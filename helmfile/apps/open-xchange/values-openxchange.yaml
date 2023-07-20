@@ -1,0 +1,159 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+appsuite:
+  istio:
+    ingressGateway:
+      name: "sovereign-workplace-gateway-istio-gateway"
+
+  core-mw:
+    enabled: true
+    masterAdmin: "admin"
+    features:
+      status:
+        # enable admin pack
+        # admin: enabled
+        documents: disabled
+        guard: enabled
+    packages:
+      status:
+        open-xchange-oidc: enabled
+        open-xchange-authentication-database: disabled
+        open-xchange-authentication-oauth: enabled
+    properties:
+      com.openexchange.UIWebPath: "/appsuite/"
+      # OIDC
+      com.openexchange.oidc.enabled: "true"
+      com.openexchange.oidc.autologinCookieMode: "ox_direct"
+      com.openexchange.oidc.contextLookupClaim: "context"
+      com.openexchange.oidc.contextLookupNamePart: "full"
+      com.openexchange.oidc.backchannelLogoutEnabled: "true"
+      com.openexchange.oidc.startDefaultBackend: "true"
+      com.openexchange.oidc.ssoLogout: "true"
+      com.openexchange.oidc.userLookupNamePart: "full"
+      com.openexchange.oidc.userLookupClaim: "phoenixusername"
+      com.openexchange.oidc.clientId: "as8oidc"
+      # OAUTH
+      com.openexchange.oauth.provider.enabled: "true"
+      com.openexchange.oauth.provider.contextLookupClaim: "context"
+      com.openexchange.oauth.provider.contextLookupNamePart: "full"
+      com.openexchange.oauth.provider.mode: "expect_jwt"
+      com.openexchange.oauth.provider.userLookupNamePart: "full"
+      com.openexchange.oauth.provider.userLookupClaim: "phoenixusername"
+      com.openexchange.authentication.oauth.clientId: "as8oidc"
+      # MAIL
+      com.openexchange.mail.authType: "xoauth2"
+      com.openexchange.mail.loginSource: "mail"
+      com.openexchange.mail.mailServer: "dovecot"
+      com.openexchange.mail.mailServerSource: "global"
+      com.openexchange.mail.transport.authType: "xoauth2"
+      com.openexchange.mail.transportServer: "postfix"
+      com.openexchange.mail.transportServerSource: "global"
+      # Mailfilter
+      com.openexchange.mail.filter.loginType: global
+      com.openexchange.mail.filter.credentialSource: mail
+      com.openexchange.mail.filter.server: dovecot
+      com.openexchange.mail.filter.preferredSaslMech: XOAUTH2
+      # Capabilities
+      com.openexchange.capability.client-onboarding: "true"
+      com.openexchange.capability.dynamic-theme: "true"
+      com.openexchange.capability.filestorage_nextcloud: "true"
+      com.openexchange.capability.filestorage_nextcloud_oauth: "true"
+      com.openexchange.capability.guard: "true"
+      com.openexchange.capability.guard-mail: "true"
+      com.openexchange.capability.public-sector: "true"
+      com.openexchange.capability.smime: "true"
+      # Secondary Accounts
+      com.openexchange.mail.secondary.authType: XOAUTH2
+      # Nextcloud integration
+      com.openexchange.file.storage.nextcloud.oauth.url: "http://nextcloud/"
+      com.openexchange.file.storage.nextcloud.oauth.webdav.username.strategy: "user"
+      com.openexchange.nextcloud.filepicker.includeAccessToken: "false"
+      # GDPR
+      com.openexchange.gdpr.dataexport.enabled: "false"
+      com.openexchange.gdpr.dataexport.active: "false"
+      # Guard
+      com.openexchange.guard.guestSMTPServer: "postfix"
+      # S/MIME
+      # Usage (in browser console after login):
+      # http = (await import('./io.ox/core/http.js')).default
+      # await http.POST({ module: 'oxguard/smime', params: { action: 'test' } })
+      com.openexchange.smime.test: "true"
+      # Other
+      com.openexchange.secret.secretSource: "\"<user-id> + '@' + <context-id> + '/' + <random>\""
+    propertiesFiles:
+      /opt/open-xchange/etc/AdminDaemon.properties:
+        MASTER_ACCOUNT_OVERRIDE: "true"
+      /opt/open-xchange/etc/system.properties:
+        SERVER_NAME: "oxserver"
+      /opt/open-xchange/etc/ldapauth.properties:
+        java.naming.provider.url: "ldap://univention-corporate-container:389/dc=swp-ldap,dc=internal"
+        bindOnly: "false"
+        bindDN: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
+
+    uiSettings:
+      # Resources
+      io.ox/core//features/resourceCalendars: "true"
+      io.ox/core//features/managedResources: "true"
+      # Categories
+      io.ox/core//features/categories: "true"
+      io.ox/core//categories/predefined: '[{ "name": "Predefined", "color": "orange", "icon": "bi/exclamation-circle.svg" }]'
+      # Nextcloud integration
+      # io.ox.nextcloud//server: "https://ics.<DOMAIN>/fs/"
+      # Central navigation
+      io.ox.public-sector//navigation/oxtabname: tab_groupware
+      # io.ox.public-sector//ics/url: "https://ics.<DOMAIN>/"
+      io.ox/core//apps/quickLaunchCount: "0"
+      io.ox/core//coloredIcons: "false"
+      # Dynamic theme
+      io.ox/dynamic-theme//mainColor: "#004B76"
+      io.ox/dynamic-theme//logoURL: io.ox.public-sector/logo.svg
+      io.ox/dynamic-theme//logoWidth: "80"
+      io.ox/dynamic-theme//topbarBackground: "#fff"
+      io.ox/dynamic-theme//topbarColor: "#1f1f1f"
+      io.ox/dynamic-theme//topbarHover: "rgba(0, 0, 0, 0.1)"
+      io.ox/dynamic-theme//listSelected: "#ADC8F0"
+      io.ox/dynamic-theme//listHover: "#ddd"
+      io.ox/dynamic-theme//folderBackground: "#fff"
+      io.ox/dynamic-theme//folderSelected: "#ADC8F0"
+      io.ox/dynamic-theme//folderHover: "#ddd"
+
+    asConfig:
+      default:
+        host: all
+        pageHeaderPrefix: "as8.souvap App Suite"
+        oidcLogin: true
+        oidcPath: /oidc
+
+  core-ui:
+    enabled: true
+  core-ui-middleware:
+    enabled: true
+  core-guidedtours:
+    enabled: true
+  guard-ui:
+    enabled: true
+  core-cacheservice:
+    enabled: true
+  core-user-guide:
+    enabled: true
+  core-imageconverter:
+    enabled: false
+  core-spellcheck:
+    enabled: false
+  core-documentconverter:
+    enabled: false
+  core-documents-collaboration:
+    enabled: false
+  office-web:
+    enabled: false
+  office-user-guide:
+    enabled: false
+  plugins-ui:
+    enabled: false
+  cloud-plugins-ui:
+    enabled: false
+  drive-client-windows-ox:
+    enabled: false
+  core-drive-help:
+    enabled: false

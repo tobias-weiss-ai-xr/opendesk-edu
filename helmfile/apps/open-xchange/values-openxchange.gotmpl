@@ -1,0 +1,130 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+  mysql:
+    host: "{{ .Values.databases.oxAppsuite.host }}"
+    database: "{{ .Values.databases.oxAppsuite.name }}"
+    auth:
+      user: "{{ .Values.databases.oxAppsuite.username }}"
+      password: "{{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword }}"
+      rootPassword: "{{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword }}"
+
+istio:
+  enabled: {{ .Values.istio.enabled }}
+
+nextcloud-integration-ui:
+  imagePullSecrets:
+  {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+  {{- end }}
+
+public-sector-ui:
+  imagePullSecrets:
+  {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+  {{- end }}
+
+appsuite:
+  istio:
+    enabled: {{ .Values.istio.enabled }}
+    ingressGateway:
+      hosts:
+        - "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    virtualServices:
+      appsuite:
+        hosts:
+          - "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+      dav:
+        hosts:
+          - "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+
+  core-mw:
+    masterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+    hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    properties:
+      "com.openexchange.oauth.provider.jwt.jwksUri": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/certs"
+      "com.openexchange.oauth.provider.allowedIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+      "com.openexchange.authentication.oauth.tokenEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
+      "com.openexchange.authentication.oauth.clientSecret": {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
+      "com.openexchange.oidc.rpRedirectURIAuth": "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/appsuite/api/oidc/auth"
+      "com.openexchange.oidc.opAuthorizationEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/auth"
+      "com.openexchange.oidc.opTokenEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
+      "com.openexchange.oidc.opIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+      "com.openexchange.oidc.opJwkSetEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/certs"
+      "com.openexchange.oidc.clientSecret": {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
+      "com.openexchange.oidc.rpRedirectURIPostSSOLogout": "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/appsuite/api/oidc/logout"
+      "com.openexchange.oidc.opLogoutEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
+      "com.openexchange.oidc.rpRedirectURILogout": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+    secretProperties:
+      com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppsuite.cookieHashSalt | quote }}
+      com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppsuite.sessiondEncryptionKey | quote }}
+      com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppsuite.shareCryptKey | quote }}
+    propertiesFiles:
+      "/opt/open-xchange/etc/ldapauth.properties":
+        bindDNPassword: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox | quote }}
+    uiSettings:
+      "io.ox.nextcloud//server": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
+      "io.ox.public-sector//ics/url": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
+    secretETCFiles:
+      # Format of the OX Guard master key:
+      # MC+base64(20 random bytes)
+      # RC+base64(20 random bytes)
+      oxguardpass: |
+        {{ .Values.secrets.oxAppsuite.oxguardMC }}
+        {{ .Values.secrets.oxAppsuite.oxguardRC }}
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+
+  core-ui:
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+
+  core-ui-middleware:
+    ingress:
+      hosts:
+        - host: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+
+  core-guidedtours:
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+
+  guard-ui:
+    image:
+      repository: "{{ .Values.global.imageRegistry }}/appsuite-core-public/guard-ui"
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+
+  core-cacheservice:
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+
+  core-user-guide:
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+...

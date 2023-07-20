@@ -1,0 +1,55 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  url: "{{ .Values.global.imageRegistry }}/{{ .Values.images.xwiki.repository }}"
+  tag: "{{ .Values.images.xwiki.tag }}"
+
+externalDB:
+  password: "{{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.xwikiUser }}"
+  database: "{{ .Values.databases.xwiki.name }}"
+  user: "{{ .Values.databases.xwiki.username }}"
+  host: "{{ .Values.databases.xwiki.host }}"
+
+customConfigs:
+  "xwiki.cfg":
+    "xwiki.superadminpassword": {{ .Values.secrets.xwiki.superadminpassword | quote }}
+  "xwiki.properties":
+    "oidc.endpoint.authorization": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/auth"
+    "oidc.endpoint.token": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
+    "oidc.endpoint.userinfo": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/userinfo"
+    "oidc.endpoint.logout": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
+    "oidc.secret": {{ .Values.secrets.keycloak.clientSecret.xwiki }}
+    "url.trustedDomains": "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+    "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+    "workplaceServices.portalSecret": {{ .Values.secrets.centralnavigation.apiKey }}
+
+properties:
+  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: "{{ .Values.ingress.ingressClassName }}"
+  annotations:
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host {{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+  hosts:
+    - host: "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+  tls:
+    - secretName: "{{ .Values.ingress.tls.secretName }}"
+      hosts:
+        - "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+
+persistence:
+  size: "{{ .Values.persistence.size.xwiki }}"
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+
+replicaCount: {{ .Values.replicas.xwiki }}
+
+resources:
+  {{ .Values.resources.xwiki | toYaml | nindent 2 }}
+...

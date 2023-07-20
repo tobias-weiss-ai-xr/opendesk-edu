@@ -1,0 +1,120 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  registry: "{{ .Values.global.imageRegistry }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.jitsiKeycloakAdapter.repository }}"
+  tag: "{{ .Values.images.jitsiKeycloakAdapter.tag }}"
+
+settings:
+  jwtAppSecret: "{{ .Values.secrets.jitsiPlain.jwtAppSecret }}"
+
+jitsi:
+  publicURL: "https://{{ .Values.global.hosts.jitsiPlain }}.{{ .Values.global.domain }}"
+  web:
+    replicaCount: {{ .Values.replicas.jitsi }}
+    image:
+      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jitsi.repository }}"
+      tag: "{{ .Values.images.jitsi.tag }}"
+    ingress:
+      enabled: "{{ .Values.ingress.enabled }}"
+      ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+      hosts:
+        - host: "{{ .Values.global.hosts.jitsiPlain }}.{{ .Values.global.domain }}"
+          paths:
+            - "/"
+      tls:
+        - secretName: "{{ .Values.ingress.tls.secretName }}"
+          hosts:
+            - "{{ .Values.global.hosts.jitsiPlain }}.{{ .Values.global.domain }}"
+    extraEnvs:
+      TURN_ENABLE: "1"
+    resources:
+      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+  prosody:
+    image:
+      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.prosody.repository }}"
+      tag: "{{ .Values.images.prosody.tag }}"
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
+    extraEnvs:
+      - name: "AUTH_TYPE"
+        value: "jwt"
+      - name: "JWT_APP_ID"
+        value: "myappid"
+      - name: "JWT_APP_SECRET"
+        value: "{{ .Values.secrets.jitsiPlain.jwtAppSecret }}"
+      - name: TURNS_HOST
+        value: "{{ .Values.turn.tls.host }}"
+      - name: TURNS_PORT
+        value: "{{ .Values.turn.tls.port }}"
+      - name: TURN_HOST
+        value: "{{ .Values.turn.server.host }}"
+      - name: TURN_PORT
+        value: "{{ .Values.turn.server.port }}"
+      - name: TURN_TRANSPORT
+        value: "{{ .Values.turn.transport }}"
+      - name: TURN_CREDENTIALS
+        value: "{{ .Values.turn.credentials }}"
+    resources:
+      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+    persistence:
+      size: "{{ .Values.persistence.size.prosody }}"
+      storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+  jicofo:
+    replicaCount: {{ .Values.replicas.jicofo }}
+    image:
+      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jicofo.repository }}"
+      tag: "{{ .Values.images.jicofo.tag }}"
+    xmpp:
+      password: "{{ .Values.secrets.jitsiPlain.jicofoAuthPassword }}"
+      componentSecret: "{{ .Values.secrets.jitsiPlain.jicofoComponentPassword }}"
+    resources:
+      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+  jvb:
+    replicaCount: {{ .Values.replicas.jvb }}
+    image:
+      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jvb.repository }}"
+      tag: "{{ .Values.images.jvb.tag }}"
+    xmpp:
+      password: "{{ .Values.secrets.jitsiPlain.jvbAuthPassword }}"
+    resources:
+      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+  jibri:
+    replicaCount: {{ .Values.replicas.jibri }}
+    image:
+      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jibri.repository }}"
+      tag: "{{ .Values.images.jibri.tag }}"
+    recorder:
+      password: "{{ .Values.secrets.jitsiPlain.jibriRecorderPassword }}"
+    xmpp:
+      password: "{{ .Values.secrets.jitsiPlain.jibriXmppPassword }}"
+    resources:
+      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+  imagePullSecrets:
+  {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+  {{- end }}
+
+patchJVB:
+  image:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.jitsiPatchJVB.repository }}"
+    tag: "{{ .Values.images.jitsiPatchJVB.v20230425 }}"
+replicaCount: {{ .Values.replicas.jitsiKeycloakAdapter }}
+
+resources:
+  {{ .Values.resources.jitsiKeycloakAdapter | toYaml | nindent 2 }}
+...

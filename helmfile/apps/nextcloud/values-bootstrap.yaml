@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+config:
+  administrator:
+    username: "nextcloud"
+  antivirus:
+    host: "clamav-sovereign-workplace-icap"
+  apps:
+    integrationSwp:
+      username: "phoenixusername"
+    userOidc:
+      username: "ncoidc"
+
+cleanup:
+  deletePodsOnSuccess: true
+...

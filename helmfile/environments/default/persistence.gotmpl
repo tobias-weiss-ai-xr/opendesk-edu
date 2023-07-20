@@ -1,0 +1,24 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+persistence:
+  storageClassNames:
+    RWX: "csi-cephfs-sc"
+    RWO: "csi-rbd-sc"
+  size:
+    clamav: "1Gi"
+    dovecot: "1Gi"
+    mariadb: "1Gi"
+    nextcloud:
+      main: "1Gi"
+      data: "10Gi"
+    openproject: "1Gi"
+    postfix: "1Gi"
+    postgresql: "1Gi"
+    prosody: "1Gi"
+    redis: "1Gi"
+    univentionCorporateServer: "1Gi"
+    xwiki: "1Gi"
+...

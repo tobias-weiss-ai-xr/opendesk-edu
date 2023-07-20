@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "collabora-online"
+    url: "https://collaboraonline.github.io/online"
+
+releases:
+  - name: "collabora-online"
+    chart: "collabora-online/collabora-online"
+    version: "1.0.2"
+    values:
+      - "values.yaml"
+      - "values.gotmpl"
+    condition: "collabora.enabled"
+
+bases:
+  - "../../bases/environments.yaml"
+...

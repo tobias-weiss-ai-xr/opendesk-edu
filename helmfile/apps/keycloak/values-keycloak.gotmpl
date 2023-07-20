@@ -1,0 +1,87 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.keycloak.repository }}"
+  tag: "{{ .Values.images.keycloak.tag }}"
+  digest: "{{ .Values.images.keycloak.digest }}"
+
+externalDatabase:
+  host: "{{ .Values.databases.keycloak.host }}"
+  port: {{ .Values.databases.keycloak.port }}
+  user: "{{ .Values.databases.keycloak.username }}"
+  database: "{{ .Values.databases.keycloak.name }}"
+  password: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser }}
+
+auth:
+  adminPassword: {{ .Values.secrets.keycloak.adminPassword }}
+
+replicaCount: {{ .Values.replicas.keycloak }}
+
+keycloakConfigCli:
+  extraEnvVars:
+    - name: "LDAP_GROUPS_DN"
+      value: "cn=groups,dc=swp-ldap,dc=internal"
+    - name: "LDAP_USERS_DN"
+      value: "cn=users,dc=swp-ldap,dc=internal"
+    - name: "LDAP_SERVER_URL"
+      value: "univention-corporate-container"
+    - name: "IDENTIFIER"
+      value: "souvap"
+    - name: "THEME"
+      value: "souvap"
+    - name: "KEYCLOAK_AVAILABILITYCHECK_TIMEOUT"
+      value: "600s"
+    - name: "UNIVENTION_CORPORATE_SERVER_DOMAIN"
+      value: "{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+    - name: "KEYCLOAK_DOMAIN"
+      value: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+    - name: "OPENXCHANGE_8_DOMAIN"
+      value: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    - name: "XWIKI_DOMAIN"
+      value: "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+    - name: "OPENPROJECT_DOMAIN"
+      value: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
+    - name: "NEXTCLOUD_DOMAIN"
+      value: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+    - name: "MATRIX_DOMAIN"
+      value: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
+    - name: "JITSI_PLAIN_DOMAIN"
+      value: "{{ .Values.global.hosts.jitsiPlain }}.{{ .Values.global.domain }}"
+    - name: "ELEMENT_DOMAIN"
+      value: "{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}"
+    - name: "INTERCOM_SERVICE_DOMAIN"
+      value: "{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}"
+    - name: "CLIENT_SECRET_INTERCOM_PASSWORD"
+      value: {{ .Values.secrets.keycloak.clientSecret.intercom }}
+    - name: "CLIENT_SECRET_MATRIX_PASSWORD"
+      value: {{ .Values.secrets.keycloak.clientSecret.matrix }}
+    - name: "CLIENT_SECRET_JITSI_PLAIN_PASSWORD"
+      value: {{ .Values.secrets.keycloak.clientSecret.jitsiPlain }}
+    - name: "CLIENT_SECRET_NCOIDC_PASSWORD"
+      value: {{ .Values.secrets.keycloak.clientSecret.ncoidc }}
+    - name: "CLIENT_SECRET_OPENPROJECT_PASSWORD"
+      value: {{ .Values.secrets.keycloak.clientSecret.openproject }}
+    - name: "CLIENT_SECRET_XWIKI_PASSWORD"
+      value: {{ .Values.secrets.keycloak.clientSecret.xwiki }}
+    - name: "CLIENT_SECRET_AS8OIDC_PASSWORD"
+      value: {{ .Values.secrets.keycloak.clientSecret.as8oidc }}
+    - name: "KEYCLOAK_STORAGEPROVICER_UCSLDAP_NAME"
+      value: "storage_provider_ucsldap"
+    - name: "LDAPSEARCH_PASSWORD"
+      value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak }}
+    - name: "LDAPSEARCH_USERNAME"
+      value: "ldapsearch_keycloak"
+
+resources:
+  {{ .Values.resources.keycloak | toYaml | nindent 2 }}
+...

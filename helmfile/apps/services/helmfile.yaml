@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "sovereign-workplace-certificates"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/133/packages/helm/stable"
+  - name: "postgresql"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/83/packages/helm/stable"
+  - name: "mariadb"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/86/packages/helm/stable"
+  - name: "postfix"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/85/packages/helm/stable"
+  - name: "istio-resources"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/69/packages/helm/stable"
+  - name: "clamav"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/73/packages/helm/stable"
+  - name: "bitnami"
+    url: "https://charts.bitnami.com/bitnami"
+
+releases:
+  - name: "sovereign-workplace-certificates"
+    chart: "sovereign-workplace-certificates/sovereign-workplace-certificates"
+    version: "^1.0.0"
+    values:
+      - "values-certificates.gotmpl"
+    condition: "certificates.enabled"
+  - name: "redis"
+    chart: "bitnami/redis"
+    version: "^17.9.3"
+    values:
+      - "values-redis.gotmpl"
+      - "values-redis.yaml"
+    condition: "redis.enabled"
+  - name: "postgresql"
+    chart: "postgresql/postgresql"
+    version: "^1.0.0"
+    values:
+      - "values-postgresql.yaml"
+      - "values-postgresql.gotmpl"
+    condition: "postgresql.enabled"
+  - name: "mariadb"
+    chart: "mariadb/mariadb"
+    version: "^1.0.0"
+    values:
+      - "values-mariadb.yaml"
+      - "values-mariadb.gotmpl"
+    condition: "mariadb.enabled"
+  - name: "postfix"
+    chart: "postfix/postfix"
+    version: "^1.0.0"
+    values:
+      - "values-postfix.yaml"
+      - "values-postfix.gotmpl"
+    condition: "postfix.enabled"
+  - name: "clamav"
+    chart: "clamav/sovereign-workplace-clamav"
+    version: "^2.0.0"
+    values:
+      - "values-clamav.gotmpl"
+    condition: "clamav.enabled"
+  - name: "sovereign-workplace-gateway"
+    chart: "istio-resources/istio-gateway"
+    version: "^1.1.0"
+    values:
+      - "values-istio-gateway.gotmpl"
+    condition: "istio.enabled"
+bases:
+  - "../../bases/environments.yaml"
+...

@@ -1,0 +1,30 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.oxConnector.repository }}"
+  pullPolicy: "Always"
+  tag: "{{ .Values.images.oxConnector.tag }}"
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+
+persistence:
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+
+oxConnector:
+  domainName: "{{ .Values.global.domain }}"
+  #oxMasterAdmin: "(( .Values.appsuite.core-mw.masterAdmin ))"
+  oxMasterAdmin: "admin"
+  oxMasterPassword: "{{ .Values.secrets.oxAppsuite.adminPassword }}"
+  oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+  oxDefaultContext: "1"
+
+resources:
+  {{ .Values.resources.oxConnector | toYaml | nindent 2 }}
+...

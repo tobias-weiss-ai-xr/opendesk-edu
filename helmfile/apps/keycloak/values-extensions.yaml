@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  keycloak:
+    host: "keycloak"
+    adminUsername: "kcadmin"
+    adminRealm: "master"
+    realm: "souvap"
+
+handler:
+  image:
+    tag: "latest"
+  appConfig:
+    captchaProtectionEnable: "False"
+
+postgresql:
+  enabled: false
+
+proxy:
+  image:
+    tag: "latest"
+...

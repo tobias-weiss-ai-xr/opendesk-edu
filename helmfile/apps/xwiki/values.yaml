@@ -1,0 +1,62 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+image:
+  name: "git.xwikisas.com:5050/xwikisas/swp/xwiki"
+  tag: "0.4-mariadb-tomcat"
+  pullPolicy: "Always"
+
+ingress:
+  # enabled: true
+  annotations:
+    kubernetes.io/ingress.class: null
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "250m"
+
+istio:
+  enabled: false
+
+service:
+  externalPort: 80
+  enabled: true
+
+mysql:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+mariadb:
+  enabled: false
+
+properties:
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.colorTheme": "FlamingoThemes.Iceberg"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.default_language": "de"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.languages": "de"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.brand-primary": "#004B76"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.link-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.btn-primary-bg": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-active-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": "#fff"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": "#fff"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "'@list-group-active-border: @list-group-border; @gray-light: #727272; @text-muted: @gray; @xwiki-drawer-menu-item-hover-bg: @list-group-hover-bg; @xwiki-drawer-menu-item-hover-color: @list-group-link-hover-color; @well-bg: @body-bg; .navbar-default { border-bottom: 3px solid @brand-primary !important; }'"
+  "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"
+
+customConfigs:
+  xwiki.cfg:
+    xwiki.url.protocol: "https"
+  xwiki.properties:
+    oidc.scope: "openid,profile,email,address,phoenix"
+    oidc.endpoint.userinfo.method: "GET"
+    oidc.user.nameFormater: '${oidc.user.phoenixusername._lowerCase}'
+    oidc.user.subjectFormater: '${oidc.user.subject}'
+    oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
+    oidc.clientid: "xwiki"
+    oidc.endpoint.token.auth_method: "client_secret_basic"
+    oidc.skipped: false
+    oidc.logoutMechanism: "rpInitiated"
+...

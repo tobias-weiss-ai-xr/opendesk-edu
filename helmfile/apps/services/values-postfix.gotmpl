@@ -1,0 +1,36 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  url: "{{ .Values.global.imageRegistry }}/{{ .Values.images.postfix.repository }}"
+  tag: "{{ .Values.images.postfix.tag }}"
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+
+postfix:
+  domain: "{{ .Values.global.domain }}"
+  virtualMailboxDomains: "{{ .Values.global.domain }}"
+  overrides:
+    - fileName: "sasl_passwd.map"
+      content:
+        - "{{ .Values.smtp.host }} {{ .Values.smtp.username }}:{{ .Values.smtp.password }}"
+  relayHost: "[{{ .Values.smtp.host }}]:587"
+
+persistence:
+  size: "{{ .Values.persistence.size.postfix }}"
+  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+
+replicaCount: {{ .Values.replicas.postfix }}
+
+resources:
+  {{ .Values.resources.postfix | toYaml | nindent 2 }}
+
+ingress:
+  tls:
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+...

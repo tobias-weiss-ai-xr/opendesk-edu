@@ -1,0 +1,15 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+istio:
+  enabled: true
+  domain: {{ env "ISTIO_DOMAIN" | default "souvap-univention.de" }}
+  virtualService:
+    enabled: false
+  gateway:
+    enabled: true
+  issuerRef:
+    name: "letsencrypt-istio-prod"
+...

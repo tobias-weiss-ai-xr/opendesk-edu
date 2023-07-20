@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "swp-nextcloud-bootstrap"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/130/packages/helm/stable"
+  - name: "nextcloud"
+    url: "https://nextcloud.github.io/helm/"
+
+releases:
+  - name: "swp-nextcloud-bootstrap"
+    chart: "swp-nextcloud-bootstrap/sovereign-workplace-nextcloud-bootstrap"
+    version: "2.0.5"
+    wait: true
+    timeout: 1800
+    values:
+      - "values-bootstrap.gotmpl"
+      - "values-bootstrap.yaml"
+    condition: "nextcloud.enabled"
+
+  - name: "nextcloud"
+    chart: "nextcloud/nextcloud"
+    version: "3.5.19"
+    needs:
+      - "swp-nextcloud-bootstrap"
+    values:
+      - "values-nextcloud.gotmpl"
+      - "values-nextcloud.yaml"
+    condition: "nextcloud.enabled"
+
+bases:
+  - "../../bases/environments.yaml"
+...

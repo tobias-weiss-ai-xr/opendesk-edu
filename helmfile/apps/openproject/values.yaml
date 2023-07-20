@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+image:
+  registry: "registry.souvap-univention.de"
+
+probes:
+  liveness:
+    initialDelaySeconds: 300
+    failureThreshold: 30
+  readiness:
+    initialDelaySeconds: 150
+    failureThreshold: 30
+
+postgresql:
+  bundled: false
+
+openproject:
+  oidc:
+    enabled: true
+    provider: "keycloak"
+    identifier: "openproject"
+    authorizationEndpoint: "/realms/souvap/protocol/openid-connect/auth"
+    tokenEndpoint: "/realms/souvap/protocol/openid-connect/token"
+    userinfoEndpoint: "/realms/souvap/protocol/openid-connect/userinfo"
+    scope: "[openid,phoenix]"
+  # seed will only be executed on initial installation
+  seed_locale: "de"
+
+# For more details and more options see https://www.openproject.org/docs/installation-and-operations/configuration/environment/
+environment:
+  OPENPROJECT_LOG__LEVEL: "info"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_LOGIN: "phoenixusername"
+  OPENPROJECT_LOGIN__REQUIRED: "true"
+  OPENPROJECT_OAUTH__ALLOW__REMAPPING__OF__EXISTING__USERS: "true"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_DISPLAY__NAME: "Keycloak"
+  OPENPROJECT_PER__PAGE__OPTIONS: "20, 50, 100, 200"
+  OPENPROJECT_EMAIL__DELIVERY__METHOD: "smtp"
+  OPENPROJECT_SMTP__AUTHENTICATION: "plain"
+  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
+  OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "peer"
+
+...

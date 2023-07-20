@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+environments:
+  default:
+    values:
+      - "../../environments/default/*.gotmpl"
+  ionos:
+    values:
+      - "../../environments/default/*.gotmpl"
+      - "../../environments/ionos/values.yaml"
+  uv-develop:
+    values:
+      - "../../environments/default/*.gotmpl"
+      - "../../environments/uv-develop/values.yaml"
+...

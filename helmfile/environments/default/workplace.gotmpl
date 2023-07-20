@@ -1,0 +1,42 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+masterPassword: {{ env "MASTER_PASSWORD" | default "sovereign-workplace" }}
+
+certificates:
+  enabled: true
+clamav:
+  enabled: true
+collabora:
+  enabled: true
+dovecot:
+  enabled: true
+intercom:
+  enabled: true
+jitsi:
+  enabled: true
+keycloak:
+  enabled: true
+mariadb:
+  enabled: true
+nextcloud:
+  enabled: true
+openproject:
+  enabled: true
+oxAppsuite:
+  enabled: true
+oxConnector:
+  enabled: true
+postfix:
+  enabled: true
+postgresql:
+  enabled: true
+redis:
+  enabled: true
+univentionCorporateServer:
+  enabled: true
+xwiki:
+  enabled: true
+...

@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "ox-connector"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable"
+
+releases:
+  - name: "ox-connector"
+    chart: "ox-connector/ox-connector"
+    version: "0.1.0-pre-jconde-standalone-listener"
+    values:
+      - "values-oxconnector.yaml"
+      - "values-oxconnector.gotmpl"
+    condition: "oxConnector.enabled"
+
+bases:
+  - "../../bases/environments.yaml"
+...

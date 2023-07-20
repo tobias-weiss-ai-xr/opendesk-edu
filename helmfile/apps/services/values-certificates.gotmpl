@@ -1,0 +1,21 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+
+issuerRef:
+  name: "{{ .Values.certificate.issuerRef.name }}"
+
+{{- if .Values.istio.enabled }}
+istio:
+  enabled: {{ .Values.istio.enabled }}
+  domain: {{ .Values.istio.domain }}
+  issuerRef:
+    name: "{{ .Values.istio.issuerRef.name }}"
+{{- end }}
+...

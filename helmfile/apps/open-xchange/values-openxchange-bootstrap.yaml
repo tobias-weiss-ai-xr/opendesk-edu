@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+cleanup:
+  deletePodsOnSuccess: false
+
+# resources:
+#   limits:
+#     # The max amount of CPUs to consume.
+#     cpu: 1
+#     # The max amount of RAM to consume.
+#     memory: "1Gi"
+#   requests:
+#     # The amount of CPUs which has to be available on the scheduled node.
+#     cpu: 1
+#     # The amount of RAM which has to be available on the scheduled node.
+#     memory: "256Mi"
+
+# Keep default values:
+# coreMiddleware:
+#   statefulSet: "open-xchange-core-mw-default-0"
+#   pod: "open-xchange-core-mw-default-0"
+...

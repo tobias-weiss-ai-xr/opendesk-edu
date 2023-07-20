@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+postgresql:
+  enabled: false
+externalDatabase:
+  existingSecret: ""
+  existingSecretPasswordKey: ""
+auth:
+  adminUser: "kcadmin"
+# not working as expected with older helm chart, check if it works with most recent one.
+# meanwhile we set the loglevel using the extraEnvVars a bit below.
+#logging:
+#  level: "DEBUG"
+extraEnvVars:
+  - name: "KC_LOG_LEVEL"
+    value: "INFO"
+extraStartupArgs: "-Dkeycloak.profile.feature.token_exchange=enabled -Dkeycloak.profile.feature.admin_fine_grained_authz=enabled"
+
+service:
+  type: "ClusterIP"
+ingress:
+  enabled: false
+extraVolumes:
+  - name: "keycloak-theme"
+    configMap:
+      name: "keycloak-theme"
+      items:
+        - key: "theme.properties"
+          path: "souvap/login/theme.properties"
+        - key: "messages_de.properties"
+          path: "souvap/login/messages/messages_de.properties"
+        - key: "messages_en.properties"
+          path: "souvap/login/messages/messages_en.properties"
+        - key: "styles.css"
+          path: "souvap/login/resources/css/styles.css"
+        - key: "logo.svg"
+          path: "souvap/login/resources/img/logo_phoenix.svg"
+        - key: "login.ftl"
+          path: "souvap/login/login.ftl"
+extraVolumeMounts:
+  - name: "keycloak-theme"
+    mountPath: "/opt/bitnami/keycloak/themes"
+
+keycloakConfigCli:
+  enabled: true
+  command: [ "java", "-jar" ,"/opt/bitnami/keycloak-config-cli/keycloak-config-cli-19.0.3.jar" ]
+  args: [ "--import.var-substitution.enabled=true" ]
+  cache:
+    enabled: false
+
+...

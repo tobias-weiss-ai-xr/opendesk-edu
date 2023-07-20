@@ -1,0 +1,40 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  repository: "{{ .Values.images.mariadb.repository }}"
+  tag: "{{ .Values.images.mariadb.tag }}"
+
+job:
+  users:
+    - username: "xwiki_user"
+      password: "{{ .Values.secrets.mariadb.xwikiUser }}"
+    - username: "openxchange_user"
+      password: "{{ .Values.secrets.mariadb.openxchangeUser }}"
+    - username: "nextcloud_user"
+      password: "{{ .Values.secrets.mariadb.nextcloudUser }}"
+  databases:
+    - name: "xwiki"
+      user: "xwiki_user"
+    - name: "nextcloud"
+      user: "nextcloud_user"
+    - name: "openxchange"
+      user: "openxchange_user"
+
+mariadb:
+  rootPassword: "{{ .Values.secrets.mariadb.rootPassword }}"
+
+persistence:
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: "{{ .Values.persistence.size.mariadb }}"
+
+resources:
+  {{ .Values.resources.mariadb | toYaml | nindent 2 }}
+...

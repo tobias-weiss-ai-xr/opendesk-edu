@@ -1,0 +1,58 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+clamd:
+  podSecurityContext:
+    {{/* Disabled until NFS Provisioner on IONOS is fixed */}}
+    enabled: false
+  replicaCount: {{ .Values.replicas.clamd }}
+  image:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.clamd.repository }}"
+    tag: "{{ .Values.images.clamd.tag }}"
+  resources:
+    {{ .Values.resources.clamd | toYaml | nindent 4 }}
+
+freshclam:
+  podSecurityContext:
+    {{/* Disabled until NFS Provisioner on IONOS is fixed */}}
+    enabled: false
+  replicaCount: {{ .Values.replicas.freshclam }}
+  image:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.freshclam.repository }}"
+    tag: "{{ .Values.images.freshclam.tag }}"
+  resources:
+    {{ .Values.resources.freshclam | toYaml | nindent 4 }}
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+icap:
+  replicaCount: {{ .Values.replicas.icap }}
+  image:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.icap.repository }}"
+    tag: "{{ .Values.images.icap.tag }}"
+  resources:
+    {{ .Values.resources.icap | toYaml | nindent 4 }}
+
+milter:
+  podSecurityContext:
+    {{/* Disabled until NFS Provisioner on IONOS is fixed */}}
+    enabled: false
+  replicaCount: {{ .Values.replicas.milter }}
+  image:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.milter.repository }}"
+    tag: "{{ .Values.images.milter.tag }}"
+  resources:
+    {{ .Values.resources.milter | toYaml | nindent 4 }}
+
+persistence:
+  storageClass: "{{ .Values.persistence.storageClassNames.RWX }}"
+  size: "{{ .Values.persistence.size.clamav }}"
+...

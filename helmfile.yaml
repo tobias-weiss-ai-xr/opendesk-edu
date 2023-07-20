@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+#
+# Advanced Configuration: Nested States
+#
+helmfiles:
+  # Path to the helmfile state file being processed BEFORE releases in this state file
+  - path: "helmfile/apps/services/helmfile.yaml"
+  - path: "helmfile/apps/keycloak/helmfile.yaml"
+  - path: "helmfile/apps/univention-corporate-container/helmfile.yaml"
+  - path: "helmfile/apps/keycloak-bootstrap/helmfile.yaml"
+  - path: "helmfile/apps/openproject/helmfile.yaml"
+  - path: "helmfile/apps/intercom-service/helmfile.yaml"
+  - path: "helmfile/apps/open-xchange/helmfile.yaml"
+  - path: "helmfile/apps/xwiki/helmfile.yaml"
+  - path: "helmfile/apps/collabora/helmfile.yaml"
+  - path: "helmfile/apps/nextcloud/helmfile.yaml"
+  - path: "helmfile/apps/jitsi/helmfile.yaml"
+  - path: "helmfile/apps/provisioning/helmfile.yaml"
+
+missingFileHandler: "Error"
+
+...

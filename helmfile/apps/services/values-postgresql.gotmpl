@@ -1,0 +1,49 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  imageRegistry: {{ .Values.global.imageRegistry }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  repository: "{{ .Values.images.postgresql.repository }}"
+  tag: "{{ .Values.images.postgresql.tag }}"
+
+job:
+  users:
+    - username: "keycloak_user"
+      password: {{ .Values.secrets.postgresql.keycloakUser }}
+    - username: "openproject_user"
+      password: {{ .Values.secrets.postgresql.openprojectUser }}
+    - username: "keycloak_extensions_user"
+      password: {{ .Values.secrets.postgresql.keycloakExtensionUser }}
+    - username: "matrix_user"
+      password: {{ .Values.secrets.postgresql.matrixUser }}
+    - username: "notificationsapi_user"
+      password: {{ .Values.secrets.postgresql.notificationsapiUser }}
+  databases:
+    - name: "keycloak"
+      user: "keycloak_user"
+    - name: "keycloak_extensions"
+      user: "keycloak_extensions_user"
+    - name: "openproject"
+      user: "openproject_user"
+    - name: "matrix"
+      user: "matrix_user"
+      additionalParams: "ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0"
+    - name: "notificationsapi"
+      user: "notificationsapi_user"
+
+persistence:
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: "{{ .Values.persistence.size.postgresql }}"
+
+postgres:
+  password: {{ .Values.secrets.postgresql.postgresUser }}
+
+resources:
+  {{ .Values.resources.postgresql | toYaml | nindent 2 }}
+...

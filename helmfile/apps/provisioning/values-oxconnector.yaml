@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+ingress:
+  enabled: false
+
+oxConnector:
+  ldapHost: "univention-corporate-container"
+  #ldapHostIp: ""
+  ldapBaseDn: "dc=swp-ldap,dc=internal"
+  ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
+  notifierServer: "univention-corporate-container"
+  tlsMode: "plain"
+  # current static password for UCC
+  ldapPassword: "ucctempldapstring"
+  caCert: "ucctempldapstring"
+  debugLevel: "5"
+  logLevel: "DEBUG"
+  oxDefaultContext: "1"
+  oxLocalTimezone: "Europe/Berlin"
+  oxLanguage: "de_DE"
+  oxSmtpServer: "smtp://127.0.0.1:587"
+  oxImapServer: "imap://127.0.0.1:143"
+
+## Container deployment probes
+probes:
+  liveness:
+    enabled: true
+    initialDelaySeconds: 120
+    timeoutSeconds: 3
+    periodSeconds: 30
+    failureThreshold: 3
+    successThreshold: 1
+
+  readiness:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 3
+    periodSeconds: 15
+    failureThreshold: 30
+    successThreshold: 1
+
+
+serviceAccount:
+  create: true
+
+...

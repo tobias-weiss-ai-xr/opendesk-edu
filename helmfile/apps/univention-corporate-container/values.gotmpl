@@ -1,0 +1,68 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  registry: "{{ .Values.global.imageRegistry }}"
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  imagePullPolicy: "Always"
+  repository: "{{ .Values.images.univentionCorporateServer.repository }}"
+  tag: "{{ .Values.images.univentionCorporateServer.tag }}"
+
+ingress:
+  host: "{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+persistence:
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: "{{ .Values.persistence.size.univentionCorporateServer }}"
+
+extraEnvVars:
+  - name: ISTIO_DOMAIN
+    value: {{ .Values.istio.domain }}
+  - name: CENTRALNAVIGATION_API_SECRET
+    value: {{ .Values.secrets.centralnavigation.apiKey }}
+  - name: LDAPSEARCH_OX_USERNAME
+    value: "ldapsearch_ox"
+  - name: LDAPSEARCH_OX_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox }}
+  - name: LDAPSEARCH_DOVECOT_USERNAME
+    value: "ldapsearch_dovecot"
+  - name: LDAPSEARCH_DOVECOT_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot }}
+  - name: LDAPSEARCH_KEYCLOAK_USERNAME
+    value: "ldapsearch_keycloak"
+  - name: LDAPSEARCH_KEYCLOAK_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak }}
+  - name: LDAPSEARCH_NEXTCLOUD_USERNAME
+    value: "ldapsearch_nextcloud"
+  - name: LDAPSEARCH_NEXTCLOUD_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud }}
+  - name: LDAPSEARCH_OPENPROJECT_USERNAME
+    value: "ldapsearch_openproject"
+  - name: LDAPSEARCH_OPENPROJECT_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject }}
+  - name: LDAPSEARCH_XWIKI_USERNAME
+    value: "ldapsearch_xwiki"
+  - name: LDAPSEARCH_XWIKI_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki }}
+  - name: DEFAULT_ACCOUNT_USER_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.defaultAccounts.userPassword }}
+  - name: DEFAULT_ACCOUNT_ADMIN_PASSWORD
+    value: {{ .Values.secrets.univentionCorporateServer.defaultAccounts.adminPassword }}
+
+resources:
+  {{ .Values.resources.univentionCorporateServer | toYaml | nindent 2 }}
+...

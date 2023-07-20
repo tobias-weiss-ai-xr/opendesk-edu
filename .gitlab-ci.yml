@@ -1,0 +1,323 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+stages:
+  - "env-cleanup"
+  - "env"
+  - "basic-services-deploy"
+  - "component-deploy"
+  - "component-bootstrap"
+  - "ucs-post-bootstrap"
+  - "run-tests"
+  - "env-stop"
+
+variables:
+  NAMESPACE:
+    description: "The name of namespaces to deploy to."
+    value: ""
+  CLUSTER:
+    description: "Define which cluster to use - don't select prototype when you are not explicitly knowing what you are doing!"
+    value: "develop"
+    options:
+      - "develop"
+      - "hubble"
+      - "dataport-dev"
+      - "prototype"
+  TLD:
+    description: "Define the Cluster Domain (TLD)."
+    value: "souvap-univention.de"
+    options:
+      - "souvap-univention.de"
+      - "at-univention.de"
+      - "souvap.cloud"
+  MASTER_PASSWORD:
+    description: "Optional: Provide a passphrase to be used for password generation."
+    value: "sovereign-workplace"
+  ENV_STOP_BEFORE:
+    description: "Stop environment/delete namespace for the deployment"
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_ALL_COMPONENTS:
+    description: "Enable all component deployment (overwrites 'no' setting on component level)."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_SERVICES:
+    description: "Enable Service deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_UCS:
+    description: "Enable Univention Corporate Server deployment. Depends on `DEPLOY_KEYCLOAK` and `DEPLOY_VAULT`."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_PROVISIONING:
+    description: "Enable Provisioning Components."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_COLLABORA:
+    description: "Enable Collabora deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_KEYCLOAK:
+    description: "Enable Keycloak deployment. 'yes' deploys upstream (bitnami) Keycloak, select 'keycloak_univention' to install Univention maintained Keycloak."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_OX:
+    description: "Enable OX AppSuite8 deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_ICS:
+    description: "Enable ICS deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_XWIKI:
+    description: "Enable XWiki deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_NEXTCLOUD:
+    description: "Enable Nextcloud deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_OPENPROJECT:
+    description: "Enable OpenProject deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_JITSI:
+    description: "Enable Jitsi deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  # please use the following set of variables with normalized names:
+  DOMAIN: "${NAMESPACE}.${CLUSTER}.${TLD}"
+  ISTIO_DOMAIN: "${NAMESPACE}.istio.${CLUSTER}.${TLD}"
+
+.deploy-common:
+  cache: {}
+  dependencies: []
+  image: "registry.souvap-univention.de/souvap/tooling/images/helm:latest"
+  secrets:
+    SMTP_PASSWORD:
+      vault:
+        engine:
+          name: "kv-v2"
+          path: "swp"
+        path: "accounts/brained/mail/relay@souvap-univention.de"
+        field: "password"
+      file: false
+    TURN_CREDENTIALS:
+      vault:
+        engine:
+          name: "kv-v2"
+          path: "swp"
+        path: "accounts/souvap-univention.de/develop/turn/secret"
+        field: "credentials"
+      file: false
+  script:
+    - cd "${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
+    # Match Cluster to helmfile environments
+    - |
+      if [ "${CLUSTER}" = "develop" ]; then
+        export HELMFILE_ENVIRONMENT=uv-develop
+      elif [ "${CLUSTER}" = "prototype" ]; then
+        export HELMFILE_ENVIRONMENT=uv-develop
+      elif [ "${CLUSTER}" = "hubble" ]; then
+        export HELMFILE_ENVIRONMENT=default
+      elif [ "${CLUSTER}" = "dataport-dev" ]; then
+        export HELMFILE_ENVIRONMENT=ionos
+      else
+        echo "Unsupported cluster chosen: ${CLUSTER}"
+        exit 1
+      fi;
+    - echo "Installing ${COMPONENT} into ${NAMESPACE} namespace as ${HELMFILE_ENVIRONMENT} environment on ${CLUSTER}"
+    - helmfile --namespace ${NAMESPACE} apply --suppress-diff
+  tags:
+    - "docker"
+    - "kubernetes"
+    - "${CLUSTER}"
+
+env-cleanup:
+  extends: ".deploy-common"
+  environment:
+    name: "${NAMESPACE}"
+    action: "stop"
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $ENV_STOP_BEFORE != "no"
+      when: "always"
+  script:
+    - "helmfile destroy --namespace ${NAMESPACE}"
+    - "kubectl delete pvc --all --namespace ${NAMESPACE}"
+  stage: "env-cleanup"
+
+env-start:
+  environment:
+    name: "${NAMESPACE}"
+    url: "https://portal.${NAMESPACE}.${SWP_DOMAIN}"
+    on_stop: "env-stop"
+  extends: ".deploy-common"
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/
+      when: "always"
+  script:
+    - 'echo "Deploying to Environment ${NAMESPACE} in ${CLUSTER} Cluster"'
+    - "kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -"
+    - >
+      kubectl create secret
+      --namespace "${NAMESPACE}"
+      docker-registry external-registry
+      --docker-server "external-registry.souvap-univention.de"
+      --docker-username sovereign-workplace
+      --docker-password "${EXTERNAL_REGISTRY_PASSWORD}"
+      --dry-run=client -o yaml | kubectl apply -f -
+  stage: "env"
+
+services-deploy:
+  stage: "basic-services-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
+      when: always
+  variables:
+    COMPONENT: "services"
+
+ucs-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no")
+      when: always
+  variables:
+    COMPONENT: "univention-corporate-container"
+
+provisioning-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no" || $DEPLOY_PROVISIONING != "no")
+      when: always
+  variables:
+    COMPONENT: "provisioning"
+
+keycloak-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
+      when: always
+  variables:
+    COMPONENT: "keycloak"
+
+keycloak-bootstrap-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  timeout: 30m
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
+      when: always
+  variables:
+    COMPONENT: "keycloak-bootstrap"
+
+ox-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OX != "no")
+      when: always
+  variables:
+    COMPONENT: "open-xchange"
+
+ics-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ICS != "no")
+      when: always
+  variables:
+    COMPONENT: "intercom-service"
+
+xwiki-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_XWIKI != "no")
+      when: always
+  variables:
+    COMPONENT: "xwiki"
+
+collabora-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_COLLABORA != "no")
+      when: always
+  variables:
+    COMPONENT: "collabora"
+
+nextcloud-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no")
+      when: always
+  variables:
+    COMPONENT: "nextcloud"
+
+openproject-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OPENPROJECT != "no")
+      when: always
+  variables:
+    COMPONENT: "openproject"
+
+jitsi-deploy:
+  stage: "component-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_JITSI != "no")
+      when: always
+  variables:
+    COMPONENT: "jitsi"
+
+env-stop:
+  extends: ".deploy-common"
+  environment:
+    name: "${NAMESPACE}"
+    action: "stop"
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/
+      when: "manual"
+  script:
+    - "echo 'We do not stop the env (delete the namespace) at the moment in this stage, as deleting a branches also triggers this env-stop stage and we do not want this to happen.'"
+    # - kubectl delete namespace "${NAMESPACE}"
+  stage: "env-stop"
+  variables:
+    GIT_STRATEGY: "none"

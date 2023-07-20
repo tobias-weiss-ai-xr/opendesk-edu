@@ -1,0 +1,176 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+resources:
+  clamd:
+    limits:
+      cpu: 4
+      memory: "4Gi"
+    requests:
+      cpu: 0.1
+      memory: "2Gi"
+  dovecot:
+    limits:
+      cpu: 0.5
+      memory: "0.25Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  freshclam:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  icap:
+    limits:
+      cpu: 2
+      memory: "4Gi"
+    requests:
+      cpu: 0.1
+      memory: "2Gi"
+  jibri:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  jicofo:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  jitsi:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  jitsiKeycloakAdapter:
+    limits:
+      cpu: "100m"
+      memory: "128Mi"
+    requests:
+      cpu: "10m"
+      memory: "16Mi"
+  jvb:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  keycloak:
+    limits:
+      cpu: 2
+      memory: "2Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.75Gi"
+  keycloakExtension:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  keycloakBootstrap:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.25Gi"
+  keycloakProxy:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  mariadb:
+    limits:
+      cpu: 2
+      memory: "2Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.5Gi"
+  milter:
+    limits:
+      cpu: 4
+      memory: "4Gi"
+    requests:
+      cpu: 0.1
+      memory: "2Gi"
+  nextcloud:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.5Gi"
+  openproject:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.25Gi"
+  oxConnector:
+    limits:
+      cpu: 2
+      memory: "2Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.25Gi"
+  postfix:
+    limits:
+      cpu: 0.5
+      memory: "0.25Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  postgresql:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.25Gi"
+  prosody:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  redis:
+    limits:
+      cpu: 1
+      memory: "0.5Gi"
+    requests:
+      cpu: 0.1
+      memory: "0.1Gi"
+  univentionCorporateServer:
+    limits:
+      cpu: 2
+      memory: "4Gi"
+    requests:
+      cpu: 0.5
+      memory: "1Gi"
+  xwiki:
+    limits:
+      cpu: 2
+      memory: "8Gi"
+    requests:
+      cpu: 0.1
+      memory: "6Gi"
+
+...

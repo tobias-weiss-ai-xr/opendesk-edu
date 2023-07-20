@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "openproject"
+    url: "https://charts.openproject.org"
+
+releases:
+  - name: "openproject"
+    chart: "openproject/openproject"
+    version: "1.8.0"
+    values:
+      - "values.yaml"
+      - "values.gotmpl"
+    condition: "openproject.enabled"
+
+bases:
+  - "../../bases/environments.yaml"
+...

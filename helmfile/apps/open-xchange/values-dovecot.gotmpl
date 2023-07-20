@@ -1,0 +1,39 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  url: "{{ .Values.images.dovecot.repository }}"
+  tag: "{{ .Values.images.dovecot.tag }}"
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+
+dovecot:
+  mailDomain: "{{ .Values.global.domain }}"
+  password: {{ .Values.secrets.dovecot.doveadm }}
+  ldap:
+    dn: "uid=ldapsearch_dovecot,cn=users,dc=swp-ldap,dc=internal"
+    password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot }}
+  oidc:
+    introspectionURL: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token/introspect"
+    clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc }}
+    clientID: "as8oidc"
+
+ingress:
+  tls:
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+replicaCount: {{ .Values.replicas.dovecot }}
+
+persistence:
+  size: "{{ .Values.persistence.size.dovecot }}"
+  storageClassName: "{{ .Values.persistence.storageClassNames.RWX }}"
+
+resources:
+  {{ .Values.resources.dovecot | toYaml | nindent 2 }}
+...

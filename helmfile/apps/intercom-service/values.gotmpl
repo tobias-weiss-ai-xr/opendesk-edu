@@ -1,0 +1,43 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+ics:
+  secret: {{ .Values.secrets.intercom.secret }}
+  issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+  originRegex: "{{ .Values.istio.domain }}"
+  default:
+    domain: "{{ .Values.global.domain }}"
+  oidc:
+    secret: {{ .Values.secrets.keycloak.clientSecret.intercom }}
+  matrix:
+    asSecret: {{ .Values.secrets.jitsi.synapseAsToken }}
+    serverName: "matrix.{{ .Values.global.domain }}"
+  portal:
+    apiKey: {{ .Values.secrets.centralnavigation.apiKey }}
+  redis:
+    password: {{ .Values.secrets.redis.password }}
+  openxchange:
+    url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.intercom.repository }}"
+  tag: "{{ .Values.images.intercom.tag }}"
+
+ingress:
+  host: "{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}"
+  enabled: "{{ .Values.ingress.enabled }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: "{{ .Values.ingress.tls.enabled }}"
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+...

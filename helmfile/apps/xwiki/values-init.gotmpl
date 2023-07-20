@@ -1,0 +1,20 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+xwiki:
+  url: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/"
+  superadmin:
+    username: "superadmin"
+    password: {{ .Values.secrets.xwiki.superadminpassword | quote }}
+
+image:
+  repository: "{{ .Values.images.xwikiInit.repository }}"
+  tag: "{{ .Values.images.xwikiInit.tag }}"
+...

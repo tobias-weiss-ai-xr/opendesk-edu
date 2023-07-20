@@ -1,0 +1,92 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+images:
+  clamd:
+    repository: "clamav/clamav"
+    tag: "1.1.0_base"
+  collabora:
+    repository: "souvap/tooling/images/collabora"
+    tag: "23.05.1.2.1"
+  dovecot:
+    repository: "dovecot/dovecot"
+    tag: "2.3.20"
+  freshclam:
+    repository: "clamav/clamav"
+    tag: "1.1.0_base"
+  jibri:
+    repository: "jitsi/jibri"
+    tag: "stable-8615"
+  jicofo:
+    repository: "jitsi/jicofo"
+    tag: "stable-8615"
+  jitsi:
+    repository: "jitsi/web"
+    tag: "stable-8615"
+  jitsiKeycloakAdapter:
+    repository: "nordeck/jitsi-keycloak-adapter"
+    tag: "v20230425"
+  jitsiPatchJVB:
+    repository: "bitnami/kubectl"
+    tag: "1.26.6"
+  jvb:
+    repository: "jitsi/jvb"
+    tag: "stable-8615"
+  icap:
+    repository: "/souvap/tooling/images/c-icap/c-icap-clamav"
+    tag: "1.0.4"
+  intercom:
+    repository: "univention/intercom-service"
+    tag: "1.4-kubernetes"
+  keycloak:
+    repository: "bitnami/keycloak"
+    tag: "19.0.3-debian-11-r15"
+    digest: ""
+  keycloakBootstrap:
+    repository: "souvap/tooling/images/ansible"
+    tag: "4.10.0"
+  keycloakExtension:
+    repository: "souvap/tooling/images/keycloak-extensions/keycloak-proxy"
+    tag: "latest"
+  mariadb:
+    repository: "mariadb"
+    tag: "10"
+  memcached:
+    repository: "bitnami/memcached"
+    tag: "1.6.21-debian-11-r4"
+  milter:
+    repository: "clamav/clamav"
+    tag: "1.1.0_base"
+  nextcloud:
+    repository: "nextcloud"
+    tag: "26.0.1-apache"
+  openproject:
+    repository: "souvap/tooling/images/openproject/souvap"
+    tag: "dev"
+  oxConnector:
+    repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
+    tag: "tilt-56c67cc45d91a3a6"
+  postfix:
+    repository: "souvap/tooling/images/postfix"
+    tag: "1.0.0"
+  postgresql:
+    repository: "postgres"
+    tag: "15-alpine"
+  prosody:
+    repository: "jitsi/prosody"
+    tag: "stable-8615"
+  redis:
+    repository: "bitnami/redis"
+    tag: "7.0.12-debian-11-r0"
+  univentionCorporateServer:
+    repository: "souvap/tooling/images/univention-corporate-server-swp/ucs"
+    tag: "20230719T143819"
+  xwiki:
+    repository: "xwikisas/swp/xwiki"
+    tag: "0.4-mariadb-tomcat"
+  xwikiInit:
+    repository: "curlimages/curl"
+    tag: "8.1.2"
+...

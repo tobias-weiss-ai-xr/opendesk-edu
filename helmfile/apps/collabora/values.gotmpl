@@ -1,0 +1,36 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.collabora.repository }}"
+  tag: "{{ .Values.images.collabora.tag }}"
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: "{{ .Values.ingress.ingressClassName }}"
+  hosts:
+    - host: "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
+      paths:
+        - path: "/"
+          pathType: "Prefix"
+  tls:
+    - secretName: "{{ .Values.ingress.tls.secretName }}"
+      hosts:
+        - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
+
+collabora:
+  # Admin Console Credentials: https://CODE-domain/browser/dist/admin/admin.html
+  username: "collabora-internal-admin"
+  password: {{ .Values.secrets.collabora.adminPassword }}
+  aliasgroups:
+    - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}:443"
+
+replicaCount: {{ .Values.replicas.collabora }}
+...

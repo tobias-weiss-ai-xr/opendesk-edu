@@ -1,0 +1,40 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+databases:
+  keycloak:
+    name: "keycloak"
+    host: "postgresql"
+    port: 5432
+    username: "keycloak_user"
+    password: ""
+  keycloakExtension:
+    name: "keycloak_extensions"
+    host: "postgresql"
+    port: 5432
+    username: "keycloak_extensions_user"
+    password: ""
+  nextcloud:
+    name: "nextcloud"
+    host: "mariadb"
+    username: "nextcloud_user"
+    password: ""
+  openproject:
+    name: "openproject"
+    host: "postgresql"
+    port: 5432
+    username: "openproject_user"
+    password: ""
+  oxAppsuite:
+    host: "mariadb"
+    name: "CONFIGDB"
+    username: "root"
+    password: ""
+  xwiki:
+    name: "xwiki"
+    host: "mariadb"
+    username: "xwiki_user"
+    password: ""
+...
