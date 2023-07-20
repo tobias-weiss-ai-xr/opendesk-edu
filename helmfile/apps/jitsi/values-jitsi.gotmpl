@@ -112,7 +112,7 @@ patchJVB:
   image:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.jitsiPatchJVB.repository }}"
-    tag: "{{ .Values.images.jitsiPatchJVB.v20230425 }}"
+    tag: "{{ .Values.images.jitsiPatchJVB.tag }}"
 replicaCount: {{ .Values.replicas.jitsiKeycloakAdapter }}
 
 resources:
