@@ -6,9 +6,6 @@ stages:
   - "env"
   - "basic-services-deploy"
   - "component-deploy"
-  - "component-bootstrap"
-  - "ucs-post-bootstrap"
-  - "run-tests"
   - "env-stop"
 
 variables:
@@ -19,9 +16,11 @@ variables:
     description: "Define which cluster to use - don't select prototype when you are not explicitly knowing what you are doing!"
     value: "develop"
     options:
+      - "dev"
+      - "qa"
+      - "ref"
       - "develop"
       - "hubble"
-      - "dataport-dev"
       - "prototype"
   TLD:
     description: "Define the Cluster Domain (TLD)."
@@ -146,7 +145,7 @@ variables:
         export HELMFILE_ENVIRONMENT=uv-develop
       elif [ "${CLUSTER}" = "hubble" ]; then
         export HELMFILE_ENVIRONMENT=default
-      elif [ "${CLUSTER}" = "dataport-dev" ]; then
+      elif [ "${CLUSTER}" = "dev" ]; then
         export HELMFILE_ENVIRONMENT=ionos
       else
         echo "Unsupported cluster chosen: ${CLUSTER}"
