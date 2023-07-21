@@ -30,9 +30,9 @@ variables:
       - "souvap-univention.de"
       - "at-univention.de"
       - "souvap.cloud"
-  MASTER_PASSWORD:
+  MASTER_PASSWORD_WEB_VAR:
     description: "Optional: Provide a passphrase to be used for password generation."
-    value: "sovereign-workplace"
+    value: ""
   ENV_STOP_BEFORE:
     description: "Stop environment/delete namespace for the deployment"
     value: "no"
@@ -138,8 +138,8 @@ variables:
       file: false
   script:
     - cd "${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
-    # Match Cluster to helmfile environments
     - |
+      # Match Cluster to helmfile environments
       if [ "${CLUSTER}" = "develop" ]; then
         export HELMFILE_ENVIRONMENT=uv-develop
       elif [ "${CLUSTER}" = "prototype" ]; then
@@ -151,6 +151,10 @@ variables:
       else
         echo "Unsupported cluster chosen: ${CLUSTER}"
         exit 1
+      fi;
+      # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
+      if ! [ -z "${MASTER_PASSWORD_WEB_VAR}" ]; then
+        export MASTER_PASSWORD="${MASTER_PASSWORD_WEB_VAR}"
       fi;
     - echo "Installing ${COMPONENT} into ${NAMESPACE} namespace as ${HELMFILE_ENVIRONMENT} environment on ${CLUSTER}"
     - helmfile --namespace ${NAMESPACE} apply --suppress-diff

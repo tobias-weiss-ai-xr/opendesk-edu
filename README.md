@@ -10,11 +10,13 @@ SPDX-License-Identifier: Apache-2.0
 
 The current state of the SWP is missing two components that are not yet generally available to the public also
 outside the SWP (Element Starter Edition and Open-Xchange App Suite 8), and contains components that will be replaced
-(e.g. UCS container monolith to be replaced by multiple Univention Management Stack containers).
+(e.g. UCS dev container monolith to be replaced by multiple Univention Management Stack containers).
 In the next months we not only expect upstream updates of the functional components within their feature scope but we
 are going to address operational issues like monitoring and network policies.
 
-Of course we will extend the documentation and would love to get [feedback from you](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#mitwirkung-und-beteiligung) regarding the areas you require more details on. But be sure also without that feedback the documentation will grow.
+Of course we will also extend the documentation.
+
+In any case we love to get [feedback from you](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#mitwirkung-und-beteiligung) regarding the documentation as well as your experience with the deployment and the SWP itself.
 
 The first release of the SWP is scheduled for December 2023.
 
@@ -92,10 +94,19 @@ All of these requirements are optional as long as you do not want to make use of
 
 The project includes a `.gitlab-ci.yml` that allows you to execute the deployment from a Gitlab instance of your choice.
 
-Please ensure you provide the variables listed in the `Required input variables` section. When starting the CI through
-the Gitlab UI you will be queried for some of the variables, but the variable `ISTIO_DOMAIN` will be derived
-automatically by prefixing `DOMAIN` with `istio.`. Other variables you are not asked for when triggering the CI you may
-want to set in the projects `Settings` > `CI/CD` > `Variables`.
+Please ensure you provide the variables listed in the `Required input variables` section.
+
+When starting the CI through the Gitlab UI you will be queried for some of the variables and in addition for
+
+- `NAMESPACE`: Defines into which namespace of your K8s cluster the SWP will be installed
+- `MASTER_PASSWORD_WEB_VAR`: Overwrite value of `MASTER_PASSWORD`
+
+Based on your input the following variables will be set:
+- `DOMAIN` = `NAMESPACE`.`DOMAIN`
+- `ISTIO_DOMAIN` = istio.`DOMAIN`
+- `MASTER_PASSWORD` = `MASTER_PASSWORD_WEB_VAR` if that is not given `MASTER_PASSWORD` will be used, that could be set as masked CI variable in Gitlab or as a fallback the default value of `MASTER_PASSWORD`.
+
+You might want to set password / credential variables in the projects `Settings` > `CI/CD` > `Variables`.
 
 ### Local
 
@@ -190,25 +201,26 @@ In case you don't got for a develop or evaluation environment you want to point 
 
 #### Scaling
 
-Replicas for scalable components can be increased.
+Replicas for components can be increased, while we still have to look in the actual scalability of the
+components (see column `Scales at least to 2`).
 
-| Component   | Name                   | Default | Service            | Scaling            |
-|-------------|------------------------|---------|--------------------|--------------------|
-| ClamAV      | `replicas.clamd`       | `1`     | :white_check_mark: | :white_check_mark: |
-|             | `replicas.freshclam`   | `1`     | :white_check_mark: | :x:                |
-|             | `replicas.icap`        | `1`     | :white_check_mark: | :white_check_mark: |
-|             | `replicas.milter`      | `1`     | :white_check_mark: | :white_check_mark: |
-| Collabora   | `replicas.collabora`   | `1`     | :white_check_mark: | :white_check_mark: |
-| Dovecot     | `replicas.dovecot`     | `1`     | :white_check_mark: | :x:                |
-| Jitsi       | `replicas.jibri`       | `1`     | :white_check_mark: | :white_check_mark: |
-|             | `replicas.jicofo`      | `1`     | :white_check_mark: | :white_check_mark: |
-|             | `replicas.jitsi `      | `1`     | :white_check_mark: | :white_check_mark: |
-|             | `replicas.jvb `        | `1`     | :white_check_mark: | :white_check_mark: |
-| Keycloak    | `replicas.keycloak`    | `1`     | :white_check_mark: | :white_check_mark: |
-| Nextcloud   | `replicas.nextcloud`   | `1`     | :white_check_mark: | :white_check_mark: |
-| OpenProject | `replicas.openproject` | `1`     | :white_check_mark: | :white_check_mark: |
-| Postfix     | `replicas.postfix`     | `1`     | :white_check_mark: | :x:                |
-| XWiki       | `replicas.xwiki`       | `1`     | :white_check_mark: | :white_check_mark: |
+| Component   | Name                   | Default | Service            | Scaling            | Scales at least to 2 |
+|-------------|------------------------|---------|--------------------|--------------------|----------------------|
+| ClamAV      | `replicas.clamd`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+|             | `replicas.freshclam`   | `1`     | :white_check_mark: | :x:                | not tested           |
+|             | `replicas.icap`        | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+|             | `replicas.milter`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+| Collabora   | `replicas.collabora`   | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+| Dovecot     | `replicas.dovecot`     | `1`     | :white_check_mark: | :x:                | not tested           |
+| Jitsi       | `replicas.jibri`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+|             | `replicas.jicofo`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+|             | `replicas.jitsi `      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+|             | `replicas.jvb `        | `1`     | :white_check_mark: | :white_check_mark: | tested               |
+| Keycloak    | `replicas.keycloak`    | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+| Nextcloud   | `replicas.nextcloud`   | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+| OpenProject | `replicas.openproject` | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+| Postfix     | `replicas.postfix`     | `1`     | :white_check_mark: | :x:                | not tested           |
+| XWiki       | `replicas.xwiki`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 
 ## Identity data flows
 
