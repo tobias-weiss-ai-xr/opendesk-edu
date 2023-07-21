@@ -8,137 +8,49 @@ SPDX-License-Identifier: Apache-2.0
 
 # Disclaimer July 2023
 
-The current state of the SouvAP is missing two components that are not yet generally available to the public also outside the SouvAP (Element Starter Edition and Open-Xchange App Suite 8), and contains components that will be replaced (e.g. UCS container monolith with multiple Univention Management Stack containers). We not only expect upstream updates of the functional components within their feature scope but we are going to address operational issues like monitoring and network policies.
+The current state of the SWP is missing two components that are not yet generally available to the public also
+outside the SWP (Element Starter Edition and Open-Xchange App Suite 8), and contains components that will be replaced
+(e.g. UCS container monolith to be replaced by multiple Univention Management Stack containers).
+In the next months we not only expect upstream updates of the functional components within their feature scope but we
+are going to address operational issues like monitoring and network policies.
 
-Of course we will extend the documentation
+Of course we will extend the documentation and would love to get [feedback from you](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#mitwirkung-und-beteiligung) regarding the areas you require more details on. But be sure also without that feedback the documentation will grow.
 
+The first release of the SWP is scheduled for December 2023.
 
 # The Sovereign Workplace (SWP)
 
 The SWP's runtime environment is [Kubernetes](https://kubernetes.io/), often written in it's short form "K8s".
 
-While not all components are perfectly shaped for the execution as containers, one of the projects objectives is the make the applications more aligned with best practise when it comes to container design and operations.
+While not all components are perfectly shaped for the execution as containers, one of the projects objectives is the
+make the applications more aligned with best practise when it comes to container design and operations.
 
-This documentation gives you - hopefully - all you need to setup your own instance of the SWP. You should have at least basic knowledge Kubernetes and Devops knowledge.
+This documentation gives you - hopefully - all you need to setup your own instance of the SWP. You should have at least
+basic knowledge Kubernetes and Devops knowledge.
 
-To have an overview of what can be found at Open CoDE and the basic components of the SWP, please check out the [OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md) in the [Info repository](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info).
+To have an overview of what can be found at Open CoDE and the basic components of the SWP, please check out the
+[OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md) in the
+[Info repository](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info).
 
-Especially check out the section ["Mitwirkung und Beteiligung"](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#mitwirkung-und-beteiligung) if you are missing something or you have questions. We appreciate your feedback to improve product and documentation.
+Especially check out the section
+["Mitwirkung und Beteiligung"](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#mitwirkung-und-beteiligung)
+if you are missing something or you have questions. We appreciate your feedback to improve product and documentation.
+
 ## Prerequisites
+
+### Mandatory technical prerequisites
 
 You have to take care about the following prerequisites in order to deploy the SWP:
 
 - Vanilla K8s cluster
-- Domain and DNS Service [ToDo: manual setup docu with * record...]
-- Ingress controller (supported are nginx-ingress, ingress-nginx, HAProxy and Cillium)
-- [Helm](https://helm.sh/), [HelmFile](https://helmfile.readthedocs.io/en/latest/) and [HelmDiff](https://github.com/databus23/helm-diff)
+- Domain and DNS Service
+- Ingress controller (supported are nginx-ingress, ingress-nginx, HAProxy)
+- [Helm](https://helm.sh/), [HelmFile](https://helmfile.readthedocs.io/en/latest/) and
+[HelmDiff](https://github.com/databus23/helm-diff)
 - Volume provisioner supporting RWO (read-write-once) and RWX (read-write-many)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
-- [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are working with Open-Xchange to get rid of this component.
-
-### Feature based prerequisites
-
-- An external SMTP relay/gateway for sending mails from various components
-- PKI / CI for Open-Xchange AppSuite S/MIME feature
-- STUN/TURN server
-
-#
-
-- Domain and cert management (table with all hostnames we need to set (`<function>.<domain>`), reference to cert-manager, manual requires in DNS service)
-- Parametrisierungsdoku
-  - Service components
-  - Environments (ingress & storage definitions)
-  - Secrets (and "upstream" input secrets)
-
-[ggf. später]
-- Debugging (explain the centralized debugging values and provide additional debugging info for each component - when available. Explain that the midterm goal is to have distroless containers!)
-- Functional Components
-- Service Components
-- CONTRIBUTE.md
-
-
-## Self contained deployment
-
-We differenciate between
-- functional components (e.g. Fileshare, Groupware, IAM etc.) that are the actual focus of the SWP and
-- service components (e.g. databases, storage) that are available within this deployment as well in order to make it self-contained. But in other than dev, test and demo scenarios we expect service components to be provided externally by the operator.
-
-**DEV-REQUIREMENT**: A functional component that makes use of a service component has to support a config option that allows the use of an external service and skips the installation of the given service component within the deployment, as long as no other functional compontent still relies on that service component.
-
-## CI based deployment
-
-**Note: Please only deploy components you need for your developmet, as the full stack is quite resource hungry and we have limited resources. There is a nightly (namespace `nighly`) build from `main` on the `develop` cluster with all components enabled.**
-
-**Note: Currently Gitlab sometimes does not load the configures pipeline variables as expected, so if you don't see any predefined variables on the pipelines mentioned in this document you want to reload the page in order to ensure there aren't any variables. It works on reload in 99% of the cases.**
-
-- Please use the `develop` cluster unless you are explicitly advised to use another cluster.
-- Install prerequisites and gain access to the cluster following the instructions here: https://gitlab.souvap-univention.de/groups/souvap/devops/-/wikis/deployment/K8s-cluster
-- In order to deploy an instance of the SWP with selected components by running the pipeline of this project you need to request a certificate first by executing this pipeline: https://gitlab.souvap-univention.de/souvap/infrastructure/k8s-certificates/-/pipelines/new stating your desired namespace.
-  - You might want to check the available certificates first: `kubectl -n istio-system get certificate`
-  - We have separated the cert-management from the actual deployment to avoid getting hit my letsencrypt's rate limits.
-
-Todos
-- some info on the modules
-- some info on how long a deployment takes
-- rerun / update vs redeploy vs refresh complete namespace
-- some info on "debugging" the deployment
-- semantic release (on main)
-
-## Local deployments
-
-[..]
-
-## Helmfile
-
-### Setup
-
-helmfile needs `helm` and the helm plugin `helm-diff` to run properly.
-
-To install helm-diff (  helm >2.3.):
-```bash
-helm plugin install https://github.com/databus23/helm-diff
-```
-
-### Environment
-
-You need to expose following variables to run the default installation with helmfile
-
-
-| name                | default                      | description                                              |
-|---------------------|------------------------------|----------------------------------------------------------|
-| `DOMAIN`            | `souvap-univention.de`       | External reachable TLD.                                  |
-| `ISTIO_DOMAIN`      | `istio.souvap-univention.de` | External reachable TLD for Istio Gateway.                |
-| `MASTER_PASSWORD`   | `sovereign-workplace`        | The password where generated passwords are derived from. |
-| `SMTP_PASSWORD`     |                              | Password for STMP relay gateway.                         |
-| `TURN_CREDENTIALS`  |                              | Credentials for coturn server.                           |
-
-### Configuration
-
-In order to have a functional deployment, you need to adapt the default values to your infrastructure.
-
-#### Deployment selection
-
-As default, all available components are deployed.
-
-| Component                   | Name                                | Default | Description                     |
-|-----------------------------|-------------------------------------|---------|---------------------------------|
-| Certificates                | `certificates.enabled`              | `true`  | TLS certificates.               |
-| ClamAV                      | `clamav.enabled`                    | `true`  | Antivirus engine.               |
-| Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                       |
-| Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend (for development). |
-| Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange.    |
-| Jitsi                       | `jitsi.enabled`                     | `true`  | Videoconferencing               |
-| Keycloak                    | `keycloak.enabled`                  | `true`  | Identity Provider               |
-| MariaDB                     | `mariadb.enabled`                   | `true`  | Database (for development)      |
-| Nextcloud                   | `nextcloud.enabled`                 | `true`  | File share                      |
-| OpenProject                 | `openproject.enabled`               | `true`  | Project management              |
-| OX Appsuite                 | `oxAppsuite.enabled`                | `true`  | Groupware                       |
-| OX Connector                | `oxConnector.enabled`               | `true`  | Backend provisioning            |
-| Postfix                     | `postfix.enabled`                   | `true`  | MTA (for development)           |
-| PostgreSQL                  | `postgresql.enabled`                | `true`  | Database (for development)      |
-| Redis                       | `redis.enabled`                     | `true`  | Cache (for development)         |
-| Univention Corporate Server | `univentionCorporateServer.enabled` | `true`  | LDAP                            |
-| XWIKI                       | `xwiki.enabled`                     | `true`  | Knowledgebase                   |
+- [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are working with Open-Xchange
+to get rid of this component.
 
 #### TLS Certificate
 
@@ -146,7 +58,99 @@ The setup will create a `cert-manager.io` Certificate resource.
 
 You can set the ClusterIssuer via `certificate.issuerRef.name`
 
+### Required input variables
+
+You need to expose following variables to run the installation.
+
+| name                | default                      | description                                       |
+|---------------------|------------------------------|---------------------------------------------------|
+| `DOMAIN`            | `souvap-univention.de`       | External reachable TLD                            |
+| `ISTIO_DOMAIN`      | `istio.souvap-univention.de` | External reachable TLD for Istio Gateway          |
+| `MASTER_PASSWORD`   | `sovereign-workplace`        | The password that seeds the autogenerated secrets |
+| `SMTP_PASSWORD`     |                              | Password for STMP relay gateway                   |
+| `TURN_CREDENTIALS`  |                              | Credentials for coturn server                     |
+
+Please ensure you have set DNS records pointing to the respective loadbalancer/IP for `DOMAIN` and `ISTIO_DOMAIN`.
+
+If you want inbound mail also MX records that point to the Postfix's pods public IP.
+
+More details on the DNS options incl. SPF/DKIM and autodiscovery options to come...
+
+### Optional or feature based prerequisites
+
+All of these requirements are optional as long as you do not want to make use of the given feature.
+
+| Feature                      | Component(s)   | Requirement         |
+|------------------------------|----------------|---------------------|
+| Sending outbound emails      | Various        | SMTP relay/gateway  |
+| S/MIME Support               | OX AppSuite8   | PKI / CI            |
+| Improved videoconferencing   | Jitsi          | STUN/TURN server    |
+
+## Deployments
+
+### CI based
+
+The project includes a `.gitlab-ci.yml` that allows you to execute the deployment from a Gitlab instance of your choice.
+
+Please ensure you provide the variables listed in the `Required input variables` section. When starting the CI through
+the Gitlab UI you will be queried for some of the variables, but the variable `ISTIO_DOMAIN` will be derived
+automatically by prefixing `DOMAIN` with `istio.`. Other variables you are not asked for when triggering the CI you may
+want to set in the projects `Settings` > `CI/CD` > `Variables`.
+
+### Local
+
+Please ensure you have set the `Required input variables` (see section above) and have also read the `Helmfile` section below for non default configurations. Then go with
+
+```shell
+helmfile apply -n <NAMESPACE>
+```
+
+and wait. After the deployment are finished some bootstrapping is executed which might take some more minutes before you can login.
+
+## Logging in
+
+Once you have successfully deployed the SWP you should see the portal's login page at `https://portal.<DOMAIN>`.
+
+Off the shelf you get two accounts with passwords you can lookup in the `univention-corporate-container-*` pod environment:
+
+| Username / Login   | Password environment variable  |
+|--------------------|--------------------------------|
+| default.user       | DEFAULT_ACCOUNT_USER_PASSWORD  |
+| default.admin      | DEFAULT_ACCOUNT_ADMIN_PASSWORD |
+
+## Helmfile
+
+### Custom Configuration
+
+#### Deployment selection
+
+By default all components are deployed. The components of type `Eval` are used for development and evaluation
+purposes only and need to be replaced in production deployments. These components are grouped together in the
+subdirectory `/helmfile/apps/services`.
+
+| Component                   | Name                                | Default | Description                  | Type       |
+|-----------------------------|-------------------------------------|---------|------------------------------|------------|
+| Certificates                | `certificates.enabled`              | `true`  | TLS certificates             | Eval       |
+| ClamAV                      | `clamav.enabled`                    | `true`  | Antivirus engine             | Eval       |
+| Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                    | Functional |
+| Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend                 | Functional |
+| Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange  | Functional |
+| Jitsi                       | `jitsi.enabled`                     | `true`  | Videoconferencing            | Functional |
+| Keycloak                    | `keycloak.enabled`                  | `true`  | Identity Provider            | Functional |
+| MariaDB                     | `mariadb.enabled`                   | `true`  | Database                     | Eval       |
+| Nextcloud                   | `nextcloud.enabled`                 | `true`  | File share                   | Functional |
+| OpenProject                 | `openproject.enabled`               | `true`  | Project management           | Functional |
+| OX Appsuite                 | `oxAppsuite.enabled`                | `true`  | Groupware                    | Functional |
+| Provisioning                | `oxConnector.enabled`               | `true`  | Backend provisioning         | Functional |
+| Postfix                     | `postfix.enabled`                   | `true`  | MTA                          | Eval       |
+| PostgreSQL                  | `postgresql.enabled`                | `true`  | Database                     | Eval       |
+| Redis                       | `redis.enabled`                     | `true`  | Cache Database               | Eval       |
+| Univention Corporate Server | `univentionCorporateServer.enabled` | `true`  | Identity Management & Portal | Functional |
+| XWiki                       | `xwiki.enabled`                     | `true`  | Knowledgebase                | Functional |
+
 #### Databases
+
+In case you don't got for a develop or evaluation environment you want to point the application to your own database instances.
 
 | Component   | Name               | Type       | Parameter | Key                                    | Default                    |
 |-------------|--------------------|------------|-----------|----------------------------------------|----------------------------|
@@ -178,7 +182,7 @@ You can set the ClusterIssuer via `certificate.issuerRef.name`
 |             |                    |            | Host      | `databases.oxAppsuite.host`            | `mariadb`                  |
 |             |                    |            | Username  | `databases.oxAppsuite.username`        | `root`                     |
 |             |                    |            | Password  | `databases.oxAppsuite.password`        |                            |
-| XWIKI       | XWIKI              | MariaDB    |           |                                        |                            |
+| XWiki       | XWiki              | MariaDB    |           |                                        |                            |
 |             |                    |            | Name      | `databases.xwiki.name`                 | `xwiki`                    |
 |             |                    |            | Host      | `databases.xwiki.host`                 | `mariadb`                  |
 |             |                    |            | Username  | `databases.xwiki.username`             | `xwiki_user`               |
@@ -204,4 +208,33 @@ Replicas for scalable components can be increased.
 | Nextcloud   | `replicas.nextcloud`   | `1`     | :white_check_mark: | :white_check_mark: |
 | OpenProject | `replicas.openproject` | `1`     | :white_check_mark: | :white_check_mark: |
 | Postfix     | `replicas.postfix`     | `1`     | :white_check_mark: | :x:                |
-| XWIKI       | `replicas.xwiki`       | `1`     | :white_check_mark: | :white_check_mark: |
+| XWiki       | `replicas.xwiki`       | `1`     | :white_check_mark: | :white_check_mark: |
+
+## Identity data flows
+
+An overview on
+- components that consume data from the ldap, in most cases using a dedicated ldap search account and
+- components using Keycloak as IdP, if not otherwise denoted based on the OAuth2 / OIDC flows.
+
+Some components trust others to handle authentication for them.
+
+```mermaid
+flowchart TD
+    K[Keycloak]-->L[LDAP]
+    N[Nextcloud]-->L
+    A[OX AppSuite]-->L
+    D[OX Dovecot]-->L
+    P[Portal/Admin]-->L
+    O[OpenProject]-->|in 2023|L
+    X[XWiki]-->|in 2023|L
+    F[Postfix]-->D
+    A-->K
+    N-->K
+    D-->K
+    O-->K
+    X-->K
+    P-->|SAML|K
+    E[Element]-->K
+    J[Jitsi]-->K
+    C[Collabora]-->N
+```
