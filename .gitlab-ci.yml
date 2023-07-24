@@ -5,7 +5,8 @@ stages:
   - "env-cleanup"
   - "env"
   - "basic-services-deploy"
-  - "component-deploy"
+  - "component-deploy-stage-1"
+  - "component-deploy-stage-2"
   - "env-stop"
 
 variables:
@@ -209,7 +210,7 @@ services-deploy:
     COMPONENT: "services"
 
 ucs-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no")
@@ -218,7 +219,7 @@ ucs-deploy:
     COMPONENT: "univention-corporate-container"
 
 provisioning-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-2"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no" || $DEPLOY_PROVISIONING != "no")
@@ -227,7 +228,7 @@ provisioning-deploy:
     COMPONENT: "provisioning"
 
 keycloak-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
@@ -236,7 +237,7 @@ keycloak-deploy:
     COMPONENT: "keycloak"
 
 keycloak-bootstrap-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   timeout: 30m
   rules:
@@ -246,7 +247,7 @@ keycloak-bootstrap-deploy:
     COMPONENT: "keycloak-bootstrap"
 
 ox-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OX != "no")
@@ -255,7 +256,7 @@ ox-deploy:
     COMPONENT: "open-xchange"
 
 ics-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ICS != "no")
@@ -264,7 +265,7 @@ ics-deploy:
     COMPONENT: "intercom-service"
 
 xwiki-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_XWIKI != "no")
@@ -273,7 +274,7 @@ xwiki-deploy:
     COMPONENT: "xwiki"
 
 collabora-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_COLLABORA != "no")
@@ -282,7 +283,7 @@ collabora-deploy:
     COMPONENT: "collabora"
 
 nextcloud-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no")
@@ -291,7 +292,7 @@ nextcloud-deploy:
     COMPONENT: "nextcloud"
 
 openproject-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OPENPROJECT != "no")
@@ -300,7 +301,7 @@ openproject-deploy:
     COMPONENT: "openproject"
 
 jitsi-deploy:
-  stage: "component-deploy"
+  stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
     - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_JITSI != "no")
