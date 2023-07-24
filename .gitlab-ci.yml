@@ -148,6 +148,8 @@ variables:
         export HELMFILE_ENVIRONMENT=default
       elif [ "${CLUSTER}" = "dev" ]; then
         export HELMFILE_ENVIRONMENT=ionos
+      elif [ "${CLUSTER}" = "qa" ]; then
+        export HELMFILE_ENVIRONMENT=ionos
       else
         echo "Unsupported cluster chosen: ${CLUSTER}"
         exit 1
