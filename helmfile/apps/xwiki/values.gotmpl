@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  url: "{{ .Values.global.imageRegistry }}/{{ .Values.images.xwiki.repository }}"
+  name: "{{ .Values.global.imageRegistry }}/{{ .Values.images.xwiki.repository }}"
   tag: "{{ .Values.images.xwiki.tag }}"
 
 externalDB:
