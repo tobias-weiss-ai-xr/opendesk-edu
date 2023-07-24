@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+include:
+  - project: "souvap/devops/sovereign-workplace-env"
+    file: "gitlab/environments.yaml"
+
 stages:
   - "env-cleanup"
   - "env"
@@ -118,6 +122,7 @@ variables:
 .deploy-common:
   cache: {}
   dependencies: []
+  extends: ".environments"
   image: "registry.souvap-univention.de/souvap/tooling/images/helm:latest"
   secrets:
     SMTP_PASSWORD:
@@ -138,23 +143,8 @@ variables:
       file: false
   script:
     - cd "${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
-    - |
-      # Match Cluster to helmfile environments
-      if [ "${CLUSTER}" = "develop" ]; then
-        export HELMFILE_ENVIRONMENT=uv-develop
-      elif [ "${CLUSTER}" = "prototype" ]; then
-        export HELMFILE_ENVIRONMENT=uv-develop
-      elif [ "${CLUSTER}" = "hubble" ]; then
-        export HELMFILE_ENVIRONMENT=default
-      elif [ "${CLUSTER}" = "dev" ]; then
-        export HELMFILE_ENVIRONMENT=ionos
-      elif [ "${CLUSTER}" = "qa" ]; then
-        export HELMFILE_ENVIRONMENT=ionos
-      else
-        echo "Unsupported cluster chosen: ${CLUSTER}"
-        exit 1
-      fi;
       # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
+    - |
       if ! [ -z "${MASTER_PASSWORD_WEB_VAR}" ]; then
         export MASTER_PASSWORD="${MASTER_PASSWORD_WEB_VAR}"
       fi;
@@ -164,6 +154,8 @@ variables:
     - "docker"
     - "kubernetes"
     - "${CLUSTER}"
+  variables:
+    HELMFILE_ENVIRONMENT: "dev"
 
 env-cleanup:
   extends: ".deploy-common"

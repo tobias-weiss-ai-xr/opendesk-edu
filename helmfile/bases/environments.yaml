@@ -5,12 +5,12 @@ environments:
   default:
     values:
       - "../../environments/default/*.gotmpl"
-  ionos:
+  dev:
     values:
       - "../../environments/default/*.gotmpl"
-      - "../../environments/ionos/values.yaml"
-  uv-develop:
+      - "../../environments/dev/values.yaml"
+  prod:
     values:
       - "../../environments/default/*.gotmpl"
-      - "../../environments/uv-develop/values.yaml"
+      - "../../environments/prod/values.yaml"
 ...

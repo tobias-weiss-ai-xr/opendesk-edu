@@ -1,11 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-ingress:
-  ingressClassName: "dedicated-haproxy-external"
-
-persistence:
-  storageClassNames:
-    RWX: "nfs-client"
-    RWO: "ionos-enterprise-ssd"
+# This a sample file and could be filled with proper variable overload.
+sample: true
 ...
