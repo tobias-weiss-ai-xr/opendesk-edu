@@ -2,3 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 .vscode
 .idea
+
+# Ignore changes to sample environments
+helmfile/environments/dev/
+helmfile/environments/prod/
