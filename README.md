@@ -16,7 +16,9 @@ are going to address operational issues like monitoring and network policies.
 
 Of course we will also extend the documentation.
 
-In any case we love to get [feedback from you](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#mitwirkung-und-beteiligung) regarding the documentation as well as your experience with the deployment and the SWP itself.
+In any case we love to get feedback from you! Related to the deployment / contents of this repository please use the [issues within this project](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/issues).
+
+ If you want to address other topics, please check the section ["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
 
 The first release of the SWP is scheduled for December 2023.
 
@@ -96,13 +98,14 @@ The project includes a `.gitlab-ci.yml` that allows you to execute the deploymen
 
 Please ensure you provide the variables listed in the `Required input variables` section.
 
-When starting the CI through the Gitlab UI you will be queried for some of the variables and in addition for
+When starting the CI through the Gitlab UI you will be queried for some of the variables plus the following ones:
 
+- `TLD`: The base domain the SWP will be installed at e.g. `souvap.cloud`
 - `NAMESPACE`: Defines into which namespace of your K8s cluster the SWP will be installed
 - `MASTER_PASSWORD_WEB_VAR`: Overwrite value of `MASTER_PASSWORD`
 
 Based on your input the following variables will be set:
-- `DOMAIN` = `NAMESPACE`.`DOMAIN`
+- `DOMAIN` = `NAMESPACE`.`TLD`
 - `ISTIO_DOMAIN` = istio.`DOMAIN`
 - `MASTER_PASSWORD` = `MASTER_PASSWORD_WEB_VAR` if that is not given `MASTER_PASSWORD` will be used, that could be set as masked CI variable in Gitlab or as a fallback the default value of `MASTER_PASSWORD`.
 
