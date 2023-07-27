@@ -4,8 +4,7 @@
 config:
   administrator:
     username: "nextcloud"
-  antivirus:
-    host: "clamav-sovereign-workplace-icap"
+
   apps:
     integrationSwp:
       username: "phoenixusername"

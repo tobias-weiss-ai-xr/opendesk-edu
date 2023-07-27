@@ -4,10 +4,15 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 replicas:
+  {{/* clamav-simple */}}
+  clamav: 1
+  {{/* clamav-distributed */}}
   clamd: 1
   collabora: 1
   dovecot: 1
+  {{/* clamav-distributed */}}
   freshclam: 1
+  {{/* clamav-distributed */}}
   icap: 1
   jibri: 1
   jicofo: 1
@@ -15,6 +20,7 @@ replicas:
   jitsiKeycloakAdapter: 1
   jvb: 1
   keycloak: 1
+  {{/* clamav-distributed */}}
   milter: 1
   nextcloud: 1
   openproject: 1

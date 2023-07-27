@@ -7,7 +7,9 @@ masterPassword: {{ env "MASTER_PASSWORD" | default "sovereign-workplace" }}
 
 certificates:
   enabled: true
-clamav:
+clamavDistributed:
+  enabled: true
+clamavSimple:
   enabled: true
 collabora:
   enabled: true

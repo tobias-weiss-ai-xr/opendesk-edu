@@ -145,7 +145,8 @@ subdirectory `/helmfile/apps/services`.
 | Component                   | Name                                | Default | Description                  | Type       |
 |-----------------------------|-------------------------------------|---------|------------------------------|------------|
 | Certificates                | `certificates.enabled`              | `true`  | TLS certificates             | Eval       |
-| ClamAV                      | `clamav.enabled`                    | `true`  | Antivirus engine             | Eval       |
+| ClamAV (Distributed)        | `clamavDistributed.enabled`         | `true`  | Antivirus engine             | Eval       |
+| ClamAV (Simple)             | `clamavSimple.enabled`              | `false` | Antivirus engine             | Eval       |
 | Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                    | Functional |
 | Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend                 | Functional |
 | Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange  | Functional |
@@ -209,7 +210,8 @@ components (see column `Scales at least to 2`).
 
 | Component   | Name                   | Default | Service            | Scaling            | Scales at least to 2 |
 |-------------|------------------------|---------|--------------------|--------------------|----------------------|
-| ClamAV      | `replicas.clamd`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+| ClamAV      | `replicas.clamav`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+|             | `replicas.clamd`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 |             | `replicas.freshclam`   | `1`     | :white_check_mark: | :x:                | not tested           |
 |             | `replicas.icap`        | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 |             | `replicas.milter`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
@@ -218,7 +220,7 @@ components (see column `Scales at least to 2`).
 | Jitsi       | `replicas.jibri`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 |             | `replicas.jicofo`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 |             | `replicas.jitsi `      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.jvb `        | `1`     | :white_check_mark: | :white_check_mark: | tested               |
+|             | `replicas.jvb `        | `1`     | :white_check_mark: | :x:                | tested               |
 | Keycloak    | `replicas.keycloak`    | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 | Nextcloud   | `replicas.nextcloud`   | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 | OpenProject | `replicas.openproject` | `1`     | :white_check_mark: | :white_check_mark: | not tested           |

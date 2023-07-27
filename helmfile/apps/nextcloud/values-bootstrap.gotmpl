@@ -15,6 +15,14 @@ global:
 config:
   administrator:
     password: {{ .Values.secrets.nextcloud.adminPassword }}
+
+  antivirus:
+    {{- if .Values.clamavDistributed.enabled }}
+    host: "clamav-sovereign-workplace-icap"
+    {{- else if .Values.clamavSimple.enabled }}
+    host: "clamav-simple"
+    {{- end }}
+
   apps:
     integrationSwp:
       password: {{ .Values.secrets.centralnavigation.apiKey }}
