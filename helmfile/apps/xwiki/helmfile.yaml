@@ -25,6 +25,11 @@ releases:
     values:
       - "values-init.gotmpl"
     condition: "xwiki.enabled"
+
+commonLabels:
+  deploy-stage: "component-1"
+  component: "xwiki"
+
 bases:
   - "../../bases/environments.yaml"
 ...

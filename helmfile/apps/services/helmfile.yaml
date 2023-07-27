@@ -64,6 +64,11 @@ releases:
     values:
       - "values-istio-gateway.gotmpl"
     condition: "istio.enabled"
+
+commonLabels:
+  deploy-stage: "services"
+  component: "services"
+
 bases:
   - "../../bases/environments.yaml"
 ...

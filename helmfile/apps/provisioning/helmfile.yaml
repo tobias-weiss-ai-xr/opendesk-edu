@@ -14,6 +14,10 @@ releases:
       - "values-oxconnector.gotmpl"
     condition: "oxConnector.enabled"
 
+commonLabels:
+  deploy-stage: "component-2"
+  component: "provisioning"
+
 bases:
   - "../../bases/environments.yaml"
 ...

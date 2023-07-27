@@ -35,6 +35,10 @@ releases:
       - "values-extensions.gotmpl"
     condition: "keycloak.enabled"
 
+commonLabels:
+  deploy-stage: "component-1"
+  component: "keycloak"
+
 bases:
   - "../../bases/environments.yaml"
 ...

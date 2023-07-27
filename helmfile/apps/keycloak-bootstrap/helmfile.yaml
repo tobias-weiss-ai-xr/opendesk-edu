@@ -15,6 +15,11 @@ releases:
     condition: "keycloak.enabled"
     # as we have seen some slow clusters we want to ensure we not just fail due to a timeout.
     timeout: 1800
+
+commonLabels:
+  deploy-stage: "component-1"
+  component: "keycloak-bootstrap"
+
 bases:
   - "../../bases/environments.yaml"
 ...

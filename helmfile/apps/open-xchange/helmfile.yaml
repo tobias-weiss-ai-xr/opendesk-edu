@@ -34,6 +34,11 @@ releases:
     values:
       - "values-openxchange-bootstrap.yaml"
     condition: "oxAppsuite.enabled"
+
+commonLabels:
+  deploy-stage: "component-1"
+  component: "open-xchange"
+
 bases:
   - "../../bases/environments.yaml"
 ...

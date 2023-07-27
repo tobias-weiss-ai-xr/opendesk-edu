@@ -29,6 +29,10 @@ releases:
     condition: "nextcloud.enabled"
     timeout: 1800
 
+commonLabels:
+  deploy-stage: "component-1"
+  component: "nextcloud"
+
 bases:
   - "../../bases/environments.yaml"
 ...

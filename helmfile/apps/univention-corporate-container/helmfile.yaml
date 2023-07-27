@@ -14,6 +14,10 @@ releases:
       - "values.gotmpl"
     condition: "univentionCorporateServer.enabled"
 
+commonLabels:
+  deploy-stage: "component-1"
+  component: "univention-corporate-container"
+
 bases:
   - "../../bases/environments.yaml"
 ...
