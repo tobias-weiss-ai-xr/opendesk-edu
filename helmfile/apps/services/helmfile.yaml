@@ -20,7 +20,7 @@ repositories:
 releases:
   - name: "sovereign-workplace-certificates"
     chart: "sovereign-workplace-certificates/sovereign-workplace-certificates"
-    version: "^1.0.0"
+    version: "1.2.1"
     values:
       - "values-certificates.gotmpl"
     condition: "certificates.enabled"
@@ -33,7 +33,7 @@ releases:
     condition: "redis.enabled"
   - name: "postgresql"
     chart: "postgresql/postgresql"
-    version: "^1.0.0"
+    version: "1.1.1"
     values:
       - "values-postgresql.yaml"
       - "values-postgresql.gotmpl"
@@ -47,20 +47,20 @@ releases:
     condition: "mariadb.enabled"
   - name: "postfix"
     chart: "postfix/postfix"
-    version: "^1.0.0"
+    version: "1.6.2"
     values:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
     condition: "postfix.enabled"
   - name: "clamav"
     chart: "clamav/sovereign-workplace-clamav"
-    version: "^2.0.0"
+    version: "2.0.0"
     values:
       - "values-clamav.gotmpl"
     condition: "clamav.enabled"
   - name: "sovereign-workplace-gateway"
     chart: "istio-resources/istio-gateway"
-    version: "^1.1.0"
+    version: "1.1.2"
     values:
       - "values-istio-gateway.gotmpl"
     condition: "istio.enabled"
