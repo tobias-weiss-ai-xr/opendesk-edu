@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+certificate:
+  request:
+    enabled: false
+
 postfix:
-  relayNets: "10.0.0.0/8"
-  virtualTransport: "lmtps:dovecot:24"
-  smtpdSASLPath: "inet:dovecot:3659"
-  smtpdMilters: "inet:clamav-milter:7357"
   hostname: "postfix"
   inetProtocols: "ipv4"
   smtpSASLAuthEnable: "yes"

@@ -45,4 +45,14 @@ global:
   #
   imagePullSecrets:
     - "external-registry"
+
+  ## Define internal kubernetes domain, usually svc.cluster.local
+  ## Workaround for calico with postfix
+  #
+  internalDomain: "svc.cluster.local"
+
+  ## Define internal kubernetes network for postfix
+  ## Attention: Mail from this network can be sent without authentication!
+  #
+  internalNetwork: "10.0.0.0/8"
 ...

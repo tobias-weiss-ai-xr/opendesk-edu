@@ -12,6 +12,9 @@ imagePullSecrets:
   - name: {{ . }}
 {{- end }}
 
+certificate:
+  secretName: "{{ .Values.ingress.tls.secretName }}"
+
 postfix:
   domain: "{{ .Values.global.domain }}"
   virtualMailboxDomains: "{{ .Values.global.domain }}"
@@ -20,6 +23,10 @@ postfix:
       content:
         - "{{ .Values.smtp.host }} {{ .Values.smtp.username }}:{{ .Values.smtp.password }}"
   relayHost: "[{{ .Values.smtp.host }}]:587"
+  relayNets: {{ .Values.global.internalNetwork | quote }}
+  virtualTransport: "lmtps:dovecot.{{ .Release.Namespace }}.{{ .Values.global.internalDomain }}:24"
+  smtpdSASLPath: "inet:dovecot:3659"
+  smtpdMilters: "inet:clamav-milter:7357"
 
 persistence:
   size: "{{ .Values.persistence.size.postfix }}"
@@ -29,8 +36,4 @@ replicaCount: {{ .Values.replicas.postfix }}
 
 resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
-
-ingress:
-  tls:
-    secretName: "{{ .Values.ingress.tls.secretName }}"
 ...
