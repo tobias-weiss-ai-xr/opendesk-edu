@@ -5,6 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   domain: "{{ .Values.global.domain }}"
+  istioDomain: "{{ .Values.istio.domain }}"
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   registry: "{{ .Values.global.imageRegistry }}"
