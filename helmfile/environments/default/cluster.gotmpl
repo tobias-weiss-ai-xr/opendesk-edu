@@ -1,0 +1,22 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+cluster:
+  service:
+    # Based on the available Implementations of your cluster, choose the type of Service.
+    # Choose out of "ClusterIP", "NodePort" or "LoadBalancer.
+    type: "LoadBalancer"
+
+  persistence:
+    # Enable if ReadWriteMany (RWX) storage is available (f.e. CephFS, NFS, ...).
+    readWriteMany:
+      enabled: false
+
+  networking:
+    # Kubernetes internal cluster domain.
+    domain: "cluster.local"
+    # Kubernetes cluster network CIDR.
+    cidr: "10.0.0.0/8"
+...

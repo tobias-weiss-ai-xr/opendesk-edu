@@ -23,16 +23,30 @@ dovecot:
     introspectionURL: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token/introspect"
     clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc }}
     clientID: "as8oidc"
+  loginTrustedNetworks: "{{ .Values.cluster.networking.cidr }}"
 
 ingress:
   tls:
     secretName: "{{ .Values.ingress.tls.secretName }}"
 
+{{- if .Values.cluster.persistence.readWriteMany.enabled }}
 replicaCount: {{ .Values.replicas.dovecot }}
+{{- else }}
+replicaCount: 1
+{{- end }}
+
 
 persistence:
-  size: "{{ .Values.persistence.size.dovecot }}"
+  {{- if .Values.cluster.persistence.readWriteMany.enabled }}
   storageClassName: "{{ .Values.persistence.storageClassNames.RWX }}"
+  accessModes:
+    - "ReadWriteMany"
+  {{- else }}
+  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+  accessModes:
+    - "ReadWriteOnce"
+  {{- end }}
+  size: "{{ .Values.persistence.size.dovecot }}"
 
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}

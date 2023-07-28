@@ -23,10 +23,14 @@ postfix:
       content:
         - "{{ .Values.smtp.host }} {{ .Values.smtp.username }}:{{ .Values.smtp.password }}"
   relayHost: "[{{ .Values.smtp.host }}]:587"
-  relayNets: {{ .Values.global.internalNetwork | quote }}
-  virtualTransport: "lmtps:dovecot.{{ .Release.Namespace }}.{{ .Values.global.internalDomain }}:24"
+  relayNets: {{ .Values.cluster.networking.cidr }}
+  virtualTransport: "lmtps:dovecot.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:24"
   smtpdSASLPath: "inet:dovecot:3659"
+  {{- if .Values.clamavDistributed.enabled }}
   smtpdMilters: "inet:clamav-milter:7357"
+  {{- else if .Values.clamavSimple.enabled }}
+  smtpdMilters: "inet:clamav-simple:7357"
+  {{- end }}
 
 persistence:
   size: "{{ .Values.persistence.size.postfix }}"

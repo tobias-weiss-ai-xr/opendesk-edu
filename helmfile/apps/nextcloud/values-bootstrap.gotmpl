@@ -49,10 +49,18 @@ image:
   tag: "{{ .Values.images.nextcloud.tag }}"
 
 persistence:
+  {{- if .Values.cluster.persistence.readWriteMany.enabled }}
+  accessModes:
+    - "ReadWriteMany"
+  storageClass: "{{ .Values.persistence.storageClassNames.RWX }}"
+  {{- else }}
+  accessModes:
+    - "ReadWriteOnce"
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  {{- end }}
   size:
     main: "{{ .Values.persistence.size.nextcloud.main }}"
     data: "{{ .Values.persistence.size.nextcloud.data }}"
-  storageClass: "{{ .Values.persistence.storageClassNames.RWX }}"
 
 resources:
   {{ .Values.resources.nextcloud | toYaml | nindent 2 }}

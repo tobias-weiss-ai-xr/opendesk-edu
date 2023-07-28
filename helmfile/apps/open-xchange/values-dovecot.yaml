@@ -1,12 +1,7 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-persistence:
-  accessModes:
-    - "ReadWriteMany"
-
 dovecot:
-  loginTrustedNetworks: "10.0.0.0/8"
   ldap:
     enbaled: true
     host: "univention-corporate-container"

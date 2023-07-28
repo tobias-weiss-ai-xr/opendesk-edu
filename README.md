@@ -145,8 +145,8 @@ subdirectory `/helmfile/apps/services`.
 | Component                   | Name                                | Default | Description                  | Type       |
 |-----------------------------|-------------------------------------|---------|------------------------------|------------|
 | Certificates                | `certificates.enabled`              | `true`  | TLS certificates             | Eval       |
-| ClamAV (Distributed)        | `clamavDistributed.enabled`         | `true`  | Antivirus engine             | Eval       |
-| ClamAV (Simple)             | `clamavSimple.enabled`              | `false` | Antivirus engine             | Eval       |
+| ClamAV (Distributed)        | `clamavDistributed.enabled`         | `false` | Antivirus engine             | Eval       |
+| ClamAV (Simple)             | `clamavSimple.enabled`              | `true`  | Antivirus engine             | Eval       |
 | Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                    | Functional |
 | Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend                 | Functional |
 | Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange  | Functional |
@@ -162,6 +162,16 @@ subdirectory `/helmfile/apps/services`.
 | Redis                       | `redis.enabled`                     | `true`  | Cache Database               | Eval       |
 | Univention Corporate Server | `univentionCorporateServer.enabled` | `true`  | Identity Management & Portal | Functional |
 | XWiki                       | `xwiki.enabled`                     | `true`  | Knowledgebase                | Functional |
+
+
+#### Cluster capabilities
+| Capability                          | Default         | Options                                 | Notes                                                                                                                                                             |
+|-------------------------------------|-----------------|-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cluster.service.type`              | `LoadBalancer`  | `ClusterIP`, `NodePort`, `LoadBalancer` | External access to TCP/UDP services. [Additional Information](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
+| `cluster.persistence.readWriteMany` | `false`         | `true`, `false`                         | Enable if ReadWriteMany (RWX) storage is available (f.e. CephFS, NFS, ...).                                                                                       |
+| `cluster.networking.domain`         | `cluster.local` |                                         | Kubernetes cluster domain.                                                                                                                                        |
+| `cluster.networking.cidr`           | `10.0.0.0/8`    |                                         | Kubernetes internal network                                                                                                                                       |
+
 
 #### Databases
 

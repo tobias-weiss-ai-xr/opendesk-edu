@@ -92,6 +92,8 @@ jitsi:
       password: "{{ .Values.secrets.jitsiPlain.jvbAuthPassword }}"
     resources:
       {{ .Values.resources.openproject | toYaml | nindent 6 }}
+    service:
+      type: "{{ .Values.cluster.service.type }}"
   jibri:
     replicaCount: {{ .Values.replicas.jibri }}
     image:

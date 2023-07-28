@@ -32,10 +32,13 @@ image:
 
 metrics:
   token: "{{ .Values.secrets.nextcloud.metricsToken }}"
-persistence:
-  storageclass: "{{ .Values.persistence.storageClassNames.RWX }}"
 
+{{- if .Values.cluster.persistence.readWriteMany.enabled }}
 replicaCount: {{ .Values.replicas.nextcloud }}
+{{- else }}
+replicaCount: 1
+{{- end }}
+
 resources:
   {{ .Values.resources.nextcloud | toYaml | nindent 2 }}
 ...
