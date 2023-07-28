@@ -22,4 +22,22 @@ helmfiles:
 
 missingFileHandler: "Error"
 
+# Environment is defined here and in helmfile/bases/environments.yaml
+# This is a temporary solution to solve issue with different (relative) paths required when
+# - Installing all releases from root via helmfile apply
+# - Installing a single release from root via helmfile apply -f helmfile/apps/<app>/helmfile.yaml
+# - Installing a single release from app directory via helmfile apply
+# Issue: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/issues/2
+environments:
+  default:
+    values:
+      - "helmfile/environments/default/*.gotmpl"
+  dev:
+    values:
+      - "helmfile/environments/default/*.gotmpl"
+      - "helmfile/environments/dev/values.yaml"
+  prod:
+    values:
+      - "helmfile/environments/default/*.gotmpl"
+      - "helmfile/environments/prod/values.yaml"
 ...

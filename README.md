@@ -20,7 +20,7 @@ In any case we love to get feedback from you! Related to the deployment / conten
 
  If you want to address other topics, please check the section ["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
 
-The first release of the SWP is scheduled for December 2023.
+The first release of the SWP is scheduled for December 2023. Before that release there will be breaking changes in the deployment.
 
 # The Sovereign Workplace (SWP)
 
