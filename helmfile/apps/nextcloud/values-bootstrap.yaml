@@ -12,5 +12,5 @@ config:
       username: "ncoidc"
 
 cleanup:
-  deletePodsOnSuccess: true
+  deletePodsOnSuccess: false
 ...
