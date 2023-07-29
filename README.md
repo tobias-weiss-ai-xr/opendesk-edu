@@ -51,7 +51,7 @@ You have to take care about the following prerequisites in order to deploy the S
 - Ingress controller (supported are nginx-ingress, ingress-nginx, HAProxy)
 - [Helm](https://helm.sh/), [HelmFile](https://helmfile.readthedocs.io/en/latest/) and
 [HelmDiff](https://github.com/databus23/helm-diff)
-- Volume provisioner supporting RWO (read-write-once) and RWX (read-write-many)
+- Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
 - [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are working with Open-Xchange
 to get rid of this component.
@@ -84,11 +84,12 @@ More details on the DNS options incl. SPF/DKIM and autodiscovery options to come
 
 All of these requirements are optional as long as you do not want to make use of the given feature.
 
-| Feature                      | Component(s)   | Requirement         |
-|------------------------------|----------------|---------------------|
-| Sending outbound emails      | Various        | SMTP relay/gateway  |
-| S/MIME Support               | OX AppSuite8   | PKI / CI            |
-| Improved videoconferencing   | Jitsi          | STUN/TURN server    |
+| Feature                      | Component(s)   | Requirement                 |
+|------------------------------|----------------|-----------------------------|
+| Component Scalability        | Various[^1]    | Read-Write-Many Provisioner |
+| Sending outbound emails      | Various        | SMTP relay/gateway          |
+| S/MIME Support               | OX AppSuite8   | PKI / CI                    |
+| Improved videoconferencing   | Jitsi          | STUN/TURN server            |
 
 ## Deployments
 
@@ -265,3 +266,7 @@ flowchart TD
     J[Jitsi]-->K
     C[Collabora]-->N
 ```
+
+# Footnotes
+
+[^1] Required for scaling components Nextcloud, Dovecot and ClamAV Distributed.
