@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
-.vscode
-.idea
-
-# Ignore changes to sample environments
-helmfile/environments/dev/values.yaml
-helmfile/environments/prod/values.yaml
+---
+# This a sample file and could be filled with proper variable overload.
+sample: true
+...
