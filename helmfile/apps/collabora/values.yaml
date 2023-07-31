@@ -12,10 +12,13 @@ image:
 collabora:
   extra_params: "--o:ssl.enable=false --o:ssl.termination=true"
 
-securityContext:
-  capabilities:
-    add:
-      - "MKNOD"
+
+# In case of issues with "Failed to exec command '/usr/bin/loolforkit' (EPERM: Operation not permitted)...", activate:
+# Ref.: https://github.com/CollaboraOnline/online/issues/2800
+# securityContext:
+#   capabilities:
+#     add:
+#       - "MKNOD"
 
 ingress:
   annotations:
