@@ -27,8 +27,8 @@ variables:
       - "develop"
       - "hubble"
       - "prototype"
-  TLD:
-    description: "Define the Cluster Domain (TLD)."
+  BASE_DOMAIN:
+    description: "Define the Cluster Base Domain."
     value: "souvap-univention.de"
     options:
       - "souvap-univention.de"
@@ -116,8 +116,8 @@ variables:
       - "yes"
       - "no"
   # please use the following set of variables with normalized names:
-  DOMAIN: "${NAMESPACE}.${CLUSTER}.${TLD}"
-  ISTIO_DOMAIN: "${NAMESPACE}.istio.${CLUSTER}.${TLD}"
+  DOMAIN: "${NAMESPACE}.${CLUSTER}.${BASE_DOMAIN}"
+  ISTIO_DOMAIN: "${NAMESPACE}.istio.${CLUSTER}.${BASE_DOMAIN}"
 
 .deploy-common:
   cache: {}
