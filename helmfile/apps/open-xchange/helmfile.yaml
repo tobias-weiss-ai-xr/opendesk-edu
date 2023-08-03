@@ -16,7 +16,7 @@ repositories:
 releases:
   - name: "dovecot"
     chart: "dovecot/dovecot"
-    version: "1.1.0"
+    version: "1.2.0"
     values:
       - "values-dovecot.yaml"
       - "values-dovecot.gotmpl"

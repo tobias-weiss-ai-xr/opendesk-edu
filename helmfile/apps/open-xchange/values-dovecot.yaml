@@ -1,9 +1,12 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+containerSecurityContext:
+  readOnlyRootFilesystem: false
+
 dovecot:
   ldap:
-    enbaled: true
+    enabled: true
     host: "univention-corporate-container"
     port: 389
     base: "dc=swp-ldap,dc=internal"
@@ -12,7 +15,4 @@ dovecot:
     enabled: true
     clientID: "as8oidc"
     usernameAttribute: "phoenixusername"
-
-ingress:
-  enabled: false
 ...

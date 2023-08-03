@@ -25,16 +25,14 @@ dovecot:
     clientID: "as8oidc"
   loginTrustedNetworks: "{{ .Values.cluster.networking.cidr }}"
 
-ingress:
-  tls:
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+certificate:
+  secretName: "{{ .Values.ingress.tls.secretName }}"
 
 {{- if .Values.cluster.persistence.readWriteMany.enabled }}
 replicaCount: {{ .Values.replicas.dovecot }}
 {{- else }}
 replicaCount: 1
 {{- end }}
-
 
 persistence:
   {{- if .Values.cluster.persistence.readWriteMany.enabled }}
@@ -50,4 +48,11 @@ persistence:
 
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}
+
+{{- if or (eq .Values.cluster.service.type "NodePort") (eq .Values.cluster.service.type "LoadBalancer") }}
+service:
+  external:
+    enabled: true
+    type: {{ .Values.cluster.service.type | quote }}
+{{- end }}
 ...
