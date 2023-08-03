@@ -10,7 +10,7 @@ oxConnector:
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
   notifierServer: "univention-corporate-container"
-  tlsMode: "plain"
+  tlsMode: "off"
   # current static password for UCC
   ldapPassword: "ucctempldapstring"
   caCert: "ucctempldapstring"

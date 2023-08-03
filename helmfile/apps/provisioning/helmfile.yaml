@@ -8,7 +8,7 @@ repositories:
 releases:
   - name: "ox-connector"
     chart: "ox-connector/ox-connector"
-    version: "0.1.0-pre-jconde-standalone-listener"
+    version: "0.1.0-pre-jconde-listener-entrypoint-chaining"
     values:
       - "values-oxconnector.yaml"
       - "values-oxconnector.gotmpl"
