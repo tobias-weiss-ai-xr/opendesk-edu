@@ -32,5 +32,14 @@ collabora:
   aliasgroups:
     - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}:443"
 
+{{- if not (eq .Values.cluster.container.engine "containerd") }}
+# In case of issues with "Failed to exec command '/usr/bin/loolforkit' (EPERM: Operation not permitted)...", activate:
+# Ref.: https://github.com/CollaboraOnline/online/issues/2800
+securityContext:
+  capabilities:
+    add:
+      - "MKNOD"
+{{- end }}
+
 replicaCount: {{ .Values.replicas.collabora }}
 ...
