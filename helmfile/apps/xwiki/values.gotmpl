@@ -23,7 +23,8 @@ customConfigs:
     "oidc.endpoint.logout": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
     "oidc.secret": {{ .Values.secrets.keycloak.clientSecret.xwiki }}
     "url.trustedDomains": "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
-    "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+    "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
+    "workplaceServices.base": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
     "workplaceServices.portalSecret": {{ .Values.secrets.centralnavigation.apiKey }}
 
 properties:
