@@ -134,7 +134,7 @@ appsuite:
   guard-ui:
     enabled: true
   core-cacheservice:
-    enabled: true
+    enabled: false
   core-user-guide:
     enabled: true
   core-imageconverter:

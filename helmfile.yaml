@@ -11,8 +11,7 @@ helmfiles:
   - path: "helmfile/apps/univention-corporate-container/helmfile.yaml"
   - path: "helmfile/apps/keycloak-bootstrap/helmfile.yaml"
   - path: "helmfile/apps/intercom-service/helmfile.yaml"
-  # Disable Open-Xchange AppSuite 8 Deployment until it is publicly available
-  # - path: "helmfile/apps/open-xchange/helmfile.yaml"
+  - path: "helmfile/apps/open-xchange/helmfile.yaml"
   - path: "helmfile/apps/nextcloud/helmfile.yaml"
   - path: "helmfile/apps/collabora/helmfile.yaml"
   - path: "helmfile/apps/jitsi/helmfile.yaml"

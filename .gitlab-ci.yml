@@ -29,11 +29,7 @@ variables:
       - "prototype"
   BASE_DOMAIN:
     description: "Define the Cluster Base Domain."
-    value: "souvap-univention.de"
-    options:
-      - "souvap-univention.de"
-      - "at-univention.de"
-      - "souvap.cloud"
+    value: "souvap.cloud"
   MASTER_PASSWORD_WEB_VAR:
     description: "Optional: Provide a passphrase to be used for password generation."
     value: ""

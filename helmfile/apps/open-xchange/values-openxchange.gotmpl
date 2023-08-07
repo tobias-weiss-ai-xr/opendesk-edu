@@ -18,12 +18,18 @@ istio:
   enabled: {{ .Values.istio.enabled }}
 
 nextcloud-integration-ui:
+  image:
+    repository: {{ .Values.images.openxchangeNextcloudIntegrationUI.repository }}
+    tag: {{ .Values.images.openxchangeNextcloudIntegrationUI.tag }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . }}
   {{- end }}
 
 public-sector-ui:
+  image:
+    repository: {{ .Values.images.openxchangePublicSectorUI.repository }}
+    tag: {{ .Values.images.openxchangePublicSectorUI.tag }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . }}
@@ -77,6 +83,13 @@ appsuite:
       oxguardpass: |
         {{ .Values.secrets.oxAppsuite.oxguardMC }}
         {{ .Values.secrets.oxAppsuite.oxguardRC }}
+    image:
+      repository: {{ .Values.images.openxchangeCoreMW.repository }}
+      tag: {{ .Values.images.openxchangeCoreMW.tag }}
+    update:
+      image:
+        repository: {{ .Values.images.openxchangeCoreMW.repository }}
+        tag: {{ .Values.images.openxchangeCoreMW.tag }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . }}
@@ -87,6 +100,9 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . }}
     {{- end }}
+    image:
+      repository: {{ .Values.images.openxchangeCoreUI.repository }}
+      tag: {{ .Values.images.openxchangeCoreUI.tag }}
 
   core-ui-middleware:
     ingress:
@@ -96,33 +112,32 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . }}
     {{- end }}
+    image:
+      repository: {{ .Values.images.openxchangeCoreUIMiddleware.repository }}
+      tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag }}
 
   core-guidedtours:
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . }}
     {{- end }}
+    image:
+      repository: {{ .Values.images.openxchangeCoreGuidedtours.repository }}
+      tag: {{ .Values.images.openxchangeCoreGuidedtours.tag }}
 
   guard-ui:
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . }}
+    {{- end }}
     image:
-      repository: "{{ .Values.global.imageRegistry }}/appsuite-core-public/guard-ui"
-    imagePullSecrets:
-    {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
-    {{- end }}
-
-  core-cacheservice:
-    imagePullSecrets:
-    {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
-    {{- end }}
+      repository: {{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGuardUI.repository }}
+      tag: {{ .Values.images.openxchangeGuardUI.tag }}
 
   core-user-guide:
-    imagePullSecrets:
-    {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
-    {{- end }}
-
+    image:
+      repository: {{ .Values.images.openxchangeCoreUserGuide.repository }}
+      tag: {{ .Values.images.openxchangeCoreUserGuide.tag }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . }}
