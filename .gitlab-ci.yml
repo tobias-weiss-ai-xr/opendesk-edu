@@ -11,6 +11,7 @@ stages:
   - "basic-services-deploy"
   - "component-deploy-stage-1"
   - "component-deploy-stage-2"
+  - "tests"
   - "env-stop"
 
 variables:
@@ -111,6 +112,15 @@ variables:
     options:
       - "yes"
       - "no"
+  RUN_TESTS:
+    description: "Triggers execution of E2E-tests."
+    value: "yes"
+    options:
+      - "yes"
+      - "no"
+  TESTS_PROJECT_URL:
+    description: "URL of the E2E-test gitlab project API with project ID."
+    value: "gitlab.souvap-univention.de/api/v4/projects/6"
   # please use the following set of variables with normalized names:
   DOMAIN: "${NAMESPACE}.${CLUSTER}.${BASE_DOMAIN}"
   ISTIO_DOMAIN: "${NAMESPACE}.istio.${CLUSTER}.${BASE_DOMAIN}"
@@ -315,3 +325,45 @@ env-stop:
   stage: "env-stop"
   variables:
     GIT_STRATEGY: "none"
+
+run-tests:
+  extends: ".deploy-common"
+  environment:
+    name: "${NAMESPACE}"
+  tags:
+    - "docker"
+    - "kubernetes"
+    - "${CLUSTER}"
+  stage: "tests"
+  rules:
+    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
+      when: always
+  script:
+    - |
+      COMPONENTS="login or portal or profile or navigation"
+      if [ "${DEPLOY_ALL_COMPONENTS}" != "no" ]; then
+        COMPONENTS="${COMPONENTS} or collabora or ics or jitsi or keycloak or nextcloud or openproject or ox or ucs or xwiki"
+      else
+        [ "${DEPLOY_COLLABORA}" != "no" ] && COMPONENTS="${COMPONENTS} or collabora"
+        [ "${DEPLOY_ICS}" != "no" ] && COMPONENTS="${COMPONENTS} or ics"
+        [ "${DEPLOY_JITSI}" != "no" ] && COMPONENTS="${COMPONENTS} or jitsi"
+        [ "${DEPLOY_KEYCLOAK}" != "no" ] && COMPONENTS="${COMPONENTS} or keycloak"
+        [ "${DEPLOY_NEXTCLOUD}" != "no" ] && COMPONENTS="${COMPONENTS} or nextcloud"
+        [ "${DEPLOY_OPENPROJECT}" != "no" ] && COMPONENTS="${COMPONENTS} or openproject"
+        [ "${DEPLOY_OX}" != "no" ] && COMPONENTS="${COMPONENTS} or ox"
+        [ "${DEPLOY_UCS}" != "no" ] && COMPONENTS="${COMPONENTS} or ucs"
+        [ "${DEPLOY_XWIKI}" != "no" ] && COMPONENTS="${COMPONENTS} or xwiki"
+      fi
+      UCS_CONTAINER_NAME=$(kubectl -n ${NAMESPACE} get pods --no-headers --selector 'app.kubernetes.io/instance=univention-corporate-container' | awk '{print $1}')
+      DEFAULT_USER_PASSWORD=$(kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} | grep DEFAULT_ACCOUNT_USER_PASSWORD | awk '{print $2}')
+      DEFAULT_ADMIN_PASSWORD=$(kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} | grep DEFAULT_ACCOUNT_ADMIN_PASSWORD | awk '{print $2}')
+      curl -X POST \
+        -F "ref=main" \
+        -F "token=${CI_JOB_TOKEN}" \
+        -F "variables[url]=https://portal.${DOMAIN}" \
+        -F "variables[user_name]=${DEFAULT_USER_NAME}" \
+        -F "variables[user_password]=${DEFAULT_USER_PASSWORD}" \
+        -F "variables[admin_name]=${DEFAULT_ADMIN_NAME}" \
+        -F "variables[admin_password]=${DEFAULT_ADMIN_PASSWORD}" \
+        -F "variables[components]=\"${COMPONENTS}\"" \
+        https://${TESTS_PROJECT_URL}/trigger/pipeline

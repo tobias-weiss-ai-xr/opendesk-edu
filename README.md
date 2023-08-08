@@ -350,6 +350,21 @@ We want to provide more information per component in separate, component specifi
 
 - [Intercom-Service](./helmfile/apps/intercom-service/README.md)
 
+## Tests
+
+There is a frontend end-to-end test suite that can get triggered if the
+deployment is performed via a Gitlab pipeline.
+
+Currently, the test suite is in progress to be published, so right now it is
+only usable by project members. But that will change soon, and it could be used
+to create custom tests and perform them after deployment.
+
+The deployment pipeline provides a variable named `TESTS_PROJECT_URL` that
+points to the test pipeline residing in another Gitlab repository. At the end of
+the deployment the test pipeline is triggered. Tests are just performed for
+components that have been deployed prior.
+
+
 # Footnotes
 
 [^1] Required for scaling components Nextcloud, Dovecot and ClamAV Distributed.
