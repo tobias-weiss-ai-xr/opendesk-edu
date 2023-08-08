@@ -39,10 +39,13 @@ properties:
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.btn-primary-bg": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-color": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-color": "@brand-primary"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-color": "@brand-primary"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-active-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-color":
+    "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-active-color":
+    "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": "#fff"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": "#fff"
+  # yamllint disable-line rule:line-length
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "'@list-group-active-border: @list-group-border; @gray-light: #727272; @text-muted: @gray; @xwiki-drawer-menu-item-hover-bg: @list-group-hover-bg; @xwiki-drawer-menu-item-hover-color: @list-group-link-hover-color; @well-bg: @body-bg; .navbar-default { border-bottom: 3px solid @brand-primary !important; } #menuview .navbar-brand img { padding: 5px; }'"
   "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"
 
@@ -52,8 +55,9 @@ customConfigs:
   xwiki.properties:
     oidc.scope: "openid,profile,email,address,phoenix"
     oidc.endpoint.userinfo.method: "GET"
-    oidc.user.nameFormater: '${oidc.user.phoenixusername._lowerCase}'
-    oidc.user.subjectFormater: '${oidc.user.subject}'
+    oidc.user.nameFormater: "${oidc.user.phoenixusername._lowerCase}"
+    oidc.user.subjectFormater: "${oidc.user.subject}"
+    # yamllint disable-line rule:line-length
     oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
     oidc.clientid: "xwiki"
     oidc.endpoint.token.auth_method: "client_secret_basic"

@@ -13,13 +13,13 @@ appsuite:
       status:
         # enable admin pack
         # admin: enabled
-        documents: disabled
-        guard: enabled
+        documents: "disabled"
+        guard: "enabled"
     packages:
       status:
-        open-xchange-oidc: enabled
-        open-xchange-authentication-database: disabled
-        open-xchange-authentication-oauth: enabled
+        open-xchange-oidc: "enabled"
+        open-xchange-authentication-database: "disabled"
+        open-xchange-authentication-oauth: "enabled"
     properties:
       com.openexchange.UIWebPath: "/appsuite/"
       # OIDC
@@ -50,10 +50,10 @@ appsuite:
       com.openexchange.mail.transportServer: "postfix"
       com.openexchange.mail.transportServerSource: "global"
       # Mailfilter
-      com.openexchange.mail.filter.loginType: global
-      com.openexchange.mail.filter.credentialSource: mail
-      com.openexchange.mail.filter.server: dovecot
-      com.openexchange.mail.filter.preferredSaslMech: XOAUTH2
+      com.openexchange.mail.filter.loginType: "global"
+      com.openexchange.mail.filter.credentialSource: "mail"
+      com.openexchange.mail.filter.server: "dovecot"
+      com.openexchange.mail.filter.preferredSaslMech: "XOAUTH2"
       # Capabilities
       com.openexchange.capability.client-onboarding: "true"
       com.openexchange.capability.dynamic-theme: "true"
@@ -64,7 +64,7 @@ appsuite:
       com.openexchange.capability.public-sector: "true"
       com.openexchange.capability.smime: "true"
       # Secondary Accounts
-      com.openexchange.mail.secondary.authType: XOAUTH2
+      com.openexchange.mail.secondary.authType: "XOAUTH2"
       # Nextcloud integration
       com.openexchange.file.storage.nextcloud.oauth.url: "http://nextcloud/"
       com.openexchange.file.storage.nextcloud.oauth.webdav.username.strategy: "user"
@@ -97,17 +97,18 @@ appsuite:
       io.ox/core//features/managedResources: "true"
       # Categories
       io.ox/core//features/categories: "true"
-      io.ox/core//categories/predefined: '[{ "name": "Predefined", "color": "orange", "icon": "bi/exclamation-circle.svg" }]'
+      io.ox/core//categories/predefined: >
+        [{ "name": "Predefined", "color": "orange", "icon": "bi/exclamation-circle.svg" }]
       # Nextcloud integration
       # io.ox.nextcloud//server: "https://ics.<DOMAIN>/fs/"
       # Central navigation
-      io.ox.public-sector//navigation/oxtabname: tab_groupware
+      io.ox.public-sector//navigation/oxtabname: "tab_groupware"
       # io.ox.public-sector//ics/url: "https://ics.<DOMAIN>/"
       io.ox/core//apps/quickLaunchCount: "0"
       io.ox/core//coloredIcons: "false"
       # Dynamic theme
       io.ox/dynamic-theme//mainColor: "#004B76"
-      io.ox/dynamic-theme//logoURL: io.ox.public-sector/logo.svg
+      io.ox/dynamic-theme//logoURL: "io.ox.public-sector/logo.svg"
       io.ox/dynamic-theme//logoWidth: "80"
       io.ox/dynamic-theme//topbarBackground: "#fff"
       io.ox/dynamic-theme//topbarColor: "#1f1f1f"
@@ -120,10 +121,10 @@ appsuite:
 
     asConfig:
       default:
-        host: all
+        host: "all"
         pageHeaderPrefix: "as8.souvap App Suite"
         oidcLogin: true
-        oidcPath: /oidc
+        oidcPath: "/oidc"
 
   core-ui:
     enabled: true

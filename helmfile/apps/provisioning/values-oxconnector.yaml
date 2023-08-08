@@ -6,7 +6,7 @@ ingress:
 
 oxConnector:
   ldapHost: "univention-corporate-container"
-  #ldapHostIp: ""
+  # ldapHostIp: ""
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
   notifierServer: "univention-corporate-container"

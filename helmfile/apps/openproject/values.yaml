@@ -27,7 +27,8 @@ openproject:
   # seed will only be executed on initial installation
   seed_locale: "de"
 
-# For more details and more options see https://www.openproject.org/docs/installation-and-operations/configuration/environment/
+# For more details and more options see
+# https://www.openproject.org/docs/installation-and-operations/configuration/environment/
 environment:
   OPENPROJECT_LOG__LEVEL: "info"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_LOGIN: "phoenixusername"

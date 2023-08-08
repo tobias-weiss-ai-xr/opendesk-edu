@@ -3,6 +3,7 @@
 ---
 keycloakConfigCli:
   configuration:
+    # yamllint disable rule:line-length
     idp.json: |
       {
         "id": "$(IDENTIFIER)",
@@ -1688,4 +1689,5 @@ keycloakConfigCli:
         ],
         "browserFlow": "2fa-browser"
       }
+    # yamllint enable rule:line-length
 ...

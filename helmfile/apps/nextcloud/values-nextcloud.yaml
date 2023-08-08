@@ -17,7 +17,9 @@ cronjob:
     postStartCommand:
       - "sh"
       - "-c"
-      - 'sed -i "s/\*\/5 \* \* \* \* php -f \/var\/www\/html\/cron.php/\*\/1 \* \* \* \* php -f \/var\/www\/html\/cron.php/g" /var/spool/cron/crontabs/www-data'
+      - >
+        sed -i "s/\*\/5 \* \* \* \* php -f \/var\/www\/html\/cron.php/\*\/1 \* \* \* \* php -f
+        \/var\/www\/html\/cron.php/g" /var/spool/cron/crontabs/www-data
 
 internalDatabase:
   enabled: false

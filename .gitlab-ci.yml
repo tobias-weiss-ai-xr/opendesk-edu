@@ -27,7 +27,7 @@ variables:
     description: "The name of namespaces to deploy to."
     value: ""
   CLUSTER:
-    description: "Define which cluster to use - don't select prototype when you are not explicitly knowing what you are doing!"
+    description: "Define which cluster to use"
     value: "develop"
     options:
       - "dev"
@@ -61,7 +61,7 @@ variables:
       - "yes"
       - "no"
   DEPLOY_UCS:
-    description: "Enable Univention Corporate Server deployment. Depends on `DEPLOY_KEYCLOAK` and `DEPLOY_VAULT`."
+    description: "Enable Univention Corporate Server deployment."
     value: "no"
     options:
       - "yes"
@@ -79,7 +79,7 @@ variables:
       - "yes"
       - "no"
   DEPLOY_KEYCLOAK:
-    description: "Enable Keycloak deployment. 'yes' deploys upstream (bitnami) Keycloak, select 'keycloak_univention' to install Univention maintained Keycloak."
+    description: "Enable Keycloak deployment."
     value: "no"
     options:
       - "yes"
@@ -156,14 +156,15 @@ variables:
         field: "credentials"
       file: false
   script:
-    - cd "${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
-      # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
+    - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
+    # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
     - |
       if ! [ -z "${MASTER_PASSWORD_WEB_VAR}" ]; then
         export MASTER_PASSWORD="${MASTER_PASSWORD_WEB_VAR}"
       fi;
-    - echo "Installing ${COMPONENT} into ${NAMESPACE} namespace as ${HELMFILE_ENVIRONMENT} environment on ${CLUSTER}"
-    - helmfile --namespace ${NAMESPACE} apply --suppress-diff
+    - >
+      echo "Installing ${COMPONENT} into ${NAMESPACE} namespace as ${HELMFILE_ENVIRONMENT} environment on ${CLUSTER}"
+    - "helmfile --namespace ${NAMESPACE} apply --suppress-diff"
   tags:
     - "docker"
     - "kubernetes"
@@ -178,7 +179,10 @@ env-cleanup:
     action: "stop"
   needs: []
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $ENV_STOP_BEFORE != "no"
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          $ENV_STOP_BEFORE != "no"
       when: "always"
   script:
     - "helmfile destroy --namespace ${NAMESPACE}"
@@ -193,10 +197,12 @@ env-start:
   extends: ".deploy-common"
   image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/
       when: "always"
   script:
-    - 'echo "Deploying to Environment ${NAMESPACE} in ${CLUSTER} Cluster"'
+    - "echo \"Deploying to Environment ${NAMESPACE} in ${CLUSTER} Cluster\""
     - "kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -"
     - >
       kubectl create secret
@@ -212,8 +218,11 @@ services-deploy:
   stage: "basic-services-deploy"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
+      when: "always"
   variables:
     COMPONENT: "services"
 
@@ -221,8 +230,11 @@ ucs-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no")
+      when: "always"
   variables:
     COMPONENT: "univention-corporate-container"
 
@@ -230,8 +242,11 @@ provisioning-deploy:
   stage: "component-deploy-stage-2"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no" || $DEPLOY_PROVISIONING != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no" || $DEPLOY_PROVISIONING != "no")
+      when: "always"
   variables:
     COMPONENT: "provisioning"
 
@@ -239,18 +254,24 @@ keycloak-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
+      when: "always"
   variables:
     COMPONENT: "keycloak"
 
 keycloak-bootstrap-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
-  timeout: 30m
+  timeout: "30m"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
+      when: "always"
   variables:
     COMPONENT: "keycloak-bootstrap"
 
@@ -258,8 +279,11 @@ ox-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OX != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OX != "no")
+      when: "always"
   variables:
     COMPONENT: "open-xchange"
 
@@ -267,8 +291,11 @@ ics-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ICS != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ICS != "no")
+      when: "always"
   variables:
     COMPONENT: "intercom-service"
 
@@ -276,8 +303,11 @@ xwiki-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_XWIKI != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_XWIKI != "no")
+      when: "always"
   variables:
     COMPONENT: "xwiki"
 
@@ -285,8 +315,11 @@ collabora-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_COLLABORA != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_COLLABORA != "no")
+      when: "always"
   variables:
     COMPONENT: "collabora"
 
@@ -294,8 +327,11 @@ nextcloud-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no")
+      when: "always"
   variables:
     COMPONENT: "nextcloud"
 
@@ -303,8 +339,11 @@ openproject-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OPENPROJECT != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OPENPROJECT != "no")
+      when: "always"
   variables:
     COMPONENT: "openproject"
 
@@ -312,8 +351,11 @@ jitsi-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_JITSI != "no")
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_JITSI != "no")
+      when: "always"
   variables:
     COMPONENT: "jitsi"
 
@@ -325,10 +367,12 @@ env-stop:
   image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
   needs: []
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/
       when: "manual"
   script:
-    - "echo 'We do not stop the env (delete the namespace) at the moment in this stage, as deleting a branches also triggers this env-stop stage and we do not want this to happen.'"
+    - "echo 'We do not stop the env (delete the namespace) at the moment in this stage, as deleting a branches also
+      triggers this env-stop stage and we do not want this to happen.'"
     # - kubectl delete namespace "${NAMESPACE}"
   stage: "env-stop"
   variables:
@@ -344,8 +388,9 @@ run-tests:
     - "${CLUSTER}"
   stage: "tests"
   rules:
-    - if: $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
-      when: always
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
+      when: "always"
   script:
     - |
       COMPONENTS="login or portal or profile or navigation"
@@ -383,10 +428,11 @@ run-tests:
 
 common-yaml-linter:
   except:
-    - tags
-    - web
+    - "tags"
+    - "web"
 
 reuse-linter:
+  allow_failure: false
   except:
-    - tags
-    - web
+    - "tags"
+    - "web"
