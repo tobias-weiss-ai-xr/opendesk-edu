@@ -2,10 +2,17 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 include:
+  - project: "souvap/tooling/gitlab-config"
+    ref: "main"
+    file:
+      - "ci/common/lint.yml"
+      - "ci/release-automation/semantic-release.yml"
   - project: "souvap/devops/sovereign-workplace-env"
     file: "gitlab/environments.yaml"
 
 stages:
+  - ".pre"
+  - "lint"
   - "env-cleanup"
   - "env"
   - "basic-services-deploy"
@@ -13,6 +20,7 @@ stages:
   - "component-deploy-stage-2"
   - "tests"
   - "env-stop"
+  - "post"
 
 variables:
   NAMESPACE:
@@ -367,3 +375,18 @@ run-tests:
         -F "variables[admin_password]=${DEFAULT_ADMIN_PASSWORD}" \
         -F "variables[components]=\"${COMPONENTS}\"" \
         https://${TESTS_PROJECT_URL}/trigger/pipeline
+
+
+# Overwrite shared settings
+.common-semantic-release:
+  image: "registry.souvap-univention.de/souvap/tooling/images/semantic-release-patched:latest"
+
+common-yaml-linter:
+  except:
+    - tags
+    - web
+
+reuse-linter:
+  except:
+    - tags
+    - web
