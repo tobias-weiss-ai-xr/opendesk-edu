@@ -395,7 +395,8 @@ run-tests:
     - |
       COMPONENTS="login or portal or profile or navigation"
       if [ "${DEPLOY_ALL_COMPONENTS}" != "no" ]; then
-        COMPONENTS="${COMPONENTS} or collabora or ics or jitsi or keycloak or nextcloud or openproject or ox or ucs or xwiki"
+        COMPONENTS="${COMPONENTS} or collabora or ics or jitsi or keycloak or nextcloud or openproject or ox or ucs \
+          or xwiki"
       else
         [ "${DEPLOY_COLLABORA}" != "no" ] && COMPONENTS="${COMPONENTS} or collabora"
         [ "${DEPLOY_ICS}" != "no" ] && COMPONENTS="${COMPONENTS} or ics"
@@ -407,9 +408,26 @@ run-tests:
         [ "${DEPLOY_UCS}" != "no" ] && COMPONENTS="${COMPONENTS} or ucs"
         [ "${DEPLOY_XWIKI}" != "no" ] && COMPONENTS="${COMPONENTS} or xwiki"
       fi
-      UCS_CONTAINER_NAME=$(kubectl -n ${NAMESPACE} get pods --no-headers --selector 'app.kubernetes.io/instance=univention-corporate-container' | awk '{print $1}')
-      DEFAULT_USER_PASSWORD=$(kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} | grep DEFAULT_ACCOUNT_USER_PASSWORD | awk '{print $2}')
-      DEFAULT_ADMIN_PASSWORD=$(kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} | grep DEFAULT_ACCOUNT_ADMIN_PASSWORD | awk '{print $2}')
+
+      echo "Gathering passwords from UCS container ..."
+      UCS_CONTAINER_NAME=$( \
+        kubectl -n ${NAMESPACE} get pods --no-headers \
+        --selector 'app.kubernetes.io/instance=univention-corporate-container' \
+       | awk '{print $1}' \
+      )
+      echo "UCS_CONTAINER_NAME: ${UCS_CONTAINER_NAME}"
+      DEFAULT_USER_PASSWORD=$( \
+        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
+        | grep DEFAULT_ACCOUNT_USER_PASSWORD \
+        | awk '{print $2}' \
+      )
+      DEFAULT_ADMIN_PASSWORD=$( \
+        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
+        | grep DEFAULT_ACCOUNT_ADMIN_PASSWORD \
+        | awk '{print $2}' \
+      )
+
+      echo "triggering test pipeline ..."
       curl -X POST \
         -F "ref=main" \
         -F "token=${CI_JOB_TOKEN}" \
