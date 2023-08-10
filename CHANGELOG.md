@@ -1,3 +1,10 @@
+## [0.0.3](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.2...v0.0.3) (2023-08-10)
+
+
+### Bug Fixes
+
+* **keycloak:** Keycloak extensions sha256 image pinning, includes fix for failing keycloak extension handler on unavailable SMTP relay. ([27ce715](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/27ce71554d5f495731d90632a56e134762b95a25))
+
 ## [0.0.2](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.1...v0.0.2) (2023-08-10)
 
 
