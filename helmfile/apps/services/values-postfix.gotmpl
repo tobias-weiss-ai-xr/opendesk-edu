@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 image:
   url: "{{ .Values.global.imageRegistry }}/{{ .Values.images.postfix.repository }}"
-  tag: "{{ .Values.images.postfix.tag }}"
+  digest: "{{ .Values.images.postfix.digest }}"
 
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
@@ -24,7 +24,7 @@ postfix:
         - "{{ .Values.smtp.host }} {{ .Values.smtp.username }}:{{ .Values.smtp.password }}"
   relayHost: "[{{ .Values.smtp.host }}]:587"
   relayNets: {{ .Values.cluster.networking.cidr }}
-  virtualTransport: "lmtps:dovecot.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:24"
+  virtualTransport: "lmtps:dovecot:24"
   smtpdSASLPath: "inet:dovecot:3659"
   {{- if .Values.clamavDistributed.enabled }}
   smtpdMilters: "inet:clamav-milter:7357"

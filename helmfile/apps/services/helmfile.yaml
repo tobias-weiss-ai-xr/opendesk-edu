@@ -47,7 +47,7 @@ releases:
     condition: "mariadb.enabled"
   - name: "postfix"
     chart: "postfix/postfix"
-    version: "1.8.0"
+    version: "1.13.0"
     values:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
