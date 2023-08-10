@@ -9,8 +9,6 @@ global:
     realm: "souvap"
 
 handler:
-  image:
-    tag: "latest"
   appConfig:
     captchaProtectionEnable: "False"
 

@@ -47,9 +47,12 @@ images:
   keycloakBootstrap:
     repository: "souvap/tooling/images/ansible"
     tag: "4.10.0"
-  keycloakExtension:
-    repository: "souvap/tooling/images/keycloak-extensions/keycloak-proxy"
-    tag: "latest"
+  keycloakExtensionHandler:
+    repository: "souvap/tooling/images/keycloak-extensions/keycloak-handler@sha256"
+    tag: "cdaaab8fb1b658ee2ca45557e76570153bb306c43061db5b5ee0f418c40e2200"
+  keycloakExtensionProxy:
+    repository: "souvap/tooling/images/keycloak-extensions/keycloak-proxy@sha256"
+    tag: "15ad665620368178d98721c0bd91744dd9c965c2e470abc3838e353fff530093"
   mariadb:
     repository: "mariadb"
     tag: "10"
