@@ -443,6 +443,9 @@ run-tests:
 # Overwrite shared settings
 .common-semantic-release:
   image: "registry.souvap-univention.de/souvap/tooling/images/semantic-release-patched:latest"
+  except:
+    - "tags"
+    - "web"
 
 common-yaml-linter:
   except:
