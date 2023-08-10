@@ -15,6 +15,11 @@ global:
       username: "{{ .Values.databases.keycloakExtension.username }}"
       password: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser }}
 handler:
+  image:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.keycloakExtensionHandler.repository }}"
+    tag: "{{ .Values.images.keycloakExtensionHandler.tag }}"
+    imagePullPolicy: "Always"
   appConfig:
     smtpPassword: "{{ .Values.smtp.password }}"
     smtpHost: "{{ .Values.smtp.host }}"
@@ -25,8 +30,8 @@ handler:
 proxy:
   image:
     registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.keycloakExtension.repository }}"
-    tag: "{{ .Values.images.keycloakExtension.tag }}"
+    repository: "{{ .Values.images.keycloakExtensionProxy.repository }}"
+    tag: "{{ .Values.images.keycloakExtensionProxy.tag }}"
     imagePullPolicy: "Always"
   ingress:
     enabled: "{{ .Values.ingress.enabled }}"
