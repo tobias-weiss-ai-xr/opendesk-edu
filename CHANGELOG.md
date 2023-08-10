@@ -1,3 +1,10 @@
+## [0.0.2](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.1...v0.0.2) (2023-08-10)
+
+
+### Bug Fixes
+
+* **services:** Remove fqdn from dovecot in postfix ([2033c76](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/2033c76d81e39c625112b312934668d3b3eb43fe))
+
 ## 0.0.1 (2023-08-10)
 
 
