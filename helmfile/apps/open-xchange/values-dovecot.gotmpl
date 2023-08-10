@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   url: "{{ .Values.images.dovecot.repository }}"
-  tag: "{{ .Values.images.dovecot.tag }}"
+  digest: "{{ .Values.images.dovecot.digest }}"
 
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
