@@ -8,47 +8,57 @@ SPDX-License-Identifier: Apache-2.0
 
 # Disclaimer August 2023
 
-The current state of the SWP is missing one component which is not yet generally available to the public also
-outside the SWP (Element Starter Edition), and contains components that will be replaced (e.g. UCS dev container
-monolith to be replaced by multiple Univention Management Stack containers).
-In the next months we not only expect upstream updates of the functional components within their feature scope but we
-are going to address operational issues like monitoring and network policies.
+The current state of the Sovereign Workplace misses the component
+_Element Starter Edition_ because it is not generally available yet.
 
-Of course we will also extend the documentation.
+Also does the Sovereign Workplace contain components that are going to be
+replaced. Like for example the UCS dev container monolith will be substituted by
+multiple Univention Management Stack containers.
 
-In any case we love to get feedback from you! Related to the deployment / contents of this repository please use the [issues within this project](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/issues).
+In the next months we not only expect upstream updates of the functional
+components within their feature scope, but we are also going to address
+operational issues like monitoring and network policies.
 
-If you want to address other topics, please check the section ["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
+Of course, further development also includes enhancing the documentation.
 
-The first release of the SWP is scheduled for December 2023. Before that release there will be breaking changes in the deployment.
+The first release of the Sovereign Workplace is scheduled for December 2023.
+Before that release there will be breaking changes in the deployment.
+
 
 # The Sovereign Workplace (SWP)
 
-The SWP's runtime environment is [Kubernetes](https://kubernetes.io/), often written in it's short form "K8s".
+The Sovereign Workplace's runtime environment is [Kubernetes](https://kubernetes.io/), or "K8s" in
+short.
 
-While not all components are perfectly shaped for the execution as containers, one of the projects objectives is the
-make the applications more aligned with best practise when it comes to container design and operations.
+While not all components are still perfectly shaped for the execution inside
+containers, one of the projects objectives is it to align the applications
+with the best practises regarding container design and operations.
 
-This documentation gives you - hopefully - all you need to setup your own instance of the SWP. You should have at least
-basic knowledge Kubernetes and Devops knowledge.
+This documentation aims to give you all that is needed to set up your own
+instance of the Sovereign Workplace. Basic knowledge of Kubernetes and Devops is
+required though.
 
-To have an overview of what can be found at Open CoDE and the basic components of the SWP, please check out the
-[OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md) in the
-[Info repository](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info).
+To have an overview of what can be found at Open CoDE and the basic components
+of the Sovereign Workplace, please check out the
+[OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md) in the [Info repository](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info).
 
-Especially check out the section
-["Mitwirkung und Beteiligung"](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#mitwirkung-und-beteiligung)
-if you are missing something or you have questions. We appreciate your feedback to improve product and documentation.
+We love to get feedback from you! Related to the deployment / contents of this
+repository please use the [issues within this project](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/issues).
+
+If you want to address other topics, please check the section
+["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
 
 # Deployment
 
-**Note for project members:** You can use the project's `dev` K8s cluster to setup your own development instance. Please see the project `sovereign-workplace-env` on the internal Gitlab for more details.
+**Note for project members:** You can use the project's `dev` K8s cluster to set
+up your own instance for development purposes. Please see the project
+`sovereign-workplace-env` on the internal Gitlab for more details.
 
 ## Prerequisites
 
 ### Mandatory technical prerequisites
 
-You have to take care about the following prerequisites in order to deploy the SWP:
+These are the requirements of the Sovereign Workplace deployment:
 
 - Vanilla K8s cluster
 - Domain and DNS Service
@@ -57,8 +67,8 @@ You have to take care about the following prerequisites in order to deploy the S
 [HelmDiff](https://github.com/databus23/helm-diff)
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
-- [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are working with Open-Xchange
-to get rid of this dependency.
+- [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are
+working with Open-Xchange to get rid of this dependency.
 
 #### TLS Certificate
 
@@ -68,25 +78,30 @@ You can set the ClusterIssuer via `certificate.issuerRef.name`
 
 ### Required input variables
 
-You need to expose following variables to run the installation.
+You need to expose following environment variables in order to run the
+installation.
 
-| name                | default                      | description                                       |
-|---------------------|------------------------------|---------------------------------------------------|
-| `DOMAIN`            | `souvap-univention.de`       | External reachable domain                         |
-| `ISTIO_DOMAIN`      | `istio.souvap-univention.de` | External reachable domain for Istio Gateway       |
-| `MASTER_PASSWORD`   | `sovereign-workplace`        | The password that seeds the autogenerated secrets |
-| `SMTP_PASSWORD`     |                              | Password for SMTP relay gateway                   |
-| `TURN_CREDENTIALS`  |                              | Credentials for coturn server                     |
+| name                | default               | description                                       |
+|---------------------|-----------------------|---------------------------------------------------|
+| `DOMAIN`            | `souvap.cloud`        | External reachable domain                         |
+| `ISTIO_DOMAIN`      | `istio.souvap.cloud`  | External reachable domain for Istio Gateway       |
+| `MASTER_PASSWORD`   | `sovereign-workplace` | The password that seeds the autogenerated secrets |
+| `SMTP_PASSWORD`     |                       | Password for SMTP relay gateway                   |
+| `TURN_CREDENTIALS`  |                       | Credentials for coturn server                     |
 
-Please ensure you have set DNS records pointing to the respective loadbalancer/IP for `DOMAIN` and `ISTIO_DOMAIN`.
+Please ensure that you set the DNS records pointing to the loadbalancer/IP for
+`DOMAIN` and `ISTIO_DOMAIN`.
 
-If you want inbound mail also use MX records that point to the Postfix's pods public IP.
+If you want inbound email you need to set the MX records that points to the
+public IP address of the Postfix-pods.
 
-More details on the DNS options incl. SPF/DKIM and autodiscovery options to come...
+More details on DNS options including SPF/DKIM and autodiscovery options
+are to come...
 
 ### Optional or feature based prerequisites
 
-All of these requirements are optional as long as you do not want to make use of the given feature.
+All of these requirements are optional as long as you do not want to use the
+related feature.
 
 | Feature                      | Component(s)   | Requirement                 |
 |------------------------------|----------------|-----------------------------|
@@ -97,47 +112,65 @@ All of these requirements are optional as long as you do not want to make use of
 
 ## CI based deployment
 
-The project includes a `.gitlab-ci.yml` that allows you to execute the deployment from a Gitlab instance of your choice.
+The project includes a `.gitlab-ci.yml` that allows you to execute the
+deployment from a Gitlab instance of your choice.
 
-Please ensure you provide the variables listed in the `Required input variables` section.
+Please ensure to provide the environment variables listed at
+[Required input variables](#required-input-variables).
 
-When starting the CI through the Gitlab UI you will be queried for some of the variables plus the following ones:
+When starting the pipeline through the Gitlab UI you will be queried for some
+of the variables plus the following ones:
 
-- `BASE_DOMAIN`: The base domain the SWP will be installed at e.g. `souvap.cloud`
+- `BASE_DOMAIN`: The base domain the SWP will use. For example: `souvap.cloud`
 - `NAMESPACE`: Defines into which namespace of your K8s cluster the SWP will be installed
-- `MASTER_PASSWORD_WEB_VAR`: Overwrite value of `MASTER_PASSWORD`
+- `MASTER_PASSWORD_WEB_VAR`: Overwrites value of `MASTER_PASSWORD`
 
 Based on your input the following variables will be set:
 - `DOMAIN` = `NAMESPACE`.`BASE_DOMAIN`
 - `ISTIO_DOMAIN` = istio.`DOMAIN`
-- `MASTER_PASSWORD` = `MASTER_PASSWORD_WEB_VAR` if that is not given `MASTER_PASSWORD` will be used, that could be set as masked CI variable in Gitlab or as a fallback the default value of `MASTER_PASSWORD`.
+- `MASTER_PASSWORD` = `MASTER_PASSWORD_WEB_VAR`. If `MASTER_PASSWORD_WEB_VAR`
+is not set, the default for `MASTER_PASSWORD` will be used, unless you set
+`MASTER_PASSWORD` as a masked CI/CD variable in Gitlab to supercede the default.
 
-You might want to set password / credential variables in the projects `Settings` > `CI/CD` > `Variables`.
+You might want to set credential variables in the Gitlab project at
+`Settings` > `CI/CD` > `Variables`.
 
 ## Local deployment
 
-Please ensure you have set the `Required input variables` (see section above) and have also read the `Helmfile` section below for non default configurations. Then go with
+Please ensure to provide the environment variables listed at
+[Required input variables](#required-input-variables).
+Also, please read [Helmfile](#helmfile) a little below in case of a non default
+configuration.
+
+Then go with
 
 ```shell
 helmfile apply -n <NAMESPACE>
 ```
 
-and wait. After the deployment are finished some bootstrapping is executed which might take some more minutes before you can login.
+and wait a little. After the deployment is finished some bootstrapping is
+executed which might take some more minutes before you can log in your new
+instance.
 
 ## Logging in
 
-When successfully deployed the SWP all K8s jobs from the deployment should be in the status `Succeeded` and all pods should be up an `Running`.
+When successfully deployed the SWP, all K8s jobs from the deployment should be
+in the status `Succeeded` and all pods should be `Running`.
 
 You should see the portal's login page at `https://portal.<DOMAIN>`.
 
-Off the shelf you get two accounts with passwords you can lookup in the `univention-corporate-container-*` pod environment:
+Off the shelf you get two accounts with passwords you can look up in the
+`univention-corporate-container-*` pod environment. You can use a shell on that
+container or a `kubectl describe`-command to get the credentials.
 
 | Username / Login   | Password environment variable  |
 |--------------------|--------------------------------|
 | default.user       | DEFAULT_ACCOUNT_USER_PASSWORD  |
 | default.admin      | DEFAULT_ACCOUNT_ADMIN_PASSWORD |
 
-If you do not see any tiles in the portal after the login you may want to wait a couple of minutes, as on the initial start some bootstrapping and cache building is done, that blocks the portal entries from showing up.
+If you do not see any tiles in the portal after the login you may want to wait a
+couple of minutes, as on the initial start some bootstrapping and cache building
+is done. This blocks the portal entries from showing up.
 
 # Helmfile
 
@@ -145,8 +178,9 @@ If you do not see any tiles in the portal after the login you may want to wait a
 
 ### Deployment selection
 
-By default all components are deployed. The components of type `Eval` are used for development and evaluation
-purposes only and need to be replaced in production deployments. These components are grouped together in the
+By default, all components are deployed. The components of type `Eval` are used
+for development and evaluation purposes only - they need to be replaced in
+production deployments. These components are grouped together in the
 subdirectory `/helmfile/apps/services`.
 
 | Component                   | Name                                | Default | Description                  | Type       |
@@ -182,7 +216,8 @@ subdirectory `/helmfile/apps/services`.
 
 #### Databases
 
-In case you don't got for a develop or evaluation environment you want to point the application to your own database instances.
+In case you don't got for a develop or evaluation environment you want to point
+the application to your own database instances.
 
 | Component   | Name               | Type       | Parameter | Key                                    | Default                    |
 |-------------|--------------------|------------|-----------|----------------------------------------|----------------------------|
@@ -222,8 +257,8 @@ In case you don't got for a develop or evaluation environment you want to point 
 
 ### Scaling
 
-Replicas for components can be increased, while we still have to look in the actual scalability of the
-components (see column `Scales at least to 2`).
+The Replicas of components can be increased, while we still have to look in the
+actual scalability of the components (see column `Scales at least to 2`).
 
 | Component   | Name                   | Default | Service            | Scaling            | Scales at least to 2 |
 |-------------|------------------------|---------|--------------------|--------------------|----------------------|
@@ -269,29 +304,46 @@ flowchart TD
 
 #### Intercom Service (ICS)
 
-The UCS Intercom Service's role is to enable cross application integration based on browser interaction. Handling authentication when frontend of application A is using API from application B is often a challenge. For more details on the ICS please refer to it's separate [README.md](./helmfile/apps/intercom-service/README.md) - (**TODO**)
+The UCS Intercom Service's role is to enable cross application integration based
+on browser interaction. Handling authentication when the frontend of an
+application is using the API from another application is often a challenge.
+For more details on the ICS please refer to its own [README.md](./helmfile/apps/intercom-service/README.md).
 
-In order to establish a session with the ICS the application makes use of the ICS must initiate a silent login.
+In order to establish a session with the Intercom Service, the application that
+wants to use the ICS must initiate a silent login.
 
-Currently only OX AppSuite is using the frontend based integration and therefore it's the only consumer of the ICS API endpoints.
+Currently only OX AppSuite is using the frontend based integration, and
+therefore it is right now the only consumer of the ICS API.
 
 ### Filepicker
 
-The Nextcloud filepicker is integrated into the OX AppSuite allows you for adding attachments or links to files from and saving attachments to Nextcloud. The filepicker is using frontend based integration (OX AppSuite in the browser talking to Intercom service) as well as backend to backend integration e.g. (OX AppSuite middleware talking to Nextcloud). The latter one especially when adding a file to an email or storing an file into Nextcloud.
+The Nextcloud filepicker which is integrated into the OX AppSuite allows you to
+add attachments or links to files from and saving attachments to Nextcloud.
+
+The filepicker is using frontend and backend based integration. Frontend based
+integration means that OX AppSuite in the browser is communicating with ICS.
+While using backend based integration, OX AppSuite middleware is communicating
+with Nextcloud, which is especially used when adding a file to an email or
+storing a file into Nextcloud.
 
 ### Central Navigation
 
-The central navigation is based on an API endpoint in the portal that provides the contents of the portal for a user in order to allow components to render the menu showing all available SWP applications for the user.
+Central navigation is based on an API endpoint in the portal that provides the
+contents of the portal for a user in order to allow components to render the
+menu showing all available SWP applications for the user.
 
 ### (Read & write) Central contacts
 
-Open-Xchange App Suite is the place to manage contacts within the SWP. There is a standard API in the AppSuite that is being used by Nextcloud to lookup contacts as well as to create contacts e.g. if a file is shared with a not yet available personal contact.
+Open-Xchange App Suite is used to manage contacts within the Sovereign
+Workplace. There is an API in the AppSuite that is being used by
+Nextcloud to lookup contacts as well as to create contacts. This is maybe done
+when a file is shared with a not yet available personal contact.
 
 # Identity data flows
 
-An overview on
-- components that consume data from the ldap, in most cases using a dedicated ldap search account and
-- components using Keycloak as IdP, if not otherwise denoted based on the OAuth2 / OIDC flows.
+An overview of
+- components that consume the LDAP service. Mostly by using a dedicated LDAP search account.
+- components using Keycloak as identity provider. If not otherwise denoted based on the OAuth2 / OIDC flows.
 
 Some components trust others to handle authentication for them.
 
@@ -319,7 +371,9 @@ flowchart TD
 
 # Provisioning
 
-Currently active provisioning is only done for OX AppSuite. The OX-Connector synchronizes create, modify and delete acitivities for the following objects to the OX AppSuite using the AppSuite's SOAP API:
+Currently active provisioning is only done for OX AppSuite. The OX-Connector
+synchronizes creates, modifies and deletes activities for the following objects
+to the OX AppSuite using the AppSuite's SOAP API:
 
 - Contexts
 - Users
@@ -329,10 +383,12 @@ Currently active provisioning is only done for OX AppSuite. The OX-Connector syn
 
 # Component specific documentation
 
-We want to provide more information per component in separate, component specific `README.md` files. In order to establish a common view on the components we are going to cover various aspects:
+We want to provide more information per component in separate, component
+specific `README.md` files. In order to establish a common view on the
+components we are going to cover various aspects:
 
-- **Component overview**: Should provide a quick introduction with the components prerequisites and subcomponents (f.e. pods).
-- **Resources**: Will contain link to the components upstream documentation, the helm chart and image locations.
+- **Component overview**: Shall provide a quick introduction including the components prerequisites and subcomponents (f.e. pods).
+- **Resources**: Will contain a link to the components upstream documentation, the helm chart and image locations.
 - **Operational Capabilities**
   - **Install**: The components installs within the SWP.
   - **Restart**: Deleting and restarting pods works seamlessly.
