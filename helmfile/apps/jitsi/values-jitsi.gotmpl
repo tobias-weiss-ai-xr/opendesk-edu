@@ -40,7 +40,7 @@ jitsi:
     extraEnvs:
       TURN_ENABLE: "1"
     resources:
-      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+      {{ .Values.resources.jitsi | toYaml | nindent 6 }}
   prosody:
     image:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.prosody.repository }}"
@@ -69,7 +69,7 @@ jitsi:
       - name: TURN_CREDENTIALS
         value: "{{ .Values.turn.credentials }}"
     resources:
-      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+      {{ .Values.resources.prosody | toYaml | nindent 6 }}
     persistence:
       size: "{{ .Values.persistence.size.prosody }}"
       storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
@@ -82,7 +82,7 @@ jitsi:
       password: "{{ .Values.secrets.jitsiPlain.jicofoAuthPassword }}"
       componentSecret: "{{ .Values.secrets.jitsiPlain.jicofoComponentPassword }}"
     resources:
-      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+      {{ .Values.resources.jicofo | toYaml | nindent 6 }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     image:
@@ -91,7 +91,7 @@ jitsi:
     xmpp:
       password: "{{ .Values.secrets.jitsiPlain.jvbAuthPassword }}"
     resources:
-      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+      {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
       type: "{{ .Values.cluster.service.type }}"
   jibri:
@@ -104,7 +104,7 @@ jitsi:
     xmpp:
       password: "{{ .Values.secrets.jitsiPlain.jibriXmppPassword }}"
     resources:
-      {{ .Values.resources.openproject | toYaml | nindent 6 }}
+      {{ .Values.resources.jibri | toYaml | nindent 6 }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . }}
