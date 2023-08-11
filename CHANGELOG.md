@@ -1,3 +1,10 @@
+## [0.0.5](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.4...v0.0.5) (2023-08-11)
+
+
+### Bug Fixes
+
+* **keycloak:** Improve digest image pinning ([b8a8932](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/b8a8932221ae4d6632c7d1f4a85f46fea01a92e7))
+
 ## [0.0.4](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.3...v0.0.4) (2023-08-11)
 
 
