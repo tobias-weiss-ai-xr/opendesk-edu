@@ -1,3 +1,10 @@
+## [0.0.4](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.3...v0.0.4) (2023-08-11)
+
+
+### Bug Fixes
+
+* **jitsi:** Fix identifiers in resources ([3a0b246](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/3a0b246f83dc6a3ff19973959b3cf3c243c39025))
+
 ## [0.0.3](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.2...v0.0.3) (2023-08-10)
 
 
