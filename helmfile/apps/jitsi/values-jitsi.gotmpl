@@ -17,10 +17,10 @@ image:
   tag: "{{ .Values.images.jitsiKeycloakAdapter.tag }}"
 
 settings:
-  jwtAppSecret: "{{ .Values.secrets.jitsiPlain.jwtAppSecret }}"
+  jwtAppSecret: "{{ .Values.secrets.jitsi.jwtAppSecret }}"
 
 jitsi:
-  publicURL: "https://{{ .Values.global.hosts.jitsiPlain }}.{{ .Values.global.domain }}"
+  publicURL: "https://{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
   web:
     replicaCount: {{ .Values.replicas.jitsi }}
     image:
@@ -30,13 +30,13 @@ jitsi:
       enabled: "{{ .Values.ingress.enabled }}"
       ingressClassName: "{{ .Values.ingress.ingressClassName }}"
       hosts:
-        - host: "{{ .Values.global.hosts.jitsiPlain }}.{{ .Values.global.domain }}"
+        - host: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
           paths:
             - "/"
       tls:
         - secretName: "{{ .Values.ingress.tls.secretName }}"
           hosts:
-            - "{{ .Values.global.hosts.jitsiPlain }}.{{ .Values.global.domain }}"
+            - "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
     extraEnvs:
       TURN_ENABLE: "1"
     resources:
@@ -55,7 +55,7 @@ jitsi:
       - name: "JWT_APP_ID"
         value: "myappid"
       - name: "JWT_APP_SECRET"
-        value: "{{ .Values.secrets.jitsiPlain.jwtAppSecret }}"
+        value: "{{ .Values.secrets.jitsi.jwtAppSecret }}"
       - name: TURNS_HOST
         value: "{{ .Values.turn.tls.host }}"
       - name: TURNS_PORT
@@ -79,8 +79,8 @@ jitsi:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jicofo.repository }}"
       tag: "{{ .Values.images.jicofo.tag }}"
     xmpp:
-      password: "{{ .Values.secrets.jitsiPlain.jicofoAuthPassword }}"
-      componentSecret: "{{ .Values.secrets.jitsiPlain.jicofoComponentPassword }}"
+      password: "{{ .Values.secrets.jitsi.jicofoAuthPassword }}"
+      componentSecret: "{{ .Values.secrets.jitsi.jicofoComponentPassword }}"
     resources:
       {{ .Values.resources.jicofo | toYaml | nindent 6 }}
   jvb:
@@ -89,7 +89,7 @@ jitsi:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jvb.repository }}"
       tag: "{{ .Values.images.jvb.tag }}"
     xmpp:
-      password: "{{ .Values.secrets.jitsiPlain.jvbAuthPassword }}"
+      password: "{{ .Values.secrets.jitsi.jvbAuthPassword }}"
     resources:
       {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
@@ -100,9 +100,9 @@ jitsi:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jibri.repository }}"
       tag: "{{ .Values.images.jibri.tag }}"
     recorder:
-      password: "{{ .Values.secrets.jitsiPlain.jibriRecorderPassword }}"
+      password: "{{ .Values.secrets.jitsi.jibriRecorderPassword }}"
     xmpp:
-      password: "{{ .Values.secrets.jitsiPlain.jibriXmppPassword }}"
+      password: "{{ .Values.secrets.jitsi.jibriXmppPassword }}"
     resources:
       {{ .Values.resources.jibri | toYaml | nindent 6 }}
   imagePullSecrets:

@@ -8,10 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Disclaimer August 2023
 
-The current state of the Sovereign Workplace misses the component
-_Element Starter Edition_ because it is not generally available yet.
-
-Also does the Sovereign Workplace contain components that are going to be
+The current state of the Sovereign Workplace contain components that are going to be
 replaced. Like for example the UCS dev container monolith will be substituted by
 multiple Univention Management Stack containers.
 
@@ -183,26 +180,27 @@ for development and evaluation purposes only - they need to be replaced in
 production deployments. These components are grouped together in the
 subdirectory `/helmfile/apps/services`.
 
-| Component                   | Name                                | Default | Description                  | Type       |
-|-----------------------------|-------------------------------------|---------|------------------------------|------------|
-| Certificates                | `certificates.enabled`              | `true`  | TLS certificates             | Eval       |
-| ClamAV (Distributed)        | `clamavDistributed.enabled`         | `false` | Antivirus engine             | Eval       |
-| ClamAV (Simple)             | `clamavSimple.enabled`              | `true`  | Antivirus engine             | Eval       |
-| Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                    | Functional |
-| Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend                 | Functional |
-| Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange  | Functional |
-| Jitsi                       | `jitsi.enabled`                     | `true`  | Videoconferencing            | Functional |
-| Keycloak                    | `keycloak.enabled`                  | `true`  | Identity Provider            | Functional |
-| MariaDB                     | `mariadb.enabled`                   | `true`  | Database                     | Eval       |
-| Nextcloud                   | `nextcloud.enabled`                 | `true`  | File share                   | Functional |
-| OpenProject                 | `openproject.enabled`               | `true`  | Project management           | Functional |
-| OX Appsuite                 | `oxAppsuite.enabled`                | `true`  | Groupware                    | Functional |
-| Provisioning                | `oxConnector.enabled`               | `true`  | Backend provisioning         | Functional |
-| Postfix                     | `postfix.enabled`                   | `true`  | MTA                          | Eval       |
-| PostgreSQL                  | `postgresql.enabled`                | `true`  | Database                     | Eval       |
-| Redis                       | `redis.enabled`                     | `true`  | Cache Database               | Eval       |
-| Univention Corporate Server | `univentionCorporateServer.enabled` | `true`  | Identity Management & Portal | Functional |
-| XWiki                       | `xwiki.enabled`                     | `true`  | Knowledgebase                | Functional |
+| Component                   | Name                                | Default | Description                    | Type       |
+|-----------------------------|-------------------------------------|---------|--------------------------------|------------|
+| Certificates                | `certificates.enabled`              | `true`  | TLS certificates               | Eval       |
+| ClamAV (Distributed)        | `clamavDistributed.enabled`         | `false` | Antivirus engine               | Eval       |
+| ClamAV (Simple)             | `clamavSimple.enabled`              | `true`  | Antivirus engine               | Eval       |
+| Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                      | Functional |
+| Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend                   | Functional |
+| Element                     | `element.enabled`                   | `true`  | Secure communications platform | Functional |
+| Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange    | Functional |
+| Jitsi                       | `jitsi.enabled`                     | `true`  | Videoconferencing              | Functional |
+| Keycloak                    | `keycloak.enabled`                  | `true`  | Identity Provider              | Functional |
+| MariaDB                     | `mariadb.enabled`                   | `true`  | Database                       | Eval       |
+| Nextcloud                   | `nextcloud.enabled`                 | `true`  | File share                     | Functional |
+| OpenProject                 | `openproject.enabled`               | `true`  | Project management             | Functional |
+| OX Appsuite                 | `oxAppsuite.enabled`                | `true`  | Groupware                      | Functional |
+| Provisioning                | `oxConnector.enabled`               | `true`  | Backend provisioning           | Functional |
+| Postfix                     | `postfix.enabled`                   | `true`  | MTA                            | Eval       |
+| PostgreSQL                  | `postgresql.enabled`                | `true`  | Database                       | Eval       |
+| Redis                       | `redis.enabled`                     | `true`  | Cache Database                 | Eval       |
+| Univention Corporate Server | `univentionCorporateServer.enabled` | `true`  | Identity Management & Portal   | Functional |
+| XWiki                       | `xwiki.enabled`                     | `true`  | Knowledgebase                  | Functional |
 
 
 #### Cluster capabilities
@@ -221,6 +219,12 @@ the application to your own database instances.
 
 | Component   | Name               | Type       | Parameter | Key                                    | Default                    |
 |-------------|--------------------|------------|-----------|----------------------------------------|----------------------------|
+| Element     | Synapse            | PostgreSQL |           |                                        |                            |
+|             |                    |            | Name      | `databases.synapse.name`               | `matrix`                   |
+|             |                    |            | Host      | `databases.synapse.host`               | `postgresql`               |
+|             |                    |            | Port      | `databases.synapse.port`               | `5432`                     |
+|             |                    |            | Username  | `databases.synapse.username`           | `matrix_user`              |
+|             |                    |            | Password  | `databases.synapse.password`           |                            |
 | Keycloak    | Keycloak           | PostgreSQL |           |                                        |                            |
 |             |                    |            | Name      | `databases.keycloak.name`              | `keycloak`                 |
 |             |                    |            | Host      | `databases.keycloak.host`              | `postgresql`               |
@@ -269,10 +273,14 @@ actual scalability of the components (see column `Scales at least to 2`).
 |             | `replicas.milter`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 | Collabora   | `replicas.collabora`   | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 | Dovecot     | `replicas.dovecot`     | `1`     | :white_check_mark: | :x:                | not tested           |
+| Element     | `replicas.element`     | `2`     | :white_check_mark: | :white_check_mark: | :white_check_mark:   |
+|             | `replicas.synapse`     | `1`     | :white_check_mark: | :x:                | not tested           |
+|             | `replicas.synapseWeb`  | `2`     | :white_check_mark: | :white_check_mark: | :white_check_mark:   |
+|             | `replicas.wellKnown`   | `2`     | :white_check_mark: | :white_check_mark: | :white_check_mark:   |
 | Jitsi       | `replicas.jibri`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 |             | `replicas.jicofo`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 |             | `replicas.jitsi `      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.jvb `        | `1`     | :white_check_mark: | :x:                | tested               |
+|             | `replicas.jvb `        | `1`     | :white_check_mark: | :x:                | :x:                  |
 | Keycloak    | `replicas.keycloak`    | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 | Nextcloud   | `replicas.nextcloud`   | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 | OpenProject | `replicas.openproject` | `1`     | :white_check_mark: | :white_check_mark: | not tested           |

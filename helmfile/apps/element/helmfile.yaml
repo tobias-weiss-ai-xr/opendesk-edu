@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "sovereign-workplace-element"
+    url: "https://gitlab.souvap-univention.de/api/v4/projects/148/packages/helm/stable"
+
+releases:
+  - name: "sovereign-workplace-element"
+    chart: "sovereign-workplace-element/sovereign-workplace-element"
+    version: "1.1.2"
+    values:
+      - "values-element.gotmpl"
+    condition: "element.enabled"
+
+  - name: "sovereign-workplace-well-known"
+    chart: "sovereign-workplace-element/sovereign-workplace-well-known"
+    version: "1.1.2"
+    values:
+      - "values-well-known.gotmpl"
+    condition: "element.enabled"
+
+  - name: "sovereign-workplace-synapse-web"
+    chart: "sovereign-workplace-element/sovereign-workplace-synapse-web"
+    version: "1.1.2"
+    values:
+      - "values-synapse-web.gotmpl"
+    condition: "element.enabled"
+
+  - name: "sovereign-workplace-synapse"
+    chart: "sovereign-workplace-element/sovereign-workplace-synapse"
+    version: "1.1.2"
+    values:
+      - "values-synapse.gotmpl"
+    condition: "element.enabled"
+
+commonLabels:
+  deploy-stage: "component-1"
+  component: "element"
+
+bases:
+  - "../../bases/environments.yaml"
+...

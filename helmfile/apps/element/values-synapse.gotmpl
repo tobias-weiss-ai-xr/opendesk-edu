@@ -1,0 +1,52 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  registry: "{{ .Values.global.imageRegistry }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.synapse.repository }}"
+  tag: "{{ .Values.images.synapse.tag }}"
+
+configuration:
+  database:
+    host: "{{ .Values.databases.synapse.host }}"
+    name: "{{ .Values.databases.synapse.name }}"
+    user: "{{ .Values.databases.synapse.username }}"
+    password: "{{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser }}"
+
+  homeserver:
+    oidc:
+      clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix }}
+      issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+
+    turn:
+      sharedSecret: {{ .Values.turn.credentials }}
+      servers:
+        {{- if .Values.turn.tls.host }}
+        - server: {{ .Values.turn.tls.host }}
+          port: {{ .Values.turn.tls.port }}
+          transport: {{ .Values.turn.transport }}
+        {{- else if .Values.turn.server.host }}
+        - server: {{ .Values.turn.server.host }}
+          port: {{ .Values.turn.server.port }}
+          transport: {{ .Values.turn.transport }}
+        {{- end }}
+
+persistence:
+  size: "{{ .Values.persistence.size.synapse }}"
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+
+replicaCount: {{ .Values.replicas.synapse }}
+
+resources:
+  {{ .Values.resources.synapse | toYaml | nindent 2 }}
+...
