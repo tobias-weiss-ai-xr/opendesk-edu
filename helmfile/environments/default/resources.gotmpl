@@ -14,17 +14,24 @@ resources:
   dovecot:
     limits:
       cpu: 0.5
-      memory: "0.25Gi"
+      memory: "250Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
+  element:
+    limits:
+      cpu: 1
+      memory: "250Mi"
+    requests:
+      cpu: 0.1
+      memory: "50Mi"
   freshclam:
     limits:
       cpu: 1
       memory: "1Gi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   icap:
     limits:
       cpu: 2
@@ -35,24 +42,24 @@ resources:
   jibri:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "125Mi"
   jicofo:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   jitsi:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   jitsiKeycloakAdapter:
     limits:
       cpu: "100m"
@@ -63,45 +70,45 @@ resources:
   jvb:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   keycloak:
     limits:
       cpu: 2
       memory: "2Gi"
     requests:
       cpu: 0.1
-      memory: "0.75Gi"
+      memory: "750Mi"
   keycloakExtension:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   keycloakBootstrap:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.25Gi"
+      memory: "250Mi"
   keycloakProxy:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   mariadb:
     limits:
       cpu: 2
       memory: "2Gi"
     requests:
       cpu: 0.1
-      memory: "0.5Gi"
+      memory: "500Mi"
   milter:
     limits:
       cpu: 4
@@ -115,49 +122,63 @@ resources:
       memory: "1Gi"
     requests:
       cpu: 0.1
-      memory: "0.5Gi"
+      memory: "500Mi"
   openproject:
     limits:
       cpu: 2
       memory: "1Gi"
     requests:
       cpu: 0.1
-      memory: "0.25Gi"
+      memory: "250Mi"
   oxConnector:
     limits:
       cpu: 2
       memory: "2Gi"
     requests:
       cpu: 0.1
-      memory: "0.25Gi"
+      memory: "250Mi"
   postfix:
     limits:
       cpu: 0.5
-      memory: "0.25Gi"
+      memory: "250Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   postgresql:
     limits:
       cpu: 2
       memory: "1Gi"
     requests:
       cpu: 0.1
-      memory: "0.25Gi"
+      memory: "250Mi"
   prosody:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
   redis:
     limits:
       cpu: 1
-      memory: "0.5Gi"
+      memory: "500Mi"
     requests:
       cpu: 0.1
-      memory: "0.1Gi"
+      memory: "100Mi"
+  synapse:
+    limits:
+      cpu: 4
+      memory: "4Gi"
+    requests:
+      cpu: 1
+      memory: "2Gi"
+  synapseWeb:
+    limits:
+      cpu: 1
+      memory: "250Mi"
+    requests:
+      cpu: 0.1
+      memory: "50Mi"
   univentionCorporateServer:
     limits:
       cpu: 2
@@ -165,6 +186,13 @@ resources:
     requests:
       cpu: 0.5
       memory: "1Gi"
+  wellKnown:
+    limits:
+      cpu: 1
+      memory: "250Mi"
+    requests:
+      cpu: 0.1
+      memory: "50Mi"
   xwiki:
     limits:
       cpu: 2

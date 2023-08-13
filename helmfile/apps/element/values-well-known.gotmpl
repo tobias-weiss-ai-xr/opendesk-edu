@@ -1,0 +1,31 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  registry: "{{ .Values.global.imageRegistry }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.wellKnown.repository }}"
+  tag: "{{ .Values.images.wellKnown.tag }}"
+
+ingress:
+  host: "{{ .Values.global.domain }}"
+  enabled: "{{ .Values.ingress.enabled }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: "{{ .Values.ingress.tls.enabled }}"
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+replicaCount: {{ .Values.replicas.wellKnown }}
+
+resources:
+  {{ .Values.resources.wellKnown | toYaml | nindent 2 }}
+...

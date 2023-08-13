@@ -116,9 +116,9 @@ keycloakConfigCli:
             "enabled": true,
             "alwaysDisplayInConsole": false,
             "clientAuthenticatorType": "client-secret",
-            "secret": "$(CLIENT_SECRET_JITSI_PLAIN_PASSWORD)",
+            "secret": "$(CLIENT_SECRET_JITSI_PASSWORD)",
             "redirectUris": [
-              "https://$(JITSI_PLAIN_DOMAIN)/*"
+              "https://$(JITSI_DOMAIN)/*"
             ],
             "webOrigins": [
               "*"
@@ -135,7 +135,7 @@ keycloakConfigCli:
             "frontchannelLogout": true,
             "protocol": "openid-connect",
             "attributes": {
-              "post.logout.redirect.uris": "https://$(JITSI_PLAIN_DOMAIN)/*##https://$(UNIVENTION_CORPORATE_SERVER_DOMAIN)/*"
+              "post.logout.redirect.uris": "https://$(JITSI_DOMAIN)/*##https://$(UNIVENTION_CORPORATE_SERVER_DOMAIN)/*"
             },
             "authenticationFlowBindingOverrides": {},
             "fullScopeAllowed": true,
