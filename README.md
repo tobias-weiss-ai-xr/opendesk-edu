@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Disclaimer August 2023
 
-The current state of the Sovereign Workplace contain components that are going to be
+The current state of the Sovereign Workplace contains components that are going to be
 replaced. Like for example the UCS dev container monolith will be substituted by
 multiple Univention Management Stack containers.
 
