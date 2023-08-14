@@ -1,3 +1,15 @@
+# [0.1.0](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.6...v0.1.0) (2023-08-14)
+
+
+### Bug Fixes
+
+* **docs:** Typo ([ee684a7](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/ee684a78910ce721ea834e9ec2f4222ed37572c6))
+
+
+### Features
+
+* **element:** Add element component ([5f0ca92](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/5f0ca92a058e51a27aa56e35ebcf2048bad88671))
+
 ## [0.0.6](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.5...v0.0.6) (2023-08-14)
 
 
