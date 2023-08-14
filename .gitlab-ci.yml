@@ -127,8 +127,7 @@ variables:
       - "yes"
       - "no"
   TESTS_PROJECT_URL:
-    description: "URL of the E2E-test gitlab project API with project ID."
-    value: "gitlab.souvap-univention.de/api/v4/projects/6"
+    description: "URL of the E2E-test Gitlab project API with project ID."
   # please use the following set of variables with normalized names:
   DOMAIN: "${NAMESPACE}.${CLUSTER}.${BASE_DOMAIN}"
   ISTIO_DOMAIN: "${NAMESPACE}.istio.${CLUSTER}.${BASE_DOMAIN}"
@@ -192,7 +191,7 @@ env-cleanup:
 env-start:
   environment:
     name: "${NAMESPACE}"
-    url: "https://portal.${NAMESPACE}.${SWP_DOMAIN}"
+    url: "https://portal.${DOMAIN}"
     on_stop: "env-stop"
   extends: ".deploy-common"
   image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
