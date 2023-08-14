@@ -65,6 +65,7 @@ appsuite:
       com.openexchange.capability.smime: "true"
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"
+      com.openexchange.mail.transport.secondary.authType: "xoauth2"
       # Nextcloud integration
       com.openexchange.file.storage.nextcloud.oauth.url: "http://nextcloud/"
       com.openexchange.file.storage.nextcloud.oauth.webdav.username.strategy: "user"
