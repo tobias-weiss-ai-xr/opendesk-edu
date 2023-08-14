@@ -51,7 +51,7 @@ jitsi:
     {{- end }}
     extraEnvs:
       - name: "AUTH_TYPE"
-        value: "jwt"
+        value: "hybrid_matrix_token"
       - name: "JWT_APP_ID"
         value: "myappid"
       - name: "JWT_APP_SECRET"
@@ -111,6 +111,8 @@ jitsi:
   {{- end }}
 
 patchJVB:
+  configuration:
+    staticLoadbalancerIP: "{{ .Values.cluster.networking.ingressGatewayIP }}"
   image:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.jitsiPatchJVB.repository }}"
