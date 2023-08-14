@@ -1,3 +1,11 @@
+## [0.1.1](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.1.0...v0.1.1) (2023-08-14)
+
+
+### Bug Fixes
+
+* **open-xchange:** Bump dovecot and sovereign-workplace-open-xchange-bootstrap to 1.3.0 with image digest support ([53796da](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/53796dae660463207a460b387b6f3dd23ce20cd0))
+* **open-xchange:** Bump sovereign-workplace-open-xchange-bootstrap to 1.3.1 ([390f2de](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/390f2dee5226b83855a6cca8bf1c0d0f5647ee34))
+
 # [0.1.0](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.6...v0.1.0) (2023-08-14)
 
 
