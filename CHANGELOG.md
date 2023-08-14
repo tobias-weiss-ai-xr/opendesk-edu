@@ -1,3 +1,10 @@
+## [0.0.6](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.5...v0.0.6) (2023-08-14)
+
+
+### Bug Fixes
+
+* **open-xchange:** Functional mailboxes auth settings update in AppSuite and Dovecot ([53948ea](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/53948eae7648cc9785d2b8a813fc7e40b36aa3aa))
+
 ## [0.0.5](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.0.4...v0.0.5) (2023-08-11)
 
 
