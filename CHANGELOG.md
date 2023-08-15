@@ -1,3 +1,10 @@
+## [0.1.2](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.1.1...v0.1.2) (2023-08-15)
+
+
+### Bug Fixes
+
+* **jitsi:** Update support for NodePort setups with different ingress/egress ips ([de25789](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/de257893d4ff2b3e8ea1d6988c6bdde5ed1eae9a))
+
 ## [0.1.1](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.1.0...v0.1.1) (2023-08-14)
 
 
