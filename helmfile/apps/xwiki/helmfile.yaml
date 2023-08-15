@@ -2,12 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "xwiki"
-    url: "https://xwiki-contrib.github.io/xwiki-helm"
+  - name: "xwiki-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://xwiki-contrib.github.io/xwiki-helm" }}
 
 releases:
   - name: "xwiki"
-    chart: "xwiki/xwiki"
+    chart: "xwiki-repo/xwiki"
     version: "1.1.1"
     wait: true
     timeout: 600

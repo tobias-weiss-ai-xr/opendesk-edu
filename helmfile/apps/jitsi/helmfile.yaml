@@ -2,12 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "jitsi"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/137/packages/helm/stable"
+  - name: "jitsi-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/137/packages/helm/stable" }}
 
 releases:
   - name: "jitsi"
-    chart: "jitsi/sovereign-workplace-jitsi"
+    chart: "jitsi-repo/sovereign-workplace-jitsi"
     version: "1.2.1"
     values:
       - "values-jitsi.gotmpl"

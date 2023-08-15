@@ -2,14 +2,18 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "sovereign-workplace-nextcloud-bootstrap"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/130/packages/helm/stable"
-  - name: "nextcloud"
-    url: "https://nextcloud.github.io/helm/"
+  - name: "sovereign-workplace-nextcloud-bootstrap-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/130/packages/helm/stable" }}
+  - name: "nextcloud-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://nextcloud.github.io/helm/" }}
 
 releases:
   - name: "sovereign-workplace-nextcloud-bootstrap"
-    chart: "sovereign-workplace-nextcloud-bootstrap/sovereign-workplace-nextcloud-bootstrap"
+    chart: "sovereign-workplace-nextcloud-bootstrap-repo/sovereign-workplace-nextcloud-bootstrap"
     version: "2.2.0"
     wait: true
     waitForJobs: true
@@ -20,7 +24,7 @@ releases:
     timeout: 1800
 
   - name: "nextcloud"
-    chart: "nextcloud/nextcloud"
+    chart: "nextcloud-repo/nextcloud"
     version: "3.5.19"
     needs:
       - "sovereign-workplace-nextcloud-bootstrap"
