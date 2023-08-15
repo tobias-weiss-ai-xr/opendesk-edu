@@ -2,22 +2,28 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "bitnami"
-    url: "https://charts.bitnami.com/bitnami"
-  - name: "keycloak-theme"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/96/packages/helm/stable"
-  - name: "keycloak-extensions"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/77/packages/helm/stable"
+  - name: "bitnami-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://charts.bitnami.com/bitnami" }}
+  - name: "keycloak-theme-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/96/packages/helm/stable" }}
+  - name: "keycloak-extensions-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/77/packages/helm/stable" }}
 
 releases:
   - name: "keycloak-theme"
-    chart: "keycloak-theme/sovereign-workplace-theme"
+    chart: "keycloak-theme-repo/sovereign-workplace-theme"
     version: "1.0.0"
     values:
       - "values-theme.gotmpl"
     condition: "keycloak.enabled"
   - name: "keycloak"
-    chart: "bitnami/keycloak"
+    chart: "bitnami-repo/keycloak"
     version: "12.2.0"
     values:
       - "values-keycloak.gotmpl"
@@ -26,7 +32,7 @@ releases:
     wait: true
     condition: "keycloak.enabled"
   - name: "keycloak-extensions"
-    chart: "keycloak-extensions/keycloak-extensions"
+    chart: "keycloak-extensions-repo/keycloak-extensions"
     version: "0.1.0"
     needs:
       - "keycloak"

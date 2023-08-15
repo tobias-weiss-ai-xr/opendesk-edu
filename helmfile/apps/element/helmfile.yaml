@@ -2,33 +2,35 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "sovereign-workplace-element"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/148/packages/helm/stable"
+  - name: "sovereign-workplace-element-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/148/packages/helm/stable" }}
 
 releases:
   - name: "sovereign-workplace-element"
-    chart: "sovereign-workplace-element/sovereign-workplace-element"
+    chart: "sovereign-workplace-element-repo/sovereign-workplace-element"
     version: "1.1.2"
     values:
       - "values-element.gotmpl"
     condition: "element.enabled"
 
   - name: "sovereign-workplace-well-known"
-    chart: "sovereign-workplace-element/sovereign-workplace-well-known"
+    chart: "sovereign-workplace-element-repo/sovereign-workplace-well-known"
     version: "1.1.2"
     values:
       - "values-well-known.gotmpl"
     condition: "element.enabled"
 
   - name: "sovereign-workplace-synapse-web"
-    chart: "sovereign-workplace-element/sovereign-workplace-synapse-web"
+    chart: "sovereign-workplace-element-repo/sovereign-workplace-synapse-web"
     version: "1.1.2"
     values:
       - "values-synapse-web.gotmpl"
     condition: "element.enabled"
 
   - name: "sovereign-workplace-synapse"
-    chart: "sovereign-workplace-element/sovereign-workplace-synapse"
+    chart: "sovereign-workplace-element-repo/sovereign-workplace-synapse"
     version: "1.1.2"
     values:
       - "values-synapse.gotmpl"

@@ -2,12 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "openproject"
-    url: "https://charts.openproject.org"
+  - name: "openproject-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://charts.openproject.org" }}
 
 releases:
   - name: "openproject"
-    chart: "openproject/openproject"
+    chart: "openproject-repo/openproject"
     version: "1.8.0"
     values:
       - "values.yaml"

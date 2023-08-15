@@ -149,6 +149,16 @@ and wait a little. After the deployment is finished some bootstrapping is
 executed which might take some more minutes before you can log in your new
 instance.
 
+## Offline deployment
+
+Before executing a [local deployment](#local-deployment), you can set following
+environment variables to use your own container image and helm chart registry:
+
+| name                         | description                    |
+|------------------------------|--------------------------------|
+| PRIVATE_CHART_REPOSITORY_URL | Your helm chart repository url |
+| PRIVATE_IMAGE_REGISTRY_URL   | Your image registry url        |
+
 ## Logging in
 
 When successfully deployed the SWP, all K8s jobs from the deployment should be

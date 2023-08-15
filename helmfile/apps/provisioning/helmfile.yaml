@@ -2,12 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "ox-connector"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable"
+  - name: "ox-connector-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable" }}
 
 releases:
   - name: "ox-connector"
-    chart: "ox-connector/ox-connector"
+    chart: "ox-connector-repo/ox-connector"
     version: "0.1.0-pre-jconde-listener-entrypoint-chaining"
     values:
       - "values-oxconnector.yaml"

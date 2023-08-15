@@ -2,12 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "collabora-online"
-    url: "https://collaboraonline.github.io/online"
+  - name: "collabora-online-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://collaboraonline.github.io/online" }}
 
 releases:
   - name: "collabora-online"
-    chart: "collabora-online/collabora-online"
+    chart: "collabora-online-repo/collabora-online"
     version: "1.0.2"
     values:
       - "values.yaml"

@@ -2,70 +2,84 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "sovereign-workplace-certificates"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/133/packages/helm/stable"
-  - name: "postgresql"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/83/packages/helm/stable"
-  - name: "mariadb"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/86/packages/helm/stable"
-  - name: "postfix"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/85/packages/helm/stable"
-  - name: "istio-resources"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/69/packages/helm/stable"
-  - name: "clamav"
-    url: "https://gitlab.souvap-univention.de/api/v4/projects/73/packages/helm/stable"
-  - name: "bitnami"
-    url: "https://charts.bitnami.com/bitnami"
+  - name: "sovereign-workplace-certificates-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/133/packages/helm/stable" }}
+  - name: "postgresql-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/83/packages/helm/stable" }}
+  - name: "mariadb-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/86/packages/helm/stable" }}
+  - name: "postfix-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/85/packages/helm/stable" }}
+  - name: "istio-resources-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/69/packages/helm/stable" }}
+  - name: "clamav-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/73/packages/helm/stable" }}
+  - name: "bitnami-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://charts.bitnami.com/bitnami" }}
 
 releases:
   - name: "sovereign-workplace-certificates"
-    chart: "sovereign-workplace-certificates/sovereign-workplace-certificates"
+    chart: "sovereign-workplace-certificates-repo/sovereign-workplace-certificates"
     version: "1.2.2"
     values:
       - "values-certificates.gotmpl"
     condition: "certificates.enabled"
   - name: "redis"
-    chart: "bitnami/redis"
+    chart: "bitnami-repo/redis"
     version: "^17.9.3"
     values:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
     condition: "redis.enabled"
   - name: "postgresql"
-    chart: "postgresql/postgresql"
+    chart: "postgresql-repo/postgresql"
     version: "2.0.0"
     values:
       - "values-postgresql.yaml"
       - "values-postgresql.gotmpl"
     condition: "postgresql.enabled"
   - name: "mariadb"
-    chart: "mariadb/mariadb"
+    chart: "mariadb-repo/mariadb"
     version: "2.0.0"
     values:
       - "values-mariadb.yaml"
       - "values-mariadb.gotmpl"
     condition: "mariadb.enabled"
   - name: "postfix"
-    chart: "postfix/postfix"
+    chart: "postfix-repo/postfix"
     version: "1.13.0"
     values:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
     condition: "postfix.enabled"
   - name: "clamav"
-    chart: "clamav/sovereign-workplace-clamav"
+    chart: "clamav-repo/sovereign-workplace-clamav"
     version: "2.1.0"
     values:
       - "values-clamav-distributed.gotmpl"
     condition: "clamavDistributed.enabled"
   - name: "clamav-simple"
-    chart: "clamav/clamav-simple"
+    chart: "clamav-repo/clamav-simple"
     version: "2.1.0"
     values:
       - "values-clamav-simple.gotmpl"
     condition: "clamavSimple.enabled"
   - name: "sovereign-workplace-gateway"
-    chart: "istio-resources/istio-gateway"
+    chart: "istio-resources-repo/istio-gateway"
     version: "1.1.2"
     values:
       - "values-istio-gateway.gotmpl"
