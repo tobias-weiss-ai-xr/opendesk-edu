@@ -1,3 +1,15 @@
+# [0.2.0](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.1.2...v0.2.0) (2023-08-15)
+
+
+### Bug Fixes
+
+* **helmfile:** Replace bitnami repositories with OCI ([4c21fd2](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/4c21fd228654520bb71d56dc1bda96332334002b))
+
+
+### Features
+
+* **helmfile:** Implement private image/chart registry variables ([5788323](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/57883236219811d2a5fc422649b4f9b042a0ac22))
+
 ## [0.1.2](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.1.1...v0.1.2) (2023-08-15)
 
 
