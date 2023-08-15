@@ -7,10 +7,10 @@ repositories:
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "https://gitlab.souvap-univention.de/api/v4/projects/80/packages/helm/stable" }}
   - name: "openxchange-repo"
+    oci: true
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "registry.open-xchange.com" }}
-    oci: true
   - name: "sovereign-workplace-open-xchange-bootstrap-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
