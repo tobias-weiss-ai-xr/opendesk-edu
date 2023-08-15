@@ -27,9 +27,10 @@ repositories:
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "https://gitlab.souvap-univention.de/api/v4/projects/73/packages/helm/stable" }}
   - name: "bitnami-repo"
+    oci: true
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://charts.bitnami.com/bitnami" }}
+         default "registry-1.docker.io/bitnamicharts" }}
 
 releases:
   - name: "sovereign-workplace-certificates"

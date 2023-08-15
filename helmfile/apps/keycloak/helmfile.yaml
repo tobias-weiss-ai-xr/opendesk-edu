@@ -3,9 +3,10 @@
 ---
 repositories:
   - name: "bitnami-repo"
+    oci: true
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://charts.bitnami.com/bitnami" }}
+         default "registry-1.docker.io/bitnamicharts" }}
   - name: "keycloak-theme-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
