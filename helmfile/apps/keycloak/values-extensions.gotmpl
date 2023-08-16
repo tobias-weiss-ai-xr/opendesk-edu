@@ -46,6 +46,7 @@ proxy:
     ingressClassName: "{{ .Values.ingress.ingressClassName }}"
     annotations:
       nginx.org/proxy-buffer-size: "8k"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
     host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     tls:
       enabled: "{{ .Values.ingress.tls.enabled }}"
