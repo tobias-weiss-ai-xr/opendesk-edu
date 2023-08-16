@@ -108,6 +108,7 @@ appsuite:
     ingress:
       hosts:
         - host: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+      enabled: false
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . }}
