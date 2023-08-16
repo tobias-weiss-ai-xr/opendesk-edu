@@ -23,6 +23,10 @@ cluster:
     # When ingress and egress gateway use different ips, which results that pods can't self-discover their incoming ip,
     # you need to provide the public (load-balanced) ingress gateways ip address.
     ingressGatewayIP: ""
+    # LoadBalancer status fiel - only relevant for "LoadBalancer" cluster services.
+    # The IP/DNS of your load-balancer will be fetched for some components from 'status' map of services.
+    # Most providers use '.status.loadBalancer.ingress[0].ip' to store public ip. You can modify the chosen field here.
+    loadBalancerStatusField: "ip"
 
   container:
     # Used container engine in kubernetes cluster.

@@ -3,14 +3,14 @@
 ---
 repositories:
   - name: "jitsi-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/137/packages/helm/stable" }}
-
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-jitsi" }}
 releases:
   - name: "jitsi"
     chart: "jitsi-repo/sovereign-workplace-jitsi"
-    version: "1.2.1"
+    version: "1.2.5"
     values:
       - "values-jitsi.gotmpl"
     condition: "jitsi.enabled"
