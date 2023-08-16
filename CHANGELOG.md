@@ -1,3 +1,10 @@
+## [0.2.1](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.0...v0.2.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* **keycloak:** Increase proxy-buffer-size for ingress-nginx ([d8adcc4](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/d8adcc463adc8bec5a793a97977dddd89d7363cc))
+
 # [0.2.0](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.1.2...v0.2.0) (2023-08-15)
 
 
