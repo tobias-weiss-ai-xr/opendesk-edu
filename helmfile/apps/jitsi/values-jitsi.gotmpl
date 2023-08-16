@@ -113,6 +113,7 @@ jitsi:
 patchJVB:
   configuration:
     staticLoadbalancerIP: "{{ .Values.cluster.networking.ingressGatewayIP }}"
+    loadbalancerStatusField: "{{ .Values.cluster.networking.loadBalancerStatusField }}"
   image:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.jitsiPatchJVB.repository }}"
