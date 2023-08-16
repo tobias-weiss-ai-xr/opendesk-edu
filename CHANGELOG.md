@@ -1,3 +1,11 @@
+## [0.2.2](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.1...v0.2.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* **jitsi:** Allow configuration of LoadBalancer status field for patchJVB job ([7491582](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/7491582c28c21e83a0bc6349fb68045472146aad))
+* **open-xchange:** Explicitly disable core-ui-middleware ingress ([06dc7a1](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/06dc7a115d36841f1109f9e75aac844d934c2f4c))
+
 ## [0.2.1](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.0...v0.2.1) (2023-08-16)
 
 
