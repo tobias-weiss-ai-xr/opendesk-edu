@@ -216,6 +216,7 @@ subdirectory `/helmfile/apps/services`.
 | PostgreSQL                  | `postgresql.enabled`                | `true`  | Database                       | Eval       |
 | Redis                       | `redis.enabled`                     | `true`  | Cache Database                 | Eval       |
 | Univention Corporate Server | `univentionCorporateServer.enabled` | `true`  | Identity Management & Portal   | Functional |
+| Univention Management Stack | `univentionManagementStack.enabled` | `false` | Identity Management & Portal   | Eval       |
 | XWiki                       | `xwiki.enabled`                     | `true`  | Knowledgebase                  | Functional |
 
 
