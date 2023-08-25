@@ -119,6 +119,42 @@ images:
   univentionCorporateServer:
     repository: "souvap/tooling/images/univention-corporate-server-swp/ucs"
     tag: "20230829T094822@sha256:6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
+  umsConfigHtpasswd:
+    repository: "souvap/tooling/images/univention/config-htpasswd"
+    tag: "latest@sha256:24c5e218baa62b169e7222d8ee4d3951ddc8622cd359def6b660bb23a1052f9e"
+  umsDataLoader:
+    repository: "souvap/tooling/images/univention/data-loader"
+    tag: "latest@sha256:857837c1810f82362d441544dc32bd2c1d6fe358bbb5ae0e2c60b7f8f4092190"
+  umsLdapNotifier:
+    repository: "souvap/tooling/images/univention/ldap-notifier"
+    tag: "latest@sha256:6eccf86fe78926247ec9b59d7ba83c53271bc3ca7d0195863c0489e22c836002"
+  umsLdapServer:
+    repository: "souvap/tooling/images/univention/ldap-server"
+    tag: "latest@sha256:4a7c44b37c727cdc03e4043c88e3dbf6b1f119772c5c1904eaed3298bdd49a3d"
+  umsNotificationsApi:
+    repository: "souvap/tooling/images/univention/notifications-api"
+    tag: "latest@sha256:87a047c2d0669fcbb3501ef94192812e17e09aecabc1edd2e4b92afbb7ea4b20"
+  umsPortalListener:
+    repository: "souvap/tooling/images/univention/portal-listener"
+    tag: "latest@sha256:bcf48d108bc2f1afd745659a1d4f11f1dd0d8ada034899aa401dfea32a29c87a"
+  umsPortalFrontend:
+    repository: "souvap/tooling/images/univention/portal-frontend"
+    tag: "latest@sha256:a1b11db009e992d91cfef2bc60a5022cd4498c38908194020c881ef6dd325bae"
+  umsPortalServer:
+    repository: "souvap/tooling/images/univention/portal-server"
+    tag: "latest@sha256:eb0b032c4cf4b207f78b80c69f3e593e01e577779d877e16908902f19b4fc2ee"
+  umsStoreDav:
+    repository: "souvap/tooling/images/univention/store-dav"
+    tag: "latest@sha256:d65f705e46a497ba58e7373f19973835f731796baeace16a32d6331469bf0068"
+  umsUdmRestApi:
+    repository: "souvap/tooling/images/univention/udm-rest-api"
+    tag: "latest@sha256:dce4322646749692c5d4692ccd7ff55df080a4af3485585a50c82871715e0cae"
+  umsUmcGateway:
+    repository: "souvap/tooling/images/univention/umc-gateway"
+    tag: "latest@sha256:18172ee4317a9259291f251c0cc1d2be05e003558cbd18d6dc062098a127cc8d"
+  umsUmcServer:
+    repository: "souvap/tooling/images/univention/umc-server"
+    tag: "latest@sha256:6cbb1708109c5a0c13f3ee433989094d04cecfb8b32975e723d0f5a2e526f8db"
   wellKnown:
     repository: "library/nginx"
     tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"

@@ -1,0 +1,30 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+ldapServer:
+  ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
+
+  # TODO: Certificates handling
+  # caCert: ""
+  # certPem: ""
+  # privateKey: ""
+  # dhParam: ""
+  tlsMode: "off"
+
+  # TODO: SAML integration
+  # samlMetadataUrl: "http://localhost:8097/realms/ucs/protocol/saml/descriptor"
+  # samlMetadataUrlInternal: "http://keycloak.default/realms/ucs/protocol/saml/descriptor"
+  # serviceProviders: "http://localhost:8000/univention/saml/metadata,http://localhost:8000/auth/realms/ucs"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.umsLdapServer.repository }}"
+  pullPolicy: "Always"
+  tag: "{{ .Values.images.umsLdapServer.tag }}"
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+    {{- end }}
+...

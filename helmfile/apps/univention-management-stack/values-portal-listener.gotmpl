@@ -1,0 +1,42 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+portalListener:
+  adminGroup: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
+  environment: "staging"
+  debugLevel: "4"
+  # TODO: using this in server without the pending slash, fix
+  # ucsInternalUrl: "http://portal-listener:univention@store-dav/portal-data/"
+  assetsRoot: "http://portal-listener:univention@store-dav/portal-assets/"
+  ucsInternalUrl: "http://portal-listener:univention@store-dav/portal-data/"
+  umcGetUrl: "http://umc-server/get"
+  umcSessionUrl: "http://umc-server/get/session-info"
+
+  ldapBaseDn: "dc=univention-organization,dc=intranet"
+  ldapHost: "ldap-server"
+  ldapHostDn: "cn=admin,dc=univention-organization,dc=intranet"
+  ldapSecret: "univention"
+  machineSecret: "univention"
+  notifierServer: "ldap-notifier"
+  portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,dc=univention-organization,dc=intranet"
+  udmApiUrl: "http://udm-rest-api/udm/"
+  udmApiUsername: "cn=admin"
+
+  tlsMode: "off"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.umsPortalListener.repository }}"
+  pullPolicy: "Always"
+  tag: "{{ .Values.images.umsPortalListener.tag }}"
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+    {{- end }}
+
+store-dav:
+  bundled: false
+
+...

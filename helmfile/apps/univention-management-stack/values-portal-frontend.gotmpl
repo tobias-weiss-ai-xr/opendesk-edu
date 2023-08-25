@@ -1,0 +1,40 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+portalFrontend:
+  environment: "staging"
+  log_level: "INFO"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.umsPortalFrontend.repository }}"
+  pullPolicy: "Always"
+  tag: "{{ .Values.images.umsPortalFrontend.tag }}"
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+    {{- end }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+ingressRoot:
+  enabled: {{ .Values.ingress.enabled }}
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+istio:
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  enabled: {{ .Values.istio.enabled }}
+
+...

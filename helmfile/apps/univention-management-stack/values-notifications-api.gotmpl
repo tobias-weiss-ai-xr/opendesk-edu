@@ -1,0 +1,35 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+notificationsapi:
+  apply_database_migrations: "True"
+  dev_mode: "False"
+  environment: "staging"
+  log_level: "DEBUG"
+  sql_echo: "False"
+  api_prefix: "/univention/portal/notifications-api"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.umsNotificationsApi.repository }}"
+  pullPolicy: "Always"
+  tag: "{{ .Values.images.umsNotificationsApi.tag }}"
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+    {{- end }}
+
+istio:
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  enabled: {{ .Values.istio.enabled }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+...
