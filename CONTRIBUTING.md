@@ -9,17 +9,17 @@ Please read the [project's overall CONTRIBUTING.md](https://gitlab.opencode.de/b
 
 # How to contribute?
 
-When providing contributes to this project, please adhere to the standards and conventions described in further down in this document. Doing so please feel free to create merge requests.
+When providing contributes to this project, please adhere to the standards and conventions described further down in this document. Doing so please feel free to create merge requests.
 
 # Standards and conventions
 
 ## Branching
 
-We use of [Github flow](https://docs.github.com/en/get-started/quickstart/github-flow).
+We use [Github flow](https://docs.github.com/en/get-started/quickstart/github-flow).
 
 ## Verified commits
 
-We only allow verify commits:
+We only allow verified commits:
 - https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/
 - https://docs.gitlab.com/ee/user/project/repository/gpg_signed_commits/
 - https://docs.gitlab.com/ee/user/project/repository/x509_signed_commits/
@@ -80,7 +80,7 @@ Due to DVS requirements:
 - we should avoid stand alone Manifests.
 - we do not use Operators and CRDs.
 
-In order to align the Helm files from various sources into an unified deployment of the SWP we make use of to [Helmfile](https://github.com/helmfile/helmfile).
+In order to align the Helm files from various sources into an unified deployment of the SWP we make use of [Helmfile](https://github.com/helmfile/helmfile).
 
 ## Tooling
 
