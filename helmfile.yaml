@@ -9,6 +9,7 @@ helmfiles:
   - path: "helmfile/apps/services/helmfile.yaml"
   - path: "helmfile/apps/keycloak/helmfile.yaml"
   - path: "helmfile/apps/univention-corporate-container/helmfile.yaml"
+  - path: "helmfile/apps/univention-management-stack/helmfile.yaml"
   - path: "helmfile/apps/keycloak-bootstrap/helmfile.yaml"
   - path: "helmfile/apps/intercom-service/helmfile.yaml"
   - path: "helmfile/apps/open-xchange/helmfile.yaml"
