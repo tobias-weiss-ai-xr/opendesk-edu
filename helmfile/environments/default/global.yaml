@@ -25,6 +25,7 @@ global:
     pollWidget: "poll-widget"
     synapse: "matrix"
     univentionCorporateServer: "portal"
+    univentionManagementStack: "portal"
     whiteboard: "whiteboard"
     xwiki: "wiki"
 

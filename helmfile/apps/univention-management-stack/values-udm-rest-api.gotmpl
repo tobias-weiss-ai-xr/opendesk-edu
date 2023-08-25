@@ -1,0 +1,57 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+udmRestApi:
+  apiLogLevel: "4"
+  authGroups:
+    dcBackup: "cn=DC Backup Hosts,cn=groups,dc=univention-organization,dc=intranet"
+    dcSlaves: "cn=DC Slave Hosts,cn=groups,dc=univention-organization,dc=intranet"
+    domainAdmins: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
+  environment: "staging"
+  ldapHost: "ldap-server"
+  ldapBaseDn: "dc=univention-organization,dc=intranet"
+  # TODO: This should not be required, the machine account is not there
+  # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=univention-organization,dc=intranet
+  ldapHostDn: "cn=admin,dc=univention-organization,dc=intranet"
+  # TODO: Secret should be entered without b64enc
+  ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
+  # TODO: There is on machine secret on the container
+  # TODO: Secret should be entered without b64enc
+  machineSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
+  # TODO: why do we need this many subprocesses?
+  numberOfSubprocesses: 8
+  # TODO: Stub value currently
+  caCert: ""
+  # TODO: This should not be part of the udm-rest-api anymore
+  loadJoinData:
+    enabled: true
+  # TODO: probably to INFO
+  logLevel: "DEBUG"
+  # TODO: configurable
+  tlsMode: "off"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.umsUdmRestApi.repository }}"
+  pullPolicy: "Always"
+  tag: "{{ .Values.images.umsUdmRestApi.tag }}"
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+    {{- end }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+istio:
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  enabled: {{ .Values.istio.enabled }}
+
+...

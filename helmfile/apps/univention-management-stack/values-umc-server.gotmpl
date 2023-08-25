@@ -1,0 +1,52 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+umcServer:
+  domainname: "{{ .Values.global.domain }}"
+  hostname: "{{ .Values.global.hosts.univentionManagementStack }}"
+  ldapHost: "ldap-server"
+  ldapBaseDn: "dc=univention-organization,dc=intranet"
+  # TODO: This should not be required, the machine account is not there
+  # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=univention-organization,dc=intranet
+  ldapHostDn: cn=admin,dc=univention-organization,dc=intranet
+  enforceSessionCookie: "true"
+
+  samlEnabled: false
+  samlMetadataUrl: "http://localhost:8097/realms/ucs/protocol/saml/descriptor"
+  samlMetadataUrlInternal: "http://keycloak/realms/ucs/protocol/saml/descriptor"
+  samlSpServer: "localhost:8000"
+  samlSchemes: "http"
+
+  tlsMode: "off"
+
+  # TODO: Secret should be entered without b64enc
+  ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
+  # TODO: There is on machine secret on the container
+  # TODO: Secret should be entered without b64enc
+  machineSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.umsUmcServer.repository }}"
+  pullPolicy: "Always"
+  tag: "{{ .Values.images.umsUmcServer.tag }}"
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . }}
+    {{- end }}
+
+istio:
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  enabled: {{ .Values.istio.enabled }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+...

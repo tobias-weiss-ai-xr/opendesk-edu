@@ -1,3 +1,86 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+
+repositories:
+  - name: "univention"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable" }}
+
+releases:
+  - name: "store-dav"
+    chart: "univention/store-dav"
+    version: "0.2.0"
+    values:
+      - "values-store-dav.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "ldap-server"
+    chart: "univention/ldap-server"
+    version: "0.1.0"
+    values:
+      - "values-ldap-server.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "ldap-notifier"
+    chart: "univention/ldap-notifier"
+    version: "0.1.0"
+    values:
+      - "values-ldap-notifier.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "udm-rest-api"
+    chart: "univention/udm-rest-api"
+    version: "0.1.0"
+    values:
+      - "values-udm-rest-api.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "stack-data-ums"
+    chart: "univention/stack-data-ums"
+    version: "0.1.0"
+    values:
+      - "values-stack-data-ums.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "stack-data-swp"
+    chart: "univention/stack-data-swp"
+    version: "0.1.0"
+    values:
+      - "values-stack-data-swp.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "portal-server"
+    chart: "univention/portal-server"
+    version: "0.1.0"
+    values:
+      - "values-portal-server.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "notifications-api"
+    chart: "univention/notifications-api"
+    version: "0.1.0"
+    values:
+      - "values-notifications-api.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "portal-listener"
+    chart: "univention/portal-listener"
+    version: "0.1.0"
+    values:
+      - "values-portal-listener.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "portal-frontend"
+    chart: "univention/portal-frontend"
+    version: "0.1.0"
+    values:
+      - "values-portal-frontend.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "umc-gateway"
+    chart: "univention/umc-gateway"
+    version: "0.1.0"
+    values:
+      - "values-umc-gateway.gotmpl"
+    condition: "univentionManagementStack.enabled"
+  - name: "umc-server"
+    chart: "univention/umc-server"
+    version: "0.1.0"
+    values:
+      - "values-umc-server.gotmpl"
+    condition: "univentionManagementStack.enabled"
+
+bases:
+  - "../../bases/environments.yaml"
