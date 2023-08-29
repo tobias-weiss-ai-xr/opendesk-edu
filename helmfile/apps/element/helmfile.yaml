@@ -10,28 +10,29 @@ repositories:
 releases:
   - name: "sovereign-workplace-element"
     chart: "sovereign-workplace-element-repo/sovereign-workplace-element"
-    version: "1.1.2"
+    version: "1.3.0"
     values:
       - "values-element.gotmpl"
     condition: "element.enabled"
 
   - name: "sovereign-workplace-well-known"
     chart: "sovereign-workplace-element-repo/sovereign-workplace-well-known"
-    version: "1.1.2"
+    version: "1.3.0"
     values:
+      - "values-well-known.yaml"
       - "values-well-known.gotmpl"
     condition: "element.enabled"
 
   - name: "sovereign-workplace-synapse-web"
     chart: "sovereign-workplace-element-repo/sovereign-workplace-synapse-web"
-    version: "1.1.2"
+    version: "1.3.0"
     values:
       - "values-synapse-web.gotmpl"
     condition: "element.enabled"
 
   - name: "sovereign-workplace-synapse"
     chart: "sovereign-workplace-element-repo/sovereign-workplace-synapse"
-    version: "1.1.2"
+    version: "1.3.0"
     values:
       - "values-synapse.gotmpl"
     condition: "element.enabled"
