@@ -1,3 +1,10 @@
+## [0.2.3](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.2...v0.2.3) (2023-08-29)
+
+
+### Bug Fixes
+
+* **ci:** Add central branding information ([a14c42f](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/a14c42f6ed2e3d8e12af5d04cae1a4bb1336fb3d))
+
 ## [0.2.2](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.1...v0.2.2) (2023-08-16)
 
 
