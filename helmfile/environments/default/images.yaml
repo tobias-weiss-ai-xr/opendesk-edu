@@ -12,8 +12,8 @@ images:
     repository: "dovecot/dovecot"
     digest: "sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
   element:
-    repository: "vectorim/element-web"
-    tag: "v1.11.35"
+    repository: "souvap/tooling/images/element-web@sha256"
+    tag: "16506bba9da546b1bf5896892f6f4afefea3d0f1d8ed93eae511212627a029b9"
   freshclam:
     repository: "clamav/clamav"
     tag: "1.1.0_base"

@@ -45,6 +45,7 @@ properties:
     "@brand-primary"
   # yamllint disable-line rule:line-length
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "'.navbar-default { background-color: white; border-bottom: 1px solid grey; height: 64px; } #menuview .navbar-brand img { padding: 5px; } div#companylogo { width: 96px; height: auto; padding-top: 6px; padding-left: 5px; } li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } button { background-color: #ffffff; } .drawer-nav, .drawer-brand { background-color: #ffffff; } #footerglobal { background-color: #ffffff; }'"
+  # yamllint disable-line rule:line-length
   # "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "'@list-group-active-border: @list-group-border; @gray-light: #727272; @text-muted: @gray; @xwiki-drawer-menu-item-hover-bg: @list-group-hover-bg; @xwiki-drawer-menu-item-hover-color: @list-group-link-hover-color; @well-bg: @body-bg; .navbar-default { background-color: #ffffff; border-bottom: 1px solid #dddddd !important; height: 64px; } #menuview .navbar-brand img { padding: 5px; } div#companylogo { width: 96px; height: auto; padding-top: 6px; padding-left: 5px; } li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } #globalsearch .btn { background-color: #ffffff; color: @brand-primary; }'"
 
   "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"

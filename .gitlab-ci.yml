@@ -28,7 +28,8 @@ variables:
     description: "The name of namespaces to deploy to."
     value: ""
   CLUSTER:
-    description: "Define which cluster to use. Cluster must be defined in gitlab/environments.yaml of sovereign-workplace-env included above."
+    description: "Define which cluster to use. Cluster must be defined in gitlab/environments.yaml of
+      sovereign-workplace-env included above."
     value: "dev"
   BASE_DOMAIN:
     description: "Define the Cluster Base Domain."
