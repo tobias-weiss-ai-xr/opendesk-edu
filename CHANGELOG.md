@@ -1,3 +1,10 @@
+## [0.2.4](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.3...v0.2.4) (2023-08-29)
+
+
+### Bug Fixes
+
+* **element:** Apply the global theme to Element ([7f7eae8](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/7f7eae8f99a6d8ad8085ad99c63af27b858ff9b7))
+
 ## [0.2.3](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.2...v0.2.3) (2023-08-29)
 
 
