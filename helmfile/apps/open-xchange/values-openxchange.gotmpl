@@ -76,6 +76,16 @@ appsuite:
     uiSettings:
       "io.ox.nextcloud//server": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
       "io.ox.public-sector//ics/url": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
+      # Dynamic theme
+      io.ox/dynamic-theme//mainColor: "{{ .Values.theme.colors.primary }}"
+      io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
+      io.ox/dynamic-theme//topbarBackground: "{{ .Values.theme.colors.white }}"
+      io.ox/dynamic-theme//topbarColor: "{{ .Values.theme.colors.black }}"
+      io.ox/dynamic-theme//listSelected: "{{ .Values.theme.colors.primary15 }}"
+      io.ox/dynamic-theme//listHover: "{{ .Values.theme.colors.secondaryGreyLight }}"
+      io.ox/dynamic-theme//folderBackground: "{{ .Values.theme.colors.white }}"
+      io.ox/dynamic-theme//folderSelected: "{{ .Values.theme.colors.primary15 }}"
+      io.ox/dynamic-theme//folderHover: "{{ .Values.theme.colors.secondaryGreyLight }}"
     secretETCFiles:
       # Format of the OX Guard master key:
       # MC+base64(20 random bytes)

@@ -64,8 +64,7 @@ These are the requirements of the Sovereign Workplace deployment:
 [HelmDiff](https://github.com/databus23/helm-diff)
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
-- [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are
-working with Open-Xchange to get rid of this dependency.
+- [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are talking to Open-Xchange and will try to get rid of this dependency.
 
 #### TLS Certificate
 
@@ -372,7 +371,7 @@ flowchart TD
     A[OX AppSuite]-->L
     D[OX Dovecot]-->L
     P[Portal/Admin]-->L
-    O[OpenProject]-->|in 2023|L
+    O[OpenProject]-->L
     X[XWiki]-->|in 2023|L
     A-->K
     N-->K

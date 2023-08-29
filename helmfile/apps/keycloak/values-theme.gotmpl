@@ -7,4 +7,7 @@ global:
   domain: "{{ .Values.global.domain }}"
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
+
+theme:
+  {{ .Values.theme | toYaml | nindent 2 }}
 ...

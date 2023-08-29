@@ -63,6 +63,8 @@ appsuite:
       com.openexchange.capability.guard-mail: "true"
       com.openexchange.capability.public-sector: "true"
       com.openexchange.capability.smime: "true"
+      com.openexchange.capability.share_links: "false"
+      com.openexchange.capability.invite_guests: "false"
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"
       com.openexchange.mail.transport.secondary.authType: "xoauth2"
@@ -93,6 +95,8 @@ appsuite:
         bindDN: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
 
     uiSettings:
+      io.ox/dynamic-theme//logoWidth: "82"
+      io.ox/dynamic-theme//topbarHover: "rgba(0, 0, 0, 0.1)"
       # Resources
       io.ox/core//features/resourceCalendars: "true"
       io.ox/core//features/managedResources: "true"
@@ -107,18 +111,6 @@ appsuite:
       # io.ox.public-sector//ics/url: "https://ics.<DOMAIN>/"
       io.ox/core//apps/quickLaunchCount: "0"
       io.ox/core//coloredIcons: "false"
-      # Dynamic theme
-      io.ox/dynamic-theme//mainColor: "#004B76"
-      io.ox/dynamic-theme//logoURL: "io.ox.public-sector/logo.svg"
-      io.ox/dynamic-theme//logoWidth: "80"
-      io.ox/dynamic-theme//topbarBackground: "#fff"
-      io.ox/dynamic-theme//topbarColor: "#1f1f1f"
-      io.ox/dynamic-theme//topbarHover: "rgba(0, 0, 0, 0.1)"
-      io.ox/dynamic-theme//listSelected: "#ADC8F0"
-      io.ox/dynamic-theme//listHover: "#ddd"
-      io.ox/dynamic-theme//folderBackground: "#fff"
-      io.ox/dynamic-theme//folderSelected: "#ADC8F0"
-      io.ox/dynamic-theme//folderHover: "#ddd"
 
     asConfig:
       default:

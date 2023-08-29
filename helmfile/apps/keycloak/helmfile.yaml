@@ -19,7 +19,7 @@ repositories:
 releases:
   - name: "keycloak-theme"
     chart: "keycloak-theme-repo/sovereign-workplace-theme"
-    version: "1.0.0"
+    version: "1.1.0"
     values:
       - "values-theme.gotmpl"
     condition: "keycloak.enabled"

@@ -30,6 +30,8 @@ releases:
     values:
       - "values-openxchange.yaml"
       - "values-openxchange.gotmpl"
+      - "values-openxchange-enterprise-contact-picker.yaml"
+      - "values-openxchange-enterprise-contact-picker.gotmpl"
     condition: "oxAppsuite.enabled"
   - name: "sovereign-workplace-open-xchange-bootstrap"
     chart: "sovereign-workplace-open-xchange-bootstrap-repo/sovereign-workplace-open-xchange-bootstrap"

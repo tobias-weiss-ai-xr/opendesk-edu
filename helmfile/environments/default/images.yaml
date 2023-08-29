@@ -1,7 +1,5 @@
-{{/*
-SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-SPDX-License-Identifier: Apache-2.0
-*/}}
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
 ---
 images:
   clamd:
@@ -69,8 +67,8 @@ images:
     repository: "nextcloud"
     tag: "26.0.1-apache"
   openproject:
-    repository: "souvap/tooling/images/openproject/souvap"
-    tag: "dev"
+    repository: "souvap/tooling/images/openproject/souvap@sha256"
+    tag: "5da1ae8be3d7483bf0f3d9ec50c3470586528e0ff51b663e2c3a57bceb489423"
   openxchangeBootstrap:
     repository: "alpine/k8s"
     digest: "sha256:199a4457602b4e260d9781358cd2e342f63c177f4bcfa8053493be01e57beddf"
@@ -121,11 +119,12 @@ images:
     tag: "2.4"
   univentionCorporateServer:
     repository: "souvap/tooling/images/univention-corporate-server-swp/ucs@sha256"
-    tag: "286503f13726399284b49d4521f45fdbed81216875d78e76dcae20e0d8301f65"
+    tag: "6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
   wellKnown:
     repository: "library/nginx"
     tag: "1.23"
   xwiki:
-    repository: "xwikisas/swp/xwiki"
-    tag: "0.8-mariadb-tomcat"
+    repository: "xwikisas/swp/xwiki@sha256"
+    # tag: "0.9-mariadb-tomcat"
+    tag: "b77d83613a8f70d8d0f6ef784eb6186d13fcc28ff327a8fcfe22c06128b69836"
 ...

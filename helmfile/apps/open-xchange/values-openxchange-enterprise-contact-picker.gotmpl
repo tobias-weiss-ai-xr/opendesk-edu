@@ -1,0 +1,14 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+appsuite:
+  core-mw:
+    secretYAMLFiles:
+      ldap-client-config.yml:
+        contactsLdapClient:
+          auth:
+            adminDN:
+              password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox | quote }}
+...
