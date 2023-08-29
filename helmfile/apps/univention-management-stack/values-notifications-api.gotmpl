@@ -11,6 +11,16 @@ notificationsapi:
   sql_echo: "False"
   api_prefix: "/univention/portal/notifications-api"
 
+postgresql:
+  bundled: false
+  connection:
+    host: "postgresql"
+    port: 5432
+  auth:
+    username: "notificationsapi_user"
+    database: "notificationsapi"
+    password: {{ .Values.secrets.postgresql.notificationsapiUser }}
+
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsNotificationsApi.repository }}"
