@@ -63,6 +63,12 @@ variables:
     options:
       - "yes"
       - "no"
+  DEPLOY_UMS:
+    description: "Enable Univention Management Stack deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
   DEPLOY_PROVISIONING:
     description: "Enable Provisioning Components."
     value: "no"
@@ -235,6 +241,18 @@ provisioning-deploy:
       when: "always"
   variables:
     COMPONENT: "provisioning"
+
+ums-deploy:
+  stage: "component-deploy-stage-1"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          $DEPLOY_UMS != "no"
+      when: "always"
+  variables:
+    COMPONENT: "univention-management-stack"
 
 keycloak-deploy:
   stage: "component-deploy-stage-1"
