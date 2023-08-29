@@ -59,6 +59,8 @@ environment:
   OPENPROJECT_SMTP__PORT: "587" # (default=587)
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
   OPENPROJECT_SMTP__ADDRESS: "{{ .Values.smtp.host }}"
+  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
+  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject }}"
 
 persistence:
   size: "{{ .Values.persistence.size.openproject }}"
@@ -68,4 +70,5 @@ replicaCount: {{ .Values.replicas.openproject }}
 
 resources:
   {{ .Values.resources.openproject | toYaml | nindent 2 }}
+
 ...

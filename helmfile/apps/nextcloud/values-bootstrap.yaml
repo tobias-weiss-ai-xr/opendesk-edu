@@ -11,6 +11,9 @@ config:
     userOidc:
       username: "ncoidc"
 
+  ldapSearch:
+    host: "univention-corporate-container"
+
 cleanup:
   deletePodsOnSuccess: false
 ...

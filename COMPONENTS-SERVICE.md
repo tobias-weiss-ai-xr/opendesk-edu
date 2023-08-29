@@ -42,7 +42,7 @@ This service is used by:
 
 ## TURN Server
 
-- dOZ 2.0
+This services is used by:
 - Jitsi
 
 ## NFS

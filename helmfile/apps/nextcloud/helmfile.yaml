@@ -14,7 +14,7 @@ repositories:
 releases:
   - name: "sovereign-workplace-nextcloud-bootstrap"
     chart: "sovereign-workplace-nextcloud-bootstrap-repo/sovereign-workplace-nextcloud-bootstrap"
-    version: "2.2.0"
+    version: "2.3.0"
     wait: true
     waitForJobs: true
     values:

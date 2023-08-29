@@ -64,4 +64,7 @@ persistence:
 
 resources:
   {{ .Values.resources.nextcloud | toYaml | nindent 2 }}
+
+theme:
+  {{ .Values.theme | toYaml | nindent 2 }}
 ...

@@ -5,12 +5,15 @@ environments:
   default:
     values:
       - "../../environments/default/*.gotmpl"
+      - "../../environments/default/*.yaml"
   dev:
     values:
       - "../../environments/default/*.gotmpl"
+      - "../../environments/default/*.yaml"
       - "../../environments/dev/values.yaml"
   prod:
     values:
       - "../../environments/default/*.gotmpl"
+      - "../../environments/default/*.yaml"
       - "../../environments/prod/values.yaml"
 ...

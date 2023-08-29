@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 include:
-  - project: "souvap/tooling/gitlab-config"
+  - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
     ref: "main"
     file:
       - "ci/common/lint.yml"
@@ -20,22 +20,16 @@ stages:
   - "component-deploy-stage-2"
   - "tests"
   - "env-stop"
-  - "post"
+  - "generate-release-artefacts"
+  - ".post"
 
 variables:
   NAMESPACE:
     description: "The name of namespaces to deploy to."
     value: ""
   CLUSTER:
-    description: "Define which cluster to use"
-    value: "develop"
-    options:
-      - "dev"
-      - "qa"
-      - "ref"
-      - "develop"
-      - "hubble"
-      - "prototype"
+    description: "Define which cluster to use. Cluster must be defined in gitlab/environments.yaml of sovereign-workplace-env included above."
+    value: "dev"
   BASE_DOMAIN:
     description: "Define the Cluster Base Domain."
     value: "souvap.cloud"
@@ -283,6 +277,7 @@ keycloak-bootstrap-deploy:
 ox-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
+  timeout: "30m"
   rules:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
@@ -456,24 +451,80 @@ run-tests:
         -F "variables[components]=\"${COMPONENTS}\"" \
         https://${TESTS_PROJECT_URL}/trigger/pipeline
 
+generate-release-artefacts:
+  stage: "generate-release-artefacts"
+  image: "registry.souvap-univention.de/souvap/tooling/images/ansible:4.10.0"
+  rules:
+    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+      when: "always"
+    - when: "never"
+  script:
+    - |
+      git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/souvap/devops/generate-deployment-artefacts
+      cd generate-deployment-artefacts
+      export OPENDESK_DEPLOYMENT_AUTOMATION_PATH=${CI_PROJECT_DIR}
+      ./artefact_generator.py
+      mv ./build_artefacts ${CI_PROJECT_DIR}
+      cd ..
+      rm -rf generate-deployment-artefacts
+      ls -l ./build_artefacts
+  artifacts:
+    paths:
+      - "./build_artefacts/chart-index.json"
+      - "./build_artefacts/image-index.json"
+  tags:
+    - "docker"
 
 # Overwrite shared settings
 .common-semantic-release:
   image: "registry.souvap-univention.de/souvap/tooling/images/semantic-release-patched:latest"
-  except:
-    - "tags"
-    - "triggers"
-    - "web"
+  rules:
+    - if: "$CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
+      when: "never"
+    - when: "always"
 
 common-yaml-linter:
-  except:
-    - "tags"
-    - "triggers"
-    - "web"
+  rules:
+    - if: "$CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
+      when: "never"
+    - when: "always"
 
 reuse-linter:
   allow_failure: false
-  except:
-    - "tags"
-    - "triggers"
-    - "web"
+  rules:
+    - if: "$CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
+      when: "never"
+    - when: "always"
+
+release:
+  rules:
+    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+      when: "always"
+    - when: "never"
+  script:
+    - |
+      cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
+      {
+        "branches": ["main"],
+        "plugins": [
+          ["@semantic-release/gitlab",
+            {
+              "assets": [
+                { "path": "./build_artefacts/chart-index.json",
+                  "label": "Chart Index JSON" },
+                { "path": "./build_artefacts/image-index.json",
+                  "label": "Image Index JSON" },
+              ]
+            }
+          ],
+          "@semantic-release/release-notes-generator",
+          "@semantic-release/changelog",
+          ["@semantic-release/git", {
+            "assets": ["charts/**/Chart.yaml", "CHANGELOG.md", "charts/**/README.md"],
+            "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+          }]
+        ]
+      }
+      EOF
+    - "semantic-release"
+...

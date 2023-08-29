@@ -8,14 +8,23 @@ image:
   tag: "{{ .Values.images.xwiki.tag }}"
 
 externalDB:
-  password: "{{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.xwikiUser }}"
+  password: "{{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword }}"
   database: "{{ .Values.databases.xwiki.name }}"
   user: "{{ .Values.databases.xwiki.username }}"
   host: "{{ .Values.databases.xwiki.host }}"
 
 customConfigs:
   "xwiki.cfg":
-    "xwiki.superadminpassword": {{ .Values.secrets.xwiki.superadminpassword | quote }}
+    "xwiki.superadminpassword": "{{ .Values.secrets.xwiki.superadminpassword }}"
+    ## LDAP Server configuration
+    # "xwiki.authentication.ldap.server": "univention-corporate-container"
+    # xwiki.authentication.ldap.port: 389
+    ## Authentication to the LDAP server
+    # xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
+    # xwiki.authentication.ldap.bind_pass: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki }}"
+    ## Base DN used for searching for users
+    # xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
+
   "xwiki.properties":
     "oidc.endpoint.authorization": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/auth"
     "oidc.endpoint.token": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
@@ -25,10 +34,16 @@ customConfigs:
     "url.trustedDomains": "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
     "workplaceServices.base": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
-    "workplaceServices.portalSecret": {{ .Values.secrets.centralnavigation.apiKey }}
+    "workplaceServices.portalSecret": "{{ .Values.secrets.centralnavigation.apiKey }}"
 
 properties:
-  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
+  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvg | b64enc }}"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.brand-primary": "{{ .Values.theme.colors.primary }}"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": "{{ .Values.theme.colors.white }}"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": "{{ .Values.theme.colors.secondaryGreyLight }}"
+  ## Link LDAP users and users authenticated through OIDC
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}

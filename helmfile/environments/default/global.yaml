@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+## The global properties are used to configure multiple charts at once.
+#
+global:
+
+  ## Define ingress/virtualservice host.
+  #
+  hosts:
+    collabora: "collabora"
+    dimension: "integration"
+    element: "chat"
+    etherpad: "etherpad"
+    intercomService: "ics"
+    jitsi: "meet"
+    keycloak: "id"
+    meetingWidgetsBot: "meeting-widgets-bot"
+    meetingWidgets: "meeting-widgets"
+    newWorkBoardWidget: "whiteboard-widget"
+    nextcloud: "fs"
+    openproject: "project"
+    openxchange: "webmail"
+    openxchangeProvisioning: "ox-provisioning"
+    pollWidget: "poll-widget"
+    synapse: "matrix"
+    univentionCorporateServer: "portal"
+    whiteboard: "whiteboard"
+    xwiki: "wiki"
+
+
+  ## Define docker registry address.
+  #
+  imageRegistry: "external-registry.souvap-univention.de/sovereign-workplace"
+
+  ## Credentials to fetch images from private registry
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  #
+  imagePullSecrets:
+    - "external-registry"
+
+...

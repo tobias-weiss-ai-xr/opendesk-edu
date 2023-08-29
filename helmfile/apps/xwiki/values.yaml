@@ -33,8 +33,8 @@ mariadb:
 properties:
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.colorTheme": "FlamingoThemes.Iceberg"
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.default_language": "de"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.timezone": "Europe/Berlin"
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.languages": "de"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.brand-primary": "#004B76"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.link-color": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.btn-primary-bg": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-color": "@brand-primary"
@@ -43,15 +43,38 @@ properties:
     "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-active-color":
     "@brand-primary"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": "#fff"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": "#fff"
   # yamllint disable-line rule:line-length
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "'@list-group-active-border: @list-group-border; @gray-light: #727272; @text-muted: @gray; @xwiki-drawer-menu-item-hover-bg: @list-group-hover-bg; @xwiki-drawer-menu-item-hover-color: @list-group-link-hover-color; @well-bg: @body-bg; .navbar-default { border-bottom: 3px solid @brand-primary !important; } #menuview .navbar-brand img { padding: 5px; }'"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "'.navbar-default { background-color: white; border-bottom: 1px solid grey; height: 64px; } #menuview .navbar-brand img { padding: 5px; } div#companylogo { width: 96px; height: auto; padding-top: 6px; padding-left: 5px; } li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } button { background-color: #ffffff; } .drawer-nav, .drawer-brand { background-color: #ffffff; } #footerglobal { background-color: #ffffff; }'"
+  # "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "'@list-group-active-border: @list-group-border; @gray-light: #727272; @text-muted: @gray; @xwiki-drawer-menu-item-hover-bg: @list-group-hover-bg; @xwiki-drawer-menu-item-hover-color: @list-group-link-hover-color; @well-bg: @body-bg; .navbar-default { background-color: #ffffff; border-bottom: 1px solid #dddddd !important; height: 64px; } #menuview .navbar-brand img { padding: 5px; } div#companylogo { width: 96px; height: auto; padding-top: 6px; padding-left: 5px; } li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } #globalsearch .btn { background-color: #ffffff; color: @brand-primary; }'"
+
   "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"
+  ## Fields to search in when importing users from the administration UI (not completely in scope for now)
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapUserAttributes":
+  #   "sn,givenname,uid"
+  ## Restrict user import in the UI to global administrators
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.usersAllowedToImport": "globalAdmin"
+  ## Enable group and user synchronization
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupsUpdate": 1
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupImport": 1
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.forceXWikiUsersGroupMembershipUpdate":
+  #   1
+  ## Base DN under which groups should be searched for
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchDN":
+  #  "dc=swp-ldap,dc=internal"
+  ## LDAP filter to only synchronize some groups
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
+  #   "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
 
 customConfigs:
   xwiki.cfg:
     xwiki.url.protocol: "https"
+    ## Indicate the LDAP field defining the user UID
+    # xwiki.authentication.ldap.UID_attr: "uid"
+    ## Indicate the LDAP field defining the user profile picture
+    # xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
+    ## Enable the synchronization of the LDAP profile picture
+    # xwiki.authentication.ldap.update_photo: 1
+
   xwiki.properties:
     oidc.scope: "openid,profile,email,address,phoenix"
     oidc.endpoint.userinfo.method: "GET"

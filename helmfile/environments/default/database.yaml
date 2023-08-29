@@ -1,7 +1,5 @@
-{{/*
-SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-SPDX-License-Identifier: Apache-2.0
-*/}}
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
 ---
 databases:
   keycloak:
@@ -41,6 +39,6 @@ databases:
   xwiki:
     name: "xwiki"
     host: "mariadb"
-    username: "xwiki_user"
+    username: "root"
     password: ""
 ...

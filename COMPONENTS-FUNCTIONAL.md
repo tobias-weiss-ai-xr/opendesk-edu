@@ -17,7 +17,7 @@ Functional components are the core of the SWP as they provide it's rich function
 
 ## File & Share - Nextcloud
 
-## Kollaboration - dOnlineZusammenarbeit 2.0
+## Kollaboration - Element
 
 ## Videokonferenzen - Jitsi
 
@@ -25,4 +25,4 @@ Functional components are the core of the SWP as they provide it's rich function
 
 ## Project Management - OpenProject
 
-## IAM - Univention Corporate Services
+## Portal & IAM - Univention Corporate Services

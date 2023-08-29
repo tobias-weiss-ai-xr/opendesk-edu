@@ -19,6 +19,9 @@ image:
 settings:
   jwtAppSecret: "{{ .Values.secrets.jitsi.jwtAppSecret }}"
 
+theme:
+  {{ .Values.theme | toYaml | nindent 2 }}
+
 jitsi:
   publicURL: "https://{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
   web:
