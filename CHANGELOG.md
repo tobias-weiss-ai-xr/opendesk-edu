@@ -4,6 +4,15 @@
 ### Bug Fixes
 
 * **ci:** Change path of asset_generator ([6ab4fa0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/6ab4fa078b0bb3939c54f46d6475770fa9901936))
+* **ci:** Include deployment environments ([0f59736](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/0f59736c5dcff905400ae2e1bbf7ae496ffb9b2c))
+* **ci:** Release artefacts ([2a61b5f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/2a61b5f2a66bf1dc1ad06f7111ef7ecaf9247b39))
+
+## [0.2.6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.5...v0.2.6) (2023-08-30)
+
+
+### Bug Fixes
+
+* **ci:** Change path of asset_generator ([6ab4fa0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/6ab4fa078b0bb3939c54f46d6475770fa9901936))
 * **ci:** Release artefacts ([2a61b5f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/2a61b5f2a66bf1dc1ad06f7111ef7ecaf9247b39))
 
 ## [0.2.5](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.4...v0.2.5) (2023-08-30)
