@@ -26,7 +26,7 @@ stages:
   - "component-deploy-stage-2"
   - "tests"
   - "env-stop"
-  - "generate-release-artefacts"
+  - "generate-release-assets"
   - ".post"
 
 variables:
@@ -458,8 +458,8 @@ run-tests:
         -F "variables[components]=\"${COMPONENTS}\"" \
         https://${TESTS_PROJECT_URL}/trigger/pipeline
 
-generate-release-artefacts:
-  stage: "generate-release-artefacts"
+generate-release-assets:
+  stage: "generate-release-assets"
   image: "registry.souvap-univention.de/souvap/tooling/images/ansible:4.10.0"
   rules:
     - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
@@ -467,13 +467,13 @@ generate-release-artefacts:
     - when: "never"
   script:
     - |
-      git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/souvap/devops/generate-deployment-artefacts
-      cd generate-deployment-artefacts
+      git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/bmi/souveraener_arbeitsplatz/tooling/opendesk-asset-generator
+      cd opendesk-asset-generator
       export OPENDESK_DEPLOYMENT_AUTOMATION_PATH=${CI_PROJECT_DIR}
-      ./artefact_generator.py
+      ./opendesk_asset_generator.py
       mv ./build_artefacts ${CI_PROJECT_DIR}
       cd ..
-      rm -rf generate-deployment-artefacts
+      rm -rf opendesk-asset-generator
       ls -l ./build_artefacts
   artifacts:
     paths:
@@ -484,10 +484,6 @@ generate-release-artefacts:
 # Overwrite shared settings
 .common-semantic-release:
   image: "registry.souvap-univention.de/souvap/tooling/images/semantic-release-patched:latest"
-  rules:
-    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-      when: "always"
-    - when: "never"
   tags: []
 
 common-yaml-linter:
@@ -503,7 +499,17 @@ reuse-linter:
       when: "never"
     - when: "always"
 
+generate-release-version:
+  rules:
+    - if: "$JOB_RELEASE_ENABLED != 'false'"
+      when: "always"
+
 release:
+  dependencies:
+    - "generate-release-assets"
+  rules:
+    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+      when: "always"
   script:
     - |
       cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
