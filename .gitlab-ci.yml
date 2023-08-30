@@ -503,6 +503,12 @@ reuse-linter:
       when: "never"
     - when: "always"
 
+generate-release-version:
+  rules:
+    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+      when: "always"
+    - when: "never"
+
 release:
   rules:
     - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
