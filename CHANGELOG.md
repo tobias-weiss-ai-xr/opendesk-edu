@@ -1,3 +1,10 @@
+## [0.2.5](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.4...v0.2.5) (2023-08-30)
+
+
+### Bug Fixes
+
+* **xwiki:** Theming and language of central navigation ([3d4d45f](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/3d4d45f7114e6e3bc353b8d6c5fdbcac4cb2460f))
+
 ## [0.2.4](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/compare/v0.2.3...v0.2.4) (2023-08-29)
 
 
