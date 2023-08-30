@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+.environments:
+  before_script:
+    - "echo 'The proper environment configuration will be checked-out here'"
+
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
     ref: "main"
@@ -9,6 +13,8 @@ include:
       - "ci/release-automation/semantic-release.yml"
   - project: "souvap/devops/sovereign-workplace-env"
     file: "gitlab/environments.yaml"
+    rules:
+      - if: "$INCLUDE_ENVIRONMENTS_ENABLED != 'false'"
 
 stages:
   - ".pre"
