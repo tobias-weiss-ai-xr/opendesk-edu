@@ -32,12 +32,15 @@ environments:
   default:
     values:
       - "helmfile/environments/default/*.gotmpl"
+      - "helmfile/environments/default/*.yaml"
   dev:
     values:
       - "helmfile/environments/default/*.gotmpl"
+      - "helmfile/environments/default/*.yaml"
       - "helmfile/environments/dev/values.yaml"
   prod:
     values:
       - "helmfile/environments/default/*.gotmpl"
+      - "helmfile/environments/default/*.yaml"
       - "helmfile/environments/prod/values.yaml"
 ...
