@@ -1,3 +1,10 @@
+## [0.2.7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.6...v0.2.7) (2023-08-30)
+
+
+### Bug Fixes
+
+* **jitsi:** Update Jitsi Helm chart to set the user's display name as default ([387bd87](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/387bd8715c5a1cf54733c6642cf57c6ef9a44316))
+
 ## [0.2.6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.5...v0.2.6) (2023-08-30)
 
 
