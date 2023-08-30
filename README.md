@@ -45,6 +45,15 @@ repository please use the [issues within this project](https://gitlab.opencode.d
 If you want to address other topics, please check the section
 ["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
 
+# Releases
+
+All technical releases are created using [Semantic Versioning](https://semver.org/lang/de/).
+
+Gitlab provides an [overview on the releases](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/releases) of this project.
+
+The following release artefacts are provided beside the default source code assets:
+- `chart-index.json`: An overview of all Helm charts used by the release.
+- `image-index.json`: An overview of all container images used by the release.
 # Deployment
 
 **Note for project members:** You can use the project's `dev` K8s cluster to set
