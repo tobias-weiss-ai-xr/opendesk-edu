@@ -6,8 +6,10 @@ images:
     repository: "clamav/clamav"
     tag: "1.1.0_base"
   collabora:
-    repository: "collabora/code"
-    tag: "23.05.2.2.1"
+    # repository: "collabora/code"
+    # tag: "23.05.2.2.1"
+    repository: "souvap/tooling/images/collabora"
+    tag: "23.05.3.1.1@sha256:f1248a50e67940e3be3dfa58dc37eca73267cf73a679b459707d2520cee7720e"
   dovecot:
     repository: "dovecot/dovecot"
     digest: "sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
@@ -28,7 +30,7 @@ images:
     tag: "stable-8615"
   jitsiKeycloakAdapter:
     repository: "nordeck/jitsi-keycloak-adapter"
-    tag: "v20230425"
+    tag: "v20230816"
   jitsiPatchJVB:
     repository: "bitnami/kubectl"
     tag: "1.26.6"
