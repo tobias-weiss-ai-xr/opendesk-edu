@@ -485,9 +485,9 @@ generate-release-artefacts:
 .common-semantic-release:
   image: "registry.souvap-univention.de/souvap/tooling/images/semantic-release-patched:latest"
   rules:
-    - if: "$CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
-      when: "never"
-    - when: "always"
+    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+      when: "always"
+    - when: "never"
   tags: []
 
 common-yaml-linter:
@@ -503,17 +503,7 @@ reuse-linter:
       when: "never"
     - when: "always"
 
-generate-release-version:
-  rules:
-    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-      when: "always"
-    - when: "never"
-
 release:
-  rules:
-    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-      when: "always"
-    - when: "never"
   script:
     - |
       cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
