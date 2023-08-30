@@ -479,8 +479,7 @@ generate-release-artefacts:
     paths:
       - "./build_artefacts/chart-index.json"
       - "./build_artefacts/image-index.json"
-  tags:
-    - "docker"
+  tags: []
 
 # Overwrite shared settings
 .common-semantic-release:
@@ -489,17 +488,18 @@ generate-release-artefacts:
     - if: "$CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
       when: "never"
     - when: "always"
+  tags: []
 
 common-yaml-linter:
   rules:
-    - if: "$CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
+    - if: "$JOB_COMMON_YAML_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
       when: "never"
     - when: "always"
 
 reuse-linter:
   allow_failure: false
   rules:
-    - if: "$CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
+    - if: "$JOB_REUSE_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
       when: "never"
     - when: "always"
 
