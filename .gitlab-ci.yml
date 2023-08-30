@@ -1,17 +1,13 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-.environments:
-  before_script:
-    - "echo 'The proper environment configuration will be checked-out here'"
-
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
     ref: "main"
     file:
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"
-  - project: "souvap/devops/sovereign-workplace-env"
+  - project: "${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
     file: "gitlab/environments.yaml"
     rules:
       - if: "$INCLUDE_ENVIRONMENTS_ENABLED != 'false'"
@@ -480,6 +476,12 @@ generate-release-assets:
       - "./build_artefacts/chart-index.json"
       - "./build_artefacts/image-index.json"
   tags: []
+
+
+# Declare .environments which is in environments repository and only loaded when INCLUDE_ENVIRONMENTS_ENABLED not false.
+# 'cache' is used because job must contain at least one key, so cache is just a dummy key.
+.environments:
+  cache: {}
 
 # Overwrite shared settings
 .common-semantic-release:
