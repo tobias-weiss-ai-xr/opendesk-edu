@@ -124,7 +124,8 @@ images:
     repository: "library/nginx"
     tag: "1.23"
   xwiki:
+    # repository: "xwikisas/swp/xwiki"
+    # tag: "0.10-mariadb-tomcat"
     repository: "xwikisas/swp/xwiki@sha256"
-    # tag: "0.9-mariadb-tomcat"
-    tag: "b77d83613a8f70d8d0f6ef784eb6186d13fcc28ff327a8fcfe22c06128b69836"
+    tag: "02f0ff6407ccdd8dab17814202e28991fe0aa8d44fa106ba171cff5249eaf58f"
 ...
