@@ -1,3 +1,10 @@
+## [0.2.8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.7...v0.2.8) (2023-08-31)
+
+
+### Bug Fixes
+
+* **open-xchange:** Update images and Helm chart ([39565c7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/39565c7cfd89a8d1c2e645e3ecea28fba703ccc1))
+
 ## [0.2.7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.6...v0.2.7) (2023-08-30)
 
 
