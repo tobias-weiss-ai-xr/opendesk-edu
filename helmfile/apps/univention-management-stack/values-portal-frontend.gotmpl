@@ -21,17 +21,20 @@ ingress:
   enabled: {{ .Values.ingress.enabled }}
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  # The TLS configuration is on the "master" Ingress, see below.
   tls:
-    enabled: {{ .Values.ingress.tls.enabled }}
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+    enabled: false
 
-ingressRoot:
-  enabled: {{ .Values.ingress.enabled }}
-  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
-  tls:
-    enabled: {{ .Values.ingress.tls.enabled }}
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+extraIngresses:
+  redirects:
+    # The TLS configuration is on the "master" Ingress, see below.
+    tls:
+      enabled: false
+  master:
+    enabled: {{ .Values.ingress.enabled }}
+    tls:
+      enabled: {{ .Values.ingress.tls.enabled }}
+      secretName: "{{ .Values.ingress.tls.secretName }}"
 
 istio:
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
