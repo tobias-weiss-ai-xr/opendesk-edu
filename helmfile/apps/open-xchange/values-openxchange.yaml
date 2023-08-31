@@ -55,13 +55,17 @@ appsuite:
       com.openexchange.mail.filter.server: "dovecot"
       com.openexchange.mail.filter.preferredSaslMech: "XOAUTH2"
       # Capabilities
+      # Old capability can be used to toggle all integrations with a single switch
+      com.openexchange.capability.public-sector: "true"
+      # New capabilities in 2.0
+      com.openexchange.capability.public-sector-element: "false"
+      com.openexchange.capability.public-sector-navigation: "true"
       com.openexchange.capability.client-onboarding: "true"
       com.openexchange.capability.dynamic-theme: "true"
       com.openexchange.capability.filestorage_nextcloud: "true"
       com.openexchange.capability.filestorage_nextcloud_oauth: "true"
       com.openexchange.capability.guard: "true"
       com.openexchange.capability.guard-mail: "true"
-      com.openexchange.capability.public-sector: "true"
       com.openexchange.capability.smime: "true"
       com.openexchange.capability.share_links: "false"
       com.openexchange.capability.invite_guests: "false"
@@ -95,6 +99,11 @@ appsuite:
         bindDN: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
 
     uiSettings:
+      # Show the Enterprise Picker in the top right corner instead of the launcher drop-down
+      io.ox/core//features/enterprisePicker/showLauncher: "false"
+      io.ox/core//features/enterprisePicker/showTopRightLauncher: "true"
+      # Text and icon color in the topbar
+      io.ox/dynamic-theme//topbarColor: "#000"
       io.ox/dynamic-theme//logoWidth: "82"
       io.ox/dynamic-theme//topbarHover: "rgba(0, 0, 0, 0.1)"
       # Resources
