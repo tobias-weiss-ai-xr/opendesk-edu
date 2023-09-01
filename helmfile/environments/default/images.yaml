@@ -143,6 +143,9 @@ images:
   umsPortalServer:
     repository: "souvap/tooling/images/univention/portal-server"
     tag: "latest@sha256:eb0b032c4cf4b207f78b80c69f3e593e01e577779d877e16908902f19b4fc2ee"
+  umsWaitForDependency:
+    repository: "souvap/tooling/images/univention/wait-for-dependency"
+    tag: "latest@sha256:5d8d5e9ed55af2d12fef25856e5e61c7d13081458e4b14e6a01b10488b8067d3"
   umsStoreDav:
     repository: "souvap/tooling/images/univention/store-dav"
     tag: "latest@sha256:d65f705e46a497ba58e7373f19973835f731796baeace16a32d6331469bf0068"

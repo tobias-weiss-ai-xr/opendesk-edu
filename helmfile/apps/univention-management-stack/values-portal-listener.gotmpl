@@ -36,6 +36,12 @@ image:
     - name: {{ . }}
     {{- end }}
 
+  waitForDependency:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.umsWaitForDependency.repository }}"
+    imagePullPolicy: "Always"
+    tag: "{{ .Values.images.umsWaitForDependency.tag }}"
+
 store-dav:
   bundled: false
 
