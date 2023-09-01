@@ -47,8 +47,9 @@ ingress:
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   ingressClassName: "{{ .Values.ingress.ingressClassName }}"
   tls:
-    enabled: {{ .Values.ingress.tls.enabled }}
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+    # The TLS configuration is on the "master" Ingress, see "portal-frontend"
+    enabled: false
+    secretName: ""
 
 istio:
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
