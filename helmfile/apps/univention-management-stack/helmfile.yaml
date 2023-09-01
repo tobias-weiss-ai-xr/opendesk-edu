@@ -82,5 +82,9 @@ releases:
       - "values-umc-server.gotmpl"
     condition: "univentionManagementStack.enabled"
 
+commonLabels:
+  deploy-stage: "component-1"
+  component: "univention-management-stack"
+
 bases:
   - "../../bases/environments.yaml"
