@@ -9,9 +9,9 @@ portalServer:
   environment: "staging"
   editable: "true"
   logLevel: "DEBUG"
-  ucsInternalUrl: "http://portal-server:univention@store-dav/portal-data"
-  umcGetUrl: "http://umc-server/get"
-  umcSessionUrl: "http://umc-server/get/session-info"
+  ucsInternalUrl: "http://portal-server:univention@ums-store-dav/portal-data"
+  umcGetUrl: "http://ums-umc-server/get"
+  umcSessionUrl: "http://ums-umc-server/get/session-info"
 
 image:
   registry: "{{ .Values.global.imageRegistry }}"

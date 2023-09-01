@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 umcServer:
   domainname: "{{ .Values.global.domain }}"
   hostname: "{{ .Values.global.hosts.univentionManagementStack }}"
-  ldapHost: "ldap-server"
+  ldapHost: "ums-ldap-server"
   ldapBaseDn: "dc=univention-organization,dc=intranet"
   # TODO: This should not be required, the machine account is not there
   # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=univention-organization,dc=intranet
