@@ -4,7 +4,7 @@
 images:
   clamd:
     repository: "clamav/clamav"
-    tag: "1.1.0_base"
+    tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   collabora:
     # repository: "collabora/code"
     # tag: "23.05.2.2.1"
@@ -18,7 +18,7 @@ images:
     tag: "16506bba9da546b1bf5896892f6f4afefea3d0f1d8ed93eae511212627a029b9"
   freshclam:
     repository: "clamav/clamav"
-    tag: "1.1.0_base"
+    tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   jibri:
     repository: "jitsi/jibri"
     tag: "stable-8615"
@@ -38,8 +38,8 @@ images:
     repository: "jitsi/jvb"
     tag: "stable-8615"
   icap:
-    repository: "souvap/tooling/images/c-icap/c-icap-clamav"
-    tag: "1.0.4"
+    repository: "souvap/tooling/images/c-icap"
+    tag: "0.5.10@sha256:cd665e77a42460bb1e6df4282bc1d8737be241fc9f4143d43509e31de3a7993d"
   intercom:
     repository: "univention/intercom-service"
     tag: "1.4-kubernetes"
@@ -64,10 +64,10 @@ images:
     tag: "1.6.21-debian-11-r4"
   milter:
     repository: "clamav/clamav"
-    tag: "1.1.0_base"
+    tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   nextcloud:
     repository: "nextcloud"
-    tag: "26.0.1-apache"
+    tag: "26.0.5-apache"
   openproject:
     repository: "souvap/tooling/images/openproject/souvap@sha256"
     tag: "5da1ae8be3d7483bf0f3d9ec50c3470586528e0ff51b663e2c3a57bceb489423"
@@ -103,7 +103,7 @@ images:
     tag: "branch-jconde-listener-entrypoint-chaining"
   postfix:
     repository: "souvap/tooling/images/postfix"
-    digest: "sha256:69e0c53ade77ffb89673672f5c8183ec2edfc81d4e990aca3ec594f33c55a7ac"
+    tag: "1.0.0@sha256:69e0c53ade77ffb89673672f5c8183ec2edfc81d4e990aca3ec594f33c55a7ac"
   postgresql:
     repository: "postgres"
     tag: "15-alpine"
