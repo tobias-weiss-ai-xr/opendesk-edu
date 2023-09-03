@@ -280,30 +280,30 @@ the application to your own database instances.
 ### Scaling
 
 The Replicas of components can be increased, while we still have to look in the
-actual scalability of the components (see column `Scales at least to 2`).
+actual scalability of the components (see column `Scaling (verified)`).
 
-| Component   | Name                   | Default | Service            | Scaling            | Scales at least to 2 |
-|-------------|------------------------|---------|--------------------|--------------------|----------------------|
-| ClamAV      | `replicas.clamav`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.clamd`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.freshclam`   | `1`     | :white_check_mark: | :x:                | not tested           |
-|             | `replicas.icap`        | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.milter`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-| Collabora   | `replicas.collabora`   | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-| Dovecot     | `replicas.dovecot`     | `1`     | :white_check_mark: | :x:                | not tested           |
-| Element     | `replicas.element`     | `2`     | :white_check_mark: | :white_check_mark: | :white_check_mark:   |
-|             | `replicas.synapse`     | `1`     | :white_check_mark: | :x:                | not tested           |
-|             | `replicas.synapseWeb`  | `2`     | :white_check_mark: | :white_check_mark: | :white_check_mark:   |
-|             | `replicas.wellKnown`   | `2`     | :white_check_mark: | :white_check_mark: | :white_check_mark:   |
-| Jitsi       | `replicas.jibri`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.jicofo`      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.jitsi `      | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-|             | `replicas.jvb `        | `1`     | :white_check_mark: | :x:                | :x:                  |
-| Keycloak    | `replicas.keycloak`    | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-| Nextcloud   | `replicas.nextcloud`   | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-| OpenProject | `replicas.openproject` | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
-| Postfix     | `replicas.postfix`     | `1`     | :white_check_mark: | :x:                | not tested           |
-| XWiki       | `replicas.xwiki`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
+| Component   | Name                   | Scaling (effective) | Scaling (verified) |
+|-------------|------------------------|:-------------------:|:------------------:|
+| ClamAV      | `replicas.clamav`      | :white_check_mark:  | :white_check_mark: |
+|             | `replicas.clamd`       | :white_check_mark:  | :white_check_mark: |
+|             | `replicas.freshclam`   |         :x:         |        :x:         |
+|             | `replicas.icap`        | :white_check_mark:  | :white_check_mark: |
+|             | `replicas.milter`      | :white_check_mark:  | :white_check_mark: |
+| Collabora   | `replicas.collabora`   | :white_check_mark:  |       :gear:       |
+| Dovecot     | `replicas.dovecot`     |         :x:         |       :gear:       |
+| Element     | `replicas.element`     | :white_check_mark:  | :white_check_mark: |
+|             | `replicas.synapse`     |         :x:         |       :gear:       |
+|             | `replicas.synapseWeb`  | :white_check_mark:  | :white_check_mark: |
+|             | `replicas.wellKnown`   | :white_check_mark:  | :white_check_mark: |
+| Jitsi       | `replicas.jibri`       | :white_check_mark:  |       :gear:       |
+|             | `replicas.jicofo`      | :white_check_mark:  |       :gear:       |
+|             | `replicas.jitsi `      | :white_check_mark:  |       :gear:       |
+|             | `replicas.jvb `        |         :x:         |        :x:         |
+| Keycloak    | `replicas.keycloak`    | :white_check_mark:  |       :gear:       |
+| Nextcloud   | `replicas.nextcloud`   | :white_check_mark:  |       :gear:       |
+| OpenProject | `replicas.openproject` | :white_check_mark:  |       :gear:       |
+| Postfix     | `replicas.postfix`     |         :x:         |       :gear:       |
+| XWiki       | `replicas.xwiki`       | :white_check_mark:  |       :gear:       |
 
 
 ## Security

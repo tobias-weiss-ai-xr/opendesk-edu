@@ -8,7 +8,7 @@ replicas:
   clamd: 1
   collabora: 1
   dovecot: 1
-  element: 2
+  element: 1
   # clamav-distributed
   freshclam: 1
   # clamav-distributed
@@ -25,7 +25,7 @@ replicas:
   openproject: 1
   postfix: 1
   synapse: 1
-  synapseWeb: 2
-  wellKnown: 2
+  synapseWeb: 1
+  wellKnown: 1
   xwiki: 1
 ...
