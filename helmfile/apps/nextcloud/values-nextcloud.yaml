@@ -21,6 +21,11 @@ cronjob:
         sed -i "s/\*\/5 \* \* \* \* php -f \/var\/www\/html\/cron.php/\*\/1 \* \* \* \* php -f
         \/var\/www\/html\/cron.php/g" /var/spool/cron/crontabs/www-data
 
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 4G
+    nginx.org/client-max-body-size: 4G
+
 internalDatabase:
   enabled: false
 postgresql:
