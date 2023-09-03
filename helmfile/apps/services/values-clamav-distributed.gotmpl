@@ -5,8 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 ---
 clamd:
   podSecurityContext:
-    {{/* Disabled until NFS Provisioner on IONOS is fixed */}}
-    enabled: false
   replicaCount: {{ .Values.replicas.clamd }}
   image:
     registry: "{{ .Values.global.imageRegistry }}"
@@ -17,8 +15,6 @@ clamd:
 
 freshclam:
   podSecurityContext:
-    {{/* Disabled until NFS Provisioner on IONOS is fixed */}}
-    enabled: false
   replicaCount: {{ .Values.replicas.freshclam }}
   image:
     registry: "{{ .Values.global.imageRegistry }}"
@@ -42,8 +38,6 @@ icap:
 
 milter:
   podSecurityContext:
-    {{/* Disabled until NFS Provisioner on IONOS is fixed */}}
-    enabled: false
   replicaCount: {{ .Values.replicas.milter }}
   image:
     registry: "{{ .Values.global.imageRegistry }}"

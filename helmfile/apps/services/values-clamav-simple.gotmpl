@@ -3,11 +3,6 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
-
-podSecurityContext:
-  {{/* Disabled until NFS Provisioner on IONOS is fixed */}}
-  enabled: false
-
 replicaCount: {{ .Values.replicas.clamav }}
 
 image:
