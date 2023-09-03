@@ -8,4 +8,8 @@ sentinel:
 
 metrics:
   enabled: false
+
+master:
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
 ...
