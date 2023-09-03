@@ -306,6 +306,23 @@ actual scalability of the components (see column `Scales at least to 2`).
 | XWiki       | `replicas.xwiki`       | `1`     | :white_check_mark: | :white_check_mark: | not tested           |
 
 
+## Security
+
+This list gives you an overview of default security settings and if they comply with security standards:
+
+
+| Component  | Process    | allowPrivilegeEscalation (`false`) | capabilities (`drop: ALL`)                               | seccompProfile (`RuntimeDefault`) | readOnlyRootFilesystem (`true`) | runAsNonRoot (`true`) | runAsUser | runAsGroup | fsGroup |
+|------------|------------|------------------------------------|----------------------------------------------------------|-----------------------------------|---------------------------------|-----------------------|-----------|------------|---------|
+| ClamAV     | clamd      | :white_check_mark:                 | :white_check_mark:                                       | :white_check_mark:                | :white_check_mark:              | :white_check_mark:    | 100       | 101        | 101     |
+|            | freshclam  | :white_check_mark:                 | :white_check_mark:                                       | :white_check_mark:                | :white_check_mark:              | :white_check_mark:    | 100       | 101        | 101     |
+|            | icap       | :white_check_mark:                 | :white_check_mark:                                       | :white_check_mark:                | :white_check_mark:              | :white_check_mark:    | 100       | 101        | 101     |
+|            | milter     | :white_check_mark:                 | :white_check_mark:                                       | :white_check_mark:                | :white_check_mark:              | :white_check_mark:    | 100       | 101        | 101     |
+| MariaDB    | mariadb    | :white_check_mark:                 | :white_check_mark:                                       | :white_check_mark:                | :white_check_mark:              | :white_check_mark:    | 1001      | 1001       | 1001    |
+| Postfix    | postfix    | :white_check_mark:                 | :x:                                                      | :white_check_mark:                | :x:                             | :x:                   |           |            | 101     |
+|            |            |                                    | `DAC_OVERRIDE, FOWNER, SETUID, SETGID, NET_BIND_SERVICE` |                                   |                                 |                       |           |            |         |
+| PostgreSQL | postgresql | :white_check_mark:                 | :white_check_mark:                                       | :white_check_mark:                | :white_check_mark:              | :white_check_mark:    | 1001      | 1001       | 1001    |
+
+
 # Component integration
 
 ## Functional use cases
