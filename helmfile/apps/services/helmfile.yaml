@@ -7,13 +7,15 @@ repositories:
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "https://gitlab.souvap-univention.de/api/v4/projects/133/packages/helm/stable" }}
   - name: "postgresql-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/83/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "https://gitlab.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postgresql" }}
   - name: "mariadb-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/86/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "https://gitlab.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/mariadb" }}
   - name: "postfix-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
@@ -23,13 +25,14 @@ repositories:
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "https://gitlab.souvap-univention.de/api/v4/projects/69/packages/helm/stable" }}
   - name: "clamav-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/73/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/clamav" }}
   - name: "bitnami-repo"
     oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "registry-1.docker.io/bitnamicharts" }}
 
 releases:
@@ -41,41 +44,41 @@ releases:
     condition: "certificates.enabled"
   - name: "redis"
     chart: "bitnami-repo/redis"
-    version: "17.9.3"
+    version: "18.0.0"
     values:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
     condition: "redis.enabled"
   - name: "postgresql"
     chart: "postgresql-repo/postgresql"
-    version: "2.0.0"
+    version: "2.0.2"
     values:
       - "values-postgresql.yaml"
       - "values-postgresql.gotmpl"
     condition: "postgresql.enabled"
   - name: "mariadb"
     chart: "mariadb-repo/mariadb"
-    version: "2.0.0"
+    version: "2.0.2"
     values:
       - "values-mariadb.yaml"
       - "values-mariadb.gotmpl"
     condition: "mariadb.enabled"
   - name: "postfix"
     chart: "postfix-repo/postfix"
-    version: "1.13.0"
+    version: "2.0.0"
     values:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
     condition: "postfix.enabled"
   - name: "clamav"
-    chart: "clamav-repo/sovereign-workplace-clamav"
-    version: "2.1.0"
+    chart: "clamav-repo/opendesk-clamav"
+    version: "4.0.0"
     values:
       - "values-clamav-distributed.gotmpl"
     condition: "clamavDistributed.enabled"
   - name: "clamav-simple"
     chart: "clamav-repo/clamav-simple"
-    version: "2.1.0"
+    version: "4.0.0"
     values:
       - "values-clamav-simple.gotmpl"
     condition: "clamavSimple.enabled"
