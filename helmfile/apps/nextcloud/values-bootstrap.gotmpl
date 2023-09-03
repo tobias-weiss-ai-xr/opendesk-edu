@@ -18,7 +18,7 @@ config:
 
   antivirus:
     {{- if .Values.clamavDistributed.enabled }}
-    host: "clamav-sovereign-workplace-icap"
+    host: "clamav-icap"
     {{- else if .Values.clamavSimple.enabled }}
     host: "clamav-simple"
     {{- end }}
