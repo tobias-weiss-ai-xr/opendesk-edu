@@ -33,10 +33,10 @@ resources:
   icap:
     limits:
       cpu: 2
-      memory: "4Gi"
+      memory: "128Mi"
     requests:
       cpu: 0.1
-      memory: "2Gi"
+      memory: "16Mi"
   jibri:
     limits:
       cpu: 1
