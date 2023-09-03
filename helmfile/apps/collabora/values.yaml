@@ -26,7 +26,8 @@ ingress:
       http-request track-sc1 url_param(WOPISrc)
       stick match url_param(WOPISrc) if { var(txn.wopisrcconns) -m int gt 0 }
       stick store-request url_param(WOPISrc)
-
+    nginx.org/websocket-services: "collabora"
+    nginx.org/lb-method: "hash $arg_WOPISrc consistent"
 autoscaling:
   enabled: false
 ...
