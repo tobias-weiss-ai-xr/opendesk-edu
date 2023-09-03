@@ -11,7 +11,7 @@ global:
 image:
   registry: {{ .Values.global.imageRegistry }}
   repository: "{{ .Values.images.postfix.repository }}"
-  digest: "{{ .Values.images.postfix.digest }}"
+  tag: "{{ .Values.images.postfix.tag }}"
 
 certificate:
   secretName: "{{ .Values.ingress.tls.secretName }}"
