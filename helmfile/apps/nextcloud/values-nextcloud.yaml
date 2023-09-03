@@ -23,8 +23,8 @@ cronjob:
 
 ingress:
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: 4G
-    nginx.org/client-max-body-size: 4G
+    nginx.ingress.kubernetes.io/proxy-body-size: "4G"
+    nginx.org/client-max-body-size: "4G"
 
 internalDatabase:
   enabled: false
