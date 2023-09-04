@@ -4,7 +4,8 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 stackDataSwp:
-  udmApiPassword: "univention"
+  udmApiUsername: "cn=admin"
+  udmApiPassword: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   loadDevData: true
 

@@ -23,7 +23,6 @@ umcServer:
 
   # TODO: Secret should be entered without b64enc
   ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
-  # TODO: There is on machine secret on the container
   # TODO: Secret should be entered without b64enc
   machineSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
 
