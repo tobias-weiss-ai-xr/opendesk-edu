@@ -31,19 +31,6 @@ image:
     - name: {{ . }}
     {{- end }}
 
-istio:
-  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-  enabled: {{ .Values.istio.enabled }}
-
-ingress:
-  enabled: {{ .Values.ingress.enabled }}
-  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
-  tls:
-    # The TLS configuration is on the "master" Ingress, see "portal-frontend"
-    enabled: false
-    secretName: ""
-
 resources:
   {{ .Values.resources.umsNotificationsApi | toYaml | nindent 2 }}
 ...

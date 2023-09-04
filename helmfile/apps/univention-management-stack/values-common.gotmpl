@@ -1,0 +1,10 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
