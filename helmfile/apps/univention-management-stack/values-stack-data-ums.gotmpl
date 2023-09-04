@@ -9,7 +9,7 @@ stackDataUms:
   loadDevData: true
 
 stackDataContext:
-  initialPasswordAdministrator: "univention"
+  initialPasswordAdministrator: "{{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword }}"
 
   # The SWP configuration brings its own UMC policies.
   installUmcPolicies: false
