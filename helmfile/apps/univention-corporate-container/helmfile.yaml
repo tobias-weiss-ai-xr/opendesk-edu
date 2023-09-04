@@ -20,7 +20,7 @@ releases:
     values:
       - "values.yaml"
       - "values.gotmpl"
-    condition: "univentionCorporateServer.enabled"
+    installed: {{ .Values.univentionCorporateServer.enabled }}
 
 commonLabels:
   deploy-stage: "component-1"

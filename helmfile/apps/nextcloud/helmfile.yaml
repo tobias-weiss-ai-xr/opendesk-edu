@@ -30,7 +30,7 @@ releases:
     values:
       - "values-bootstrap.gotmpl"
       - "values-bootstrap.yaml"
-    condition: "nextcloud.enabled"
+    installed: {{ .Values.nextcloud.enabled }}
     timeout: 900
 
   - name: "nextcloud"
@@ -41,7 +41,7 @@ releases:
     values:
       - "values-nextcloud.gotmpl"
       - "values-nextcloud.yaml"
-    condition: "nextcloud.enabled"
+    installed: {{ .Values.nextcloud.enabled }}
     timeout: 900
 
 commonLabels:

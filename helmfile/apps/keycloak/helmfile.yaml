@@ -32,7 +32,7 @@ releases:
     version: "2.0.0"
     values:
       - "values-theme.gotmpl"
-    condition: "keycloak.enabled"
+    installed: {{ .Values.keycloak.enabled }}
   - name: "keycloak"
     chart: "bitnami-repo/keycloak"
     version: "12.1.5"
@@ -41,7 +41,7 @@ releases:
       - "values-keycloak.yaml"
       - "values-keycloak-idp.yaml"
     wait: true
-    condition: "keycloak.enabled"
+    installed: {{ .Values.keycloak.enabled }}
   - name: "keycloak-extensions"
     chart: "keycloak-extensions-repo/keycloak-extensions"
     version: "0.1.0"
@@ -50,7 +50,7 @@ releases:
     values:
       - "values-extensions.yaml"
       - "values-extensions.gotmpl"
-    condition: "keycloak.enabled"
+    installed: {{ .Values.keycloak.enabled }}
 
 commonLabels:
   deploy-stage: "component-1"

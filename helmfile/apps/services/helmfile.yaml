@@ -74,28 +74,28 @@ releases:
     version: "2.1.0"
     values:
       - "values-certificates.gotmpl"
-    condition: "certificates.enabled"
+    installed: {{ .Values.certificates.enabled }}
   - name: "redis"
     chart: "bitnami-repo/redis"
     version: "18.1.2"
     values:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
-    condition: "redis.enabled"
+    installed: {{ .Values.redis.enabled }}
   - name: "memcached"
     chart: "bitnami-repo/memcached"
     version: "6.6.2"
     values:
       - "values-memcached.yaml"
       - "values-memcached.gotmpl"
-    condition: "memcached.enabled"
+    installed: {{ .Values.memcached.enabled }}
   - name: "postgresql"
     chart: "postgresql-repo/postgresql"
     version: "2.0.2"
     values:
       - "values-postgresql.yaml"
       - "values-postgresql.gotmpl"
-    condition: "postgresql.enabled"
+    installed: {{ .Values.postgresql.enabled }}
     timeout: 900
   - name: "mariadb"
     chart: "mariadb-repo/mariadb"
@@ -103,7 +103,7 @@ releases:
     values:
       - "values-mariadb.yaml"
       - "values-mariadb.gotmpl"
-    condition: "mariadb.enabled"
+    installed: {{ .Values.mariadb.enabled }}
     timeout: 900
   - name: "postfix"
     chart: "postfix-repo/postfix"
@@ -111,28 +111,28 @@ releases:
     values:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
-    condition: "postfix.enabled"
+    installed: {{ .Values.postfix.enabled }}
   - name: "clamav"
     chart: "clamav-repo/opendesk-clamav"
     version: "4.0.0"
     values:
       - "values-clamav-distributed.yaml"
       - "values-clamav-distributed.gotmpl"
-    condition: "clamavDistributed.enabled"
+    installed: {{ .Values.clamavDistributed.enabled }}
   - name: "clamav-simple"
     chart: "clamav-repo/clamav-simple"
     version: "4.0.0"
     values:
       - "values-clamav-simple.yaml"
       - "values-clamav-simple.gotmpl"
-    condition: "clamavSimple.enabled"
+    installed: {{ .Values.clamavSimple.enabled }}
   - name: "opendesk-gateway"
     chart: "istio-resources-repo/istio-gateway"
     version: "2.0.0"
     values:
       - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
-    condition: "istio.enabled"
+    installed: {{ .Values.istio.enabled }}
 
 commonLabels:
   deploy-stage: "services"
