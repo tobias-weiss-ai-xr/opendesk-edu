@@ -8,6 +8,13 @@ umcGateway:
   hostname: "{{ .Values.global.hosts.univentionManagementStack }}"
   ssoFqdn: "localhost:8097"
 
+  showCookieBanner: true
+  cookieBannerTitleDE: "Cookie Zustimmung"
+  cookieBannerTitleEN: "Cookie Consent"
+  cookieBannerTextDE: "Die Nutzung dieses Angebots ist nur möglich, wenn Cookies gespeichert und verarbeitet werden können (essenzielle Cookies). Dafür benötigen wir Ihre Zustimmung. Bitte akzeptieren Sie um fortzufahren oder schließen Sie die Seite."
+  cookieBannerTextEN: "Usage of this site is only possible by storing and processing cookie information (essential cookies). We require your consent. Please accept to continue or close the page."
+
+
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsUmcGateway.repository }}"
