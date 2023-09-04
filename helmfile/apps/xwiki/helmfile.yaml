@@ -17,7 +17,7 @@ releases:
     values:
       - "values.yaml"
       - "values.gotmpl"
-    condition: "xwiki.enabled"
+    installed: {{ .Values.xwiki.enabled }}
     timeout: 900
 
 commonLabels:

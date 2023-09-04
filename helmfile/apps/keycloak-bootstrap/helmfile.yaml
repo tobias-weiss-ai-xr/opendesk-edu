@@ -21,7 +21,7 @@ releases:
     values:
       - "values-bootstrap.gotmpl"
       - "values-bootstrap.yaml"
-    condition: "keycloak.enabled"
+    installed: {{ .Values.keycloak.enabled }}
     # as we have seen some slow clusters we want to ensure we not just fail due to a timeout.
     timeout: 1800
 

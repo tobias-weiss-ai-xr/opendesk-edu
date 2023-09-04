@@ -18,7 +18,7 @@ releases:
     version: "2.0.0"
     values:
       - "values.gotmpl"
-    condition: "intercom.enabled"
+    installed: {{ .Values.intercom.enabled }}
 
 commonLabels:
   deploy-stage: "component-1"

@@ -18,7 +18,7 @@ releases:
     values:
       - "values.yaml"
       - "values.gotmpl"
-    condition: "openproject.enabled"
+    installed: {{ .Values.openproject.enabled }}
     timeout: 900
 
 commonLabels:

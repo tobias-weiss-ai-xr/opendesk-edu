@@ -15,7 +15,7 @@ releases:
     values:
       - "values-oxconnector.yaml"
       - "values-oxconnector.gotmpl"
-    condition: "oxConnector.enabled"
+    installed: {{ .Values.oxConnector.enabled }}
 
 commonLabels:
   deploy-stage: "component-2"

@@ -33,7 +33,7 @@ releases:
     values:
       - "values-element.yaml"
       - "values-element.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "opendesk-well-known"
@@ -42,7 +42,7 @@ releases:
     values:
       - "values-well-known.yaml"
       - "values-well-known.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "opendesk-synapse-web"
@@ -51,7 +51,7 @@ releases:
     values:
       - "values-synapse-web.yaml"
       - "values-synapse-web.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "opendesk-synapse"
@@ -60,7 +60,7 @@ releases:
     values:
       - "values-synapse.yaml"
       - "values-synapse.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "opendesk-matrix-user-verification-service-bootstrap"
@@ -69,7 +69,7 @@ releases:
     values:
       - "values-matrix-user-verification-service-bootstrap.yaml"
       - "values-matrix-user-verification-service-bootstrap.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "opendesk-matrix-user-verification-service"
@@ -78,7 +78,7 @@ releases:
     values:
       - "values-matrix-user-verification-service.yaml"
       - "values-matrix-user-verification-service.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "matrix-neoboard-widget"
@@ -87,7 +87,7 @@ releases:
     values:
       - "values-matrix-neoboard-widget.yaml"
       - "values-matrix-neoboard-widget.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "matrix-neochoice-widget"
@@ -96,7 +96,7 @@ releases:
     values:
       - "values-matrix-neochoice-widget.yaml"
       - "values-matrix-neochoice-widget.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "matrix-neodatefix-widget"
@@ -105,7 +105,7 @@ releases:
     values:
       - "values-matrix-neodatefix-widget.yaml"
       - "values-matrix-neodatefix-widget.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "matrix-neodatefix-bot-bootstrap"
@@ -114,7 +114,7 @@ releases:
     values:
       - "values-matrix-neodatefix-bot-bootstrap.yaml"
       - "values-matrix-neodatefix-bot-bootstrap.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
   - name: "matrix-neodatefix-bot"
@@ -123,7 +123,7 @@ releases:
     values:
       - "values-matrix-neodatefix-bot.yaml"
       - "values-matrix-neodatefix-bot.gotmpl"
-    condition: "element.enabled"
+    installed: {{ .Values.element.enabled }}
     timeout: 900
 
 commonLabels:

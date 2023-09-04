@@ -19,7 +19,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-store-dav.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-ldap-server"
     chart: "ums-repo/ldap-server"
     version: "0.1.0"
@@ -27,7 +27,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-ldap-server.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-ldap-notifier"
     chart: "ums-repo/ldap-notifier"
     version: "0.1.0"
@@ -36,7 +36,7 @@ releases:
       - "values-common.yaml"
       - "values-ldap-notifier.gotmpl"
       - "values-ldap-notifier.yaml"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-udm-rest-api"
     chart: "ums-repo/udm-rest-api"
     version: "0.1.0"
@@ -44,7 +44,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-udm-rest-api.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-stack-data-ums"
     chart: "ums-repo/stack-data-ums"
     version: "0.1.0"
@@ -52,7 +52,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-stack-data-ums.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-stack-data-swp"
     chart: "ums-repo/stack-data-swp"
     version: "0.1.0"
@@ -60,7 +60,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-stack-data-swp.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-portal-server"
     chart: "ums-repo/portal-server"
     version: "0.1.0"
@@ -68,7 +68,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-portal-server.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-notifications-api"
     chart: "ums-repo/notifications-api"
     version: "0.1.0"
@@ -77,7 +77,7 @@ releases:
       - "values-common.yaml"
       - "values-notifications-api.gotmpl"
       - "values-notifications-api.yaml"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-portal-listener"
     chart: "ums-repo/portal-listener"
     version: "0.1.0"
@@ -86,7 +86,7 @@ releases:
       - "values-common.yaml"
       - "values-portal-listener.gotmpl"
       - "values-portal-listener.yaml"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-portal-frontend"
     chart: "ums-repo/portal-frontend"
     version: "0.1.0"
@@ -94,7 +94,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-portal-frontend.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-umc-gateway"
     chart: "ums-repo/umc-gateway"
     version: "0.1.0"
@@ -103,7 +103,7 @@ releases:
       - "values-common.yaml"
       - "values-umc-gateway.gotmpl"
       - "values-umc-gateway.yaml"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
   - name: "ums-umc-server"
     chart: "ums-repo/umc-server"
     version: "0.1.0"
@@ -111,7 +111,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-umc-server.gotmpl"
-    condition: "univentionManagementStack.enabled"
+    installed: {{ .Values.univentionManagementStack.enabled }}
 
 commonLabels:
   deploy-stage: "component-1"
