@@ -55,4 +55,7 @@ istio:
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.istio.enabled }}
 
+resources:
+  {{ .Values.resources.umsUdmRestApi | toYaml | nindent 2 }}
+
 ...

@@ -42,6 +42,12 @@ image:
     imagePullPolicy: "Always"
     tag: "{{ .Values.images.umsWaitForDependency.tag }}"
 
+resources:
+  {{ .Values.resources.umsPortalListener | toYaml | nindent 2 }}
+
+resourcesDependencyWaiter:
+  {{ .Values.resources.umsPortalListenerDependencies | toYaml | nindent 2 }}
+
 store-dav:
   bundled: false
 

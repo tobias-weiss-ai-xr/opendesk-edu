@@ -27,4 +27,7 @@ image:
     {{- range .Values.global.imagePullSecrets }}
     - name: {{ . }}
     {{- end }}
+
+resources:
+  {{ .Values.resources.umsLdapServer | toYaml | nindent 2 }}
 ...

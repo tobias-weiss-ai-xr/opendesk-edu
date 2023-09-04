@@ -14,6 +14,9 @@ image:
     - name: {{ . }}
     {{- end }}
 
+resources:
+  {{ .Values.resources.umsLdapNotifier | toYaml | nindent 2 }}
+
 volumes:
   claims:
     shared-data: "shared-data-ums-ldap-server-0"
