@@ -24,4 +24,6 @@ image:
     - name: {{ . }}
     {{- end }}
 
+resources:
+  {{ .Values.resources.umsStackDataUms | toYaml | nindent 2 }}
 ...

@@ -44,4 +44,6 @@ ingress:
     enabled: false
     secretName: ""
 
+resources:
+  {{ .Values.resources.umsNotificationsApi | toYaml | nindent 2 }}
 ...

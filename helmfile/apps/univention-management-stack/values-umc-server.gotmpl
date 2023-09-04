@@ -50,4 +50,6 @@ ingress:
     enabled: false
     secretName: ""
 
+resources:
+  {{ .Values.resources.umsUmcServer | toYaml | nindent 2 }}
 ...

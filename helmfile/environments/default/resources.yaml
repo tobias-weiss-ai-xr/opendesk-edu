@@ -191,6 +191,97 @@ resources:
     requests:
       cpu: 0.5
       memory: "1Gi"
+  umsLdapNotifier:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsLdapServer:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsNotificationsApi:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsPortalFrontend:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsPortalListener:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsPortalListenerDependencies:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsPortalServer:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsStackDataUms:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsStackDataSwp:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsStoreDav:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsUdmRestApi:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsUmcGateway:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
+  umsUmcServer:
+    limits:
+      cpu: 1
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "250Mi"
   wellKnown:
     limits:
       cpu: 1
