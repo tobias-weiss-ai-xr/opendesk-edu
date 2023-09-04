@@ -7,10 +7,8 @@ portalListener:
   adminGroup: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
   environment: "staging"
   debugLevel: "4"
-  # TODO: using this in server without the pending slash, fix
-  # ucsInternalUrl: "http://portal-listener:univention@store-dav/portal-data/"
-  assetsRoot: "http://portal-listener:univention@ums-store-dav/portal-assets/"
-  ucsInternalUrl: "http://portal-listener:univention@ums-store-dav/portal-data/"
+  assetsRoot: "http://portal-listener:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}@ums-store-dav/portal-assets/"
+  ucsInternalUrl: "http://portal-listener:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}@ums-store-dav/portal-data/"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
 

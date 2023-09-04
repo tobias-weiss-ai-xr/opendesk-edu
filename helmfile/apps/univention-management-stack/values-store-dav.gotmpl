@@ -6,10 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 storeDav:
   auth:
     basicAuth:
-      # TODO: Secrets management
-      portal-server: "univention"
-      portal-listener: "univention"
-
+      portal-listener: "{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}"
+      portal-server: "{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalServer }}"
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsStoreDav.repository }}"
