@@ -9,7 +9,7 @@ portalServer:
   environment: "staging"
   editable: "true"
   logLevel: "DEBUG"
-  ucsInternalUrl: "http://portal-server:univention@ums-store-dav/portal-data"
+  ucsInternalUrl: "http://portal-server:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalServer }}@ums-store-dav/portal-data"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
 
