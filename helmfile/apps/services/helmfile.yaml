@@ -10,12 +10,12 @@ repositories:
     oci: true
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "https://gitlab.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postgresql" }}
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postgresql" }}
   - name: "mariadb-repo"
     oci: true
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "https://gitlab.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/mariadb" }}
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/mariadb" }}
   - name: "postfix-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
