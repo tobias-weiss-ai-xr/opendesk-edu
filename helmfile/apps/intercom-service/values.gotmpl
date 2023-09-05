@@ -29,6 +29,7 @@ ics:
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
 
 image:
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.intercom.repository }}"
   tag: "{{ .Values.images.intercom.tag }}"

@@ -16,6 +16,7 @@ image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.redis.repository }}"
   tag: "{{ .Values.images.redis.tag }}"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 master:
   persistence:

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.oxConnector.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.oxConnector.tag }}"
 
 imagePullSecrets:

@@ -11,6 +11,7 @@ global:
 image:
   repository: "{{ .Values.images.mariadb.repository }}"
   tag: "{{ .Values.images.mariadb.tag }}"
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 # Open-Xchange and XWiki require the permission to create database schemas, so they use the `root` account anyway.
 # Please refer to `databases.yaml` for details.

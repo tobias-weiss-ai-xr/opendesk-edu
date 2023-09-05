@@ -10,6 +10,7 @@ clamd:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.clamd.repository }}"
     tag: "{{ .Values.images.clamd.tag }}"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   resources:
     {{ .Values.resources.clamd | toYaml | nindent 4 }}
 
@@ -20,6 +21,7 @@ freshclam:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.freshclam.repository }}"
     tag: "{{ .Values.images.freshclam.tag }}"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   resources:
     {{ .Values.resources.freshclam | toYaml | nindent 4 }}
 
@@ -33,6 +35,7 @@ icap:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.icap.repository }}"
     tag: "{{ .Values.images.icap.tag }}"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   resources:
     {{ .Values.resources.icap | toYaml | nindent 4 }}
 
@@ -43,6 +46,7 @@ milter:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.milter.repository }}"
     tag: "{{ .Values.images.milter.tag }}"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   resources:
     {{ .Values.resources.milter | toYaml | nindent 4 }}
 

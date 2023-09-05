@@ -23,7 +23,7 @@ handler:
 {{- else if .Values.images.keycloakExtensionHandler.tag }}
     tag: "{{ .Values.images.keycloakExtensionHandler.tag }}"
 {{- end }}
-    imagePullPolicy: "Always"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   appConfig:
     smtpPassword: "{{ .Values.smtp.password }}"
     smtpHost: "{{ .Values.smtp.host }}"
@@ -40,7 +40,7 @@ proxy:
 {{- else if .Values.images.keycloakExtensionProxy.tag }}
     tag: "{{ .Values.images.keycloakExtensionProxy.tag }}"
 {{- end }}
-    imagePullPolicy: "Always"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   ingress:
     enabled: "{{ .Values.ingress.enabled }}"
     ingressClassName: "{{ .Values.ingress.ingressClassName }}"
