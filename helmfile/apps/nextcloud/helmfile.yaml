@@ -4,11 +4,11 @@
 repositories:
   - name: "opendesk-nextcloud-bootstrap-repo"
     oci: true
+    # yamllint disable rule:line-length
     url: >-
-      # yamllint disable rule:line-length
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
          "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap" }}
-      # yamllint enable rule:line-length
+    # yamllint enable rule:line-length
   - name: "nextcloud-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
