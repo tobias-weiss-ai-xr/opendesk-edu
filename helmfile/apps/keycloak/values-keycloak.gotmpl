@@ -81,6 +81,8 @@ keycloakConfigCli:
       value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak }}
     - name: "LDAPSEARCH_USERNAME"
       value: "ldapsearch_keycloak"
+  resources:
+    {{ .Values.resources.keycloak | toYaml | nindent 4 }}
 
 resources:
   {{ .Values.resources.keycloak | toYaml | nindent 2 }}
