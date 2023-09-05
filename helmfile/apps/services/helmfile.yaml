@@ -86,6 +86,7 @@ releases:
     chart: "istio-resources-repo/istio-gateway"
     version: "1.1.2"
     values:
+      - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
     condition: "istio.enabled"
 
