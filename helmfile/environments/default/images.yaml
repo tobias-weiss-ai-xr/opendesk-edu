@@ -21,22 +21,22 @@ images:
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   jibri:
     repository: "jitsi/jibri"
-    tag: "stable-8615"
+    tag: "stable-8922@sha256:87aa176b44b745b13769f13b8e2d22ddd6f6ba624244d5354c8dd3664787e936"
   jicofo:
     repository: "jitsi/jicofo"
-    tag: "stable-8615"
+    tag: "stable-8922@sha256:820fcd4b072b29f42c1c37389fbefda1065f1e9654694941485dc08123c8a93b"
   jitsi:
     repository: "jitsi/web"
-    tag: "stable-8615"
+    tag: "stable-8922@sha256:24bd4179998fe01ace1be74e53fea5308f4d91722953bb4334611e6886753f46"
   jitsiKeycloakAdapter:
     repository: "nordeck/jitsi-keycloak-adapter"
-    tag: "v20230816"
+    tag: "v20230816@sha256:dcc7d0ca07eb506a9cde97d6d138d05e9200acb2c57e2a3b1699de1f5e315a9c"
   jitsiPatchJVB:
     repository: "bitnami/kubectl"
-    tag: "1.26.6"
+    tag: "1.26.8@sha256:c6902a1fdce0a24c9f93ac8d1f317039b206a4b307d8fc76cab4a92911345757"
   jvb:
     repository: "jitsi/jvb"
-    tag: "stable-8615"
+    tag: "stable-8922@sha256:75dd613807e19cbbd440d071b60609fa9e4ee50a1396b14deb0ed779d882a554"
   icap:
     repository: "souvap/tooling/images/c-icap"
     tag: "0.5.10@sha256:cd665e77a42460bb1e6df4282bc1d8737be241fc9f4143d43509e31de3a7993d"
