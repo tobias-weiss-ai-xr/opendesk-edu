@@ -1,3 +1,22 @@
+## [0.2.9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.8...v0.2.9) (2023-09-05)
+
+
+### Bug Fixes
+
+* **collabora:** Add websocket support for NGINX Inc. Ingress ([6e5ef63](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/6e5ef639c22aad93fd2d0eb75f7a1ffc00d6cc9a))
+* **docs:** Add security part in README ([ff462ab](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/ff462ab0dc2252cc7b517874f5337427b8d19053))
+* **docs:** Update scaling docs ([63a1e25](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/63a1e2568e8c5ff62081c6e6594d2019c1aa4b74))
+* **helmfile:** Reduce icap resources in default enviroment ([c5ab1b8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/c5ab1b81fecbce46788c50b282ed6d1770124fa5))
+* **helmfile:** Update clamav and nextcloud images in default environment ([4f2a8ae](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/4f2a8aeee4ee6c3d27b1c8a99bad14f603486be5))
+* **nextcloud:** Add support for up to 4G large upload for Ingress NGINX and NGINX Inc. Ingress ([6e68f7f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/6e68f7f28c937319d93f8afe1dbb302012f77233))
+* **nextcloud:** Rename sovereign-workplace-nextcloud-bootstrap to opendesk-nextcloud-bootstrap and use OCI ([cef11ac](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/cef11acbae28510809f9bfa13224dc3a6996207f))
+* **nextcloud:** Use clamav-icap when clamavDistributed is activated ([41d40c9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/41d40c9b731b866da2666fa4ffa8cb6493737112))
+* **services:** Enable security context and use default increased security settings ([9a6d240](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/9a6d2409a697f7e9811a0f4f8d31bb18bac1b926))
+* **services:** Fix image registry templates for postfix ([6321ff5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/6321ff50a00203abbfb7f5822e67a3c0e00d4b01))
+* **services:** Replace image digest by tag ([f758293](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/f7582932412f13b1a087d40459e97cf633b1a97e))
+* **services:** Set readOnlyRootFilesystem to true on master ([5fbf86b](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/5fbf86b6bc7b63c81b3ac07c5e0fa8cd464fdad1))
+* **services:** Update clamav to 4.0.0, redis to 18.0.0, postgresql to 2.0.2, mariadb to 2.0.2 and use OCI registries ([9d78664](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/9d7866480cee889fd3b3003b2eea313a6ed73344))
+
 ## [0.2.8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.7...v0.2.8) (2023-08-31)
 
 
