@@ -10,10 +10,12 @@ image:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.clamd.repository }}"
     tag: "{{ .Values.images.clamd.tag }}"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   icap:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.icap.repository }}"
     tag: "{{ .Values.images.icap.tag }}"
+    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 resources:
   {{ .Values.resources.clamd | toYaml | nindent 4 }}

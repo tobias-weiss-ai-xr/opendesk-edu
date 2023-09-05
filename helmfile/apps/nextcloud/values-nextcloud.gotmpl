@@ -25,7 +25,7 @@ ingress:
         - "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
 image:
   repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.nextcloud.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.nextcloud.tag }}"
   pullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}

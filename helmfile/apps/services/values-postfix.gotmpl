@@ -12,6 +12,7 @@ image:
   registry: {{ .Values.global.imageRegistry }}
   repository: "{{ .Values.images.postfix.repository }}"
   tag: "{{ .Values.images.postfix.tag }}"
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 certificate:
   secretName: "{{ .Values.ingress.tls.secretName }}"

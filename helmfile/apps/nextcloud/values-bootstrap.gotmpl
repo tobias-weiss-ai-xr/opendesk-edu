@@ -44,6 +44,7 @@ config:
     password: "{{ .Values.smtp.password }}"
 
 image:
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.nextcloud.repository }}"
   tag: "{{ .Values.images.nextcloud.tag }}"

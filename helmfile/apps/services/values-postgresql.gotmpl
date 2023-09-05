@@ -11,6 +11,7 @@ global:
 image:
   repository: "{{ .Values.images.postgresql.repository }}"
   tag: "{{ .Values.images.postgresql.tag }}"
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 job:
   users:

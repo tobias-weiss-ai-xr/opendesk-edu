@@ -19,6 +19,7 @@ image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.keycloakBootstrap.repository }}"
   tag: "{{ .Values.images.keycloakBootstrap.tag }}"
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 resources:
   {{ .Values.resources.keycloakBootstrap | toYaml | nindent 2 }}

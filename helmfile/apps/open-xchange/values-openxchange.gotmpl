@@ -34,6 +34,7 @@ public-sector-ui:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . }}
   {{- end }}
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 appsuite:
   istio:
@@ -96,6 +97,7 @@ appsuite:
     image:
       repository: {{ .Values.images.openxchangeCoreMW.repository }}
       tag: {{ .Values.images.openxchangeCoreMW.tag }}
+      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
     update:
       image:
         repository: {{ .Values.images.openxchangeCoreMW.repository }}
@@ -113,6 +115,7 @@ appsuite:
     image:
       repository: {{ .Values.images.openxchangeCoreUI.repository }}
       tag: {{ .Values.images.openxchangeCoreUI.tag }}
+      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
   core-ui-middleware:
     ingress:
@@ -126,6 +129,7 @@ appsuite:
     image:
       repository: {{ .Values.images.openxchangeCoreUIMiddleware.repository }}
       tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag }}
+      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
   core-guidedtours:
     imagePullSecrets:
@@ -135,6 +139,7 @@ appsuite:
     image:
       repository: {{ .Values.images.openxchangeCoreGuidedtours.repository }}
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag }}
+      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
   guard-ui:
     imagePullSecrets:
@@ -144,11 +149,13 @@ appsuite:
     image:
       repository: {{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGuardUI.repository }}
       tag: {{ .Values.images.openxchangeGuardUI.tag }}
+      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
   core-user-guide:
     image:
       repository: {{ .Values.images.openxchangeCoreUserGuide.repository }}
       tag: {{ .Values.images.openxchangeCoreUserGuide.tag }}
+      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . }}

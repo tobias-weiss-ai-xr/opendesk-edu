@@ -6,6 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 image:
   name: "{{ .Values.global.imageRegistry }}/{{ .Values.images.xwiki.repository }}"
   tag: "{{ .Values.images.xwiki.tag }}"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 externalDB:
   password: "{{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword }}"

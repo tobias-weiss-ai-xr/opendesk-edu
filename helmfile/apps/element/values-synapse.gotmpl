@@ -12,6 +12,7 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.synapse.repository }}"
   tag: "{{ .Values.images.synapse.tag }}"

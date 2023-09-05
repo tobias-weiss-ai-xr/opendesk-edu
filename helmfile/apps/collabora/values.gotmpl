@@ -6,6 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 image:
   repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.collabora.repository }}"
   tag: "{{ .Values.images.collabora.tag }}"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}

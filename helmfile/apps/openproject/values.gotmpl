@@ -10,7 +10,7 @@ global:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.openproject.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.openproject.tag }}"
 
 memcached:

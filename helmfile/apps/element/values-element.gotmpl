@@ -16,6 +16,7 @@ configuration:
     logout_redirect_url: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout?client_id=matrix&post_logout_redirect_uri=https%3A%2F%2F{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
 
 image:
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.element.repository }}"
   tag: "{{ .Values.images.element.tag }}"
