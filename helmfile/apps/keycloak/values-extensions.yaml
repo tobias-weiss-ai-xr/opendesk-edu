@@ -11,11 +11,35 @@ global:
 handler:
   appConfig:
     captchaProtectionEnable: "False"
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
 
 postgresql:
   enabled: false
 
 proxy:
-  image:
-    tag: "latest"
+  ingress:
+    annotations:
+      nginx.org/proxy-buffer-size: "8k"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
 ...
