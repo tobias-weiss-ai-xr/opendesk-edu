@@ -10,7 +10,7 @@ repositories:
 releases:
   - name: "jitsi"
     chart: "jitsi-repo/sovereign-workplace-jitsi"
-    version: "1.4.2"
+    version: "1.5.1"
     values:
       - "values-jitsi.gotmpl"
     condition: "jitsi.enabled"
