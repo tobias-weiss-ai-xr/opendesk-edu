@@ -1,3 +1,17 @@
+## [0.2.10](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.9...v0.2.10) (2023-09-06)
+
+
+### Bug Fixes
+
+* **helmfile:** Add imagePullPolicy default env variable ([f988644](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/f9886448b60bbbd917b5ba04d188401275293eec))
+* **helmfile:** Update images and add jitsi, keycloak to security section in docs ([0eceb85](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/0eceb85e7df7455fa61cb17a854807069fbcf51a))
+* **jitsi:** Update chart to 1.4.2 with improved security and fixed change on each deployment ([1349181](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/1349181d802ccb80d9e48cf50fe39f1505116c8e))
+* **keycloak:** Improve default security settings ([3b90533](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/3b90533063c151a9f3cdc9861a115481f6dc440a))
+* **nextcloud:** Fix yamllint disable comment ([4380e78](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/4380e789814ec2b0458fb2c341c8160ab2743afc))
+* **services:** Disable https redirect in istio to fix cert-manager issues ([1ef4a86](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/1ef4a861acc955e2e85715c62f715a6629ada940))
+* **services:** Fix capabilities of postifix ([a6fa846](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a6fa846afc9744f2b399c37cc754f878b6b9e90b))
+* **services:** Fix OCI registry address of postgresql, mariadb ([be82243](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/be822439661f766c4db6044fd3581db0cce214bb))
+
 ## [0.2.9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.8...v0.2.9) (2023-09-05)
 
 
