@@ -30,7 +30,7 @@ images:
     tag: "stable-8922@sha256:24bd4179998fe01ace1be74e53fea5308f4d91722953bb4334611e6886753f46"
   jitsiKeycloakAdapter:
     repository: "nordeck/jitsi-keycloak-adapter"
-    tag: "v20230816@sha256:dcc7d0ca07eb506a9cde97d6d138d05e9200acb2c57e2a3b1699de1f5e315a9c"
+    tag: "v20230906@sha256:54d45ee1a1205f98641810ffb171bd92e6478e2957a349ee4ff599359239fbf2"
   jitsiPatchJVB:
     repository: "bitnami/kubectl"
     tag: "1.26.8@sha256:c6902a1fdce0a24c9f93ac8d1f317039b206a4b307d8fc76cab4a92911345757"
@@ -109,7 +109,7 @@ images:
     tag: "15-alpine"
   prosody:
     repository: "jitsi/prosody"
-    tag: "stable-8615"
+    tag: "stable-8922@sha256:243547f24ae7d686d1f0c18ee230cf93119a66f095dda282bacbf45d4bb69f77"
   redis:
     repository: "bitnami/redis"
     tag: "7.0.12-debian-11-r0"
