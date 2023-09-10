@@ -9,6 +9,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "2Gi"
+  collabora:
+    limits:
+      cpu: 1
+      memory: "500Mi"
+    requests:
+      cpu: 0.1
+      memory: "16Mi"
   dovecot:
     limits:
       cpu: 0.5
