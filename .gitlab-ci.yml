@@ -463,8 +463,7 @@ generate-release-assets:
     - when: "never"
   script:
     - |
-      # yamllint disable-line rule:line-length
-      git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/bmi/souveraener_arbeitsplatz/tooling/opendesk-asset-generator
+      git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${ASSET_GENERATOR_REPO_PATH}
       cd opendesk-asset-generator
       export OPENDESK_DEPLOYMENT_AUTOMATION_PATH=${CI_PROJECT_DIR}
       ./opendesk_asset_generator.py
@@ -477,6 +476,8 @@ generate-release-assets:
       - "./build_artefacts/chart-index.json"
       - "./build_artefacts/image-index.json"
   tags: []
+  variables:
+    ASSET_GENERATOR_REPO_PATH: "bmi/souveraener_arbeitsplatz/tooling/opendesk-asset-generator"
 
 
 # Declare .environments which is in environments repository and only loaded when INCLUDE_ENVIRONMENTS_ENABLED not false.
