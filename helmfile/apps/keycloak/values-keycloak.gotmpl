@@ -13,7 +13,6 @@ image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.keycloak.repository }}"
   tag: "{{ .Values.images.keycloak.tag }}"
-  digest: "{{ .Values.images.keycloak.digest }}"
   pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 externalDatabase:

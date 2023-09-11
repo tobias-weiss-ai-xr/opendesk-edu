@@ -6,13 +6,11 @@ images:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   collabora:
-    # repository: "collabora/code"
-    # tag: "23.05.2.2.1"
     repository: "souvap/tooling/images/collabora"
     tag: "23.05.3.1.1@sha256:f1248a50e67940e3be3dfa58dc37eca73267cf73a679b459707d2520cee7720e"
   dovecot:
     repository: "dovecot/dovecot"
-    digest: "sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
+    tag: "2.3.20@sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
   element:
     repository: "souvap/tooling/images/element-web"
     tag: "latest@sha256:16506bba9da546b1bf5896892f6f4afefea3d0f1d8ed93eae511212627a029b9"
@@ -42,77 +40,76 @@ images:
     tag: "0.5.10@sha256:cd665e77a42460bb1e6df4282bc1d8737be241fc9f4143d43509e31de3a7993d"
   intercom:
     repository: "univention/intercom-service"
-    tag: "1.4-kubernetes"
+    tag: "1.4-kubernetes@sha256:e4fa2e0df49595bf9ba5bf73e36a50e8f1b44334a1a326a43488b8f9c8bbcb9c"
   keycloak:
     repository: "bitnami/keycloak"
-    tag: "19.0.3-debian-11-r15"
-    digest: ""
+    tag: "19.0.3-debian-11-r22@sha256:4ac04104d20d4861ecca24ff2d07d71b34a98ee1148c6e6b6e7969a6b2ad085e"
   keycloakBootstrap:
     repository: "souvap/tooling/images/ansible"
-    tag: "4.10.0"
+    tag: "4.10.0@sha256:89d8212c20e03b0fd079e08afaf3247c1b96b380c4db1b572d68d0b4a6abc0ac"
   keycloakExtensionHandler:
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-handler"
-    digest: "cdaaab8fb1b658ee2ca45557e76570153bb306c43061db5b5ee0f418c40e2200"
+    tag: "latest@sha256:e67bdfc655e43b7fb83b025e13f949b04fdd98e089b33401275d03e340e03e2e"
   keycloakExtensionProxy:
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-proxy"
-    digest: "15ad665620368178d98721c0bd91744dd9c965c2e470abc3838e353fff530093"
+    tag: "latest@sha256:57026fb4ba7d4579461e7ddd4b1b8ce9585d1cac4adbe64040f5e1063c80a6ba"
   mariadb:
     repository: "mariadb"
-    tag: "10"
+    tag: "11.1.2-jammy@sha256:b6440c4f4e1471bdcee202e4c4e21c1f93af87421f6d33028363dd224e54f481"
   memcached:
     repository: "bitnami/memcached"
-    tag: "1.6.21-debian-11-r4"
+    tag: "1.6.21-debian-11-r84@sha256:81747acd297d3fcd05706ea771d441a6f01b28d722c366a06f922b6b7d4033dd"
   milter:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   nextcloud:
     repository: "nextcloud"
-    tag: "26.0.5-apache"
+    tag: "26.0.5-apache@sha256:2a129ba3258300424319e7023e8e60c28d79178ae4143e7ba2d41148646c30e1"
   openproject:
-    repository: "souvap/tooling/images/openproject/souvap@sha256"
-    tag: "5da1ae8be3d7483bf0f3d9ec50c3470586528e0ff51b663e2c3a57bceb489423"
+    repository: "souvap/tooling/images/openproject/souvap"
+    tag: "dev@sha256:03eb1eacc0c0c4e9e7d0f0c3d265fd0c15fd01cda33bc4f89cbc487ad53474a8"
   openxchangeBootstrap:
     repository: "alpine/k8s"
     digest: "sha256:199a4457602b4e260d9781358cd2e342f63c177f4bcfa8053493be01e57beddf"
   openxchangeCoreGuidedtours:
     repository: "appsuite-public-sector/core-guidedtours"
-    tag: "8.5.1"
+    tag: "8.5.1@sha256:469457562a378cca50460e08d9437a954fc6f19622f18128fa74979f7905ecd9"
   openxchangeCoreMW:
     repository: "appsuite-public-sector/middleware-public-sector"
-    tag: "8.16.55"
+    tag: "8.16.55@sha256:11317124714725d61204188ebfebc2220f295fd59b245adcef0b6c3186a68fd3"
   openxchangeCoreUI:
     repository: "appsuite-public-sector/core-ui"
-    tag: "8.16.5"
+    tag: "8.16.5@sha256:4f4dd4e36fb8a1b493c195e38e2f13b87c9582bfcdc3d23b646698fce2ffef8c"
   openxchangeCoreUIMiddleware:
     repository: "appsuite-public-sector/core-ui-middleware"
-    tag: "1.8.4"
+    tag: "1.8.4@sha256:c707fbd5496c894f201dab8f4e78aad98f1ad80c8058778f04dfa5e6e201ed64"
   openxchangeCoreUserGuide:
     repository: "appsuite-public-sector/core-user-guide"
-    tag: "8.16.727397"
+    tag: "8.16.727397@sha256:5d8dbf9a91456dea59a235b495dcd002b971e2b23ef6c3a2ea5fd2071664e2a4"
   openxchangeGuardUI:
     repository: "appsuite-public-sector/guard-ui"
-    tag: "4.0.6"
+    tag: "4.0.6@sha256:7bb8fdf944228dd78a5c33bbd8d0019d5a9e4ce1c35bda674166f2febc5d9a02"
   openxchangeNextcloudIntegrationUI:
     repository: "appsuite-public-sector/nextcloud-integration-ui"
-    tag: "1.0.3"
+    tag: "1.0.3@sha256:193fd07a8b83164d175cd55f7e28fb7ec6d81f1037945035ca709825725c038e"
   openxchangePublicSectorUI:
     repository: "appsuite-public-sector/public-sector-ui"
-    tag: "2.0.1"
+    tag: "2.0.1@sha256:8df90f6dfb59008567d8ded0dbd17b8f92f409c78ba2cf4ab2a39e1b23e34d3b"
   oxConnector:
     repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
-    tag: "branch-jconde-listener-entrypoint-chaining"
+    tag: "branch-jconde-listener-entrypoint-chaining@sha256:54748d49e37d52529d4a857ff834d1217bd2cb8c89c7eed25c0873159ed6853c"
   postfix:
     repository: "souvap/tooling/images/postfix"
     tag: "1.0.0@sha256:69e0c53ade77ffb89673672f5c8183ec2edfc81d4e990aca3ec594f33c55a7ac"
   postgresql:
     repository: "postgres"
-    tag: "15-alpine"
+    tag: "15.4-alpine3.18@sha256:f36c528a2dc8747ea40b4cb8578da69fa75c5063fd6a71dcea3e3b2a6404ff7b"
   prosody:
     repository: "jitsi/prosody"
     tag: "stable-8922@sha256:243547f24ae7d686d1f0c18ee230cf93119a66f095dda282bacbf45d4bb69f77"
   redis:
-    repository: "bitnami/redis"
-    tag: "7.0.12-debian-11-r0"
+    repository: "rapidfort/redis"
+    tag: "7.0.12-debian-11-r0@sha256:313a757ec99d516a7d8b572334cab91ddf82db1a5eb2fdf1e4f2c485ec46cb7e"
   synapse:
     repository: "matrixdotorg/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
@@ -120,14 +117,12 @@ images:
     repository: "rapidfort/haproxy-official"
     tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
   univentionCorporateServer:
-    repository: "souvap/tooling/images/univention-corporate-server-swp/ucs@sha256"
-    tag: "6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
+    repository: "souvap/tooling/images/univention-corporate-server-swp/ucs"
+    tag: "20230829T094822@sha256:6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
   wellKnown:
     repository: "library/nginx"
     tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"
   xwiki:
-    # repository: "xwikisas/swp/xwiki"
-    # tag: "0.10-mariadb-tomcat"
-    repository: "xwikisas/swp/xwiki@sha256"
-    tag: "02f0ff6407ccdd8dab17814202e28991fe0aa8d44fa106ba171cff5249eaf58f"
+    repository: "xwikisas/swp/xwiki"
+    tag: "0.10-mariadb-tomcat@sha256:02f0ff6407ccdd8dab17814202e28991fe0aa8d44fa106ba171cff5249eaf58f"
 ...
