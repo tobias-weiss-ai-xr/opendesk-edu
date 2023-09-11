@@ -1,10 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-configuration:
-  e2ee:
-    forceDisable: true
-
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -13,13 +9,12 @@ containerSecurityContext:
   enabled: true
   privileged: false
   readOnlyRootFilesystem: true
-  runAsGroup: 101
   runAsNonRoot: true
-  runAsUser: 101
+  runAsUser: 10991
   seccompProfile:
     type: "RuntimeDefault"
 
 podSecurityContext:
   enabled: true
-  fsGroup: 101
+  fsGroup: 10991
 ...
