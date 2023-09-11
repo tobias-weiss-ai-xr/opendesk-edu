@@ -1,10 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-configuration:
-  e2ee:
-    forceDisable: true
-
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:

@@ -14,8 +14,8 @@ images:
     repository: "dovecot/dovecot"
     digest: "sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
   element:
-    repository: "souvap/tooling/images/element-web@sha256"
-    tag: "16506bba9da546b1bf5896892f6f4afefea3d0f1d8ed93eae511212627a029b9"
+    repository: "souvap/tooling/images/element-web"
+    tag: "latest@sha256:16506bba9da546b1bf5896892f6f4afefea3d0f1d8ed93eae511212627a029b9"
   freshclam:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
@@ -115,16 +115,16 @@ images:
     tag: "7.0.12-debian-11-r0"
   synapse:
     repository: "matrixdotorg/synapse"
-    tag: "v1.87.0"
+    tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
   synapseWeb:
-    repository: "library/haproxy"
-    tag: "2.4"
+    repository: "rapidfort/haproxy-official"
+    tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
   univentionCorporateServer:
     repository: "souvap/tooling/images/univention-corporate-server-swp/ucs@sha256"
     tag: "6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
   wellKnown:
     repository: "library/nginx"
-    tag: "1.23"
+    tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"
   xwiki:
     # repository: "xwikisas/swp/xwiki"
     # tag: "0.10-mariadb-tomcat"
