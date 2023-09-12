@@ -460,17 +460,14 @@ components we are going to cover various aspects:
 
 ## Tests
 
-There is a frontend end-to-end test suite that can get triggered if the
-deployment is performed via a Gitlab pipeline.
+The gitlab-ci pipeline contains a job named `run-tests` that can trigger a test suite pipeline on another gitlab project.
+The `DEPLOY_`-variables are used to determine which components should be tested.
+In order for the trigger to work, the variable `TESTS_PROJECT_URL` has to be set on this gitlab project's CI variables
+that can be found at `Settings` -> `CI/CD` -> `Variables`. The variable should have this format:
+`<domain of gitlab>/api/v4/projects/<id>`.
 
-Currently, the test suite is in progress to be published, so right now it is
-only usable by project members. But that will change soon, and it could be used
-to create custom tests and perform them after deployment.
-
-The deployment pipeline provides a variable named `TESTS_PROJECT_URL` that
-points to the test pipeline residing in another Gitlab repository. At the end of
-the deployment the test pipeline is triggered. Tests are just performed for
-components that have been deployed prior.
+If the branch of the test pipeline is not `main` this can be set with the .gitlab-ci.yml variable
+`TESTS_BRANCH` while creating a new pipeline.
 
 
 # Footnotes

@@ -129,8 +129,9 @@ variables:
     options:
       - "yes"
       - "no"
-  TESTS_PROJECT_URL:
-    description: "URL of the E2E-test Gitlab project API with project ID."
+  TESTS_BRANCH:
+    description: "Branch of E2E-tests on which the test pipeline is triggered"
+    value: "main"
   # please use the following set of variables with normalized names:
   DOMAIN: "${NAMESPACE}.${CLUSTER}.${BASE_DOMAIN}"
   ISTIO_DOMAIN: "${NAMESPACE}.istio.${CLUSTER}.${BASE_DOMAIN}"
@@ -408,51 +409,50 @@ run-tests:
       when: "always"
   script:
     - |
-      COMPONENTS="login or portal or profile or navigation"
-      if [ "${DEPLOY_ALL_COMPONENTS}" != "no" ]; then
-        COMPONENTS="${COMPONENTS} or collabora or ics or jitsi or keycloak or nextcloud or openproject or ox or ucs \
-          or xwiki"
-      else
-        [ "${DEPLOY_COLLABORA}" != "no" ] && COMPONENTS="${COMPONENTS} or collabora"
-        [ "${DEPLOY_ICS}" != "no" ] && COMPONENTS="${COMPONENTS} or ics"
-        [ "${DEPLOY_JITSI}" != "no" ] && COMPONENTS="${COMPONENTS} or jitsi"
-        [ "${DEPLOY_KEYCLOAK}" != "no" ] && COMPONENTS="${COMPONENTS} or keycloak"
-        [ "${DEPLOY_NEXTCLOUD}" != "no" ] && COMPONENTS="${COMPONENTS} or nextcloud"
-        [ "${DEPLOY_OPENPROJECT}" != "no" ] && COMPONENTS="${COMPONENTS} or openproject"
-        [ "${DEPLOY_OX}" != "no" ] && COMPONENTS="${COMPONENTS} or ox"
-        [ "${DEPLOY_UCS}" != "no" ] && COMPONENTS="${COMPONENTS} or ucs"
-        [ "${DEPLOY_XWIKI}" != "no" ] && COMPONENTS="${COMPONENTS} or xwiki"
-      fi
-
-      echo "Gathering passwords from UCS container ..."
       UCS_CONTAINER_NAME=$( \
-        kubectl -n ${NAMESPACE} get pods --no-headers \
-        --selector 'app.kubernetes.io/instance=univention-corporate-container' \
-       | awk '{print $1}' \
+        kubectl -n ${NAMESPACE} get pods --no-headers --selector \
+          'app.kubernetes.io/instance=univention-corporate-container' \
+        | grep Running \
+        | awk '{print $1}' \
       )
-      echo "UCS_CONTAINER_NAME: ${UCS_CONTAINER_NAME}"
       DEFAULT_USER_PASSWORD=$( \
         kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
         | grep DEFAULT_ACCOUNT_USER_PASSWORD \
         | awk '{print $2}' \
       )
-      DEFAULT_ADMIN_PASSWORD=$( \
+      DEFAULT_ADMIN_PASSWORD=$(
         kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
         | grep DEFAULT_ACCOUNT_ADMIN_PASSWORD \
         | awk '{print $2}' \
       )
 
-      echo "triggering test pipeline ..."
-      curl -X POST \
-        -F "ref=main" \
-        -F "token=${CI_JOB_TOKEN}" \
-        -F "variables[url]=https://portal.${DOMAIN}" \
-        -F "variables[user_name]=${DEFAULT_USER_NAME}" \
-        -F "variables[user_password]=${DEFAULT_USER_PASSWORD}" \
-        -F "variables[admin_name]=${DEFAULT_ADMIN_NAME}" \
-        -F "variables[admin_password]=${DEFAULT_ADMIN_PASSWORD}" \
-        -F "variables[components]=\"${COMPONENTS}\"" \
-        https://${TESTS_PROJECT_URL}/trigger/pipeline
+      curl --request POST \
+      --header "Content-Type: application/json" \
+      --data "{ \
+        \"ref\": \"${TESTS_BRANCH}\", \
+        \"token\": \"${CI_JOB_TOKEN}\", \
+        \"variables\": { \
+          \"url\": \"https://portal.${DOMAIN}\", \
+          \"user_name\": \"${DEFAULT_USER_NAME}\", \
+          \"user_password\": \"${DEFAULT_USER_PASSWORD}\", \
+          \"admin_name\": \"${DEFAULT_ADMIN_NAME}\", \
+          \"admin_password\": \"${DEFAULT_ADMIN_PASSWORD}\", \
+          \"DEPLOY_ALL_COMPONENTS\": \"${DEPLOY_ALL_COMPONENTS}\", \
+          \"DEPLOY_COLLABORA\": \"${DEPLOY_COLLABORA}\", \
+          \"DEPLOY_ELEMENT\": \"${DEPLOY_ELEMENT}\", \
+          \"DEPLOY_ICS\": \"${DEPLOY_ICS}\", \
+          \"DEPLOY_JITSI\": \"${DEPLOY_JITSI}\", \
+          \"DEPLOY_KEYCLOAK\": \"${DEPLOY_KEYCLOAK}\", \
+          \"DEPLOY_NEXTCLOUD\": \"${DEPLOY_NEXTCLOUD}\", \
+          \"DEPLOY_OPENPROJECT\": \"${DEPLOY_OPENPROJECT}\", \
+          \"DEPLOY_OX\": \"${DEPLOY_OX}\", \
+          \"DEPLOY_SERVICES\": \"${DEPLOY_SERVICES}\", \
+          \"DEPLOY_UCS\": \"${DEPLOY_UCS}\", \
+          \"DEPLOY_XWIKI\": \"${DEPLOY_XWIKI}\", \
+          \"DEPLOY_PROVISIONING\": \"${DEPLOY_PROVISIONING}\" \
+        } \
+      }" \
+      "https://${TESTS_PROJECT_URL}/trigger/pipeline"
 
 generate-release-assets:
   stage: "generate-release-assets"
