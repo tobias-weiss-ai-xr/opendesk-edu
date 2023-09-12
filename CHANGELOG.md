@@ -1,3 +1,10 @@
+# [0.3.0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.10...v0.3.0) (2023-09-12)
+
+
+### Features
+
+* **ci:** Selective tests ([d2e7ac9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/d2e7ac93481249e9eb7e5e1a41a6c6e333abe2dc))
+
 ## [0.2.10](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.9...v0.2.10) (2023-09-06)
 
 
