@@ -44,7 +44,7 @@ releases:
     condition: "certificates.enabled"
   - name: "redis"
     chart: "bitnami-repo/redis"
-    version: "18.0.0"
+    version: "18.0.4"
     values:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
@@ -58,14 +58,14 @@ releases:
     condition: "postgresql.enabled"
   - name: "mariadb"
     chart: "mariadb-repo/mariadb"
-    version: "2.0.2"
+    version: "2.1.0"
     values:
       - "values-mariadb.yaml"
       - "values-mariadb.gotmpl"
     condition: "mariadb.enabled"
   - name: "postfix"
     chart: "postfix-repo/postfix"
-    version: "2.0.2"
+    version: "2.0.3"
     values:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
@@ -74,12 +74,14 @@ releases:
     chart: "clamav-repo/opendesk-clamav"
     version: "4.0.0"
     values:
+      - "values-clamav-distributed.yaml"
       - "values-clamav-distributed.gotmpl"
     condition: "clamavDistributed.enabled"
   - name: "clamav-simple"
     chart: "clamav-repo/clamav-simple"
     version: "4.0.0"
     values:
+      - "values-clamav-simple.yaml"
       - "values-clamav-simple.gotmpl"
     condition: "clamavSimple.enabled"
   - name: "sovereign-workplace-gateway"

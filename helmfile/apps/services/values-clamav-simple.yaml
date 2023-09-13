@@ -7,23 +7,13 @@ containerSecurityContext:
     drop:
       - "ALL"
   enabled: true
-  runAsUser: 1001
-  runAsGroup: 1001
+  runAsUser: 100
+  runAsGroup: 101
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-
-job:
-  image:
-    digest: "sha256:de7451b563ef79eb6acb2851dbadd18388e6436cd757b65d275a3dc60dbb0b73"
 
 podSecurityContext:
   enabled: true
-  fsGroup: 1001
-  fsGroupChangePolicy: "OnRootMismatch"
-
-
-postgres:
-  user: "postgres"
+  fsGroup: 101
+  fsGroupChangePolicy: "Always"
 ...

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   url: "{{ .Values.images.openxchangeBootstrap.repository }}"
-  digest: "{{ .Values.images.openxchangeBootstrap.digest }}"
+  tag: "{{ .Values.images.openxchangeBootstrap.tag }}"
   imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 imagePullSecrets:
