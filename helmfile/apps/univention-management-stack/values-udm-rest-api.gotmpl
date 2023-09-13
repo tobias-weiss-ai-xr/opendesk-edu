@@ -9,7 +9,6 @@ udmRestApi:
     dcBackup: "cn=DC Backup Hosts,cn=groups,dc=univention-organization,dc=intranet"
     dcSlaves: "cn=DC Slave Hosts,cn=groups,dc=univention-organization,dc=intranet"
     domainAdmins: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
-  environment: "staging"
   ldapHost: "ums-ldap-server"
   ldapBaseDn: "dc=univention-organization,dc=intranet"
   # TODO: This should not be required, the machine account is not there
@@ -26,8 +25,6 @@ udmRestApi:
   # TODO: This should not be part of the udm-rest-api anymore
   loadJoinData:
     enabled: true
-  # TODO: probably to INFO
-  logLevel: "DEBUG"
   # TODO: configurable
   tlsMode: "off"
 

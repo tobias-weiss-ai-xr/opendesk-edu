@@ -21,6 +21,7 @@ image:
   configHtpasswd:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.umsConfigHtpasswd.repository }}"
+    pullPolicy: "Always"
     pullPolicy: "{{ .Values.global.imagePullPolicy }}"
     tag: "{{ .Values.images.umsConfigHtpasswd.tag }}"
     pullSecrets:

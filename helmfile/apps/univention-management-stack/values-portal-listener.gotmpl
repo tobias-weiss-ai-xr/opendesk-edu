@@ -46,7 +46,4 @@ resources:
 resourcesDependencyWaiter:
   {{ .Values.resources.umsPortalListenerDependencies | toYaml | nindent 2 }}
 
-store-dav:
-  bundled: false
-
 ...

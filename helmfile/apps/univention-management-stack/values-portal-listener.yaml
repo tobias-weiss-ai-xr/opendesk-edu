@@ -2,9 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 
-volumes:
-  claims:
-    shared-data: "shared-data-ums-ldap-server-0"
-    shared-run: "shared-run-ums-ldap-server-0"
+store-dav:
+  bundled: false
 
 ...
