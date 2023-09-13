@@ -27,7 +27,7 @@ portalListener:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsPortalListener.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsPortalListener.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}

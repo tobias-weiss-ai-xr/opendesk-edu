@@ -24,7 +24,7 @@ postgresql:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsNotificationsApi.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsNotificationsApi.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}

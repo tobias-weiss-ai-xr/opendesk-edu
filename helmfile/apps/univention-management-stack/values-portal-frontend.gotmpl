@@ -10,7 +10,7 @@ portalFrontend:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsPortalFrontend.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsPortalFrontend.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}

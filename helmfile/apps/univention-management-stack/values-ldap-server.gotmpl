@@ -21,7 +21,7 @@ ldapServer:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsLdapServer.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsLdapServer.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}

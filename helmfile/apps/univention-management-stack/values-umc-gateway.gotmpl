@@ -18,7 +18,7 @@ umcGateway:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsUmcGateway.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsUmcGateway.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}

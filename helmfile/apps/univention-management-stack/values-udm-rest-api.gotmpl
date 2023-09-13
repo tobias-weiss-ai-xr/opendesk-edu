@@ -34,7 +34,7 @@ udmRestApi:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsUdmRestApi.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsUdmRestApi.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
