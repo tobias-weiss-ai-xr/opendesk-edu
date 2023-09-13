@@ -11,7 +11,7 @@ storeDav:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsStoreDav.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsStoreDav.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
@@ -21,7 +21,7 @@ image:
   configHtpasswd:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.umsConfigHtpasswd.repository }}"
-    pullPolicy: "Always"
+    pullPolicy: "{{ .Values.global.imagePullPolicy }}"
     tag: "{{ .Values.images.umsConfigHtpasswd.tag }}"
     pullSecrets:
       {{- range .Values.global.imagePullSecrets }}

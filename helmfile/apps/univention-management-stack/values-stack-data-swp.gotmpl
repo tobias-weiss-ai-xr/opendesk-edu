@@ -12,7 +12,7 @@ stackDataSwp:
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsDataLoader.repository }}"
-  pullPolicy: "Always"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.umsDataLoader.tag }}"
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
