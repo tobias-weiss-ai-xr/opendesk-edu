@@ -5,6 +5,19 @@ certificate:
   request:
     enabled: false
 
+containerSecurityContext:
+  allowPrivilegeEscalation: true
+  capabilities: {}
+  enabled: true
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
+  runAsNonRoot: false
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 101
+
 postfix:
   hostname: "postfix"
   inetProtocols: "ipv4"

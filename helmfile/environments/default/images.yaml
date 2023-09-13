@@ -70,7 +70,7 @@ images:
     tag: "dev@sha256:03eb1eacc0c0c4e9e7d0f0c3d265fd0c15fd01cda33bc4f89cbc487ad53474a8"
   openxchangeBootstrap:
     repository: "alpine/k8s"
-    digest: "sha256:199a4457602b4e260d9781358cd2e342f63c177f4bcfa8053493be01e57beddf"
+    tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
   openxchangeCoreGuidedtours:
     repository: "appsuite-public-sector/core-guidedtours"
     tag: "8.5.1@sha256:469457562a378cca50460e08d9437a954fc6f19622f18128fa74979f7905ecd9"
@@ -108,8 +108,8 @@ images:
     repository: "jitsi/prosody"
     tag: "stable-8922@sha256:243547f24ae7d686d1f0c18ee230cf93119a66f095dda282bacbf45d4bb69f77"
   redis:
-    repository: "rapidfort/redis"
-    tag: "7.0.12-debian-11-r0@sha256:313a757ec99d516a7d8b572334cab91ddf82db1a5eb2fdf1e4f2c485ec46cb7e"
+    repository: "bitnami/redis"
+    tag: "7.2.1-debian-11-r5@sha256:e664fa63dfe88cd099180c32f2c9a109a958f053b75d195beb48b06ffd8a0b5b"
   synapse:
     repository: "matrixdotorg/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"

@@ -18,11 +18,7 @@ handler:
   image:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.keycloakExtensionHandler.repository }}"
-{{- if .Values.images.keycloakExtensionHandler.digest }}
-    sha256: "{{ .Values.images.keycloakExtensionHandler.digest}}"
-{{- else if .Values.images.keycloakExtensionHandler.tag }}
     tag: "{{ .Values.images.keycloakExtensionHandler.tag }}"
-{{- end }}
     imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   appConfig:
     smtpPassword: "{{ .Values.smtp.password }}"
@@ -35,11 +31,7 @@ proxy:
   image:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.keycloakExtensionProxy.repository }}"
-{{- if .Values.images.keycloakExtensionProxy.digest }}
-    sha256: "{{ .Values.images.keycloakExtensionProxy.digest}}"
-{{- else if .Values.images.keycloakExtensionProxy.tag }}
     tag: "{{ .Values.images.keycloakExtensionProxy.tag }}"
-{{- end }}
     imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   ingress:
     enabled: "{{ .Values.ingress.enabled }}"
