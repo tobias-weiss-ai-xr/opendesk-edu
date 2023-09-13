@@ -11,6 +11,17 @@ stackDataSwp:
 
 stackDataContext:
   ldapBase: "dc=swp-ldap,dc=internal"
+  externalDomainName: "{{ .Values.global.domain }}"
+  externalMailDomain: "{{ .Values.global.domain }}"
+
+  portalGroupwareLinkBase: "https://webmail.{{ .Values.istio.domain }}"
+  portalFileshareLinkBase: "https://fs.{{ .Values.global.domain }}"
+  portalRealtimeCollaborationLinkBase: "https://chat.{{ .Values.global.domain }}"
+  portalRealtimeVideoconferenceLinkBase: "https://meet.{{ .Values.global.domain }}"
+  portalManagementProjectLinkBase: "https://project.{{ .Values.global.domain }}"
+  portalManagementKnowledgeLinkBase: "https://wiki.{{ .Values.global.domain }}"
+
+  oxDefaultContext: "10"
 
 image:
   registry: "{{ .Values.global.imageRegistry }}"
