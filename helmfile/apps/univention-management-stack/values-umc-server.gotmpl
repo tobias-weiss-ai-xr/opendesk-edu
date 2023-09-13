@@ -7,10 +7,10 @@ umcServer:
   domainname: "{{ .Values.global.domain }}"
   hostname: "{{ .Values.global.hosts.univentionManagementStack }}"
   ldapHost: "ums-ldap-server"
-  ldapBaseDn: "dc=univention-organization,dc=intranet"
+  ldapBaseDn: "dc=swp-ldap,dc=internal"
   # TODO: This should not be required, the machine account is not there
-  # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=univention-organization,dc=intranet
-  ldapHostDn: cn=admin,dc=univention-organization,dc=intranet
+  # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=swp-ldap,dc=internal
+  ldapHostDn: cn=admin,dc=swp-ldap,dc=internal
   enforceSessionCookie: "true"
 
   # TODO: The keycloak integration is pending
