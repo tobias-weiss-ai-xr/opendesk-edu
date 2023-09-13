@@ -8,3 +8,7 @@ ingress:
   enabled: {{ .Values.ingress.enabled }}
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    # The TLS configuration is on the "master" Ingress, see "portal-frontend"
+    enabled: false
+    secretName: ""
