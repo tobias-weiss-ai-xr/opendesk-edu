@@ -9,6 +9,9 @@ stackDataSwp:
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   loadDevData: true
 
+stackDataContext:
+  ldapBase: "dc=swp-ldap,dc=internal"
+
 image:
   registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.umsDataLoader.repository }}"

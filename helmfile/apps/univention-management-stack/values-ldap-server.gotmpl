@@ -5,6 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 ldapServer:
   ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
+  ldapBaseDn: "dc=swp-ldap,dc=internal"
 
   # TODO: Certificates handling
   # caCert: ""

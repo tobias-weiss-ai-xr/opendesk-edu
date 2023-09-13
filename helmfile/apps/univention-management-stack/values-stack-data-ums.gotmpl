@@ -10,6 +10,7 @@ stackDataUms:
   loadDevData: true
 
 stackDataContext:
+  ldapBase: "dc=swp-ldap,dc=internal"
   initialPasswordAdministrator: "{{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword }}"
 
   # The SWP configuration brings its own UMC policies.

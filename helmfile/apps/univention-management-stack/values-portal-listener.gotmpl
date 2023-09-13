@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 portalListener:
-  adminGroup: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
+  adminGroup: "cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal"
   environment: "staging"
   debugLevel: "4"
   assetsRoot: "http://portal-listener:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}@ums-store-dav/portal-assets/"
@@ -12,13 +12,13 @@ portalListener:
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
 
-  ldapBaseDn: "dc=univention-organization,dc=intranet"
+  ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHost: "ums-ldap-server"
-  ldapHostDn: "cn=admin,dc=univention-organization,dc=intranet"
+  ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
   ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
   machineSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
   notifierServer: "ums-ldap-notifier"
-  portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,dc=univention-organization,dc=intranet"
+  portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,dc=swp-ldap,dc=internal"
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   udmApiUsername: "cn=admin"
 
