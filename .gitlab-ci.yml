@@ -141,23 +141,6 @@ variables:
   dependencies: []
   extends: ".environments"
   image: "registry.souvap-univention.de/souvap/tooling/images/helm:latest"
-  secrets:
-    SMTP_PASSWORD:
-      vault:
-        engine:
-          name: "kv-v2"
-          path: "swp"
-        path: "accounts/brained/mail/relay@souvap-univention.de"
-        field: "password"
-      file: false
-    TURN_CREDENTIALS:
-      vault:
-        engine:
-          name: "kv-v2"
-          path: "swp"
-        path: "accounts/souvap-univention.de/develop/turn/secret"
-        field: "credentials"
-      file: false
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
