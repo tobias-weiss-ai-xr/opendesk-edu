@@ -1,3 +1,16 @@
+## [0.3.1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.3.0...v0.3.1) (2023-09-14)
+
+
+### Bug Fixes
+
+* **collabora:** Update Ingress annotations and set securityContext ([b5583ca](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/b5583caec10c24e3bfb312edcb2800e6a60a9b10))
+* **element:** Improve default container security settings ([882f1fb](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/882f1fbc93ceb4ac33683d445e100e445798b202))
+* **element:** Update opendesk element version to 2.0.1 ([d725b93](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/d725b937989987ffacf87d7a9ee05803dcdd4c93))
+* **helmfile:** Remove default SMTP credentials and create docs for SMTP/TURN ([e120f5f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/e120f5fb9a91b80ba71ce78eace99852b4da5fda))
+* **helmfile:** Update images and use a tag and digest together ([c7fc187](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/c7fc187f14b78cdcc698abbbaec1ba0bbfc718a1))
+* **services:** Explicitly set securityContexts ([a799db0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a799db03c4115ba69303be1c265f7aefef95d659))
+* **services:** Update Postfix to 2.0.2 fixing security gaining ([e1070ee](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/e1070eeb0602523c240a91dae1b0869a7cc42a78))
+
 # [0.3.0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.2.10...v0.3.0) (2023-09-12)
 
 
