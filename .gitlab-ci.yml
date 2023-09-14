@@ -58,16 +58,13 @@ variables:
       - "yes"
       - "no"
   DEPLOY_UCS:
-    description: "Enable Univention Corporate Server deployment."
+    description: >-
+      Enable Univention Corporate Server deployment.
+      "ums-eval" does deploy the Univention Management Stack instead of the UCS container.
     value: "no"
     options:
       - "yes"
-      - "no"
-  DEPLOY_UMS:
-    description: "Enable Univention Management Stack deployment."
-    value: "no"
-    options:
-      - "yes"
+      - "ums-eval"
       - "no"
   DEPLOY_PROVISIONING:
     description: "Enable Provisioning Components."
@@ -225,7 +222,7 @@ ucs-deploy:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
-          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no")
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS == "yes")
       when: "always"
   variables:
     COMPONENT: "univention-corporate-container"
@@ -249,7 +246,7 @@ ums-deploy:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
-          $DEPLOY_UMS != "no"
+          $DEPLOY_UCS == "ums-eval"
       when: "always"
   variables:
     COMPONENT: "univention-management-stack"
