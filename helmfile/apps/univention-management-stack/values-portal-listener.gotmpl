@@ -40,6 +40,11 @@ image:
     imagePullPolicy: "Always"
     tag: "{{ .Values.images.umsWaitForDependency.tag }}"
 
+# TODO: Pending upstream support, #200
+persistence:
+  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: "{{ .Values.persistence.size.univentionManagementStack.portalListener }}"
+
 resources:
   {{ .Values.resources.umsPortalListener | toYaml | nindent 2 }}
 

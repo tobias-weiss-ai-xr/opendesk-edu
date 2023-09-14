@@ -29,6 +29,11 @@ image:
       - name: {{ . }}
       {{- end }}
 
+# TODO: Pending upstream support, #201
+persistence:
+  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: "{{ .Values.persistence.size.univentionManagementStack.storeDav }}"
+
 resources:
   {{ .Values.resources.umsStoreDav | toYaml | nindent 2 }}
 ...

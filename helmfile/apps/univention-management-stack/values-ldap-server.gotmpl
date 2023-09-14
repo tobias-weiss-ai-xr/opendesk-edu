@@ -29,6 +29,16 @@ image:
     - name: {{ . }}
     {{- end }}
 
+# TODO: Pending upstream support, #199
+persistence:
+  data:
+    storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+    size: "{{ .Values.persistence.size.univentionManagementStack.ldapServerData }}"
+  shared:
+    storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+    size: "{{ .Values.persistence.size.univentionManagementStack.ldapServerShared }}"
+
+
 resources:
   {{ .Values.resources.umsLdapServer | toYaml | nindent 2 }}
 ...

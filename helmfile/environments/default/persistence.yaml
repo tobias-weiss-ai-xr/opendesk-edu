@@ -19,5 +19,10 @@ persistence:
     redis: "1Gi"
     synapse: "1Gi"
     univentionCorporateServer: "1Gi"
+    univentionManagementStack:
+      ldapServerData: "1Gi"
+      ldapServerShared: "1Gi"
+      portalListener: "1Gi"
+      storeDav: "1Gi"
     xwiki: "1Gi"
 ...
