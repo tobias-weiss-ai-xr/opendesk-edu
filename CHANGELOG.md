@@ -1,3 +1,35 @@
+## [0.3.2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.3.1...v0.3.2) (2023-09-14)
+
+
+### Bug Fixes
+
+* **helmfile:** Fix linter issues ([1514678](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/1514678db00d32c1463d8fc496c0e6d1c2a2df96))
+* **univention-management-stack:** Add "commonLabels" into helmfile ([16c08f8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/16c08f82c9b4934567bb3b9c7fccab754bfad494))
+* **univention-management-stack:** Add Helm charts ([a74d662](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a74d66240423fd5ba87854cc2b71132f11271ec7))
+* **univention-management-stack:** Add switch "univentionManagementStack.enabled" ([471a2fa](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/471a2fa26205b8ca3afb5eeeb4524897a57f5c20))
+* **univention-management-stack:** Adjust Ingress configuration for portal-server ([13bcd78](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/13bcd785e8f7db22d20903020e0cdd28094309a9))
+* **univention-management-stack:** Adjust Ingress configuration for umc ([320da3b](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/320da3bec3a49d974765e567878d5c2f2b4e93ef))
+* **univention-management-stack:** Adjust Ingress configuration of notifications-api ([5e1a7b1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/5e1a7b19e278147d010c48dac2da111f828dd115))
+* **univention-management-stack:** Adjust ingress configuration of the portal-frontend ([c54bab1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/c54bab165bf81854471d790200781b4181eba22a))
+* **univention-management-stack:** Adjust Ingress configuration of udm-rest-api ([c61b1b8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/c61b1b828150caa8d2fe1a5b9f0a862b2fbef4f1))
+* **univention-management-stack:** Adjust Ingress conifguration of store-dav ([96097e4](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/96097e470483a5251acd81eb772da70ad7f55137))
+* **univention-management-stack:** Configure cookie banner data ([12c931f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/12c931fcff5536116af11df1c9c0468429949fe2))
+* **univention-management-stack:** Define resource requests and limits ([2f8a298](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/2f8a2989250ea0f3b50dd3417f214a8864fe62d0))
+* **univention-management-stack:** Disable istio for the stack ([4835a2b](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/4835a2beec408ec6267177f82257edd9ccb0d937))
+* **univention-management-stack:** Prepare persistence configuration ([7ab1cb5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/7ab1cb5c7e7bca85394eae2ed17141e513dd5a42))
+* **univention-management-stack:** Process bases before releases ([ec3f1d9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/ec3f1d96ac17cf1fb9d34ab692240460d5bd4ba1))
+* **univention-management-stack:** Set externalDomainName for bootstrapping the stack ([0ba71f2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/0ba71f2749eaf51b09429a5f3c705bd0075c1efa))
+* **univention-management-stack:** Split templated from static values ([09079a1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/09079a13031be7894a34bf92945bd25a040c2290))
+* **univention-management-stack:** Split values into templated and static ([d3c4390](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/d3c439038a2551ec90324ab8659d24b65b223d4f))
+* **univention-management-stack:** Update portal-listener to leverage dependency waiting ([c840608](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/c84060811229bb131bcd473a9e4668dfa73f97d7))
+* **univention-management-stack:** Use global secrets to fill initialPasswordAdministrator ([a4bab40](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a4bab4068dc298056ed864e60a244d49a2934c8b))
+* **univention-management-stack:** Use global secrets to populate ldap related secrets ([9409ad8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/9409ad829a725c84ebc3de5d1c4d42fe735e9d0c))
+* **univention-management-stack:** Use global secrets to set store-dav related passwords ([90019e3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/90019e3ef6de5e4ed1742ee9ddc3bbb256cd3dec))
+* **univention-management-stack:** Use ldap base DN "dc=swp-ldap,dc=internal" ([77e362f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/77e362f6bc053c5d456bf65649f15130ce53547c))
+* **univention-management-stack:** Use postgresql service for notifications-api ([fe0e0cd](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/fe0e0cdce4622352afbf74875adcae8324d769a3))
+* **univention-management-stack:** Use the prefix "ums-" for all releases ([edb25bd](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/edb25bd7655beeefa73a62fb9a8c85e076c4cc2f))
+* **univention-management-stack:** Use the value "global.imagePullPolicy" ([15db5dc](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/15db5dcbba33c39f752499f2d73c77cac32d1e8c))
+
 ## [0.3.1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.3.0...v0.3.1) (2023-09-14)
 
 
