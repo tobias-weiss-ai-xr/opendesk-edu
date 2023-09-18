@@ -1,3 +1,10 @@
+# [0.4.0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.3.2...v0.4.0) (2023-09-18)
+
+
+### Features
+
+* **ci:** Optionally trigger E2E tests of the SouvAP Dev team ([a99c088](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a99c088361b95b2bb7ee2b161e3a254f02bcd9ae))
+
 ## [0.3.2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.3.1...v0.3.2) (2023-09-14)
 
 
