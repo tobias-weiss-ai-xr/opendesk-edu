@@ -135,6 +135,15 @@ variables:
   TESTS_BRANCH:
     description: "Branch of E2E-tests on which the test pipeline is triggered"
     value: "main"
+  RUN_UMS_TESTS:
+    description: "Run E2E test suite of SouvAP Dev team"
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  UMS_TESTS_BRANCH:
+    description: "Branch of E2E test suite of SouvAP Dev team"
+    value: "main"
   # please use the following set of variables with normalized names:
   DOMAIN: "${NAMESPACE}.${CLUSTER}.${BASE_DOMAIN}"
   ISTIO_DOMAIN: "${NAMESPACE}.istio.${CLUSTER}.${BASE_DOMAIN}"
@@ -451,6 +460,54 @@ run-tests:
         } \
       }" \
       "https://${TESTS_PROJECT_URL}/trigger/pipeline"
+
+run-souvap-dev-tests:
+  extends: ".deploy-common"
+  environment:
+    name: "${NAMESPACE}"
+  tags:
+    - "docker"
+    - "kubernetes"
+    - "${CLUSTER}"
+  stage: "tests"
+  rules:
+    - if: >
+        $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_UMS_TESTS == "yes"
+      when: "always"
+  script:
+    - |
+      UCS_CONTAINER_NAME=$( \
+        kubectl -n ${NAMESPACE} get pods --no-headers --selector \
+          'app.kubernetes.io/instance=univention-corporate-container' \
+        | grep Running \
+        | awk '{print $1}' \
+      )
+      DEFAULT_USER_PASSWORD=$( \
+        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
+        | grep DEFAULT_ACCOUNT_USER_PASSWORD \
+        | awk '{print $2}' \
+      )
+      DEFAULT_ADMIN_PASSWORD=$(
+        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
+        | grep DEFAULT_ACCOUNT_ADMIN_PASSWORD \
+        | awk '{print $2}' \
+      )
+
+      curl --request POST \
+      --header "Content-Type: application/json" \
+      --data "{ \
+        \"ref\": \"${UMS_TESTS_BRANCH}\", \
+        \"token\": \"${CI_JOB_TOKEN}\", \
+        \"variables\": { \
+          \"portal_base_url\": \"https://portal.${DOMAIN}\", \
+          \"username\": \"${DEFAULT_USER_NAME}\", \
+          \"password\": \"${DEFAULT_USER_PASSWORD}\", \
+          \"admin_username\": \"${DEFAULT_ADMIN_NAME}\", \
+          \"admin_password\": \"${DEFAULT_ADMIN_PASSWORD}\", \
+          \"keycloak_base_url\": \"https://id.${DOMAIN}\" \
+        } \
+      }" \
+      "https://${UMS_TESTS_PROJECT_URL}/trigger/pipeline"
 
 generate-release-assets:
   stage: "generate-release-assets"
