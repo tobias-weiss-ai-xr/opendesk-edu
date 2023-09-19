@@ -3,7 +3,6 @@
 ---
 bases:
   - "../../bases/environments.yaml"
----
 
 repositories:
   - name: "univention"
