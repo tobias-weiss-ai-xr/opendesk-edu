@@ -1,3 +1,10 @@
+## [0.4.1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.0...v0.4.1) (2023-09-19)
+
+
+### Bug Fixes
+
+* **univention-management-stack:** Remove doublette triple dashes in helmfile.yaml ([41b9afb](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/41b9afb3648a0e1fddc5aa4337cc1501756b370c))
+
 # [0.4.0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.3.2...v0.4.0) (2023-09-18)
 
 
