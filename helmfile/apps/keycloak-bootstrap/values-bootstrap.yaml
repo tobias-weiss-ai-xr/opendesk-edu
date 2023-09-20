@@ -4,7 +4,4 @@
 config:
   administrator:
     username: "kcadmin"
-
-cleanup:
-  deletePodsOnSuccess: true
 ...
