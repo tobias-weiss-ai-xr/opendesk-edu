@@ -2,43 +2,74 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "sovereign-workplace-certificates-repo"
+  # openDesk Certificates
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-certificates
+  - name: "opendesk-certificates-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/133/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-certificates" }}
+    verify: true
+    keyring: ../../../pubkey.gpg
+  # openDesk PostgreSQL
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postgresql
   - name: "postgresql-repo"
     oci: true
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postgresql" }}
+    verify: true
+    keyring: ../../../pubkey.gpg
+  # openDesk MariaDB
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-mariadb
   - name: "mariadb-repo"
     oci: true
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/mariadb" }}
+    verify: true
+    keyring: ../../../pubkey.gpg
+  # openDesk Postfix
+  # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postfix
   - name: "postfix-repo"
+    oci: true
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/85/packages/helm/stable" }}
+         default "https://gitlab.souvap-univention.de/souvap/tooling/charts/postfix" }}
+    verify: true
+    keyring: ../../../pubkey.gpg
+  # openDesk Istio Resources
+  # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-istio-resources
   - name: "istio-resources-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/69/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "https://gitlab.souvap-univention.de/souvap/tooling/charts/istio-ressources" }}
+    verify: true
+    keyring: ../../../pubkey.gpg
+  # openDesk ClamAV
+  # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-clamav
   - name: "clamav-repo"
     oci: true
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/clamav" }}
+    verify: true
+    keyring: ../../../pubkey.gpg
+  # VMWare Bitnami
+  # Source: https://github.com/bitnami/charts/
   - name: "bitnami-repo"
     oci: true
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "registry-1.docker.io/bitnamicharts" }}
+    # Bitnami charts are not signed, see https://github.com/bitnami/charts/issues/14491
+    verify: false
 
 releases:
-  - name: "sovereign-workplace-certificates"
-    chart: "sovereign-workplace-certificates-repo/sovereign-workplace-certificates"
-    version: "1.2.2"
+  - name: "opendesk-certificates"
+    chart: "opendesk-certificates-repo/opendesk-certificates"
+    version: "2.0.0"
     values:
       - "values-certificates.gotmpl"
     condition: "certificates.enabled"
@@ -88,7 +119,7 @@ releases:
     condition: "clamavSimple.enabled"
   - name: "sovereign-workplace-gateway"
     chart: "istio-resources-repo/istio-gateway"
-    version: "1.1.2"
+    version: "1.2.0"
     values:
       - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
