@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+cleanup:
+  # Keep Pods/Job logs after successful run.
+  deletePodsOnSuccess: true
+  # When deletePodsOnSuccess is enabled, the pod will be deleted after configured seconds.
+  deletePodsOnSuccessTimeout: 60
+  # Keep persistence on deletion of this release.
+  keepPVCOnDelete: false
+  # Keep additional resources, like certificates on deletion of this release.
+  keepRessourceOnDelete: true
+...

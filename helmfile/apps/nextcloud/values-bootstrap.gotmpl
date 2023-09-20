@@ -43,6 +43,11 @@ config:
     username: "{{ .Values.smtp.username }}"
     password: "{{ .Values.smtp.password }}"
 
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccessTimeout: {{ .Values.cleanup.deletePodsOnSuccessTimeout }}
+  keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
+
 image:
   imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   registry: "{{ .Values.global.imageRegistry }}"

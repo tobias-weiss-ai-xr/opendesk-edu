@@ -11,6 +11,10 @@ global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
+
 config:
   administrator:
     password: "{{ .Values.secrets.keycloak.adminPassword }}"
