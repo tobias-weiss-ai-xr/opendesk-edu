@@ -8,9 +8,9 @@ repositories:
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
          "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap" }}
-    verify: true
-    keyring: ../../../pubkey.gpg
     # yamllint enable rule:line-length
+    verify: true
+    keyring: "../../../pubkey.gpg"
   - name: "nextcloud-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
