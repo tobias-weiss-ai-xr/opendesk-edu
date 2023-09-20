@@ -336,6 +336,10 @@ turn:
 
 ## Security
 
+This section summarizes various aspects of security and compliance aspects.
+
+### Kubernetes Security Enforcements
+
 This list gives you an overview of default security settings and if they comply with security standards:
 
 
@@ -364,6 +368,11 @@ This list gives you an overview of default security settings and if they comply 
 | Postfix    | postfix                  |        :x:         |                :x:                 |                                                                      :x:                                                                       |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |   101   |
 | PostgreSQL | postgresql               | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1001    |    1001    |  1001   |
 
+
+### Helm Chart Trust Chain
+
+Helm Charts which are released via openDesk CI/CD process are always signed. The public GPG keys are present in
+`pubkey.gpg` file and are validated during helmfile installation.
 
 # Component integration
 
