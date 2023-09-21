@@ -7,7 +7,7 @@ images:
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   collabora:
     repository: "souvap/tooling/images/collabora"
-    tag: "23.05.3.1.1@sha256:f1248a50e67940e3be3dfa58dc37eca73267cf73a679b459707d2520cee7720e"
+    tag: "23.05.4.2.1@sha256:ee9ce83811700f1ff57e1218d22388dbaca96306df33f82aa14b334c5302285a"
   dovecot:
     repository: "dovecot/dovecot"
     tag: "2.3.20@sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
