@@ -1,3 +1,10 @@
+## [0.4.2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.1...v0.4.2) (2023-09-21)
+
+
+### Bug Fixes
+
+* **nextcloud:** Add Nextcloud app for OpenProject integration; Bump Collabora Image ([f46c8a9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/f46c8a9a5f4f9778cb171d65e9a0280e4ce61c16))
+
 ## [0.4.1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.0...v0.4.1) (2023-09-19)
 
 
