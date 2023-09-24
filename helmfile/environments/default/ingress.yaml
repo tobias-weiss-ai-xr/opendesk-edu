@@ -6,5 +6,5 @@ ingress:
   ingressClassName: ""
   tls:
     enabled: true
-    secretName: "sovereign-workplace-certificates-tls"
+    secretName: "opendesk-certificates-tls"
 ...

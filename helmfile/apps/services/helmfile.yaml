@@ -119,7 +119,7 @@ releases:
       - "values-clamav-simple.yaml"
       - "values-clamav-simple.gotmpl"
     condition: "clamavSimple.enabled"
-  - name: "sovereign-workplace-gateway"
+  - name: "opendesk-gateway"
     chart: "istio-resources-repo/istio-gateway"
     version: "1.2.0"
     values:
