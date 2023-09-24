@@ -4,4 +4,5 @@
 certificate:
   issuerRef:
     name: "letsencrypt-prod"
+  wildcard: false
 ...
