@@ -16,7 +16,7 @@ images:
     # @supplier: "Open-Xchange"
   element:
     repository: "souvap/tooling/images/element-web"
-    tag: "latest@sha256:16506bba9da546b1bf5896892f6f4afefea3d0f1d8ed93eae511212627a029b9"
+    tag: "1.1.0@sha256:4fc2df523090cf012b50a681c92482f61231baf4cce67de467dd9f79c181bc93"
     # @supplier: "Element"
   freshclam:
     repository: "clamav/clamav"
@@ -156,6 +156,10 @@ images:
     repository: "matrixdotorg/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
     # @supplier: "Element"
+  synapseGuestModule:
+    repository: "nordeck/synapse-guest-module"
+    tag: "1.0.0@sha256:e9c736d84a77df93b2dbe3e3afa7b0ca3efcbc4457677adaac5df3cc79a85923"
+    # @supplier: "Nordeck"
   synapseWeb:
     repository: "rapidfort/haproxy-official"
     tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"

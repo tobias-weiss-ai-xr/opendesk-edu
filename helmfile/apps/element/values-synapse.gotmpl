@@ -41,6 +41,14 @@ configuration:
           port: {{ .Values.turn.server.port }}
           transport: {{ .Values.turn.transport }}
         {{- end }}
+    
+    guestModule:
+      enabled: true
+      image:
+        imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+        registry: "{{ .Values.global.imageRegistry }}"
+        repository: "{{ .Values.images.synapseGuestModule.repository }}"
+        tag: "{{ .Values.images.synapseGuestModule.tag }}"
 
 persistence:
   size: "{{ .Values.persistence.size.synapse }}"
