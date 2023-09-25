@@ -1,3 +1,10 @@
+## [0.4.3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.2...v0.4.3) (2023-09-25)
+
+
+### Bug Fixes
+
+* **nextcloud:** Update image to 27.1.1 ([ce7e5f6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/ce7e5f670a4dbc980eb8be73e5f7d15b27e8b1de))
+
 ## [0.4.2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.1...v0.4.2) (2023-09-21)
 
 
