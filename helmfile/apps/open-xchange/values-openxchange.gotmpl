@@ -53,6 +53,15 @@ appsuite:
   core-mw:
     masterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    gotenberg:
+      imagePullSecrets:
+      {{- range .Values.global.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+      image:
+        repository: {{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGotenberg.repository }}
+        tag: {{ .Values.images.openxchangeGotenberg.tag }}
+        pullPolicy: "{{ .Values.global.imagePullPolicy }}"
     properties:
       "com.openexchange.oauth.provider.jwt.jwksUri": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/certs"
       "com.openexchange.oauth.provider.allowedIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"

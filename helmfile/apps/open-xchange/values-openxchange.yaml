@@ -9,6 +9,8 @@ appsuite:
   core-mw:
     enabled: true
     masterAdmin: "admin"
+    gotenberg:
+      enabled: true
     features:
       status:
         # enable admin pack
@@ -22,6 +24,13 @@ appsuite:
         open-xchange-authentication-oauth: "enabled"
     properties:
       com.openexchange.UIWebPath: "/appsuite/"
+      # PDF Export
+      com.openexchange.capability.mail_export_pdf: "true"
+      com.openexchange.mail.exportpdf.gotenberg.enabled: "true"
+      com.openexchange.mail.exportpdf.collabora.enabled: "true"
+      com.openexchange.mail.exportpdf.pdfa.collabora.enabled: "true"
+      com.openexchange.mail.exportpdf.collabora.url: "http://collabora:9980"
+      com.openexchange.mail.exportpdf.gotenberg.url: "http://open-xchange-gotenberg:3000"
       # OIDC
       com.openexchange.oidc.enabled: "true"
       com.openexchange.oidc.autologinCookieMode: "ox_direct"
@@ -120,6 +129,8 @@ appsuite:
       # io.ox.public-sector//ics/url: "https://ics.<DOMAIN>/"
       io.ox/core//apps/quickLaunchCount: "0"
       io.ox/core//coloredIcons: "false"
+      # Mail templates
+      io.ox/core//features/templates: "true"
 
     asConfig:
       default:

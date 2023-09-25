@@ -26,7 +26,7 @@ releases:
     condition: "dovecot.enabled"
   - name: "open-xchange"
     chart: "openxchange-repo/appsuite-public-sector/charts/appsuite-public-sector"
-    version: "2.0.3"
+    version: "2.0.4"
     values:
       - "values-openxchange.yaml"
       - "values-openxchange.gotmpl"
