@@ -64,7 +64,7 @@ images:
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   nextcloud:
     repository: "nextcloud"
-    tag: "26.0.5-apache@sha256:2a129ba3258300424319e7023e8e60c28d79178ae4143e7ba2d41148646c30e1"
+    tag: "27.1.1-apache@sha256:47325758ffcd54563021e697905aaba6aac8c21bceefb245c67d40194813ce39"
   openproject:
     repository: "souvap/tooling/images/openproject/souvap"
     tag: "dev@sha256:03eb1eacc0c0c4e9e7d0f0c3d265fd0c15fd01cda33bc4f89cbc487ad53474a8"
