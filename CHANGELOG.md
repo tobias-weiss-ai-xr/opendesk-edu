@@ -1,3 +1,10 @@
+## [0.4.4](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.3...v0.4.4) (2023-09-25)
+
+
+### Bug Fixes
+
+* **open-xchange:** Updates for mail templates and mail export ([ae3d0da](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/ae3d0daa117d3d0ff307f379590394914a757546))
+
 ## [0.4.3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.2...v0.4.3) (2023-09-25)
 
 
