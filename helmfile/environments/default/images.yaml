@@ -5,165 +5,223 @@ images:
   clamd:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
+    # @supplier: "openDesk DevSecOps"
   collabora:
     repository: "souvap/tooling/images/collabora"
     tag: "23.05.4.2.1@sha256:ee9ce83811700f1ff57e1218d22388dbaca96306df33f82aa14b334c5302285a"
+    # @supplier: "Collabora"
   dovecot:
     repository: "dovecot/dovecot"
     tag: "2.3.20@sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
+    # @supplier: "Open-Xchange"
   element:
     repository: "souvap/tooling/images/element-web"
     tag: "latest@sha256:16506bba9da546b1bf5896892f6f4afefea3d0f1d8ed93eae511212627a029b9"
+    # @supplier: "Element"
   freshclam:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
+    # @supplier: "openDesk DevSecOps"
   jibri:
     repository: "jitsi/jibri"
     tag: "stable-8922@sha256:87aa176b44b745b13769f13b8e2d22ddd6f6ba624244d5354c8dd3664787e936"
+    # @supplier: "Nordeck"
   jicofo:
     repository: "jitsi/jicofo"
     tag: "stable-8922@sha256:820fcd4b072b29f42c1c37389fbefda1065f1e9654694941485dc08123c8a93b"
+    # @supplier: "Nordeck"
   jitsi:
     repository: "jitsi/web"
     tag: "stable-8922@sha256:24bd4179998fe01ace1be74e53fea5308f4d91722953bb4334611e6886753f46"
+    # @supplier: "Nordeck"
   jitsiKeycloakAdapter:
     repository: "nordeck/jitsi-keycloak-adapter"
     tag: "v20230906@sha256:54d45ee1a1205f98641810ffb171bd92e6478e2957a349ee4ff599359239fbf2"
+    # @supplier: "Nordeck"
   jitsiPatchJVB:
     repository: "bitnami/kubectl"
     tag: "1.26.8@sha256:c6902a1fdce0a24c9f93ac8d1f317039b206a4b307d8fc76cab4a92911345757"
+    # @supplier: "Nordeck"
   jvb:
     repository: "jitsi/jvb"
     tag: "stable-8922@sha256:75dd613807e19cbbd440d071b60609fa9e4ee50a1396b14deb0ed779d882a554"
+    # @supplier: "Nordeck"
   icap:
     repository: "souvap/tooling/images/c-icap"
     tag: "0.5.10@sha256:cd665e77a42460bb1e6df4282bc1d8737be241fc9f4143d43509e31de3a7993d"
+    # @supplier: "openDesk DevSecOps"
   intercom:
     repository: "univention/intercom-service"
     tag: "1.4-kubernetes@sha256:e4fa2e0df49595bf9ba5bf73e36a50e8f1b44334a1a326a43488b8f9c8bbcb9c"
+    # @supplier: "Univention"
   keycloak:
     repository: "bitnami/keycloak"
     tag: "19.0.3-debian-11-r22@sha256:4ac04104d20d4861ecca24ff2d07d71b34a98ee1148c6e6b6e7969a6b2ad085e"
+    # @supplier: "Univention"
   keycloakBootstrap:
     repository: "souvap/tooling/images/ansible"
     tag: "4.10.0@sha256:89d8212c20e03b0fd079e08afaf3247c1b96b380c4db1b572d68d0b4a6abc0ac"
+    # @supplier: "Univention"
   keycloakExtensionHandler:
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-handler"
     tag: "latest@sha256:e67bdfc655e43b7fb83b025e13f949b04fdd98e089b33401275d03e340e03e2e"
+    # @supplier: "Univention"
   keycloakExtensionProxy:
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-proxy"
     tag: "latest@sha256:57026fb4ba7d4579461e7ddd4b1b8ce9585d1cac4adbe64040f5e1063c80a6ba"
+    # @supplier: "Univention"
   mariadb:
     repository: "mariadb"
     tag: "11.1.2-jammy@sha256:b6440c4f4e1471bdcee202e4c4e21c1f93af87421f6d33028363dd224e54f481"
+    # @supplier: "openDesk DevSecOps"
   memcached:
     repository: "bitnami/memcached"
     tag: "1.6.21-debian-11-r84@sha256:81747acd297d3fcd05706ea771d441a6f01b28d722c366a06f922b6b7d4033dd"
+    # @supplier: "OpenProject"
   milter:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
+    # @supplier: "openDesk DevSecOps"
   nextcloud:
     repository: "nextcloud"
     tag: "27.1.1-apache@sha256:47325758ffcd54563021e697905aaba6aac8c21bceefb245c67d40194813ce39"
+    # @supplier: "Nextcloud Community"
   openproject:
     repository: "souvap/tooling/images/openproject/souvap"
     tag: "dev@sha256:03eb1eacc0c0c4e9e7d0f0c3d265fd0c15fd01cda33bc4f89cbc487ad53474a8"
+    # @supplier: "OpenProject"
   openxchangeBootstrap:
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
+    # @supplier: "Open-Xchange"
   openxchangeCoreGuidedtours:
     repository: "appsuite-public-sector/core-guidedtours"
     tag: "8.5.1@sha256:469457562a378cca50460e08d9437a954fc6f19622f18128fa74979f7905ecd9"
+    # @supplier: "Open-Xchange"
   openxchangeCoreMW:
     repository: "appsuite-public-sector/middleware-public-sector"
-    tag: "8.16.55@sha256:11317124714725d61204188ebfebc2220f295fd59b245adcef0b6c3186a68fd3"
+    tag: "8.16.60@sha256:269c5b72f380c49ba1888c4300c409745d2ce757ca0b269afe1e8ac9bb26f028"
+    # @supplier: "Open-Xchange"
   openxchangeCoreUI:
     repository: "appsuite-public-sector/core-ui"
     tag: "8.16.5@sha256:4f4dd4e36fb8a1b493c195e38e2f13b87c9582bfcdc3d23b646698fce2ffef8c"
+    # @supplier: "Open-Xchange"
   openxchangeCoreUIMiddleware:
     repository: "appsuite-public-sector/core-ui-middleware"
     tag: "1.8.4@sha256:c707fbd5496c894f201dab8f4e78aad98f1ad80c8058778f04dfa5e6e201ed64"
+    # @supplier: "Open-Xchange"
   openxchangeCoreUserGuide:
     repository: "appsuite-public-sector/core-user-guide"
     tag: "8.16.727397@sha256:5d8dbf9a91456dea59a235b495dcd002b971e2b23ef6c3a2ea5fd2071664e2a4"
+    # @supplier: "Open-Xchange"
   openxchangeGuardUI:
     repository: "appsuite-public-sector/guard-ui"
     tag: "4.0.6@sha256:7bb8fdf944228dd78a5c33bbd8d0019d5a9e4ce1c35bda674166f2febc5d9a02"
+    # @supplier: "Open-Xchange"
   openxchangeNextcloudIntegrationUI:
     repository: "appsuite-public-sector/nextcloud-integration-ui"
-    tag: "1.0.3@sha256:193fd07a8b83164d175cd55f7e28fb7ec6d81f1037945035ca709825725c038e"
+    tag: "1.0.5@sha256:cad4ecba431f84b8627d2e541cfea773d5ef54b65d847fa8f7e3fd0d63156497"
+    # @supplier: "Open-Xchange"
   openxchangePublicSectorUI:
     repository: "appsuite-public-sector/public-sector-ui"
     tag: "2.0.1@sha256:8df90f6dfb59008567d8ded0dbd17b8f92f409c78ba2cf4ab2a39e1b23e34d3b"
+    # @supplier: "Open-Xchange"
+  openxchangeGotenberg:
+    repository: "appsuite-public-sector/3rdparty/gotenberg"
+    tag: "7.8.2@sha256:34af7b6d21c02b8183785177f5f3f1731633d72ec69e1f2ecdb8b43747887f62"
+    # @supplier: "Open-Xchange"
   oxConnector:
     repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
     tag:
       "branch-jconde-listener-entrypoint-chaining\
       @sha256:54748d49e37d52529d4a857ff834d1217bd2cb8c89c7eed25c0873159ed6853c"
+    # @supplier: "Univention"
   postfix:
     repository: "souvap/tooling/images/postfix"
     tag: "1.0.0@sha256:69e0c53ade77ffb89673672f5c8183ec2edfc81d4e990aca3ec594f33c55a7ac"
+    # @supplier: "openDesk DevSecOps"
   postgresql:
     repository: "postgres"
     tag: "15.4-alpine3.18@sha256:f36c528a2dc8747ea40b4cb8578da69fa75c5063fd6a71dcea3e3b2a6404ff7b"
+    # @supplier: "openDesk DevSecOps"
   prosody:
     repository: "jitsi/prosody"
     tag: "stable-8922@sha256:243547f24ae7d686d1f0c18ee230cf93119a66f095dda282bacbf45d4bb69f77"
+    # @supplier: "Nordeck"
   redis:
     repository: "bitnami/redis"
     tag: "7.2.1-debian-11-r5@sha256:e664fa63dfe88cd099180c32f2c9a109a958f053b75d195beb48b06ffd8a0b5b"
+    # @supplier: "openDesk DevSecOps"
   synapse:
     repository: "matrixdotorg/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
+    # @supplier: "Element"
   synapseWeb:
     repository: "rapidfort/haproxy-official"
     tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
+    # @supplier: "Element"
   univentionCorporateServer:
     repository: "souvap/tooling/images/univention-corporate-server-swp/ucs"
     tag: "20230829T094822@sha256:6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
+    # @supplier: "Univention"
   umsConfigHtpasswd:
     repository: "souvap/tooling/images/univention/config-htpasswd"
     tag: "latest@sha256:24c5e218baa62b169e7222d8ee4d3951ddc8622cd359def6b660bb23a1052f9e"
+    # @supplier: "Univention"
   umsDataLoader:
     repository: "souvap/tooling/images/univention/data-loader"
     tag: "latest@sha256:857837c1810f82362d441544dc32bd2c1d6fe358bbb5ae0e2c60b7f8f4092190"
+    # @supplier: "Univention"
   umsLdapNotifier:
     repository: "souvap/tooling/images/univention/ldap-notifier"
     tag: "latest@sha256:6eccf86fe78926247ec9b59d7ba83c53271bc3ca7d0195863c0489e22c836002"
+    # @supplier: "Univention"
   umsLdapServer:
     repository: "souvap/tooling/images/univention/ldap-server"
     tag: "latest@sha256:4a7c44b37c727cdc03e4043c88e3dbf6b1f119772c5c1904eaed3298bdd49a3d"
+    # @supplier: "Univention"
   umsNotificationsApi:
     repository: "souvap/tooling/images/univention/notifications-api"
     tag: "latest@sha256:87a047c2d0669fcbb3501ef94192812e17e09aecabc1edd2e4b92afbb7ea4b20"
+    # @supplier: "Univention"
   umsPortalListener:
     repository: "souvap/tooling/images/univention/portal-listener"
     tag: "latest@sha256:bcf48d108bc2f1afd745659a1d4f11f1dd0d8ada034899aa401dfea32a29c87a"
+    # @supplier: "Univention"
   umsPortalFrontend:
     repository: "souvap/tooling/images/univention/portal-frontend"
     tag: "latest@sha256:a1b11db009e992d91cfef2bc60a5022cd4498c38908194020c881ef6dd325bae"
+    # @supplier: "Univention"
   umsPortalServer:
     repository: "souvap/tooling/images/univention/portal-server"
     tag: "latest@sha256:eb0b032c4cf4b207f78b80c69f3e593e01e577779d877e16908902f19b4fc2ee"
+    # @supplier: "Univention"
   umsWaitForDependency:
     repository: "souvap/tooling/images/univention/wait-for-dependency"
     tag: "latest@sha256:5d8d5e9ed55af2d12fef25856e5e61c7d13081458e4b14e6a01b10488b8067d3"
+    # @supplier: "Univention"
   umsStoreDav:
     repository: "souvap/tooling/images/univention/store-dav"
     tag: "latest@sha256:d65f705e46a497ba58e7373f19973835f731796baeace16a32d6331469bf0068"
+    # @supplier: "Univention"
   umsUdmRestApi:
     repository: "souvap/tooling/images/univention/udm-rest-api"
     tag: "latest@sha256:dce4322646749692c5d4692ccd7ff55df080a4af3485585a50c82871715e0cae"
+    # @supplier: "Univention"
   umsUmcGateway:
     repository: "souvap/tooling/images/univention/umc-gateway"
     tag: "latest@sha256:18172ee4317a9259291f251c0cc1d2be05e003558cbd18d6dc062098a127cc8d"
+    # @supplier: "Univention"
   umsUmcServer:
     repository: "souvap/tooling/images/univention/umc-server"
     tag: "latest@sha256:6cbb1708109c5a0c13f3ee433989094d04cecfb8b32975e723d0f5a2e526f8db"
+    # @supplier: "Univention"
   wellKnown:
     repository: "library/nginx"
     tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"
+    # @supplier: "Element"
   xwiki:
     repository: "xwikisas/swp/xwiki"
     tag: "0.10-mariadb-tomcat@sha256:02f0ff6407ccdd8dab17814202e28991fe0aa8d44fa106ba171cff5249eaf58f"
+    # @supplier: "XWiki"
 ...
