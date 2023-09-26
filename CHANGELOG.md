@@ -1,3 +1,11 @@
+## [0.4.7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.6...v0.4.7) (2023-09-26)
+
+
+### Bug Fixes
+
+* **helmfile:** Add timeout for database services ([98ec02f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/98ec02f230f1691eb8c17d8d3552fceda329bf7c))
+* **openproject:** Image digest ([b340373](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/b340373133ad973cfd6a3632adc9a74a23419cc7))
+
 ## [0.4.6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.5...v0.4.6) (2023-09-26)
 
 
