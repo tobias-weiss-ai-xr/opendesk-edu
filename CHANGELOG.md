@@ -1,3 +1,10 @@
+## [0.4.5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.4...v0.4.5) (2023-09-26)
+
+
+### Bug Fixes
+
+* **helmfile:** Streamline timeouts ([2703615](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/2703615dffb2ba5c70704a4f08bb0485629218f3))
+
 ## [0.4.4](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.3...v0.4.4) (2023-09-25)
 
 
