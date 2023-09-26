@@ -1,3 +1,10 @@
+## [0.4.8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.7...v0.4.8) (2023-09-26)
+
+
+### Bug Fixes
+
+* **openproject:** Digest rollback ([9acce08](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/9acce081397c06426820b61f39c9aa0dcc1234a5))
+
 ## [0.4.7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.6...v0.4.7) (2023-09-26)
 
 
