@@ -88,7 +88,7 @@ images:
     # @supplier: "Nextcloud Community"
   openproject:
     repository: "souvap/tooling/images/openproject/open_desk"
-    tag: "dev@sha256:d2adb649aab0abdbff853d46a3b3038e096a67db46bb10208b2c5536d0dfa523"
+    tag: "dev@sha256:4d8371dd2577847c9288d296e865abccb5891464a3a435f9a6098c32e60c9a52"
     # @supplier: "OpenProject"
   openxchangeBootstrap:
     repository: "alpine/k8s"
