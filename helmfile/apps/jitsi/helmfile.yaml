@@ -14,6 +14,7 @@ releases:
     values:
       - "values-jitsi.gotmpl"
     condition: "jitsi.enabled"
+    timeout: 900
 
 commonLabels:
   deploy-stage: "component-1"
