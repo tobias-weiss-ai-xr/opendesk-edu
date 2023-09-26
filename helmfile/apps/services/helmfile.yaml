@@ -56,6 +56,7 @@ releases:
       - "values-postgresql.yaml"
       - "values-postgresql.gotmpl"
     condition: "postgresql.enabled"
+    timeout: 900
   - name: "mariadb"
     chart: "mariadb-repo/mariadb"
     version: "2.1.0"
@@ -63,6 +64,7 @@ releases:
       - "values-mariadb.yaml"
       - "values-mariadb.gotmpl"
     condition: "mariadb.enabled"
+    timeout: 900
   - name: "postfix"
     chart: "postfix-repo/postfix"
     version: "2.0.3"
