@@ -71,7 +71,7 @@ repositories:
 releases:
   - name: "opendesk-certificates"
     chart: "opendesk-certificates-repo/opendesk-certificates"
-    version: "2.0.0"
+    version: "2.1.0"
     values:
       - "values-certificates.gotmpl"
     condition: "certificates.enabled"
