@@ -1,3 +1,10 @@
+## [0.4.6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.5...v0.4.6) (2023-09-26)
+
+
+### Bug Fixes
+
+* **openproject:** Use renamed registry open_desk ([a37faf3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a37faf3b5769aea9944ffa7626096c16296dcc85))
+
 ## [0.4.5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.4...v0.4.5) (2023-09-26)
 
 
