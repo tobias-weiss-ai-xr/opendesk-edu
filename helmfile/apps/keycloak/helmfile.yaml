@@ -2,15 +2,25 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # VMWare Bitnami
+  # Source: https://github.com/bitnami/charts/
   - name: "bitnami-repo"
     oci: true
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "registry-1.docker.io/bitnamicharts" }}
+    # Bitnami charts are not signed, see https://github.com/bitnami/charts/issues/14491
+    verify: false
+  # openDesk Keycloak Theme
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-keycloak-theme
   - name: "keycloak-theme-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/96/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/keycloak-theme" }}
+    verify: true
+    keyring: "../../../pubkey.gpg"
+  # openDesk Keycloak Extensions
   - name: "keycloak-extensions-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
@@ -18,8 +28,8 @@ repositories:
 
 releases:
   - name: "keycloak-theme"
-    chart: "keycloak-theme-repo/sovereign-workplace-theme"
-    version: "1.1.0"
+    chart: "keycloak-theme-repo/opendesk-keycloak-theme"
+    version: "2.0.0"
     values:
       - "values-theme.gotmpl"
     condition: "keycloak.enabled"
