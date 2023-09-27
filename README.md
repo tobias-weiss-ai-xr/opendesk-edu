@@ -374,6 +374,34 @@ This list gives you an overview of default security settings and if they comply 
 Helm Charts which are released via openDesk CI/CD process are always signed. The public GPG keys are present in
 `pubkey.gpg` file and are validated during helmfile installation.
 
+| Repository                           | OCI |     Verifiable     |
+|--------------------------------------|:---:|:------------------:|
+| bitnami-repo                         | yes |        :x:         |
+| clamav-repo                          | yes | :white_check_mark: |
+| collabora-online-repo                | no  |        :x:         |
+| intercom-service-repo                | yes | :white_check_mark: |
+| istio-resources-repo                 | yes | :white_check_mark: |
+| jitsi-repo                           | yes | :white_check_mark: |
+| keycloak-extensions-repo             | no  |        :x:         |
+| keycloak-theme-repo                  | yes | :white_check_mark: |
+| mariadb-repo                         | yes | :white_check_mark: |
+| nextcloud-repo                       | no  |        :x:         |
+| opendesk-certificates-repo           | yes | :white_check_mark: |
+| opendesk-dovecot-repo                | yes | :white_check_mark: |
+| opendesk-element-repo                | yes | :white_check_mark: |
+| opendesk-keycloak-bootstrap-repo     | yes | :white_check_mark: |
+| opendesk-nextcloud-bootstrap-repo    | yes | :white_check_mark: |
+| opendesk-open-xchange-bootstrap-repo | yes | :white_check_mark: |
+| openproject-repo                     | no  |        :x:         |
+| openxchange-repo                     | yes |        :x:         |
+| ox-connector-repo                    | no  |        :x:         |
+| postfix-repo                         | yes | :white_check_mark: |
+| postgresql-repo                      | yes | :white_check_mark: |
+| univention-corporate-container-repo  | yes | :white_check_mark: |
+| ums-repo                             | no  |        :x:         |
+| xwiki-repo                           | no  |        :x:         |
+
+
 # Component integration
 
 ## Functional use cases
