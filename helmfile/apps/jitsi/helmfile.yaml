@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # openDesk Jitsi
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-jitsi
   - name: "jitsi-repo"
     oci: true
     url: >-
@@ -9,6 +11,7 @@ repositories:
          "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-jitsi" }}
     verify: true
     keyring: "../../../pubkey.gpg"
+
 releases:
   - name: "jitsi"
     chart: "jitsi-repo/sovereign-workplace-jitsi"
