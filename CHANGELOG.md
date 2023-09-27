@@ -1,3 +1,10 @@
+## [0.4.9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.8...v0.4.9) (2023-09-27)
+
+
+### Bug Fixes
+
+* **nextcloud:** Bump Helm chart to add app "groupfolders" ([62b767e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/62b767ef38c8eae2874b20a9aa51e85d2a3fe5a3))
+
 ## [0.4.8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.7...v0.4.8) (2023-09-26)
 
 
