@@ -121,7 +121,7 @@ releases:
     condition: "clamavSimple.enabled"
   - name: "opendesk-gateway"
     chart: "istio-resources-repo/istio-gateway"
-    version: "1.2.0"
+    version: "2.0.0"
     values:
       - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
