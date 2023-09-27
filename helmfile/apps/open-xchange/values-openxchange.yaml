@@ -4,7 +4,7 @@
 appsuite:
   istio:
     ingressGateway:
-      name: "sovereign-workplace-gateway-istio-gateway"
+      name: "opendesk-gateway-istio-gateway"
 
   core-mw:
     enabled: true
