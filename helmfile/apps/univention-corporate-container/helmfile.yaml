@@ -2,10 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # openDesk Univention Corporate Server (as eval Container)
   - name: "univention-corporate-container-repo"
+    # yamllint disable rule:line-length
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/132/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
+         "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/univention-corporate-container" }}
+    # yamllint enable rule:line-length
+    verify: true
+    keyring: "../../../pubkey.gpg"
 
 releases:
   - name: "univention-corporate-container"
