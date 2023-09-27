@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # OpenProject
+  # Source: https://github.com/opf/helm-charts
   - name: "openproject-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
