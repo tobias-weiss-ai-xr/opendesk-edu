@@ -15,8 +15,7 @@ repositories:
   - name: "openxchange-repo"
     oci: true
     url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
-         default "registry.open-xchange.com" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default "registry.open-xchange.com" }}
   # openDesk Open-Xchange Bootstrap
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-open-xchange-bootstrap
   - name: "opendesk-open-xchange-bootstrap-repo"
