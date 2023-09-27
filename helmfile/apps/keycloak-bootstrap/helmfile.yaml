@@ -2,14 +2,21 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "sovereign-workplace-keycloak-bootstrap-repo"
+  # openDesk Keycloak Bootstrap
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-keycloak-bootstrap
+  - name: "opendesk-keycloak-bootstrap-repo"
+    oci: true
+    # yamllint disable rule:line-length
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/138/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-keycloak-bootstrap" }}
+    # yamllint enable rule:line-length
+    verify: true
+    keyring: "../../../pubkey.gpg"
 
 releases:
-  - name: "sovereign-workplace-keycloak-bootstrap"
-    chart: "sovereign-workplace-keycloak-bootstrap-repo/sovereign-workplace-keycloak-bootstrap"
+  - name: "opendesk-keycloak-bootstrap"
+    chart: "opendesk-keycloak-bootstrap-repo/sovereign-workplace-keycloak-bootstrap"
     version: "1.1.11"
     values:
       - "values-bootstrap.gotmpl"
