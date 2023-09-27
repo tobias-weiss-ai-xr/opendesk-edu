@@ -43,7 +43,6 @@ configuration:
         {{- end }}
     
     guestModule:
-      enabled: true
       image:
         imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
         registry: "{{ .Values.global.imageRegistry }}"
