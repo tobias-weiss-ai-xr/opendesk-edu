@@ -2,6 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # openDesk Keycloak Bootstrap
+  # Source:
+  #  https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/sovereign-workplace-nextcloud-bootstrap
   - name: "opendesk-nextcloud-bootstrap-repo"
     oci: true
     # yamllint disable rule:line-length
@@ -11,6 +14,8 @@ repositories:
     # yamllint enable rule:line-length
     verify: true
     keyring: "../../../pubkey.gpg"
+  # Nextcloud
+  # Source: https://github.com/nextcloud/helm/
   - name: "nextcloud-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
