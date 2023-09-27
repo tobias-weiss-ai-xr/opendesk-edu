@@ -2,23 +2,36 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  - name: "dovecot-repo"
+  # openDesk Dovecot
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-dovecot
+  - name: "opendesk-dovecot-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/80/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
+         "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/dovecot" }}
+    verify: true
+    keyring: "../../../pubkey.gpg"
+  # Open-Xchange
   - name: "openxchange-repo"
     oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
          default "registry.open-xchange.com" }}
-  - name: "sovereign-workplace-open-xchange-bootstrap-repo"
+  # openDesk Open-Xchange Bootstrap
+  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-open-xchange-bootstrap
+  - name: "opendesk-open-xchange-bootstrap-repo"
+    oci: true
+    # yamllint disable rule:line-length
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/139/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
+         "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-open-xchange-bootstrap" }}
+    # yamllint enable rule:line-length
+    verify: true
+    keyring: "../../../pubkey.gpg"
 
 releases:
   - name: "dovecot"
-    chart: "dovecot-repo/dovecot"
+    chart: "opendesk-dovecot-repo/dovecot"
     version: "1.3.1"
     values:
       - "values-dovecot.yaml"
@@ -37,8 +50,8 @@ releases:
     condition: "oxAppsuite.enabled"
     timeout: 900
 
-  - name: "sovereign-workplace-open-xchange-bootstrap"
-    chart: "sovereign-workplace-open-xchange-bootstrap-repo/sovereign-workplace-open-xchange-bootstrap"
+  - name: "opendesk-open-xchange-bootstrap"
+    chart: "opendesk-open-xchange-bootstrap-repo/sovereign-workplace-open-xchange-bootstrap"
     version: "1.3.1"
     values:
       - "values-openxchange-bootstrap.gotmpl"
