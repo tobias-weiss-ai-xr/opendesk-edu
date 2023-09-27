@@ -10,7 +10,7 @@ repositories:
 releases:
   - name: "opendesk-element"
     chart: "opendesk-element-repo/opendesk-element"
-    version: "2.1.0"
+    version: "2.2.0"
     values:
       - "values-element.yaml"
       - "values-element.gotmpl"
@@ -18,7 +18,7 @@ releases:
 
   - name: "opendesk-well-known"
     chart: "opendesk-element-repo/opendesk-well-known"
-    version: "2.1.0"
+    version: "2.2.0"
     values:
       - "values-well-known.yaml"
       - "values-well-known.gotmpl"
@@ -26,7 +26,7 @@ releases:
 
   - name: "opendesk-synapse-web"
     chart: "opendesk-element-repo/opendesk-synapse-web"
-    version: "2.1.0"
+    version: "2.2.0"
     values:
       - "values-synapse-web.yaml"
       - "values-synapse-web.gotmpl"
@@ -34,7 +34,7 @@ releases:
 
   - name: "opendesk-synapse"
     chart: "opendesk-element-repo/opendesk-synapse"
-    version: "2.1.0"
+    version: "2.2.0"
     values:
       - "values-synapse.yaml"
       - "values-synapse.gotmpl"
