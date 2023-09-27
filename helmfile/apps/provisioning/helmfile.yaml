@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # OX Connector
   - name: "ox-connector-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
