@@ -4,6 +4,7 @@
 repositories:
   # openDesk Univention Corporate Server (as eval Container)
   - name: "univention-corporate-container-repo"
+    oci: true
     # yamllint disable rule:line-length
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
