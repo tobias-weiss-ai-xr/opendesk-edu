@@ -1,3 +1,16 @@
+# [0.5.0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.9...v0.5.0) (2023-09-27)
+
+
+### Bug Fixes
+
+* **element:** Move the static configuration into the values.yaml ([f22619b](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/f22619bd8ef11cb43147ef19dcff2c02d9fe0503))
+* **element:** Specify resources for the guest module init container ([275798c](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/275798c1d6aa47ef33fbb0da3bb03a86d3e4b0ee))
+
+
+### Features
+
+* **element:** Activate the guest module ([5ad25ac](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/5ad25acafd54d19dd2ed330b19f7860aff5d49f4))
+
 ## [0.4.9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.8...v0.4.9) (2023-09-27)
 
 
