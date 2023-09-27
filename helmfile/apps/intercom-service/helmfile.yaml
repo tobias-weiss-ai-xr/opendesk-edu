@@ -2,10 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # Intercom Service
+  # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/intercom-service
   - name: "intercom-service-repo"
+    oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/66/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/intercom-service" }}
+    verify: true
+    keyring: "../../../pubkey.gpg"
 
 releases:
   - name: "intercom-service"
