@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # Collabora Online
+  # Source: https://github.com/CollaboraOnline/online
   - name: "collabora-online-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
