@@ -2,10 +2,17 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # openDesk Element
+  # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/sovereign-workplace-element
   - name: "opendesk-element-repo"
+    oci: true
+    # yamllint disable rule:line-length
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/148/packages/helm/stable" }}
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element" }}
+    # yamllint enable rule:line-length
+    verify: true
+    keyring: "../../../pubkey.gpg"
 
 releases:
   - name: "opendesk-element"
