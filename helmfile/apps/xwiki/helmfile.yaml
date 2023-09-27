@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
+  # XWiki
+  # Source: https://github.com/xwiki-contrib/xwiki-helm
   - name: "xwiki-repo"
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
