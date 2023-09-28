@@ -92,7 +92,7 @@ releases:
     timeout: 900
   - name: "mariadb"
     chart: "mariadb-repo/mariadb"
-    version: "2.1.0"
+    version: "2.0.2"
     values:
       - "values-mariadb.yaml"
       - "values-mariadb.gotmpl"

@@ -72,7 +72,8 @@ images:
     # @supplier: "Univention"
   mariadb:
     repository: "mariadb"
-    tag: "11.1.2-jammy@sha256:b6440c4f4e1471bdcee202e4c4e21c1f93af87421f6d33028363dd224e54f481"
+    # For upgrades at least confirm compatibility of target version with OX (regarding AS Guard)
+    tag: "10.5@sha256:aa1ccc18000c32d1f39ac0b055117b27bffd93e622ec961d682de40fe2a1a95f"
     # @supplier: "openDesk DevSecOps"
   memcached:
     repository: "bitnami/memcached"
