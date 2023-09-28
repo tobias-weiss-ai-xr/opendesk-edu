@@ -183,8 +183,16 @@ env-cleanup:
           $ENV_STOP_BEFORE != "no"
       when: "always"
   script:
-    - "helmfile destroy --namespace ${NAMESPACE}"
-    - "kubectl delete pvc --all --namespace ${NAMESPACE}"
+    - |
+      if [ "${OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED}" = "yes" ]; then
+        for OPENDESK_RELEASE in $(helm ls -n ${NAMESPACE} -aq); do
+          helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE};
+        done
+        kubectl delete pvc --all --namespace ${NAMESPACE};
+        kubectl delete jobs --all --namespace ${NAMESPACE};
+      else
+        helmfile destroy --namespace ${NAMESPACE};
+      fi
   stage: "env-cleanup"
 
 env-start:

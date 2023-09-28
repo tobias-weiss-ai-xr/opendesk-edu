@@ -156,6 +156,12 @@ and wait a little. After the deployment is finished some bootstrapping is
 executed which might take some more minutes before you can log in your new
 instance.
 
+Deployments can be removed with:
+
+```shell
+helmfile destroy -n <NAMESPACE>
+```
+
 ## Offline deployment
 
 Before executing a [local deployment](#local-deployment), you can set following
