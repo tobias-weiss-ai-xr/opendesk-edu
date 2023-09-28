@@ -11,7 +11,7 @@ repositories:
          "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/univention-corporate-container" }}
     # yamllint enable rule:line-length
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
   - name: "univention-corporate-container"

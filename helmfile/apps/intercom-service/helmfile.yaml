@@ -10,7 +10,7 @@ repositories:
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/intercom-service" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
   - name: "intercom-service"

@@ -13,7 +13,7 @@ repositories:
          "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap" }}
     # yamllint enable rule:line-length
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # Nextcloud
   # Source: https://github.com/nextcloud/helm/
   - name: "nextcloud-repo"

@@ -19,7 +19,7 @@ repositories:
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/keycloak-theme" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk Keycloak Extensions
   - name: "keycloak-extensions-repo"
     url: >-

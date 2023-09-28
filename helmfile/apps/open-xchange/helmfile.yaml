@@ -10,7 +10,7 @@ repositories:
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
          "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/dovecot" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # Open-Xchange
   - name: "openxchange-repo"
     oci: true
@@ -26,7 +26,7 @@ repositories:
          "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-open-xchange-bootstrap" }}
     # yamllint enable rule:line-length
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
   - name: "dovecot"
