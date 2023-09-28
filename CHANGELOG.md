@@ -1,3 +1,27 @@
+## [0.5.1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.0...v0.5.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* **docs:** Add 'Helm Chart Trust Chain' section ([b6b4972](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/b6b4972a5dd426bcc8fa00137d7e7b60056376c8))
+* **docs:** Highlight that Helmfile >= 0.157.0 is required ([d86f516](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/d86f516747323d117f620658c4368408926c507a))
+* **element:** Use OCI registry and verify chart signatures ([a41b9a6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a41b9a699c79bf90163bbb3c233c805b8d0a999e))
+* **helmfile:** Add cleanup flag for job resources ([0f01b94](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/0f01b94aa19b40b4774ba11d9886fe6f12090e73))
+* **helmfile:** Create directory for gpg pubkeys ([4c5731e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/4c5731e6bb057cb272f660b4df0369b67709c203))
+* **intercom-service:** Use OCI registry and verify chart signatures ([74b3d41](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/74b3d41381474efd2fbc5a9f3a0f1c0713811106))
+* **jitsi:** Verify chart signatures ([1dd6582](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/1dd6582ec7d742250ba08f69eba9a4679984b1ae))
+* **keycloak-bootstrap:** Use OCI registry and verify chart signatures ([ca5d5f8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/ca5d5f82800ea6d7ecfa38eb2b5d8b85e709bb9f))
+* **keycloak:** Use OCI registry and verify chart signatures ([095059c](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/095059c7e53bbe8a874773f574cc6794ef8af6e4))
+* **nextcloud:** Use OCI registry and verify chart signatures ([41dfdc0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/41dfdc0c8f83e3d79fa5a763ac449f6edfc76676))
+* **open-xchange:** Use OCI registry and verify chart signatures ([2d5d370](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/2d5d3708f7f45600961c22ce11e750561de1fd27))
+* **open-xchange:** Use renamed istio gateway ([65d2642](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/65d2642d34c1c21a00a29278f7e1143f7fabb2aa))
+* **openproject:** Use OCI registry and verify chart signatures ([5343840](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/5343840bed01992b3132eace362f91588c705a98))
+* **services:** Add wildcard certifcate request support ([15ad8ca](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/15ad8ca7ab34b079252f7b69219ede81ad43aa1c))
+* **services:** Bump opendesk-certificates to 2.1.0 ([4372f06](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/4372f063e0a27d5156da963d44d3ed4e72490fc4))
+* **services:** Only create istio gateway with webmail domain ([6a39011](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/6a390112dab11afaca06118a0ca7a18afe633a30))
+* **services:** Use OCI registry for all services and add gpg verify mechanism ([892920b](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/892920b0487b41a35b5a96596c61101827e8dd6d))
+* **univention-corporate-container:** Use OCI registry and verify chart signatures ([424317e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/424317ed585f7bd5036259d7e3d77d081d2aec1b))
+
 # [0.5.0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.4.9...v0.5.0) (2023-09-27)
 
 
