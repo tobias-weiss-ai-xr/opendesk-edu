@@ -1,3 +1,10 @@
+## [0.5.3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.2...v0.5.3) (2023-09-28)
+
+
+### Bug Fixes
+
+* **open-xchange:** Rollback MariaDB version to fix OX Guard initialization ([e33acd3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/e33acd33e79740144e8fe318fe34dc705834ddf3))
+
 ## [0.5.2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.1...v0.5.2) (2023-09-28)
 
 
