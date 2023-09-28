@@ -1,3 +1,10 @@
+## [0.5.2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.1...v0.5.2) (2023-09-28)
+
+
+### Bug Fixes
+
+* **ci:** Add Gitlab-CI sledgehammer deployment removal ([6fd655a](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/6fd655a0b1afd40303ac11130692202146bab215))
+
 ## [0.5.1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.0...v0.5.1) (2023-09-28)
 
 
