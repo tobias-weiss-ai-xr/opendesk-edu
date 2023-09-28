@@ -12,7 +12,7 @@ repositories:
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-certificates" }}
     # yamllint enable rule:line-length
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk PostgreSQL
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postgresql
   - name: "postgresql-repo"
@@ -21,7 +21,7 @@ repositories:
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postgresql" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk MariaDB
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-mariadb
   - name: "mariadb-repo"
@@ -30,7 +30,7 @@ repositories:
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/mariadb" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk Postfix
   # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postfix
   - name: "postfix-repo"
@@ -39,7 +39,7 @@ repositories:
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postfix" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk Istio Resources
   # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-istio-resources
   - name: "istio-resources-repo"
@@ -48,7 +48,7 @@ repositories:
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/istio-ressources" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk ClamAV
   # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-clamav
   - name: "clamav-repo"
@@ -57,7 +57,7 @@ repositories:
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/clamav" }}
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
   - name: "bitnami-repo"

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 global:
   domain: "{{ .Values.istio.domain }}"
   hosts:
-    openxchange: "webmail"
+    openxchange: "{{ .Values.global.hosts.openxchange }}"
 
 tls:
   secretName: "{{ .Values.istio.domain }}-tls"

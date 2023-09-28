@@ -12,7 +12,7 @@ repositories:
          default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-keycloak-bootstrap" }}
     # yamllint enable rule:line-length
     verify: true
-    keyring: "../../../pubkey.gpg"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
   - name: "opendesk-keycloak-bootstrap"
