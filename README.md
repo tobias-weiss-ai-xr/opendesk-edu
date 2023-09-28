@@ -66,11 +66,12 @@ up your own instance for development purposes. Please see the project
 
 These are the requirements of the Sovereign Workplace deployment:
 
-- Vanilla K8s cluster
+- K8s cluster >= 1.24, [CNCF Certified Kubernetes Distro](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
 - Ingress controller (supported are nginx-ingress, ingress-nginx, HAProxy)
-- [Helm](https://helm.sh/), [HelmFile](https://helmfile.readthedocs.io/en/latest/) and
-[HelmDiff](https://github.com/databus23/helm-diff)
+- [Helm](https://helm.sh/) >= v3.9.0
+- [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v0.157.0**
+- [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
 - [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8, we are talking to Open-Xchange and will try to get rid of this dependency.
