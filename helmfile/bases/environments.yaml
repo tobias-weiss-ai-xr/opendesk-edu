@@ -11,9 +11,17 @@ environments:
       - "../../environments/default/*.gotmpl"
       - "../../environments/default/*.yaml"
       - "../../environments/dev/values.yaml"
+      - "../../environments/dev/values.gotmpl"
+  test:
+    values:
+      - "../../environments/default/*.gotmpl"
+      - "../../environments/default/*.yaml"
+      - "../../environments/test/values.yaml"
+      - "../../environments/test/values.gotmpl"
   prod:
     values:
       - "../../environments/default/*.gotmpl"
       - "../../environments/default/*.yaml"
       - "../../environments/prod/values.yaml"
+      - "../../environments/prod/values.gotmpl"
 ...
