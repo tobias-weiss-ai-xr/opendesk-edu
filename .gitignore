@@ -5,4 +5,8 @@
 
 # Ignore changes to sample environments
 helmfile/environments/dev/values.yaml
+helmfile/environments/dev/values.gotmpl
+helmfile/environments/test/values.yaml
+helmfile/environments/test/values.gotmpl
 helmfile/environments/prod/values.yaml
+helmfile/environments/prod/values.gotmpl

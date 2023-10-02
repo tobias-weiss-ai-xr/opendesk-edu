@@ -29,6 +29,7 @@ missingFileHandler: "Error"
 # - Installing a single release from root via helmfile apply -f helmfile/apps/<app>/helmfile.yaml
 # - Installing a single release from app directory via helmfile apply
 # Issue: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/issues/2
+
 environments:
   default:
     values:
@@ -39,9 +40,17 @@ environments:
       - "helmfile/environments/default/*.gotmpl"
       - "helmfile/environments/default/*.yaml"
       - "helmfile/environments/dev/values.yaml"
+      - "helmfile/environments/dev/values.gotmpl"
+  test:
+    values:
+      - "helmfile/environments/default/*.gotmpl"
+      - "helmfile/environments/default/*.yaml"
+      - "helmfile/environments/test/values.yaml"
+      - "helmfile/environments/test/values.gotmpl"
   prod:
     values:
       - "helmfile/environments/default/*.gotmpl"
       - "helmfile/environments/default/*.yaml"
       - "helmfile/environments/prod/values.yaml"
+      - "helmfile/environments/prod/values.gotmpl"
 ...
