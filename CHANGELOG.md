@@ -1,3 +1,10 @@
+## [0.5.4](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.3...v0.5.4) (2023-10-02)
+
+
+### Bug Fixes
+
+* **helmfile:** Add third environment (test) ([7dbcbfe](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/7dbcbfe7237b365cf53f4c850b149e8b95149901))
+
 ## [0.5.3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.2...v0.5.3) (2023-09-28)
 
 
