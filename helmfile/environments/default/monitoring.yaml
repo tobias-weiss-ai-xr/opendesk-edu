@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+prometheus:
+  monitor:
+    enabled: false
+    labels:
+      release: "kube-prometheus-stack"
+
+  rules:
+    enabled: false
+    labels:
+      release: "kube-prometheus-stack"
+
+
+grafana:
+  dashboards:
+    enabled: false
+    labels:
+      grafana_dashboard: "1"
+    annotations:
+...
