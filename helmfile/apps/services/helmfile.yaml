@@ -77,7 +77,7 @@ releases:
     condition: "certificates.enabled"
   - name: "redis"
     chart: "bitnami-repo/redis"
-    version: "18.0.4"
+    version: "18.1.2"
     values:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
