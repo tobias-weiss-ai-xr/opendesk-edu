@@ -38,4 +38,23 @@ replicaCount: {{ .Values.replicas.collabora }}
 
 resources:
   {{ .Values.resources.collabora | toYaml | nindent 2 }}
+
+prometheus:
+  servicemonitor:
+    enabled: {{ .Values.prometheus.monitor.enabled }}
+    labels:
+      {{- toYaml .Values.prometheus.monitor.labels | nindent 6 }}
+  rules:
+    enabled: {{ .Values.prometheus.rules.enabled }}
+    additionalLabels:
+      {{- toYaml .Values.prometheus.rules.labels | nindent 6 }}
+
+grafana:
+  dashboards:
+    enabled: {{ .Values.grafana.dashboards.enabled }}
+    labels:
+      {{- toYaml .Values.grafana.dashboards.labels | nindent 6 }}
+    annotations:
+      {{- toYaml .Values.grafana.dashboards.annotations | nindent 6 }}
+
 ...
