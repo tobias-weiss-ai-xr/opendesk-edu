@@ -7,10 +7,10 @@ repositories:
   - name: "bitnami-repo"
     oci: true
     url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "registry-1.docker.io/bitnamicharts" }}
-    # Bitnami charts are not signed, see https://github.com/bitnami/charts/issues/14491
-    verify: false
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/bitnami-charts" }}
+    verify: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk Keycloak Theme
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-keycloak-theme
   - name: "keycloak-theme-repo"
@@ -35,7 +35,7 @@ releases:
     condition: "keycloak.enabled"
   - name: "keycloak"
     chart: "bitnami-repo/keycloak"
-    version: "12.2.0"
+    version: "12.1.5"
     values:
       - "values-keycloak.gotmpl"
       - "values-keycloak.yaml"

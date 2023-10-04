@@ -383,7 +383,7 @@ Helm Charts which are released via openDesk CI/CD process are always signed. The
 
 | Repository                           | OCI |     Verifiable     |
 |--------------------------------------|:---:|:------------------:|
-| bitnami-repo                         | yes |        :x:         |
+| bitnami-repo (oD Build)              | yes | :white_check_mark: |
 | clamav-repo                          | yes | :white_check_mark: |
 | collabora-online-repo                | no  |        :x:         |
 | intercom-service-repo                | yes | :white_check_mark: |

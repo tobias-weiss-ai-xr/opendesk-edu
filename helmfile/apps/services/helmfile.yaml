@@ -64,9 +64,9 @@ repositories:
     oci: true
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "registry-1.docker.io/bitnamicharts" }}
-    # Bitnami charts are not signed, see https://github.com/bitnami/charts/issues/14491
-    verify: false
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/bitnami-charts" }}
+    verify: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
   - name: "opendesk-certificates"
