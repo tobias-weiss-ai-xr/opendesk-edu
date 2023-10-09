@@ -1,3 +1,10 @@
+## [0.5.5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.4...v0.5.5) (2023-10-09)
+
+
+### Bug Fixes
+
+* **openproject:** Switch image to fix central navigation; set email sender address ([e42feb4](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/e42feb4c260fc24692bc2742c97754230f8e2857))
+
 ## [0.5.4](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.3...v0.5.4) (2023-10-02)
 
 
