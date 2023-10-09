@@ -59,7 +59,7 @@ environment:
   OPENPROJECT_SMTP__PORT: "{{ .Values.smtp.port }}"
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
   OPENPROJECT_SMTP__ADDRESS: "{{ .Values.smtp.host }}"
-  OPENPROJECT_MAIL__FROM="do-not-reply@{{ .Values.global.domain }}"
+  OPENPROJECT_MAIL__FROM: "do-not-reply@{{ .Values.global.domain }}"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
   OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject }}"
 
