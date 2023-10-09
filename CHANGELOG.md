@@ -1,3 +1,11 @@
+## [0.5.6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.5...v0.5.6) (2023-10-09)
+
+
+### Bug Fixes
+
+* **helmfile:** Use signed bitnami charts from openDesk Mirror Builds ([70744d0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/70744d04c66f32d65dc968c8570ed7a397f4efcc))
+* **services:** Bump redis chart to 18.1.2 ([d4c751d](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/d4c751d29f15c718957f6bc388a99347e2923c87))
+
 ## [0.5.5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.4...v0.5.5) (2023-10-09)
 
 
