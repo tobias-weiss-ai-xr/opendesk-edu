@@ -1,3 +1,10 @@
+## [0.5.7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.6...v0.5.7) (2023-10-09)
+
+
+### Bug Fixes
+
+* **openproject:** Mail sender address ([711d29e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/711d29e374d13a3c8b7bcdf3e8440d03e0ef2b7d))
+
 ## [0.5.6](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.5...v0.5.6) (2023-10-09)
 
 
