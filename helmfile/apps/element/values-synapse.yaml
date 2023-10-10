@@ -4,7 +4,7 @@
 configuration:
   homeserver:
     guestModule:
-      enabled: false
+      enabled: true
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
