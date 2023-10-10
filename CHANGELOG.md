@@ -1,3 +1,10 @@
+## [0.5.8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.7...v0.5.8) (2023-10-10)
+
+
+### Bug Fixes
+
+* **helmfile:** Add default port for SMTP in environment ([74f9ec2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/74f9ec28e401f7caeefc4e50ac0a7e95fea41a53))
+
 ## [0.5.7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.6...v0.5.7) (2023-10-09)
 
 
