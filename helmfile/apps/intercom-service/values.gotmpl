@@ -4,6 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
+  imageRegistry: "{{ .Values.global.imageRegistry }}"
   domain: "{{ .Values.global.domain }}"
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
@@ -30,7 +31,6 @@ ics:
 
 image:
   imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  registry: "{{ .Values.global.imageRegistry }}"
   repository: "{{ .Values.images.intercom.repository }}"
   tag: "{{ .Values.images.intercom.tag }}"
 
