@@ -1,3 +1,10 @@
+## [0.5.9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.8...v0.5.9) (2023-10-10)
+
+
+### Bug Fixes
+
+* **element:** Enable the guest module in Synapse ([da1bf35](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/da1bf3581c5790786601948cabcef8a1d1c680ad))
+
 ## [0.5.8](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.7...v0.5.8) (2023-10-10)
 
 
