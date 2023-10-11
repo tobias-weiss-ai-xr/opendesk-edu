@@ -75,6 +75,10 @@ images:
     # For upgrades at least confirm compatibility of target version with OX (regarding AS Guard)
     tag: "10.5@sha256:aa1ccc18000c32d1f39ac0b055117b27bffd93e622ec961d682de40fe2a1a95f"
     # @supplier: "openDesk DevSecOps"
+  matrixNeoBoardWidget:
+    repository: "nordeck/matrix-neoboard-widget"
+    tag: "0.4.0@sha256:c5e72409a0edc1962e9be618fcb83acce19e64c0c645075d8ff0ccde06e93fc7"
+    # @supplier: "Nordeck"
   memcached:
     repository: "bitnami/memcached"
     tag: "1.6.21-debian-11-r107@sha256:247ec29efd6030960047a623aef025021154662edf6b6d6e88c97936f164d99d"

@@ -19,6 +19,7 @@ replicas:
   jitsiKeycloakAdapter: 1
   jvb: 1
   keycloak: 1
+  matrixNeoBoardWidget: 1
   # clamav-distributed
   milter: 1
   nextcloud: 1
