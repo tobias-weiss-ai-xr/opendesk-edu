@@ -14,6 +14,18 @@ repositories:
     verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
+  # openDesk Matrix Widgets
+  # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/opendesk-matrix-widgets
+  - name: "opendesk-matrix-widgets-repo"
+    oci: true
+    # yamllint disable rule:line-length
+    url: >-
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets" }}
+    # yamllint enable rule:line-length
+    verify: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+
 releases:
   - name: "opendesk-element"
     chart: "opendesk-element-repo/opendesk-element"
@@ -45,6 +57,14 @@ releases:
     values:
       - "values-synapse.yaml"
       - "values-synapse.gotmpl"
+    condition: "element.enabled"
+
+  - name: "matrix-neoboard-widget"
+    chart: "opendesk-matrix-widgets-repo/matrix-neoboard-widget"
+    version: "3.0.0"
+    values:
+      - "values-matrix-neoboard-widget.yaml"
+      - "values-matrix-neoboard-widget.gotmpl"
     condition: "element.enabled"
 
 commonLabels:

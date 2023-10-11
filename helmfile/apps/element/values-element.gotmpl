@@ -15,6 +15,31 @@ configuration:
   additionalConfiguration:
     logout_redirect_url: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout?client_id=matrix&post_logout_redirect_uri=https%3A%2F%2F{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
 
+    "net.nordeck.element_web.module.widget_lifecycle":
+      widget_permissions:
+        "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/jitsi.html":
+          identity_approved: true
+        "https://{{ .Values.global.hosts.matrixNeoBoardWidget }}.{{ .Values.global.domain }}/*":
+          preload_approved: true
+          capabilities_approved:
+            - org.matrix.msc2762.send.event:net.nordeck.whiteboard.document.create
+            - org.matrix.msc2762.receive.event:net.nordeck.whiteboard.document.create
+            - org.matrix.msc2762.send.event:net.nordeck.whiteboard.document.chunk
+            - org.matrix.msc2762.receive.event:net.nordeck.whiteboard.document.chunk
+            - org.matrix.msc2762.send.event:net.nordeck.whiteboard.document.snapshot
+            - org.matrix.msc2762.receive.event:net.nordeck.whiteboard.document.snapshot
+            - org.matrix.msc2762.send.state_event:m.room.power_levels#
+            - org.matrix.msc2762.receive.state_event:m.room.power_levels#
+            - org.matrix.msc2762.receive.state_event:m.room.member
+            - org.matrix.msc2762.receive.state_event:m.room.name
+            - org.matrix.msc2762.send.state_event:net.nordeck.whiteboard
+            - org.matrix.msc2762.receive.state_event:net.nordeck.whiteboard
+            - org.matrix.msc2762.send.state_event:net.nordeck.whiteboard.sessions#*
+            - org.matrix.msc2762.receive.state_event:net.nordeck.whiteboard.sessions
+            - org.matrix.msc3819.send.to_device:net.nordeck.whiteboard.connection_signaling
+            - org.matrix.msc3819.receive.to_device:net.nordeck.whiteboard.connection_signaling
+            - town.robin.msc3846.turn_servers
+
 image:
   imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   registry: "{{ .Values.global.imageRegistry }}"
