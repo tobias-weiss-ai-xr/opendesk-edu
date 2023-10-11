@@ -128,6 +128,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "50Mi"
+  matrixNeoDateFixWidget:
+    limits:
+      cpu: 1
+      memory: "250Mi"
+    requests:
+      cpu: 0.1
+      memory: "50Mi"
   memcached:
     limits:
       cpu: 1
