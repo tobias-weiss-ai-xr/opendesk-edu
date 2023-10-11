@@ -24,7 +24,7 @@ memcached:
 
 postgresql:
   auth:
-    password: {{ .Values.databases.openproject.password | default .Values.secrets.postgresql.openprojectUser }}
+    password: {{ .Values.databases.openproject.password | default .Values.secrets.postgresql.openprojectUser | quote }}
     username: "{{ .Values.databases.openproject.username }}"
     database: "{{ .Values.databases.openproject.name }}"
   connection:
@@ -38,7 +38,7 @@ openproject:
     name: "OpenProject Interal Admin"
     mail: "openproject-admin@swp-domain.internal"
     password_reset: "false"
-    password: "{{ .Values.secrets.openproject.adminPassword }}"
+    password: {{ .Values.secrets.openproject.adminPassword | quote }}
 
 ingress:
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"

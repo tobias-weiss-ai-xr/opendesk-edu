@@ -22,7 +22,7 @@ configuration:
     host: "{{ .Values.databases.synapse.host }}"
     name: "{{ .Values.databases.synapse.name }}"
     user: "{{ .Values.databases.synapse.username }}"
-    password: "{{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser }}"
+    password: {{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser | quote }}
 
   homeserver:
     oidc:
@@ -41,7 +41,7 @@ configuration:
           port: {{ .Values.turn.server.port }}
           transport: {{ .Values.turn.transport }}
         {{- end }}
-    
+
     guestModule:
       image:
         imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"

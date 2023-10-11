@@ -37,31 +37,31 @@ extraEnvVars:
   - name: LDAPSEARCH_OX_USERNAME
     value: "ldapsearch_ox"
   - name: LDAPSEARCH_OX_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox }}
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox | quote }}
   - name: LDAPSEARCH_DOVECOT_USERNAME
     value: "ldapsearch_dovecot"
   - name: LDAPSEARCH_DOVECOT_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot }}
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot | quote }}
   - name: LDAPSEARCH_KEYCLOAK_USERNAME
     value: "ldapsearch_keycloak"
   - name: LDAPSEARCH_KEYCLOAK_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak }}
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak | quote }}
   - name: LDAPSEARCH_NEXTCLOUD_USERNAME
     value: "ldapsearch_nextcloud"
   - name: LDAPSEARCH_NEXTCLOUD_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud }}
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud | quote }}
   - name: LDAPSEARCH_OPENPROJECT_USERNAME
     value: "ldapsearch_openproject"
   - name: LDAPSEARCH_OPENPROJECT_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject }}
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject | quote }}
   - name: LDAPSEARCH_XWIKI_USERNAME
     value: "ldapsearch_xwiki"
   - name: LDAPSEARCH_XWIKI_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki }}
+    value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki | quote }}
   - name: DEFAULT_ACCOUNT_USER_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.defaultAccounts.userPassword }}
+    value: {{ .Values.secrets.univentionCorporateServer.defaultAccounts.userPassword | quote }}
   - name: DEFAULT_ACCOUNT_ADMIN_PASSWORD
-    value: {{ .Values.secrets.univentionCorporateServer.defaultAccounts.adminPassword }}
+    value: {{ .Values.secrets.univentionCorporateServer.defaultAccounts.adminPassword | quote }}
 
 resources:
   {{ .Values.resources.univentionCorporateServer | toYaml | nindent 2 }}

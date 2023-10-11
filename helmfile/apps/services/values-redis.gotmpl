@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 auth:
-  password: {{ .Values.secrets.redis.password }}
+  password: {{ .Values.secrets.redis.password | quote }}
 
 global:
   imageRegistry: "{{ .Values.global.imageRegistry }}"

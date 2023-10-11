@@ -20,10 +20,10 @@ externalDatabase:
   port: {{ .Values.databases.keycloak.port }}
   user: "{{ .Values.databases.keycloak.username }}"
   database: "{{ .Values.databases.keycloak.name }}"
-  password: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser }}
+  password: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser | quote }}
 
 auth:
-  adminPassword: {{ .Values.secrets.keycloak.adminPassword }}
+  adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
 
 replicaCount: {{ .Values.replicas.keycloak }}
 

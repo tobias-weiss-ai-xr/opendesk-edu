@@ -6,20 +6,20 @@ SPDX-License-Identifier: Apache-2.0
 nextcloud:
   host: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
   username: "nextcloud"
-  password: {{ .Values.secrets.nextcloud.adminPassword }}
+  password: {{ .Values.secrets.nextcloud.adminPassword | quote }}
 externalDatabase:
   database: "{{ .Values.databases.nextcloud.name }}"
   user: "{{ .Values.databases.nextcloud.username }}"
   host: "{{ .Values.databases.nextcloud.host }}"
-  password: "{{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser }}"
+  password: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
 extraEnv:
   REDIS_HOST: {{ .Values.cache.nextcloud.host | quote }}
   REDIS_HOST_PORT: {{ .Values.cache.nextcloud.port | quote }}
-  REDIS_HOST_PASSWORD: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password }}
+  REDIS_HOST_PASSWORD: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
 redis:
   auth:
     enabled: true
-    password: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password }}
+    password: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
 ingress:
   enabled: {{ .Values.ingress.enabled }}
   className: {{ .Values.ingress.ingressClassName }}

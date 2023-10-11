@@ -29,7 +29,7 @@ ingress:
 collabora:
   # Admin Console Credentials: https://CODE-domain/browser/dist/admin/admin.html
   username: "collabora-internal-admin"
-  password: {{ .Values.secrets.collabora.adminPassword }}
+  password: {{ .Values.secrets.collabora.adminPassword | quote }}
   aliasgroups:
     - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}:443"
 

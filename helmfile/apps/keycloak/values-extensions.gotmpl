@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   keycloak:
-    adminPassword: {{ .Values.secrets.keycloak.adminPassword }}
+    adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
   postgresql:
     connection:
       host: "{{ .Values.databases.keycloakExtension.host }}"
@@ -13,7 +13,7 @@ global:
     auth:
       database: "{{ .Values.databases.keycloakExtension.name }}"
       username: "{{ .Values.databases.keycloakExtension.username }}"
-      password: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser }}
+      password: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
 handler:
   image:
     registry: "{{ .Values.global.imageRegistry }}"
@@ -21,7 +21,7 @@ handler:
     tag: "{{ .Values.images.keycloakExtensionHandler.tag }}"
     imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   appConfig:
-    smtpPassword: "{{ .Values.smtp.password }}"
+    smtpPassword: {{ .Values.smtp.password | quote }}
     smtpHost: "{{ .Values.smtp.host }}"
     smtpUsername: "{{ .Values.smtp.username }}"
     mailFrom: "noreply@{{ .Values.global.domain }}"
