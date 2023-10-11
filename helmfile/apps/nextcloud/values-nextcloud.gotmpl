@@ -12,10 +12,14 @@ externalDatabase:
   user: "{{ .Values.databases.nextcloud.username }}"
   host: "{{ .Values.databases.nextcloud.host }}"
   password: "{{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser }}"
+extraEnv:
+  REDIS_HOST: {{ .Values.cache.nextcloud.host | quote }}
+  REDIS_HOST_PORT: {{ .Values.cache.nextcloud.port | quote }}
+  REDIS_HOST_PASSWORD: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password }}
 redis:
   auth:
     enabled: true
-    password: {{ .Values.secrets.redis.password }}
+    password: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password }}
 ingress:
   enabled: {{ .Values.ingress.enabled }}
   className: {{ .Values.ingress.ingressClassName }}

@@ -459,3 +459,8 @@
 * **open-xchange:** OX AppSuite 8 within SWP is now publicly available ([6dc470f](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/6dc470fd67edbb9711e406acb067569ca357b989))
 * **services:** Add clamav-simple deployment ([505f25c](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/505f25c5493ebb9e0181233ed5b7d8018e3a315d))
 * **sovereign-workplace:** Initial commit ([533c504](https://gitlab.souvap-univention.de/souvap/devops/sovereign-workplace/commit/533c5040faebd91f4012b604d0f4779ea1510424))
+
+<!--
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+-->
