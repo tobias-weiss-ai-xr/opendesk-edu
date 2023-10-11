@@ -55,6 +55,41 @@ configuration:
             - org.matrix.msc2762.receive.state_event:net.nordeck.poll.group
             - org.matrix.msc2762.send.event:net.nordeck.poll.start
             - org.matrix.msc2762.receive.event:net.nordeck.poll.start
+        "https://{{ .Values.global.hosts.matrixNeoDateFixWidget }}.{{ .Values.global.domain }}/*":
+          preload_approved: true
+          identity_approved: true
+          capabilities_approved:
+            - org.matrix.msc2931.navigate
+            - org.matrix.msc2762.timeline:*
+            - org.matrix.msc2762.receive.state_event:m.room.power_levels
+            - org.matrix.msc2762.receive.event:m.reaction
+            - org.matrix.msc2762.receive.state_event:m.room.create
+            - org.matrix.msc2762.receive.state_event:m.room.tombstone
+            - org.matrix.msc2762.receive.state_event:m.room.member
+            - org.matrix.msc2762.send.state_event:m.room.member
+            - org.matrix.msc2762.receive.state_event:m.room.name
+            - org.matrix.msc2762.receive.state_event:m.room.topic
+            - org.matrix.msc2762.receive.state_event:m.space.parent
+            - org.matrix.msc2762.receive.state_event:m.space.child
+            - org.matrix.msc2762.receive.state_event:net.nordeck.meetings.metadata
+            - org.matrix.msc2762.receive.state_event:im.vector.modular.widgets
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.meeting.create
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.meeting.create
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.breakoutsessions.create
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.breakoutsessions.create
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.meeting.close
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.meeting.close
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.meeting.widgets.handle
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.meeting.widgets.handle
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.meeting.participants.handle
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.meeting.participants.handle
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.meeting.update
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.meeting.update
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.meeting.change.message_permissions
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.meeting.change.message_permissions
+            - org.matrix.msc2762.send.event:net.nordeck.meetings.sub_meetings.send_message
+            - org.matrix.msc2762.receive.event:net.nordeck.meetings.sub_meetings.send_message
+            - org.matrix.msc3973.user_directory_search
 
 image:
   imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
