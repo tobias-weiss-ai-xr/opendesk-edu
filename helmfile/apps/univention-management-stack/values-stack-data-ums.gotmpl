@@ -5,13 +5,13 @@ SPDX-License-Identifier: Apache-2.0
 ---
 stackDataUms:
   udmApiUser: "cn=admin"
-  udmApiPassword: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
+  udmApiPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   loadDevData: true
 
 stackDataContext:
   ldapBase: "dc=swp-ldap,dc=internal"
-  initialPasswordAdministrator: "{{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword }}"
+  initialPasswordAdministrator: {{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword | quote }}
 
   # The SWP configuration brings its own UMC policies.
   installUmcPolicies: false

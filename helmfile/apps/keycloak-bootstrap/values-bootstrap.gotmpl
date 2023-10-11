@@ -17,7 +17,7 @@ cleanup:
 
 config:
   administrator:
-    password: "{{ .Values.secrets.keycloak.adminPassword }}"
+    password: {{ .Values.secrets.keycloak.adminPassword | quote }}
 
 image:
   registry: "{{ .Values.global.imageRegistry }}"

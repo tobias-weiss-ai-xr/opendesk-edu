@@ -11,8 +11,8 @@ global:
     database: "{{ .Values.databases.oxAppsuite.name }}"
     auth:
       user: "{{ .Values.databases.oxAppsuite.username }}"
-      password: "{{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword }}"
-      rootPassword: "{{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword }}"
+      password: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
+      rootPassword: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
 
 istio:
   enabled: {{ .Values.istio.enabled }}

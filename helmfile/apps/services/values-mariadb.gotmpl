@@ -18,11 +18,11 @@ image:
 job:
   users:
     - username: "xwiki_user"
-      password: "{{ .Values.secrets.mariadb.xwikiUser }}"
+      password: {{ .Values.secrets.mariadb.xwikiUser | quote }}
     - username: "openxchange_user"
-      password: "{{ .Values.secrets.mariadb.openxchangeUser }}"
+      password: {{ .Values.secrets.mariadb.openxchangeUser | quote }}
     - username: "nextcloud_user"
-      password: "{{ .Values.secrets.mariadb.nextcloudUser }}"
+      password: {{ .Values.secrets.mariadb.nextcloudUser | quote}}
   databases:
     - name: "xwiki"
       user: "xwiki_user"
@@ -32,7 +32,7 @@ job:
       user: "openxchange_user"
 
 mariadb:
-  rootPassword: "{{ .Values.secrets.mariadb.rootPassword }}"
+  rootPassword: {{ .Values.secrets.mariadb.rootPassword | quote }}
 
 persistence:
   storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"

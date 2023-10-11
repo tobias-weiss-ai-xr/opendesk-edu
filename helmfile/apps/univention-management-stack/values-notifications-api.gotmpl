@@ -11,7 +11,7 @@ postgresql:
   auth:
     username: "notificationsapi_user"
     database: "notificationsapi"
-    password: {{ .Values.secrets.postgresql.notificationsapiUser }}
+    password: {{ .Values.secrets.postgresql.notificationsapiUser | quote }}
 
 image:
   registry: "{{ .Values.global.imageRegistry }}"

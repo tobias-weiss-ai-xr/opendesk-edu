@@ -9,7 +9,7 @@ image:
   pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
 externalDB:
-  password: "{{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword }}"
+  password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
   database: "{{ .Values.databases.xwiki.name }}"
   user: "{{ .Values.databases.xwiki.username }}"
   host: "{{ .Values.databases.xwiki.host }}"

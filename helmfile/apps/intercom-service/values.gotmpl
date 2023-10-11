@@ -27,7 +27,7 @@ ics:
   redis:
     host: {{ .Values.cache.intercomService.host }}
     port: {{ .Values.cache.intercomService.port }}
-    password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password }}
+    password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password | quote }}
   openxchange:
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
 

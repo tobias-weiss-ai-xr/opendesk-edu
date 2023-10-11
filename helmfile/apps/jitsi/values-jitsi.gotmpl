@@ -86,7 +86,7 @@ jitsi:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jicofo.repository }}"
       tag: "{{ .Values.images.jicofo.tag }}"
     xmpp:
-      password: "{{ .Values.secrets.jitsi.jicofoAuthPassword }}"
+      password: {{ .Values.secrets.jitsi.jicofoAuthPassword | quote }}
       componentSecret: "{{ .Values.secrets.jitsi.jicofoComponentPassword }}"
     resources:
       {{ .Values.resources.jicofo | toYaml | nindent 6 }}

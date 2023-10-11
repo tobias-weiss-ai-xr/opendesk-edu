@@ -16,15 +16,15 @@ image:
 job:
   users:
     - username: "keycloak_user"
-      password: {{ .Values.secrets.postgresql.keycloakUser }}
+      password: {{ .Values.secrets.postgresql.keycloakUser | quote }}
     - username: "openproject_user"
-      password: {{ .Values.secrets.postgresql.openprojectUser }}
+      password: {{ .Values.secrets.postgresql.openprojectUser | quote }}
     - username: "keycloak_extensions_user"
-      password: {{ .Values.secrets.postgresql.keycloakExtensionUser }}
+      password: {{ .Values.secrets.postgresql.keycloakExtensionUser | quote }}
     - username: "matrix_user"
-      password: {{ .Values.secrets.postgresql.matrixUser }}
+      password: {{ .Values.secrets.postgresql.matrixUser | quote }}
     - username: "notificationsapi_user"
-      password: {{ .Values.secrets.postgresql.notificationsapiUser }}
+      password: {{ .Values.secrets.postgresql.notificationsapiUser | quote }}
   databases:
     - name: "keycloak"
       user: "keycloak_user"
@@ -43,7 +43,7 @@ persistence:
   size: "{{ .Values.persistence.size.postgresql }}"
 
 postgres:
-  password: {{ .Values.secrets.postgresql.postgresUser }}
+  password: {{ .Values.secrets.postgresql.postgresUser | quote }}
 
 resources:
   {{ .Values.resources.postgresql | toYaml | nindent 2 }}

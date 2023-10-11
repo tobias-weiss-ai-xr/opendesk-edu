@@ -21,7 +21,7 @@ oxConnector:
   domainName: "{{ .Values.global.domain }}"
   #oxMasterAdmin: "(( .Values.appsuite.core-mw.masterAdmin ))"
   oxMasterAdmin: "admin"
-  oxMasterPassword: "{{ .Values.secrets.oxAppsuite.adminPassword }}"
+  oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
   oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
   oxDefaultContext: "1"
 

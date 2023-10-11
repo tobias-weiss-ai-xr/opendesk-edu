@@ -16,10 +16,10 @@ imagePullSecrets:
 
 dovecot:
   mailDomain: "{{ .Values.global.domain }}"
-  password: {{ .Values.secrets.dovecot.doveadm }}
+  password: {{ .Values.secrets.dovecot.doveadm | quote }}
   ldap:
     dn: "uid=ldapsearch_dovecot,cn=users,dc=swp-ldap,dc=internal"
-    password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot }}
+    password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot | quote }}
   oidc:
     introspectionURL: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token/introspect"
     clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc }}
