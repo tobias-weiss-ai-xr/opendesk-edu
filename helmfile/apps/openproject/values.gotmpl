@@ -14,6 +14,9 @@ image:
   tag: "{{ .Values.images.openproject.tag }}"
 
 memcached:
+  connection:
+    host: "{{ .Values.cache.openproject.host }}"
+    port: {{ .Values.cache.openproject.port }}
   image:
     registry: "{{ .Values.global.imageRegistry }}"
     repository: "{{ .Values.images.memcached.repository }}"

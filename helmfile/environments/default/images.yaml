@@ -77,8 +77,8 @@ images:
     # @supplier: "openDesk DevSecOps"
   memcached:
     repository: "bitnami/memcached"
-    tag: "1.6.21-debian-11-r84@sha256:81747acd297d3fcd05706ea771d441a6f01b28d722c366a06f922b6b7d4033dd"
-    # @supplier: "OpenProject"
+    tag: "1.6.21-debian-11-r107@sha256:247ec29efd6030960047a623aef025021154662edf6b6d6e88c97936f164d99d"
+    # @supplier: "openDesk DevSecOps"
   milter:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"

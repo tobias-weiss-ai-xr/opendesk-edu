@@ -4,6 +4,9 @@
 image:
   registry: "registry.souvap-univention.de"
 
+memcached:
+  bundled: false
+
 probes:
   liveness:
     initialDelaySeconds: 300
@@ -26,6 +29,12 @@ openproject:
     scope: "[openid,phoenix]"
   # seed will only be executed on initial installation
   seed_locale: "de"
+
+securityContext:
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
 
 # For more details and more options see
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/

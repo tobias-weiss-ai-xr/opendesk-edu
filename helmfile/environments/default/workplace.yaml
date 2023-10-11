@@ -21,6 +21,8 @@ keycloak:
   enabled: true
 mariadb:
   enabled: true
+memcached:
+  enabled: true
 nextcloud:
   enabled: true
 openproject:

@@ -82,6 +82,13 @@ releases:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
     condition: "redis.enabled"
+  - name: "memcached"
+    chart: "bitnami-repo/memcached"
+    version: "6.6.2"
+    values:
+      - "values-memcached.yaml"
+      - "values-memcached.gotmpl"
+    condition: "memcached.enabled"
   - name: "postgresql"
     chart: "postgresql-repo/postgresql"
     version: "2.0.2"

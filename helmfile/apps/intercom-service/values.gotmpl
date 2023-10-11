@@ -25,7 +25,9 @@ ics:
   portal:
     apiKey: {{ .Values.secrets.centralnavigation.apiKey }}
   redis:
-    password: {{ .Values.secrets.redis.password }}
+    host: {{ .Values.cache.intercomService.host }}
+    port: {{ .Values.cache.intercomService.port }}
+    password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password }}
   openxchange:
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
 
