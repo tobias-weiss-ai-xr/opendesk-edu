@@ -1,3 +1,11 @@
+## [0.5.11](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.10...v0.5.11) (2023-10-11)
+
+
+### Bug Fixes
+
+* **helmfile:** Quote all password template strings ([fb7dba7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/fb7dba787c232c402aa9c989c0e8ace51869d534))
+* **services:** Add memcached service ([72e3afd](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/72e3afdffdeb6f88f8e926426dbc26adf4b54e7a))
+
 ## [0.5.10](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.9...v0.5.10) (2023-10-11)
 
 
