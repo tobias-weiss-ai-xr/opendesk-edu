@@ -39,6 +39,22 @@ configuration:
             - org.matrix.msc3819.send.to_device:net.nordeck.whiteboard.connection_signaling
             - org.matrix.msc3819.receive.to_device:net.nordeck.whiteboard.connection_signaling
             - town.robin.msc3846.turn_servers
+        "https://{{ .Values.global.hosts.matrixNeoChoiceWidget }}.{{ .Values.global.domain }}/*":
+          preload_approved: true
+          capabilities_approved:
+            - org.matrix.msc2762.send.event:net.nordeck.poll.vote
+            - org.matrix.msc2762.receive.event:net.nordeck.poll.vote
+            - org.matrix.msc2762.send.state_event:net.nordeck.poll
+            - org.matrix.msc2762.receive.state_event:net.nordeck.poll
+            - org.matrix.msc2762.send.state_event:net.nordeck.poll.settings
+            - org.matrix.msc2762.receive.state_event:net.nordeck.poll.settings
+            - org.matrix.msc2762.receive.state_event:m.room.power_levels
+            - org.matrix.msc2762.receive.state_event:m.room.name
+            - org.matrix.msc2762.receive.state_event:m.room.member
+            - org.matrix.msc2762.send.state_event:net.nordeck.poll.group
+            - org.matrix.msc2762.receive.state_event:net.nordeck.poll.group
+            - org.matrix.msc2762.send.event:net.nordeck.poll.start
+            - org.matrix.msc2762.receive.event:net.nordeck.poll.start
 
 image:
   imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"

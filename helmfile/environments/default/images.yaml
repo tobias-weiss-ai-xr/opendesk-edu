@@ -79,6 +79,10 @@ images:
     repository: "nordeck/matrix-neoboard-widget"
     tag: "0.4.0@sha256:c5e72409a0edc1962e9be618fcb83acce19e64c0c645075d8ff0ccde06e93fc7"
     # @supplier: "Nordeck"
+  matrixNeoChoiceWidget:
+    repository: "nordeck/matrix-poll-widget"
+    tag: "1.2.0@sha256:0abcf7c368c91721413c96deaa1e87f095b6afbe864ea5f042c9a370c38fb07b"
+    # @supplier: "Nordeck"
   memcached:
     repository: "bitnami/memcached"
     tag: "1.6.21-debian-11-r107@sha256:247ec29efd6030960047a623aef025021154662edf6b6d6e88c97936f164d99d"
