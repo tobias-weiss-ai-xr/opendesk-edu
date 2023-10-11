@@ -1,3 +1,10 @@
+## [0.5.10](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.9...v0.5.10) (2023-10-11)
+
+
+### Bug Fixes
+
+* **intercom-service:** Update intercom-service chart to v2.0.0 ([c3129f1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/c3129f14437728be890187bb7c4a1bfc42d90958))
+
 ## [0.5.9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.8...v0.5.9) (2023-10-10)
 
 
