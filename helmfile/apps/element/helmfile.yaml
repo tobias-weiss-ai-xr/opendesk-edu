@@ -67,6 +67,14 @@ releases:
       - "values-matrix-neoboard-widget.gotmpl"
     condition: "element.enabled"
 
+  - name: "matrix-neochoice-widget"
+    chart: "opendesk-matrix-widgets-repo/matrix-neochoice-widget"
+    version: "3.0.0"
+    values:
+      - "values-matrix-neochoice-widget.yaml"
+      - "values-matrix-neochoice-widget.gotmpl"
+    condition: "element.enabled"
+
 commonLabels:
   deploy-stage: "component-1"
   component: "element"

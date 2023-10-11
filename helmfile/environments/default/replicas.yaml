@@ -20,6 +20,7 @@ replicas:
   jvb: 1
   keycloak: 1
   matrixNeoBoardWidget: 1
+  matrixNeoChoiceWidget: 1
   # clamav-distributed
   milter: 1
   nextcloud: 1
