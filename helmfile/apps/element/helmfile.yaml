@@ -83,6 +83,22 @@ releases:
       - "values-matrix-neodatefix-widget.gotmpl"
     condition: "element.enabled"
 
+  - name: "matrix-neodatefix-bot-bootstrap"
+    chart: "opendesk-element-repo/opendesk-synapse-create-account"
+    version: "2.3.0"
+    values:
+      - "values-matrix-neodatefix-bot-bootstrap.yaml"
+      - "values-matrix-neodatefix-bot-bootstrap.gotmpl"
+    condition: "element.enabled"
+
+  - name: "matrix-neodatefix-bot"
+    chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-bot"
+    version: "3.0.0"
+    values:
+      - "values-matrix-neodatefix-bot.yaml"
+      - "values-matrix-neodatefix-bot.gotmpl"
+    condition: "element.enabled"
+
 commonLabels:
   deploy-stage: "component-1"
   component: "element"

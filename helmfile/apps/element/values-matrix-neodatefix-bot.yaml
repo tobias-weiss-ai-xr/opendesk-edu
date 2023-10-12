@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+configuration:
+  bot:
+    username: "meetings-bot"
+    displayname: "Terminplaner Bot"
+
+  strings:
+    breakoutSessionWidgetName: "Breakoutsessions"
+    calendarRoomName: "Terminplaner"
+    calendarWidgetName: "Terminplaner"
+    cockpitWidgetName: "Meeting Steuerung"
+    jitsiWidgetName: "Videokonferenz"
+    matrixNeoBoardWidgetName: "Whiteboard"
+    matrixNeoChoiceWidgetName: "Abstimmungen"
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsGroup: 101
+  runAsNonRoot: true
+  runAsUser: 101
+  seccompProfile:
+    type: "RuntimeDefault"
+
+extraEnvVars:
+  - name: "ACCESS_TOKEN"
+    valueFrom:
+      secretKeyRef:
+        name: "matrix-neodatefix-bot-account"
+        key: "access_token"
+
+# TODO: The health endpoint does not work with the haproxy configuration, yet
+livenessProbe:
+  enabled: false
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 101
+
+# TODO: The health endpoint does not work with the haproxy configuration, yet
+readinessProbe:
+  enabled: false
+...

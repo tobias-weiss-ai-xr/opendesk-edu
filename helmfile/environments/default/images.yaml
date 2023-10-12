@@ -83,6 +83,10 @@ images:
     repository: "nordeck/matrix-poll-widget"
     tag: "1.2.0@sha256:0abcf7c368c91721413c96deaa1e87f095b6afbe864ea5f042c9a370c38fb07b"
     # @supplier: "Nordeck"
+  matrixNeoDateFixBot:
+    repository: "nordeck/matrix-meetings-bot"
+    tag: "2.3.0@sha256:2b3ebc9296935f0d2212db5a7ff7273ac5140d68ddda76ac2767ff428f773fef"
+    # @supplier: "Nordeck"
   matrixNeoDateFixWidget:
     repository: "nordeck/matrix-meetings-widget"
     tag: "1.5.0@sha256:ba547735f635c5359293d6e497297876397bf630fed0e1d35800a0b9ba2f4a96"
