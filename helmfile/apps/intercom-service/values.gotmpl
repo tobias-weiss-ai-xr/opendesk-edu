@@ -14,14 +14,14 @@ global:
 ics:
   secret: {{ .Values.secrets.intercom.secret }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
-  originRegex: "{{ .Values.istio.domain }}"
+  originRegex: "{{ .Values.istio.domain }}|{{ .Values.global.domain }}"
   default:
     domain: "{{ .Values.global.domain }}"
   oidc:
     secret: {{ .Values.secrets.keycloak.clientSecret.intercom }}
   matrix:
     asSecret: {{ .Values.secrets.jitsi.synapseAsToken }}
-    serverName: "matrix.{{ .Values.global.domain }}"
+    serverName: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
   portal:
     apiKey: {{ .Values.secrets.centralnavigation.apiKey }}
   redis:
