@@ -1,0 +1,37 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+configuration:
+  openxchangeBaseUrl: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+
+image:
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  repository: "{{ .Values.images.matrixNeoDateFixBot.repository }}"
+  tag: "{{ .Values.images.matrixNeoDateFixBot.tag }}"
+
+ingress:
+  enabled: "{{ .Values.ingress.enabled }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls:
+    enabled: "{{ .Values.ingress.tls.enabled }}"
+    secretName: "{{ .Values.ingress.tls.secretName }}"
+
+persistence:
+  size: "{{ .Values.persistence.size.matrixNeoDateFixBot }}"
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+
+replicaCount: {{ .Values.replicas.matrixNeoDateFixBot }}
+
+resources:
+  {{ .Values.resources.matrixNeoDateFixBot | toYaml | nindent 2 }}
+...

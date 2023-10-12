@@ -2,6 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 configuration:
+  additionalConfiguration:
+    room_prejoin_state:
+      additional_event_types:
+        - "m.space.parent"
+        - "net.nordeck.meetings.metadata"
+        - "m.room.power_levels"
+
   homeserver:
     guestModule:
       enabled: true

@@ -9,6 +9,7 @@ persistence:
     clamav: "1Gi"
     dovecot: "1Gi"
     mariadb: "1Gi"
+    matrixNeoDateFixBot: "1Gi"
     nextcloud:
       main: "1Gi"
       data: "10Gi"

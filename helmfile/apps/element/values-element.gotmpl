@@ -91,6 +91,8 @@ configuration:
             - org.matrix.msc2762.receive.event:net.nordeck.meetings.sub_meetings.send_message
             - org.matrix.msc3973.user_directory_search
 
+  welcomeUserId: "@meetings-bot:{{ .Values.global.domain }}"
+
 image:
   imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
   registry: "{{ .Values.global.imageRegistry }}"
