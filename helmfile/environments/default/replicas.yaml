@@ -23,6 +23,7 @@ replicas:
   matrixNeoChoiceWidget: 1
   matrixNeoDateFixBot: 1
   matrixNeoDateFixWidget: 1
+  matrixUserVerificationService: 1
   # clamav-distributed
   milter: 1
   nextcloud: 1
