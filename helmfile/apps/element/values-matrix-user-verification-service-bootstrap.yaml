@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+configuration:
+  username: "uvs"
+  pod: "opendesk-synapse-0"
+  secretName: "opendesk-matrix-user-verification-service-account"
+...

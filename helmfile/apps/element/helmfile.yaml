@@ -59,6 +59,22 @@ releases:
       - "values-synapse.gotmpl"
     condition: "element.enabled"
 
+  - name: "opendesk-matrix-user-verification-service-bootstrap"
+    chart: "opendesk-element-repo/opendesk-synapse-create-account"
+    version: "2.3.0"
+    values:
+      - "values-matrix-user-verification-service-bootstrap.yaml"
+      - "values-matrix-user-verification-service-bootstrap.gotmpl"
+    condition: "element.enabled"
+
+  - name: "opendesk-matrix-user-verification-service"
+    chart: "opendesk-element-repo/opendesk-matrix-user-verification-service"
+    version: "2.3.0"
+    values:
+      - "values-matrix-user-verification-service.yaml"
+      - "values-matrix-user-verification-service.gotmpl"
+    condition: "element.enabled"
+
   - name: "matrix-neoboard-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neoboard-widget"
     version: "3.0.0"

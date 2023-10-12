@@ -63,6 +63,10 @@ jitsi:
         value: "myappid"
       - name: "JWT_APP_SECRET"
         value: "{{ .Values.secrets.jitsi.jwtAppSecret }}"
+      - name: "MATRIX_UVS_SYNC_POWER_LEVELS"
+        value: "true"
+      - name: "MATRIX_UVS_URL"
+        value: "http://opendesk-matrix-user-verification-service.{{ .Release.Namespace }}.svc.cluster.local"
       - name: TURNS_HOST
         value: "{{ .Values.turn.tls.host }}"
       - name: TURNS_PORT
