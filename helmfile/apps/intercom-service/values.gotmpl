@@ -21,7 +21,10 @@ ics:
     secret: {{ .Values.secrets.keycloak.clientSecret.intercom }}
   matrix:
     asSecret: {{ .Values.secrets.jitsi.synapseAsToken }}
+    subdomain: {{ .Values.global.hosts.synapse }}
     serverName: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
+  nordeck:
+    subdomain: {{ .Values.global.hosts.matrixNeoDateFixBot }}
   portal:
     apiKey: {{ .Values.secrets.centralnavigation.apiKey }}
   redis:
