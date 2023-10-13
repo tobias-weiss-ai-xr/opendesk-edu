@@ -181,7 +181,7 @@ keycloakConfigCli:
             "attributes": {
               "backchannel.logout.revoke.offline.tokens": "true",
               "backchannel.logout.session.required": "true",
-              "backchannel.logout.url": "https://$(ELEMENT_DOMAIN)/_synapse/client/oidc/backchannel_logout",
+              "backchannel.logout.url": "https://$(MATRIX_DOMAIN)/_synapse/client/oidc/backchannel_logout",
               "post.logout.redirect.uris": "https://$(ELEMENT_DOMAIN)/*##https://$(MATRIX_DOMAIN)/*##https://$(UNIVENTION_CORPORATE_SERVER_DOMAIN)/*"
             },
             "authenticationFlowBindingOverrides": {},
