@@ -25,6 +25,17 @@ configuration:
     password: {{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser | quote }}
 
   homeserver:
+    appServiceConfigs:
+      - as_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}
+        hs_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}
+        id: intercom-service
+        namespaces:
+          users:
+            - exclusive: false
+              regex: "@.*"
+        url: null
+        sender_localpart: intercom-service
+
     oidc:
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix }}
       issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
