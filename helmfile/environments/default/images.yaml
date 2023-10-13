@@ -16,7 +16,7 @@ images:
     # @supplier: "Open-Xchange"
   element:
     repository: "souvap/tooling/images/element-web"
-    tag: "1.1.0@sha256:4fc2df523090cf012b50a681c92482f61231baf4cce67de467dd9f79c181bc93"
+    tag: "1.2.0@sha256:1a1d137dbf953d2e3d9bafac64efd7369cb6446db079b7de2d02c5fdcd749e80"
     # @supplier: "Element"
   freshclam:
     repository: "clamav/clamav"
