@@ -67,7 +67,7 @@ appsuite:
       # Old capability can be used to toggle all integrations with a single switch
       com.openexchange.capability.public-sector: "true"
       # New capabilities in 2.0
-      com.openexchange.capability.public-sector-element: "false"
+      com.openexchange.capability.public-sector-element: "true"
       com.openexchange.capability.public-sector-navigation: "true"
       com.openexchange.capability.client-onboarding: "true"
       com.openexchange.capability.dynamic-theme: "true"
