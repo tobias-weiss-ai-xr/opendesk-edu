@@ -177,6 +177,10 @@ images:
     repository: "matrixdotorg/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
     # @supplier: "Element"
+  synapseCreateUser:
+    repository: "alpine/k8s"
+    tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
+    # @supplier: "Nordeck"
   synapseGuestModule:
     repository: "nordeck/synapse-guest-module"
     tag: "1.0.0@sha256:e9c736d84a77df93b2dbe3e3afa7b0ca3efcbc4457677adaac5df3cc79a85923"
