@@ -66,7 +66,7 @@ jitsi:
       - name: "MATRIX_UVS_SYNC_POWER_LEVELS"
         value: "true"
       - name: "MATRIX_UVS_URL"
-        value: "http://opendesk-matrix-user-verification-service.{{ .Release.Namespace }}.svc.cluster.local"
+        value: "http://opendesk-matrix-user-verification-service.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
       - name: TURNS_HOST
         value: "{{ .Values.turn.tls.host }}"
       - name: TURNS_PORT
