@@ -1,3 +1,24 @@
+## [0.5.12](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.11...v0.5.12) (2023-10-19)
+
+
+### Bug Fixes
+
+* **element:** Add an application service for the intercom-service ([1a4eced](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/1a4eced998998faa7ac862b8c409bbd743b16ec0))
+* **element:** Add the Matrix NeoBoard Widget deployment ([5afd233](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/5afd2339c20a0be41078ae4c3ce703c62f332557))
+* **element:** Add the Matrix NeoChoice Widget deployment ([7756d35](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/7756d35fa156b36ed50ba8f837273db56323f45f))
+* **element:** Add the Matrix NeoDateFix Bot deployment ([785989e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/785989e91df5547ab5ac60914b82bc99c4f1a790))
+* **element:** Add the Matrix NeoDateFix Widget deployment ([27b6796](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/27b6796639f37dbd6c26f21fd54502153398aed0))
+* **element:** Add the Matrix User Verification Service deployment ([30405d1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/30405d182d44a5586a4070738dfbe1c141841d19))
+* **element:** Upgrade Element to v1.11.46 ([82a037e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/82a037ec7c25baf41bd0542c3ded47402adc2844))
+* **element:** Upgrade the opendesk-element charts to 2.3.0 ([fd9e04d](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/fd9e04d9922b949d0f213016169a9024a66a1ded))
+* **element:** Upgrade the opendesk-matrix-widgets charts to 2.3.0 ([cbe5141](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/cbe514176a4d86d166db248d7297d215409016d2))
+* **element:** Use a separate image configuration for the bootstrap tasks ([7f7c364](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/7f7c364071072b01d485d3e248a3f8de49a07309))
+* **intercom-service:** Allow access from the non-istio domain and reference to the correct synapse hostname ([16f2ac4](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/16f2ac464eb7267f1c4d87c3ccaca2c91a7ecc1b))
+* **intercom-service:** Fix the nordeck configuration ([06dcdd7](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/06dcdd78afe0e6514c1f30d24924d3e7077ae6da))
+* **jitsi:** Use template for the cluster networking domain ([0898d96](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/0898d9657145d66fd4c52fe6036c955ad58a0cfe))
+* **keycloak:** Use the correct backchannel logout configuration for element ([86657b1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/86657b139a6d8f4ff3f921b8755e04cb790c3786))
+* **open-xchange:** Enable Element calendar integration ([f564efd](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/f564efd97f8db39cffaea317e36db3825fc9121e))
+
 ## [0.5.11](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.10...v0.5.11) (2023-10-11)
 
 
