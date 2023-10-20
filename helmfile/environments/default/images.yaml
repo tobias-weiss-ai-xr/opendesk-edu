@@ -85,11 +85,11 @@ images:
     # @supplier: "Nordeck"
   matrixNeoDateFixBot:
     repository: "nordeck/matrix-meetings-bot"
-    tag: "2.3.0@sha256:2b3ebc9296935f0d2212db5a7ff7273ac5140d68ddda76ac2767ff428f773fef"
+    tag: "2.4.0@sha256:d6560841c3708bd8b55623ef70dd55bf4792da6ed6cd5026c37a5e4df7c8a3a3"
     # @supplier: "Nordeck"
   matrixNeoDateFixWidget:
     repository: "nordeck/matrix-meetings-widget"
-    tag: "1.5.0@sha256:ba547735f635c5359293d6e497297876397bf630fed0e1d35800a0b9ba2f4a96"
+    tag: "1.5.1@sha256:a518c194fa1b8cf2886c02623d883810f166f27259ce7d4e0138b962dea565e7"
     # @supplier: "Nordeck"
   matrixUserVerificationService:
     repository: "matrixdotorg/matrix-user-verification-service"
