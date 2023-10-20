@@ -29,7 +29,7 @@ repositories:
 releases:
   - name: "opendesk-element"
     chart: "opendesk-element-repo/opendesk-element"
-    version: "2.4.0"
+    version: "2.5.0"
     values:
       - "values-element.yaml"
       - "values-element.gotmpl"
@@ -37,7 +37,7 @@ releases:
 
   - name: "opendesk-well-known"
     chart: "opendesk-element-repo/opendesk-well-known"
-    version: "2.4.0"
+    version: "2.5.0"
     values:
       - "values-well-known.yaml"
       - "values-well-known.gotmpl"
@@ -45,7 +45,7 @@ releases:
 
   - name: "opendesk-synapse-web"
     chart: "opendesk-element-repo/opendesk-synapse-web"
-    version: "2.4.0"
+    version: "2.5.0"
     values:
       - "values-synapse-web.yaml"
       - "values-synapse-web.gotmpl"
@@ -53,7 +53,7 @@ releases:
 
   - name: "opendesk-synapse"
     chart: "opendesk-element-repo/opendesk-synapse"
-    version: "2.4.0"
+    version: "2.5.0"
     values:
       - "values-synapse.yaml"
       - "values-synapse.gotmpl"
@@ -61,7 +61,7 @@ releases:
 
   - name: "opendesk-matrix-user-verification-service-bootstrap"
     chart: "opendesk-element-repo/opendesk-synapse-create-account"
-    version: "2.4.0"
+    version: "2.5.0"
     values:
       - "values-matrix-user-verification-service-bootstrap.yaml"
       - "values-matrix-user-verification-service-bootstrap.gotmpl"
@@ -69,7 +69,7 @@ releases:
 
   - name: "opendesk-matrix-user-verification-service"
     chart: "opendesk-element-repo/opendesk-matrix-user-verification-service"
-    version: "2.4.0"
+    version: "2.5.0"
     values:
       - "values-matrix-user-verification-service.yaml"
       - "values-matrix-user-verification-service.gotmpl"
@@ -101,7 +101,7 @@ releases:
 
   - name: "matrix-neodatefix-bot-bootstrap"
     chart: "opendesk-element-repo/opendesk-synapse-create-account"
-    version: "2.4.0"
+    version: "2.5.0"
     values:
       - "values-matrix-neodatefix-bot-bootstrap.yaml"
       - "values-matrix-neodatefix-bot-bootstrap.gotmpl"

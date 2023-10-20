@@ -15,6 +15,15 @@ configuration:
   additionalConfiguration:
     logout_redirect_url: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout?client_id=matrix&post_logout_redirect_uri=https%3A%2F%2F{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
 
+    "net.nordeck.element_web.module.opendesk":
+      config:
+        ics_navigation_json_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/navigation.json"
+        ics_silent_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/silent"
+        portal_logo_svg_url: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
+        portal_url: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/"
+        custom_css_variables:
+          --cpd-color-text-action-accent: {{ .Values.theme.colors.primary | quote }}
+
     "net.nordeck.element_web.module.widget_lifecycle":
       widget_permissions:
         "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/jitsi.html":
