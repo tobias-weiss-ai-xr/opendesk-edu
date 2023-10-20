@@ -1,3 +1,10 @@
+## [0.5.14](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.13...v0.5.14) (2023-10-20)
+
+
+### Bug Fixes
+
+* **element:** Support for openDesk top bar with central navigation ([e609b75](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/e609b75cc7fcbb7f03997cb5e26dd9cf4628f77d))
+
 ## [0.5.13](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.12...v0.5.13) (2023-10-20)
 
 
