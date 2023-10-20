@@ -1,3 +1,10 @@
+## [0.5.13](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.12...v0.5.13) (2023-10-20)
+
+
+### Bug Fixes
+
+* **element:** Configure rights and roles ([59d58e3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/59d58e320e503727e42dbfe0b027ba7948275ac6))
+
 ## [0.5.12](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.11...v0.5.12) (2023-10-19)
 
 
