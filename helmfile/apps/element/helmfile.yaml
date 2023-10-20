@@ -29,7 +29,7 @@ repositories:
 releases:
   - name: "opendesk-element"
     chart: "opendesk-element-repo/opendesk-element"
-    version: "2.3.0"
+    version: "2.4.0"
     values:
       - "values-element.yaml"
       - "values-element.gotmpl"
@@ -37,7 +37,7 @@ releases:
 
   - name: "opendesk-well-known"
     chart: "opendesk-element-repo/opendesk-well-known"
-    version: "2.3.0"
+    version: "2.4.0"
     values:
       - "values-well-known.yaml"
       - "values-well-known.gotmpl"
@@ -45,7 +45,7 @@ releases:
 
   - name: "opendesk-synapse-web"
     chart: "opendesk-element-repo/opendesk-synapse-web"
-    version: "2.3.0"
+    version: "2.4.0"
     values:
       - "values-synapse-web.yaml"
       - "values-synapse-web.gotmpl"
@@ -53,7 +53,7 @@ releases:
 
   - name: "opendesk-synapse"
     chart: "opendesk-element-repo/opendesk-synapse"
-    version: "2.3.0"
+    version: "2.4.0"
     values:
       - "values-synapse.yaml"
       - "values-synapse.gotmpl"
@@ -61,7 +61,7 @@ releases:
 
   - name: "opendesk-matrix-user-verification-service-bootstrap"
     chart: "opendesk-element-repo/opendesk-synapse-create-account"
-    version: "2.3.0"
+    version: "2.4.0"
     values:
       - "values-matrix-user-verification-service-bootstrap.yaml"
       - "values-matrix-user-verification-service-bootstrap.gotmpl"
@@ -69,7 +69,7 @@ releases:
 
   - name: "opendesk-matrix-user-verification-service"
     chart: "opendesk-element-repo/opendesk-matrix-user-verification-service"
-    version: "2.3.0"
+    version: "2.4.0"
     values:
       - "values-matrix-user-verification-service.yaml"
       - "values-matrix-user-verification-service.gotmpl"
@@ -77,7 +77,7 @@ releases:
 
   - name: "matrix-neoboard-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neoboard-widget"
-    version: "3.0.0"
+    version: "3.1.0"
     values:
       - "values-matrix-neoboard-widget.yaml"
       - "values-matrix-neoboard-widget.gotmpl"
@@ -85,7 +85,7 @@ releases:
 
   - name: "matrix-neochoice-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neochoice-widget"
-    version: "3.0.0"
+    version: "3.1.0"
     values:
       - "values-matrix-neochoice-widget.yaml"
       - "values-matrix-neochoice-widget.gotmpl"
@@ -93,7 +93,7 @@ releases:
 
   - name: "matrix-neodatefix-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-widget"
-    version: "3.0.0"
+    version: "3.1.0"
     values:
       - "values-matrix-neodatefix-widget.yaml"
       - "values-matrix-neodatefix-widget.gotmpl"
@@ -101,7 +101,7 @@ releases:
 
   - name: "matrix-neodatefix-bot-bootstrap"
     chart: "opendesk-element-repo/opendesk-synapse-create-account"
-    version: "2.3.0"
+    version: "2.4.0"
     values:
       - "values-matrix-neodatefix-bot-bootstrap.yaml"
       - "values-matrix-neodatefix-bot-bootstrap.gotmpl"
@@ -109,7 +109,7 @@ releases:
 
   - name: "matrix-neodatefix-bot"
     chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-bot"
-    version: "3.0.0"
+    version: "3.1.0"
     values:
       - "values-matrix-neodatefix-bot.yaml"
       - "values-matrix-neodatefix-bot.gotmpl"
