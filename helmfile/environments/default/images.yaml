@@ -112,6 +112,10 @@ images:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk DevSecOps"
+  minio:
+    repository: "bitnami/minio"
+    tag: "2023@sha256:bced4f2f9fc48b755ebb3e1b35e76195a978d4331bf2d0c6699dab412d3c0be7"
+    # @supplier: "openDesk DevSecOps"
   nextcloud:
     repository: "nextcloud"
     tag: "27.1.1-apache@sha256:47325758ffcd54563021e697905aaba6aac8c21bceefb245c67d40194813ce39"

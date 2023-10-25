@@ -170,6 +170,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "2Gi"
+  minio:
+    limits:
+      cpu: 2
+      memory: "4Gi"
+    requests:
+      cpu: 0.25
+      memory: "1Gi"
   nextcloud:
     limits:
       cpu: 2
@@ -352,5 +359,4 @@ resources:
     requests:
       cpu: 0.1
       memory: "6Gi"
-
 ...

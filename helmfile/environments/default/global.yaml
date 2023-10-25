@@ -4,7 +4,6 @@
 ## The global properties are used to configure multiple charts at once.
 #
 global:
-
   ## Define ingress/virtualservice host.
   #
   hosts:
@@ -20,6 +19,8 @@ global:
     matrixNeoChoiceWidget: "matrix-neochoice-widget"
     matrixNeoDateFixBot: "matrix-neodatefix-bot"
     matrixNeoDateFixWidget: "matrix-neodatefix-widget"
+    minioApi: "minio"
+    minioConsole: "minio-console"
     nextcloud: "fs"
     openproject: "project"
     openxchange: "webmail"
@@ -29,7 +30,6 @@ global:
     univentionManagementStack: "portal"
     whiteboard: "whiteboard"
     xwiki: "wiki"
-
 
   ## Define docker registry address.
   #

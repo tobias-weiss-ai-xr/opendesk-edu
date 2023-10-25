@@ -10,10 +10,10 @@ persistence:
     dovecot: "1Gi"
     mariadb: "1Gi"
     matrixNeoDateFixBot: "1Gi"
+    minio: "1Gi"
     nextcloud:
       main: "1.2Gi"
       data: "10Gi"
-    openproject: "1Gi"
     postfix: "1Gi"
     postgresql: "1Gi"
     prosody: "1Gi"

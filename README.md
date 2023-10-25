@@ -224,6 +224,7 @@ subdirectory `/helmfile/apps/services`.
 | Keycloak                    | `keycloak.enabled`                  | `true`  | Identity Provider              | Functional |
 | MariaDB                     | `mariadb.enabled`                   | `true`  | Database                       | Eval       |
 | Memcached                   | `memcached.enabled`                 | `true`  | Cache Database                 | Eval       |
+| MinIO                       | `minio.enabled`                     | `true`  | Object Storage                 | Eval       |
 | Nextcloud                   | `nextcloud.enabled`                 | `true`  | File share                     | Functional |
 | OpenProject                 | `openproject.enabled`               | `true`  | Project management             | Functional |
 | OX Appsuite                 | `oxAppsuite.enabled`                | `true`  | Groupware                      | Functional |

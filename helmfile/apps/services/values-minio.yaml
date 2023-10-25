@@ -1,0 +1,114 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+mode: "standalone"
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+
+containerSecurityContext:
+  enabled: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  privileged: false
+  runAsUser: 1000
+  runAsNonRoot: true
+  seccompProfile:
+    type: "RuntimeDefault"
+
+ingress:
+  annotations:
+    nginx.org/websocket-services: "minio"
+
+networkPolicy:
+  enabled: false
+
+defaultBuckets: "openproject,openxchange,ums,nextcloud"
+
+provisioning:
+  enabled: true
+  cleanupAfterFinished:
+    enabled: true
+  buckets:
+    - name: "openproject"
+      versioning: true
+      withLock: false
+    - name: "openxchange"
+      versioning: true
+      withLock: false
+    - name: "ums"
+      versioning: true
+      withLock: false
+    - name: "nextcloud"
+      versioning: true
+      withLock: false
+  policies:
+    - name: "openproject-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::openproject"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::openproject/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "openxchange-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::openxchange"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::openxchange/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "ums-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::ums"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::ums/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "nextcloud-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::nextcloud"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::nextcloud/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 10
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 10
+
+startupProbe:
+  enabled: true
+  periodSeconds: 10
+  timeoutSeconds: 10
+...

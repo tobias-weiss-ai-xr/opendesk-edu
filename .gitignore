@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 .vscode
 .idea
+.yamllint
 
 # Ignore changes to sample environments
 helmfile/environments/dev/values.yaml
