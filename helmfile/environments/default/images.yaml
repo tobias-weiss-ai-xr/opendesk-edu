@@ -58,6 +58,11 @@ images:
     repository: "bitnami/keycloak"
     tag: "19.0.3-debian-11-r22@sha256:4ac04104d20d4861ecca24ff2d07d71b34a98ee1148c6e6b6e7969a6b2ad085e"
     # @supplier: "Univention"
+  keycloakUnivention:
+    # This is a preview and not part of the standard deployment.
+    repository: "souvap/tooling/images/univention/keycloak-app-on-use-base-manpub-tr"
+    tag: "latest"
+    # @supplier: "Univention"
   keycloakBootstrap:
     repository: "souvap/tooling/images/ansible"
     tag: "4.10.0@sha256:89d8212c20e03b0fd079e08afaf3247c1b96b380c4db1b572d68d0b4a6abc0ac"
@@ -194,54 +199,67 @@ images:
     tag: "20230829T094822@sha256:6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
     # @supplier: "Univention"
   umsConfigHtpasswd:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/config-htpasswd"
     tag: "latest"
     # @supplier: "Univention"
   umsDataLoader:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/data-loader"
     tag: "latest"
     # @supplier: "Univention"
   umsLdapNotifier:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-notifier"
     tag: "latest"
     # @supplier: "Univention"
   umsLdapServer:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-server"
     tag: "latest"
     # @supplier: "Univention"
   umsNotificationsApi:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/notifications-api"
     tag: "latest"
     # @supplier: "Univention"
   umsPortalListener:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-listener"
     tag: "latest"
     # @supplier: "Univention"
   umsPortalFrontend:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-frontend"
     tag: "latest"
     # @supplier: "Univention"
   umsPortalServer:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-server"
     tag: "latest"
     # @supplier: "Univention"
   umsWaitForDependency:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/wait-for-dependency"
     tag: "latest"
     # @supplier: "Univention"
   umsStoreDav:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/store-dav"
     tag: "latest"
     # @supplier: "Univention"
   umsUdmRestApi:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/udm-rest-api"
     tag: "latest"
     # @supplier: "Univention"
   umsUmcGateway:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-gateway"
     tag: "latest"
     # @supplier: "Univention"
   umsUmcServer:
+    # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-server"
     tag: "latest"
     # @supplier: "Univention"
@@ -253,4 +271,10 @@ images:
     repository: "xwikisas/swp/xwiki"
     tag: "0.10-mariadb-tomcat@sha256:02f0ff6407ccdd8dab17814202e28991fe0aa8d44fa106ba171cff5249eaf58f"
     # @supplier: "XWiki"
+  xwikiJetty:
+    # This is a preview and not part of the standard deployment.
+    repository: "xwikisas/swp/xwiki"
+    tag: "0.11-SNAPSHOT-mariadb-jetty-alpine"
+    # @supplier: "XWiki"
+
 ...
