@@ -1,3 +1,10 @@
+## [0.5.15](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.14...v0.5.15) (2023-10-25)
+
+
+### Bug Fixes
+
+* **helmfile:** Add XWiki Jetty and UniventionKeycloak to image.yaml for Compliance checks. They are not yet part of standard deployment. ([8e376bb](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/8e376bb4a5e37e16d76ea527cd02a5f614cdfe3d))
+
 ## [0.5.14](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.13...v0.5.14) (2023-10-20)
 
 
