@@ -1,0 +1,80 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  registry: "{{ .Values.global.imageRegistry }}"
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.minio.repository }}"
+  tag: "{{ .Values.images.minio.tag }}"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+
+auth:
+  rootPassword: {{ .Values.secrets.minio.rootPassword | quote }}
+
+statefulset:
+  replicaCount: {{ .Values.replicas.minioDistributed }}
+
+resources:
+  {{ .Values.resources.minio | toYaml | nindent 2 }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  hostname: "{{ .Values.global.hosts.minioConsole }}.{{ .Values.global.domain }}"
+  extraTls:
+    - hosts:
+      - "{{ .Values.global.hosts.minioConsole }}.{{ .Values.global.domain }}"
+      secretName: "{{ .Values.ingress.tls.secretName }}"
+
+apiIngress:
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  hostname: "{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
+  extraTls:
+    - hosts:
+      - "{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
+      secretName: "{{ .Values.ingress.tls.secretName }}"
+
+metrics:
+  serviceMonitor:
+    enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+  prometheusRule:
+    enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+
+persistence:
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: "{{ .Values.persistence.size.minio }}"
+
+provisioning:
+  users:
+    - username: "openproject_user"
+      password: {{ .Values.secrets.minio.openprojectUser | quote }}
+      disabled: false
+      policies:
+        - "openproject-bucket-policy"
+      setPolicies: true
+    - username: "openxchange_user"
+      password: {{ .Values.secrets.minio.openxchangeUser | quote }}
+      disabled: false
+      policies:
+        - "openxchange-bucket-policy"
+      setPolicies: true
+    - username: "ums_user"
+      password: {{ .Values.secrets.minio.umsUser | quote }}
+      disabled: false
+      policies:
+        - "ums-bucket-policy"
+      setPolicies: true
+    - username: "nextcloud_user"
+      password: {{ .Values.secrets.minio.nextcloudUser | quote }}
+      disabled: false
+      policies:
+        - "nextcloud-bucket-policy"
+      setPolicies: true
+...

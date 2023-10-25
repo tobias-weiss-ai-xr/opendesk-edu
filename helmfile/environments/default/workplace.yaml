@@ -25,6 +25,8 @@ mariadb:
   enabled: true
 memcached:
   enabled: true
+minio:
+  enabled: true
 nextcloud:
   enabled: true
 openproject:

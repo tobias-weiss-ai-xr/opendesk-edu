@@ -27,6 +27,7 @@ replicas:
   matrixUserVerificationService: 1
   # clamav-distributed
   milter: 1
+  minioDistributed: 4
   nextcloud: 1
   openproject: 1
   postfix: 1

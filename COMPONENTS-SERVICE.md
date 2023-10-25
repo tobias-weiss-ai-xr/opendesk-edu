@@ -60,3 +60,6 @@ This service is used by
 - Open-Xchange
 
 ## Objectstore - MinIO
+
+This services is used by:
+- OpenProject (attachment storage)

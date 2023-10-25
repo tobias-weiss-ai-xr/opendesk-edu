@@ -42,7 +42,7 @@ openproject:
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
   # Will only be set on initial seed / installation
   admin_user:
-    name: "OpenProject Interal Admin"
+    name: "OpenProject Internal Admin"
     mail: "openproject-admin@swp-domain.internal"
     password_reset: "false"
     password: {{ .Values.secrets.openproject.adminPassword | quote }}
@@ -75,10 +75,9 @@ environment:
   OPENPROJECT_MAIL__FROM: "do-not-reply@{{ .Values.global.domain }}"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
   OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject | quote }}
-
-persistence:
-  size: {{ .Values.persistence.size.openproject | quote }}
-  storageClassName: {{ .Values.persistence.storageClassNames.RWX | quote }}
+  OPENPROJECT_FOG_CREDENTIALS_HOST: "{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
+  OPENPROJECT_FOG_CREDENTIALS_ENDPOINT: "https://{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
+  OPENPROJECT_FOG_CREDENTIALS_AWS__SECRET__ACCESS__KEY: {{ .Values.secrets.minio.openprojectUser | quote }}
 
 replicaCount: {{ .Values.replicas.openproject }}
 

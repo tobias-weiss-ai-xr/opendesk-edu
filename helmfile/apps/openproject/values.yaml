@@ -37,8 +37,10 @@ securityContext:
   readOnlyRootFilesystem: false
 
 persistence:
-  accessModes:
-    - "ReadWriteMany"
+  enabled: false
+
+s3:
+  enabled: true
 
 # For more details and more options see
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/
@@ -71,5 +73,10 @@ environment:
     "(&(objectClass=opendeskProjectmanagementGroup)(opendeskProjectmanagementEnabled=TRUE))"
   OPENPROJECT_SEED_LDAP_OPENDESK_GROUPFILTER_OPENDESK_SYNC__USERS: "true"
   OPENPROJECT_SEED_LDAP_OPENDESK_GROUPFILTER_OPENDESK_GROUP__ATTRIBUTE: "cn"
-
+  # Details: https://www.openproject.org/docs/installation-and-operations/configuration/#attachments-storage
+  OPENPROJECT_ATTACHMENTS__STORAGE: "fog"
+  OPENPROJECT_FOG_DIRECTORY: "openproject"
+  OPENPROJECT_FOG_CREDENTIALS_PROVIDER: "AWS"
+  OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE: "true"
+  OPENPROJECT_FOG_CREDENTIALS_AWS__ACCESS__KEY__ID: "openproject_user"
 ...

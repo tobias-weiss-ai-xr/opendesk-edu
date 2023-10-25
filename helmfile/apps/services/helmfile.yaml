@@ -137,6 +137,13 @@ releases:
       - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
     installed: {{ .Values.istio.enabled }}
+  - name: "minio"
+    chart: "bitnami-repo/minio"
+    version: "12.8.19"
+    values:
+      - "values-minio.yaml"
+      - "values-minio.gotmpl"
+    installed: {{ .Values.minio.enabled }}
 
 commonLabels:
   deploy-stage: "services"
