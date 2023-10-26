@@ -36,6 +36,10 @@ securityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: false
 
+persistence:
+  accessModes: 
+    - "ReadWriteMany"
+
 # For more details and more options see
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/
 environment:
