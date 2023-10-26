@@ -113,8 +113,8 @@ images:
     tag: "27.1.1-apache@sha256:47325758ffcd54563021e697905aaba6aac8c21bceefb245c67d40194813ce39"
     # @supplier: "Nextcloud Community"
   openproject:
-    repository: "souvap/tooling/images/openproject/opendesk"
-    tag: "fat-dev@sha256:e5d0fb5125df968ba98cb3005b7051ddff25b05da54922c94bb2ee61e6ec842c"
+    repository: "openproject/open_desk"
+    tag: "dev@sha256:e907515ebbc758ea93b7efd9209c27a449e99adc0a3fc725a73c89508140a2f4"
     # @supplier: "OpenProject"
   openxchangeBootstrap:
     repository: "alpine/k8s"

@@ -12,7 +12,9 @@ repositories:
 releases:
   - name: "openproject"
     chart: "openproject-repo/openproject"
-    version: "1.8.0"
+    version: "2.0.4"
+    wait: true
+    waitForJobs: true
     values:
       - "values.yaml"
       - "values.gotmpl"

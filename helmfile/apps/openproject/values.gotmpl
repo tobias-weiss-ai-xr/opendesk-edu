@@ -68,7 +68,7 @@ environment:
 
 persistence:
   size: "{{ .Values.persistence.size.openproject }}"
-  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+  storageClassName: "{{ .Values.persistence.storageClassNames.RWX }}"
 
 replicaCount: {{ .Values.replicas.openproject }}
 
