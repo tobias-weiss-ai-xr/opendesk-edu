@@ -1,3 +1,10 @@
+## [0.5.16](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.15...v0.5.16) (2023-10-26)
+
+
+### Bug Fixes
+
+* **openproject:** Slim container with upgraded helm-chart ([535823e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/535823e0a8b2bde72d159835248b2287fd136af7))
+
 ## [0.5.15](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.14...v0.5.15) (2023-10-25)
 
 
