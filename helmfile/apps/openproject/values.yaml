@@ -37,7 +37,7 @@ securityContext:
   readOnlyRootFilesystem: false
 
 persistence:
-  accessModes: 
+  accessModes:
     - "ReadWriteMany"
 
 # For more details and more options see
