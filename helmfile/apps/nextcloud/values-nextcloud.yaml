@@ -44,6 +44,18 @@ externalDatabase:
 metrics:
   enabled: false
 
+nextcloud:
+  configs:
+    mimetypealiases.json: |-
+      {
+        "application/x-drawio": "image"
+      }
+
+    mimetypemapping.json: |-
+      {
+        "drawio": ["application/x-drawio"]
+      }
+
 # this is not documented but can be found in values.yaml
 service:
   port: "80"
