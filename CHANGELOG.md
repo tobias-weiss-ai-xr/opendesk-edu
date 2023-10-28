@@ -1,3 +1,10 @@
+## [0.5.17](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.16...v0.5.17) (2023-10-28)
+
+
+### Bug Fixes
+
+* **nextcloud:** Update swp_integration app and prepare CryptPad integration ([a046dea](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a046deaf173ab41029c2ab5e3161bd89e0fdabcb))
+
 ## [0.5.16](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.15...v0.5.16) (2023-10-26)
 
 
