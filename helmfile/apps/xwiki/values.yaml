@@ -1,6 +1,31 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+containerSecurityContext:
+  enabled: true
+
+customConfigs:
+  xwiki.cfg:
+    xwiki.url.protocol: "https"
+    ## Indicate the LDAP field defining the user UID
+    # xwiki.authentication.ldap.UID_attr: "uid"
+    ## Indicate the LDAP field defining the user profile picture
+    # xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
+    ## Enable the synchronization of the LDAP profile picture
+    # xwiki.authentication.ldap.update_photo: 1
+
+  xwiki.properties:
+    oidc.scope: "openid,profile,email,address,phoenix"
+    oidc.endpoint.userinfo.method: "GET"
+    oidc.user.nameFormater: "${oidc.user.phoenixusername._lowerCase}"
+    oidc.user.subjectFormater: "${oidc.user.subject}"
+    # yamllint disable-line rule:line-length
+    oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
+    oidc.clientid: "xwiki"
+    oidc.endpoint.token.auth_method: "client_secret_basic"
+    oidc.skipped: false
+    oidc.logoutMechanism: "rpInitiated"
+
 image:
   pullPolicy: "IfNotPresent"
 
@@ -15,9 +40,8 @@ ingress:
 istio:
   enabled: false
 
-service:
-  externalPort: 80
-  enabled: true
+mariadb:
+  enabled: false
 
 mysql:
   enabled: false
@@ -25,14 +49,11 @@ mysql:
 postgresql:
   enabled: false
 
-mariadb:
-  enabled: false
-
 properties:
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.colorTheme": "FlamingoThemes.Iceberg"
-  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.default_language": "de_DE"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.default_language": "de"
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.timezone": "Europe/Berlin"
-  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.languages": "de_DE"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.languages": "de"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.link-color": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.btn-primary-bg": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-color": "@brand-primary"
@@ -62,25 +83,13 @@ properties:
   # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
   #   "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
 
-customConfigs:
-  xwiki.cfg:
-    xwiki.url.protocol: "https"
-    ## Indicate the LDAP field defining the user UID
-    # xwiki.authentication.ldap.UID_attr: "uid"
-    ## Indicate the LDAP field defining the user profile picture
-    # xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
-    ## Enable the synchronization of the LDAP profile picture
-    # xwiki.authentication.ldap.update_photo: 1
+securityContext:
+  enabled: true
 
-  xwiki.properties:
-    oidc.scope: "openid,profile,email,address,phoenix"
-    oidc.endpoint.userinfo.method: "GET"
-    oidc.user.nameFormater: "${oidc.user.phoenixusername._lowerCase}"
-    oidc.user.subjectFormater: "${oidc.user.subject}"
-    # yamllint disable-line rule:line-length
-    oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
-    oidc.clientid: "xwiki"
-    oidc.endpoint.token.auth_method: "client_secret_basic"
-    oidc.skipped: false
-    oidc.logoutMechanism: "rpInitiated"
+service:
+  externalPort: 80
+  enabled: true
+
+volumePermissions:
+  enabled: true
 ...
