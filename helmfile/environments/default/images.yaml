@@ -269,12 +269,11 @@ images:
     # @supplier: "Element"
   xwiki:
     repository: "xwikisas/swp/xwiki"
+    tag: "0.11-mariadb-jetty-alpine@sha256:a334e18d171458ed41ef356e82580561f48b0edf60b4979dc4ed9503eb497c59"
+    # @supplier: "XWiki"
+  xwikiTomcat:
+    # This is legacy and not part of the standard deployment.
+    repository: "xwikisas/swp/xwiki"
     tag: "0.10-mariadb-tomcat@sha256:02f0ff6407ccdd8dab17814202e28991fe0aa8d44fa106ba171cff5249eaf58f"
     # @supplier: "XWiki"
-  xwikiJetty:
-    # This is a preview and not part of the standard deployment.
-    repository: "xwikisas/swp/xwiki"
-    tag: "0.11-SNAPSHOT-mariadb-jetty-alpine"
-    # @supplier: "XWiki"
-
 ...
