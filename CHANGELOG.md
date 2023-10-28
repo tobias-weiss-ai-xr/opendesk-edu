@@ -1,3 +1,10 @@
+## [0.5.18](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.17...v0.5.18) (2023-10-28)
+
+
+### Bug Fixes
+
+* **xwiki:** Switch to Alpine/Jetty slim image ([b399869](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/b39986907cece3cec06012531a55b2699d131f90))
+
 ## [0.5.17](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.16...v0.5.17) (2023-10-28)
 
 
