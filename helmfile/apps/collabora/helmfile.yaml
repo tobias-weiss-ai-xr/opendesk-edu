@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+bases:
+  - "../../bases/environments.yaml"
+
+---
 repositories:
   # Collabora Online
   # Source: https://github.com/CollaboraOnline/online
@@ -21,7 +25,4 @@ releases:
 commonLabels:
   deploy-stage: "component-1"
   component: "collabora"
-
-bases:
-  - "../../bases/environments.yaml"
 ...

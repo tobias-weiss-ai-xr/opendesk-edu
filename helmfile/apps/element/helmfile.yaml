@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+bases:
+  - "../../bases/environments.yaml"
+
+---
 repositories:
   # openDesk Element
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/sovereign-workplace-element
@@ -129,7 +133,4 @@ releases:
 commonLabels:
   deploy-stage: "component-1"
   component: "element"
-
-bases:
-  - "../../bases/environments.yaml"
 ...

@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+bases:
+  - "../../bases/environments.yaml"
+
+---
 repositories:
   # openDesk Keycloak Bootstrap
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-keycloak-bootstrap
@@ -28,7 +32,4 @@ releases:
 commonLabels:
   deploy-stage: "component-1"
   component: "keycloak-bootstrap"
-
-bases:
-  - "../../bases/environments.yaml"
 ...
