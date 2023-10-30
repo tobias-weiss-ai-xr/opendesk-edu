@@ -333,7 +333,7 @@ actual scalability of the components (see column `Scaling (verified)`).
 
 ### Mail/SMTP configuration
 
-To use the full potential of the openDesk, you need to set up a STMP Smarthost/Relay which allows to send emails from 
+To use the full potential of the openDesk, you need to set up a STMP Smarthost/Relay which allows to send emails from
 the whole subdomain.
 
 ```yaml
@@ -376,10 +376,10 @@ This list gives you an overview of default security settings and if they comply 
 |             | icap                     | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    100    |    101     |   101   |
 |             | milter                   | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    100    |    101     |   101   |
 | Collabora   | collabora                |        :x:         |                :x:                 | :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`, `MKNOD`) |        :white_check_mark:         |               :x:               |  :white_check_mark:   |    100    |    101     |   100   |
-| Element     | element                  | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   | 
-|             | synapse                  | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   10991   |     -      |  10991  | 
-|             | synapseWeb               | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   | 
-|             | wellKnown                | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   | 
+| Element     | element                  | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   |
+|             | synapse                  | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   10991   |     -      |  10991  |
+|             | synapseWeb               | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   |
+|             | wellKnown                | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   |
 | Jitsi       | jibri                    |        :x:         |                :x:                 |                                                               :x: (`SYS_ADMIN`)                                                                |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |             | jicofo                   |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |             | jitsiKeycloakAdapter     | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1993    |    1993    |    -    |
@@ -567,6 +567,11 @@ that can be found at `Settings` -> `CI/CD` -> `Variables`. The variable should h
 If the branch of the test pipeline is not `main` this can be set with the .gitlab-ci.yml variable
 `TESTS_BRANCH` while creating a new pipeline.
 
+# License
+This project uses the following license: Apache-2.0
+
+# Copyright
+Copyright (C) 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 
 # Footnotes
 
