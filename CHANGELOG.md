@@ -1,3 +1,10 @@
+## [0.5.19](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.18...v0.5.19) (2023-10-30)
+
+
+### Bug Fixes
+
+* **element:** Update Element Web and Nordeck Widgets to latest releases ([2313f75](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/2313f75dbe32d855b0c440944bd0de51c8e104ca))
+
 ## [0.5.18](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.17...v0.5.18) (2023-10-28)
 
 
