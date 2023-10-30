@@ -1,3 +1,10 @@
+## [0.5.20](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.19...v0.5.20) (2023-10-30)
+
+
+### Bug Fixes
+
+* **helmfile:** Remove old XWiki image, set explicit timeout for OP deployment, bump Jitsi Helm chart to enable chat for stand-alone Jitsi ([5d01f8c](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/5d01f8ca46384d63d69dab0119998c4bb3183084))
+
 ## [0.5.19](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.18...v0.5.19) (2023-10-30)
 
 
