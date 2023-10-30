@@ -1,3 +1,11 @@
+## [0.5.21](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.20...v0.5.21) (2023-10-30)
+
+
+### Bug Fixes
+
+* **helmfile:** Deinstall components if disabled ([7feaadf](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/7feaadf7f8830d8d0d5df752733c9b8f47315df6))
+* **helmfile:** Put enviroments in first document inside of a yaml ([034e98c](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/034e98c850fa1f67300c04883904737a69448a25))
+
 ## [0.5.20](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.19...v0.5.20) (2023-10-30)
 
 
