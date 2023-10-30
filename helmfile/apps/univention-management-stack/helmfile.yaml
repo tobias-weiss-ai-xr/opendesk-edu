@@ -4,6 +4,7 @@
 bases:
   - "../../bases/environments.yaml"
 
+---
 repositories:
   # Univention Management Stack
   - name: "ums-repo"
@@ -116,3 +117,4 @@ releases:
 commonLabels:
   deploy-stage: "component-1"
   component: "univention-management-stack"
+...

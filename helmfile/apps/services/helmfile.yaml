@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+bases:
+  - "../../bases/environments.yaml"
+
+---
 repositories:
   # openDesk Certificates
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-certificates
@@ -137,7 +141,4 @@ releases:
 commonLabels:
   deploy-stage: "services"
   component: "services"
-
-bases:
-  - "../../bases/environments.yaml"
 ...

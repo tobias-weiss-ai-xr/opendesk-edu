@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+bases:
+  - "../../bases/environments.yaml"
+
+---
 repositories:
   # OX Connector
   - name: "ox-connector-repo"
@@ -20,7 +24,4 @@ releases:
 commonLabels:
   deploy-stage: "component-2"
   component: "provisioning"
-
-bases:
-  - "../../bases/environments.yaml"
 ...

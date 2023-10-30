@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+bases:
+  - "../../bases/environments.yaml"
+
+---
 repositories:
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
@@ -55,7 +59,4 @@ releases:
 commonLabels:
   deploy-stage: "component-1"
   component: "keycloak"
-
-bases:
-  - "../../bases/environments.yaml"
 ...
