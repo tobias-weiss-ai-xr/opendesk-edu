@@ -114,7 +114,7 @@ images:
     # @supplier: "Nextcloud Community"
   openproject:
     repository: "openproject/open_desk"
-    tag: "dev@sha256:e907515ebbc758ea93b7efd9209c27a449e99adc0a3fc725a73c89508140a2f4"
+    tag: "dev@sha256:ca5b843fd7f0687617ce3038a52fd6ac73fb4e9db7b762b8ac7d5090f168f0b1"
     # @supplier: "OpenProject"
   openxchangeBootstrap:
     repository: "alpine/k8s"
