@@ -1,3 +1,10 @@
+## [0.5.22](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.21...v0.5.22) (2023-10-31)
+
+
+### Bug Fixes
+
+* **openproject:** Nextcloud integration within K8s instances ([d249d0e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/d249d0e3ce3ee0966033e870ea5c4d9e1928f045))
+
 ## [0.5.21](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.20...v0.5.21) (2023-10-30)
 
 
