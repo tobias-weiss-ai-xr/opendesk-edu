@@ -1,3 +1,10 @@
+## [0.5.23](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.22...v0.5.23) (2023-11-01)
+
+
+### Bug Fixes
+
+* **element:** Update Element Web to latest release ([b47de62](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/b47de62f987e8778878fee55ecda3032beb55f3d))
+
 ## [0.5.22](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.21...v0.5.22) (2023-10-31)
 
 
