@@ -8,7 +8,7 @@ images:
     # @supplier: "openDesk DevSecOps"
   collabora:
     repository: "souvap/tooling/images/collabora"
-    tag: "23.05.4.2.1@sha256:ee9ce83811700f1ff57e1218d22388dbaca96306df33f82aa14b334c5302285a"
+    tag: "23.05.5.3.1@sha256:496c913527ce83feb3fe2383d710851aa3781ffa56d200c75def74904d32adc3"
     # @supplier: "Collabora"
   dovecot:
     repository: "dovecot/dovecot"
