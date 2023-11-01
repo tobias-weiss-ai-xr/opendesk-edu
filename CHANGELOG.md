@@ -1,3 +1,10 @@
+## [0.5.24](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.23...v0.5.24) (2023-11-01)
+
+
+### Bug Fixes
+
+* **collabora:** Update image to 23.05.5.3.1 ([38336d0](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/38336d024033f4fe1a28b0f76f9c63ecdb076156))
+
 ## [0.5.23](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.22...v0.5.23) (2023-11-01)
 
 
