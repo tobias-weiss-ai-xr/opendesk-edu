@@ -1,3 +1,10 @@
+## [0.5.25](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.24...v0.5.25) (2023-11-01)
+
+
+### Bug Fixes
+
+* **cryptpad:** Add CryptPad to support editing of diagrams.net files from within Nextcloud ([ab6014f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/ab6014f8c6285785be5c56cd656fe0636df4434c))
+
 ## [0.5.24](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.23...v0.5.24) (2023-11-01)
 
 
