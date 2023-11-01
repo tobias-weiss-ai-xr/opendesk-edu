@@ -78,6 +78,12 @@ variables:
     options:
       - "yes"
       - "no"
+  DEPLOY_CRYPTPAD:
+    description: "Enable CryptPad deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
   DEPLOY_ELEMENT:
     description: "Enable Element deployment."
     value: "no"
@@ -341,6 +347,18 @@ collabora-deploy:
       when: "always"
   variables:
     COMPONENT: "collabora"
+
+cryptpad-deploy:
+  stage: "component-deploy-stage-1"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_CRYPTPAD != "no")
+      when: "always"
+  variables:
+    COMPONENT: "cryptpad"
 
 nextcloud-deploy:
   stage: "component-deploy-stage-1"

@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+bases:
+  - "../../bases/environments.yaml"
+
+---
+repositories:
+  # CryptPad
+  # Source: https://github.com/cryptpad/helm
+  - name: "cryptpad-online-repo"
+    url: >-
+      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
+         default "https://cryptpad.github.io/helm" }}
+
+releases:
+  - name: "cryptpad"
+    chart: "cryptpad-online-repo/cryptpad"
+    version: "0.0.13"
+    values:
+      - "values.yaml"
+      - "values.gotmpl"
+    installed: {{ .Values.cryptpad.enabled }}
+
+commonLabels:
+  deploy-stage: "component-1"
+  component: "cryptpad"
+...

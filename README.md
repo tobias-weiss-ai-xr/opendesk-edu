@@ -209,6 +209,7 @@ subdirectory `/helmfile/apps/services`.
 | ClamAV (Distributed)        | `clamavDistributed.enabled`         | `false` | Antivirus engine               | Eval       |
 | ClamAV (Simple)             | `clamavSimple.enabled`              | `true`  | Antivirus engine               | Eval       |
 | Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                      | Functional |
+| CryptPad                    | `cryptpad.enabled`                  | `true`  | Weboffice                      | Functional |
 | Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend                   | Functional |
 | Element                     | `element.enabled`                   | `true`  | Secure communications platform | Functional |
 | Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange    | Functional |
@@ -315,6 +316,7 @@ actual scalability of the components (see column `Scaling (verified)`).
 |             | `replicas.icap`        | :white_check_mark:  | :white_check_mark: |
 |             | `replicas.milter`      | :white_check_mark:  | :white_check_mark: |
 | Collabora   | `replicas.collabora`   | :white_check_mark:  |       :gear:       |
+| CryptPad    | `replicas.cryptpad`    | :white_check_mark:  |       :gear:       |
 | Dovecot     | `replicas.dovecot`     |         :x:         |       :gear:       |
 | Element     | `replicas.element`     | :white_check_mark:  | :white_check_mark: |
 |             | `replicas.synapse`     |         :x:         |       :gear:       |
@@ -376,6 +378,7 @@ This list gives you an overview of default security settings and if they comply 
 |             | icap                     | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    100    |    101     |   101   |
 |             | milter                   | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    100    |    101     |   101   |
 | Collabora   | collabora                |        :x:         |                :x:                 | :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`, `MKNOD`) |        :white_check_mark:         |               :x:               |  :white_check_mark:   |    100    |    101     |   100   |
+| CryptPad    | cryptpad                 |        :x:         |                :x:                 |                                                                      :x:                                                                       |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |  4001   |
 | Element     | element                  | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   |
 |             | synapse                  | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   10991   |     -      |  10991  |
 |             | synapseWeb               | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   |
@@ -407,6 +410,7 @@ Helm Charts which are released via openDesk CI/CD process are always signed. The
 | bitnami-repo (openDesk build)        | yes | :white_check_mark: |
 | clamav-repo                          | yes | :white_check_mark: |
 | collabora-online-repo                | no  |        :x:         |
+| cryptpad-online-repo                 | no  |        :x:         |
 | intercom-service-repo                | yes | :white_check_mark: |
 | istio-resources-repo                 | yes | :white_check_mark: |
 | jitsi-repo                           | yes | :white_check_mark: |
@@ -516,6 +520,7 @@ flowchart TD
     J[Jitsi]-->K
     I[IntercomService]-->K
     C[Collabora]-->N
+    R[CryptPad]-->N
     F[Postfix]-->D
 ```
 

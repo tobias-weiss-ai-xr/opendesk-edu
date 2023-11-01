@@ -9,6 +9,7 @@ global:
   #
   hosts:
     collabora: "collabora"
+    cryptpad: "cryptpad"
     dimension: "integration"
     element: "chat"
     etherpad: "etherpad"

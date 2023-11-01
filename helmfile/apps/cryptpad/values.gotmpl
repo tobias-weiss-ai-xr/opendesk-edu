@@ -1,0 +1,33 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.cryptpad.repository }}"
+  tag: {{ .Values.images.cryptpad.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . | quote }}
+{{- end }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: {{ .Values.ingress.ingressClassName | quote }}
+  hosts:
+    - host: "{{ .Values.global.hosts.cryptpad }}.{{ .Values.global.domain }}"
+      paths:
+        - path: "/"
+          pathType: "ImplementationSpecific"
+  tls:
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
+      hosts:
+        - "{{ .Values.global.hosts.cryptpad }}.{{ .Values.global.domain }}"
+
+replicaCount: {{ .Values.replicas.cryptpad }}
+
+resources:
+  {{ .Values.resources.cryptpad | toYaml | nindent 2 }}
+...

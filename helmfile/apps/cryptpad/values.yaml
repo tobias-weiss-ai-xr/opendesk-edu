@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+# https://github.com/cryptpad/helm/blob/main/charts/cryptpad/README.md or
+# https://github.com/cryptpad/helm/blob/main/charts/cryptpad/values.yaml
+
+# Disable registration and access to unregistered users:
+# (https://docs.cryptpad.org/en/admin_guide/customization.html#application-config)
+
+application_config:
+  availablePadTypes:
+    - "diagram"
+
+# Deactivating public access breaks nextcloud plugin!
+#  registeredOnlyTypes:
+#    - "diagram"
+
+autoscaling:
+  enabled: false
+
+enableEmbedding: true
+
+fullnameOverride: "cryptpad"
+
+persistence:
+  enabled: false
+
+podSecurityContext:
+  fsGroup: 4001
+
+securityContext:
+  seccompProfile:
+    type: "RuntimeDefault"
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+serviceAccount:
+  create: true
+
+workloadStateful: false
+...

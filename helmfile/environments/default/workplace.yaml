@@ -9,6 +9,8 @@ clamavSimple:
   enabled: true
 collabora:
   enabled: true
+cryptpad:
+  enabled: true
 dovecot:
   enabled: true
 element:
