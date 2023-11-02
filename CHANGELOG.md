@@ -1,3 +1,10 @@
+## [0.5.26](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.25...v0.5.26) (2023-11-02)
+
+
+### Bug Fixes
+
+* **element:** Enables user directory search for all users ([8fafd90](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/8fafd906a3b0efa7e4164b357656d7903fc55371))
+
 ## [0.5.25](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.24...v0.5.25) (2023-11-01)
 
 
