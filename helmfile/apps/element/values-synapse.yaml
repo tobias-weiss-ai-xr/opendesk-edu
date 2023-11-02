@@ -3,6 +3,9 @@
 ---
 configuration:
   additionalConfiguration:
+    user_directory:
+      enabled: true
+      search_all_users: true
     room_prejoin_state:
       additional_event_types:
         - "m.space.parent"
