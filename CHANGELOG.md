@@ -1,3 +1,10 @@
+## [0.5.27](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.26...v0.5.27) (2023-11-04)
+
+
+### Bug Fixes
+
+* **docs:** Re-include release artefacts ([4359b21](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/4359b21f1cdae91a87b87ad2b270d67a2b1eda21))
+
 ## [0.5.26](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.25...v0.5.26) (2023-11-02)
 
 
