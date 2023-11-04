@@ -6,11 +6,20 @@ SPDX-License-Identifier: Apache-2.0
 
 [[_TOC_]]
 
-# Disclaimer August 2023
+# Disclaimer
 
-The current state of the Sovereign Workplace contains components that are going to be
-replaced. Like for example the UCS dev container monolith will be substituted by
-multiple Univention Management Stack containers.
+openDesk will face breaking changes in the near future without upgrade paths.
+
+While most components support upgrades, major configuration or component changes
+may occur, therefore we recommend always installing from scratch.
+
+Components that are going to be replaced soon are:
+- The UCS dev container monolith will be substituted by multiple Univention
+Management Stack containers,
+- the Nextcloud community container is going to be replaced by an openDesk
+specific Nextcloud distroless container and
+- Dovecot Community is going to be replaced by a Dovecot container tailored for the
+needs of the public sector.
 
 In the next months we not only expect upstream updates of the functional
 components within their feature scope, but we are also going to address
@@ -19,8 +28,6 @@ operational issues like monitoring and network policies.
 Of course, further development also includes enhancing the documentation.
 
 The first release of the Sovereign Workplace is scheduled for December 2023.
-Before that release there will be breaking changes in the deployment.
-
 
 # The Sovereign Workplace (SWP)
 
