@@ -1,3 +1,10 @@
+## [0.5.29](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.28...v0.5.29) (2023-11-06)
+
+
+### Bug Fixes
+
+* **xwiki:** Update XWiki Helm configuration to enable LDAP and OIDC user synchronization ([7c56c72](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/7c56c7244f3862b6b21627661430a94d804c6974))
+
 ## [0.5.28](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.27...v0.5.28) (2023-11-06)
 
 
