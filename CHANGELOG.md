@@ -1,3 +1,11 @@
+## [0.5.30](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.29...v0.5.30) (2023-11-06)
+
+
+### Bug Fixes
+
+* **collabora:** Init monitoring in defaults and in collabora (for prometheus-monitor, -rules and grafana dashboard) ([0ad0434](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/0ad043406bef7bb10d561ef1418b58cbd8714d43))
+* **helmfile:** Add monitoring.yaml for optional monitoring ([385d81b](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/385d81b9a9e1ec319706493c51629c8e48822aa7))
+
 ## [0.5.29](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.28...v0.5.29) (2023-11-06)
 
 
