@@ -281,6 +281,6 @@ images:
     # @supplier: "Element"
   xwiki:
     repository: "xwikisas/swp/xwiki"
-    tag: "0.11-mariadb-jetty-alpine@sha256:a334e18d171458ed41ef356e82580561f48b0edf60b4979dc4ed9503eb497c59"
+    tag: "0.12-mariadb-jetty-alpine@sha256:c195d8baf38b6c6b0c533a3216e726cd863a6c2ba0e65f18036402592bb72896"
     # @supplier: "XWiki"
 ...

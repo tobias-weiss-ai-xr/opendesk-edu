@@ -8,7 +8,7 @@ customConfigs:
   xwiki.cfg:
     xwiki.url.protocol: "https"
     ## Indicate the LDAP field defining the user UID
-    # xwiki.authentication.ldap.UID_attr: "uid"
+    xwiki.authentication.ldap.UID_attr: "uid"
     ## Indicate the LDAP field defining the user profile picture
     # xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
     ## Enable the synchronization of the LDAP profile picture
@@ -17,8 +17,8 @@ customConfigs:
   xwiki.properties:
     oidc.scope: "openid,profile,email,address,phoenix"
     oidc.endpoint.userinfo.method: "GET"
-    oidc.user.nameFormater: "${oidc.user.phoenixusername._lowerCase}"
-    oidc.user.subjectFormater: "${oidc.user.subject}"
+    oidc.user.nameFormater: "${oidc.user.phoenixusername._clean._lowerCase}"
+    oidc.user.subjectFormater: "${oidc.user.phoenixusername._lowerCase}"
     # yamllint disable-line rule:line-length
     oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
     oidc.clientid: "xwiki"
@@ -67,21 +67,18 @@ properties:
 
   "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"
   ## Fields to search in when importing users from the administration UI (not completely in scope for now)
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapUserAttributes":
-  #   "sn,givenname,uid"
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapUserAttributes": "sn,givenname,uid"
   ## Restrict user import in the UI to global administrators
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.usersAllowedToImport": "globalAdmin"
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.usersAllowedToImport": "globalAdmin"
   ## Enable group and user synchronization
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupsUpdate": 1
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupImport": 1
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.forceXWikiUsersGroupMembershipUpdate":
-  #   1
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupsUpdate": 1
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupImport": 1
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.forceXWikiUsersGroupMembershipUpdate": 1
   ## Base DN under which groups should be searched for
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchDN":
-  #  "dc=swp-ldap,dc=internal"
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchDN": "dc=swp-ldap,dc=internal"
   ## LDAP filter to only synchronize some groups
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
-  #   "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
+    "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
 
 securityContext:
   enabled: true
