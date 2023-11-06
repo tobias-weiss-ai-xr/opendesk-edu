@@ -103,6 +103,9 @@ appsuite:
       oxguardpass: |
         {{ .Values.secrets.oxAppsuite.oxguardMC }}
         {{ .Values.secrets.oxAppsuite.oxguardRC }}
+    redis:
+      auth:
+        password: {{ .Values.secrets.redis.password | quote }}
     image:
       repository: {{ .Values.images.openxchangeCoreMW.repository }}
       tag: {{ .Values.images.openxchangeCoreMW.tag }}
@@ -139,6 +142,16 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreUIMiddleware.repository }}
       tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag }}
       pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    redis:
+      auth:
+        password: {{ .Values.secrets.redis.password | quote }}
+
+  core-documentconverter:
+    image:
+      repository: {{ .Values.images.openxchangeDocumentConverter.repository }}
+      tag: {{ .Values.images.openxchangeDocumentConverter.tag }}
+    resources:
+      {{- .Values.resources.oxDocumentConverter | toYaml | nindent 6 }}
 
   core-guidedtours:
     imagePullSecrets:
@@ -149,6 +162,11 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreGuidedtours.repository }}
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag }}
       pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+
+  core-imageconverter:
+    image:
+      repository: {{ .Values.images.openxchangeImageConverter.repository }}
+      tag: {{ .Values.images.openxchangeImageConverter.tag }}
 
   guard-ui:
     imagePullSecrets:

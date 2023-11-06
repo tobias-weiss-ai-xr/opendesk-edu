@@ -27,7 +27,7 @@ databases:
     password: ""
   oxAppsuite:
     host: "mariadb"
-    name: "CONFIGDB"
+    name: "configdb"
     username: "root"
     password: ""
   synapse:

@@ -44,7 +44,7 @@ releases:
 
   - name: "open-xchange"
     chart: "openxchange-repo/appsuite-public-sector/charts/appsuite-public-sector"
-    version: "2.0.4"
+    version: "2.1.1"
     values:
       - "values-openxchange.yaml"
       - "values-openxchange.gotmpl"
