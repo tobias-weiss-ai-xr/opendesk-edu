@@ -6,6 +6,9 @@ appsuite:
     ingressGateway:
       name: "opendesk-gateway-istio-gateway"
 
+  switchboard:
+    enabled: false
+
   core-mw:
     enabled: true
     masterAdmin: "admin"
@@ -63,6 +66,8 @@ appsuite:
       com.openexchange.mail.filter.credentialSource: "mail"
       com.openexchange.mail.filter.server: "dovecot"
       com.openexchange.mail.filter.preferredSaslMech: "XOAUTH2"
+      # Dovecot
+      com.openexchange.imap.attachmentMarker.enabled: "true"
       # Capabilities
       # Old capability can be used to toggle all integrations with a single switch
       com.openexchange.capability.public-sector: "true"
@@ -78,6 +83,7 @@ appsuite:
       com.openexchange.capability.smime: "true"
       com.openexchange.capability.share_links: "false"
       com.openexchange.capability.invite_guests: "false"
+      com.openexchange.capability.document_preview: "true"
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"
       com.openexchange.mail.transport.secondary.authType: "xoauth2"
@@ -89,6 +95,8 @@ appsuite:
       com.openexchange.gdpr.dataexport.enabled: "false"
       com.openexchange.gdpr.dataexport.active: "false"
       # Guard
+      com.openexchange.guard.storage.file.fileStorageType: "file"
+      com.openexchange.guard.storage.file.uploadDirectory: "/opt/open-xchange/guard-files/"
       com.openexchange.guard.guestSMTPServer: "postfix"
       # S/MIME
       # Usage (in browser console after login):
@@ -139,10 +147,31 @@ appsuite:
         oidcLogin: true
         oidcPath: "/oidc"
 
+    redis:
+      enabled: true
+      mode: "standalone"
+      hosts:
+        - "redis-master"
+
+    hooks:
+      beforeAppsuiteStart:
+        create-guard-dir.sh: |
+          mkdir -p /opt/open-xchange/guard-files
+          chown open-xchange:open-xchange /opt/open-xchange/guard-files
+
   core-ui:
     enabled: true
+
   core-ui-middleware:
     enabled: true
+    overrides: {}
+    redis:
+      mode: "standalone"
+      hosts:
+        - "redis-master:6379"
+      auth:
+        enabled: true
+
   core-guidedtours:
     enabled: true
   guard-ui:
@@ -151,12 +180,26 @@ appsuite:
     enabled: false
   core-user-guide:
     enabled: true
+
   core-imageconverter:
-    enabled: false
+    enabled: true
+    objectCache:
+      s3ObjectStores:
+        - id: -1
+          endpoint: "."
+          accessKey: "."
+          secretKey: "."
+
   core-spellcheck:
     enabled: false
+
   core-documentconverter:
-    enabled: false
+    enabled: true
+    documentConverter:
+      cache:
+        remoteCache:
+          enabled: false
+
   core-documents-collaboration:
     enabled: false
   office-web:

@@ -6,7 +6,7 @@ appsuite:
 
     properties:
       # Enterprise contact picker
-      com.openexchange.contacts.ldap.accounts: "opendesk"
+      com.openexchange.contacts.ldap.accounts: "opendesk,other,functional"
       com.openexchange.admin.bypassAccessCombinationChecks: "true"
       ENABLE_INTERNAL_USER_EDIT: "false"
 
@@ -153,7 +153,7 @@ appsuite:
             # allows to sort the attributes lexicographically, either "ascending" or "descending".
             dynamicAttributes:
               attributeName: "o"
-              contactFilterTemplate: "(&(univentionObjectType=users/user)(o=[value]))"
+              contactFilterTemplate: "(&(univentionObjectType=users/user)(isOxUser=OK)(o=[value]))"
               contactSearchScope: "sub"
               # refreshInterval: 1h
               refreshInterval: "5m"
@@ -173,6 +173,48 @@ appsuite:
                 - "Product Development"
                 - "Management"
                 - "Human Resources"
+
+        other:
+          name: "Other contacts"
+          ldapClientId: "contactsLdapClient"
+          mappings: "ucs"
+          folders:
+            mode: "static"
+            usedForSync:
+              protected: true
+              defaultValue: false
+            usedInPicker:
+              protected: false
+              defaultValue: true
+            shownInTree:
+              protected: false
+              defaultValue: true
+            static:
+              commonContactFilter: "(&(univentionObjectType=users/user)(isOxUser=OK)(!(o=*)))"
+              folders:
+                - name: "Ohne Organisation"
+                  contactFilter: "(&(univentionObjectType=users/user)(isOxUser=OK)(!(o=*)))"
+
+        functional:
+          name: "Functional mailboxes"
+          ldapClientId: "contactsLdapClient"
+          mappings: "functional"
+          folders:
+            mode: "static"
+            usedForSync:
+              protected: true
+              defaultValue: false
+            usedInPicker:
+              protected: false
+              defaultValue: true
+            shownInTree:
+              protected: false
+              defaultValue: true
+            static:
+              commonContactFilter: "(univentionObjectType=oxmail/functional_account)"
+              folders:
+                - name: "Funktionale Postfächer"
+                  contactFilter: "(univentionObjectType=oxmail/functional_account)"
 
       contacts-provider-ldap-mappings.yml:
         # Example definitions of contact property <-> LDAP attribute mappings.
@@ -347,3 +389,9 @@ appsuite:
           # image_last_modified   :
           # Will be set automatically to "image/jpeg" if not defined.
           # image1_content_type   :
+
+        functional:
+          objectid: "mailPrimaryAddress"
+          displayname: "oxPersonal,cn,mailPrimaryAddress"
+          file_as: "oxPersonal,cn,mailPrimaryAddress"
+          email1: "mailPrimaryAddress"

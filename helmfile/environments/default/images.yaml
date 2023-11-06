@@ -126,39 +126,47 @@ images:
     # @supplier: "Open-Xchange"
   openxchangeCoreGuidedtours:
     repository: "appsuite-public-sector/core-guidedtours"
-    tag: "8.5.1@sha256:469457562a378cca50460e08d9437a954fc6f19622f18128fa74979f7905ecd9"
+    tag: "8.6.0@sha256:6c20780f8c609636f2182c41709e2ee26586b4a23679fd13b15875a5f443445b"
     # @supplier: "Open-Xchange"
   openxchangeCoreMW:
     repository: "appsuite-public-sector/middleware-public-sector"
-    tag: "8.16.60@sha256:269c5b72f380c49ba1888c4300c409745d2ce757ca0b269afe1e8ac9bb26f028"
+    tag: "8.19.33@sha256:369c44369d727e4172f10c25137dbb00d936d20dd844cdca3a34f7f31273ea05"
     # @supplier: "Open-Xchange"
   openxchangeCoreUI:
     repository: "appsuite-public-sector/core-ui"
-    tag: "8.16.5@sha256:4f4dd4e36fb8a1b493c195e38e2f13b87c9582bfcdc3d23b646698fce2ffef8c"
+    tag: "8.19.0@sha256:7fdd73f78fd7094f2968f6fcaaae175e60824f9ef68f9e7e70418de6a2b623e9"
     # @supplier: "Open-Xchange"
   openxchangeCoreUIMiddleware:
     repository: "appsuite-public-sector/core-ui-middleware"
-    tag: "1.8.4@sha256:c707fbd5496c894f201dab8f4e78aad98f1ad80c8058778f04dfa5e6e201ed64"
+    tag: "2.0.0@sha256:8082edf30498a3ac1715f2d9b3e406f240ea586e2616b97f40c207ef55dff11f"
     # @supplier: "Open-Xchange"
   openxchangeCoreUserGuide:
     repository: "appsuite-public-sector/core-user-guide"
-    tag: "8.16.727397@sha256:5d8dbf9a91456dea59a235b495dcd002b971e2b23ef6c3a2ea5fd2071664e2a4"
+    tag: "8.19.771856@sha256:e00ed8f94c3c42cd288dd03f7fb18d228eb516b5e5ebd318825289b1c4ed17ab"
     # @supplier: "Open-Xchange"
-  openxchangeGuardUI:
-    repository: "appsuite-public-sector/guard-ui"
-    tag: "4.0.6@sha256:7bb8fdf944228dd78a5c33bbd8d0019d5a9e4ce1c35bda674166f2febc5d9a02"
-    # @supplier: "Open-Xchange"
-  openxchangeNextcloudIntegrationUI:
-    repository: "appsuite-public-sector/nextcloud-integration-ui"
-    tag: "1.0.5@sha256:cad4ecba431f84b8627d2e541cfea773d5ef54b65d847fa8f7e3fd0d63156497"
-    # @supplier: "Open-Xchange"
-  openxchangePublicSectorUI:
-    repository: "appsuite-public-sector/public-sector-ui"
-    tag: "2.0.1@sha256:8df90f6dfb59008567d8ded0dbd17b8f92f409c78ba2cf4ab2a39e1b23e34d3b"
+  openxchangeDocumentConverter:
+    repository: "appsuite-public-sector/documentconverter"
+    tag: "8.19.32@sha256:82354e858b6aeeae7f0ebaf66ad106f8e9ae46e605e97bb1d2d14e6ce1c3d708"
     # @supplier: "Open-Xchange"
   openxchangeGotenberg:
     repository: "appsuite-public-sector/3rdparty/gotenberg"
-    tag: "7.8.2@sha256:34af7b6d21c02b8183785177f5f3f1731633d72ec69e1f2ecdb8b43747887f62"
+    tag: "7.9.2@sha256:c97c1adb971d149222062ec46c5d749d710b38ad153c5c6ed954023e2401c9d0"
+    # @supplier: "Open-Xchange"
+  openxchangeGuardUI:
+    repository: "appsuite-public-sector/guard-ui"
+    tag: "4.0.7@sha256:8c9fa5d6aed055c0e84042ab28b3f0e9add94390362266ad440da4f90b8c93a8"
+    # @supplier: "Open-Xchange"
+  openxchangeImageConverter:
+    repository: "appsuite-public-sector/imageconverter"
+    tag: "8.19.33@sha256:9543c1409a129567bd6e4a657a353819842a4b1e1807ab86a1ea2e7f73f8c18e"
+    # @supplier: "Open-Xchange"
+  openxchangeNextcloudIntegrationUI:
+    repository: "appsuite-public-sector/nextcloud-integration-ui"
+    tag: "1.1.0@sha256:82cecb5adac63806ab41546e6b49090a93a5f4645750bb3967d87585b60df2e1"
+    # @supplier: "Open-Xchange"
+  openxchangePublicSectorUI:
+    repository: "appsuite-public-sector/public-sector-ui"
+    tag: "2.1.0@sha256:ed56730add8afdb08bef8b43a114aba406fd86d83c7fd7af93dc16bb002fa233"
     # @supplier: "Open-Xchange"
   oxConnector:
     repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
