@@ -18,13 +18,13 @@ customConfigs:
   "xwiki.cfg":
     "xwiki.superadminpassword": "{{ .Values.secrets.xwiki.superadminpassword }}"
     ## LDAP Server configuration
-    # "xwiki.authentication.ldap.server": "univention-corporate-container"
-    # xwiki.authentication.ldap.port: 389
+    xwiki.authentication.ldap.server: "univention-corporate-container"
+    xwiki.authentication.ldap.port: 389
     ## Authentication to the LDAP server
-    # xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
-    # xwiki.authentication.ldap.bind_pass: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki }}"
+    xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
+    xwiki.authentication.ldap.bind_pass: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki }}"
     ## Base DN used for searching for users
-    # xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
+    xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
 
   "xwiki.properties":
     "oidc.endpoint.authorization": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/auth"
@@ -43,8 +43,8 @@ properties:
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": "{{ .Values.theme.colors.white }}"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": "{{ .Values.theme.colors.secondaryGreyLight }}"
   ## Link LDAP users and users authenticated through OIDC
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}
