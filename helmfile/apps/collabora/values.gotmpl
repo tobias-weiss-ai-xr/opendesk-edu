@@ -41,13 +41,13 @@ resources:
 
 prometheus:
   servicemonitor:
-    enabled: {{ .Values.prometheus.monitor.enabled }}
+    enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
     labels:
-      {{- toYaml .Values.prometheus.monitor.labels | nindent 6 }}
+      {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
   rules:
-    enabled: {{ .Values.prometheus.rules.enabled }}
+    enabled: {{ .Values.prometheus.prometheusRules.enabled }}
     additionalLabels:
-      {{- toYaml .Values.prometheus.rules.labels | nindent 6 }}
+      {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 6 }}
 
 grafana:
   dashboards:
