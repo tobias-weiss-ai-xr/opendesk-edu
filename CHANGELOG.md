@@ -1,3 +1,10 @@
+## [0.5.28](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.27...v0.5.28) (2023-11-06)
+
+
+### Bug Fixes
+
+* **open-xchange:** Add Document- and ImageConverter, improve LDAP address book filters ([899a8c5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/899a8c5af9052634b98d9876dfbaea517d89ad49))
+
 ## [0.5.27](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.26...v0.5.27) (2023-11-04)
 
 
