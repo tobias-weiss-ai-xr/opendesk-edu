@@ -2,12 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 prometheus:
-  monitor:
+  serviceMonitors:
     enabled: false
     labels:
       release: "kube-prometheus-stack"
-
-  rules:
+  podMonitors:
+    enabled: false
+    labels:
+      release: "kube-prometheus-stack"
+  prometheusRules:
     enabled: false
     labels:
       release: "kube-prometheus-stack"

@@ -442,91 +442,42 @@ Helm Charts which are released via openDesk CI/CD process are always signed. The
 
 
 ## Monitoring
-For a monitoring openDesk has an optional deployment of Kubernetes Resources for the usage with [Prometheus Operator](https://prometheus-operator.dev).
+Together with 
+[kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) into
+you can monitor openDesk components with Prometheus and Grafana.
 
-There is an easy all in one Monitoring helm-chart
-[kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack)
-which also deployes an Grafana as sub-helmchart.
+Before enabling the following options, you need to install the respective CRDs from the kube-prometheus-stack 
+repository.
 
 
-### Metrics (pod- and serviceMonitor)
-To deploy podMonitor and serviceMonitor, enable it by:
+### Metrics
+To deploy podMonitor and serviceMonitor custom resources, enable it by:
+
 ```yaml
 prometheus:
-  monitor:
+  serviceMonitors:
+    enabled: true
+  podMonitors:
     enabled: true
 ```
 
-### Alerts (prometheusRules)
-Some helm-charts provide a default set of prometheusRules for alerting
-To deploy prometheusRules (alerts), enable it by:
+### Alerts
+Some helm-charts provide a default set of prometheusRules for alerting, enable it by:
+
 ```yaml
 prometheus:
-  rules:
+  prometheusRules:
     enabled: true
-```
-
-### Non default Prometheus setup
-An Prometheus Instance (deployed by Prometheus-Operator)
-search for Kubernetes-Resources by his labels
-on kube-prometheus-stack the default-value are "release=kube-prometheus-stack".
-
-If you use a different Prometheus-Setup, maybe you like to adjust the labels:
-```yaml
-prometheus:
-  monitor:
-    labels:
-      release: "kube-prometheus-stack"
-  rules:
-    labels:
-      release: "kube-prometheus-stack"
 ```
 
 ### Dashboards for Grafana
-The default Grafana helm-chart is able to collect this with an pre installed sidecar
+To deploy optional ConfigMaps with Grafana dashboards, enable it by:
 
-Deploy optional ConfigMaps with grafana dashboards.
 ```yaml
 grafana:
   dashboards:
     enabled: true
 ```
-
-
-#### Non default Grafana setup
-The pre installed sidecar of grafana search for ConfigMaps and Secrets by his labels
-on default value  is "grafana_dashboard=1".
-
-If you use a different setup, maybe you like to adjust the labels:
-```yaml
-grafana:
-  dashboards:
-    labels:
-      grafana_dashboard: "1"
-```
-
-#### Put Dashboards in Grafana folder
-usefull for putting dashboards in folder
-https://github.com/grafana/helm-charts/tree/grafana-6.58.6/charts/grafana#configuration
-if in grafana helmchart `sidecar.dashboards.folderAnnotation` and `sidecar.dashboards.provider.foldersFromFilesStructure` set
-or in [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack):
-```yaml
-grafana:
-  sidecar:
-    dashboards:
-      folderAnnotation: "grafana-dashboard-folder"
-      provider:
-         foldersFromFilesStructure: true
-```
-
-Afterward you could configure openDesk with this helmfile to use the directory e.g. "openDesk":
-```yaml
-grafana:
-  dashboards:
-    annotations:
-      "grafana-dashboard-folder": "openDesk"
-```
-
 
 ### Components
 | Component   | Metrics (pod- or serviceMonitor)  | Alerts (prometheusRule) | Dashboard (Grafana) |
