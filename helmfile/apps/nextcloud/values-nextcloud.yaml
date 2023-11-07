@@ -41,9 +41,6 @@ externalDatabase:
   # to the mariadb:
   type: "mysql"
 
-metrics:
-  enabled: false
-
 nextcloud:
   configs:
     mimetypealiases.json: |-

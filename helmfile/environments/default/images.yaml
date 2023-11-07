@@ -120,6 +120,10 @@ images:
     repository: "nextcloud"
     tag: "27.1.1-apache@sha256:47325758ffcd54563021e697905aaba6aac8c21bceefb245c67d40194813ce39"
     # @supplier: "Nextcloud Community"
+  nextcloudExporter:
+    repository: "xperimental/nextcloud-exporter"
+    tag: "0.6.1@sha256:2a01f270ac3a887365a9de02e9d81e47364278c9bbd2a0aef13417eaf7181a5c"
+    # @supplier: "?"
   openproject:
     repository: "openproject/open_desk"
     tag: "dev@sha256:732b5d0efe9fc64fe411c9d8143ec3f4a3c731d03c0caddb5fa4c614ff426e8d"
