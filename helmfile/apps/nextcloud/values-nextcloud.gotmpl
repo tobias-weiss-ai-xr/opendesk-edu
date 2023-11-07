@@ -35,7 +35,19 @@ image:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 metrics:
+  enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
   token: {{ .Values.secrets.nextcloud.metricsToken | quote }}
+  image:
+    repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.nextcloudExporter.repository }}"
+    pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    tag: "{{ .Values.images.nextcloudExporter.tag }}"
+    pullSecrets:
+      {{- toYaml .Values.global.imagePullSecrets | nindent 4 }}
+
+  serviceMonitor:
+    enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+    labels:
+      {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
 
 {{- if .Values.cluster.persistence.readWriteMany.enabled }}
 replicaCount: {{ .Values.replicas.nextcloud }}
