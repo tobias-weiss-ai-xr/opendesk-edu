@@ -11,11 +11,11 @@ resources:
       memory: "2Gi"
   collabora:
     limits:
-      cpu: 1
-      memory: "500Mi"
+      cpu: 4
+      memory: "4Gi"
     requests:
-      cpu: 0.1
-      memory: "16Mi"
+      cpu: 0.5
+      memory: "1Gi"
   cryptpad:
     limits:
       cpu: 2
