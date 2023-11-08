@@ -4,22 +4,29 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 stackDataSwp:
-  udmApiUsername: "cn=admin"
+  udmApiUser: "cn=admin"
   udmApiPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   loadDevData: true
 
 stackDataContext:
   ldapBase: "dc=swp-ldap,dc=internal"
+  ldapSearchUsers:
+    {{- range $k, $v := .Values.secrets.univentionCorporateServer.ldapSearch }}
+    - username: {{ printf "ldapsearch_%s" $k | quote }}
+      password: {{ $v | quote }}
+      lastname: {{ "LDAP-Search-User" }}
+    {{- end }}
+
   externalDomainName: "{{ .Values.global.domain }}"
   externalMailDomain: "{{ .Values.global.domain }}"
 
-  portalGroupwareLinkBase: "https://webmail.{{ .Values.istio.domain }}"
-  portalFileshareLinkBase: "https://fs.{{ .Values.global.domain }}"
-  portalRealtimeCollaborationLinkBase: "https://chat.{{ .Values.global.domain }}"
-  portalRealtimeVideoconferenceLinkBase: "https://meet.{{ .Values.global.domain }}"
-  portalManagementProjectLinkBase: "https://project.{{ .Values.global.domain }}"
-  portalManagementKnowledgeLinkBase: "https://wiki.{{ .Values.global.domain }}"
+  portalGroupwareLinkBase: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+  portalFileshareLinkBase: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+  portalRealtimeCollaborationLinkBase: "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}"
+  portalRealtimeVideoconferenceLinkBase: "https://{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
+  portalManagementProjectLinkBase: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
+  portalManagementKnowledgeLinkBase: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
 
   oxDefaultContext: "10"
 

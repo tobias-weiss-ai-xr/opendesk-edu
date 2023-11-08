@@ -13,7 +13,4 @@ config:
 
   cryptpad:
     enabled: true
-
-  ldapSearch:
-    host: "univention-corporate-container"
 ...

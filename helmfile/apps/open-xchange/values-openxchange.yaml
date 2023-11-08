@@ -111,7 +111,6 @@ appsuite:
       /opt/open-xchange/etc/system.properties:
         SERVER_NAME: "oxserver"
       /opt/open-xchange/etc/ldapauth.properties:
-        java.naming.provider.url: "ldap://univention-corporate-container:389/dc=swp-ldap,dc=internal"
         bindOnly: "false"
         bindDN: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
 

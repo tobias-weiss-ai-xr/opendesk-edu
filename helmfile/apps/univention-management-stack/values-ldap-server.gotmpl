@@ -14,10 +14,9 @@ ldapServer:
   # dhParam: ""
   tlsMode: "off"
 
-  # TODO: SAML integration
-  # samlMetadataUrl: "http://localhost:8097/realms/ucs/protocol/saml/descriptor"
-  # samlMetadataUrlInternal: "http://keycloak.default/realms/ucs/protocol/saml/descriptor"
-  # serviceProviders: "http://localhost:8000/univention/saml/metadata,http://localhost:8000/auth/realms/ucs"
+  samlMetadataUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/saml/descriptor"
+  samlMetadataUrlInternal: null
+  serviceProviders: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/saml/metadata"
 
 image:
   registry: "{{ .Values.global.imageRegistry }}"
@@ -28,6 +27,12 @@ image:
     {{- range .Values.global.imagePullSecrets }}
     - name: {{ . }}
     {{- end }}
+
+  waitForDependency:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.umsWaitForDependency.repository }}"
+    imagePullPolicy: "Always"
+    tag: "{{ .Values.images.umsWaitForDependency.tag }}"
 
 # TODO: Pending upstream support, #199
 persistence:

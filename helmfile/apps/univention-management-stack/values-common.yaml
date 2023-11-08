@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+global:
+  configMapUcrDefaults: "ums-stack-data-ums-ucr"
+  configMapUcr: "ums-stack-data-swp-ucr"
+  configMapUcrForced: null
 
 istio:
   enabled: false

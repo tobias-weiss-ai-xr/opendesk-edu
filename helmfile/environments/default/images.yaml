@@ -213,67 +213,67 @@ images:
   umsConfigHtpasswd:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/config-htpasswd"
-    tag: "latest"
+    tag: "0.5.2"
     # @supplier: "Univention"
   umsDataLoader:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/data-loader"
-    tag: "latest"
+    tag: "0.15.2"
     # @supplier: "Univention"
   umsLdapNotifier:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-notifier"
-    tag: "latest"
+    tag: "0.4.1"
     # @supplier: "Univention"
   umsLdapServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-server"
-    tag: "latest"
+    tag: "0.4.1"
     # @supplier: "Univention"
   umsNotificationsApi:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/notifications-api"
-    tag: "latest"
+    tag: "0.3.4"
     # @supplier: "Univention"
   umsPortalListener:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-listener"
-    tag: "latest"
+    tag: "0.3.4"
     # @supplier: "Univention"
   umsPortalFrontend:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-frontend"
-    tag: "latest"
+    tag: "0.3.5"
     # @supplier: "Univention"
   umsPortalServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-server"
-    tag: "latest"
+    tag: "0.3.4"
     # @supplier: "Univention"
   umsWaitForDependency:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/wait-for-dependency"
-    tag: "latest"
+    tag: "0.3.4"
     # @supplier: "Univention"
   umsStoreDav:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/store-dav"
-    tag: "latest"
+    tag: "0.5.2"
     # @supplier: "Univention"
   umsUdmRestApi:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/udm-rest-api"
-    tag: "latest"
+    tag: "0.3.2"
     # @supplier: "Univention"
   umsUmcGateway:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-gateway"
-    tag: "latest"
+    tag: "0.3.2"
     # @supplier: "Univention"
   umsUmcServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-server"
-    tag: "latest"
+    tag: "0.3.2"
     # @supplier: "Univention"
   wellKnown:
     repository: "library/nginx"

@@ -55,9 +55,6 @@ environment:
   OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
   OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "peer"
   OPENPROJECT_DEFAULT__COMMENT__SORT__ORDER: "desc"
-  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
-  OPENPROJECT_SEED_LDAP_OPENDESK_HOST: "univention-corporate-container"
-  OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
   OPENPROJECT_SEED_LDAP_OPENDESK_SECURITY: "plain_ldap"
   OPENPROJECT_SEED_LDAP_OPENDESK_BINDUSER: "uid=ldapsearch_openproject,cn=users,dc=swp-ldap,dc=internal"
   OPENPROJECT_SEED_LDAP_OPENDESK_BASEDN: "dc=swp-ldap,dc=internal"

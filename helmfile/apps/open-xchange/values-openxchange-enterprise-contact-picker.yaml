@@ -16,9 +16,6 @@ appsuite:
         contactsLdapClient:
           pool:
             type: "simple"
-            host:
-              address: "univention-corporate-container"
-              port: 389
           auth:
             type: "adminDN"
             adminDN:

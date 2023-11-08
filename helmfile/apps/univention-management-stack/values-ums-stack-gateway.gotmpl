@@ -1,0 +1,173 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+
+ingress:
+  enabled: true
+  hostname: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  tls: false
+  extraTls:
+    - hosts:
+        - "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+      secretName: "{{ .Values.ingress.tls.secretName }}"
+
+service:
+  type: "ClusterIP"
+
+# The content of the "serverBlock" does resemble the Ingress configuration of
+# the UMS components. The "location" entries do intentionally reflect precisely
+# the respective paths which are configured.
+serverBlock: |
+  server {
+    listen 8080;
+
+    ## portal-frontend
+    # The frontend does not own "/univention/portal", only these two bits
+    location = /univention/portal/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80/;
+    }
+    location = /univention/portal/index.html {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80/;
+    }
+
+    # The following prefixes are owned by the frontend
+    location /univention/portal/css/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/portal/fonts/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/portal/i18n/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/portal/media/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/portal/js/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/portal/oidc/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+
+
+    ## frontend redirects
+
+    location = / {
+       absolute_redirect off;
+       return 302 /univention/portal/;
+    }
+    location = /univention {
+       absolute_redirect off;
+       return 302 /univention/portal/;
+    }
+    location = /univention/ {
+       absolute_redirect off;
+       return 302 /univention/portal/;
+    }
+    location = /univention/portal {
+       absolute_redirect off;
+       return 302 /univention/portal/;
+    }
+
+
+    ## portal-server
+    location = /univention/portal/portal.json {
+      proxy_pass http://ums-portal-server:80;
+    }
+    location = /univention/portal/navigation.json {
+      proxy_pass http://ums-portal-server:80;
+    }
+
+
+    ## store-dav
+    location /univention/portal/icons/entries/ {
+      rewrite ^/univention/portal(/icons/entries/.*)$ /portal-assets$1 break;
+      proxy_pass http://ums-store-dav:80;
+    }
+    location /univention/portal/icons/logos/ {
+      rewrite ^/univention/portal(/icons/logos/.*)$ /portal-assets$1 break;
+      proxy_pass http://ums-store-dav:80;
+    }
+
+
+    ## udm-rest-api
+    location /univention/udm/ {
+      rewrite ^/univention(/udm/.*)$ $1 break;
+      proxy_pass http://ums-udm-rest-api:80;
+      proxy_set_header X-Forwarded-Host $host;
+    }
+
+
+    ## umc-gateway
+    location = /univention/languages.json {
+      proxy_pass http://ums-umc-gateway:80;
+    }
+    location = /univention/meta.json {
+      proxy_pass http://ums-umc-gateway:80;
+    }
+    location = /univention/theme.css {
+      proxy_pass http://ums-umc-gateway:80;
+    }
+    location /univention/js/ {
+      proxy_pass http://ums-umc-gateway:80;
+    }
+    location /univention/login/ {
+      proxy_pass http://ums-umc-gateway:80;
+    }
+    location /univention/management/ {
+      proxy_pass http://ums-umc-gateway:80;
+    }
+    location /univention/themes/ {
+      proxy_pass http://ums-umc-gateway:80;
+    }
+
+
+    ## umc-server
+    location = /univention/auth {
+      rewrite ^/univention(/.*)$ $1 break;
+      proxy_pass http://ums-umc-server:80;
+    }
+    location /univention/logout/ {
+      rewrite ^/univention(/.*)$ $1 break;
+      proxy_pass http://ums-umc-server:80;
+    }
+    location /univention/saml/ {
+      rewrite ^/univention(/.*)$ $1 break;
+      proxy_pass http://ums-umc-server:80;
+    }
+    location /univention/get/ {
+      rewrite ^/univention(/.*)$ $1 break;
+      proxy_pass http://ums-umc-server:80;
+    }
+    location /univention/set/ {
+      rewrite ^/univention(/.*)$ $1 break;
+      proxy_pass http://ums-umc-server:80;
+    }
+    location /univention/command/ {
+      rewrite ^/univention(/.*)$ $1 break;
+      proxy_pass http://ums-umc-server:80;
+    }
+    location /univention/upload/ {
+      rewrite ^/univention(/.*)$ $1 break;
+      proxy_pass http://ums-umc-server:80;
+    }
+
+
+    ## notifications-api
+
+    location /univention/portal/notifications-api/ {
+      rewrite ^/univention/portal/notifications-api(/.*)$ $1 break;
+      proxy_pass http://ums-notifications-api:80;
+    }
+
+  }
