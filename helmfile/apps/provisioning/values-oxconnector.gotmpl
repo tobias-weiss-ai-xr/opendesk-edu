@@ -19,6 +19,8 @@ persistence:
 
 oxConnector:
   domainName: "{{ .Values.global.domain }}"
+  ldapHost: "{{ .Values.global.ldap.host }}"
+  notifierServer: "{{ .Values.global.ldap.notifierHost }}"
   #oxMasterAdmin: "(( .Values.appsuite.core-mw.masterAdmin ))"
   oxMasterAdmin: "admin"
   oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}

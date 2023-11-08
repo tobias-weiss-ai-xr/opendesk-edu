@@ -54,6 +54,9 @@ environment:
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_HOST: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_END__SESSION__ENDPOINT: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
+  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
+  OPENPROJECT_SEED_LDAP_OPENDESK_HOST: "{{ .Values.global.ldap.host }}"
+  OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
   OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
   OPENPROJECT_SMTP__DOMAIN: "{{ .Values.global.domain }}"

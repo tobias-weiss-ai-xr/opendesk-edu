@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 ingress:
-  enabled: {{ .Values.ingress.enabled }}
+  enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   ingressClassName: "{{ .Values.ingress.ingressClassName }}"
   tls:

@@ -7,7 +7,6 @@ containerSecurityContext:
 dovecot:
   ldap:
     enabled: true
-    host: "univention-corporate-container"
     port: 389
     base: "dc=swp-ldap,dc=internal"
 

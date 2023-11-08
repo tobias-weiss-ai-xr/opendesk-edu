@@ -5,11 +5,9 @@ ingress:
   enabled: false
 
 oxConnector:
-  ldapHost: "univention-corporate-container"
   # ldapHostIp: ""
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
-  notifierServer: "univention-corporate-container"
   tlsMode: "off"
   # current static password for UCC
   ldapPassword: "ucctempldapstring"

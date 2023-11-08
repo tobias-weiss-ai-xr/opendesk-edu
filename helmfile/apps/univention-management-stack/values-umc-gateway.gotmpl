@@ -4,9 +4,17 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 umcGateway:
-  domainname: "{{ .Values.global.domain }}"
-  hostname: "{{ .Values.global.hosts.univentionManagementStack }}"
-  ssoFqdn: "localhost:8097"
+
+extraVolumes:
+  - name: "entrypoint-swp-patches"
+    configMap:
+      name: "ums-stack-data-swp-umc-gateway-entrypoint"
+      defaultMode: 0555
+
+extraVolumeMounts:
+  - name: "entrypoint-swp-patches"
+    mountPath: "/entrypoint.d/90-swp.sh"
+    subPath: "90-swp.sh"
 
 image:
   registry: "{{ .Values.global.imageRegistry }}"

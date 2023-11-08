@@ -7,7 +7,7 @@ portalServer:
   adminGroup: "cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal"
   authMode: "saml"
   environment: "staging"
-  editable: "true"
+  editable: "false"
   logLevel: "DEBUG"
   ucsInternalUrl: "http://portal-server:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalServer }}@ums-store-dav/portal-data"
   umcGetUrl: "http://ums-umc-server/get"

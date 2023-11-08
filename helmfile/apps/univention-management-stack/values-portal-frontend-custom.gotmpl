@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+
+ingress:
+  enabled: true
+  hostname: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ingressClassName: "nginx"
+  annotations:
+    nginx.org/mergeable-ingress-type: "minion"
+  tls: false
+
+  pathType: Exact
+  path: /favicon.ico
+
+  extraPaths:
+    - pathType: Exact
+      path: /univention/portal/css/custom.css
+      backend:
+        service:
+          name: ums-portal-frontend-custom-nginx
+          port:
+            name: http
+    - pathType: Exact
+      path: /univention/portal/icons/logo.svg
+      backend:
+        service:
+          name: ums-portal-frontend-custom-nginx
+          port:
+            name: http
+    - pathType: Exact
+      path: /univention/portal/icons/logo_small_border.svg
+      backend:
+        service:
+          name: ums-portal-frontend-custom-nginx
+          port:
+            name: http
+    - pathType: Exact
+      path: /univention/portal/custom/portal_background_image.png
+      backend:
+        service:
+          name: ums-portal-frontend-custom-nginx
+          port:
+            name: http
+    - pathType: Exact
+      path: /univention/portal/custom/portal_background_image.svg
+      backend:
+        service:
+          name: ums-portal-frontend-custom-nginx
+          port:
+            name: http
+
+...

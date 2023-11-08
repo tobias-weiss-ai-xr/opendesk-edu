@@ -34,7 +34,7 @@ keycloakConfigCli:
     - name: "LDAP_USERS_DN"
       value: "cn=users,dc=swp-ldap,dc=internal"
     - name: "LDAP_SERVER_URL"
-      value: "univention-corporate-container"
+      value: "{{ .Values.global.ldap.host }}"
     - name: "IDENTIFIER"
       value: "souvap"
     - name: "THEME"

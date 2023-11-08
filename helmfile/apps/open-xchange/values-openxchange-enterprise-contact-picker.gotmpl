@@ -8,6 +8,10 @@ appsuite:
     secretYAMLFiles:
       ldap-client-config.yml:
         contactsLdapClient:
+          pool:
+            host:
+              address: "{{ .Values.global.ldap.host }}"
+              port: 389
           auth:
             adminDN:
               password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox | quote }}

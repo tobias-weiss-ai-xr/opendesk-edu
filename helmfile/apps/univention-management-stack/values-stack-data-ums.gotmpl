@@ -10,8 +10,22 @@ stackDataUms:
   loadDevData: true
 
 stackDataContext:
+  domainname: "{{ .Values.global.domain }}"
+  externalMailDomain: "{{ .Values.global.domain }}"
+  hostname: "{{ .Values.global.hosts.univentionManagementStack }}"
+  ldapHost: "{{ .Values.global.ldap.host }}"
   ldapBase: "dc=swp-ldap,dc=internal"
-  initialPasswordAdministrator: {{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword | quote }}
+  # TODO: This should not be required, the machine account is not there
+  # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=swp-ldap,dc=internal
+  ldapHostDn: cn=admin,dc=swp-ldap,dc=internal
+
+  samlMetadataUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/saml/descriptor"
+  samlMetadataUrlInternal: null
+  samlSpServer: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  samlSchemes: "https"
+  ssoFqdn: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+
+  initialPasswordAdministrator: "{{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword }}"
 
   # The SWP configuration brings its own UMC policies.
   installUmcPolicies: false

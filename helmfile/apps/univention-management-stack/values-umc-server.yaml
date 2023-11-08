@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+umcServer:
+  certPemFile: "/var/secrets/ssl/tls.crt"
+  privateKeyFile: "/var/secrets/ssl/tls.key"
+
+extraVolumes:
+  - name: "certificates"
+    secret:
+      secretName: "opendesk-certificates-tls"
+
+extraVolumeMounts:
+  - name: "certificates"
+    mountPath: "/var/secrets/ssl"
+
+...

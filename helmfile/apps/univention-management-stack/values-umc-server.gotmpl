@@ -4,24 +4,6 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 umcServer:
-  domainname: "{{ .Values.global.domain }}"
-  hostname: "{{ .Values.global.hosts.univentionManagementStack }}"
-  ldapHost: "ums-ldap-server"
-  ldapBaseDn: "dc=swp-ldap,dc=internal"
-  # TODO: This should not be required, the machine account is not there
-  # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=swp-ldap,dc=internal
-  ldapHostDn: cn=admin,dc=swp-ldap,dc=internal
-  enforceSessionCookie: "true"
-
-  # TODO: The keycloak integration is pending
-  samlEnabled: false
-  samlMetadataUrl: "http://localhost:8097/realms/ucs/protocol/saml/descriptor"
-  samlMetadataUrlInternal: "http://keycloak/realms/ucs/protocol/saml/descriptor"
-  samlSpServer: "localhost:8000"
-  samlSchemes: "http"
-
-  tlsMode: "off"
-
   # TODO: Secret should be entered without b64enc
   ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
   # TODO: Secret should be entered without b64enc

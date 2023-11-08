@@ -11,6 +11,12 @@ global:
   #
   domain: {{ env "DOMAIN" | default "souvap.cloud" }}
 
+
+  ## Define LDAP service (supports "ums_eval" from the CI pipeline)
+  ldap:
+    host: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-server" {{ else }} "univention-corporate-container" {{ end }}
+    notifierHost: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-notifier" {{ else }} "univention-corporate-container" {{ end }}
+
   ## Define docker registry address.
   #
   imageRegistry: {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default "external-registry.souvap-univention.de/sovereign-workplace" }}

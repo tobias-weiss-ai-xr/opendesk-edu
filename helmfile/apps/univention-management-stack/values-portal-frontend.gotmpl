@@ -16,11 +16,12 @@ image:
 
 extraIngresses:
   redirects:
+    enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
     # The TLS configuration is on the "master" Ingress, see below.
     tls:
       enabled: false
   master:
-    enabled: {{ .Values.ingress.enabled }}
+    enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: "{{ .Values.ingress.tls.secretName }}"
