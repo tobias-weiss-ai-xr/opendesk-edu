@@ -10,7 +10,7 @@ appsuite:
         contactsLdapClient:
           pool:
             host:
-              address: {{ .Values.global.ldap.host | quote }}
+              address: {{ .Values.ldap.host | quote }}
               port: 389
           auth:
             adminDN:

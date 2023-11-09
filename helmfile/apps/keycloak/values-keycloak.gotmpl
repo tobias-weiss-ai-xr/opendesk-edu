@@ -34,7 +34,7 @@ keycloakConfigCli:
     - name: "LDAP_USERS_DN"
       value: "cn=users,dc=swp-ldap,dc=internal"
     - name: "LDAP_SERVER_URL"
-      value: {{ .Values.global.ldap.host | quote }}
+      value: {{ .Values.ldap.host | quote }}
     - name: "IDENTIFIER"
       value: "souvap"
     - name: "THEME"

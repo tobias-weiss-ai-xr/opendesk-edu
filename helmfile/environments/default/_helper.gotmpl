@@ -1,0 +1,10 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+## Define LDAP service (supports "ums_eval" from the CI pipeline)
+ldap:
+  host: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-server" {{ else }} "univention-corporate-container" {{ end }}
+  notifierHost: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-notifier" {{ else }} "univention-corporate-container" {{ end }}
+...

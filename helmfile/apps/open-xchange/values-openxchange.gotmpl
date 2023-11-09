@@ -83,7 +83,7 @@ appsuite:
     propertiesFiles:
       "/opt/open-xchange/etc/ldapauth.properties":
         bindDNPassword: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox | quote }}
-        java.naming.provider.url: "ldap://{{ .Values.global.ldap.host }}:389/dc=swp-ldap,dc=internal"
+        java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/dc=swp-ldap,dc=internal"
     uiSettings:
       "io.ox.nextcloud//server": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
       "io.ox.public-sector//ics/url": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
