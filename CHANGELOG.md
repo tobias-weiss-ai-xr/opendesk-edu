@@ -1,3 +1,10 @@
+## [0.5.33](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.32...v0.5.33) (2023-11-09)
+
+
+### Bug Fixes
+
+* **cryptpad:** Update security context ([89ae1d9](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/89ae1d94ea4c4e8a15a395a80847a7f235365747))
+
 ## [0.5.32](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.31...v0.5.32) (2023-11-09)
 
 
