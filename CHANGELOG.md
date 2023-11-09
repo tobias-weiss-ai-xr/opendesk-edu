@@ -1,3 +1,10 @@
+## [0.5.34](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.33...v0.5.34) (2023-11-09)
+
+
+### Bug Fixes
+
+* **openproject:** Bump helmchart and properly template OP's initdb image ([0d8e92f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/0d8e92fc5a4729ff7649e5a10e629b962a9b671b))
+
 ## [0.5.33](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.32...v0.5.33) (2023-11-09)
 
 
