@@ -13,6 +13,13 @@ image:
   pullPolicy: "{{ .Values.global.imagePullPolicy }}"
   tag: "{{ .Values.images.openproject.tag }}"
 
+initdb:
+  image:
+    registry: "{{ .Values.global.imageRegistry }}"
+    repository: "{{ .Values.images.openprojectInitDb.repository }}"
+    tag: "{{ .Values.images.openprojectInitDb.tag }}"
+    pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+
 memcached:
   connection:
     host: "{{ .Values.cache.openproject.host }}"
