@@ -29,14 +29,16 @@ podSecurityContext:
   fsGroup: 4001
 
 securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
   seccompProfile:
     type: "RuntimeDefault"
-  # capabilities:
-  #   drop:
-  #   - ALL
   # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  runAsNonRoot: true
+  runAsUser: 4001
+  runAsGroup: 4001
 
 serviceAccount:
   create: true
