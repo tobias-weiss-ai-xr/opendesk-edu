@@ -18,7 +18,7 @@ customConfigs:
   "xwiki.cfg":
     "xwiki.superadminpassword": {{ .Values.secrets.xwiki.superadminpassword | quote }}
     ## LDAP Server configuration
-    xwiki.authentication.ldap.server: {{ .Values.global.ldap.host | quote }}
+    xwiki.authentication.ldap.server: {{ .Values.ldap.host | quote }}
     xwiki.authentication.ldap.port: 389
     ## Authentication to the LDAP server
     xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"

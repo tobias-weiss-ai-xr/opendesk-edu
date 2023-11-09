@@ -36,7 +36,7 @@ config:
     password: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
 
   ldapSearch:
-    host: {{ .Values.global.ldap.host | quote }}
+    host: {{ .Values.ldap.host | quote }}
     password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud | quote }}
 
   smtp:

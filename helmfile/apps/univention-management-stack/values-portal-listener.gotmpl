@@ -13,7 +13,7 @@ portalListener:
   umcSessionUrl: "http://ums-umc-server/get/session-info"
 
   ldapBaseDn: "dc=swp-ldap,dc=internal"
-  ldapHost: "{{ .Values.global.ldap.host }}"
+  ldapHost: "{{ .Values.ldap.host }}"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
