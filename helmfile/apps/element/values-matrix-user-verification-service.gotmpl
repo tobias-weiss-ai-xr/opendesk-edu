@@ -4,17 +4,17 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
-  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  domain: {{ .Values.global.domain | quote }}
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  repository: "{{ .Values.images.matrixUserVerificationService.repository }}"
-  tag: "{{ .Values.images.matrixUserVerificationService.tag }}"
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  repository: {{ .Values.images.matrixUserVerificationService.repository | quote }}
+  tag: {{ .Values.images.matrixUserVerificationService.tag | quote }}
 
 replicaCount: {{ .Values.replicas.matrixUserVerificationService }}
 

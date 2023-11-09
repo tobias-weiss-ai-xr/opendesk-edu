@@ -14,13 +14,13 @@ portalServer:
   umcSessionUrl: "http://ums-umc-server/get/session-info"
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsPortalServer.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsPortalServer.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsPortalServer.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsPortalServer.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
 resources:

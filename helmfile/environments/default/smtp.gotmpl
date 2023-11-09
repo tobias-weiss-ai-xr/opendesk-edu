@@ -7,5 +7,5 @@ smtp:
   host: ""
   port: 587
   username: ""
-  password: "{{ env "SMTP_PASSWORD" }}"
+  password: {{ env "SMTP_PASSWORD" | quote }}
 ...

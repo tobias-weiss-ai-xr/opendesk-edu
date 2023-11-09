@@ -19,7 +19,7 @@ repositories:
 releases:
   - name: "intercom-service"
     chart: "intercom-service-repo/intercom-service"
-    version: "2.0.0"
+    version: "2.0.1"
     values:
       - "values.gotmpl"
     installed: {{ .Values.intercom.enabled }}

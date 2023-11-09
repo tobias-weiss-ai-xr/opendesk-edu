@@ -4,10 +4,10 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
+  domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  registry: "{{ .Values.global.imageRegistry }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
@@ -20,10 +20,10 @@ config:
     password: {{ .Values.secrets.keycloak.adminPassword | quote }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.keycloakBootstrap.repository }}"
-  tag: "{{ .Values.images.keycloakBootstrap.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.keycloakBootstrap.repository | quote }}
+  tag: {{ .Values.images.keycloakBootstrap.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 resources:
   {{ .Values.resources.keycloakBootstrap | toYaml | nindent 2 }}

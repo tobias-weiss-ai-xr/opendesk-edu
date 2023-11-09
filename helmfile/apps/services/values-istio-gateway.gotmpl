@@ -4,9 +4,9 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.istio.domain }}"
+  domain: {{ .Values.istio.domain | quote }}
   hosts:
-    openxchange: "{{ .Values.global.hosts.openxchange }}"
+    openxchange: {{ .Values.global.hosts.openxchange | quote }}
 
 tls:
   secretName: "{{ .Values.istio.domain }}-tls"

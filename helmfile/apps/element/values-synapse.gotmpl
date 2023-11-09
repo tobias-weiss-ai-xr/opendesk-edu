@@ -4,24 +4,24 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
-  registry: "{{ .Values.global.imageRegistry }}"
+  domain: {{ .Values.global.domain | quote }}
+  registry: {{ .Values.global.imageRegistry | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.synapse.repository }}"
-  tag: "{{ .Values.images.synapse.tag }}"
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.synapse.repository | quote }}
+  tag: {{ .Values.images.synapse.tag | quote }}
 
 configuration:
   database:
-    host: "{{ .Values.databases.synapse.host }}"
-    name: "{{ .Values.databases.synapse.name }}"
-    user: "{{ .Values.databases.synapse.username }}"
+    host: {{ .Values.databases.synapse.host | quote }}
+    name: {{ .Values.databases.synapse.name | quote }}
+    user: {{ .Values.databases.synapse.username | quote }}
     password: {{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser | quote }}
 
   homeserver:
@@ -37,32 +37,32 @@ configuration:
         sender_localpart: intercom-service
 
     oidc:
-      clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix }}
+      clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}
       issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
 
     turn:
-      sharedSecret: {{ .Values.turn.credentials }}
+      sharedSecret: {{ .Values.turn.credentials | quote }}
       servers:
         {{- if .Values.turn.tls.host }}
-        - server: {{ .Values.turn.tls.host }}
+        - server: {{ .Values.turn.tls.host | quote }}
           port: {{ .Values.turn.tls.port }}
-          transport: {{ .Values.turn.transport }}
+          transport: {{ .Values.turn.transport | quote }}
         {{- else if .Values.turn.server.host }}
-        - server: {{ .Values.turn.server.host }}
+        - server: {{ .Values.turn.server.host | quote }}
           port: {{ .Values.turn.server.port }}
-          transport: {{ .Values.turn.transport }}
+          transport: {{ .Values.turn.transport | quote }}
         {{- end }}
 
     guestModule:
       image:
-        imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-        registry: "{{ .Values.global.imageRegistry }}"
-        repository: "{{ .Values.images.synapseGuestModule.repository }}"
-        tag: "{{ .Values.images.synapseGuestModule.tag }}"
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+        registry: {{ .Values.global.imageRegistry | quote }}
+        repository: {{ .Values.images.synapseGuestModule.repository | quote }}
+        tag: {{ .Values.images.synapseGuestModule.tag | quote }}
 
 persistence:
-  size: "{{ .Values.persistence.size.synapse }}"
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: {{ .Values.persistence.size.synapse | quote }}
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 replicaCount: {{ .Values.replicas.synapse }}
 

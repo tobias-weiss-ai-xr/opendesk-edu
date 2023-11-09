@@ -4,28 +4,28 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  registry: {{ .Values.global.imageRegistry }}
+  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry }}
-  repository: "{{ .Values.images.postfix.repository }}"
-  tag: "{{ .Values.images.postfix.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.postfix.repository | quote }}
+  tag: {{ .Values.images.postfix.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 certificate:
-  secretName: "{{ .Values.ingress.tls.secretName }}"
+  secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 postfix:
-  domain: "{{ .Values.global.domain }}"
-  virtualMailboxDomains: "{{ .Values.global.domain }}"
+  domain: {{ .Values.global.domain | quote }}
+  virtualMailboxDomains: {{ .Values.global.domain | quote }}
   overrides:
     - fileName: "sasl_passwd.map"
       content:
-        - "{{ .Values.smtp.host }} {{ .Values.smtp.username }}:{{ .Values.smtp.password }}"
-  relayHost: "[{{ .Values.smtp.host }}]:587"
-  relayNets: {{ .Values.cluster.networking.cidr }}
+        - {{ printf "%s %s:%s" .Values.smtp.host .Values.smtp.username .Values.smtp.password | quote }}
+  relayHost: {{ printf "[%s]:587" .Values.smtp.host | quote }}
+  relayNets: {{ .Values.cluster.networking.cidr | quote}}
   virtualTransport: "lmtps:dovecot:24"
   smtpdSASLPath: "inet:dovecot:3659"
   {{- if .Values.clamavDistributed.enabled }}
@@ -35,8 +35,8 @@ postfix:
   {{- end }}
 
 persistence:
-  size: "{{ .Values.persistence.size.postfix }}"
-  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: {{ .Values.persistence.size.postfix | quote }}
+  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote}}
 
 replicaCount: {{ .Values.replicas.postfix }}
 

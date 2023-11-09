@@ -5,12 +5,11 @@ SPDX-License-Identifier: Apache-2.0
 ---
 turn:
   transport: "udp"
-  credentials: "{{ env "TURN_CREDENTIALS" }}"
+  credentials: {{ env "TURN_CREDENTIALS" | quote }}
   server:
     host: ""
     port: "3478"
   tls:
     host: ""
     port: "5349"
-
 ...

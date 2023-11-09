@@ -8,10 +8,10 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.openproject.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.openproject.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.openproject.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.openproject.tag | quote }}
 
 initdb:
   image:
@@ -22,21 +22,21 @@ initdb:
 
 memcached:
   connection:
-    host: "{{ .Values.cache.openproject.host }}"
+    host: {{ .Values.cache.openproject.host | quote }}
     port: {{ .Values.cache.openproject.port }}
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.memcached.repository }}"
-    tag: "{{ .Values.images.memcached.tag }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.memcached.repository | quote }}
+    tag: {{ .Values.images.memcached.tag | quote }}
 
 postgresql:
   auth:
     password: {{ .Values.databases.openproject.password | default .Values.secrets.postgresql.openprojectUser | quote }}
-    username: "{{ .Values.databases.openproject.username }}"
-    database: "{{ .Values.databases.openproject.name }}"
+    username: {{ .Values.databases.openproject.username | quote }}
+    database: {{ .Values.databases.openproject.name | quote }}
   connection:
-    host: "{{ .Values.databases.openproject.host }}"
-    port: "{{ .Values.databases.openproject.port }}"
+    host: {{ .Values.databases.openproject.host | quote }}
+    port: {{ .Values.databases.openproject.port }}
 
 openproject:
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
@@ -50,39 +50,38 @@ openproject:
 ingress:
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.ingress.enabled }}
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 environment:
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_SECRET: {{ .Values.secrets.keycloak.clientSecret.openproject }}
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_SECRET: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_HOST: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_END__SESSION__ENDPOINT: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
-  OPENPROJECT_SEED_LDAP_OPENDESK_HOST: "{{ .Values.global.ldap.host }}"
+  OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.global.ldap.host | quote }}
   OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
   OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
-  OPENPROJECT_SMTP__DOMAIN: "{{ .Values.global.domain }}"
-  OPENPROJECT_SMTP__USER__NAME: "{{ .Values.smtp.username }}"
-  OPENPROJECT_SMTP__PASSWORD: "{{ .Values.smtp.password }}"
-  OPENPROJECT_SMTP__PORT: "{{ .Values.smtp.port }}"
+  OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.domain | quote }}
+  OPENPROJECT_SMTP__USER__NAME: {{ .Values.smtp.username | quote }}
+  OPENPROJECT_SMTP__PASSWORD: {{ .Values.smtp.password | quote }}
+  OPENPROJECT_SMTP__PORT: {{ .Values.smtp.port | quote }}
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
-  OPENPROJECT_SMTP__ADDRESS: "{{ .Values.smtp.host }}"
+  OPENPROJECT_SMTP__ADDRESS: {{ .Values.smtp.host | quote }}
   OPENPROJECT_MAIL__FROM: "do-not-reply@{{ .Values.global.domain }}"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
-  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject }}"
+  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject | quote }}
 
 persistence:
-  size: "{{ .Values.persistence.size.openproject }}"
-  storageClassName: "{{ .Values.persistence.storageClassNames.RWX }}"
+  size: {{ .Values.persistence.size.openproject | quote }}
+  storageClassName: {{ .Values.persistence.storageClassNames.RWX | quote }}
 
 replicaCount: {{ .Values.replicas.openproject }}
 
 resources:
   {{ .Values.resources.openproject | toYaml | nindent 2 }}
-
 ...

@@ -4,13 +4,13 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
   mysql:
-    host: "{{ .Values.databases.oxAppsuite.host }}"
-    database: "{{ .Values.databases.oxAppsuite.name }}"
+    host: {{ .Values.databases.oxAppsuite.host | quote }}
+    database: {{ .Values.databases.oxAppsuite.name | quote }}
     auth:
-      user: "{{ .Values.databases.oxAppsuite.username }}"
+      user: {{ .Values.databases.oxAppsuite.username | quote }}
       password: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
       rootPassword: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
 
@@ -19,22 +19,22 @@ istio:
 
 nextcloud-integration-ui:
   image:
-    repository: {{ .Values.images.openxchangeNextcloudIntegrationUI.repository }}
-    tag: {{ .Values.images.openxchangeNextcloudIntegrationUI.tag }}
+    repository: {{ .Values.images.openxchangeNextcloudIntegrationUI.repository | quote }}
+    tag: {{ .Values.images.openxchangeNextcloudIntegrationUI.tag | quote }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
   {{- end }}
 
 public-sector-ui:
   image:
-    repository: {{ .Values.images.openxchangePublicSectorUI.repository }}
-    tag: {{ .Values.images.openxchangePublicSectorUI.tag }}
+    repository: {{ .Values.images.openxchangePublicSectorUI.repository | quote }}
+    tag: {{ .Values.images.openxchangePublicSectorUI.tag | quote }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
   {{- end }}
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 appsuite:
   istio:
@@ -56,12 +56,12 @@ appsuite:
     gotenberg:
       imagePullSecrets:
       {{- range .Values.global.imagePullSecrets }}
-        - name: {{ . }}
+        - name: {{ . | quote }}
       {{- end }}
       image:
-        repository: {{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGotenberg.repository }}
-        tag: {{ .Values.images.openxchangeGotenberg.tag }}
-        pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+        repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGotenberg.repository }}"
+        tag: {{ .Values.images.openxchangeGotenberg.tag | quote }}
+        pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     properties:
       "com.openexchange.oauth.provider.jwt.jwksUri": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/certs"
       "com.openexchange.oauth.provider.allowedIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
@@ -88,15 +88,15 @@ appsuite:
       "io.ox.nextcloud//server": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
       "io.ox.public-sector//ics/url": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
       # Dynamic theme
-      io.ox/dynamic-theme//mainColor: "{{ .Values.theme.colors.primary }}"
+      io.ox/dynamic-theme//mainColor: {{ .Values.theme.colors.primary | quote }}
       io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
-      io.ox/dynamic-theme//topbarBackground: "{{ .Values.theme.colors.white }}"
-      io.ox/dynamic-theme//topbarColor: "{{ .Values.theme.colors.black }}"
-      io.ox/dynamic-theme//listSelected: "{{ .Values.theme.colors.primary15 }}"
-      io.ox/dynamic-theme//listHover: "{{ .Values.theme.colors.secondaryGreyLight }}"
-      io.ox/dynamic-theme//folderBackground: "{{ .Values.theme.colors.white }}"
-      io.ox/dynamic-theme//folderSelected: "{{ .Values.theme.colors.primary15 }}"
-      io.ox/dynamic-theme//folderHover: "{{ .Values.theme.colors.secondaryGreyLight }}"
+      io.ox/dynamic-theme//topbarBackground: {{ .Values.theme.colors.white | quote }}
+      io.ox/dynamic-theme//topbarColor: {{ .Values.theme.colors.black | quote }}
+      io.ox/dynamic-theme//listSelected: {{ .Values.theme.colors.primary15 | quote }}
+      io.ox/dynamic-theme//listHover: {{ .Values.theme.colors.secondaryGreyLight | quote }}
+      io.ox/dynamic-theme//folderBackground: {{ .Values.theme.colors.white | quote }}
+      io.ox/dynamic-theme//folderSelected: {{ .Values.theme.colors.primary15 | quote }}
+      io.ox/dynamic-theme//folderHover: {{ .Values.theme.colors.secondaryGreyLight | quote }}
     secretETCFiles:
       # Format of the OX Guard master key:
       # MC+base64(20 random bytes)
@@ -108,27 +108,27 @@ appsuite:
       auth:
         password: {{ .Values.secrets.redis.password | quote }}
     image:
-      repository: {{ .Values.images.openxchangeCoreMW.repository }}
-      tag: {{ .Values.images.openxchangeCoreMW.tag }}
-      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+      repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
+      tag: {{ .Values.images.openxchangeCoreMW.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     update:
       image:
-        repository: {{ .Values.images.openxchangeCoreMW.repository }}
-        tag: {{ .Values.images.openxchangeCoreMW.tag }}
+        repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
+        tag: {{ .Values.images.openxchangeCoreMW.tag | quote }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
     {{- end }}
 
   core-ui:
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
     {{- end }}
     image:
-      repository: {{ .Values.images.openxchangeCoreUI.repository }}
-      tag: {{ .Values.images.openxchangeCoreUI.tag }}
-      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+      repository: {{ .Values.images.openxchangeCoreUI.repository | quote }}
+      tag: {{ .Values.images.openxchangeCoreUI.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
   core-ui-middleware:
     ingress:
@@ -137,55 +137,55 @@ appsuite:
       enabled: false
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
     {{- end }}
     image:
-      repository: {{ .Values.images.openxchangeCoreUIMiddleware.repository }}
-      tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag }}
-      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+      repository: {{ .Values.images.openxchangeCoreUIMiddleware.repository | quote }}
+      tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     redis:
       auth:
         password: {{ .Values.secrets.redis.password | quote }}
 
   core-documentconverter:
     image:
-      repository: {{ .Values.images.openxchangeDocumentConverter.repository }}
-      tag: {{ .Values.images.openxchangeDocumentConverter.tag }}
+      repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
+      tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
     resources:
       {{- .Values.resources.oxDocumentConverter | toYaml | nindent 6 }}
 
   core-guidedtours:
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
     {{- end }}
     image:
-      repository: {{ .Values.images.openxchangeCoreGuidedtours.repository }}
-      tag: {{ .Values.images.openxchangeCoreGuidedtours.tag }}
-      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+      repository: {{ .Values.images.openxchangeCoreGuidedtours.repository | quote }}
+      tag: {{ .Values.images.openxchangeCoreGuidedtours.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
   core-imageconverter:
     image:
-      repository: {{ .Values.images.openxchangeImageConverter.repository }}
-      tag: {{ .Values.images.openxchangeImageConverter.tag }}
+      repository: {{ .Values.images.openxchangeImageConverter.repository | quote }}
+      tag: {{ .Values.images.openxchangeImageConverter.tag | quote }}
 
   guard-ui:
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
     {{- end }}
     image:
-      repository: {{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGuardUI.repository }}
-      tag: {{ .Values.images.openxchangeGuardUI.tag }}
-      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGuardUI.repository }}"
+      tag: {{ .Values.images.openxchangeGuardUI.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
   core-user-guide:
     image:
-      repository: {{ .Values.images.openxchangeCoreUserGuide.repository }}
-      tag: {{ .Values.images.openxchangeCoreUserGuide.tag }}
-      pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+      repository: {{ .Values.images.openxchangeCoreUserGuide.repository | quote }}
+      tag: {{ .Values.images.openxchangeCoreUserGuide.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
     {{- end }}
 ...

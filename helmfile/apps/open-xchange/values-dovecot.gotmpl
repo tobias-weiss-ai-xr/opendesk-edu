@@ -4,31 +4,31 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  url: "{{ .Values.images.dovecot.repository }}"
-  tag: "{{ .Values.images.dovecot.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  url: {{ .Values.images.dovecot.repository | quote }}
+  tag: {{ .Values.images.dovecot.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
+  - name: {{ . | quote }}
 {{- end }}
 
 dovecot:
-  mailDomain: "{{ .Values.global.domain }}"
+  mailDomain: {{ .Values.global.domain | quote }}
   password: {{ .Values.secrets.dovecot.doveadm | quote }}
   ldap:
     dn: "uid=ldapsearch_dovecot,cn=users,dc=swp-ldap,dc=internal"
-    host: "{{ .Values.global.ldap.host }}"
+    host: {{ .Values.global.ldap.host | quote }}
     password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot | quote }}
   oidc:
     introspectionURL: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token/introspect"
-    clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc }}
+    clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
     clientID: "as8oidc"
-  loginTrustedNetworks: "{{ .Values.cluster.networking.cidr }}"
+  loginTrustedNetworks: {{ .Values.cluster.networking.cidr | quote }}
 
 certificate:
-  secretName: "{{ .Values.ingress.tls.secretName }}"
+  secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 {{- if .Values.cluster.persistence.readWriteMany.enabled }}
 replicaCount: {{ .Values.replicas.dovecot }}
@@ -38,15 +38,15 @@ replicaCount: 1
 
 persistence:
   {{- if .Values.cluster.persistence.readWriteMany.enabled }}
-  storageClassName: "{{ .Values.persistence.storageClassNames.RWX }}"
+  storageClassName: {{ .Values.persistence.storageClassNames.RWX | quote }}
   accessModes:
     - "ReadWriteMany"
   {{- else }}
-  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
   accessModes:
     - "ReadWriteOnce"
   {{- end }}
-  size: "{{ .Values.persistence.size.dovecot }}"
+  size: {{ .Values.persistence.size.dovecot | quote }}
 
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}

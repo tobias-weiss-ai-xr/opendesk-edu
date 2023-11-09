@@ -4,14 +4,14 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  registry: "{{ .Values.global.imageRegistry }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  repository: "{{ .Values.images.mariadb.repository }}"
-  tag: "{{ .Values.images.mariadb.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  repository: {{ .Values.images.mariadb.repository | quote }}
+  tag: {{ .Values.images.mariadb.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 # Open-Xchange and XWiki require the permission to create database schemas, so they use the `root` account anyway.
 # Please refer to `databases.yaml` for details.
@@ -35,8 +35,8 @@ mariadb:
   rootPassword: {{ .Values.secrets.mariadb.rootPassword | quote }}
 
 persistence:
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
-  size: "{{ .Values.persistence.size.mariadb }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.mariadb | quote }}
 
 resources:
   {{ .Values.resources.mariadb | toYaml | nindent 2 }}

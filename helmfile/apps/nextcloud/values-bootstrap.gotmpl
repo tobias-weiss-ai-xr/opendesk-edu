@@ -4,11 +4,11 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
-  istioDomain: "{{ .Values.istio.domain }}"
+  domain: {{ .Values.global.domain | quote }}
+  istioDomain: {{ .Values.istio.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  registry: "{{ .Values.global.imageRegistry }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
@@ -30,19 +30,19 @@ config:
       password: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
 
   database:
-    host: "{{ .Values.databases.nextcloud.host }}"
-    name: "{{ .Values.databases.nextcloud.name }}"
-    user: "{{ .Values.databases.nextcloud.username }}"
+    host: {{ .Values.databases.nextcloud.host | quote }}
+    name: {{ .Values.databases.nextcloud.name | quote }}
+    user: {{ .Values.databases.nextcloud.username | quote }}
     password: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
 
   ldapSearch:
-    host: "{{ .Values.global.ldap.host }}"
-    password: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud }}"
+    host: {{ .Values.global.ldap.host | quote }}
+    password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud | quote }}
 
   smtp:
-    host: "{{ .Values.smtp.host }}"
-    username: "{{ .Values.smtp.username }}"
-    password: "{{ .Values.smtp.password }}"
+    host: {{ .Values.smtp.host | quote }}
+    username: {{ .Values.smtp.username | quote }}
+    password: {{ .Values.smtp.password | quote }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
@@ -50,24 +50,24 @@ cleanup:
   keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
 
 image:
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.nextcloud.repository }}"
-  tag: "{{ .Values.images.nextcloud.tag }}"
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.nextcloud.repository | quote }}
+  tag: {{ .Values.images.nextcloud.tag | quote }}
 
 persistence:
   {{- if .Values.cluster.persistence.readWriteMany.enabled }}
   accessModes:
     - "ReadWriteMany"
-  storageClass: "{{ .Values.persistence.storageClassNames.RWX }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWX | quote }}
   {{- else }}
   accessModes:
     - "ReadWriteOnce"
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
   {{- end }}
   size:
-    main: "{{ .Values.persistence.size.nextcloud.main }}"
-    data: "{{ .Values.persistence.size.nextcloud.data }}"
+    main: {{ .Values.persistence.size.nextcloud.main | quote }}
+    data: {{ .Values.persistence.size.nextcloud.data | quote }}
 
 resources:
   {{ .Values.resources.nextcloud | toYaml | nindent 2 }}

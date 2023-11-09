@@ -8,13 +8,13 @@ cleanup:
   deletePodsOnSuccessTimeout: {{ .Values.cleanup.deletePodsOnSuccessTimeout }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  url: "{{ .Values.images.openxchangeBootstrap.repository }}"
-  tag: "{{ .Values.images.openxchangeBootstrap.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  url: {{ .Values.images.openxchangeBootstrap.repository | quote }}
+  tag: {{ .Values.images.openxchangeBootstrap.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
+  - name: {{ . | quote }}
 {{- end }}
 ...

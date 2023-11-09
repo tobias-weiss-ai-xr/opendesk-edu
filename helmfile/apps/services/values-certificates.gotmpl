@@ -4,19 +4,19 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
+  domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
 
 issuerRef:
-  name: "{{ .Values.certificate.issuerRef.name }}"
+  name: {{ .Values.certificate.issuerRef.name | quote }}
 
 {{- if .Values.istio.enabled }}
 istio:
   enabled: {{ .Values.istio.enabled }}
-  domain: {{ .Values.istio.domain }}
+  domain: {{ .Values.istio.domain | quote }}
   issuerRef:
-    name: "{{ .Values.istio.issuerRef.name }}"
+    name: {{ .Values.istio.issuerRef.name | quote }}
 {{- end }}
 
 cleanup:

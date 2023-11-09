@@ -4,36 +4,36 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
+  domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  registry: "{{ .Values.global.imageRegistry }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  repository: "{{ .Values.images.univentionCorporateServer.repository }}"
-  tag: "{{ .Values.images.univentionCorporateServer.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  repository: {{ .Values.images.univentionCorporateServer.repository | quote }}
+  tag: {{ .Values.images.univentionCorporateServer.tag | quote }}
 
 ingress:
   host: "{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.ingress.enabled }}
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 persistence:
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
-  size: "{{ .Values.persistence.size.univentionCorporateServer }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.univentionCorporateServer | quote }}
 
 extraEnvVars:
   - name: ISTIO_DOMAIN
-    value: {{ .Values.istio.domain }}
+    value: {{ .Values.istio.domain | quote }}
   - name: CENTRALNAVIGATION_API_SECRET
-    value: {{ .Values.secrets.centralnavigation.apiKey }}
+    value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   - name: LDAPSEARCH_OX_USERNAME
     value: "ldapsearch_ox"
   - name: LDAPSEARCH_OX_PASSWORD

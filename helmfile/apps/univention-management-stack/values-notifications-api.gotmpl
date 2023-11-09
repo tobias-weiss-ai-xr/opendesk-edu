@@ -14,13 +14,13 @@ postgresql:
     password: {{ .Values.secrets.postgresql.notificationsapiUser | quote }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsNotificationsApi.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsNotificationsApi.tag }}"
+  registry: {{ .Values.global.imageRegistry }}
+  repository: {{ .Values.images.umsNotificationsApi.repository }}
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+  tag: {{ .Values.images.umsNotificationsApi.tag }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
 resources:

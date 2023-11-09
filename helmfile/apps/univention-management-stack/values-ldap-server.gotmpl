@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 ldapServer:
-  ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
+  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   ldapBaseDn: "dc=swp-ldap,dc=internal"
 
   # TODO: Certificates handling
@@ -19,13 +19,13 @@ ldapServer:
   serviceProviders: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/saml/metadata"
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsLdapServer.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsLdapServer.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsLdapServer.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsLdapServer.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
   waitForDependency:
@@ -37,12 +37,11 @@ image:
 # TODO: Pending upstream support, #199
 persistence:
   data:
-    storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
-    size: "{{ .Values.persistence.size.univentionManagementStack.ldapServerData }}"
+    storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.univentionManagementStack.ldapServerData | quote }}
   shared:
-    storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
-    size: "{{ .Values.persistence.size.univentionManagementStack.ldapServerShared }}"
-
+    storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.univentionManagementStack.ldapServerShared | quote }}
 
 resources:
   {{ .Values.resources.umsLdapServer | toYaml | nindent 2 }}

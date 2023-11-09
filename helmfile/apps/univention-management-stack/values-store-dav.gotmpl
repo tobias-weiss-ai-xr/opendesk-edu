@@ -6,33 +6,33 @@ SPDX-License-Identifier: Apache-2.0
 storeDav:
   auth:
     basicAuth:
-      portal-listener: "{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}"
-      portal-server: "{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalServer }}"
+      portal-listener: {{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener | quote }}
+      portal-server: {{ .Values.secrets.univentionManagementStack.storeDavUsers.portalServer | quote }}
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsStoreDav.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsStoreDav.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsStoreDav.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsStoreDav.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
   configHtpasswd:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.umsConfigHtpasswd.repository }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.umsConfigHtpasswd.repository | quote }}
     pullPolicy: "Always"
-    pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-    tag: "{{ .Values.images.umsConfigHtpasswd.tag }}"
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsConfigHtpasswd.tag | quote }}
     pullSecrets:
       {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
       {{- end }}
 
 # TODO: Pending upstream support, #201
 persistence:
-  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
-  size: "{{ .Values.persistence.size.univentionManagementStack.storeDav }}"
+  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.univentionManagementStack.storeDav | quote }}
 
 resources:
   {{ .Values.resources.umsStoreDav | toYaml | nindent 2 }}

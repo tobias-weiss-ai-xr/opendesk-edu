@@ -5,24 +5,24 @@ SPDX-License-Identifier: Apache-2.0
 ---
 image:
   name: "{{ .Values.global.imageRegistry }}/{{ .Values.images.xwiki.repository }}"
-  tag: "{{ .Values.images.xwiki.tag }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  tag: {{ .Values.images.xwiki.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 externalDB:
   password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
-  database: "{{ .Values.databases.xwiki.name }}"
-  user: "{{ .Values.databases.xwiki.username }}"
-  host: "{{ .Values.databases.xwiki.host }}"
+  database: {{ .Values.databases.xwiki.name | quote }}
+  user: {{ .Values.databases.xwiki.username | quote }}
+  host: {{ .Values.databases.xwiki.host | quote }}
 
 customConfigs:
   "xwiki.cfg":
-    "xwiki.superadminpassword": "{{ .Values.secrets.xwiki.superadminpassword }}"
+    "xwiki.superadminpassword": {{ .Values.secrets.xwiki.superadminpassword | quote }}
     ## LDAP Server configuration
-    xwiki.authentication.ldap.server: "{{ .Values.global.ldap.host }}"
+    xwiki.authentication.ldap.server: {{ .Values.global.ldap.host | quote }}
     xwiki.authentication.ldap.port: 389
     ## Authentication to the LDAP server
     xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
-    xwiki.authentication.ldap.bind_pass: "{{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki }}"
+    xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki | quote }}
     ## Base DN used for searching for users
     xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
 
@@ -31,24 +31,24 @@ customConfigs:
     "oidc.endpoint.token": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
     "oidc.endpoint.userinfo": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/userinfo"
     "oidc.endpoint.logout": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
-    "oidc.secret": {{ .Values.secrets.keycloak.clientSecret.xwiki }}
+    "oidc.secret": {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
     "url.trustedDomains": "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
     "workplaceServices.base": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
-    "workplaceServices.portalSecret": "{{ .Values.secrets.centralnavigation.apiKey }}"
+    "workplaceServices.portalSecret": {{ .Values.secrets.centralnavigation.apiKey | quote }}
 
 properties:
   "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvg | b64enc }}"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.brand-primary": "{{ .Values.theme.colors.primary }}"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": "{{ .Values.theme.colors.white }}"
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": "{{ .Values.theme.colors.secondaryGreyLight }}"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.brand-primary": {{ .Values.theme.colors.primary | quote }}
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": {{ .Values.theme.colors.white | quote }}
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": {{ .Values.theme.colors.secondaryGreyLight | quote }}
   ## Link LDAP users and users authenticated through OIDC
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}
-  className: "{{ .Values.ingress.ingressClassName }}"
+  className: {{ .Values.ingress.ingressClassName | quote }}
   annotations:
     haproxy-ingress.github.io/headers: "X-Forwarded-Host {{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   hosts:
@@ -57,13 +57,13 @@ ingress:
         - path: /
           pathType: "ImplementationSpecific"
   tls:
-    - secretName: "{{ .Values.ingress.tls.secretName }}"
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
       hosts:
         - "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
 
 persistence:
-  size: "{{ .Values.persistence.size.xwiki }}"
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: {{ .Values.persistence.size.xwiki | quote }}
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 replicaCount: {{ .Values.replicas.xwiki }}
 
