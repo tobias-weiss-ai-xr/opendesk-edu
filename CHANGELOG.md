@@ -1,3 +1,10 @@
+## [0.5.32](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.31...v0.5.32) (2023-11-09)
+
+
+### Bug Fixes
+
+* **collabora:** Resource definitions ([65ce9a1](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/65ce9a171b7c8ebc453fb6bbe96743c8516da2c6))
+
 ## [0.5.31](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.30...v0.5.31) (2023-11-08)
 
 
