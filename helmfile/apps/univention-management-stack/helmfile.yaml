@@ -23,14 +23,14 @@ repositories:
 
 releases:
   # TODO: Interim, until the UMS stack has a stack umbrella chart and provides a solution
-  {{- if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}
+  # {{- if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}
   - name: "ums-stack-gateway"
     chart: "bitnami-repo/nginx"
     version: "15.3.5"
     values:
       - "values-ums-stack-gateway.gotmpl"
-    condition: "univentionManagementStack.enabled"
-  {{- end }}
+    installed: {{ .Values.univentionManagementStack.enabled }}
+  # {{- end }}
   - name: "ums-store-dav"
     chart: "ums-repo/store-dav"
     version: "0.5.2"
