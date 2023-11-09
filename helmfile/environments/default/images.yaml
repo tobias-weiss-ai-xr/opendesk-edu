@@ -173,11 +173,10 @@ images:
     tag: "2.1.0@sha256:ed56730add8afdb08bef8b43a114aba406fd86d83c7fd7af93dc16bb002fa233"
     # @supplier: "Open-Xchange"
   oxConnector:
-    repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
-    tag:
-      "branch-jconde-listener-entrypoint-chaining\
-      @sha256:54748d49e37d52529d4a857ff834d1217bd2cb8c89c7eed25c0873159ed6853c"
     # @supplier: "Univention"
+    repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
+    tag: "branch-jconde-listener-entrypoint-chaining\
+      @sha256:54748d49e37d52529d4a857ff834d1217bd2cb8c89c7eed25c0873159ed6853c"
   postfix:
     repository: "souvap/tooling/images/postfix"
     tag: "1.0.0@sha256:69e0c53ade77ffb89673672f5c8183ec2edfc81d4e990aca3ec594f33c55a7ac"
