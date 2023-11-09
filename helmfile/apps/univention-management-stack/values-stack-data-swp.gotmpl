@@ -31,13 +31,13 @@ stackDataContext:
   oxDefaultContext: "10"
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsDataLoader.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsDataLoader.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsDataLoader.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsDataLoader.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
 resources:

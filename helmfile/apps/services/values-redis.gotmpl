@@ -7,20 +7,20 @@ auth:
   password: {{ .Values.secrets.redis.password | quote }}
 
 global:
-  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.redis.repository }}"
-  tag: "{{ .Values.images.redis.tag }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.redis.repository | quote }}
+  tag: {{ .Values.images.redis.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 master:
   persistence:
-    size: "{{ .Values.persistence.size.redis }}"
+    size: {{ .Values.persistence.size.redis | quote }}
 
   resources:
     {{ .Values.resources.redis | toYaml | nindent 4 }}

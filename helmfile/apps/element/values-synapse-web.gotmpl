@@ -4,26 +4,26 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
-  registry: "{{ .Values.global.imageRegistry }}"
+  domain: {{ .Values.global.domain | quote }}
+  registry: {{ .Values.global.imageRegistry | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.synapseWeb.repository }}"
-  tag: "{{ .Values.images.synapseWeb.tag }}"
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.synapseWeb.repository | quote }}
+  tag: {{ .Values.images.synapseWeb.tag | quote }}
 
 ingress:
   host: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
-  enabled: "{{ .Values.ingress.enabled }}"
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
-    enabled: "{{ .Values.ingress.tls.enabled }}"
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 replicaCount: {{ .Values.replicas.synapseWeb }}
 

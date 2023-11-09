@@ -5,24 +5,24 @@ SPDX-License-Identifier: Apache-2.0
 ---
 image:
   repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.collabora.repository }}"
-  tag: "{{ .Values.images.collabora.tag }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  tag: {{ .Values.images.collabora.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
+  - name: {{ . | quote }}
 {{- end }}
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}
-  className: "{{ .Values.ingress.ingressClassName }}"
+  className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:
     - host: "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
       paths:
         - path: "/"
           pathType: "Prefix"
   tls:
-    - secretName: "{{ .Values.ingress.tls.secretName }}"
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
       hosts:
         - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
@@ -32,7 +32,6 @@ collabora:
   password: {{ .Values.secrets.collabora.adminPassword | quote }}
   aliasgroups:
     - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}:443"
-
 
 replicaCount: {{ .Values.replicas.collabora }}
 

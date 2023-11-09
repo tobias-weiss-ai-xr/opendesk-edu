@@ -4,14 +4,14 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  registry: {{ .Values.global.imageRegistry }}
+  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  repository: "{{ .Values.images.postgresql.repository }}"
-  tag: "{{ .Values.images.postgresql.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  repository: {{ .Values.images.postgresql.repository | quote }}
+  tag: {{ .Values.images.postgresql.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 job:
   users:
@@ -39,8 +39,8 @@ job:
       user: "notificationsapi_user"
 
 persistence:
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
-  size: "{{ .Values.persistence.size.postgresql }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.postgresql | quote }}
 
 postgres:
   password: {{ .Values.secrets.postgresql.postgresUser | quote }}

@@ -8,39 +8,38 @@ global:
     adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
   postgresql:
     connection:
-      host: "{{ .Values.databases.keycloakExtension.host }}"
-      port: "{{ .Values.databases.keycloakExtension.port }}"
+      host: {{ .Values.databases.keycloakExtension.host | quote }}
+      port: {{ .Values.databases.keycloakExtension.port }}
     auth:
-      database: "{{ .Values.databases.keycloakExtension.name }}"
-      username: "{{ .Values.databases.keycloakExtension.username }}"
+      database: {{ .Values.databases.keycloakExtension.name | quote }}
+      username: {{ .Values.databases.keycloakExtension.username | quote }}
       password: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
 handler:
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.keycloakExtensionHandler.repository }}"
-    tag: "{{ .Values.images.keycloakExtensionHandler.tag }}"
-    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.keycloakExtensionHandler.repository | quote }}
+    tag: {{ .Values.images.keycloakExtensionHandler.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   appConfig:
     smtpPassword: {{ .Values.smtp.password | quote }}
-    smtpHost: "{{ .Values.smtp.host }}"
-    smtpUsername: "{{ .Values.smtp.username }}"
+    smtpHost: {{ .Values.smtp.host | quote }}
+    smtpUsername: {{ .Values.smtp.username | quote }}
     mailFrom: "noreply@{{ .Values.global.domain }}"
   resources:
     {{ .Values.resources.keycloakExtension | toYaml | nindent 4 }}
 proxy:
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.keycloakExtensionProxy.repository }}"
-    tag: "{{ .Values.images.keycloakExtensionProxy.tag }}"
-    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.keycloakExtensionProxy.repository | quote }}
+    tag: {{ .Values.images.keycloakExtensionProxy.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   ingress:
-    enabled: "{{ .Values.ingress.enabled }}"
-    ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+    enabled: {{ .Values.ingress.enabled }}
+    ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
     host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     tls:
-      enabled: "{{ .Values.ingress.tls.enabled }}"
-      secretName: "{{ .Values.ingress.tls.secretName }}"
+      enabled: {{ .Values.ingress.tls.enabled }}
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
   resources:
     {{ .Values.resources.keycloakProxy | toYaml | nindent 4 }}
-
 ...

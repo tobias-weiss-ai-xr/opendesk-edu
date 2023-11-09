@@ -3,18 +3,16 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
-
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsLdapNotifier.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsLdapNotifier.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsLdapNotifier.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsLdapNotifier.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
 resources:
   {{ .Values.resources.umsLdapNotifier | toYaml | nindent 2 }}
-
 ...

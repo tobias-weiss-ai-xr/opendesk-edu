@@ -3,12 +3,12 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
-
 ingress:
   enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
     # The TLS configuration is on the "master" Ingress, see "portal-frontend"
     enabled: false
     secretName: ""
+...

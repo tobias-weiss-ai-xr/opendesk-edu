@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
@@ -13,11 +13,11 @@ cleanup:
   deletePodsOnSuccessTimeout: {{ .Values.cleanup.deletePodsOnSuccessTimeout }}
 
 configuration:
-  password: {{ .Values.secrets.matrixUserVerificationService.password }}
+  password: {{ .Values.secrets.matrixUserVerificationService.password | quote }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  url: "{{ .Values.images.synapseCreateUser.repository }}"
-  tag: "{{ .Values.images.synapseCreateUser.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  url: {{ .Values.images.synapseCreateUser.repository | quote }}
+  tag: {{ .Values.images.synapseCreateUser.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 ...

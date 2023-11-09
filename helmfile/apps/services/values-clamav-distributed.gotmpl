@@ -7,10 +7,10 @@ clamd:
   podSecurityContext:
   replicaCount: {{ .Values.replicas.clamd }}
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.clamd.repository }}"
-    tag: "{{ .Values.images.clamd.tag }}"
-    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.clamd.repository | quote }}
+    tag: {{ .Values.images.clamd.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   resources:
     {{ .Values.resources.clamd | toYaml | nindent 4 }}
 
@@ -18,10 +18,10 @@ freshclam:
   podSecurityContext:
   replicaCount: {{ .Values.replicas.freshclam }}
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.freshclam.repository }}"
-    tag: "{{ .Values.images.freshclam.tag }}"
-    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.freshclam.repository | quote }}
+    tag: {{ .Values.images.freshclam.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   resources:
     {{ .Values.resources.freshclam | toYaml | nindent 4 }}
 
@@ -32,10 +32,10 @@ global:
 icap:
   replicaCount: {{ .Values.replicas.icap }}
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.icap.repository }}"
-    tag: "{{ .Values.images.icap.tag }}"
-    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.icap.repository | quote }}
+    tag: {{ .Values.images.icap.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   resources:
     {{ .Values.resources.icap | toYaml | nindent 4 }}
 
@@ -43,14 +43,14 @@ milter:
   podSecurityContext:
   replicaCount: {{ .Values.replicas.milter }}
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.milter.repository }}"
-    tag: "{{ .Values.images.milter.tag }}"
-    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.milter.repository | quote }}
+    tag: {{ .Values.images.milter.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   resources:
     {{ .Values.resources.milter | toYaml | nindent 4 }}
 
 persistence:
-  storageClass: "{{ .Values.persistence.storageClassNames.RWX }}"
-  size: "{{ .Values.persistence.size.clamav }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWX | quote }}
+  size: {{ .Values.persistence.size.clamav | quote }}
 ...

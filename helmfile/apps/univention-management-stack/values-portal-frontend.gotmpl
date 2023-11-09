@@ -3,15 +3,14 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
-
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsPortalFrontend.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsPortalFrontend.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsPortalFrontend.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsPortalFrontend.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
 extraIngresses:
@@ -24,9 +23,8 @@ extraIngresses:
     enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
-      secretName: "{{ .Values.ingress.tls.secretName }}"
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 resources:
   {{ .Values.resources.umsPortalFrontend | toYaml | nindent 2 }}
-
 ...

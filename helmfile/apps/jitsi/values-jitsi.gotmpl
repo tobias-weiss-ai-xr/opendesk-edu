@@ -4,8 +4,8 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
-  registry: "{{ .Values.global.imageRegistry }}"
+  domain: {{ .Values.global.domain | quote }}
+  registry: {{ .Values.global.imageRegistry | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
@@ -15,13 +15,13 @@ cleanup:
   deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
 
 image:
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.jitsiKeycloakAdapter.repository }}"
-  tag: "{{ .Values.images.jitsiKeycloakAdapter.tag }}"
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.jitsiKeycloakAdapter.repository | quote }}
+  tag: {{ .Values.images.jitsiKeycloakAdapter.tag | quote }}
 
 settings:
-  jwtAppSecret: "{{ .Values.secrets.jitsi.jwtAppSecret }}"
+  jwtAppSecret: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
 
 theme:
   {{ .Values.theme | toYaml | nindent 2 }}
@@ -32,16 +32,16 @@ jitsi:
     replicaCount: {{ .Values.replicas.jitsi }}
     image:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jitsi.repository }}"
-      tag: "{{ .Values.images.jitsi.tag }}"
+      tag: {{ .Values.images.jitsi.tag | quote }}
     ingress:
-      enabled: "{{ .Values.ingress.enabled }}"
-      ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+      enabled: {{ .Values.ingress.enabled }}
+      ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
       hosts:
         - host: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
           paths:
             - "/"
       tls:
-        - secretName: "{{ .Values.ingress.tls.secretName }}"
+        - secretName: {{ .Values.ingress.tls.secretName | quote }}
           hosts:
             - "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
     extraEnvs:
@@ -51,10 +51,10 @@ jitsi:
   prosody:
     image:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.prosody.repository }}"
-      tag: "{{ .Values.images.prosody.tag }}"
+      tag: {{ .Values.images.prosody.tag | quote }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-      - name: {{ . }}
+      - name: {{ . | quote }}
     {{- end }}
     extraEnvs:
       - name: "AUTH_TYPE"
@@ -62,74 +62,74 @@ jitsi:
       - name: "JWT_APP_ID"
         value: "myappid"
       - name: "JWT_APP_SECRET"
-        value: "{{ .Values.secrets.jitsi.jwtAppSecret }}"
+        value: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
       - name: "MATRIX_UVS_SYNC_POWER_LEVELS"
         value: "true"
       - name: "MATRIX_UVS_URL"
         value: "http://opendesk-matrix-user-verification-service.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
       - name: TURNS_HOST
-        value: "{{ .Values.turn.tls.host }}"
+        value: {{ .Values.turn.tls.host | quote }}
       - name: TURNS_PORT
-        value: "{{ .Values.turn.tls.port }}"
+        value: {{ .Values.turn.tls.port | quote }}
       - name: TURN_HOST
-        value: "{{ .Values.turn.server.host }}"
+        value: {{ .Values.turn.server.host | quote }}
       - name: TURN_PORT
-        value: "{{ .Values.turn.server.port }}"
+        value: {{ .Values.turn.server.port | quote }}
       - name: TURN_TRANSPORT
-        value: "{{ .Values.turn.transport }}"
+        value: {{ .Values.turn.transport | quote }}
       - name: TURN_CREDENTIALS
-        value: "{{ .Values.turn.credentials }}"
+        value: {{ .Values.turn.credentials | quote }}
     resources:
       {{ .Values.resources.prosody | toYaml | nindent 6 }}
     persistence:
-      size: "{{ .Values.persistence.size.prosody }}"
-      storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
+      size: {{ .Values.persistence.size.prosody | quote }}
+      storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
   jicofo:
     replicaCount: {{ .Values.replicas.jicofo }}
     image:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jicofo.repository }}"
-      tag: "{{ .Values.images.jicofo.tag }}"
+      tag: {{ .Values.images.jicofo.tag | quote }}
     xmpp:
       password: {{ .Values.secrets.jitsi.jicofoAuthPassword | quote }}
-      componentSecret: "{{ .Values.secrets.jitsi.jicofoComponentPassword }}"
+      componentSecret: {{ .Values.secrets.jitsi.jicofoComponentPassword | quote }}
     resources:
       {{ .Values.resources.jicofo | toYaml | nindent 6 }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     image:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jvb.repository }}"
-      tag: "{{ .Values.images.jvb.tag }}"
+      tag: {{ .Values.images.jvb.tag | quote }}
     xmpp:
-      password: "{{ .Values.secrets.jitsi.jvbAuthPassword }}"
+      password: {{ .Values.secrets.jitsi.jvbAuthPassword | quote }}
     resources:
       {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
-      type: "{{ .Values.cluster.service.type }}"
+      type: {{ .Values.cluster.service.type | quote }}
   jibri:
     replicaCount: {{ .Values.replicas.jibri }}
     image:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jibri.repository }}"
-      tag: "{{ .Values.images.jibri.tag }}"
+      tag: {{ .Values.images.jibri.tag | quote }}
     recorder:
-      password: "{{ .Values.secrets.jitsi.jibriRecorderPassword }}"
+      password: {{ .Values.secrets.jitsi.jibriRecorderPassword | quote }}
     xmpp:
-      password: "{{ .Values.secrets.jitsi.jibriXmppPassword }}"
+      password: {{ .Values.secrets.jitsi.jibriXmppPassword | quote }}
     resources:
       {{ .Values.resources.jibri | toYaml | nindent 6 }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
   {{- end }}
 
 patchJVB:
   configuration:
-    staticLoadbalancerIP: "{{ .Values.cluster.networking.ingressGatewayIP }}"
-    loadbalancerStatusField: "{{ .Values.cluster.networking.loadBalancerStatusField }}"
+    staticLoadbalancerIP: {{ .Values.cluster.networking.ingressGatewayIP | quote }}
+    loadbalancerStatusField: {{ .Values.cluster.networking.loadBalancerStatusField | quote }}
   image:
-    imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.jitsiPatchJVB.repository }}"
-    tag: "{{ .Values.images.jitsiPatchJVB.tag }}"
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.jitsiPatchJVB.repository | quote }}
+    tag: {{ .Values.images.jitsiPatchJVB.tag | quote }}
 replicaCount: {{ .Values.replicas.jitsiKeycloakAdapter }}
 
 resources:

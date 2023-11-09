@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
+  domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
 

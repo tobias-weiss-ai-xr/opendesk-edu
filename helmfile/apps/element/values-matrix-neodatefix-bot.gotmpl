@@ -4,8 +4,8 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
-  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  domain: {{ .Values.global.domain | quote }}
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
@@ -15,20 +15,20 @@ configuration:
   openxchangeBaseUrl: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
 
 image:
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  repository: "{{ .Values.images.matrixNeoDateFixBot.repository }}"
-  tag: "{{ .Values.images.matrixNeoDateFixBot.tag }}"
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  repository: {{ .Values.images.matrixNeoDateFixBot.repository | quote }}
+  tag: {{ .Values.images.matrixNeoDateFixBot.tag | quote }}
 
 ingress:
-  enabled: "{{ .Values.ingress.enabled }}"
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
-    enabled: "{{ .Values.ingress.tls.enabled }}"
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 persistence:
-  size: "{{ .Values.persistence.size.matrixNeoDateFixBot }}"
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: {{ .Values.persistence.size.matrixNeoDateFixBot | quote }}
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 replicaCount: {{ .Values.replicas.matrixNeoDateFixBot }}
 

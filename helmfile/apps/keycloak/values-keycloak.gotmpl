@@ -4,22 +4,22 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  imageRegistry: "{{ .Values.global.imageRegistry }}"
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.keycloak.repository }}"
-  tag: "{{ .Values.images.keycloak.tag }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.keycloak.repository | quote }}
+  tag: {{ .Values.images.keycloak.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 externalDatabase:
-  host: "{{ .Values.databases.keycloak.host }}"
+  host: {{ .Values.databases.keycloak.host | quote }}
   port: {{ .Values.databases.keycloak.port }}
-  user: "{{ .Values.databases.keycloak.username }}"
-  database: "{{ .Values.databases.keycloak.name }}"
+  user: {{ .Values.databases.keycloak.username | quote }}
+  database: {{ .Values.databases.keycloak.name | quote }}
   password: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser | quote }}
 
 auth:
@@ -34,7 +34,7 @@ keycloakConfigCli:
     - name: "LDAP_USERS_DN"
       value: "cn=users,dc=swp-ldap,dc=internal"
     - name: "LDAP_SERVER_URL"
-      value: "{{ .Values.global.ldap.host }}"
+      value: {{ .Values.global.ldap.host | quote }}
     - name: "IDENTIFIER"
       value: "souvap"
     - name: "THEME"
@@ -62,23 +62,23 @@ keycloakConfigCli:
     - name: "INTERCOM_SERVICE_DOMAIN"
       value: "{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}"
     - name: "CLIENT_SECRET_INTERCOM_PASSWORD"
-      value: {{ .Values.secrets.keycloak.clientSecret.intercom }}
+      value: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
     - name: "CLIENT_SECRET_MATRIX_PASSWORD"
-      value: {{ .Values.secrets.keycloak.clientSecret.matrix }}
+      value: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}
     - name: "CLIENT_SECRET_JITSI_PASSWORD"
-      value: {{ .Values.secrets.keycloak.clientSecret.jitsi }}
+      value: {{ .Values.secrets.keycloak.clientSecret.jitsi | quote }}
     - name: "CLIENT_SECRET_NCOIDC_PASSWORD"
-      value: {{ .Values.secrets.keycloak.clientSecret.ncoidc }}
+      value: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
     - name: "CLIENT_SECRET_OPENPROJECT_PASSWORD"
-      value: {{ .Values.secrets.keycloak.clientSecret.openproject }}
+      value: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
     - name: "CLIENT_SECRET_XWIKI_PASSWORD"
-      value: {{ .Values.secrets.keycloak.clientSecret.xwiki }}
+      value: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
     - name: "CLIENT_SECRET_AS8OIDC_PASSWORD"
-      value: {{ .Values.secrets.keycloak.clientSecret.as8oidc }}
+      value: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
     - name: "KEYCLOAK_STORAGEPROVICER_UCSLDAP_NAME"
       value: "storage_provider_ucsldap"
     - name: "LDAPSEARCH_PASSWORD"
-      value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak }}
+      value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak | quote }}
     - name: "LDAPSEARCH_USERNAME"
       value: "ldapsearch_keycloak"
   resources:

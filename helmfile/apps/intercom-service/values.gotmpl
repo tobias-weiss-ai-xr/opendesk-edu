@@ -4,46 +4,46 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  imageRegistry: "{{ .Values.global.imageRegistry }}"
-  domain: "{{ .Values.global.domain }}"
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
+  domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 ics:
-  secret: {{ .Values.secrets.intercom.secret }}
+  secret: {{ .Values.secrets.intercom.secret | quote }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
   originRegex: "{{ .Values.istio.domain }}|{{ .Values.global.domain }}"
   default:
-    domain: "{{ .Values.global.domain }}"
+    domain: {{ .Values.global.domain | quote }}
   oidc:
-    secret: {{ .Values.secrets.keycloak.clientSecret.intercom }}
+    secret: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
   matrix:
     asSecret: {{ .Values.secrets.intercom.synapseAsToken | quote }}
-    subdomain: {{ .Values.global.hosts.synapse }}
+    subdomain: {{ .Values.global.hosts.synapse | quote }}
     serverName: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
   nordeck:
-    subdomain: {{ .Values.global.hosts.matrixNeoDateFixBot }}
+    subdomain: {{ .Values.global.hosts.matrixNeoDateFixBot | quote }}
   portal:
-    apiKey: {{ .Values.secrets.centralnavigation.apiKey }}
+    apiKey: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   redis:
-    host: {{ .Values.cache.intercomService.host }}
+    host: {{ .Values.cache.intercomService.host | quote }}
     port: {{ .Values.cache.intercomService.port }}
     password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password | quote }}
   openxchange:
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
 
 image:
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  repository: "{{ .Values.images.intercom.repository }}"
-  tag: "{{ .Values.images.intercom.tag }}"
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  repository: {{ .Values.images.intercom.repository | quote }}
+  tag: {{ .Values.images.intercom.tag | quote }}
 
 ingress:
   host: "{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}"
-  enabled: "{{ .Values.ingress.enabled }}"
-  ingressClassName: "{{ .Values.ingress.ingressClassName }}"
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
-    enabled: "{{ .Values.ingress.tls.enabled }}"
-    secretName: "{{ .Values.ingress.tls.secretName }}"
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
 ...

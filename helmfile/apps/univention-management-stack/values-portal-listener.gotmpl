@@ -15,8 +15,8 @@ portalListener:
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHost: "{{ .Values.global.ldap.host }}"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
-  ldapSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
-  machineSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret }}"
+  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   notifierServer: "ums-ldap-notifier"
   portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,dc=swp-ldap,dc=internal"
   udmApiUrl: "http://ums-udm-rest-api/udm/"
@@ -25,30 +25,29 @@ portalListener:
   tlsMode: "off"
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.umsPortalListener.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.umsPortalListener.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsPortalListener.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsPortalListener.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . }}
+    - name: {{ . | quote }}
     {{- end }}
 
   waitForDependency:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.umsWaitForDependency.repository }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
     imagePullPolicy: "Always"
-    tag: "{{ .Values.images.umsWaitForDependency.tag }}"
+    tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
 
 # TODO: Pending upstream support, #200
 persistence:
-  storageClassName: "{{ .Values.persistence.storageClassNames.RWO }}"
-  size: "{{ .Values.persistence.size.univentionManagementStack.portalListener }}"
+  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.univentionManagementStack.portalListener | quote }}
 
 resources:
   {{ .Values.resources.umsPortalListener | toYaml | nindent 2 }}
 
 resourcesDependencyWaiter:
   {{ .Values.resources.umsPortalListenerDependencies | toYaml | nindent 2 }}
-
 ...

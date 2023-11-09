@@ -4,23 +4,23 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.oxConnector.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.oxConnector.tag }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.oxConnector.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.oxConnector.tag | quote }}
 
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
-  - name: {{ . }}
+  - name: {{ . | quote }}
 {{- end }}
 
 persistence:
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 oxConnector:
-  domainName: "{{ .Values.global.domain }}"
-  ldapHost: "{{ .Values.global.ldap.host }}"
-  notifierServer: "{{ .Values.global.ldap.notifierHost }}"
+  domainName: {{ .Values.global.domain | quote }}
+  ldapHost: {{ .Values.global.ldap.host | quote }}
+  notifierServer: {{ .Values.global.ldap.notifierHost | quote }}
   #oxMasterAdmin: "(( .Values.appsuite.core-mw.masterAdmin ))"
   oxMasterAdmin: "admin"
   oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}

@@ -8,9 +8,9 @@ nextcloud:
   username: "nextcloud"
   password: {{ .Values.secrets.nextcloud.adminPassword | quote }}
 externalDatabase:
-  database: "{{ .Values.databases.nextcloud.name }}"
-  user: "{{ .Values.databases.nextcloud.username }}"
-  host: "{{ .Values.databases.nextcloud.host }}"
+  database: {{ .Values.databases.nextcloud.name | quote }}
+  user: {{ .Values.databases.nextcloud.username | quote }}
+  host: {{ .Values.databases.nextcloud.host | quote }}
   password: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
 extraEnv:
   REDIS_HOST: {{ .Values.cache.nextcloud.host | quote }}
@@ -22,20 +22,20 @@ redis:
     password: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
 ingress:
   enabled: {{ .Values.ingress.enabled }}
-  className: {{ .Values.ingress.ingressClassName }}
+  className: {{ .Values.ingress.ingressClassName | quote }}
   tls:
-    - secretName: "{{ .Values.ingress.tls.secretName }}"
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
       hosts:
         - "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
 image:
   repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.nextcloud.repository }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-  tag: "{{ .Values.images.nextcloud.tag }}"
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.nextcloud.tag | quote }}
   pullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 metrics:
-  token: "{{ .Values.secrets.nextcloud.metricsToken }}"
+  token: {{ .Values.secrets.nextcloud.metricsToken | quote }}
 
 {{- if .Values.cluster.persistence.readWriteMany.enabled }}
 replicaCount: {{ .Values.replicas.nextcloud }}

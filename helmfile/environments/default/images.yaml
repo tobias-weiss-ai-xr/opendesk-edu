@@ -26,6 +26,14 @@ images:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk DevSecOps"
+  icap:
+    repository: "souvap/tooling/images/c-icap"
+    tag: "0.5.10@sha256:cd665e77a42460bb1e6df4282bc1d8737be241fc9f4143d43509e31de3a7993d"
+    # @supplier: "openDesk DevSecOps"
+  intercom:
+    repository: "univention/intercom-service"
+    tag: "1.4-kubernetes@sha256:e4fa2e0df49595bf9ba5bf73e36a50e8f1b44334a1a326a43488b8f9c8bbcb9c"
+    # @supplier: "Univention"
   jibri:
     repository: "jitsi/jibri"
     tag: "stable-8922@sha256:87aa176b44b745b13769f13b8e2d22ddd6f6ba624244d5354c8dd3664787e936"
@@ -50,14 +58,6 @@ images:
     repository: "jitsi/jvb"
     tag: "stable-8922@sha256:75dd613807e19cbbd440d071b60609fa9e4ee50a1396b14deb0ed779d882a554"
     # @supplier: "Nordeck"
-  icap:
-    repository: "souvap/tooling/images/c-icap"
-    tag: "0.5.10@sha256:cd665e77a42460bb1e6df4282bc1d8737be241fc9f4143d43509e31de3a7993d"
-    # @supplier: "openDesk DevSecOps"
-  intercom:
-    repository: "univention/intercom-service"
-    tag: "1.4-kubernetes@sha256:e4fa2e0df49595bf9ba5bf73e36a50e8f1b44334a1a326a43488b8f9c8bbcb9c"
-    # @supplier: "Univention"
   keycloak:
     repository: "bitnami/keycloak"
     tag: "19.0.3-debian-11-r22@sha256:4ac04104d20d4861ecca24ff2d07d71b34a98ee1148c6e6b6e7969a6b2ad085e"
