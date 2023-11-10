@@ -30,6 +30,9 @@ stackDataContext:
 
   oxDefaultContext: "10"
 
+  userPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.userPassword | quote }}
+  adminPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.adminPassword | quote }}
+
 image:
   registry: {{ .Values.global.imageRegistry | quote }}
   repository: {{ .Values.images.umsDataLoader.repository | quote }}

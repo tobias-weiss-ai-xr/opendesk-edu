@@ -32,7 +32,7 @@ images:
     # @supplier: "openDesk DevSecOps"
   intercom:
     repository: "univention/intercom-service"
-    tag: "1.4-kubernetes@sha256:e4fa2e0df49595bf9ba5bf73e36a50e8f1b44334a1a326a43488b8f9c8bbcb9c"
+    tag: "1.6@sha256:f32c1e52fa132e9dc6973e9f8ed36a98c5c3e0bcd51c60f9a683e7e528dd2306"
     # @supplier: "Univention"
   jibri:
     repository: "jitsi/jibri"
@@ -228,42 +228,42 @@ images:
   umsConfigHtpasswd:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/config-htpasswd"
-    tag: "0.5.2@sha256:b713d22a9f2285aab7ff3b1db950002c9ae507ee0b8ba6c76c8a700299440b02"
+    tag: "0.5.2@sha256:b63887af87ed4c496688d422a8881e806de4a2364eb07c7e24bb1635b539e7f3"
     # @supplier: "Univention"
   umsDataLoader:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/data-loader"
-    tag: "0.25.1@sha256:4b5d621e7ee2ca9efd8755ccb287a6daeb05284c3c010e4b6c487d01e539c606"
+    tag: "0.33.0@sha256:2e9baf28cfe3eb6c740ce604d60ebc1ee6b3e0e2e8741730716a1c7375046039"
     # @supplier: "Univention"
   umsLdapNotifier:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-notifier"
-    tag: "0.5.2@sha256:693c170507dd420d9afa19a2128c85ffd1f231b1c13b149a46bb12a501a1136f"
+    tag: "0.7.0@sha256:c5bd680dc85990aec2c3dde14f8e6b72f5a5d2d3c648bc434c57117836464faf"
     # @supplier: "Univention"
   umsLdapServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-server"
-    tag: "0.5.2@sha256:e4b229b1879185e150e371242a90c9a8e1ebb0bc19076871554137cc354855cb"
+    tag: "0.7.0@sha256:a87b615fc97c574316f41e1e6dc9bef41d80583ba450aece9d9830bab4d5a09a"
     # @supplier: "Univention"
   umsNotificationsApi:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/notifications-api"
-    tag: "0.4.3@sha256:f0a95d96f4047b08db41b8878800f98e66a8fb2fc3c0f493130be314a3be0270"
+    tag: "0.4.4@sha256:630905fd503ea5f4b17ccd4adccd68c20b85405a7372e7c71ac2c88aa6e1e47c"
     # @supplier: "Univention"
   umsPortalListener:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-listener"
-    tag: "0.4.3@sha256:a5454bfc113df95d1e71424765b6a0137e7468861cb3df3865136888d24ca7a0"
+    tag: "0.4.4@sha256:689065bad9ab735be1cfd12e519934616e8c049afee4f78c46b630ab7c1a7aef"
     # @supplier: "Univention"
   umsPortalFrontend:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-frontend"
-    tag: "0.4.3@sha256:bfae4930c830185b0f64d6cd9bb479bdde8ac383a58f8f5948731ece9288ff4d"
+    tag: "0.4.4@sha256:b8955718ad4d2c973b4c1ee80867ac47c2d90e422234c7a2401b13ed606fd4d4"
     # @supplier: "Univention"
   umsPortalServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-server"
-    tag: "0.4.3@sha256:3a906e38aaabf5e80457f1b572a4ee3676b90921ac9c0df9a64a177ee0d75cc9"
+    tag: "0.4.4@sha256:21d279ede3a7cbdaf3a5c4e83375bb389785db4f2569cfaf8362896a9b30e287"
     # @supplier: "Univention"
   umsWaitForDependency:
     # This is a preview and not part of the standard deployment.
@@ -273,22 +273,22 @@ images:
   umsStoreDav:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/store-dav"
-    tag: "0.5.2@sha256:e6d42110be74f171b62c8ba4752afd0af8119f0354783bf428eb2030f97be84a"
+    tag: "0.5.2@sha256:a3cbb1df2024edf58aea029a280f660bcd2fb8e684eed638901f5d7cbf9db467"
     # @supplier: "Univention"
   umsUdmRestApi:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/udm-rest-api"
-    tag: "0.3.3@sha256:3893d74b1e450e920a53788a8b86cafb4e811dbbae8734fd32d56718ccbb89c5"
+    tag: "0.3.5@sha256:1a434f9d5e4d15217d011c13d9f1694e8a12291e09a6d0802c1158f7e2c5e035"
     # @supplier: "Univention"
   umsUmcGateway:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-gateway"
-    tag: "0.3.5@sha256:2e5ec7a33f0f9094143090c786b3fda632fe85b669b7fe3bb467ec96b4a76eff"
+    tag: "0.5.1@sha256:9937efd54020e0782a26a1670d0cb8b29edbc802b1fd9eed5e308a594d4ce010"
     # @supplier: "Univention"
   umsUmcServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-server"
-    tag: "0.3.5@sha256:fa95ab3a547807322e6d66da943292119b37229eccbb35b31217fe0f484c4798"
+    tag: "0.5.1@sha256:cfb626f8d0a949ce0ed36d7e01791006eae24d984573dfa3ed3f031808437da3"
     # @supplier: "Univention"
   wellKnown:
     repository: "library/nginx"
