@@ -9,9 +9,22 @@ extraVolumes:
   - name: "certificates"
     secret:
       secretName: "opendesk-certificates-tls"
+  - name: "entrypoint-swp-patches"
+    configMap:
+      name: "ums-stack-data-swp-umc-server-entrypoint"
+      defaultMode: 0555
+  - name: "self-service-emails"
+    configMap:
+      name: "ums-stack-data-swp-self-service-emails"
+      defaultMode: 0444
 
 extraVolumeMounts:
   - name: "certificates"
     mountPath: "/var/secrets/ssl"
+  - name: "entrypoint-swp-patches"
+    mountPath: "/entrypoint.d/90-customization.sh"
+    subPath: "90-customization.sh"
+  - name: "self-service-emails"
+    mountPath: "/usr/share/univention-self-service/email_bodies"
 
 ...

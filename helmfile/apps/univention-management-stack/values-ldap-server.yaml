@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+
+service:
+  type: "ClusterIP"
+
+extraVolumes:
+  - name: "opendesk-schemas"
+    configMap:
+      name: "ums-stack-data-swp-schemas"
+
+extraVolumeMounts:
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskFileshare.schema"
+    subPath: "opendeskFileshare.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskKnowledgemanagement.schema"
+    subPath: "opendeskKnowledgemanagement.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskLearnmanagement.schema"
+    subPath: "opendeskLearnmanagement.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskLivecollaboration.schema"
+    subPath: "opendeskLivecollaboration.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskProjectmanagement.schema"
+    subPath: "opendeskProjectmanagement.schema"
+
+...

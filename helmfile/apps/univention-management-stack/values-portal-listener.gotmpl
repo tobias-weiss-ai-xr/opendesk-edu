@@ -17,7 +17,7 @@ portalListener:
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
-  notifierServer: "ums-ldap-notifier"
+  notifierServer: {{ .Values.ldap.notifierHost | quote }}
   portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,dc=swp-ldap,dc=internal"
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   udmApiUsername: "cn=admin"
