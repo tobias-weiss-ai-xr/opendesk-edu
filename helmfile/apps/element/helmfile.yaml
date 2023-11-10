@@ -87,7 +87,7 @@ releases:
 
   - name: "matrix-neoboard-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neoboard-widget"
-    version: "3.1.0"
+    version: "3.2.0"
     values:
       - "values-matrix-neoboard-widget.yaml"
       - "values-matrix-neoboard-widget.gotmpl"
@@ -96,7 +96,7 @@ releases:
 
   - name: "matrix-neochoice-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neochoice-widget"
-    version: "3.1.0"
+    version: "3.2.0"
     values:
       - "values-matrix-neochoice-widget.yaml"
       - "values-matrix-neochoice-widget.gotmpl"
@@ -105,7 +105,7 @@ releases:
 
   - name: "matrix-neodatefix-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-widget"
-    version: "3.1.0"
+    version: "3.2.0"
     values:
       - "values-matrix-neodatefix-widget.yaml"
       - "values-matrix-neodatefix-widget.gotmpl"
@@ -123,7 +123,7 @@ releases:
 
   - name: "matrix-neodatefix-bot"
     chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-bot"
-    version: "3.1.0"
+    version: "3.2.0"
     values:
       - "values-matrix-neodatefix-bot.yaml"
       - "values-matrix-neodatefix-bot.gotmpl"
