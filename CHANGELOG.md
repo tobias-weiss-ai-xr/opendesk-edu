@@ -1,3 +1,10 @@
+## [0.5.36](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.35...v0.5.36) (2023-11-10)
+
+
+### Bug Fixes
+
+* **element:** Update Element and Widgets ([97034a5](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/97034a556f4cdcc447f61003ad9cd036c186bc3b))
+
 ## [0.5.35](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.34...v0.5.35) (2023-11-10)
 
 
