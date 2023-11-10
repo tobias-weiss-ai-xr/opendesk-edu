@@ -1,3 +1,13 @@
+## [0.5.35](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.34...v0.5.35) (2023-11-10)
+
+
+### Bug Fixes
+
+* **helmfile:** Eliminate some yamllint errors ([1d03a6e](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/1d03a6e11f368fd81dd10b91b0d9d7fc29c0cb24))
+* **helmfile:** Move ldap host variable into helpers ([08811de](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/08811decd92e7fd7802d0eba2644046512ec58a4))
+* **helmfile:** Update charts to use proper quoting ([69ea840](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/69ea84051721f3aaf36a5dbafdfb37dd86b66dbb))
+* **services:** Add minio as service and consume by OpenProject ([baa5827](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/baa5827de3e1e368abf238a932a5849f169af723))
+
 ## [0.5.34](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.33...v0.5.34) (2023-11-09)
 
 
