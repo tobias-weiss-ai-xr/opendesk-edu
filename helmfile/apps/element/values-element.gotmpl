@@ -17,12 +17,16 @@ configuration:
 
     "net.nordeck.element_web.module.opendesk":
       config:
-        ics_navigation_json_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/navigation.json"
-        ics_silent_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/silent"
-        portal_logo_svg_url: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
-        portal_url: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/"
+        banner:
+          ics_navigation_json_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/navigation.json"
+          ics_silent_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/silent"
+          portal_logo_svg_url: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
+          portal_url: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/"
         custom_css_variables:
           --cpd-color-text-action-accent: {{ .Values.theme.colors.primary | quote }}
+        widget_types:
+          - jitsi
+          - net.nordeck
 
     "net.nordeck.element_web.module.widget_lifecycle":
       widget_permissions:
