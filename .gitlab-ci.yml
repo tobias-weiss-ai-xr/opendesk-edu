@@ -384,6 +384,18 @@ openproject-deploy:
   variables:
     COMPONENT: "openproject"
 
+openproject-bootstrap-deploy:
+  stage: "component-deploy-stage-2"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || ($DEPLOY_OPENPROJECT != "no" && $DEPLOY_NEXTCLOUD != "no"))
+      when: "always"
+  variables:
+    COMPONENT: "openproject-bootstrap"
+
 jitsi-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"

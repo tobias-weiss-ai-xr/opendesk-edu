@@ -12,7 +12,7 @@ persistence:
     matrixNeoDateFixBot: "1Gi"
     minio: "1Gi"
     nextcloud:
-      main: "1.2Gi"
+      main: "2Gi"
       data: "10Gi"
     postfix: "1Gi"
     postgresql: "1Gi"

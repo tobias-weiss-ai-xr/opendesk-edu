@@ -70,7 +70,7 @@ images:
   keycloakBootstrap:
     repository: "souvap/tooling/images/ansible"
     tag: "4.10.0@sha256:89d8212c20e03b0fd079e08afaf3247c1b96b380c4db1b572d68d0b4a6abc0ac"
-    # @supplier: "Univention"
+    # @supplier: "openDesk DevSecOps"
   keycloakExtensionHandler:
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-handler"
     tag: "latest@sha256:e67bdfc655e43b7fb83b025e13f949b04fdd98e089b33401275d03e340e03e2e"
@@ -122,12 +122,16 @@ images:
     # @supplier: "Nextcloud Community"
   openproject:
     repository: "openproject/open_desk"
-    tag: "dev@sha256:ca5b843fd7f0687617ce3038a52fd6ac73fb4e9db7b762b8ac7d5090f168f0b1"
+    tag: "dev@sha256:732b5d0efe9fc64fe411c9d8143ec3f4a3c731d03c0caddb5fa4c614ff426e8d"
     # @supplier: "OpenProject"
   openprojectInitDb:
     repository: "postgres"
     tag: "13@sha256:ced3ba927f4cf06e03eac7760f426a95367076fb31fe4e31b679f82d119a3519"
     # @supplier: "OpenProject"
+  openprojectBootstrap:
+    repository: "souvap/tooling/images/opendesk-openproject-bootstrap"
+    tag: "1.1.1@sha256:09da76a9b645b3dbe5c181061f7829f82f239e7d17f7e115218a32870f7a955e"
+    # @supplier: "openDesk DevSecOps"
   openxchangeBootstrap:
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"

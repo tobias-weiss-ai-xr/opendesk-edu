@@ -57,6 +57,8 @@ ingress:
 
 environment:
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_SECRET: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
+  OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_USER: {{ .Values.secrets.openproject.apiAdminUsername | quote }}
+  OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_PASSWORD: {{ .Values.secrets.openproject.apiAdminPassword | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_HOST: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
