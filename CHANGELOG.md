@@ -1,3 +1,10 @@
+## [0.5.37](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.36...v0.5.37) (2023-11-12)
+
+
+### Bug Fixes
+
+* **openproject:** Add bootstrapping of Nextcloud filestore ([1971dfb](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/1971dfbded21d16909e889ba6d19ff9cf3e4cb20))
+
 ## [0.5.36](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.35...v0.5.36) (2023-11-10)
 
 
