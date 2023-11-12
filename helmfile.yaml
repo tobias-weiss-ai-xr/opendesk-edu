@@ -20,6 +20,7 @@ helmfiles:
   - path: "helmfile/apps/openproject/helmfile.yaml"
   - path: "helmfile/apps/xwiki/helmfile.yaml"
   - path: "helmfile/apps/provisioning/helmfile.yaml"
+  - path: "helmfile/apps/openproject-bootstrap/helmfile.yaml"
 
 missingFileHandler: "Error"
 

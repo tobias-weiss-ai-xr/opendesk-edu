@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+bases:
+  - "../../bases/environments.yaml"
+
+---
+repositories:
+  # openDesk OpenProject Bootstrap
+  # Source: Set when repo is managed on Open CoDE
+  - name: "opendesk-openproject-bootstrap-repo"
+    oci: true
+    # yamllint disable rule:line-length
+    url: >-
+      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
+         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/opendesk-openproject-bootstrap" }}
+    # yamllint enable rule:line-length
+    verify: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+
+releases:
+  - name: "opendesk-openproject-bootstrap"
+    chart: "opendesk-openproject-bootstrap-repo/opendesk-openproject-bootstrap"
+    version: "1.2.1"
+    wait: true
+    waitForJobs: true
+    values:
+      - "values.yaml"
+      - "values.gotmpl"
+    installed: {{ .Values.openproject.enabled }}
+    timeout: 900
+
+commonLabels:
+  deploy-stage: "component-2"
+  component: "opendesk-openproject-bootstrap"
+...
