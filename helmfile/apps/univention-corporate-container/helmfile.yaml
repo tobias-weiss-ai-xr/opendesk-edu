@@ -18,6 +18,11 @@ repositories:
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/univention-corporate-container/univention-corporate-container
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "univention-corporate-container"
     chart: "univention-corporate-container-repo/univention-corporate-container"
     version: "1.0.10"

@@ -73,12 +73,23 @@ repositories:
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-certificates/opendesk-certificates
+  # dataSource=docker
+  # dependencyType=service
   - name: "opendesk-certificates"
     chart: "opendesk-certificates-repo/opendesk-certificates"
     version: "2.1.0"
     values:
       - "values-certificates.gotmpl"
     installed: {{ .Values.certificates.enabled }}
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/bitnami-charts/redis
+  # dataSource=docker
+  # dependencyType=service
   - name: "redis"
     chart: "bitnami-repo/redis"
     version: "18.1.2"
@@ -86,6 +97,12 @@ releases:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
     installed: {{ .Values.redis.enabled }}
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/bitnami-charts/memcached
+  # dataSource=docker
+  # dependencyType=service
   - name: "memcached"
     chart: "bitnami-repo/memcached"
     version: "6.6.2"
@@ -93,6 +110,12 @@ releases:
       - "values-memcached.yaml"
       - "values-memcached.gotmpl"
     installed: {{ .Values.memcached.enabled }}
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/postgresql/postgresql
+  # dataSource=docker
+  # dependencyType=service
   - name: "postgresql"
     chart: "postgresql-repo/postgresql"
     version: "2.0.3"
@@ -101,6 +124,12 @@ releases:
       - "values-postgresql.gotmpl"
     installed: {{ .Values.postgresql.enabled }}
     timeout: 900
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/mariadb/mariadb
+  # dataSource=docker
+  # dependencyType=service
   - name: "mariadb"
     chart: "mariadb-repo/mariadb"
     version: "2.1.1"
@@ -109,6 +138,12 @@ releases:
       - "values-mariadb.gotmpl"
     installed: {{ .Values.mariadb.enabled }}
     timeout: 900
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/postfix/postfix
+  # dataSource=docker
+  # dependencyType=service
   - name: "postfix"
     chart: "postfix-repo/postfix"
     version: "2.0.4"
@@ -116,6 +151,12 @@ releases:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
     installed: {{ .Values.postfix.enabled }}
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/clamav/opendesk-clamav
+  # dataSource=docker
+  # dependencyType=service
   - name: "clamav"
     chart: "clamav-repo/opendesk-clamav"
     version: "4.0.0"
@@ -123,6 +164,12 @@ releases:
       - "values-clamav-distributed.yaml"
       - "values-clamav-distributed.gotmpl"
     installed: {{ .Values.clamavDistributed.enabled }}
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/clamav/clamav-simple
+  # dataSource=docker
+  # dependencyType=service
   - name: "clamav-simple"
     chart: "clamav-repo/clamav-simple"
     version: "4.0.0"
@@ -130,6 +177,12 @@ releases:
       - "values-clamav-simple.yaml"
       - "values-clamav-simple.gotmpl"
     installed: {{ .Values.clamavSimple.enabled }}
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/istio-ressources/istio-gateway
+  # dataSource=docker
+  # dependencyType=service
   - name: "opendesk-gateway"
     chart: "istio-resources-repo/istio-gateway"
     version: "2.0.0"
@@ -137,6 +190,12 @@ releases:
       - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
     installed: {{ .Values.istio.enabled }}
+
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/bitnami-charts/minio
+  # dataSource=docker
+  # dependencyType=service
   - name: "minio"
     chart: "bitnami-repo/minio"
     version: "12.8.19"

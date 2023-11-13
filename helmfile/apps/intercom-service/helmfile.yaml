@@ -17,6 +17,11 @@ repositories:
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/intercom-service/intercom-service
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "intercom-service"
     chart: "intercom-service-repo/intercom-service"
     version: "2.0.1"

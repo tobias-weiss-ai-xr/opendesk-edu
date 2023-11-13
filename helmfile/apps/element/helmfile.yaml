@@ -3,7 +3,6 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # openDesk Element
@@ -31,6 +30,11 @@ repositories:
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-element
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "opendesk-element"
     chart: "opendesk-element-repo/opendesk-element"
     version: "2.5.1"
@@ -40,6 +44,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-well-known
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "opendesk-well-known"
     chart: "opendesk-element-repo/opendesk-well-known"
     version: "2.5.1"
@@ -49,6 +58,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-web
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "opendesk-synapse-web"
     chart: "opendesk-element-repo/opendesk-synapse-web"
     version: "2.5.1"
@@ -58,6 +72,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "opendesk-synapse"
     chart: "opendesk-element-repo/opendesk-synapse"
     version: "2.5.1"
@@ -67,6 +86,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-create-account
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "opendesk-matrix-user-verification-service-bootstrap"
     chart: "opendesk-element-repo/opendesk-synapse-create-account"
     version: "2.5.1"
@@ -76,6 +100,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-matrix-user-verification-service
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "opendesk-matrix-user-verification-service"
     chart: "opendesk-element-repo/opendesk-matrix-user-verification-service"
     version: "2.5.1"
@@ -85,6 +114,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neoboard-widget
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "matrix-neoboard-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neoboard-widget"
     version: "3.2.0"
@@ -94,6 +128,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neochoice-widget
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "matrix-neochoice-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neochoice-widget"
     version: "3.2.0"
@@ -103,6 +142,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neodatefix-widget
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "matrix-neodatefix-widget"
     chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-widget"
     version: "3.2.0"
@@ -112,6 +156,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-create-account
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "matrix-neodatefix-bot-bootstrap"
     chart: "opendesk-element-repo/opendesk-synapse-create-account"
     version: "2.5.1"
@@ -121,6 +170,11 @@ releases:
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neodatefix-bot
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "matrix-neodatefix-bot"
     chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-bot"
     version: "3.2.0"

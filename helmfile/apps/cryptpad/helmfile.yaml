@@ -14,6 +14,11 @@ repositories:
          default "https://cryptpad.github.io/helm" }}
 
 releases:
+  # renovate:
+  # registryUrl=https://cryptpad.github.io/helm
+  # packageName=cryptpad
+  # dataSource=helm
+  # dependencyType=vendor
   - name: "cryptpad"
     chart: "cryptpad-online-repo/cryptpad"
     version: "0.0.13"

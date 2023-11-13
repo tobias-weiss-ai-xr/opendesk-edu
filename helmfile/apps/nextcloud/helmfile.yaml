@@ -26,6 +26,11 @@ repositories:
          default "https://nextcloud.github.io/helm/" }}
 
 releases:
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap/opendesk-nextcloud-bootstrap
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "opendesk-nextcloud-bootstrap"
     chart: "opendesk-nextcloud-bootstrap-repo/opendesk-nextcloud-bootstrap"
     version: "3.2.3"
@@ -37,6 +42,11 @@ releases:
     installed: {{ .Values.nextcloud.enabled }}
     timeout: 900
 
+  # renovate:
+  # registryUrl=https://nextcloud.github.io/helm
+  # packageName=nextcloud
+  # dataSource=helm
+  # dependencyType=vendor
   - name: "nextcloud"
     chart: "nextcloud-repo/nextcloud"
     version: "3.5.19"
