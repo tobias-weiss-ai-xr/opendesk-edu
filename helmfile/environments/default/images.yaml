@@ -3,298 +3,508 @@
 ---
 images:
   clamd:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk DevSecOps"
   collabora:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     repository: "souvap/tooling/images/collabora"
     tag: "23.05.5.4.1@sha256:ff48ec379f0d63e50b7714d1fa0f8f8de4247595dfa78754c44786a79c4968e4"
     # @supplier: "Collabora"
   cryptpad:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "cryptpad/cryptpad"
     tag: "opendesk-20231020@sha256:b0bfe09601d8c8064e1b174d21a225ddb10aaa4103892fdfdf3d216726c26dde"
     # @supplier: "XWiki"
   dovecot:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     repository: "souvap/tooling/images/dovecot-public-sector"
     tag: "2.3.21@sha256:c76965a84d1ca527f523404eb027119f6736b199c094e4671037cb345ecad3dc"
     # @supplier: "Open-Xchange"
   element:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     repository: "souvap/tooling/images/element-web"
     tag: "1.6.0@sha256:a71cbd75ee88471e3df59f26a2a37b9b8ff83d2f71f726053acd381ecd87e234"
     # @supplier: "Element"
   freshclam:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk DevSecOps"
   icap:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=service
     repository: "souvap/tooling/images/c-icap"
     tag: "0.5.10@sha256:cd665e77a42460bb1e6df4282bc1d8737be241fc9f4143d43509e31de3a7993d"
     # @supplier: "openDesk DevSecOps"
   intercom:
+    # renovate:
+    # registryUrl=https://quay.io
+    # dependencyType=vendor
     repository: "univention/intercom-service"
     tag: "1.6@sha256:f32c1e52fa132e9dc6973e9f8ed36a98c5c3e0bcd51c60f9a683e7e528dd2306"
     # @supplier: "Univention"
   jibri:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "jitsi/jibri"
     tag: "stable-8922@sha256:87aa176b44b745b13769f13b8e2d22ddd6f6ba624244d5354c8dd3664787e936"
     # @supplier: "Nordeck"
   jicofo:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "jitsi/jicofo"
     tag: "stable-8922@sha256:820fcd4b072b29f42c1c37389fbefda1065f1e9654694941485dc08123c8a93b"
     # @supplier: "Nordeck"
   jitsi:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "jitsi/web"
     tag: "stable-8922@sha256:24bd4179998fe01ace1be74e53fea5308f4d91722953bb4334611e6886753f46"
     # @supplier: "Nordeck"
   jitsiKeycloakAdapter:
+    # renovate:
+    # registryUrl=https://ghcr.io
+    # dependencyType=vendor
     repository: "nordeck/jitsi-keycloak-adapter"
     tag: "v20230906@sha256:54d45ee1a1205f98641810ffb171bd92e6478e2957a349ee4ff599359239fbf2"
     # @supplier: "Nordeck"
   jitsiPatchJVB:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "bitnami/kubectl"
     tag: "1.26.8@sha256:c6902a1fdce0a24c9f93ac8d1f317039b206a4b307d8fc76cab4a92911345757"
     # @supplier: "Nordeck"
   jvb:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "jitsi/jvb"
     tag: "stable-8922@sha256:75dd613807e19cbbd440d071b60609fa9e4ee50a1396b14deb0ed779d882a554"
     # @supplier: "Nordeck"
   keycloak:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "bitnami/keycloak"
     tag: "19.0.3-debian-11-r22@sha256:4ac04104d20d4861ecca24ff2d07d71b34a98ee1148c6e6b6e7969a6b2ad085e"
     # @supplier: "Univention"
   keycloakUnivention:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/keycloak-app-on-use-base-manpub-tr"
     tag: "latest"
     # @supplier: "Univention"
   keycloakBootstrap:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=service
     repository: "souvap/tooling/images/ansible"
     tag: "4.10.0@sha256:89d8212c20e03b0fd079e08afaf3247c1b96b380c4db1b572d68d0b4a6abc0ac"
     # @supplier: "openDesk DevSecOps"
   keycloakExtensionHandler:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-handler"
     tag: "latest@sha256:e67bdfc655e43b7fb83b025e13f949b04fdd98e089b33401275d03e340e03e2e"
     # @supplier: "Univention"
   keycloakExtensionProxy:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-proxy"
     tag: "latest@sha256:57026fb4ba7d4579461e7ddd4b1b8ce9585d1cac4adbe64040f5e1063c80a6ba"
     # @supplier: "Univention"
   mariadb:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "mariadb"
     # For upgrades at least confirm compatibility of target version with OX (regarding AS Guard)
     tag: "10.5@sha256:aa1ccc18000c32d1f39ac0b055117b27bffd93e622ec961d682de40fe2a1a95f"
     # @supplier: "openDesk DevSecOps"
   matrixNeoBoardWidget:
+    # renovate:
+    # registryUrl=https://ghcr.io
+    # dependencyType=vendor
     repository: "nordeck/matrix-neoboard-widget"
     tag: "1.0.0@sha256:584b9c18ea3dfd4b7f1e73f3e114bc1dcd5731b400a8d037576bf2a797c8b086"
     # @supplier: "Nordeck"
   matrixNeoChoiceWidget:
+    # renovate:
+    # registryUrl=https://ghcr.io
+    # dependencyType=vendor
     repository: "nordeck/matrix-poll-widget"
     tag: "1.3.0@sha256:19d2c8c7a15fe7d12c4a83a89310831da12323fd45ff0280cce808f1be0c7e0b"
     # @supplier: "Nordeck"
   matrixNeoDateFixBot:
+    # renovate:
+    # registryUrl=https://ghcr.io
+    # dependencyType=vendor
     repository: "nordeck/matrix-meetings-bot"
     tag: "2.4.2@sha256:f5b3362560255470076f3e6c95a0dd93a8f781398afb992c1e1212764fa87297"
     # @supplier: "Nordeck"
   matrixNeoDateFixWidget:
+    # renovate:
+    # registryUrl=https://ghcr.io
+    # dependencyType=vendor
     repository: "nordeck/matrix-meetings-widget"
     tag: "1.5.3@sha256:918b1eb28cefb08bfdaae57607f0889b454111f2ba80b5ec9bb3c750f8599913"
     # @supplier: "Nordeck"
   matrixUserVerificationService:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "matrixdotorg/matrix-user-verification-service"
     tag: "v3.0.0@sha256:25e685d595785e2a72e75a525dac78cf8c782445454f8ac090d3702431c38008"
     # @supplier: "Element"
   memcached:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "bitnami/memcached"
     tag: "1.6.21-debian-11-r107@sha256:247ec29efd6030960047a623aef025021154662edf6b6d6e88c97936f164d99d"
     # @supplier: "openDesk DevSecOps"
   milter:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk DevSecOps"
   minio:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "bitnami/minio"
     tag: "2023@sha256:bced4f2f9fc48b755ebb3e1b35e76195a978d4331bf2d0c6699dab412d3c0be7"
     # @supplier: "openDesk DevSecOps"
   nextcloud:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "nextcloud"
     tag: "27.1.3-apache@sha256:ec46e99164ee7fa5d49e84784833e022be47f9f54f401bcb5a2d789f8c0bc149"
     # @supplier: "Nextcloud Community"
   nextcloudExporter:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "xperimental/nextcloud-exporter"
     tag: "0.6.2@sha256:4ef2555e74ad1dd1b7b7b0680ce85f2b9333f2c2301756582ff04ae97adf796f"
     # @supplier: "openDesk DevSecOps"
   openproject:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "openproject/open_desk"
     tag: "dev@sha256:732b5d0efe9fc64fe411c9d8143ec3f4a3c731d03c0caddb5fa4c614ff426e8d"
     # @supplier: "OpenProject"
   openprojectInitDb:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "postgres"
     tag: "13@sha256:ced3ba927f4cf06e03eac7760f426a95367076fb31fe4e31b679f82d119a3519"
     # @supplier: "OpenProject"
   openprojectBootstrap:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=service
     repository: "souvap/tooling/images/opendesk-openproject-bootstrap"
     tag: "1.1.1@sha256:09da76a9b645b3dbe5c181061f7829f82f239e7d17f7e115218a32870f7a955e"
     # @supplier: "openDesk DevSecOps"
   openxchangeBootstrap:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
     # @supplier: "Open-Xchange"
   openxchangeCoreGuidedtours:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/core-guidedtours"
     tag: "8.6.0@sha256:6c20780f8c609636f2182c41709e2ee26586b4a23679fd13b15875a5f443445b"
     # @supplier: "Open-Xchange"
   openxchangeCoreMW:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/middleware-public-sector"
     tag: "8.19.33@sha256:369c44369d727e4172f10c25137dbb00d936d20dd844cdca3a34f7f31273ea05"
     # @supplier: "Open-Xchange"
   openxchangeCoreUI:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/core-ui"
     tag: "8.19.0@sha256:7fdd73f78fd7094f2968f6fcaaae175e60824f9ef68f9e7e70418de6a2b623e9"
     # @supplier: "Open-Xchange"
   openxchangeCoreUIMiddleware:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/core-ui-middleware"
     tag: "2.0.0@sha256:8082edf30498a3ac1715f2d9b3e406f240ea586e2616b97f40c207ef55dff11f"
     # @supplier: "Open-Xchange"
   openxchangeCoreUserGuide:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/core-user-guide"
     tag: "8.19.771856@sha256:e00ed8f94c3c42cd288dd03f7fb18d228eb516b5e5ebd318825289b1c4ed17ab"
     # @supplier: "Open-Xchange"
   openxchangeDocumentConverter:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/documentconverter"
     tag: "8.19.32@sha256:82354e858b6aeeae7f0ebaf66ad106f8e9ae46e605e97bb1d2d14e6ce1c3d708"
     # @supplier: "Open-Xchange"
   openxchangeGotenberg:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/3rdparty/gotenberg"
     tag: "7.9.2@sha256:c97c1adb971d149222062ec46c5d749d710b38ad153c5c6ed954023e2401c9d0"
     # @supplier: "Open-Xchange"
   openxchangeGuardUI:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/guard-ui"
     tag: "4.0.7@sha256:8c9fa5d6aed055c0e84042ab28b3f0e9add94390362266ad440da4f90b8c93a8"
     # @supplier: "Open-Xchange"
   openxchangeImageConverter:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/imageconverter"
     tag: "8.19.33@sha256:9543c1409a129567bd6e4a657a353819842a4b1e1807ab86a1ea2e7f73f8c18e"
     # @supplier: "Open-Xchange"
   openxchangeNextcloudIntegrationUI:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/nextcloud-integration-ui"
     tag: "1.1.0@sha256:82cecb5adac63806ab41546e6b49090a93a5f4645750bb3967d87585b60df2e1"
     # @supplier: "Open-Xchange"
   openxchangePublicSectorUI:
+    # renovate:
+    # registryUrl=https://registry.open-xchange.com
+    # dependencyType=vendor
     repository: "appsuite-public-sector/public-sector-ui"
     tag: "2.1.0@sha256:ed56730add8afdb08bef8b43a114aba406fd86d83c7fd7af93dc16bb002fa233"
     # @supplier: "Open-Xchange"
   oxConnector:
-    # @supplier: "Univention"
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
     tag: "branch-jconde-listener-entrypoint-chaining\
       @sha256:54748d49e37d52529d4a857ff834d1217bd2cb8c89c7eed25c0873159ed6853c"
+    # @supplier: "Univention"
   postfix:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=service
     repository: "souvap/tooling/images/postfix"
     tag: "1.0.0@sha256:69e0c53ade77ffb89673672f5c8183ec2edfc81d4e990aca3ec594f33c55a7ac"
     # @supplier: "openDesk DevSecOps"
   postgresql:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "postgres"
     tag: "15.4-alpine3.18@sha256:f36c528a2dc8747ea40b4cb8578da69fa75c5063fd6a71dcea3e3b2a6404ff7b"
     # @supplier: "openDesk DevSecOps"
   prosody:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "jitsi/prosody"
     tag: "stable-8922@sha256:243547f24ae7d686d1f0c18ee230cf93119a66f095dda282bacbf45d4bb69f77"
     # @supplier: "Nordeck"
   redis:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=service
     repository: "bitnami/redis"
     tag: "7.2.1-debian-11-r5@sha256:e664fa63dfe88cd099180c32f2c9a109a958f053b75d195beb48b06ffd8a0b5b"
     # @supplier: "openDesk DevSecOps"
   synapse:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "matrixdotorg/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
     # @supplier: "Element"
   synapseCreateUser:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
     # @supplier: "Nordeck"
   synapseGuestModule:
+    # renovate:
+    # registryUrl=https://ghcr.io
+    # dependencyType=vendor
     repository: "nordeck/synapse-guest-module"
     tag: "1.0.0@sha256:e9c736d84a77df93b2dbe3e3afa7b0ca3efcbc4457677adaac5df3cc79a85923"
     # @supplier: "Nordeck"
   synapseWeb:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "rapidfort/haproxy-official"
     tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
     # @supplier: "Element"
   univentionCorporateServer:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     repository: "souvap/tooling/images/univention-corporate-server-swp/ucs"
     tag: "20230829T094822@sha256:6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
     # @supplier: "Univention"
   umsConfigHtpasswd:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/config-htpasswd"
     tag: "0.5.2@sha256:b63887af87ed4c496688d422a8881e806de4a2364eb07c7e24bb1635b539e7f3"
     # @supplier: "Univention"
   umsDataLoader:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/data-loader"
     tag: "0.33.0@sha256:2e9baf28cfe3eb6c740ce604d60ebc1ee6b3e0e2e8741730716a1c7375046039"
     # @supplier: "Univention"
   umsLdapNotifier:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-notifier"
     tag: "0.7.0@sha256:c5bd680dc85990aec2c3dde14f8e6b72f5a5d2d3c648bc434c57117836464faf"
     # @supplier: "Univention"
   umsLdapServer:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-server"
     tag: "0.7.0@sha256:a87b615fc97c574316f41e1e6dc9bef41d80583ba450aece9d9830bab4d5a09a"
     # @supplier: "Univention"
   umsNotificationsApi:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/notifications-api"
     tag: "0.4.4@sha256:630905fd503ea5f4b17ccd4adccd68c20b85405a7372e7c71ac2c88aa6e1e47c"
     # @supplier: "Univention"
   umsPortalListener:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-listener"
     tag: "0.4.4@sha256:689065bad9ab735be1cfd12e519934616e8c049afee4f78c46b630ab7c1a7aef"
     # @supplier: "Univention"
   umsPortalFrontend:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-frontend"
     tag: "0.4.4@sha256:b8955718ad4d2c973b4c1ee80867ac47c2d90e422234c7a2401b13ed606fd4d4"
     # @supplier: "Univention"
   umsPortalServer:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-server"
     tag: "0.4.4@sha256:21d279ede3a7cbdaf3a5c4e83375bb389785db4f2569cfaf8362896a9b30e287"
     # @supplier: "Univention"
   umsWaitForDependency:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/wait-for-dependency"
     tag: "0.4.3@sha256:ff4b7f762860baa1415cfe9a24131cb28c2660a14058ca8a1e7a697468f72d69"
     # @supplier: "Univention"
   umsStoreDav:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/store-dav"
     tag: "0.5.2@sha256:a3cbb1df2024edf58aea029a280f660bcd2fb8e684eed638901f5d7cbf9db467"
     # @supplier: "Univention"
   umsUdmRestApi:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/udm-rest-api"
     tag: "0.3.5@sha256:1a434f9d5e4d15217d011c13d9f1694e8a12291e09a6d0802c1158f7e2c5e035"
     # @supplier: "Univention"
   umsUmcGateway:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-gateway"
     tag: "0.5.1@sha256:9937efd54020e0782a26a1670d0cb8b29edbc802b1fd9eed5e308a594d4ce010"
     # @supplier: "Univention"
   umsUmcServer:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-server"
     tag: "0.5.1@sha256:cfb626f8d0a949ce0ed36d7e01791006eae24d984573dfa3ed3f031808437da3"
     # @supplier: "Univention"
   wellKnown:
+    # renovate:
+    # registryUrl=https://docker.io
+    # dependencyType=vendor
     repository: "library/nginx"
     tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"
     # @supplier: "Element"
   xwiki:
+    # renovate:
+    # registryUrl=https://git.xwikisas.com:5050
+    # dependencyType=vendor
     repository: "xwikisas/swp/xwiki"
     tag: "0.12-mariadb-jetty-alpine@sha256:c195d8baf38b6c6b0c533a3216e726cd863a6c2ba0e65f18036402592bb72896"
     # @supplier: "XWiki"

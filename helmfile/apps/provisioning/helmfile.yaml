@@ -13,6 +13,11 @@ repositories:
          default "https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable" }}
 
 releases:
+  # renovate:
+  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable
+  # packageName=ox-connector
+  # dataSource=helm
+  # dependencyType=vendor
   - name: "ox-connector"
     chart: "ox-connector-repo/ox-connector"
     version: "0.1.0-pre-jconde-listener-entrypoint-chaining"

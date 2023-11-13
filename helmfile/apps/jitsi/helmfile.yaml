@@ -17,6 +17,11 @@ repositories:
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
+  # renovate:
+  # registryUrl=https://registry.souvap-univention.de
+  # packageName=souvap/tooling/charts/sovereign-workplace-jitsi/sovereign-workplace-jitsi
+  # dataSource=docker
+  # dependencyType=vendor
   - name: "jitsi"
     chart: "jitsi-repo/sovereign-workplace-jitsi"
     version: "1.7.1"

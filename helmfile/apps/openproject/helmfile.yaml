@@ -14,6 +14,11 @@ repositories:
          default "https://charts.openproject.org" }}
 
 releases:
+  # renovate:
+  # registryUrl=https://charts.openproject.org
+  # packageName=openproject
+  # dataSource=helm
+  # dependencyType=vendor
   - name: "openproject"
     chart: "openproject-repo/openproject"
     version: "2.4.0"
