@@ -19,11 +19,12 @@ stackDataContext:
   # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=swp-ldap,dc=internal
   ldapHostDn: cn=admin,dc=swp-ldap,dc=internal
 
-  samlMetadataUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/saml/descriptor"
-  samlMetadataUrlInternal: null
-  samlSpServer: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-  samlSchemes: "https"
-  ssoFqdn: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+  idpSamlMetadataUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/saml/descriptor"
+  idpSamlMetadataUrlInternal: null
+  umcSamlSpFqdn: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  umcSamlSchemes: "https"
+  idpFqdn: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+  ldapSamlSpUrls: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/saml/metadata"
 
   initialPasswordAdministrator: "{{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword }}"
 

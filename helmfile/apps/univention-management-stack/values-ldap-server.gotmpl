@@ -7,16 +7,13 @@ ldapServer:
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   ldapBaseDn: "dc=swp-ldap,dc=internal"
 
+  waitForSamlMetadata: true
+
   # TODO: Certificates handling
   # caCert: ""
   # certPem: ""
   # privateKey: ""
   # dhParam: ""
-  tlsMode: "off"
-
-  samlMetadataUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/saml/descriptor"
-  samlMetadataUrlInternal: null
-  serviceProviders: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/saml/metadata"
 
 image:
   registry: {{ .Values.global.imageRegistry | quote }}

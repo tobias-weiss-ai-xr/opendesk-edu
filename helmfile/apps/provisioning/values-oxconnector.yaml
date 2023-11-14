@@ -5,12 +5,9 @@ ingress:
   enabled: false
 
 oxConnector:
-  # ldapHostIp: ""
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
   tlsMode: "off"
-  # current static password for UCC
-  ldapPassword: "ucctempldapstring"
   caCert: "ucctempldapstring"
   debugLevel: "5"
   logLevel: "DEBUG"
