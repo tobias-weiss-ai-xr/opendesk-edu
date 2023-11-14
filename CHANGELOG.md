@@ -1,3 +1,10 @@
+## [0.5.40](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.39...v0.5.40) (2023-11-14)
+
+
+### Bug Fixes
+
+* **open-xchange:** Bump Dovecot and fix out-of-office replys ([55f6ba2](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/55f6ba21dc9eab811ac501bf0e2b78d4ae772194))
+
 ## [0.5.39](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.38...v0.5.39) (2023-11-14)
 
 
