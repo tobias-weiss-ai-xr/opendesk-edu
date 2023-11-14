@@ -26,6 +26,7 @@ oxConnector:
   oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
   oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
   oxDefaultContext: "1"
+  ldapPassword: {{ if eq .Values.ldap.host "univention-corporate-container" }} "ucctempldapstring" {{ else }} {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }} {{ end }}
 
 resources:
   {{ .Values.resources.oxConnector | toYaml | nindent 2 }}

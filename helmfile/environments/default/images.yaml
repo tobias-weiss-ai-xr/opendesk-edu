@@ -224,67 +224,67 @@ images:
   umsConfigHtpasswd:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/config-htpasswd"
-    tag: "0.5.2"
+    tag: "0.5.2@sha256:b713d22a9f2285aab7ff3b1db950002c9ae507ee0b8ba6c76c8a700299440b02"
     # @supplier: "Univention"
   umsDataLoader:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/data-loader"
-    tag: "0.15.2"
+    tag: "0.25.1@sha256:4b5d621e7ee2ca9efd8755ccb287a6daeb05284c3c010e4b6c487d01e539c606"
     # @supplier: "Univention"
   umsLdapNotifier:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-notifier"
-    tag: "0.4.1"
+    tag: "0.5.2@sha256:693c170507dd420d9afa19a2128c85ffd1f231b1c13b149a46bb12a501a1136f"
     # @supplier: "Univention"
   umsLdapServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-server"
-    tag: "0.4.1"
+    tag: "0.5.2@sha256:e4b229b1879185e150e371242a90c9a8e1ebb0bc19076871554137cc354855cb"
     # @supplier: "Univention"
   umsNotificationsApi:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/notifications-api"
-    tag: "0.3.4"
+    tag: "0.4.3@sha256:f0a95d96f4047b08db41b8878800f98e66a8fb2fc3c0f493130be314a3be0270"
     # @supplier: "Univention"
   umsPortalListener:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-listener"
-    tag: "0.3.4"
+    tag: "0.4.3@sha256:a5454bfc113df95d1e71424765b6a0137e7468861cb3df3865136888d24ca7a0"
     # @supplier: "Univention"
   umsPortalFrontend:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-frontend"
-    tag: "0.3.5"
+    tag: "0.4.3@sha256:bfae4930c830185b0f64d6cd9bb479bdde8ac383a58f8f5948731ece9288ff4d"
     # @supplier: "Univention"
   umsPortalServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-server"
-    tag: "0.3.4"
+    tag: "0.4.3@sha256:3a906e38aaabf5e80457f1b572a4ee3676b90921ac9c0df9a64a177ee0d75cc9"
     # @supplier: "Univention"
   umsWaitForDependency:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/wait-for-dependency"
-    tag: "0.3.4"
+    tag: "0.4.3@sha256:ff4b7f762860baa1415cfe9a24131cb28c2660a14058ca8a1e7a697468f72d69"
     # @supplier: "Univention"
   umsStoreDav:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/store-dav"
-    tag: "0.5.2"
+    tag: "0.5.2@sha256:e6d42110be74f171b62c8ba4752afd0af8119f0354783bf428eb2030f97be84a"
     # @supplier: "Univention"
   umsUdmRestApi:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/udm-rest-api"
-    tag: "0.3.2"
+    tag: "0.3.3@sha256:3893d74b1e450e920a53788a8b86cafb4e811dbbae8734fd32d56718ccbb89c5"
     # @supplier: "Univention"
   umsUmcGateway:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-gateway"
-    tag: "0.3.2"
+    tag: "0.3.5@sha256:2e5ec7a33f0f9094143090c786b3fda632fe85b669b7fe3bb467ec96b4a76eff"
     # @supplier: "Univention"
   umsUmcServer:
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/umc-server"
-    tag: "0.3.2"
+    tag: "0.3.5@sha256:fa95ab3a547807322e6d66da943292119b37229eccbb35b31217fe0f484c4798"
     # @supplier: "Univention"
   wellKnown:
     repository: "library/nginx"

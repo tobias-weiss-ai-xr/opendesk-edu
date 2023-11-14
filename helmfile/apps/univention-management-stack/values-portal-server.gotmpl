@@ -12,6 +12,9 @@ portalServer:
   ucsInternalUrl: "http://portal-server:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalServer }}@ums-store-dav/portal-data"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
+  centralNavigation:
+    enabled: true
+    authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
 
 image:
   registry: {{ .Values.global.imageRegistry | quote }}
