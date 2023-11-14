@@ -1,9 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-containerSecurityContext:
-  readOnlyRootFilesystem: false
-
 dovecot:
   ldap:
     enabled: true
@@ -14,4 +11,9 @@ dovecot:
     enabled: true
     clientID: "as8oidc"
     usernameAttribute: "phoenixusername"
+
+  submission:
+    enabled: true
+    ssl: "no"
+    host: "postfix:25"
 ...

@@ -15,8 +15,8 @@ images:
     tag: "opendesk-20231020@sha256:b0bfe09601d8c8064e1b174d21a225ddb10aaa4103892fdfdf3d216726c26dde"
     # @supplier: "XWiki"
   dovecot:
-    repository: "dovecot/dovecot"
-    tag: "2.3.20@sha256:96d414aa3f6978669b417f6468c16313a54ee6143a4846870e9f0eda280806e7"
+    repository: "souvap/tooling/images/dovecot-public-sector"
+    tag: "2.3.21@sha256:c76965a84d1ca527f523404eb027119f6736b199c094e4671037cb345ecad3dc"
     # @supplier: "Open-Xchange"
   element:
     repository: "souvap/tooling/images/element-web"
