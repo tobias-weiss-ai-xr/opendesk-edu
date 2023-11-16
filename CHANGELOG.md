@@ -1,3 +1,10 @@
+## [0.5.41](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.40...v0.5.41) (2023-11-16)
+
+
+### Bug Fixes
+
+* **helmfile:** Split README into docs ([cd0e94f](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/cd0e94f96fa5b377ab382b6c7738ed279cb2a199))
+
 ## [0.5.40](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.39...v0.5.40) (2023-11-14)
 
 
