@@ -9,6 +9,8 @@ umcServer:
   # TODO: Secret should be entered without b64enc
   machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
 
+  smtpSecret: {{ .Values.smtp.password | quote }}
+
 image:
   registry: {{ .Values.global.imageRegistry | quote }}
   repository: {{ .Values.images.umsUmcServer.repository | quote }}

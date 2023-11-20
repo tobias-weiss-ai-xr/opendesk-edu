@@ -28,6 +28,11 @@ stackDataContext:
   portalManagementProjectLinkBase: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
   portalManagementKnowledgeLinkBase: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
 
+  smtpHost: {{ .Values.smtp.host | quote }}
+  smtpPort: 587
+  smtpUser: {{ .Values.smtp.username | quote }}
+  smtpStartTls: true
+
   oxDefaultContext: "10"
 
   userPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.userPassword | quote }}
