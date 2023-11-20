@@ -1,3 +1,11 @@
+## [0.5.42](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.41...v0.5.42) (2023-11-20)
+
+
+### Bug Fixes
+
+* **nextcloud:** Add exporter and serviceMonitor ([feed270](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/feed270fd7949743e8f9974e7f147e89ab623347))
+* **nextcloud:** Bump openDesk bootstrap to 3.2.3 to support serverinfo token ([ea14f95](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/ea14f953a4a54c01cc0d66db1bdb645ca4a661e5))
+
 ## [0.5.41](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.40...v0.5.41) (2023-11-16)
 
 
