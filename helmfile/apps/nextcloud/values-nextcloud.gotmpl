@@ -36,11 +36,12 @@ image:
 
 metrics:
   enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+  https: true
   token: {{ .Values.secrets.nextcloud.metricsToken | quote }}
   image:
     repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.nextcloudExporter.repository }}"
     pullPolicy: "{{ .Values.global.imagePullPolicy }}"
-    tag: "{{ .Values.images.nextcloudExporter.tag }}"
+    tag: {{ .Values.images.nextcloudExporter.tag | quote }}
     pullSecrets:
       {{- toYaml .Values.global.imagePullSecrets | nindent 4 }}
 

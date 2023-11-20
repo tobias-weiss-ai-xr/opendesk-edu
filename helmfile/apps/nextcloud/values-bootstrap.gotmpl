@@ -39,6 +39,9 @@ config:
     host: {{ .Values.ldap.host | quote }}
     password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud | quote }}
 
+  serverinfo:
+    token: {{ .Values.secrets.nextcloud.metricsToken | quote }}
+
   smtp:
     host: {{ .Values.smtp.host | quote }}
     username: {{ .Values.smtp.username | quote }}
