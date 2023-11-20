@@ -65,6 +65,7 @@ grafana:
 ```
 
 ## Components
-| Component   | Metrics (pod- or serviceMonitor)  | Alerts (prometheusRule) | Dashboard (Grafana) |
-|:------------|-----------------------------------|-------------------------|---------------------|
-| Collabora   | :white_check_mark:                | :white_check_mark:      | :white_check_mark:  |
+| Component | Metrics (pod- or serviceMonitor)  | Alerts (prometheusRule) | Dashboard (Grafana) |
+|:----------|-----------------------------------|-------------------------|---------------------|
+| Collabora | :white_check_mark:                | :white_check_mark:      | :white_check_mark:  |
+| Nextcloud | :white_check_mark:                | :x:                     | :x:                 |

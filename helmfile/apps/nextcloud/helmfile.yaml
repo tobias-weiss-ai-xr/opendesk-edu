@@ -28,7 +28,7 @@ repositories:
 releases:
   - name: "opendesk-nextcloud-bootstrap"
     chart: "opendesk-nextcloud-bootstrap-repo/opendesk-nextcloud-bootstrap"
-    version: "3.2.2"
+    version: "3.2.3"
     wait: true
     waitForJobs: true
     values:
