@@ -42,4 +42,12 @@ extraVolumeMounts:
   - name: "announcements-customization"
     mountPath: "/usr/share/univention-management-console/modules/udm-portals-announcement.xml"
     subPath: "udm-portals-announcement.xml"
+
+memcached:
+  bundled: false
+  server: "memcached"
+  auth:
+    username: null
+    password: null
+
 ...
