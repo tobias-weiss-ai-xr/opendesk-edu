@@ -1,3 +1,10 @@
+## [0.5.43](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.42...v0.5.43) (2023-11-20)
+
+
+### Bug Fixes
+
+* **univention-management-stack:** Update optional UMS preview state ([061e588](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/061e588da90e52b531df0688347675bf4dcb431e))
+
 ## [0.5.42](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.41...v0.5.42) (2023-11-20)
 
 
