@@ -46,4 +46,7 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+
+resources:
+  {{ .Values.resources.intercomService | toYaml | nindent 2 }}
 ...

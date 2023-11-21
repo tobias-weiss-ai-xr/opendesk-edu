@@ -25,6 +25,8 @@ nextcloud-integration-ui:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
   {{- end }}
+  resources:
+    {{ .Values.resources.openxchangeNextcloudIntegrationUI | toYaml | nindent 4 }}
 
 public-sector-ui:
   image:
@@ -35,6 +37,8 @@ public-sector-ui:
     - name: {{ . | quote }}
   {{- end }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  resources:
+    {{ .Values.resources.openxchangePublicSectorUI | toYaml | nindent 4 }}
 
 appsuite:
   istio:
@@ -62,6 +66,8 @@ appsuite:
         repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGotenberg.repository }}"
         tag: {{ .Values.images.openxchangeGotenberg.tag | quote }}
         pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+      resources:
+        {{ .Values.resources.openxchangeGotenberg | toYaml | nindent 8 }}
     properties:
       "com.openexchange.oauth.provider.jwt.jwksUri": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/certs"
       "com.openexchange.oauth.provider.allowedIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
@@ -119,6 +125,8 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
     {{- end }}
+    resources:
+      {{ .Values.resources.openxchangeCoreMW | toYaml | nindent 6 }}
 
   core-ui:
     imagePullSecrets:
@@ -129,6 +137,8 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreUI.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    resources:
+      {{ .Values.resources.openxchangeCoreUI | toYaml | nindent 6 }}
 
   core-ui-middleware:
     ingress:
@@ -146,13 +156,18 @@ appsuite:
     redis:
       auth:
         password: {{ .Values.secrets.redis.password | quote }}
+    resources:
+      {{ .Values.resources.openxchangeCoreUIMiddleware | toYaml | nindent 6 }}
+      updater:
+      resources:
+        {{ .Values.resources.openxchangeCoreUIMiddlewareUpdater | toYaml | nindent 6 }}
 
   core-documentconverter:
     image:
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
     resources:
-      {{- .Values.resources.oxDocumentConverter | toYaml | nindent 6 }}
+      {{- .Values.resources.openxchangeCoreDocumentConverter | toYaml | nindent 6 }}
 
   core-guidedtours:
     imagePullSecrets:
@@ -163,11 +178,15 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreGuidedtours.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    resources:
+      {{- .Values.resources.openxchangeCoreGuidedtours | toYaml | nindent 6 }}
 
   core-imageconverter:
     image:
       repository: {{ .Values.images.openxchangeImageConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeImageConverter.tag | quote }}
+    resources:
+      {{- .Values.resources.openxchangeCoreImageConverter | toYaml | nindent 6 }}
 
   guard-ui:
     imagePullSecrets:
@@ -178,6 +197,8 @@ appsuite:
       repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGuardUI.repository }}"
       tag: {{ .Values.images.openxchangeGuardUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    resources:
+      {{- .Values.resources.openxchangeGuardUI | toYaml | nindent 6 }}
 
   core-user-guide:
     image:
@@ -188,4 +209,6 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
     {{- end }}
+    resources:
+      {{- .Values.resources.openxchangeCoreUserGuide | toYaml | nindent 6 }}
 ...
