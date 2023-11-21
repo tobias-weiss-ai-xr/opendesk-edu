@@ -49,6 +49,8 @@ metrics:
     enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
     labels:
       {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+  resources:
+    {{ .Values.resources.nextcloudMetrics | toYaml | nindent 4 }}
 
 {{- if .Values.cluster.persistence.readWriteMany.enabled }}
 replicaCount: {{ .Values.replicas.nextcloud }}
