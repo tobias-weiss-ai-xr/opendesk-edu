@@ -1,3 +1,10 @@
+## [0.5.44](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.43...v0.5.44) (2023-11-21)
+
+
+### Bug Fixes
+
+* **ci:** Remove default BASE_DOMAIN in .gitlab-ci.yml ([7ae65a3](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/7ae65a36a2777d249ba3784bf965da4c790a1b21))
+
 ## [0.5.43](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.42...v0.5.43) (2023-11-20)
 
 
