@@ -17,6 +17,9 @@ extraVolumes:
     configMap:
       name: "ums-stack-data-swp-self-service-emails"
       defaultMode: 0444
+  - name: "attribute-to-group-mapper-hook"
+    configMap:
+      name: "ums-stack-data-swp-attribute-to-group-mapper-hook"
 
 extraVolumeMounts:
   - name: "certificates"
@@ -26,5 +29,12 @@ extraVolumeMounts:
     subPath: "90-customization.sh"
   - name: "self-service-emails"
     mountPath: "/usr/share/univention-self-service/email_bodies"
+  - name: "attribute-to-group-mapper-hook"
+    mountPath: "/usr/lib/python3/dist-packages/univention/admin/hooks.d/AttributeToGroupMapper.py"
+    subPath: "AttributeToGroupMapper.py"
+  - name: "attribute-to-group-mapper-hook"
+    mountPath: "/usr/share/attribute-to-group-mapper/flag_to_group_mapping.json"
+    subPath: "flag_to_group_mapping.json"
+
 
 ...

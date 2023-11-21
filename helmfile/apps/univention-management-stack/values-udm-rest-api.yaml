@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+extraVolumes:
+  - name: "attribute-to-group-mapper-hook"
+    configMap:
+      name: "ums-stack-data-swp-attribute-to-group-mapper-hook"
+
+extraVolumeMounts:
+  - name: "attribute-to-group-mapper-hook"
+    mountPath: "/usr/lib/python3/dist-packages/univention/admin/hooks.d/AttributeToGroupMapper.py"
+    subPath: "AttributeToGroupMapper.py"
+  - name: "attribute-to-group-mapper-hook"
+    mountPath: "/usr/share/attribute-to-group-mapper/flag_to_group_mapping.json"
+    subPath: "flag_to_group_mapping.json"
+
+...

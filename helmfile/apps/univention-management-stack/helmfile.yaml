@@ -94,6 +94,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-udm-rest-api.gotmpl"
+      - "values-udm-rest-api.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:
