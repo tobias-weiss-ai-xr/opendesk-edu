@@ -1,3 +1,10 @@
+## [0.5.45](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.44...v0.5.45) (2023-11-22)
+
+
+### Bug Fixes
+
+* **open-xchange:** Add security context ([db48140](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/db48140f3ae6576b21e93ac0f10f40765efd608d))
+
 ## [0.5.44](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.43...v0.5.44) (2023-11-21)
 
 
