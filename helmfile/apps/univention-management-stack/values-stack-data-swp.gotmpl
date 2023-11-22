@@ -4,13 +4,9 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 stackDataSwp:
-  udmApiUser: "cn=admin"
   udmApiPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
-  udmApiUrl: "http://ums-udm-rest-api/udm/"
-  loadDevData: true
 
 stackDataContext:
-  ldapBase: "dc=swp-ldap,dc=internal"
   ldapSearchUsers:
     {{- range $k, $v := .Values.secrets.univentionCorporateServer.ldapSearch }}
     - username: {{ printf "ldapsearch_%s" $k | quote }}
@@ -29,11 +25,8 @@ stackDataContext:
   portalManagementKnowledgeLinkBase: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
 
   smtpHost: {{ .Values.smtp.host | quote }}
-  smtpPort: 587
+  smtpPort: {{ .Values.smtp.port | quote }}
   smtpUser: {{ .Values.smtp.username | quote }}
-  smtpStartTls: true
-
-  oxDefaultContext: "10"
 
   userPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.userPassword | quote }}
   adminPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.adminPassword | quote }}
