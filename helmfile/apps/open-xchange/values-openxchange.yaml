@@ -14,6 +14,17 @@ appsuite:
     masterAdmin: "admin"
     gotenberg:
       enabled: true
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - "ALL"
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: "RuntimeDefault"
     features:
       status:
         # enable admin pack
@@ -27,6 +38,7 @@ appsuite:
         open-xchange-authentication-oauth: "enabled"
     properties:
       com.openexchange.UIWebPath: "/appsuite/"
+      com.openexchange.showAdmin: "false"
       # PDF Export
       com.openexchange.capability.mail_export_pdf: "true"
       com.openexchange.mail.exportpdf.gotenberg.enabled: "true"
@@ -158,8 +170,23 @@ appsuite:
           mkdir -p /opt/open-xchange/guard-files
           chown open-xchange:open-xchange /opt/open-xchange/guard-files
 
+    # Security context for core-mw has no effect yet
+    # podSecurityContext: {}
+    # securityContext: {}
+
   core-ui:
     enabled: true
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
 
   core-ui-middleware:
     enabled: true
@@ -170,15 +197,62 @@ appsuite:
         - "redis-master:6379"
       auth:
         enabled: true
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
 
   core-guidedtours:
     enabled: true
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
+
   guard-ui:
     enabled: true
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
+
   core-cacheservice:
     enabled: false
+
   core-user-guide:
     enabled: true
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
 
   core-imageconverter:
     enabled: true
@@ -188,6 +262,19 @@ appsuite:
           endpoint: "."
           accessKey: "."
           secretKey: "."
+    podSecurityContext:
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 987
+      seccompProfile:
+        type: "RuntimeDefault"
+    securityContext:
+      # missing:
+      # readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
 
   core-spellcheck:
     enabled: false
@@ -198,6 +285,19 @@ appsuite:
       cache:
         remoteCache:
           enabled: false
+    podSecurityContext:
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 987
+      seccompProfile:
+        type: "RuntimeDefault"
+    securityContext:
+      # missing:
+      # readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
 
   core-documents-collaboration:
     enabled: false
@@ -213,3 +313,30 @@ appsuite:
     enabled: false
   core-drive-help:
     enabled: false
+
+nextcloud-integration-ui:
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    readOnlyRootFilesystem: true
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+
+public-sector-ui:
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    readOnlyRootFilesystem: true
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+...
