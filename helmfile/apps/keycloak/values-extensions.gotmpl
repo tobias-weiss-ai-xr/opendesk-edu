@@ -23,6 +23,7 @@ handler:
   appConfig:
     smtpPassword: {{ .Values.smtp.password | quote }}
     smtpHost: {{ .Values.smtp.host | quote }}
+    smtpPort: {{ .Values.smtp.port | quote }}
     smtpUsername: {{ .Values.smtp.username | quote }}
     mailFrom: "noreply@{{ .Values.global.domain }}"
   resources:

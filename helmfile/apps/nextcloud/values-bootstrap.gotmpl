@@ -44,6 +44,7 @@ config:
 
   smtp:
     host: {{ .Values.smtp.host | quote }}
+    port: {{ .Values.smtp.port | quote }}
     username: {{ .Values.smtp.username | quote }}
     password: {{ .Values.smtp.password | quote }}
 

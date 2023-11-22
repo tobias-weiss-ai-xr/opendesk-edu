@@ -24,7 +24,7 @@ postfix:
     - fileName: "sasl_passwd.map"
       content:
         - {{ printf "%s %s:%s" .Values.smtp.host .Values.smtp.username .Values.smtp.password | quote }}
-  relayHost: {{ printf "[%s]:587" .Values.smtp.host | quote }}
+  relayHost: {{ printf "[%s]:[%d]" .Values.smtp.host .Values.smtp.port | quote }}
   relayNets: {{ .Values.cluster.networking.cidr | quote}}
   virtualTransport: "lmtps:dovecot:24"
   smtpdSASLPath: "inet:dovecot:3659"

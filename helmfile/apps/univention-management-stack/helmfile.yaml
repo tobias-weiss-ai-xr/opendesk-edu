@@ -123,6 +123,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-stack-data-swp.gotmpl"
+      - "values-stack-data-swp.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:
