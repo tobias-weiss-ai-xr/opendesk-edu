@@ -209,6 +209,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-umc-gateway.gotmpl"
+      - "values-umc-gateway.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:
