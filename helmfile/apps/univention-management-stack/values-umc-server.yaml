@@ -20,6 +20,10 @@ extraVolumes:
   - name: "attribute-to-group-mapper-hook"
     configMap:
       name: "ums-stack-data-swp-attribute-to-group-mapper-hook"
+  - name: "announcements-customization"
+    configMap:
+      name: "ums-stack-data-swp-umc-server-announcements"
+      defaultMode: 0444
 
 extraVolumeMounts:
   - name: "certificates"
@@ -35,6 +39,7 @@ extraVolumeMounts:
   - name: "attribute-to-group-mapper-hook"
     mountPath: "/usr/share/attribute-to-group-mapper/flag_to_group_mapping.json"
     subPath: "flag_to_group_mapping.json"
-
-
+  - name: "announcements-customization"
+    mountPath: "/usr/share/univention-management-console/modules/udm-portals-announcement.xml"
+    subPath: "udm-portals-announcement.xml"
 ...
