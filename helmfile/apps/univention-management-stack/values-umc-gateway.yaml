@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+extraVolumes:
+  - name: "entrypoint-swp-patches"
+    configMap:
+      name: "ums-stack-data-swp-umc-gateway-entrypoint"
+      defaultMode: 0555
+  - name: "announcements-customization"
+    configMap:
+      name: "ums-stack-data-swp-umc-server-announcements"
+      defaultMode: 0444
+
+extraVolumeMounts:
+  - name: "entrypoint-swp-patches"
+    mountPath: "/entrypoint.d/90-swp.sh"
+    subPath: "90-swp.sh"
+  - name: "announcements-customization"
+    mountPath: "/usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/16x16/udm-portals-announcement.png"
+    subPath: "udm-portals-announcement.png"
+...
