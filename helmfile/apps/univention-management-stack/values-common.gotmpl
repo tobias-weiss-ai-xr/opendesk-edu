@@ -4,7 +4,11 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 ingress:
-  enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
+  # Intentionally not using the Ingress configuration of the UMS stack at the
+  # moment, since it does depend on rewriting capabilities of the ingress
+  # controller. Those are encapsulated into the release "stack-gateway" so that
+  # the compatibility with all ingress controllers is increased.
+  enabled: false
   host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
