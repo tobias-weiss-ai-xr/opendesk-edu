@@ -61,7 +61,6 @@ serverBlock: |
 
 
     ## frontend redirects
-
     location = / {
        absolute_redirect off;
        return 302 /univention/portal/;
@@ -164,10 +163,22 @@ serverBlock: |
 
 
     ## notifications-api
-
     location /univention/portal/notifications-api/ {
       rewrite ^/univention/portal/notifications-api(/.*)$ $1 break;
       proxy_pass http://ums-notifications-api:80;
+    }
+
+    ## openDesk branding
+    location = /favicon.ico {
+      proxy_pass http://ums-portal-frontend:80/;
+    }
+    location /univention/portal/custom/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80/;
+    }
+    location /univention/portal/icons/ {
+      rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80/;
     }
 
   }
