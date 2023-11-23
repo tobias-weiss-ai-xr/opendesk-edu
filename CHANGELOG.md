@@ -1,3 +1,10 @@
+## [0.5.46](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.45...v0.5.46) (2023-11-23)
+
+
+### Bug Fixes
+
+* **element:** Fix quotes in element chart ([a447c13](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/commit/a447c137fe58be343e7ada55afb7f6891a5cde74))
+
 ## [0.5.45](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.44...v0.5.45) (2023-11-22)
 
 
