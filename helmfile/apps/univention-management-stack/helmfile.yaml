@@ -185,20 +185,6 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/bitnami-charts/nginx
-  # dataSource=docker
-  # dependencyType=vendor
-  - name: "ums-portal-frontend-custom"
-    # TODO: Replace with our own Nginx chart.
-    chart: "bitnami-repo/nginx"
-    version: "15.3.5"
-    values:
-      - "values-portal-frontend-custom.yaml"
-      - "values-portal-frontend-custom.gotmpl"
-    installed: {{ .Values.univentionManagementStack.enabled }}
-
-  # renovate:
   # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
   # packageName=umc-gateway
   # dataSource=helm
