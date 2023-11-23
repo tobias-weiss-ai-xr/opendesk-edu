@@ -37,6 +37,12 @@ service.
 |             |                    |            | Port      | `databases.keycloakExtension.port`     | `5432`                     |
 |             |                    |            | Username  | `databases.keycloakExtension.username` | `keycloak_extensions_user` |
 |             |                    |            | Password  | `databases.keycloakExtension.password` |                            |
+| UMS         | Notifications API  | PostgreSQL |           |                                        |                            |
+|             |                    |            | Name      | `databases.notificationsApi.name`      | `notificationsapi`         |
+|             |                    |            | Host      | `databases.notificationsApi.host`      | `postgresql`               |
+|             |                    |            | Port      | `databases.notificationsApi.port`      | `5432`                     |
+|             |                    |            | Username  | `databases.notificationsApi.username`  | `notificationsapi_user`    |
+|             |                    |            | Password  | `databases.notificationsApi.password`  |                            |
 | Nextcloud   | Nextcloud          | MariaDB    |           |                                        |                            |
 |             |                    |            | Name      | `databases.nextcloud.name`             | `nextcloud`                |
 |             |                    |            | Host      | `databases.nextcloud.host`             | `mariadb`                  |
