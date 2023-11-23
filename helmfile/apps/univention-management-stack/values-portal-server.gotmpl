@@ -4,16 +4,9 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 portalServer:
-  adminGroup: "cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal"
-  authMode: "saml"
-  environment: "staging"
-  editable: "false"
-  logLevel: "DEBUG"
+  adminGroup: "cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}"
   ucsInternalUrl: "http://portal-server:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalServer }}@ums-store-dav/portal-data"
-  umcGetUrl: "http://ums-umc-server/get"
-  umcSessionUrl: "http://ums-umc-server/get/session-info"
   centralNavigation:
-    enabled: true
     authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
 
 image:

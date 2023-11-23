@@ -5,15 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 ldapServer:
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
-  ldapBaseDn: "dc=swp-ldap,dc=internal"
-
-  waitForSamlMetadata: true
-
-  # TODO: Certificates handling
-  # caCert: ""
-  # certPem: ""
-  # privateKey: ""
-  # dhParam: ""
+  ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
 
 image:
   registry: {{ .Values.global.imageRegistry | quote }}
@@ -26,12 +18,11 @@ image:
     {{- end }}
 
   waitForDependency:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.umsWaitForDependency.repository }}"
-    imagePullPolicy: "Always"
-    tag: "{{ .Values.images.umsWaitForDependency.tag }}"
+    registry: {{ .Values.global.imageRegistry | quote }}
+    repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
 
-# TODO: Pending upstream support, #199
 persistence:
   data:
     storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}

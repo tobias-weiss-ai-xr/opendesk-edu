@@ -21,7 +21,6 @@ image:
   configHtpasswd:
     registry: {{ .Values.global.imageRegistry | quote }}
     repository: {{ .Values.images.umsConfigHtpasswd.repository | quote }}
-    pullPolicy: "Always"
     pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.umsConfigHtpasswd.tag | quote }}
     pullSecrets:
@@ -29,7 +28,6 @@ image:
       - name: {{ . | quote }}
       {{- end }}
 
-# TODO: Pending upstream support, #201
 persistence:
   storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
   size: {{ .Values.persistence.size.univentionManagementStack.storeDav | quote }}

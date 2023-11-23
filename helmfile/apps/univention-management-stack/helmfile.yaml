@@ -32,6 +32,7 @@ releases:
     version: "15.3.5"
     values:
       - "values-ums-stack-gateway.gotmpl"
+      - "values-ums-stack-gateway.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:
@@ -105,6 +106,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-stack-data-ums.gotmpl"
+      - "values-stack-data-ums.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:
@@ -134,6 +136,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-portal-server.gotmpl"
+      - "values-portal-server.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:
@@ -178,6 +181,7 @@ releases:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-portal-frontend.gotmpl"
+      - "values-portal-frontend.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   # renovate:

@@ -16,6 +16,8 @@ extraVolumeMounts:
     mountPath: "/entrypoint.d/90-swp.sh"
     subPath: "90-swp.sh"
   - name: "announcements-customization"
-    mountPath: "/usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/16x16/udm-portals-announcement.png"
+    mountPath:
+      "/usr/share/univention-management-console-frontend/js/dijit/themes\
+      /umc/icons/16x16/udm-portals-announcement.png"
     subPath: "udm-portals-announcement.png"
 ...

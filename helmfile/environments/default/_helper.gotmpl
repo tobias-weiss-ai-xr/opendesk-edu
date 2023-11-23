@@ -7,4 +7,5 @@ SPDX-License-Identifier: Apache-2.0
 ldap:
   host: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-server" {{ else }} "univention-corporate-container" {{ end }}
   notifierHost: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-notifier" {{ else }} "univention-corporate-container" {{ end }}
+  baseDn: "dc=swp-ldap,dc=internal"
 ...
