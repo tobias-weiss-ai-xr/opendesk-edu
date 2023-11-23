@@ -15,19 +15,22 @@ image:
 
 extraIngresses:
   redirects:
-    enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
+    # Using "stack-gateway" currently.
+    enabled: false
     # The TLS configuration is on the "master" Ingress, see below.
     tls:
       enabled: false
   master:
-    enabled: {{ if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}false{{ else }}{{ .Values.ingress.enabled }}{{ end }}
+    # Using "stack-gateway" currently.
+    enabled: false
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
 
   # See "extraVolumeMounts" below
   custom-favicon:
-    enabled: true
+    # Using "stack-gateway" at the moment
+    enabled: false
     annotations:
       nginx.org/mergeable-ingress-type: "minion"
     paths:
@@ -37,7 +40,8 @@ extraIngresses:
 
   # See "extraVolumeMounts" below
   custom-branding:
-    enabled: true
+    # Using "stack-gateway" at the moment
+    enabled: false
     annotations:
       nginx.ingress.kubernetes.io/configuration-snippet: |
         rewrite ^/univention/portal(/.*)$ $1 break;

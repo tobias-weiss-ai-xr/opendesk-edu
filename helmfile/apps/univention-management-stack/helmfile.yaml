@@ -22,9 +22,6 @@ repositories:
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
 
 releases:
-  # TODO: Interim, until the UMS stack has a stack umbrella chart and provides a solution
-  # {{- if eq .Values.ingress.ingressClassName "dedicated-haproxy-external" }}
-
   # renovate:
   # registryUrl=https://registry.souvap-univention.de
   # packageName=souvap/tooling/charts/bitnami-charts/nginx
@@ -36,7 +33,6 @@ releases:
     values:
       - "values-ums-stack-gateway.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
-  # {{- end }}
 
   # renovate:
   # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
