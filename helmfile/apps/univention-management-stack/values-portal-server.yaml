@@ -2,15 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 
-portalListener:
-  debugLevel: "4"
-  tlsMode: "off"
-  udmApiUrl: "http://ums-udm-rest-api/udm/"
-  udmApiUsername: "cn=admin"
+portalServer:
+  authMode: "saml"
+  editable: "false"
+  logLevel: "DEBUG"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
-
-store-dav:
-  bundled: false
+  centralNavigation:
+    enabled: true
 
 ...

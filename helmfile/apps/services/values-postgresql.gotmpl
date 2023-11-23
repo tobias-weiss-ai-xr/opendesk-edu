@@ -24,7 +24,7 @@ job:
     - username: "matrix_user"
       password: {{ .Values.secrets.postgresql.matrixUser | quote }}
     - username: "notificationsapi_user"
-      password: {{ .Values.secrets.postgresql.notificationsapiUser | quote }}
+      password: {{ .Values.secrets.postgresql.notificationsApiUser | quote }}
   databases:
     - name: "keycloak"
       user: "keycloak_user"

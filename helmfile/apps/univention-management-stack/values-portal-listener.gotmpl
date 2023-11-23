@@ -4,25 +4,20 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 portalListener:
-  adminGroup: "cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal"
-  environment: "staging"
-  debugLevel: "4"
+  adminGroup: "cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}"
   assetsRoot: "http://portal-listener:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}@ums-store-dav/portal-assets/"
   ucsInternalUrl: "http://portal-listener:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}@ums-store-dav/portal-data/"
-  umcGetUrl: "http://ums-umc-server/get"
-  umcSessionUrl: "http://ums-umc-server/get/session-info"
 
-  ldapBaseDn: "dc=swp-ldap,dc=internal"
-  ldapHost: "{{ .Values.ldap.host }}"
-  ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
+  ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
+  ldapHost: {{ .Values.ldap.host | quote }}
+  ldapHostDn: "cn=admin,{{ .Values.ldap.baseDn }}"
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   notifierServer: {{ .Values.ldap.notifierHost | quote }}
-  portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,dc=swp-ldap,dc=internal"
+  portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   udmApiUsername: "cn=admin"
 
-  tlsMode: "off"
 
 image:
   registry: {{ .Values.global.imageRegistry | quote }}
@@ -37,10 +32,9 @@ image:
   waitForDependency:
     registry: {{ .Values.global.imageRegistry | quote }}
     repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
-    imagePullPolicy: "Always"
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
 
-# TODO: Pending upstream support, #200
 persistence:
   storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
   size: {{ .Values.persistence.size.univentionManagementStack.portalListener | quote }}

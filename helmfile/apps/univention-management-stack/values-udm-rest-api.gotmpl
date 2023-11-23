@@ -7,12 +7,7 @@ udmRestApi:
   # TODO: Secret should be entered without b64enc
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
   # TODO: Secret should be entered without b64enc
-  machineSecret: "{{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc }}"
-  # TODO: Stub value currently
-  caCert: ""
-  # TODO: This should not be part of the udm-rest-api anymore
-  loadJoinData:
-    enabled: true
+  machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
 
 image:
   registry: {{ .Values.global.imageRegistry | quote }}

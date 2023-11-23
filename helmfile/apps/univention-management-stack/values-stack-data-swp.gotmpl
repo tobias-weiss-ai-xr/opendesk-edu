@@ -8,14 +8,14 @@ stackDataSwp:
 
 stackDataContext:
   ldapSearchUsers:
-    {{- range $k, $v := .Values.secrets.univentionCorporateServer.ldapSearch }}
-    - username: {{ printf "ldapsearch_%s" $k | quote }}
-      password: {{ $v | quote }}
+    {{- range $username, $password := .Values.secrets.univentionCorporateServer.ldapSearch }}
+    - username: {{ printf "ldapsearch_%s" $username | quote }}
+      password: {{ $password | quote }}
       lastname: {{ "LDAP-Search-User" }}
     {{- end }}
 
-  externalDomainName: "{{ .Values.global.domain }}"
-  externalMailDomain: "{{ .Values.global.domain }}"
+  externalDomainName: {{ .Values.global.domain | quote }}
+  externalMailDomain: {{ .Values.global.domain | quote }}
 
   portalGroupwareLinkBase: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
   portalFileshareLinkBase: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"

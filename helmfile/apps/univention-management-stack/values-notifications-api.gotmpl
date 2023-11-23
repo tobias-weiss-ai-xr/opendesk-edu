@@ -6,12 +6,12 @@ SPDX-License-Identifier: Apache-2.0
 postgresql:
   bundled: false
   connection:
-    host: "postgresql"
-    port: 5432
+    host: {{ .Values.databases.notificationsApi.host | quote }}
+    port: {{ .Values.databases.notificationsApi.port | quote }}
   auth:
-    username: "notificationsapi_user"
-    database: "notificationsapi"
-    password: {{ .Values.secrets.postgresql.notificationsapiUser | quote }}
+    username: {{ .Values.databases.notificationsApi.username | quote }}
+    database: {{ .Values.databases.notificationsApi.name | quote }}
+    password: {{ .Values.databases.notificationsApi.password | default .Values.secrets.postgresql.notificationsApiUser | quote }}
 
 image:
   registry: {{ .Values.global.imageRegistry }}

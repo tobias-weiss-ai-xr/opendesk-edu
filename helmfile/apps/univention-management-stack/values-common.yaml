@@ -6,5 +6,18 @@ global:
   configMapUcr: "ums-stack-data-swp-ucr"
   configMapUcrForced: null
 
+ingress:
+  # Intentionally not using the Ingress configuration of the UMS stack at the
+  # moment, since it does depend on rewriting capabilities of the ingress
+  # controller. Those are encapsulated into the release "stack-gateway" so that
+  # the compatibility with all ingress controllers is increased.
+  enabled: false
+  tls:
+    # The TLS configuration is on the "master" Ingress, see "portal-frontend"
+    enabled: false
+    secretName: ""
+
 istio:
   enabled: false
+
+...

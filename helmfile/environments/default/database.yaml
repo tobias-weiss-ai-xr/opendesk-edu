@@ -19,6 +19,12 @@ databases:
     host: "mariadb"
     username: "nextcloud_user"
     password: ""
+  notificationsApi:
+    name: "notificationsapi"
+    host: "postgresql"
+    port: 5432
+    username: "notificationsapi_user"
+    password: ""
   openproject:
     name: "openproject"
     host: "postgresql"
