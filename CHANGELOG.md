@@ -1,3 +1,11 @@
+## [0.5.47](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.46...v0.5.47) (2023-11-24)
+
+
+### Bug Fixes
+
+* **helmfile:** Rename absolute paths on OpenCoDE to new 'opendesk' base group name ([7ac2e0f](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/7ac2e0f9de2a8386a7f5809ba40db4ed7164a857))
+* **xwiki:** Enable the sync of user profile picture from LDAP ([6aa3d38](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/6aa3d386afe8b3f22e47f9971fd719089006b54e))
+
 ## [0.5.46](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/compare/v0.5.45...v0.5.46) (2023-11-23)
 
 
