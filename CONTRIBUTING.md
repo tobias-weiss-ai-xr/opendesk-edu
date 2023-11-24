@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Read me first
 
-Please read the [project's overall CONTRIBUTING.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/CONTRIBUTING.md) first.
+Please read the [project's overall CONTRIBUTING.md](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/CONTRIBUTING.md) first.
 
 # How to contribute?
 

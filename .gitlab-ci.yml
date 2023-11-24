@@ -555,7 +555,7 @@ generate-release-assets:
       - "./build_artefacts/image-index.json"
   tags: []
   variables:
-    ASSET_GENERATOR_REPO_PATH: "bmi/souveraener_arbeitsplatz/tooling/opendesk-asset-generator"
+    ASSET_GENERATOR_REPO_PATH: "bmi/opendesk/tooling/opendesk-asset-generator"
 
 
 # Declare .environments which is in environments repository and only loaded when INCLUDE_ENVIRONMENTS_ENABLED not false.

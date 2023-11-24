@@ -29,7 +29,7 @@ missingFileHandler: "Error"
 # - Installing all releases from root via helmfile apply
 # - Installing a single release from root via helmfile apply -f helmfile/apps/<app>/helmfile.yaml
 # - Installing a single release from app directory via helmfile apply
-# Issue: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/issues/2
+# Issue: https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/issues/2
 
 environments:
   default:
