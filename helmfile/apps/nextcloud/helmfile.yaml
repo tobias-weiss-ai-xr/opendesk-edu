@@ -8,7 +8,7 @@ bases:
 repositories:
   # openDesk Keycloak Bootstrap
   # Source:
-  #  https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/sovereign-workplace-nextcloud-bootstrap
+  #  https://gitlab.opencode.de/bmi/opendesk/components/charts/sovereign-workplace-nextcloud-bootstrap
   - name: "opendesk-nextcloud-bootstrap-repo"
     oci: true
     # yamllint disable rule:line-length

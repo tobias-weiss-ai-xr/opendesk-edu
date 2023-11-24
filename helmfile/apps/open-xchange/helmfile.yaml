@@ -7,7 +7,7 @@ bases:
 ---
 repositories:
   # openDesk Dovecot
-  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-dovecot
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-dovecot
   - name: "opendesk-dovecot-repo"
     oci: true
     url: >-
@@ -21,7 +21,7 @@ repositories:
     url: >-
       {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default "registry.open-xchange.com" }}
   # openDesk Open-Xchange Bootstrap
-  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-open-xchange-bootstrap
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-open-xchange-bootstrap
   - name: "opendesk-open-xchange-bootstrap-repo"
     oci: true
     # yamllint disable rule:line-length

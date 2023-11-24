@@ -16,7 +16,7 @@ repositories:
     verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
   # openDesk Keycloak Theme
-  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-keycloak-theme
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-keycloak-theme
   - name: "keycloak-theme-repo"
     oci: true
     url: >-

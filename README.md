@@ -40,7 +40,7 @@ Basic knowledge of Kubernetes and Devops is required though.
 
 # Active development notice
 openDesk will face breaking changes in the near future without upgrade paths before
-[technical release](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/releases
+[technical release](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases
 v1.0.0 is reached.
 
 While most components support upgrades, major configuration or component changes may occur, therefore we recommend
@@ -60,10 +60,10 @@ Of course, further development also includes enhancing the documentation.
 
 We love to get feedback from you!
 Related to the deployment / contents of this repository,
-please use the [issues within this project](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/issues).
+please use the [issues within this project](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/issues).
 
 If you want to address other topics, please check the section
-["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
+["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
 
 # Requirements
 
@@ -86,7 +86,7 @@ If you want to address other topics, please check the section
 All technical releases are created using [Semantic Versioning](https://semver.org/lang/de/).
 
 Gitlab provides an
-[overview on the releases](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace/-/releases)
+[overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases)
 of this project.
 
 The following release artefacts are provided beside the default source code assets:
