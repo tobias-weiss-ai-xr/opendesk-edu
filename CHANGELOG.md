@@ -1,3 +1,10 @@
+## [0.5.48](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.47...v0.5.48) (2023-11-24)
+
+
+### Bug Fixes
+
+* **services:** Update resource requests and remove cpu limits ([f86a74b](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/f86a74ba100c7f08f6538b58a713bbc87c00e814))
+
 ## [0.5.47](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.46...v0.5.47) (2023-11-24)
 
 
