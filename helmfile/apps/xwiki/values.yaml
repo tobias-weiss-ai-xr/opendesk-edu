@@ -10,9 +10,9 @@ customConfigs:
     ## Indicate the LDAP field defining the user UID
     xwiki.authentication.ldap.UID_attr: "uid"
     ## Indicate the LDAP field defining the user profile picture
-    # xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
+    xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
     ## Enable the synchronization of the LDAP profile picture
-    # xwiki.authentication.ldap.update_photo: 1
+    xwiki.authentication.ldap.update_photo: 1
 
   xwiki.properties:
     oidc.scope: "openid,profile,email,address,phoenix"
@@ -80,8 +80,10 @@ properties:
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchDN":
     "dc=swp-ldap,dc=internal"
   ## LDAP filter to only synchronize some groups
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
+  #   "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
-    "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
+    "(objectClass=opendeskKnowledgemanagementGroup)"
 
 securityContext:
   enabled: true
