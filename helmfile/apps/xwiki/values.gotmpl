@@ -16,7 +16,7 @@ externalDB:
 
 customConfigs:
   "xwiki.cfg":
-    "xwiki.superadminpassword": {{ .Values.secrets.xwiki.superadminpassword | quote }}
+    xwiki.superadminpassword: {{ .Values.secrets.xwiki.superadminpassword | quote }}
     ## LDAP Server configuration
     xwiki.authentication.ldap.server: {{ .Values.ldap.host | quote }}
     xwiki.authentication.ldap.port: 389
@@ -25,6 +25,8 @@ customConfigs:
     xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki | quote }}
     ## Base DN used for searching for users
     xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
+    ## Allow short update cycles of the LDAP group cache
+    xwiki.authentication.ldap.groupcache_expiration: 300
 
   "xwiki.properties":
     "oidc.endpoint.authorization": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/auth"
