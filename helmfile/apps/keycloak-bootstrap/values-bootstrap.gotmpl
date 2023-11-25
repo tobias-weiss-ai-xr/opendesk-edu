@@ -27,4 +27,8 @@ image:
 
 resources:
   {{ .Values.resources.keycloakBootstrap | toYaml | nindent 2 }}
+
+additionalAnnotations:
+  annotations:
+    intents.otterize.com/service-name: "keycloak-bootstrap"
 ...
