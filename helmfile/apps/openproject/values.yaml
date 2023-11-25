@@ -82,4 +82,8 @@ environment:
   # Define an admin mapping from the claim
   # The attribute mapping cannot currently be defined in the value
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_ADMIN: "openproject_admin"
+
+seederJob:
+  annotations:
+    intents.otterize.com/service-name: "openproject-seeder"
 ...

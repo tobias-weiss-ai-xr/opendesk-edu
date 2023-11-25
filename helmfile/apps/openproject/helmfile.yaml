@@ -12,6 +12,8 @@ repositories:
     url: >-
       {{ env "PRIVATE_CHART_REPOSITORY_URL" |
          default "https://charts.openproject.org" }}
+    verify: true
+    keyring: "../../files/gpg-pubkeys/openproject-com.gpg"
 
 releases:
   # renovate:
@@ -21,7 +23,7 @@ releases:
   # dependencyType=vendor
   - name: "openproject"
     chart: "openproject-repo/openproject"
-    version: "2.4.0"
+    version: "2.6.1"
     wait: true
     waitForJobs: true
     values:
