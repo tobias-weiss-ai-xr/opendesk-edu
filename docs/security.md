@@ -10,6 +10,7 @@ This document should cover the current status of security measurements.
 <!-- TOC -->
   * [Helm Chart Trust Chain](#helm-chart-trust-chain)
   * [Kubernetes Security Enforcements](#kubernetes-security-enforcements)
+  * [NetworkPolicies](#networkpolicies)
 <!-- TOC -->
 
 ## Helm Chart Trust Chain
@@ -99,3 +100,22 @@ This list gives you an overview of default security settings and if they comply 
 | UCC             | univention-corporate-container |        :x:         |                :x:                 |                                                                      :x:                                                                       |               :x:                 |               :x:               |          :x:          |     -     |     -      |    -    |
 | XWiki           | xwiki                          |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |    100    |    101     |   101   |
 |                 | xwiki initContainers           |        :x:         |                :x:                 |                                                                      :x:                                                                       |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |   101   | 
+
+## NetworkPolicies
+
+Kubernetes NetworkPolicies are an important measure to secure your kubernetes apps and clusters.
+When applied, they restrict the traffic to your services.
+This protects other deployments in your cluster or other services in your deployment to get compromised when one
+component is compromised.
+
+We ship a default set of Otterize ClientIntents via
+[Otterize intents operator](https://github.com/otterize/intents-operator) which translates intent-based access control
+(IBAC) into kubernetes native NetworkPolicies.
+
+This requires the Otterize intents operator to be installed.
+
+```yaml
+security:
+  otterizeIntents:
+    enabled: true
+```
