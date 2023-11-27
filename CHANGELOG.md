@@ -1,3 +1,10 @@
+## [0.5.50](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.49...v0.5.50) (2023-11-27)
+
+
+### Bug Fixes
+
+* **ci:** Add metadata for renovate processing ([36aa3ed](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/36aa3ed7c9f9a6d0ffe23dc3ca2174d5f2741dfa))
+
 ## [0.5.49](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.48...v0.5.49) (2023-11-27)
 
 
