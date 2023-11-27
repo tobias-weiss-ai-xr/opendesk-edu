@@ -1,3 +1,10 @@
+## [0.5.49](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.48...v0.5.49) (2023-11-27)
+
+
+### Bug Fixes
+
+* **nextcloud:** Bump image to incorporate fix for https://github.com/nextcloud/security-advisories/security/advisories/GHSA-f962-hw26-g267 ([efbd814](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/efbd81496868c5d4274f09805a1e771f47d548be))
+
 ## [0.5.48](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.47...v0.5.48) (2023-11-24)
 
 
