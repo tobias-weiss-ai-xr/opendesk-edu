@@ -10,6 +10,8 @@ config:
       username: "phoenixusername"
     userOidc:
       username: "ncoidc"
+      userIdAttribute: "entryuuid"
+      realm: "souvap"
 
   cryptpad:
     enabled: true
