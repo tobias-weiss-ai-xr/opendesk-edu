@@ -118,7 +118,7 @@ images:
     # @supplier: "openDesk DevSecOps"
   nextcloud:
     repository: "nextcloud"
-    tag: "27.1.1-apache@sha256:47325758ffcd54563021e697905aaba6aac8c21bceefb245c67d40194813ce39"
+    tag: "27.1.3-apache@sha256:ec46e99164ee7fa5d49e84784833e022be47f9f54f401bcb5a2d789f8c0bc149"
     # @supplier: "Nextcloud Community"
   nextcloudExporter:
     repository: "xperimental/nextcloud-exporter"
