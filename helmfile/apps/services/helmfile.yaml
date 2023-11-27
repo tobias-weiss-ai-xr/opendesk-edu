@@ -91,10 +91,10 @@ releases:
   # dependencyType=service
   - name: "opendesk-otterize"
     chart: "opendesk-otterize-repo/opendesk-otterize"
-    version: "1.0.3"
+    version: "1.1.1"
     values:
       - "values-otterize.gotmpl"
-    installed: { { .Values.security.otterizeIntents.enabled } }
+    installed: {{ .Values.security.otterizeIntents.enabled }}
   # renovate:
   # registryUrl=https://registry.souvap-univention.de
   # packageName=souvap/tooling/charts/sovereign-workplace-certificates/opendesk-certificates
