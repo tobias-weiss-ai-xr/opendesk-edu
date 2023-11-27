@@ -5,6 +5,7 @@ include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
     ref: "main"
     file:
+      - "ci/common/automr.yml"
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"
   - project: "${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
@@ -14,6 +15,7 @@ include:
 
 stages:
   - ".pre"
+  - "automr"
   - "lint"
   - "env-cleanup"
   - "env"
