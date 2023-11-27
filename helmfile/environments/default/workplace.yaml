@@ -4,9 +4,9 @@
 certificates:
   enabled: true
 clamavDistributed:
-  enabled: true
-clamavSimple:
   enabled: false
+clamavSimple:
+  enabled: true
 collabora:
   enabled: true
 cryptpad:
@@ -42,9 +42,9 @@ postgresql:
 redis:
   enabled: true
 univentionCorporateServer:
-  enabled: false
-univentionManagementStack:
   enabled: true
+univentionManagementStack:
+  enabled: false
 xwiki:
   enabled: true
 ...

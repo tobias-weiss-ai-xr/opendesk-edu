@@ -23,7 +23,7 @@ releases:
   # dependencyType=vendor
   - name: "openproject"
     chart: "openproject-repo/openproject"
-    version: "2.6.1"
+    version: "2.6.2"
     wait: true
     waitForJobs: true
     values:
