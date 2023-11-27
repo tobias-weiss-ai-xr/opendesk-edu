@@ -33,7 +33,7 @@ releases:
   # dependencyType=vendor
   - name: "opendesk-nextcloud-bootstrap"
     chart: "opendesk-nextcloud-bootstrap-repo/opendesk-nextcloud-bootstrap"
-    version: "3.2.3"
+    version: "3.2.4"
     wait: true
     waitForJobs: true
     values:
