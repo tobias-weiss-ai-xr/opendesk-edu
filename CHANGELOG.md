@@ -1,3 +1,10 @@
+## [0.5.52](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.51...v0.5.52) (2023-11-28)
+
+
+### Bug Fixes
+
+* **ci:** Open automatic MRs for new branches ([735fec3](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/735fec3b4ccd33ba63e5fa6482526efb6853c64a))
+
 ## [0.5.51](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.50...v0.5.51) (2023-11-28)
 
 
