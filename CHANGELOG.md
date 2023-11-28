@@ -1,3 +1,11 @@
+## [0.5.51](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.50...v0.5.51) (2023-11-28)
+
+
+### Bug Fixes
+
+* **nextcloud:** Bump chart to fix central navigation ([cac6abe](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/cac6abe2510b6793963633077543684a6a4e7cbc))
+* **openproject:** Update container and prepare for OIDC based user admin role setting ([6dc92df](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/6dc92df2ebcae435e3b3609cc163dc6c33fb1b83))
+
 ## [0.5.50](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.49...v0.5.50) (2023-11-27)
 
 
