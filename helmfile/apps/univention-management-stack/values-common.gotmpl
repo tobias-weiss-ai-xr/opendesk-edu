@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 ingress:
-  host: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  host: {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
 
 ...

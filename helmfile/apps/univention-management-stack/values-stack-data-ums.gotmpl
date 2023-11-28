@@ -12,14 +12,12 @@ stackDataContext:
   hostname: {{ .Values.global.hosts.univentionManagementStack | quote }}
   ldapHost: {{ .Values.ldap.host | quote }}
   ldapBase: {{ .Values.ldap.baseDn | quote }}
-  # TODO: This should not be required, the machine account is not there
-  # ldapHostDn: cn=stub-value,cn=dc,cn=computers,dc=swp-ldap,dc=internal
-  ldapHostDn: "cn=admin,{{ .Values.ldap.baseDn }}"
+  ldapHostDn: {{ printf "%s,%s" "cn=admin" .Values.ldap.baseDn | quote }}
 
-  idpSamlMetadataUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/saml/descriptor"
-  umcSamlSpFqdn: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-  idpFqdn: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
-  ldapSamlSpUrls: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/saml/metadata"
+  idpSamlMetadataUrl: {{ printf "https://%s.%s%s" .Values.global.hosts.keycloak .Values.global.domain "/realms/souvap/protocol/saml/descriptor" | quote }}
+  umcSamlSpFqdn: {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
+  idpFqdn: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
+  ldapSamlSpUrls: {{ printf "https://%s.%s%s" .Values.global.hosts.univentionManagementStack .Values.global.domain "/univention/saml/metadata" | quote }}
 
   initialPasswordAdministrator: {{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword | quote }}
 

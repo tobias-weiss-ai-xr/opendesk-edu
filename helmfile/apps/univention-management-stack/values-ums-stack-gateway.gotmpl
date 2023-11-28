@@ -4,9 +4,9 @@
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}
-  hostname: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  hostname: {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   extraTls:
     - hosts:
-        - "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+        - {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}

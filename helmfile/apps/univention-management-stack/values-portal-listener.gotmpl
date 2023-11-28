@@ -4,17 +4,17 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 portalListener:
-  adminGroup: "cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}"
-  assetsRoot: "http://portal-listener:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}@ums-store-dav/portal-assets/"
-  ucsInternalUrl: "http://portal-listener:{{ .Values.secrets.univentionManagementStack.storeDavUsers.portalListener }}@ums-store-dav/portal-data/"
+  adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
+  assetsRoot: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-assets/" | quote }}
+  ucsInternalUrl: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-data/" | quote }}
 
   ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
   ldapHost: {{ .Values.ldap.host | quote }}
-  ldapHostDn: "cn=admin,{{ .Values.ldap.baseDn }}"
+  ldapHostDn: {{ printf "%s,%s" "cn=admin" .Values.ldap.baseDn | quote }}
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   notifierServer: {{ .Values.ldap.notifierHost | quote }}
-  portalDefaultDn: "cn=domain,cn=portal,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+  portalDefaultDn: {{ printf "%s,%s" "cn=domain,cn=portal,cn=portals,cn=univention" .Values.ldap.baseDn | quote }}
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   udmApiUsername: "cn=admin"
 
