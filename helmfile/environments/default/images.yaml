@@ -396,7 +396,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/config-htpasswd"
-    tag: "0.5.2@sha256:35cec4a412ac50dc46dc9a5d59eda2edea7ba89bb27c6ba99daf874345e4ac7f"
+    tag: "0.5.2@sha256:c8627e0b73ee1d92f74d2ae8b06e4593ac93b6bbde55d56d0497f3510912924c"
     # @supplier: "Univention"
   umsDataLoader:
     # renovate:
@@ -412,7 +412,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-notifier"
-    tag: "0.7.0@sha256:47055a83becf98c7fed7785e4cf9fbe07808059c0f8abe600423adfa5097b80b"
+    tag: "0.7.0@sha256:ae9acf8f1a5e28645edea62a25040b6dd77bb1c8773964f0cb0e885397586bbe"
     # @supplier: "Univention"
   umsLdapServer:
     # renovate:
@@ -420,7 +420,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/ldap-server"
-    tag: "0.7.0@sha256:d9634b0f0483efc65d718f83196830622559955428a43854bd46c4fd704e6733"
+    tag: "0.7.0@sha256:a637f8d11c3a17d18b8f4dfce252fd55150188ea16ed3b1605a779b7ff535f3e"
     # @supplier: "Univention"
   umsNotificationsApi:
     # renovate:
@@ -428,7 +428,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/notifications-api"
-    tag: "0.5.1@sha256:52ab06cb65258a7b77f0a0b7fca4221fa0c11f9eadc1be4dbf90b3826f57a785"
+    tag: "0.5.2@sha256:192f0ebb77ec6191d1df1edb2427739c4a69a3733c7d423f55045db5b9209c64"
     # @supplier: "Univention"
   umsPortalListener:
     # renovate:
@@ -436,7 +436,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-listener"
-    tag: "0.5.1@sha256:c0113a5d86353acc86b64ecf0b88972b0d4a91dd9f70608b8eef237833401444"
+    tag: "0.5.2@sha256:a1834a98cf4f4686a74077cb6c2b094429a49875d05801745de7ee13eee38a07"
     # @supplier: "Univention"
   umsPortalFrontend:
     # renovate:
@@ -444,7 +444,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-frontend"
-    tag: "0.5.1@sha256:1677b176cd4920dec6bd9f004ebc7ecf85e078037e908210bb10fa5ef4dc64f9"
+    tag: "0.5.2@sha256:aca1d481e23cbba7a33d5f261be6196690a6b7f1e593f7ff96fc6f22edab2c6b"
     # @supplier: "Univention"
   umsPortalServer:
     # renovate:
@@ -452,7 +452,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/portal-server"
-    tag: "0.5.1@sha256:506b7f5b5417e5e6edb2d38ec1b28140ff9ba9b08a96734d2c7fd7dca0de6baa"
+    tag: "0.5.2@sha256:ed982e41ac5b0b81946272acf00f76463901da4f4b3ad50282ec4c73fd4b5833"
     # @supplier: "Univention"
   umsWaitForDependency:
     # renovate:
@@ -468,7 +468,7 @@ images:
     # dependencyType=vendor
     # This is a preview and not part of the standard deployment.
     repository: "souvap/tooling/images/univention/store-dav"
-    tag: "0.5.2@sha256:945507962c77f259491c93d6a334e5ae29ba756c0b0b3bbc0ae66e1d1332dbdb"
+    tag: "0.5.2@sha256:1bc01b883a5ccd2612925e123da10f9d216389701d743f1cea4050633770639f"
     # @supplier: "Univention"
   umsUdmRestApi:
     # renovate:
