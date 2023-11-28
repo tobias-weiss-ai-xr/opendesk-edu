@@ -79,4 +79,7 @@ environment:
   OPENPROJECT_FOG_CREDENTIALS_PROVIDER: "AWS"
   OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE: "true"
   OPENPROJECT_FOG_CREDENTIALS_AWS__ACCESS__KEY__ID: "openproject_user"
+  # Define an admin mapping from the claim
+  # The attribute mapping cannot currently be defined in the value
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_ADMIN: "openproject_admin"
 ...
