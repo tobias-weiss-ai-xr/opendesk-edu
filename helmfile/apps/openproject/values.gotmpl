@@ -77,9 +77,16 @@ environment:
   OPENPROJECT_MAIL__FROM: "do-not-reply@{{ .Values.global.domain }}"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
   OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject | quote }}
-  OPENPROJECT_FOG_CREDENTIALS_HOST: "{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
-  OPENPROJECT_FOG_CREDENTIALS_ENDPOINT: "https://{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
-  OPENPROJECT_FOG_CREDENTIALS_AWS__SECRET__ACCESS__KEY: {{ .Values.secrets.minio.openprojectUser | quote }}
+  {{ if ne .Values.objectstores.openproject.backend "aws" }}
+  OPENPROJECT_FOG_CREDENTIALS_ENDPOINT: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+  OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE: "true"
+  {{ end }}
+  OPENPROJECT_FOG_CREDENTIALS_AWS__ACCESS__KEY__ID: {{ .Values.objectstores.openproject.username | quote }}
+  OPENPROJECT_FOG_CREDENTIALS_AWS__SECRET__ACCESS__KEY: {{ .Values.objectstores.openproject.secret | default .Values.secrets.minio.openprojectUser | quote }}
+  OPENPROJECT_FOG_CREDENTIALS_PROVIDER: {{ .Values.objectstores.openproject.provider | default "AWS" | quote }}
+  OPENPROJECT_FOG_CREDENTIALS_REGION: {{ .Values.objectstores.openproject.region | quote }}
+  OPENPROJECT_FOG_DIRECTORY: {{ .Values.objectstores.openproject.bucket | quote }}
+  OPENPROJECT_FOG_CREDENTIALS_USE__IAM__PROFILE : {{ .Values.objectstores.openproject.useIAMProfile | default "false" | quote }}
 
 replicaCount: {{ .Values.replicas.openproject }}
 

@@ -9,6 +9,7 @@ This document will cover the additional configuration to use external services l
 
 <!-- TOC -->
   * [Database](#database)
+  * [Objectstore](#objectstore)
   * [Cache](#cache)
 <!-- TOC -->
 
@@ -64,6 +65,23 @@ service.
 |             |                    |            | Host      | `databases.xwiki.host`                 | `mariadb`                  |
 |             |                    |            | Username  | `databases.xwiki.username`             | `xwiki_user`               |
 |             |                    |            | Password  | `databases.xwiki.password`             |                            |
+
+## Objectstore
+
+When deploying this suite to production, you need to configure the applications to use your production grade objectstore
+service.
+
+| Component   | Name        | Parameter       | Key                                      | Default            |
+|-------------|-------------|-----------------|------------------------------------------|--------------------|
+| OpenProject | OpenProject |                 |                                          |                    |
+|             |             | Backend         | `objectstores.openproject.backend`       | `minio`            |
+|             |             | Bucket          | `objectstores.openproject.bucket`        | `openproject`      |
+|             |             | Endpoint        | `objectstores.openproject.endpoint`      |                    |
+|             |             | Provider        | `objectstores.openproject.provider`      | `AWS`              |
+|             |             | Region          | `objectstores.openproject.region`        |                    |
+|             |             | Secret          | `objectstores.openproject.secret`        |                    |
+|             |             | Username        | `objectstores.openproject.username`      | `openproject_user` |
+|             |             | Use IAM profile | `objectstores.openproject.useIAMProfile` |                    |
 
 ## Cache
 
