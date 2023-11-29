@@ -1,3 +1,10 @@
+## [0.5.54](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.53...v0.5.54) (2023-11-29)
+
+
+### Bug Fixes
+
+* **helmfile:** Add and document security context for components ([519db51](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/519db51be2be3ce292a88965ac0ec049b4c8bb8e))
+
 ## [0.5.53](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.52...v0.5.53) (2023-11-29)
 
 
