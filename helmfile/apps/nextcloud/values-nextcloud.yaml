@@ -20,6 +20,11 @@ cronjob:
       - >
         sed -i "s/\*\/5 \* \* \* \* php -f \/var\/www\/html\/cron.php/\*\/1 \* \* \* \* php -f
         \/var\/www\/html\/cron.php/g" /var/spool/cron/crontabs/www-data
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
 
 ingress:
   annotations:
@@ -52,6 +57,20 @@ nextcloud:
       {
         "drawio": ["application/x-drawio"]
       }
+  podSecurityContext:
+    fsGroup: 33
+    seccompProfile:
+      type: "RuntimeDefault"
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+      add:
+        - "NET_BIND_SERVICE"
+        - "SETGID"
+        - "SETUID"
 
 # this is not documented but can be found in values.yaml
 service:
