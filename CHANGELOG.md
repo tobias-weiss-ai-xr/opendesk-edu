@@ -1,3 +1,25 @@
+## [0.5.53](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.52...v0.5.53) (2023-11-29)
+
+
+### Bug Fixes
+
+* **univention-managemen-stack:** Integrate Attribute to Group Mapper into the containerized stack ([7bbab22](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/7bbab229396075c7d10f94f42bef14551faefe26))
+* **univention-management-stack:** Add Announcements icon into "umc-gateway" ([7a9ecf7](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/7a9ecf7b8595edf0949d9c200d01b3409f25b9a7))
+* **univention-management-stack:** Add Announcements module into "umc-server" ([4c52a5a](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/4c52a5aaa83ffb6f4c49faa039c94cb1855987bb))
+* **univention-management-stack:** Add branding related configuration to stack-gateway ([a5f263c](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/a5f263ce489f88b90cf1151de249f36616a51632))
+* **univention-management-stack:** Apply styling ([b3d45c4](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/b3d45c45e1b754e14ab0519efcb6b6a359f0ad1e))
+* **univention-management-stack:** Configure openDesk branding in frontend chart ([cbe8fb2](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/cbe8fb2d65e6ce73f9da95ef9b0ed3ffbb16d367))
+* **univention-management-stack:** Document database of UMS Notifications API ([3cf348c](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/3cf348c7ae8f438daf3e64addbf839230816f3d2))
+* **univention-management-stack:** Move static settings from gotmpl into yaml for umc-gateway ([b3ac0ae](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/b3ac0ae6d91a058265fcd26c6653bb8a13d3e780))
+* **univention-management-stack:** Quote all composed strings ([1c35ca6](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/1c35ca67ce0673e1b2f9a350bd07c82c22a05354))
+* **univention-management-stack:** Remove frontend-custom ([8b6a4b2](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/8b6a4b2e88e8be1d299af91ed1ffff4405db88e6))
+* **univention-management-stack:** Set SMTP host for self-service notifications ([0c7a77c](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/0c7a77c4b6f20c6d83e977dabfc4e555b652f6ac))
+* **univention-management-stack:** UMC uses external memcached ([211bee9](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/211bee94bb7675860f867f0335fec9f14fc96875))
+* **univention-management-stack:** Update ums-dependencies ([e0c6c14](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/e0c6c14dcaefc0755495270bbf45898721e27985))
+* **univention-management-stack:** Update ums-dependencies ([c246edd](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/c246edd8f9753e37bc9c32683faf41f5b46d7675))
+* **univention-management-stack:** Update ums-dependencies ([86b4818](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/86b48188e160c1f7d15f2c33f1f3cd0cc0e68bf2))
+* **univention-management-stack:** Use "stack-gateway" in all deployments ([c19bca2](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/c19bca2be0d14750bbef661e45c5c424f7da8e77))
+
 ## [0.5.52](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.51...v0.5.52) (2023-11-28)
 
 
