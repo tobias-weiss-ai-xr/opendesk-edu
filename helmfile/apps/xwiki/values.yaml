@@ -2,7 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 containerSecurityContext:
+  allowPrivilegeEscalation: false
   enabled: true
+  runAsUser: 100
+  runAsGroup: 101
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - "ALL"
 
 customConfigs:
   xwiki.cfg:
@@ -87,6 +94,9 @@ properties:
 
 securityContext:
   enabled: true
+  fsGroup: 101
+  seccompProfile:
+    type: "RuntimeDefault"
 
 service:
   externalPort: 80

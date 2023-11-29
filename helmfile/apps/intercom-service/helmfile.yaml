@@ -26,6 +26,7 @@ releases:
     chart: "intercom-service-repo/intercom-service"
     version: "2.0.1"
     values:
+      - "values.yaml"
       - "values.gotmpl"
     installed: {{ .Values.intercom.enabled }}
 

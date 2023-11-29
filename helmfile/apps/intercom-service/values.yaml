@@ -1,31 +1,21 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-config:
-  administrator:
-    username: "nextcloud"
-
-  apps:
-    integrationSwp:
-      username: "phoenixusername"
-    userOidc:
-      username: "ncoidc"
-      userIdAttribute: "entryuuid"
-      realm: "souvap"
-
-  cryptpad:
-    enabled: true
-
 containerSecurityContext:
   allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
   enabled: true
+  runAsUser: 1000
+  runAsGroup: 1000
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: false
-  runAsNonRoot: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
 
 podSecurityContext:
   enabled: true
-  fsGroup: 33
+  fsGroup: 1000
   fsGroupChangePolicy: "Always"
 ...
