@@ -101,7 +101,7 @@ releases:
   # dependencyType=vendor
   - name: "ums-stack-data-ums"
     chart: "ums-repo/stack-data-ums"
-    version: "0.36.0"
+    version: "0.37.0"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -116,7 +116,7 @@ releases:
   # dependencyType=vendor
   - name: "ums-stack-data-swp"
     chart: "ums-repo/stack-data-swp"
-    version: "0.36.0"
+    version: "0.37.0"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
