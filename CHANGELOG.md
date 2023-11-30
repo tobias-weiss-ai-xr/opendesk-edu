@@ -1,3 +1,10 @@
+## [0.5.56](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.55...v0.5.56) (2023-11-30)
+
+
+### Bug Fixes
+
+* **element:** Raise treshold for login rate limit to avoid too early barrier hitting normal users ([466e741](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/466e7414942837fdb1aecabfb08eae49f9dab272))
+
 ## [0.5.55](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.54...v0.5.55) (2023-11-30)
 
 
