@@ -21,7 +21,7 @@ releases:
   # dependencyType=vendor
   - name: "cryptpad"
     chart: "cryptpad-online-repo/cryptpad"
-    version: "0.0.13"
+    version: "0.0.14"
     values:
       - "values.yaml"
       - "values.gotmpl"
