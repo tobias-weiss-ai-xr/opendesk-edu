@@ -12,4 +12,6 @@ stackDataContext:
   # The openDesk configuration brings its own UMC policies.
   installUmcPolicies: false
 
+additionalAnnotations:
+  intents.otterize.com/service-name: "ums-stack-data-ums"
 ...

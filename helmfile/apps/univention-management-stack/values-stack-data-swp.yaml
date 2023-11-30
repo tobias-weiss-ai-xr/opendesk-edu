@@ -11,4 +11,6 @@ stackDataContext:
   oxDefaultContext: "10"
   smtpStartTls: true
 
+additionalAnnotations:
+  intents.otterize.com/service-name: "ums-stack-data-swp"
 ...

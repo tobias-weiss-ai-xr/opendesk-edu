@@ -24,7 +24,7 @@ releases:
   # dependencyType=vendor
   - name: "jitsi"
     chart: "jitsi-repo/sovereign-workplace-jitsi"
-    version: "1.7.1"
+    version: "1.7.2-feat-jitsi-app-id"
     values:
       - "values-jitsi.gotmpl"
     installed: {{ .Values.jitsi.enabled }}
