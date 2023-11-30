@@ -22,6 +22,10 @@ enableEmbedding: true
 
 fullnameOverride: "cryptpad"
 
+ingress:
+  annotations:
+    nginx.org/websocket-services: "cryptpad"
+
 persistence:
   enabled: false
 
