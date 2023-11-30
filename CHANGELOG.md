@@ -1,3 +1,10 @@
+## [0.5.55](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.54...v0.5.55) (2023-11-30)
+
+
+### Bug Fixes
+
+* **cryptpad:** Update Helm chart to enable readiness and liveness probes ([6d3e484](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/6d3e484855540569be53130e133e0821a04b2ca5))
+
 ## [0.5.54](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.53...v0.5.54) (2023-11-29)
 
 
