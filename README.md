@@ -9,14 +9,15 @@ openDesk is a Kubernetes based, open-source and cloud-native digital workplace s
 Aufbau ZenDiS" of Germany's Federal Ministry of the Interior.
 
 It features:
-- Fully integrated Identity Management (Univention, Keycloak)
+- Fully integrated Identity Management (Univention)
 - File storage (Nextcloud)
 - Weboffice (Collabora)
-- Videoconference (Jitsi)
-- Encrypted Chat (Synapse, Element)
+- Videoconference (Nordeck w/ Jitsi)
+- Chat and Collaboration (Element w/ Nordeck)
 - Groupware (OX Appsuite)
 - Wiki (XWiki)
-- Notes and Diagrams (Cryptpad, Draw.io)
+- Project Management (OpenProject)
+- Notes and Diagrams (Cryptpad)
 
 openDesk integrates these components and is working towards a seamless user experience.
 
@@ -40,7 +41,7 @@ Basic knowledge of Kubernetes and Devops is required though.
 
 # Active development notice
 openDesk will face breaking changes in the near future without upgrade paths before
-[technical release](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases
+[technical release](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases)
 v1.0.0 is reached.
 
 While most components support upgrades, major configuration or component changes may occur, therefore we recommend

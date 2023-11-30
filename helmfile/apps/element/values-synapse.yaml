@@ -11,6 +11,16 @@ configuration:
         - "m.space.parent"
         - "net.nordeck.meetings.metadata"
         - "m.room.power_levels"
+    # When a user logs into Element a parallel request is done through Intercom Service to allow Synapse API
+    # interaction, to avoid (temporary) blocking of the user for followup logins we want to raise the limits.
+    # https://matrix-org.github.io/synapse/v1.59/usage/configuration/config_documentation.html#ratelimiting
+    rc_login:
+      account:
+        per_second: 2
+        burst_count: 8
+      address:
+        per_second: 2
+        burst_count: 12
 
   homeserver:
     guestModule:
