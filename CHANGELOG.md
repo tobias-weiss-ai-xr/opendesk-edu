@@ -1,3 +1,10 @@
+## [0.5.57](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.56...v0.5.57) (2023-12-01)
+
+
+### Bug Fixes
+
+* **helmfile:** Using correct private registry for  postfix helm-chart ([d367739](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/d367739248ed43b3bad6a00b059b2c949dde4cb7))
+
 ## [0.5.56](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.55...v0.5.56) (2023-11-30)
 
 
