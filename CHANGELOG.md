@@ -1,3 +1,15 @@
+## [0.5.58](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.57...v0.5.58) (2023-12-01)
+
+
+### Bug Fixes
+
+* **cryptpad:** Add websocket annotation ([c41643e](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/c41643ee3e5610ef27a63a0355804159030a7452))
+* **openproject:** Add seederJob intent ([05cc82d](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/05cc82d7c5c5f93fb5de7df555a22e8e90279621))
+* **openproject:** Bump to 2.6.2 ([c8bc8b3](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/c8bc8b3172cfef3396379e3969dc087d67a228ee))
+* **services:** Add NetworkPolicy section to docs/security.md ([24812b6](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/24812b667cded720a0ac09b8b3eb89df39b02afb))
+* **services:** Add Otterize based security settings ([bec9a2d](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/bec9a2d46b2b563b7001ed8c6625c10111d5f151))
+* **univention-management-stack:** Add Otterize annotations for jobs ([2628a0e](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/2628a0e13e5957475ce81b12d4230400c9ffeafe))
+
 ## [0.5.57](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.56...v0.5.57) (2023-12-01)
 
 
