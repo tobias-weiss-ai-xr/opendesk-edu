@@ -11,6 +11,19 @@ umcServer:
 
   smtpSecret: {{ .Values.smtp.password | quote }}
 
+postgresql:
+  connection:
+    host: {{ .Values.databases.umsSelfservice.host | quote }}
+    port: {{ .Values.databases.umsSelfservice.port | quote }}
+  auth:
+    username: {{ .Values.databases.umsSelfservice.username | quote }}
+    database: {{ .Values.databases.umsSelfservice.name | quote }}
+    password: {{ .Values.databases.umsSelfservice.password | default .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+    postgresPassword: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+
+memcached:
+  server: {{ .Values.cache.umsSelfservice.host | quote }}
+
 image:
   registry: {{ .Values.global.imageRegistry | quote }}
   repository: {{ .Values.images.umsUmcServer.repository | quote }}

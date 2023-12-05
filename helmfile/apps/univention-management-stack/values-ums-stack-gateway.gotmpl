@@ -10,3 +10,4 @@ ingress:
     - hosts:
         - {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
+...

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 portalListener:
   adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
   assetsRoot: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-assets/" | quote }}
-  ucsInternalUrl: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-data/" | quote }}
+  ucsInternalUrl: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-data" | quote }}
 
   ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
   ldapHost: {{ .Values.ldap.host | quote }}

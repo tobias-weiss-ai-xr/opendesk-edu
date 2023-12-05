@@ -13,4 +13,7 @@ cache:
   openproject:
     host: "memcached"
     port: 11211
+  umsSelfservice:
+    host: "memcached"
+    port: 11211
 ...
