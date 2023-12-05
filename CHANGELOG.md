@@ -1,3 +1,10 @@
+## [0.5.59](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.58...v0.5.59) (2023-12-05)
+
+
+### Bug Fixes
+
+* **helmfile:** Add configurable objectstore ([3b5493d](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/3b5493d78dc027cd1f3206b26cf347dc6ce6e265))
+
 ## [0.5.58](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.57...v0.5.58) (2023-12-01)
 
 
