@@ -620,4 +620,6 @@ release:
       }
       EOF
     - "semantic-release"
+  needs:
+    - "generate-release-assets"
 ...
