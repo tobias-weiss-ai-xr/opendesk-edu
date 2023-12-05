@@ -1,3 +1,10 @@
+## [0.5.60](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.59...v0.5.60) (2023-12-05)
+
+
+### Bug Fixes
+
+* **ci:** Ensure release creation with artifacts ([dc7ce0b](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/dc7ce0bc4b9501b63274f68352e6d9e76b5424e8))
+
 ## [0.5.59](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.58...v0.5.59) (2023-12-05)
 
 
