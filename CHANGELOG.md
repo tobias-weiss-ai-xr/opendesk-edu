@@ -1,3 +1,10 @@
+## [0.5.61](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.60...v0.5.61) (2023-12-05)
+
+
+### Bug Fixes
+
+* **services:** Fix port declaration for Postfix ([bf5dcda](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/bf5dcda3b59e1dc98cbee7e67f50a960d344b8e0))
+
 ## [0.5.60](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.59...v0.5.60) (2023-12-05)
 
 
