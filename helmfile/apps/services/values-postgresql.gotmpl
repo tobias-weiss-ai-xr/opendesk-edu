@@ -24,7 +24,9 @@ job:
     - username: "matrix_user"
       password: {{ .Values.secrets.postgresql.matrixUser | quote }}
     - username: "notificationsapi_user"
-      password: {{ .Values.secrets.postgresql.notificationsApiUser | quote }}
+      password: {{ .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
+    - username: "selfservice_user"
+      password: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
   databases:
     - name: "keycloak"
       user: "keycloak_user"
@@ -37,6 +39,8 @@ job:
       additionalParams: "ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0"
     - name: "notificationsapi"
       user: "notificationsapi_user"
+    - name: "selfservice"
+      user: "selfservice_user"
 
 persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}

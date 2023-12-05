@@ -43,11 +43,12 @@ extraVolumeMounts:
     mountPath: "/usr/share/univention-management-console/modules/udm-portals-announcement.xml"
     subPath: "udm-portals-announcement.xml"
 
+postgresql:
+  bundled: false
+
 memcached:
   bundled: false
-  server: "memcached"
   auth:
     username: null
     password: null
-
 ...

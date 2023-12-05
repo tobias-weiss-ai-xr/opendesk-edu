@@ -7,6 +7,8 @@ ingress:
 service:
   type: "ClusterIP"
 
+fullnameOverride: "ums-stack-gateway"
+
 # The content of the "serverBlock" does resemble the Ingress configuration of
 # the UMS components. The "location" entries do intentionally reflect precisely
 # the respective paths which are configured.
@@ -15,13 +17,18 @@ serverBlock: |
     listen 8080;
 
     ## portal-frontend
-    # The frontend does not own "/univention/portal", only these two bits
+    # The frontend does not own "/univention/portal" nor
+    # "/univention/selfservice", only these two bits
     location = /univention/portal/ {
       rewrite ^/univention/portal(/.*)$ $1 break;
       proxy_pass http://ums-portal-frontend:80/;
     }
     location = /univention/portal/index.html {
       rewrite ^/univention/portal(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80/;
+    }
+    location = /univention/selfservice/ {
+      rewrite ^/univention/selfservice(/.*)$ $1 break;
       proxy_pass http://ums-portal-frontend:80/;
     }
 
@@ -50,6 +57,30 @@ serverBlock: |
       rewrite ^/univention/portal(/.*)$ $1 break;
       proxy_pass http://ums-portal-frontend:80;
     }
+    location /univention/selfservice/css/ {
+      rewrite ^/univention/selfservice(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/selfservice/fonts/ {
+      rewrite ^/univention/selfservice(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/selfservice/i18n/ {
+      rewrite ^/univention/selfservice(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/selfservice/media/ {
+      rewrite ^/univention/selfservice(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/selfservice/js/ {
+      rewrite ^/univention/selfservice(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
+    location /univention/selfservice/oidc/ {
+      rewrite ^/univention/selfservice(/.*)$ $1 break;
+      proxy_pass http://ums-portal-frontend:80;
+    }
 
 
     ## frontend redirects
@@ -69,10 +100,17 @@ serverBlock: |
        absolute_redirect off;
        return 302 /univention/portal/;
     }
+    location = /univention/selfservice {
+       absolute_redirect off;
+       return 302 /univention/selfservice/;
+    }
 
 
     ## portal-server
     location = /univention/portal/portal.json {
+      proxy_pass http://ums-portal-server:80;
+    }
+    location = /univention/selfservice/portal.json {
       proxy_pass http://ums-portal-server:80;
     }
     location = /univention/portal/navigation.json {
@@ -87,6 +125,14 @@ serverBlock: |
     }
     location /univention/portal/icons/logos/ {
       rewrite ^/univention/portal(/icons/logos/.*)$ /portal-assets$1 break;
+      proxy_pass http://ums-store-dav:80;
+    }
+    location /univention/selfservice/icons/entries/ {
+      rewrite ^/univention/selfservice(/icons/entries/.*)$ /portal-assets$1 break;
+      proxy_pass http://ums-store-dav:80;
+    }
+    location /univention/selfservice/icons/logos/ {
+      rewrite ^/univention/selfservice(/icons/logos/.*)$ /portal-assets$1 break;
       proxy_pass http://ums-store-dav:80;
     }
 
@@ -128,27 +174,27 @@ serverBlock: |
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
     }
-    location /univention/logout/ {
+    location /univention/logout {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
     }
-    location /univention/saml/ {
+    location /univention/saml {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
     }
-    location /univention/get/ {
+    location /univention/get {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
     }
-    location /univention/set/ {
+    location /univention/set {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
     }
-    location /univention/command/ {
+    location /univention/command {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
     }
-    location /univention/upload/ {
+    location /univention/upload {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
     }

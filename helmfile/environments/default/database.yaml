@@ -19,12 +19,6 @@ databases:
     host: "mariadb"
     username: "nextcloud_user"
     password: ""
-  notificationsApi:
-    name: "notificationsapi"
-    host: "postgresql"
-    port: 5432
-    username: "notificationsapi_user"
-    password: ""
   openproject:
     name: "openproject"
     host: "postgresql"
@@ -42,6 +36,18 @@ databases:
     username: "matrix_user"
     password: ""
     port: 5432
+  umsNotificationsApi:
+    name: "notificationsapi"
+    host: "postgresql"
+    port: 5432
+    username: "notificationsapi_user"
+    password: ""
+  umsSelfservice:
+    name: "selfservice"
+    host: "postgresql"
+    port: 5432
+    username: "selfservice_user"
+    password: ""
   xwiki:
     name: "xwiki"
     host: "mariadb"
