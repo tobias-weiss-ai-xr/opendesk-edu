@@ -1,3 +1,11 @@
+## [0.5.62](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.61...v0.5.62) (2023-12-06)
+
+
+### Bug Fixes
+
+* **nextcloud:** Bump image to 27.1.4 and update Helm chart to configure "Shared_with_me" folder ([d04a603](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/d04a60349dbbff2d64ca2b36b9c44b75526bf859))
+* **univention-management-stack:** Update optional UMS preview state ([94ae3da](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/94ae3da78bd79c61fd7a22db5a541d473eea6a2e))
+
 ## [0.5.61](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.60...v0.5.61) (2023-12-05)
 
 
