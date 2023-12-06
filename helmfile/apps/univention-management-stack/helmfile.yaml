@@ -3,7 +3,6 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # Univention Management Stack
@@ -13,50 +12,35 @@ repositories:
          default "https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable" }}
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
-  - name: "bitnami-repo"
+  - name: "nginx-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/bitnami-charts" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.nginx.verify }}
+    username: "{{ .Values.charts.nginx.username }}"
+    password: {{ .Values.charts.nginx.password | quote }}
+    url: "{{ .Values.charts.nginx.registry }}/{{ .Values.charts.nginx.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/bitnami-charts/nginx
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "ums-stack-gateway"
-    chart: "bitnami-repo/nginx"
-    version: "15.3.5"
+    chart: "nginx-repo/{{ .Values.charts.nginx.name }}"
+    version: "{{ .Values.charts.nginx.version }}"
     values:
       - "values-ums-stack-gateway.gotmpl"
       - "values-ums-stack-gateway.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=store-dav
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-store-dav"
-    chart: "ums-repo/store-dav"
-    version: "0.7.0"
+    chart: "ums-repo/{{ .Values.charts.umsStoreDav.name }}"
+    version: "{{ .Values.charts.umsStoreDav.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-store-dav.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=ldap-server
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-ldap-server"
-    chart: "ums-repo/ldap-server"
-    version: "0.7.0"
+    chart: "ums-repo/{{ .Values.charts.umsLdapServer.name }}"
+    version: "{{ .Values.charts.umsLdapServer.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -64,14 +48,9 @@ releases:
       - "values-ldap-server.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=ldap-notifier
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-ldap-notifier"
-    chart: "ums-repo/ldap-notifier"
-    version: "0.7.0"
+    chart: "ums-repo/{{ .Values.charts.umsLdapNotifier.name }}"
+    version: "{{ .Values.charts.umsLdapNotifier.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -79,14 +58,9 @@ releases:
       - "values-ldap-notifier.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=udm-rest-api
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-udm-rest-api"
-    chart: "ums-repo/udm-rest-api"
-    version: "0.3.5"
+    chart: "ums-repo/{{ .Values.charts.umsUdmRestApi.name }}"
+    version: "{{ .Values.charts.umsUdmRestApi.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -94,14 +68,9 @@ releases:
       - "values-udm-rest-api.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=stack-data-ums
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-stack-data-ums"
-    chart: "ums-repo/stack-data-ums"
-    version: "0.38.1"
+    chart: "ums-repo/{{ .Values.charts.umsStackDataUms.name }}"
+    version: "{{ .Values.charts.umsStackDataUms.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -109,14 +78,9 @@ releases:
       - "values-stack-data-ums.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=stack-data-swp
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-stack-data-swp"
-    chart: "ums-repo/stack-data-swp"
-    version: "0.38.1"
+    chart: "ums-repo/{{ .Values.charts.umsStackDataSwp.name }}"
+    version: "{{ .Values.charts.umsStackDataSwp.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -124,14 +88,9 @@ releases:
       - "values-stack-data-swp.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=portal-server
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-portal-server"
-    chart: "ums-repo/portal-server"
-    version: "0.6.1"
+    chart: "ums-repo/{{ .Values.charts.umsPortalServer.name }}"
+    version: "{{ .Values.charts.umsPortalServer.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -139,14 +98,9 @@ releases:
       - "values-portal-server.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=notifications-api
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-notifications-api"
-    chart: "ums-repo/notifications-api"
-    version: "0.6.1"
+    chart: "ums-repo/{{ .Values.charts.umsNotificationsApi.name }}"
+    version: "{{ .Values.charts.umsNotificationsApi.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -154,14 +108,9 @@ releases:
       - "values-notifications-api.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=portal-listener
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-portal-listener"
-    chart: "ums-repo/portal-listener"
-    version: "0.6.1"
+    chart: "ums-repo/{{ .Values.charts.umsPortalListener.name }}"
+    version: "{{ .Values.charts.umsPortalListener.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -169,14 +118,9 @@ releases:
       - "values-portal-listener.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=portal-frontend
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-portal-frontend"
-    chart: "ums-repo/portal-frontend"
-    version: "0.6.1"
+    chart: "ums-repo/{{ .Values.charts.umsPortalFrontend.name }}"
+    version: "{{ .Values.charts.umsPortalFrontend.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -184,14 +128,9 @@ releases:
       - "values-portal-frontend.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=umc-gateway
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-umc-gateway"
-    chart: "ums-repo/umc-gateway"
-    version: "0.6.1"
+    chart: "ums-repo/{{ .Values.charts.umsUmcGateway.name }}"
+    version: "{{ .Values.charts.umsUmcGateway.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
@@ -199,14 +138,9 @@ releases:
       - "values-umc-gateway.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-  # packageName=umc-server
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ums-umc-server"
-    chart: "ums-repo/umc-server"
-    version: "0.6.1"
+    chart: "ums-repo/{{ .Values.charts.umsUmcServer.name }}"
+    version: "{{ .Values.charts.umsUmcServer.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"

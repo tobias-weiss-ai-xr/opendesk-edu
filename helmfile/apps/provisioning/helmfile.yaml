@@ -3,24 +3,18 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # OX Connector
   - name: "ox-connector-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable" }}
+    username: "{{ .Values.charts.oxConnector.username }}"
+    password: {{ .Values.charts.oxConnector.password | quote }}
+    url: "{{ .Values.charts.oxConnector.registry }}/{{ .Values.charts.oxConnector.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable
-  # packageName=ox-connector
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "ox-connector"
-    chart: "ox-connector-repo/ox-connector"
-    version: "0.1.0-pre-jconde-listener-entrypoint-chaining"
+    chart: "ox-connector-repo/{{ .Values.charts.oxConnector.name }}"
+    version: "{{ .Values.charts.oxConnector.version }}"
     values:
       - "values-oxconnector.yaml"
       - "values-oxconnector.gotmpl"

@@ -3,54 +3,45 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
-  - name: "bitnami-repo"
+  - name: "keycloak-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/bitnami-charts" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.keycloak.verify }}
+    username: "{{ .Values.charts.keycloak.username }}"
+    password: {{ .Values.charts.keycloak.password | quote }}
+    url: "{{ .Values.charts.keycloak.registry }}/{{ .Values.charts.keycloak.repository }}"
+
   # openDesk Keycloak Theme
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-keycloak-theme
   - name: "keycloak-theme-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/keycloak-theme" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.keycloakTheme.verify }}
+    username: "{{ .Values.charts.keycloakTheme.username }}"
+    password: {{ .Values.charts.keycloakTheme.password | quote }}
+    url: "{{ .Values.charts.keycloakTheme.registry }}/{{ .Values.charts.keycloakTheme.repository }}"
+
   # openDesk Keycloak Extensions
   - name: "keycloak-extensions-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/77/packages/helm/stable" }}
+    username: "{{ .Values.charts.keycloakExtensions.username }}"
+    password: {{ .Values.charts.keycloakExtensions.password | quote }}
+    url: "{{ .Values.charts.keycloakExtensions.registry }}/{{ .Values.charts.keycloakExtensions.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/keycloak-theme/opendesk-keycloak-theme
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "keycloak-theme"
-    chart: "keycloak-theme-repo/opendesk-keycloak-theme"
-    version: "2.0.0"
+    chart: "keycloak-theme-repo/{{ .Values.charts.keycloakTheme.name }}"
+    version: "{{ .Values.charts.keycloakTheme.version }}"
     values:
       - "values-theme.gotmpl"
     installed: {{ .Values.keycloak.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/bitnami-charts/keycloak
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "keycloak"
-    chart: "bitnami-repo/keycloak"
-    version: "12.1.5"
+    chart: "keycloak-repo/{{ .Values.charts.keycloak.name }}"
+    version: "{{ .Values.charts.keycloak.version }}"
     values:
       - "values-keycloak.gotmpl"
       - "values-keycloak.yaml"
@@ -58,14 +49,9 @@ releases:
     wait: true
     installed: {{ .Values.keycloak.enabled }}
 
-  # renovate:
-  # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/77/packages/helm/stable
-  # packageName=keycloak-extensions
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "keycloak-extensions"
-    chart: "keycloak-extensions-repo/keycloak-extensions"
-    version: "0.1.0"
+    chart: "keycloak-extensions-repo/{{ .Values.charts.keycloakExtensions.name }}"
+    version: "{{ .Values.charts.keycloakExtensions.version }}"
     needs:
       - "keycloak"
     values:

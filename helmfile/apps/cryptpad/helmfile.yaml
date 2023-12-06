@@ -3,25 +3,19 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # CryptPad
   # Source: https://github.com/cryptpad/helm
-  - name: "cryptpad-online-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://cryptpad.github.io/helm" }}
+  - name: "cryptpad-repo"
+    username: "{{ .Values.charts.cryptpad.username }}"
+    password: {{ .Values.charts.cryptpad.password | quote }}
+    url: "{{ .Values.charts.cryptpad.registry }}/{{ .Values.charts.cryptpad.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://cryptpad.github.io/helm
-  # packageName=cryptpad
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "cryptpad"
-    chart: "cryptpad-online-repo/cryptpad"
-    version: "0.0.14"
+    chart: "cryptpad-repo/{{ .Values.charts.cryptpad.name }}"
+    version: "{{ .Values.charts.cryptpad.version }}"
     values:
       - "values.yaml"
       - "values.gotmpl"

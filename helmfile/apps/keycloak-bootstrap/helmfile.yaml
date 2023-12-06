@@ -3,30 +3,22 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # openDesk Keycloak Bootstrap
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-keycloak-bootstrap
   - name: "opendesk-keycloak-bootstrap-repo"
     oci: true
-    # yamllint disable rule:line-length
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-keycloak-bootstrap" }}
-    # yamllint enable rule:line-length
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.keycloakBootstrap.verify }}
+    username: "{{ .Values.charts.keycloakBootstrap.username }}"
+    password: {{ .Values.charts.keycloakBootstrap.password | quote }}
+    url: "{{ .Values.charts.keycloakBootstrap.registry }}/{{ .Values.charts.keycloakBootstrap.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/opendesk-keycloak-bootstrap/opendesk-keycloak-bootstrap
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-keycloak-bootstrap"
-    chart: "opendesk-keycloak-bootstrap-repo/sovereign-workplace-keycloak-bootstrap"
-    version: "1.1.12"
+    chart: "opendesk-keycloak-bootstrap-repo/{{ .Values.charts.keycloakBootstrap.name }}"
+    version: "{{ .Values.charts.keycloakBootstrap.version }}"
     values:
       - "values-bootstrap.gotmpl"
       - "values-bootstrap.yaml"
