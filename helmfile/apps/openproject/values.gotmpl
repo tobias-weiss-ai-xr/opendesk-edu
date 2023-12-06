@@ -86,7 +86,8 @@ environment:
   OPENPROJECT_FOG_CREDENTIALS_PROVIDER: {{ .Values.objectstores.openproject.provider | default "AWS" | quote }}
   OPENPROJECT_FOG_CREDENTIALS_REGION: {{ .Values.objectstores.openproject.region | quote }}
   OPENPROJECT_FOG_DIRECTORY: {{ .Values.objectstores.openproject.bucket | quote }}
-  OPENPROJECT_FOG_CREDENTIALS_USE__IAM__PROFILE : {{ .Values.objectstores.openproject.useIAMProfile | default "false" | quote }}
+  OPENPROJECT_FOG_CREDENTIALS_USE__IAM__PROFILE: {{ .Values.objectstores.openproject.useIAMProfile | default "false" | quote }}
+  OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
 
 replicaCount: {{ .Values.replicas.openproject }}
 
