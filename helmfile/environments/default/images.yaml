@@ -219,7 +219,7 @@ images:
     # registryUrl=https://docker.io
     # dependencyType=vendor
     repository: "openproject/open_desk"
-    tag: "dev@sha256:3c9d110c0221621530a431b5899ba16956db8253f491a55a220ec642473cb61f"
+    tag: "release-13.1@sha256:1dc528de7e38d9c461188e53b2153b1a5ede374f83dde7b32d9c7c057c802178"
     # @supplier: "OpenProject"
   openprojectInitDb:
     # renovate:
