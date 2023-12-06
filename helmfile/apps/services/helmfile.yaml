@@ -3,224 +3,194 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # openDesk Otterize
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-otterize
-  - name: "opendesk-otterize-repo"
+  - name: "otterize-repo"
     oci: true
-    # yamllint disable rule:line-length
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/opendesk-otterize" }}
-    # yamllint enable rule:line-length
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.otterize.verify }}
+    username: "{{ .Values.charts.otterize.username }}"
+    password: {{ .Values.charts.otterize.password | quote }}
+    url: "{{ .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
+
   # openDesk Certificates
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-certificates
-  - name: "opendesk-certificates-repo"
+  - name: "certificates-repo"
     oci: true
-    # yamllint disable rule:line-length
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-certificates" }}
-    # yamllint enable rule:line-length
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.certificates.verify }}
+    username: "{{ .Values.charts.certificates.username }}"
+    password: {{ .Values.charts.certificates.password | quote }}
+    url: "{{ .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
+
   # openDesk PostgreSQL
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postgresql
   - name: "postgresql-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postgresql" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.postgresql.verify }}
+    username: "{{ .Values.charts.postgresql.username }}"
+    password: {{ .Values.charts.postgresql.password | quote }}
+    url: "{{ .Values.charts.postgresql.registry }}/{{ .Values.charts.postgresql.repository }}"
+
   # openDesk MariaDB
-  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-mariadb
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-mariadb
   - name: "mariadb-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/mariadb" }}
-    verify: true
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.mariadb.verify }}
+    username: "{{ .Values.charts.mariadb.username }}"
+    password: {{ .Values.charts.mariadb.password | quote }}
+    url: "{{ .Values.charts.mariadb.registry }}/{{ .Values.charts.mariadb.repository }}"
+
   # openDesk Postfix
   # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postfix
   - name: "postfix-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/postfix" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.postfix.verify }}
+    username: "{{ .Values.charts.postfix.username }}"
+    password: {{ .Values.charts.postfix.password | quote }}
+    url: "{{ .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
+
   # openDesk Istio Resources
   # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-istio-resources
   - name: "istio-resources-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/istio-ressources" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.istioResources.verify }}
+    username: "{{ .Values.charts.istioResources.username }}"
+    password: {{ .Values.charts.istioResources.password | quote }}
+    url: "{{ .Values.charts.istioResources.registry }}/{{ .Values.charts.istioResources.repository }}"
+
   # openDesk ClamAV
   # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-clamav
   - name: "clamav-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/clamav" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.clamav.verify }}
+    username: "{{ .Values.charts.clamav.username }}"
+    password: {{ .Values.charts.clamav.password | quote }}
+    url: "{{ .Values.charts.clamav.registry }}/{{ .Values.charts.clamav.repository }}"
+  - name: "clamav-simple-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.clamavSimple.verify }}
+    username: "{{ .Values.charts.clamavSimple.username }}"
+    password: {{ .Values.charts.clamavSimple.password | quote }}
+    url: "{{ .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
+
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
-  - name: "bitnami-repo"
+  - name: "memcached-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/bitnami-charts" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.memcached.verify }}
+    username: "{{ .Values.charts.memcached.username }}"
+    password: {{ .Values.charts.memcached.password | quote }}
+    url: "{{ .Values.charts.memcached.registry }}/{{ .Values.charts.memcached.repository }}"
+  - name: "redis-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.redis.verify }}
+    username: "{{ .Values.charts.redis.username }}"
+    password: {{ .Values.charts.redis.password | quote }}
+    url: "{{ .Values.charts.redis.registry }}/{{ .Values.charts.redis.repository }}"
+  - name: "minio-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.minio.verify }}
+    username: "{{ .Values.charts.minio.username }}"
+    password: {{ .Values.charts.minio.password | quote }}
+    url: "{{ .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
+
 
 releases:
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/opendesk-otterize/opendesk-otterize
-  # dataSource=docker
-  # dependencyType=service
   - name: "opendesk-otterize"
-    chart: "opendesk-otterize-repo/opendesk-otterize"
-    version: "1.1.3"
+    chart: "otterize-repo/{{ .Values.charts.otterize.name }}"
+    version: "{{ .Values.charts.otterize.version }}"
     values:
       - "values-otterize.gotmpl"
     installed: {{ .Values.security.otterizeIntents.enabled }}
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-certificates/opendesk-certificates
-  # dataSource=docker
-  # dependencyType=service
+
   - name: "opendesk-certificates"
-    chart: "opendesk-certificates-repo/opendesk-certificates"
-    version: "2.1.0"
+    chart: "certificates-repo/{{ .Values.charts.certificates.name }}"
+    version: "{{ .Values.charts.certificates.version }}"
     values:
       - "values-certificates.gotmpl"
     installed: {{ .Values.certificates.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/bitnami-charts/redis
-  # dataSource=docker
-  # dependencyType=service
   - name: "redis"
-    chart: "bitnami-repo/redis"
-    version: "18.1.2"
+    chart: "redis-repo/{{ .Values.charts.redis.name }}"
+    version: "{{ .Values.charts.redis.version }}"
     values:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
     installed: {{ .Values.redis.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/bitnami-charts/memcached
-  # dataSource=docker
-  # dependencyType=service
   - name: "memcached"
-    chart: "bitnami-repo/memcached"
-    version: "6.6.2"
+    chart: "memcached-repo/{{ .Values.charts.memcached.name }}"
+    version: "{{ .Values.charts.memcached.version }}"
     values:
       - "values-memcached.yaml"
       - "values-memcached.gotmpl"
     installed: {{ .Values.memcached.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/postgresql/postgresql
-  # dataSource=docker
-  # dependencyType=service
   - name: "postgresql"
-    chart: "postgresql-repo/postgresql"
-    version: "2.0.3"
+    chart: "postgresql-repo/{{ .Values.charts.postgresql.name }}"
+    version: "{{ .Values.charts.postgresql.version }}"
     values:
       - "values-postgresql.yaml"
       - "values-postgresql.gotmpl"
     installed: {{ .Values.postgresql.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/mariadb/mariadb
-  # dataSource=docker
-  # dependencyType=service
   - name: "mariadb"
-    chart: "mariadb-repo/mariadb"
-    version: "2.1.1"
+    chart: "mariadb-repo/{{ .Values.charts.mariadb.name }}"
+    version: "{{ .Values.charts.mariadb.version }}"
     values:
       - "values-mariadb.yaml"
       - "values-mariadb.gotmpl"
     installed: {{ .Values.mariadb.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/postfix/postfix
-  # dataSource=docker
-  # dependencyType=service
   - name: "postfix"
-    chart: "postfix-repo/postfix"
-    version: "2.0.4"
+    chart: "postfix-repo/{{ .Values.charts.postfix.name }}"
+    version: "{{ .Values.charts.postfix.version }}"
     values:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
     installed: {{ .Values.postfix.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/clamav/opendesk-clamav
-  # dataSource=docker
-  # dependencyType=service
   - name: "clamav"
-    chart: "clamav-repo/opendesk-clamav"
-    version: "4.0.0"
+    chart: "clamav-repo/{{ .Values.charts.clamav.name }}"
+    version: "{{ .Values.charts.clamav.version }}"
     values:
       - "values-clamav-distributed.yaml"
       - "values-clamav-distributed.gotmpl"
     installed: {{ .Values.clamavDistributed.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/clamav/clamav-simple
-  # dataSource=docker
-  # dependencyType=service
   - name: "clamav-simple"
-    chart: "clamav-repo/clamav-simple"
-    version: "4.0.0"
+    chart: "clamav-simple-repo/{{ .Values.charts.clamavSimple.name }}"
+    version: "{{ .Values.charts.clamavSimple.version }}"
     values:
       - "values-clamav-simple.yaml"
       - "values-clamav-simple.gotmpl"
     installed: {{ .Values.clamavSimple.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/istio-ressources/istio-gateway
-  # dataSource=docker
-  # dependencyType=service
   - name: "opendesk-gateway"
-    chart: "istio-resources-repo/istio-gateway"
-    version: "2.0.0"
+    chart: "istio-resources-repo/{{ .Values.charts.istioResources.name }}"
+    version: "{{ .Values.charts.istioResources.version }}"
     values:
       - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
     installed: {{ .Values.istio.enabled }}
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/bitnami-charts/minio
-  # dataSource=docker
-  # dependencyType=service
   - name: "minio"
-    chart: "bitnami-repo/minio"
-    version: "12.8.19"
+    chart: "minio-repo/{{ .Values.charts.minio.name }}"
+    version: "{{ .Values.charts.minio.version }}"
     values:
       - "values-minio.yaml"
       - "values-minio.gotmpl"

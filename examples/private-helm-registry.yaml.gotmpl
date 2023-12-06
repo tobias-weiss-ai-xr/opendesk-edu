@@ -1,0 +1,266 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+charts:
+  certificates:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  clamav:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  clamavSimple:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  collabora:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  cryptpad:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  dovecot:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  element:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  elementWellKnown:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  intercomService:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  istioResources:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  jitsi:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  keycloak:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  keycloakBootstrap:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  keycloakExtensions:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  keycloakTheme:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  mariadb:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  matrixNeoboardWidget:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  matrixNeochoiseWidget:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  matrixNeodatefixBot:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  matrixNeodatefixWidget:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  matrixUserVerificationService:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  memcached:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  minio:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  nextcloud:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  nextcloudBootstrap:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  nginx:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  openproject:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  openprojectBootstrap:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  openXchangeAppSuite:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  openXchangeAppSuiteBootstrap:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  otterize:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  oxConnector:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  postfix:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  postgresql:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  redis:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  synapse:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  synapseCreateAccount:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  synapseWeb:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsLdapNotifier:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsLdapServer:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsNotificationsApi:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsPortalFrontend:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsPortalListener:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsPortalServer:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsStackDataSwp:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsStackDataUms:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsStoreDav:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsUdmRestApi:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsUmcGateway:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsUmcServer:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  univentionCorporateServer:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  xwiki:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+...

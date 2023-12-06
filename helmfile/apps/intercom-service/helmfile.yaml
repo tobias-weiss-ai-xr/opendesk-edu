@@ -3,28 +3,22 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # Intercom Service
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/intercom-service
   - name: "intercom-service-repo"
     oci: true
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/intercom-service" }}
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.intercomService.verify }}
+    username: "{{ .Values.charts.intercomService.username }}"
+    password: {{ .Values.charts.intercomService.password | quote }}
+    url: "{{ .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/intercom-service/intercom-service
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "intercom-service"
-    chart: "intercom-service-repo/intercom-service"
-    version: "2.0.1"
+    chart: "intercom-service-repo/{{ .Values.charts.intercomService.name }}"
+    version: "{{ .Values.charts.intercomService.version }}"
     values:
       - "values.yaml"
       - "values.gotmpl"

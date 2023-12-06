@@ -3,27 +3,22 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # OpenProject
   # Source: https://github.com/opf/helm-charts
   - name: "openproject-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://charts.openproject.org" }}
-    verify: true
+    oci: true
     keyring: "../../files/gpg-pubkeys/openproject-com.gpg"
+    verify: {{ .Values.charts.openproject.verify }}
+    username: "{{ .Values.charts.openproject.username }}"
+    password: {{ .Values.charts.openproject.password | quote }}
+    url: "{{ .Values.charts.openproject.registry }}/{{ .Values.charts.openproject.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://charts.openproject.org
-  # packageName=openproject
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "openproject"
-    chart: "openproject-repo/openproject"
-    version: "2.6.2"
+    chart: "openproject-repo/{{ .Values.charts.openproject.name }}"
+    version: "{{ .Values.charts.openproject.version }}"
     wait: true
     waitForJobs: true
     values:

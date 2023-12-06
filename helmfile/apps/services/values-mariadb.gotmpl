@@ -8,6 +8,9 @@ global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+
 image:
   repository: {{ .Values.images.mariadb.repository | quote }}
   tag: {{ .Values.images.mariadb.tag | quote }}

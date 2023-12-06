@@ -3,25 +3,19 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # Collabora Online
   # Source: https://github.com/CollaboraOnline/online
   - name: "collabora-online-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://collaboraonline.github.io/online" }}
+    username: "{{ .Values.charts.collabora.username }}"
+    password: {{ .Values.charts.collabora.password | quote }}
+    url: "{{ .Values.charts.collabora.registry }}/{{ .Values.charts.collabora.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://collaboraonline.github.io/online
-  # packageName=collabora-online
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "collabora-online"
-    chart: "collabora-online-repo/collabora-online"
-    version: "1.0.2"
+    chart: "collabora-online-repo/{{ .Values.charts.collabora.name }}"
+    version: "{{ .Values.charts.collabora.version }}"
     values:
       - "values.yaml"
       - "values.gotmpl"

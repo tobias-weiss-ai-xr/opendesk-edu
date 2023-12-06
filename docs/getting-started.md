@@ -12,7 +12,7 @@ This documentation should enable you to create your own evaluation instance of o
   * [Customize environment](#customize-environment)
     * [Domain](#domain)
     * [Apps](#apps)
-    * [Private OCI registry](#private-oci-registry)
+    * [Private Image registry](#private-image-registry)
     * [Private Helm registry](#private-helm-registry)
     * [Cluster capabilities](#cluster-capabilities)
       * [Service](#service)
@@ -129,9 +129,9 @@ jitsi:
   enabled: false
 ```
 
-### Private OCI registry
+### Private Image registry
 
-By default, all OCI artifacts are proxied via the project's container registry, which should get replaced soon by the
+By default, all OCI artifacts are proxied via the project's image registry, which should get replaced soon by the
 OCI registries provided by Open CoDE.
 
 You also can set your own registry by:
@@ -156,11 +156,31 @@ global:
 
 ### Private Helm registry
 
-Some apps use Chart Museum style helm registries. You can use your own registry by setting this environment variable:
+Some apps use OCI style registry and some use Helm chart museum style registries.
+In `helmfile/environments/default/charts.yaml` you can find all helm charts used and modify their registry, repository
+or version.
 
-```shell
-export PRIVATE_CHART_REPOSITORY_URL=charts.open.desk
+As an example, you can also use helmfile methods to use just a single environment variable to set registry and
+authentication for all OCI helm charts.
+
+```yaml
+charts:
+  certificates:
+    registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
 ```
+
+There is a full example including http and OCI style registries in `examples/private-helm-registry.yaml.gotmpl`.
+The following environment variables have to be exposed when using the example:
+
+| Environment variable                | Description                                                                                |
+|-------------------------------------|--------------------------------------------------------------------------------------------|
+| `OD_PRIVATE_HELM_OCI_REGISTRY`      | Registry for OCI hosted helm charts, example: `external-registry.souvap-univention.de`     |
+| `OD_PRIVATE_HELM_HTTP_REGISTRY`     | Registry URI for http hosted helm charts, `https://external-registry.souvap-univention.de` |
+| `OD_PRIVATE_HELM_REGISTRY_USERNAME` | Username                                                                                   |
+| `OD_PRIVATE_HELM_REGISTRY_PASSWORD` | Password                                                                                   |
+
 
 ### Cluster capabilities
 

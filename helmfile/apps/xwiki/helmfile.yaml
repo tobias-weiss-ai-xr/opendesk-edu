@@ -3,25 +3,19 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # XWiki
   # Source: https://github.com/xwiki-contrib/xwiki-helm
   - name: "xwiki-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://xwiki-contrib.github.io/xwiki-helm" }}
+    username: "{{ .Values.charts.xwiki.username }}"
+    password: {{ .Values.charts.xwiki.password | quote }}
+    url: "{{ .Values.charts.xwiki.registry }}/{{ .Values.charts.xwiki.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://xwiki-contrib.github.io/xwiki-helm
-  # packageName=xwiki
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "xwiki"
-    chart: "xwiki-repo/xwiki"
-    version: "1.2.3"
+    chart: "xwiki-repo/{{ .Values.charts.xwiki.name }}"
+    version: "{{ .Values.charts.xwiki.version }}"
     wait: true
     values:
       - "values.yaml"

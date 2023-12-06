@@ -3,37 +3,30 @@
 ---
 bases:
   - "../../bases/environments.yaml"
-
 ---
 repositories:
   # openDesk Keycloak Bootstrap
   # Source:
   #  https://gitlab.opencode.de/bmi/opendesk/components/charts/sovereign-workplace-nextcloud-bootstrap
-  - name: "opendesk-nextcloud-bootstrap-repo"
+  - name: "nextcloud-bootstrap-repo"
     oci: true
-    # yamllint disable rule:line-length
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" | default
-         "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap" }}
-    # yamllint enable rule:line-length
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.nextcloudBootstrap.verify }}
+    username: "{{ .Values.charts.nextcloudBootstrap.username }}"
+    password: {{ .Values.charts.nextcloudBootstrap.password | quote }}
+    url: "{{ .Values.charts.nextcloudBootstrap.registry }}/{{ .Values.charts.nextcloudBootstrap.repository }}"
+
   # Nextcloud
   # Source: https://github.com/nextcloud/helm/
   - name: "nextcloud-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://nextcloud.github.io/helm/" }}
+    username: "{{ .Values.charts.nextcloud.username }}"
+    password: {{ .Values.charts.nextcloud.password | quote }}
+    url: "{{ .Values.charts.nextcloud.registry }}/{{ .Values.charts.nextcloud.repository }}"
 
 releases:
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap/opendesk-nextcloud-bootstrap
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-nextcloud-bootstrap"
-    chart: "opendesk-nextcloud-bootstrap-repo/opendesk-nextcloud-bootstrap"
-    version: "3.2.6"
+    chart: "nextcloud-bootstrap-repo/{{ .Values.charts.nextcloudBootstrap.name }}"
+    version: "{{ .Values.charts.nextcloudBootstrap.version }}"
     wait: true
     waitForJobs: true
     values:
@@ -42,14 +35,9 @@ releases:
     installed: {{ .Values.nextcloud.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://nextcloud.github.io/helm
-  # packageName=nextcloud
-  # dataSource=helm
-  # dependencyType=vendor
   - name: "nextcloud"
-    chart: "nextcloud-repo/nextcloud"
-    version: "3.5.19"
+    chart: "nextcloud-repo/{{ .Values.charts.nextcloud.name }}"
+    version: "{{ .Values.charts.nextcloud.version }}"
     needs:
       - "opendesk-nextcloud-bootstrap"
     values:

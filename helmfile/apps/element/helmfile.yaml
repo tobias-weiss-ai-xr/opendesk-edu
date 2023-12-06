@@ -7,177 +7,176 @@ bases:
 repositories:
   # openDesk Element
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/sovereign-workplace-element
-  - name: "opendesk-element-repo"
+  - name: "element-repo"
     oci: true
-    # yamllint disable rule:line-length
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element" }}
-    # yamllint enable rule:line-length
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.element.verify }}
+    username: "{{ .Values.charts.element.username }}"
+    password: {{ .Values.charts.element.password | quote }}
+    url: "{{ .Values.charts.element.registry }}/{{ .Values.charts.element.repository }}"
+  - name: "element-well-known-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.element.verify }}
+    username: "{{ .Values.charts.elementWellKnown.username }}"
+    password: {{ .Values.charts.elementWellKnown.password | quote }}
+    url: "{{ .Values.charts.elementWellKnown.registry }}/{{ .Values.charts.elementWellKnown.repository }}"
+  - name: "synapse-web-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.element.verify }}
+    username: "{{ .Values.charts.synapseWeb.username }}"
+    password: {{ .Values.charts.synapseWeb.password | quote }}
+    url: "{{ .Values.charts.synapseWeb.registry }}/{{ .Values.charts.synapseWeb.repository }}"
+  - name: "synapse-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.element.verify }}
+    username: "{{ .Values.charts.synapse.username }}"
+    password: {{ .Values.charts.synapse.password | quote }}
+    url: "{{ .Values.charts.synapse.registry }}/{{ .Values.charts.synapse.repository }}"
+  - name: "synapse-create-account-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.element.verify }}
+    username: "{{ .Values.charts.synapseCreateAccount.username }}"
+    password: {{ .Values.charts.synapseCreateAccount.password | quote }}
+    url: "{{ .Values.charts.synapseCreateAccount.registry }}/{{ .Values.charts.synapseCreateAccount.repository }}"
 
   # openDesk Matrix Widgets
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/opendesk-matrix-widgets
-  - name: "opendesk-matrix-widgets-repo"
+  - name: "matrix-user-verification-service-repo"
     oci: true
-    # yamllint disable rule:line-length
-    url: >-
-      {{ env "PRIVATE_IMAGE_REGISTRY_URL" |
-         default "external-registry.souvap-univention.de/sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets" }}
-    # yamllint enable rule:line-length
-    verify: true
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.matrixUserVerificationService.verify }}
+    username: "{{ .Values.charts.matrixUserVerificationService.username }}"
+    password: {{ .Values.charts.matrixUserVerificationService.password | quote }}
+    url: "{{ .Values.charts.matrixUserVerificationService.registry }}/\
+      {{ .Values.charts.matrixUserVerificationService.repository }}"
+  - name: "matrix-neoboard-widget-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.matrixNeoboardWidget.verify }}
+    username: "{{ .Values.charts.matrixNeoboardWidget.username }}"
+    password: {{ .Values.charts.matrixNeoboardWidget.password | quote }}
+    url: "{{ .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
+  - name: "matrix-neochoice-widget-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.matrixNeoboardWidget.verify }}
+    username: "{{ .Values.charts.matrixNeoboardWidget.username }}"
+    password: {{ .Values.charts.matrixNeoboardWidget.password | quote }}
+    url: "{{ .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
+  - name: "matrix-neodatefix-widget-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.matrixNeodatefixWidget.verify }}
+    username: "{{ .Values.charts.matrixNeodatefixWidget.username }}"
+    password: {{ .Values.charts.matrixNeodatefixWidget.password | quote }}
+    url: "{{ .Values.charts.matrixNeodatefixWidget.registry }}/{{ .Values.charts.matrixNeodatefixWidget.repository }}"
+  - name: "matrix-neodatefix-bot-repo"
+    oci: true
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.matrixNeodatefixBot.verify }}
+    username: "{{ .Values.charts.matrixNeodatefixBot.username }}"
+    password: {{ .Values.charts.matrixNeodatefixBot.password | quote }}
+    url: "{{ .Values.charts.matrixNeodatefixBot.registry }}/{{ .Values.charts.matrixNeodatefixBot.repository }}"
+
 
 releases:
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-element
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-element"
-    chart: "opendesk-element-repo/opendesk-element"
-    version: "2.6.0"
+    chart: "element-repo/{{ .Values.charts.element.name }}"
+    version: "{{ .Values.charts.element.version }}"
     values:
       - "values-element.yaml"
       - "values-element.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-well-known
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-well-known"
-    chart: "opendesk-element-repo/opendesk-well-known"
-    version: "2.6.0"
+    chart: "element-well-known-repo/{{ .Values.charts.elementWellKnown.name }}"
+    version: "{{ .Values.charts.elementWellKnown.version }}"
     values:
       - "values-well-known.yaml"
       - "values-well-known.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-web
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-synapse-web"
-    chart: "opendesk-element-repo/opendesk-synapse-web"
-    version: "2.6.0"
+    chart: "synapse-web-repo/{{ .Values.charts.synapseWeb.name }}"
+    version: "{{ .Values.charts.synapseWeb.version }}"
     values:
       - "values-synapse-web.yaml"
       - "values-synapse-web.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-synapse"
-    chart: "opendesk-element-repo/opendesk-synapse"
-    version: "2.6.0"
+    chart: "synapse-repo/{{ .Values.charts.synapse.name }}"
+    version: "{{ .Values.charts.synapse.version }}"
     values:
       - "values-synapse.yaml"
       - "values-synapse.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-create-account
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-matrix-user-verification-service-bootstrap"
-    chart: "opendesk-element-repo/opendesk-synapse-create-account"
-    version: "2.6.0"
+    chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
+    version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
       - "values-matrix-user-verification-service-bootstrap.yaml"
       - "values-matrix-user-verification-service-bootstrap.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-matrix-user-verification-service
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "opendesk-matrix-user-verification-service"
-    chart: "opendesk-element-repo/opendesk-matrix-user-verification-service"
-    version: "2.6.0"
+    chart: "matrix-user-verification-service-repo/{{ .Values.charts.matrixUserVerificationService.name }}"
+    version: "{{ .Values.charts.matrixUserVerificationService.version }}"
     values:
       - "values-matrix-user-verification-service.yaml"
       - "values-matrix-user-verification-service.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neoboard-widget
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "matrix-neoboard-widget"
-    chart: "opendesk-matrix-widgets-repo/matrix-neoboard-widget"
-    version: "3.3.0"
+    chart: "matrix-neoboard-widget-repo/{{ .Values.charts.matrixNeoboardWidget.name }}"
+    version: "{{ .Values.charts.matrixNeoboardWidget.version }}"
     values:
       - "values-matrix-neoboard-widget.yaml"
       - "values-matrix-neoboard-widget.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neochoice-widget
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "matrix-neochoice-widget"
-    chart: "opendesk-matrix-widgets-repo/matrix-neochoice-widget"
-    version: "3.3.0"
+    chart: "matrix-neochoice-widget-repo/{{ .Values.charts.matrixNeochoiseWidget.name }}"
+    version: "{{ .Values.charts.matrixNeochoiseWidget.version }}"
     values:
       - "values-matrix-neochoice-widget.yaml"
       - "values-matrix-neochoice-widget.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neodatefix-widget
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "matrix-neodatefix-widget"
-    chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-widget"
-    version: "3.3.0"
+    chart: "matrix-neodatefix-widget-repo/{{ .Values.charts.matrixNeodatefixWidget.name }}"
+    version: "{{ .Values.charts.matrixNeodatefixWidget.version }}"
     values:
       - "values-matrix-neodatefix-widget.yaml"
       - "values-matrix-neodatefix-widget.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-create-account
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "matrix-neodatefix-bot-bootstrap"
-    chart: "opendesk-element-repo/opendesk-synapse-create-account"
-    version: "2.6.0"
+    chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
+    version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
       - "values-matrix-neodatefix-bot-bootstrap.yaml"
       - "values-matrix-neodatefix-bot-bootstrap.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
-  # renovate:
-  # registryUrl=https://registry.souvap-univention.de
-  # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neodatefix-bot
-  # dataSource=docker
-  # dependencyType=vendor
   - name: "matrix-neodatefix-bot"
-    chart: "opendesk-matrix-widgets-repo/matrix-neodatefix-bot"
-    version: "3.3.0"
+    chart: "matrix-neodatefix-bot-repo/{{ .Values.charts.matrixNeodatefixBot.name }}"
+    version: "{{ .Values.charts.matrixNeodatefixBot.version }}"
     values:
       - "values-matrix-neodatefix-bot.yaml"
       - "values-matrix-neodatefix-bot.gotmpl"
