@@ -1,3 +1,10 @@
+## [0.5.63](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.62...v0.5.63) (2023-12-06)
+
+
+### Bug Fixes
+
+* **nextcloud:** Remove Talk folder ([0ea5856](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/0ea585633b4bf72fe180ca744cc99d9e9f84998f))
+
 ## [0.5.62](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.61...v0.5.62) (2023-12-06)
 
 
