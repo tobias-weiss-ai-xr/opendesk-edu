@@ -1,3 +1,10 @@
+## [0.5.64](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.63...v0.5.64) (2023-12-06)
+
+
+### Bug Fixes
+
+* **openproject:** Switch to release container and set home url link ([e67ab8f](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/e67ab8f4304a525b50a3a723c86d1e610313c594))
+
 ## [0.5.63](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.62...v0.5.63) (2023-12-06)
 
 
