@@ -97,6 +97,13 @@ repositories:
     username: {{ .Values.charts.umsSelfserviceListener.username | quote }}
     password: {{ .Values.charts.umsSelfserviceListener.password | quote }}
     url: "{{ .Values.charts.umsSelfserviceListener.registry }}/{{ .Values.charts.umsSelfserviceListener.repository }}"
+  - name: "ums-provisioning-repo"
+    oci: {{ .Values.charts.umsProvisioning.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsProvisioning.verify }}
+    username: {{ .Values.charts.umsProvisioning.username | quote }}
+    password: {{ .Values.charts.umsProvisioning.password | quote }}
+    url: "{{ .Values.charts.umsProvisioning.registry }}/{{ .Values.charts.umsProvisioning.repository }}"
 
   # Univention Keycloak Extensions
   - name: "ums-keycloak-extensions-repo"
@@ -312,6 +319,16 @@ releases:
       - "values-common.yaml"
       - "values-selfservice-listener.gotmpl"
       - "values-selfservice-listener.yaml"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+
+  - name: "ums-provisioning"
+    chart: "ums-provisioning-repo/{{ .Values.charts.umsProvisioning.name }}"
+    version: "{{ .Values.charts.umsProvisioning.version }}"
+    values:
+      - "values-common.gotmpl"
+      - "values-common.yaml"
+      - "values-provisioning.gotmpl"
+      - "values-provisioning.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
 commonLabels:

@@ -657,6 +657,21 @@ charts:
     username: ~
     password: ~
 
+  umsProvisioning:
+    # renovate:
+    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
+    # packageName=provisioning-api
+    # dataSource=helm
+    # dependencyType=vendor
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    name: "provisioning-api"
+    oci: true
+    verify: true
+    version: "0.2.1"
+    username: ~
+    password: ~
+
   umsSelfserviceListener:
     # renovate:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
