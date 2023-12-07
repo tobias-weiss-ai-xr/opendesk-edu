@@ -324,8 +324,7 @@ images:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=vendor
     repository: "souvap/tooling/images/ox-connector/ox-connector-standalone"
-    tag: "branch-jconde-listener-entrypoint-chaining\
-      @sha256:54748d49e37d52529d4a857ff834d1217bd2cb8c89c7eed25c0873159ed6853c"
+    tag: "0.3.4@sha256:db95466170613db46222e63aa0f69de9e60d08c6a409e27905ce5389e4b19074"
     # @supplier: "Univention"
   postfix:
     # renovate:
