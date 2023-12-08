@@ -35,7 +35,7 @@ images:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=vendor
     repository: "souvap/tooling/images/element-web"
-    tag: "1.6.0@sha256:a71cbd75ee88471e3df59f26a2a37b9b8ff83d2f71f726053acd381ecd87e234"
+    tag: "1.7.0@sha256:b8b59aff8ed3eb07dc22cec123a2d04acaf435f5637148698183773a695444c2"
     # @supplier: "Element"
   freshclam:
     # renovate:
@@ -149,21 +149,21 @@ images:
     # registryUrl=https://ghcr.io
     # dependencyType=vendor
     repository: "nordeck/matrix-neoboard-widget"
-    tag: "1.0.0@sha256:584b9c18ea3dfd4b7f1e73f3e114bc1dcd5731b400a8d037576bf2a797c8b086"
+    tag: "1.4.0@sha256:da04d6c3c3e07ec1fcb6ecec245adc48897f107a2ab84c39d8924de951744d9f"
     # @supplier: "Nordeck"
   matrixNeoChoiceWidget:
     # renovate:
     # registryUrl=https://ghcr.io
     # dependencyType=vendor
     repository: "nordeck/matrix-poll-widget"
-    tag: "1.3.0@sha256:19d2c8c7a15fe7d12c4a83a89310831da12323fd45ff0280cce808f1be0c7e0b"
+    tag: "1.3.1@sha256:ba7a0bcbcf278df523cef8d230dc44f31ef86f8aefe6dbea7d832b7234ff5c7a"
     # @supplier: "Nordeck"
   matrixNeoDateFixBot:
     # renovate:
     # registryUrl=https://ghcr.io
     # dependencyType=vendor
     repository: "nordeck/matrix-meetings-bot"
-    tag: "2.4.2@sha256:f5b3362560255470076f3e6c95a0dd93a8f781398afb992c1e1212764fa87297"
+    tag: "2.5.0@sha256:6ea92f7e48cd71ce2c552cb5222a1d4b3696136e61045bce8456bc52ce02b9c8"
     # @supplier: "Nordeck"
   matrixNeoDateFixWidget:
     # renovate:
