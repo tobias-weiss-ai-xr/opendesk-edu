@@ -1,3 +1,10 @@
+## [0.5.65](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.64...v0.5.65) (2023-12-08)
+
+
+### Bug Fixes
+
+* **univention-management-stack:** Bump OX Connector ([83192b7](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/83192b78345c62465e2979195d9a1c882ddbf0ea))
+
 ## [0.5.64](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.63...v0.5.64) (2023-12-06)
 
 
