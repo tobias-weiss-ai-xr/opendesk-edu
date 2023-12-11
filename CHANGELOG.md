@@ -1,3 +1,10 @@
+## [0.5.67](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.66...v0.5.67) (2023-12-11)
+
+
+### Bug Fixes
+
+* **services:** Use Charts from openCoDE registry ([cc0daa2](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/cc0daa2a22837c00583038ffd9df7e669004e84e))
+
 ## [0.5.66](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.65...v0.5.66) (2023-12-08)
 
 
