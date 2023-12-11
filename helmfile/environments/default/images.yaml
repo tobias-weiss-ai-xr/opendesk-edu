@@ -254,14 +254,14 @@ images:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/middleware-public-sector"
-    tag: "8.19.33@sha256:369c44369d727e4172f10c25137dbb00d936d20dd844cdca3a34f7f31273ea05"
+    tag: "8.20.51@sha256:4a9cc9d6745b09a9ace2475fbbacfeff2ca66db02b6314eb8e035f28e28574a8"
     # @supplier: "Open-Xchange"
   openxchangeCoreUI:
     # renovate:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/core-ui"
-    tag: "8.19.0@sha256:7fdd73f78fd7094f2968f6fcaaae175e60824f9ef68f9e7e70418de6a2b623e9"
+    tag: "8.20.1@sha256:a8bdf83b1179ca9126bcd4e5301b818aafec5e8ac6ff25914603d74a137b65dc"
     # @supplier: "Open-Xchange"
   openxchangeCoreUIMiddleware:
     # renovate:
@@ -275,14 +275,14 @@ images:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/core-user-guide"
-    tag: "8.19.771856@sha256:e00ed8f94c3c42cd288dd03f7fb18d228eb516b5e5ebd318825289b1c4ed17ab"
+    tag: "8.20.799279@sha256:075c917a7e5ebfe57c07c3c21485ee672554616252d5c57f829f443ca987e75b"
     # @supplier: "Open-Xchange"
   openxchangeDocumentConverter:
     # renovate:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/documentconverter"
-    tag: "8.19.32@sha256:82354e858b6aeeae7f0ebaf66ad106f8e9ae46e605e97bb1d2d14e6ce1c3d708"
+    tag: "8.20.50@sha256:bd11b4e5a62377aab79ebc0ebbe8da0bf54d42ce9a8ae64db0c84608570edf9f"
     # @supplier: "Open-Xchange"
   openxchangeGotenberg:
     # renovate:
@@ -303,21 +303,21 @@ images:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/imageconverter"
-    tag: "8.19.33@sha256:9543c1409a129567bd6e4a657a353819842a4b1e1807ab86a1ea2e7f73f8c18e"
+    tag: "8.20.50@sha256:590a8a4c583057f6bb071247c2f8b8566c79d5d219482dcaa452b30c944c876b"
     # @supplier: "Open-Xchange"
   openxchangeNextcloudIntegrationUI:
     # renovate:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/nextcloud-integration-ui"
-    tag: "1.1.0@sha256:82cecb5adac63806ab41546e6b49090a93a5f4645750bb3967d87585b60df2e1"
+    tag: "1.2.0@sha256:3d0ef11196f7544a01539e6790e4402ad69e2a501312eb7c7bb128c6563d0a8d"
     # @supplier: "Open-Xchange"
   openxchangePublicSectorUI:
     # renovate:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/public-sector-ui"
-    tag: "2.1.0@sha256:ed56730add8afdb08bef8b43a114aba406fd86d83c7fd7af93dc16bb002fa233"
+    tag: "2.2.0@sha256:3f8c62c139c27569e6b7d38321268e7cc291caa4ea1ea03180c8ce5499edd6d5"
     # @supplier: "Open-Xchange"
   oxConnector:
     # renovate:

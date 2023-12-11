@@ -399,7 +399,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/appsuite-public-sector/charts"
     name: "appsuite-public-sector"
-    version: "2.1.1"
+    version: "2.2.34"
     username: ~
     password: ~
 

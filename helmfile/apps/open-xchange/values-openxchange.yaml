@@ -150,6 +150,9 @@ appsuite:
       io.ox/core//coloredIcons: "false"
       # Mail templates
       io.ox/core//features/templates: "true"
+      # Contact Collector
+      io.ox/mail//contactCollectOnMailTransport: "true"
+      # io.ox/mail//contactCollectOnMailAccess: "true"
 
     asConfig:
       default:
