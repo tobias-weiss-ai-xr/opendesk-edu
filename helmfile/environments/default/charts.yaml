@@ -149,7 +149,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-jitsi"
     name: "sovereign-workplace-jitsi"
-    version: "1.7.1"
+    version: "1.7.2"
     verify: true
     username: ~
     password: ~

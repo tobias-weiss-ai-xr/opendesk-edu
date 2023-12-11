@@ -22,6 +22,8 @@ extraEnvVars:
       secretKeyRef:
         name: "opendesk-matrix-user-verification-service-account"
         key: "access_token"
+  - name: "UVS_DISABLE_IP_BLACKLIST"
+    value: "true"
 
 podSecurityContext:
   enabled: true

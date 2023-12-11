@@ -60,7 +60,7 @@ jitsi:
       - name: "AUTH_TYPE"
         value: "hybrid_matrix_token"
       - name: "JWT_APP_ID"
-        value: "myappid"
+        value: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
       - name: "JWT_APP_SECRET"
         value: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
       - name: "MATRIX_UVS_SYNC_POWER_LEVELS"
