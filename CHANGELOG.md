@@ -1,3 +1,11 @@
+## [0.5.68](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.67...v0.5.68) (2023-12-11)
+
+
+### Bug Fixes
+
+* **jitsi:** Disable IP Blacklist ([6a649cb](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/6a649cb7f0d04736ccabcd27c035ef6d051f6fd5))
+* **open-xchange:** Update to latest version ([db4bfa4](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/db4bfa488401f10bad111ce03c20a60473c64837))
+
 ## [0.5.67](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.66...v0.5.67) (2023-12-11)
 
 
