@@ -24,6 +24,7 @@ persistence:
       ldapServerData: "1Gi"
       ldapServerShared: "1Gi"
       portalListener: "1Gi"
+      selfserviceListener: "1Gi"
       storeDav: "1Gi"
     xwiki: "1Gi"
 ...

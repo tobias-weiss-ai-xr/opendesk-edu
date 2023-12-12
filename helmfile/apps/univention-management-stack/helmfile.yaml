@@ -148,6 +148,16 @@ releases:
       - "values-umc-server.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
+  - name: "ums-selfservice-listener"
+    chart: "ums-repo/{{ .Values.charts.umsSelfserviceListener.name }}"
+    version: "{{ .Values.charts.umsSelfserviceListener.version }}"
+    values:
+      - "values-common.gotmpl"
+      - "values-common.yaml"
+      - "values-selfservice-listener.gotmpl"
+      - "values-selfservice-listener.yaml"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+
 commonLabels:
   deploy-stage: "component-1"
   component: "univention-management-stack"
