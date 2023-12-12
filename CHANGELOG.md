@@ -1,3 +1,10 @@
+## [0.5.69](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.68...v0.5.69) (2023-12-12)
+
+
+### Bug Fixes
+
+* **univention-management-stack:** Functional replacement for UCS container monolith, still optional. ([ce38714](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/ce38714a81ea3b0e1377e6ea2d640fb65f317396))
+
 ## [0.5.68](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.67...v0.5.68) (2023-12-11)
 
 
