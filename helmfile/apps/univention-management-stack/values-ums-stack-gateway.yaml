@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 ingress:
+  annotations:
+    # Ensure that the ingress controller can handle responses with plenty of
+    # headers. This is a requirement from the UDM Rest API.
+    nginx.org/proxy-buffer-size: "64k"
+    nginx.org/proxy-buffers: "4 128k"
   tls: false
 
 service:
@@ -15,6 +20,15 @@ fullnameOverride: "ums-stack-gateway"
 serverBlock: |
   server {
     listen 8080;
+
+    proxy_http_version 1.1;
+
+    proxy_set_header Host $http_host;
+
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $http_x_forwarded_host;
+    proxy_set_header X-Forwarded-Port $http_x_forwarded_port;
+    proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
 
     ## portal-frontend
     # The frontend does not own "/univention/portal" nor
@@ -139,9 +153,13 @@ serverBlock: |
 
     ## udm-rest-api
     location /univention/udm/ {
+      # The UDM Rest API does return on some endpoints a lot of headers
+      proxy_busy_buffers_size 128k;
+      proxy_buffers 4 128k;
+      proxy_buffer_size 64k;
+
       rewrite ^/univention(/udm/.*)$ $1 break;
       proxy_pass http://ums-udm-rest-api:80;
-      proxy_set_header X-Forwarded-Host $host;
     }
 
 
