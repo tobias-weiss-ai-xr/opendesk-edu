@@ -1,3 +1,10 @@
+## [0.5.70](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.69...v0.5.70) (2023-12-14)
+
+
+### Bug Fixes
+
+* **univention-management-stack:** Remove UCS container monolith and make UMS standard IAM ([450c434](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/450c434ed08120ad0757d672dc269a78362e780d))
+
 ## [0.5.69](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.68...v0.5.69) (2023-12-12)
 
 
