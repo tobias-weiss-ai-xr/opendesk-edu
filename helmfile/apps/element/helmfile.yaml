@@ -8,77 +8,77 @@ repositories:
   # openDesk Element
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/sovereign-workplace-element
   - name: "element-repo"
-    oci: true
+    oci: {{ .Values.charts.element.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.element.verify }}
-    username: "{{ .Values.charts.element.username }}"
+    username: {{ .Values.charts.element.username | quote }}
     password: {{ .Values.charts.element.password | quote }}
     url: "{{ .Values.charts.element.registry }}/{{ .Values.charts.element.repository }}"
   - name: "element-well-known-repo"
-    oci: true
+    oci: {{ .Values.charts.elementWellKnown.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
-    verify: {{ .Values.charts.element.verify }}
-    username: "{{ .Values.charts.elementWellKnown.username }}"
+    verify: {{ .Values.charts.elementWellKnown.verify }}
+    username: {{ .Values.charts.elementWellKnown.username | quote }}
     password: {{ .Values.charts.elementWellKnown.password | quote }}
     url: "{{ .Values.charts.elementWellKnown.registry }}/{{ .Values.charts.elementWellKnown.repository }}"
   - name: "synapse-web-repo"
-    oci: true
+    oci: {{ .Values.charts.synapseWeb.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
-    verify: {{ .Values.charts.element.verify }}
-    username: "{{ .Values.charts.synapseWeb.username }}"
+    verify: {{ .Values.charts.synapseWeb.verify }}
+    username: {{ .Values.charts.synapseWeb.username | quote }}
     password: {{ .Values.charts.synapseWeb.password | quote }}
     url: "{{ .Values.charts.synapseWeb.registry }}/{{ .Values.charts.synapseWeb.repository }}"
   - name: "synapse-repo"
-    oci: true
+    oci: {{ .Values.charts.synapse.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
-    verify: {{ .Values.charts.element.verify }}
-    username: "{{ .Values.charts.synapse.username }}"
+    verify: {{ .Values.charts.synapse.verify }}
+    username: {{ .Values.charts.synapse.username | quote }}
     password: {{ .Values.charts.synapse.password | quote }}
     url: "{{ .Values.charts.synapse.registry }}/{{ .Values.charts.synapse.repository }}"
   - name: "synapse-create-account-repo"
-    oci: true
+    oci: {{ .Values.charts.synapseCreateAccount.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
-    verify: {{ .Values.charts.element.verify }}
-    username: "{{ .Values.charts.synapseCreateAccount.username }}"
+    verify: {{ .Values.charts.synapseCreateAccount.verify }}
+    username: {{ .Values.charts.synapseCreateAccount.username | quote }}
     password: {{ .Values.charts.synapseCreateAccount.password | quote }}
     url: "{{ .Values.charts.synapseCreateAccount.registry }}/{{ .Values.charts.synapseCreateAccount.repository }}"
 
   # openDesk Matrix Widgets
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/opendesk-matrix-widgets
   - name: "matrix-user-verification-service-repo"
-    oci: true
+    oci: {{ .Values.charts.matrixUserVerificationService.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.matrixUserVerificationService.verify }}
-    username: "{{ .Values.charts.matrixUserVerificationService.username }}"
+    username: {{ .Values.charts.matrixUserVerificationService.username | quote }}
     password: {{ .Values.charts.matrixUserVerificationService.password | quote }}
     url: "{{ .Values.charts.matrixUserVerificationService.registry }}/\
       {{ .Values.charts.matrixUserVerificationService.repository }}"
   - name: "matrix-neoboard-widget-repo"
-    oci: true
+    oci: {{ .Values.charts.matrixNeoboardWidget.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.matrixNeoboardWidget.verify }}
-    username: "{{ .Values.charts.matrixNeoboardWidget.username }}"
+    username: {{ .Values.charts.matrixNeoboardWidget.username | quote }}
     password: {{ .Values.charts.matrixNeoboardWidget.password | quote }}
     url: "{{ .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
   - name: "matrix-neochoice-widget-repo"
-    oci: true
+    oci: {{ .Values.charts.matrixNeoboardWidget.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.matrixNeoboardWidget.verify }}
-    username: "{{ .Values.charts.matrixNeoboardWidget.username }}"
+    username: {{ .Values.charts.matrixNeoboardWidget.username | quote }}
     password: {{ .Values.charts.matrixNeoboardWidget.password | quote }}
     url: "{{ .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
   - name: "matrix-neodatefix-widget-repo"
-    oci: true
+    oci: {{ .Values.charts.matrixNeodatefixWidget.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.matrixNeodatefixWidget.verify }}
-    username: "{{ .Values.charts.matrixNeodatefixWidget.username }}"
+    username: {{ .Values.charts.matrixNeodatefixWidget.username | quote }}
     password: {{ .Values.charts.matrixNeodatefixWidget.password | quote }}
     url: "{{ .Values.charts.matrixNeodatefixWidget.registry }}/{{ .Values.charts.matrixNeodatefixWidget.repository }}"
   - name: "matrix-neodatefix-bot-repo"
-    oci: true
+    oci: {{ .Values.charts.matrixNeodatefixBot.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.matrixNeodatefixBot.verify }}
-    username: "{{ .Values.charts.matrixNeodatefixBot.username }}"
+    username: {{ .Values.charts.matrixNeodatefixBot.username | quote }}
     password: {{ .Values.charts.matrixNeodatefixBot.password | quote }}
     url: "{{ .Values.charts.matrixNeodatefixBot.registry }}/{{ .Values.charts.matrixNeodatefixBot.repository }}"
 

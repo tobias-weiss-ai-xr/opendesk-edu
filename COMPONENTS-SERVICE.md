@@ -37,7 +37,7 @@ This service is used by:
 - Nextcloud (e.g. share file notifictions)
 - Open-Xchange (emails)
 - OpenProject (general notifications)
-- UCS (e.g. password reset emails)
+- UMS (e.g. password reset emails)
 - XWiki (e.g. change notifications)
 
 ## TURN Server

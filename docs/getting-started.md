@@ -52,7 +52,7 @@ For the following guide, we will use `dev` as environment, where variables can b
 
 ### Domain
 
-The deployment is designed to deploy each app under a subdomains. For your convenience, we recommend to create a 
+The deployment is designed to deploy each app under a subdomains. For your convenience, we recommend to create a
 `*.domain.tld` A-Record to your cluster ingress controller, otherwise you need to create an A-Record for each subdomain.
 
 A list of all subdomains can be found in `helmfile/environments/default/global.yaml`.
@@ -118,8 +118,7 @@ All available apps and their default value can be found in `helmfile/environment
 | Postfix                     | `postfix.enabled`                   | `true`  | MTA                            |
 | PostgreSQL                  | `postgresql.enabled`                | `true`  | Database                       |
 | Redis                       | `redis.enabled`                     | `true`  | Cache Database                 |
-| Univention Corporate Server | `univentionCorporateServer.enabled` | `true`  | Identity Management & Portal   |
-| Univention Management Stack | `univentionManagementStack.enabled` | `false` | Identity Management & Portal   |
+| Univention Management Stack | `univentionManagementStack.enabled` | `true`  | Identity Management & Portal   |
 | XWiki                       | `xwiki.enabled`                     | `true`  | Knowledgebase                  |
 
 Exemplary, Jitsi can be disabled like:
@@ -316,7 +315,7 @@ certificate:
 
 ### Password seed
 
-All secrets are generated from a single master password via Master Password (algorithm). 
+All secrets are generated from a single master password via Master Password (algorithm).
 To prevent others from using your openDesk instance, we highly recommend setting an individual master password via:
 
 ```shell
@@ -369,7 +368,7 @@ When all apps are successfully deployed and pod status' went to `Running` or `Su
 https://portal.domain.tld
 ```
 
-If you change the subdomain of `univentionCorporateServer` or `univentionManagementStack`, you need to replace `portal`
+If you change the subdomain of `univentionManagementStack`, you need to replace `portal`
 by your specified subdomain.
 
 **Credentials:**
@@ -378,20 +377,13 @@ by your specified subdomain.
 # Replace with your namespace
 NAMESPACE=your-namespace
 
-# Get UCS container, which contains passwords as env var.
-CONTAINER=$(kubectl -n ${NAMESPACE} get po -l app.kubernetes.io/name=univention-corporate-container -o jsonpath='{.items[0].metadata.name}')
-# $ kubectl -n ${NAMESPACE} get po -l app.kubernetes.io/name=univention-corporate-container
-#
-# NAME                                              READY   STATUS    RESTARTS   AGE
-# univention-corporate-container-8665c6f8b7-nlhc6   1/1     Running   0          10m
-
-
-# Password of `default.user`
-kubectl -n ${NAMESPACE} get po ${CONTAINER} -o=jsonpath='{.spec.containers[0].env[?(@.name=="DEFAULT_ACCOUNT_USER_PASSWORD")].value}'
+# Get credentials from ConfigMap
+kubectl -n ${NAMESPACE} get cm ums-stack-data-swp-data -o jsonpath='{.data.dev-test-users\.yaml}' \
+  | yq '.properties.username,.properties.password'
+# default.user
 # 40615..............................e9e2f
-
-# Password of `default.admin`
-kubectl -n ${NAMESPACE} get po ${CONTAINER} -o=jsonpath='{.spec.containers[0].env[?(@.name=="DEFAULT_ACCOUNT_ADMIN_PASSWORD")].value}'
+# ---
+# default.admin
 # bdbbb..............................04db6
 ```
 

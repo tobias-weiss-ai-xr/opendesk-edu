@@ -59,7 +59,7 @@ Valid commit scopes:
 - `openproject`
 - `provisioning`
 - `services`
-- `univention-corporate-container`
+- `univention-management-stack`
 - `xwiki`
 
 ## Semantic Release

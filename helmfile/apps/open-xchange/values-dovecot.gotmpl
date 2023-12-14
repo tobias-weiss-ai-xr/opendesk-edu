@@ -20,7 +20,7 @@ dovecot:
   ldap:
     dn: "uid=ldapsearch_dovecot,cn=users,dc=swp-ldap,dc=internal"
     host: {{ .Values.ldap.host | quote }}
-    password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.dovecot | quote }}
+    password: {{ .Values.secrets.univentionManagementStack.ldapSearch.dovecot | quote }}
   oidc:
     introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
     introspectionPath: "/realms/souvap/protocol/openid-connect/token/introspect"

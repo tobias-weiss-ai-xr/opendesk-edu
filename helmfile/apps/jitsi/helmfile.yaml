@@ -8,10 +8,10 @@ repositories:
   # openDesk Jitsi
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-jitsi
   - name: "jitsi-repo"
-    oci: true
+    oci: {{ .Values.charts.jitsi.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.jitsi.verify }}
-    username: "{{ .Values.charts.jitsi.username }}"
+    username: {{ .Values.charts.jitsi.username | quote }}
     password: {{ .Values.charts.jitsi.password | quote }}
     url: "{{ .Values.charts.jitsi.registry }}/{{ .Values.charts.jitsi.repository }}"
 

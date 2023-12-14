@@ -1,18 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-
-portalListener:
-  debugLevel: "4"
-  tlsMode: "off"
-  udmApiUrl: "http://ums-udm-rest-api/udm/"
-  udmApiUsername: "cn=admin"
-  umcGetUrl: "http://ums-umc-server/get"
-  umcSessionUrl: "http://ums-umc-server/get/session-info"
-
-store-dav:
-  bundled: false
-
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:

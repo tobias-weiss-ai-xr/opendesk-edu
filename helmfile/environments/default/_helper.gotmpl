@@ -3,9 +3,8 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
-## Define LDAP service (supports "ums_eval" from the CI pipeline)
 ldap:
-  host: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-server" {{ else }} "univention-corporate-container" {{ end }}
-  notifierHost: {{ if eq (env "DEPLOY_UCS") "ums-eval" }} "ums-ldap-notifier" {{ else }} "univention-corporate-container" {{ end }}
+  host: "ums-ldap-server"
+  notifierHost: "ums-ldap-notifier"
   baseDn: "dc=swp-ldap,dc=internal"
 ...

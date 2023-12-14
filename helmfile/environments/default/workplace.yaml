@@ -41,10 +41,8 @@ postgresql:
   enabled: true
 redis:
   enabled: true
-univentionCorporateServer:
-  enabled: true
 univentionManagementStack:
-  enabled: false
+  enabled: true
 xwiki:
   enabled: true
 ...

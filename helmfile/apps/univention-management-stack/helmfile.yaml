@@ -6,10 +6,72 @@ bases:
 ---
 repositories:
   # Univention Management Stack
-  - name: "ums-repo"
-    url: >-
-      {{ env "PRIVATE_CHART_REPOSITORY_URL" |
-         default "https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable" }}
+  - name: "ums-store-dav-repo"
+    oci: {{ .Values.charts.umsStoreDav.oci }}
+    username: {{ .Values.charts.umsStoreDav.username | quote }}
+    password: {{ .Values.charts.umsStoreDav.password | quote }}
+    url: "{{ .Values.charts.umsStoreDav.registry }}/{{ .Values.charts.umsStoreDav.repository }}"
+  - name: "ums-ldap-server-repo"
+    oci: {{ .Values.charts.umsLdapServer.oci }}
+    username: {{ .Values.charts.umsLdapServer.username | quote }}
+    password: {{ .Values.charts.umsLdapServer.password | quote }}
+    url: "{{ .Values.charts.umsLdapServer.registry }}/{{ .Values.charts.umsLdapServer.repository }}"
+  - name: "ums-ldap-notifier-repo"
+    oci: {{ .Values.charts.umsLdapNotifier.oci }}
+    username: {{ .Values.charts.umsLdapNotifier.username | quote }}
+    password: {{ .Values.charts.umsLdapNotifier.password | quote }}
+    url: "{{ .Values.charts.umsLdapNotifier.registry }}/{{ .Values.charts.umsLdapNotifier.repository }}"
+  - name: "ums-udm-rest-api-repo"
+    oci: {{ .Values.charts.umsUdmRestApi.oci }}
+    username: {{ .Values.charts.umsUdmRestApi.username | quote }}
+    password: {{ .Values.charts.umsUdmRestApi.password | quote }}
+    url: "{{ .Values.charts.umsUdmRestApi.registry }}/{{ .Values.charts.umsUdmRestApi.repository }}"
+  - name: "ums-stack-data-ums-repo"
+    oci: {{ .Values.charts.umsStackDataUms.oci }}
+    username: {{ .Values.charts.umsStackDataUms.username | quote }}
+    password: {{ .Values.charts.umsStackDataUms.password | quote }}
+    url: "{{ .Values.charts.umsStackDataUms.registry }}/{{ .Values.charts.umsStackDataUms.repository }}"
+  - name: "ums-stack-data-swp-repo"
+    oci: {{ .Values.charts.umsStackDataSwp.oci }}
+    username: {{ .Values.charts.umsStackDataSwp.username | quote }}
+    password: {{ .Values.charts.umsStackDataSwp.password | quote }}
+    url: "{{ .Values.charts.umsStackDataSwp.registry }}/{{ .Values.charts.umsStackDataSwp.repository }}"
+  - name: "ums-portal-server-repo"
+    oci: {{ .Values.charts.umsPortalServer.oci }}
+    username: {{ .Values.charts.umsPortalServer.username | quote }}
+    password: {{ .Values.charts.umsPortalServer.password | quote }}
+    url: "{{ .Values.charts.umsPortalServer.registry }}/{{ .Values.charts.umsPortalServer.repository }}"
+  - name: "ums-notifications-api-repo"
+    oci: {{ .Values.charts.umsNotificationsApi.oci }}
+    username: {{ .Values.charts.umsNotificationsApi.username | quote }}
+    password: {{ .Values.charts.umsNotificationsApi.password | quote }}
+    url: "{{ .Values.charts.umsNotificationsApi.registry }}/{{ .Values.charts.umsNotificationsApi.repository }}"
+  - name: "ums-portal-listener-repo"
+    oci: {{ .Values.charts.umsPortalListener.oci }}
+    username: {{ .Values.charts.umsPortalListener.username | quote }}
+    password: {{ .Values.charts.umsPortalListener.password | quote }}
+    url: "{{ .Values.charts.umsPortalListener.registry }}/{{ .Values.charts.umsPortalListener.repository }}"
+  - name: "ums-portal-frontend-repo"
+    oci: {{ .Values.charts.umsPortalFrontend.oci }}
+    username: {{ .Values.charts.umsPortalFrontend.username | quote }}
+    password: {{ .Values.charts.umsPortalFrontend.password | quote }}
+    url: "{{ .Values.charts.umsPortalFrontend.registry }}/{{ .Values.charts.umsPortalFrontend.repository }}"
+  - name: "ums-umc-gateway-repo"
+    oci: {{ .Values.charts.umsUmcGateway.oci }}
+    username: {{ .Values.charts.umsUmcGateway.username | quote }}
+    password: {{ .Values.charts.umsUmcGateway.password | quote }}
+    url: "{{ .Values.charts.umsUmcGateway.registry }}/{{ .Values.charts.umsUmcGateway.repository }}"
+  - name: "ums-umc-server-repo"
+    oci: {{ .Values.charts.umsUmcServer.oci }}
+    username: {{ .Values.charts.umsUmcServer.username | quote }}
+    password: {{ .Values.charts.umsUmcServer.password | quote }}
+    url: "{{ .Values.charts.umsUmcServer.registry }}/{{ .Values.charts.umsUmcServer.repository }}"
+  - name: "ums-selfservice-listener-repo"
+    oci: {{ .Values.charts.umsSelfserviceListener.oci }}
+    username: {{ .Values.charts.umsSelfserviceListener.username | quote }}
+    password: {{ .Values.charts.umsSelfserviceListener.password | quote }}
+    url: "{{ .Values.charts.umsSelfserviceListener.registry }}/{{ .Values.charts.umsSelfserviceListener.repository }}"
+
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
   - name: "nginx-repo"
@@ -30,16 +92,17 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-store-dav"
-    chart: "ums-repo/{{ .Values.charts.umsStoreDav.name }}"
+    chart: "ums-store-dav-repo/{{ .Values.charts.umsStoreDav.name }}"
     version: "{{ .Values.charts.umsStoreDav.version }}"
     values:
       - "values-common.gotmpl"
       - "values-common.yaml"
       - "values-store-dav.gotmpl"
+      - "values-store-dav.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-ldap-server"
-    chart: "ums-repo/{{ .Values.charts.umsLdapServer.name }}"
+    chart: "ums-ldap-server-repo/{{ .Values.charts.umsLdapServer.name }}"
     version: "{{ .Values.charts.umsLdapServer.version }}"
     values:
       - "values-common.gotmpl"
@@ -49,7 +112,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-ldap-notifier"
-    chart: "ums-repo/{{ .Values.charts.umsLdapNotifier.name }}"
+    chart: "ums-ldap-notifier-repo/{{ .Values.charts.umsLdapNotifier.name }}"
     version: "{{ .Values.charts.umsLdapNotifier.version }}"
     values:
       - "values-common.gotmpl"
@@ -59,7 +122,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-udm-rest-api"
-    chart: "ums-repo/{{ .Values.charts.umsUdmRestApi.name }}"
+    chart: "ums-udm-rest-api-repo/{{ .Values.charts.umsUdmRestApi.name }}"
     version: "{{ .Values.charts.umsUdmRestApi.version }}"
     values:
       - "values-common.gotmpl"
@@ -69,7 +132,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-stack-data-ums"
-    chart: "ums-repo/{{ .Values.charts.umsStackDataUms.name }}"
+    chart: "ums-stack-data-ums-repo/{{ .Values.charts.umsStackDataUms.name }}"
     version: "{{ .Values.charts.umsStackDataUms.version }}"
     values:
       - "values-common.gotmpl"
@@ -79,7 +142,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-stack-data-swp"
-    chart: "ums-repo/{{ .Values.charts.umsStackDataSwp.name }}"
+    chart: "ums-stack-data-swp-repo/{{ .Values.charts.umsStackDataSwp.name }}"
     version: "{{ .Values.charts.umsStackDataSwp.version }}"
     values:
       - "values-common.gotmpl"
@@ -89,7 +152,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-portal-server"
-    chart: "ums-repo/{{ .Values.charts.umsPortalServer.name }}"
+    chart: "ums-portal-server-repo/{{ .Values.charts.umsPortalServer.name }}"
     version: "{{ .Values.charts.umsPortalServer.version }}"
     values:
       - "values-common.gotmpl"
@@ -99,7 +162,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-notifications-api"
-    chart: "ums-repo/{{ .Values.charts.umsNotificationsApi.name }}"
+    chart: "ums-notifications-api-repo/{{ .Values.charts.umsNotificationsApi.name }}"
     version: "{{ .Values.charts.umsNotificationsApi.version }}"
     values:
       - "values-common.gotmpl"
@@ -109,7 +172,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-portal-listener"
-    chart: "ums-repo/{{ .Values.charts.umsPortalListener.name }}"
+    chart: "ums-portal-listener-repo/{{ .Values.charts.umsPortalListener.name }}"
     version: "{{ .Values.charts.umsPortalListener.version }}"
     values:
       - "values-common.gotmpl"
@@ -119,7 +182,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-portal-frontend"
-    chart: "ums-repo/{{ .Values.charts.umsPortalFrontend.name }}"
+    chart: "ums-portal-frontend-repo/{{ .Values.charts.umsPortalFrontend.name }}"
     version: "{{ .Values.charts.umsPortalFrontend.version }}"
     values:
       - "values-common.gotmpl"
@@ -129,7 +192,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-umc-gateway"
-    chart: "ums-repo/{{ .Values.charts.umsUmcGateway.name }}"
+    chart: "ums-umc-gateway-repo/{{ .Values.charts.umsUmcGateway.name }}"
     version: "{{ .Values.charts.umsUmcGateway.version }}"
     values:
       - "values-common.gotmpl"
@@ -139,7 +202,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-umc-server"
-    chart: "ums-repo/{{ .Values.charts.umsUmcServer.name }}"
+    chart: "ums-umc-server-repo/{{ .Values.charts.umsUmcServer.name }}"
     version: "{{ .Values.charts.umsUmcServer.version }}"
     values:
       - "values-common.gotmpl"
@@ -149,7 +212,7 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
 
   - name: "ums-selfservice-listener"
-    chart: "ums-repo/{{ .Values.charts.umsSelfserviceListener.name }}"
+    chart: "ums-selfservice-listener-repo/{{ .Values.charts.umsSelfserviceListener.name }}"
     version: "{{ .Values.charts.umsSelfserviceListener.version }}"
     values:
       - "values-common.gotmpl"

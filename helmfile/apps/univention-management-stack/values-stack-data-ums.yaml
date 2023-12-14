@@ -14,4 +14,13 @@ stackDataContext:
 
 additionalAnnotations:
   intents.otterize.com/service-name: "ums-stack-data-ums"
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
 ...

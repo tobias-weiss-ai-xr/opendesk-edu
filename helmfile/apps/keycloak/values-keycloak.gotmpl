@@ -42,7 +42,7 @@ keycloakConfigCli:
     - name: "KEYCLOAK_AVAILABILITYCHECK_TIMEOUT"
       value: "600s"
     - name: "UNIVENTION_CORPORATE_SERVER_DOMAIN"
-      value: "{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+      value: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
     - name: "KEYCLOAK_DOMAIN"
       value: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     - name: "OPENXCHANGE_8_DOMAIN"
@@ -78,7 +78,7 @@ keycloakConfigCli:
     - name: "KEYCLOAK_STORAGEPROVICER_UCSLDAP_NAME"
       value: "storage_provider_ucsldap"
     - name: "LDAPSEARCH_PASSWORD"
-      value: {{ .Values.secrets.univentionCorporateServer.ldapSearch.keycloak | quote }}
+      value: {{ .Values.secrets.univentionManagementStack.ldapSearch.keycloak | quote }}
     - name: "LDAPSEARCH_USERNAME"
       value: "ldapsearch_keycloak"
   resources:

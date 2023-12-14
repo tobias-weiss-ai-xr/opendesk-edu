@@ -8,9 +8,18 @@ stackDataSwp:
 
 stackDataContext:
   ldapBase: "dc=swp-ldap,dc=internal"
-  oxDefaultContext: "10"
+  oxDefaultContext: "1"
   smtpStartTls: true
 
 additionalAnnotations:
   intents.otterize.com/service-name: "ums-stack-data-swp"
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
 ...
