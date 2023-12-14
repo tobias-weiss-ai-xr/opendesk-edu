@@ -7,7 +7,8 @@ bases:
 repositories:
   # OX Connector
   - name: "ox-connector-repo"
-    username: "{{ .Values.charts.oxConnector.username }}"
+    oci: {{ .Values.charts.oxConnector.oci }}
+    username: {{ .Values.charts.oxConnector.username | quote }}
     password: {{ .Values.charts.oxConnector.password | quote }}
     url: "{{ .Values.charts.oxConnector.registry }}/{{ .Values.charts.oxConnector.repository }}"
 

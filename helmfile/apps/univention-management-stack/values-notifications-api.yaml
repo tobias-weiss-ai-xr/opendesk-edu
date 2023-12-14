@@ -9,4 +9,12 @@ notificationsapi:
   sql_echo: "False"
   api_prefix: "/univention/portal/notifications-api"
 
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
 ...

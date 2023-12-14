@@ -8,7 +8,6 @@ helmfiles:
   # Path to the helmfile state file being processed BEFORE releases in this state file
   - path: "helmfile/apps/services/helmfile.yaml"
   - path: "helmfile/apps/keycloak/helmfile.yaml"
-  - path: "helmfile/apps/univention-corporate-container/helmfile.yaml"
   - path: "helmfile/apps/univention-management-stack/helmfile.yaml"
   - path: "helmfile/apps/keycloak-bootstrap/helmfile.yaml"
   - path: "helmfile/apps/intercom-service/helmfile.yaml"

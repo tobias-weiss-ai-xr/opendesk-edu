@@ -56,14 +56,11 @@ variables:
     options:
       - "yes"
       - "no"
-  DEPLOY_UCS:
-    description: >-
-      Enable Univention Corporate Server deployment.
-      "ums-eval" does deploy the Univention Management Stack instead of the UCS container.
+  DEPLOY_UMS:
+    description: "Enable Univention Management Stack deployment."
     value: "no"
     options:
       - "yes"
-      - "ums-eval"
       - "no"
   DEPLOY_PROVISIONING:
     description: "Enable Provisioning Components."
@@ -154,7 +151,8 @@ variables:
   cache: {}
   dependencies: []
   extends: ".environments"
-  image: "registry.souvap-univention.de/souvap/tooling/images/helm:latest"
+  image: "external-registry.souvap-univention.de/registry-souvap-univention-de/souvap/tooling/images/helm\
+          @sha256:5a53455af45f4af5c97a01ee2dd5f9ef683f365b59f1ab0102505bc0fd37f6c5"
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
@@ -233,18 +231,6 @@ services-deploy:
   variables:
     COMPONENT: "services"
 
-ucs-deploy:
-  stage: "component-deploy-stage-1"
-  extends: ".deploy-common"
-  rules:
-    - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
-          $NAMESPACE =~ /.+/ &&
-          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS == "yes")
-      when: "always"
-  variables:
-    COMPONENT: "univention-corporate-container"
-
 provisioning-deploy:
   stage: "component-deploy-stage-2"
   extends: ".deploy-common"
@@ -252,7 +238,7 @@ provisioning-deploy:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
-          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UCS != "no" || $DEPLOY_PROVISIONING != "no")
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no" || $DEPLOY_PROVISIONING != "no")
       when: "always"
   variables:
     COMPONENT: "provisioning"
@@ -264,7 +250,7 @@ ums-deploy:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
-          $DEPLOY_UCS == "ums-eval"
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no")
       when: "always"
   variables:
     COMPONENT: "univention-management-stack"
@@ -434,6 +420,19 @@ env-stop:
   variables:
     GIT_STRATEGY: "none"
 
+.ums-default-password: &ums-default-password
+  - |
+    UMS_PASSWORDS=$( \
+      kubectl -n ${NAMESPACE} get cm ums-stack-data-swp-data -o jsonpath='{.data.dev-test-users\.yaml}' \
+      | yq '.properties.password' > passwords.txt \
+    )
+    DEFAULT_USER_PASSWORD=$( \
+      awk 'NR==1{print $1}' passwords.txt \
+    )
+    DEFAULT_ADMIN_PASSWORD=$(
+      awk 'NR==3{print $1}' passwords.txt \
+    )
+
 run-tests:
   extends: ".deploy-common"
   environment:
@@ -444,24 +443,8 @@ run-tests:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
       when: "always"
   script:
+    - *ums-default-password
     - |
-      UCS_CONTAINER_NAME=$( \
-        kubectl -n ${NAMESPACE} get pods --no-headers --selector \
-          'app.kubernetes.io/instance=univention-corporate-container' \
-        | grep Running \
-        | awk '{print $1}' \
-      )
-      DEFAULT_USER_PASSWORD=$( \
-        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
-        | grep DEFAULT_ACCOUNT_USER_PASSWORD \
-        | awk '{print $2}' \
-      )
-      DEFAULT_ADMIN_PASSWORD=$(
-        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
-        | grep DEFAULT_ACCOUNT_ADMIN_PASSWORD \
-        | awk '{print $2}' \
-      )
-
       curl --request POST \
       --header "Content-Type: application/json" \
       --data "{ \
@@ -483,7 +466,7 @@ run-tests:
           \"DEPLOY_OPENPROJECT\": \"${DEPLOY_OPENPROJECT}\", \
           \"DEPLOY_OX\": \"${DEPLOY_OX}\", \
           \"DEPLOY_SERVICES\": \"${DEPLOY_SERVICES}\", \
-          \"DEPLOY_UCS\": \"${DEPLOY_UCS}\", \
+          \"DEPLOY_UCS\": \"${DEPLOY_UMS}\", \
           \"DEPLOY_XWIKI\": \"${DEPLOY_XWIKI}\", \
           \"DEPLOY_PROVISIONING\": \"${DEPLOY_PROVISIONING}\" \
         } \
@@ -500,24 +483,8 @@ run-souvap-dev-tests:
         $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_UMS_TESTS == "yes"
       when: "always"
   script:
+    - *ums-default-password
     - |
-      UCS_CONTAINER_NAME=$( \
-        kubectl -n ${NAMESPACE} get pods --no-headers --selector \
-          'app.kubernetes.io/instance=univention-corporate-container' \
-        | grep Running \
-        | awk '{print $1}' \
-      )
-      DEFAULT_USER_PASSWORD=$( \
-        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
-        | grep DEFAULT_ACCOUNT_USER_PASSWORD \
-        | awk '{print $2}' \
-      )
-      DEFAULT_ADMIN_PASSWORD=$(
-        kubectl -n ${NAMESPACE} describe pod ${UCS_CONTAINER_NAME} \
-        | grep DEFAULT_ACCOUNT_ADMIN_PASSWORD \
-        | awk '{print $2}' \
-      )
-
       curl --request POST \
       --header "Content-Type: application/json" \
       --data "{ \
@@ -569,6 +536,14 @@ generate-release-assets:
 .common-semantic-release:
   image: "registry.souvap-univention.de/souvap/tooling/images/semantic-release-patched:latest"
   tags: []
+
+
+conventional-commits-linter:
+  rules:
+    - if: "$JOB_CONVENTIONAL_COMMITS_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
+      when: "never"
+    - when: "always"
+
 
 common-yaml-linter:
   rules:

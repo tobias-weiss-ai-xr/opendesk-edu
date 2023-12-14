@@ -22,7 +22,7 @@ customConfigs:
     xwiki.authentication.ldap.port: 389
     ## Authentication to the LDAP server
     xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
-    xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.univentionCorporateServer.ldapSearch.xwiki | quote }}
+    xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.univentionManagementStack.ldapSearch.xwiki | quote }}
     ## Base DN used for searching for users
     xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
     ## Allow short update cycles of the LDAP group cache
@@ -35,8 +35,8 @@ customConfigs:
     "oidc.endpoint.logout": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
     "oidc.secret": {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
     "url.trustedDomains": "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
-    "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
-    "workplaceServices.base": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+    "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
+    "workplaceServices.base": "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
     "workplaceServices.portalSecret": {{ .Values.secrets.centralnavigation.apiKey | quote }}
 
 properties:

@@ -26,7 +26,6 @@ global:
     openxchange: "webmail"
     openxchangeProvisioning: "ox-provisioning"
     synapse: "matrix"
-    univentionCorporateServer: "portal"
     univentionManagementStack: "portal"
     whiteboard: "whiteboard"
     xwiki: "wiki"

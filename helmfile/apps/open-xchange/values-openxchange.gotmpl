@@ -81,21 +81,21 @@ appsuite:
       "com.openexchange.oidc.clientSecret": {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
       "com.openexchange.oidc.rpRedirectURIPostSSOLogout": "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/appsuite/api/oidc/logout"
       "com.openexchange.oidc.opLogoutEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
-      "com.openexchange.oidc.rpRedirectURILogout": "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+      "com.openexchange.oidc.rpRedirectURILogout": "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
     secretProperties:
       com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppsuite.cookieHashSalt | quote }}
       com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppsuite.sessiondEncryptionKey | quote }}
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppsuite.shareCryptKey | quote }}
     propertiesFiles:
       "/opt/open-xchange/etc/ldapauth.properties":
-        bindDNPassword: {{ .Values.secrets.univentionCorporateServer.ldapSearch.ox | quote }}
+        bindDNPassword: {{ .Values.secrets.univentionManagementStack.ldapSearch.ox | quote }}
         java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/dc=swp-ldap,dc=internal"
     uiSettings:
       "io.ox.nextcloud//server": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
       "io.ox.public-sector//ics/url": "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
       # Dynamic theme
       io.ox/dynamic-theme//mainColor: {{ .Values.theme.colors.primary | quote }}
-      io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
+      io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
       io.ox/dynamic-theme//topbarBackground: {{ .Values.theme.colors.white | quote }}
       io.ox/dynamic-theme//topbarColor: {{ .Values.theme.colors.black | quote }}
       io.ox/dynamic-theme//listSelected: {{ .Values.theme.colors.primary15 | quote }}

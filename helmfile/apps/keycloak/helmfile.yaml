@@ -8,26 +8,27 @@ repositories:
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
   - name: "keycloak-repo"
-    oci: true
+    oci: {{ .Values.charts.keycloak.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.keycloak.verify }}
-    username: "{{ .Values.charts.keycloak.username }}"
+    username: {{ .Values.charts.keycloak.username | quote }}
     password: {{ .Values.charts.keycloak.password | quote }}
     url: "{{ .Values.charts.keycloak.registry }}/{{ .Values.charts.keycloak.repository }}"
 
   # openDesk Keycloak Theme
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-keycloak-theme
   - name: "keycloak-theme-repo"
-    oci: true
+    oci: {{ .Values.charts.keycloakTheme.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.keycloakTheme.verify }}
-    username: "{{ .Values.charts.keycloakTheme.username }}"
+    username: {{ .Values.charts.keycloakTheme.username | quote }}
     password: {{ .Values.charts.keycloakTheme.password | quote }}
     url: "{{ .Values.charts.keycloakTheme.registry }}/{{ .Values.charts.keycloakTheme.repository }}"
 
   # openDesk Keycloak Extensions
   - name: "keycloak-extensions-repo"
-    username: "{{ .Values.charts.keycloakExtensions.username }}"
+    oci: {{ .Values.charts.keycloakExtensions.oci }}
+    username: {{ .Values.charts.keycloakExtensions.username | quote }}
     password: {{ .Values.charts.keycloakExtensions.password | quote }}
     url: "{{ .Values.charts.keycloakExtensions.registry }}/{{ .Values.charts.keycloakExtensions.repository }}"
 

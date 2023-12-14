@@ -20,4 +20,25 @@ extraVolumeMounts:
       "/usr/share/univention-management-console-frontend/js/dijit/themes\
       /umc/icons/16x16/udm-portals-announcement.png"
     subPath: "udm-portals-announcement.png"
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
 ...

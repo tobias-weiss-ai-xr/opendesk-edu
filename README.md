@@ -48,7 +48,6 @@ While most components support upgrades, major configuration or component changes
 at the moment always installing from scratch.
 
 Components that are going to be replaced soon are:
-- the UCS dev container monolith will be substituted by multiple Univention Management Stack containers,
 - the Nextcloud community container is going to be replaced by an openDesk specific Nextcloud distroless container and
 - Dovecot Community is going to be replaced by a Dovecot container tailored for the needs of the public sector.
 

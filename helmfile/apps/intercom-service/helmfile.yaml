@@ -8,10 +8,10 @@ repositories:
   # Intercom Service
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/intercom-service
   - name: "intercom-service-repo"
-    oci: true
+    oci: {{ .Values.charts.intercomService.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.intercomService.verify }}
-    username: "{{ .Values.charts.intercomService.username }}"
+    username: {{ .Values.charts.intercomService.username | quote }}
     password: {{ .Values.charts.intercomService.password | quote }}
     url: "{{ .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
 

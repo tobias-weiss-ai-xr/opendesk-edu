@@ -19,7 +19,6 @@ persistence:
     prosody: "1Gi"
     redis: "1Gi"
     synapse: "1Gi"
-    univentionCorporateServer: "1Gi"
     univentionManagementStack:
       ldapServerData: "1Gi"
       ldapServerShared: "1Gi"

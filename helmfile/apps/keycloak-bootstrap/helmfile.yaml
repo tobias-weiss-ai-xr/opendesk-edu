@@ -8,10 +8,10 @@ repositories:
   # openDesk Keycloak Bootstrap
   # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-keycloak-bootstrap
   - name: "opendesk-keycloak-bootstrap-repo"
-    oci: true
+    oci: {{ .Values.charts.keycloakBootstrap.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.keycloakBootstrap.verify }}
-    username: "{{ .Values.charts.keycloakBootstrap.username }}"
+    username: {{ .Values.charts.keycloakBootstrap.username | quote }}
     password: {{ .Values.charts.keycloakBootstrap.password | quote }}
     url: "{{ .Values.charts.keycloakBootstrap.registry }}/{{ .Values.charts.keycloakBootstrap.repository }}"
 

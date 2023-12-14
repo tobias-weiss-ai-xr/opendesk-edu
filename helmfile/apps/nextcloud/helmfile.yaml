@@ -6,20 +6,20 @@ bases:
 ---
 repositories:
   # openDesk Keycloak Bootstrap
-  # Source:
-  #  https://gitlab.opencode.de/bmi/opendesk/components/charts/sovereign-workplace-nextcloud-bootstrap
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/sovereign-workplace-nextcloud-bootstrap
   - name: "nextcloud-bootstrap-repo"
-    oci: true
+    oci: {{ .Values.charts.nextcloudBootstrap.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.nextcloudBootstrap.verify }}
-    username: "{{ .Values.charts.nextcloudBootstrap.username }}"
+    username: {{ .Values.charts.nextcloudBootstrap.username | quote }}
     password: {{ .Values.charts.nextcloudBootstrap.password | quote }}
     url: "{{ .Values.charts.nextcloudBootstrap.registry }}/{{ .Values.charts.nextcloudBootstrap.repository }}"
 
   # Nextcloud
   # Source: https://github.com/nextcloud/helm/
   - name: "nextcloud-repo"
-    username: "{{ .Values.charts.nextcloud.username }}"
+    oci: {{ .Values.charts.nextcloud.oci }}
+    username: {{ .Values.charts.nextcloud.username | quote }}
     password: {{ .Values.charts.nextcloud.password | quote }}
     url: "{{ .Values.charts.nextcloud.registry }}/{{ .Values.charts.nextcloud.repository }}"
 

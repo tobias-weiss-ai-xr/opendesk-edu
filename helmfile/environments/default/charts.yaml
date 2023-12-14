@@ -11,6 +11,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-certificates"
     name: "opendesk-certificates"
+    oci: true
     version: "2.1.0"
     verify: true
     username: ~
@@ -25,6 +26,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/clamav"
     name: "opendesk-clamav"
+    oci: true
     version: "4.0.0"
     verify: true
     username: ~
@@ -40,6 +42,7 @@ charts:
     repository: "sovereign-workplace/souvap/tooling/charts/clamav"
     name: "clamav-simple"
     version: "4.0.0"
+    oci: true
     verify: true
     username: ~
     password: ~
@@ -53,6 +56,7 @@ charts:
     registry: "https://collaboraonline.github.io"
     repository: "online"
     name: "collabora-online"
+    oci: false
     version: "1.0.2"
     username: ~
     password: ~
@@ -66,6 +70,7 @@ charts:
     registry: "https://cryptpad.github.io"
     repository: "helm"
     name: "cryptpad"
+    oci: false
     version: "0.0.14"
     username: ~
     password: ~
@@ -79,6 +84,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/dovecot"
     name: "dovecot"
+    oci: true
     version: "1.3.6"
     verify: true
     username: ~
@@ -93,6 +99,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
     name: "opendesk-element"
+    oci: true
     version: "2.6.0"
     verify: true
     username: ~
@@ -107,6 +114,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
     name: "opendesk-well-known"
+    oci: true
     version: "2.6.0"
     verify: true
     username: ~
@@ -121,6 +129,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/intercom-service"
     name: "intercom-service"
+    oci: true
     version: "2.0.1"
     verify: true
     username: ~
@@ -135,6 +144,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/istio-ressources"
     name: "istio-gateway"
+    oci: true
     version: "2.0.0"
     verify: true
     username: ~
@@ -149,6 +159,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-jitsi"
     name: "sovereign-workplace-jitsi"
+    oci: true
     version: "1.7.2"
     verify: true
     username: ~
@@ -163,6 +174,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
     name: "keycloak"
+    oci: true
     version: "12.1.5"
     verify: true
     username: ~
@@ -177,6 +189,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-keycloak-bootstrap"
     name: "sovereign-workplace-keycloak-bootstrap"
+    oci: true
     version: "1.1.12"
     verify: true
     username: ~
@@ -191,6 +204,7 @@ charts:
     registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/77/packages/helm/stable"
     name: "keycloak-extensions"
+    oci: false
     version: "0.1.0"
     username: ~
     password: ~
@@ -204,6 +218,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/keycloak-theme"
     name: "opendesk-keycloak-theme"
+    oci: true
     version: "2.0.0"
     verify: true
     username: ~
@@ -218,6 +233,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/charts/opendesk-mariadb"
     name: "mariadb"
+    oci: true
     version: "2.2.0"
     verify: true
     username: ~
@@ -232,6 +248,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
     name: "matrix-neoboard-widget"
+    oci: true
     version: "3.3.0"
     verify: true
     username: ~
@@ -246,6 +263,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
     name: "matrix-neochoice-widget"
+    oci: true
     version: "3.3.0"
     verify: true
     username: ~
@@ -260,6 +278,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-bot"
+    oci: true
     version: "3.3.0"
     verify: true
     username: ~
@@ -274,6 +293,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-widget"
+    oci: true
     version: "3.3.0"
     verify: true
     username: ~
@@ -288,6 +308,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
     name: "opendesk-matrix-user-verification-service"
+    oci: true
     version: "2.6.0"
     verify: true
     username: ~
@@ -302,6 +323,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
     name: "memcached"
+    oci: true
     version: "6.6.2"
     verify: true
     username: ~
@@ -316,6 +338,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
     name: "minio"
+    oci: true
     version: "12.8.19"
     verify: true
     username: ~
@@ -329,6 +352,7 @@ charts:
     # dependencyType=vendor
     registry: "https://nextcloud.github.io"
     repository: "helm"
+    oci: false
     name: "nextcloud"
     version: "3.5.19"
     username: ~
@@ -343,6 +367,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap"
     name: "opendesk-nextcloud-bootstrap"
+    oci: true
     version: "3.2.6"
     verify: true
     username: ~
@@ -357,6 +382,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
     name: "nginx"
+    oci: true
     version: "15.3.5"
     verify: true
     username: ~
@@ -371,6 +397,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/opf/helm-charts"
     name: "openproject"
+    oci: true
     version: "3.0.2"
     verify: true
     username: ~
@@ -385,6 +412,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/opendesk-openproject-bootstrap"
     name: "opendesk-openproject-bootstrap"
+    oci: true
     version: "1.2.1"
     verify: true
     username: ~
@@ -399,6 +427,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/appsuite-public-sector/charts"
     name: "appsuite-public-sector"
+    oci: true
     version: "2.2.34"
     username: ~
     password: ~
@@ -412,6 +441,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-open-xchange-bootstrap"
     name: "sovereign-workplace-open-xchange-bootstrap"
+    oci: true
     version: "1.3.1"
     verify: true
     username: ~
@@ -426,7 +456,8 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "1.1.5"
+    oci: true
+    version: "1.1.6"
     verify: true
     username: ~
     password: ~
@@ -440,6 +471,7 @@ charts:
     registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/128/packages/helm/stable"
     name: "ox-connector"
+    oci: false
     version: "0.1.0-pre-jconde-listener-entrypoint-chaining"
     username: ~
     password: ~
@@ -453,6 +485,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/postfix"
     name: "postfix"
+    oci: true
     version: "2.0.4"
     verify: true
     username: ~
@@ -467,6 +500,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/postgresql"
     name: "postgresql"
+    oci: true
     version: "2.0.3"
     verify: true
     username: ~
@@ -481,6 +515,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
     name: "redis"
+    oci: true
     version: "18.1.2"
     verify: true
     username: ~
@@ -495,6 +530,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
     name: "opendesk-synapse"
+    oci: true
     version: "2.6.0"
     verify: true
     username: ~
@@ -509,6 +545,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
     name: "opendesk-synapse-create-account"
+    oci: true
     version: "2.6.0"
     verify: true
     username: ~
@@ -523,6 +560,7 @@ charts:
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
     name: "opendesk-synapse-web"
+    oci: true
     version: "2.6.0"
     verify: true
     username: ~
@@ -534,9 +572,10 @@ charts:
     # packageName=ldap-notifier
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "ldap-notifier"
+    oci: false
     version: "0.7.0"
     username: ~
     password: ~
@@ -547,9 +586,10 @@ charts:
     # packageName=ldap-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "ldap-server"
+    oci: false
     version: "0.7.0"
     username: ~
     password: ~
@@ -560,9 +600,10 @@ charts:
     # packageName=notifications-api
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "notifications-api"
+    oci: false
     version: "0.9.1"
     username: ~
     password: ~
@@ -573,9 +614,10 @@ charts:
     # packageName=portal-frontend
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "portal-frontend"
+    oci: false
     version: "0.9.1"
     username: ~
     password: ~
@@ -586,9 +628,10 @@ charts:
     # packageName=portal-listener
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "portal-listener"
+    oci: false
     version: "0.9.1"
     username: ~
     password: ~
@@ -599,9 +642,10 @@ charts:
     # packageName=portal-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "portal-server"
+    oci: false
     version: "0.9.1"
     username: ~
     password: ~
@@ -612,9 +656,10 @@ charts:
     # packageName=umc-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "selfservice-listener"
+    oci: false
     version: "0.2.0"
     username: ~
     password: ~
@@ -625,9 +670,10 @@ charts:
     # packageName=stack-data-swp
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "stack-data-swp"
+    oci: false
     version: "0.39.3"
     username: ~
     password: ~
@@ -638,9 +684,10 @@ charts:
     # packageName=stack-data-ums
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "stack-data-ums"
+    oci: false
     version: "0.39.3"
     username: ~
     password: ~
@@ -651,9 +698,10 @@ charts:
     # packageName=store-dav
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "store-dav"
+    oci: false
     version: "0.9.1"
     username: ~
     password: ~
@@ -664,9 +712,10 @@ charts:
     # packageName=udm-rest-api
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "udm-rest-api"
+    oci: false
     version: "0.4.1"
     username: ~
     password: ~
@@ -677,9 +726,10 @@ charts:
     # packageName=umc-gateway
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "umc-gateway"
+    oci: false
     version: "0.6.2"
     username: ~
     password: ~
@@ -690,24 +740,11 @@ charts:
     # packageName=umc-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "gitlab.souvap-univention.de"
+    registry: "https://gitlab.souvap-univention.de"
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "umc-server"
+    oci: false
     version: "0.6.2"
-    username: ~
-    password: ~
-
-  univentionCorporateServer:
-    # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/univention-corporate-container/univention-corporate-container
-    # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention-corporate-container"
-    name: "univention-corporate-container"
-    version: "1.0.10"
-    verify: true
     username: ~
     password: ~
 
@@ -719,9 +756,9 @@ charts:
     # dependencyType=vendor
     registry: "https://xwiki-contrib.github.io"
     repository: "xwiki-helm"
+    oci: false
     name: "xwiki"
     version: "1.2.3"
-    verify: true
     username: ~
     password: ~
 ...

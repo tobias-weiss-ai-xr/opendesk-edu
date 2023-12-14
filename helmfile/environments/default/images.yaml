@@ -382,13 +382,6 @@ images:
     repository: "rapidfort/haproxy-official"
     tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
     # @supplier: "Element"
-  univentionCorporateServer:
-    # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # dependencyType=vendor
-    repository: "souvap/tooling/images/univention-corporate-server-swp/ucs"
-    tag: "20230829T094822@sha256:6415847851ee3b474cea756212698f4a110fbbde74882e22da92500a6358a4f8"
-    # @supplier: "Univention"
   umsConfigHtpasswd:
     # renovate:
     # registryUrl=https://registry.souvap-univention.de

@@ -8,10 +8,10 @@ repositories:
   # openDesk OpenProject Bootstrap
   # Source: Set when repo is managed on Open CoDE
   - name: "openproject-bootstrap-repo"
-    oci: true
+    oci: {{ .Values.charts.openprojectBootstrap.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.openprojectBootstrap.verify }}
-    username: "{{ .Values.charts.openprojectBootstrap.username }}"
+    username: {{ .Values.charts.openprojectBootstrap.username | quote }}
     password: {{ .Values.charts.openprojectBootstrap.password | quote }}
     url: "{{ .Values.charts.openprojectBootstrap.registry }}/{{ .Values.charts.openprojectBootstrap.repository }}"
 

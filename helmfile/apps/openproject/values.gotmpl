@@ -67,7 +67,7 @@ environment:
   OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.ldap.host | quote }}
   OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
   OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey | quote }}
-  OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.univentionCorporateServer }}.{{ .Values.global.domain }}"
+  OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.domain | quote }}
   OPENPROJECT_SMTP__USER__NAME: {{ .Values.smtp.username | quote }}
   OPENPROJECT_SMTP__PASSWORD: {{ .Values.smtp.password | quote }}
@@ -76,7 +76,7 @@ environment:
   OPENPROJECT_SMTP__ADDRESS: {{ .Values.smtp.host | quote }}
   OPENPROJECT_MAIL__FROM: "do-not-reply@{{ .Values.global.domain }}"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
-  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.univentionCorporateServer.ldapSearch.openproject | quote }}
+  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.univentionManagementStack.ldapSearch.openproject | quote }}
   {{ if ne .Values.objectstores.openproject.backend "aws" }}
   OPENPROJECT_FOG_CREDENTIALS_ENDPOINT: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
   OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE: "true"

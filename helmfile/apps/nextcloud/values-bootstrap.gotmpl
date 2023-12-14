@@ -37,7 +37,7 @@ config:
 
   ldapSearch:
     host: {{ .Values.ldap.host | quote }}
-    password: {{ .Values.secrets.univentionCorporateServer.ldapSearch.nextcloud | quote }}
+    password: {{ .Values.secrets.univentionManagementStack.ldapSearch.nextcloud | quote }}
 
   serverinfo:
     token: {{ .Values.secrets.nextcloud.metricsToken | quote }}

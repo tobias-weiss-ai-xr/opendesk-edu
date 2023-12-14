@@ -8,7 +8,7 @@ stackDataSwp:
 
 stackDataContext:
   ldapSearchUsers:
-    {{- range $username, $password := .Values.secrets.univentionCorporateServer.ldapSearch }}
+    {{- range $username, $password := .Values.secrets.univentionManagementStack.ldapSearch }}
     - username: {{ printf "ldapsearch_%s" $username | quote }}
       password: {{ $password | quote }}
       lastname: "LDAP-Search-User"
@@ -23,6 +23,8 @@ stackDataContext:
   portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain | quote }}
   portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain | quote }}
   portalManagementKnowledgeLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.xwiki .Values.global.domain | quote }}
+  portalTitleDE: "{{ .Values.theme.texts.productName }} Portal"
+  portalTitleEN: "{{ .Values.theme.texts.productName }} Portal"
 
   smtpHost: {{ .Values.smtp.host | quote }}
   smtpPort: {{ .Values.smtp.port | quote }}

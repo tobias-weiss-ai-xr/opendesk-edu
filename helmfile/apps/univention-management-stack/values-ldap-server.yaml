@@ -30,4 +30,25 @@ extraVolumeMounts:
     mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskProjectmanagement.schema"
     subPath: "opendeskProjectmanagement.schema"
 
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
 ...
