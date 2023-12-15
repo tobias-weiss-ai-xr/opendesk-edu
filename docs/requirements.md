@@ -7,17 +7,17 @@ SPDX-License-Identifier: Apache-2.0
 This section covers the internal system requirements as well as external service requirements for productive use.
 
 <!-- TOC -->
-  * [TL;DR;](#tldr)
-  * [Hardware](#hardware)
-  * [Kubernetes](#kubernetes)
-  * [Ingress controller](#ingress-controller)
-  * [Volume provisioner](#volume-provisioner)
-  * [Certificate management](#certificate-management)
-  * [External services](#external-services)
-  * [Deployment](#deployment)
+* [TL;DR;](#tldr)
+* [Hardware](#hardware)
+* [Kubernetes](#kubernetes)
+* [Ingress controller](#ingress-controller)
+* [Volume provisioner](#volume-provisioner)
+* [Certificate management](#certificate-management)
+* [External services](#external-services)
+* [Deployment](#deployment)
 <!-- TOC -->
 
-## TL;DR;
+# TL;DR;
 openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s) cluster.
 
 - K8s cluster >= 1.24, [CNCF Certified Kubernetes Distro](https://www.cncf.io/certification/software-conformance/)
@@ -30,7 +30,7 @@ openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
 - [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8
 
-## Hardware
+# Hardware
 
 The following minimal requirements are thought for initial evaluation deployment:
 
@@ -40,7 +40,7 @@ The following minimal requirements are thought for initial evaluation deployment
 | RAM  | 16 GB, recommended 32 GB                             |
 | Disk | HDD or SSD, >10 GB                                   |
 
-## Kubernetes
+# Kubernetes
 
 Any self-hosted or managed K8s cluster >= 1.24 listed in
 [CNCF Certified Kubernetes Distros](https://www.cncf.io/certification/software-conformance/) should be supported.
@@ -49,7 +49,7 @@ The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/
 
 > **Note:** The deployment is not tested against OpenShift.
 
-## Ingress controller
+# Ingress controller
 
 The deployment is intended to use only over HTTPS via a configured FQDN, therefor it is required to have a proper
 configured ingress controller deployed.
@@ -63,14 +63,14 @@ configured ingress controller deployed.
 
 When you want to use Open-Xchange Appsuite 8, you need to deploy and configure additionally [Istio](https://istio.io/)
 
-## Volume provisioner
+# Volume provisioner
 
 Initial evaluation deployment requires a `ReadWriteOnce` volume provisioner. For local deployment a local- or hostPath-
 provisioner is sufficient.
 
 > **Note:** Some components requiring a `ReadWriteMany` volume provisioner for distributed mode or scaling.
 
-## Certificate management
+# Certificate management
 
 This deployment leverages [cert-manager](https://cert-manager.io/) to generate valid certificates. This is **optional**,
 but a secret containing a valid TLS certificate is required.
@@ -78,16 +78,16 @@ but a secret containing a valid TLS certificate is required.
 Only `Certificate` resources will be deployed, the `cert-manager` including its CRD must be installed prior to this or
 openDesk certificate management disabled.
 
-## External services
+# External services
 
 Evaluation the openDesk deployment does not require any external service to start, but features may be limited.
 
 
-| Group    | Type                | Version | Tested against        | 
-|----------|---------------------|---------|-----------------------| 
-| Cache    | Memached            | `1.6.x` | Memached              | 
-|          | Redis               | `7.x.x` | Redis                 | 
-| Database | MariaDB             | `10.x`  | MariaDB               | 
+| Group    | Type                | Version | Tested against        |
+|----------|---------------------|---------|-----------------------|
+| Cache    | Memached            | `1.6.x` | Memached              |
+|          | Redis               | `7.x.x` | Redis                 |
+| Database | MariaDB             | `10.x`  | MariaDB               |
 |          | PostgreSQL          | `15.x`  | PostgreSQL            |
 | Mail     | Mail Transfer Agent |         | Postfix               |
 |          | PKI/CI (SMIME)      |         |                       |
@@ -97,7 +97,7 @@ Evaluation the openDesk deployment does not require any external service to star
 |          | Object Storage      |         | MinIO                 |
 | Voice    | TURN                |         | Coturn                |
 
-## Deployment
+# Deployment
 
 The deployment of each individual component is [Helm](https://helm.sh/) based. The 35+ Helm charts are configured and
 templated via [Helmfile](https://helmfile.readthedocs.io/en/latest/) to provide a streamlined deployment experience.

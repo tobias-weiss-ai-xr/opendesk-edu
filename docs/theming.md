@@ -8,13 +8,13 @@ SPDX-License-Identifier: Apache-2.0
 This document will cover the theming and customization of your openDesk deployment.
 
 <!-- TOC -->
-  * [Strings and texts](#strings-and-texts)
-  * [Colors](#colors)
+* [Strings and texts](#strings-and-texts)
+* [Colors](#colors)
   * [Images and Logos](#images-and-logos)
-  * [Known limits](#known-limits)
+* [Known limits](#known-limits)
 <!-- TOC -->
 
-## Strings and texts
+# Strings and texts
 
 The deployment name can be changed by:
 
@@ -24,7 +24,7 @@ theme:
     productName: "openDesk Cloud"
 ```
 
-## Colors
+# Colors
 
 The primary color and their derivates with lesser opacity be customized by:
 
@@ -50,10 +50,10 @@ theme:
     faviconIco: "..."
 ```
 
-## Known limits
+# Known limits
 
 Not all applications support theming. Known exceptions are:
-  - Univention Corporate Container (should be superseded by the Univention Management Stack which has planned support 
+  - Univention Corporate Container (should be superseded by the Univention Management Stack which has planned support
     for theming through the deployment).
   - OpenProject
   - Jitsi

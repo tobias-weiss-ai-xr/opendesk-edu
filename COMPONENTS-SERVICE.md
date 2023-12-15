@@ -21,7 +21,9 @@ This services is used by:
 ## Database - PostgreSQL
 
 This services is used by:
-- Keycloak
+- Univention Management Stack
+  - Self Service
+  - Keycloak
 - OpenProject
 
 ## Redis
@@ -33,11 +35,12 @@ This service is used by:
 ## Postfix
 
 This service is used by:
-- Keycloak (e.g. new device login notification)
 - Nextcloud (e.g. share file notifictions)
 - Open-Xchange (emails)
 - OpenProject (general notifications)
-- UMS (e.g. password reset emails)
+- Univention Management Stack
+  - Self Service (e.g. password reset emails)
+  - Keycloak (e.g. new device login notification)
 - XWiki (e.g. change notifications)
 
 ## TURN Server

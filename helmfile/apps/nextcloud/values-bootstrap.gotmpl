@@ -28,6 +28,7 @@ config:
       password: {{ .Values.secrets.centralnavigation.apiKey | quote }}
     userOidc:
       password: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
+      realm: {{ .Values.platform.realm }}
 
   database:
     host: {{ .Values.databases.nextcloud.host | quote }}

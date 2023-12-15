@@ -22,11 +22,8 @@ openproject:
   oidc:
     enabled: true
     provider: "keycloak"
-    identifier: "openproject"
-    authorizationEndpoint: "/realms/souvap/protocol/openid-connect/auth"
-    tokenEndpoint: "/realms/souvap/protocol/openid-connect/token"
-    userinfoEndpoint: "/realms/souvap/protocol/openid-connect/userinfo"
-    scope: "[openid,phoenix]"
+    identifier: "opendesk-openproject"
+    scope: "[openid,opendesk]"
   # seed will only be executed on initial installation
   seed_locale: "de"
 
@@ -53,7 +50,7 @@ s3:
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/
 environment:
   OPENPROJECT_LOG__LEVEL: "info"
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_LOGIN: "phoenixusername"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_LOGIN: "opendesk_username"
   OPENPROJECT_LOGIN__REQUIRED: "true"
   OPENPROJECT_OAUTH__ALLOW__REMAPPING__OF__EXISTING__USERS: "true"
   OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER: "keycloak"

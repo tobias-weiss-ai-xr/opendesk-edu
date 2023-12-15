@@ -46,7 +46,10 @@ openproject:
     mail: "openproject-admin@swp-domain.internal"
     password_reset: "false"
     password: {{ .Values.secrets.openproject.adminPassword | quote }}
-
+  oidc:
+    authorizationEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
+    tokenEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
+    userinfoEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/userinfo"
 ingress:
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.ingress.enabled }}
@@ -56,13 +59,13 @@ ingress:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 environment:
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_SECRET: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
   OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_USER: {{ .Values.secrets.openproject.apiAdminUsername | quote }}
   OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_PASSWORD: {{ .Values.secrets.openproject.apiAdminPassword | quote }}
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_SECRET: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_HOST: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_END__SESSION__ENDPOINT: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_END__SESSION__ENDPOINT: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
   OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.ldap.host | quote }}
   OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"

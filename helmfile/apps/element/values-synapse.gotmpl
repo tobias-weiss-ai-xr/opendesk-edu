@@ -38,7 +38,7 @@ configuration:
 
     oidc:
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}
-      issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+      issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
 
     turn:
       sharedSecret: {{ .Values.turn.credentials | quote }}

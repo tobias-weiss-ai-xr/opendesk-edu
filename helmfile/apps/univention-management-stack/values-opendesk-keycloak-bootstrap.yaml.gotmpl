@@ -1,0 +1,320 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: "{{ .Values.global.domain }}"
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  registry: "{{ .Values.global.imageRegistry }}"
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: "{{ .Values.global.imageRegistry }}"
+  repository: "{{ .Values.images.opendeskKeycloakBootstrap.repository }}"
+  tag: "{{ .Values.images.opendeskKeycloakBootstrap.tag }}"
+  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
+
+config:
+  keycloak:
+    adminUser: "kcadmin"
+    adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
+    realm: {{ .Values.platform.realm | quote }}
+    intraCluster:
+      enabled: true
+      internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
+  custom:
+    clientScopes:
+      - name: "read_contacts"
+        protocol: "openid-connect"
+      - name: "write_contacts"
+        protocol: "openid-connect"
+      - name: "opendesk"
+        protocol: "openid-connect"
+        protocolMappers:
+          - name: "opendesk_useruuid"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "entryUUID"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_useruuid"
+              jsonType.label: "String"
+          - name: "opendesk_username"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "uid"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_username"
+              jsonType.label: "String"
+    clients:
+      - name: "opendesk-dovecot"
+        clientId: "opendesk-dovecot"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.dovecot | quote }}
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        attributes:
+          backchannel.logout.session.required: false
+        defaultClientScopes:
+          - "opendesk"
+      - name: "opendesk-intercom"
+        clientId: "opendesk-intercom"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
+        redirectUris:
+          - "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/callback"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        attributes:
+          backchannel.logout.session.required: true
+          backchannel.logout.url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/backchannel-logout"
+        protocolMappers:
+          - name: "intercom-audience"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-audience-mapper"
+            consentRequired: false
+            config:
+              included.client.audience: "opendesk-intercom"
+              id.token.claim: false
+              access.token.claim: true
+          # temporary additional claim while entryuuid is a hardcoded attribute in IntercomService and we cannot set
+          # it to `opendesk_useruuid` standard claim. For reference:
+          # https://github.com/univention/intercom-service/blob/cd819b6ced6433e532e74a8878943d05412c1416/intercom/app.js#L89
+          - name: "entryuuid_temp"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "entryUUID"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "entryuuid"
+              jsonType.label: "String"
+          # temporary additional claim while phoenixusername is a hardcoded attribute in IntercomService and we cannot
+          # set it to `opendesk_username` standard claim. For reference:
+          # https://github.com/univention/intercom-service/blob/cd819b6ced6433e532e74a8878943d05412c1416/intercom/routes/navigation.js#L27
+          - name: "phoenixusername_temp"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "uid"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "phoenixusername"
+              jsonType.label: "String"
+        defaultClientScopes:
+          - "opendesk"
+          - "offline_access"
+      - name: "opendesk-jitsi"
+        clientId: "opendesk-jitsi"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        redirectUris:
+          - "https://{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}/*"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: true
+        fullScopeAllowed: true
+        defaultClientScopes:
+          - "opendesk"
+          - "profile"
+      - name: "opendesk-matrix"
+        clientId: "opendesk-matrix"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}
+        redirectUris:
+          - "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/*"
+          - "https://{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}/*"
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        standardFlowEnabled: true
+        directAccessGrantsEnabled: true
+        serviceAccountsEnabled: true
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        attributes:
+          backchannel.logout.session.required: true
+          backchannel.logout.url: "https://{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}/_synapse/client/oidc/backchannel_logout"
+          post.logout.redirect.uris: "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        defaultClientScopes:
+          - "opendesk"
+        optionalClientScopes:
+          - "email"
+          - "profile"
+        # This is a temporary OIDC client for matrix, as the OIDC logout still uses "matrix" as client ID. Unless that
+        # is solved and also is able to use "opendesk-matrix" we keep that dummy client that
+      - name: "matrix"
+        clientId: "matrix"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        standardFlowEnabled: true
+        directAccessGrantsEnabled: true
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        attributes:
+          post.logout.redirect.uris: "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+      - name: "opendesk-nextcloud"
+        clientId: "opendesk-nextcloud"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
+        redirectUris:
+          - "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/*"
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        attributes:
+          backchannel.logout.session.required: true
+          backchannel.logout.url: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/apps/user_oidc/backchannel-logout/ncoidc"
+          post.logout.redirect.uris: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        protocolMappers:
+          - name: "context"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "oxContextIDNum"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "context"
+              jsonType.label: "String"
+        defaultClientScopes:
+          - "opendesk"
+          - "email"
+          - "read_contacts"
+          - "write_contacts"
+      - name: "opendesk-openproject"
+        clientId: "opendesk-openproject"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
+        redirectUris:
+          - "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/*"
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        serviceAccountsEnabled: true
+        attributes:
+          backchannel.logout.session.required: true
+          backchannel.logout.url: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/auth/keycloak/backchannel-logout"
+          post.logout.redirect.uris: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        protocolMappers:
+          - name: "opendeskProjectmanagementAdmin"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "opendeskProjectmanagementAdmin"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "openproject_admin"
+              jsonType.label: "String"
+        defaultClientScopes:
+          - "opendesk"
+          - "email"
+          - "profile"
+      - name: "opendesk-oxappsuite"
+        clientId: "opendesk-oxappsuite"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
+        redirectUris:
+          - "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/*"
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        attributes:
+          backchannel.logout.session.required: true
+          backchannel.logout.url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/ajax/oidc/backchannel_logout"
+          post.logout.redirect.uris: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        protocolMappers:
+          - name: "context"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "oxContextIDNum"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "context"
+              jsonType.label: "String"
+        defaultClientScopes:
+          - "opendesk"
+          - "read_contacts"
+          - "write_contacts"
+      - name: "opendesk-xwiki"
+        clientId: "opendesk-xwiki"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
+        redirectUris:
+          - "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/*"
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        attributes:
+          backchannel.logout.session.required: false
+          backchannel.logout.url: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/NOT_YET_IMPLEMENTED_DONT_FORGET_TO_DISABLE_FCL_WHEN_BCL_IS_ACTIVATED/backchannel-logout"
+          post.logout.redirect.uris: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+        defaultClientScopes:
+          - "opendesk"
+          - "address"
+          - "email"
+          - "profile"
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  privileged: false
+  runAsUser: 1000
+  runAsGroup: 1000
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+podAnnotations:
+  intents.otterize.com/service-name: "ums-keycloak-bootstrap"
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+  fsGroupChangePolicy: "OnRootMismatch"
+
+resources:
+  {{ .Values.resources.opendeskKeycloakBootstrap | toYaml | nindent 2 }}
+
+...

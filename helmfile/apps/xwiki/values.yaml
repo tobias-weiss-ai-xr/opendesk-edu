@@ -22,13 +22,13 @@ customConfigs:
     xwiki.authentication.ldap.update_photo: 1
 
   xwiki.properties:
-    oidc.scope: "openid,profile,email,address,phoenix"
+    oidc.scope: "openid,profile,email,address,opendesk"
     oidc.endpoint.userinfo.method: "GET"
-    oidc.user.nameFormater: "${oidc.user.phoenixusername._clean._lowerCase}"
-    oidc.user.subjectFormater: "${oidc.user.phoenixusername._lowerCase}"
+    oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
+    oidc.user.subjectFormater: "${oidc.user.opendesk_username._lowerCase}"
     # yamllint disable-line rule:line-length
     oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
-    oidc.clientid: "xwiki"
+    oidc.clientid: "opendesk-xwiki"
     oidc.endpoint.token.auth_method: "client_secret_basic"
     oidc.skipped: false
     oidc.logoutMechanism: "rpInitiated"

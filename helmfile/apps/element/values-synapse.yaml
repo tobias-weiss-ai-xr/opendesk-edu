@@ -25,6 +25,8 @@ configuration:
   homeserver:
     guestModule:
       enabled: true
+    oidc:
+      clientId: "opendesk-matrix"
 
 containerSecurityContext:
   allowPrivilegeEscalation: false

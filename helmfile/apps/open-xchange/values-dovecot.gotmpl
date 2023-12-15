@@ -23,9 +23,9 @@ dovecot:
     password: {{ .Values.secrets.univentionManagementStack.ldapSearch.dovecot | quote }}
   oidc:
     introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
-    introspectionPath: "/realms/souvap/protocol/openid-connect/token/introspect"
-    clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
-    clientID: "as8oidc"
+    introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
+    clientSecret: {{ .Values.secrets.keycloak.clientSecret.dovecot | quote }}
+    clientID: "opendesk-dovecot"
   loginTrustedNetworks: {{ .Values.cluster.networking.cidr | quote }}
 
 certificate:

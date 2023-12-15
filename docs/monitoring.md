@@ -9,15 +9,15 @@ This document will cover how you can enable observability with Prometheus based 
 well as the overall status of monitoring integration.
 
 <!-- TOC -->
-  * [Technology](#technology)
-  * [Defaults](#defaults)
-  * [Metrics](#metrics)
-  * [Alerts](#alerts)
-  * [Dashboards for Grafana](#dashboards-for-grafana)
-  * [Components](#components)
+* [Technology](#technology)
+* [Defaults](#defaults)
+* [Metrics](#metrics)
+* [Alerts](#alerts)
+* [Dashboards for Grafana](#dashboards-for-grafana)
+* [Components](#components)
 <!-- TOC -->
 
-## Technology
+# Technology
 
 We provide integration into the Prometheus based monitoring.
 Together with
@@ -27,12 +27,12 @@ easily leverage the full potential of open-source cloud-native observability sta
 Before enabling the following options, you need to install the respective CRDs from the kube-prometheus-stack
 repository or prometheus operator.
 
-## Defaults
+# Defaults
 
 All configurable options and their defaults can be found in
 [`monitoring.yaml`](../helmfile/environments/default/monitoring.yaml).
 
-## Metrics
+# Metrics
 
 To deploy podMonitor and serviceMonitor custom resources, enable it by:
 
@@ -44,7 +44,7 @@ prometheus:
     enabled: true
 ```
 
-## Alerts
+# Alerts
 
 Some helm-charts provide a default set of prometheusRules for alerting, enable it by:
 
@@ -54,7 +54,7 @@ prometheus:
     enabled: true
 ```
 
-## Dashboards for Grafana
+# Dashboards for Grafana
 
 To deploy optional ConfigMaps with Grafana dashboards, enable it by:
 
@@ -64,7 +64,8 @@ grafana:
     enabled: true
 ```
 
-## Components
+# Components
+
 | Component | Metrics (pod- or serviceMonitor)  | Alerts (prometheusRule) | Dashboard (Grafana) |
 |:----------|-----------------------------------|-------------------------|---------------------|
 | Collabora | :white_check_mark:                | :white_check_mark:      | :white_check_mark:  |

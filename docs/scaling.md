@@ -8,10 +8,10 @@ SPDX-License-Identifier: Apache-2.0
 This document should cover the abilities to scale apps.
 
 <!-- TOC -->
-  * [Replicas](#replicas)
+* [Replicas](#replicas)
 <!-- TOC -->
 
-## Replicas
+# Replicas
 
 The Replicas can be increased of almost any component, but is only effective for high-availability or load-balancing for
 apps with a check-mark in `Scaling (effective)` column.

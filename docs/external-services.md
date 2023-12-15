@@ -8,12 +8,12 @@ SPDX-License-Identifier: Apache-2.0
 This document will cover the additional configuration to use external services like databases, caches or buckets.
 
 <!-- TOC -->
-  * [Database](#database)
-  * [Objectstore](#objectstore)
-  * [Cache](#cache)
+* [Database](#database)
+* [Objectstore](#objectstore)
+* [Cache](#cache)
 <!-- TOC -->
 
-## Database
+# Database
 
 When deploying this suite to production, you need to configure the applications to use your production grade database
 service.
@@ -72,7 +72,7 @@ service.
 |             |                    |            | Username  | `databases.xwiki.username`               | `xwiki_user`               |
 |             |                    |            | Password  | `databases.xwiki.password`               |                            |
 
-## Objectstore
+# Objectstore
 
 When deploying this suite to production, you need to configure the applications to use your production grade objectstore
 service.
@@ -89,7 +89,7 @@ service.
 |             |             | Username        | `objectstores.openproject.username`      | `openproject_user` |
 |             |             | Use IAM profile | `objectstores.openproject.useIAMProfile` |                    |
 
-## Cache
+# Cache
 
 When deploying this suite to production, you need to configure the applications to use your production grade cache
 service.

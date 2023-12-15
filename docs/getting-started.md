@@ -8,38 +8,38 @@ SPDX-License-Identifier: Apache-2.0
 This documentation should enable you to create your own evaluation instance of openDesk on your Kubernetes cluster.
 
 <!-- TOC -->
-  * [Requirements](#requirements)
-  * [Customize environment](#customize-environment)
-    * [Domain](#domain)
+* [Requirements](#requirements)
+* [Customize environment](#customize-environment)
+  * [Domain](#domain)
     * [Apps](#apps)
-    * [Private Image registry](#private-image-registry)
-    * [Private Helm registry](#private-helm-registry)
-    * [Cluster capabilities](#cluster-capabilities)
-      * [Service](#service)
-      * [Networking](#networking)
-      * [Ingress](#ingress)
-      * [Container runtime](#container-runtime)
-      * [Volumes](#volumes)
-    * [Connectivity](#connectivity)
-      * [Mail/SMTP configuration](#mailsmtp-configuration)
-      * [TURN configuration](#turn-configuration)
-      * [Certificate issuer](#certificate-issuer)
-    * [Password seed](#password-seed)
+  * [Private Image registry](#private-image-registry)
+  * [Private Helm registry](#private-helm-registry)
+  * [Cluster capabilities](#cluster-capabilities)
+    * [Service](#service)
+    * [Networking](#networking)
+    * [Ingress](#ingress)
+    * [Container runtime](#container-runtime)
+    * [Volumes](#volumes)
+  * [Connectivity](#connectivity)
+    * [Mail/SMTP configuration](#mailsmtp-configuration)
+    * [TURN configuration](#turn-configuration)
+    * [Certificate issuer](#certificate-issuer)
+  * [Password seed](#password-seed)
   * [Install](#install)
-    * [Install single app](#install-single-app)
-    * [Install single release/chart](#install-single-releasechart)
-  * [Access deployment](#access-deployment)
-  * [Uninstall](#uninstall)
+  * [Install single app](#install-single-app)
+  * [Install single release/chart](#install-single-releasechart)
+* [Access deployment](#access-deployment)
+* [Uninstall](#uninstall)
 <!-- TOC -->
 
 Thanks for looking into the openDesk Getting started guide. This documents covers essentials configuration steps to
 deploy openDesk onto your kubernetes infrastructure.
 
-## Requirements
+# Requirements
 
 Detailed system requirements are covered on [requirements](requirements.md) page.
 
-## Customize environment
+# Customize environment
 
 Before deploying openDesk, you have to configure the deployment to suit your environment.
 To keep your deployment up to date, we recommend customizing in `dev`, `test` or `prod` and not in `default` environment
@@ -50,7 +50,7 @@ files.
 For the following guide, we will use `dev` as environment, where variables can be set in
 `helmfile/environments/dev/values.yaml`.
 
-### Domain
+## Domain
 
 The deployment is designed to deploy each app under a subdomains. For your convenience, we recommend to create a
 `*.domain.tld` A-Record to your cluster ingress controller, otherwise you need to create an A-Record for each subdomain.
@@ -107,7 +107,6 @@ All available apps and their default value can be found in `helmfile/environment
 | Element                     | `element.enabled`                   | `true`  | Secure communications platform |
 | Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange    |
 | Jitsi                       | `jitsi.enabled`                     | `true`  | Videoconferencing              |
-| Keycloak                    | `keycloak.enabled`                  | `true`  | Identity Provider              |
 | MariaDB                     | `mariadb.enabled`                   | `true`  | Database                       |
 | Memcached                   | `memcached.enabled`                 | `true`  | Cache Database                 |
 | MinIO                       | `minio.enabled`                     | `true`  | Object Storage                 |
@@ -128,7 +127,7 @@ jitsi:
   enabled: false
 ```
 
-### Private Image registry
+## Private Image registry
 
 By default, all OCI artifacts are proxied via the project's image registry, which should get replaced soon by the
 OCI registries provided by Open CoDE.
@@ -153,7 +152,7 @@ global:
     - "external-registry"
 ```
 
-### Private Helm registry
+## Private Helm registry
 
 Some apps use OCI style registry and some use Helm chart museum style registries.
 In `helmfile/environments/default/charts.yaml` you can find all helm charts used and modify their registry, repository
@@ -180,10 +179,9 @@ The following environment variables have to be exposed when using the example:
 | `OD_PRIVATE_HELM_REGISTRY_USERNAME` | Username                                                                                   |
 | `OD_PRIVATE_HELM_REGISTRY_PASSWORD` | Password                                                                                   |
 
+## Cluster capabilities
 
-### Cluster capabilities
-
-#### Service
+### Service
 
 Some apps, like Jitsi or Dovecot, require HTTP and external TCP connections.
 These apps create a Kubernetes service object.
@@ -196,7 +194,7 @@ cluster:
     type: "NodePort"
 ```
 
-#### Networking
+### Networking
 
 If your cluster has not the default `cluster.local` domain configured, you need to provide the domain via:
 
@@ -214,7 +212,7 @@ cluster:
     cidr: "127.0.0.0/8"
 ```
 
-#### Ingress
+### Ingress
 
 By default, the `ingressClassName` is empty to choose your default ingress controller, you may want to customize it by
 setting:
@@ -224,7 +222,7 @@ ingress:
   ingressClassName: "cilium"
 ```
 
-#### Container runtime
+### Container runtime
 
 Some apps require specific configuration for container runtimes. You can set your container runtime like `cri-o`,
 `containerd` or `docker` by:
@@ -235,7 +233,7 @@ cluster:
     engine: "containerd"
 ```
 
-#### Volumes
+### Volumes
 
 When your cluster has a `ReadWriteMany` volume provisioner, you can benefit from distributed or scaling of apps. By
 default, only `ReadWriteOnce` is enabled. To enable `ReadWriteMany` you can set:
@@ -255,9 +253,9 @@ persistence:
     RWO: "my-read-write-once-class"
 ```
 
-### Connectivity
+## Connectivity
 
-#### Mail/SMTP configuration
+### Mail/SMTP configuration
 
 To use the full potential of the openDesk, you need to set up an SMTP Smarthost/Relay which allows to send emails from
 the whole subdomain.
@@ -269,7 +267,7 @@ smtp:
   password: "secret"
 ```
 
-#### TURN configuration
+### TURN configuration
 
 Some components (Jitsi, Element) use for direct communication a TURN server. You can configure your own TURN server with
 these options:
@@ -286,7 +284,7 @@ turn:
     port: "5349"
 ```
 
-#### Certificate issuer
+### Certificate issuer
 
 As mentioned in [requirements](requirements.md#certificate-management) you can provide your own valid certificate. A TLS
 secret with name `opendesk-certificates-tls` needs to be present in application namespace. For deployment, you can
@@ -313,7 +311,7 @@ certificate:
   wildcard: true
 ```
 
-### Password seed
+## Password seed
 
 All secrets are generated from a single master password via Master Password (algorithm).
 To prevent others from using your openDesk instance, we highly recommend setting an individual master password via:
@@ -337,7 +335,7 @@ helmfile apply -e dev -n <NAMESPACE> [-l <label>] [--suppress-diff]
 - `-l <label>`: Label selector
 - `--suppress-diff`: Disable diff printing
 
-### Install single app
+## Install single app
 
 You can also install or upgrade only a single app like Collabora, either by label selector:
 
@@ -352,7 +350,7 @@ cd helmfile/apps/collabora
 helmfile apply -e dev -n <NAMESPACE>
 ```
 
-### Install single release/chart
+## Install single release/chart
 
 Instead of iteration through all services, you can also deploy a single release like mariadb by:
 
@@ -360,7 +358,7 @@ Instead of iteration through all services, you can also deploy a single release 
 helmfile apply -e dev -n <NAMESPACE> -l name=mariadb
 ```
 
-## Access deployment
+# Access deployment
 
 When all apps are successfully deployed and pod status' went to `Running` or `Succeeded`, you can navigate to
 
@@ -394,7 +392,7 @@ Now you can log in with obtained credentials:
 | `default.user`  | `40615..............................e9e2f` | Application user |
 | `default.admin` | `bdbbb..............................04db6` | Administrator    |
 
-## Uninstall
+# Uninstall
 
 You can uninstall the deployment by:
 

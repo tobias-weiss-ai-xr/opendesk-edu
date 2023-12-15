@@ -69,18 +69,18 @@ appsuite:
       resources:
         {{ .Values.resources.openxchangeGotenberg | toYaml | nindent 8 }}
     properties:
-      "com.openexchange.oauth.provider.jwt.jwksUri": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/certs"
-      "com.openexchange.oauth.provider.allowedIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
-      "com.openexchange.authentication.oauth.tokenEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
+      "com.openexchange.oauth.provider.jwt.jwksUri": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
+      "com.openexchange.oauth.provider.allowedIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+      "com.openexchange.authentication.oauth.tokenEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
       "com.openexchange.authentication.oauth.clientSecret": {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
       "com.openexchange.oidc.rpRedirectURIAuth": "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/appsuite/api/oidc/auth"
-      "com.openexchange.oidc.opAuthorizationEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/auth"
-      "com.openexchange.oidc.opTokenEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
-      "com.openexchange.oidc.opIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
-      "com.openexchange.oidc.opJwkSetEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/certs"
+      "com.openexchange.oidc.opAuthorizationEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
+      "com.openexchange.oidc.opTokenEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
+      "com.openexchange.oidc.opIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+      "com.openexchange.oidc.opJwkSetEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
       "com.openexchange.oidc.clientSecret": {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
       "com.openexchange.oidc.rpRedirectURIPostSSOLogout": "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/appsuite/api/oidc/logout"
-      "com.openexchange.oidc.opLogoutEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
+      "com.openexchange.oidc.opLogoutEndpoint": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
       "com.openexchange.oidc.rpRedirectURILogout": "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
     secretProperties:
       com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppsuite.cookieHashSalt | quote }}

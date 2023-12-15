@@ -85,7 +85,7 @@ charts:
     repository: "sovereign-workplace/souvap/tooling/charts/dovecot"
     name: "dovecot"
     oci: true
-    version: "1.3.6"
+    version: "1.3.7"
     verify: true
     username: ~
     password: ~
@@ -165,37 +165,52 @@ charts:
     username: ~
     password: ~
 
-  keycloak:
-    # renovate:
-    # registryUrl=https://registry-1.docker.io
-    # packageName=bitnamicharts/keycloak
-    # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
-    name: "keycloak"
-    oci: true
-    version: "12.1.5"
-    verify: true
-    username: ~
-    password: ~
-
-  keycloakBootstrap:
+  umsKeycloak:
     # renovate:
     # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-keycloak-bootstrap/sovereign-workplace-keycloak-bootstrap
+    # packageName=souvap/tooling/charts/univention-keycloak/ums-keycloak
     # dataSource=docker
     # dependencyType=vendor
     registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-keycloak-bootstrap"
-    name: "sovereign-workplace-keycloak-bootstrap"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention-keycloak"
+    name: "ums-keycloak"
     oci: true
-    version: "1.1.12"
+    version: "1.0.1"
     verify: true
     username: ~
     password: ~
 
-  keycloakExtensions:
+  umsKeycloakBootstrap:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # packageName=souvap/tooling/charts/univention-keycloak-bootstrap/ums-keycloak-bootstrap
+    # dataSource=docker
+    # dependencyType=vendor
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention-keycloak-bootstrap"
+    name: "ums-keycloak-bootstrap"
+    oci: true
+    version: "1.0.1"
+    verify: true
+    username: ~
+    password: ~
+
+  opendeskKeycloakBootstrap:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # packageName=souvap/tooling/charts/opendesk-keycloak-bootstrap/opendesk-keycloak-bootstrap
+    # dataSource=docker
+    # dependencyType=vendor
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-keycloak-bootstrap"
+    name: "opendesk-keycloak-bootstrap"
+    oci: true
+    version: "1.0.3"
+    verify: true
+    username: ~
+    password: ~
+
+  umsKeycloakExtensions:
     # renovate:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/77/packages/helm/stable
     # packageName=keycloak-extensions
@@ -206,21 +221,6 @@ charts:
     name: "keycloak-extensions"
     oci: false
     version: "0.1.0"
-    username: ~
-    password: ~
-
-  keycloakTheme:
-    # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/keycloak-theme/opendesk-keycloak-theme
-    # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/keycloak-theme"
-    name: "opendesk-keycloak-theme"
-    oci: true
-    version: "2.0.0"
-    verify: true
     username: ~
     password: ~
 
@@ -457,7 +457,7 @@ charts:
     repository: "sovereign-workplace/souvap/tooling/charts/opendesk-otterize"
     name: "opendesk-otterize"
     oci: true
-    version: "1.1.6"
+    version: "1.2.0"
     verify: true
     username: ~
     password: ~
@@ -531,7 +531,7 @@ charts:
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
     name: "opendesk-synapse"
     oci: true
-    version: "2.6.0"
+    version: "2.6.2"
     verify: true
     username: ~
     password: ~
@@ -674,7 +674,7 @@ charts:
     repository: "api/v4/projects/155/packages/helm/stable"
     name: "stack-data-swp"
     oci: false
-    version: "0.39.3"
+    version: "0.39.4"
     username: ~
     password: ~
 

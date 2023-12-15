@@ -1,0 +1,56 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: {{ .Values.global.domain | quote }}
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | quote }}
+  repository: {{ .Values.images.umsKeycloak.repository | quote }}
+  tag: {{ .Values.images.umsKeycloak.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+config:
+  admin:
+    password: {{ .Values.secrets.keycloak.adminPassword | quote }}
+  database:
+    host: {{ .Values.databases.keycloak.host | quote }}
+    port: {{ .Values.databases.keycloak.port }}
+    user: {{ .Values.databases.keycloak.username | quote }}
+    database: {{ .Values.databases.keycloak.name | quote }}
+    password: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser | quote }}
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
+  runAsUser: 1000
+  runAsGroup: 1000
+  runAsNonRoot: true
+
+podSecurityContext:
+  fsGroup: 1000
+  fsGroupChangePolicy: "OnRootMismatch"
+
+theme:
+  univentionTheme: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/theme.css"
+  univentionCustomTheme: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/css/custom.css"
+  favIcon: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/favicon.ico"
+
+replicaCount: {{ .Values.replicas.keycloak }}
+
+resources:
+  {{ .Values.resources.umsKeycloak | toYaml | nindent 2 }}
+
+...
