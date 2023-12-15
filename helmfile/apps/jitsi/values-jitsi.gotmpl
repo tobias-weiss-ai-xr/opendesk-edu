@@ -22,6 +22,8 @@ image:
 
 settings:
   jwtAppSecret: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
+  keycloakRealm: {{ .Values.platform.realm | quote }}
+  keycloakClientId: "opendesk-jitsi"
 
 theme:
   {{ .Values.theme | toYaml | nindent 2 }}

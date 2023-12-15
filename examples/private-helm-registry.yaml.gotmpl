@@ -59,23 +59,23 @@ charts:
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
 
-  keycloak:
+  umsKeycloak:
    registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
 
-  keycloakBootstrap:
+  umsKeycloakBootstrap:
    registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
 
-  keycloakExtensions:
+  opendeskKeycloakBootstrap:
+   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
+    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
+
+  umsKeycloakExtensions:
     registry: {{ requiredEnv "OD_PRIVATE_HELM_HTTP_REGISTRY" | quote }}
-    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
-    username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
-
-  keycloakTheme:
-   registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
     username: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
 

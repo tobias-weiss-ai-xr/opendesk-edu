@@ -13,8 +13,10 @@ global:
 
 ics:
   secret: {{ .Values.secrets.intercom.secret | quote }}
-  issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+  issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   originRegex: "{{ .Values.istio.domain }}|{{ .Values.global.domain }}"
+  keycloak:
+    realm: {{ .Values.platform.realm | quote }}
   default:
     domain: {{ .Values.global.domain | quote }}
   oidc:
@@ -33,7 +35,9 @@ ics:
     password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password | quote }}
   openxchange:
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
-
+    audience: "opendesk-oxappsuite"
+  nextcloud:
+    audience: "opendesk-nextcloud"
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   repository: {{ .Values.images.intercom.repository | quote }}

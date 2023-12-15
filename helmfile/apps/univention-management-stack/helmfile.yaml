@@ -72,17 +72,80 @@ repositories:
     password: {{ .Values.charts.umsSelfserviceListener.password | quote }}
     url: "{{ .Values.charts.umsSelfserviceListener.registry }}/{{ .Values.charts.umsSelfserviceListener.repository }}"
 
+  # Univention Keycloak Extensions
+  - name: "ums-keycloak-extensions-repo"
+    oci: {{ .Values.charts.umsKeycloakExtensions.oci }}
+    username: {{ .Values.charts.umsKeycloakExtensions.username | quote }}
+    password: {{ .Values.charts.umsKeycloakExtensions.password | quote }}
+    url: "{{ .Values.charts.umsKeycloakExtensions.registry }}/{{ .Values.charts.umsKeycloakExtensions.repository }}"
+  # Univention Keycloak
+  - name: "ums-keycloak-repo"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.umsKeycloak.verify }}
+    oci: {{ .Values.charts.umsKeycloak.oci }}
+    username: {{ .Values.charts.umsKeycloak.username | quote }}
+    password: {{ .Values.charts.umsKeycloak.password | quote }}
+    url: "{{ .Values.charts.umsKeycloak.registry }}/{{ .Values.charts.umsKeycloak.repository }}"
+  - name: "ums-keycloak-bootstrap-repo"
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.umsKeycloakBootstrap.verify }}
+    oci: {{ .Values.charts.umsKeycloakBootstrap.oci }}
+    username: {{ .Values.charts.umsKeycloakBootstrap.username | quote }}
+    password: {{ .Values.charts.umsKeycloakBootstrap.password | quote }}
+    url: "{{ .Values.charts.umsKeycloakBootstrap.registry }}/{{ .Values.charts.umsKeycloakBootstrap.repository }}"
+  - name: "opendesk-keycloak-bootstrap-repo"
+    oci: {{ .Values.charts.opendeskKeycloakBootstrap.oci }}
+    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    verify: {{ .Values.charts.opendeskKeycloakBootstrap.verify }}
+    username: {{ .Values.charts.opendeskKeycloakBootstrap.username | quote }}
+    password: {{ .Values.charts.opendeskKeycloakBootstrap.password | quote }}
+    url: "{{ .Values.charts.opendeskKeycloakBootstrap.registry }}/\
+      {{ .Values.charts.opendeskKeycloakBootstrap.repository }}"
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
   - name: "nginx-repo"
-    oci: true
+    oci: {{ .Values.charts.nginx.oci }}
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.nginx.verify }}
-    username: "{{ .Values.charts.nginx.username }}"
+    username: {{ .Values.charts.nginx.username | quote }}
     password: {{ .Values.charts.nginx.password | quote }}
     url: "{{ .Values.charts.nginx.registry }}/{{ .Values.charts.nginx.repository }}"
 
 releases:
+  - name: "ums-keycloak"
+    chart: "ums-keycloak-repo/{{ .Values.charts.umsKeycloak.name }}"
+    version: "{{ .Values.charts.umsKeycloak.version }}"
+    values:
+      - "values-ums-keycloak.yaml.gotmpl"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+
+  - name: "ums-keycloak-extensions"
+    chart: "ums-keycloak-extensions-repo/{{ .Values.charts.umsKeycloakExtensions.name }}"
+    version: "{{ .Values.charts.umsKeycloakExtensions.version }}"
+    values:
+      - "values-ums-keycloak-extensions.yaml.gotmpl"
+    needs:
+      - "ums-keycloak"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+
+  - name: "ums-keycloak-bootstrap"
+    chart: "ums-keycloak-bootstrap-repo/{{ .Values.charts.umsKeycloakBootstrap.name }}"
+    version: "{{ .Values.charts.umsKeycloakBootstrap.version }}"
+    values:
+      - "values-ums-keycloak-bootstrap.yaml.gotmpl"
+    needs:
+      - "ums-keycloak"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+
+  - name: "opendesk-keycloak-bootstrap"
+    chart: "opendesk-keycloak-bootstrap-repo/{{ .Values.charts.opendeskKeycloakBootstrap.name }}"
+    version: "{{ .Values.charts.opendeskKeycloakBootstrap.version }}"
+    values:
+      - "values-opendesk-keycloak-bootstrap.yaml.gotmpl"
+    needs:
+      - "ums-keycloak-bootstrap"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+
   - name: "ums-stack-gateway"
     chart: "nginx-repo/{{ .Values.charts.nginx.name }}"
     version: "{{ .Values.charts.nginx.version }}"

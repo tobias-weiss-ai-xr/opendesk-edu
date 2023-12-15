@@ -5,7 +5,11 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   keycloak:
+    host: "ums-keycloak:8080"
+    adminUsername: "kcadmin"
     adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
+    adminRealm: "master"
+    realm: {{ .Values.platform.realm | quote }}
   postgresql:
     connection:
       host: {{ .Values.databases.keycloakExtension.host | quote }}
@@ -17,30 +21,65 @@ global:
 handler:
   image:
     registry: {{ .Values.global.imageRegistry | quote }}
-    repository: {{ .Values.images.keycloakExtensionHandler.repository | quote }}
-    tag: {{ .Values.images.keycloakExtensionHandler.tag | quote }}
+    repository: {{ .Values.images.umsKeycloakExtensionHandler.repository | quote }}
+    tag: {{ .Values.images.umsKeycloakExtensionHandler.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   appConfig:
+    captchaProtectionEnable: false
     smtpPassword: {{ .Values.smtp.password | quote }}
     smtpHost: {{ .Values.smtp.host | quote }}
     smtpPort: {{ .Values.smtp.port | quote }}
     smtpUsername: {{ .Values.smtp.username | quote }}
     mailFrom: "noreply@{{ .Values.global.domain }}"
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
   resources:
-    {{ .Values.resources.keycloakExtension | toYaml | nindent 4 }}
+    {{ .Values.resources.umsKeycloakExtensionHandler | toYaml | nindent 4 }}
+postgresql:
+  enabled: false
 proxy:
   image:
     registry: {{ .Values.global.imageRegistry | quote }}
-    repository: {{ .Values.images.keycloakExtensionProxy.repository | quote }}
-    tag: {{ .Values.images.keycloakExtensionProxy.tag | quote }}
+    repository: {{ .Values.images.umsKeycloakExtensionProxy.repository | quote }}
+    tag: {{ .Values.images.umsKeycloakExtensionProxy.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   ingress:
+    annotations:
+      nginx.org/proxy-buffer-size: "8k"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    paths:
+      - pathType: "Prefix"
+        path: "/realms"
+      - pathType: "Prefix"
+        path: "/resources"
+      - pathType: "Prefix"
+        path: "/fingerprintjs"
     enabled: {{ .Values.ingress.enabled }}
     ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
     host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
   resources:
-    {{ .Values.resources.keycloakProxy | toYaml | nindent 4 }}
+    {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 4 }}
 ...

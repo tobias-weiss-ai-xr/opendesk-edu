@@ -27,8 +27,8 @@ dovecot:
 
   oidc:
     enabled: true
-    clientID: "as8oidc"
-    usernameAttribute: "phoenixusername"
+    clientID: "opendesk-dovecot"
+    usernameAttribute: "opendesk_username"
 
   submission:
     enabled: true

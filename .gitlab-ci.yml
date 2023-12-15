@@ -86,12 +86,6 @@ variables:
     options:
       - "yes"
       - "no"
-  DEPLOY_KEYCLOAK:
-    description: "Enable Keycloak deployment."
-    value: "no"
-    options:
-      - "yes"
-      - "no"
   DEPLOY_OX:
     description: "Enable OX AppSuite8 deployment."
     value: "no"
@@ -254,31 +248,6 @@ ums-deploy:
       when: "always"
   variables:
     COMPONENT: "univention-management-stack"
-
-keycloak-deploy:
-  stage: "component-deploy-stage-1"
-  extends: ".deploy-common"
-  rules:
-    - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
-          $NAMESPACE =~ /.+/ &&
-          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
-      when: "always"
-  variables:
-    COMPONENT: "keycloak"
-
-keycloak-bootstrap-deploy:
-  stage: "component-deploy-stage-1"
-  extends: ".deploy-common"
-  timeout: "30m"
-  rules:
-    - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
-          $NAMESPACE =~ /.+/ &&
-          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_KEYCLOAK != "no")
-      when: "always"
-  variables:
-    COMPONENT: "keycloak-bootstrap"
 
 ox-deploy:
   stage: "component-deploy-stage-1"
@@ -461,7 +430,7 @@ run-tests:
           \"DEPLOY_ELEMENT\": \"${DEPLOY_ELEMENT}\", \
           \"DEPLOY_ICS\": \"${DEPLOY_ICS}\", \
           \"DEPLOY_JITSI\": \"${DEPLOY_JITSI}\", \
-          \"DEPLOY_KEYCLOAK\": \"${DEPLOY_KEYCLOAK}\", \
+          \"DEPLOY_KEYCLOAK\": \"${DEPLOY_UMS}\", \
           \"DEPLOY_NEXTCLOUD\": \"${DEPLOY_NEXTCLOUD}\", \
           \"DEPLOY_OPENPROJECT\": \"${DEPLOY_OPENPROJECT}\", \
           \"DEPLOY_OX\": \"${DEPLOY_OX}\", \

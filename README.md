@@ -67,19 +67,19 @@ If you want to address other topics, please check the section
 
 # Requirements
 
-⟶ Visit our detailed [Requirements](docs/requirements.md) overview.
+⟶ Visit our detailed [Requirements](./docs/requirements.md) overview.
 
 # Getting started
 
-⟶ Visit our detailed [Getting started](docs/getting-started.md) guide.
+⟶ Visit our detailed [Getting started](./docs/getting-started.md) guide.
 
 # Advanced customization
 
-- [External services](docs/external-services.md)
-- [Security](docs/security.md)
-- [Scaling](docs/scaling.md)
-- [Monitoring](docs/monitoring.md)
-- [Theming](docs/theming.md)
+- [External services](./docs/external-services.md)
+- [Security](./docs/security.md)
+- [Scaling](./docs/scaling.md)
+- [Monitoring](./docs/monitoring.md)
+- [Theming](./docs/theming.md)
 
 # Releases
 
@@ -95,7 +95,7 @@ The following release artefacts are provided beside the default source code asse
 
 # Components
 
-⟶ Visit our detailed [Component](docs/getting-started.md) docs.
+⟶ Visit our detailed [Component](./docs/components.md) docs.
 
 
 # License

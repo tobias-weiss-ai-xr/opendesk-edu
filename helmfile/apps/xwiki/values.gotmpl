@@ -29,10 +29,10 @@ customConfigs:
     xwiki.authentication.ldap.groupcache_expiration: 300
 
   "xwiki.properties":
-    "oidc.endpoint.authorization": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/auth"
-    "oidc.endpoint.token": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/token"
-    "oidc.endpoint.userinfo": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/userinfo"
-    "oidc.endpoint.logout": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout"
+    "oidc.endpoint.authorization": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
+    "oidc.endpoint.token": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
+    "oidc.endpoint.userinfo": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/userinfo"
+    "oidc.endpoint.logout": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
     "oidc.secret": {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
     "url.trustedDomains": "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     "workplaceServices.navigationEndpoint": "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
@@ -46,7 +46,7 @@ properties:
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": {{ .Values.theme.colors.secondaryGreyLight | quote }}
   ## Link LDAP users and users authenticated through OIDC
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
-  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap"
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}

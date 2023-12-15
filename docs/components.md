@@ -7,20 +7,20 @@ SPDX-License-Identifier: Apache-2.0
 This section covers the internal system requirements as well as external service requirements for productive use.
 
 <!-- TOC -->
-  * [Overview](#overview)
-  * [Component integration](#component-integration)
-    * [Intercom Service (ICS)](#intercom-service-ics)
-    * [Filepicker](#filepicker)
-    * [Central Navigation](#central-navigation)
-    * [(Read & write) Central contacts](#read--write-central-contacts)
-    * [OpenProject Filestore](#openproject-filestore)
-  * [Identity data flows](#identity-data-flows)
-  * [Provisioning](#provisioning)
-  * [Component specific documentation](#component-specific-documentation)
-  * [Links to component docs](#links-to-component-docs)
+* [Overview](#overview)
+* [Component integration](#component-integration)
+  * [Intercom Service (ICS)](#intercom-service-ics)
+  * [Filepicker](#filepicker)
+  * [Central Navigation](#central-navigation)
+  * [(Read \& write) Central contacts](#read--write-central-contacts)
+  * [OpenProject Filestore](#openproject-filestore)
+* [Identity data flows](#identity-data-flows)
+* [Provisioning](#provisioning)
+* [Component specific documentation](#component-specific-documentation)
+* [Links to component docs](#links-to-component-docs)
 <!-- TOC -->
 
-## Overview
+# Overview
 
 openDesk consists out of a variety of open-source projects. Here is a list with the description and type.
 
@@ -38,7 +38,6 @@ they need to be replaced in production deployments.
 | Element                     | Secure communications platform | Functional |
 | Intercom Service            | Cross service data exchange    | Functional |
 | Jitsi                       | Videoconferencing              | Functional |
-| Keycloak                    | Identity Provider              | Functional |
 | MariaDB                     | Database                       | Eval       |
 | Memcached                   | Cache Database                 | Eval       |
 | MinIO                       | Object Storage                 | Eval       |
@@ -49,18 +48,17 @@ they need to be replaced in production deployments.
 | Postfix                     | MTA                            | Eval       |
 | PostgreSQL                  | Database                       | Eval       |
 | Redis                       | Cache Database                 | Eval       |
-| Univention Corporate Server | Identity Management & Portal   | Functional |
-| Univention Management Stack | Identity Management & Portal   | Eval       |
+| Univention Management Stack | Identity Management & Portal   | Functional |
 | XWiki                       | Knowledgebase                  | Functional |
 
-## Component integration
+# Component integration
 
 Some use cases require inter component integration.
 
 ```mermaid
 flowchart TD
   OXAppSuiteFrontend-->|SilentLogin, Filepicker, CentralNavigation|IntercomService
-  IntercomService-->|SilentLogin, TokenExchange|Keycloak
+  IntercomService-->|SilentLogin, TokenExchange|IdP
   IntercomService-->|Filepicker|Nextcloud
   IntercomService-->|CentralNavigation|Portal
   OXAppSuiteBackend-->|Filepicker|Nextcloud
@@ -71,7 +69,7 @@ flowchart TD
   OXAppSuiteFrontend-->|Filepicker|OXAppSuiteBackend
 ```
 
-### Intercom Service (ICS)
+## Intercom Service (ICS)
 
 The UCS Intercom Service's role is to enable cross-application integration based on browser interaction.
 Handling authentication when the frontend of an application is using the API from another application is often a
@@ -84,7 +82,7 @@ login.
 Currently only OX AppSuite is using the frontend-based integration, and therefore it is right now the only consumer of
 the ICS API.
 
-### Filepicker
+## Filepicker
 
 The Nextcloud filepicker which is integrated into the OX AppSuite allows you to add attachments or links to files from
 and saving attachments to Nextcloud.
@@ -94,34 +92,33 @@ Frontend-based integration means that OX AppSuite in the browser is communicatin
 While using backend-based integration, OX AppSuite middleware is communicating with Nextcloud, which is especially used
 when adding a file to an email or storing a file into Nextcloud.
 
-### Central Navigation
+## Central Navigation
 
 Central navigation is based on an API endpoint in the portal that provides the contents of the portal for a user to
 allow components to render the menu showing all available SWP applications for the user.
 
-### (Read & write) Central contacts
+## (Read & write) Central contacts
 
 Open-Xchange App Suite is used to manage contacts within openDesk. There is an API in the AppSuite that is being used by
 Nextcloud to lookup contacts as well as to create contacts. This is maybe done when a file is shared with a not yet
 available personal contact.
 
-### OpenProject Filestore
+## OpenProject Filestore
 
 By default, Nextcloud is a configured option for storing attachments in OpenProject.
 The Filestore can be enabled on a per-project level in OpenProject's project admin section.
 
-
-## Identity data flows
+# Identity data flows
 
 An overview of
 - components that consume the LDAP service. Mostly by using a dedicated LDAP search account.
-- components using Keycloak as identity provider. If not otherwise denoted based on the OAuth2 / OIDC flows.
+- components using Univention Keycloak as identity provider (IdP). If not otherwise denoted based on the OAuth2 / OIDC flows.
 
 Some components trust others to handle authentication for them.
 
 ```mermaid
 flowchart TD
-    K[Keycloak]-->L[LDAP]
+    K[IdP]-->L[LDAP]
     N[Nextcloud]-->L
     O[OpenProject] --> L
     A[OX AppSuite]-->L
@@ -142,7 +139,7 @@ flowchart TD
     F[Postfix]-->D
 ```
 
-## Provisioning
+# Provisioning
 
 Currently, active provisioning is only done for OX AppSuite. The OX-Connector is synchronizing, creating, modifying and
 deleting activities for the following objects to the OX AppSuite using the AppSuite's SOAP API:
@@ -153,7 +150,7 @@ deleting activities for the following objects to the OX AppSuite using the AppSu
 - Functional Mailboxes
 - Resources
 
-## Component specific documentation
+# Component specific documentation
 
 We want to provide more information per component in separate, component-specific markdown file.
 To establish a common view on the components, we are going to cover various aspects:
@@ -173,6 +170,6 @@ To establish a common view on the components, we are going to cover various aspe
   - **Uninstall**: Documented and working complete uninstallation of the component.
 - **Debugging**: Some helpful information when it comes to debugging a component, e.g. setting log level.
 
-## Links to component docs
+# Links to component docs
 
 - [Intercom-Service](./components/intercom-service.md)

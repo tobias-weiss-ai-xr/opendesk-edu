@@ -100,36 +100,35 @@ images:
     repository: "jitsi/jvb"
     tag: "stable-8922@sha256:75dd613807e19cbbd440d071b60609fa9e4ee50a1396b14deb0ed779d882a554"
     # @supplier: "Nordeck"
-  keycloak:
+  umsKeycloak:
     # renovate:
-    # registryUrl=https://docker.io
+    # registryUrl=https://docker.software-univention.de
     # dependencyType=vendor
-    repository: "bitnami/keycloak"
-    tag: "19.0.3-debian-11-r22@sha256:4ac04104d20d4861ecca24ff2d07d71b34a98ee1148c6e6b6e7969a6b2ad085e"
+    repository: "keycloak-keycloak"
+    tag: "22.0.3-ucs1@sha256:6b17a63d4c6bc60f9c645902f8dbb7ad094a867065e40c43cc81c867c1b8ba00"
     # @supplier: "Univention"
-  keycloakUnivention:
-    # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # dependencyType=vendor
-    # This is a preview and not part of the standard deployment.
-    repository: "souvap/tooling/images/univention/keycloak-app-on-use-base-manpub-tr"
-    tag: "latest"
-    # @supplier: "Univention"
-  keycloakBootstrap:
+  umsKeycloakBootstrap:
     # renovate:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=service
-    repository: "souvap/tooling/images/ansible"
-    tag: "4.10.0@sha256:89d8212c20e03b0fd079e08afaf3247c1b96b380c4db1b572d68d0b4a6abc0ac"
+    repository: "souvap/tooling/images/univention-keycloak-bootstrap"
+    tag: "1.0.5@sha256:81ccf77e5af77385e4d0c4ff6a7df2cec11691ea76c6c23c36eb1ef0d51ad687"
+    # @supplier: "Univention"
+  opendeskKeycloakBootstrap:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=service
+    repository: "souvap/tooling/images/opendesk-keycloak-bootstrap"
+    tag: "1.0.3@sha256:b9c18294bdf5b3b79caa789e899403bbf1b485f05a0be3e09895e5161506d4a8"
     # @supplier: "openDesk DevSecOps"
-  keycloakExtensionHandler:
+  umsKeycloakExtensionHandler:
     # renovate:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=vendor
     repository: "souvap/tooling/images/keycloak-extensions/keycloak-handler"
     tag: "latest@sha256:e67bdfc655e43b7fb83b025e13f949b04fdd98e089b33401275d03e340e03e2e"
     # @supplier: "Univention"
-  keycloakExtensionProxy:
+  umsKeycloakExtensionProxy:
     # renovate:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=vendor

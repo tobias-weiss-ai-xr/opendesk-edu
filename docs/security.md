@@ -8,12 +8,12 @@ SPDX-License-Identifier: Apache-2.0
 This document should cover the current status of security measurements.
 
 <!-- TOC -->
-  * [Helm Chart Trust Chain](#helm-chart-trust-chain)
-  * [Kubernetes Security Enforcements](#kubernetes-security-enforcements)
-  * [NetworkPolicies](#networkpolicies)
+* [Helm Chart Trust Chain](#helm-chart-trust-chain)
+* [Kubernetes Security Enforcements](#kubernetes-security-enforcements)
+* [NetworkPolicies](#networkpolicies)
 <!-- TOC -->
 
-## Helm Chart Trust Chain
+# Helm Chart Trust Chain
 
 Helm Charts which are released via openDesk CI/CD process are always signed. The public GPG keys are present in
 `pubkey.gpg` file and are validated during helmfile installation.
@@ -28,7 +28,6 @@ Helm Charts which are released via openDesk CI/CD process are always signed. The
 | istio-resources-repo                 | yes | :white_check_mark: |
 | jitsi-repo                           | yes | :white_check_mark: |
 | keycloak-extensions-repo             | no  |        :x:         |
-| keycloak-theme-repo                  | yes | :white_check_mark: |
 | mariadb-repo                         | yes | :white_check_mark: |
 | nextcloud-repo                       | no  |        :x:         |
 | opendesk-certificates-repo           | yes | :white_check_mark: |
@@ -43,9 +42,11 @@ Helm Charts which are released via openDesk CI/CD process are always signed. The
 | postfix-repo                         | yes | :white_check_mark: |
 | postgresql-repo                      | yes | :white_check_mark: |
 | ums-repo                             | no  |        :x:         |
+| univention-keycloak-repo             | yes | :white_check_mark: |
+| univention-keycloak-bootstrap-repo   | yes | :white_check_mark: |
 | xwiki-repo                           | no  |        :x:         |
 
-## Kubernetes Security Enforcements
+# Kubernetes Security Enforcements
 
 This list gives you an overview of default security settings and if they comply with security standards:
 
@@ -109,9 +110,9 @@ This list gives you an overview of default security settings and if they comply 
 |                             | umc-gateway                  |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |                             | umc-server                   |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 | XWiki                       | xwiki                        |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |    100    |    101     |   101   |
-|                             | xwiki initContainers         |        :x:         |                :x:                 |                                                                      :x:                                                                       |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |   101   | 
+|                             | xwiki initContainers         |        :x:         |                :x:                 |                                                                      :x:                                                                       |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |   101   |
 
-## NetworkPolicies
+# NetworkPolicies
 
 Kubernetes NetworkPolicies are an important measure to secure your kubernetes apps and clusters.
 When applied, they restrict the traffic to your services.

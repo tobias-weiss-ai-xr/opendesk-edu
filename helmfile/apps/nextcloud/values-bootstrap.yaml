@@ -7,11 +7,10 @@ config:
 
   apps:
     integrationSwp:
-      username: "phoenixusername"
+      username: "opendesk_username"
     userOidc:
-      username: "ncoidc"
-      userIdAttribute: "entryuuid"
-      realm: "souvap"
+      username: "opendesk-nextcloud"
+      userIdAttribute: "opendesk_useruuid"
 
   cryptpad:
     enabled: true

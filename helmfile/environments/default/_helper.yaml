@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+ldap:
+  host: "ums-ldap-server"
+  notifierHost: "ums-ldap-notifier"
+  baseDn: "dc=swp-ldap,dc=internal"
+## Define Keycloak realmname for openDesk
+platform:
+  realm: "opendesk"
+...

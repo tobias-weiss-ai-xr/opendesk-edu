@@ -4,18 +4,18 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  domain: "{{ .Values.global.domain }}"
+  domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  registry: "{{ .Values.global.imageRegistry }}"
+  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
   registry: {{ .Values.global.imageRegistry }}
-  repository: "{{ .Values.images.openprojectBootstrap.repository }}"
-  tag: "{{ .Values.images.openprojectBootstrap.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  repository: {{ .Values.images.openprojectBootstrap.repository | quote }}
+  tag: {{ .Values.images.openprojectBootstrap.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy |quote }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}

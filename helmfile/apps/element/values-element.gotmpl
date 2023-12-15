@@ -13,7 +13,7 @@ global:
 
 configuration:
   additionalConfiguration:
-    logout_redirect_url: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/souvap/protocol/openid-connect/logout?client_id=matrix&post_logout_redirect_uri=https%3A%2F%2F{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+    logout_redirect_url: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout?client_id=matrix&post_logout_redirect_uri=https%3A%2F%2F{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
 
     "net.nordeck.element_web.module.opendesk":
       config:

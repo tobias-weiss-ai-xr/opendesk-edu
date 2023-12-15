@@ -52,8 +52,6 @@ Valid commit scopes:
 - `collabora`
 - `ìntercom-service`
 - `jitsi`
-- `keycloak`
-- `keycloak-bootstrap`
 - `nextcloud`
 - `open-xchange`
 - `openproject`
