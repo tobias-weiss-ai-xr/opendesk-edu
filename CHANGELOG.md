@@ -1,3 +1,11 @@
+## [0.5.71](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.70...v0.5.71) (2023-12-15)
+
+
+### Bug Fixes
+
+* **docs:** Security.md ([36bbbae](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/36bbbae57918036f44ddb23e47b550b2f46e5f35))
+* **univention-management-stack:** Switch to Univention Keycloak ([902076c](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/902076c62909889f8ffcf90328bc06ebb908b9b8))
+
 ## [0.5.70](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.69...v0.5.70) (2023-12-14)
 
 
