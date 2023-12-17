@@ -14,7 +14,7 @@ images:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=vendor
     repository: "souvap/tooling/images/collabora"
-    tag: "23.05.5.4.1@sha256:ff48ec379f0d63e50b7714d1fa0f8f8de4247595dfa78754c44786a79c4968e4"
+    tag: "23.05.6.3.1@sha256:cebcb5287df58f6f12bb95882f18e99f970552ce161be8fc51a541d96de53d0e"
     # @supplier: "Collabora"
   cryptpad:
     # renovate:
