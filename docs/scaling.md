@@ -47,6 +47,6 @@ marked with a gear.
 | Keycloak    | `replicas.keycloak`                      | :white_check_mark:  |       :gear:       |
 | Minio       | `replicas.minioDistributed`              | :white_check_mark:  | :white_check_mark: |
 | Nextcloud   | `replicas.nextcloud`                     | :white_check_mark:  |       :gear:       |
-| OpenProject | `replicas.openproject`                   | :white_check_mark:  |       :gear:       |
+| OpenProject | `replicas.openproject`                   | :white_check_mark:  | :white_check_mark: |
 | Postfix     | `replicas.postfix`                       |         :x:         |       :gear:       |
-| XWiki       | `replicas.xwiki`                         | :white_check_mark:  |       :gear:       |
+| XWiki       | `replicas.xwiki`                         |         :x:         |       :gear:       |
