@@ -1,3 +1,12 @@
+## [0.5.72](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.71...v0.5.72) (2023-12-18)
+
+
+### Bug Fixes
+
+* **collabora:** Update image to 23.05.6.3.1 ([8c378c6](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/8c378c6f91a88da3b45c209da5360cabfeb911aa))
+* **docs:** Update scaling.md ([d342efe](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/d342efe9a9bbc8f018831e2723e664e5365abba3))
+* **open-xchange:** Update Helm chart removing yaml templating doublettes ([c21dd46](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/c21dd462895870fd6ba98bbb167ac063e747a501))
+
 ## [0.5.71](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.70...v0.5.71) (2023-12-15)
 
 
