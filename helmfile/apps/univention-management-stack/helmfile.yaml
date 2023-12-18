@@ -144,6 +144,7 @@ releases:
     values:
       - "values-ums-keycloak.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-keycloak-extensions"
     chart: "ums-keycloak-extensions-repo/{{ .Values.charts.umsKeycloakExtensions.name }}"
@@ -199,6 +200,7 @@ releases:
       - "values-ldap-server.gotmpl"
       - "values-ldap-server.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-ldap-notifier"
     chart: "ums-ldap-notifier-repo/{{ .Values.charts.umsLdapNotifier.name }}"
@@ -209,6 +211,7 @@ releases:
       - "values-ldap-notifier.gotmpl"
       - "values-ldap-notifier.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-udm-rest-api"
     chart: "ums-udm-rest-api-repo/{{ .Values.charts.umsUdmRestApi.name }}"
@@ -299,6 +302,7 @@ releases:
       - "values-umc-server.gotmpl"
       - "values-umc-server.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-selfservice-listener"
     chart: "ums-selfservice-listener-repo/{{ .Values.charts.umsSelfserviceListener.name }}"
