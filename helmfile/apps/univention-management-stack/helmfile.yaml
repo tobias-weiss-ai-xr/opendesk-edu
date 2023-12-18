@@ -8,66 +8,92 @@ repositories:
   # Univention Management Stack
   - name: "ums-store-dav-repo"
     oci: {{ .Values.charts.umsStoreDav.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsStoreDav.verify }}
     username: {{ .Values.charts.umsStoreDav.username | quote }}
     password: {{ .Values.charts.umsStoreDav.password | quote }}
     url: "{{ .Values.charts.umsStoreDav.registry }}/{{ .Values.charts.umsStoreDav.repository }}"
   - name: "ums-ldap-server-repo"
     oci: {{ .Values.charts.umsLdapServer.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsLdapServer.verify }}
     username: {{ .Values.charts.umsLdapServer.username | quote }}
     password: {{ .Values.charts.umsLdapServer.password | quote }}
     url: "{{ .Values.charts.umsLdapServer.registry }}/{{ .Values.charts.umsLdapServer.repository }}"
   - name: "ums-ldap-notifier-repo"
     oci: {{ .Values.charts.umsLdapNotifier.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsLdapNotifier.verify }}
     username: {{ .Values.charts.umsLdapNotifier.username | quote }}
     password: {{ .Values.charts.umsLdapNotifier.password | quote }}
     url: "{{ .Values.charts.umsLdapNotifier.registry }}/{{ .Values.charts.umsLdapNotifier.repository }}"
   - name: "ums-udm-rest-api-repo"
     oci: {{ .Values.charts.umsUdmRestApi.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsUdmRestApi.verify }}
     username: {{ .Values.charts.umsUdmRestApi.username | quote }}
     password: {{ .Values.charts.umsUdmRestApi.password | quote }}
     url: "{{ .Values.charts.umsUdmRestApi.registry }}/{{ .Values.charts.umsUdmRestApi.repository }}"
   - name: "ums-stack-data-ums-repo"
     oci: {{ .Values.charts.umsStackDataUms.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsStackDataUms.verify }}
     username: {{ .Values.charts.umsStackDataUms.username | quote }}
     password: {{ .Values.charts.umsStackDataUms.password | quote }}
     url: "{{ .Values.charts.umsStackDataUms.registry }}/{{ .Values.charts.umsStackDataUms.repository }}"
   - name: "ums-stack-data-swp-repo"
     oci: {{ .Values.charts.umsStackDataSwp.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsStackDataSwp.verify }}
     username: {{ .Values.charts.umsStackDataSwp.username | quote }}
     password: {{ .Values.charts.umsStackDataSwp.password | quote }}
     url: "{{ .Values.charts.umsStackDataSwp.registry }}/{{ .Values.charts.umsStackDataSwp.repository }}"
   - name: "ums-portal-server-repo"
     oci: {{ .Values.charts.umsPortalServer.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsPortalServer.verify }}
     username: {{ .Values.charts.umsPortalServer.username | quote }}
     password: {{ .Values.charts.umsPortalServer.password | quote }}
     url: "{{ .Values.charts.umsPortalServer.registry }}/{{ .Values.charts.umsPortalServer.repository }}"
   - name: "ums-notifications-api-repo"
     oci: {{ .Values.charts.umsNotificationsApi.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsNotificationsApi.verify }}
     username: {{ .Values.charts.umsNotificationsApi.username | quote }}
     password: {{ .Values.charts.umsNotificationsApi.password | quote }}
     url: "{{ .Values.charts.umsNotificationsApi.registry }}/{{ .Values.charts.umsNotificationsApi.repository }}"
   - name: "ums-portal-listener-repo"
     oci: {{ .Values.charts.umsPortalListener.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsPortalListener.verify }}
     username: {{ .Values.charts.umsPortalListener.username | quote }}
     password: {{ .Values.charts.umsPortalListener.password | quote }}
     url: "{{ .Values.charts.umsPortalListener.registry }}/{{ .Values.charts.umsPortalListener.repository }}"
   - name: "ums-portal-frontend-repo"
     oci: {{ .Values.charts.umsPortalFrontend.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsPortalFrontend.verify }}
     username: {{ .Values.charts.umsPortalFrontend.username | quote }}
     password: {{ .Values.charts.umsPortalFrontend.password | quote }}
     url: "{{ .Values.charts.umsPortalFrontend.registry }}/{{ .Values.charts.umsPortalFrontend.repository }}"
   - name: "ums-umc-gateway-repo"
     oci: {{ .Values.charts.umsUmcGateway.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsUmcGateway.verify }}
     username: {{ .Values.charts.umsUmcGateway.username | quote }}
     password: {{ .Values.charts.umsUmcGateway.password | quote }}
     url: "{{ .Values.charts.umsUmcGateway.registry }}/{{ .Values.charts.umsUmcGateway.repository }}"
   - name: "ums-umc-server-repo"
     oci: {{ .Values.charts.umsUmcServer.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsUmcServer.verify }}
     username: {{ .Values.charts.umsUmcServer.username | quote }}
     password: {{ .Values.charts.umsUmcServer.password | quote }}
     url: "{{ .Values.charts.umsUmcServer.registry }}/{{ .Values.charts.umsUmcServer.repository }}"
   - name: "ums-selfservice-listener-repo"
     oci: {{ .Values.charts.umsSelfserviceListener.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsSelfserviceListener.verify }}
     username: {{ .Values.charts.umsSelfserviceListener.username | quote }}
     password: {{ .Values.charts.umsSelfserviceListener.password | quote }}
     url: "{{ .Values.charts.umsSelfserviceListener.registry }}/{{ .Values.charts.umsSelfserviceListener.repository }}"

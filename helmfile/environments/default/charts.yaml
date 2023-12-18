@@ -216,11 +216,11 @@ charts:
     # packageName=keycloak-extensions
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/77/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "keycloak-extensions"
-    oci: false
-    version: "0.1.0"
+    oci: true
+    version: "0.0.3"
     username: ~
     password: ~
 
@@ -468,11 +468,12 @@ charts:
     # packageName=ox-connector
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/128/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "ox-connector"
-    oci: false
-    version: "0.1.0-pre-jconde-listener-entrypoint-chaining"
+    oci: true
+    version: "0.4.2"
+    verify: true
     username: ~
     password: ~
 
@@ -572,11 +573,12 @@ charts:
     # packageName=ldap-notifier
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "ldap-notifier"
-    oci: false
-    version: "0.7.0"
+    oci: true
+    verify: true
+    version: "0.7.2"
     username: ~
     password: ~
 
@@ -586,11 +588,12 @@ charts:
     # packageName=ldap-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "ldap-server"
-    oci: false
-    version: "0.7.0"
+    oci: true
+    verify: true
+    version: "0.7.2"
     username: ~
     password: ~
 
@@ -600,11 +603,12 @@ charts:
     # packageName=notifications-api
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "notifications-api"
-    oci: false
-    version: "0.9.1"
+    oci: true
+    verify: true
+    version: "0.9.2"
     username: ~
     password: ~
 
@@ -614,11 +618,12 @@ charts:
     # packageName=portal-frontend
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "portal-frontend"
-    oci: false
-    version: "0.9.1"
+    oci: true
+    verify: true
+    version: "0.9.2"
     username: ~
     password: ~
 
@@ -628,11 +633,12 @@ charts:
     # packageName=portal-listener
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "portal-listener"
-    oci: false
-    version: "0.9.1"
+    oci: true
+    verify: true
+    version: "0.9.2"
     username: ~
     password: ~
 
@@ -642,11 +648,12 @@ charts:
     # packageName=portal-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "portal-server"
-    oci: false
-    version: "0.9.1"
+    oci: true
+    verify: true
+    version: "0.9.2"
     username: ~
     password: ~
 
@@ -656,11 +663,12 @@ charts:
     # packageName=umc-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "selfservice-listener"
-    oci: false
-    version: "0.2.0"
+    oci: true
+    verify: true
+    version: "0.3.1"
     username: ~
     password: ~
 
@@ -670,11 +678,12 @@ charts:
     # packageName=stack-data-swp
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "stack-data-swp"
-    oci: false
-    version: "0.39.4"
+    oci: true
+    verify: true
+    version: "0.39.5"
     username: ~
     password: ~
 
@@ -684,11 +693,12 @@ charts:
     # packageName=stack-data-ums
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "stack-data-ums"
-    oci: false
-    version: "0.39.3"
+    oci: true
+    verify: true
+    version: "0.39.5"
     username: ~
     password: ~
 
@@ -698,11 +708,12 @@ charts:
     # packageName=store-dav
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "store-dav"
-    oci: false
-    version: "0.9.1"
+    oci: true
+    verify: true
+    version: "0.9.3"
     username: ~
     password: ~
 
@@ -712,11 +723,12 @@ charts:
     # packageName=udm-rest-api
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "udm-rest-api"
-    oci: false
-    version: "0.4.1"
+    oci: true
+    verify: true
+    version: "0.4.3"
     username: ~
     password: ~
 
@@ -726,11 +738,12 @@ charts:
     # packageName=umc-gateway
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "umc-gateway"
-    oci: false
-    version: "0.6.2"
+    oci: true
+    verify: true
+    version: "0.6.4"
     username: ~
     password: ~
 
@@ -740,11 +753,12 @@ charts:
     # packageName=umc-server
     # dataSource=helm
     # dependencyType=vendor
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/155/packages/helm/stable"
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "umc-server"
-    oci: false
-    version: "0.6.2"
+    oci: true
+    verify: true
+    version: "0.6.4"
     username: ~
     password: ~
 
