@@ -295,7 +295,7 @@ images:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/guard-ui"
-    tag: "4.0.7@sha256:8c9fa5d6aed055c0e84042ab28b3f0e9add94390362266ad440da4f90b8c93a8"
+    tag: "4.2.2@sha256:c2ff375fa3dc359c555570f5216a5451966d9b7165934980acb1bf60363b59c8"
     # @supplier: "Open-Xchange"
   openxchangeImageConverter:
     # renovate:
@@ -316,7 +316,7 @@ images:
     # registryUrl=https://registry.open-xchange.com
     # dependencyType=vendor
     repository: "appsuite-public-sector/public-sector-ui"
-    tag: "2.2.0@sha256:3f8c62c139c27569e6b7d38321268e7cc291caa4ea1ea03180c8ce5499edd6d5"
+    tag: "2.2.1@sha256:cf5dc3754dfdf41844f619b0c3178d0406de3ce8dd51317ed706cb329d338fc8"
     # @supplier: "Open-Xchange"
   oxConnector:
     # renovate:

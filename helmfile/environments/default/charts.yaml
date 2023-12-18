@@ -428,7 +428,7 @@ charts:
     repository: "sovereign-workplace/appsuite-public-sector/charts"
     name: "appsuite-public-sector"
     oci: true
-    version: "2.2.34"
+    version: "2.2.37"
     username: ~
     password: ~
 
