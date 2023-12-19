@@ -93,6 +93,8 @@ The following release artefacts are provided beside the default source code asse
 - `chart-index.json`: An overview of all Helm charts used by the release.
 - `image-index.json`: An overview of all container images used by the release.
 
+⟶ Visit out detailed [Workflow](./docs/workflow.md) docs.
+
 # Components
 
 ⟶ Visit our detailed [Component](./docs/components.md) docs.
