@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 appsuite:
+  appsuite-toolkit:
+    enabled: false
   istio:
     ingressGateway:
       name: "opendesk-gateway-istio-gateway"
