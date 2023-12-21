@@ -1,3 +1,15 @@
+## [0.5.73](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.72...v0.5.73) (2023-12-21)
+
+
+### Bug Fixes
+
+* **docs:** Add and reference workflow.md ([0e1e875](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/0e1e87550f2ff10a3ff11e860e559a54251702cb))
+* **helmfile:** Make GPG keys to use CC0-1.0 ([006e20f](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/006e20f06bf5969a213c40c9cbd241cb35adef6c))
+* **helmfile:** Pull Univention Helm charts from OCI ([8d6503c](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/8d6503cf28e7960f914325a834032cd9c4e01724))
+* **helmfile:** Switch Helm charts to Open CoDE ([0952221](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/0952221f9052f0e58e19629ccd47d85b60b53155))
+* **open-xchange:** Disable debug container (appsuite-toolkit) ([40fb9dc](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/40fb9dc9faf7cf579707758d2f5d8714509d34d9))
+* **univention-management-stack:** Add extended timeouts to Helm deployment ([1f7b3ca](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/commit/1f7b3ca0f93036300d1421bedc962cf725e6459e))
+
 ## [0.5.72](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.71...v0.5.72) (2023-12-18)
 
 
