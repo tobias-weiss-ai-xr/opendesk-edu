@@ -4,44 +4,44 @@
 charts:
   certificates:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-certificates/opendesk-certificates
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-certificates/opendesk-certificates
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-certificates"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-certificates"
     name: "opendesk-certificates"
     oci: true
-    version: "2.1.0"
+    version: "2.1.1"
     verify: true
     username: ~
     password: ~
 
   clamav:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/clamav/opendesk-clamav
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-clamav/opendesk-clamav
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/clamav"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
     name: "opendesk-clamav"
     oci: true
-    version: "4.0.0"
+    version: "4.0.1"
     verify: true
     username: ~
     password: ~
 
   clamavSimple:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/clamav/clamav-simple
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-clamav/clamav-simple
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/clamav"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
     name: "clamav-simple"
-    version: "4.0.0"
+    version: "4.0.1"
     oci: true
     verify: true
     username: ~
@@ -52,7 +52,7 @@ charts:
     # registryUrl=https://collaboraonline.github.io/online
     # packageName=collabora-online
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "https://collaboraonline.github.io"
     repository: "online"
     name: "collabora-online"
@@ -66,7 +66,7 @@ charts:
     # registryUrl=https://cryptpad.github.io/helm
     # packageName=cryptpad
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "https://cryptpad.github.io"
     repository: "helm"
     name: "cryptpad"
@@ -77,45 +77,45 @@ charts:
 
   dovecot:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/dovecot/dovecot
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-dovecot/dovecot
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/dovecot"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-dovecot"
     name: "dovecot"
     oci: true
-    version: "1.3.7"
+    version: "1.3.8"
     verify: true
     username: ~
     password: ~
 
   element:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-element
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-element
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-element"
     oci: true
-    version: "2.6.0"
+    version: "2.6.3"
     verify: true
     username: ~
     password: ~
 
   elementWellKnown:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-well-known
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-well-known
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-well-known"
     oci: true
-    version: "2.6.0"
+    version: "2.6.3"
     verify: true
     username: ~
     password: ~
@@ -125,7 +125,7 @@ charts:
     # registryUrl=https://registry.souvap-univention.de
     # packageName=souvap/tooling/charts/intercom-service/intercom-service
     # dataSource=docker
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/intercom-service"
     name: "intercom-service"
@@ -137,30 +137,30 @@ charts:
 
   istioResources:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/istio-ressources/istio-gateway
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-istio-resources/istio-gateway
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/istio-ressources"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-istio-resources"
     name: "istio-gateway"
     oci: true
-    version: "2.0.0"
+    version: "2.0.1"
     verify: true
     username: ~
     password: ~
 
   jitsi:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-jitsi/sovereign-workplace-jitsi
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-jitsi/opendesk-jitsi
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-jitsi"
-    name: "sovereign-workplace-jitsi"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-jitsi"
+    name: "opendesk-jitsi"
     oci: true
-    version: "1.7.2"
+    version: "1.7.4"
     verify: true
     username: ~
     password: ~
@@ -170,7 +170,7 @@ charts:
     # registryUrl=https://registry.souvap-univention.de
     # packageName=souvap/tooling/charts/univention-keycloak/ums-keycloak
     # dataSource=docker
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention-keycloak"
     name: "ums-keycloak"
@@ -185,7 +185,7 @@ charts:
     # registryUrl=https://registry.souvap-univention.de
     # packageName=souvap/tooling/charts/univention-keycloak-bootstrap/ums-keycloak-bootstrap
     # dataSource=docker
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention-keycloak-bootstrap"
     name: "ums-keycloak-bootstrap"
@@ -197,15 +197,15 @@ charts:
 
   opendeskKeycloakBootstrap:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/opendesk-keycloak-bootstrap/opendesk-keycloak-bootstrap
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap/opendesk-keycloak-bootstrap
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-keycloak-bootstrap"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap"
     name: "opendesk-keycloak-bootstrap"
     oci: true
-    version: "1.0.3"
+    version: "1.0.5"
     verify: true
     username: ~
     password: ~
@@ -215,101 +215,101 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/77/packages/helm/stable
     # packageName=keycloak-extensions
     # dataSource=helm
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    # dependencyType=supplier
+    registry: "https://gitlab.souvap-univention.de"
+    repository: "api/v4/projects/77/packages/helm/stable"
     name: "keycloak-extensions"
-    oci: true
-    version: "0.0.3"
+    oci: false
+    version: "0.1.0"
     username: ~
     password: ~
 
   mariadb:
     # renovate:
     # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/charts/opendesk-mariadb/mariadb
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-mariadb/mariadb
     # dataSource=docker
-    # dependencyType=service
+    # dependencyType=platform
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/charts/opendesk-mariadb"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-mariadb"
     name: "mariadb"
     oci: true
-    version: "2.2.0"
+    version: "2.2.1"
     verify: true
     username: ~
     password: ~
 
   matrixNeoboardWidget:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neoboard-widget
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neoboard-widget
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neoboard-widget"
     oci: true
-    version: "3.3.0"
+    version: "3.3.1"
     verify: true
     username: ~
     password: ~
 
   matrixNeochoiseWidget:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neochoice-widget
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neochoice-widget
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neochoice-widget"
     oci: true
-    version: "3.3.0"
+    version: "3.3.1"
     verify: true
     username: ~
     password: ~
 
   matrixNeodatefixBot:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neodatefix-bot
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-bot
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-bot"
     oci: true
-    version: "3.3.0"
+    version: "3.3.1"
     verify: true
     username: ~
     password: ~
 
   matrixNeodatefixWidget:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/opendesk-matrix-widgets/matrix-neodatefix-widget
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-widget
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-matrix-widgets"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-widget"
     oci: true
-    version: "3.3.0"
+    version: "3.3.1"
     verify: true
     username: ~
     password: ~
 
   matrixUserVerificationService:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-matrix-user-verification-service
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-matrix-user-verification-service
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-matrix-user-verification-service"
     oci: true
-    version: "2.6.0"
+    version: "2.6.3"
     verify: true
     username: ~
     password: ~
@@ -319,12 +319,12 @@ charts:
     # registryUrl=https://registry-1.docker.io
     # packageName=bitnamicharts/memcached
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
+    # dependencyType=external
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/external/charts/bitnami-charts"
     name: "memcached"
     oci: true
-    version: "6.6.2"
+    version: "6.7.1"
     verify: true
     username: ~
     password: ~
@@ -334,12 +334,12 @@ charts:
     # registryUrl=https://registry-1.docker.io
     # packageName=bitnamicharts/minio
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
+    # dependencyType=external
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/external/charts/bitnami-charts"
     name: "minio"
     oci: true
-    version: "12.8.19"
+    version: "12.10.11"
     verify: true
     username: ~
     password: ~
@@ -349,7 +349,7 @@ charts:
     # registryUrl=https://nextcloud.github.io/helm
     # packageName=nextcloud
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "https://nextcloud.github.io"
     repository: "helm"
     oci: false
@@ -363,7 +363,7 @@ charts:
     # registryUrl=https://registry.souvap-univention.de
     # packageName=souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap/opendesk-nextcloud-bootstrap
     # dataSource=docker
-    # dependencyType=vendor
+    # dependencyType=platform
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap"
     name: "opendesk-nextcloud-bootstrap"
@@ -378,12 +378,12 @@ charts:
     # registryUrl=https://registry-1.docker.io
     # packageName=bitnamicharts/nginx
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
+    # dependencyType=external
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/external/charts/bitnami-charts"
     name: "nginx"
     oci: true
-    version: "15.3.5"
+    version: "15.5.1"
     verify: true
     username: ~
     password: ~
@@ -393,7 +393,7 @@ charts:
     # registryUrl=https://ghcr.io
     # packageName=opf/helm-charts/openproject
     # dataSource=docker
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/opf/helm-charts"
     name: "openproject"
@@ -405,15 +405,15 @@ charts:
 
   openprojectBootstrap:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/opendesk-openproject-bootstrap/opendesk-openproject-bootstrap
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap/opendesk-openproject-bootstrap
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-openproject-bootstrap"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap"
     name: "opendesk-openproject-bootstrap"
     oci: true
-    version: "1.2.1"
+    version: "1.2.3"
     verify: true
     username: ~
     password: ~
@@ -423,7 +423,7 @@ charts:
     # registryUrl=https://registry.open-xchange.com
     # packageName=appsuite-public-sector/charts/appsuite-public-sector
     # dataSource=docker
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/appsuite-public-sector/charts"
     name: "appsuite-public-sector"
@@ -434,30 +434,30 @@ charts:
 
   openXchangeAppSuiteBootstrap:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-open-xchange-bootstrap/sovereign-workplace-open-xchange-bootstrap
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap/opendesk-open-xchange-bootstrap
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-open-xchange-bootstrap"
-    name: "sovereign-workplace-open-xchange-bootstrap"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap"
+    name: "opendesk-open-xchange-bootstrap"
     oci: true
-    version: "1.3.1"
+    version: "1.3.4"
     verify: true
     username: ~
     password: ~
 
   otterize:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/opendesk-otterize/opendesk-otterize
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-otterize/opendesk-otterize
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/opendesk-otterize"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
     oci: true
-    version: "1.2.0"
+    version: "1.3.1"
     verify: true
     username: ~
     password: ~
@@ -467,7 +467,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable
     # packageName=ox-connector
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "ox-connector"
@@ -479,30 +479,30 @@ charts:
 
   postfix:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/postfix/postfix
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-postfix/postfix
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/postfix"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-postfix"
     name: "postfix"
     oci: true
-    version: "2.0.4"
+    version: "2.0.5"
     verify: true
     username: ~
     password: ~
 
   postgresql:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/postgresql/postgresql
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-postgresql/postgresql
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/postgresql"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-postgresql"
     name: "postgresql"
     oci: true
-    version: "2.0.3"
+    version: "2.0.5"
     verify: true
     username: ~
     password: ~
@@ -512,57 +512,57 @@ charts:
     # registryUrl=https://registry-1.docker.io
     # packageName=bitnamicharts/redis
     # dataSource=docker
-    # dependencyType=service
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/bitnami-charts"
+    # dependencyType=external
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/external/charts/bitnami-charts"
     name: "redis"
     oci: true
-    version: "18.1.2"
+    version: "18.6.1"
     verify: true
     username: ~
     password: ~
 
   synapse:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse"
     oci: true
-    version: "2.6.2"
+    version: "2.6.3"
     verify: true
     username: ~
     password: ~
 
   synapseCreateAccount:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-create-account
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-create-account
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-create-account"
     oci: true
-    version: "2.6.0"
+    version: "2.6.3"
     verify: true
     username: ~
     password: ~
 
   synapseWeb:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-element/opendesk-synapse-web
+    # registryUrl=https://registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-web
     # dataSource=docker
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-element"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-web"
     oci: true
-    version: "2.6.0"
+    version: "2.6.3"
     verify: true
     username: ~
     password: ~
@@ -572,7 +572,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=ldap-notifier
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "ldap-notifier"
@@ -587,7 +587,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=ldap-server
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "ldap-server"
@@ -602,7 +602,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=notifications-api
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "notifications-api"
@@ -617,7 +617,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=portal-frontend
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "portal-frontend"
@@ -632,7 +632,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=portal-listener
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "portal-listener"
@@ -647,7 +647,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=portal-server
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "portal-server"
@@ -662,7 +662,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=umc-server
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "selfservice-listener"
@@ -677,7 +677,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=stack-data-swp
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "stack-data-swp"
@@ -692,7 +692,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=stack-data-ums
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "stack-data-ums"
@@ -707,7 +707,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=store-dav
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "store-dav"
@@ -722,7 +722,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=udm-rest-api
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "udm-rest-api"
@@ -737,7 +737,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=umc-gateway
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "umc-gateway"
@@ -752,7 +752,7 @@ charts:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
     # packageName=umc-server
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "external-registry.souvap-univention.de"
     repository: "sovereign-workplace/souvap/tooling/charts/univention"
     name: "umc-server"
@@ -767,7 +767,7 @@ charts:
     # registryUrl=https://xwiki-contrib.github.io/xwiki-helm
     # packageName=xwiki
     # dataSource=helm
-    # dependencyType=vendor
+    # dependencyType=supplier
     registry: "https://xwiki-contrib.github.io"
     repository: "xwiki-helm"
     oci: false
