@@ -21,7 +21,7 @@ images:
     # registryUrl=https://docker.io
     # dependencyType=supplier
     repository: "cryptpad/cryptpad"
-    tag: "version-5.6.0@sha256:9e408642333c2620c6aaa5d6c628ac4b48b5e0d3d2239e83187e627eeef1461a"
+    tag: "opendesk-20231222@sha256:f4d20d5c38c87b11ed1a1b46ef6a3633d32c6758ebdff8556458f040318fa5e2"
     # @supplier: "XWiki"
   dovecot:
     # renovate:
