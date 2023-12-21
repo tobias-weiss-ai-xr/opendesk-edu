@@ -1,0 +1,18 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  registry: {{ .Values.global.imageRegistry }}
+  repository: {{ .Values.images.umsOpenPolicyAgent.repository }}
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+  tag: {{ .Values.images.umsOpenPolicyAgent.tag }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+resources:
+  {{ .Values.resources.umsOpenPolicyAgent | toYaml | nindent 2 }}
+...

@@ -6,6 +6,34 @@ bases:
 ---
 repositories:
   # Univention Management Stack
+  - name: "ums-guardian-management-api-repo"
+    oci: {{ .Values.charts.umsGuardianManagementApi.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsGuardianManagementApi.verify }}
+    username: {{ .Values.charts.umsGuardianManagementApi.username | quote }}
+    password: {{ .Values.charts.umsGuardianManagementApi.password | quote }}
+    url: "{{ .Values.charts.umsGuardianManagementApi.registry }}/{{ .Values.charts.umsGuardianManagementApi.repository }}"
+  - name: "ums-guardian-management-ui-repo"
+    oci: {{ .Values.charts.umsGuardianManagementUi.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsGuardianManagementUi.verify }}
+    username: {{ .Values.charts.umsGuardianManagementUi.username | quote }}
+    password: {{ .Values.charts.umsGuardianManagementUi.password | quote }}
+    url: "{{ .Values.charts.umsGuardianManagementUi.registry }}/{{ .Values.charts.umsGuardianManagementUi.repository }}"
+  - name: "ums-guardian-authorization-api-repo"
+    oci: {{ .Values.charts.umsGuardianAuthorizationApi.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsGuardianAuthorizationApi.verify }}
+    username: {{ .Values.charts.umsGuardianAuthorizationApi.username | quote }}
+    password: {{ .Values.charts.umsGuardianAuthorizationApi.password | quote }}
+    url: "{{ .Values.charts.umsGuardianAuthorizationApi.registry }}/{{ .Values.charts.umsGuardianAuthorizationApi.repository }}"
+  - name: "ums-open-policy-agent-repo"
+    oci: {{ .Values.charts.umsOpenPolicyAgent.oci }}
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.umsOpenPolicyAgent.verify }}
+    username: {{ .Values.charts.umsOpenPolicyAgent.username | quote }}
+    password: {{ .Values.charts.umsOpenPolicyAgent.password | quote }}
+    url: "{{ .Values.charts.umsOpenPolicyAgent.registry }}/{{ .Values.charts.umsOpenPolicyAgent.repository }}"
   - name: "ums-store-dav-repo"
     oci: {{ .Values.charts.umsStoreDav.oci }}
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
@@ -329,6 +357,41 @@ releases:
       - "values-common.yaml"
       - "values-provisioning.gotmpl"
       - "values-provisioning.yaml"
+  - name: "ums-guardian-management-api"
+    chart: "ums-guardian-management-api-repo/{{ .Values.charts.umsGuardianManagementApi.name }}"
+    version: "{{ .Values.charts.umsGuardianManagementApi.version }}"
+    values:
+      - "values-common.gotmpl"
+      - "values-common.yaml"
+      - "values-guardian-management-api.gotmpl"
+      - "values-guardian-management-api.yaml"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+  - name: "ums-guardian-management-ui"
+    chart: "ums-guardian-management-ui-repo/{{ .Values.charts.umsGuardianManagementUi.name }}"
+    version: "{{ .Values.charts.umsGuardianManagementUi.version }}"
+    values:
+      - "values-common.gotmpl"
+      - "values-common.yaml"
+      - "values-guardian-management-ui.gotmpl"
+      - "values-guardian-management-ui.yaml"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+  - name: "ums-guardian-authorization-api"
+    chart: "ums-guardian-authorization-api-repo/{{ .Values.charts.umsGuardianAuthorizationApi.name }}"
+    version: "{{ .Values.charts.umsGuardianAuthorizationApi.version }}"
+    values:
+      - "values-common.gotmpl"
+      - "values-common.yaml"
+      - "values-guardian-authorization-api.gotmpl"
+      - "values-guardian-authorization-api.yaml"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+  - name: "ums-open-policy-agent"
+    chart: "ums-open-policy-agent-repo/{{ .Values.charts.umsOpenPolicyAgent.name }}"
+    version: "{{ .Values.charts.umsOpenPolicyAgent.version }}"
+    values:
+      - "values-common.gotmpl"
+      - "values-common.yaml"
+      - "values-open-policy-agent.gotmpl"
+      - "values-open-policy-agent.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
 
 commonLabels:

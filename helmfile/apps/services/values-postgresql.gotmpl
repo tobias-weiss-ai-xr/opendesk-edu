@@ -25,6 +25,8 @@ job:
       password: {{ .Values.secrets.postgresql.matrixUser | quote }}
     - username: "notificationsapi_user"
       password: {{ .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
+    - username: "guardianmanagementapi_user"
+      password: {{ .Values.secrets.postgresql.umsGuardianManagementApiUser | quote }}
     - username: "selfservice_user"
       password: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
   databases:
@@ -37,6 +39,8 @@ job:
     - name: "matrix"
       user: "matrix_user"
       additionalParams: "ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0"
+    - name: "guardianmanagementapi"
+      user: "guardianmanagementapi_user"
     - name: "notificationsapi"
       user: "notificationsapi_user"
     - name: "selfservice"

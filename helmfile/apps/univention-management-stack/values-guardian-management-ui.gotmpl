@@ -1,0 +1,23 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+guardianManagementUi:
+  viteApiDataAdapterUri: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/guardian/management"
+  viteKeycloakAuthenticationAdapterSsoUri: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+  viteKeycloakAuthenticationAdapterRealm: {{ .Values.platform.realm | quote }}
+
+image:
+  registry: {{ .Values.global.imageRegistry }}
+  repository: {{ .Values.images.umsGuardianManagementUi.repository }}
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+  tag: {{ .Values.images.umsGuardianManagementUi.tag }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+resources:
+  {{ .Values.resources.umsGuardianManagementUi | toYaml | nindent 2 }}
+...

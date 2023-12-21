@@ -36,6 +36,12 @@ databases:
     username: "matrix_user"
     password: ""
     port: 5432
+  umsGuardianManagementApi:
+    name: "guardianmanagementapi"
+    host: "postgresql"
+    port: 5432
+    username: "guardianmanagementapi_user"
+    password: ""
   umsNotificationsApi:
     name: "notificationsapi"
     host: "postgresql"

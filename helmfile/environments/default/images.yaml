@@ -470,12 +470,44 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '39', '5']
+  umsGuardianManagementApi:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=supplier
+    # This is a preview and not part of the standard deployment.
+    repository: "souvap/tooling/images/univention/guardian-management-api"
+    tag: "0.0.1-pre-jlohmer-container-ci-2@sha256:db0a109866feb79aa2cd97db957b5c68bf58d9e2b41ddb05b8859f9445361a3f"
+    # @supplier: "Univention"
+  umsGuardianManagementUi:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=supplier
+    # This is a preview and not part of the standard deployment.
+    repository: "souvap/tooling/images/univention/guardian-management-ui"
+    tag: "0.0.1-pre-jlohmer-container-ci-2@sha256:e47091da3a6bcabd20cedbda490324a968cd1fd683bb8feed19a6f2b0377fd8b"
+    # @supplier: "Univention"
+  umsGuardianAuthorizationApi:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=supplier
+    # This is a preview and not part of the standard deployment.
+    repository: "souvap/tooling/images/univention/guardian-authorization-api"
+    tag: "0.0.1-pre-jlohmer-container-ci-2@sha256:54b4a2ac043443627b9ff7c5f9b88ce76e8af0b193ba9187ceebc47acc9a204f"
+    # @supplier: "Univention"
+  umsOpenPolicyAgent:
+    # renovate:
+    # registryUrl=https://registry.souvap-univention.de
+    # dependencyType=supplier
+    # This is a preview and not part of the standard deployment.
+    repository: "souvap/tooling/images/univention/guardian-opa"
+    tag: "0.0.1-pre-jlohmer-container-ci-2@sha256:bc515dfd18af8edecd0289b44bb8cbefa195d1a9c162357b8b13db8dcf63ba16"
+    # @supplier: "Univention"
   umsLdapNotifier:
     # renovate:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=supplier
     repository: "souvap/tooling/images/univention/ldap-notifier"
-    tag: "0.7.2@sha256:cd05f5c8c6765ed5bdc1246178498a8d47e4f7ec6a75c3e0f1f69c0ee18f6e6a"
+    tag: "0.8.2@sha256:bb7d76fb5299e9d019aa61b5397af15063a5b341fcf2b74c65db679ca5fa873f"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '7', '2']
@@ -484,7 +516,7 @@ images:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=supplier
     repository: "souvap/tooling/images/univention/ldap-server"
-    tag: "0.7.2@sha256:591115300e67ace320333b7a865922f528a7628e693db858f20f59c3ff454b51"
+    tag: "0.8.2@sha256:abcaec050875a8605befe13cce78f9f8eb28aa3c1764e281a8540b2a3db4a5da"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '7', '2']
@@ -547,7 +579,7 @@ images:
     # registryUrl=https://registry.souvap-univention.de
     # dependencyType=supplier
     repository: "souvap/tooling/images/univention/udm-rest-api"
-    tag: "0.4.3@sha256:d6ae525028dd2ee108e923dee79db9c1f2f4e0e9f0df3b35de1d50ccc3d90420"
+    tag: "0.5.2@sha256:94c8294130f6a187bb850bcaeb314a09c5aa48ab97e3f419fbeb6ddbd39a3246"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '4', '3']

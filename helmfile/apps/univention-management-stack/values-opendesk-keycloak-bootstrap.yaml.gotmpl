@@ -415,12 +415,12 @@ config:
           - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/guardian/*"
         fullScopeAllowed: true
         protocol: "openid-connect"
-        publiClient: true
+        publicClient: true
         frontchannelLogout: false
         standardFlowEnabled: true
         attributes:
-          use.refresh.tokens: true
-          backchannel.logout.session.required: true
+          use.refresh.tokens: "true"
+          backchannel.logout.session.required: "true"
         protocolMappers:
           - name: "email"
             protocol: "openid-connect"

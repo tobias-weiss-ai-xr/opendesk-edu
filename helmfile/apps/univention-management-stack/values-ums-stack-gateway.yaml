@@ -243,6 +243,21 @@ serverBlock: |
       proxy_pass http://ums-provisioning-provisioning-api:80;
     }
 
+    ## guardian
+    location /univention/guardian/management-ui {
+      proxy_pass http://ums-guardian-management-ui:80/univention/guardian/management-ui;
+    }
+    location /guardian/opa {
+      rewrite ^/guardian/opa(/.*)$ $1 break;
+      proxy_pass http://ums-open-policy-agent:80/;
+    }
+    location /guardian/management {
+      proxy_pass http://ums-guardian-management-api:80/guardian/management;
+    }
+    location /guardian/authorization {
+      proxy_pass http://ums-guardian-authorization-api:80/guardian/authorization;
+    }
+
   }
 
 podSecurityContext:
