@@ -175,7 +175,7 @@ charts:
     repository: "sovereign-workplace/souvap/tooling/charts/univention-keycloak"
     name: "ums-keycloak"
     oci: true
-    version: "1.0.1"
+    version: "1.0.3"
     verify: true
     username: ~
     password: ~

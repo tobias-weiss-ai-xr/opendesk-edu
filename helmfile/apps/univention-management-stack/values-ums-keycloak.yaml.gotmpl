@@ -26,6 +26,12 @@ config:
     user: {{ .Values.databases.keycloak.username | quote }}
     database: {{ .Values.databases.keycloak.name | quote }}
     password: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser | quote }}
+  logLevel: "DEBUG"
+  enableMetrics: true
+  # The availability of the admin console is already restricted through the path settings in the Keycloak Extensions
+  # Proxy which is used in openDesk. The setting here is just relevant when Keycloak endpoints are exposed directly
+  # through an own ingress.
+  exposeAdminConsole: false
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
