@@ -9,7 +9,7 @@ repositories:
   # Source: Set when repo is managed on Open CoDE
   - name: "openproject-bootstrap-repo"
     oci: {{ .Values.charts.openprojectBootstrap.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.openprojectBootstrap.verify }}
     username: {{ .Values.charts.openprojectBootstrap.username | quote }}
     password: {{ .Values.charts.openprojectBootstrap.password | quote }}

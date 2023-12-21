@@ -121,7 +121,7 @@ repositories:
     url: "{{ .Values.charts.umsKeycloakBootstrap.registry }}/{{ .Values.charts.umsKeycloakBootstrap.repository }}"
   - name: "opendesk-keycloak-bootstrap-repo"
     oci: {{ .Values.charts.opendeskKeycloakBootstrap.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.opendeskKeycloakBootstrap.verify }}
     username: {{ .Values.charts.opendeskKeycloakBootstrap.username | quote }}
     password: {{ .Values.charts.opendeskKeycloakBootstrap.password | quote }}
@@ -131,7 +131,7 @@ repositories:
   # Source: https://github.com/bitnami/charts/
   - name: "nginx-repo"
     oci: {{ .Values.charts.nginx.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.nginx.verify }}
     username: {{ .Values.charts.nginx.username | quote }}
     password: {{ .Values.charts.nginx.password | quote }}

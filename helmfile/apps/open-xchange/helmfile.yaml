@@ -9,7 +9,7 @@ repositories:
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-dovecot
   - name: "dovecot-repo"
     oci: {{ .Values.charts.dovecot.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.dovecot.verify }}
     username: {{ .Values.charts.dovecot.username | quote }}
     password: {{ .Values.charts.dovecot.password | quote }}
@@ -26,7 +26,7 @@ repositories:
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-open-xchange-bootstrap
   - name: "open-xchange-bootstrap-repo"
     oci: {{ .Values.charts.openXchangeAppSuiteBootstrap.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.openXchangeAppSuiteBootstrap.verify }}
     username: {{ .Values.charts.openXchangeAppSuiteBootstrap.username | quote }}
     password: {{ .Values.charts.openXchangeAppSuiteBootstrap.password | quote }}

@@ -6,37 +6,37 @@ bases:
 ---
 repositories:
   # openDesk Otterize
-  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-otterize
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-otterize
   - name: "otterize-repo"
     oci: {{ .Values.charts.otterize.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.otterize.verify }}
     username: {{ .Values.charts.otterize.username | quote }}
     password: {{ .Values.charts.otterize.password | quote }}
     url: "{{ .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
 
   # openDesk Certificates
-  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-certificates
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-certificates
   - name: "certificates-repo"
     oci: {{ .Values.charts.certificates.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.certificates.verify }}
     username: {{ .Values.charts.certificates.username | quote }}
     password: {{ .Values.charts.certificates.password | quote }}
     url: "{{ .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
 
   # openDesk PostgreSQL
-  # Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postgresql
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postgresql
   - name: "postgresql-repo"
     oci: {{ .Values.charts.postgresql.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.postgresql.verify }}
     username: {{ .Values.charts.postgresql.username | quote }}
     password: {{ .Values.charts.postgresql.password | quote }}
     url: "{{ .Values.charts.postgresql.registry }}/{{ .Values.charts.postgresql.repository }}"
 
   # openDesk MariaDB
-  # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-mariadb
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-mariadb
   - name: "mariadb-repo"
     oci: {{ .Values.charts.mariadb.oci }}
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
@@ -46,37 +46,37 @@ repositories:
     url: "{{ .Values.charts.mariadb.registry }}/{{ .Values.charts.mariadb.repository }}"
 
   # openDesk Postfix
-  # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-postfix
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postfix
   - name: "postfix-repo"
     oci: {{ .Values.charts.postfix.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.postfix.verify }}
     username: {{ .Values.charts.postfix.username | quote }}
     password: {{ .Values.charts.postfix.password | quote }}
     url: "{{ .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
 
   # openDesk Istio Resources
-  # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-istio-resources
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-istio-resources
   - name: "istio-resources-repo"
     oci: {{ .Values.charts.istioResources.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.istioResources.verify }}
     username: {{ .Values.charts.istioResources.username | quote }}
     password: {{ .Values.charts.istioResources.password | quote }}
     url: "{{ .Values.charts.istioResources.registry }}/{{ .Values.charts.istioResources.repository }}"
 
   # openDesk ClamAV
-  # https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/components/charts/opendesk-clamav
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-clamav
   - name: "clamav-repo"
     oci: {{ .Values.charts.clamav.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.clamav.verify }}
     username: {{ .Values.charts.clamav.username | quote }}
     password: {{ .Values.charts.clamav.password | quote }}
     url: "{{ .Values.charts.clamav.registry }}/{{ .Values.charts.clamav.repository }}"
   - name: "clamav-simple-repo"
     oci: {{ .Values.charts.clamavSimple.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.clamavSimple.verify }}
     username: {{ .Values.charts.clamavSimple.username | quote }}
     password: {{ .Values.charts.clamavSimple.password | quote }}
@@ -86,26 +86,25 @@ repositories:
   # Source: https://github.com/bitnami/charts/
   - name: "memcached-repo"
     oci: {{ .Values.charts.memcached.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.memcached.verify }}
     username: {{ .Values.charts.memcached.username | quote }}
     password: {{ .Values.charts.memcached.password | quote }}
     url: "{{ .Values.charts.memcached.registry }}/{{ .Values.charts.memcached.repository }}"
   - name: "redis-repo"
     oci: {{ .Values.charts.redis.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.redis.verify }}
     username: {{ .Values.charts.redis.username | quote }}
     password: {{ .Values.charts.redis.password | quote }}
     url: "{{ .Values.charts.redis.registry }}/{{ .Values.charts.redis.repository }}"
   - name: "minio-repo"
     oci: {{ .Values.charts.minio.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.minio.verify }}
     username: {{ .Values.charts.minio.username | quote }}
     password: {{ .Values.charts.minio.password | quote }}
     url: "{{ .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
-
 
 releases:
   - name: "opendesk-otterize"
