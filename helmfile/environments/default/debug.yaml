@@ -10,4 +10,7 @@ cleanup:
   keepPVCOnDelete: false
   # Keep additional resources, like certificates on deletion of this release.
   keepRessourceOnDelete: true
+debug:
+  # Currently used in: umsKeycloak
+  logLevel: "INFO"
 ...
