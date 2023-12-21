@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+guardianAuthorizationApi:
+  home: "/guardian_service_dir"
+  guardianAuthzCorsAllowedOrigins: "*"
+  guardianAuthzAdapterSettingsPort: "env"
+  guardianAuthzAdapterAppPersistencePort: "udm_data"
+  guardianAuthzAdapterPolicyPort: "opa"
+  guardianAuthzAdapterAuthenticationPort: "fast_api_oauth"
+  isUniventionAppCenter: 0
+  udmDataAdapterUrl: "http://ums-udm-rest-api/udm/"
+  udmDataAdapterUsername: "cn=admin"
+  opaAdapterUrl: "http://ums-open-policy-agent/"
+  guardianAuthzLoggingLevel: "DEBUG"
+  guardianAuthzLoggingStructured: false
+  guardianAuthzLoggingFormat: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS ZZ}</green> | <level>{level}</level> | <level>{message}</level> | {extra}"
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+...

@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+guardianManagementApi:
+  home: "/guardian_service_dir"
+  guardianManagementCorsAllowedOrigins: "*"
+  guardianManagementAdapterSettingsPort: "env"
+  guardianManagementAdapterAppPersistencePort: "sql"
+  guardianManagementAdapterConditionPersistencePort: "sql"
+  guardianManagementAdapterContextPersistencePort: "sql"
+  guardianManagementAdapterNamespacePersistencePort: "sql"
+  guardianManagementAdapterPermissionPersistencePort: "sql"
+  guardianManagementAdapterRolePersistencePort: "sql"
+  guardianManagementAdapterCapabilityPersistencePort: "sql"
+  guardianManagementAdapterAuthenticationPort: "fast_api_oauth"
+  guardianManagementAdapterAuthorizationApiUrl: "http://ums-guardian-authorization-api/guardian/authorization"
+  guardianManagementAdapterResourceAuthorizationPort: "always"
+  isUniventionAppCenter: 0
+  sqlPersistenceAdapterDialect: "postgresql"
+  sqlPersistenceAdapterDbName: "postgres"
+  oauthAdapterM2mSecretFile: "/var/secrets/oauthAdapterM2mSecret"
+  guardianManagementLoggingLevel: "DEBUG"
+  guardianManagementLoggingStructured: false
+  guardianManagementLoggingFormat: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS ZZ}</green> | <level>{level}</level> | <level>{message}</level> | {extra}"
+  guardianManagementBaseUrl: "http://0.0.0.0:8000"
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+...

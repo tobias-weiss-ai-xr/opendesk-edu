@@ -457,7 +457,7 @@ charts:
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
     oci: true
-    version: "1.3.1"
+    version: "1.5.0"
     verify: true
     username: ~
     password: ~
@@ -567,6 +567,66 @@ charts:
     username: ~
     password: ~
 
+  umsGuardianManagementApi:
+    # renovate:
+    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
+    # packageName=umc-server
+    # dataSource=helm
+    # dependencyType=supplier
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    name: "guardian-management-api"
+    oci: true
+    verify: true
+    version: "0.0.1"
+    username: ~
+    password: ~
+
+  umsGuardianManagementUi:
+    # renovate:
+    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
+    # packageName=umc-server
+    # dataSource=helm
+    # dependencyType=supplier
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    name: "guardian-management-ui"
+    oci: true
+    verify: true
+    version: "0.0.1"
+    username: ~
+    password: ~
+
+  umsGuardianAuthorizationApi:
+    # renovate:
+    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
+    # packageName=umc-server
+    # dataSource=helm
+    # dependencyType=supplier
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    name: "guardian-authorization-api"
+    oci: true
+    verify: true
+    version: "0.0.1"
+    username: ~
+    password: ~
+
+  umsOpenPolicyAgent:
+    # renovate:
+    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
+    # packageName=umc-server
+    # dataSource=helm
+    # dependencyType=supplier
+    registry: "external-registry.souvap-univention.de"
+    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    name: "open-policy-agent"
+    oci: true
+    verify: true
+    version: "0.0.1"
+    username: ~
+    password: ~
+
   umsLdapNotifier:
     # renovate:
     # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
@@ -578,7 +638,7 @@ charts:
     name: "ldap-notifier"
     oci: true
     verify: true
-    version: "0.7.2"
+    version: "0.8.2"
     username: ~
     password: ~
 
@@ -593,7 +653,7 @@ charts:
     name: "ldap-server"
     oci: true
     verify: true
-    version: "0.7.2"
+    version: "0.8.2"
     username: ~
     password: ~
 
@@ -698,7 +758,7 @@ charts:
     name: "stack-data-swp"
     oci: true
     verify: true
-    version: "0.39.5"
+    version: "0.41.2"
     username: ~
     password: ~
 
@@ -713,7 +773,7 @@ charts:
     name: "stack-data-ums"
     oci: true
     verify: true
-    version: "0.39.5"
+    version: "0.41.2"
     username: ~
     password: ~
 
@@ -743,7 +803,7 @@ charts:
     name: "udm-rest-api"
     oci: true
     verify: true
-    version: "0.4.3"
+    version: "0.5.2"
     username: ~
     password: ~
 

@@ -1,0 +1,32 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+guardianManagementApi:
+  oauthAdapterM2mSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
+  oauthAdapterWellKnownUrl: "http://ums-keycloak:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
+
+postgresql:
+  bundled: false
+  connection:
+    host: {{ .Values.databases.umsGuardianManagementApi.host | quote }}
+    port: {{ .Values.databases.umsGuardianManagementApi.port | quote }}
+  auth:
+    username: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
+    database: {{ .Values.databases.umsGuardianManagementApi.name | quote }}
+    password: {{ .Values.databases.umsGuardianManagementApi.password | default .Values.secrets.postgresql.umsGuardianManagementApiUser | quote }}
+
+image:
+  registry: {{ .Values.global.imageRegistry }}
+  repository: {{ .Values.images.umsGuardianManagementApi.repository }}
+  pullPolicy: {{ .Values.global.imagePullPolicy }}
+  tag: {{ .Values.images.umsGuardianManagementApi.tag }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+resources:
+  {{ .Values.resources.umsGuardianManagementApi | toYaml | nindent 2 }}
+...
