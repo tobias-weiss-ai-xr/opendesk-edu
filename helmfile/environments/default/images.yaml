@@ -105,7 +105,7 @@ images:
     # registryUrl=https://docker.software-univention.de
     # dependencyType=supplier
     repository: "keycloak-keycloak"
-    tag: "22.0.3-ucs1@sha256:6b17a63d4c6bc60f9c645902f8dbb7ad094a867065e40c43cc81c867c1b8ba00"
+    tag: "22.0.3-ucs2@sha256:1e8e45a2e01050c1473595c3b143446363016ea292b0c599ccd9f1bd37112206"
     # @supplier: "Univention"
   umsKeycloakBootstrap:
     # renovate:
