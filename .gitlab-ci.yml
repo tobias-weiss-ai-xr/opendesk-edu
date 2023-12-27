@@ -15,6 +15,7 @@ include:
 
 stages:
   - ".pre"
+  - "scan"
   - "automr"
   - "lint"
   - "env-cleanup"
@@ -469,6 +470,64 @@ run-souvap-dev-tests:
         } \
       }" \
       "https://${UMS_TESTS_PROJECT_URL}/trigger/pipeline"
+
+avscan-prepare:
+  stage: ".pre"
+  rules:
+    - if: "$JOB_AVSCAN_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+      when: "always"
+    - when: "never"
+  image: "external-registry.souvap-univention.de/docker-remote/mikefarah/yq"
+  script:
+    - |
+      cat << 'EOF' > dynamic-scans.yml
+      ---
+      stages:
+        - "scan"
+
+      .container-clamav:
+        stage: "scan"
+        image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/clamav-imagescan:1.0.0"
+        before_script:
+          - "sed -i \"/^DatabaseMirror .*$/c DatabaseMirror ${DATABASE_MIRROR}\" /etc/clamav/freshclam.conf"
+          - "freshclam"
+          - "mkdir /scan"
+        script:
+          - "export IMAGE=${EXTERNAL_REGISTRY:-${CONTAINER_REGISTRY}}/${CONTAINER_IMAGE}:${CONTAINER_TAG}"
+          - "echo Pulling and scanning $IMAGE..."
+          - "crane pull $IMAGE /scan/image.tar"
+          - "clamscan /scan"
+        variables:
+          CONTAINER_IMAGE: ""
+          CONTAINER_REGISTRY: ""
+          CONTAINER_TAG: ""
+          DATABASE_MIRROR: "https://nexus.souvap-univention.de/repository/ClamAV"
+      EOF
+    - >
+      yq '.images
+      | with_entries(.key |= "scan-" + .)
+      | .[].extends=".container-clamav"
+      | with(.[]; .variables.CONTAINER_IMAGE = .repository | .variables.CONTAINER_TAG = .tag | .variables.CONTAINER_REGISTRY = .registry)
+      | del(.[].repository)
+      | del(.[].tag)
+      | del(.[].registry)'
+      helmfile/environments/default/images.yaml
+      >> dynamic-scans.yml
+  artifacts:
+    paths:
+      - "dynamic-scans.yml"
+
+avscan-start:
+  stage: "scan"
+  rules:
+    - if: "$JOB_AVSCAN_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+      when: "always"
+    - when: "never"
+  trigger:
+    include:
+      - artifact: "dynamic-scans.yml"
+        job: "avscan-prepare"
+    strategy: "depend"
 
 generate-release-assets:
   stage: "generate-release-assets"
