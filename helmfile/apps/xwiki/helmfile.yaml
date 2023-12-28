@@ -19,8 +19,7 @@ releases:
     version: "{{ .Values.charts.xwiki.version }}"
     wait: true
     values:
-      - "values.yaml"
-      - "values.gotmpl"
+      - "values.yaml.gotmpl"
     installed: {{ .Values.xwiki.enabled }}
     timeout: 900
 
