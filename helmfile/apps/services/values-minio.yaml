@@ -23,6 +23,11 @@ ingress:
   annotations:
     nginx.org/websocket-services: "minio"
 
+apiIngress:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "4G"
+    nginx.org/client-max-body-size: "4G"
+
 networkPolicy:
   enabled: false
 

@@ -237,21 +237,35 @@ images:
     # dependencyType=external
     repository: "bitnami/minio"
     tag: "2023@sha256:bced4f2f9fc48b755ebb3e1b35e76195a978d4331bf2d0c6699dab412d3c0be7"
-    # @supplier: "openDesk"
-  nextcloud:
+    # @supplier: "openDesk DevSecOps"
+  nextcloudApache2:
     # renovate:
-    # registryUrl=https://docker.io
-    # dependencyType=supplier
-    repository: "nextcloud"
-    tag: "27.1.4-apache@sha256:bd277bec9a8cf7cc009865e15410c05e0f66ccb6269ed96841cc95dd37c214fe"
-    # @supplier: "Nextcloud"
+    # registryUrl=https://registry.opencode.de
+    # dependencyType=vendor
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
+    tag: "1.1.7@sha256:f80bb93f0fda83143ebb35dab23dc02127609bed5dfa14bb659fc9ce6ebc6673"
+    # @supplier: "openDesk DevSecOps"
   nextcloudExporter:
     # renovate:
     # registryUrl=https://docker.io
     # dependencyType=external
-    repository: "xperimental/nextcloud-exporter"
-    tag: "0.6.2@sha256:4ef2555e74ad1dd1b7b7b0680ce85f2b9333f2c2301756582ff04ae97adf796f"
-    # @supplier: "openDesk"
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter"
+    tag: "1.0.0@sha256:a05b0f7d7e919320285d2808ebcc20a7b7163204a1001d7d9fb5a97d97194081"
+    # @supplier: "openDesk DevSecOps"
+  nextcloudPHP:
+    # renovate:
+    # registryUrl=https://registry.opencode.de
+    # dependencyType=vendor
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
+    tag: "1.6.1@sha256:21e8584f10f19b263be76a93df2658e2e845e00548d1b176ee336eb1f0e15a50"
+    # @supplier: "openDesk DevSecOps"
+  nextcloudManagement:
+    # renovate:
+    # registryUrl=https://registry.opencode.de
+    # dependencyType=vendor
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
+    tag: "1.0.11@sha256:969bdaaa24ef6091ecb8b63b4fb2f7925fa10eaf46d3997ec74f6414ac373a8d"
+    # @supplier: "openDesk DevSecOps"
   openproject:
     # renovate:
     # registryUrl=https://docker.io

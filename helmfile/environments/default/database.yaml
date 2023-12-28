@@ -17,6 +17,7 @@ databases:
   nextcloud:
     name: "nextcloud"
     host: "mariadb"
+    port: 3306
     username: "nextcloud_user"
     password: ""
   openproject:

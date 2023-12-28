@@ -1,0 +1,124 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  imageRegistry: {{ .Values.global.imageRegistry | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+exporter:
+  enabled: true
+  configuration:
+    token:
+      value: {{ .Values.secrets.nextcloud.metricsToken | quote }}
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 65532
+    runAsGroup: 65532
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  image:
+    repository: "{{ .Values.images.nextcloudExporter.repository }}"
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.nextcloudExporter.tag | quote }}
+  prometheus:
+    serviceMonitor:
+      enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+      labels:
+        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+    prometheusRule:
+      enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+      additionalLabels:
+        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 6 }}
+  replicas: {{ .Values.replicas.nextcloudExporter }}
+  resources:
+    {{ .Values.resources.nextcloudExporter | toYaml | nindent 4 }}
+
+php:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "opendesk-nextcloud-php"
+  configuration:
+    cache:
+      auth:
+        enabled: true
+        username:
+          value: "default"
+        password:
+          value: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
+      host: {{ .Values.cache.nextcloud.host | quote }}
+      port: {{ .Values.cache.nextcloud.port | quote }}
+    database:
+      host: {{ .Values.databases.nextcloud.host | quote }}
+      port: {{ .Values.databases.nextcloud.port | quote }}
+      auth:
+        username:
+          value: "nextcloud_user"
+        password:
+          value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 65532
+    runAsGroup: 65532
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  image:
+    repository: "{{ .Values.images.nextcloudPHP.repository }}"
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.nextcloudPHP.tag | quote }}
+  prometheus:
+    serviceMonitor:
+      enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+      labels:
+        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+    prometheusRule:
+      enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+      additionalLabels:
+        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 6 }}
+  replicas: {{ .Values.replicas.nextcloudPHP }}
+  resources:
+    {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
+
+apache2:
+  configuration:
+    php:
+      host: "opendesk-nextcloud-php.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 65532
+    runAsGroup: 65532
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  ingress:
+    enabled: {{ .Values.ingress.enabled }}
+    ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+    host: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
+  image:
+    repository: {{ .Values.images.nextcloudApache2.repository | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.nextcloudApache2.tag | quote }}
+  replicas: {{ .Values.replicas.nextcloudApache2 }}
+  resources:
+    {{ .Values.resources.nextcloudApache2 | toYaml | nindent 4 }}
+...

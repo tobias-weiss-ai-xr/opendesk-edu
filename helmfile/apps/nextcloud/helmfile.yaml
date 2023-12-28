@@ -5,46 +5,41 @@ bases:
   - "../../bases/environments.yaml"
 ---
 repositories:
-  # openDesk Keycloak Bootstrap
-  # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/sovereign-workplace-nextcloud-bootstrap
-  - name: "nextcloud-bootstrap-repo"
-    oci: {{ .Values.charts.nextcloudBootstrap.oci }}
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
-    verify: {{ .Values.charts.nextcloudBootstrap.verify }}
-    username: {{ .Values.charts.nextcloudBootstrap.username | quote }}
-    password: {{ .Values.charts.nextcloudBootstrap.password | quote }}
-    url: "{{ .Values.charts.nextcloudBootstrap.registry }}/{{ .Values.charts.nextcloudBootstrap.repository }}"
-
   # Nextcloud
-  # Source: https://github.com/nextcloud/helm/
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-nextcloud
+  - name: "nextcloud-management-repo"
+    oci: {{ .Values.charts.nextcloudManagement.oci }}
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.nextcloudManagement.verify }}
+    username: {{ .Values.charts.nextcloudManagement.username | quote }}
+    password: {{ .Values.charts.nextcloudManagement.password | quote }}
+    url: "{{ .Values.charts.nextcloudManagement.registry }}/{{ .Values.charts.nextcloudManagement.repository }}"
   - name: "nextcloud-repo"
     oci: {{ .Values.charts.nextcloud.oci }}
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.nextcloud.verify }}
     username: {{ .Values.charts.nextcloud.username | quote }}
     password: {{ .Values.charts.nextcloud.password | quote }}
     url: "{{ .Values.charts.nextcloud.registry }}/{{ .Values.charts.nextcloud.repository }}"
 
 releases:
-  - name: "opendesk-nextcloud-bootstrap"
-    chart: "nextcloud-bootstrap-repo/{{ .Values.charts.nextcloudBootstrap.name }}"
-    version: "{{ .Values.charts.nextcloudBootstrap.version }}"
-    wait: true
-    waitForJobs: true
+  - name: "opendesk-nextcloud-management"
+    chart: "nextcloud-repo/{{ .Values.charts.nextcloudManagement.name }}"
+    version: "{{ .Values.charts.nextcloudManagement.version }}"
     values:
-      - "values-bootstrap.gotmpl"
-      - "values-bootstrap.yaml"
+      - "values-nextcloud-mgmt.yaml.gotmpl"
+    waitForJobs: true
+    wait: true
     installed: {{ .Values.nextcloud.enabled }}
     timeout: 900
-
-  - name: "nextcloud"
+  - name: "opendesk-nextcloud"
     chart: "nextcloud-repo/{{ .Values.charts.nextcloud.name }}"
     version: "{{ .Values.charts.nextcloud.version }}"
-    needs:
-      - "opendesk-nextcloud-bootstrap"
     values:
-      - "values-nextcloud.gotmpl"
-      - "values-nextcloud.yaml"
+      - "values-nextcloud.yaml.gotmpl"
+    needs:
+      - "opendesk-nextcloud-management"
     installed: {{ .Values.nextcloud.enabled }}
-    timeout: 900
 
 commonLabels:
   deploy-stage: "component-1"
