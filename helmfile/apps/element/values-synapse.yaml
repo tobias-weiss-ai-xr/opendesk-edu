@@ -44,4 +44,9 @@ containerSecurityContext:
 podSecurityContext:
   enabled: true
   fsGroup: 10991
+
+readinessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 5
+
 ...

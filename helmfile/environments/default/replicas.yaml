@@ -28,7 +28,9 @@ replicas:
   # clamav-distributed
   milter: 1
   minioDistributed: 4
-  nextcloud: 1
+  nextcloudApache2: 1
+  nextcloudExporter: 1
+  nextcloudPHP: 1
   openproject: 1
   postfix: 1
   synapse: 1

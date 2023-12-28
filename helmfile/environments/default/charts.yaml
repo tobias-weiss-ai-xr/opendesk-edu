@@ -346,29 +346,30 @@ charts:
 
   nextcloud:
     # renovate:
-    # registryUrl=https://nextcloud.github.io/helm
-    # packageName=nextcloud
+    # registryUrl=https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-nextcloud
+    # packageName=opendesk-nextcloud
     # dataSource=helm
-    # dependencyType=supplier
-    registry: "https://nextcloud.github.io"
-    repository: "helm"
-    oci: false
-    name: "nextcloud"
-    version: "3.5.19"
+    # dependencyType=platform
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
+    oci: true
+    name: "opendesk-nextcloud"
+    version: "1.3.3"
+    verify: true
     username: ~
     password: ~
 
-  nextcloudBootstrap:
+  nextcloudManagement:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap/opendesk-nextcloud-bootstrap
-    # dataSource=docker
+    # registryUrl=https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-nextcloud
+    # packageName=opendesk-nextcloud-management
+    # dataSource=helm
     # dependencyType=platform
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/sovereign-workplace-nextcloud-bootstrap"
-    name: "opendesk-nextcloud-bootstrap"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
     oci: true
-    version: "3.2.6"
+    name: "opendesk-nextcloud-management"
+    version: "1.3.3"
     verify: true
     username: ~
     password: ~
@@ -758,7 +759,7 @@ charts:
     name: "stack-data-swp"
     oci: true
     verify: true
-    version: "0.41.2"
+    version: "0.41.4"
     username: ~
     password: ~
 
@@ -773,7 +774,7 @@ charts:
     name: "stack-data-ums"
     oci: true
     verify: true
-    version: "0.41.2"
+    version: "0.41.4"
     username: ~
     password: ~
 
