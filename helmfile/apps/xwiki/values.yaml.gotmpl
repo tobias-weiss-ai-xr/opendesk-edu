@@ -1,0 +1,167 @@
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+image:
+  name: "{{ .Values.global.imageRegistry }}/{{ .Values.images.xwiki.repository }}"
+  tag: {{ .Values.images.xwiki.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+externalDB:
+  password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
+  database: {{ .Values.databases.xwiki.name | quote }}
+  user: {{ .Values.databases.xwiki.username | quote }}
+  host: {{ .Values.databases.xwiki.host | quote }}
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  enabled: true
+  runAsUser: 100
+  runAsGroup: 101
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - "ALL"
+
+customConfigs:
+  xwiki.cfg:
+    xwiki.url.protocol: "https"
+    ## Indicate the LDAP field defining the user UID
+    xwiki.authentication.ldap.UID_attr: "uid"
+    ## Indicate the LDAP field defining the user profile picture
+    xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
+    ## Enable the synchronization of the LDAP profile picture
+    xwiki.authentication.ldap.update_photo: 1
+    ## Password of default user
+    xwiki.superadminpassword: {{ .Values.secrets.xwiki.superadminpassword | quote }}
+    ## LDAP Server configuration
+    xwiki.authentication.ldap.server: {{ .Values.ldap.host | quote }}
+    xwiki.authentication.ldap.port: 389
+    ## Authentication to the LDAP server
+    xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
+    xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.univentionManagementStack.ldapSearch.xwiki | quote }}
+    ## Base DN used for searching for users
+    xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
+    ## Allow short update cycles of the LDAP group cache
+    xwiki.authentication.ldap.groupcache_expiration: 300
+
+  xwiki.properties:
+    oidc.endpoint.authorization: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
+    oidc.endpoint.token: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
+    oidc.endpoint.userinfo: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/userinfo"
+    oidc.endpoint.logout: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
+    oidc.secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
+    oidc.scope: "openid,profile,email,address,opendesk"
+    oidc.endpoint.userinfo.method: "GET"
+    oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
+    oidc.user.subjectFormater: "${oidc.user.opendesk_username._lowerCase}"
+    # yamllint disable-line rule:line-length
+    oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
+    oidc.clientid: "opendesk-xwiki"
+    oidc.endpoint.token.auth_method: "client_secret_basic"
+    oidc.skipped: false
+    oidc.logoutMechanism: "rpInitiated"
+    url.trustedDomains: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+    workplaceServices.navigationEndpoint: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
+    workplaceServices.base: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+    workplaceServices.portalSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: {{ .Values.ingress.ingressClassName | quote }}
+  annotations:
+    kubernetes.io/ingress.class: null
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "250m"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host {{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+  hosts:
+    - host: "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+  tls:
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
+      hosts:
+        - "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+
+istio:
+  enabled: false
+
+mariadb:
+  enabled: false
+
+mysql:
+  enabled: false
+
+persistence:
+  size: {{ .Values.persistence.size.xwiki | quote }}
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+
+postgresql:
+  enabled: false
+
+properties:
+  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvg | b64enc }}"
+  ## Link LDAP users and users authenticated through OIDC
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.colorTheme": "FlamingoThemes.Iceberg"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.default_language": "de_DE"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.timezone": "Europe/Berlin"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.languages": "de_DE"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.link-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.btn-primary-bg": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-color": "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-color":
+    "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-active-color":
+    "@brand-primary"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.brand-primary": {{ .Values.theme.colors.primary | quote }}
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": {{ .Values.theme.colors.white | quote }}
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": {{ .Values.theme.colors.secondaryGreyLight | quote }}
+  # yamllint disable-line rule:line-length
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": " li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } .navbar { border-bottom: 1px solid #ddd; height: 64px; } div#companylogo { width: 90px; height: auto; padding-top: 7px; padding-left: 9px; }"
+
+  "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"
+  ## Fields to search in when importing users from the administration UI (not completely in scope for now)
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapUserAttributes":
+    "sn,givenname,uid"
+  ## Restrict user import in the UI to global administrators
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.usersAllowedToImport": "globalAdmin"
+  ## Enable group and user synchronization
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupsUpdate": 1
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.triggerGroupImport": 1
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.forceXWikiUsersGroupMembershipUpdate":
+    1
+  ## Base DN under which groups should be searched for
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchDN":
+    "dc=swp-ldap,dc=internal"
+  ## LDAP filter to only synchronize some groups
+  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
+  #   "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
+  "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
+    "(objectClass=opendeskKnowledgemanagementGroup)"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.title": "{{ .Values.theme.texts.productName }} Wissen - $!tdoc.displayTitle"
+
+replicaCount: {{ .Values.replicas.xwiki }}
+
+resources:
+  {{ .Values.resources.xwiki | toYaml | nindent 2 }}
+
+securityContext:
+  enabled: true
+  fsGroup: 101
+  seccompProfile:
+    type: "RuntimeDefault"
+
+service:
+  externalPort: 80
+  enabled: true
+
+volumePermissions:
+  enabled: true
+
+...
