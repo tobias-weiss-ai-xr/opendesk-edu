@@ -20,7 +20,7 @@ releases:
     chart: "jitsi-repo/{{ .Values.charts.jitsi.name }}"
     version: "{{ .Values.charts.jitsi.version }}"
     values:
-      - "values-jitsi.gotmpl"
+      - "values-jitsi.yaml.gotmpl"
     installed: {{ .Values.jitsi.enabled }}
     timeout: 900
 
