@@ -113,6 +113,7 @@ releases:
     values:
       - "values-otterize.gotmpl"
     installed: {{ .Values.security.otterizeIntents.enabled }}
+    timeout: 900
 
   - name: "opendesk-certificates"
     chart: "certificates-repo/{{ .Values.charts.certificates.name }}"
@@ -120,6 +121,7 @@ releases:
     values:
       - "values-certificates.gotmpl"
     installed: {{ .Values.certificates.enabled }}
+    timeout: 900
 
   - name: "redis"
     chart: "redis-repo/{{ .Values.charts.redis.name }}"
@@ -128,6 +130,7 @@ releases:
       - "values-redis.gotmpl"
       - "values-redis.yaml"
     installed: {{ .Values.redis.enabled }}
+    timeout: 900
 
   - name: "memcached"
     chart: "memcached-repo/{{ .Values.charts.memcached.name }}"
@@ -136,6 +139,7 @@ releases:
       - "values-memcached.yaml"
       - "values-memcached.gotmpl"
     installed: {{ .Values.memcached.enabled }}
+    timeout: 900
 
   - name: "postgresql"
     chart: "postgresql-repo/{{ .Values.charts.postgresql.name }}"
@@ -162,6 +166,7 @@ releases:
       - "values-postfix.yaml"
       - "values-postfix.gotmpl"
     installed: {{ .Values.postfix.enabled }}
+    timeout: 900
 
   - name: "clamav"
     chart: "clamav-repo/{{ .Values.charts.clamav.name }}"
@@ -170,6 +175,7 @@ releases:
       - "values-clamav-distributed.yaml"
       - "values-clamav-distributed.gotmpl"
     installed: {{ .Values.clamavDistributed.enabled }}
+    timeout: 900
 
   - name: "clamav-simple"
     chart: "clamav-simple-repo/{{ .Values.charts.clamavSimple.name }}"
@@ -178,6 +184,7 @@ releases:
       - "values-clamav-simple.yaml"
       - "values-clamav-simple.gotmpl"
     installed: {{ .Values.clamavSimple.enabled }}
+    timeout: 900
 
   - name: "opendesk-gateway"
     chart: "istio-resources-repo/{{ .Values.charts.istioResources.name }}"
@@ -186,6 +193,7 @@ releases:
       - "values-istio-gateway.yaml"
       - "values-istio-gateway.gotmpl"
     installed: {{ .Values.istio.enabled }}
+    timeout: 900
 
   - name: "minio"
     chart: "minio-repo/{{ .Values.charts.minio.name }}"
@@ -194,6 +202,7 @@ releases:
       - "values-minio.yaml"
       - "values-minio.gotmpl"
     installed: {{ .Values.minio.enabled }}
+    timeout: 900
 
 commonLabels:
   deploy-stage: "services"

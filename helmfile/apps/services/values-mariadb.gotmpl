@@ -19,6 +19,8 @@ image:
 # Open-Xchange and XWiki require the permission to create database schemas, so they use the `root` account anyway.
 # Please refer to `databases.yaml` for details.
 job:
+  retries: 10
+  wait: 30
   users:
     - username: "xwiki_user"
       password: {{ .Values.secrets.mariadb.xwikiUser | quote }}
