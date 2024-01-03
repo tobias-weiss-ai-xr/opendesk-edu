@@ -175,7 +175,7 @@ env-cleanup:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           $ENV_STOP_BEFORE != "no"
-      when: "always"
+      when: "on_success"
   script:
     - |
       if [ "${OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED}" = "yes" ]; then
@@ -199,7 +199,7 @@ env-start:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/
-      when: "always"
+      when: "on_success"
   script:
     - "echo \"Deploying to Environment ${NAMESPACE} in ${CLUSTER} Cluster\""
     - "kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -"
@@ -221,7 +221,7 @@ services-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "services"
 
@@ -233,7 +233,7 @@ provisioning-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no" || $DEPLOY_PROVISIONING != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "provisioning"
 
@@ -245,7 +245,7 @@ ums-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "univention-management-stack"
 
@@ -258,7 +258,7 @@ ox-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OX != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "open-xchange"
 
@@ -270,7 +270,7 @@ ics-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ICS != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "intercom-service"
 
@@ -282,7 +282,7 @@ xwiki-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_XWIKI != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "xwiki"
 
@@ -294,7 +294,7 @@ collabora-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_COLLABORA != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "collabora"
 
@@ -306,7 +306,7 @@ cryptpad-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_CRYPTPAD != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "cryptpad"
 
@@ -318,7 +318,7 @@ nextcloud-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "nextcloud"
 
@@ -330,7 +330,7 @@ openproject-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OPENPROJECT != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "openproject"
 
@@ -342,7 +342,7 @@ openproject-bootstrap-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || ($DEPLOY_OPENPROJECT != "no" && $DEPLOY_NEXTCLOUD != "no"))
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "openproject-bootstrap"
 
@@ -354,7 +354,7 @@ jitsi-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_JITSI != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "jitsi"
 
@@ -366,7 +366,7 @@ element-deploy:
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ELEMENT != "no")
-      when: "always"
+      when: "on_success"
   variables:
     COMPONENT: "element"
 
@@ -410,7 +410,7 @@ run-tests:
   rules:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
-      when: "always"
+      when: "on_success"
   script:
     - *ums-default-password
     - |
@@ -450,7 +450,7 @@ run-souvap-dev-tests:
   rules:
     - if: >
         $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_UMS_TESTS == "yes"
-      when: "always"
+      when: "on_success"
   script:
     - *ums-default-password
     - |
@@ -475,7 +475,7 @@ generate-release-assets:
   image: "registry.souvap-univention.de/souvap/tooling/images/ansible:4.10.0"
   rules:
     - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-      when: "always"
+      when: "on_success"
     - when: "never"
   script:
     - |
@@ -530,14 +530,14 @@ reuse-linter:
 generate-release-version:
   rules:
     - if: "$JOB_RELEASE_ENABLED != 'false'"
-      when: "always"
+      when: "on_success"
 
 release:
   dependencies:
     - "generate-release-assets"
   rules:
     - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-      when: "always"
+      when: "on_success"
   script:
     - |
       cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
