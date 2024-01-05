@@ -8,6 +8,8 @@ repositories:
   # XWiki
   # Source: https://github.com/xwiki-contrib/xwiki-helm
   - name: "xwiki-repo"
+    keyring: "../../files/gpg-pubkeys/xwiki-com.gpg"
+    verify: {{ .Values.charts.xwiki.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
