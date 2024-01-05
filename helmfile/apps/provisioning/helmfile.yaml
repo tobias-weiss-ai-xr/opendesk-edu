@@ -7,9 +7,9 @@ bases:
 repositories:
   # OX Connector
   - name: "ox-connector-repo"
-    oci: {{ .Values.charts.oxConnector.oci }}
-    username: {{ .Values.charts.oxConnector.username | quote }}
-    password: {{ .Values.charts.oxConnector.password | quote }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
     url: "{{ .Values.global.imageRegistry | default .Values.charts.oxConnector.registry }}/{{ .Values.charts.oxConnector.repository }}"
 
 releases:

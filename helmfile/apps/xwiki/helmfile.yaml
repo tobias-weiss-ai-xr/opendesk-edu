@@ -8,9 +8,9 @@ repositories:
   # XWiki
   # Source: https://github.com/xwiki-contrib/xwiki-helm
   - name: "xwiki-repo"
-    oci: {{ .Values.charts.xwiki.oci }}
-    username: {{ .Values.charts.xwiki.username | quote }}
-    password: {{ .Values.charts.xwiki.password | quote }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
     url: "{{ .Values.global.imageRegistry | default .Values.charts.xwiki.registry }}/{{ .Values.charts.xwiki.repository }}"
 
 releases:
