@@ -11,15 +11,15 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.collabora.registry }}/{{ .Values.charts.collabora.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.collabora.registry }}/\
+      {{ .Values.charts.collabora.repository }}"
 
 releases:
   - name: "collabora-online"
     chart: "collabora-online-repo/{{ .Values.charts.collabora.name }}"
     version: "{{ .Values.charts.collabora.version }}"
     values:
-      - "values.yaml"
-      - "values.gotmpl"
+      - "values.yaml.gotmpl"
     installed: {{ .Values.collabora.enabled }}
 
 commonLabels:
