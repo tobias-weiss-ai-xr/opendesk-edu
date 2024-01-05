@@ -13,7 +13,7 @@ repositories:
     verify: {{ .Values.charts.openproject.verify }}
     username: {{ .Values.charts.openproject.username | quote }}
     password: {{ .Values.charts.openproject.password | quote }}
-    url: "{{ .Values.charts.openproject.registry }}/{{ .Values.charts.openproject.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.openproject.registry }}/{{ .Values.charts.openproject.repository }}"
 
 releases:
   - name: "openproject"

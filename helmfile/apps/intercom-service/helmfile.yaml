@@ -13,7 +13,7 @@ repositories:
     verify: {{ .Values.charts.intercomService.verify }}
     username: {{ .Values.charts.intercomService.username | quote }}
     password: {{ .Values.charts.intercomService.password | quote }}
-    url: "{{ .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
 
 releases:
   - name: "intercom-service"

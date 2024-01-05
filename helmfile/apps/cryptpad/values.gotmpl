@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.cryptpad.repository }}"
+  repository: "{{ .Values.global.imageRegistry | default .Values.images.cryptpad.registry }}/{{ .Values.images.cryptpad.repository }}"
   tag: {{ .Values.images.cryptpad.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 

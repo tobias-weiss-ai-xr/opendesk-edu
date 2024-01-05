@@ -4,12 +4,11 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.postfix.registry | quote }}
   repository: {{ .Values.images.postfix.repository | quote }}
   tag: {{ .Values.images.postfix.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

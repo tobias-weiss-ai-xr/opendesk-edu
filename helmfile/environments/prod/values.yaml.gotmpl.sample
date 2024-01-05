@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-# This a sample file and could be filled with proper variable overload.
-sample: true
+sampleWithTemplating: {{ env "YOUR_ENV_VARIABLE_FOR_TEMPLATING" | quote }}
+global:
+  imageRegistry: "your.private.ociregistry/with_optional_path"
 ...

@@ -12,7 +12,7 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsKeycloakBootstrap.registry | quote }}
   repository: {{ .Values.images.umsKeycloakBootstrap.repository | quote }}
   tag: {{ .Values.images.umsKeycloakBootstrap.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy }}

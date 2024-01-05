@@ -7,12 +7,11 @@ global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  registry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.openprojectBootstrap.registry | quote }}
   repository: {{ .Values.images.openprojectBootstrap.repository | quote }}
   tag: {{ .Values.images.openprojectBootstrap.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy |quote }}

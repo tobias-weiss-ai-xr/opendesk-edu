@@ -7,15 +7,14 @@ global:
   domain: "{{ .Values.global.domain }}"
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  registry: "{{ .Values.global.imageRegistry }}"
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
-  repository: "{{ .Values.images.opendeskKeycloakBootstrap.repository }}"
-  tag: "{{ .Values.images.opendeskKeycloakBootstrap.tag }}"
-  imagePullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  registry: {{ .Values.global.imageRegistry | default .Values.images.opendeskKeycloakBootstrap.registry | quote }}
+  repository: {{ .Values.images.opendeskKeycloakBootstrap.repository | quote }}
+  tag: {{ .Values.images.opendeskKeycloakBootstrap.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}

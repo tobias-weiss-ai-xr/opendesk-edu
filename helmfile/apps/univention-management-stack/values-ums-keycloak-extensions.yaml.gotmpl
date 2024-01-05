@@ -20,7 +20,7 @@ global:
       password: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
 handler:
   image:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsKeycloakExtensionHandler.registry | quote }}
     repository: {{ .Values.images.umsKeycloakExtensionHandler.repository | quote }}
     tag: {{ .Values.images.umsKeycloakExtensionHandler.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -48,7 +48,7 @@ postgresql:
   enabled: false
 proxy:
   image:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsKeycloakExtensionProxy.registry | quote }}
     repository: {{ .Values.images.umsKeycloakExtensionProxy.repository | quote }}
     tag: {{ .Values.images.umsKeycloakExtensionProxy.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

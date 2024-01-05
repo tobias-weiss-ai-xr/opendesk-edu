@@ -14,7 +14,7 @@ postgresql:
     password: {{ .Values.databases.umsNotificationsApi.password | default .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
 
 image:
-  registry: {{ .Values.global.imageRegistry }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsNotificationsApi.registry | quote }}
   repository: {{ .Values.images.umsNotificationsApi.repository }}
   pullPolicy: {{ .Values.global.imagePullPolicy }}
   tag: {{ .Values.images.umsNotificationsApi.tag }}

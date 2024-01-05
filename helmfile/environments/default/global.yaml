@@ -30,10 +30,6 @@ global:
     whiteboard: "whiteboard"
     xwiki: "wiki"
 
-  ## Define docker registry address.
-  #
-  imageRegistry: "external-registry.souvap-univention.de/sovereign-workplace"
-
   ## Credentials to fetch images from private registry
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   #

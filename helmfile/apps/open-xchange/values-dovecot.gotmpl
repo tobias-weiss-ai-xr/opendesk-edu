@@ -4,8 +4,8 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
-  url: {{ .Values.images.dovecot.repository | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.dovecot.registry | quote }}
+  repository: {{ .Values.images.dovecot.repository | quote }}
   tag: {{ .Values.images.dovecot.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 

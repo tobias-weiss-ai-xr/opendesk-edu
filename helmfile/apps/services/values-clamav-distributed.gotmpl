@@ -7,7 +7,7 @@ clamd:
   podSecurityContext:
   replicaCount: {{ .Values.replicas.clamd }}
   image:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.clamd.registry | quote }}
     repository: {{ .Values.images.clamd.repository | quote }}
     tag: {{ .Values.images.clamd.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -18,7 +18,7 @@ freshclam:
   podSecurityContext:
   replicaCount: {{ .Values.replicas.freshclam }}
   image:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.freshclam.registry | quote }}
     repository: {{ .Values.images.freshclam.repository | quote }}
     tag: {{ .Values.images.freshclam.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -32,7 +32,7 @@ global:
 icap:
   replicaCount: {{ .Values.replicas.icap }}
   image:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.icap.registry | quote }}
     repository: {{ .Values.images.icap.repository | quote }}
     tag: {{ .Values.images.icap.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -43,7 +43,7 @@ milter:
   podSecurityContext:
   replicaCount: {{ .Values.replicas.milter }}
   image:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.milter.registry | quote }}
     repository: {{ .Values.images.milter.repository | quote }}
     tag: {{ .Values.images.milter.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

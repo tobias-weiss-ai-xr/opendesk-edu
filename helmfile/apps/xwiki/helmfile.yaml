@@ -11,7 +11,7 @@ repositories:
     oci: {{ .Values.charts.xwiki.oci }}
     username: {{ .Values.charts.xwiki.username | quote }}
     password: {{ .Values.charts.xwiki.password | quote }}
-    url: "{{ .Values.charts.xwiki.registry }}/{{ .Values.charts.xwiki.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.xwiki.registry }}/{{ .Values.charts.xwiki.repository }}"
 
 releases:
   - name: "xwiki"

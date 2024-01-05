@@ -34,7 +34,7 @@ stackDataContext:
   adminPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.adminPassword | quote }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsDataLoader.registry | quote }}
   repository: {{ .Values.images.umsDataLoader.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.umsDataLoader.tag | quote }}

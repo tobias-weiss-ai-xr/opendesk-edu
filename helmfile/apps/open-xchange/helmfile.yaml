@@ -13,14 +13,14 @@ repositories:
     verify: {{ .Values.charts.dovecot.verify }}
     username: {{ .Values.charts.dovecot.username | quote }}
     password: {{ .Values.charts.dovecot.password | quote }}
-    url: "{{ .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
 
   # Open-Xchange
   - name: "open-xchange-repo"
     oci: {{ .Values.charts.openXchangeAppSuite.oci }}
     username: {{ .Values.charts.openXchangeAppSuite.username | quote }}
     password: {{ .Values.charts.openXchangeAppSuite.password | quote }}
-    url: "{{ .Values.charts.openXchangeAppSuite.registry }}/{{ .Values.charts.openXchangeAppSuite.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.openXchangeAppSuite.registry }}/{{ .Values.charts.openXchangeAppSuite.repository }}"
 
   # openDesk Open-Xchange Bootstrap
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/charts/opendesk-open-xchange-bootstrap
@@ -30,7 +30,7 @@ repositories:
     verify: {{ .Values.charts.openXchangeAppSuiteBootstrap.verify }}
     username: {{ .Values.charts.openXchangeAppSuiteBootstrap.username | quote }}
     password: {{ .Values.charts.openXchangeAppSuiteBootstrap.password | quote }}
-    url: "{{ .Values.charts.openXchangeAppSuiteBootstrap.registry }}/\
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.openXchangeAppSuiteBootstrap.registry }}/\
       {{ .Values.charts.openXchangeAppSuiteBootstrap.repository }}"
 
 releases:

@@ -12,8 +12,7 @@ This documentation should enable you to create your own evaluation instance of o
 * [Customize environment](#customize-environment)
   * [Domain](#domain)
     * [Apps](#apps)
-  * [Private Image registry](#private-image-registry)
-  * [Private Helm registry](#private-helm-registry)
+  * [Private Helm chart and container image registry](#private-helm-chart-and-container-image-registry)
   * [Cluster capabilities](#cluster-capabilities)
     * [Service](#service)
     * [Networking](#networking)
@@ -127,57 +126,38 @@ jitsi:
   enabled: false
 ```
 
-## Private Image registry
+## Private Helm chart and container image registry
 
-By default, all OCI artifacts are proxied via the project's image registry, which should get replaced soon by the
-OCI registries provided by Open CoDE.
+By default Helm charts and container images are fetched from OCI registries. These registries can be found for most cases
+in the [openDesk/component section on Open CoDE](https://gitlab.opencode.de/bmi/opendesk/components).
 
-You also can set your own registry by:
+For untouched upstream artefacts that do not belong to a functional component's core we use upstream registries
+like Docker Hub.
+
+Doing a test deployment will most likely be fine with this setup. In case you want to deploy multiple times a day
+and fetch from the same IP address you might run into rate limits at Docker Hub. In that case and in cases you
+prefer the use of a private image registry anyway you can configure such for
+[your target environment](./../helmfile/environments/dev/values.yaml.gotmpl.sample) by setting `global.imageRegistry`
+like this:
 
 ```yaml
 global:
   imageRegistry: "external-registry.souvap-univention.de/sovereign-workplace"
 ```
 
-or via environments variable:
+alternatively you can use an environment variable:
 
 ```shell
 export PRIVATE_IMAGE_REGISTRY_URL=external-registry.souvap-univention.de/sovereign-workplace
 ```
 
 If authentication is required, you can reference imagePullSecrets as following:
+
 ```yaml
 global:
   imagePullSecrets:
     - "external-registry"
 ```
-
-## Private Helm registry
-
-Some apps use OCI style registry and some use Helm chart museum style registries.
-In `helmfile/environments/default/charts.yaml` you can find all helm charts used and modify their registry, repository
-or version.
-
-As an example, you can also use helmfile methods to use just a single environment variable to set registry and
-authentication for all OCI helm charts.
-
-```yaml
-charts:
-  certificates:
-    registry: {{ requiredEnv "OD_PRIVATE_HELM_OCI_REGISTRY" | quote }}
-    username: {{ env "OD_PRIVATE_HELM_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_HELM_REGISTRY_PASSWORD" | quote }}
-```
-
-There is a full example including http and OCI style registries in `examples/private-helm-registry.yaml.gotmpl`.
-The following environment variables have to be exposed when using the example:
-
-| Environment variable                | Description                                                                                |
-|-------------------------------------|--------------------------------------------------------------------------------------------|
-| `OD_PRIVATE_HELM_OCI_REGISTRY`      | Registry for OCI hosted helm charts, example: `external-registry.souvap-univention.de`     |
-| `OD_PRIVATE_HELM_HTTP_REGISTRY`     | Registry URI for http hosted helm charts, `https://external-registry.souvap-univention.de` |
-| `OD_PRIVATE_HELM_REGISTRY_USERNAME` | Username                                                                                   |
-| `OD_PRIVATE_HELM_REGISTRY_PASSWORD` | Password                                                                                   |
 
 ## Cluster capabilities
 

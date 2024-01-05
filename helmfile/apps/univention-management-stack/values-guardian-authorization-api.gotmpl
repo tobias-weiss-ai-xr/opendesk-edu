@@ -7,10 +7,10 @@ guardianAuthorizationApi:
   udmDataAdapterPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   oauthAdapterWellKnownUrl: "http://ums-keycloak:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
 image:
-  registry: {{ .Values.global.imageRegistry }}
-  repository: {{ .Values.images.umsGuardianAuthorizationApi.repository }}
-  pullPolicy: {{ .Values.global.imagePullPolicy }}
-  tag: {{ .Values.images.umsGuardianAuthorizationApi.tag }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsGuardianAuthorizationApi.registry | quote }}
+  repository: {{ .Values.images.umsGuardianAuthorizationApi.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsGuardianAuthorizationApi.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}

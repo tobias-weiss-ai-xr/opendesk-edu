@@ -7,13 +7,12 @@ auth:
   password: {{ .Values.secrets.redis.password | quote }}
 
 global:
-  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.redis.registry | quote }}
   repository: {{ .Values.images.redis.repository | quote }}
   tag: {{ .Values.images.redis.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}

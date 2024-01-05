@@ -20,7 +20,7 @@ portalListener:
 
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsPortalListener.registry | quote }}
   repository: {{ .Values.images.umsPortalListener.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.umsPortalListener.tag | quote }}
@@ -30,7 +30,7 @@ image:
     {{- end }}
 
   waitForDependency:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsWaitForDependency.registry | quote }}
     repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.umsWaitForDependency.tag | quote }}

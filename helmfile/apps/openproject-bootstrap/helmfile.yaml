@@ -13,7 +13,7 @@ repositories:
     verify: {{ .Values.charts.openprojectBootstrap.verify }}
     username: {{ .Values.charts.openprojectBootstrap.username | quote }}
     password: {{ .Values.charts.openprojectBootstrap.password | quote }}
-    url: "{{ .Values.charts.openprojectBootstrap.registry }}/{{ .Values.charts.openprojectBootstrap.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.openprojectBootstrap.registry }}/{{ .Values.charts.openprojectBootstrap.repository }}"
 
 releases:
   - name: "opendesk-openproject-bootstrap"

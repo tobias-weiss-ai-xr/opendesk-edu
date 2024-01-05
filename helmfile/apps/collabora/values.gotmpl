@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.collabora.repository }}"
+  repository: "{{ .Values.global.imageRegistry | default .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
   tag: {{ .Values.images.collabora.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 

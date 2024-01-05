@@ -4,12 +4,11 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  registry: "{{ .Values.global.imageRegistry }}"
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: "{{ .Values.global.imageRegistry }}"
+  registry: {{ .Values.global.imageRegistry | default .Values.images.minio.registry | quote }}
   repository: "{{ .Values.images.minio.repository }}"
   tag: "{{ .Values.images.minio.tag }}"
   pullPolicy: "{{ .Values.global.imagePullPolicy }}"
