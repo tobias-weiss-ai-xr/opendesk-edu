@@ -33,6 +33,7 @@ ics:
     port: {{ .Values.cache.intercomService.port }}
     password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password | quote }}
   openxchange:
+    oci: true
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
     audience: "opendesk-oxappsuite"
   nextcloud:

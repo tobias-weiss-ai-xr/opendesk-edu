@@ -8,18 +8,18 @@ repositories:
   # Nextcloud
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-nextcloud
   - name: "nextcloud-management-repo"
-    oci: {{ .Values.charts.nextcloudManagement.oci }}
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.nextcloudManagement.verify }}
-    username: {{ .Values.charts.nextcloudManagement.username | quote }}
-    password: {{ .Values.charts.nextcloudManagement.password | quote }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
     url: "{{ .Values.global.imageRegistry | default .Values.charts.nextcloudManagement.registry }}/{{ .Values.charts.nextcloudManagement.repository }}"
   - name: "nextcloud-repo"
-    oci: {{ .Values.charts.nextcloud.oci }}
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.nextcloud.verify }}
-    username: {{ .Values.charts.nextcloud.username | quote }}
-    password: {{ .Values.charts.nextcloud.password | quote }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
     url: "{{ .Values.global.imageRegistry | default .Values.charts.nextcloud.registry }}/{{ .Values.charts.nextcloud.repository }}"
 
 releases:

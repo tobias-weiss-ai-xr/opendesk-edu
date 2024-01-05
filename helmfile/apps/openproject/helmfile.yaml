@@ -8,11 +8,11 @@ repositories:
   # OpenProject
   # Source: https://github.com/opf/helm-charts
   - name: "openproject-repo"
-    oci: {{ .Values.charts.openproject.oci }}
     keyring: "../../files/gpg-pubkeys/openproject-com.gpg"
     verify: {{ .Values.charts.openproject.verify }}
-    username: {{ .Values.charts.openproject.username | quote }}
-    password: {{ .Values.charts.openproject.password | quote }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
     url: "{{ .Values.global.imageRegistry | default .Values.charts.openproject.registry }}/{{ .Values.charts.openproject.repository }}"
 
 releases:

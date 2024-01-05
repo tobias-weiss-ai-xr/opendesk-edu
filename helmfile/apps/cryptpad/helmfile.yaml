@@ -8,9 +8,9 @@ repositories:
   # CryptPad
   # Source: https://github.com/cryptpad/helm
   - name: "cryptpad-repo"
-    username: {{ .Values.charts.cryptpad.username | quote }}
-    password: {{ .Values.charts.cryptpad.password | quote }}
-    oci: {{ .Values.charts.cryptpad.oci }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
     url: "{{ .Values.global.imageRegistry | default .Values.charts.cryptpad.registry }}/{{ .Values.charts.cryptpad.repository }}"
 
 releases:

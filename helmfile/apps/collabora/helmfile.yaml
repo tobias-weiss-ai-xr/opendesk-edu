@@ -8,9 +8,9 @@ repositories:
   # Collabora Online
   # Source: https://github.com/CollaboraOnline/online
   - name: "collabora-online-repo"
-    username: {{ .Values.charts.collabora.username | quote }}
-    password: {{ .Values.charts.collabora.password | quote }}
-    oci: {{ .Values.charts.collabora.oci }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
     url: "{{ .Values.global.imageRegistry | default .Values.charts.collabora.registry }}/{{ .Values.charts.collabora.repository }}"
 
 releases:
