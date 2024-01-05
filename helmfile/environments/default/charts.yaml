@@ -7,11 +7,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-certificates/opendesk-certificates
     # dependencyType=platform
+    name: "opendesk-certificates"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-certificates"
-    name: "opendesk-certificates"
-    version: "2.1.1"
     verify: true
+    version: "2.1.1"
     # @supplier: "openDesk"
 
   clamav:
@@ -19,11 +19,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-clamav/opendesk-clamav
     # dependencyType=platform
+    name: "opendesk-clamav"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
-    name: "opendesk-clamav"
-    version: "4.0.1"
     verify: true
+    version: "4.0.1"
     # @supplier: "openDesk"
 
   clamavSimple:
@@ -31,11 +31,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-clamav/clamav-simple
     # dependencyType=platform
+    name: "clamav-simple"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
-    name: "clamav-simple"
-    version: "4.0.1"
     verify: true
+    version: "4.0.1"
     # @supplier: "openDesk"
 
   collabora:
@@ -43,9 +43,9 @@ charts:
     # upstreamRegistry=ghcr.io/collaboraonline/charts
     # upstreamRepository=collabora-online
     # dependencyType=supplier
+    name: "collabora-online"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/collabora/charts-mirror"
-    name: "collabora-online"
     version: "1.1.8"
     # @supplier: "Collabora"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -57,8 +57,9 @@ charts:
     # upstreamRepository=cryptpad
     # dependencyType=supplier
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
     name: "cryptpad"
+    repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
+    verify: true
     version: "0.0.17"
     # @supplier: "XWiki"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -69,11 +70,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-dovecot/dovecot
     # dependencyType=platform
+    name: "dovecot"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-dovecot"
-    name: "dovecot"
-    version: "1.3.8"
     verify: true
+    version: "1.3.8"
     # @supplier: "Open-Xchange"
 
   element:
@@ -81,11 +82,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-element
     # dependencyType=platform
+    name: "opendesk-element"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
-    name: "opendesk-element"
-    version: "2.6.3"
     verify: true
+    version: "2.6.3"
     # @supplier: "openDesk"
 
   elementWellKnown:
@@ -93,11 +94,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-well-known
     # dependencyType=platform
+    name: "opendesk-well-known"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
-    name: "opendesk-well-known"
-    version: "2.6.3"
     verify: true
+    version: "2.6.3"
     # @supplier: "openDesk"
 
   intercomService:
@@ -105,11 +106,11 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/intercom-service/intercom-service
     # dependencyType=supplier
+    name: "intercom-service"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "intercom-service"
-    version: "2.0.1"
     verify: true
+    version: "2.0.1"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['2', '0', '1']
@@ -119,11 +120,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-istio-resources/istio-gateway
     # dependencyType=platform
+    name: "istio-gateway"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-istio-resources"
-    name: "istio-gateway"
-    version: "2.0.1"
     verify: true
+    version: "2.0.1"
     # @supplier: "openDesk"
 
   jitsi:
@@ -131,11 +132,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-jitsi/opendesk-jitsi
     # dependencyType=platform
+    name: "opendesk-jitsi"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-jitsi"
-    name: "opendesk-jitsi"
-    version: "1.7.4"
     verify: true
+    version: "1.7.4"
     # @supplier: "openDesk"
 
   umsKeycloak:
@@ -143,11 +144,11 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention-keycloak/ums-keycloak
     # dependencyType=supplier
+    name: "ums-keycloak"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ums-keycloak"
-    version: "1.0.3"
     verify: true
+    version: "1.0.3"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '3']
@@ -157,11 +158,11 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention-keycloak-bootstrap/ums-keycloak-bootstrap
     # dependencyType=supplier
+    name: "ums-keycloak-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ums-keycloak-bootstrap"
-    version: "1.0.1"
     verify: true
+    version: "1.0.1"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '1']
@@ -171,11 +172,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap/opendesk-keycloak-bootstrap
     # dependencyType=platform
+    name: "opendesk-keycloak-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap"
-    name: "opendesk-keycloak-bootstrap"
-    version: "1.0.5"
     verify: true
+    version: "1.0.5"
     # @supplier: "openDesk"
 
   umsKeycloakExtensions:
@@ -183,11 +184,11 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/keycloak-extensions
     # dependencyType=supplier
+    name: "keycloak-extensions"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "keycloak-extensions"
-    version: "0.0.5"
     verify: true
+    version: "0.0.5"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '0', '3']
@@ -197,11 +198,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-mariadb/mariadb
     # dependencyType=platform
+    name: "mariadb"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-mariadb"
-    name: "mariadb"
-    version: "2.2.1"
     verify: true
+    version: "2.2.1"
     # @supplier: "openDesk"
 
   matrixNeoboardWidget:
@@ -209,11 +210,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neoboard-widget
     # dependencyType=platform
+    name: "matrix-neoboard-widget"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
-    name: "matrix-neoboard-widget"
-    version: "3.3.1"
     verify: true
+    version: "3.3.1"
     # @supplier: "openDesk"
 
   matrixNeochoiseWidget:
@@ -221,11 +222,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neochoice-widget
     # dependencyType=platform
+    name: "matrix-neochoice-widget"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
-    name: "matrix-neochoice-widget"
-    version: "3.3.1"
     verify: true
+    version: "3.3.1"
     # @supplier: "openDesk"
 
   matrixNeodatefixBot:
@@ -233,11 +234,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-bot
     # dependencyType=platform
+    name: "matrix-neodatefix-bot"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
-    name: "matrix-neodatefix-bot"
-    version: "3.3.1"
     verify: true
+    version: "3.3.1"
     # @supplier: "openDesk"
 
   matrixNeodatefixWidget:
@@ -245,11 +246,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-widget
     # dependencyType=platform
+    name: "matrix-neodatefix-widget"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
-    name: "matrix-neodatefix-widget"
-    version: "3.3.1"
     verify: true
+    version: "3.3.1"
     # @supplier: "openDesk"
 
   matrixUserVerificationService:
@@ -257,11 +258,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-matrix-user-verification-service
     # dependencyType=platform
+    name: "opendesk-matrix-user-verification-service"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
-    name: "opendesk-matrix-user-verification-service"
-    version: "2.6.3"
     verify: true
+    version: "2.6.3"
     # @supplier: "openDesk"
 
   memcached:
@@ -269,11 +270,11 @@ charts:
     # upstreamRegistry=registry-1.docker.io
     # upstreamRepository=bitnamicharts/memcached
     # dependencyType=external
+    name: "memcached"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
-    name: "memcached"
-    version: "6.7.1"
     verify: true
+    version: "6.7.1"
     # @supplier: "openDesk"
 
   minio:
@@ -281,11 +282,11 @@ charts:
     # upstreamRegistry=registry-1.docker.io
     # upstreamRepository=bitnamicharts/minio
     # dependencyType=external
+    name: "minio"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
-    name: "minio"
-    version: "12.10.11"
     verify: true
+    version: "12.10.11"
     # @supplier: "openDesk"
 
   nextcloud:
@@ -293,11 +294,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-nextcloud/opendesk-nextcloud
     # dependencyType=platform
+    name: "opendesk-nextcloud"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
-    name: "opendesk-nextcloud"
-    version: "1.3.3"
     verify: true
+    version: "1.3.3"
     # @supplier: "openDesk"
 
   nextcloudManagement:
@@ -305,11 +306,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # packageName=bmi/opendesk/components/platform-development/charts/opendesk-nextcloud/opendesk-nextcloud-management
     # dependencyType=platform
+    name: "opendesk-nextcloud-management"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
-    name: "opendesk-nextcloud-management"
-    version: "1.3.3"
     verify: true
+    version: "1.3.3"
     # @supplier: "openDesk"
 
   nginx:
@@ -317,11 +318,11 @@ charts:
     # upstreamRegistry=registry-1.docker.io
     # upstreamRepository=bitnamicharts/nginx
     # dependencyType=external
+    name: "nginx"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
-    name: "nginx"
-    version: "15.5.1"
     verify: true
+    version: "15.5.1"
     # @supplier: "openDesk"
 
   openproject:
@@ -329,11 +330,11 @@ charts:
     # upstreamRegistry=ghcr.io
     # upstreamRepository=opf/helm-charts/openproject
     # dependencyType=supplier
+    name: "openproject"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/charts-mirror"
-    name: "openproject"
-    version: "3.0.2"
     verify: true
+    version: "3.0.2"
     # @supplier: "openProject"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['3', '0', '2']
@@ -343,11 +344,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap/opendesk-openproject-bootstrap
     # dependencyType=platform
+    name: "opendesk-openproject-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap"
-    name: "opendesk-openproject-bootstrap"
-    version: "1.2.3"
     verify: true
+    version: "1.2.3"
     # @supplier: "openDesk"
 
   openXchangeAppSuite:
@@ -355,9 +356,9 @@ charts:
     # upstreamRegistry=registry.open-xchange.com
     # upstreamRepository=appsuite-public-sector/charts/appsuite-public-sector
     # dependencyType=supplier
+    name: "appsuite-public-sector"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/charts-mirror"
-    name: "appsuite-public-sector"
     version: "2.2.37"
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -368,11 +369,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap/opendesk-open-xchange-bootstrap
     # dependencyType=platform
+    name: "opendesk-open-xchange-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap"
-    name: "opendesk-open-xchange-bootstrap"
-    version: "1.3.4"
     verify: true
+    version: "1.3.4"
     # @supplier: "openDesk"
 
   otterize:
@@ -380,11 +381,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-otterize/opendesk-otterize
     # dependencyType=platform
+    name: "opendesk-otterize"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
-    name: "opendesk-otterize"
-    version: "1.6.0"
     verify: true
+    version: "1.6.0"
     # @supplier: "openDesk"
 
   oxConnector:
@@ -392,11 +393,11 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/ox-connector
     # dependencyType=supplier
+    name: "ox-connector"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ox-connector"
-    version: "0.4.2"
     verify: true
+    version: "0.4.2"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '4', '2']
@@ -406,11 +407,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-postfix/postfix
     # dependencyType=platform
+    name: "postfix"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-postfix"
-    name: "postfix"
-    version: "2.0.5"
     verify: true
+    version: "2.0.5"
     # @supplier: "openDesk"
 
   postgresql:
@@ -418,11 +419,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-postgresql/postgresql
     # dependencyType=platform
+    name: "postgresql"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-postgresql"
-    name: "postgresql"
-    version: "2.0.5"
     verify: true
+    version: "2.0.5"
     # @supplier: "openDesk"
 
   redis:
@@ -430,11 +431,11 @@ charts:
     # upstreamRegistry=registry-1.docker.io
     # upstreamRepository=bitnamicharts/redis
     # dependencyType=external
+    name: "redis"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
-    name: "redis"
-    version: "18.6.1"
     verify: true
+    version: "18.6.1"
     # @supplier: "openDesk"
 
   synapse:
@@ -442,11 +443,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse
     # dependencyType=platform
+    name: "opendesk-synapse"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
-    name: "opendesk-synapse"
-    version: "2.6.3"
     verify: true
+    version: "2.6.3"
     # @supplier: "openDesk"
 
   synapseCreateAccount:
@@ -454,11 +455,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-create-account
     # dependencyType=platform
+    name: "opendesk-synapse-create-account"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
-    name: "opendesk-synapse-create-account"
-    version: "2.6.3"
     verify: true
+    version: "2.6.3"
     # @supplier: "openDesk"
 
   synapseWeb:
@@ -466,11 +467,11 @@ charts:
     # upstreamRegistry=registry.opencode.de
     # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-web
     # dependencyType=platform
+    name: "opendesk-synapse-web"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
-    name: "opendesk-synapse-web"
-    version: "2.6.3"
     verify: true
+    version: "2.6.3"
     # @supplier: "openDesk"
 
   umsGuardianManagementApi:
@@ -478,9 +479,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/guardian-management-api
     # dependencyType=supplier
+    name: "guardian-management-api"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "guardian-management-api"
     verify: true
     version: "0.0.1"
     # @supplier: "Univention"
@@ -492,9 +493,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/guardian-management-ui
     # dependencyType=supplier
+    name: "guardian-management-ui"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "guardian-management-ui"
     verify: true
     version: "0.0.1"
     # @supplier: "Univention"
@@ -506,9 +507,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/guardian-authorization-api
     # dependencyType=supplier
+    name: "guardian-authorization-api"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "guardian-authorization-api"
     verify: true
     version: "0.0.1"
     # @supplier: "Univention"
@@ -520,9 +521,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/open-policy-agent
     # dependencyType=supplier
+    name: "open-policy-agent"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "open-policy-agent"
     verify: true
     version: "0.0.1"
     # @supplier: "Univention"
@@ -534,9 +535,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/ldap-notifier
     # dependencyType=supplier
+    name: "ldap-notifier"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ldap-notifier"
     verify: true
     version: "0.8.2"
     # @supplier: "Univention"
@@ -548,9 +549,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/ldap-server
     # dependencyType=supplier
+    name: "ldap-server"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ldap-server"
     verify: true
     version: "0.8.2"
     # @supplier: "Univention"
@@ -562,9 +563,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/notifications-api
     # dependencyType=supplier
+    name: "notifications-api"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "notifications-api"
     verify: true
     version: "0.9.2"
     # @supplier: "Univention"
@@ -576,9 +577,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/portal-frontend
     # dependencyType=supplier
+    name: "portal-frontend"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "portal-frontend"
     verify: true
     version: "0.9.2"
     # @supplier: "Univention"
@@ -590,9 +591,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/portal-listener
     # dependencyType=supplier
+    name: "portal-listener"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "portal-listener"
     verify: true
     version: "0.9.2"
     # @supplier: "Univention"
@@ -604,9 +605,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/portal-server
     # dependencyType=supplier
+    name: "portal-server"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "portal-server"
     verify: true
     version: "0.9.2"
     # @supplier: "Univention"
@@ -618,9 +619,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/provisioning-api
     # dependencyType=supplier
+    name: "provisioning-api"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "provisioning-api"
     verify: true
     version: "0.2.1"
     # @supplier: "Univention"
@@ -632,9 +633,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/selfservice-listener
     # dependencyType=supplier
+    name: "selfservice-listener"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "selfservice-listener"
     verify: true
     version: "0.3.1"
     # @supplier: "Univention"
@@ -646,9 +647,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/stack-data-swp
     # dependencyType=supplier
+    name: "stack-data-swp"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "stack-data-swp"
     verify: true
     version: "0.41.5"
     # @supplier: "Univention"
@@ -660,9 +661,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/stack-data-ums
     # dependencyType=supplier
+    name: "stack-data-ums"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "stack-data-ums"
     verify: true
     version: "0.41.5"
     # @supplier: "Univention"
@@ -674,9 +675,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/store-dav
     # dependencyType=supplier
+    name: "store-dav"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "store-dav"
     verify: true
     version: "0.9.3"
     # @supplier: "Univention"
@@ -688,9 +689,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/udm-rest-api
     # dependencyType=supplier
+    name: "udm-rest-api"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "udm-rest-api"
     verify: true
     version: "0.5.2"
     # @supplier: "Univention"
@@ -702,9 +703,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/umc-gateway
     # dependencyType=supplier
+    name: "umc-gateway"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "umc-gateway"
     verify: true
     version: "0.6.4"
     # @supplier: "Univention"
@@ -716,9 +717,9 @@ charts:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/charts/univention/umc-server
     # dependencyType=supplier
+    name: "umc-server"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "umc-server"
     verify: true
     version: "0.6.4"
     # @supplier: "Univention"
@@ -730,10 +731,11 @@ charts:
     # upstreamRegistry=git.xwikisas.com:5050/xwikisas/swp/xwiki/contrib-xwiki-helm
     # upstreamRepository=xwiki
     # dependencyType=supplier
+    name: "xwiki"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
-    name: "xwiki"
-    version: "1.2.4"
+    verify: false
+    version: "1.2.5"
     # @supplier: "XWiki"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '2', '4']
