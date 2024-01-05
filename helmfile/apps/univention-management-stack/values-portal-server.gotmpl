@@ -10,7 +10,7 @@ portalServer:
     authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsPortalServer.registry | quote }}
   repository: {{ .Values.images.umsPortalServer.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.umsPortalServer.tag | quote }}

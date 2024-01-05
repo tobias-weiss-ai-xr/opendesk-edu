@@ -7,7 +7,6 @@ global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   istioDomain: {{ .Values.istio.domain }}
@@ -86,6 +85,7 @@ containerSecurityContext:
   runAsNonRoot: true
 
 image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudManagement.registry | quote }}
   repository: "{{ .Values.images.nextcloudManagement.repository }}"
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.nextcloudManagement.tag | quote }}

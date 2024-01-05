@@ -8,7 +8,7 @@ ldapServer:
   ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsLdapServer.registry | quote }}
   repository: {{ .Values.images.umsLdapServer.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.umsLdapServer.tag | quote }}
@@ -18,7 +18,7 @@ image:
     {{- end }}
 
   waitForDependency:
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsWaitForDependency.registry | quote }}
     repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.umsWaitForDependency.tag | quote }}

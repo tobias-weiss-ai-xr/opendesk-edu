@@ -13,7 +13,7 @@ repositories:
     verify: {{ .Values.charts.otterize.verify }}
     username: {{ .Values.charts.otterize.username | quote }}
     password: {{ .Values.charts.otterize.password | quote }}
-    url: "{{ .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
 
   # openDesk Certificates
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-certificates
@@ -23,7 +23,7 @@ repositories:
     verify: {{ .Values.charts.certificates.verify }}
     username: {{ .Values.charts.certificates.username | quote }}
     password: {{ .Values.charts.certificates.password | quote }}
-    url: "{{ .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
 
   # openDesk PostgreSQL
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postgresql
@@ -33,7 +33,7 @@ repositories:
     verify: {{ .Values.charts.postgresql.verify }}
     username: {{ .Values.charts.postgresql.username | quote }}
     password: {{ .Values.charts.postgresql.password | quote }}
-    url: "{{ .Values.charts.postgresql.registry }}/{{ .Values.charts.postgresql.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.postgresql.registry }}/{{ .Values.charts.postgresql.repository }}"
 
   # openDesk MariaDB
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-mariadb
@@ -43,7 +43,7 @@ repositories:
     verify: {{ .Values.charts.mariadb.verify }}
     username: {{ .Values.charts.mariadb.username | quote }}
     password: {{ .Values.charts.mariadb.password | quote }}
-    url: "{{ .Values.charts.mariadb.registry }}/{{ .Values.charts.mariadb.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.mariadb.registry }}/{{ .Values.charts.mariadb.repository }}"
 
   # openDesk Postfix
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postfix
@@ -53,7 +53,7 @@ repositories:
     verify: {{ .Values.charts.postfix.verify }}
     username: {{ .Values.charts.postfix.username | quote }}
     password: {{ .Values.charts.postfix.password | quote }}
-    url: "{{ .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
 
   # openDesk Istio Resources
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-istio-resources
@@ -63,7 +63,7 @@ repositories:
     verify: {{ .Values.charts.istioResources.verify }}
     username: {{ .Values.charts.istioResources.username | quote }}
     password: {{ .Values.charts.istioResources.password | quote }}
-    url: "{{ .Values.charts.istioResources.registry }}/{{ .Values.charts.istioResources.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.istioResources.registry }}/{{ .Values.charts.istioResources.repository }}"
 
   # openDesk ClamAV
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-clamav
@@ -73,14 +73,14 @@ repositories:
     verify: {{ .Values.charts.clamav.verify }}
     username: {{ .Values.charts.clamav.username | quote }}
     password: {{ .Values.charts.clamav.password | quote }}
-    url: "{{ .Values.charts.clamav.registry }}/{{ .Values.charts.clamav.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.clamav.registry }}/{{ .Values.charts.clamav.repository }}"
   - name: "clamav-simple-repo"
     oci: {{ .Values.charts.clamavSimple.oci }}
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.clamavSimple.verify }}
     username: {{ .Values.charts.clamavSimple.username | quote }}
     password: {{ .Values.charts.clamavSimple.password | quote }}
-    url: "{{ .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
 
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
@@ -90,21 +90,21 @@ repositories:
     verify: {{ .Values.charts.memcached.verify }}
     username: {{ .Values.charts.memcached.username | quote }}
     password: {{ .Values.charts.memcached.password | quote }}
-    url: "{{ .Values.charts.memcached.registry }}/{{ .Values.charts.memcached.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.memcached.registry }}/{{ .Values.charts.memcached.repository }}"
   - name: "redis-repo"
     oci: {{ .Values.charts.redis.oci }}
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.redis.verify }}
     username: {{ .Values.charts.redis.username | quote }}
     password: {{ .Values.charts.redis.password | quote }}
-    url: "{{ .Values.charts.redis.registry }}/{{ .Values.charts.redis.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.redis.registry }}/{{ .Values.charts.redis.repository }}"
   - name: "minio-repo"
     oci: {{ .Values.charts.minio.oci }}
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.minio.verify }}
     username: {{ .Values.charts.minio.username | quote }}
     password: {{ .Values.charts.minio.password | quote }}
-    url: "{{ .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
 
 releases:
   - name: "opendesk-otterize"

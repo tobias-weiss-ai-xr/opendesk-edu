@@ -25,7 +25,7 @@ memcached:
   server: {{ .Values.cache.umsSelfservice.host | quote }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsUmcServer.registry | quote }}
   repository: {{ .Values.images.umsUmcServer.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.umsUmcServer.tag | quote }}

@@ -4,7 +4,6 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
   mysql:
     host: {{ .Values.databases.oxAppsuite.host | quote }}
@@ -19,6 +18,7 @@ istio:
 
 nextcloud-integration-ui:
   image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeNextcloudIntegrationUI.registry | quote }}
     repository: {{ .Values.images.openxchangeNextcloudIntegrationUI.repository | quote }}
     tag: {{ .Values.images.openxchangeNextcloudIntegrationUI.tag | quote }}
   imagePullSecrets:
@@ -30,6 +30,7 @@ nextcloud-integration-ui:
 
 public-sector-ui:
   image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangePublicSectorUI.registry | quote }}
     repository: {{ .Values.images.openxchangePublicSectorUI.repository | quote }}
     tag: {{ .Values.images.openxchangePublicSectorUI.tag | quote }}
   imagePullSecrets:
@@ -63,7 +64,7 @@ appsuite:
         - name: {{ . | quote }}
       {{- end }}
       image:
-        repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGotenberg.repository }}"
+        repository: "{{ .Values.global.imageRegistry | default .Values.images.openxchangeGotenberg.registry }}/{{ .Values.images.openxchangeGotenberg.repository }}"
         tag: {{ .Values.images.openxchangeGotenberg.tag | quote }}
         pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
       resources:
@@ -114,6 +115,7 @@ appsuite:
       auth:
         password: {{ .Values.secrets.redis.password | quote }}
     image:
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeCoreMW.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreMW.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -134,6 +136,7 @@ appsuite:
       - name: {{ . | quote }}
     {{- end }}
     image:
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeCoreUI.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreUI.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -150,6 +153,7 @@ appsuite:
       - name: {{ . | quote }}
     {{- end }}
     image:
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeCoreUIMiddleware.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreUIMiddleware.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -164,6 +168,7 @@ appsuite:
 
   core-documentconverter:
     image:
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeDocumentConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
     resources:
@@ -175,6 +180,7 @@ appsuite:
       - name: {{ . | quote }}
     {{- end }}
     image:
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeCoreGuidedtours.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreGuidedtours.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -183,6 +189,7 @@ appsuite:
 
   core-imageconverter:
     image:
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeImageConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeImageConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeImageConverter.tag | quote }}
     resources:
@@ -194,7 +201,7 @@ appsuite:
       - name: {{ . | quote }}
     {{- end }}
     image:
-      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.openxchangeGuardUI.repository }}"
+      repository: "{{ .Values.global.imageRegistry | default .Values.images.openxchangeGuardUI.registry }}/{{ .Values.images.openxchangeGuardUI.repository }}"
       tag: {{ .Values.images.openxchangeGuardUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     resources:
@@ -202,6 +209,7 @@ appsuite:
 
   core-user-guide:
     image:
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeCoreUserGuide.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreUserGuide.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreUserGuide.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}

@@ -4,9 +4,8 @@
 charts:
   certificates:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-certificates/opendesk-certificates
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-certificates/opendesk-certificates
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-certificates"
@@ -16,12 +15,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   clamav:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-clamav/opendesk-clamav
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-clamav/opendesk-clamav
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
@@ -31,12 +30,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   clamavSimple:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-clamav/clamav-simple
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-clamav/clamav-simple
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
@@ -46,40 +45,44 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   collabora:
     # renovate:
-    # registryUrl=https://collaboraonline.github.io/online
-    # packageName=collabora-online
-    # dataSource=helm
+    # upstreamRegistry=ghcr.io/collaboraonline/charts
+    # upstreamRepository=collabora-online
     # dependencyType=supplier
-    registry: "https://collaboraonline.github.io"
-    repository: "online"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/collabora/charts-mirror"
     name: "collabora-online"
-    oci: false
-    version: "1.0.2"
+    oci: true
+    version: "1.1.8"
     username: ~
     password: ~
+    # @supplier: "Collabora"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['1', '1', '8']
 
   cryptpad:
     # renovate:
-    # registryUrl=https://cryptpad.github.io/helm
-    # packageName=cryptpad
-    # dataSource=helm
+    # upstreamRegistry=ghcr.io/cryptpad/helm
+    # upstreamRepository=cryptpad
     # dependencyType=supplier
-    registry: "https://cryptpad.github.io"
-    repository: "helm"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
     name: "cryptpad"
-    oci: false
-    version: "0.0.14"
+    oci: true
+    version: "0.0.17"
     username: ~
     password: ~
+    # @supplier: "XWiki"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '0', '17']
 
   dovecot:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-dovecot/dovecot
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-dovecot/dovecot
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-dovecot"
@@ -89,12 +92,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "Open-Xchange"
 
   element:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-element
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-element
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
@@ -104,12 +107,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   elementWellKnown:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-well-known
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-well-known
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
@@ -119,27 +122,29 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   intercomService:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/intercom-service/intercom-service
-    # dataSource=docker
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/intercom-service/intercom-service
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/intercom-service"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "intercom-service"
     oci: true
     version: "2.0.1"
     verify: true
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['2', '0', '1']
 
   istioResources:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-istio-resources/istio-gateway
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-istio-resources/istio-gateway
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-istio-resources"
@@ -149,12 +154,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   jitsi:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-jitsi/opendesk-jitsi
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-jitsi/opendesk-jitsi
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-jitsi"
@@ -164,42 +169,46 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   umsKeycloak:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/univention-keycloak/ums-keycloak
-    # dataSource=docker
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention-keycloak/ums-keycloak
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention-keycloak"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ums-keycloak"
     oci: true
     version: "1.0.3"
     verify: true
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['1', '0', '3']
 
   umsKeycloakBootstrap:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
-    # packageName=souvap/tooling/charts/univention-keycloak-bootstrap/ums-keycloak-bootstrap
-    # dataSource=docker
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention-keycloak-bootstrap/ums-keycloak-bootstrap
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention-keycloak-bootstrap"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ums-keycloak-bootstrap"
     oci: true
     version: "1.0.1"
     verify: true
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['1', '0', '1']
 
   opendeskKeycloakBootstrap:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap/opendesk-keycloak-bootstrap
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap/opendesk-keycloak-bootstrap
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap"
@@ -209,26 +218,29 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   umsKeycloakExtensions:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/77/packages/helm/stable
-    # packageName=keycloak-extensions
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/keycloak-extensions
     # dependencyType=supplier
-    registry: "https://gitlab.souvap-univention.de"
-    repository: "api/v4/projects/77/packages/helm/stable"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "keycloak-extensions"
-    oci: false
-    version: "0.1.0"
+    oci: true
+    version: "0.0.5"
+    verify: true
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '0', '3']
 
   mariadb:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-mariadb/mariadb
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-mariadb/mariadb
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-mariadb"
@@ -238,12 +250,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   matrixNeoboardWidget:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neoboard-widget
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neoboard-widget
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
@@ -253,12 +265,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   matrixNeochoiseWidget:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neochoice-widget
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neochoice-widget
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
@@ -268,12 +280,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   matrixNeodatefixBot:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-bot
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-bot
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
@@ -283,12 +295,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   matrixNeodatefixWidget:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-widget
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets/matrix-neodatefix-widget
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
@@ -298,12 +310,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   matrixUserVerificationService:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-matrix-user-verification-service
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-matrix-user-verification-service
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
@@ -313,12 +325,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   memcached:
     # renovate:
-    # registryUrl=https://registry-1.docker.io
-    # packageName=bitnamicharts/memcached
-    # dataSource=docker
+    # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=bitnamicharts/memcached
     # dependencyType=external
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
@@ -328,12 +340,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   minio:
     # renovate:
-    # registryUrl=https://registry-1.docker.io
-    # packageName=bitnamicharts/minio
-    # dataSource=docker
+    # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=bitnamicharts/minio
     # dependencyType=external
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
@@ -343,12 +355,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   nextcloud:
     # renovate:
-    # registryUrl=https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-nextcloud
-    # packageName=opendesk-nextcloud
-    # dataSource=helm
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-nextcloud/opendesk-nextcloud
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
@@ -358,12 +370,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   nextcloudManagement:
     # renovate:
-    # registryUrl=https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-nextcloud
-    # packageName=opendesk-nextcloud-management
-    # dataSource=helm
+    # upstreamRegistry=registry.opencode.de
+    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-nextcloud/opendesk-nextcloud-management
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
@@ -373,12 +385,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   nginx:
     # renovate:
-    # registryUrl=https://registry-1.docker.io
-    # packageName=bitnamicharts/nginx
-    # dataSource=docker
+    # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=bitnamicharts/nginx
     # dependencyType=external
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
@@ -388,27 +400,29 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   openproject:
     # renovate:
-    # registryUrl=https://ghcr.io
-    # packageName=opf/helm-charts/openproject
-    # dataSource=docker
+    # upstreamRegistry=ghcr.io
+    # upstreamRepository=opf/helm-charts/openproject
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/opf/helm-charts"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/openproject/charts-mirror"
     name: "openproject"
     oci: true
     version: "3.0.2"
     verify: true
     username: ~
     password: ~
+    # @supplier: "openProject"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['3', '0', '2']
 
   openprojectBootstrap:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap/opendesk-openproject-bootstrap
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap/opendesk-openproject-bootstrap
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap"
@@ -418,26 +432,28 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   openXchangeAppSuite:
     # renovate:
-    # registryUrl=https://registry.open-xchange.com
-    # packageName=appsuite-public-sector/charts/appsuite-public-sector
-    # dataSource=docker
+    # upstreamRegistry=registry.open-xchange.com
+    # upstreamRepository=appsuite-public-sector/charts/appsuite-public-sector
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/appsuite-public-sector/charts"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/open-xchange/charts-mirror"
     name: "appsuite-public-sector"
     oci: true
     version: "2.2.37"
     username: ~
     password: ~
+    # @supplier: "Open-Xchange"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['2', '2', '37']
 
   openXchangeAppSuiteBootstrap:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap/opendesk-open-xchange-bootstrap
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap/opendesk-open-xchange-bootstrap
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap"
@@ -447,12 +463,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   otterize:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-otterize/opendesk-otterize
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-otterize/opendesk-otterize
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
@@ -462,27 +478,29 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   oxConnector:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/128/packages/helm/stable
-    # packageName=ox-connector
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/ox-connector
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ox-connector"
     oci: true
     version: "0.4.2"
     verify: true
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '4', '2']
 
   postfix:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-postfix/postfix
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-postfix/postfix
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-postfix"
@@ -492,12 +510,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   postgresql:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-postgresql/postgresql
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-postgresql/postgresql
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-postgresql"
@@ -507,12 +525,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   redis:
     # renovate:
-    # registryUrl=https://registry-1.docker.io
-    # packageName=bitnamicharts/redis
-    # dataSource=docker
+    # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=bitnamicharts/redis
     # dependencyType=external
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
@@ -522,12 +540,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   synapse:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
@@ -537,12 +555,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   synapseCreateAccount:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-create-account
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-create-account
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
@@ -552,12 +570,12 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   synapseWeb:
     # renovate:
-    # registryUrl=https://registry.opencode.de
-    # packageName=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-web
-    # dataSource=docker
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse-web
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
@@ -567,288 +585,327 @@ charts:
     verify: true
     username: ~
     password: ~
+    # @supplier: "openDesk"
 
   umsGuardianManagementApi:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=umc-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/guardian-management-api
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "guardian-management-api"
     oci: true
     verify: true
     version: "0.0.1"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '0', '1']
 
   umsGuardianManagementUi:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=umc-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/guardian-management-ui
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "guardian-management-ui"
     oci: true
     verify: true
     version: "0.0.1"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '0', '1']
 
   umsGuardianAuthorizationApi:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=umc-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/guardian-authorization-api
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "guardian-authorization-api"
     oci: true
     verify: true
     version: "0.0.1"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '0', '1']
 
   umsOpenPolicyAgent:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=umc-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/open-policy-agent
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "open-policy-agent"
     oci: true
     verify: true
     version: "0.0.1"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '0', '1']
 
   umsLdapNotifier:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=ldap-notifier
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/ldap-notifier
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ldap-notifier"
     oci: true
     verify: true
     version: "0.8.2"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '7', '2']
 
   umsLdapServer:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=ldap-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/ldap-server
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ldap-server"
     oci: true
     verify: true
     version: "0.8.2"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '7', '2']
 
   umsNotificationsApi:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=notifications-api
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/notifications-api
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "notifications-api"
     oci: true
     verify: true
     version: "0.9.2"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '2']
 
   umsPortalFrontend:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=portal-frontend
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/portal-frontend
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "portal-frontend"
     oci: true
     verify: true
     version: "0.9.2"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '2']
 
   umsPortalListener:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=portal-listener
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/portal-listener
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "portal-listener"
     oci: true
     verify: true
     version: "0.9.2"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '2']
 
   umsPortalServer:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=portal-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/portal-server
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "portal-server"
     oci: true
     verify: true
     version: "0.9.2"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '2']
 
   umsProvisioning:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=provisioning-api
-    # dataSource=helm
-    # dependencyType=vendor
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/provisioning-api
+    # dependencyType=supplier
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "provisioning-api"
     oci: true
     verify: true
     version: "0.2.1"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '2', '1']
 
   umsSelfserviceListener:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=umc-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/selfservice-listener
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "selfservice-listener"
     oci: true
     verify: true
     version: "0.3.1"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '3', '1']
 
   umsStackDataSwp:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=stack-data-swp
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/stack-data-swp
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "stack-data-swp"
     oci: true
     verify: true
     version: "0.41.4"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '39', '5']
 
   umsStackDataUms:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=stack-data-ums
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/stack-data-ums
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "stack-data-ums"
     oci: true
     verify: true
     version: "0.41.4"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '39', '5']
 
   umsStoreDav:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=store-dav
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/store-dav
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "store-dav"
     oci: true
     verify: true
     version: "0.9.3"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '3']
 
   umsUdmRestApi:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=udm-rest-api
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/udm-rest-api
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "udm-rest-api"
     oci: true
     verify: true
     version: "0.5.2"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '4', '3']
 
   umsUmcGateway:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=umc-gateway
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/umc-gateway
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "umc-gateway"
     oci: true
     verify: true
     version: "0.6.4"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '6', '4']
 
   umsUmcServer:
     # renovate:
-    # registryUrl=https://gitlab.souvap-univention.de/api/v4/projects/155/packages/helm/stable
-    # packageName=umc-server
-    # dataSource=helm
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/umc-server
     # dependencyType=supplier
-    registry: "external-registry.souvap-univention.de"
-    repository: "sovereign-workplace/souvap/tooling/charts/univention"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "umc-server"
     oci: true
     verify: true
     version: "0.6.4"
     username: ~
     password: ~
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '6', '4']
 
   xwiki:
     # renovate:
-    # registryUrl=https://xwiki-contrib.github.io/xwiki-helm
-    # packageName=xwiki
-    # dataSource=helm
+    # upstreamRegistry=git.xwikisas.com:5050/xwikisas/swp/xwiki/contrib-xwiki-helm
+    # upstreamRepository=xwiki
     # dependencyType=supplier
-    registry: "https://xwiki-contrib.github.io"
-    repository: "xwiki-helm"
-    oci: false
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
+    oci: true
     name: "xwiki"
-    version: "1.2.3"
+    version: "1.2.4"
     username: ~
     password: ~
+    # @supplier: "XWiki"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['1', '2', '4']
 ...

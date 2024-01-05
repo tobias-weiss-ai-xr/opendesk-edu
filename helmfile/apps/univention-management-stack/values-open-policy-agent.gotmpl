@@ -4,10 +4,10 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  registry: {{ .Values.global.imageRegistry }}
-  repository: {{ .Values.images.umsOpenPolicyAgent.repository }}
-  pullPolicy: {{ .Values.global.imagePullPolicy }}
-  tag: {{ .Values.images.umsOpenPolicyAgent.tag }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsOpenPolicyAgent.registry | quote }}
+  repository: {{ .Values.images.umsOpenPolicyAgent.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsOpenPolicyAgent.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}

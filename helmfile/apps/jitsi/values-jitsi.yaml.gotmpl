@@ -5,7 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   domain: {{ .Values.global.domain | quote }}
-  registry: {{ .Values.global.imageRegistry | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
@@ -16,7 +15,7 @@ cleanup:
 
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.jitsiKeycloakAdapter.registry | quote }}
   repository: {{ .Values.images.jitsiKeycloakAdapter.repository | quote }}
   tag: {{ .Values.images.jitsiKeycloakAdapter.tag | quote }}
 
@@ -33,7 +32,7 @@ jitsi:
   web:
     replicaCount: {{ .Values.replicas.jitsi }}
     image:
-      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jitsi.repository }}"
+      repository: "{{ .Values.global.imageRegistry | default .Values.images.jitsi.registry }}/{{ .Values.images.jitsi.repository }}"
       tag: {{ .Values.images.jitsi.tag | quote }}
     ingress:
       enabled: {{ .Values.ingress.enabled }}
@@ -52,7 +51,7 @@ jitsi:
       {{ .Values.resources.jitsi | toYaml | nindent 6 }}
   prosody:
     image:
-      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.prosody.repository }}"
+      repository: "{{ .Values.global.imageRegistry | default .Values.images.prosody.registry }}/{{ .Values.images.prosody.repository }}"
       tag: {{ .Values.images.prosody.tag | quote }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
@@ -89,7 +88,7 @@ jitsi:
   jicofo:
     replicaCount: {{ .Values.replicas.jicofo }}
     image:
-      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jicofo.repository }}"
+      repository: "{{ .Values.global.imageRegistry | default .Values.images.jicofo.registry }}/{{ .Values.images.jicofo.repository }}"
       tag: {{ .Values.images.jicofo.tag | quote }}
     xmpp:
       password: {{ .Values.secrets.jitsi.jicofoAuthPassword | quote }}
@@ -99,7 +98,7 @@ jitsi:
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     image:
-      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jvb.repository }}"
+      repository: "{{ .Values.global.imageRegistry | default .Values.images.jvb.registry }}/{{ .Values.images.jvb.repository }}"
       tag: {{ .Values.images.jvb.tag | quote }}
     xmpp:
       password: {{ .Values.secrets.jitsi.jvbAuthPassword | quote }}
@@ -110,7 +109,7 @@ jitsi:
   jibri:
     replicaCount: {{ .Values.replicas.jibri }}
     image:
-      repository: "{{ .Values.global.imageRegistry }}/{{ .Values.images.jibri.repository }}"
+      repository: "{{ .Values.global.imageRegistry | default .Values.images.jibri.registry }}/{{ .Values.images.jibri.repository }}"
       tag: {{ .Values.images.jibri.tag | quote }}
     recorder:
       password: {{ .Values.secrets.jitsi.jibriRecorderPassword | quote }}
@@ -129,7 +128,7 @@ patchJVB:
     loadbalancerStatusField: {{ .Values.cluster.networking.loadBalancerStatusField | quote }}
   image:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-    registry: {{ .Values.global.imageRegistry | quote }}
+    registry: {{ .Values.global.imageRegistry | default .Values.images.jitsiPatchJVB.registry | quote }}
     repository: {{ .Values.images.jitsiPatchJVB.repository | quote }}
     tag: {{ .Values.images.jitsiPatchJVB.tag | quote }}
 replicaCount: {{ .Values.replicas.jitsiKeycloakAdapter }}

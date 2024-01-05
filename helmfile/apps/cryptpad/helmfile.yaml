@@ -11,7 +11,7 @@ repositories:
     username: {{ .Values.charts.cryptpad.username | quote }}
     password: {{ .Values.charts.cryptpad.password | quote }}
     oci: {{ .Values.charts.cryptpad.oci }}
-    url: "{{ .Values.charts.cryptpad.registry }}/{{ .Values.charts.cryptpad.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.cryptpad.registry }}/{{ .Values.charts.cryptpad.repository }}"
 
 releases:
   - name: "cryptpad"

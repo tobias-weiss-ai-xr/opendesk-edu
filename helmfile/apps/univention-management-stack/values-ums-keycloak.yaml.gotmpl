@@ -7,12 +7,11 @@ global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
-  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsKeycloak.registry | quote }}
   repository: {{ .Values.images.umsKeycloak.repository | quote }}
   tag: {{ .Values.images.umsKeycloak.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}

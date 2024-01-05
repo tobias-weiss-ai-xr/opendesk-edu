@@ -13,7 +13,7 @@ repositories:
     verify: {{ .Values.charts.jitsi.verify }}
     username: {{ .Values.charts.jitsi.username | quote }}
     password: {{ .Values.charts.jitsi.password | quote }}
-    url: "{{ .Values.charts.jitsi.registry }}/{{ .Values.charts.jitsi.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.jitsi.registry }}/{{ .Values.charts.jitsi.repository }}"
 
 releases:
   - name: "jitsi"

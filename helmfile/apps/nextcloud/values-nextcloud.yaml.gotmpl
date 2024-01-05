@@ -4,7 +4,6 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
@@ -26,6 +25,7 @@ exporter:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
   image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudExporter.registry | quote }}
     repository: "{{ .Values.images.nextcloudExporter.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudExporter.tag | quote }}
@@ -76,6 +76,7 @@ php:
     readOnlyRootFilesystem: true
     runAsNonRoot: true
   image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudPHP.registry | quote }}
     repository: "{{ .Values.images.nextcloudPHP.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudPHP.tag | quote }}
@@ -115,6 +116,7 @@ apache2:
     tls:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
   image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudApache2.registry | quote }}
     repository: {{ .Values.images.nextcloudApache2.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudApache2.tag | quote }}

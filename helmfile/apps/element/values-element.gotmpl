@@ -5,7 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   domain: {{ .Values.global.domain | quote }}
-  registry: {{ .Values.global.imageRegistry | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
@@ -108,7 +107,7 @@ configuration:
 
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.element.registry | quote }}
   repository: {{ .Values.images.element.repository | quote }}
   tag: {{ .Values.images.element.tag | quote }}
 

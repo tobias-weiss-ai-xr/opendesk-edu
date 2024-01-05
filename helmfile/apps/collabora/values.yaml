@@ -6,9 +6,6 @@
 
 fullnameOverride: "collabora"
 
-image:
-  pullPolicy: "IfNotPresent"
-
 collabora:
   extra_params: "--o:ssl.enable=false --o:ssl.termination=true"
 

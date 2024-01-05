@@ -13,14 +13,14 @@ repositories:
     verify: {{ .Values.charts.nextcloudManagement.verify }}
     username: {{ .Values.charts.nextcloudManagement.username | quote }}
     password: {{ .Values.charts.nextcloudManagement.password | quote }}
-    url: "{{ .Values.charts.nextcloudManagement.registry }}/{{ .Values.charts.nextcloudManagement.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.nextcloudManagement.registry }}/{{ .Values.charts.nextcloudManagement.repository }}"
   - name: "nextcloud-repo"
     oci: {{ .Values.charts.nextcloud.oci }}
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.nextcloud.verify }}
     username: {{ .Values.charts.nextcloud.username | quote }}
     password: {{ .Values.charts.nextcloud.password | quote }}
-    url: "{{ .Values.charts.nextcloud.registry }}/{{ .Values.charts.nextcloud.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.nextcloud.registry }}/{{ .Values.charts.nextcloud.repository }}"
 
 releases:
   - name: "opendesk-nextcloud-management"

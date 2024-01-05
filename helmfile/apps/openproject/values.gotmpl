@@ -8,26 +8,22 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.openproject.registry | quote }}
   repository: {{ .Values.images.openproject.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.openproject.tag | quote }}
 
 initdb:
   image:
-    registry: "{{ .Values.global.imageRegistry }}"
-    repository: "{{ .Values.images.openprojectInitDb.repository }}"
-    tag: "{{ .Values.images.openprojectInitDb.tag }}"
-    pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+    registry: {{ .Values.global.imageRegistry | default .Values.images.openprojectInitDb.registry | quote }}
+    repository: {{ .Values.images.openprojectInitDb.repository | quote }}
+    tag: {{ .Values.images.openprojectInitDb.tag | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 memcached:
   connection:
     host: {{ .Values.cache.openproject.host | quote }}
     port: {{ .Values.cache.openproject.port }}
-  image:
-    registry: {{ .Values.global.imageRegistry | quote }}
-    repository: {{ .Values.images.memcached.repository | quote }}
-    tag: {{ .Values.images.memcached.tag | quote }}
 
 postgresql:
   auth:

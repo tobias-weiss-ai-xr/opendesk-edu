@@ -4,7 +4,6 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  imageRegistry: {{ .Values.global.imageRegistry | quote }}
   domain: {{ .Values.global.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
@@ -40,6 +39,7 @@ ics:
     audience: "opendesk-nextcloud"
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.intercom.registry | quote }}
   repository: {{ .Values.images.intercom.repository | quote }}
   tag: {{ .Values.images.intercom.tag | quote }}
 

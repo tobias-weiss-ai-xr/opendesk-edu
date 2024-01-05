@@ -9,10 +9,10 @@ guardianManagementUi:
   viteKeycloakAuthenticationAdapterRealm: {{ .Values.platform.realm | quote }}
 
 image:
-  registry: {{ .Values.global.imageRegistry }}
-  repository: {{ .Values.images.umsGuardianManagementUi.repository }}
-  pullPolicy: {{ .Values.global.imagePullPolicy }}
-  tag: {{ .Values.images.umsGuardianManagementUi.tag }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsGuardianManagementUi.registry | quote }}
+  repository: {{ .Values.images.umsGuardianManagementUi.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsGuardianManagementUi.tag | quote }}
   pullSecrets:
     {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}

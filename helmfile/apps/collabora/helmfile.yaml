@@ -11,7 +11,7 @@ repositories:
     username: {{ .Values.charts.collabora.username | quote }}
     password: {{ .Values.charts.collabora.password | quote }}
     oci: {{ .Values.charts.collabora.oci }}
-    url: "{{ .Values.charts.collabora.registry }}/{{ .Values.charts.collabora.repository }}"
+    url: "{{ .Values.global.imageRegistry | default .Values.charts.collabora.registry }}/{{ .Values.charts.collabora.repository }}"
 
 releases:
   - name: "collabora-online"
