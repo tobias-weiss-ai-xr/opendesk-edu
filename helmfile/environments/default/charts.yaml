@@ -650,7 +650,7 @@ charts:
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "stack-data-swp"
     verify: true
-    version: "0.41.4"
+    version: "0.41.5"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '39', '5']
@@ -664,7 +664,7 @@ charts:
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "stack-data-ums"
     verify: true
-    version: "0.41.4"
+    version: "0.41.5"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '39', '5']

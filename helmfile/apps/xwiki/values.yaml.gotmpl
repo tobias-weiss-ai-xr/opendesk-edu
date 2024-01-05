@@ -140,11 +140,9 @@ properties:
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchDN":
     "dc=swp-ldap,dc=internal"
   ## LDAP filter to only synchronize some groups
-  # "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
-  #   "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
-    "(objectClass=opendeskKnowledgemanagementGroup)"
-  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.title": "{{ .Values.theme.texts.productName }} Wissen - $!tdoc.displayTitle"
+    "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.title": "{{ .Values.theme.texts.productName }} Wissen - \\$!tdoc.displayTitle"
 
 replicaCount: {{ .Values.replicas.xwiki }}
 
