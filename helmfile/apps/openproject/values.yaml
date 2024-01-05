@@ -82,7 +82,7 @@ environment:
   OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE: "true"
   # Define an admin mapping from the claim
   # The attribute mapping cannot currently be defined in the value
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_ADMIN: "openproject_admin"
+  # OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_ADMIN: "openproject_admin"
 
 seederJob:
   annotations:
