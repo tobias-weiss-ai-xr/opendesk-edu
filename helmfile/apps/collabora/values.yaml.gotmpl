@@ -1,13 +1,37 @@
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: Apache-2.0
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
 ---
-# https://github.com/CollaboraOnline/online/blob/master/kubernetes/helm/README.md or
-# https://github.com/CollaboraOnline/online/blob/master/kubernetes/helm/collabora-online/values.yaml
-
-fullnameOverride: "collabora"
+autoscaling:
+  enabled: false
 
 collabora:
   extra_params: "--o:ssl.enable=false --o:ssl.termination=true"
+  username: "collabora-internal-admin"
+  password: {{ .Values.secrets.collabora.adminPassword | quote }}
+  aliasgroups:
+    - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}:443"
+
+fullnameOverride: "collabora"
+
+grafana:
+  dashboards:
+    enabled: {{ .Values.grafana.dashboards.enabled }}
+    labels:
+      {{- toYaml .Values.grafana.dashboards.labels | nindent 6 }}
+    annotations:
+      {{- toYaml .Values.grafana.dashboards.annotations | nindent 6 }}
+
+image:
+  repository: "{{ .Values.global.imageRegistry | default .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
+  tag: {{ .Values.images.collabora.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . | quote }}
+{{- end }}
 
 ingress:
   annotations:
@@ -47,11 +71,35 @@ ingress:
       acl admin_url path_beg /cool/adminws/
       acl admin_url path_beg /browser/dist/admin/admin.html
       http-request deny if admin_url
-autoscaling:
-  enabled: false
+  enabled: {{ .Values.ingress.enabled }}
+  className: {{ .Values.ingress.ingressClassName | quote }}
+  hosts:
+    - host: "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
+      paths:
+        - path: "/"
+          pathType: "Prefix"
+  tls:
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
+      hosts:
+        - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
-serviceAccount:
-  create: true
+podSecurityContext:
+  fsGroup: 100
+
+prometheus:
+  servicemonitor:
+    enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+    labels:
+      {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+  rules:
+    enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+    additionalLabels:
+      {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 6 }}
+
+replicaCount: {{ .Values.replicas.collabora }}
+
+resources:
+  {{ .Values.resources.collabora | toYaml | nindent 2 }}
 
 securityContext:
   allowPrivilegeEscalation: true
@@ -79,6 +127,6 @@ securityContext:
       - "SYS_CHROOT"
       - "MKNOD"
 
-podSecurityContext:
-  fsGroup: 100
+serviceAccount:
+  create: true
 ...
