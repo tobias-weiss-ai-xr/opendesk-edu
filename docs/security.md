@@ -15,36 +15,14 @@ This document should cover the current status of security measurements.
 
 # Helm Chart Trust Chain
 
-Helm Charts which are released via openDesk CI/CD process are always signed. The public GPG keys are present in
-`pubkey.gpg` file and are validated during helmfile installation.
+Helm charts are signed and validated against GPG keys which could be found in `helmfile/files/gpg-pubkeys`.
 
-| Repository                           | OCI |     Verifiable     |
-|--------------------------------------|:---:|:------------------:|
-| bitnami-repo (openDesk build)        | yes | :white_check_mark: |
-| clamav-repo                          | yes | :white_check_mark: |
-| collabora-online-repo                | no  |        :x:         |
-| cryptpad-online-repo                 | no  |        :x:         |
-| intercom-service-repo                | yes | :white_check_mark: |
-| istio-resources-repo                 | yes | :white_check_mark: |
-| jitsi-repo                           | yes | :white_check_mark: |
-| keycloak-extensions-repo             | yes | :white_check_mark: |
-| mariadb-repo                         | yes | :white_check_mark: |
-| opendesk-nextcloud-repo              | yes | :white_check_mark: |
-| opendesk-certificates-repo           | yes | :white_check_mark: |
-| opendesk-dovecot-repo                | yes | :white_check_mark: |
-| opendesk-element-repo                | yes | :white_check_mark: |
-| opendesk-keycloak-bootstrap-repo     | yes | :white_check_mark: |
-| opendesk-nextcloud-bootstrap-repo    | yes | :white_check_mark: |
-| opendesk-open-xchange-bootstrap-repo | yes | :white_check_mark: |
-| openproject-repo                     | yes | :white_check_mark: |
-| openxchange-repo                     | yes |        :x:         |
-| ox-connector-repo                    | yes | :white_check_mark: |
-| postfix-repo                         | yes | :white_check_mark: |
-| postgresql-repo                      | yes | :white_check_mark: |
-| univention-management-stack-repo     | yes | :white_check_mark: |
-| univention-keycloak-repo             | yes | :white_check_mark: |
-| univention-keycloak-bootstrap-repo   | yes | :white_check_mark: |
-| xwiki-repo                           | no  |        :x:         |
+All charts except these are verifiable:
+
+| Repository        | Verifiable |
+|-------------------|:----------:|
+| collabora-repo    |     no     |
+| open-xchange-repo |     no     |
 
 # Kubernetes Security Enforcements
 
@@ -58,7 +36,7 @@ This list gives you an overview of default security settings and if they comply 
 |                             | icap                          | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    100    |    101     |   101   |
 |                             | milter                        | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    100    |    101     |   101   |
 | Collabora                   | collabora                     |        :x:         |                :x:                 | :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`, `MKNOD`) |        :white_check_mark:         |               :x:               |  :white_check_mark:   |    100    |    101     |   100   |
-| CryptPad                    | npm                           |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |   4001    |    4001    |  4001   |
+| CryptPad                    | cryptpad                      |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |   4001    |    4001    |  4001   |
 | Dovecot                     | dovecot                       |        :x:         |         :white_check_mark:         |                          :x: (`CHOWN`, `DAC_OVERRIDE`, `KILL`, `NET_BIND_SERVICE`, `SETGID`, `SETUID`, `SYS_CHROOT`)                           |        :white_check_mark:         |       :white_check_mark:        |          :x:          |     -     |     -      |  1000   |
 | Element                     | element                       | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |    101    |    101     |   101   |
 |                             | synapse                       | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   10991   |     -      |  10991  |
@@ -96,14 +74,18 @@ This list gives you an overview of default security settings and if they comply 
 | Postfix                     | postfix                       |        :x:         |                :x:                 |                                                                      :x:                                                                       |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |   101   |
 | PostgreSQL                  | postgresql                    | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1001    |    1001    |  1001   |
 | Redis                       | redis                         |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1001    |     0      |  1001   |
-| Univention Management Stack | keycloak                      |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |   1000    |    1000    |  1000   |
-|                             | keycloakBootstrap             |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |   1000    |    1000    |  1000   |
-|                             | keycloakExtensionHandler      | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1000    |    1000    |    -    |
-|                             | keycloakExtensionProxy        | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1000    |    1000    |    -    |
+| Univention Management Stack | guardian-authorization-api    |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
+|                             | guardian-management-api       |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
+|                             | guardian-management-ui        |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
+|                             | keycloak                      |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |   1000    |    1000    |  1000   |
+|                             | keycloak-bootstrap            |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |  :white_check_mark:   |   1000    |    1000    |  1000   |
+|                             | keycloak-extension-handler    | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1000    |    1000    |    -    |
+|                             | keycloak-extension-proxy      | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1000    |    1000    |    -    |
 |                             | ldap-notifier                 |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |                             | ldap-server                   |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |                             | notifications-api             |        :x:         |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
-|                             | opendeskKeycloakBootstrap     | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1000    |    1000    |  1000   |
+|                             | opendesk-keycloak-bootstrap   | :white_check_mark: |         :white_check_mark:         |                                                               :white_check_mark:                                                               |        :white_check_mark:         |       :white_check_mark:        |  :white_check_mark:   |   1000    |    1000    |  1000   |
+|                             | open-policy-agent             |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |                             | portal-frontend               |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |                             | portal-listener               |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
 |                             | portal-server                 |        :x:         |         :white_check_mark:         |     :x: (`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `FSETID`, `KILL`, `SETGID`, `SETUID`, `SETPCAP`, `NET_BIND_SERVICE`, `NET_RAW`, `SYS_CHROOT`)      |        :white_check_mark:         |               :x:               |          :x:          |     -     |     -      |    -    |
