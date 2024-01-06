@@ -16,10 +16,14 @@ appsuite:
         contactsLdapClient:
           pool:
             type: "simple"
+            host:
+              address: {{ .Values.ldap.host | quote }}
+              port: 389
           auth:
             type: "adminDN"
             adminDN:
               dn: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
+              password: {{ .Values.secrets.univentionManagementStack.ldapSearch.ox | quote }}
 
     uiSettings:
       # Enterprise contact picker
