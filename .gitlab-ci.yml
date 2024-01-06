@@ -539,6 +539,27 @@ release:
     - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
       when: "on_success"
   script:
+    - >
+      export RELEASE_VERSION=$(semantic-release --dry-run --branches $CI_COMMIT_REF_NAME --plugins
+      "@semantic-release/gitlab" | grep -oP "Published release [0-9]+\.[0-9]+\.[0-9]+ on" |
+      grep -oP "[0-9]+\.[0-9]+\.[0-9]+")
+    - |
+      if [ -z "${RELEASE_VERSION}" ]; then
+        echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed s@^v@@g )"
+      else
+        echo "RELEASE_VERSION=${RELEASE_VERSION}"
+      fi
+    - |
+      echo -e "\n[INFO] Writing data to helm value file..."
+      cat <<EOF >helmfile/environments/default/global.generated.yaml
+      # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+      # SPDX-License-Identifier: Apache-2.0
+      ---
+      global:
+        systemInformation:
+          releaseVersion: "v$(echo -E "$RELEASE_VERSION")"
+      ...
+      EOF
     - |
       cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
       {
@@ -557,7 +578,7 @@ release:
           "@semantic-release/release-notes-generator",
           "@semantic-release/changelog",
           ["@semantic-release/git", {
-            "assets": ["charts/**/Chart.yaml", "CHANGELOG.md", "charts/**/README.md"],
+            "assets": ["charts/**/Chart.yaml", "CHANGELOG.md", "charts/**/README.md", "helmfile/environments/default/global.generated.yaml"],
             "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
           }]
         ]

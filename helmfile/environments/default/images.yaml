@@ -50,6 +50,8 @@ images:
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
     tag: "1.8.2@sha256:0595292e824c039e9c088a845b3d49c6be93d46f9f99090783eb20cb1fc27227"
     # @supplier: "Element"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['1', '8', '0']
   freshclam:
     # renovate:
     # upstreamRegistry=docker.io
@@ -573,7 +575,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/data-loader"
-    tag: "0.39.5@sha256:01370139fd682a20f42e7b9b7f269c5bb8e0f9a392e0119135c88abbf2c5616c"
+    tag: "0.41.5@sha256:9978e5eae3846e3c32effb2e602136d8855aaec287fb280a54b311defab2fbf3"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '39', '5']
