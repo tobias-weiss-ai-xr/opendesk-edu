@@ -38,8 +38,7 @@ releases:
     chart: "dovecot-repo/{{ .Values.charts.dovecot.name }}"
     version: "{{ .Values.charts.dovecot.version }}"
     values:
-      - "values-dovecot.yaml"
-      - "values-dovecot.gotmpl"
+      - "values-dovecot.yaml.gotmpl"
     installed: {{ .Values.dovecot.enabled }}
     timeout: 900
 
@@ -47,10 +46,8 @@ releases:
     chart: "open-xchange-repo/{{ .Values.charts.openXchangeAppSuite.name }}"
     version: "{{ .Values.charts.openXchangeAppSuite.version }}"
     values:
-      - "values-openxchange.yaml"
-      - "values-openxchange.gotmpl"
-      - "values-openxchange-enterprise-contact-picker.yaml"
-      - "values-openxchange-enterprise-contact-picker.gotmpl"
+      - "values-openxchange.yaml.gotmpl"
+      - "values-openxchange-enterprise-contact-picker.yaml.gotmpl"
     installed: {{ .Values.oxAppsuite.enabled }}
     timeout: 900
 
@@ -58,7 +55,7 @@ releases:
     chart: "open-xchange-bootstrap-repo/{{ .Values.charts.openXchangeAppSuiteBootstrap.name }}"
     version: "{{ .Values.charts.openXchangeAppSuiteBootstrap.version }}"
     values:
-      - "values-openxchange-bootstrap.gotmpl"
+      - "values-openxchange-bootstrap.yaml.gotmpl"
     installed: {{ .Values.oxAppsuite.enabled }}
     timeout: 900
 
