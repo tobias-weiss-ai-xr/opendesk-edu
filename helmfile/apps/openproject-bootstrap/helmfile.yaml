@@ -22,8 +22,7 @@ releases:
     wait: true
     waitForJobs: true
     values:
-      - "values.yaml"
-      - "values.gotmpl"
+      - "values.yaml.gotmpl"
     installed: {{ .Values.openproject.enabled }}
     timeout: 900
 
