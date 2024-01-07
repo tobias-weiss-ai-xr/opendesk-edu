@@ -23,18 +23,20 @@ containerSecurityContext:
 environment:
 # For more details and more options see
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/
-  OPENPROJECT_LOG__LEVEL: "info"
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_LOGIN: "opendesk_username"
+  OPENPROJECT_LOG__LEVEL: {{ .Values.debug.logLevel | lower | quote }}
   OPENPROJECT_LOGIN__REQUIRED: "true"
   OPENPROJECT_OAUTH__ALLOW__REMAPPING__OF__EXISTING__USERS: "true"
   OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER: "keycloak"
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_DISPLAY__NAME: "Keycloak"
   OPENPROJECT_PER__PAGE__OPTIONS: "20, 50, 100, 200"
   OPENPROJECT_EMAIL__DELIVERY__METHOD: "smtp"
   OPENPROJECT_SMTP__AUTHENTICATION: "plain"
   OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
   OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "peer"
   OPENPROJECT_DEFAULT__COMMENT__SORT__ORDER: "desc"
+  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
+  OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.ldap.host | quote }}
+  OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
+  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.univentionManagementStack.ldapSearch.openproject | quote }}
   OPENPROJECT_SEED_LDAP_OPENDESK_SECURITY: "plain_ldap"
   OPENPROJECT_SEED_LDAP_OPENDESK_BINDUSER: "uid=ldapsearch_openproject,cn=users,dc=swp-ldap,dc=internal"
   OPENPROJECT_SEED_LDAP_OPENDESK_BASEDN: "dc=swp-ldap,dc=internal"
@@ -51,19 +53,8 @@ environment:
     "(&(objectClass=opendeskProjectmanagementGroup)(opendeskProjectmanagementEnabled=TRUE))"
   OPENPROJECT_SEED_LDAP_OPENDESK_GROUPFILTER_OPENDESK_SYNC__USERS: "true"
   OPENPROJECT_SEED_LDAP_OPENDESK_GROUPFILTER_OPENDESK_GROUP__ATTRIBUTE: "cn"
-  # Details: https://www.openproject.org/docs/installation-and-operations/configuration/#attachments-storage
-  OPENPROJECT_ATTACHMENTS__STORAGE: "fog"
-  OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE: "true"
   OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_USER: {{ .Values.secrets.openproject.apiAdminUsername | quote }}
   OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_PASSWORD: {{ .Values.secrets.openproject.apiAdminPassword | quote }}
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_SECRET: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_HOST: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_END__SESSION__ENDPOINT: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
-  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
-  OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.ldap.host | quote }}
-  OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
   OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
   OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.domain | quote }}
@@ -73,22 +64,9 @@ environment:
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
   OPENPROJECT_SMTP__ADDRESS: {{ .Values.smtp.host | quote }}
   OPENPROJECT_MAIL__FROM: "do-not-reply@{{ .Values.global.domain }}"
-  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
-  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.univentionManagementStack.ldapSearch.openproject | quote }}
-  {{ if ne .Values.objectstores.openproject.backend "aws" }}
-  OPENPROJECT_FOG_CREDENTIALS_ENDPOINT: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
-  OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE: "true"
-  {{ end }}
-  OPENPROJECT_FOG_CREDENTIALS_AWS__ACCESS__KEY__ID: {{ .Values.objectstores.openproject.username | quote }}
-  OPENPROJECT_FOG_CREDENTIALS_AWS__SECRET__ACCESS__KEY: {{ .Values.objectstores.openproject.secret | default .Values.secrets.minio.openprojectUser | quote }}
-  OPENPROJECT_FOG_CREDENTIALS_PROVIDER: {{ .Values.objectstores.openproject.provider | default "AWS" | quote }}
-  OPENPROJECT_FOG_CREDENTIALS_REGION: {{ .Values.objectstores.openproject.region | quote }}
-  OPENPROJECT_FOG_DIRECTORY: {{ .Values.objectstores.openproject.bucket | quote }}
-  OPENPROJECT_FOG_CREDENTIALS_USE__IAM__PROFILE: {{ .Values.objectstores.openproject.useIAMProfile | default "false" | quote }}
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
-  # Define an admin mapping from the claim
-  # The attribute mapping cannot currently be defined in the value
-  # OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ATTRIBUTE__MAP_ADMIN: "openproject_admin"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
 
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.openproject.registry | quote }}
@@ -131,7 +109,6 @@ probes:
     failureThreshold: 30
 
 openproject:
-  oidc:
   # seed will only be executed on initial installation
   seed_locale: "de"
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
@@ -143,12 +120,20 @@ openproject:
     password: {{ .Values.secrets.openproject.adminPassword | quote }}
   oidc:
     enabled: true
-    provider: "keycloak"
-    identifier: "opendesk-openproject"
-    scope: "[openid,opendesk]"
     authorizationEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
+    endSessionEndpoint : "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
+    host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+    identifier: "opendesk-openproject"
+    provider: "keycloak"
+    scope: "[openid,opendesk]"
+    secret: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
     tokenEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
     userinfoEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/userinfo"
+    attribute_map:
+      login: "opendesk_username"
+      admin: "openproject_admin"
+  useTmpVolumes: true
+
 ingress:
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.ingress.enabled }}
@@ -164,6 +149,15 @@ resources:
 
 s3:
   enabled: true
+  endpoint: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+  host: {{ (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+  pathStyle: "true"
+  region: {{ .Values.objectstores.openproject.region | quote }}
+  bucketName: {{ .Values.objectstores.openproject.bucket | quote }}
+  use_iam_profile: {{ .Values.objectstores.openproject.useIAMProfile | default "false" | quote }}
+  auth:
+    accessKeyId: {{ .Values.objectstores.openproject.username | quote }}
+    secretAccessKey: {{ .Values.objectstores.openproject.secret | default .Values.secrets.minio.openprojectUser | quote }}
 
 seederJob:
   annotations:

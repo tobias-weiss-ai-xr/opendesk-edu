@@ -5,7 +5,6 @@
 portalServer:
   authMode: "saml"
   editable: "false"
-  logLevel: "DEBUG"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
   centralNavigation:

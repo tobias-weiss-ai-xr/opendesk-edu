@@ -4,6 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 portalServer:
+  logLevel: {{ .Values.debug.logLevel | quote }}
   adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
   ucsInternalUrl: {{ printf "%s%s%s" "http://portal-server:" .Values.secrets.univentionManagementStack.storeDavUsers.portalServer "@ums-store-dav/portal-data" | quote }}
   centralNavigation:
