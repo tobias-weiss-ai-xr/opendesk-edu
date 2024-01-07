@@ -10,7 +10,6 @@ oxConnector:
   tlsMode: "off"
   caCert: "ucctempldapstring"
   debugLevel: "5"
-  logLevel: "DEBUG"
   oxDefaultContext: "1"
   oxLocalTimezone: "Europe/Berlin"
   oxLanguage: "de_DE"

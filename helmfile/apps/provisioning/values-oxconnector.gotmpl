@@ -21,6 +21,7 @@ oxConnector:
   domainName: {{ .Values.global.domain | quote }}
   ldapHost: {{ .Values.ldap.host | quote }}
   notifierServer: {{ .Values.ldap.notifierHost | quote }}
+  logLevel: {{ .Values.debug.logLevel | quote }}
   #oxMasterAdmin: "(( .Values.appsuite.core-mw.masterAdmin ))"
   oxMasterAdmin: "admin"
   oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
