@@ -554,6 +554,21 @@ generate-release-assets:
   variables:
     ASSET_GENERATOR_REPO_PATH: "bmi/opendesk/tooling/opendesk-asset-generator"
 
+opendesk-linter:
+  cache: {}
+  image: "registry.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli:1.0.1"
+  needs: []
+  rules:
+    - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
+      when: "never"
+    - when: "always"
+  script:
+    - "node /app/src/index.js sort-images ${CI_PROJECT_DIR}/helmfile/environments/default/images.yaml"
+    - "node /app/src/index.js sort-charts ${CI_PROJECT_DIR}/helmfile/environments/default/charts.yaml"
+    - "git diff --exit-code"
+  stage: "lint"
+  tags:
+    - "docker"
 
 # Declare .environments which is in environments repository and only loaded when INCLUDE_ENVIRONMENTS_ENABLED not false.
 # 'cache' is used because job must contain at least one key, so cache is just a dummy key.
