@@ -291,7 +291,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/charts-mirror"
     name: "openproject"
-    version: "3.0.2"
+    version: "4.2.1"
     verify: true
     # @supplier: "openProject"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
