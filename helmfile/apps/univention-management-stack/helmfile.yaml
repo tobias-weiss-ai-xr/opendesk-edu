@@ -189,6 +189,7 @@ releases:
     needs:
       - "ums-keycloak"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-keycloak-bootstrap"
     chart: "ums-keycloak-bootstrap-repo/{{ .Values.charts.umsKeycloakBootstrap.name }}"
@@ -198,6 +199,7 @@ releases:
     needs:
       - "ums-keycloak"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "opendesk-keycloak-bootstrap"
     chart: "opendesk-keycloak-bootstrap-repo/{{ .Values.charts.opendeskKeycloakBootstrap.name }}"
@@ -207,6 +209,7 @@ releases:
     needs:
       - "ums-keycloak-bootstrap"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-stack-gateway"
     chart: "nginx-repo/{{ .Values.charts.nginx.name }}"
@@ -215,6 +218,7 @@ releases:
       - "values-ums-stack-gateway.gotmpl"
       - "values-ums-stack-gateway.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-store-dav"
     chart: "ums-store-dav-repo/{{ .Values.charts.umsStoreDav.name }}"
@@ -225,6 +229,7 @@ releases:
       - "values-store-dav.gotmpl"
       - "values-store-dav.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-ldap-server"
     chart: "ums-ldap-server-repo/{{ .Values.charts.umsLdapServer.name }}"
@@ -257,6 +262,7 @@ releases:
       - "values-udm-rest-api.gotmpl"
       - "values-udm-rest-api.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-stack-data-ums"
     chart: "ums-stack-data-ums-repo/{{ .Values.charts.umsStackDataUms.name }}"
@@ -267,6 +273,7 @@ releases:
       - "values-stack-data-ums.gotmpl"
       - "values-stack-data-ums.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-stack-data-swp"
     chart: "ums-stack-data-swp-repo/{{ .Values.charts.umsStackDataSwp.name }}"
@@ -277,6 +284,7 @@ releases:
       - "values-stack-data-swp.gotmpl"
       - "values-stack-data-swp.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-portal-server"
     chart: "ums-portal-server-repo/{{ .Values.charts.umsPortalServer.name }}"
@@ -287,6 +295,7 @@ releases:
       - "values-portal-server.gotmpl"
       - "values-portal-server.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-notifications-api"
     chart: "ums-notifications-api-repo/{{ .Values.charts.umsNotificationsApi.name }}"
@@ -297,6 +306,7 @@ releases:
       - "values-notifications-api.gotmpl"
       - "values-notifications-api.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-portal-listener"
     chart: "ums-portal-listener-repo/{{ .Values.charts.umsPortalListener.name }}"
@@ -307,6 +317,7 @@ releases:
       - "values-portal-listener.gotmpl"
       - "values-portal-listener.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-portal-frontend"
     chart: "ums-portal-frontend-repo/{{ .Values.charts.umsPortalFrontend.name }}"
@@ -317,6 +328,7 @@ releases:
       - "values-portal-frontend.gotmpl"
       - "values-portal-frontend.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-umc-gateway"
     chart: "ums-umc-gateway-repo/{{ .Values.charts.umsUmcGateway.name }}"
@@ -327,6 +339,7 @@ releases:
       - "values-umc-gateway.gotmpl"
       - "values-umc-gateway.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-umc-server"
     chart: "ums-umc-server-repo/{{ .Values.charts.umsUmcServer.name }}"
@@ -348,6 +361,7 @@ releases:
       - "values-selfservice-listener.gotmpl"
       - "values-selfservice-listener.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
   - name: "ums-provisioning"
     chart: "ums-provisioning-repo/{{ .Values.charts.umsProvisioning.name }}"
@@ -357,6 +371,9 @@ releases:
       - "values-common.yaml"
       - "values-provisioning.gotmpl"
       - "values-provisioning.yaml"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
+
   - name: "ums-guardian-management-api"
     chart: "ums-guardian-management-api-repo/{{ .Values.charts.umsGuardianManagementApi.name }}"
     version: "{{ .Values.charts.umsGuardianManagementApi.version }}"
@@ -366,6 +383,8 @@ releases:
       - "values-guardian-management-api.gotmpl"
       - "values-guardian-management-api.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
+
   - name: "ums-guardian-management-ui"
     chart: "ums-guardian-management-ui-repo/{{ .Values.charts.umsGuardianManagementUi.name }}"
     version: "{{ .Values.charts.umsGuardianManagementUi.version }}"
@@ -375,6 +394,8 @@ releases:
       - "values-guardian-management-ui.gotmpl"
       - "values-guardian-management-ui.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
+
   - name: "ums-guardian-authorization-api"
     chart: "ums-guardian-authorization-api-repo/{{ .Values.charts.umsGuardianAuthorizationApi.name }}"
     version: "{{ .Values.charts.umsGuardianAuthorizationApi.version }}"
@@ -384,6 +405,8 @@ releases:
       - "values-guardian-authorization-api.gotmpl"
       - "values-guardian-authorization-api.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
+
   - name: "ums-open-policy-agent"
     chart: "ums-open-policy-agent-repo/{{ .Values.charts.umsOpenPolicyAgent.name }}"
     version: "{{ .Values.charts.umsOpenPolicyAgent.version }}"
@@ -393,6 +416,7 @@ releases:
       - "values-open-policy-agent.gotmpl"
       - "values-open-policy-agent.yaml"
     installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
 
 commonLabels:
   deploy-stage: "component-1"
