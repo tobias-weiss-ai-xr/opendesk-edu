@@ -650,11 +650,11 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "stack-data-swp"
-    version: "0.41.5"
+    version: "0.41.8"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '39', '5']
+    # @mirrorFrom: ['0', '41', '8']
 
   umsStackDataUms:
     # renovate:
@@ -664,11 +664,11 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "stack-data-ums"
-    version: "0.41.5"
+    version: "0.41.8"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '39', '5']
+    # @mirrorFrom: ['0', '41', '8']
 
   umsStoreDav:
     # renovate:

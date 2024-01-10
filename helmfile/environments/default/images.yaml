@@ -519,10 +519,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/config-htpasswd"
-    tag: "0.9.3@sha256:a6ae17dab54fdf75ed59078c25b4f4a6eca9ef755a78fd9a092c5a1c27473da6"
+    tag: "0.9.4@sha256:ba4f6fa2736a789c6c7413cc784bfadbeda1b3269fee29a871207f6f2ba2ee08"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '3']
+    # @mirrorFrom: ['0', '9', '4']
   umsDataLoader:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -533,7 +533,7 @@ images:
     tag: "0.41.5@sha256:9978e5eae3846e3c32effb2e602136d8855aaec287fb280a54b311defab2fbf3"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '39', '5']
+    # @mirrorFrom: ['0', '41', '5']
   umsGuardianAuthorizationApi:
     # renovate:
     # upstreamRegistry=docker.software-univention.de
@@ -621,7 +621,7 @@ images:
     tag: "0.8.2@sha256:bb7d76fb5299e9d019aa61b5397af15063a5b341fcf2b74c65db679ca5fa873f"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '7', '2']
+    # @mirrorFrom: ['0', '8', '2']
   umsLdapServer:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -632,7 +632,7 @@ images:
     tag: "0.8.2@sha256:abcaec050875a8605befe13cce78f9f8eb28aa3c1764e281a8540b2a3db4a5da"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '7', '2']
+    # @mirrorFrom: ['0', '8', '2']
   umsNotificationsApi:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -640,10 +640,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/notifications-api"
-    tag: "0.9.2@sha256:4df0fd062a84afffb9b21e62d7fef594dac1920c8485fb178ee65738060db19e"
+    tag: "0.9.4@sha256:f058398d68c38039bb168af6d60d016f66fffde83a02f0b8f62124ebf2fed4d9"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '2']
+    # @mirrorFrom: ['0', '9', '4']
   umsOpenPolicyAgent:
     # renovate:
     # upstreamRegistry=docker.software-univention.de
@@ -657,15 +657,14 @@ images:
     # @mirrorFrom: ['1', '0', '0']
   umsPortalFrontend:
     # renovate:
-    # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/images/univention/portal-frontend
+    # registryUrl=https://registry.souvap-univention.de
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend"
-    tag: "0.9.2@sha256:29abefe80cea54753a85e3d020a68c6025f5b11b8fafcc84b9e71bccac86316b"
+    tag: "0.9.4@sha256:97887159fc4a7febdf663761a65b7fac2eb7b99b6dd042c7d63ce6b254ea6fb9"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '2']
+    # @mirrorFrom: ['0', '9', '4']
   umsPortalListener:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -673,10 +672,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-listener"
-    tag: "0.9.2@sha256:4d52acbabc2b2fce3c9830a154c394aae5beec53d38f399ce8865ade2d97eb55"
+    tag: "0.9.4@sha256:1e03db8153cbff0825c4370526d5d44a6b9b92c643b0e605d1bfc762ebac3a31"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '2']
+    # @mirrorFrom: ['0', '9', '4']
   umsPortalServer:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -684,10 +683,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-server"
-    tag: "0.9.2@sha256:7a6468bcda5b5ee2fd24d0029435d86dca96096f28cbe32d6497bcafa683610a"
+    tag: "0.9.4@sha256:47c825f83b61799b287b11cf5c548e05000c21e7d071d1f2095fbba4c952d84c"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '2']
+    # @mirrorFrom: ['0', '9', '4']
   umsProvisioning:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -695,10 +694,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-dispatch"
-    tag: "0.2.1@sha256:5c048d0d715ac701c67a98950d87524b54e62d60c4ae39ebb4e8d0a55d0d3438"
+    tag: "0.4.0@sha256:43fda35f02cfa7c4c6aaa42e561858f7b0b80485370c1e393cef3a4b8d7715c0"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '2', '1']
+    # @mirrorFrom: ['0', '4', '0']
   umsSelfserviceInvitation:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -706,10 +705,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-invitation"
-    tag: "0.3.1@sha256:c985e679fa2af21dce4ce5a41750aec76674858f016b6f8d962f44f90551895d"
+    tag: "0.3.2@sha256:8dd90d8669e206232edff37aca73c528344ad453ad0154f36cca0561bf1999a2"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '3', '1']
+    # @mirrorFrom: ['0', '3', '2']
   umsSelfserviceListener:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -717,10 +716,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-listener"
-    tag: "0.3.1@sha256:eb1866c364b476258cfa535aa0c94e0da6706cf74e0f774fd80ebce22c3ce6d8"
+    tag: "0.3.2@sha256:de0fc94cab436e982219d9c883a2353d91de583d5cf75046902847df4b451e28"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '3', '1']
+    # @mirrorFrom: ['0', '3', '2']
   umsStoreDav:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -728,10 +727,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/store-dav"
-    tag: "0.9.3@sha256:e7b1be11933112fe22f5336ec7cd526faeac77a28120abf806d7758dc48d0596"
+    tag: "0.9.4@sha256:4a2c7675c15a244a3a8c002e030db425cdbe5cd7bf8c21ced4bac6f5252382bd"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '3']
+    # @mirrorFrom: ['0', '9', '4']
   umsUdmRestApi:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -742,7 +741,7 @@ images:
     tag: "0.5.2@sha256:94c8294130f6a187bb850bcaeb314a09c5aa48ab97e3f419fbeb6ddbd39a3246"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '4', '3']
+    # @mirrorFrom: ['0', '5', '2']
   umsUmcGateway:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -750,10 +749,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-gateway"
-    tag: "0.6.4@sha256:733d2eac6d358b6d78925d346db8ab6d1adff1ef3179ce8c300e25284ff2c400"
+    tag: "0.7.3@sha256:e32cfe40cb0022d4084d89e9ae0367e559302c50d92223bd4c8905698141a3ef"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '6', '4']
+    # @mirrorFrom: ['0', '7', '3']
   umsUmcServer:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -761,10 +760,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-server"
-    tag: "0.6.4@sha256:ed3c11df4e51939f771a3035055b1bebc360f0971a8b1a11b7eb39cf065875eb"
+    tag: "0.7.3@sha256:4de1e4164cd442cfd2e9fe0d8cc144e73872a53f493a64d735f5c635715e1437"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '6', '4']
+    # @mirrorFrom: ['0', '7', '3']
   umsWaitForDependency:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -772,10 +771,10 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/wait-for-dependency"
-    tag: "0.9.2@sha256:524e9bad6875bf12370dfbd5cd85df13a04e34c49d074eca34b3ca4b4efc7d8e"
+    tag: "0.9.4@sha256:63451fe519d557e52d5f99e21231594daebb2990eb734931172ad61543c443cb"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '2']
+    # @mirrorFrom: ['0', '9', '4']
   wellKnown:
     # renovate:
     # upstreamRegistry=docker.io
