@@ -53,7 +53,5 @@ theme:
 # Known limits
 
 Not all applications support theming. Known exceptions are:
-  - Univention Corporate Container (should be superseded by the Univention Management Stack which has planned support
-    for theming through the deployment).
   - OpenProject
   - Jitsi

@@ -791,7 +791,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/xwiki"
-    tag: "0.13-mariadb-jetty-alpine@sha256:3bbf76d1e70168006213643b4079921a6904b7d97feab70ef7a2697953d50133"
+    tag: "0.14-mariadb-jetty-alpine@sha256:276e871e3938bf80a86a0e1e63751c843920ccd260848badafec8689410ded80"
     # @supplier: "XWiki"
     # @mirrorFilter: '^(\d+)\.(\d+)-.+$'
     # @mirrorFrom: ['0', '12']

@@ -84,7 +84,7 @@ The below rendering in class diagram notation shows the three component classes 
 
 **Note:** The methods prefixed with '-' are not yet available in `gitlab-config` you will learn about them later.
 
-```Mermaid
+```mermaid
 classDiagram
     Images <|-- Helm_charts
     Images <|-- Helmfile_based_deployment_automation
