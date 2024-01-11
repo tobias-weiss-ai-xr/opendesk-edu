@@ -14,6 +14,7 @@ replicas:
   freshclam: 1
   # clamav-distributed
   icap: 1
+  intercomService: 1
   jibri: 1
   jicofo: 1
   jitsi: 1
@@ -25,6 +26,7 @@ replicas:
   matrixNeoDateFixBot: 1
   matrixNeoDateFixWidget: 1
   matrixUserVerificationService: 1
+  memcached: 1
   # clamav-distributed
   milter: 1
   minioDistributed: 4
@@ -33,6 +35,7 @@ replicas:
   nextcloudPHP: 1
   openproject: 1
   postfix: 1
+  redis: 1
   synapse: 1
   synapseWeb: 1
   wellKnown: 1
