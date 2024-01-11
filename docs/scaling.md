@@ -46,10 +46,12 @@ marked with a gear.
 |                  | `replicas.jitsiKeycloakAdapter`          | :white_check_mark:  |       :gear:       |
 |                  | `replicas.jvb `                          |         :x:         |        :x:         |
 | Keycloak         | `replicas.keycloak`                      | :white_check_mark:  |       :gear:       |
+| Memcached        | `replicas.memcached`                     |       :gear:        |       :gear:       |
 | Minio            | `replicas.minioDistributed`              | :white_check_mark:  | :white_check_mark: |
 | Nextcloud        | `replicas.nextcloudApache2`              | :white_check_mark:  | :white_check_mark: |
 |                  | `replicas.nextcloudExporter`             | :white_check_mark:  | :white_check_mark: |
 |                  | `replicas.nextcloudPHP`                  | :white_check_mark:  | :white_check_mark: |
 | OpenProject      | `replicas.openproject`                   | :white_check_mark:  | :white_check_mark: |
 | Postfix          | `replicas.postfix`                       |         :x:         |       :gear:       |
+| Redis            | `replicas.redis`                         |       :gear:        |       :gear:       |
 | XWiki            | `replicas.xwiki`                         |         :x:         |       :gear:       |

@@ -22,4 +22,6 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
   fsGroupChangePolicy: "OnRootMismatch"
+
+replicaCount: 1
 ...

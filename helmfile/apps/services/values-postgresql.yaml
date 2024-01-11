@@ -23,7 +23,8 @@ podSecurityContext:
   fsGroup: 1001
   fsGroupChangePolicy: "OnRootMismatch"
 
-
 postgres:
   user: "postgres"
+
+replicaCount: 1
 ...
