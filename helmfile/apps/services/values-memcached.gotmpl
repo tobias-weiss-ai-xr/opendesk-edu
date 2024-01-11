@@ -13,6 +13,8 @@ image:
   tag: {{ .Values.images.memcached.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
+replicaCount: {{ .Values.replicas.memcached }}
+
 resources:
   {{ .Values.resources.memcached | toYaml | nindent 2 }}
 ...

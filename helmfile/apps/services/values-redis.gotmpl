@@ -18,6 +18,7 @@ image:
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 master:
+  count: {{ .Values.replicas.redis }}
   persistence:
     size: {{ .Values.persistence.size.redis | quote }}
 
