@@ -24,6 +24,7 @@ handler:
     repository: {{ .Values.images.umsKeycloakExtensionHandler.repository | quote }}
     tag: {{ .Values.images.umsKeycloakExtensionHandler.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets: {{ .Values.global.imagePullSecrets }}
   appConfig:
     captchaProtectionEnable: false
     smtpPassword: {{ .Values.smtp.password | quote }}
@@ -52,6 +53,7 @@ proxy:
     repository: {{ .Values.images.umsKeycloakExtensionProxy.repository | quote }}
     tag: {{ .Values.images.umsKeycloakExtensionProxy.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets: {{ .Values.global.imagePullSecrets }}
   ingress:
     annotations:
       nginx.org/proxy-buffer-size: "8k"

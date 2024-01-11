@@ -510,7 +510,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "keycloak-extensions"
-    version: "0.0.5"
+    version: "0.0.5-post-feat-add-imagepullsecrets"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -734,7 +734,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
     name: "xwiki"
-    version: "1.2.5"
+    version: "1.2.6"
     verify: false
     # @supplier: "XWiki"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'

@@ -2,6 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsStackGateway.registry | quote }}
+  repository: {{ .Values.images.umsStackGateway.repository | quote }}
+  tag: {{ .Values.images.umsStackGateway.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
 ingress:
   enabled: {{ .Values.ingress.enabled }}
   hostname: {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
