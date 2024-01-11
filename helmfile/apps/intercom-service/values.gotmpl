@@ -52,6 +52,8 @@ ingress:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 
+replicaCount: {{ .Values.replicas.intercomService }}
+
 resources:
   {{ .Values.resources.intercomService | toYaml | nindent 2 }}
 ...
