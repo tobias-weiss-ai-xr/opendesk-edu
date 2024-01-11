@@ -8,6 +8,8 @@ image:
   tag: {{ .Values.images.xwiki.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
+imagePullSecrets: {{ .Values.global.imagePullSecrets }}
+
 externalDB:
   password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
   database: {{ .Values.databases.xwiki.name | quote }}
