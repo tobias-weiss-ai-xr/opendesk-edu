@@ -159,7 +159,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neoboard-widget"
-    version: "3.3.1"
+    version: "3.4.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -171,7 +171,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neochoice-widget"
-    version: "3.3.1"
+    version: "3.4.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -183,7 +183,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-bot"
-    version: "3.4.0-feat-nd-fix-rights-roles"
+    version: "3.4.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -195,7 +195,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-widget"
-    version: "3.3.1"
+    version: "3.4.0"
     verify: true
     # @supplier: "openDesk"
 
