@@ -585,7 +585,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/univention-keycloak-bootstrap"
-    tag: "1.0.5@sha256:81ccf77e5af77385e4d0c4ff6a7df2cec11691ea76c6c23c36eb1ef0d51ad687"
+    tag: "1.0.8@sha256:fef48cb1b2552977e8a4253516249b59ef6c42189dd13cd6d98269b8988b362a"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '5']
