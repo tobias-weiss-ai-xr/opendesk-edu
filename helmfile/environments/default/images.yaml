@@ -720,6 +720,14 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '3', '2']
+  umsStackGateway:
+    # renovate:
+    # upstreamRegistry=docker.io
+    # upstreamRepository=bitnami/nginx
+    # dependencyType=external
+    registry: "docker.io"
+    repository: "bitnami/nginx"
+    tag: "1.25.3@sha256:40ce0d6b8f5fc174a4df8c59c8893164c540192ee862cb7253650a30d9dc3b73"
   umsStoreDav:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
