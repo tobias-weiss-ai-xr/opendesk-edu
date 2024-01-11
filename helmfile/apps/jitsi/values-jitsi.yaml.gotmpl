@@ -10,6 +10,19 @@ global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  enabled: true
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - "ALL"
+  seccompProfile:
+    type: "RuntimeDefault"
+  runAsUser: 1993
+  runAsGroup: 1993
+  runAsNonRoot: true
+
 cleanup:
   deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
 
@@ -126,6 +139,10 @@ patchJVB:
   configuration:
     staticLoadbalancerIP: {{ .Values.cluster.networking.ingressGatewayIP | quote }}
     loadbalancerStatusField: {{ .Values.cluster.networking.loadBalancerStatusField | quote }}
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    enabled: true
+    readOnlyRootFilesystem: true
   image:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     registry: {{ .Values.global.imageRegistry | default .Values.images.jitsiPatchJVB.registry | quote }}
