@@ -14,7 +14,7 @@ stackDataContext:
   ldapBase: {{ .Values.ldap.baseDn | quote }}
   ldapHostDn: {{ printf "%s,%s" "cn=admin" .Values.ldap.baseDn | quote }}
 
-  idpSamlMetadataUrl: {{ printf "https://%s.%s/%s/%s/%s" .Values.global.hosts.keycloak .Values.global.domain "realms" .Values.platform.realm "protocol/saml/descriptor" | quote }}
+  idpSamlMetadataUrl: {{ printf "http://ums-keycloak.%s.svc.%s:8080/realms/%s/protocol/saml/descriptor" .Release.Namespace .Values.cluster.networking.domain .Values.platform.realm | quote }}
   umcSamlSpFqdn: {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
   idpFqdn: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
   ldapSamlSpUrls: {{ printf "https://%s.%s%s" .Values.global.hosts.univentionManagementStack .Values.global.domain "/univention/saml/metadata" | quote }}
