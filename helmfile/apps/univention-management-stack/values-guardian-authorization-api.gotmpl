@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 guardianAuthorizationApi:
   udmDataAdapterPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
-  oauthAdapterWellKnownUrl: "http://ums-keycloak:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
+  oauthAdapterWellKnownUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.umsGuardianAuthorizationApi.registry | quote }}
   repository: {{ .Values.images.umsGuardianAuthorizationApi.repository | quote }}

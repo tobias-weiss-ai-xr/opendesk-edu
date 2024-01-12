@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   keycloak:
-    host: "ums-keycloak:8080"
+    host: "ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
     adminUsername: "kcadmin"
     adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
     adminRealm: "master"

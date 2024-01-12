@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 guardianManagementApi:
   oauthAdapterM2mSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
-  oauthAdapterWellKnownUrl: "http://ums-keycloak:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
+  oauthAdapterWellKnownUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
 
 postgresql:
   bundled: false
