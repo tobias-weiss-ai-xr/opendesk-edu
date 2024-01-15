@@ -277,7 +277,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/images-mirror/open_desk"
-    tag: "13.1.1@sha256:780ea7781f19a76f44519750db2a4ffa840a4f4f4247ceacb7731075138fe6ae"
+    tag: "13.2.0@sha256:79e703d814bef918acff626f12b4301818263e4c95f90d889d0b83a06a195675"
     # @supplier: "OpenProject"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['13', '1', '1']
