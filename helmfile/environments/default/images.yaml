@@ -541,7 +541,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-authorization-api-authorization-api"
-    tag: "1.0.0@sha256:dee5d42131037bde99ab9d827e751bb6a16496f9c2c0380c48f1e2919d905814"
+    tag: "2.0.0@sha256:5f194f9385aea5a279e25a57352f7b88a6cc4fa90b3bf04c2c97b9ff2bad70a5"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
@@ -552,7 +552,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-management-api-management-api"
-    tag: "1.0.0@sha256:16e8004a12a6a9fba47e89e1289c8a433e5f56bbd0ee26620b0ddade0bd33313"
+    tag: "2.0.0@sha256:61a1ab84efebe2a87d358e8624f8b39073a6071683e7cd77b740a97d464753a2"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
@@ -563,7 +563,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-management-ui-management-ui"
-    tag: "1.0.0@sha256:e1e4e1e7fa0c7ffff09e63474b5b054cb492fbb743cad0b2ee5910bb1de6967b"
+    tag: "2.0.0@sha256:57e2503a4772f0ff656e792a98fadef4d41c248218e6c368f76ce82a892478cf"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
@@ -651,7 +651,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-authorization-api-opa"
-    tag: "1.0.0@sha256:a5caa128eef2de1a12514727ceff0f54f647b7b1814a304728da2e1bc9e7b621"
+    tag: "2.0.0@sha256:56a92a08da5addb951a2b2df09974889295ddde8526e93ad40dd973de1052ad4"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
