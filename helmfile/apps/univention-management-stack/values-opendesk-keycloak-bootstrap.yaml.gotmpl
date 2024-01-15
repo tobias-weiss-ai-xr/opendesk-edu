@@ -86,6 +86,7 @@ config:
         authorizationServicesEnabled: false
         attributes:
           backchannel.logout.session.required: true
+          backchannel.logout.revoke.offline.tokens: true
           backchannel.logout.url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/backchannel-logout"
         protocolMappers:
           - name: "intercom-audience"
