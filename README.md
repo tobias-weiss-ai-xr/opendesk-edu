@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-![logo](./helmfile/environments/default/theme/logo_portal_background.svg)
+<h1>openDesk Deployment Automation</h1>
 
 openDesk is a Kubernetes based, open-source and cloud-native digital workplace suite provided by the "Projektgruppe für
 Aufbau ZenDiS" of Germany's Federal Ministry of the Interior.

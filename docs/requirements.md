@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 This section covers the internal system requirements as well as external service requirements for productive use.
 
 <!-- TOC -->
-* [TL;DR;](#tldr)
+* [tl;dr](#tldr)
 * [Hardware](#hardware)
 * [Kubernetes](#kubernetes)
 * [Ingress controller](#ingress-controller)
@@ -17,7 +17,7 @@ This section covers the internal system requirements as well as external service
 * [Deployment](#deployment)
 <!-- TOC -->
 
-# TL;DR;
+# tl;dr
 openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s) cluster.
 
 - K8s cluster >= 1.24, [CNCF Certified Kubernetes Distro](https://www.cncf.io/certification/software-conformance/)
