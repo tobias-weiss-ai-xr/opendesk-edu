@@ -1,0 +1,75 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsPortalListener.registry | quote }}
+  repository: {{ .Values.images.umsPortalListener.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsPortalListener.tag | quote }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+  waitForDependency:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsWaitForDependency.registry | quote }}
+    repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
+
+persistence:
+  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.univentionManagementStack.portalListener | quote }}
+
+portalListener:
+  adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
+  assetsRoot: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-assets/" | quote }}
+  ucsInternalUrl: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-data" | quote }}
+
+  ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
+  ldapHost: {{ .Values.ldap.host | quote }}
+  ldapHostDn: {{ printf "%s,%s" "cn=admin" .Values.ldap.baseDn | quote }}
+  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  notifierServer: {{ .Values.ldap.notifierHost | quote }}
+  portalDefaultDn: {{ printf "%s,%s" "cn=domain,cn=portal,cn=portals,cn=univention" .Values.ldap.baseDn | quote }}
+  udmApiUrl: "http://ums-udm-rest-api/udm/"
+  udmApiUsername: "cn=admin"
+  debugLevel: "4"
+  tlsMode: "off"
+  udmApiUrl: "http://ums-udm-rest-api/udm/"
+  udmApiUsername: "cn=admin"
+  umcGetUrl: "http://ums-umc-server/get"
+  umcSessionUrl: "http://ums-umc-server/get/session-info"
+
+resources:
+  {{ .Values.resources.umsPortalListener | toYaml | nindent 2 }}
+
+resourcesDependencyWaiter:
+  {{ .Values.resources.umsPortalListenerDependencies | toYaml | nindent 2 }}
+
+store-dav:
+  bundled: false
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+
+...

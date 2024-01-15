@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+configuration:
+  e2ee:
+    forceDisable: true
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsGroup: 101
+  runAsNonRoot: true
+  runAsUser: 101
+  seccompProfile:
+    type: "RuntimeDefault"
+
+global:
+  domain: {{ .Values.global.domain | quote }}
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.wellKnown.registry | quote }}
+  repository: {{ .Values.images.wellKnown.repository | quote }}
+  tag: {{ .Values.images.wellKnown.tag | quote }}
+
+ingress:
+  host: {{ .Values.global.domain | quote }}
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 101
+
+replicaCount: {{ .Values.replicas.wellKnown }}
+
+resources:
+  {{ .Values.resources.wellKnown | toYaml | nindent 2 }}
+
+...

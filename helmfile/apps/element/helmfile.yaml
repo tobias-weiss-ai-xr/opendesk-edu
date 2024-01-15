@@ -88,8 +88,7 @@ releases:
     chart: "element-repo/{{ .Values.charts.element.name }}"
     version: "{{ .Values.charts.element.version }}"
     values:
-      - "values-element.yaml"
-      - "values-element.gotmpl"
+      - "values-element.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -97,8 +96,7 @@ releases:
     chart: "element-well-known-repo/{{ .Values.charts.elementWellKnown.name }}"
     version: "{{ .Values.charts.elementWellKnown.version }}"
     values:
-      - "values-well-known.yaml"
-      - "values-well-known.gotmpl"
+      - "values-well-known.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -106,8 +104,7 @@ releases:
     chart: "synapse-web-repo/{{ .Values.charts.synapseWeb.name }}"
     version: "{{ .Values.charts.synapseWeb.version }}"
     values:
-      - "values-synapse-web.yaml"
-      - "values-synapse-web.gotmpl"
+      - "values-synapse-web.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -115,8 +112,7 @@ releases:
     chart: "synapse-repo/{{ .Values.charts.synapse.name }}"
     version: "{{ .Values.charts.synapse.version }}"
     values:
-      - "values-synapse.yaml"
-      - "values-synapse.gotmpl"
+      - "values-synapse.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -124,8 +120,7 @@ releases:
     chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
-      - "values-matrix-user-verification-service-bootstrap.yaml"
-      - "values-matrix-user-verification-service-bootstrap.gotmpl"
+      - "values-matrix-user-verification-service-bootstrap.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -133,8 +128,7 @@ releases:
     chart: "matrix-user-verification-service-repo/{{ .Values.charts.matrixUserVerificationService.name }}"
     version: "{{ .Values.charts.matrixUserVerificationService.version }}"
     values:
-      - "values-matrix-user-verification-service.yaml"
-      - "values-matrix-user-verification-service.gotmpl"
+      - "values-matrix-user-verification-service.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -142,8 +136,7 @@ releases:
     chart: "matrix-neoboard-widget-repo/{{ .Values.charts.matrixNeoboardWidget.name }}"
     version: "{{ .Values.charts.matrixNeoboardWidget.version }}"
     values:
-      - "values-matrix-neoboard-widget.yaml"
-      - "values-matrix-neoboard-widget.gotmpl"
+      - "values-matrix-neoboard-widget.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -151,8 +144,7 @@ releases:
     chart: "matrix-neochoice-widget-repo/{{ .Values.charts.matrixNeochoiseWidget.name }}"
     version: "{{ .Values.charts.matrixNeochoiseWidget.version }}"
     values:
-      - "values-matrix-neochoice-widget.yaml"
-      - "values-matrix-neochoice-widget.gotmpl"
+      - "values-matrix-neochoice-widget.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -160,8 +152,7 @@ releases:
     chart: "matrix-neodatefix-widget-repo/{{ .Values.charts.matrixNeodatefixWidget.name }}"
     version: "{{ .Values.charts.matrixNeodatefixWidget.version }}"
     values:
-      - "values-matrix-neodatefix-widget.yaml"
-      - "values-matrix-neodatefix-widget.gotmpl"
+      - "values-matrix-neodatefix-widget.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -169,8 +160,7 @@ releases:
     chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
-      - "values-matrix-neodatefix-bot-bootstrap.yaml"
-      - "values-matrix-neodatefix-bot-bootstrap.gotmpl"
+      - "values-matrix-neodatefix-bot-bootstrap.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -178,8 +168,7 @@ releases:
     chart: "matrix-neodatefix-bot-repo/{{ .Values.charts.matrixNeodatefixBot.name }}"
     version: "{{ .Values.charts.matrixNeodatefixBot.version }}"
     values:
-      - "values-matrix-neodatefix-bot.yaml"
-      - "values-matrix-neodatefix-bot.gotmpl"
+      - "values-matrix-neodatefix-bot.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 

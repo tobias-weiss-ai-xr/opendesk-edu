@@ -1,0 +1,68 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+additionalAnnotations:
+  intents.otterize.com/service-name: "ums-stack-data-swp"
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsDataLoader.registry | quote }}
+  repository: {{ .Values.images.umsDataLoader.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsDataLoader.tag | quote }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+resources:
+  {{ .Values.resources.umsStackDataSwp | toYaml | nindent 2 }}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+
+stackDataContext:
+  ldapBase: "dc=swp-ldap,dc=internal"
+  oxDefaultContext: "1"
+  smtpStartTls: true
+  ldapSearchUsers:
+    {{- range $username, $password := .Values.secrets.univentionManagementStack.ldapSearch }}
+    - username: {{ printf "ldapsearch_%s" $username | quote }}
+      password: {{ $password | quote }}
+      lastname: "LDAP-Search-User"
+    {{- end }}
+
+  externalDomainName: {{ .Values.global.domain | quote }}
+  externalMailDomain: {{ .Values.global.domain | quote }}
+
+  portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.istio.domain | quote }}
+  portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain | quote }}
+  portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain | quote }}
+  portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain | quote }}
+  portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain | quote }}
+  portalManagementKnowledgeLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.xwiki .Values.global.domain | quote }}
+  portalTitleDE: "{{ .Values.theme.texts.productName }} Portal"
+  portalTitleEN: "{{ .Values.theme.texts.productName }} Portal"
+
+  smtpHost: {{ .Values.smtp.host | quote }}
+  smtpPort: {{ .Values.smtp.port | quote }}
+  smtpUser: {{ .Values.smtp.username | quote }}
+
+  userPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.userPassword | quote }}
+  adminPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.adminPassword | quote }}
+
+stackDataSwp:
+  udmApiPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  systemInformation:
+    deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
+    releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
+  udmApiUser: "cn=admin"
+  udmApiUrl: "http://ums-udm-rest-api/udm/"
+  loadDevData: true
+
+...

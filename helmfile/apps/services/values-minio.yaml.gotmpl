@@ -1,0 +1,188 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiIngress:
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  hostname: "{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
+  extraTls:
+    - hosts:
+      - "{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
+      secretName: "{{ .Values.ingress.tls.secretName }}"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "4G"
+    nginx.org/client-max-body-size: "4G"
+
+auth:
+  rootPassword: {{ .Values.secrets.minio.rootPassword | quote }}
+
+containerSecurityContext:
+  enabled: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  privileged: false
+  runAsUser: 1000
+  runAsNonRoot: true
+  seccompProfile:
+    type: "RuntimeDefault"
+
+defaultBuckets: "openproject,openxchange,ums,nextcloud"
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.minio.registry | quote }}
+  repository: "{{ .Values.images.minio.repository }}"
+  tag: "{{ .Values.images.minio.tag }}"
+  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  hostname: "{{ .Values.global.hosts.minioConsole }}.{{ .Values.global.domain }}"
+  extraTls:
+    - hosts:
+      - "{{ .Values.global.hosts.minioConsole }}.{{ .Values.global.domain }}"
+      secretName: "{{ .Values.ingress.tls.secretName }}"
+  annotations:
+    nginx.org/websocket-services: "minio"
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 10
+
+mode: "standalone"
+
+metrics:
+  serviceMonitor:
+    enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+  prometheusRule:
+    enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+
+networkPolicy:
+  enabled: false
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+
+persistence:
+  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
+  size: "{{ .Values.persistence.size.minio }}"
+
+provisioning:
+  enabled: true
+  cleanupAfterFinished:
+    enabled: true
+  buckets:
+    - name: "openproject"
+      versioning: true
+      withLock: false
+    - name: "openxchange"
+      versioning: true
+      withLock: false
+    - name: "ums"
+      versioning: true
+      withLock: false
+    - name: "nextcloud"
+      versioning: true
+      withLock: false
+  policies:
+    - name: "openproject-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::openproject"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::openproject/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "openxchange-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::openxchange"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::openxchange/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "ums-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::ums"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::ums/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "nextcloud-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::nextcloud"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::nextcloud/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+  users:
+    - username: "openproject_user"
+      password: {{ .Values.secrets.minio.openprojectUser | quote }}
+      disabled: false
+      policies:
+        - "openproject-bucket-policy"
+      setPolicies: true
+    - username: "openxchange_user"
+      password: {{ .Values.secrets.minio.openxchangeUser | quote }}
+      disabled: false
+      policies:
+        - "openxchange-bucket-policy"
+      setPolicies: true
+    - username: "ums_user"
+      password: {{ .Values.secrets.minio.umsUser | quote }}
+      disabled: false
+      policies:
+        - "ums-bucket-policy"
+      setPolicies: true
+    - username: "nextcloud_user"
+      password: {{ .Values.secrets.minio.nextcloudUser | quote }}
+      disabled: false
+      policies:
+        - "nextcloud-bucket-policy"
+      setPolicies: true
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 10
+
+resources:
+  {{ .Values.resources.minio | toYaml | nindent 2 }}
+
+startupProbe:
+  enabled: true
+  periodSeconds: 10
+  timeoutSeconds: 10
+
+statefulset:
+  replicaCount: {{ .Values.replicas.minioDistributed }}
+
+...

@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  runAsUser: 100
+  runAsGroup: 101
+  seccompProfile:
+    type: "RuntimeDefault"
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  clamav:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.clamd.registry | quote }}
+    repository: {{ .Values.images.clamd.repository | quote }}
+    tag: {{ .Values.images.clamd.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  icap:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.icap.registry | quote }}
+    repository: {{ .Values.images.icap.repository | quote }}
+    tag: {{ .Values.images.icap.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+persistence:
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.clamav | quote }}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 101
+  fsGroupChangePolicy: "Always"
+
+replicaCount: {{ .Values.replicas.clamav }}
+
+resources:
+  {{ .Values.resources.clamd | toYaml | nindent 4 }}
+
+...

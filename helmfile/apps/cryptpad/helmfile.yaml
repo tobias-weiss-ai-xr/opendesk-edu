@@ -20,8 +20,7 @@ releases:
     chart: "cryptpad-repo/{{ .Values.charts.cryptpad.name }}"
     version: "{{ .Values.charts.cryptpad.version }}"
     values:
-      - "values.yaml"
-      - "values.gotmpl"
+      - "values.yaml.gotmpl"
     installed: {{ .Values.cryptpad.enabled }}
 
 commonLabels:

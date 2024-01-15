@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccessTimeout: {{ .Values.cleanup.deletePodsOnSuccessTimeout }}
+
+configuration:
+  username: "uvs"
+  pod: "opendesk-synapse-0"
+  secretName: "opendesk-matrix-user-verification-service-account"
+  password: {{ .Values.secrets.matrixUserVerificationService.password | quote }}
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.synapseCreateUser.registry | quote }}
+  url: {{ .Values.images.synapseCreateUser.repository | quote }}
+  tag: {{ .Values.images.synapseCreateUser.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+...
