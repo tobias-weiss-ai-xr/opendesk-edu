@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  privileged: false
+  # TODO: the service can't run with read only filesystem or as non-root
+  # readOnlyRootFilesystem: true
+  # runAsGroup: 101
+  # runAsNonRoot: true
+  # runAsUser: 101
+  seccompProfile:
+    type: "RuntimeDefault"
+
+extraEnvVars:
+  - name: "UVS_ACCESS_TOKEN"
+    valueFrom:
+      secretKeyRef:
+        name: "opendesk-matrix-user-verification-service-account"
+        key: "access_token"
+  - name: "UVS_DISABLE_IP_BLACKLIST"
+    value: "true"
+
+global:
+  domain: {{ .Values.global.domain | quote }}
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ .Values.global.imageRegistry | default .Values.images.matrixUserVerificationService.registry | quote }}
+  repository: {{ .Values.images.matrixUserVerificationService.repository | quote }}
+  tag: {{ .Values.images.matrixUserVerificationService.tag | quote }}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 101
+
+replicaCount: {{ .Values.replicas.matrixUserVerificationService }}
+
+resources:
+  {{ .Values.resources.matrixUserVerificationService | toYaml | nindent 2 }}
+
+...

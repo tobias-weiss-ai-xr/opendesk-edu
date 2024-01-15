@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  privileged: false
+  runAsUser: 1001
+  runAsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.mariadb.registry | quote }}
+  repository: {{ .Values.images.mariadb.repository | quote }}
+  tag: {{ .Values.images.mariadb.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+job:
+  enabled: true
+  retries: 10
+  wait: 30
+  users:
+    - username: "xwiki_user"
+      password: {{ .Values.secrets.mariadb.xwikiUser | quote }}
+    - username: "openxchange_user"
+      password: {{ .Values.secrets.mariadb.openxchangeUser | quote }}
+    - username: "nextcloud_user"
+      password: {{ .Values.secrets.mariadb.nextcloudUser | quote}}
+  databases:
+    - name: "xwiki"
+      user: "xwiki_user"
+    - name: "nextcloud"
+      user: "nextcloud_user"
+    - name: "openxchange"
+      user: "openxchange_user"
+
+mariadb:
+  rootPassword: {{ .Values.secrets.mariadb.rootPassword | quote }}
+
+persistence:
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.mariadb | quote }}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+  fsGroupChangePolicy: "OnRootMismatch"
+
+replicaCount: 1
+
+resources:
+  {{ .Values.resources.mariadb | toYaml | nindent 2 }}
+
+...

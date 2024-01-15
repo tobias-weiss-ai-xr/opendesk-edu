@@ -111,7 +111,7 @@ releases:
     chart: "otterize-repo/{{ .Values.charts.otterize.name }}"
     version: "{{ .Values.charts.otterize.version }}"
     values:
-      - "values-otterize.gotmpl"
+      - "values-otterize.yaml.gotmpl"
     installed: {{ .Values.security.otterizeIntents.enabled }}
     timeout: 900
 
@@ -119,7 +119,7 @@ releases:
     chart: "certificates-repo/{{ .Values.charts.certificates.name }}"
     version: "{{ .Values.charts.certificates.version }}"
     values:
-      - "values-certificates.gotmpl"
+      - "values-certificates.yaml.gotmpl"
     installed: {{ .Values.certificates.enabled }}
     timeout: 900
 
@@ -127,8 +127,7 @@ releases:
     chart: "redis-repo/{{ .Values.charts.redis.name }}"
     version: "{{ .Values.charts.redis.version }}"
     values:
-      - "values-redis.gotmpl"
-      - "values-redis.yaml"
+      - "values-redis.yaml.gotmpl"
     installed: {{ .Values.redis.enabled }}
     timeout: 900
 
@@ -136,8 +135,7 @@ releases:
     chart: "memcached-repo/{{ .Values.charts.memcached.name }}"
     version: "{{ .Values.charts.memcached.version }}"
     values:
-      - "values-memcached.yaml"
-      - "values-memcached.gotmpl"
+      - "values-memcached.yaml.gotmpl"
     installed: {{ .Values.memcached.enabled }}
     timeout: 900
 
@@ -145,8 +143,7 @@ releases:
     chart: "postgresql-repo/{{ .Values.charts.postgresql.name }}"
     version: "{{ .Values.charts.postgresql.version }}"
     values:
-      - "values-postgresql.yaml"
-      - "values-postgresql.gotmpl"
+      - "values-postgresql.yaml.gotmpl"
     installed: {{ .Values.postgresql.enabled }}
     timeout: 900
 
@@ -154,8 +151,7 @@ releases:
     chart: "mariadb-repo/{{ .Values.charts.mariadb.name }}"
     version: "{{ .Values.charts.mariadb.version }}"
     values:
-      - "values-mariadb.yaml"
-      - "values-mariadb.gotmpl"
+      - "values-mariadb.yaml.gotmpl"
     installed: {{ .Values.mariadb.enabled }}
     timeout: 900
 
@@ -163,8 +159,7 @@ releases:
     chart: "postfix-repo/{{ .Values.charts.postfix.name }}"
     version: "{{ .Values.charts.postfix.version }}"
     values:
-      - "values-postfix.yaml"
-      - "values-postfix.gotmpl"
+      - "values-postfix.yaml.gotmpl"
     installed: {{ .Values.postfix.enabled }}
     timeout: 900
 
@@ -172,8 +167,7 @@ releases:
     chart: "clamav-repo/{{ .Values.charts.clamav.name }}"
     version: "{{ .Values.charts.clamav.version }}"
     values:
-      - "values-clamav-distributed.yaml"
-      - "values-clamav-distributed.gotmpl"
+      - "values-clamav-distributed.yaml.gotmpl"
     installed: {{ .Values.clamavDistributed.enabled }}
     timeout: 900
 
@@ -181,8 +175,7 @@ releases:
     chart: "clamav-simple-repo/{{ .Values.charts.clamavSimple.name }}"
     version: "{{ .Values.charts.clamavSimple.version }}"
     values:
-      - "values-clamav-simple.yaml"
-      - "values-clamav-simple.gotmpl"
+      - "values-clamav-simple.yaml.gotmpl"
     installed: {{ .Values.clamavSimple.enabled }}
     timeout: 900
 
@@ -190,8 +183,7 @@ releases:
     chart: "istio-resources-repo/{{ .Values.charts.istioResources.name }}"
     version: "{{ .Values.charts.istioResources.version }}"
     values:
-      - "values-istio-gateway.yaml"
-      - "values-istio-gateway.gotmpl"
+      - "values-istio-gateway.yaml.gotmpl"
     installed: {{ .Values.istio.enabled }}
     timeout: 900
 
@@ -199,8 +191,7 @@ releases:
     chart: "minio-repo/{{ .Values.charts.minio.name }}"
     version: "{{ .Values.charts.minio.version }}"
     values:
-      - "values-minio.yaml"
-      - "values-minio.gotmpl"
+      - "values-minio.yaml.gotmpl"
     installed: {{ .Values.minio.enabled }}
     timeout: 900
 

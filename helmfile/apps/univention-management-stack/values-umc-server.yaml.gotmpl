@@ -1,0 +1,103 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+extraVolumes:
+  - name: "certificates"
+    secret:
+      secretName: "opendesk-certificates-tls"
+  - name: "entrypoint-swp-patches"
+    configMap:
+      name: "ums-stack-data-swp-umc-server-entrypoint"
+      defaultMode: 0555
+  - name: "self-service-emails"
+    configMap:
+      name: "ums-stack-data-swp-self-service-emails"
+      defaultMode: 0444
+  - name: "attribute-to-group-mapper-hook"
+    configMap:
+      name: "ums-stack-data-swp-attribute-to-group-mapper-hook"
+  - name: "announcements-customization"
+    configMap:
+      name: "ums-stack-data-swp-umc-server-announcements"
+      defaultMode: 0444
+
+extraVolumeMounts:
+  - name: "certificates"
+    mountPath: "/var/secrets/ssl"
+  - name: "entrypoint-swp-patches"
+    mountPath: "/entrypoint.d/90-customization.sh"
+    subPath: "90-customization.sh"
+  - name: "self-service-emails"
+    mountPath: "/usr/share/univention-self-service/email_bodies"
+  - name: "attribute-to-group-mapper-hook"
+    mountPath: "/usr/lib/python3/dist-packages/univention/admin/hooks.d/AttributeToGroupMapper.py"
+    subPath: "AttributeToGroupMapper.py"
+  - name: "attribute-to-group-mapper-hook"
+    mountPath: "/usr/share/attribute-to-group-mapper/flag_to_group_mapping.json"
+    subPath: "flag_to_group_mapping.json"
+  - name: "announcements-customization"
+    mountPath: "/usr/share/univention-management-console/modules/udm-portals-announcement.xml"
+    subPath: "udm-portals-announcement.xml"
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsUmcServer.registry | quote }}
+  repository: {{ .Values.images.umsUmcServer.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsUmcServer.tag | quote }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+memcached:
+  bundled: false
+  auth:
+    username: null
+    password: null
+  server: {{ .Values.cache.umsSelfservice.host | quote }}
+
+postgresql:
+  bundled: false
+  auth:
+    username: {{ .Values.databases.umsSelfservice.username | quote }}
+    database: {{ .Values.databases.umsSelfservice.name | quote }}
+    password: {{ .Values.databases.umsSelfservice.password | default .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+    postgresPassword: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+  connection:
+    host: {{ .Values.databases.umsSelfservice.host | quote }}
+    port: {{ .Values.databases.umsSelfservice.port | quote }}
+
+resources:
+  {{ .Values.resources.umsUmcServer | toYaml | nindent 2 }}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+
+umcServer:
+  certPemFile: "/var/secrets/ssl/tls.crt"
+  # TODO: Secret should be entered without b64enc
+  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
+  # TODO: Secret should be entered without b64enc
+  machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
+  smtpSecret: {{ .Values.smtp.password | quote }}
+  privateKeyFile: "/var/secrets/ssl/tls.key"
+
+...

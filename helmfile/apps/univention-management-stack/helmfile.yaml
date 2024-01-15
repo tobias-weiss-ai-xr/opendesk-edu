@@ -215,8 +215,7 @@ releases:
     chart: "nginx-repo/{{ .Values.charts.nginx.name }}"
     version: "{{ .Values.charts.nginx.version }}"
     values:
-      - "values-ums-stack-gateway.gotmpl"
-      - "values-ums-stack-gateway.yaml"
+      - "values-ums-stack-gateway.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -224,10 +223,8 @@ releases:
     chart: "ums-store-dav-repo/{{ .Values.charts.umsStoreDav.name }}"
     version: "{{ .Values.charts.umsStoreDav.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-store-dav.gotmpl"
-      - "values-store-dav.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-store-dav.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -235,10 +232,8 @@ releases:
     chart: "ums-ldap-server-repo/{{ .Values.charts.umsLdapServer.name }}"
     version: "{{ .Values.charts.umsLdapServer.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-ldap-server.gotmpl"
-      - "values-ldap-server.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-ldap-server.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -246,10 +241,8 @@ releases:
     chart: "ums-ldap-notifier-repo/{{ .Values.charts.umsLdapNotifier.name }}"
     version: "{{ .Values.charts.umsLdapNotifier.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-ldap-notifier.gotmpl"
-      - "values-ldap-notifier.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-ldap-notifier.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -257,10 +250,8 @@ releases:
     chart: "ums-udm-rest-api-repo/{{ .Values.charts.umsUdmRestApi.name }}"
     version: "{{ .Values.charts.umsUdmRestApi.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-udm-rest-api.gotmpl"
-      - "values-udm-rest-api.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-udm-rest-api.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -268,10 +259,8 @@ releases:
     chart: "ums-stack-data-ums-repo/{{ .Values.charts.umsStackDataUms.name }}"
     version: "{{ .Values.charts.umsStackDataUms.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-stack-data-ums.gotmpl"
-      - "values-stack-data-ums.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-stack-data-ums.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -279,10 +268,8 @@ releases:
     chart: "ums-stack-data-swp-repo/{{ .Values.charts.umsStackDataSwp.name }}"
     version: "{{ .Values.charts.umsStackDataSwp.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-stack-data-swp.gotmpl"
-      - "values-stack-data-swp.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-stack-data-swp.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -290,10 +277,8 @@ releases:
     chart: "ums-portal-server-repo/{{ .Values.charts.umsPortalServer.name }}"
     version: "{{ .Values.charts.umsPortalServer.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-portal-server.gotmpl"
-      - "values-portal-server.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-portal-server.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -301,10 +286,8 @@ releases:
     chart: "ums-notifications-api-repo/{{ .Values.charts.umsNotificationsApi.name }}"
     version: "{{ .Values.charts.umsNotificationsApi.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-notifications-api.gotmpl"
-      - "values-notifications-api.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-notifications-api.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -312,10 +295,8 @@ releases:
     chart: "ums-portal-listener-repo/{{ .Values.charts.umsPortalListener.name }}"
     version: "{{ .Values.charts.umsPortalListener.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-portal-listener.gotmpl"
-      - "values-portal-listener.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-portal-listener.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -323,10 +304,8 @@ releases:
     chart: "ums-portal-frontend-repo/{{ .Values.charts.umsPortalFrontend.name }}"
     version: "{{ .Values.charts.umsPortalFrontend.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-portal-frontend.gotmpl"
-      - "values-portal-frontend.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-portal-frontend.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -334,10 +313,8 @@ releases:
     chart: "ums-umc-gateway-repo/{{ .Values.charts.umsUmcGateway.name }}"
     version: "{{ .Values.charts.umsUmcGateway.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-umc-gateway.gotmpl"
-      - "values-umc-gateway.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-umc-gateway.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -345,10 +322,8 @@ releases:
     chart: "ums-umc-server-repo/{{ .Values.charts.umsUmcServer.name }}"
     version: "{{ .Values.charts.umsUmcServer.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-umc-server.gotmpl"
-      - "values-umc-server.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-umc-server.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -356,10 +331,8 @@ releases:
     chart: "ums-selfservice-listener-repo/{{ .Values.charts.umsSelfserviceListener.name }}"
     version: "{{ .Values.charts.umsSelfserviceListener.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-selfservice-listener.gotmpl"
-      - "values-selfservice-listener.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-selfservice-listener.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -367,10 +340,8 @@ releases:
     chart: "ums-provisioning-repo/{{ .Values.charts.umsProvisioning.name }}"
     version: "{{ .Values.charts.umsProvisioning.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-provisioning.gotmpl"
-      - "values-provisioning.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-provisioning.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -378,10 +349,8 @@ releases:
     chart: "ums-guardian-management-api-repo/{{ .Values.charts.umsGuardianManagementApi.name }}"
     version: "{{ .Values.charts.umsGuardianManagementApi.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-guardian-management-api.gotmpl"
-      - "values-guardian-management-api.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-guardian-management-api.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -389,10 +358,8 @@ releases:
     chart: "ums-guardian-management-ui-repo/{{ .Values.charts.umsGuardianManagementUi.name }}"
     version: "{{ .Values.charts.umsGuardianManagementUi.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-guardian-management-ui.gotmpl"
-      - "values-guardian-management-ui.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-guardian-management-ui.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -400,10 +367,8 @@ releases:
     chart: "ums-guardian-authorization-api-repo/{{ .Values.charts.umsGuardianAuthorizationApi.name }}"
     version: "{{ .Values.charts.umsGuardianAuthorizationApi.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-guardian-authorization-api.gotmpl"
-      - "values-guardian-authorization-api.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-guardian-authorization-api.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
@@ -411,10 +376,8 @@ releases:
     chart: "ums-open-policy-agent-repo/{{ .Values.charts.umsOpenPolicyAgent.name }}"
     version: "{{ .Values.charts.umsOpenPolicyAgent.version }}"
     values:
-      - "values-common.gotmpl"
-      - "values-common.yaml"
-      - "values-open-policy-agent.gotmpl"
-      - "values-open-policy-agent.yaml"
+      - "values-common.yaml.gotmpl"
+      - "values-open-policy-agent.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 

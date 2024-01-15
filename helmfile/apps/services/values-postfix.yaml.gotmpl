@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+certificate:
+  secretName: {{ .Values.ingress.tls.secretName | quote }}
+  request:
+    enabled: false
+
+containerSecurityContext:
+  allowPrivilegeEscalation: true
+  capabilities: {}
+  enabled: true
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
+  runAsNonRoot: false
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.postfix.registry | quote }}
+  repository: {{ .Values.images.postfix.repository | quote }}
+  tag: {{ .Values.images.postfix.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+persistence:
+  size: {{ .Values.persistence.size.postfix | quote }}
+  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote}}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 101
+
+postfix:
+  amavisHost: ""
+  amavisPortIn: ""
+  domain: {{ .Values.global.domain | quote }}
+  hostname: "postfix"
+  inetProtocols: "ipv4"
+  milterDefaultAction: "accept"
+  overrides:
+    - fileName: "sasl_passwd.map"
+      content:
+        - {{ printf "%s %s:%s" .Values.smtp.host .Values.smtp.username .Values.smtp.password | quote }}
+  rspamdHost: ""
+  relayHost: {{ printf "[%s]:%d" .Values.smtp.host .Values.smtp.port | quote }}
+  relayNets: {{ .Values.cluster.networking.cidr | quote}}
+  smtpSASLAuthEnable: "yes"
+  smtpSASLPasswordMaps: "lmdb:/etc/postfix/sasl_passwd.map"
+  smtpUseTLS: "yes"
+  smtpdSASLAuthEnable: "no"
+  smtpdSASLSecurityOptions: "noanonymous"
+  smtpdSASLType: "dovecot"
+  smtpdUseTLS: "yes"
+  smtpdTLSCertFile: "/etc/tls/tls.crt"
+  smtpdKeyFile: "/etc/tls/tls.key"
+  smtpdSASLPath: "inet:dovecot:3659"
+  {{- if .Values.clamavDistributed.enabled }}
+  smtpdMilters: "inet:clamav-milter:7357"
+  {{- else if .Values.clamavSimple.enabled }}
+  smtpdMilters: "inet:clamav-simple:7357"
+  {{- end }}
+  virtualMailboxDomains: {{ .Values.global.domain | quote }}
+  virtualTransport: "lmtps:dovecot:24"
+
+replicaCount: {{ .Values.replicas.postfix }}
+
+resources:
+  {{ .Values.resources.postfix | toYaml | nindent 2 }}
+...

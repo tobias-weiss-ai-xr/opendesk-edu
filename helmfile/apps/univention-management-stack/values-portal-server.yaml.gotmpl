@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsPortalServer.registry | quote }}
+  repository: {{ .Values.images.umsPortalServer.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsPortalServer.tag | quote }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+portalServer:
+  authMode: "saml"
+  editable: "false"
+  umcGetUrl: "http://ums-umc-server/get"
+  umcSessionUrl: "http://ums-umc-server/get/session-info"
+  logLevel: {{ .Values.debug.logLevel | quote }}
+  adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
+  ucsInternalUrl: {{ printf "%s%s%s" "http://portal-server:" .Values.secrets.univentionManagementStack.storeDavUsers.portalServer "@ums-store-dav/portal-data" | quote }}
+  centralNavigation:
+    enabled: true
+    authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+
+resources:
+  {{ .Values.resources.umsPortalServer | toYaml | nindent 2 }}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+
+...

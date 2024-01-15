@@ -1,0 +1,82 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+extraVolumes:
+  - name: "opendesk-schemas"
+    configMap:
+      name: "ums-stack-data-swp-schemas"
+
+extraVolumeMounts:
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskFileshare.schema"
+    subPath: "opendeskFileshare.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskKnowledgemanagement.schema"
+    subPath: "opendeskKnowledgemanagement.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskLearnmanagement.schema"
+    subPath: "opendeskLearnmanagement.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskLivecollaboration.schema"
+    subPath: "opendeskLivecollaboration.schema"
+  - name: "opendesk-schemas"
+    mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskProjectmanagement.schema"
+    subPath: "opendeskProjectmanagement.schema"
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsLdapServer.registry | quote }}
+  repository: {{ .Values.images.umsLdapServer.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsLdapServer.tag | quote }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+  waitForDependency:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsWaitForDependency.registry | quote }}
+    repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
+
+ldapServer:
+  waitForSamlMetadata: true
+  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
+
+persistence:
+  data:
+    storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.univentionManagementStack.ldapServerData | quote }}
+  shared:
+    storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.univentionManagementStack.ldapServerShared | quote }}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+
+service:
+  type: "ClusterIP"
+
+resources:
+  {{ .Values.resources.umsLdapServer | toYaml | nindent 2 }}
+
+...

@@ -1,0 +1,65 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.oxConnector.registry | quote }}
+  repository: {{ .Values.images.oxConnector.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.oxConnector.tag | quote }}
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . | quote }}
+{{- end }}
+
+ingress:
+  enabled: false
+
+oxConnector:
+  caCert: "ucctempldapstring"
+  debugLevel: "5"
+  domainName: {{ .Values.global.domain | quote }}
+  ldapHost: {{ .Values.ldap.host | quote }}
+  logLevel: {{ .Values.debug.logLevel | quote }}
+  ldapPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  ldapBaseDn: "dc=swp-ldap,dc=internal"
+  ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
+  tlsMode: "off"
+  notifierServer: {{ .Values.ldap.notifierHost | quote }}
+  oxDefaultContext: "1"
+  oxImapServer: "imap://127.0.0.1:143"
+  oxLocalTimezone: "Europe/Berlin"
+  oxLanguage: "de_DE"
+  oxMasterAdmin: "admin"
+  oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+  oxSmtpServer: "smtp://127.0.0.1:587"
+  oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+
+resources:
+  {{ .Values.resources.oxConnector | toYaml | nindent 2 }}
+
+persistence:
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+
+## Container deployment probes
+probes:
+  liveness:
+    enabled: true
+    initialDelaySeconds: 120
+    timeoutSeconds: 3
+    periodSeconds: 30
+    failureThreshold: 3
+    successThreshold: 1
+
+  readiness:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 3
+    periodSeconds: 15
+    failureThreshold: 30
+    successThreshold: 1
+
+serviceAccount:
+  create: true
+
+...

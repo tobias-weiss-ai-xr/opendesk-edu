@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+guardianAuthorizationApi:
+  guardianAuthzCorsAllowedOrigins: "*"
+  guardianAuthzAdapterSettingsPort: "env"
+  guardianAuthzAdapterAppPersistencePort: "udm_data"
+  guardianAuthzAdapterPolicyPort: "opa"
+  guardianAuthzAdapterAuthenticationPort: "fast_api_oauth"
+  guardianAuthzLoggingLevel: {{ .Values.debug.logLevel | quote }}
+  guardianAuthzLoggingStructured: false
+  guardianAuthzLoggingFormat: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS ZZ}</green> | <level>{level}</level> | <level>{message}</level> | {extra}"
+  home: "/guardian_service_dir"
+  isUniventionAppCenter: 0
+  oauthAdapterWellKnownUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
+  opaAdapterUrl: "http://ums-open-policy-agent/"
+  udmDataAdapterUrl: "http://ums-udm-rest-api/udm/"
+  udmDataAdapterUsername: "cn=admin"
+  udmDataAdapterPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.umsGuardianAuthorizationApi.registry | quote }}
+  repository: {{ .Values.images.umsGuardianAuthorizationApi.repository | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  tag: {{ .Values.images.umsGuardianAuthorizationApi.tag | quote }}
+  pullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+    - name: {{ . | quote }}
+    {{- end }}
+
+resources:
+  {{ .Values.resources.umsGuardianAuthorizationApi | toYaml | nindent 2 }}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+  privileged: false
+  seccompProfile:
+    type: "RuntimeDefault"
+
+...

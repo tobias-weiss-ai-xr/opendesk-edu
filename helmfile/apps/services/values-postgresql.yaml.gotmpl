@@ -1,0 +1,83 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+job:
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+  fsGroupChangePolicy: "OnRootMismatch"
+
+postgres:
+  user: "postgres"
+
+replicaCount: 1
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.postgresql.registry | quote }}
+  repository: {{ .Values.images.postgresql.repository | quote }}
+  tag: {{ .Values.images.postgresql.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  image:
+    digest: "sha256:de7451b563ef79eb6acb2851dbadd18388e6436cd757b65d275a3dc60dbb0b73"
+
+job:
+  users:
+    - username: "keycloak_user"
+      password: {{ .Values.secrets.postgresql.keycloakUser | quote }}
+    - username: "openproject_user"
+      password: {{ .Values.secrets.postgresql.openprojectUser | quote }}
+    - username: "keycloak_extensions_user"
+      password: {{ .Values.secrets.postgresql.keycloakExtensionUser | quote }}
+    - username: "matrix_user"
+      password: {{ .Values.secrets.postgresql.matrixUser | quote }}
+    - username: "notificationsapi_user"
+      password: {{ .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
+    - username: "guardianmanagementapi_user"
+      password: {{ .Values.secrets.postgresql.umsGuardianManagementApiUser | quote }}
+    - username: "selfservice_user"
+      password: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+  databases:
+    - name: "keycloak"
+      user: "keycloak_user"
+    - name: "keycloak_extensions"
+      user: "keycloak_extensions_user"
+    - name: "openproject"
+      user: "openproject_user"
+    - name: "matrix"
+      user: "matrix_user"
+      additionalParams: "ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0"
+    - name: "guardianmanagementapi"
+      user: "guardianmanagementapi_user"
+    - name: "notificationsapi"
+      user: "notificationsapi_user"
+    - name: "selfservice"
+      user: "selfservice_user"
+
+persistence:
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.postgresql | quote }}
+
+postgres:
+  password: {{ .Values.secrets.postgresql.postgresUser | quote }}
+
+resources:
+  {{ .Values.resources.postgresql | toYaml | nindent 2 }}
+...

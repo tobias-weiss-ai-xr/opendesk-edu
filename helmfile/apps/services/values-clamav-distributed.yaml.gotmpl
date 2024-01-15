@@ -1,0 +1,120 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+clamd:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 100
+    runAsGroup: 101
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.clamd.registry | quote }}
+    repository: {{ .Values.images.clamd.repository | quote }}
+    tag: {{ .Values.images.clamd.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 101
+    fsGroupChangePolicy: "Always"
+  replicaCount: {{ .Values.replicas.clamd }}
+  resources:
+    {{ .Values.resources.clamd | toYaml | nindent 4 }}
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  enabled: true
+  readOnlyRootFilesystem: true
+
+freshclam:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 100
+    runAsGroup: 101
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.freshclam.registry | quote }}
+    repository: {{ .Values.images.freshclam.repository | quote }}
+    tag: {{ .Values.images.freshclam.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 101
+    fsGroupChangePolicy: "Always"
+  replicaCount: {{ .Values.replicas.freshclam }}
+  resources:
+    {{ .Values.resources.freshclam | toYaml | nindent 4 }}
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+icap:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 100
+    runAsGroup: 101
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.icap.registry | quote }}
+    repository: {{ .Values.images.icap.repository | quote }}
+    tag: {{ .Values.images.icap.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 101
+    fsGroupChangePolicy: "Always"
+  replicaCount: {{ .Values.replicas.icap }}
+  resources:
+    {{ .Values.resources.icap | toYaml | nindent 4 }}
+
+milter:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 100
+    runAsGroup: 101
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.milter.registry | quote }}
+    repository: {{ .Values.images.milter.repository | quote }}
+    tag: {{ .Values.images.milter.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 101
+    fsGroupChangePolicy: "Always"
+  replicaCount: {{ .Values.replicas.milter }}
+  resources:
+    {{ .Values.resources.milter | toYaml | nindent 4 }}
+
+persistence:
+  storageClass: {{ .Values.persistence.storageClassNames.RWX | quote }}
+  size: {{ .Values.persistence.size.clamav | quote }}
+...
