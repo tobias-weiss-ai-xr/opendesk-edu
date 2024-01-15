@@ -342,7 +342,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "1.6.0"
+    version: "1.7.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -440,7 +440,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "guardian-authorization-api"
-    version: "0.0.1"
+    version: "0.1.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -454,7 +454,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "guardian-management-api"
-    version: "0.0.1"
+    version: "0.1.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -468,7 +468,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "guardian-management-ui"
-    version: "0.0.1"
+    version: "0.1.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -566,7 +566,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "open-policy-agent"
-    version: "0.0.1"
+    version: "0.1.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'

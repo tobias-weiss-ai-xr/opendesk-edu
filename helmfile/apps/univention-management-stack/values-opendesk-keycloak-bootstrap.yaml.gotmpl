@@ -300,8 +300,8 @@ config:
           - "address"
           - "email"
           - "profile"
-      - name: "guardian-cli"
-        clientId: "guardian-cli"
+      - name: "guardian-management-api"
+        clientId: "guardian-management-api"
         rootUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
         baseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
         protocol: "openid-connect"
@@ -406,21 +406,32 @@ config:
               access.token.claim: true
               claim.name: "clientAddress"
               jsonType.label: "String"
-      - name: "guardian"
-        clientId: "guardian"
+      - name: "guardian-scripts"
+        clientId: "guardian-scripts"
+        description: ""
         rootUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+        adminUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
         baseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+        surrogateAuthRequired: false
+        enabled: true
+        alwaysDisplayInConsole: false
         clientAuthenticatorType: "client-secret"
         redirectUris:
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/guardian/*"
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
           - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/guardian/*"
-        fullScopeAllowed: true
-        protocol: "openid-connect"
+        webOrigins:
+          - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+        bearerOnly: false
+        consentRequired: false
+        standardFlowEnabled: true
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: true
+        serviceAccountsEnabled: false
         publicClient: true
         frontchannelLogout: false
-        standardFlowEnabled: true
-        attributes:
-          use.refresh.tokens: "true"
-          backchannel.logout.session.required: "true"
+        protocol: "openid-connect"
+        fullScopeAllowed: true
         protocolMappers:
           - name: "email"
             protocol: "openid-connect"
@@ -433,28 +444,15 @@ config:
               access.token.claim: true
               claim.name: "email"
               jsonType.label: "String"
-          - name: "dn"
+          - name: "guardian-audience"
             protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
+            protocolMapper: "oidc-audience-mapper"
             consentRequired: false
             config:
-              userinfo.token.claim: false
-              user.attribute: "LDAP_ENTRY_DN"
+              included.client.audience: "guardian"
               id.token.claim: false
               access.token.claim: true
-              claim.name: "dn"
-              jsonType.label: "String"
-          - name: "uid"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "uid"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "udi"
-              jsonType.label: "String"
+              userinfo.token.claim: false
           - name: "username"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-property-mapper"
@@ -466,15 +464,51 @@ config:
               access.token.claim: true
               claim.name: "preferred_username"
               jsonType.label: "String"
+          - name: "uid"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "uid"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "uid"
+              jsonType.label: "String"
           - name: "audiencemap"
             protocol: "openid-connect"
             protocolMapper: "oidc-audience-mapper"
             consentRequired: false
             config:
-              included.client.audience: "guardian"
+              included.client.audience: "guardian-scripts"
               id.token.claim: true
               access.token.claim: true
               userinfo.token.claim: true
+          - name: "dn"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              aggregate.attrs: false
+              multivalued: false
+              userinfo.token.claim: false
+              user.attribute: "LDAP_ENTRY_DN"
+              id.token.claim: false
+              access.token.claim: true
+              claim.name: "dn"
+              jsonType.label: "String"
+        defaultClientScopes:
+          - "opendesk"
+          - "web-origins"
+          - "acr"
+          - "roles"
+          - "profile"
+          - "email"
+        optionalClientScopes:
+          - "address"
+          - "phone"
+          - "offline_access"
+          - "microprofile-jwt"
       - name: "guardian-ui"
         clientId: "guardian-ui"
         rootUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
