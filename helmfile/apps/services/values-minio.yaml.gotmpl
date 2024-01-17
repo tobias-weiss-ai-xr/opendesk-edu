@@ -167,6 +167,8 @@ provisioning:
       policies:
         - "nextcloud-bucket-policy"
       setPolicies: true
+  resources:
+    {{ .Values.resources.minio | toYaml | nindent 4 }}
 
 readinessProbe:
   enabled: true

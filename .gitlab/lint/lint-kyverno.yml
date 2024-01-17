@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+include:
+  - local: "/.gitlab/lint/lint-common.yml"
+
+lint-kyverno:
+  allow_failure: true
+  extends: ".lint-common"
+  image: "${OPENDESK_LINT_IMAGE}"
+  parallel:
+    matrix:
+      - APP:
+          - "collabora"
+          - "cryptpad"
+          - "element"
+          - "intercom-service"
+          - "jitsi"
+          - "nextcloud"
+          - "open-xchange"
+          - "openproject"
+          - "openproject-bootstrap"
+          - "provisioning"
+          - "services"
+          - "univention-management-stack"
+          - "xwiki"
+  script:
+    - "cd ${CI_PROJECT_DIR}/helmfile/apps/${APP}"
+    - "helmfile template -e test --include-needs > ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
+    - "node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests -d ${CI_PROJECT_DIR}/.kyverno -t required ${APP}"
+    - "node /app/opendesk-ci-cli/src/index.js filter-for-kinds -f ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
+    - "cd ${CI_PROJECT_DIR}/.kyverno"
+    - "kyverno test ."
+
+...

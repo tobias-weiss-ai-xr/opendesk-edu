@@ -92,6 +92,8 @@ appsuite:
     masterAdmin: "admin"
     masterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    serviceAccount:
+      create: true
     features:
       status:
         # enable admin pack
@@ -413,6 +415,8 @@ appsuite:
       capabilities:
         drop:
           - "ALL"
+      seccompProfile:
+        type: "RuntimeDefault"
 
   core-documents-collaboration:
     enabled: false
@@ -481,6 +485,8 @@ appsuite:
       capabilities:
         drop:
           - "ALL"
+      seccompProfile:
+        type: "RuntimeDefault"
 
   guard-ui:
     enabled: true

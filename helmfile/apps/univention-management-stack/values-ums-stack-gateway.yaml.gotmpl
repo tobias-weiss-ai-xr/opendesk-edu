@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
 fullnameOverride: "ums-stack-gateway"
 
 image:
@@ -28,18 +32,26 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
 
-securityContext:
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+  privileged: false
+  readOnlyRootFilesystem: false
   allowPrivilegeEscalation: false
   capabilities:
     drop:
       - "ALL"
-  enabled: true
-  privileged: false
-  readOnlyRootFilesystem: false
-  runAsUser: 1001
-  runAsNonRoot: true
   seccompProfile:
     type: "RuntimeDefault"
+
+service:
+  type: "ClusterIP"
+
+serviceAccount:
+  create: true
+
+fullnameOverride: "ums-stack-gateway"
 
 # The content of the "serverBlock" does resemble the Ingress configuration of
 # the UMS components. The "location" entries do intentionally reflect precisely
@@ -288,8 +300,5 @@ serverBlock: |
     }
 
   }
-
-service:
-  type: "ClusterIP"
 
 ...

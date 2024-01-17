@@ -1,0 +1,173 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: "kyverno.io/v1"
+kind: "ClusterPolicy"
+metadata:
+  name: "require-containersecuritycontext"
+spec:
+  background: true
+  rules:
+    - name: "require-ro-rootfs"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Root filesystem must be read-only."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  readOnlyRootFilesystem: true
+            =(initContainers):
+              - securityContext:
+                  readOnlyRootFilesystem: true
+            containers:
+              - securityContext:
+                  readOnlyRootFilesystem: true
+
+    - name: "require-no-privilege-escalation"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Disallow privilege escalation."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  allowPrivilegeEscalation: false
+            =(initContainers):
+              - securityContext:
+                  allowPrivilegeEscalation: false
+            containers:
+              - securityContext:
+                  allowPrivilegeEscalation: false
+
+    - name: "require-all-capabilities-dropped"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Required to drop ALL linux capabilities."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  capabilities:
+                    drop:
+                      - "ALL"
+            =(initContainers):
+              - securityContext:
+                  capabilities:
+                    drop:
+                      - "ALL"
+            containers:
+              - securityContext:
+                  capabilities:
+                    drop:
+                      - "ALL"
+
+    - name: "require-no-privileged"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Disallow privileged container."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  privileged: false
+            =(initContainers):
+              - securityContext:
+                  privileged: false
+            containers:
+              - securityContext:
+                  privileged: false
+
+    - name: "require-run-as-user"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Container must run as non-root user."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  runAsUser: ">0"
+            =(initContainers):
+              - securityContext:
+                  runAsUser: ">0"
+            containers:
+              - securityContext:
+                  runAsUser: ">0"
+
+    - name: "require-run-as-group"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Container must run as non-root group."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  runAsGroup: ">0"
+            =(initContainers):
+              - securityContext:
+                  runAsGroup: ">0"
+            containers:
+              - securityContext:
+                  runAsGroup: ">0"
+
+    - name: "require-seccomp-profile"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Container must have seccompProfile"
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  seccompProfile:
+                    type: "RuntimeDefault | Localhost"
+            =(initContainers):
+              - securityContext:
+                  seccompProfile:
+                    type: "RuntimeDefault | Localhost"
+            containers:
+              - securityContext:
+                  seccompProfile:
+                    type: "RuntimeDefault | Localhost"
+
+    - name: "require-run-as-non-root"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "Container must run in non-root mode."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  runAsNonRoot: true
+            =(initContainers):
+              - securityContext:
+                  runAsNonRoot: true
+            containers:
+              - securityContext:
+                  runAsNonRoot: true
+
+  validationFailureAction: "audit"
+...

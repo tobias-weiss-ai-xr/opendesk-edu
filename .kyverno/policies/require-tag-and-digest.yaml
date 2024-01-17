@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: "kyverno.io/v1"
+kind: "ClusterPolicy"
+metadata:
+  name: "require-tag-and-digest"
+spec:
+  background: true
+  rules:
+    - match:
+        resources:
+          kinds:
+            - "Pod"
+      name: "require-tag-and-digest"
+      validate:
+        message: "An image tag and digest required."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - image: "*:*@sha256:*"
+            =(initContainers):
+              - image: "*:*@sha256:*"
+            containers:
+              - image: "*:*@sha256:*"
+  validationFailureAction: "audit"
+...

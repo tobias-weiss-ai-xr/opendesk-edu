@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: "kyverno.io/v1"
+kind: "ClusterPolicy"
+metadata:
+  name: "require-health-and-liveness-check"
+spec:
+  background: true
+  rules:
+    - match:
+        resources:
+          kinds:
+            - "Pod"
+      name: "require-health-and-liveness-check"
+      validate:
+        message: "Liveness and readiness probes are required. spec.containers[*].livenessProbe.periodSeconds
+          must be set to a value greater than 0."
+        pattern:
+          spec:
+            containers:
+              - livenessProbe:
+                  periodSeconds: ">0"
+                readinessProbe:
+                  periodSeconds: ">0"
+  validationFailureAction: "audit"
+...

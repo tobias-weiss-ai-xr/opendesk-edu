@@ -71,7 +71,7 @@ environment:
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.openproject.registry | quote }}
   repository: {{ .Values.images.openproject.repository | quote }}
-  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.openproject.tag | quote }}
 
 initdb:
@@ -79,7 +79,7 @@ initdb:
     registry: {{ .Values.global.imageRegistry | default .Values.images.openprojectInitDb.registry | quote }}
     repository: {{ .Values.images.openprojectInitDb.repository | quote }}
     tag: {{ .Values.images.openprojectInitDb.tag | quote }}
-    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 memcached:
   bundled: false

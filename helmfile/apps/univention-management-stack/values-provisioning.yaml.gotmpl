@@ -1,5 +1,7 @@
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: Apache-2.0
+{{/*
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
 ---
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.umsProvisioning.registry | quote }}
@@ -10,6 +12,22 @@ image:
     {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
     {{- end }}
+
+nats:
+  global:
+    image:
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+      pullSecretNames: {{ .Values.global.imagePullSecrets }}
+      registry: {{ .Values.global.imageRegistry | default .Values.images.umsProvisioningNats.registry | quote }}
+  container:
+    image:
+      repository: {{ .Values.images.umsProvisioningNats.repository | quote }}
+      tag: {{ .Values.images.umsProvisioningNats.tag | quote }}
+  natsBox:
+    container:
+      image:
+        repository: {{ .Values.images.umsProvisioningNatsBox.repository | quote }}
+        tag: {{ .Values.images.umsProvisioningNatsBox.tag | quote }}
 
 provisioningApi:
   rootPath: "/univention/provisioning-api"

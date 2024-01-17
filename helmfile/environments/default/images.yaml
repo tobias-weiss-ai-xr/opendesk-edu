@@ -698,6 +698,22 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '4', '0']
+  umsProvisioningNats:
+    # renovate:
+    # upstreamRegistry=docker.io
+    # upstreamRepository=nats
+    # dependencyType=external
+    registry: "docker.io"
+    repository: "nats"
+    tag: "2.10.5-alpine@sha256:85319e5e541b6f273dbffc722e001601f391028e004c90a4fadab53475789e79"
+  umsProvisioningNatsBox:
+    # renovate:
+    # upstreamRegistry=docker.io
+    # upstreamRepository=nats
+    # dependencyType=external
+    registry: "docker.io"
+    repository: "natsio/nats-box"
+    tag: "0.14.1@sha256:a67913df95f1d5b265117e49e4c83228091d13d6783d80215ddcf84aba695ef4"
   umsSelfserviceInvitation:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
