@@ -56,9 +56,8 @@ ingress:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 
-# TODO: The health endpoint does not work with the haproxy configuration, yet
 livenessProbe:
-  enabled: false
+  enabled: true
 
 persistence:
   size: {{ .Values.persistence.size.matrixNeoDateFixBot | quote }}
@@ -68,9 +67,8 @@ podSecurityContext:
   enabled: true
   fsGroup: 101
 
-# TODO: The health endpoint does not work with the haproxy configuration, yet
 readinessProbe:
-  enabled: false
+  enabled: true
 
 replicaCount: {{ .Values.replicas.matrixNeoDateFixBot }}
 

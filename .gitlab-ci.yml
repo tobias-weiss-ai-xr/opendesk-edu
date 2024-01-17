@@ -12,6 +12,16 @@ include:
     file: "gitlab/environments.yaml"
     rules:
       - if: "$INCLUDE_ENVIRONMENTS_ENABLED != 'false'"
+  - local: "/.gitlab/lint/lint-opendesk.yml"
+    rules:
+      - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
+        when: "never"
+      - when: "always"
+  - local: "/.gitlab/lint/lint-kyverno.yml"
+    rules:
+      - if: "$JOB_KYVERNO_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
+        when: "never"
+      - when: "always"
 
 stages:
   - ".pre"
@@ -137,8 +147,8 @@ variables:
   cache: {}
   dependencies: []
   extends: ".environments"
-  image: "external-registry.souvap-univention.de/registry-souvap-univention-de/souvap/tooling/images/helm\
-          @sha256:5a53455af45f4af5c97a01ee2dd5f9ef683f365b59f1ab0102505bc0fd37f6c5"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:1.0.1\
+          @sha256:d38f41b88374e055332860018f2936db8807b763caf6089735db0484cbb2842a"
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
@@ -517,22 +527,6 @@ generate-release-assets:
   variables:
     ASSET_GENERATOR_REPO_PATH: "bmi/opendesk/tooling/opendesk-asset-generator"
 
-opendesk-linter:
-  cache: {}
-  image: "registry.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli:1.0.1"
-  needs: []
-  rules:
-    - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
-      when: "never"
-    - when: "always"
-  script:
-    - "node /app/src/index.js sort-images ${CI_PROJECT_DIR}/helmfile/environments/default/images.yaml"
-    - "node /app/src/index.js sort-charts ${CI_PROJECT_DIR}/helmfile/environments/default/charts.yaml"
-    - "git diff --exit-code"
-  stage: "lint"
-  tags:
-    - "docker"
-
 # Declare .environments which is in environments repository and only loaded when INCLUDE_ENVIRONMENTS_ENABLED not false.
 # 'cache' is used because job must contain at least one key, so cache is just a dummy key.
 .environments:
@@ -613,7 +607,13 @@ release:
           "@semantic-release/release-notes-generator",
           "@semantic-release/changelog",
           ["@semantic-release/git", {
-            "assets": ["charts/**/Chart.yaml", "CHANGELOG.md", "charts/**/README.md", "helmfile/environments/default/global.generated.yaml"],
+            "assets": [
+              "charts/**/Chart.yaml",
+              "CHANGELOG.md",
+              "charts/**/README.md",
+              "helmfile/environments/default/global.generated.yaml",
+              ".kyverno/kyverno-test.yaml"
+            ],
             "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
           }]
         ]

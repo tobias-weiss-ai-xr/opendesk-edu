@@ -15,6 +15,8 @@ externalDB:
   database: {{ .Values.databases.xwiki.name | quote }}
   user: {{ .Values.databases.xwiki.username | quote }}
   host: {{ .Values.databases.xwiki.host | quote }}
+  customKeyRef:
+    enabled: false
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
@@ -25,6 +27,8 @@ containerSecurityContext:
   capabilities:
     drop:
       - "ALL"
+  seccompProfile:
+    type: "RuntimeDefault"
 
 customConfigs:
   xwiki.cfg:

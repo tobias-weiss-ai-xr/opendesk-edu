@@ -20,6 +20,15 @@ image:
 master:
   containerSecurityContext:
     readOnlyRootFilesystem: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: "RuntimeDefault"
+    capabilities:
+      drop:
+        - "ALL"
   count: {{ .Values.replicas.redis }}
   persistence:
     size: {{ .Values.persistence.size.redis | quote }}

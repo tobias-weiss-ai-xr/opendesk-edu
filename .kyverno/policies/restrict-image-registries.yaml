@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: "kyverno.io/v1"
+kind: "ClusterPolicy"
+metadata:
+  name: "restrict-image-registries"
+spec:
+  background: true
+  rules:
+    - match:
+        resources:
+          kinds:
+            - "Pod"
+      name: "validate-registries"
+      validate:
+        message: "Unknown image registry."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - image: "external-registry.souvap-univention.de/*"
+            =(initContainers):
+              - image: "external-registry.souvap-univention.de/*"
+            containers:
+              - image: "external-registry.souvap-univention.de/*"
+  validationFailureAction: "audit"
+...

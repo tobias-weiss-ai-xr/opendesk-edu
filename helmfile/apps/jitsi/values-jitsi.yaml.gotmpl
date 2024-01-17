@@ -62,6 +62,9 @@ jitsi:
       TURN_ENABLE: "1"
     resources:
       {{ .Values.resources.jitsi | toYaml | nindent 6 }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
   prosody:
     image:
       repository: "{{ .Values.global.imageRegistry | default .Values.images.prosody.registry }}/{{ .Values.images.prosody.repository }}"
@@ -98,6 +101,9 @@ jitsi:
     persistence:
       size: {{ .Values.persistence.size.prosody | quote }}
       storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
   jicofo:
     replicaCount: {{ .Values.replicas.jicofo }}
     image:
@@ -108,6 +114,9 @@ jitsi:
       componentSecret: {{ .Values.secrets.jitsi.jicofoComponentPassword | quote }}
     resources:
       {{ .Values.resources.jicofo | toYaml | nindent 6 }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     image:
@@ -119,6 +128,9 @@ jitsi:
       {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
       type: {{ .Values.cluster.service.type | quote }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
   jibri:
     replicaCount: {{ .Values.replicas.jibri }}
     image:
@@ -130,6 +142,9 @@ jitsi:
       password: {{ .Values.secrets.jitsi.jibriXmppPassword | quote }}
     resources:
       {{ .Values.resources.jibri | toYaml | nindent 6 }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
@@ -143,6 +158,8 @@ patchJVB:
     allowPrivilegeEscalation: false
     enabled: true
     readOnlyRootFilesystem: true
+    seccompProfile:
+      type: "RuntimeDefault"
   image:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     registry: {{ .Values.global.imageRegistry | default .Values.images.jitsiPatchJVB.registry | quote }}

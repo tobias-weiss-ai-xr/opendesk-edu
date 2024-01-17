@@ -6,5 +6,8 @@
 
 # Ignore changes to sample environments
 helmfile/environments/dev/values.yaml.gotmpl
-helmfile/environments/test/values.yaml.gotmpl
 helmfile/environments/prod/values.yaml.gotmpl
+
+# Ignore in CI generated files
+.kyverno/opendesk.yaml
+.kyverno/kyverno-test.yaml
