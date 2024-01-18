@@ -705,17 +705,28 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
-  umsProvisioning:
+  umsProvisioningDispatcher:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/images/univention/provisioning-dispatch
+    # upstreamRepository=souvap/tooling/images/univention/dispatcher
     # dependencyType=supplier
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-dispatch"
-    tag: "0.4.0@sha256:43fda35f02cfa7c4c6aaa42e561858f7b0b80485370c1e393cef3a4b8d7715c0"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/dispatcher"
+    tag: "0.9.5@sha256:35bfe36c0f44070a514074804f740e9f3d60d2d1386757067d392bc2ebef9f84"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '4', '0']
+    # @mirrorFrom: ['0', '9', '5']
+  umsProvisioningEventsAndConsumerApi:
+    # renovate:
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/images/univention/events-and-consumer-api
+    # dependencyType=supplier
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/events-and-consumer-api"
+    tag: "0.9.5@sha256:e8e9c40ccad460e4c837b7c0108de04b1ab9faf4d385ffd280e5326731a3116b"
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '5']
   umsProvisioningNats:
     # renovate:
     # upstreamRegistry=docker.io
@@ -740,6 +751,17 @@ images:
     registry: "docker.io"
     repository: "natsio/nats-server-config-reloader"
     tag: "0.14.1@sha256:77dd4c60001ffbf442c6b25592e73b4fca06ea9406c677607192788d80453783"
+  umsProvisioningUdmListener:
+    # renovate:
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/images/univention/udm-listener
+    # dependencyType=supplier
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/udm-listener"
+    tag: "0.9.5@sha256:4550913a415e0ab17701a4475f87461836b74546cb9a89d452ac607e5b5dfdfb"
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '5']
   umsSelfserviceInvitation:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de

@@ -617,16 +617,16 @@ charts:
   umsProvisioning:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/charts/univention/provisioning-api
+    # upstreamRepository=souvap/tooling/charts/univention/provisioning
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "provisioning-api"
-    version: "0.2.1"
+    name: "provisioning"
+    version: "0.9.5"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '2', '1']
+    # @mirrorFrom: ['0', '9', '5']
 
   umsSelfserviceListener:
     # renovate:

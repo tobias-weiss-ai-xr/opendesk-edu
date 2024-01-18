@@ -3,15 +3,95 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
-image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.umsProvisioning.registry | quote }}
-  repository: {{ .Values.images.umsProvisioning.repository | quote }}
-  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  tag: {{ .Values.images.umsProvisioning.tag | quote }}
-  pullSecrets:
-    {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . | quote }}
-    {{- end }}
+
+dispatcher:
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsProvisioningDispatcher.registry | quote }}
+    repository: {{ .Values.images.umsProvisioningDispatcher.repository | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsProvisioningDispatcher.tag | quote }}
+    pullSecrets:
+      {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . | quote }}
+      {{- end }}
+  resources:
+    {{ .Values.resources.umsProvisioning | toYaml | nindent 4 }}
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    privileged: false
+    seccompProfile:
+      type: "RuntimeDefault"
+
+events-and-consumer-api:
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsProvisioningEventsAndConsumerApi.registry | quote }}
+    repository: {{ .Values.images.umsProvisioningEventsAndConsumerApi.repository | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsProvisioningEventsAndConsumerApi.tag | quote }}
+    pullSecrets:
+      {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . | quote }}
+      {{- end }}
+  rootPath: "/univention/provisioning-api"
+  ingress:
+    # copied from values-common.yaml.gotmpl
+    # Intentionally not using the Ingress configuration of the UMS stack at the
+    # moment, since it does depend on rewriting capabilities of the ingress
+    # controller. Those are encapsulated into the release "stack-gateway" so that
+    # the compatibility with all ingress controllers is increased.
+    enabled: false
+    host: {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
+  resources:
+    {{ .Values.resources.umsProvisioning | toYaml | nindent 4 }}
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    privileged: false
+    seccompProfile:
+      type: "RuntimeDefault"
+
+udm-listener:
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsProvisioningUdmListener.registry | quote }}
+    repository: {{ .Values.images.umsProvisioningUdmListener.repository | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsProvisioningUdmListener.tag | quote }}
+    pullSecrets:
+      {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . | quote }}
+      {{- end }}
+  config:
+    ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
+    ldapHost: {{ .Values.ldap.host | quote }}
+    ldapHostDn: {{ printf "%s,%s" "cn=admin" .Values.ldap.baseDn | quote }}
+    ldapPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  resources:
+    {{ .Values.resources.umsProvisioning | toYaml | nindent 4 }}
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+      add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "FSETID"
+      - "KILL"
+      - "SETGID"
+      - "SETUID"
+      - "SETPCAP"
+      - "NET_BIND_SERVICE"
+      - "NET_RAW"
+      - "SYS_CHROOT"
+    privileged: false
+    seccompProfile:
+      type: "RuntimeDefault"
 
 nats:
   global:
@@ -39,19 +119,4 @@ nats:
       registry: {{ .Values.global.imageRegistry }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
-
-provisioningApi:
-  rootPath: "/univention/provisioning-api"
-
-resources:
-  {{ .Values.resources.umsProvisioning | toYaml | nindent 2 }}
-
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - "ALL"
-  privileged: false
-  seccompProfile:
-    type: "RuntimeDefault"
 ...
