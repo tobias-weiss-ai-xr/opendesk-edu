@@ -10,7 +10,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.oxConnector.registry }}/{{ .Values.charts.oxConnector.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.oxConnector.registry }}/{{ .Values.charts.oxConnector.repository }}"
 
 releases:
   - name: "ox-connector"

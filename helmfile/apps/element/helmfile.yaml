@@ -13,35 +13,35 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.element.registry }}/{{ .Values.charts.element.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.element.registry }}/{{ .Values.charts.element.repository }}"
   - name: "element-well-known-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.elementWellKnown.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.elementWellKnown.registry }}/{{ .Values.charts.elementWellKnown.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.elementWellKnown.registry }}/{{ .Values.charts.elementWellKnown.repository }}"
   - name: "synapse-web-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.synapseWeb.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.synapseWeb.registry }}/{{ .Values.charts.synapseWeb.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapseWeb.registry }}/{{ .Values.charts.synapseWeb.repository }}"
   - name: "synapse-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.synapse.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.synapse.registry }}/{{ .Values.charts.synapse.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapse.registry }}/{{ .Values.charts.synapse.repository }}"
   - name: "synapse-create-account-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.synapseCreateAccount.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.synapseCreateAccount.registry }}/{{ .Values.charts.synapseCreateAccount.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapseCreateAccount.registry }}/{{ .Values.charts.synapseCreateAccount.repository }}"
 
   # openDesk Matrix Widgets
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets
@@ -51,7 +51,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.matrixUserVerificationService.registry }}/\
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixUserVerificationService.registry }}/\
       {{ .Values.charts.matrixUserVerificationService.repository }}"
   - name: "matrix-neoboard-widget-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
@@ -59,28 +59,28 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
   - name: "matrix-neochoice-widget-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.matrixNeoboardWidget.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
   - name: "matrix-neodatefix-widget-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.matrixNeodatefixWidget.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.matrixNeodatefixWidget.registry }}/{{ .Values.charts.matrixNeodatefixWidget.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeodatefixWidget.registry }}/{{ .Values.charts.matrixNeodatefixWidget.repository }}"
   - name: "matrix-neodatefix-bot-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.matrixNeodatefixBot.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.matrixNeodatefixBot.registry }}/{{ .Values.charts.matrixNeodatefixBot.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeodatefixBot.registry }}/{{ .Values.charts.matrixNeodatefixBot.repository }}"
 
 
 releases:

@@ -12,133 +12,133 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsGuardianManagementApi.registry }}/{{ .Values.charts.umsGuardianManagementApi.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsGuardianManagementApi.registry }}/{{ .Values.charts.umsGuardianManagementApi.repository }}"
   - name: "ums-guardian-management-ui-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsGuardianManagementUi.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsGuardianManagementUi.registry }}/{{ .Values.charts.umsGuardianManagementUi.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsGuardianManagementUi.registry }}/{{ .Values.charts.umsGuardianManagementUi.repository }}"
   - name: "ums-guardian-authorization-api-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsGuardianAuthorizationApi.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsGuardianAuthorizationApi.registry }}/{{ .Values.charts.umsGuardianAuthorizationApi.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsGuardianAuthorizationApi.registry }}/{{ .Values.charts.umsGuardianAuthorizationApi.repository }}"
   - name: "ums-open-policy-agent-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsOpenPolicyAgent.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsOpenPolicyAgent.registry }}/{{ .Values.charts.umsOpenPolicyAgent.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsOpenPolicyAgent.registry }}/{{ .Values.charts.umsOpenPolicyAgent.repository }}"
   - name: "ums-store-dav-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsStoreDav.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsStoreDav.registry }}/{{ .Values.charts.umsStoreDav.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsStoreDav.registry }}/{{ .Values.charts.umsStoreDav.repository }}"
   - name: "ums-ldap-server-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsLdapServer.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsLdapServer.registry }}/{{ .Values.charts.umsLdapServer.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsLdapServer.registry }}/{{ .Values.charts.umsLdapServer.repository }}"
   - name: "ums-ldap-notifier-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsLdapNotifier.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsLdapNotifier.registry }}/{{ .Values.charts.umsLdapNotifier.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsLdapNotifier.registry }}/{{ .Values.charts.umsLdapNotifier.repository }}"
   - name: "ums-udm-rest-api-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsUdmRestApi.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsUdmRestApi.registry }}/{{ .Values.charts.umsUdmRestApi.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsUdmRestApi.registry }}/{{ .Values.charts.umsUdmRestApi.repository }}"
   - name: "ums-stack-data-ums-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsStackDataUms.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsStackDataUms.registry }}/{{ .Values.charts.umsStackDataUms.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsStackDataUms.registry }}/{{ .Values.charts.umsStackDataUms.repository }}"
   - name: "ums-stack-data-swp-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsStackDataSwp.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsStackDataSwp.registry }}/{{ .Values.charts.umsStackDataSwp.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsStackDataSwp.registry }}/{{ .Values.charts.umsStackDataSwp.repository }}"
   - name: "ums-portal-server-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsPortalServer.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsPortalServer.registry }}/{{ .Values.charts.umsPortalServer.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsPortalServer.registry }}/{{ .Values.charts.umsPortalServer.repository }}"
   - name: "ums-notifications-api-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsNotificationsApi.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsNotificationsApi.registry }}/{{ .Values.charts.umsNotificationsApi.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsNotificationsApi.registry }}/{{ .Values.charts.umsNotificationsApi.repository }}"
   - name: "ums-portal-listener-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsPortalListener.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsPortalListener.registry }}/{{ .Values.charts.umsPortalListener.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsPortalListener.registry }}/{{ .Values.charts.umsPortalListener.repository }}"
   - name: "ums-portal-frontend-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsPortalFrontend.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsPortalFrontend.registry }}/{{ .Values.charts.umsPortalFrontend.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsPortalFrontend.registry }}/{{ .Values.charts.umsPortalFrontend.repository }}"
   - name: "ums-umc-gateway-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsUmcGateway.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsUmcGateway.registry }}/{{ .Values.charts.umsUmcGateway.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsUmcGateway.registry }}/{{ .Values.charts.umsUmcGateway.repository }}"
   - name: "ums-umc-server-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsUmcServer.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsUmcServer.registry }}/{{ .Values.charts.umsUmcServer.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsUmcServer.registry }}/{{ .Values.charts.umsUmcServer.repository }}"
   - name: "ums-selfservice-listener-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsSelfserviceListener.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsSelfserviceListener.registry }}/{{ .Values.charts.umsSelfserviceListener.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsSelfserviceListener.registry }}/{{ .Values.charts.umsSelfserviceListener.repository }}"
   - name: "ums-provisioning-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsProvisioning.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsProvisioning.registry }}/{{ .Values.charts.umsProvisioning.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsProvisioning.registry }}/{{ .Values.charts.umsProvisioning.repository }}"
 
   # Univention Keycloak Extensions
   - name: "ums-keycloak-extensions-repo"
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsKeycloakExtensions.registry }}/{{ .Values.charts.umsKeycloakExtensions.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsKeycloakExtensions.registry }}/{{ .Values.charts.umsKeycloakExtensions.repository }}"
   # Univention Keycloak
   - name: "ums-keycloak-repo"
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
@@ -146,21 +146,21 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsKeycloak.registry }}/{{ .Values.charts.umsKeycloak.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsKeycloak.registry }}/{{ .Values.charts.umsKeycloak.repository }}"
   - name: "ums-keycloak-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
     verify: {{ .Values.charts.umsKeycloakBootstrap.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.umsKeycloakBootstrap.registry }}/{{ .Values.charts.umsKeycloakBootstrap.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsKeycloakBootstrap.registry }}/{{ .Values.charts.umsKeycloakBootstrap.repository }}"
   - name: "opendesk-keycloak-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.opendeskKeycloakBootstrap.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.opendeskKeycloakBootstrap.registry }}/\
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskKeycloakBootstrap.registry }}/\
       {{ .Values.charts.opendeskKeycloakBootstrap.repository }}"
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
@@ -170,7 +170,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.nginx.registry }}/{{ .Values.charts.nginx.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.nginx.registry }}/{{ .Values.charts.nginx.repository }}"
 
 releases:
   - name: "ums-keycloak"

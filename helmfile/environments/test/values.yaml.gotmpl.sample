@@ -3,5 +3,6 @@
 ---
 sampleWithTemplating: {{ env "YOUR_ENV_VARIABLE_FOR_TEMPLATING" | quote }}
 global:
-  imageRegistry: "your.private.ociregistry/with_optional_path"
+  imageRegistry: "your.private.oci-container-image-registry/with_optional_path"
+  helmRegistry: "your.private.oci-helm-chart-registry/with_optional_path"
 ...

@@ -12,7 +12,7 @@ This documentation should enable you to create your own evaluation instance of o
 * [Customize environment](#customize-environment)
   * [Domain](#domain)
     * [Apps](#apps)
-  * [Private Helm chart and container image registry](#private-helm-chart-and-container-image-registry)
+  * [Private registries](#private-registries)
   * [Cluster capabilities](#cluster-capabilities)
     * [Service](#service)
     * [Networking](#networking)
@@ -126,7 +126,7 @@ jitsi:
   enabled: false
 ```
 
-## Private Helm chart and container image registry
+## Private registries
 
 By default Helm charts and container images are fetched from OCI registries. These registries can be found for most cases
 in the [openDesk/component section on Open CoDE](https://gitlab.opencode.de/bmi/opendesk/components).
@@ -137,8 +137,9 @@ like Docker Hub.
 Doing a test deployment will most likely be fine with this setup. In case you want to deploy multiple times a day
 and fetch from the same IP address you might run into rate limits at Docker Hub. In that case and in cases you
 prefer the use of a private image registry anyway you can configure such for
-[your target environment](./../helmfile/environments/dev/values.yaml.gotmpl.sample) by setting `global.imageRegistry`
-like this:
+[your target environment](./../helmfile/environments/dev/values.yaml.gotmpl.sample) by setting
+- `global.imageRegistry` for a private image registry and
+- `global.helmRegistry` for a private Helm chart registry.
 
 ```yaml
 global:
