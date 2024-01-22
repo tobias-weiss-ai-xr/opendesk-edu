@@ -218,6 +218,7 @@ serverBlock: |
     location = /univention/auth {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
+      proxy_set_header X-UMC-HTTPS 'on';
     }
     location /univention/logout {
       rewrite ^/univention(/.*)$ $1 break;
@@ -226,6 +227,7 @@ serverBlock: |
     location /univention/saml {
       rewrite ^/univention(/.*)$ $1 break;
       proxy_pass http://ums-umc-server:80;
+      proxy_set_header X-UMC-HTTPS 'on';
     }
     location /univention/get {
       rewrite ^/univention(/.*)$ $1 break;
