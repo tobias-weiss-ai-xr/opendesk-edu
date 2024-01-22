@@ -13,7 +13,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.xwiki.registry }}/{{ .Values.charts.xwiki.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.xwiki.registry }}/{{ .Values.charts.xwiki.repository }}"
 
 releases:
   - name: "xwiki"

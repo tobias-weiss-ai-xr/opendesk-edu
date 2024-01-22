@@ -11,7 +11,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.imageRegistry | default .Values.charts.collabora.registry }}/\
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.collabora.registry }}/\
       {{ .Values.charts.collabora.repository }}"
 
 releases:
