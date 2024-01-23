@@ -62,8 +62,8 @@ mode: "standalone"
 metrics:
   serviceMonitor:
     enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
-  prometheusRule:
-    enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+    additionalLabels:
+      {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
 
 networkPolicy:
   enabled: false
