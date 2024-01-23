@@ -33,11 +33,11 @@ exporter:
     serviceMonitor:
       enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
       labels:
-        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 8 }}
     prometheusRule:
       enabled: {{ .Values.prometheus.prometheusRules.enabled }}
       additionalLabels:
-        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 6 }}
+        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 8 }}
   replicas: {{ .Values.replicas.nextcloudExporter }}
   resources:
     {{ .Values.resources.nextcloudExporter | toYaml | nindent 4 }}
@@ -84,11 +84,11 @@ php:
     serviceMonitor:
       enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
       labels:
-        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 8 }}
     prometheusRule:
       enabled: {{ .Values.prometheus.prometheusRules.enabled }}
       additionalLabels:
-        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 6 }}
+        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 8 }}
   replicas: {{ .Values.replicas.nextcloudPHP }}
   resources:
     {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
