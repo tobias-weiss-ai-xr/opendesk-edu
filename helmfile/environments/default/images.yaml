@@ -615,7 +615,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-handler"
-    tag: "0.0.3@sha256:b27d76b1a397bc776b0b7e652e318fd707da4bbfba81908ed3a7ca866b2ee8cc"
+    tag: "0.2.0@sha256:ed3a391cb32b9bb9408a4b8e9839b6ee89cbab60149732cd51165a871a91c54d"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '0', '3']
@@ -626,7 +626,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-proxy"
-    tag: "0.0.3@sha256:368c57fc4e730d2ad8e24b29f4c876f7e6dbd835a9913f5d0909159409cd5042"
+    tag: "0.2.0@sha256:8b924ab47771b9aee07384e3d13106406d49b1e7ef7fc46648adb1f0fb401327"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '0', '3']
