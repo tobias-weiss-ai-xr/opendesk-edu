@@ -1,3 +1,12 @@
+## [0.5.76](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.75...v0.5.76) (2024-01-24)
+
+
+### Bug Fixes
+
+* **nextcloud:** Correct indent in monitoring resources ([bea1413](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bea1413b860aa69cab3bb4a9dfb6d8593594cc25))
+* **services:** Monitoring for minio with correct labels and there are no prometheusRule ([af63e5c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/af63e5c18dbd6d7d1e1ebd79ad91c4f994fe7003))
+* **univention-management-stack:** Fix external registry for nats charts ([cbb33b9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cbb33b922d397467d01a9227f3eb18d789cdc39c))
+
 ## [0.5.75](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.74...v0.5.75) (2024-01-24)
 
 
