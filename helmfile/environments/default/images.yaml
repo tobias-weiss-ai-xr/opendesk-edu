@@ -714,6 +714,14 @@ images:
     registry: "docker.io"
     repository: "natsio/nats-box"
     tag: "0.14.1@sha256:a67913df95f1d5b265117e49e4c83228091d13d6783d80215ddcf84aba695ef4"
+  umsProvisioningNatsReloader:
+    # renovate:
+    # upstreamRegistry=docker.io
+    # upstreamRepository=nats
+    # dependencyType=external
+    registry: "docker.io"
+    repository: "natsio/nats-server-config-reloader"
+    tag: "0.14.1@sha256:77dd4c60001ffbf442c6b25592e73b4fca06ea9406c677607192788d80453783"
   umsSelfserviceInvitation:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
