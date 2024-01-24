@@ -21,13 +21,24 @@ nats:
       registry: {{ .Values.global.imageRegistry | default .Values.images.umsProvisioningNats.registry | quote }}
   container:
     image:
+      registry: {{ .Values.global.imageRegistry }}
       repository: {{ .Values.images.umsProvisioningNats.repository | quote }}
       tag: {{ .Values.images.umsProvisioningNats.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   natsBox:
     container:
       image:
+        registry: {{ .Values.global.imageRegistry }}
         repository: {{ .Values.images.umsProvisioningNatsBox.repository | quote }}
         tag: {{ .Values.images.umsProvisioningNatsBox.tag | quote }}
+        pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  reloader:
+    image:
+      repository: {{ .Values.images.umsProvisioningNatsReloader.repository | quote }}
+      tag: {{ .Values.images.umsProvisioningNatsReloader.tag | quote }}
+      registry: {{ .Values.global.imageRegistry }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
 
 provisioningApi:
   rootPath: "/univention/provisioning-api"
