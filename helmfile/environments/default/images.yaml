@@ -782,7 +782,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-gateway"
-    tag: "0.7.3@sha256:e32cfe40cb0022d4084d89e9ae0367e559302c50d92223bd4c8905698141a3ef"
+    tag: "0.9.0@sha256:e15b59b851b3cae2bdfde1a9de707bfbc64a124db98a8d9ac7965d7d3827519b"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '7', '3']
@@ -793,7 +793,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-server"
-    tag: "0.7.3@sha256:4de1e4164cd442cfd2e9fe0d8cc144e73872a53f493a64d735f5c635715e1437"
+    tag: "0.9.0@sha256:7ef0f6a3a3024120a4dae6f0bd44fc531c88ca0b5893465d0bdbd96b5a9c87ea"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '7', '3']
