@@ -1,3 +1,15 @@
+## [0.5.75](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.74...v0.5.75) (2024-01-24)
+
+
+### Bug Fixes
+
+* **ci:** Add Kyverno CI Lint ([e778a59](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e778a59cddecc7c73b827e03af5e47ddd5c3dcee))
+* **helmfile:** Cleanup and small conformity fixes ([db0a544](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/db0a5441550ae08450afc04ef274ff8d19e85138))
+* **helmfile:** Merge .yaml and .gotmpl files for Services, Provisioning, Cryptpad, Intercom-Service and Element ([a49daa6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a49daa6fa27dc7c51c3163b1155eec33b78949f5))
+* **helmfile:** Split image and helm registry ([89c149a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/89c149af954a6f0884ae905e55b52e8db9036b05))
+* **univention-management-stack:** UMC secure session cookie ([67f7c05](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/67f7c050387157808f010857395715335b42d767))
+* **univention-management-stack:** Update guardian to version 2 ([a99f338](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a99f3389dc90aa89ce2ba4bcfc266a2dfdf15ab9))
+
 ## [0.5.74](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/compare/v0.5.73...v0.5.74) (2024-01-12)
 
 
