@@ -209,8 +209,8 @@ env-start:
       kubectl create secret
       --namespace "${NAMESPACE}"
       docker-registry external-registry
-      --docker-server "external-registry.souvap-univention.de"
-      --docker-username sovereign-workplace
+      --docker-server "${EXTERNAL_REGISTRY}"
+      --docker-username "${EXTERNAL_REGISTRY_USERNAME}"
       --docker-password "${EXTERNAL_REGISTRY_PASSWORD}"
       --dry-run=client -o yaml | kubectl apply -f -
   stage: "env"
