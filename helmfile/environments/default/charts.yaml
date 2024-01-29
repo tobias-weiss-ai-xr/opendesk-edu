@@ -342,7 +342,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "1.7.0"
+    version: "1.7.1"
     verify: true
     # @supplier: "openDesk"
 
