@@ -267,7 +267,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/external/charts/bitnami-charts"
     name: "nginx"
-    version: "15.5.1"
+    version: "15.9.3"
     verify: true
     # @supplier: "openDesk"
 
