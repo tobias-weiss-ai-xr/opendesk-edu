@@ -59,7 +59,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
     name: "cryptpad"
-    version: "0.0.17"
+    version: "0.0.18"
     verify: true
     # @supplier: "XWiki"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
