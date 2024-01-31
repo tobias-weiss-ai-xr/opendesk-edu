@@ -5,6 +5,7 @@ images:
   clamd:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=clamav/clamav
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "clamav/clamav"
@@ -45,6 +46,7 @@ images:
   element:
     # renovate:
     # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
@@ -55,6 +57,7 @@ images:
   freshclam:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=clamav/clamav
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "clamav/clamav"
@@ -63,6 +66,7 @@ images:
   icap:
     # renovate:
     # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/clamav-icap
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/clamav-icap"
@@ -146,6 +150,7 @@ images:
   mariadb:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=library/mariadb
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "library/mariadb"
@@ -209,6 +214,7 @@ images:
   memcached:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=bitnami/memcached
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "bitnami/memcached"
@@ -217,6 +223,7 @@ images:
   milter:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=clamav/clamav
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "clamav/clamav"
@@ -225,6 +232,7 @@ images:
   minio:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=bitnami/minio
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "bitnami/minio"
@@ -232,7 +240,8 @@ images:
     # @supplier: "openDesk"
   nextcloudApache2:
     # renovate:
-    # registryUrl=registry.opencode.de
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
@@ -241,6 +250,7 @@ images:
   nextcloudExporter:
     # renovate:
     # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter"
@@ -248,7 +258,8 @@ images:
     # @supplier: "openDesk"
   nextcloudManagement:
     # renovate:
-    # registryUrl=registry.opencode.de
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
@@ -256,7 +267,8 @@ images:
     # @supplier: "openDesk"
   nextcloudPHP:
     # renovate:
-    # registryUrl=registry.opencode.de
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
@@ -265,6 +277,7 @@ images:
   opendeskKeycloakBootstrap:
     # renovate:
     # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
@@ -284,6 +297,7 @@ images:
   openprojectBootstrap:
     # renovate:
     # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap"
@@ -301,6 +315,7 @@ images:
   openxchangeBootstrap:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=alpine/k8s
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "alpine/k8s"
@@ -441,6 +456,7 @@ images:
   postfix:
     # renovate:
     # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/platform-development/images/postfix
     # dependencyType=platform
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/postfix"
@@ -449,6 +465,7 @@ images:
   postgresql:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=library/postgres
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "library/postgres"
@@ -488,6 +505,7 @@ images:
   synapseCreateUser:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=alpine/k8s
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "alpine/k8s"
@@ -507,6 +525,7 @@ images:
   synapseWeb:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=rapidfort/haproxy-official
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "rapidfort/haproxy-official"
@@ -657,7 +676,8 @@ images:
     # @mirrorFrom: ['1', '0', '0']
   umsPortalFrontend:
     # renovate:
-    # registryUrl=https://registry.souvap-univention.de
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend"
@@ -811,6 +831,7 @@ images:
   wellKnown:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=library/nginx
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "library/nginx"
