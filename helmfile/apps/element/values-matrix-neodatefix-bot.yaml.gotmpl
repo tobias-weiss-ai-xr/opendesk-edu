@@ -42,6 +42,8 @@ extraEnvVars:
       secretKeyRef:
         name: "matrix-neodatefix-bot-account"
         key: "access_token"
+  - name: "ENABLE_CRYPTO"
+    value: "false"
 
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
