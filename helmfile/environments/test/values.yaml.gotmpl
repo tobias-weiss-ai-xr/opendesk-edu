@@ -5,4 +5,26 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   imageRegistry: "external-registry.souvap-univention.de/sovereign-workplace"
+persistence:
+  storageClassNames:
+    RWX: "kyverno-test"
+    RWO: "kyverno-test"
+  size:
+    clamav: "42Gi"
+    dovecot: "42Gi"
+    mariadb: "42Gi"
+    matrixNeoDateFixBot: "42Gi"
+    minio: "42Gi"
+    postfix: "42Gi"
+    postgresql: "42Gi"
+    prosody: "42Gi"
+    redis: "42Gi"
+    synapse: "42Gi"
+    univentionManagementStack:
+      ldapServerData: "42Gi"
+      ldapServerShared: "42Gi"
+      portalListener: "42Gi"
+      selfserviceListener: "42Gi"
+      storeDav: "42Gi"
+    xwiki: "42Gi"
 ...

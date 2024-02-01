@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: "kyverno.io/v1"
+kind: "ClusterPolicy"
+metadata:
+  name: "require-storage"
+spec:
+  background: true
+  rules:
+    - match:
+        resources:
+          kinds:
+            - "StatefulSet"
+      name: "require-storageclass-pod"
+      validate:
+        message: "VolumeClaims inside pods need to have storageClass set when templated."
+        pattern:
+          spec:
+            (volumeClaimTemplates):
+              - spec:
+                  storageClassName: "kyverno-test"
+    - match:
+        resources:
+          kinds:
+            - "PersistentVolumeClaim"
+      name: "require-storageclass-pvc"
+      validate:
+        message: "Persistent Volume Claim need to have storageClassName set when templated."
+        pattern:
+          spec:
+            storageClassName: "kyverno-test"
+
+    - match:
+        resources:
+          kinds:
+            - "StatefulSet"
+      name: "require-storage-size-pod"
+      validate:
+        message: "VolumeClaims inside pods need to have storageClass set when templated."
+        pattern:
+          spec:
+            (volumeClaimTemplates):
+              - spec:
+                  resources:
+                    requests:
+                      storage: "42Gi"
+    - match:
+        resources:
+          kinds:
+            - "PersistentVolumeClaim"
+      name: "require-storage-size-pvc"
+      validate:
+        message: "Persistent Volume Claim need to have storageClassName set when templated."
+        pattern:
+          spec:
+            resources:
+              requests:
+                storage: "42Gi"
+  validationFailureAction: "audit"
+...

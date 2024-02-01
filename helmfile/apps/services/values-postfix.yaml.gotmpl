@@ -27,7 +27,7 @@ image:
 
 persistence:
   size: {{ .Values.persistence.size.postfix | quote }}
-  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote}}
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 podSecurityContext:
   enabled: true

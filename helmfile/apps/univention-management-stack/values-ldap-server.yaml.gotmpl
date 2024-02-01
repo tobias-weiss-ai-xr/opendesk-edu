@@ -45,11 +45,11 @@ ldapServer:
   ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
 
 persistence:
-  data:
-    storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  sharedData:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
     size: {{ .Values.persistence.size.univentionManagementStack.ldapServerData | quote }}
-  shared:
-    storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  sharedRun:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
     size: {{ .Values.persistence.size.univentionManagementStack.ldapServerShared | quote }}
 
 securityContext:
