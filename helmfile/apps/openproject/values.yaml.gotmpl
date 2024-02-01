@@ -23,7 +23,7 @@ containerSecurityContext:
 environment:
 # For more details and more options see
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/
-  OPENPROJECT_LOG__LEVEL: {{ .Values.debug.logLevel | lower | quote }}
+  OPENPROJECT_LOG__LEVEL: {{ if .Values.debug.enabled }}"debug"{{ else }}"info"{{ end }}
   OPENPROJECT_LOGIN__REQUIRED: "true"
   OPENPROJECT_OAUTH__ALLOW__REMAPPING__OF__EXISTING__USERS: "true"
   OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER: "keycloak"

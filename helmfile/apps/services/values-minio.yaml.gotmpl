@@ -40,6 +40,7 @@ image:
   tag: "{{ .Values.images.minio.tag }}"
   pullPolicy: "{{ .Values.global.imagePullPolicy }}"
 
+{{- if .Values.debug.enabled }}
 ingress:
   enabled: {{ .Values.ingress.enabled }}
   ingressClassName: {{ .Values.ingress.ingressClassName }}
@@ -50,6 +51,7 @@ ingress:
       secretName: "{{ .Values.ingress.tls.secretName }}"
   annotations:
     nginx.org/websocket-services: "minio"
+{{- end }}
 
 livenessProbe:
   enabled: true

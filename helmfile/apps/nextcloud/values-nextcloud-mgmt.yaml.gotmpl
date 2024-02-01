@@ -14,6 +14,9 @@ global:
 additionalAnnotations:
   intents.otterize.com/service-name: "opendesk-nextcloud-php"
 
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+
 configuration:
   administrator:
     username: "nextcloud"
@@ -84,6 +87,9 @@ containerSecurityContext:
   readOnlyRootFilesystem: false
   runAsNonRoot: true
 
+debug:
+  loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"1"{{ end }}
+
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudManagement.registry | quote }}
   repository: "{{ .Values.images.nextcloudManagement.repository }}"
@@ -95,4 +101,5 @@ theme:
 
 resources:
   {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
+
 ...

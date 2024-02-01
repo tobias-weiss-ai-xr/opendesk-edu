@@ -195,7 +195,7 @@ config:
         authorizationServicesEnabled: false
         attributes:
           backchannel.logout.session.required: true
-          backchannel.logout.url: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/apps/user_oidc/backchannel-logout/ncoidc"
+          backchannel.logout.url: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/index.php/apps/user_oidc/backchannel-logout/opendesk-nextcloud"
           post.logout.redirect.uris: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
         protocolMappers:
           - name: "context"

@@ -16,7 +16,7 @@ portalServer:
   editable: "false"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
-  logLevel: {{ .Values.debug.logLevel | quote }}
+  logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
   ucsInternalUrl: {{ printf "%s%s%s" "http://portal-server:" .Values.secrets.univentionManagementStack.storeDavUsers.portalServer "@ums-store-dav/portal-data" | quote }}
   centralNavigation:
