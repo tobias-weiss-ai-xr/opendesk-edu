@@ -22,8 +22,9 @@ image:
       {{- end }}
 
 persistence:
-  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
-  size: {{ .Values.persistence.size.univentionManagementStack.storeDav | quote }}
+  data:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.univentionManagementStack.storeDav | quote }}
 
 resources:
   {{ .Values.resources.umsStoreDav | toYaml | nindent 2 }}
