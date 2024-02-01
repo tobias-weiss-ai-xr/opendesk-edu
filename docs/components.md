@@ -58,12 +58,14 @@ Some use cases require inter component integration.
 ```mermaid
 flowchart TD
   OXAppSuiteFrontend-->|SilentLogin, Filepicker, CentralNavigation|IntercomService
+  Element-->|CentralNavigation|IntercomService
   IntercomService-->|SilentLogin, TokenExchange|IdP
   IntercomService-->|Filepicker|Nextcloud
   IntercomService-->|CentralNavigation|Portal
   OXAppSuiteBackend-->|Filepicker|Nextcloud
   Nextcloud-->|CentralNavigation|Portal
   OpenProject-->|CentralNavigation|Portal
+  OpenProject-->|Filestore|Nextcloud
   XWiki-->|CentralNavigation|Portal
   Nextcloud-->|CentralContacts|OXAppSuiteBackend
   OXAppSuiteFrontend-->|Filepicker|OXAppSuiteBackend
@@ -124,7 +126,7 @@ flowchart TD
     A[OX AppSuite]-->L
     D[OX Dovecot]-->L
     P[Portal/Admin]-->L
-    X[XWiki]-->|in 2023|L
+    X[XWiki]-->L
     A-->K
     N-->K
     D-->K

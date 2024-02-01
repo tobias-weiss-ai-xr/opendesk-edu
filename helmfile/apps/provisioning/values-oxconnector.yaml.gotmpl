@@ -17,10 +17,10 @@ ingress:
 
 oxConnector:
   caCert: "ucctempldapstring"
-  debugLevel: "5"
+  debugLevel: {{ if .Values.debug.enabled }}"4"{{ else }}"1"{{ end }}
   domainName: {{ .Values.global.domain | quote }}
   ldapHost: {{ .Values.ldap.host | quote }}
-  logLevel: {{ .Values.debug.logLevel | quote }}
+  logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   ldapPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"

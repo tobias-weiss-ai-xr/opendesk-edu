@@ -44,7 +44,7 @@ selfserviceListener:
   machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   notifierServer: {{ .Values.ldap.notifierHost | quote }}
   umcAdminPassword: {{ .Values.secrets.univentionManagementStack.defaultAccounts.adminPassword | quote }}
-  debugLevel: "4"
+  debugLevel: {{ if .Values.debug.enabled }}"4"{{ else }}"1"{{ end }}
   tlsMode: "off"
   umcServerUrl: "http://ums-umc-server"
   umcAdminUser: "default.admin"

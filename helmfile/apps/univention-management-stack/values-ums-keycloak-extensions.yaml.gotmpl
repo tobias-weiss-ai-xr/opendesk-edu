@@ -59,6 +59,10 @@ proxy:
       nginx.org/proxy-buffer-size: "8k"
       nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
     paths:
+      {{- if .Values.debug.enabled }}
+      - pathType: "Prefix"
+        path: "/admin"
+      {{- end }}
       - pathType: "Prefix"
         path: "/realms"
       - pathType: "Prefix"

@@ -11,6 +11,9 @@ cleanup:
   # Keep additional resources, like certificates on deletion of this release.
   keepRessourceOnDelete: true
 debug:
-  # Currently used in: umsKeycloak
-  logLevel: "INFO"
+  # should activate debug output in all components and even allow e.g. successfully executed jobs
+  # to stay available. This is going to be implemented on a case by case basis when we actually
+  # need debugging in a component.
+  # Use: `{{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}`
+  enabled: false
 ...

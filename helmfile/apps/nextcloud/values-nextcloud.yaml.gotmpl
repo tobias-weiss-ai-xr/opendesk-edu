@@ -75,6 +75,10 @@ php:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+  cron:
+    successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"0"{{ end }}
+  debug:
+    loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"1"{{ end }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudPHP.registry | quote }}
     repository: "{{ .Values.images.nextcloudPHP.repository }}"

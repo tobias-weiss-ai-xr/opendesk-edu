@@ -35,7 +35,7 @@ portalListener:
   portalDefaultDn: {{ printf "%s,%s" "cn=domain,cn=portal,cn=portals,cn=univention" .Values.ldap.baseDn | quote }}
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   udmApiUsername: "cn=admin"
-  debugLevel: "4"
+  debugLevel: {{ if .Values.debug.enabled }}"4"{{ else }}"1"{{ end }}
   tlsMode: "off"
   udmApiUrl: "http://ums-udm-rest-api/udm/"
   udmApiUsername: "cn=admin"
