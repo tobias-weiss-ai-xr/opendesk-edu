@@ -677,7 +677,7 @@ images:
   umsPortalFrontend:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend
+    # upstreamRepository=souvap/tooling/images/univention/portal-frontend
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend"
