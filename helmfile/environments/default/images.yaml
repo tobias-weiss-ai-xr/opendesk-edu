@@ -13,15 +13,13 @@ images:
     # @supplier: "openDesk"
   collabora:
     # renovate:
-    # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/images/collabora
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/supplier/collabora/images
     # dependencyType=supplier
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/collabora/images-mirror/collabora"
-    tag: "23.05.6.4.1@sha256:98e2107ba9dc7d69b146d9319473fb42249c5291ef5b570c8bd6eff941564697"
+    repository: "bmi/opendesk/components/supplier/collabora/images"
+    tag: "23.05.8.4.1@sha256:3ce642e35371532eeb33a57c3abc545472f8c127ae7d1d6cd3ce756e3131f62a"
     # @supplier: "Collabora"
-    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)\.\d+\.\d+$'
-    # @mirrorFrom: ['23', '5', '6']
   cryptpad:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
