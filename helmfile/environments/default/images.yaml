@@ -11,6 +11,7 @@ images:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk"
+
   collabora:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -20,6 +21,7 @@ images:
     repository: "bmi/opendesk/components/supplier/collabora/images"
     tag: "23.05.8.4.1@sha256:3ce642e35371532eeb33a57c3abc545472f8c127ae7d1d6cd3ce756e3131f62a"
     # @supplier: "Collabora"
+
   cryptpad:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -30,6 +32,7 @@ images:
     tag: "opendesk-20231222@sha256:f4d20d5c38c87b11ed1a1b46ef6a3633d32c6758ebdff8556458f040318fa5e2"
     # @supplier: "XWiki"
     # @mirrorFilter: '^opendesk-(\d+)$'
+
   dovecot:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -41,6 +44,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['2', '3', '21']
+
   element:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -52,6 +56,7 @@ images:
     # @supplier: "Element"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '8', '0']
+
   freshclam:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -61,6 +66,7 @@ images:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk"
+
   icap:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -70,6 +76,7 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/clamav-icap"
     tag: "0.5.10@sha256:891f267a6b2a304616854ad2f013dc5d23f6f6c84d535c8b46e76d124fe39b6a"
     # @supplier: "openDesk"
+
   intercom:
     # renovate:
     # upstreamRegistry=quay.io
@@ -81,6 +88,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '6']
+
   jibri:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -92,6 +100,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^stable-(\d+)$'
     # @mirrorFrom: ['8922']
+
   jicofo:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -103,6 +112,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^stable-(\d+)$'
     # @mirrorFrom: ['8922']
+
   jitsi:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -114,6 +124,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^stable-(\d+)$'
     # @mirrorFrom: ['8922']
+
   jitsiKeycloakAdapter:
     # renovate:
     # upstreamRegistry=ghcr.io
@@ -125,6 +136,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^v(\d\d\d\d)(\d\d)(\d\d)$'
     # @mirrorFrom: ['2023', '12', '14']
+
   jitsiPatchJVB:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -134,6 +146,7 @@ images:
     repository: "bitnami/kubectl"
     tag: "1.26.8@sha256:c6902a1fdce0a24c9f93ac8d1f317039b206a4b307d8fc76cab4a92911345757"
     # @supplier: "Nordeck"
+
   jvb:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -145,6 +158,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^stable-(\d+)$'
     # @mirrorFrom: ['8922']
+
   mariadb:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -154,6 +168,7 @@ images:
     repository: "library/mariadb"
     tag: "10.5@sha256:aa1ccc18000c32d1f39ac0b055117b27bffd93e622ec961d682de40fe2a1a95f"
     # @supplier: "openDesk"
+
   matrixNeoBoardWidget:
     # renovate:
     # upstreamRegistry=ghcr.io
@@ -165,6 +180,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '4', '0']
+
   matrixNeoChoiceWidget:
     # renovate:
     # upstreamRegistry=ghcr.io
@@ -176,6 +192,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '4', '0']
+
   matrixNeoDateFixBot:
     # renovate:
     # upstreamRegistry=ghcr.io
@@ -187,6 +204,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['2', '7', '0']
+
   matrixNeoDateFixWidget:
     # renovate:
     # upstreamRegistry=ghcr.io
@@ -198,6 +216,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '6', '0']
+
   matrixUserVerificationService:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -209,6 +228,7 @@ images:
     # @supplier: "Element"
     # @mirrorFilter: '^v(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['3', '0', '0']
+
   memcached:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -218,6 +238,7 @@ images:
     repository: "bitnami/memcached"
     tag: "1.6.21-debian-11-r107@sha256:247ec29efd6030960047a623aef025021154662edf6b6d6e88c97936f164d99d"
     # @supplier: "openDesk"
+
   milter:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -227,6 +248,7 @@ images:
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
     # @supplier: "openDesk"
+
   minio:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -236,6 +258,7 @@ images:
     repository: "bitnami/minio"
     tag: "2023@sha256:bced4f2f9fc48b755ebb3e1b35e76195a978d4331bf2d0c6699dab412d3c0be7"
     # @supplier: "openDesk"
+
   nextcloudApache2:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -245,6 +268,7 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
     tag: "1.1.9@sha256:1a71926b6f804bbb78f4b1763b7b9450df2d7dc70e70ad75490764b11f39b00e"
     # @supplier: "openDesk"
+
   nextcloudExporter:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -254,6 +278,7 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter"
     tag: "1.0.1@sha256:63e63c7420e37d3989fa0ffdbcf18a07b2a603ab9b2a849c2e7e44342dd82af0"
     # @supplier: "openDesk"
+
   nextcloudManagement:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -263,6 +288,7 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
     tag: "1.1.1@sha256:e8f0a9ea1739029fa934231aa11fc2e3cb5e075222a271801b27768faa512460"
     # @supplier: "openDesk"
+
   nextcloudPHP:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -272,6 +298,7 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
     tag: "1.7.1@sha256:b8ab2fe563004c0ff0b2f69a6fc3507910594006c2a1e15a1d07d172aabc23a1"
     # @supplier: "openDesk"
+
   opendeskKeycloakBootstrap:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -281,6 +308,7 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
     tag: "1.0.4@sha256:28eebb647180aef95d816a7d788891fa780f552f699c38cedddecbcef7a0bd1d"
     # @supplier: "openDesk"
+
   openproject:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -292,6 +320,7 @@ images:
     # @supplier: "OpenProject"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['13', '1', '1']
+
   openprojectBootstrap:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -301,15 +330,17 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap"
     tag: "1.1.3@sha256:401afe66c418fd130088edbed5cc3b4464dc667eb609f194ea68fd30dcbd1e90"
     # @supplier: "openDesk"
+
   openprojectInitDb:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
-    # upstreamRepository=postgres
+    # upstreamRepository=library/postgres
     # dependencyType=external
     registry: "registry-1.docker.io"
     repository: "library/postgres"
     tag: "13@sha256:ced3ba927f4cf06e03eac7760f426a95367076fb31fe4e31b679f82d119a3519"
     # @supplier: "OpenProject"
+
   openxchangeBootstrap:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -319,6 +350,7 @@ images:
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
     # @supplier: "openDesk"
+
   openxchangeCoreGuidedtours:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -330,6 +362,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['8', '6', '0']
+
   openxchangeCoreMW:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -341,6 +374,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['8', '20', '51']
+
   openxchangeCoreUI:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -352,6 +386,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['8', '20', '1']
+
   openxchangeCoreUIMiddleware:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -363,6 +398,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['2', '0', '0']
+
   openxchangeCoreUserGuide:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -374,6 +410,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['8', '20', '799279']
+
   openxchangeDocumentConverter:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -385,6 +422,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['8', '20', '50']
+
   openxchangeGotenberg:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -396,6 +434,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['7', '9', '2']
+
   openxchangeGuardUI:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -407,6 +446,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['4', '2', '2']
+
   openxchangeImageConverter:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -418,6 +458,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['8', '20', '50']
+
   openxchangeNextcloudIntegrationUI:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -429,6 +470,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '2', '0']
+
   openxchangePublicSectorUI:
     # renovate:
     # upstreamRegistry=registry.open-xchange.com
@@ -440,6 +482,7 @@ images:
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['2', '2', '1']
+
   oxConnector:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -451,6 +494,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '4', '2']
+
   postfix:
     # renovate:
     # upstreamRegistry=registry.opencode.de
@@ -460,6 +504,7 @@ images:
     repository: "bmi/opendesk/components/platform-development/images/postfix"
     tag: "1.0.0@sha256:61e4661a7323101dfb51c85c5a48c345c75436f3f533176f049d2660d711a8a5"
     # @supplier: "openDesk"
+
   postgresql:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -469,6 +514,7 @@ images:
     repository: "library/postgres"
     tag: "15.4-alpine3.18@sha256:f36c528a2dc8747ea40b4cb8578da69fa75c5063fd6a71dcea3e3b2a6404ff7b"
     # @supplier: "openDesk"
+
   prosody:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -480,6 +526,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^stable-(\d+)$'
     # @mirrorFrom: ['8922']
+
   redis:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -489,6 +536,7 @@ images:
     repository: "bitnami/redis"
     tag: "7.2.3-debian-11-r2@sha256:9ac3bbf7740969d32689e360ddcfa5f672538c47f6f6cf296173c3078de0edf2"
     # @supplier: "openDesk"
+
   synapse:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -500,6 +548,7 @@ images:
     # @supplier: "Element"
     # @mirrorFilter: '^v(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '91', '2']
+
   synapseCreateUser:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -509,6 +558,7 @@ images:
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
     # @supplier: "Nordeck"
+
   synapseGuestModule:
     # renovate:
     # upstreamRegistry=ghcr.io
@@ -520,6 +570,7 @@ images:
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
+
   synapseWeb:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -529,6 +580,7 @@ images:
     repository: "rapidfort/haproxy-official"
     tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
     # @supplier: "Element"
+
   umsConfigHtpasswd:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -540,6 +592,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
+
   umsDataLoader:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -551,6 +604,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '41', '5']
+
   umsGuardianAuthorizationApi:
     # renovate:
     # upstreamRegistry=docker.software-univention.de
@@ -562,6 +616,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
+
   umsGuardianManagementApi:
     # renovate:
     # upstreamRegistry=docker.software-univention.de
@@ -573,6 +628,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
+
   umsGuardianManagementUi:
     # renovate:
     # upstreamRegistry=docker.software-univention.de
@@ -584,6 +640,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
+
   umsKeycloak:
     # renovate:
     # upstreamRegistry=docker.software-univention.de
@@ -595,6 +652,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+).+$'
     # @mirrorFrom: ['22', '0', '3']
+
   umsKeycloakBootstrap:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -606,6 +664,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '5']
+
   umsKeycloakExtensionHandler:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -617,6 +676,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '0', '3']
+
   umsKeycloakExtensionProxy:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -628,6 +688,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '0', '3']
+
   umsLdapNotifier:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -639,6 +700,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '8', '2']
+
   umsLdapServer:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -650,6 +712,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '8', '2']
+
   umsNotificationsApi:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -661,6 +724,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
+
   umsOpenPolicyAgent:
     # renovate:
     # upstreamRegistry=docker.software-univention.de
@@ -672,6 +736,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '0', '0']
+
   umsPortalFrontend:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -683,6 +748,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
+
   umsPortalListener:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -694,6 +760,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
+
   umsPortalServer:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -705,6 +772,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
+
   umsProvisioningDispatcher:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -716,6 +784,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '5']
+
   umsProvisioningEventsAndConsumerApi:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -727,30 +796,37 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '5']
+
   umsProvisioningNats:
     # renovate:
-    # upstreamRegistry=docker.io
-    # upstreamRepository=nats
+    # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=library/nats
     # dependencyType=external
-    registry: "docker.io"
-    repository: "nats"
+    registry: "registry-1.docker.io"
+    repository: "library/nats"
     tag: "2.10.5-alpine@sha256:85319e5e541b6f273dbffc722e001601f391028e004c90a4fadab53475789e79"
+    # @supplier: "Univention"
+
   umsProvisioningNatsBox:
     # renovate:
-    # upstreamRegistry=docker.io
-    # upstreamRepository=nats
+    # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=natsio/nats-box
     # dependencyType=external
-    registry: "docker.io"
+    registry: "registry-1.docker.io"
     repository: "natsio/nats-box"
     tag: "0.14.1@sha256:a67913df95f1d5b265117e49e4c83228091d13d6783d80215ddcf84aba695ef4"
+    # @supplier: "Univention"
+
   umsProvisioningNatsReloader:
     # renovate:
-    # upstreamRegistry=docker.io
-    # upstreamRepository=nats
+    # upstreamRegistry=registry-1.docker.io
+    # upstreamRepository=natsio/nats-server-config-reloader
     # dependencyType=external
-    registry: "docker.io"
+    registry: "registry-1.docker.io"
     repository: "natsio/nats-server-config-reloader"
     tag: "0.14.1@sha256:77dd4c60001ffbf442c6b25592e73b4fca06ea9406c677607192788d80453783"
+    # @supplier: "Univention"
+
   umsProvisioningUdmListener:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -762,6 +838,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '5']
+
   umsSelfserviceInvitation:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -773,6 +850,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '3', '2']
+
   umsSelfserviceListener:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -784,6 +862,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '3', '2']
+
   umsStackGateway:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -793,6 +872,7 @@ images:
     repository: "bitnami/nginx"
     tag: "1.25.3@sha256:40ce0d6b8f5fc174a4df8c59c8893164c540192ee862cb7253650a30d9dc3b73"
     # @supplier: "Univention"
+
   umsStoreDav:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -804,6 +884,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
+
   umsUdmRestApi:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -815,6 +896,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '5', '2']
+
   umsUmcGateway:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -826,6 +908,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '7', '3']
+
   umsUmcServer:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -837,6 +920,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '7', '3']
+
   umsWaitForDependency:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
@@ -848,6 +932,7 @@ images:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
+
   wellKnown:
     # renovate:
     # upstreamRegistry=registry-1.docker.io
@@ -857,6 +942,7 @@ images:
     repository: "library/nginx"
     tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"
     # @supplier: "Element"
+
   xwiki:
     # renovate:
     # upstreamRegistry=git.xwikisas.com:5050
