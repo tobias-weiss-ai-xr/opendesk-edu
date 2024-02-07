@@ -35,15 +35,13 @@ images:
 
   dovecot:
     # renovate:
-    # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/images/dovecot-public-sector
+    # upstreamRegistry=registry.opencode.de
+    # upstreamRepository=bmi/opendesk/components/supplier/open-xchange/images/dovecot-public-sector
     # dependencyType=supplier
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/dovecot-public-sector"
+    repository: "bmi/opendesk/components/supplier/open-xchange/images/dovecot-public-sector"
     tag: "2.3.21@sha256:c76965a84d1ca527f523404eb027119f6736b199c094e4671037cb345ecad3dc"
     # @supplier: "Open-Xchange"
-    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['2', '3', '21']
 
   element:
     # renovate:
