@@ -343,7 +343,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "1.7.1"
+    version: "1.7.3"
     verify: true
     # @supplier: "openDesk"
 
@@ -581,7 +581,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "portal-frontend"
-    version: "0.9.2"
+    version: "0.14.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -595,7 +595,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "portal-listener"
-    version: "0.9.2"
+    version: "0.14.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -609,7 +609,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "portal-server"
-    version: "0.9.2"
+    version: "0.14.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -670,20 +670,6 @@ charts:
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '41', '8']
-
-  umsStoreDav:
-    # renovate:
-    # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/charts/univention/store-dav
-    # dependencyType=supplier
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "store-dav"
-    version: "0.9.3"
-    verify: true
-    # @supplier: "Univention"
-    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '3']
 
   umsUdmRestApi:
     # renovate:

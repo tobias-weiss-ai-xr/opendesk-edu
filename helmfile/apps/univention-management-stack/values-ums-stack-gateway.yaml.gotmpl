@@ -173,22 +173,22 @@ serverBlock: |
     }
 
 
-    ## store-dav
+    ## object storage (minio)
     location /univention/portal/icons/entries/ {
-      rewrite ^/univention/portal(/icons/entries/.*)$ /portal-assets$1 break;
-      proxy_pass http://ums-store-dav:80;
+      rewrite ^/univention/portal(/icons/entries/.*)$ /ums/portal-assets$1 break;
+      proxy_pass http://minio:9000;
     }
     location /univention/portal/icons/logos/ {
-      rewrite ^/univention/portal(/icons/logos/.*)$ /portal-assets$1 break;
-      proxy_pass http://ums-store-dav:80;
+      rewrite ^/univention/portal(/icons/logos/.*)$ /ums/portal-assets$1 break;
+      proxy_pass http://minio:9000;
     }
     location /univention/selfservice/icons/entries/ {
-      rewrite ^/univention/selfservice(/icons/entries/.*)$ /portal-assets$1 break;
-      proxy_pass http://ums-store-dav:80;
+      rewrite ^/univention/selfservice(/icons/entries/.*)$ /ums/portal-assets$1 break;
+      proxy_pass http://minio:9000;
     }
     location /univention/selfservice/icons/logos/ {
-      rewrite ^/univention/selfservice(/icons/logos/.*)$ /portal-assets$1 break;
-      proxy_pass http://ums-store-dav:80;
+      rewrite ^/univention/selfservice(/icons/logos/.*)$ /ums/portal-assets$1 break;
+      proxy_pass http://minio:9000;
     }
 
 

@@ -85,6 +85,8 @@ provisioning:
   enabled: true
   cleanupAfterFinished:
     enabled: true
+  extraCommands:
+    - "mc anonymous set download provisioning/ums/portal-assets"
   buckets:
     - name: "openproject"
       versioning: true
@@ -92,8 +94,8 @@ provisioning:
     - name: "openxchange"
       versioning: true
       withLock: false
-    - name: "ums"
-      versioning: true
+    - name: {{ .Values.objectstores.univentionManagementStack.bucket | quote }} 
+      versioning: false
       withLock: false
     - name: "nextcloud"
       versioning: true
@@ -160,7 +162,7 @@ provisioning:
       policies:
         - "openxchange-bucket-policy"
       setPolicies: true
-    - username: "ums_user"
+    - username: {{ .Values.objectstores.univentionManagementStack.username | quote }}
       password: {{ .Values.secrets.minio.umsUser | quote }}
       disabled: false
       policies:

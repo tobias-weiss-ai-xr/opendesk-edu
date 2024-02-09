@@ -23,8 +23,8 @@ persistence:
 
 portalListener:
   adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
-  assetsRoot: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-assets/" | quote }}
-  ucsInternalUrl: {{ printf "%s%s%s" "http://portal-listener:" .Values.secrets.univentionManagementStack.storeDavUsers.portalListener "@ums-store-dav/portal-data" | quote }}
+  assetsRootPath: "portal-assets"
+  ucsInternalPath: "portal-data"
 
   ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
   ldapHost: {{ .Values.ldap.host | quote }}
@@ -41,6 +41,10 @@ portalListener:
   udmApiUsername: "cn=admin"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
+  objectStorageEndpoint: "http://minio:9000"
+  objectStorageBucket: "ums"
+  objectStorageAccessKeyId: "ums_user"
+  objectStorageSecretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
 
 resources:
   {{ .Values.resources.umsPortalListener | toYaml | nindent 2 }}

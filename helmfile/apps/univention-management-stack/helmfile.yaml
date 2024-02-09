@@ -34,13 +34,6 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.umsOpenPolicyAgent.registry }}/{{ .Values.charts.umsOpenPolicyAgent.repository }}"
-  - name: "ums-store-dav-repo"
-    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
-    verify: {{ .Values.charts.umsStoreDav.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.umsStoreDav.registry }}/{{ .Values.charts.umsStoreDav.repository }}"
   - name: "ums-ldap-server-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.umsLdapServer.verify }}
@@ -216,15 +209,6 @@ releases:
     version: "{{ .Values.charts.nginx.version }}"
     values:
       - "values-ums-stack-gateway.yaml.gotmpl"
-    installed: {{ .Values.univentionManagementStack.enabled }}
-    timeout: 900
-
-  - name: "ums-store-dav"
-    chart: "ums-store-dav-repo/{{ .Values.charts.umsStoreDav.name }}"
-    version: "{{ .Values.charts.umsStoreDav.version }}"
-    values:
-      - "values-common.yaml.gotmpl"
-      - "values-store-dav.yaml.gotmpl"
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
