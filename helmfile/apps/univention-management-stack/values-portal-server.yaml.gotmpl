@@ -18,7 +18,11 @@ portalServer:
   umcSessionUrl: "http://ums-umc-server/get/session-info"
   logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
-  ucsInternalUrl: {{ printf "%s%s%s" "http://portal-server:" .Values.secrets.univentionManagementStack.storeDavUsers.portalServer "@ums-store-dav/portal-data" | quote }}
+  ucsInternalPath: "portal-data"
+  objectStorageEndpoint: "http://minio:9000"
+  objectStorageBucket: "ums"
+  objectStorageAccessKeyId: "ums_user"
+  objectStorageSecretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
   centralNavigation:
     enabled: true
     authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
