@@ -4,8 +4,8 @@
 include:
   - local: "/.gitlab/common/common.yml"
 
-.lint-common:
+.generate-common:
   extends: ".common"
-  stage: "lint"
-
+  stage: ".post"
+  tags: []
 ...

@@ -40,6 +40,7 @@ handler:
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
+    privileged: false
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
@@ -82,6 +83,7 @@ proxy:
         - "ALL"
     seccompProfile:
       type: "RuntimeDefault"
+    privileged: false
     readOnlyRootFilesystem: true
     runAsUser: 1000
     runAsGroup: 1000

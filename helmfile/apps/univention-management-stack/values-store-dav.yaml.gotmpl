@@ -49,6 +49,10 @@ securityContext:
   privileged: false
   seccompProfile:
     type: "RuntimeDefault"
+  readOnlyRootFilesystem: false
+  runAsUser: 0
+  runAsGroup: 0
+  runAsNonRoot: false
 
 storeDav:
   auth:

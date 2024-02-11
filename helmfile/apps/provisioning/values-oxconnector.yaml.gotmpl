@@ -79,6 +79,10 @@ securityContext:
   privileged: false
   seccompProfile:
     type: "RuntimeDefault"
+  runAsUser: 0
+  runAsGroup: 0
+  runAsNonRoot: false
+  readOnlyRootFilesystem: false
 
 serviceAccount:
   create: true

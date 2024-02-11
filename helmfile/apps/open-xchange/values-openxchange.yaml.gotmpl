@@ -32,10 +32,12 @@ nextcloud-integration-ui:
     capabilities:
       drop:
         - "ALL"
-    readOnlyRootFilesystem: true
+    privileged: false
+    readOnlyRootFilesystem: false
     runAsGroup: 1000
     runAsNonRoot: true
     runAsUser: 1000
+    privileged: false
     seccompProfile:
       type: "RuntimeDefault"
 
@@ -56,10 +58,12 @@ public-sector-ui:
     capabilities:
       drop:
         - "ALL"
+    privileged: false
     readOnlyRootFilesystem: true
     runAsGroup: 1000
     runAsNonRoot: true
     runAsUser: 1000
+    privileged: false
     seccompProfile:
       type: "RuntimeDefault"
 
@@ -121,6 +125,8 @@ appsuite:
         readOnlyRootFilesystem: true
         runAsNonRoot: true
         runAsUser: 1001
+        runAsGroup: 1001
+        privileged: false
         seccompProfile:
           type: "RuntimeDefault"
     hooks:
@@ -344,6 +350,7 @@ appsuite:
       runAsGroup: 1000
       runAsNonRoot: true
       runAsUser: 1000
+      privileged: false
       seccompProfile:
         type: "RuntimeDefault"
 
@@ -384,6 +391,7 @@ appsuite:
       runAsGroup: 1000
       runAsNonRoot: true
       runAsUser: 1000
+      privileged: false
       seccompProfile:
         type: "RuntimeDefault"
 
@@ -400,18 +408,17 @@ appsuite:
       registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeDocumentConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
-    podSecurityContext:
+    resources:
+      {{- .Values.resources.openxchangeCoreDocumentConverter | toYaml | nindent 6 }}
+    securityContext:
       runAsGroup: 1000
       runAsNonRoot: true
       runAsUser: 987
       seccompProfile:
         type: "RuntimeDefault"
-    resources:
-      {{- .Values.resources.openxchangeCoreDocumentConverter | toYaml | nindent 6 }}
-    securityContext:
-      # missing:
-      # readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
+      privileged: false
       capabilities:
         drop:
           - "ALL"
@@ -455,6 +462,7 @@ appsuite:
       runAsGroup: 1000
       runAsNonRoot: true
       runAsUser: 1000
+      privileged: false
       seccompProfile:
         type: "RuntimeDefault"
 
@@ -470,18 +478,17 @@ appsuite:
           endpoint: "."
           accessKey: "."
           secretKey: "."
-    podSecurityContext:
+    resources:
+      {{- .Values.resources.openxchangeCoreImageConverter | toYaml | nindent 6 }}
+    securityContext:
       runAsGroup: 1000
       runAsNonRoot: true
       runAsUser: 987
       seccompProfile:
         type: "RuntimeDefault"
-    resources:
-      {{- .Values.resources.openxchangeCoreImageConverter | toYaml | nindent 6 }}
-    securityContext:
-      # missing:
-      # readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
       allowPrivilegeEscalation: false
+      privileged: false
       capabilities:
         drop:
           - "ALL"
@@ -509,6 +516,7 @@ appsuite:
       runAsGroup: 1000
       runAsNonRoot: true
       runAsUser: 1000
+      privileged: false
       seccompProfile:
         type: "RuntimeDefault"
 
@@ -537,6 +545,7 @@ appsuite:
       runAsGroup: 1000
       runAsNonRoot: true
       runAsUser: 1000
+      privileged: false
       seccompProfile:
         type: "RuntimeDefault"
 ...
