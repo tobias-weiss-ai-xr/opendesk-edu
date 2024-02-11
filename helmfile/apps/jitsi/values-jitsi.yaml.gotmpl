@@ -14,6 +14,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   enabled: true
   readOnlyRootFilesystem: true
+  privileged: false
   capabilities:
     drop:
       - "ALL"
@@ -63,6 +64,14 @@ jitsi:
     resources:
       {{ .Values.resources.jitsi | toYaml | nindent 6 }}
     securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      enabled: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      runAsGroup: 0
+      runAsNonRoot: false
+      runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
   prosody:
@@ -102,6 +111,14 @@ jitsi:
       size: {{ .Values.persistence.size.prosody | quote }}
       storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
     securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      enabled: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      runAsGroup: 0
+      runAsNonRoot: false
+      runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
   jicofo:
@@ -115,6 +132,14 @@ jitsi:
     resources:
       {{ .Values.resources.jicofo | toYaml | nindent 6 }}
     securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      enabled: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      runAsGroup: 0
+      runAsNonRoot: false
+      runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
   jvb:
@@ -129,6 +154,14 @@ jitsi:
     service:
       type: {{ .Values.cluster.service.type | quote }}
     securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      enabled: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      runAsGroup: 0
+      runAsNonRoot: false
+      runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
   jibri:
@@ -143,8 +176,9 @@ jitsi:
     resources:
       {{ .Values.resources.jibri | toYaml | nindent 6 }}
     securityContext:
-      seccompProfile:
-        type: "RuntimeDefault"
+      # Chart does not allow to template more
+      capabilities:
+        add: ["SYS_ADMIN"]
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
@@ -156,8 +190,15 @@ patchJVB:
     loadbalancerStatusField: {{ .Values.cluster.networking.loadBalancerStatusField | quote }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
     enabled: true
+    privileged: false
     readOnlyRootFilesystem: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
   image:

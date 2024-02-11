@@ -7,10 +7,13 @@ containerSecurityContext:
     drop:
       - "ALL"
   enabled: true
+  privileged: false
   runAsUser: 100
   runAsGroup: 101
   seccompProfile:
     type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
 
 global:
   imagePullSecrets:

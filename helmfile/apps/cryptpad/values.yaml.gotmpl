@@ -63,9 +63,10 @@ securityContext:
   capabilities:
     drop:
       - "ALL"
+  privileged: false
   seccompProfile:
     type: "RuntimeDefault"
-  # readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
   runAsNonRoot: true
   runAsUser: 4001
   runAsGroup: 4001

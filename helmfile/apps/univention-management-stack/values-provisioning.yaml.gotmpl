@@ -24,6 +24,10 @@ dispatcher:
     privileged: false
     seccompProfile:
       type: "RuntimeDefault"
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
 
 events-and-consumer-api:
   image:
@@ -54,6 +58,10 @@ events-and-consumer-api:
     privileged: false
     seccompProfile:
       type: "RuntimeDefault"
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
 
 udm-listener:
   image:
@@ -92,6 +100,10 @@ udm-listener:
     privileged: false
     seccompProfile:
       type: "RuntimeDefault"
+    runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+    readOnlyRootFilesystem: false
 
 nats:
   global:

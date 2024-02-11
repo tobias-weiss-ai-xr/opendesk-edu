@@ -8,11 +8,10 @@ containerSecurityContext:
       - "ALL"
   enabled: true
   privileged: false
-  # TODO: the service can't run with read only filesystem or as non-root
-  # readOnlyRootFilesystem: true
-  # runAsGroup: 101
-  # runAsNonRoot: true
-  # runAsUser: 101
+  readOnlyRootFilesystem: false
+  runAsGroup: 0
+  runAsNonRoot: false
+  runAsUser: 0
   seccompProfile:
     type: "RuntimeDefault"
 

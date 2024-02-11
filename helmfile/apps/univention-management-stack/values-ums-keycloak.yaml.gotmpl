@@ -39,6 +39,7 @@ containerSecurityContext:
       - "ALL"
   seccompProfile:
     type: "RuntimeDefault"
+  privileged: false
   readOnlyRootFilesystem: false
   runAsUser: 1000
   runAsGroup: 1000

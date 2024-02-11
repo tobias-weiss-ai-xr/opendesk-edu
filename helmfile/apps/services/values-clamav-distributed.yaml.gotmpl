@@ -8,6 +8,7 @@ clamd:
       drop:
         - "ALL"
     enabled: true
+    privileged: false
     runAsUser: 100
     runAsGroup: 101
     seccompProfile:
@@ -31,6 +32,14 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   enabled: true
   readOnlyRootFilesystem: true
+  runAsUser: 0
+  runAsGroup: 0
+  seccompProfile:
+    type: "RuntimeDefault"
+  runAsNonRoot: false
+  capabilities:
+    drop: []
+  privileged: false
 
 freshclam:
   containerSecurityContext:
@@ -39,6 +48,7 @@ freshclam:
       drop:
         - "ALL"
     enabled: true
+    privileged: false
     runAsUser: 100
     runAsGroup: 101
     seccompProfile:
@@ -71,6 +81,7 @@ icap:
     enabled: true
     runAsUser: 100
     runAsGroup: 101
+    privileged: false
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
@@ -97,6 +108,7 @@ milter:
     enabled: true
     runAsUser: 100
     runAsGroup: 101
+    privileged: false
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
