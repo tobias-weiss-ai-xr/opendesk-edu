@@ -8,6 +8,8 @@ repositories:
   # Collabora Online
   # Source: https://github.com/CollaboraOnline/online
   - name: "collabora-online-repo"
+    keyring: "../../files/gpg-pubkeys/collaboraoffice-com.gpg"
+    verify: {{ .Values.charts.collabora.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
