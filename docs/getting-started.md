@@ -356,17 +356,12 @@ by your specified subdomain.
 # Replace with your namespace
 NAMESPACE=your-namespace
 
-# Get credentials from ConfigMap
-kubectl -n ${NAMESPACE} get cm ums-stack-data-swp-data -o jsonpath='{.data.dev-test-users\.yaml}' \
-  | yq '.properties.username,.properties.password'
-# default.user
-# 40615..............................e9e2f
-# ---
-# default.admin
-# bdbbb..............................04db6
+# Get ConfigMap with credentials
+kubectl -n ${NAMESPACE} get cm ums-stack-data-swp-data -o jsonpath='{.data.dev-test-users\.yaml}'`
 ```
 
-Now you can log in with obtained credentials:
+Renders you a two part ConfigMap where the `username` and `password` attributes in the `properties`
+section provide you with the desired information to login with the two default user roles:
 
 | Username        | Password                                   | Description      |
 |-----------------|--------------------------------------------|------------------|
