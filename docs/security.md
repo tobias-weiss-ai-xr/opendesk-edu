@@ -15,13 +15,14 @@ This document should cover the current status of security measurements.
 
 # Helm Chart Trust Chain
 
-Helm charts are signed and validated against GPG keys which could be found in `helmfile/files/gpg-pubkeys`.
+Helm charts are signed and validated against GPG keys which can be found in `helmfile/files/gpg-pubkeys`.
 
-All charts except these are verifiable:
+For more details on Chart validation please visit: https://helm.sh/docs/topics/provenance/
+
+All charts except the ones mentioned below are verifiable:
 
 | Repository        | Verifiable |
 |-------------------|:----------:|
-| collabora-repo    |     no     |
 | open-xchange-repo |     no     |
 
 # Kubernetes Security Enforcements
