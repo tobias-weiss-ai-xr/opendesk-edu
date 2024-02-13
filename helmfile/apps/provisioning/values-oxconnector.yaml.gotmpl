@@ -83,6 +83,7 @@ securityContext:
   runAsGroup: 0
   runAsNonRoot: false
   readOnlyRootFilesystem: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.oxConnector }}
 
 serviceAccount:
   create: true

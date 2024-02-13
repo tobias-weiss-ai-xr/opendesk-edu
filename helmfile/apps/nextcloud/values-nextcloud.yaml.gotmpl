@@ -25,6 +25,7 @@ exporter:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.nextcloudExporter }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudExporter.registry | quote }}
     repository: "{{ .Values.images.nextcloudExporter.repository }}"
@@ -77,6 +78,7 @@ php:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.nextcloudPHP }}
   cron:
     successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"0"{{ end }}
   debug:
@@ -116,6 +118,7 @@ apache2:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.nextcloudApache2 }}
   ingress:
     enabled: {{ .Values.ingress.enabled }}
     ingressClassName: {{ .Values.ingress.ingressClassName | quote }}

@@ -66,6 +66,7 @@ containerSecurityContext:
   runAsUser: 1000
   seccompProfile:
     type: "RuntimeDefault"
+  seLinuxOptions: {{ .Values.seLinuxOptions.umsKeycloakBootstrap }}
 
 podAnnotations:
   intents.otterize.com/service-name: "ums-keycloak-bootstrap"

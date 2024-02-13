@@ -20,6 +20,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.openproject }}
 
 environment:
 # For more details and more options see

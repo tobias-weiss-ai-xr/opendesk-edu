@@ -14,6 +14,7 @@ containerSecurityContext:
   seccompProfile:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.memcached }}
 
 global:
   imagePullSecrets:

@@ -44,6 +44,7 @@ containerSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000
   runAsNonRoot: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.umsKeycloak }}
 
 podSecurityContext:
   fsGroup: 1000

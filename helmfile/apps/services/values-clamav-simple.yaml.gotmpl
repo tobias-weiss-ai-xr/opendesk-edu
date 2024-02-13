@@ -14,6 +14,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.clamavSimple }}
 
 global:
   imagePullSecrets:

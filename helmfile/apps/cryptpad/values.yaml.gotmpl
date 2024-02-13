@@ -70,6 +70,7 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 4001
   runAsGroup: 4001
+  seLinuxOptions: {{ .Values.seLinuxOptions.cryptpad }}
 
 serviceAccount:
   create: true

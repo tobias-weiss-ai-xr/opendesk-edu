@@ -38,6 +38,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.openprojectBootstrap }}
 
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.openprojectBootstrap.registry | quote }}

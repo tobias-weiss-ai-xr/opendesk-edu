@@ -1,0 +1,95 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+#
+# Disclaimer:
+# We assume that you are very aware of what you are doing when working wih SELinux settings and that you can easily
+# break the affected components with these settings.
+---
+seLinuxOptions:
+  clamavSimple: ~
+  clamd: ~
+  collabora: ~
+  cryptpad: ~
+  dovecot: ~
+  element: ~
+  freshclam: ~
+  icap: ~
+  intercom: ~
+  # The Jibri Helm chart does not support setting the securityContext externally.
+  #jibri: ~
+  jicofo: ~
+  jitsi: ~
+  jitsiKeycloakAdapter: ~
+  jitsiPatchJVB: ~
+  jvb: ~
+  mariadb: ~
+  matrixNeoBoardWidget: ~
+  matrixNeoChoiceWidget: ~
+  matrixNeoDateFixBot: ~
+  matrixNeoDateFixWidget: ~
+  matrixUserVerificationService: ~
+  memcached: ~
+  milter: ~
+  minio: ~
+  nextcloudApache2: ~
+  nextcloudExporter: ~
+  nextcloudManagement: ~
+  nextcloudPHP: ~
+  opendeskKeycloakBootstrap: ~
+  openproject: ~
+  openprojectBootstrap: ~
+  openprojectInitDb: ~
+  openxchangeBootstrap: ~
+  openxchangeCoreGuidedtours: ~
+  openxchangeCoreMW: ~
+  openxchangeCoreUI: ~
+  openxchangeCoreUIMiddleware: ~
+  openxchangeCoreUserGuide: ~
+  openxchangeDocumentConverter: ~
+  openxchangeGotenberg: ~
+  openxchangeGuardUI: ~
+  openxchangeImageConverter: ~
+  openxchangeNextcloudIntegrationUI: ~
+  openxchangePublicSectorUI: ~
+  oxConnector: ~
+  postfix: ~
+  postgresql: ~
+  prosody: ~
+  redis: ~
+  synapse: ~
+  synapseCreateUser: ~
+  synapseGuestModule: ~
+  synapseWeb: ~
+  umsConfigHtpasswd: ~
+  umsDataLoader: ~
+  umsGuardianAuthorizationApi: ~
+  umsGuardianManagementApi: ~
+  umsGuardianManagementUi: ~
+  umsKeycloak: ~
+  umsKeycloakBootstrap: ~
+  umsKeycloakExtensionHandler: ~
+  umsKeycloakExtensionProxy: ~
+  umsLdapNotifier: ~
+  umsLdapServer: ~
+  umsNotificationsApi: ~
+  umsOpenPolicyAgent: ~
+  umsPortalFrontend: ~
+  umsPortalListener: ~
+  umsPortalServer: ~
+  umsProvisioningDispatcher: ~
+  umsProvisioningEventsAndConsumerApi: ~
+  umsProvisioningNats: ~
+  umsProvisioningNatsBox: ~
+  umsProvisioningNatsReloader: ~
+  umsProvisioningUdmListener: ~
+  umsSelfserviceInvitation: ~
+  umsSelfserviceListener: ~
+  umsStackGateway: ~
+  umsStoreDav: ~
+  umsUdmRestApi: ~
+  umsUmcGateway: ~
+  umsUmcServer: ~
+  umsWaitForDependency: ~
+  wellKnown: ~
+  xwiki: ~
+...

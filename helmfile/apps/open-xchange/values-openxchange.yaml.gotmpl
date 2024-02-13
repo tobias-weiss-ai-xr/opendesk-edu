@@ -40,6 +40,7 @@ nextcloud-integration-ui:
     privileged: false
     seccompProfile:
       type: "RuntimeDefault"
+    seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeNextcloudIntegrationUI }}
 
 public-sector-ui:
   image:
@@ -66,6 +67,7 @@ public-sector-ui:
     privileged: false
     seccompProfile:
       type: "RuntimeDefault"
+    seLinuxOptions: {{ .Values.seLinuxOptions.openxchangePublicSectorUI }}
 
 appsuite:
   appsuite-toolkit:
@@ -129,6 +131,7 @@ appsuite:
         privileged: false
         seccompProfile:
           type: "RuntimeDefault"
+        seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeGotenberg }}
     hooks:
       beforeAppsuiteStart:
         create-guard-dir.sh: |
@@ -353,6 +356,7 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreUI }}
 
   core-ui-middleware:
     enabled: true
@@ -394,7 +398,7 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
-
+      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreUIMiddleware }}
   core-cacheservice:
     enabled: false
 
@@ -424,6 +428,7 @@ appsuite:
           - "ALL"
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeDocumentConverter }}
 
   core-documents-collaboration:
     enabled: false
@@ -465,6 +470,7 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreGuidedtours }}
 
   core-imageconverter:
     enabled: true
@@ -494,6 +500,7 @@ appsuite:
           - "ALL"
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeImageConverter }}
 
   guard-ui:
     enabled: true
@@ -519,7 +526,7 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
-
+      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeGuardUI }}
   core-spellcheck:
     enabled: false
 
@@ -548,4 +555,5 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreUserGuide }}
 ...

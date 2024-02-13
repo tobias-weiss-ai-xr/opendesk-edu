@@ -18,6 +18,7 @@ containerSecurityContext:
   runAsUser: 101
   seccompProfile:
     type: "RuntimeDefault"
+  seLinuxOptions: {{ .Values.seLinuxOptions.wellKnown }}
 
 global:
   domain: {{ .Values.global.domain | quote }}

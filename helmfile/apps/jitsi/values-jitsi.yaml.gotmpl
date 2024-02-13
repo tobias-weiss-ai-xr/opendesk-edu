@@ -23,6 +23,7 @@ containerSecurityContext:
   runAsUser: 1993
   runAsGroup: 1993
   runAsNonRoot: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.jitsiKeycloakAdapter }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
@@ -74,6 +75,7 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.jitsi }}
   prosody:
     image:
       repository: "{{ .Values.global.imageRegistry | default .Values.images.prosody.registry }}/{{ .Values.images.prosody.repository }}"
@@ -121,6 +123,7 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.prosody }}
   jicofo:
     replicaCount: {{ .Values.replicas.jicofo }}
     image:
@@ -142,6 +145,7 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.jicofo }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     image:
@@ -164,6 +168,7 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
+      seLinuxOptions: {{ .Values.seLinuxOptions.jvb }}
   jibri:
     replicaCount: {{ .Values.replicas.jibri }}
     image:
@@ -201,6 +206,7 @@ patchJVB:
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
+    seLinuxOptions: {{ .Values.seLinuxOptions.jitsiPatchJVB }}
   image:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     registry: {{ .Values.global.imageRegistry | default .Values.images.jitsiPatchJVB.registry | quote }}

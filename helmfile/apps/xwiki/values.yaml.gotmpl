@@ -36,6 +36,7 @@ containerSecurityContext:
   seccompProfile:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.xwiki }}
 
 customConfigs:
   xwiki.cfg:

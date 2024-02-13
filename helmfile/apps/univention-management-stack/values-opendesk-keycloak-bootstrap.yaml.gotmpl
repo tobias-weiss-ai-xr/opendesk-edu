@@ -597,6 +597,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.opendeskKeycloakBootstrap }}
 
 podAnnotations:
   intents.otterize.com/service-name: "ums-keycloak-bootstrap"

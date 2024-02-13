@@ -50,5 +50,6 @@ securityContext:
   runAsUser: 0
   runAsGroup: 0
   runAsNonRoot: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.umsPortalServer }}
 
 ...
