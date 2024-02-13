@@ -30,6 +30,7 @@ master:
     capabilities:
       drop:
         - "ALL"
+    seLinuxOptions: {{ .Values.seLinuxOptions.redis }}
   count: {{ .Values.replicas.redis }}
   persistence:
     size: {{ .Values.persistence.size.redis | quote }}

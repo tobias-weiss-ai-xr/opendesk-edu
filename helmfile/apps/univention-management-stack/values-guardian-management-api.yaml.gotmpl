@@ -73,5 +73,6 @@ securityContext:
   runAsGroup: 1000
   runAsNonRoot: true
   readOnlyRootFilesystem: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.umsGuardianManagementApi }}
 
 ...

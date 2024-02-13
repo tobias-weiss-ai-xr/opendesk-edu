@@ -45,6 +45,7 @@ containerSecurityContext:
       - "ALL"
   seccompProfile:
     type: "RuntimeDefault"
+  seLinuxOptions: {{ .Values.seLinuxOptions.umsStackGateway }}
 
 service:
   type: "ClusterIP"

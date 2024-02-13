@@ -126,7 +126,7 @@ securityContext:
       - "NET_RAW"
       - "SYS_CHROOT"
       - "MKNOD"
-
+  seLinuxOptions: {{ .Values.seLinuxOptions.collabora }}
 serviceAccount:
   create: true
 ...

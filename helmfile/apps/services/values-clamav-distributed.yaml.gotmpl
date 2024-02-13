@@ -15,6 +15,7 @@ clamd:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.clamd }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.clamd.registry | quote }}
     repository: {{ .Values.images.clamd.repository | quote }}
@@ -40,6 +41,7 @@ containerSecurityContext:
   capabilities:
     drop: []
   privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.clamav }}
 
 freshclam:
   containerSecurityContext:
@@ -55,6 +57,7 @@ freshclam:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.freshclam }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.freshclam.registry | quote }}
     repository: {{ .Values.images.freshclam.repository | quote }}
@@ -86,6 +89,7 @@ icap:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.icap }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.icap.registry | quote }}
     repository: {{ .Values.images.icap.repository | quote }}
@@ -113,6 +117,7 @@ milter:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.milter }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.milter.registry | quote }}
     repository: {{ .Values.images.milter.repository | quote }}

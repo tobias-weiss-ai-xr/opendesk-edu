@@ -79,6 +79,7 @@ containerSecurityContext:
   runAsGroup: 10991
   seccompProfile:
     type: "RuntimeDefault"
+  seLinuxOptions: {{ .Values.seLinuxOptions.synapse }}
 
 global:
   domain: {{ .Values.global.domain | quote }}

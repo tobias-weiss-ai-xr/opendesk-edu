@@ -44,6 +44,7 @@ handler:
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.umsKeycloakExtensionHandler }}
   resources:
     {{ .Values.resources.umsKeycloakExtensionHandler | toYaml | nindent 4 }}
 postgresql:
@@ -88,6 +89,7 @@ proxy:
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
+    seLinuxOptions: {{ .Values.seLinuxOptions.umsKeycloakExtensionProxy }}
   resources:
     {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 4 }}
 ...

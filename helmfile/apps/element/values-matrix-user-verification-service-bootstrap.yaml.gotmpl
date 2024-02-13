@@ -35,4 +35,5 @@ securityContext:
   runAsUser: 101
   seccompProfile:
     type: "RuntimeDefault"
+  seLinuxOptions: {{ .Values.seLinuxOptions.synapseCreateUser }}
 ...

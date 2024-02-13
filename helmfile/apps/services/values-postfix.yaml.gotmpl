@@ -17,6 +17,7 @@ containerSecurityContext:
   runAsUser: 0
   runAsGroup: 0
   privileged: true
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix }}
 
 global:
   imagePullSecrets:

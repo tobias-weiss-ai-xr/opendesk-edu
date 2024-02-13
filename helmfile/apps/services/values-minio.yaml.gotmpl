@@ -29,6 +29,7 @@ containerSecurityContext:
   readOnlyRootFilesystem: false
   seccompProfile:
     type: "RuntimeDefault"
+  seLinuxOptions: {{ .Values.seLinuxOptions.minio }}
 
 defaultBuckets: "openproject,openxchange,ums,nextcloud"
 
