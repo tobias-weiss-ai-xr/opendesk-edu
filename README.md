@@ -33,7 +33,7 @@ openDesk currently features the following functional main components:
 | Groupware            | OX Appsuite                 | [8.20](https://documentation.open-xchange.com/appsuite/releases/8.20/) | Online documentation available from within the installed application; [Additional resources](https://www.open-xchange.com/resources/oxpedia) |
 | Knowledge management | XWiki                       | [15.10.4](https://www.xwiki.org/xwiki/bin/view/Blog/XWiki15104Released) | [For the most recent release](https://www.xwiki.org/xwiki/bin/view/Documentation) |
 | Portal & IAM         | Nubus                       | Product Preview[^1]   | [Univention's documentation website](https://docs.software-univention.de/n/en/index.html) |
-| Project management   | OpenProject                 | [13.2.1](https://www.openproject.org/docs/release-notes/13-2-1/) | [For the most recent release](https://www.openproject.org/docs/user-guide/) |
+| Project management   | OpenProject                 | [13.3.0](https://www.openproject.org/docs/release-notes/13-3-0/) | [For the most recent release](https://www.openproject.org/docs/user-guide/) |
 | Videoconferencing    | Jitsi                       | [2.0.8922](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_8922) | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/) |
 | Weboffice            | Collabora                   | [23.05.8.4.1](https://www.collaboraoffice.com/collabora-online-23-05-release-notes/) | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/) |
 
