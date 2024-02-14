@@ -139,7 +139,7 @@ properties:
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-bg": {{ .Values.theme.colors.white | quote }}
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-link-hover-bg": {{ .Values.theme.colors.secondaryGreyLight | quote }}
   # yamllint disable-line rule:line-length
-  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": " li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } .navbar { border-bottom: 1px solid #ddd; height: 64px; } div#companylogo { width: 90px; height: auto; padding-top: 7px; padding-left: 9px; }"
+  "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } .navbar { border-bottom: 1px solid #ddd !important; height: 64px;} div#companylogo { width: 90px; height: auto; padding-top: 7px; padding-left: 9px; }"
 
   "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"
   ## Fields to search in when importing users from the administration UI (not completely in scope for now)
