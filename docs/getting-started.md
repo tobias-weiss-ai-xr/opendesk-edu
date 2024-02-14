@@ -357,7 +357,7 @@ by your specified subdomain.
 NAMESPACE=your-namespace
 
 # Get ConfigMap with credentials
-kubectl -n ${NAMESPACE} get cm ums-stack-data-swp-data -o jsonpath='{.data.dev-test-users\.yaml}'`
+kubectl -n ${NAMESPACE} get cm ums-stack-data-swp-data -o jsonpath='{.data.dev-test-users\.yaml}'
 ```
 
 Renders you a two part ConfigMap where the `username` and `password` attributes in the `properties`
