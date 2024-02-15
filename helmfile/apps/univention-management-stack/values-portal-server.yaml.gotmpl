@@ -27,6 +27,8 @@ portalServer:
     enabled: true
     authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
 
+replicaCount: {{ .Values.replicas.umsPortalServer }}
+
 resources:
   {{ .Values.resources.umsPortalServer | toYaml | nindent 2 }}
 

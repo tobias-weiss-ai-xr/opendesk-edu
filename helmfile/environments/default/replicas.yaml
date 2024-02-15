@@ -38,6 +38,8 @@ replicas:
   redis: 1
   synapse: 1
   synapseWeb: 1
+  umsPortalFrontend: 1
+  umsPortalServer: 1
   wellKnown: 1
   xwiki: 1
 ...
