@@ -428,7 +428,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/gotenberg"
-    tag: "7.9.2@sha256:c97c1adb971d149222062ec46c5d749d710b38ad153c5c6ed954023e2401c9d0"
+    tag: "8.0.3@sha256:1f4979e8cfde1c69f28c24604d19b3a11cf95c59b2a73db957c5af0a27a30ce8"
     # @supplier: "Open-Xchange"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['7', '9', '2']
