@@ -20,38 +20,41 @@ Verified positive effects are marke with a check-mark in `Scaling (verified)` co
 marked with a gear.
 
 
-| Component        | Name                                     | Scaling (effective) | Scaling (verified) |
-|------------------|------------------------------------------|:-------------------:|:------------------:|
-| ClamAV           | `replicas.clamav`                        | :white_check_mark:  | :white_check_mark: |
-|                  | `replicas.clamd`                         | :white_check_mark:  | :white_check_mark: |
-|                  | `replicas.freshclam`                     |         :x:         |        :x:         |
-|                  | `replicas.icap`                          | :white_check_mark:  | :white_check_mark: |
-|                  | `replicas.milter`                        | :white_check_mark:  | :white_check_mark: |
-| Collabora        | `replicas.collabora`                     | :white_check_mark:  |       :gear:       |
-| CryptPad         | `replicas.cryptpad`                      | :white_check_mark:  |       :gear:       |
-| Dovecot          | `replicas.dovecot`                       |         :x:         |       :gear:       |
-| Element          | `replicas.element`                       | :white_check_mark:  | :white_check_mark: |
-|                  | `replicas.matrixNeoBoardWidget`          | :white_check_mark:  |       :gear:       |
-|                  | `replicas.matrixNeoChoiceWidget`         | :white_check_mark:  |       :gear:       |
-|                  | `replicas.matrixNeoDateFixBot`           | :white_check_mark:  |       :gear:       |
-|                  | `replicas.matrixNeoDateFixWidget`        | :white_check_mark:  |       :gear:       |
-|                  | `replicas.matrixUserVerificationService` | :white_check_mark:  |       :gear:       |
-|                  | `replicas.synapse`                       |         :x:         |       :gear:       |
-|                  | `replicas.synapseWeb`                    | :white_check_mark:  | :white_check_mark: |
-|                  | `replicas.wellKnown`                     | :white_check_mark:  | :white_check_mark: |
-| Intercom Service | `replicas.intercomService`               | :white_check_mark:  |       :gear:       |
-| Jitsi            | `replicas.jibri`                         | :white_check_mark:  |       :gear:       |
-|                  | `replicas.jicofo`                        | :white_check_mark:  |       :gear:       |
-|                  | `replicas.jitsi `                        | :white_check_mark:  |       :gear:       |
-|                  | `replicas.jitsiKeycloakAdapter`          | :white_check_mark:  |       :gear:       |
-|                  | `replicas.jvb `                          |         :x:         |        :x:         |
-| Keycloak         | `replicas.keycloak`                      | :white_check_mark:  |       :gear:       |
-| Memcached        | `replicas.memcached`                     |       :gear:        |       :gear:       |
-| Minio            | `replicas.minioDistributed`              | :white_check_mark:  | :white_check_mark: |
-| Nextcloud        | `replicas.nextcloudApache2`              | :white_check_mark:  | :white_check_mark: |
-|                  | `replicas.nextcloudExporter`             | :white_check_mark:  | :white_check_mark: |
-|                  | `replicas.nextcloudPHP`                  | :white_check_mark:  | :white_check_mark: |
-| OpenProject      | `replicas.openproject`                   | :white_check_mark:  | :white_check_mark: |
-| Postfix          | `replicas.postfix`                       |         :x:         |       :gear:       |
-| Redis            | `replicas.redis`                         |       :gear:        |       :gear:       |
-| XWiki            | `replicas.xwiki`                         |         :x:         |       :gear:       |
+| Component                   | Name                                     | Scaling (effective) | Scaling (verified) |
+|-----------------------------|------------------------------------------|:-------------------:|:------------------:|
+| ClamAV                      | `replicas.clamav`                        | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.clamd`                         | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.freshclam`                     |         :x:         |        :x:         |
+|                             | `replicas.icap`                          | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.milter`                        | :white_check_mark:  | :white_check_mark: |
+| Collabora                   | `replicas.collabora`                     | :white_check_mark:  |       :gear:       |
+| CryptPad                    | `replicas.cryptpad`                      | :white_check_mark:  |       :gear:       |
+| Dovecot                     | `replicas.dovecot`                       |         :x:         |       :gear:       |
+| Element                     | `replicas.element`                       | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.matrixNeoBoardWidget`          | :white_check_mark:  |       :gear:       |
+|                             | `replicas.matrixNeoChoiceWidget`         | :white_check_mark:  |       :gear:       |
+|                             | `replicas.matrixNeoDateFixBot`           | :white_check_mark:  |       :gear:       |
+|                             | `replicas.matrixNeoDateFixWidget`        | :white_check_mark:  |       :gear:       |
+|                             | `replicas.matrixUserVerificationService` | :white_check_mark:  |       :gear:       |
+|                             | `replicas.synapse`                       |         :x:         |       :gear:       |
+|                             | `replicas.synapseWeb`                    | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.wellKnown`                     | :white_check_mark:  | :white_check_mark: |
+| Intercom Service            | `replicas.intercomService`               | :white_check_mark:  |       :gear:       |
+| Jitsi                       | `replicas.jibri`                         | :white_check_mark:  |       :gear:       |
+|                             | `replicas.jicofo`                        | :white_check_mark:  |       :gear:       |
+|                             | `replicas.jitsi `                        | :white_check_mark:  |       :gear:       |
+|                             | `replicas.jitsiKeycloakAdapter`          | :white_check_mark:  |       :gear:       |
+|                             | `replicas.jvb `                          |         :x:         |        :x:         |
+| Keycloak                    | `replicas.keycloak`                      | :white_check_mark:  |       :gear:       |
+| Memcached                   | `replicas.memcached`                     |       :gear:        |       :gear:       |
+| Minio                       | `replicas.minioDistributed`              | :white_check_mark:  | :white_check_mark: |
+| Nextcloud                   | `replicas.nextcloudApache2`              | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.nextcloudExporter`             | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.nextcloudPHP`                  | :white_check_mark:  | :white_check_mark: |
+| OpenProject                 | `replicas.openproject`                   | :white_check_mark:  | :white_check_mark: |
+| Postfix                     | `replicas.postfix`                       |         :x:         |       :gear:       |
+| Redis                       | `replicas.redis`                         |       :gear:        |       :gear:       |
+| Univention Management Stack |                                          |       :gear:        |       :gear:       |
+|                             | `replicas.umsPortalFrontend`             | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.umsPortalServer`               | :white_check_mark:  | :white_check_mark: |
+| XWiki                       | `replicas.xwiki`                         |         :x:         |       :gear:       |
