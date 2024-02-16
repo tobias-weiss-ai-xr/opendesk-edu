@@ -195,7 +195,7 @@ env-start:
     name: "${NAMESPACE}"
     on_stop: "env-stop"
   extends: ".deploy-common"
-  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
+  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
   rules:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
@@ -376,7 +376,7 @@ env-stop:
   environment:
     name: "${NAMESPACE}"
     action: "stop"
-  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
+  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
   needs: []
   rules:
     - if: >
