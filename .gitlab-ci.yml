@@ -3,7 +3,7 @@
 ---
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
-    ref: "main"
+    ref: "v2.3.2"
     file:
       - "ci/common/automr.yml"
       - "ci/common/lint.yml"
@@ -446,7 +446,10 @@ run-tests:
 avscan-prepare:
   stage: ".pre"
   rules:
-    - if: "$JOB_AVSCAN_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+    - if: >
+          $JOB_AVSCAN_ENABLED != 'false' &&
+          $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+          $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "always"
     - when: "never"
   image: "external-registry.souvap-univention.de/docker-remote/mikefarah/yq"
@@ -492,7 +495,10 @@ avscan-prepare:
 avscan-start:
   stage: "scan"
   rules:
-    - if: "$JOB_AVSCAN_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+    - if: >
+        $JOB_AVSCAN_ENABLED != 'false' &&
+        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "always"
     - when: "never"
   trigger:
@@ -505,7 +511,10 @@ generate-release-assets:
   stage: "generate-release-assets"
   image: "registry.souvap-univention.de/souvap/tooling/images/ansible:4.10.0"
   rules:
-    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+    - if: >
+        $JOB_AVSCAN_ENABLED != 'false' &&
+        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "on_success"
     - when: "never"
   script:
@@ -557,14 +566,20 @@ reuse-linter:
 
 generate-release-version:
   rules:
-    - if: "$JOB_RELEASE_ENABLED != 'false'"
+    - if: >
+        $JOB_RELEASE_ENABLED != 'false' &&
+        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "on_success"
 
 release:
   dependencies:
     - "generate-release-assets"
   rules:
-    - if: "$JOB_RELEASE_ENABLED != 'false' && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+    - if: >
+        $JOB_AVSCAN_ENABLED != 'false' &&
+        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "on_success"
   script:
     - >
