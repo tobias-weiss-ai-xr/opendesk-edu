@@ -1,3 +1,40 @@
+## [0.5.77](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.76...v0.5.77) (2024-02-16)
+
+
+### Bug Fixes
+
+* **ci:** Complete CI var usage for external registry ([3bcdcd0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3bcdcd06b7c4829686f11b8f065ec38829b5a5a6))
+* **ci:** Update openDesk CI Lint to v2.3.1 ([250ef2b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/250ef2bc3fe9047b49b236b606ec3e3fa28e13ce))
+* **collabora:** Add chart validation ([0159902](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/01599022f14d447dfdadf390ca9e8e29668dfb07))
+* **collabora:** Bump to 23.05.9.1.1 ([b525a81](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b525a814fc25867c068579d5cbd8d1a993144519))
+* **cryptpad:** Update chart to v0.0.18 ([6f0b1f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6f0b1f37fc06c40bf537dbaed60f314341211e41))
+* **docs:** Add functional component table referencing the component versions to README.md ([bc7eeb8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bc7eeb8c9d3dd19f625d6f7ba94b15eb4b782d20))
+* **docs:** Add generated security-context.md ([d9e07ff](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d9e07ff7bd0e8be090f4fe2c370fa9978c22dfd5))
+* **element:** Change name of neodatefix bot job ([dd535da](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/dd535daac0bb0e602eefa45e8dc448fd07fbdd33))
+* **element:** Disable e2ee ([ba0824b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ba0824bac30ae1fc43458bdc8c09a143076e874c))
+* **helmfile:** Add additional provisioning components and configuration ([110ff56](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/110ff56f7487e7ac89b1b75c8c63d04e1c2a41c0))
+* **helmfile:** Add seLinuxOptions for all applications ([02d04fa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/02d04faa2a8d8a0b3bfc179cc8efb3fec086bc70))
+* **helmfile:** Annotations in image.yaml ([7ebbd03](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7ebbd03bdcb11abf4e459035c459b74adf8cfcda))
+* **helmfile:** Bump Collabora Chart to 1.11.1 and Image to 23.05.8.4.1 ([d2b1f0b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d2b1f0b07b5ebe4b98b2dc29b916857e28ce5706))
+* **helmfile:** Fix annotations in images.yaml ([acaec3b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/acaec3b8ac6e0ecd58167fca874cd56caa15fa98))
+* **helmfile:** Fix umsPortalFrontend image annotation ([8f83261](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8f832619864504eaa04945a9a79d6790d2ab8a48))
+* **helmfile:** Improve debugging ([56f5e35](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/56f5e35895c712440c1a7d249be672c86fc34eeb))
+* **nextcloud:** Bump openincryptpad to 0.3.3 and disable circles app ([f2b8acf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f2b8acfba85d384ed425779fa52133935e553e86))
+* **nextcloud:** Set backchannel logout url ([c0fc225](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c0fc225349794034feea1d0c05b29068b9a455af))
+* **nextcloud:** Update image, nextcloud apps and chart ([fd2a66f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fd2a66f8f2a987aa71872122267f29aee3d5f22a))
+* **nextcloud:** Update nextcloud image and chart to support upgrades ([5d95e7a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5d95e7ab2a71097d8c6231bff8c3a6aa3b6f163a))
+* **nextcloud:** Update to Nextcloud to v28 ([7c9f38f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7c9f38f06e1f0d000992ecdfd77921d6fc28015c))
+* **open-xchange:** Bump Gotenberg image ([49f126d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/49f126d169759b3e9dd130101e64892822750d7b))
+* **open-xchange:** Dovecot image on OpenCoDE without mirror ([1396071](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/139607186549f7a9a129023f1f72aff82cf36460))
+* **openproject:** Bump version to 13.3.0 ([c2087ef](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c2087efcf95bf2eef19556ba1a1d26b7807021c4))
+* **univention-management-stack:** New device login notifications on first login with 2FA ([ee1a337](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ee1a337ab5dea7001045860eb6a5bee1dfc84219))
+* **univention-management-stack:** Patches not applied to uldap ([2909e1d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2909e1d821397797244d7c11c0935a3bbc902bb1))
+* **univention-management-stack:** Support for object-storage icons and portal files ([83ac645](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/83ac645faec748e773dd7940ca0ca1102bd6dff3))
+* **univention-management-stack:** Update NGINX Helm chart to 15.9.3 ([c16c0ac](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c16c0ac7955e64254214d7129ae70d5dd8808743))
+* **univention-management-stack:** Update otterize to allow umc-server communication with memcached ([6c15dc1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6c15dc1d668623ddd95090e321d1bb268e681db5))
+* **xwiki:** Add bottom border to top nav bar to be aligned with the other components ([affa92c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/affa92cde2caa175707f8ae0e8d4adedbdceb608))
+* **xwiki:** Bump XWiki chart to 1.3.0 ([cabee0c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cabee0c9da3a32e180931b3bd490ba8f83aadb79))
+
 ## [0.5.76](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.75...v0.5.76) (2024-01-24)
 
 
