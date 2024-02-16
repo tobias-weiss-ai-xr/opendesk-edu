@@ -11,8 +11,6 @@ include:
   - local: "/.gitlab/generate/generate-docs.yml"
   - project: "${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
     file: "gitlab/environments.yaml"
-    rules:
-      - if: "$INCLUDE_ENVIRONMENTS_ENABLED != 'false'"
   - local: "/.gitlab/lint/lint-opendesk.yml"
     rules:
       - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
@@ -528,7 +526,7 @@ generate-release-assets:
   variables:
     ASSET_GENERATOR_REPO_PATH: "bmi/opendesk/tooling/opendesk-asset-generator"
 
-# Declare .environments which is in environments repository and only loaded when INCLUDE_ENVIRONMENTS_ENABLED not false.
+# Declare .environments which is in environments repository. In case it is not available
 # 'cache' is used because job must contain at least one key, so cache is just a dummy key.
 .environments:
   cache: {}
