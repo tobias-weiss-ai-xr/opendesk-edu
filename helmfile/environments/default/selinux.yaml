@@ -16,7 +16,7 @@ seLinuxOptions:
   icap: ~
   intercom: ~
   # The Jibri Helm chart does not support setting the securityContext externally.
-  #jibri: ~
+  # jibri: ~
   jicofo: ~
   jitsi: ~
   jitsiKeycloakAdapter: ~

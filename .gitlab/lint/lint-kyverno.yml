@@ -27,7 +27,14 @@ lint-kyverno:
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${APP}"
     - "helmfile template -e test --include-needs > ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
-    - "node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests -d ${CI_PROJECT_DIR}/.kyverno -t required -s manifest -f opendesk.yaml --skip-tests true ${APP}"
+    - >
+      node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests
+      -d ${CI_PROJECT_DIR}/.kyverno
+      -t required
+      -s manifest
+      -f opendesk.yaml
+      --skip-tests true
+      ${APP}
     - "node /app/opendesk-ci-cli/src/index.js filter-for-kinds -f ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
     - "cd ${CI_PROJECT_DIR}/.kyverno"
     - "kyverno test ."

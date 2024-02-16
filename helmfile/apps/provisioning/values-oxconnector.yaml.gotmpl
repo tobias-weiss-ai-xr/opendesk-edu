@@ -59,6 +59,8 @@ probes:
     failureThreshold: 30
     successThreshold: 1
 
+replicaCount: {{ .Values.replicas.oxConnector }}
+
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:

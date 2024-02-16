@@ -5,6 +5,9 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   imageRegistry: "external-registry.souvap-univention.de/sovereign-workplace"
+  imagePullSecrets:
+    - "kyverno-test"
+  imagePullPolicy: "kyverno"
 persistence:
   storageClassNames:
     RWX: "kyverno-test"
@@ -25,6 +28,53 @@ persistence:
       ldapServerShared: "42Gi"
       portalListener: "42Gi"
       selfserviceListener: "42Gi"
-      storeDav: "42Gi"
     xwiki: "42Gi"
+ingress:
+  ingressClassName: "kyverno"
+  tls:
+    enabled: true
+    secretName: "kyverno-tls"
+replicas:
+  # clamav-simple
+  clamav: 42
+  # clamav-distributed
+  clamd: 42
+  collabora: 42
+  cryptpad: 42
+  dovecot: 42
+  element: 42
+  # clamav-distributed
+  freshclam: 42
+  # clamav-distributed
+  icap: 42
+  intercomService: 42
+  jibri: 42
+  jicofo: 42
+  jitsi: 42
+  jitsiKeycloakAdapter: 42
+  jvb: 42
+  keycloak: 42
+  mariadb: 42
+  matrixNeoBoardWidget: 42
+  matrixNeoChoiceWidget: 42
+  matrixNeoDateFixBot: 42
+  matrixNeoDateFixWidget: 42
+  matrixUserVerificationService: 42
+  memcached: 42
+  # clamav-distributed
+  milter: 42
+  minio: 42
+  nextcloudApache2: 42
+  nextcloudExporter: 42
+  nextcloudPHP: 42
+  openprojectWeb: 42
+  openprojectWorker: 42
+  oxConnector: 42
+  postfix: 42
+  postgres: 42
+  redis: 42
+  synapse: 42
+  synapseWeb: 42
+  wellKnown: 42
+  xwiki: 42
 ...

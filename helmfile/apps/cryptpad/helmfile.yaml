@@ -13,7 +13,8 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.cryptpad.registry }}/{{ .Values.charts.cryptpad.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.cryptpad.registry }}/\
+      {{ .Values.charts.cryptpad.repository }}"
 
 releases:
   - name: "cryptpad"

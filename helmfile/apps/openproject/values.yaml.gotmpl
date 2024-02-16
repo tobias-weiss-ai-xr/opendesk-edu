@@ -144,7 +144,9 @@ ingress:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 
-replicaCount: {{ .Values.replicas.openproject }}
+backgroundReplicaCount: {{ .Values.replicas.openprojectWorker }}
+
+replicaCount: {{ .Values.replicas.openprojectWeb }}
 
 resources:
   {{ .Values.resources.openproject | toYaml | nindent 2 }}

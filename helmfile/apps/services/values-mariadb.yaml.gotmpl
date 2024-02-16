@@ -60,7 +60,7 @@ podSecurityContext:
   fsGroup: 1001
   fsGroupChangePolicy: "OnRootMismatch"
 
-replicaCount: 1
+replicaCount: {{ .Values.replicas.mariadb }}
 
 resources:
   {{ .Values.resources.mariadb | toYaml | nindent 2 }}

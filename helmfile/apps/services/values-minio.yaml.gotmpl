@@ -62,7 +62,7 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 10
 
-mode: "standalone"
+mode: {{ if gt .Values.replicas.minio 1 }}"distributed"{{ else }}"standalone"{{ end }}
 
 metrics:
   serviceMonitor:
@@ -94,7 +94,7 @@ provisioning:
     - name: "openxchange"
       versioning: true
       withLock: false
-    - name: {{ .Values.objectstores.univentionManagementStack.bucket | quote }} 
+    - name: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
       versioning: false
       withLock: false
     - name: "nextcloud"
@@ -192,6 +192,6 @@ startupProbe:
   timeoutSeconds: 10
 
 statefulset:
-  replicaCount: {{ .Values.replicas.minioDistributed }}
+  replicaCount: {{ .Values.replicas.minio }}
 
 ...

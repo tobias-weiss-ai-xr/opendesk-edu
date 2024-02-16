@@ -40,7 +40,7 @@ exporter:
       enabled: {{ .Values.prometheus.prometheusRules.enabled }}
       additionalLabels:
         {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 8 }}
-  replicas: {{ .Values.replicas.nextcloudExporter }}
+  replicaCount: {{ .Values.replicas.nextcloudExporter }}
   resources:
     {{ .Values.resources.nextcloudExporter | toYaml | nindent 4 }}
 
@@ -97,7 +97,7 @@ php:
       enabled: {{ .Values.prometheus.prometheusRules.enabled }}
       additionalLabels:
         {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 8 }}
-  replicas: {{ .Values.replicas.nextcloudPHP }}
+  replicaCount: {{ .Values.replicas.nextcloudPHP }}
   resources:
     {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
 
@@ -130,7 +130,7 @@ apache2:
     repository: {{ .Values.images.nextcloudApache2.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudApache2.tag | quote }}
-  replicas: {{ .Values.replicas.nextcloudApache2 }}
+  replicaCount: {{ .Values.replicas.nextcloudApache2 }}
   resources:
     {{ .Values.resources.nextcloudApache2 | toYaml | nindent 4 }}
 ...
