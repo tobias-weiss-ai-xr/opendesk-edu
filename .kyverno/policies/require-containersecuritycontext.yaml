@@ -1,10 +1,16 @@
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
 apiVersion: "kyverno.io/v1"
 kind: "ClusterPolicy"
 metadata:
   name: "require-containersecuritycontext"
+  annotations:
+    policies.kyverno.io/title: "ContainerSecurityContext best practices are set."
+    policies.kyverno.io/subject: "Pod"
+    policies.kyverno.io/description: >-
+      The containerSecurityContext is the most important security-related section because it has the highest precedence
+      and restricts the container to its minimal privileges.
 spec:
   background: true
   rules:
@@ -168,6 +174,71 @@ spec:
             containers:
               - securityContext:
                   runAsNonRoot: true
+
+    - name: "require-empty-seLinuxOptions"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: "SELinux options have to be unset."
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  seLinuxOptions:
+            =(initContainers):
+              - securityContext:
+                  seLinuxOptions:
+            containers:
+              - securityContext:
+                  seLinuxOptions:
+
+    - name: "require-default-procMount"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: >-
+          Changing the proc mount from the default is not allowed. The fields
+          spec.containers[*].securityContext.procMount, spec.initContainers[*].securityContext.procMount,
+          and spec.ephemeralContainers[*].securityContext.procMount must be unset or
+          set to `Default`.
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(securityContext):
+                  =(procMount): "Default"
+            =(initContainers):
+              - =(securityContext):
+                  =(procMount): "Default"
+            containers:
+              - =(securityContext):
+                  =(procMount): "Default"
+
+    - name: "restrict-sysctls"
+      match:
+        resources:
+          kinds:
+            - "Pod"
+      validate:
+        message: >-
+          Setting additional sysctls above the allowed type is not allowed.
+          The field spec.securityContext.sysctls must be unset or not use any other names
+          than kernel.shm_rmid_forced, net.ipv4.ip_local_port_range,
+          net.ipv4.ip_unprivileged_port_start, net.ipv4.tcp_syncookies and
+          net.ipv4.ping_group_range.
+        pattern:
+          spec:
+            =(securityContext):
+              =(sysctls):
+                - =(name): >-
+                    kernel.shm_rmid_forced |
+                    net.ipv4.ip_local_port_range |
+                    net.ipv4.ip_unprivileged_port_start |
+                    net.ipv4.tcp_syncookies |
+                    net.ipv4.ping_group_range
 
   validationFailureAction: "audit"
 ...

@@ -482,7 +482,8 @@ avscan-prepare:
       yq '.images
       | with_entries(.key |= "scan-" + .)
       | .[].extends=".container-clamav"
-      | with(.[]; .variables.CONTAINER_IMAGE = .repository | .variables.CONTAINER_TAG = .tag | .variables.CONTAINER_REGISTRY = .registry)
+      | with(.[]; .variables.CONTAINER_IMAGE = .repository
+      | .variables.CONTAINER_TAG = .tag | .variables.CONTAINER_REGISTRY = .registry)
       | del(.[].repository)
       | del(.[].tag)
       | del(.[].registry)'
@@ -595,7 +596,7 @@ release:
     - |
       echo -e "\n[INFO] Writing data to helm value file..."
       cat <<EOF >helmfile/environments/default/global.generated.yaml
-      # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+      # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
       # SPDX-License-Identifier: Apache-2.0
       ---
       global:

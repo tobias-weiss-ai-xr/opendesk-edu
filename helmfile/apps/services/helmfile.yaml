@@ -13,7 +13,8 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.otterize.registry }}/\
+      {{ .Values.charts.otterize.repository }}"
 
   # openDesk Certificates
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-certificates
@@ -23,7 +24,8 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.certificates.registry }}/\
+      {{ .Values.charts.certificates.repository }}"
 
   # openDesk PostgreSQL
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postgresql
@@ -33,7 +35,8 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.postgresql.registry }}/{{ .Values.charts.postgresql.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.postgresql.registry }}/\
+      {{ .Values.charts.postgresql.repository }}"
 
   # openDesk MariaDB
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-mariadb
@@ -43,7 +46,8 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.mariadb.registry }}/{{ .Values.charts.mariadb.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.mariadb.registry }}/\
+      {{ .Values.charts.mariadb.repository }}"
 
   # openDesk Postfix
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postfix
@@ -53,7 +57,8 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.postfix.registry }}/\
+      {{ .Values.charts.postfix.repository }}"
 
   # openDesk Istio Resources
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-istio-resources
@@ -63,7 +68,8 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.istioResources.registry }}/{{ .Values.charts.istioResources.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.istioResources.registry }}/\
+      {{ .Values.charts.istioResources.repository }}"
 
   # openDesk ClamAV
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-clamav
@@ -73,14 +79,16 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.clamav.registry }}/{{ .Values.charts.clamav.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.clamav.registry }}/\
+      {{ .Values.charts.clamav.repository }}"
   - name: "clamav-simple-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.clamavSimple.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.clamavSimple.registry }}/\
+      {{ .Values.charts.clamavSimple.repository }}"
 
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
@@ -90,21 +98,24 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.memcached.registry }}/{{ .Values.charts.memcached.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.memcached.registry }}/\
+      {{ .Values.charts.memcached.repository }}"
   - name: "redis-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.redis.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.redis.registry }}/{{ .Values.charts.redis.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.redis.registry }}/\
+      {{ .Values.charts.redis.repository }}"
   - name: "minio-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.minio.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.minio.registry }}/\
+      {{ .Values.charts.minio.repository }}"
 
 releases:
   - name: "opendesk-otterize"

@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+# Before increasing the replicas of components, please consult the scaling documentation at "docs/scaling.md" to ensure
+# that scaling of the respective component is possible and has the desired effect.
 replicas:
   # clamav-simple
   clamav: 1
@@ -21,6 +23,7 @@ replicas:
   jitsiKeycloakAdapter: 1
   jvb: 1
   keycloak: 1
+  mariadb: 1
   matrixNeoBoardWidget: 1
   matrixNeoChoiceWidget: 1
   matrixNeoDateFixBot: 1
@@ -29,12 +32,15 @@ replicas:
   memcached: 1
   # clamav-distributed
   milter: 1
-  minioDistributed: 4
+  minio: 1
   nextcloudApache2: 1
   nextcloudExporter: 1
   nextcloudPHP: 1
-  openproject: 1
+  openprojectWeb: 1
+  openprojectWorker: 1
+  oxConnector: 1
   postfix: 1
+  postgres: 1
   redis: 1
   synapse: 1
   synapseWeb: 1

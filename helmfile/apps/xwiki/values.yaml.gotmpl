@@ -161,7 +161,8 @@ properties:
     "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.title": "{{ .Values.theme.texts.productName }} Wissen - $!tdoc.displayTitle"
 
-replicaCount: {{ .Values.replicas.xwiki }}
+cluster:
+  replicas: {{ .Values.replicas.xwiki }}
 
 resources:
   {{ .Values.resources.xwiki | toYaml | nindent 2 }}
