@@ -46,7 +46,8 @@ stackDataContext:
   umcSamlSpFqdn: {{ printf "%s.%s" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
   idpFqdn: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
   ldapSamlSpUrls: {{ printf "https://%s.%s%s" .Values.global.hosts.univentionManagementStack .Values.global.domain "/univention/saml/metadata" | quote }}
-  initialPasswordAdministrator: {{ .Values.secrets.univentionManagementStack.defaultAccounts.administratorPassword | quote }}
+  initialPasswordAdministrator: {{ .Values.secrets.univentionManagementStack.systemAccounts.administratorPassword | quote }}
+  initialPasswordSysIdpUser: {{ .Values.secrets.univentionManagementStack.systemAccounts.sysIdpUserPassword | quote }}
 
 stackDataUms:
   loadDevData: true

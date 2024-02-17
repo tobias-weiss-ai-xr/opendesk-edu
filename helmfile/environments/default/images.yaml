@@ -586,7 +586,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/data-loader"
-    tag: "0.41.5@sha256:9978e5eae3846e3c32effb2e602136d8855aaec287fb280a54b311defab2fbf3"
+    tag: "0.44.0@sha256:c08d619880537c03ebdcdc19fa9746bf5098e3810d85487d47676f3846c6b16c"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '41', '5']
