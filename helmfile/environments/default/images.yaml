@@ -730,7 +730,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend"
-    tag: "0.14.0@sha256:6f96a7479728e07c3d3311c85e1d14f7ef45f4d5bc5c9a008ce62203ef232f79"
+    tag: "0.19.0@sha256:7c80f703faf720da159c405a140c1029fd8c12def61653737e2a772982012d5c"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
@@ -742,7 +742,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-listener"
-    tag: "0.14.0@sha256:5c86167d3a6ff7e85ff7e870596dd9864c1802b4f622c1f2378472744d4c4c34"
+    tag: "0.19.0@sha256:7fff6db5151b9aecffdfcd429b6eefb36a96ca14c5384183aa4246b5c0c8b133"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
@@ -754,7 +754,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-server"
-    tag: "0.14.0@sha256:d608db0692f9638e53101dabaf7749a9fbc29c316194f1977bd8986444f9f472"
+    tag: "0.19.0@sha256:9a19e3a0990fba1dd2cdb1fd96ab53dcfba23717291ca1b0c87d8ed19b4c2c46"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['0', '9', '4']
