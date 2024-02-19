@@ -39,7 +39,7 @@ marked with a gear.
 |                             | `replicas.synapse`                       |         :x:         |       :gear:       |
 |                             | `replicas.synapseWeb`                    | :white_check_mark:  | :white_check_mark: |
 |                             | `replicas.wellKnown`                     | :white_check_mark:  | :white_check_mark: |
-| Intercom Service            | `replicas.intercomService`               | :white_check_mark:  |       :gear:       |
+| Intercom Service            | `replicas.intercomService`               | :white_check_mark:  | :white_check_mark: |
 | Jitsi                       | `replicas.jibri`                         | :white_check_mark:  |       :gear:       |
 |                             | `replicas.jicofo`                        | :white_check_mark:  |       :gear:       |
 |                             | `replicas.jitsi `                        | :white_check_mark:  |       :gear:       |
