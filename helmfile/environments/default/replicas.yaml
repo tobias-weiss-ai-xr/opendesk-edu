@@ -46,6 +46,7 @@ replicas:
   synapseWeb: 1
   umsPortalFrontend: 1
   umsPortalServer: 1
+  umsUdmRestApi: 1
   wellKnown: 1
   xwiki: 1
 ...

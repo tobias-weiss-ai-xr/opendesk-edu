@@ -57,4 +57,5 @@ marked with a gear.
 | Univention Management Stack |                                          |       :gear:        |       :gear:       |
 |                             | `replicas.umsPortalFrontend`             | :white_check_mark:  | :white_check_mark: |
 |                             | `replicas.umsPortalServer`               | :white_check_mark:  | :white_check_mark: |
+|                             | `replicas.umsUdmRestApi`                 | :white_check_mark:  | :white_check_mark: |
 | XWiki                       | `replicas.xwiki`                         |         :x:         |       :gear:       |

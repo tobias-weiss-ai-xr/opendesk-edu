@@ -27,6 +27,8 @@ image:
 resources:
   {{ .Values.resources.umsUdmRestApi | toYaml | nindent 2 }}
 
+replicaCount: {{ .Values.replicas.umsUdmRestApi }}
+
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
