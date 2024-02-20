@@ -16,6 +16,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Feedback](#feedback)
 * [License](#license)
 * [Copyright](#copyright)
+* [Footnotes](#footnotes)
 <!-- TOC -->
 
 # Overview
@@ -110,3 +111,12 @@ This project uses the following license: Apache-2.0
 # Copyright
 
 Copyright (C) 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+
+# Footnotes
+
+[^1]: Nubus is the Cloud Portal and IAM from Univention.
+It is currently integrated as a product preview within openDesk therefore,
+not all resources like documentation and structured release notes are available,
+while the
+[source code can already be found on Open CoDE](https://gitlab.opencode.de/bmi/opendesk/component-code/crossfunctional/univention).
+Please find updates regarding the Nubus at https://nubus.io.
