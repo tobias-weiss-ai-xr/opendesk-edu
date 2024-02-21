@@ -764,24 +764,24 @@ images:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/images/univention/dispatcher
     # dependencyType=supplier
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/dispatcher"
-    tag: "0.9.5@sha256:35bfe36c0f44070a514074804f740e9f3d60d2d1386757067d392bc2ebef9f84"
+    registry: "registry.souvap-univention.de"
+    repository: "souvap/tooling/images/univention/dispatcher"
+    tag: "0.11.1@sha256:e3f9f185c21ff893a654e0f08ebd6c59ce4d7513150cac530792ad656348ecfa"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '5']
+    # @mirrorFrom: ['0', '11', '1']
 
   umsProvisioningEventsAndConsumerApi:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/images/univention/events-and-consumer-api
     # dependencyType=supplier
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/events-and-consumer-api"
-    tag: "0.9.5@sha256:e8e9c40ccad460e4c837b7c0108de04b1ab9faf4d385ffd280e5326731a3116b"
+    registry: "registry.souvap-univention.de"
+    repository: "souvap/tooling/images/univention/events-and-consumer-api"
+    tag: "0.11.1@sha256:c56c862e9687a9bcc0d3f808bf12b67fbc457cc1bb10d82505706572078282d6"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '5']
+    # @mirrorFrom: ['0', '11', '1']
 
   umsProvisioningNats:
     # renovate:
@@ -818,12 +818,12 @@ images:
     # upstreamRegistry=registry.souvap-univention.de
     # upstreamRepository=souvap/tooling/images/univention/udm-listener
     # dependencyType=supplier
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/udm-listener"
-    tag: "0.9.5@sha256:4550913a415e0ab17701a4475f87461836b74546cb9a89d452ac607e5b5dfdfb"
+    registry: "registry.souvap-univention.de"
+    repository: "souvap/tooling/images/univention/udm-listener"
+    tag: "0.11.1@sha256:27e01c9941d19a60ced4aeac84a64a4ef566d764302ac892256b9b5dc3d7548f"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '9', '5']
+    # @mirrorFrom: ['0', '11', '1']
 
   umsSelfserviceInvitation:
     # renovate:
