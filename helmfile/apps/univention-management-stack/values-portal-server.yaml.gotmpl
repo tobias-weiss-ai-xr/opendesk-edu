@@ -19,10 +19,10 @@ portalServer:
   logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
   adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
   ucsInternalPath: "portal-data"
-  objectStorageEndpoint: "http://minio:9000"
-  objectStorageBucket: "ums"
-  objectStorageAccessKeyId: "ums_user"
-  objectStorageSecretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
+  objectStorageEndpoint: {{ .Values.objectstores.univentionManagementStack.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+  objectStorageBucket: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
+  objectStorageAccessKeyId: {{ .Values.objectstores.univentionManagementStack.username | quote }}
+  objectStorageSecretAccessKey: {{ .Values.objectstores.univentionManagementStack.secretKey | default .Values.secrets.minio.umsUser | quote }}
   centralNavigation:
     enabled: true
     authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
