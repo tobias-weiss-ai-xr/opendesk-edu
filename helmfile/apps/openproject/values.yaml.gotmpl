@@ -155,13 +155,13 @@ s3:
   enabled: true
   endpoint: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
   host: {{ (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
-  pathStyle: "true"
+  pathStyle: {{ .Values.objectstores.openproject.pathStyle | quote }}
   region: {{ .Values.objectstores.openproject.region | quote }}
   bucketName: {{ .Values.objectstores.openproject.bucket | quote }}
   use_iam_profile: {{ .Values.objectstores.openproject.useIAMProfile | default "false" | quote }}
   auth:
     accessKeyId: {{ .Values.objectstores.openproject.username | quote }}
-    secretAccessKey: {{ .Values.objectstores.openproject.secret | default .Values.secrets.minio.openprojectUser | quote }}
+    secretAccessKey: {{ .Values.objectstores.openproject.secretKey | default .Values.secrets.minio.openprojectUser | quote }}
 
 seederJob:
   annotations:

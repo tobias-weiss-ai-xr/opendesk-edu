@@ -4,20 +4,28 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 objectstores:
+  nextcloud:
+    bucket: "nextcloud"
+    endpoint: ""
+    region: "eu-west-1"
+    secretKey: ""
+    username: "nextcloud_user"
+    storageClass: "STANDARD"
+    useSSL: true
+    pathStyle: true
+    port: 443
   openproject:
-    backend: "minio"
     bucket: "openproject"
     endpoint: ""
-    region: ""
-    secret: ""
+    region: "eu-west-1"
+    secretKey: ""
     username: "openproject_user"
+    pathStyle: true
     useIAMProfile: ""
   univentionManagementStack:
-    backend: "minio"
     bucket: "ums"
     endpoint: ""
-    region: ""
-    secret: ""
+    region: "eu-west-1"
+    secretKey: ""
     username: "ums_user"
-    useIAMProfile: ""
 ...

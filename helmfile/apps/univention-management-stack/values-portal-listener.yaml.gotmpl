@@ -41,10 +41,10 @@ portalListener:
   udmApiUsername: "cn=admin"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
-  objectStorageEndpoint: "http://minio:9000"
-  objectStorageBucket: "ums"
-  objectStorageAccessKeyId: "ums_user"
-  objectStorageSecretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
+  objectStorageEndpoint: {{ .Values.objectstores.univentionManagementStack.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+  objectStorageBucket: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
+  objectStorageAccessKeyId: {{ .Values.objectstores.univentionManagementStack.username | quote }}
+  objectStorageSecretAccessKey: {{ .Values.objectstores.univentionManagementStack.secretKey | default .Values.secrets.minio.umsUser | quote }}
 
 resources:
   {{ .Values.resources.umsPortalListener | toYaml | nindent 2 }}

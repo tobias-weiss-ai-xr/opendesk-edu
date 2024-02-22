@@ -88,16 +88,13 @@ provisioning:
   extraCommands:
     - "mc anonymous set download provisioning/ums/portal-assets"
   buckets:
-    - name: "openproject"
-      versioning: true
-      withLock: false
-    - name: "openxchange"
+    - name: {{ .Values.objectstores.openproject.bucket | quote }}
       versioning: true
       withLock: false
     - name: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
       versioning: false
       withLock: false
-    - name: "nextcloud"
+    - name: {{ .Values.objectstores.nextcloud.bucket | quote }}
       versioning: true
       withLock: false
   policies:
@@ -110,18 +107,6 @@ provisioning:
             - "s3:*"
         - resources:
             - "arn:aws:s3:::openproject/*"
-          effect: "Allow"
-          actions:
-            - "s3:*"
-    - name: "openxchange-bucket-policy"
-      statements:
-        - resources:
-            - "arn:aws:s3:::openxchange"
-          effect: "Allow"
-          actions:
-            - "s3:*"
-        - resources:
-            - "arn:aws:s3:::openxchange/*"
           effect: "Allow"
           actions:
             - "s3:*"
@@ -150,17 +135,11 @@ provisioning:
           actions:
             - "s3:*"
   users:
-    - username: "openproject_user"
+    - username: {{ .Values.objectstores.openproject.username | quote }}
       password: {{ .Values.secrets.minio.openprojectUser | quote }}
       disabled: false
       policies:
         - "openproject-bucket-policy"
-      setPolicies: true
-    - username: "openxchange_user"
-      password: {{ .Values.secrets.minio.openxchangeUser | quote }}
-      disabled: false
-      policies:
-        - "openxchange-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.univentionManagementStack.username | quote }}
       password: {{ .Values.secrets.minio.umsUser | quote }}
@@ -168,7 +147,7 @@ provisioning:
       policies:
         - "ums-bucket-policy"
       setPolicies: true
-    - username: "nextcloud_user"
+    - username: {{ .Values.objectstores.nextcloud.username | quote }}
       password: {{ .Values.secrets.minio.nextcloudUser | quote }}
       disabled: false
       policies:
