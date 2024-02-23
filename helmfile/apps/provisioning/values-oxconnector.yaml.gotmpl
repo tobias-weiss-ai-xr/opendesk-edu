@@ -20,7 +20,7 @@ oxConnector:
   debugLevel: {{ if .Values.debug.enabled }}"4"{{ else }}"1"{{ end }}
   domainName: {{ .Values.global.domain | quote }}
   ldapHost: {{ .Values.ldap.host | quote }}
-  logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
+  logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
   ldapPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"

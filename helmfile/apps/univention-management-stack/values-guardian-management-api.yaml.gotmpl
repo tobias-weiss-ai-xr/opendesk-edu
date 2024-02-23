@@ -16,7 +16,7 @@ guardianManagementApi:
   guardianManagementAdapterAuthenticationPort: "fast_api_oauth"
   guardianManagementAdapterAuthorizationApiUrl: "http://ums-guardian-authorization-api/guardian/authorization"
   guardianManagementAdapterResourceAuthorizationPort: "always"
-  guardianManagementLoggingLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
+  guardianManagementLoggingLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARNING"{{ end }}
   guardianManagementLoggingStructured: false
   guardianManagementLoggingFormat: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS ZZ}</green> | <level>{level}</level> | <level>{message}</level> | {extra}"
   guardianManagementBaseUrl: "http://0.0.0.0:8000"
