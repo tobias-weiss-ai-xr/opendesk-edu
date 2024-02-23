@@ -1,3 +1,19 @@
+## [0.5.78](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.77...v0.5.78) (2024-02-23)
+
+
+### Bug Fixes
+
+* **ci:** Move main development repo OpenCoDE ([43718b8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/43718b8da2966b87fab8e206df449c923f6615e7))
+* **ci:** Run release pipeline only on pushes to main ([13dcb00](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/13dcb004419b4efd8ded8c25e7afa41d10156be8))
+* **ci:** Update kyverno rules ([d9263c9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d9263c90110df241adaef8d1a5df8e8d8ceda11b))
+* **docs:** Add missing footnote regarding Nubus ([bc6e4f8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bc6e4f8e5dcc32cc476de579fd56dbade79b7c31))
+* **nextcloud:** Set admin priviledges for users in central IAM ([a3e415d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a3e415d575ba24b99e741994fb29d0f0cfd11d8a))
+* **univention-management-stack:** Scaling udm-rest-api ([57d0f61](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/57d0f61b2c3e789b72a0098907817c97fee69268))
+* **univention-management-stack:** Set Keycloak CSP header to allow session continuation in admin portal. ([a398e5a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a398e5aaf131c1f00b09e1776d6daf10f2c343ad))
+* **univention-management-stack:** UMS portal-server scalability ([b1b4c28](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b1b4c28618e0eca31b59719e9e1f2db8ecff7f5c))
+* **univention-management-stack:** Univention Portal upstream codefixes version bump ([c2f62f7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c2f62f7c9487b2119b0d3efd98b40c92efb97c5d))
+* **univention-management-stack:** Update provisioning to fix high CPU usage when in idle ([d9c23bd](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d9c23bdf0b955c0b5e4c82dd1ee785b75ce18a3b))
+
 ## [0.5.77](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.76...v0.5.77) (2024-02-16)
 
 
