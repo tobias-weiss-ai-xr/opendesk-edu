@@ -27,6 +27,10 @@ handler:
   imagePullSecrets: {{ .Values.global.imagePullSecrets }}
   appConfig:
     captchaProtectionEnable: false
+    deviceProtectionEnable: true
+    ipProtectionEnable: true
+    logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
+    newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
     smtpPassword: {{ .Values.smtp.password | quote }}
     smtpHost: {{ .Values.smtp.host | quote }}
     smtpPort: {{ .Values.smtp.port | quote }}
@@ -50,6 +54,8 @@ handler:
 postgresql:
   enabled: false
 proxy:
+  appConfig:
+    logLevel: {{ if .Values.debug.enabled }}"debug"{{ else }}"warn"{{ end }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.umsKeycloakExtensionProxy.registry | quote }}
     repository: {{ .Values.images.umsKeycloakExtensionProxy.repository | quote }}

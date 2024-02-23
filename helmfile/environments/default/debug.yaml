@@ -14,6 +14,6 @@ debug:
   # should activate debug output in all components and even allow e.g. successfully executed jobs
   # to stay available. This is going to be implemented on a case by case basis when we actually
   # need debugging in a component.
-  # Use: `{{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}`
+  # Use: `{{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}`
   enabled: false
 ...
