@@ -16,7 +16,7 @@ portalServer:
   editable: "false"
   umcGetUrl: "http://ums-umc-server/get"
   umcSessionUrl: "http://ums-umc-server/get/session-info"
-  logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
+  logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
   adminGroup: {{ printf "%s,%s" "cn=Domain Admins,cn=groups" .Values.ldap.baseDn | quote }}
   ucsInternalPath: "portal-data"
   objectStorageEndpoint: "http://minio:9000"

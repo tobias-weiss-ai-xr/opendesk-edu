@@ -7,7 +7,7 @@ guardianAuthorizationApi:
   guardianAuthzAdapterAppPersistencePort: "udm_data"
   guardianAuthzAdapterPolicyPort: "opa"
   guardianAuthzAdapterAuthenticationPort: "fast_api_oauth"
-  guardianAuthzLoggingLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
+  guardianAuthzLoggingLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARNING"{{ end }}
   guardianAuthzLoggingStructured: false
   guardianAuthzLoggingFormat: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS ZZ}</green> | <level>{level}</level> | <level>{message}</level> | {extra}"
   home: "/guardian_service_dir"
