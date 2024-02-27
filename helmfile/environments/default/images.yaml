@@ -19,7 +19,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
-    tag: "23.05.9.1.1@sha256:9eeaf2795987d67cf6259f2942ea3318649fdf50beb939c895bef26a4c4dd146"
+    tag: "23.05.9.2.1@sha256:4cdf38a73cfa8771d8184137525511a887cd5eab9e75ed894cee9cf1006d95eb"
     # @supplier: "Collabora"
 
   cryptpad:
