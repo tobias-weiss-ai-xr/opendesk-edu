@@ -113,8 +113,13 @@ The Filestore can be enabled on a per-project level in OpenProject's project adm
 # Identity data flows
 
 An overview of
-- components that consume the LDAP service. Mostly by using a dedicated LDAP search account.
-- components using Univention Keycloak as identity provider (IdP). If not otherwise denoted based on the OAuth2 / OIDC flows.
+- components that consume the LDAP service.
+  - The components accessing the LDAP using a component specific LDAP search account.
+- components using Univention Keycloak as identity provider (IdP).
+  - If not otherwise denoted the components make use of OAuth2 / OIDC flows.
+  - All components have a client configured in Keycloak, except for Jitsi which is using authentication with the
+    [Authorization Code Flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) that does not
+    require an OIDC client to be configured in Keycloak.
 
 Some components trust others to handle authentication for them.
 

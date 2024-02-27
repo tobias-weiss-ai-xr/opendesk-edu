@@ -483,7 +483,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ums-keycloak"
-    version: "1.0.3"
+    version: "1.0.5"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
@@ -511,7 +511,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "keycloak-extensions"
-    version: "0.1.0"
+    version: "0.2.1"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'

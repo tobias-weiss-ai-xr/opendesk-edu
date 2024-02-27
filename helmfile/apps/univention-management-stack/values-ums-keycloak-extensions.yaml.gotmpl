@@ -77,6 +77,14 @@ proxy:
         path: "/resources"
       - pathType: "Prefix"
         path: "/fingerprintjs"
+      - pathType: "Exact"
+        path: "/univention/meta.json"
+        backend:
+          service:
+            name: "ums-stack-gateway"
+            port:
+              name: "http"
+
     enabled: {{ .Values.ingress.enabled }}
     ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
     host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
