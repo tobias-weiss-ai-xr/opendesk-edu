@@ -343,7 +343,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "1.7.3"
+    version: "1.7.5"
     verify: true
     # @supplier: "openDesk"
 
@@ -623,7 +623,21 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "provisioning"
-    version: "0.9.5"
+    version: "0.14.0"
+    verify: true
+    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '9', '5']
+
+  umsProvisioningUdmListener:
+    # renovate:
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/charts/univention/udm-listener
+    # dependencyType=supplier
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
+    name: "udm-listener"
+    version: "0.14.0"
     verify: true
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
