@@ -280,12 +280,6 @@ serverBlock: |
       proxy_pass http://ums-portal-frontend:80/;
     }
 
-    ## ums-provisioning
-    location /univention/provisioning-api/ {
-      rewrite ^/univention/provisioning-api(/.*)$ $1 break;
-      proxy_pass http://ums-provisioning-events-and-consumer-api:80;
-    }
-
     ## guardian
     location /univention/guardian/management-ui {
       proxy_pass http://ums-guardian-management-ui:80/univention/guardian/management-ui;

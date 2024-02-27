@@ -762,68 +762,50 @@ images:
   umsProvisioningDispatcher:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/images/univention/dispatcher
+    # upstreamRepository=souvap/tooling/images/univention/provisioning-dispatcher
     # dependencyType=supplier
-    registry: "registry.souvap-univention.de"
-    repository: "souvap/tooling/images/univention/dispatcher"
-    tag: "0.11.1@sha256:e3f9f185c21ff893a654e0f08ebd6c59ce4d7513150cac530792ad656348ecfa"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-dispatcher"
+    tag: "0.14.0@sha256:2b51c4f2c71e044c67b036ab9084cb30330a7d38aae02a81ddf08752534ffa6f"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '11', '1']
+    # @mirrorFrom: ['0', '14', '0']
 
   umsProvisioningEventsAndConsumerApi:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/images/univention/events-and-consumer-api
+    # upstreamRepository=souvap/tooling/images/univention/provisioning-events-and-consumer-api
     # dependencyType=supplier
-    registry: "registry.souvap-univention.de"
-    repository: "souvap/tooling/images/univention/events-and-consumer-api"
-    tag: "0.11.1@sha256:c56c862e9687a9bcc0d3f808bf12b67fbc457cc1bb10d82505706572078282d6"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-events-and-consumer-api"
+    tag: "0.14.0@sha256:c27f585d77fa030b0663ca6c5799ae1a7950f30e34e08407c295451af0a6b653"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '11', '1']
+    # @mirrorFrom: ['0', '14', '0']
 
-  umsProvisioningNats:
+  umsProvisioningPrefill:
     # renovate:
-    # upstreamRegistry=registry-1.docker.io
-    # upstreamRepository=library/nats
-    # dependencyType=external
-    registry: "registry-1.docker.io"
-    repository: "library/nats"
-    tag: "2.10.5-alpine@sha256:85319e5e541b6f273dbffc722e001601f391028e004c90a4fadab53475789e79"
+    # upstreamRegistry=registry.souvap-univention.de
+    # upstreamRepository=souvap/tooling/images/univention/provisioning-prefill
+    # dependencyType=supplier
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-prefill"
+    tag: "0.14.0@sha256:f781373c3df8db73dcb87e5390deabe3f948054e15d9e107a556185773d473b0"
     # @supplier: "Univention"
-
-  umsProvisioningNatsBox:
-    # renovate:
-    # upstreamRegistry=registry-1.docker.io
-    # upstreamRepository=natsio/nats-box
-    # dependencyType=external
-    registry: "registry-1.docker.io"
-    repository: "natsio/nats-box"
-    tag: "0.14.1@sha256:a67913df95f1d5b265117e49e4c83228091d13d6783d80215ddcf84aba695ef4"
-    # @supplier: "Univention"
-
-  umsProvisioningNatsReloader:
-    # renovate:
-    # upstreamRegistry=registry-1.docker.io
-    # upstreamRepository=natsio/nats-server-config-reloader
-    # dependencyType=external
-    registry: "registry-1.docker.io"
-    repository: "natsio/nats-server-config-reloader"
-    tag: "0.14.1@sha256:77dd4c60001ffbf442c6b25592e73b4fca06ea9406c677607192788d80453783"
-    # @supplier: "Univention"
+    # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
+    # @mirrorFrom: ['0', '14', '0']
 
   umsProvisioningUdmListener:
     # renovate:
     # upstreamRegistry=registry.souvap-univention.de
-    # upstreamRepository=souvap/tooling/images/univention/udm-listener
+    # upstreamRepository=souvap/tooling/images/univention/provisioning-udm-listener
     # dependencyType=supplier
-    registry: "registry.souvap-univention.de"
-    repository: "souvap/tooling/images/univention/udm-listener"
-    tag: "0.11.1@sha256:27e01c9941d19a60ced4aeac84a64a4ef566d764302ac892256b9b5dc3d7548f"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-udm-listener"
+    tag: "0.14.0@sha256:90875ae80579651555c19db4badd474d7750b7322ab309d7812b40971a6813c5"
     # @supplier: "Univention"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
-    # @mirrorFrom: ['0', '11', '1']
+    # @mirrorFrom: ['0', '14', '0']
 
   umsSelfserviceInvitation:
     # renovate:

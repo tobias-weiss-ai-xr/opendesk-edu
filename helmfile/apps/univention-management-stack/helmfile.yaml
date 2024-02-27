@@ -350,6 +350,15 @@ releases:
     installed: {{ .Values.univentionManagementStack.enabled }}
     timeout: 900
 
+  - name: "ums-provisioning-udm-listener"
+    chart: "ums-provisioning-repo/{{ .Values.charts.umsProvisioningUdmListener.name }}"
+    version: "{{ .Values.charts.umsProvisioningUdmListener.version }}"
+    values:
+      - "values-common.yaml.gotmpl"
+      - "values-provisioning-udm-listener.yaml.gotmpl"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
+
   - name: "ums-guardian-management-api"
     chart: "ums-guardian-management-api-repo/{{ .Values.charts.umsGuardianManagementApi.name }}"
     version: "{{ .Values.charts.umsGuardianManagementApi.version }}"
