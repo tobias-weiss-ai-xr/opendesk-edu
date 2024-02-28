@@ -50,7 +50,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
-    tag: "1.8.2@sha256:0595292e824c039e9c088a845b3d49c6be93d46f9f99090783eb20cb1fc27227"
+    tag: "1.10.0@sha256:050f4fd6aafdf988033486f3e75545b664edb60163f6a639cb1209aec6ed9387"
     # @supplier: "Element"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '8', '0']
@@ -174,7 +174,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-neoboard-widget"
-    tag: "1.4.0@sha256:da04d6c3c3e07ec1fcb6ecec245adc48897f107a2ab84c39d8924de951744d9f"
+    tag: "1.12.0@sha256:2b2913cef614f2a81faea1997d9372b01347dadc3100d574b766df997d5ef2d5"
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '4', '0']
@@ -198,7 +198,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-bot"
-    tag: "2.7.0@sha256:31e7b1fae0bdd3d712f8be1472f5b90dd567994c09a14aa5522a4ce94a1a7507"
+    tag: "2.8.0@sha256:db1d99c13a9facfd08a7da1d0a9c7c05715bad47110e93649ad6b389e462b42c"
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['2', '7', '0']
@@ -210,7 +210,7 @@ images:
     # dependencyType=supplier
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-widget"
-    tag: "1.6.0@sha256:d213a410d6fb92f63aafa26517a55ffded5cf47b5314dfadc6e28ce8ede4965f"
+    tag: "1.6.1@sha256:70bebd9293a977124a5da955e1a520381129d476d6414a083093c1b48a55dadd"
     # @supplier: "Nordeck"
     # @mirrorFilter: '^(\d+)\.(\d+)\.(\d+)$'
     # @mirrorFrom: ['1', '6', '0']

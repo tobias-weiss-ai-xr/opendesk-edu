@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 configuration:
-  endToEndEncryption: false
+  endToEndEncryption: true
   additionalConfiguration:
     logout_redirect_url: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout?client_id=matrix&post_logout_redirect_uri=https%3A%2F%2F{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
 
@@ -15,9 +15,6 @@ configuration:
           portal_url: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/"
         custom_css_variables:
           --cpd-color-text-action-accent: {{ .Values.theme.colors.primary | quote }}
-        widget_types:
-          - jitsi
-          - net.nordeck
 
     "net.nordeck.element_web.module.widget_lifecycle":
       widget_permissions:

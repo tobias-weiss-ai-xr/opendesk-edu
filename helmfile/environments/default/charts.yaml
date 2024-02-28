@@ -86,7 +86,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-element"
-    version: "2.6.6"
+    version: "2.6.7"
     verify: true
     # @supplier: "openDesk"
 
@@ -98,7 +98,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-well-known"
-    version: "2.6.6"
+    version: "2.6.7"
     verify: true
     # @supplier: "openDesk"
 
@@ -160,7 +160,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neoboard-widget"
-    version: "3.4.1"
+    version: "3.5.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -172,7 +172,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neochoice-widget"
-    version: "3.4.1"
+    version: "3.5.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -184,7 +184,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-bot"
-    version: "3.4.1"
+    version: "3.5.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -196,7 +196,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets"
     name: "matrix-neodatefix-widget"
-    version: "3.4.1"
+    version: "3.5.0"
     verify: true
     # @supplier: "openDesk"
 
@@ -208,7 +208,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-matrix-user-verification-service"
-    version: "2.6.6"
+    version: "2.6.7"
     verify: true
     # @supplier: "openDesk"
 
@@ -405,7 +405,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse"
-    version: "2.6.6"
+    version: "2.6.7"
     verify: true
     # @supplier: "openDesk"
 
@@ -417,7 +417,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-create-account"
-    version: "2.6.6"
+    version: "2.6.7"
     verify: true
     # @supplier: "openDesk"
 
@@ -429,7 +429,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-web"
-    version: "2.6.6"
+    version: "2.6.7"
     verify: true
     # @supplier: "openDesk"
 
