@@ -11,7 +11,7 @@ collabora:
   username: "collabora-internal-admin"
   password: {{ .Values.secrets.collabora.adminPassword | quote }}
   aliasgroups:
-    - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}:443"
+    - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
 
 fullnameOverride: "collabora"
 
