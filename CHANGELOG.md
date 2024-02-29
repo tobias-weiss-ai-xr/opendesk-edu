@@ -1,3 +1,19 @@
+## [0.5.79](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.78...v0.5.79) (2024-02-29)
+
+
+### Bug Fixes
+
+* **collabora:** Bump image to 23.05.9.2.1 ([f4b8226](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f4b8226ea13971a38d61145ea9ac3821bc35f6b3))
+* **collabora:** Fix aliasgroups configuration whitelisting the Nextcloud host ([8b065fd](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8b065fd9d789cdd597a584937fefaae40f42bba2))
+* **docs:** Update version numbers of functional components for release in README.md ([31e5cf3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/31e5cf317ca7cd84a94cf42d57d0964152904471))
+* **element:** Provide end-to-end encryption as user controlled option ([3d31127](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3d31127a6ab0fa1d3af02695b521db5918932279))
+* **helmfile:** Enhance objectore environment variables to allow external Object Store ([d444226](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d4442261aa141e21222dc13407023b96570d055f))
+* **helmfile:** Set debuglevel to WARN instead of INFO when debug is not enabled. ([2efceef](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2efceef076beb06a3719859d7f4e2f0d03b99f44))
+* **nextcloud:** Bump images to enable password_policy and fix email with groupware ([8807b24](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8807b24ce09e59aaea39c349e9e12ee2a44a117a))
+* **univention-management-stack:** Bump Keycloak Extensions chart and configure the `/univention/meta.json` to be retrieved from `ums-stack-gateway` to avoid the inline 404 during Keycloak login. ([2023d5b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2023d5bce4642f794831670713b1a2520a0419d6))
+* **univention-management-stack:** Provisioning version bump ([410a023](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/410a0237149a5e41434c09795959bc53e57fb4ca))
+* **univention-management-stack:** Template more Keycloak Extension values incl. logLevel ([7ec123b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7ec123b9a174c8dade1fe9f6679796979749efab))
+
 ## [0.5.78](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.77...v0.5.78) (2024-02-23)
 
 
