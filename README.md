@@ -28,7 +28,7 @@ openDesk currently features the following functional main components:
 
 | Function             | Functional Component        | Component<br/>Version | Upstream Documentation |
 | -------------------- | --------------------------- | --------------------- | ----------------- |
-| Chat & collaboration | Element ft. Nordeck widgets | [1.11.52](https://github.com/element-hq/element-desktop/blob/develop/CHANGELOG.md#changes-in-11152-2023-12-19) | [For the most recent release](https://element.io/user-guide) |
+| Chat & collaboration | Element ft. Nordeck widgets | [1.11.59](https://github.com/element-hq/element-desktop/releases/tag/v1.11.59) | [For the most recent release](https://element.io/user-guide) |
 | Diagram editor       | Cryptpad ft. diagrams.net   | [5.6.0](https://github.com/cryptpad/cryptpad/releases/tag/5.6.0) | [For the most recent release](https://docs.cryptpad.org/en/) |
 | File management      | Nextcloud                   | [28.0.2](https://nextcloud.com/de/changelog/#28-0-2) | [Nextcloud 28](https://docs.nextcloud.com/) |
 | Groupware            | OX Appsuite                 | [8.20](https://documentation.open-xchange.com/appsuite/releases/8.20/) | Online documentation available from within the installed application; [Additional resources](https://www.open-xchange.com/resources/oxpedia) |
@@ -36,7 +36,7 @@ openDesk currently features the following functional main components:
 | Portal & IAM         | Nubus                       | Product Preview[^1]   | [Univention's documentation website](https://docs.software-univention.de/n/en/index.html) |
 | Project management   | OpenProject                 | [13.3.0](https://www.openproject.org/docs/release-notes/13-3-0/) | [For the most recent release](https://www.openproject.org/docs/user-guide/) |
 | Videoconferencing    | Jitsi                       | [2.0.8922](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_8922) | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/) |
-| Weboffice            | Collabora                   | [23.05.9.1.1](https://www.collaboraoffice.com/collabora-online-23-05-release-notes/) | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/) |
+| Weboffice            | Collabora                   | [23.05.9.2.1](https://www.collaboraoffice.com/collabora-online-23-05-release-notes/) | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/) |
 
 While not all components are perfectly shaped for the execution inside containers, one of the project's objectives is to
 align the applications with best practises regarding container design and operations.
