@@ -501,6 +501,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
+  umsStackGateway:
+    limits:
+      cpu: 99
+      memory: "64Mi"
+    requests:
+      cpu: 0.1
+      memory: "16Mi"
   umsUdmRestApi:
     limits:
       cpu: 99

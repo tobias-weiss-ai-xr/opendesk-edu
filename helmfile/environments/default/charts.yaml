@@ -294,7 +294,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "1.7.9"
+    version: "2.0.0"
     verify: true
   oxConnector:
     # providerCategory: 'Supplier'
@@ -375,58 +375,12 @@ charts:
     # upstreamRepository: 'souvap/tooling/charts/univention/ums'
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ['0', '0', '1']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
+    # registry: "registry.opencode.de"
+    # repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
+    registry: "registry.souvap-univention.de"
+    repository: "souvap/tooling/charts/univention"
     name: "ums"
-    version: "0.7.5"
-    verify: true
-  umsGuardianAuthorizationApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/guardian-authorization-api'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '0', '1']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "guardian-authorization-api"
-    version: "0.1.0"
-    verify: true
-  umsGuardianManagementApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/guardian-management-api'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '0', '1']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "guardian-management-api"
-    version: "0.1.0"
-    verify: true
-  umsGuardianManagementUi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/guardian-management-ui'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '0', '1']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "guardian-management-ui"
-    version: "0.1.0"
-    verify: true
-  umsKeycloak:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention-keycloak/ums-keycloak'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '0', '3']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ums-keycloak"
-    version: "1.0.5"
+    version: "0.11.0"
     verify: true
   umsKeycloakBootstrap:
     # providerCategory: 'Supplier'
@@ -439,198 +393,6 @@ charts:
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ums-keycloak-bootstrap"
     version: "1.0.1"
-    verify: true
-  umsKeycloakExtensions:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/keycloak-extensions'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '0', '3']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "keycloak-extensions"
-    version: "0.2.1"
-    verify: true
-  umsLdapNotifier:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/ldap-notifier'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '7', '2']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ldap-notifier"
-    version: "0.10.1"
-    verify: true
-  umsLdapServer:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/ldap-server'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '7', '2']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ldap-server"
-    version: "0.10.1"
-    verify: true
-  umsNotificationsApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/notifications-api'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '2']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "notifications-api"
-    version: "0.20.1"
-    verify: true
-  umsOpenPolicyAgent:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/open-policy-agent'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '0', '1']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "open-policy-agent"
-    version: "0.1.0"
-    verify: true
-  umsPortalFrontend:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/portal-frontend'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '2']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "portal-frontend"
-    version: "0.20.1"
-    verify: true
-  umsPortalListener:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/portal-listener'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '2']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "portal-listener"
-    version: "0.20.1"
-    verify: true
-  umsPortalServer:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/portal-server'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '2']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "portal-server"
-    version: "0.20.1"
-    verify: true
-  umsProvisioning:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/provisioning'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '5']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "provisioning"
-    version: "0.20.2"
-    verify: true
-  umsProvisioningUdmListener:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/udm-listener'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '5']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "udm-listener"
-    version: "0.20.2"
-    verify: true
-  umsSelfserviceListener:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/selfservice-listener'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '3', '1']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "selfservice-listener"
-    version: "0.3.1"
-    verify: true
-  umsStackDataSwp:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/stack-data-swp'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '41', '8']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "stack-data-swp"
-    version: "0.45.1"
-    verify: true
-  umsStackDataUms:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/stack-data-ums'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '41', '8']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "stack-data-ums"
-    version: "0.45.1"
-    verify: true
-  umsUdmRestApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/udm-rest-api'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '4', '3']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "udm-rest-api"
-    version: "0.9.0"
-    verify: true
-  umsUmcGateway:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/umc-gateway'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '6', '4']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "umc-gateway"
-    version: "0.11.6"
-    verify: true
-  umsUmcServer:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/charts/univention/umc-server'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '6', '4']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "umc-server"
-    version: "0.11.6"
     verify: true
   xwiki:
     # providerCategory: 'Supplier'
