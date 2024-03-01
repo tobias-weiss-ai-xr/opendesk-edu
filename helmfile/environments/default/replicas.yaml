@@ -44,9 +44,19 @@ replicas:
   redis: 1
   synapse: 1
   synapseWeb: 1
+  umsKeycloakExtensionsHandler: 1
+  umsKeycloakExtensionsProxy: 1
+  umsLdapNotifier: 1
+  umsLdapServer: 1
+  umsNotificationsApi: 1
   umsPortalFrontend: 1
+  umsPortalListener: 1
   umsPortalServer: 1
+  umsSelfserviceListener: 1
+  umsStackGateway: 1
   umsUdmRestApi: 1
+  umsUmcGateway: 1
+  umsUmcServer: 1
   wellKnown: 1
   xwiki: 1
 ...

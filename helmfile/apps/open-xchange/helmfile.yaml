@@ -27,7 +27,8 @@ repositories:
       {{ .Values.charts.openXchangeAppSuite.repository }}"
 
   # openDesk Open-Xchange Bootstrap
-  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap
+  # Source:
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap
   - name: "open-xchange-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.openXchangeAppSuiteBootstrap.verify }}
