@@ -19,8 +19,6 @@ intercom:
   enabled: true
 jitsi:
   enabled: true
-keycloak:
-  enabled: true
 mariadb:
   enabled: true
 memcached:
