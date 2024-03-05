@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Requirements](#requirements)
 * [Getting started](#getting-started)
 * [Advanced customization](#advanced-customization)
+* [Development](#development)
 * [Releases](#releases)
 * [Components](#components)
 * [Feedback](#feedback)
@@ -75,6 +76,10 @@ Of course, further development also includes enhancing the documentation itself.
 - [Scaling](./docs/scaling.md)
 - [Monitoring](./docs/monitoring.md)
 - [Theming](./docs/theming.md)
+
+# Development
+
+⟶ To understand the repository contents from a developer perspective please read the [Development](./docs/development.md) guide.
 
 # Releases
 

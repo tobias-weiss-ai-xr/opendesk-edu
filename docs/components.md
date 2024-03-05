@@ -73,7 +73,7 @@ flowchart TD
 
 ## Intercom Service (ICS)
 
-The UCS Intercom Service's role is to enable cross-application integration based on browser interaction.
+The Univention Intercom Service's role is to enable cross-application integration based on browser interaction.
 Handling authentication when the frontend of an application is using the API from another application is often a
 challenge.
 For more details on the ICS please refer to its own [doc](./components/intercom-service.md).

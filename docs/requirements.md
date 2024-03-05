@@ -82,7 +82,6 @@ openDesk certificate management disabled.
 
 Evaluation the openDesk deployment does not require any external service to start, but features may be limited.
 
-
 | Group    | Type                | Version | Tested against        |
 |----------|---------------------|---------|-----------------------|
 | Cache    | Memached            | `1.6.x` | Memached              |
