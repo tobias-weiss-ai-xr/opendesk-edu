@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
 
@@ -15,7 +15,6 @@ But contributions will be possible soon once the CLA process is sorted out.
   * [Renovate](#renovate)
   * [Mirroring](#mirroring)
     * [Get new artefacts mirrored](#get-new-artefacts-mirrored)
-  * [Release-Artefacts](#release-artefacts)
 * [Creating new charts / images](#creating-new-charts--images)
 
 # Overview
@@ -60,12 +59,11 @@ In case you do not plan to actually merge from the branch you have pushed, pleas
 
 The `charts.yaml` and `images.yaml` are the central place to reference external artefacts that are used for the deployment.
 
-Beside the deployment automation itself various tools work with the contents of the files:
+Beside the deployment automation itself some tools work with the contents of the files:
 
 - **Linting**: Ensures consistency of the file contents for the other tools.
 - **Renovate**: Automatically create MRs that update the components to their latest version.
 - **Mirror**: Mirror artefacts to Open CoDE.
-- **Release-Artefacts**: Creates the release asset jsons.
 
 Please find details on these tools below.
 
@@ -131,18 +129,6 @@ If you want new images or charts to be mirrored that are not yet included in one
 You include them in your branch with all required annotations and either
 1. ask somebody from the platform development team to trigger the mirror's CI based on your branch or
 2. you get your branch merged to `develop` already.
-
-## Release-Artefacts
-
-- See also: https://gitlab.opencode.de/bmi/opendesk/tooling/opendesk-asset-generator
-
-Creates the two artefacts `image-index.json` and `chart-index.json` by parsing the yaml files and combining the artefact's details:
-- `registry`
-- `repository`
-- `tag` in the images file or `name` & `version` in the charts file.
-adding the provider information from the annotations
-- `# providerCategory`
-- `# providerResponsible`
 
 # Creating new charts / images
 

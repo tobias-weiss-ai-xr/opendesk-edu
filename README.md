@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
 
@@ -27,17 +27,17 @@ Aufbau ZenDiS" of Germany's Federal Ministry of the Interior.
 
 openDesk currently features the following functional main components:
 
-| Function             | Functional Component        | Component<br/>Version | Upstream Documentation |
-| -------------------- | --------------------------- | --------------------- | ----------------- |
-| Chat & collaboration | Element ft. Nordeck widgets | [1.11.59](https://github.com/element-hq/element-desktop/releases/tag/v1.11.59) | [For the most recent release](https://element.io/user-guide) |
-| Diagram editor       | Cryptpad ft. diagrams.net   | [5.6.0](https://github.com/cryptpad/cryptpad/releases/tag/5.6.0) | [For the most recent release](https://docs.cryptpad.org/en/) |
-| File management      | Nextcloud                   | [28.0.2](https://nextcloud.com/de/changelog/#28-0-2) | [Nextcloud 28](https://docs.nextcloud.com/) |
-| Groupware            | OX Appsuite                 | [8.20](https://documentation.open-xchange.com/appsuite/releases/8.20/) | Online documentation available from within the installed application; [Additional resources](https://www.open-xchange.com/resources/oxpedia) |
-| Knowledge management | XWiki                       | [15.10.4](https://www.xwiki.org/xwiki/bin/view/Blog/XWiki15104Released) | [For the most recent release](https://www.xwiki.org/xwiki/bin/view/Documentation) |
-| Portal & IAM         | Nubus                       | Product Preview[^1]   | [Univention's documentation website](https://docs.software-univention.de/n/en/index.html) |
-| Project management   | OpenProject                 | [13.3.1](https://www.openproject.org/docs/release-notes/13-3-1/) | [For the most recent release](https://www.openproject.org/docs/user-guide/) |
-| Videoconferencing    | Jitsi                       | [2.0.8922](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_8922) | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/) |
-| Weboffice            | Collabora                   | [23.05.9.2.1](https://www.collaboraoffice.com/collabora-online-23-05-release-notes/) | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/) |
+| Function             | Functional Component        | Component<br/>Version                                                                                          | Upstream Documentation                                                                                                                       |
+| -------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chat & collaboration | Element ft. Nordeck widgets | [1.11.59](https://github.com/element-hq/element-desktop/releases/tag/v1.11.59)                                 | [For the most recent release](https://element.io/user-guide)                                                                                 |
+| Diagram editor       | Cryptpad ft. diagrams.net   | [5.6.0](https://github.com/cryptpad/cryptpad/releases/tag/5.6.0)                                               | [For the most recent release](https://docs.cryptpad.org/en/)                                                                                 |
+| File management      | Nextcloud                   | [28.0.2](https://nextcloud.com/de/changelog/#28-0-2)                                                           | [Nextcloud 28](https://docs.nextcloud.com/)                                                                                                  |
+| Groupware            | OX Appsuite                 | [8.20](https://documentation.open-xchange.com/appsuite/releases/8.20/)                                         | Online documentation available from within the installed application; [Additional resources](https://www.open-xchange.com/resources/oxpedia) |
+| Knowledge management | XWiki                       | [15.10.4](https://www.xwiki.org/xwiki/bin/view/Blog/XWiki15104Released)                                        | [For the most recent release](https://www.xwiki.org/xwiki/bin/view/Documentation)                                                            |
+| Portal & IAM         | Nubus                       | Product Preview[^1]                                                                                            | [Univention's documentation website](https://docs.software-univention.de/n/en/index.html)                                                    |
+| Project management   | OpenProject                 | [13.3.1](https://www.openproject.org/docs/release-notes/13-3-1/)                                               | [For the most recent release](https://www.openproject.org/docs/user-guide/)                                                                  |
+| Videoconferencing    | Jitsi                       | [2.0.8922](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_8922)                          | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/)                                                   |
+| Weboffice            | Collabora                   | [23.05.9.1.1](https://www.collaboraoffice.com/collabora-online-23-05-release-notes/)                           | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)               |
 
 While not all components are perfectly shaped for the execution inside containers, one of the project's objectives is to
 align the applications with best practises regarding container design and operations.
@@ -89,9 +89,10 @@ Gitlab provides an
 [overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases)
 of this project.
 
-The following release artefacts are provided beside the default source code assets:
-- `chart-index.json`: An overview of all Helm charts used by the release.
-- `image-index.json`: An overview of all container images used by the release.
+Please find a list of the artefacts related to the release either in the source code archive attached to the release or
+in the files from the release's git-tag:
+- `./helmfile/environments/default/images.yaml`
+- `./helmfile/environments/default/charts.yaml`
 
 ⟶ Visit our detailed [Workflow](./docs/workflow.md) docs.
 
@@ -107,7 +108,7 @@ Related to the deployment / contents of this repository,
 please use the [issues within this project](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/issues).
 
 If you want to address other topics, please check the section
-["Rückmeldungen und Beteiligung" of the Infos' project OVERVIEW.md](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung).
+["Rückmeldungen und Beteiligung" in the OVERVIEW.md](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung) of the [openDesk Info Repository](https://gitlab.opencode.de/bmi/opendesk/info).
 
 # License
 

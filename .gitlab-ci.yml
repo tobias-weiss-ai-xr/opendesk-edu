@@ -34,7 +34,6 @@ stages:
   - "component-deploy-stage-2"
   - "tests"
   - "env-stop"
-  - "generate-release-assets"
   - ".post"
 
 variables:
@@ -508,34 +507,6 @@ avscan-start:
         job: "avscan-prepare"
     strategy: "depend"
 
-generate-release-assets:
-  stage: "generate-release-assets"
-  image: "registry.souvap-univention.de/souvap/tooling/images/ansible:4.10.0"
-  rules:
-    - if: >
-        $JOB_AVSCAN_ENABLED != 'false' &&
-        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
-        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
-      when: "on_success"
-    - when: "never"
-  script:
-    - |
-      git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${ASSET_GENERATOR_REPO_PATH}
-      cd opendesk-asset-generator
-      export OPENDESK_DEPLOYMENT_AUTOMATION_PATH=${CI_PROJECT_DIR}
-      ./opendesk_asset_generator.py
-      mv ./build_artefacts ${CI_PROJECT_DIR}
-      cd ..
-      rm -rf opendesk-asset-generator
-      ls -l ./build_artefacts
-  artifacts:
-    paths:
-      - "./build_artefacts/chart-index.json"
-      - "./build_artefacts/image-index.json"
-  tags: []
-  variables:
-    ASSET_GENERATOR_REPO_PATH: "bmi/opendesk/tooling/opendesk-asset-generator"
-
 # Declare .environments which is in environments repository. In case it is not available
 # 'cache' is used because job must contain at least one key, so cache is just a dummy key.
 .environments:
@@ -574,8 +545,6 @@ generate-release-version:
       when: "on_success"
 
 release:
-  dependencies:
-    - "generate-release-assets"
   rules:
     - if: >
         $JOB_AVSCAN_ENABLED != 'false' &&
@@ -609,16 +578,7 @@ release:
       {
         "branches": ["main"],
         "plugins": [
-          ["@semantic-release/gitlab",
-            {
-              "assets": [
-                { "path": "./build_artefacts/chart-index.json",
-                  "label": "Chart Index JSON" },
-                { "path": "./build_artefacts/image-index.json",
-                  "label": "Image Index JSON" },
-              ]
-            }
-          ],
+          "@semantic-release/gitlab",
           "@semantic-release/release-notes-generator",
           "@semantic-release/changelog",
           ["@semantic-release/git", {
@@ -637,6 +597,5 @@ release:
       EOF
     - "semantic-release"
   needs:
-    - "generate-release-assets"
     - "generate-docs"
 ...
