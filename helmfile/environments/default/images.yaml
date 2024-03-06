@@ -524,7 +524,7 @@ images:
     # upstreamMirrorStartFrom: ['22', '0', '3']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-keycloak"
-    tag: "22.0.3-ucs2@sha256:1e8e45a2e01050c1473595c3b143446363016ea292b0c599ccd9f1bd37112206"
+    tag: "23.0.7-ucs1@sha256:94b34cf3d9266435cf03549b58f874219ecbe9c38c18a070fea403d0cdd2bfc4"
   umsKeycloakBootstrap:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
