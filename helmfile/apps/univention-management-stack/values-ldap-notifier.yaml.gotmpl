@@ -27,7 +27,8 @@ securityContext:
   runAsUser: 0
   runAsGroup: 0
   runAsNonRoot: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsLdapNotifier }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsLdapNotifier | toYaml | nindent 4 }}
 
 volumes:
   claims:

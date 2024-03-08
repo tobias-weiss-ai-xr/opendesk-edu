@@ -85,7 +85,8 @@ securityContext:
   runAsGroup: 0
   runAsNonRoot: false
   readOnlyRootFilesystem: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.oxConnector }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.oxConnector | toYaml | nindent 4 }}
 
 serviceAccount:
   create: true

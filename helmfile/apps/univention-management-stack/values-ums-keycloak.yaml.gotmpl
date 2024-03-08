@@ -44,7 +44,8 @@ containerSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsKeycloak }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsKeycloak | toYaml | nindent 4 }}
 
 podSecurityContext:
   fsGroup: 1000

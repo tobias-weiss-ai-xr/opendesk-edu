@@ -30,7 +30,8 @@ master:
     capabilities:
       drop:
         - "ALL"
-    seLinuxOptions: {{ .Values.seLinuxOptions.redis }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.redis | toYaml | nindent 6 }}
   count: {{ .Values.replicas.redis }}
   persistence:
     size: {{ .Values.persistence.size.redis | quote }}

@@ -46,6 +46,7 @@ securityContext:
   runAsUser: 1000
   runAsGroup: 1000
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsOpenPolicyAgent }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsOpenPolicyAgent | toYaml | nindent 4 }}
 
 ...

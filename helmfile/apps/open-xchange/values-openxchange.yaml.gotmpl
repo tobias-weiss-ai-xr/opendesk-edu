@@ -40,7 +40,8 @@ nextcloud-integration-ui:
     privileged: false
     seccompProfile:
       type: "RuntimeDefault"
-    seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeNextcloudIntegrationUI }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.openxchangeNextcloudIntegrationUI | toYaml | nindent 6 }}
 
 public-sector-ui:
   image:
@@ -67,7 +68,8 @@ public-sector-ui:
     privileged: false
     seccompProfile:
       type: "RuntimeDefault"
-    seLinuxOptions: {{ .Values.seLinuxOptions.openxchangePublicSectorUI }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.openxchangePublicSectorUI | toYaml | nindent 6 }}
 
 appsuite:
   appsuite-toolkit:
@@ -131,7 +133,8 @@ appsuite:
         privileged: false
         seccompProfile:
           type: "RuntimeDefault"
-        seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeGotenberg }}
+        seLinuxOptions:
+          {{ .Values.seLinuxOptions.openxchangeGotenberg | toYaml | nindent 10 }}
     hooks:
       beforeAppsuiteStart:
         create-guard-dir.sh: |
@@ -356,7 +359,8 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreUI }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.openxchangeCoreUI | toYaml | nindent 8 }}
 
   core-ui-middleware:
     enabled: true
@@ -398,7 +402,8 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreUIMiddleware }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.openxchangeCoreUIMiddleware | toYaml | nindent 8 }}
   core-cacheservice:
     enabled: false
 
@@ -428,7 +433,8 @@ appsuite:
           - "ALL"
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeDocumentConverter }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.openxchangeDocumentConverter | toYaml | nindent 8 }}
 
   core-documents-collaboration:
     enabled: false
@@ -470,7 +476,8 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreGuidedtours }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.openxchangeCoreGuidedtours | toYaml | nindent 8 }}
 
   core-imageconverter:
     enabled: true
@@ -500,7 +507,8 @@ appsuite:
           - "ALL"
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeImageConverter }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.openxchangeImageConverter | toYaml | nindent 8 }}
 
   guard-ui:
     enabled: true
@@ -526,7 +534,8 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeGuardUI }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.openxchangeGuardUI | toYaml | nindent 8 }}
   core-spellcheck:
     enabled: false
 
@@ -555,5 +564,6 @@ appsuite:
       privileged: false
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.openxchangeCoreUserGuide }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.openxchangeCoreUserGuide | toYaml | nindent 8 }}
 ...

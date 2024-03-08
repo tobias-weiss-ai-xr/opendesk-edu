@@ -107,7 +107,8 @@ containerSecurityContext:
   runAsUser: 101
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.element }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.element | toYaml | nindent 4 }}
 
 global:
   domain: {{ .Values.global.domain | quote }}

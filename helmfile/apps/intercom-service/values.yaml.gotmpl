@@ -14,7 +14,8 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.intercom }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.intercom | toYaml | nindent 4 }}
 
 global:
   domain: {{ .Values.global.domain | quote }}

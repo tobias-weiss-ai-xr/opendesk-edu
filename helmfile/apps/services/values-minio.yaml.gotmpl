@@ -29,7 +29,8 @@ containerSecurityContext:
   readOnlyRootFilesystem: false
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.minio }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.minio | toYaml | nindent 4 }}
 
 defaultBuckets: "openproject,openxchange,ums,nextcloud"
 
@@ -68,7 +69,7 @@ metrics:
   serviceMonitor:
     enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
     additionalLabels:
-      {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+      {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 6 }}
 
 networkPolicy:
   enabled: false

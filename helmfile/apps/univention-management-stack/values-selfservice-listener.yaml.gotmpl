@@ -73,6 +73,7 @@ securityContext:
   runAsUser: 0
   runAsGroup: 0
   runAsNonRoot: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsSelfserviceListener }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsSelfserviceListener | toYaml | nindent 4 }}
 
 ...

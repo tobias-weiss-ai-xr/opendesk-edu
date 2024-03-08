@@ -17,7 +17,8 @@ containerSecurityContext:
   runAsUser: 0
   runAsGroup: 0
   privileged: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.postfix }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
 
 global:
   imagePullSecrets:

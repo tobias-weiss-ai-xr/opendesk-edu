@@ -18,7 +18,8 @@ containerSecurityContext:
   runAsUser: 101
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.matrixNeoDateFixWidget }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.matrixNeoDateFixWidget | toYaml | nindent 4 }}
 
 global:
   domain: {{ .Values.global.domain | quote }}

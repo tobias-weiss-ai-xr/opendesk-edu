@@ -14,7 +14,8 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.postgresql }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.postgresql | toYaml | nindent 4 }}
 
 job:
 

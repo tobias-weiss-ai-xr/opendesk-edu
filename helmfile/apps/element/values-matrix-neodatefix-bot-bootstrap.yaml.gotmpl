@@ -35,6 +35,7 @@ securityContext:
   runAsUser: 101
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.synapseCreateUser }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.synapseCreateUser | toYaml | nindent 4 }}
 
 ...
