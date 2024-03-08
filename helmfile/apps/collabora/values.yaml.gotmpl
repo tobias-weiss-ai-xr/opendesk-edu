@@ -19,9 +19,9 @@ grafana:
   dashboards:
     enabled: {{ .Values.grafana.dashboards.enabled }}
     labels:
-      {{- toYaml .Values.grafana.dashboards.labels | nindent 6 }}
+      {{ .Values.grafana.dashboards.labels | toYaml | nindent 6 }}
     annotations:
-      {{- toYaml .Values.grafana.dashboards.annotations | nindent 6 }}
+      {{ .Values.grafana.dashboards.annotations | toYaml | nindent 6 }}
 
 image:
   repository: "{{ .Values.global.imageRegistry | default .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
@@ -90,11 +90,11 @@ prometheus:
   servicemonitor:
     enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
     labels:
-      {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 6 }}
+      {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 6 }}
   rules:
     enabled: {{ .Values.prometheus.prometheusRules.enabled }}
     additionalLabels:
-      {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 6 }}
+      {{ .Values.prometheus.prometheusRules.labels | toYaml | nindent 6 }}
 
 replicaCount: {{ .Values.replicas.collabora }}
 
@@ -126,7 +126,8 @@ securityContext:
       - "NET_RAW"
       - "SYS_CHROOT"
       - "MKNOD"
-  seLinuxOptions: {{ .Values.seLinuxOptions.collabora }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.collabora | toYaml | nindent 4 }}
 serviceAccount:
   create: true
 ...

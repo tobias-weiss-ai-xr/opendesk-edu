@@ -79,6 +79,7 @@ securityContext:
   runAsUser: 0
   runAsGroup: 0
   runAsNonRoot: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsPortalListener }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsPortalListener | toYaml | nindent 4 }}
 
 ...

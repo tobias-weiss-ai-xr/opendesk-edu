@@ -17,7 +17,8 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.mariadb }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.mariadb | toYaml | nindent 4 }}
 
 global:
   imagePullSecrets:

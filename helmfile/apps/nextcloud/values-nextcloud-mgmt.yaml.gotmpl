@@ -95,7 +95,8 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: false
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.nextcloudManagement }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.nextcloudManagement | toYaml | nindent 4 }}
 
 debug:
   loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"1"{{ end }}

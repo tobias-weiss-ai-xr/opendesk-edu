@@ -14,7 +14,8 @@ containerSecurityContext:
   runAsUser: 0
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.matrixUserVerificationService }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.matrixUserVerificationService | toYaml | nindent 4 }}
 
 extraEnvVars:
   - name: "UVS_ACCESS_TOKEN"

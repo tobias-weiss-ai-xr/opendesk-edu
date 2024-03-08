@@ -29,7 +29,8 @@ securityContext:
   runAsUser: 0
   runAsGroup: 0
   runAsNonRoot: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsDataLoader }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsDataLoader | toYaml | nindent 4 }}
 
 stackDataContext:
   ldapBase: "dc=swp-ldap,dc=internal"

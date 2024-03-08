@@ -20,7 +20,8 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.openproject }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.openproject | toYaml | nindent 4 }}
 
 environment:
 # For more details and more options see

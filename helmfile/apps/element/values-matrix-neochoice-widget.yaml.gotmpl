@@ -14,7 +14,8 @@ containerSecurityContext:
   runAsUser: 101
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.matrixNeoChoiceWidget }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.matrixNeoChoiceWidget | toYaml | nindent 4 }}
 
 global:
   domain: {{ .Values.global.domain | quote }}

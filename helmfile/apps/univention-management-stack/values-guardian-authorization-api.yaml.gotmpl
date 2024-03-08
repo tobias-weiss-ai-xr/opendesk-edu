@@ -55,6 +55,7 @@ securityContext:
   runAsGroup: 1000
   runAsNonRoot: true
   readOnlyRootFilesystem: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsGuardianAuthorizationApi }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsGuardianAuthorizationApi | toYaml | nindent 4 }}
 
 ...

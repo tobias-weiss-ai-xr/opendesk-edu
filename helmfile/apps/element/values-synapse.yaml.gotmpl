@@ -79,7 +79,8 @@ containerSecurityContext:
   runAsGroup: 10991
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.synapse }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.synapse | toYaml | nindent 4 }}
 
 global:
   domain: {{ .Values.global.domain | quote }}

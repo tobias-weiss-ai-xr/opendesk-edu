@@ -44,6 +44,7 @@ securityContext:
   runAsUser: 1000
   runAsGroup: 1000
   runAsNonRoot: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsNotificationsApi }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsNotificationsApi | toYaml | nindent 4 }}
 
 ...

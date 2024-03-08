@@ -25,7 +25,8 @@ exporter:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-    seLinuxOptions: {{ .Values.seLinuxOptions.nextcloudExporter }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.nextcloudExporter | toYaml | nindent 6 }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudExporter.registry | quote }}
     repository: "{{ .Values.images.nextcloudExporter.repository }}"
@@ -35,11 +36,11 @@ exporter:
     serviceMonitor:
       enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
       labels:
-        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 8 }}
+        {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
     prometheusRule:
       enabled: {{ .Values.prometheus.prometheusRules.enabled }}
       additionalLabels:
-        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 8 }}
+        {{ .Values.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
   replicaCount: {{ .Values.replicas.nextcloudExporter }}
   resources:
     {{ .Values.resources.nextcloudExporter | toYaml | nindent 4 }}
@@ -78,7 +79,8 @@ php:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-    seLinuxOptions: {{ .Values.seLinuxOptions.nextcloudPHP }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.nextcloudPHP | toYaml | nindent 6 }}
   cron:
     successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"0"{{ end }}
   debug:
@@ -92,11 +94,11 @@ php:
     serviceMonitor:
       enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
       labels:
-        {{- toYaml .Values.prometheus.serviceMonitors.labels | nindent 8 }}
+        {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
     prometheusRule:
       enabled: {{ .Values.prometheus.prometheusRules.enabled }}
       additionalLabels:
-        {{- toYaml .Values.prometheus.prometheusRules.labels | nindent 8 }}
+        {{ .Values.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
   replicaCount: {{ .Values.replicas.nextcloudPHP }}
   resources:
     {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
@@ -118,7 +120,8 @@ apache2:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-    seLinuxOptions: {{ .Values.seLinuxOptions.nextcloudApache2 }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.nextcloudApache2 | toYaml | nindent 6 }}
   ingress:
     enabled: {{ .Values.ingress.enabled }}
     ingressClassName: {{ .Values.ingress.ingressClassName | quote }}

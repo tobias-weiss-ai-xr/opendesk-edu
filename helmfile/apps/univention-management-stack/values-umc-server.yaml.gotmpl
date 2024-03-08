@@ -94,7 +94,8 @@ securityContext:
   runAsUser: 0
   runAsGroup: 0
   runAsNonRoot: false
-  seLinuxOptions: {{ .Values.seLinuxOptions.umsUmcServer }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 4 }}
 
 umcServer:
   certPemFile: "/var/secrets/ssl/tls.crt"

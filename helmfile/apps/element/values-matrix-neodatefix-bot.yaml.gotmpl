@@ -35,7 +35,8 @@ containerSecurityContext:
   runAsUser: 101
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.matrixNeoDateFixBot }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.matrixNeoDateFixBot | toYaml | nindent 4 }}
 
 extraEnvVars:
   - name: "ACCESS_TOKEN"

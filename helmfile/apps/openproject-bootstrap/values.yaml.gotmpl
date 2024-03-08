@@ -38,7 +38,8 @@ containerSecurityContext:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.openprojectBootstrap }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.openprojectBootstrap | toYaml | nindent 4 }}
 
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.openprojectBootstrap.registry | quote }}

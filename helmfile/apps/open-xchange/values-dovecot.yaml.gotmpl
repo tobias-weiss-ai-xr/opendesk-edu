@@ -66,7 +66,8 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   seccompProfile:
     type: "RuntimeDefault"
-  seLinuxOptions: {{ .Values.seLinuxOptions.dovecot }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.dovecot | toYaml | nindent 4 }}
 
 podSecurityContext:
   enabled: true

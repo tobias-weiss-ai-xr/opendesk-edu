@@ -23,7 +23,8 @@ containerSecurityContext:
   runAsUser: 1993
   runAsGroup: 1993
   runAsNonRoot: true
-  seLinuxOptions: {{ .Values.seLinuxOptions.jitsiKeycloakAdapter }}
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.jitsiKeycloakAdapter | toYaml | nindent 4 }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
@@ -75,7 +76,8 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.jitsi }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.jitsi | toYaml | nindent 8 }}
   prosody:
     image:
       repository: "{{ .Values.global.imageRegistry | default .Values.images.prosody.registry }}/{{ .Values.images.prosody.repository }}"
@@ -123,7 +125,8 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.prosody }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.prosody | toYaml | nindent 8 }}
   jicofo:
     replicaCount: {{ .Values.replicas.jicofo }}
     image:
@@ -145,7 +148,8 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.jicofo }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.jicofo | toYaml | nindent 8 }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     image:
@@ -168,7 +172,8 @@ jitsi:
       runAsUser: 0
       seccompProfile:
         type: "RuntimeDefault"
-      seLinuxOptions: {{ .Values.seLinuxOptions.jvb }}
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.jvb | toYaml | nindent 8 }}
   jibri:
     replicaCount: {{ .Values.replicas.jibri }}
     image:
@@ -206,7 +211,8 @@ patchJVB:
     runAsNonRoot: true
     seccompProfile:
       type: "RuntimeDefault"
-    seLinuxOptions: {{ .Values.seLinuxOptions.jitsiPatchJVB }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.jitsiPatchJVB | toYaml | nindent 6 }}
   image:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     registry: {{ .Values.global.imageRegistry | default .Values.images.jitsiPatchJVB.registry | quote }}
