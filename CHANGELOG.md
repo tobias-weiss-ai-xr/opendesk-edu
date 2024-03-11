@@ -1,3 +1,15 @@
+## [0.5.80](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.79...v0.5.80) (2024-03-11)
+
+
+### Bug Fixes
+
+* **ci:** Remove creation of release artefacts, use the `images.yaml` and `charts.yaml` in `./helmfile/environments/default` for information about the artefacts instead. ([ee99eef](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ee99eefb72d3207866ffd1b3bd21a36bd55ad288))
+* **collabora:** Bump image to 23.05.9.4.1 ([9c32058](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9c32058fcc21a14e9e66a46064ea044402638920))
+* **docs:** Add development.md and refactor `images.yaml` and `charts.yaml` ([a2b333b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a2b333b46277a4bb86b75ca04edb64e69efff916))
+* **helmfile:** YAML handling of seLinuxOptions and align overall `toYaml` syntax ([011ad2c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/011ad2cd6bfe552e04a598452e8814d4d1029152))
+* **nextcloud:** Update images digests ([bc18724](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bc18724d70ffff749d5192487944e62233cf4376))
+* **openproject:** Bump to 13.3.1 ([7ee9e47](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7ee9e47e8269334294c80093a359b247d86f5d62))
+
 ## [0.5.79](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.78...v0.5.79) (2024-02-29)
 
 
