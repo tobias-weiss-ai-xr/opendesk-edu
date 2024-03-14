@@ -546,7 +546,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "provisioning"
-    version: "0.14.0"
+    version: "0.20.2"
     verify: true
   umsProvisioningUdmListener:
     # providerCategory: 'Supplier'
@@ -558,7 +558,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "udm-listener"
-    version: "0.14.0"
+    version: "0.20.2"
     verify: true
   umsSelfserviceListener:
     # providerCategory: 'Supplier'

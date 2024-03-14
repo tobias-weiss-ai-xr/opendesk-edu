@@ -22,6 +22,11 @@ config:
   tlsMode: "off"
   natsHost: "ums-provisioning-nats"
   natsPort: "4222"
+  natsUser: "udmlistener"
+  natsPassword: {{ .Values.secrets.univentionManagementStack.provisioning.udmListenerNatsPassword }}
+  internalApiHost: "ums-provisioning-api"
+  eventsUsernameUdm: "udmproducer"
+  eventsPasswordUdm: {{ .Values.secrets.univentionManagementStack.provisioning.udmProducerPassword }}
 
 resources:
   {{ .Values.resources.umsProvisioningUdmListener | toYaml | nindent 4 }}
