@@ -22,7 +22,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
     name: "opendesk-clamav"
-    version: "4.0.1"
+    version: "4.0.5"
     verify: true
   clamavSimple:
     # providerCategory: 'Platform'
@@ -32,7 +32,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-clamav"
     name: "clamav-simple"
-    version: "4.0.1"
+    version: "4.0.5"
     verify: true
   collabora:
     # providerCategory: 'Supplier'

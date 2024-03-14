@@ -99,6 +99,9 @@ securityContext:
 
 umcServer:
   certPemFile: "/var/secrets/ssl/tls.crt"
+  caCert: "Cg=="
+  certPem: "Cg=="
+  privateKey: "Cg=="
   # TODO: Secret should be entered without b64enc
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
   # TODO: Secret should be entered without b64enc
