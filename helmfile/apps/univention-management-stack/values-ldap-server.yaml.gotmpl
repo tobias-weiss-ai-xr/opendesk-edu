@@ -40,6 +40,10 @@ image:
     tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
 
 ldapServer:
+  caCert: "Cg=="
+  certPem: "Cg=="
+  privateKey: "Cg=="
+  dhParam: "Cg=="
   waitForSamlMetadata: true
   ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
