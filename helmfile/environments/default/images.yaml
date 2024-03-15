@@ -46,7 +46,7 @@ images:
     # upstreamMirrorStartFrom: ['1', '8', '0']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
-    tag: "1.10.0@sha256:050f4fd6aafdf988033486f3e75545b664edb60163f6a639cb1209aec6ed9387"
+    tag: "1.11.0@sha256:633cc31a4c312cdb072136247ac382463ddbc458a5c57e139241394acee9baaf"
   freshclam:
     # providerCategory: 'Community'
     # providerResponsible: 'openDesk'
@@ -148,7 +148,7 @@ images:
     # upstreamMirrorStartFrom: ['1', '4', '0']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-neoboard-widget"
-    tag: "1.12.0@sha256:2b2913cef614f2a81faea1997d9372b01347dadc3100d574b766df997d5ef2d5"
+    tag: "1.14.0@sha256:1a00f33ed5f560e55b06011b2f81696fd8230820f6980edb826768af0e0b41d9"
   matrixNeoChoiceWidget:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Nordeck'
