@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 include:
@@ -42,14 +43,15 @@ variables:
     description: "The name of namespaces to deploy to."
     value: ""
   CLUSTER:
-    description: "Define which cluster to use. Cluster must be defined in gitlab/environments.yaml of
-      sovereign-workplace-env included above."
+    description: "Which cluster to use. Cluster must be defined in `gitlab/environments.yaml` of the
+        repo that is included above using the env var `PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG`:
+        ${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
     value: "dev"
   MASTER_PASSWORD_WEB_VAR:
-    description: "Optional: Provide a passphrase to be used for password generation."
+    description: "Optional: Provide a seed to be used for generation of all internal secrets. Same seed will result in same secrets."
     value: ""
   ENV_STOP_BEFORE:
-    description: "Stop environment/delete namespace for the deployment"
+    description: "Stop environment/delete namespace for the deployment."
     value: "no"
     options:
       - "yes"
@@ -452,7 +454,7 @@ avscan-prepare:
           $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "always"
     - when: "never"
-  image: "external-registry.souvap-univention.de/docker-remote/mikefarah/yq"
+  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/mikefarah/yq"
   script:
     - |
       cat << 'EOF' > dynamic-scans.yml
@@ -566,7 +568,7 @@ release:
     - |
       echo -e "\n[INFO] Writing data to helm value file..."
       cat <<EOF >helmfile/environments/default/global.generated.yaml
-      # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+      # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
       # SPDX-License-Identifier: Apache-2.0
       ---
       global:

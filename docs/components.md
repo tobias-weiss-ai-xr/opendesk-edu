@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
 <h1>Components</h1>
@@ -34,7 +35,6 @@ they need to be replaced in production deployments.
 | ClamAV (Simple)             | Antivirus engine               | Eval       |
 | Collabora                   | Weboffice                      | Functional |
 | CryptPad                    | Weboffice                      | Functional |
-| Dovecot                     | Mail backend                   | Functional |
 | Element                     | Secure communications platform | Functional |
 | Intercom Service            | Cross service data exchange    | Functional |
 | Jitsi                       | Videoconferencing              | Functional |
@@ -44,7 +44,8 @@ they need to be replaced in production deployments.
 | Nextcloud                   | File share                     | Functional |
 | OpenProject                 | Project management             | Functional |
 | OX Appsuite                 | Groupware                      | Functional |
-| Provisioning                | Backend provisioning           | Functional |
+| OX Dovecot                  | Mail backend (IMAP)            | Functional |
+| Provisioning (OX Connector) | Groupware provisioning         | Functional |
 | Postfix                     | MTA                            | Eval       |
 | PostgreSQL                  | Database                       | Eval       |
 | Redis                       | Cache Database                 | Eval       |

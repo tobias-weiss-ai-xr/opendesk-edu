@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
 
@@ -139,17 +140,19 @@ As a standard, the openDesk platform development team uses [reuse.software](http
 
 openDesk uses Apache 2.0 as the license for their work. A typical reuse copyright and license header looks like this:
 ```
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ```
 As the way to mark the license header as a comment differs between the various filetypes, please find matching examples for the types all across the [deployment automation repository](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace).
+
+**Remark**: If there is already an existing `SPDX-FileCopyrightText` please just add the one from the above example.
 
 ## Development workflow
 
 ### Disclaimer
 
 openDesk consists only of community products, so there is no SLA to receive service updates or backports of critical security fixes. This has two consequences:
-- In production scenarios, you should replace the community versions of the functional components with supported, SLA-backend paid versions.
+- In production scenarios, you should replace the community versions of the functional components with supported, SLA-backed paid versions.
 - openDesk aims to always update to the latest available releases of the community components and we therefore have rolling technical releases.
 
 ### Workflow
@@ -225,22 +228,28 @@ gitGraph
 
 The Standard Quality Gate addresses quality assurance steps that should be executed within each of the mentioned quality gates in the workflow.
 
+1. Linting
+   - Blocking
+     - Licening: [reuse](https://github.com/fsfe/reuse-tool)
+     - openDesk specific: Especially `images.yaml` and `charts.yaml`, find more details in the [development](./development.md) docu
+   - Non Blocking
+     - Security: [Kyverno policy check](../.kyverno) addressing some IT-Grundschutz requirements
+     - Formal: Yaml
 1. Deploy the full openDesk stack from scratch:
    - All deployment steps must be successful (green)
    - All tests from the end-to-end test set must be successful
-2. Update deployment[^3] of the full openDesk stack and apply the quality measures from the step #1:
+1. Update deployment[^3] of the full openDesk stack and apply the quality measures from the step #1:
    - Deploy the current merge target baseline (`develop` or `main`)
    - Update deploy from your QA branch into the instance from the previous step
-3. No showstopper found regarding
+1. No showstopper found regarding
    - SBOM compliance[^4]
    - Malware check
    - CVE check[^5]
    - Kubescape scan[^5]
-   - Kyverno policy check (also covering some basic requirements from IT-Grundschutz)[^5]
 
-Steps #1 and #2 from above are executed as GitLab CI and therefore documented within GitLab.
+Steps #1 to #3 from above are executed as GitLab CI and therefore documented within GitLab.
 
-Step #3 is focussed on security and was not fully implemented yet. Its main objective is to check for regressions. That step is just the second step of a security check and monitoring chain as shown below. While some checks can be executed against the static artefacts (e.g. container images) other might require an up-and-running instance. These are especially located in the third step below which is not yet implemented.
+Step #4 is focussed on security and was not fully implemented yet. Its main objective is to check for regressions. That step is just the second step of a security check and monitoring chain as shown below. While some checks can be executed against the static artefacts (e.g. container images) other might require an up-and-running instance. These are especially located in the third step below which is not yet implemented.
 
 ```mermaid
 flowchart TD
