@@ -26,6 +26,7 @@ include:
 
 stages:
   - ".pre"
+  - "renovate"
   - "scan"
   - "automr"
   - "env-cleanup"
@@ -146,6 +147,12 @@ variables:
   RUN_TESTS:
     description: "Triggers execution of E2E-tests."
     value: "yes"
+    options:
+      - "yes"
+      - "no"
+  RUN_RENOVATE:
+    description: "Triggers the Renovate based check for dependency updates."
+    value: "no"
     options:
       - "yes"
       - "no"
@@ -539,12 +546,15 @@ avscan-start:
 
 # Overwrite shared settings
 .common-semantic-release:
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release-patched:1.0.0"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release-patched:latest"
   tags: []
 
 conventional-commits-linter:
   rules:
-    - if: "$JOB_CONVENTIONAL_COMMITS_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
+    - if: >
+          $RUN_RENOVATE == "yes" ||
+          $JOB_CONVENTIONAL_COMMITS_LINTER_ENABLED == 'false' ||
+          $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'
       when: "never"
     - when: "always"
 
@@ -623,4 +633,20 @@ release:
     - "semantic-release"
   needs:
     - "generate-docs"
+
+renovate:
+  rules:
+    - if: $RUN_RENOVATE == "yes"
+      when: "on_success"
+  # The `-full` image does not install the dependencies on the fly, that is our preferred approach
+  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/renovate/renovate:37.356-full"
+  variables:
+    RENOVATE_CONFIG_FILE: "${CI_PROJECT_DIR}/.renovate/config.yaml"
+    RENOVATE_ENDPOINT: "${CI_API_V4_URL}"
+    # Increase the renovatebot log level on stdout
+    LOG_LEVEL: "DEBUG"
+  script:
+    - "renovate ${RENOVATE_EXTRA_FLAGS}"
+  stage: "renovate"
+
 ...

@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -5,515 +6,516 @@
 ---
 images:
   clamd:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'clamav/clamav'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "clamav/clamav"
     registry: "registry-1.docker.io"
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   collabora:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Collabora'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/supplier/collabora/images'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Collabora"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
     tag: "23.05.9.4.1@sha256:a7da0616002c7ae79ac91ed24a09471119c38741f99097866a775a94a071b945"
   cryptpad:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'XWiki'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'cryptpad/cryptpad'
+    # providerCategory: "Supplier"
+    # providerResponsible: "XWiki"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "cryptpad/cryptpad"
     # upstreamMirrorTagFilterRegEx: '^opendesk-(\d+)$'
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/cryptpad"
     tag: "opendesk-20231222@sha256:f4d20d5c38c87b11ed1a1b46ef6a3633d32c6758ebdff8556458f040318fa5e2"
   dovecot:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/supplier/open-xchange/images/dovecot-public-sector'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/supplier/open-xchange/images/dovecot-public-sector"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images/dovecot-public-sector"
     tag: "2.3.21@sha256:c76965a84d1ca527f523404eb027119f6736b199c094e4671037cb345ecad3dc"
   element:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Element'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '8', '0']
+    # upstreamMirrorStartFrom: ["1", "8", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
     tag: "1.11.0@sha256:633cc31a4c312cdb072136247ac382463ddbc458a5c57e139241394acee9baaf"
   freshclam:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'clamav/clamav'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "clamav/clamav"
     registry: "registry-1.docker.io"
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   icap:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/clamav-icap'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/clamav-icap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/clamav-icap"
     tag: "0.5.10@sha256:891f267a6b2a304616854ad2f013dc5d23f6f6c84d535c8b46e76d124fe39b6a"
   intercom:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'quay.io'
-    # upstreamRepository: 'univention/intercom-service'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://quay.io"
+    # upstreamRepository: "univention/intercom-service"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '6']
+    # upstreamMirrorStartFrom: ["1", "6"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/intercom-service"
     tag: "1.6@sha256:f32c1e52fa132e9dc6973e9f8ed36a98c5c3e0bcd51c60f9a683e7e528dd2306"
   jibri:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'jitsi/jibri'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "jitsi/jibri"
     # upstreamMirrorTagFilterRegEx: '^stable-(\d+)-?\d?$'
-    # upstreamMirrorStartFrom: ['8922']
+    # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jibri"
     tag: "stable-9457-2@sha256:eb079f650649c6336dc93eb30cdc086c0b784f5c3fe80ea3441a1f00ebf073f3"
   jicofo:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'jitsi/jicofo'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "jitsi/jicofo"
     # upstreamMirrorTagFilterRegEx: '^stable-(\d+)-?\d?$'
-    # upstreamMirrorStartFrom: ['8922']
+    # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jicofo"
     tag: "stable-9457-2@sha256:7d3213eea740721755da81ecfd9b500c71c610d04939b26de4434619a66e15e1"
   jitsi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'jitsi/web'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "jitsi/web"
     # upstreamMirrorTagFilterRegEx: '^stable-(\d+)-?\d?$'
-    # upstreamMirrorStartFrom: ['8922']
+    # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/web"
     tag: "stable-9457-2@sha256:263e2e52934900547f1496eed965e2d3e01e9b8a251844bacbac49deba97f6b2"
   jitsiKeycloakAdapter:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'ghcr.io'
-    # upstreamRepository: 'nordeck/jitsi-keycloak-adapter'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://ghcr.io"
+    # upstreamRepository: "nordeck/jitsi-keycloak-adapter"
     # upstreamMirrorTagFilterRegEx: '^v(\d\d\d\d)(\d\d)(\d\d)$'
-    # upstreamMirrorStartFrom: ['2023', '12', '14']
+    # upstreamMirrorStartFrom: ["2023", "12", "14"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jitsi-keycloak-adapter"
     tag: "v20231214@sha256:2fa11007b387512aae1ce30c7b86c2d10a47889a717f13ab43d33b768df877d1"
   jitsiPatchJVB:
-    # providerCategory: 'Community'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'bitnami/kubectl'
+    # providerCategory: "Community"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnami/kubectl"
     registry: "registry-1.docker.io"
     repository: "bitnami/kubectl"
     tag: "1.26.8@sha256:c6902a1fdce0a24c9f93ac8d1f317039b206a4b307d8fc76cab4a92911345757"
   jvb:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'jitsi/jvb'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "jitsi/jvb"
     # upstreamMirrorTagFilterRegEx: '^stable-(\d+)-?\d?$'
-    # upstreamMirrorStartFrom: ['8922']
+    # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jvb"
     tag: "stable-9457-2@sha256:2f10f28463e65a13a260d379c4cce62531d66a94bb8dcf2dbe88cdb4cd01b16c"
   mariadb:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'library/mariadb'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "library/mariadb"
     registry: "registry-1.docker.io"
     repository: "library/mariadb"
     tag: "10.5@sha256:aa1ccc18000c32d1f39ac0b055117b27bffd93e622ec961d682de40fe2a1a95f"
   matrixNeoBoardWidget:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'ghcr.io'
-    # upstreamRepository: 'nordeck/matrix-neoboard-widget'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://ghcr.io"
+    # upstreamRepository: "nordeck/matrix-neoboard-widget"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '4', '0']
+    # upstreamMirrorStartFrom: ["1", "4", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-neoboard-widget"
     tag: "1.14.0@sha256:1a00f33ed5f560e55b06011b2f81696fd8230820f6980edb826768af0e0b41d9"
   matrixNeoChoiceWidget:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'ghcr.io'
-    # upstreamRepository: 'nordeck/matrix-poll-widget'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://ghcr.io"
+    # upstreamRepository: "nordeck/matrix-poll-widget"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '4', '0']
+    # upstreamMirrorStartFrom: ["1", "4", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-poll-widget"
     tag: "1.4.0@sha256:216cb88aaa47449a15af9a531d60eee593cb1923c4e8fcc67c119982972911e5"
   matrixNeoDateFixBot:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'ghcr.io'
-    # upstreamRepository: 'nordeck/matrix-meetings-bot'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://ghcr.io"
+    # upstreamRepository: "nordeck/matrix-meetings-bot"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['2', '7', '0']
+    # upstreamMirrorStartFrom: ["2", "7", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-bot"
     tag: "2.8.0@sha256:db1d99c13a9facfd08a7da1d0a9c7c05715bad47110e93649ad6b389e462b42c"
   matrixNeoDateFixWidget:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'ghcr.io'
-    # upstreamRepository: 'nordeck/matrix-meetings-widget'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://ghcr.io"
+    # upstreamRepository: "nordeck/matrix-meetings-widget"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '6', '0']
+    # upstreamMirrorStartFrom: ["1", "6", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-widget"
     tag: "1.6.1@sha256:70bebd9293a977124a5da955e1a520381129d476d6414a083093c1b48a55dadd"
   matrixUserVerificationService:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Element'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'matrixdotorg/matrix-user-verification-service'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "matrixdotorg/matrix-user-verification-service"
     # upstreamMirrorTagFilterRegEx: '^v(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['3', '0', '0']
+    # upstreamMirrorStartFrom: ["3", "0", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/element/images-mirror/matrix-user-verification-service"
     tag: "v3.0.0@sha256:25e685d595785e2a72e75a525dac78cf8c782445454f8ac090d3702431c38008"
   memcached:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'bitnami/memcached'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnami/memcached"
     registry: "registry-1.docker.io"
     repository: "bitnami/memcached"
     tag: "1.6.21-debian-11-r107@sha256:247ec29efd6030960047a623aef025021154662edf6b6d6e88c97936f164d99d"
   milter:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'clamav/clamav'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "clamav/clamav"
     registry: "registry-1.docker.io"
     repository: "clamav/clamav"
     tag: "1.1.1-10_base@sha256:aed8d5a3ef58352c862028fae44241215a50eae0b9acb7ba8892b1edc0a6598f"
   minio:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'bitnami/minio'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnami/minio"
     registry: "registry-1.docker.io"
     repository: "bitnami/minio"
     tag: "2023@sha256:bced4f2f9fc48b755ebb3e1b35e76195a978d4331bf2d0c6699dab412d3c0be7"
   nextcloudApache2:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
     tag: "1.1.21@sha256:ec63d564eb11d7ed213a5ef8719f2b3380e552f1ffb1251470b84c0c8937b7b8"
   nextcloudExporter:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter"
     tag: "1.0.1@sha256:63e63c7420e37d3989fa0ffdbcf18a07b2a603ab9b2a849c2e7e44342dd82af0"
   nextcloudManagement:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
     tag: "1.3.12@sha256:54bb5a90ebe49b33b053e8a7df2fa8d8cb992b17f68a04d08357961c3aded0b0"
   nextcloudPHP:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
     tag: "1.8.11@sha256:85b3bbf027c9e6a2ccf411b8e2b3752f6a58a3a14f00fb92ecefd9e7ca0c6954"
   opendeskKeycloakBootstrap:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
     tag: "1.0.4@sha256:28eebb647180aef95d816a7d788891fa780f552f699c38cedddecbcef7a0bd1d"
   openproject:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'OpenProject'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'openproject/open_desk'
+    # providerCategory: "Supplier"
+    # providerResponsible: "OpenProject"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "openproject/open_desk"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['13', '1', '1']
+    # upstreamMirrorStartFrom: ["13", "1", "1"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/images-mirror/open_desk"
     tag: "14.0.1@sha256:664f5131dbca43084dd3fb0be22d8520b3de4148f5511b25751f6bb8eb4e76c0"
   openprojectBootstrap:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap"
     tag: "1.1.3@sha256:401afe66c418fd130088edbed5cc3b4464dc667eb609f194ea68fd30dcbd1e90"
   openprojectInitDb:
-    # providerCategory: 'Community'
-    # providerResponsible: 'OpenProject'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'library/postgres'
+    # providerCategory: "Community"
+    # providerResponsible: "OpenProject"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "library/postgres"
     registry: "registry-1.docker.io"
     repository: "library/postgres"
     tag: "13@sha256:ba6ef1f07410f29e9ccf0946c3fe17eb7a1466f826c46a30e7629c4f2e29b1d3"
   openxchangeBootstrap:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'alpine/k8s'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "alpine/k8s"
     registry: "registry-1.docker.io"
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
   openxchangeCoreGuidedtours:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/core-guidedtours'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/core-guidedtours"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['8', '6', '0']
+    # upstreamMirrorStartFrom: ["8", "6", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-guidedtours"
     tag: "8.6.3@sha256:6fb8169cba4beb4bd9039f4ce7ab9b29fc02c4991b283824db949fe2b7be34e2"
   openxchangeCoreMW:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/middleware-public-sector'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/middleware-public-sector"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['8', '20', '51']
+    # upstreamMirrorStartFrom: ["8", "20", "51"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/middleware-public-sector"
     tag: "8.23.47@sha256:b721bf41d7f06b328e9235a0561436cb678bc2a1a67202f0fa6e1f55956cc0cc"
   openxchangeCoreUI:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/core-ui'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/core-ui"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['8', '20', '1']
+    # upstreamMirrorStartFrom: ["8", "20", "1"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-ui"
     tag: "8.23.2@sha256:0cc07053cbb9d7062a17ef807c6a6942a912748243a6f0c63a892d5cb2953351"
   openxchangeCoreUIMiddleware:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/core-ui-middleware'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/core-ui-middleware"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['2', '0', '0']
+    # upstreamMirrorStartFrom: ["2", "0", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-ui-middleware"
     tag: "2.0.3@sha256:56fe8afe841105f0725674e36afc6f10f22751e3c21a301a6322834383f2d786"
   openxchangeCoreUserGuide:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/core-user-guide'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/core-user-guide"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['8', '20', '799279']
+    # upstreamMirrorStartFrom: ["8", "20", "799279"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-user-guide"
     tag: "8.23.941932@sha256:231b13cb795241513d2f54ee4bc628843ae737b5ecceab758aba3658f03de1bd"
   openxchangeDocumentConverter:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/documentconverter'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/documentconverter"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['8', '20', '50']
+    # upstreamMirrorStartFrom: ["8", "20", "50"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/documentconverter"
     tag: "8.23.43@sha256:aa9bbce833ae018573997fb07dcaf32bb7c5c4c6a7d6331f3d3156fd5b8d53b3"
   openxchangeGotenberg:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/gotenberg'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/gotenberg"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['7', '9', '2']
+    # upstreamMirrorStartFrom: ["7", "9", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/gotenberg"
     tag: "8.2.0@sha256:ec5afe8eea496d3bef6c42291fde9c203c20e8a68189a2314ef876e9c0e67680"
   openxchangeGuardUI:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/guard-ui'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/guard-ui"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['4', '2', '2']
+    # upstreamMirrorStartFrom: ["4", "2", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/guard-ui"
     tag: "8.23.0@sha256:0510458017fa028582515ce18c0b12f91ac9e23f0e94e99ac34fd49b07146c01"
   openxchangeImageConverter:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/imageconverter'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/imageconverter"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['8', '20', '50']
+    # upstreamMirrorStartFrom: ["8", "20", "50"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/imageconverter"
     tag: "8.23.43@sha256:ecc77a569f60e1b14f0d77ec93d891200b89d11eb9d7c26f59fa7696343e20e3"
   openxchangeNextcloudIntegrationUI:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/nextcloud-integration-ui'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/nextcloud-integration-ui"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '2', '0']
+    # upstreamMirrorStartFrom: ["1", "2", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/nextcloud-integration-ui"
     tag: "1.2.0@sha256:3d0ef11196f7544a01539e6790e4402ad69e2a501312eb7c7bb128c6563d0a8d"
   openxchangePublicSectorUI:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Open-Xchange'
-    # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/public-sector-ui'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Open-Xchange"
+    # upstreamRegistry: "https://registry.open-xchange.com"
+    # upstreamRepository: "appsuite-public-sector/public-sector-ui"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['2', '2', '1']
+    # upstreamMirrorStartFrom: ["2", "2", "1"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/public-sector-ui"
     tag: "2.3.0@sha256:a557816ee55500ecc3b46b60f0440ea66c7f0d90e888ce3b0df8a9acdd72acbe"
   oxConnector:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/ox-connector-standalone'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/ox-connector-standalone"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '4', '2']
+    # upstreamMirrorStartFrom: ["0", "4", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ox-connector-standalone"
     tag: "0.4.2@sha256:308489c0c0e0436bbbedbd757f78875d44468992c46c8d371c584dc778b30770"
   postfix:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/images/postfix'
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/postfix"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/postfix"
     tag: "1.0.0@sha256:61e4661a7323101dfb51c85c5a48c345c75436f3f533176f049d2660d711a8a5"
   postgresql:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'library/postgres'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "library/postgres"
     registry: "registry-1.docker.io"
     repository: "library/postgres"
     tag: "15.4-alpine3.18@sha256:f36c528a2dc8747ea40b4cb8578da69fa75c5063fd6a71dcea3e3b2a6404ff7b"
   prosody:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'jitsi/prosody'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "jitsi/prosody"
     # upstreamMirrorTagFilterRegEx: '^stable-(\d+)-?\d?$'
-    # upstreamMirrorStartFrom: ['8922']
+    # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/prosody"
     tag: "stable-9457-2@sha256:5364b0c9c6de654b7b31b5821e9cd7a39660a19010348e7ac56b85be2944daa0"
   redis:
-    # providerCategory: 'Community'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'bitnami/redis'
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnami/redis"
+    # WE ARE STUCK WITH <7.4 because of https://redis.com/blog/redis-adopts-dual-source-available-licensing/
     registry: "registry-1.docker.io"
     repository: "bitnami/redis"
     tag: "7.2.3-debian-11-r2@sha256:9ac3bbf7740969d32689e360ddcfa5f672538c47f6f6cf296173c3078de0edf2"
   synapse:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Element'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'matrixdotorg/synapse'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "matrixdotorg/synapse"
     # upstreamMirrorTagFilterRegEx: '^v(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '91', '2']
+    # upstreamMirrorStartFrom: ["1", "91", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/element/images-mirror/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
   synapseCreateUser:
-    # providerCategory: 'Community'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'alpine/k8s'
+    # providerCategory: "Community"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "alpine/k8s"
     registry: "registry-1.docker.io"
     repository: "alpine/k8s"
     tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
   synapseGuestModule:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Nordeck'
-    # upstreamRegistry: 'ghcr.io'
-    # upstreamRepository: 'nordeck/synapse-guest-module'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Nordeck"
+    # upstreamRegistry: "https://ghcr.io"
+    # upstreamRepository: "nordeck/synapse-guest-module"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '0', '0']
+    # upstreamMirrorStartFrom: ["1", "0", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/synapse-guest-module"
     tag: "1.0.0@sha256:6b3b17183a7d163148cc1bc5342604682ec67d898394fc743db2f339e61c722e"
   synapseWeb:
-    # providerCategory: 'Community'
-    # providerResponsible: 'Element'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'rapidfort/haproxy-official'
+    # providerCategory: "Community"
+    # providerResponsible: "Element"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "rapidfort/haproxy-official"
     registry: "registry-1.docker.io"
     repository: "rapidfort/haproxy-official"
     tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
   umsDataLoader:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/data-loader'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/data-loader"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '41', '5']
+    # upstreamMirrorStartFrom: ["0", "41", "5"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/data-loader"
     tag: "0.45.2@sha256:6e2e054903f361eea5cd54ae6dd3da94380d4a6a11f2628983e2acdbc66d605e"
   umsGuardianAuthorizationApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'docker.software-univention.de'
-    # upstreamRepository: 'guardian-authorization-api-authorization-api'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://docker.software-univention.de"
+    # upstreamRepository: "guardian-authorization-api-authorization-api"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '0', '0']
+    # upstreamMirrorStartFrom: ["1", "0", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-authorization-api-authorization-api"
     tag: "2.0.0@sha256:5f194f9385aea5a279e25a57352f7b88a6cc4fa90b3bf04c2c97b9ff2bad70a5"
   umsGuardianManagementApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'docker.software-univention.de'
-    # upstreamRepository: 'guardian-management-api-management-api'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://docker.software-univention.de"
+    # upstreamRepository: "guardian-management-api-management-api"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '0', '0']
+    # upstreamMirrorStartFrom: ["1", "0", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-management-api-management-api"
     tag: "2.0.0@sha256:61a1ab84efebe2a87d358e8624f8b39073a6071683e7cd77b740a97d464753a2"
   umsGuardianManagementUi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'docker.software-univention.de'
-    # upstreamRepository: 'guardian-management-ui-management-ui'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://docker.software-univention.de"
+    # upstreamRepository: "guardian-management-ui-management-ui"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '0', '0']
+    # upstreamMirrorStartFrom: ["1", "0", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-management-ui-management-ui"
     tag: "2.0.0@sha256:57e2503a4772f0ff656e792a98fadef4d41c248218e6c368f76ce82a892478cf"
@@ -528,62 +530,62 @@ images:
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-init"
     tag: "0.3.0@sha256:6ce026307cace794b33dddc616e37025974707b5c94fc52cff100b769cba722b"
   umsKeycloak:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'docker.software-univention.de'
-    # upstreamRepository: 'keycloak-keycloak'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://docker.software-univention.de"
+    # upstreamRepository: "keycloak-keycloak"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+).+$'
-    # upstreamMirrorStartFrom: ['22', '0', '3']
+    # upstreamMirrorStartFrom: ["22", "0", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-keycloak"
     tag: "24.0.3-ucs1@sha256:cc66a1730abdd5abe88ac5cf045b6558f289bf1ae8d077ee884a42d785742f8b"
   umsKeycloakBootstrap:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention-keycloak-bootstrap'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention-keycloak-bootstrap"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '0', '5']
+    # upstreamMirrorStartFrom: ["1", "0", "5"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/univention-keycloak-bootstrap"
     tag: "1.0.8@sha256:fef48cb1b2552977e8a4253516249b59ef6c42189dd13cd6d98269b8988b362a"
   umsKeycloakExtensionHandler:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/keycloak-handler'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/keycloak-handler"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '0', '3']
+    # upstreamMirrorStartFrom: ["0", "0", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-handler"
     tag: "0.3.1@sha256:98871e8d5acfe6bfa6ea7d140197ae41585cfb06c71514ffcf6e98df8315b9ee"
   umsKeycloakExtensionProxy:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/keycloak-proxy'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/keycloak-proxy"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '0', '3']
+    # upstreamMirrorStartFrom: ["0", "0", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-proxy"
     tag: "0.3.1@sha256:e6c2130310798e286cea84bf5226709021c12663fb9e8ca30f29515151741fa5"
   umsLdapNotifier:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/ldap-notifier'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/ldap-notifier"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '8', '2']
+    # upstreamMirrorStartFrom: ["0", "8", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-notifier"
     tag: "0.10.3@sha256:beb4577e7fdf1e18d3769e62296f210c0651460346dc2325e6cc29f4c671fa71"
   umsLdapServer:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/ldap-server'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/ldap-server"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '8', '2']
+    # upstreamMirrorStartFrom: ["0", "8", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-server"
     tag: "0.10.3@sha256:7742eca27bf1134cf92e6e3571bc2784e2f21a76664fdcab6ae213051db26c05"
@@ -612,178 +614,178 @@ images:
     repository: "natsio/nats-server-config-reloader"
     tag: "0.14.1@sha256:77dd4c60001ffbf442c6b25592e73b4fca06ea9406c677607192788d80453783"
   umsNotificationsApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/notifications-api'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/notifications-api"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '4']
+    # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/notifications-api"
     tag: "0.20.3@sha256:1e32854d6d4413725870fde26a904da83282b3debea82b386c5753223ecc6a59"
   umsOpenPolicyAgent:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'docker.software-univention.de'
-    # upstreamRepository: 'guardian-authorization-api-opa'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://docker.software-univention.de"
+    # upstreamRepository: "guardian-authorization-api-opa"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '0', '0']
+    # upstreamMirrorStartFrom: ["1", "0", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-authorization-api-opa"
     tag: "2.0.0@sha256:56a92a08da5addb951a2b2df09974889295ddde8526e93ad40dd973de1052ad4"
   umsPortalFrontend:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/portal-frontend'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/portal-frontend"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '4']
+    # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend"
     tag: "0.20.3@sha256:4fe6646711efcc07eb4b6e59a57f1d5080cca5f4ec2c960d073e92ecae8be42f"
   umsPortalListener:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/portal-listener'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/portal-listener"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '4']
+    # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-listener"
     tag: "0.20.7@sha256:8f158b88e0ceb7a5c79d2ad390f6ce851ce0c5ccb675d08d6b6c37f0b21f6177"
   umsPortalServer:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/portal-server'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/portal-server"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '4']
+    # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-server"
     tag: "0.20.3@sha256:0ec3db74ce9b7c8706d1534b6dcb464eb016a5de94c3b5bfc49215ccb606715c"
   umsProvisioningDispatcher:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/provisioning-dispatcher'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/provisioning-dispatcher"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '14', '0']
+    # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-dispatcher"
     tag: "0.21.3@sha256:29c5f216ab0f8d12c1e77969de6e82046c0d47e1111838fb0a2dcd9950c0175d"
   umsProvisioningEventsAndConsumerApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/provisioning-events-and-consumer-api'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/provisioning-events-and-consumer-api"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '14', '0']
+    # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-events-and-consumer-api"
     tag: "0.21.3@sha256:4cb498a64dd40c0963ca1ca382213ad5b8a4de5eb57650946d78ac44b359f43f"
   umsProvisioningPrefill:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/provisioning-prefill'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/provisioning-prefill"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '14', '0']
+    # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-prefill"
     tag: "0.21.3@sha256:944ff8558d12c59f3490cba68680281c3fa5468fd6fd011fd002befcb9956973"
   umsProvisioningUdmListener:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/provisioning-udm-listener'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/provisioning-udm-listener"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '14', '0']
+    # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-udm-listener"
     tag: "0.21.3@sha256:e1cd42558e44bb72ed5c7798cef711db94df7d10d6895c993ca6412df1d25f02"
   umsSelfserviceInvitation:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/selfservice-invitation'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/selfservice-invitation"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '3', '2']
+    # upstreamMirrorStartFrom: ["0", "3", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-invitation"
     tag: "0.4.0@sha256:bd252758576e1733076c78756f04225ebed73d9c48de22440975ef11dd087caf"
   umsSelfserviceListener:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/selfservice-listener'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/selfservice-listener"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '3', '2']
+    # upstreamMirrorStartFrom: ["0", "3", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-listener"
     tag: "0.4.0@sha256:0bc0235fd64a19a183f112da73109b54712c2d70fe7fa77c6405beefb7167588"
   umsStackGateway:
-    # providerCategory: 'Community'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'bitnami/nginx'
+    # providerCategory: "Community"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnami/nginx"
     registry: "registry-1.docker.io"
     repository: "bitnami/nginx"
     tag: "1.25.4@sha256:dd352b597f4c38ae24abec411710f4249fb5c793293c7ed04737db6b41d32d24"
   umsUdmRestApi:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'artifacts.software-univention.de'
-    # upstreamRepository: 'nubus/images/udm-rest-api'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/udm-rest-api"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '3']
+    # upstreamMirrorStartFrom: ["0", "9", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/udm-rest-api"
     tag: "0.9.3@sha256:7cf2fec05a4ff8b7085a35a215edbce1eb9456c1ae140af46257e66d5a6cd6f7"
   umsUmcGateway:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/umc-gateway'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/umc-gateway"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '7', '3']
+    # upstreamMirrorStartFrom: ["0", "7", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-gateway"
     tag: "0.11.6@sha256:5d7c1a9b74409d2d7c42e08ca87b41cda506e43cad49efbc85a4ed6b8e9c6bc8"
   umsUmcServer:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/umc-server'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/umc-server"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '7', '3']
+    # upstreamMirrorStartFrom: ["0", "7", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-server"
     tag: "0.11.8@sha256:38a87524703a1e11fbb3cd3cc9d90d5b719e92329a0e3ea05c50451105d64ac6"
   umsWaitForDependency:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/wait-for-dependency'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry.souvap-univention.de"
+    # upstreamRepository: "souvap/tooling/images/univention/wait-for-dependency"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '9', '4']
+    # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/wait-for-dependency"
     tag: "0.20.3@sha256:d1ccba5fe7448c2bda71c8a93f265a42a000e8dc79fd884e7e6ecdf29ad80efc"
   wellKnown:
-    # providerCategory: 'Community'
-    # providerResponsible: 'Element'
-    # upstreamRegistry: 'registry-1.docker.io'
-    # upstreamRepository: 'library/nginx'
+    # providerCategory: "Community"
+    # providerResponsible: "Element"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "library/nginx"
     registry: "registry-1.docker.io"
     repository: "library/nginx"
     tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"
   xwiki:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'XWiki'
-    # upstreamRegistry: 'git.xwikisas.com:5050'
-    # upstreamRepository: 'xwikisas/swp/xwiki'
+    # providerCategory: "Supplier"
+    # providerResponsible: "XWiki"
+    # upstreamRegistry: "https://git.xwikisas.com:5050"
+    # upstreamRepository: "xwikisas/swp/xwiki"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)-mariadb.+$'
-    # upstreamMirrorStartFrom: ['0', '12']
+    # upstreamMirrorStartFrom: ["0", "12"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/xwiki"
     tag: "0.17-mariadb-jetty-alpine@sha256:9eb67520774c3022aa4485ce348be477f358263b716e647cacd057da3aca9739"
