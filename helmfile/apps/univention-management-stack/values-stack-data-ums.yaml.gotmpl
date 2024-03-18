@@ -49,6 +49,10 @@ stackDataContext:
   ldapSamlSpUrls: {{ printf "https://%s.%s%s" .Values.global.hosts.univentionManagementStack .Values.global.domain "/univention/saml/metadata" | quote }}
   initialPasswordAdministrator: {{ .Values.secrets.univentionManagementStack.systemAccounts.administratorPassword | quote }}
   initialPasswordSysIdpUser: {{ .Values.secrets.univentionManagementStack.systemAccounts.sysIdpUserPassword | quote }}
+  umcPostgresqlHostname: {{ .Values.databases.umsSelfservice.host | quote }}
+  umcPostgresqUsername: {{ .Values.databases.umsSelfservice.username | quote }}
+  umcMemcachedHostname: {{ .Values.cache.umsSelfservice.host | quote }}
+  umcMemcachedUsername: "selfservice"
 
 stackDataUms:
   loadDevData: true

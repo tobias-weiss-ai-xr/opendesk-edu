@@ -14,54 +14,51 @@ extraVolumeMounts:
     mountPath: "/usr/share/attribute-to-group-mapper/flag_to_group_mapping.json"
     subPath: "flag_to_group_mapping.json"
 
-image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.umsUdmRestApi.registry | quote }}
-  repository: {{ .Values.images.umsUdmRestApi.repository | quote }}
-  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  tag: {{ .Values.images.umsUdmRestApi.tag | quote }}
-  pullSecrets:
-    {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . | quote }}
-    {{- end }}
-
 resources:
   {{ .Values.resources.umsUdmRestApi | toYaml | nindent 2 }}
 
+initResources:
+  {{ .Values.resources.umsUdmRestApiInit | toYaml | nindent 2 }}
+
 replicaCount: {{ .Values.replicas.umsUdmRestApi }}
 
-securityContext:
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+  fsGroupChangePolicy: "Always"
+
+containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
       - "ALL"
-    add:
-      - "CHOWN"
-      - "DAC_OVERRIDE"
-      - "FOWNER"
-      - "FSETID"
-      - "KILL"
-      - "SETGID"
-      - "SETUID"
-      - "SETPCAP"
-      - "NET_BIND_SERVICE"
-      - "NET_RAW"
-      - "SYS_CHROOT"
-  privileged: false
+  enabled: true
+  runAsUser: 1000
+  runAsGroup: 1000
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: false
-  runAsUser: 0
-  runAsGroup: 0
-  runAsNonRoot: false
-  seLinuxOptions:
-    {{ .Values.seLinuxOptions.umsUdmRestApi | toYaml | nindent 4 }}
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
 
 udmRestApi:
-  # TODO: Stub value currently
-  caCert: ""
-  # TODO: Secret should be entered without b64enc
-  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
-  # TODO: Secret should be entered without b64enc
-  machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
+  secretRef: ums-udm-rest-api-credentials
+  ldap:
+    uri: "ldap://{{ .Values.ldap.host }}:389"      
+    baseDN: {{ .Values.ldap.baseDn | quote }}
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsUdmRestApi.registry | quote }}
+    repository: {{ .Values.images.umsUdmRestApi.repository | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsUdmRestApi.tag | quote }}
+    pullSecrets:
+      {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . | quote }}
+      {{- end }}
+
+extraSecrets:
+  - name: ums-udm-rest-api-credentials
+    stringData:
+      ldap.secret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+      machine.secret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
 
 ...
