@@ -1,5 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
 
@@ -32,7 +33,7 @@ flowchart TD
     D-->G[images.yaml]
     D-->H[global.*]
     D-->I[secrets.yaml\nreplicas.yaml\nresources.yaml\n...]
-    A-->|overwrite defaults with\nyour environment specific values|E[./helmfile/environments/*your_environment*/values.yaml.gotmpl]
+    A-->|overwrite defaults with your\ndeployment/environment specific values|E[./helmfile/environments/*your_environment*/values.yaml.gotmpl]
 ```
 
 The `helmfile.yaml` in the root folder is the basis for the whole deployment. It references the app specific `helmfile.yaml` files as well as some
@@ -96,13 +97,13 @@ Example:
 
 ## Renovate
 
-- See also: https://gitlab.opencode.de/bmi/opendesk/tooling/renovate-opencode
+Uses a regular expression to match the values of the following attributes:
 
-Uses a regular expression to match the values of the attributes
-- `# upstreamRegistry`
-- `# upstreamRepository`
+- `registry`
+- `repository`
 - `tag`
-check for newer versions of the given artefact and create a MR containing the newest version's tag (and digest).
+
+Checks for newer versions of the given artefact and creates a MR containing the newest version's tag (and digest).
 
 ## Mirroring
 
