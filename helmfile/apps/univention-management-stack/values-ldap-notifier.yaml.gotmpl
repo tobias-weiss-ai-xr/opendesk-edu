@@ -16,9 +16,6 @@ resources:
 
 securityContext:
   allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - "ALL"
   privileged: false
   seccompProfile:
     type: "RuntimeDefault"

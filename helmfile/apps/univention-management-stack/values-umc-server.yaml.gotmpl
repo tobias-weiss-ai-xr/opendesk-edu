@@ -53,7 +53,8 @@ memcached:
   bundled: false
   auth:
     username: null
-    password: null
+    # This is also used by the umc-server Helm chart to generate a secret. The secrets content is represented as an environment variable. If said variable is empty, the container fails to start due to an entrypoint script erroring on a nullish value for the environment variable SELF_SERVICE_MEMCACHED_SECRET.
+    password: "password"
   server: {{ .Values.cache.umsSelfservice.host | quote }}
 
 postgresql:
@@ -102,10 +103,8 @@ umcServer:
   caCert: "Cg=="
   certPem: "Cg=="
   privateKey: "Cg=="
-  # TODO: Secret should be entered without b64enc
-  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
-  # TODO: Secret should be entered without b64enc
-  machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
+  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  machineSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
   smtpSecret: {{ .Values.smtp.password | quote }}
   privateKeyFile: "/var/secrets/ssl/tls.key"
 

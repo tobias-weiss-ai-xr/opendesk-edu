@@ -21,42 +21,43 @@ portalServer:
   ucsInternalPath: "portal-data"
   objectStorageEndpoint: {{ .Values.objectstores.univentionManagementStack.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
   objectStorageBucket: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
-  objectStorageAccessKeyId: {{ .Values.objectstores.univentionManagementStack.username | quote }}
-  objectStorageSecretAccessKey: {{ .Values.objectstores.univentionManagementStack.secretKey | default .Values.secrets.minio.umsUser | quote }}
   centralNavigation:
     enabled: true
     authenticatorSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+  credentialSecret:
+    name: "ums-portal-server-minio-credentials"
 
 replicaCount: {{ .Values.replicas.umsPortalServer }}
 
 resources:
   {{ .Values.resources.umsPortalServer | toYaml | nindent 2 }}
 
-securityContext:
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+  fsGroupChangePolicy: "Always"
+  sysctls:
+    - name: "net.ipv4.ip_unprivileged_port_start"
+      value: "1"
+
+containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
       - "ALL"
-    add:
-      - "CHOWN"
-      - "DAC_OVERRIDE"
-      - "FOWNER"
-      - "FSETID"
-      - "KILL"
-      - "SETGID"
-      - "SETUID"
-      - "SETPCAP"
-      - "NET_BIND_SERVICE"
-      - "NET_RAW"
-      - "SYS_CHROOT"
-  privileged: false
+  enabled: true
+  runAsUser: 1000
+  runAsGroup: 1000
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: false
-  runAsUser: 0
-  runAsGroup: 0
-  runAsNonRoot: false
-  seLinuxOptions:
-    {{ .Values.seLinuxOptions.umsPortalServer | toYaml | nindent 4 }}
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+
+extraSecrets:
+  - name: ums-portal-server-minio-credentials
+    stringData:
+      accessKeyId: {{ .Values.objectstores.univentionManagementStack.username | quote }}
+      secretAccessKey: {{ .Values.objectstores.univentionManagementStack.secretKey | default .Values.secrets.minio.umsUser | quote }}
 
 ...

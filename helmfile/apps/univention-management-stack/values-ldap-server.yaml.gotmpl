@@ -23,70 +23,70 @@ extraVolumeMounts:
     mountPath: "/var/lib/univention-ldap-local/local-schema/opendeskProjectmanagement.schema"
     subPath: "opendeskProjectmanagement.schema"
 
-image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.umsLdapServer.registry | quote }}
-  repository: {{ .Values.images.umsLdapServer.repository | quote }}
-  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  tag: {{ .Values.images.umsLdapServer.tag | quote }}
-  pullSecrets:
-    {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . | quote }}
-    {{- end }}
+extraSecrets:
+  - name: ums-stack-openldap-credentials
+    stringData:
+      adminPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
 
-  waitForDependency:
+waitForDependency:
+  image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.umsWaitForDependency.registry | quote }}
     repository: {{ .Values.images.umsWaitForDependency.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
 
 ldapServer:
-  caCert: "Cg=="
-  certPem: "Cg=="
-  privateKey: "Cg=="
-  dhParam: "Cg=="
-  waitForSamlMetadata: true
-  ldapSecret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
-  ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
+  image:
+    registry: {{ .Values.global.imageRegistry | default .Values.images.umsLdapServer.registry | quote }}
+    repository: {{ .Values.images.umsLdapServer.repository | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.umsLdapServer.tag | quote }}
+    pullSecrets:
+      {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . | quote }}
+      {{- end }}
 
+  config:
+    domainName: "univention-organization.intranet"
+    ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
+    samlMetadataUrl: {{ printf "http://ums-keycloak.%s.svc.%s:8080/realms/%s/protocol/saml/descriptor" .Release.Namespace .Values.cluster.networking.domain .Values.platform.realm | quote }}
+    samlMetadataUrlInternal: {{ printf "http://ums-keycloak.%s.svc.%s:8080/realms/%s/protocol/saml/descriptor" .Release.Namespace .Values.cluster.networking.domain .Values.platform.realm | quote }}
+    samlServiceProviders: {{ printf "https://%s.%s%s" .Values.global.hosts.univentionManagementStack .Values.global.domain "/univention/saml/metadata" | quote }}
+  credentialSecret:
+    name: ums-stack-openldap-credentials
+    key: adminPassword
+      
 persistence:
-  sharedData:
-    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-    size: {{ .Values.persistence.size.univentionManagementStack.ldapServerData | quote }}
-  sharedRun:
-    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-    size: {{ .Values.persistence.size.univentionManagementStack.ldapServerShared | quote }}
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.size.univentionManagementStack.ldapServerData | quote }}
+legacy:
+  sharedRunSize: {{ .Values.persistence.size.univentionManagementStack.ldapServerShared | quote }}
 
-securityContext:
+resources:
+  {{ .Values.resources.umsLdapServer | toYaml | nindent 2 }}
+
+initResources:
+  {{ .Values.resources.umsLdapServerInit | toYaml | nindent 2 }}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 102
+  fsGroupChangePolicy: "Always"
+  sysctls:
+    - name: "net.ipv4.ip_unprivileged_port_start"
+      value: "1"
+
+containerSecurityContext:
+  enabled: true
   allowPrivilegeEscalation: false
   capabilities:
     drop:
       - "ALL"
-    add:
-      - "CHOWN"
-      - "DAC_OVERRIDE"
-      - "FOWNER"
-      - "FSETID"
-      - "KILL"
-      - "SETGID"
-      - "SETUID"
-      - "SETPCAP"
-      - "NET_BIND_SERVICE"
-      - "NET_RAW"
-      - "SYS_CHROOT"
-  privileged: false
+  runAsUser: 101
+  runAsGroup: 102
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: false
-  runAsUser: 0
-  runAsGroup: 0
-  runAsNonRoot: false
-  seLinuxOptions:
-    {{ .Values.seLinuxOptions.umsLdapServer | toYaml | nindent 4 }}
-
-service:
-  type: "ClusterIP"
-
-resources:
-  {{ .Values.resources.umsLdapServer | toYaml | nindent 2 }}
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
 
 ...

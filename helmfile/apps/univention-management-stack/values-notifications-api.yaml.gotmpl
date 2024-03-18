@@ -28,6 +28,7 @@ postgresql:
     username: {{ .Values.databases.umsNotificationsApi.username | quote }}
     database: {{ .Values.databases.umsNotificationsApi.name | quote }}
     password: {{ .Values.databases.umsNotificationsApi.password | default .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
+    existingSecret: "ums-notifications-api-postgresql-credentials"
 
 resources:
   {{ .Values.resources.umsNotificationsApi | toYaml | nindent 2 }}
@@ -47,4 +48,8 @@ securityContext:
   seLinuxOptions:
     {{ .Values.seLinuxOptions.umsNotificationsApi | toYaml | nindent 4 }}
 
+extraSecrets:
+  - name: ums-notifications-api-postgresql-credentials
+    stringData:
+      password: {{ .Values.databases.umsNotificationsApi.password | default .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
 ...
