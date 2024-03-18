@@ -86,7 +86,7 @@ Example:
   synapse:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Element'
-    # upstreamRegistry: 'registry-1.docker.io'
+    # upstreamRegistry: 'https://registry-1.docker.io'
     # upstreamRepository: 'matrixdotorg/synapse'
     # upstreamMirrorTagFilterRegEx: '^v(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ['1', '91', '2']
@@ -99,9 +99,9 @@ Example:
 
 Uses a regular expression to match the values of the following attributes:
 
-- `registry`
-- `repository`
-- `tag`
+- `# upstreamRegistry`: : required - Attribute's value must be prefixed with `https://` for Renovate.
+- `# upstreamrepository`: required
+- `tag`: required
 
 Checks for newer versions of the given artefact and creates a MR containing the newest version's tag (and digest).
 

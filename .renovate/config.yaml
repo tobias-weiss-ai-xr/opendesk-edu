@@ -1,0 +1,90 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+# Platform type of repository
+platform: "gitlab"
+
+# Enable onboarding merge request
+onboarding: false
+
+# If set to true: keep repository data between runs instead of deleting the data
+persistRepoData: false
+
+# Controls Renovate's behavior regarding repository config files such as renovate.json
+requireConfig: "ignored"
+
+# List of Repositories
+# See: https://docs.renovatebot.com/configuration-options/
+repositories:
+  - repository: "bmi/opendesk/deployment/opendesk"
+    # Set the branch to read current dependency state from, this is especially useful during
+    # renovate setup when looking into your feature branch or when your default branch is
+    # not the one you want to check on.
+    baseBranches: [ "develop" ]
+    # Prefix to use for all branch names created by renovate bot (default: "renovate/")
+    branchPrefix: "renovate/"
+    # Lowercase merge request and commit titles ("never" = leave titles untouched )
+    commitMessageLowerCase: "never"
+    # Commit scope to use if Semantic Commits are enabled (fix(<scope>)...)
+    semanticCommitScope: "renovate"
+    # Commit type to use if Semantic Commits are enabled (default: "chore")
+    semanticCommitType: "chore"
+    # Enable dependency dashboard
+    dependencyDashboard: true
+    # Include package files only within these defined paths
+    includePaths:
+      - "helmfile/environments/default/images.yaml"
+      - "helmfile/environments/default/charts.yaml"
+    customManagers:
+      - customType: "regex"
+        fileMatch:
+          - "helmfile/environments/default/images.yaml"
+        datasourceTemplate: "docker"
+        matchStrings:
+          # yamllint disable rule:line-length
+          - ' providerResponsible: "(?<depType>.+?)"[\s\S]+? upstreamRegistry: "(?<registryUrl>.+?)"[\s\S]+? upstreamRepository: "(?<depName>.+?)"[\s\S]+? tag: "(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)"'
+          # yamllint enable rule:line-length
+      - customType: "regex"
+        fileMatch:
+          - "helmfile/environments/default/charts.yaml"
+        datasourceTemplate: "docker"
+        matchStrings:
+          # yamllint disable rule:quoted-strings
+          - ' providerResponsible: "(?<depType>.+?)"[\s\S]+? upstreamRegistry: "(?<registryUrl>.+?)"[\s\S]+? upstreamRepository: "(?<depName>.+?)"[\s\S]+? version: "(?<currentValue>.+?)"'
+          # yamllint enable rule:line-length
+    # Rules for matching packages
+    packageRules:
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "openDesk" ]
+        groupName: "Platform"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Collabora" ]
+        groupName: "Collabora"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Element" ]
+        groupName: "Element"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Nordeck" ]
+        groupName: "Nordeck"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Open-Xchange" ]
+        groupName: "Open-Xchange"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "OpenProject" ]
+        groupName: "OpenProject"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "OpenProject" ]
+        groupName: "OpenProject"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Univention" ]
+        groupName: "Univention"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "XWiki" ]
+        groupName: "XWiki"
+    # Add merge request labels
+    labels:
+      - "renovate"
+    # Enable custom regex manager only
+    enabledManagers:
+      - "custom.regex"
+...
