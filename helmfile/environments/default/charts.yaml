@@ -274,7 +274,8 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/charts-mirror"
     name: "appsuite-public-sector"
-    version: "2.2.37"
+    version: "2.4.49"
+    verify: false
   openXchangeAppSuiteBootstrap:
     # providerCategory: 'Platform'
     # providerResponsible: 'openDesk'

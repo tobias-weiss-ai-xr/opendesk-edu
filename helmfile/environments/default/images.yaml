@@ -220,7 +220,7 @@ images:
     # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2'
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
-    tag: "1.1.16@sha256:c36aaef5dfbd44b702f351ea1a875180caa537c90520d4f4fe69ea28357d85a9"
+    tag: "1.1.17@sha256:38749a9a21b349d26ebc34380a3460799bc95bf644604ab033e9249866b6bf7b"
   nextcloudExporter:
     # providerCategory: 'Platform'
     # providerResponsible: 'openDesk'
@@ -236,7 +236,7 @@ images:
     # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management'
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
-    tag: "1.3.6@sha256:4ebe6aa3fc67aa7c2c39035db9f63bfcd398ff980f43ef903dd916acaf88c241"
+    tag: "1.3.7@sha256:89b6b87c5cc7654263670d9bfbc734058bc37adcfcc743e7add44acf62edf40b"
   nextcloudPHP:
     # providerCategory: 'Platform'
     # providerResponsible: 'openDesk'
@@ -244,7 +244,7 @@ images:
     # upstreamRepository: 'bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php'
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
-    tag: "1.8.5@sha256:4fee6fc29fc1b34c069a37fbcf99d1e2a257053971035d248defe9624bea36e7"
+    tag: "1.8.6@sha256:f0dd1856cb7811d18d9cb3a4ef7f9b342af039fba1152cceaed563587ac4dbd8"
   opendeskKeycloakBootstrap:
     # providerCategory: 'Platform'
     # providerResponsible: 'openDesk'
@@ -296,7 +296,7 @@ images:
     # upstreamMirrorStartFrom: ['8', '6', '0']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-guidedtours"
-    tag: "8.6.0@sha256:6c20780f8c609636f2182c41709e2ee26586b4a23679fd13b15875a5f443445b"
+    tag: "8.6.3@sha256:6fb8169cba4beb4bd9039f4ce7ab9b29fc02c4991b283824db949fe2b7be34e2"
   openxchangeCoreMW:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -306,7 +306,7 @@ images:
     # upstreamMirrorStartFrom: ['8', '20', '51']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/middleware-public-sector"
-    tag: "8.20.51@sha256:4a9cc9d6745b09a9ace2475fbbacfeff2ca66db02b6314eb8e035f28e28574a8"
+    tag: "8.22.52@sha256:dab45b0e308b8d5c6c5cb5ec5be9d711f55e7aa87375c4b08ab178287bb7b769"
   openxchangeCoreUI:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -316,7 +316,7 @@ images:
     # upstreamMirrorStartFrom: ['8', '20', '1']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-ui"
-    tag: "8.20.1@sha256:a8bdf83b1179ca9126bcd4e5301b818aafec5e8ac6ff25914603d74a137b65dc"
+    tag: "8.22.1@sha256:4b581d8fb3761156a5dd81a2cebc1c7a0382652d01ba6ee933527f9899b41768"
   openxchangeCoreUIMiddleware:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -326,7 +326,7 @@ images:
     # upstreamMirrorStartFrom: ['2', '0', '0']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-ui-middleware"
-    tag: "2.0.0@sha256:8082edf30498a3ac1715f2d9b3e406f240ea586e2616b97f40c207ef55dff11f"
+    tag: "2.0.2@sha256:eafcc0242b3fd93a777077c136b9e87fe03b163988731c15f0d3cd2ba39a2165"
   openxchangeCoreUserGuide:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -336,7 +336,7 @@ images:
     # upstreamMirrorStartFrom: ['8', '20', '799279']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/core-user-guide"
-    tag: "8.20.799279@sha256:075c917a7e5ebfe57c07c3c21485ee672554616252d5c57f829f443ca987e75b"
+    tag: "8.22.909960@sha256:dbd3f3a37c2d0a2885234cee53d79bf69015392c1381433c008694b4b99ddf30"
   openxchangeDocumentConverter:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -346,17 +346,17 @@ images:
     # upstreamMirrorStartFrom: ['8', '20', '50']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/documentconverter"
-    tag: "8.20.50@sha256:bd11b4e5a62377aab79ebc0ebbe8da0bf54d42ce9a8ae64db0c84608570edf9f"
+    tag: "8.22.49@sha256:21ab0b52fa54fb5be969c4c689e4b7724b7bf9ee79b1bf166ab27d8c67e3a6b6"
   openxchangeGotenberg:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
     # upstreamRegistry: 'registry.open-xchange.com'
-    # upstreamRepository: 'appsuite-public-sector/3rdparty/gotenberg'
+    # upstreamRepository: 'appsuite-public-sector/gotenberg'
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ['7', '9', '2']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/gotenberg"
-    tag: "8.0.3@sha256:1f4979e8cfde1c69f28c24604d19b3a11cf95c59b2a73db957c5af0a27a30ce8"
+    tag: "8.2.0@sha256:ec5afe8eea496d3bef6c42291fde9c203c20e8a68189a2314ef876e9c0e67680"
   openxchangeGuardUI:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -366,7 +366,7 @@ images:
     # upstreamMirrorStartFrom: ['4', '2', '2']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/guard-ui"
-    tag: "4.2.2@sha256:c2ff375fa3dc359c555570f5216a5451966d9b7165934980acb1bf60363b59c8"
+    tag: "8.22.0@sha256:89c18129a2bdffe24587494e96ad12e95c01c25cd7a6a7b177afc75fec70415c"
   openxchangeImageConverter:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -376,7 +376,7 @@ images:
     # upstreamMirrorStartFrom: ['8', '20', '50']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/imageconverter"
-    tag: "8.20.50@sha256:590a8a4c583057f6bb071247c2f8b8566c79d5d219482dcaa452b30c944c876b"
+    tag: "8.22.49@sha256:42841719c515b21f5d6e18296116fe690ac63f82f5acfa877652c2639911f127"
   openxchangeNextcloudIntegrationUI:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Open-Xchange'
@@ -396,7 +396,7 @@ images:
     # upstreamMirrorStartFrom: ['2', '2', '1']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/images-mirror/public-sector-ui"
-    tag: "2.2.1@sha256:cf5dc3754dfdf41844f619b0c3178d0406de3ce8dd51317ed706cb329d338fc8"
+    tag: "2.3.0@sha256:a557816ee55500ecc3b46b60f0440ea66c7f0d90e888ce3b0df8a9acdd72acbe"
   oxConnector:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
