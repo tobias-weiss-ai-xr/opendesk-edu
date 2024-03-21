@@ -50,7 +50,7 @@ stackDataContext:
   initialPasswordAdministrator: {{ .Values.secrets.univentionManagementStack.systemAccounts.administratorPassword | quote }}
   initialPasswordSysIdpUser: {{ .Values.secrets.univentionManagementStack.systemAccounts.sysIdpUserPassword | quote }}
   umcPostgresqlHostname: {{ .Values.databases.umsSelfservice.host | quote }}
-  umcPostgresqUsername: {{ .Values.databases.umsSelfservice.username | quote }}
+  umcPostgresqlUsername: {{ .Values.databases.umsSelfservice.username | quote }}
   umcMemcachedHostname: {{ .Values.cache.umsSelfservice.host | quote }}
   umcMemcachedUsername: "selfservice"
 

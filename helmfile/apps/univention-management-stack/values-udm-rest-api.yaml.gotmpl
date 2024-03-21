@@ -43,7 +43,7 @@ containerSecurityContext:
 udmRestApi:
   secretRef: ums-udm-rest-api-credentials
   ldap:
-    uri: "ldap://{{ .Values.ldap.host }}:389"      
+    uri: "ldap://{{ .Values.ldap.host }}:389"
     baseDN: {{ .Values.ldap.baseDn | quote }}
   image:
     registry: {{ .Values.global.imageRegistry | default .Values.images.umsUdmRestApi.registry | quote }}
@@ -59,6 +59,6 @@ extraSecrets:
   - name: ums-udm-rest-api-credentials
     stringData:
       ldap.secret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
-      machine.secret: {{ .Values.secrets.univentionManagementStack.ldapSecret | b64enc | quote }}
+      machine.secret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
 
 ...

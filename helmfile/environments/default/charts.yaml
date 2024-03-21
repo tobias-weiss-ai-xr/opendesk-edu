@@ -450,7 +450,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ldap-notifier"
-    version: "0.10.0"
+    version: "0.10.1"
     verify: true
   umsLdapServer:
     # providerCategory: 'Supplier'
@@ -462,7 +462,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ldap-server"
-    version: "0.10.0"
+    version: "0.10.1"
     verify: true
   umsNotificationsApi:
     # providerCategory: 'Supplier'
