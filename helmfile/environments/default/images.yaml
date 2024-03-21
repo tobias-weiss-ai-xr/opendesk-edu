@@ -566,7 +566,7 @@ images:
     # upstreamMirrorStartFrom: ['0', '8', '2']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-notifier"
-    tag: "0.10.0@sha256:c2532b7a0920f49c115a58f1660cb7af495ebbb0e2eac0bb5f6723c59633a019"
+    tag: "0.10.1@sha256:940eb9c20c53f90aa477699c0393242a7064d974a856d714ad151069e8d12af4"
   umsLdapServer:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
@@ -576,7 +576,7 @@ images:
     # upstreamMirrorStartFrom: ['0', '8', '2']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-server"
-    tag: "0.10.0@sha256:ee54a0c6bf2e1d24fa04e7487cbebdec0a344f5db8f9a706db2b982fd07bc720"
+    tag: "0.10.1@sha256:5ae54faec6074c4653ef837158262dd6e7b7ff414f8d8722e35f929543a6a6ef"
   umsNotificationsApi:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
