@@ -45,6 +45,10 @@ apps:
   xwiki:
     enabled: {{ .Values.xwiki.enabled }}
 
+ingressController:
+  {{ .Values.security.ingressController | toYaml | nindent 2 }}
+
+
 extraApps:
   clusterPostfix:
     enabled: {{ .Values.security.clusterPostfix.enabled }}

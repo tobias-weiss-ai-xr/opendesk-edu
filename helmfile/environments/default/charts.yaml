@@ -294,7 +294,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "1.7.5"
+    version: "1.7.9"
     verify: true
   oxConnector:
     # providerCategory: 'Supplier'
