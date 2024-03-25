@@ -714,7 +714,7 @@ images:
     # upstreamMirrorStartFrom: ['0', '7', '3']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-gateway"
-    tag: "0.11.2@sha256:13edaa88ded4b3389ef36d0215ad19ea093ae962f8de9b4b178550e02de06277"
+    tag: "0.11.6@sha256:5d7c1a9b74409d2d7c42e08ca87b41cda506e43cad49efbc85a4ed6b8e9c6bc8"
   umsUmcServer:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
@@ -724,7 +724,7 @@ images:
     # upstreamMirrorStartFrom: ['0', '7', '3']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-server"
-    tag: "0.11.2@sha256:866b8c3d2845653c68316458d7a24901b0493d2e2b83d50e0932adc42cda1706"
+    tag: "0.11.8@sha256:38a87524703a1e11fbb3cd3cc9d90d5b719e92329a0e3ea05c50451105d64ac6"
   umsWaitForDependency:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'

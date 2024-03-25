@@ -52,7 +52,7 @@ stackDataContext:
   umcPostgresqlHostname: {{ .Values.databases.umsSelfservice.host | quote }}
   umcPostgresqlUsername: {{ .Values.databases.umsSelfservice.username | quote }}
   umcMemcachedHostname: {{ .Values.cache.umsSelfservice.host | quote }}
-  umcMemcachedUsername: "selfservice"
+  umcMemcachedUsername: ""
 
 stackDataUms:
   loadDevData: true

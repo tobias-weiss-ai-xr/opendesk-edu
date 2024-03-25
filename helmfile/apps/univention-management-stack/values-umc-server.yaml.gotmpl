@@ -39,23 +39,21 @@ extraVolumeMounts:
     mountPath: "/usr/share/univention-management-console/modules/udm-portals-announcement.xml"
     subPath: "udm-portals-announcement.xml"
 
+imagePullSecrets:
+  {{- range .Values.global.imagePullSecrets }}
+  - {{ . }}
+  {{- end }}
+
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.umsUmcServer.registry | quote }}
   repository: {{ .Values.images.umsUmcServer.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.umsUmcServer.tag | quote }}
-  pullSecrets:
-    {{- range .Values.global.imagePullSecrets }}
-    - name: {{ . | quote }}
-    {{- end }}
 
 memcached:
   bundled: false
   auth:
-    username: null
-    # This is also used by the umc-server Helm chart to generate a secret. The secrets content is represented as an environment variable. If said variable is empty, the container fails to start due to an entrypoint script erroring on a nullish value for the environment variable SELF_SERVICE_MEMCACHED_SECRET.
-    password: "password"
-  server: {{ .Values.cache.umsSelfservice.host | quote }}
+    password: null
 
 postgresql:
   bundled: false
