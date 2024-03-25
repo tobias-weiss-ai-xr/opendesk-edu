@@ -368,6 +368,18 @@ charts:
     name: "opendesk-synapse-web"
     version: "2.6.7"
     verify: true
+  ums:
+    # providerCategory: 'Supplier'
+    # providerResponsible: 'Univention'
+    # upstreamRegistry: 'registry.souvap-univention.de'
+    # upstreamRepository: 'souvap/tooling/charts/univention/ums'
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
+    # upstreamMirrorStartFrom: ['0', '0', '1']
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
+    name: "ums"
+    version: "0.7.5"
+    verify: true
   umsGuardianAuthorizationApi:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
