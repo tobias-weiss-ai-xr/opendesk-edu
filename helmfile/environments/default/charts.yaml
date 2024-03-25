@@ -618,7 +618,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "umc-gateway"
-    version: "0.11.2"
+    version: "0.11.6"
     verify: true
   umsUmcServer:
     # providerCategory: 'Supplier'
@@ -630,7 +630,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "umc-server"
-    version: "0.11.2"
+    version: "0.11.6"
     verify: true
   xwiki:
     # providerCategory: 'Supplier'
