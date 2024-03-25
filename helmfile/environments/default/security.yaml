@@ -7,4 +7,9 @@ security:
   clusterPostfix:
     enabled: false
     namespace: ""
+  ingressController:
+    podSelector:
+      matchLabels:
+        app.kubernetes.io/name: "ingress-nginx"
+    namespace: "ingress-nginx"
 ...
