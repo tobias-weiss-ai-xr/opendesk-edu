@@ -1,3 +1,22 @@
+## [0.5.81](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.80...v0.5.81) (2024-03-28)
+
+
+### Bug Fixes
+
+* **docs:** Various updates ([50e2638](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/50e263866be8b51ef295ebf8025c3117821a2b6c))
+* **element:** Update Element Web to v1.11.59 with widget sync fix and NeoBoard v1.14.0 ([0fd4a26](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0fd4a26c711fb345b79cdff1c775d7ef20335768))
+* **helmfile:** Fix OpenAPI validations for Kubernetes v1.28 ([0aa4cfb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0aa4cfb46f793369a472a736b28eea834a545439))
+* **nextcloud:** Bump to 28.0.3 ([34d2c05](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/34d2c059596466f8f7d6d09c2855c595391a7e0d))
+* **nextcloud:** Rename default shared folder to `__Shared_with_me__` ([5f9d015](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5f9d015f0b98579d652fd4172e74835ed67ccf11))
+* **open-xchange:** Bump to 8.22 ([5ebf291](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5ebf291a4dbe88a09c0afe2befa6140ad33bf30b))
+* **openproject:** Bump OpenProject to 13.4.0 ([d565c05](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d565c057ddb7b348f7a829e0f931b1ea448b454b))
+* **openproject:** Bump version to 13.4.1 ([7cc3964](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7cc39647d89538630bac9caa158c47b5cb8d2c45))
+* **services:** Update Otterize Policies ([42f63e3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/42f63e399230495c83f934e07beb9fc950ef5e29))
+* **univention-management-stack:** Add missing authenticator secret mount to portal-server ([5a39e87](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5a39e8725b6454591f552f87f12535201e52df7c))
+* **univention-management-stack:** Update LDAP server for BSI base security compliance ([8e889db](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8e889db63eaf05b24cc23838545f63d969232c65))
+* **univention-management-stack:** Update ldap-notifier and ldap-server ([a41ddd5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a41ddd5451a9fbd3c6319827fee3eaffbd931271))
+* **univention-management-stack:** Update provisioning charts, images and helm value to add authentication ([8c97bcf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8c97bcf994487281ae94e6d66c73f4a11c08a0be))
+
 ## [0.5.80](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.79...v0.5.80) (2024-03-11)
 
 
