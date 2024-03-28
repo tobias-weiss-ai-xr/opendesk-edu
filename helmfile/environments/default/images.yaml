@@ -748,9 +748,9 @@ images:
     # providerResponsible: 'XWiki'
     # upstreamRegistry: 'git.xwikisas.com:5050'
     # upstreamRepository: 'xwikisas/swp/xwiki'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)-.+$'
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)-mariadb.+$'
     # upstreamMirrorStartFrom: ['0', '12']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/xwiki"
-    tag: "0.14-mariadb-jetty-alpine@sha256:276e871e3938bf80a86a0e1e63751c843920ccd260848badafec8689410ded80"
+    tag: "0.17-mariadb-jetty-alpine@sha256:9eb67520774c3022aa4485ce348be477f358263b716e647cacd057da3aca9739"
 ...
