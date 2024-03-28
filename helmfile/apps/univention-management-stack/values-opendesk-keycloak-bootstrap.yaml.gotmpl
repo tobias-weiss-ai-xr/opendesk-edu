@@ -293,7 +293,7 @@ config:
         authorizationServicesEnabled: false
         attributes:
           backchannel.logout.session.required: false
-          backchannel.logout.url: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/NOT_YET_IMPLEMENTED_DONT_FORGET_TO_DISABLE_FCL_WHEN_BCL_IS_ACTIVATED/backchannel-logout"
+          backchannel.logout.url: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/oidc/authenticator/backchannel_logout"
           post.logout.redirect.uris: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
         defaultClientScopes:
           - "opendesk"

@@ -62,21 +62,21 @@ customConfigs:
     xwiki.authentication.ldap.groupcache_expiration: 300
 
   xwiki.properties:
-    oidc.endpoint.authorization: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
-    oidc.endpoint.token: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
-    oidc.endpoint.userinfo: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/userinfo"
-    oidc.endpoint.logout: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
-    oidc.secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
-    oidc.scope: "openid,profile,email,address,opendesk"
-    oidc.endpoint.userinfo.method: "GET"
-    oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
-    oidc.user.subjectFormater: "${oidc.user.opendesk_username._lowerCase}"
-    # yamllint disable-line rule:line-length
-    oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
     oidc.clientid: "opendesk-xwiki"
     oidc.endpoint.token.auth_method: "client_secret_basic"
-    oidc.skipped: false
+    oidc.endpoint.userinfo.method: "GET"
     oidc.logoutMechanism: "rpInitiated"
+    oidc.provider: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
+    oidc.scope: "openid,profile,email,address,opendesk"
+    oidc.secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
+    oidc.skipped: false
+    oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
+    oidc.user.subjectFormater: "${oidc.user.opendesk_username._lowerCase}"
+    # Using the claims below some user based information can be passed through OIDC to XWiki that partitially has an
+    # impact on the user experience. E.g. you can define the default editor for the user `xwiki_user_editor` or if
+    # the `xwiki_user_usertype` is advanced or simple.
+    # yamllint disable-line rule:line-length
+    oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
     url.trustedDomains: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     workplaceServices.navigationEndpoint: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
     workplaceServices.base: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
