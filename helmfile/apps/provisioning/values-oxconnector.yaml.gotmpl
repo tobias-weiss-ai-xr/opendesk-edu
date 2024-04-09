@@ -33,7 +33,7 @@ oxConnector:
   oxMasterAdmin: "admin"
   oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
   oxSmtpServer: "smtp://127.0.0.1:587"
-  oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+  oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
 
 resources:
   {{ .Values.resources.oxConnector | toYaml | nindent 2 }}

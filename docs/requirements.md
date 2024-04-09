@@ -28,7 +28,6 @@ openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s)
 - [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
-- [Istio](https://istio.io/) is currently required to deploy and operate OX AppSuite8
 
 # Hardware
 
@@ -56,12 +55,8 @@ configured ingress controller deployed.
 
 **Maintained controllers:**
 - [NGINX Ingress Controller](https://github.com/nginxinc/kubernetes-ingress)
-- [HAProxy Kubernetes Ingress Controller](https://github.com/haproxytech/kubernetes-ingress)
-
-**Community Supported:**
 - [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
-
-When you want to use Open-Xchange Appsuite 8, you need to deploy and configure additionally [Istio](https://istio.io/)
+- [HAProxy Kubernetes Ingress Controller](https://github.com/haproxytech/kubernetes-ingress)
 
 # Volume provisioner
 

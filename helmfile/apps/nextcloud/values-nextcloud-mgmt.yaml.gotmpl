@@ -9,7 +9,6 @@ global:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
-  istioDomain: {{ .Values.istio.domain }}
 
 additionalAnnotations:
   intents.otterize.com/service-name: "opendesk-nextcloud-php"
