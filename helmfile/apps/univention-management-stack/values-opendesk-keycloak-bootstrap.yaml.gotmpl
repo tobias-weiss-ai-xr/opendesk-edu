@@ -253,7 +253,7 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
         redirectUris:
-          - "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/*"
+          - "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/*"
           - "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
         consentRequired: false
         frontchannelLogout: false
@@ -261,8 +261,8 @@ config:
         authorizationServicesEnabled: false
         attributes:
           backchannel.logout.session.required: true
-          backchannel.logout.url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/ajax/oidc/backchannel_logout"
-          post.logout.redirect.uris: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
+          backchannel.logout.url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/ajax/oidc/backchannel_logout"
+          post.logout.redirect.uris: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/*"
         protocolMappers:
           - name: "context"
             protocol: "openid-connect"

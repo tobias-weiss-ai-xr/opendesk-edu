@@ -60,17 +60,6 @@ repositories:
     url: "{{ .Values.global.helmRegistry | default .Values.charts.postfix.registry }}/\
       {{ .Values.charts.postfix.repository }}"
 
-  # openDesk Istio Resources
-  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-istio-resources
-  - name: "istio-resources-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.istioResources.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.istioResources.registry }}/\
-      {{ .Values.charts.istioResources.repository }}"
-
   # openDesk ClamAV
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-clamav
   - name: "clamav-repo"
@@ -188,14 +177,6 @@ releases:
     values:
       - "values-clamav-simple.yaml.gotmpl"
     installed: {{ .Values.clamavSimple.enabled }}
-    timeout: 900
-
-  - name: "opendesk-gateway"
-    chart: "istio-resources-repo/{{ .Values.charts.istioResources.name }}"
-    version: "{{ .Values.charts.istioResources.version }}"
-    values:
-      - "values-istio-gateway.yaml.gotmpl"
-    installed: {{ .Values.istio.enabled }}
     timeout: 900
 
   - name: "minio"

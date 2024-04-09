@@ -630,7 +630,7 @@ stack-data-swp:
     externalDomainName: {{ .Values.global.domain | quote }}
     externalMailDomain: {{ .Values.global.domain | quote }}
 
-    portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.istio.domain | quote }}
+    portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain | quote }}
     portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain | quote }}
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain | quote }}
     portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain | quote }}

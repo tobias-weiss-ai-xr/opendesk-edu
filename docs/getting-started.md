@@ -69,26 +69,12 @@ The domain have to be set either via `dev` environment
 ```yaml
 global:
   domain: "my.open.desk"
-istio:
-  domain: "istio.my.open.desk"
 ```
 
 or via environment variable
 
 ```shell
 export DOMAIN=my.open.desk
-export ISTIO_DOMAIN=istio.my.open.desk
-```
-
-When you configure each subdomain individually, you can set `global.domain` and `istio.domain` to the same value.
-
-Istio is only used for Open-Xchange Appsuite 8, when you don't want to install it, you can disable Istio:
-
-```yaml
-istio:
-  enabled: false
-oxAppsuite:
-  enabled: false
 ```
 
 ### Apps

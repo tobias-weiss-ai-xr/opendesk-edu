@@ -27,7 +27,7 @@ global:
 ics:
   secret: {{ .Values.secrets.intercom.secret | quote }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
-  originRegex: "{{ .Values.istio.domain }}|{{ .Values.global.domain }}"
+  originRegex: "{{ .Values.global.domain }}"
   keycloak:
     realm: {{ .Values.platform.realm | quote }}
   default:
@@ -49,7 +49,7 @@ ics:
     password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password | quote }}
   openxchange:
     oci: true
-    url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     audience: "opendesk-oxappsuite"
   nextcloud:
     audience: "opendesk-nextcloud"

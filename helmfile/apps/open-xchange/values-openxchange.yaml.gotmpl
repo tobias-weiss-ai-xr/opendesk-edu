@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+  hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
   mysql:
     host: {{ .Values.databases.oxAppsuite.host | quote }}
     database: {{ .Values.databases.oxAppsuite.name | quote }}
@@ -12,9 +12,6 @@ global:
       user: {{ .Values.databases.oxAppsuite.username | quote }}
       password: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
       rootPassword: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
-
-istio:
-  enabled: {{ .Values.istio.enabled }}
 
 nextcloud-integration-ui:
   image:
@@ -77,18 +74,22 @@ appsuite:
   switchboard:
     enabled: false
   istio:
-    enabled: {{ .Values.istio.enabled }}
-    ingressGateway:
-      name: "opendesk-gateway-istio-gateway"
+    enabled: false
+  ingress:
+    enabled: {{ .Values.ingress.enabled }}
+    ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+    tls:
+      enabled: true
+      existingSecret: {{ .Values.ingress.tls.secretName | quote }}
+    appsuite:
       hosts:
-        - "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
-    virtualServices:
-      appsuite:
-        hosts:
-          - "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
-      dav:
-        hosts:
-          - "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+        - "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
+    dav:
+      hosts:
+        - "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
+    routes:
+      trailslash:
+        enabled: false
   core-mw:
     enabled: true
     asConfig:
@@ -99,7 +100,7 @@ appsuite:
         oidcPath: "/oidc"
     masterAdmin: "admin"
     masterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
-    hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+    hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     serviceAccount:
       create: true
     features:
@@ -168,9 +169,9 @@ appsuite:
       com.openexchange.oidc.opJwkSetEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
       com.openexchange.oidc.opLogoutEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
       com.openexchange.oidc.opTokenEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
-      com.openexchange.oidc.rpRedirectURIAuth: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/appsuite/api/oidc/auth"
+      com.openexchange.oidc.rpRedirectURIAuth: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/appsuite/api/oidc/auth"
       com.openexchange.oidc.rpRedirectURILogout: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-      com.openexchange.oidc.rpRedirectURIPostSSOLogout: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}/appsuite/api/oidc/logout"
+      com.openexchange.oidc.rpRedirectURIPostSSOLogout: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/appsuite/api/oidc/logout"
       com.openexchange.oidc.ssoLogout: "true"
       com.openexchange.oidc.startDefaultBackend: "true"
       com.openexchange.oidc.userLookupClaim: "opendesk_username"
@@ -366,7 +367,7 @@ appsuite:
     enabled: true
     ingress:
       hosts:
-        - host: "{{ .Values.global.hosts.openxchange }}.{{ .Values.istio.domain }}"
+        - host: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
       enabled: false
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
@@ -385,6 +386,8 @@ appsuite:
       auth:
         enabled: true
         password: {{ .Values.secrets.redis.password | quote }}
+        # Workaround for a bug in 8.23
+        ca: ""
     resources:
       {{ .Values.resources.openxchangeCoreUIMiddleware | toYaml | nindent 6 }}
       updater:

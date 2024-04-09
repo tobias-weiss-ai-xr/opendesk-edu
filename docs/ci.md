@@ -19,7 +19,6 @@ The project includes a `.gitlab-ci.yml` that allows you to execute the deploymen
 When starting the pipeline through the Gitlab UI, you will be queried for some variables plus the following ones:
 
 - `DOMAIN` = The domain to deploy to.
-- `ISTIO_DOMAIN` = istio.`DOMAIN`
 - `NAMESPACE`: Defines into which namespace of your K8s cluster the SWP will be installed
 - `MASTER_PASSWORD_WEB_VAR`: Overwrites value of `MASTER_PASSWORD`
 

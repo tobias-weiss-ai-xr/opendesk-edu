@@ -14,7 +14,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-certificates"
     name: "opendesk-certificates"
-    version: "2.1.1"
+    version: "2.1.3"
     verify: true
   clamav:
     # providerCategory: 'Platform'
@@ -100,16 +100,6 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "intercom-service"
-    version: "2.0.1"
-    verify: true
-  istioResources:
-    # providerCategory: 'Platform'
-    # providerResponsible: 'openDesk'
-    # upstreamRegistry: 'registry.opencode.de'
-    # upstreamRepository: 'bmi/opendesk/components/platform-development/charts/opendesk-istio-resources/istio-gateway'
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/platform-development/charts/opendesk-istio-resources"
-    name: "istio-gateway"
     version: "2.0.1"
     verify: true
   jitsi:
@@ -210,7 +200,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
     name: "opendesk-nextcloud"
-    version: "1.5.0"
+    version: "1.5.1"
     verify: true
   nextcloudManagement:
     # providerCategory: 'Platform'
@@ -220,7 +210,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
     name: "opendesk-nextcloud-management"
-    version: "1.5.0"
+    version: "1.5.1"
     verify: true
   nginx:
     # providerCategory: 'Community'
@@ -274,7 +264,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/open-xchange/charts-mirror"
     name: "appsuite-public-sector"
-    version: "2.4.49"
+    version: "2.5.3"
     verify: false
   openXchangeAppSuiteBootstrap:
     # providerCategory: 'Platform'
@@ -294,7 +284,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "2.0.0"
+    version: "2.0.1"
     verify: true
   oxConnector:
     # providerCategory: 'Supplier'
