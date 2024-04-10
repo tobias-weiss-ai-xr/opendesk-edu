@@ -21,6 +21,7 @@ containerSecurityContext:
 
 global:
   domain: {{ .Values.global.domain | quote }}
+  clusterDomain: {{ .Values.cluster.networking.domain | quote }}
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
