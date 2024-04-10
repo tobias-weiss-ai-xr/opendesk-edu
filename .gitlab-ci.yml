@@ -28,12 +28,13 @@ stages:
   - ".pre"
   - "scan"
   - "automr"
-  - "lint"
   - "env-cleanup"
   - "env"
+  - "pre-services-deploy"
   - "basic-services-deploy"
   - "component-deploy-stage-1"
   - "component-deploy-stage-2"
+  - "lint"
   - "tests"
   - "env-stop"
   - ".post"
@@ -161,7 +162,7 @@ variables:
       fi;
     - >
       echo "Installing ${COMPONENT} into ${NAMESPACE} namespace as ${HELMFILE_ENVIRONMENT} environment on ${CLUSTER}"
-    - "helmfile --namespace ${NAMESPACE} apply --suppress-diff"
+    - "helmfile --namespace ${NAMESPACE} apply --suppress-diff ${ADDITIONAL_ARGS}"
   tags:
     - "docker"
     - "kubernetes"
@@ -217,6 +218,19 @@ env-start:
       --docker-password "${EXTERNAL_REGISTRY_PASSWORD}"
       --dry-run=client -o yaml | kubectl apply -f -
   stage: "env"
+
+policies-deploy:
+  stage: "pre-services-deploy"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
+      when: "on_success"
+  variables:
+    COMPONENT: "services"
+    ADDITIONAL_ARGS: "-l name=opendesk-otterize"
 
 services-deploy:
   stage: "basic-services-deploy"
