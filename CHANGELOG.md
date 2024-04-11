@@ -1,3 +1,20 @@
+# [0.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.81...v0.6.0) (2024-04-11)
+
+
+### Bug Fixes
+
+* **helmfile:** Improve support for external Objectstore, and fix issue with DoveCot storageClassName ([1b748b6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1b748b6bf63d75fc5232c90407a3fa885c2dd3c8)), closes [#57](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/57) [#60](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/60) [#56](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/56)
+* **nextcloud:** Bump to 28.0.4 ([cb33a92](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cb33a929ef7c13a9a578e56a631951292d14d0e4))
+* **univention-management-stack:** add Guardian provisioning job image ([79c52d0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/79c52d014cec188d010a2827bb63b2635abafb2c))
+* **univention-management-stack:** Update UMC to 0.11.8 ([5e3f4fa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5e3f4faade2ea02e51f260d1d614296a6a484848))
+* **univention-management-stack:** Use umbrella helm chart ([10ecb44](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/10ecb44aa675d2f139aaec6fe8d4246fa1d3dd40))
+* **xwiki:** Bump to 15.10.8 and enable OIDC backchannel logout ([c395d35](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c395d35dd77bbec5e6b7d01768533f87af843560))
+
+
+### Features
+
+* **open-xchange:** Bump to 8.23 and remove Istio prerequisite ([3be3564](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3be3564ec7168a1a2d72b58f11da84e89e81911d))
+
 ## [0.5.81](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.80...v0.5.81) (2024-03-28)
 
 
