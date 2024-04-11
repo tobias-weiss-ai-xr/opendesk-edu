@@ -54,7 +54,7 @@ configuration:
       secretKey:
         value: {{ .Values.objectstores.nextcloud.secretKey | default .Values.secrets.minio.nextcloudUser | quote }}
     bucket: {{ .Values.objectstores.nextcloud.bucket | quote }}
-    host: {{ .Values.objectstores.nextcloud.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    host: {{ .Values.objectstores.nextcloud.endpoint | quote }}
     region: {{ .Values.objectstores.nextcloud.region | quote }}
     storageClass: {{ .Values.objectstores.nextcloud.storageClass | quote }}
     port: {{ .Values.objectstores.nextcloud.port | quote }}
