@@ -1525,7 +1525,7 @@ extraSecrets:
   - name: ums-portal-server-minio-credentials
     stringData:
       nubus-s3-access-key-id: {{ .Values.objectstores.univentionManagementStack.username | quote }}
-      nubus-s3-secret-key-id: {{ .Values.secrets.minio.umsUser | quote }}
+      nubus-s3-secret-key-id: {{ .Values.objectstores.univentionManagementStack.secretKey | default .Values.secrets.minio.umsUser | quote }}
   - name: ums-portal-server-authenticator-credentials
     stringData:
       authenticator.secret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
