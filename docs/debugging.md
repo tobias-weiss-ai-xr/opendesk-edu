@@ -6,6 +6,9 @@ SPDX-License-Identifier: Apache-2.0
 
 * [Disclaimer](#disclaimer)
 * [Enable debugging](#enable-debugging)
+* [Adding containers to a pod for debugging purposes](#adding-containers-to-a-pod-for-debugging-purposes)
+  * [Adding a container to a pod/deployment - Dev/Test only](#adding-a-container-to-a-poddeployment---devtest-only)
+  * [Temporary/ephemeral containers](#temporaryephemeral-containers)
 * [Components](#components)
   * [MariaDB](#mariadb)
   * [Nextcloud](#nextcloud)
@@ -34,6 +37,94 @@ component's loglevel to debug and it get some features like:
 and set the loglevel for components to "Debug".
 
 **Note:** All containers should write their log output to STDOUT, if you find (valuable) logs inside a container, please let us know!
+
+# Adding containers to a pod for debugging purposes
+
+During test or development you come across the need to execute tools, browse or even change things in the filesystem of another container.
+
+This can be a challenge the more security hardened container images are, because there are no debugging tools available and sometimes not even a shell.
+
+Adding a container to a Pod can ease the pain.
+
+Below you will find some wrap-up notes when it comes to debugging openDesk by adding debug containers. Of course there are a lot of more detailled resources out in the wild.
+
+## Adding a container to a pod/deployment - Dev/Test only
+
+You can add a container by editing and updating an existing deployment, which is quite comforable with tools like [Lens](https://k8slens.dev/).
+
+- Select the container you want to make use of as debugging container, in the example below it's `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:1.0.0`.
+- Ensure the `shareProcessNamespace` option is enabled for the Pod.
+- Reference the selected container within the `containers` array of the deployment.
+- In case you want to access another containers filesystem, ensure the user/group settings of both containers match.
+- Save & update the deployment.
+
+The following example can e.g. be used to debug the `openDesk-Nextcloud-PHP` container, in case you want to modify files, don't forget to set `readOnlyRootFilesystem` to `true` on the PHP container.
+
+```
+      shareProcessNamespace: true
+      containers:
+        - name: debugging
+          image: registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:1.0.0
+          command: ["/bin/bash", "-c", "while true; do echo 'This is a temporary container for debugging'; sleep 5 ; done"]
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsUser: 65532
+            runAsGroup: 65532
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+```
+
+- After the deployment was reloaded open the shell of the debugging container.
+- When you've been successful you will see the processes of both/all containers in the pod when doing a `ps aux`.
+- To access another containers filesystem just select the PID of a process from the other container an do a `cd /proc/<selected_process_id>/root`
+
+## Temporary/ephemeral containers
+
+Interesting read we picked most of the details below from: https://iximiuz.com/en/posts/kubernetes-ephemeral-containers/
+
+Sometimes you do not want to add a container permanently to your existing deployment. In that case you could use [ephemeral containers](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/).
+
+For the commands further down this section we set some environment variables first:
+- `NAMESPACE`: The namespace the Pod you want to inspects is running in.
+- `DEPLOYMENT_NAME`: The name of the deployment responsible for spawning the Pod you want to inspect within the prementioned namespace.
+- `POD_NAME`: The name of the Pod you want to inspect within the prementioned namespace.
+- `EPH_CONTAINER_NAME`: Chose the name for the container, "debugging" seem obvious.
+- `DEBUG_IMAGE`: The image you want to make use of for debugging purposes.
+
+e.g.
+
+```
+export EPH_CONTAINER_NAME=debugging
+export NAMESPACE=my_testdeployment
+export DEPLOYMENT_NAME=opendesk-nextcloud-php
+export POD_NAME=opendesk-nextcloud-php-6686d47cfb-7vtmf
+export DEBUG_IMAGE=registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:1.0.0
+```
+
+You still need to ensure that your deployment supports process namespace sharing:
+
+```
+kubectl -n ${NAMESPACE} patch deployment ${DEPLOYMENT_NAME} --patch '
+spec:
+  template:
+    spec:
+      shareProcessNamespace: true'
+```
+
+Now you can add the ephemeral container with:
+```
+kubectl -n ${NAMESPACE} debug -it --attach=false -c ${EPH_CONTAINER_NAME} --image={DEBUG_IMAGE} ${POD_NAME}
+```
+and open it's interactive terminal with
+```
+kubectl -n ${NAMESPACE} attach -it -c ${EPH_CONTAINER_NAME} ${POD_NAME}
+```
 
 # Components
 
