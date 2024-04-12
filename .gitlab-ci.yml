@@ -59,6 +59,12 @@ variables:
     options:
       - "yes"
       - "no"
+  DEBUG_ENABLED:
+    description: "Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific configuration containting: `debug.enabled: {{ env \"DEBUG_ENABLED\" | default false }}`"
+    value: "no"
+    options:
+      - "yes"
+      - "no"
   DEPLOY_ALL_COMPONENTS:
     description: "Enable all component deployment (overwrites 'no' setting on component level)."
     value: "no"
