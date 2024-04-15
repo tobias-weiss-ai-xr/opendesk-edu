@@ -577,6 +577,30 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-notifier"
     tag: "0.10.3@sha256:beb4577e7fdf1e18d3769e62296f210c0651460346dc2325e6cc29f4c671fa71"
+  umsNats:
+    # providerCategory: 'Community'
+    # providerResponsible: 'Univention'
+    # upstreamRegistry: 'registry-1.docker.io'
+    # upstreamRepository: 'library/nats'
+    registry: "registry-1.docker.io"
+    repository: "library/nats"
+    tag: "2.10.10@sha256:fa26beda8a3187ccefa47afcfe9ea6d0e2f40a57c8f64d70bd63c792d7973938"
+  umsNatsBox:
+    # providerCategory: 'Community'
+    # providerResponsible: 'Univention'
+    # upstreamRegistry: 'registry-1.docker.io'
+    # upstreamRepository: 'natsio/nats-box'
+    registry: "registry-1.docker.io"
+    repository: "natsio/nats-box"
+    tag: "0.14.2@sha256:c9b8ebaabb2ca4c227feb4f6b856dc72d4775ac3d71f80d2c65aa82303079011"
+  umsNatsReloader:
+    # providerCategory: 'Community'
+    # providerResponsible: 'Univention'
+    # upstreamRegistry: 'registry-1.docker.io'
+    # upstreamRepository: 'natsio/nats-server-config-reloader'
+    registry: "registry-1.docker.io"
+    repository: "natsio/nats-server-config-reloader"
+    tag: "0.14.1@sha256:77dd4c60001ffbf442c6b25592e73b4fca06ea9406c677607192788d80453783"
   umsLdapServer:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
