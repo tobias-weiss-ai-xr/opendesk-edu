@@ -577,6 +577,16 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-notifier"
     tag: "0.10.3@sha256:beb4577e7fdf1e18d3769e62296f210c0651460346dc2325e6cc29f4c671fa71"
+  umsLdapServer:
+    # providerCategory: 'Supplier'
+    # providerResponsible: 'Univention'
+    # upstreamRegistry: 'registry.souvap-univention.de'
+    # upstreamRepository: 'souvap/tooling/images/univention/ldap-server'
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
+    # upstreamMirrorStartFrom: ['0', '8', '2']
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-server"
+    tag: "0.10.3@sha256:7742eca27bf1134cf92e6e3571bc2784e2f21a76664fdcab6ae213051db26c05"
   umsNats:
     # providerCategory: 'Community'
     # providerResponsible: 'Univention'
@@ -601,16 +611,6 @@ images:
     registry: "registry-1.docker.io"
     repository: "natsio/nats-server-config-reloader"
     tag: "0.14.1@sha256:77dd4c60001ffbf442c6b25592e73b4fca06ea9406c677607192788d80453783"
-  umsLdapServer:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/ldap-server'
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '8', '2']
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-server"
-    tag: "0.10.3@sha256:7742eca27bf1134cf92e6e3571bc2784e2f21a76664fdcab6ae213051db26c05"
   umsNotificationsApi:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
