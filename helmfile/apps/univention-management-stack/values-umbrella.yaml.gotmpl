@@ -535,6 +535,26 @@ provisioning:
           secretKeyRef:
             name: ums-provisioning-prefill-credentials
             key: NATS_PASSWORD
+  nats:
+    nats:
+      image:
+        registry: {{ .Values.global.imageRegistry | default .Values.images.umsNats.registry | quote }}
+        repository: {{ .Values.images.umsNats.repository | quote }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+        tag: {{ .Values.images.umsNats.tag | quote }}
+    natsBox:
+      image:
+        registry: {{ .Values.global.imageRegistry | default .Values.images.umsNatsBox.registry | quote }}
+        repository: {{ .Values.images.umsNatsBox.repository | quote }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+        tag: {{ .Values.images.umsNatsBox.tag | quote }}
+    reloader:
+      image:
+        registry: {{ .Values.global.imageRegistry | default .Values.images.umsNatsReloader.registry | quote }}
+        repository: {{ .Values.images.umsNatsReloader.repository | quote }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+        tag: {{ .Values.images.umsNatsReloader.tag | quote }}
+
 
   ingress:
     host: "localhost"
