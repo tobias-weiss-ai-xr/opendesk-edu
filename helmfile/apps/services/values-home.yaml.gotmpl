@@ -1,0 +1,16 @@
+{{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: {{ .Values.global.domain | quote }}
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+
+ingress:
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  host: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+  tls:
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
+...

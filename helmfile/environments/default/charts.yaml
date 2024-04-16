@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 #
 # Please read the /docs/development.md for information about structure and annotations used in this file.
@@ -89,6 +89,16 @@ charts:
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-well-known"
     version: "2.6.7"
+    verify: true
+  home:
+    # providerCategory: 'Platform'
+    # providerResponsible: 'openDesk'
+    # upstreamRegistry: 'registry.opencode.de'
+    # upstreamRepository: 'bmi/opendesk/components/platform-development/charts/opendesk-home'
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-home"
+    name: "opendesk-home"
+    version: "1.0.1"
     verify: true
   intercomService:
     # providerCategory: 'Supplier'

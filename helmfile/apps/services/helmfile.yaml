@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -15,6 +16,17 @@ repositories:
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.otterize.registry }}/\
       {{ .Values.charts.otterize.repository }}"
+
+  # openDesk Home
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-home
+  - name: "home-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.home.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.home.registry }}/\
+      {{ .Values.charts.home.repository }}"
 
   # openDesk Certificates
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-certificates
@@ -114,6 +126,13 @@ releases:
       - "values-otterize.yaml.gotmpl"
     installed: {{ .Values.security.otterizeIntents.enabled }}
     timeout: 900
+
+  - name: "opendesk-home"
+    chart: "home-repo/{{ .Values.charts.home.name }}"
+    version: "{{ .Values.charts.home.version }}"
+    values:
+      - "values-home.yaml.gotmpl"
+    installed: {{ .Values.home.enabled }}
 
   - name: "opendesk-certificates"
     chart: "certificates-repo/{{ .Values.charts.certificates.name }}"
