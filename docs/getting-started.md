@@ -77,6 +77,20 @@ or via environment variable
 export DOMAIN=my.open.desk
 ```
 
+If the mail domain differs from the domain, the mail
+domain has to be set either via `dev` environment
+
+```yaml
+global:
+  mail_domain: "open.desk"
+```
+
+or via environment variable
+
+```shell
+export MAIL_DOMAIN=open.desk
+```
+
 ### Apps
 
 All available apps and their default value can be found in `helmfile/environments/default/workplace.yaml`.
