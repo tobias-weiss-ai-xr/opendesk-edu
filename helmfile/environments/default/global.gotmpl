@@ -11,6 +11,10 @@ global:
   #
   domain: {{ env "DOMAIN" | default "souvap.cloud" | quote }}
 
+  ## Define mail host
+  #
+  mailDomain: {{ env "MAIL_DOMAIN" | default "souvap.cloud" | quote }}
+
   ## Define docker registry address.
   #
   helmRegistry: {{ env "PRIVATE_HELM_REGISTRY_URL" | quote }}
