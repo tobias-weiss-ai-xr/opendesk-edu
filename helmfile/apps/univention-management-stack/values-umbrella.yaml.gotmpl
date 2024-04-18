@@ -6,6 +6,7 @@ global:
   configMapUcr: "ums-stack-data-swp-ucr"
   configMapUcrForced: null
   domain: {{ .Values.global.domain | quote }}
+  mailDomain: {{ .Values.global.mailDomain | quote }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
@@ -609,7 +610,7 @@ stack-data-ums:
     # The openDesk configuration brings its own UMC policies.
     installUmcPolicies: false
     domainname: {{ .Values.global.domain | quote }}
-    externalMailDomain: {{ .Values.global.domain | quote }}
+    externalMailDomain: {{ .Values.global.mailDomain | quote }}
     hostname: {{ .Values.global.hosts.univentionManagementStack | quote }}
     ldapHost: {{ .Values.ldap.host | quote }}
     ldapBase: {{ .Values.ldap.baseDn | quote }}
@@ -650,7 +651,7 @@ stack-data-swp:
       {{- end }}
 
     externalDomainName: {{ .Values.global.domain | quote }}
-    externalMailDomain: {{ .Values.global.domain | quote }}
+    externalMailDomain: {{ .Values.global.mailDomain | quote }}
 
     portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain | quote }}
     portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain | quote }}

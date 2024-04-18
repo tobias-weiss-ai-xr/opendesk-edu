@@ -41,7 +41,7 @@ podSecurityContext:
 postfix:
   amavisHost: ""
   amavisPortIn: ""
-  domain: {{ .Values.global.domain | quote }}
+  domain: {{ .Values.global.mailDomain | quote }}
   hostname: "postfix"
   inetProtocols: "ipv4"
   milterDefaultAction: "accept"
@@ -67,7 +67,7 @@ postfix:
   {{- else if .Values.clamavSimple.enabled }}
   smtpdMilters: "inet:clamav-simple:7357"
   {{- end }}
-  virtualMailboxDomains: {{ .Values.global.domain | quote }}
+  virtualMailboxDomains: {{ .Values.global.mailDomain | quote }}
   virtualTransport: "lmtps:dovecot:24"
 
 replicaCount: {{ .Values.replicas.postfix }}
