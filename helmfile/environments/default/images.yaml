@@ -732,13 +732,13 @@ images:
   umsUdmRestApi:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/udm-rest-api'
+    # upstreamRegistry: 'artifacts.software-univention.de'
+    # upstreamRepository: 'nubus/images/udm-rest-api'
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '5', '2']
+    # upstreamMirrorStartFrom: ['0', '9', '3']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/udm-rest-api"
-    tag: "0.9.2@sha256:3309171c63f46cd3dccd15eb24af5dbb13f8abbc39c95e5a2d24d0d802ea896f"
+    tag: "0.9.3@sha256:7cf2fec05a4ff8b7085a35a215edbce1eb9456c1ae140af46257e66d5a6cd6f7"
   umsUmcGateway:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
