@@ -77,18 +77,27 @@ or via environment variable
 export DOMAIN=my.open.desk
 ```
 
-If the mail domain differs from the domain, the mail
-domain has to be set either via `dev` environment
+Additionally, you can announce/specify an alternative Domain for mail and chat.
+
+As example, your domain is `acme.tld` and you want to send mails with this domain, then you can deploy openDesk to
+`*.opendesk.acme.tld` and send mail as `default.user@acme.tld`.
+Webmail will be accessed via `mail.opendesk.acme.tld` in this scenario.
+The required routing have to be implemented by yourself. 
+Users
+
+The alternative domains have to be set either via `dev` environment
 
 ```yaml
 global:
-  mail_domain: "open.desk"
+  mailDomain: "open.desk"
+  synapseDomain: "open.desk"
 ```
 
 or via environment variable
 
 ```shell
 export MAIL_DOMAIN=open.desk
+export SYNAPSE_DOMAIN=open.desk
 ```
 
 ### Apps
