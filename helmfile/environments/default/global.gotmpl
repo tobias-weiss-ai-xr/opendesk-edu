@@ -13,7 +13,11 @@ global:
 
   ## Define mail host
   #
-  mailDomain: {{ env "MAIL_DOMAIN" | default "souvap.cloud" | quote }}
+  mailDomain: {{ env "MAIL_DOMAIN" | quote }}
+
+  ## Define synapse host
+  #
+  synapseDomain: {{ env "SYNAPSE_DOMAIN" | quote }}
 
   ## Define docker registry address.
   #

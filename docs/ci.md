@@ -19,7 +19,8 @@ The project includes a `.gitlab-ci.yml` that allows you to execute the deploymen
 When starting the pipeline through the GitLab UI, you will be queried for some variables plus the following ones:
 
 - `DOMAIN` = The domain to deploy to.
-- `MAIL_DOMAIN` = The mail domain to use.
+- `MAIL_DOMAIN` = (optional) Specify domain (f.e. root FQDN) for Mail, defaults to `DOMAIN`.
+- `SYNAPSE_DOMAIN` = (optional) Specify domain (f.e. root FQDN) for Synapse, defaults to `DOMAIN`.
 - `NAMESPACE`: Defines into which namespace of your K8s cluster openDesk will be installed
 - `MASTER_PASSWORD_WEB_VAR`: Overwrites value of `MASTER_PASSWORD`
 

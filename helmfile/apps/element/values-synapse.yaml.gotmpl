@@ -29,6 +29,7 @@ configuration:
     password: {{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser | quote }}
 
   homeserver:
+    serverName: {{ .Values.global.synapseDomain | default .Values.global.domain }}
     appServiceConfigs:
       - as_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}
         hs_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}

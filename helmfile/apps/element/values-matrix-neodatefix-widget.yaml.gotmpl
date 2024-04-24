@@ -4,6 +4,7 @@
 configuration:
   bot:
     username: "meetings-bot"
+    homeserver: {{ .Values.global.synapseDomain | default .Values.global.domain }}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
