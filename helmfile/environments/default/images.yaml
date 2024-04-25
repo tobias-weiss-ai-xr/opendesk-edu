@@ -650,7 +650,7 @@ images:
     # upstreamMirrorStartFrom: ['0', '9', '4']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-listener"
-    tag: "0.20.3@sha256:8960b54477d4a74e8cb52f66264928e0940b725c349cda2a22ede67e216f5f1e"
+    tag: "0.20.7@sha256:8f158b88e0ceb7a5c79d2ad390f6ce851ce0c5ccb675d08d6b6c37f0b21f6177"
   umsPortalServer:
     # providerCategory: 'Supplier'
     # providerResponsible: 'Univention'
