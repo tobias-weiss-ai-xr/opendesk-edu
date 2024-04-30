@@ -380,7 +380,7 @@ charts:
     registry: "registry.souvap-univention.de"
     repository: "souvap/tooling/charts/univention"
     name: "ums"
-    version: "0.11.2"
+    version: "0.12.0"
     verify: true
   umsKeycloakBootstrap:
     # providerCategory: 'Supplier'

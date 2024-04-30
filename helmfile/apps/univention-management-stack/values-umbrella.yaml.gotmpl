@@ -181,6 +181,7 @@ ldap-server:
         {{- range .Values.global.imagePullSecrets }}
         - name: {{ . | quote }}
         {{- end }}
+      tag: {{ .Values.images.umsWaitForDependency.tag | quote }}
   ldapServer:
     image:
       registry: {{ .Values.global.imageRegistry | default .Values.images.umsLdapServer.registry | quote }}
@@ -190,6 +191,7 @@ ldap-server:
         {{- range .Values.global.imagePullSecrets }}
         - name: {{ . | quote }}
         {{- end }}
+      tag: {{ .Values.images.umsLdapServer.tag | quote }}
     config:
       domainName: "{{ .Release.Namespace }}.{{ .Values.global.domain}}"
       ldapBaseDn: {{ .Values.ldap.baseDn | quote }}
@@ -417,10 +419,10 @@ portal-server:
     objectStorageBucket: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
     centralNavigation:
       enabled: true
-    credentialSecret:
+    objectStorageCredentialSecret:
       name: "ums-portal-server-minio-credentials"
-      accessKeyId: "nubus-s3-access-key-id"
-      secretAccessKey: "nubus-s3-secret-key-id"
+      accessKeyKey: "nubus-s3-access-key-id"
+      secretKeyKey: "nubus-s3-secret-key-id"
 
   extraVolumes:
     - name: authenticator-secret
@@ -780,7 +782,7 @@ udm-rest-api:
     secretRef: ums-udm-rest-api-credentials
     ldap:
       uri: "ldap://ums-ldap-server:389"
-      baseDN: {{ .Values.ldap.baseDn | quote }}
+      baseDn: {{ .Values.ldap.baseDn | quote }}
     tls:
       enabled: false
       secretName: "portal.{{ .Release.Namespace }}.gaia.open-desk.cloud"
@@ -935,10 +937,6 @@ umc-server:
       enabled: false
   memcached:
     bundled: false
-    auth:
-      username: null
-      # This is also used by the umc-server Helm chart to generate a secret. The secrets content is represented as an environment variable. If said variable is empty, the container fails to start due to an entrypoint script erroring on a nullish value for the environment variable SELF_SERVICE_MEMCACHED_SECRET.
-      password: "password"
     server: {{ .Values.cache.umsSelfservice.host | quote }}
 
   postgresql:
