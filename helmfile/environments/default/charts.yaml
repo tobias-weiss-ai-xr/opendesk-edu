@@ -78,7 +78,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-element"
-    version: "2.6.7"
+    version: "2.7.1"
     verify: true
   elementWellKnown:
     # providerCategory: 'Platform'
@@ -88,7 +88,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-well-known"
-    version: "2.6.7"
+    version: "2.7.1"
     verify: true
   home:
     # providerCategory: 'Platform'
@@ -180,7 +180,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-matrix-user-verification-service"
-    version: "2.6.7"
+    version: "2.7.1"
     verify: true
   memcached:
     # providerCategory: 'Community'
@@ -346,7 +346,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse"
-    version: "2.6.7"
+    version: "2.7.1"
     verify: true
   synapseCreateAccount:
     # providerCategory: 'Platform'
@@ -356,7 +356,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-create-account"
-    version: "2.6.7"
+    version: "2.7.1"
     verify: true
   synapseWeb:
     # providerCategory: 'Platform'
@@ -366,7 +366,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-web"
-    version: "2.6.7"
+    version: "2.7.1"
     verify: true
   ums:
     # providerCategory: 'Supplier'
