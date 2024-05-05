@@ -10,6 +10,7 @@ This documentation should enable you to create your own evaluation instance of o
 <!-- TOC -->
 * [Requirements](#requirements)
 * [Customize environment](#customize-environment)
+  * [DNS](#dns)
   * [Domain](#domain)
     * [Apps](#apps)
   * [Private registries](#private-registries)
@@ -49,10 +50,24 @@ files.
 For the following guide, we will use `dev` as environment, where variables can be set in
 `helmfile/environments/dev/values.yaml`.
 
-## Domain
+## DNS
 
-The deployment is designed to deploy each app under a subdomains. For your convenience, we recommend to create a
-`*.domain.tld` A-Record to your cluster ingress controller, otherwise you need to create an A-Record for each subdomain.
+The deployment is designed to deploy each application/service under a dedicated subdomain.
+For your convenience, we recommend to create a `*.domain.tld` A-Record to your cluster ingress controller,
+otherwise you need to create an A-Record for each subdomain.
+
+| Record name             | Type | Value                                              | Additional information                                                                  |
+| ----------------------- | ---- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| *.domain.tld            | A    | IPv4 address of your Ingress Controller            |                                                                                         |
+| *.domain.tld            | AAAA | IPv6 address of your Ingress Controller            |                                                                                         |
+| mail.domain.tld         | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                        |
+| mail.domain.tld         | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                        |
+| domain.tld              | MX   | `10 mail.domain.tld`                               |                                                                                         |
+| domain.tld              | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                                              |
+| _dmarc.domain.tld       | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                                                |
+| _matrix._tcp.domain.tld | SRV  | `1 10 PORT matrix.domain.tld`                      | The `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service. |
+
+## Domain
 
 A list of all subdomains can be found in `helmfile/environments/default/global.yaml`.
 
@@ -68,22 +83,21 @@ The domain have to be set either via `dev` environment
 
 ```yaml
 global:
-  domain: "my.open.desk"
+  domain: "domain.tld"
 ```
 
 or via environment variable
 
 ```shell
-export DOMAIN=my.open.desk
+export DOMAIN=domain.tld
 ```
 
-Additionally, you can announce/specify an alternative Domain for mail and chat.
+Additionally, you can announce/specify an alternative domain for mail and chat.
 
-As example, your domain is `acme.tld` and you want to send mails with this domain, then you can deploy openDesk to
-`*.opendesk.acme.tld` and send mail as `default.user@acme.tld`.
-Webmail will be accessed via `mail.opendesk.acme.tld` in this scenario.
-The required routing have to be implemented by yourself. 
-Users
+As an example, if your domain is `domain.tld` and you want to send mails with this domain, then you can deploy openDesk to
+`*.opendesk.domain.tld` and send mail as `default.user@domain.tld`.
+Webmail will be accessed via `mail.opendesk.domain.tld` in this scenario.
+The required routing have to be implemented by yourself.
 
 The alternative domains have to be set either via `dev` environment
 
@@ -99,6 +113,18 @@ or via environment variable
 export MAIL_DOMAIN=open.desk
 export SYNAPSE_DOMAIN=open.desk
 ```
+
+If you want to federate with other Matrix instances, you need to add an SRV record to signal Matrix delegation.
+
+| Record name                    | Type | Value                     |
+|--------------------------------|------|---------------------------|
+| _matrix._tcp.SYNAPSE_DOMAIN    | SRV  | `1 10 PORT matrix.DOMAIN` |
+| matrix-fed._tcp.SYNAPSE_DOMAIN | SRV  | `1 10 PORT matrix.DOMAIN` |
+| MAIL_DOMAIN                    | MX   | `10 mail.domain.tld`    |
+
+_Hint:_ Replace `SYNAPSE_DOMAIN`, `MAIL_DOMAIN` and `DOMAIN` with proper values of your domain settings.
+
+_Hint:_ `matrix.DOMAIN` can also be an IP address where synapse tls port is listening to.
 
 ### Apps
 
