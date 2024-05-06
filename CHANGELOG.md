@@ -1,3 +1,24 @@
+# [0.7.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.6.0...v0.7.0) (2024-05-06)
+
+
+### Bug Fixes
+
+* **ci:** Add debug option. Has to be supported by stage specific configuration containing: `debug.enabled: {{ env "DEBUG_ENABLED" | default false }}` ([3dc6484](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3dc648421b80d4e170a11792604be127a3960c0e))
+* **element:** Provide the internal cluster domain to synapse web ([b9ac5ec](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b9ac5ecf2def57bba0070f1c2f4a01449808f106))
+* **univention-management-stack:** Add the image configuration for NATS ([e9ec2f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e9ec2f3a6e51975ccdbd6d3575b5fc6a909502aa))
+* **univention-management-stack:** Fix [#55](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/55), [#35](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/35) by updating chart "ums" to 0.11.2 and image "portal-listener" to 0.20.6; To update an existing installation you need to manually delete the `ums-portal-listener` stateful set before the update: `kubectl -n <your_namespace> delete statefulsets ums-portal-listener` ([2ad0270](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2ad027082f4cb958d68d7728d8db05f786dba0f0))
+* **univention-management-stack:** Migrate UDM-REST-API image to new Univention registry ([9be3b78](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9be3b78761610db0274572d5a7c526aa34d0615f))
+* **univention-management-stack:** Objectstore credentials ([d1bd43f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d1bd43fa957accdb70f0cda69983e0490ac6cfa0))
+* **univention-management-stack:** Update Helm chart to 0.12.0 including required changes to openDesk Helmfile deployment. ([fefd2f6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fefd2f6cae3617ba1f00ef0c5fa3a80cde1d6ba1))
+* **univention-management-stack:** Use the NATS related image configuration ([cd22570](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cd225703ebe67bc78faa878080639dd7cc1845a9))
+
+
+### Features
+
+* **element:** Add support for Matrix federation ([36139b4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/36139b42f1df9785b8414059bf70dc3e37616e8a))
+* **helmfile:** Introduce additional variables for mailDomain and synapseDomain ([e6fe2a7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e6fe2a7c18581f637d6bd4d0553d558f753dadd2))
+* **services:** Add opendesk-home service, which redirects on domain to portal ([c7e2172](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c7e217208c4cb812cc23f9aa5ea42fcb77ea7c3a))
+
 # [0.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.5.81...v0.6.0) (2024-04-11)
 
 
