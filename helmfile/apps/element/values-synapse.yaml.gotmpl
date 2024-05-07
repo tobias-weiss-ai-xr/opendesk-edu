@@ -113,4 +113,6 @@ replicaCount: {{ .Values.replicas.synapse }}
 resources:
   {{ .Values.resources.synapse | toYaml | nindent 2 }}
 
+tls:
+  secretName: {{ if .Values.global.matrixDomain }}"opendesk-certificates-synapse-tls"{{ else }}"opendesk-certificates-tls"{{ end }}
 ...
