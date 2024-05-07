@@ -1,4 +1,5 @@
 <!--
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -22,8 +23,8 @@ SPDX-License-Identifier: Apache-2.0
 
 # Overview
 
-openDesk is a Kubernetes based, open-source and cloud-native digital workplace suite provided by the "Projektgruppe für
-Aufbau ZenDiS" of Germany's Federal Ministry of the Interior.
+openDesk is a Kubernetes based, open-source and cloud-native digital workplace suite provided by the
+*Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH*.
 
 openDesk currently features the following functional main components:
 
@@ -116,7 +117,7 @@ This project uses the following license: Apache-2.0
 
 # Copyright
 
-Copyright (C) 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+Copyright (C) 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 
 # Footnotes
 
