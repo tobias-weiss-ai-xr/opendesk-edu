@@ -539,7 +539,7 @@ avscan-start:
 
 # Overwrite shared settings
 .common-semantic-release:
-  image: "registry.souvap-univention.de/souvap/tooling/images/semantic-release-patched:latest"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release-patched:1.0.0"
   tags: []
 
 conventional-commits-linter:

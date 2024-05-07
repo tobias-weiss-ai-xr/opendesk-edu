@@ -24,10 +24,10 @@ spec:
         pattern:
           spec:
             =(ephemeralContainers):
-              - image: "external-registry.souvap-univention.de/*"
+              - image: "my_private_registry.domain.tld/*"
             =(initContainers):
-              - image: "external-registry.souvap-univention.de/*"
+              - image: "my_private_registry.domain.tld/*"
             containers:
-              - image: "external-registry.souvap-univention.de/*"
+              - image: "my_private_registry.domain.tld/*"
   validationFailureAction: "audit"
 ...

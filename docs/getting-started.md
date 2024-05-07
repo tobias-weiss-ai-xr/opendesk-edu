@@ -178,13 +178,13 @@ prefer the use of a private image registry anyway you can configure such for
 
 ```yaml
 global:
-  imageRegistry: "external-registry.souvap-univention.de/sovereign-workplace"
+  imageRegistry: "my_private_registry.domain.tld"
 ```
 
 alternatively you can use an environment variable:
 
 ```shell
-export PRIVATE_IMAGE_REGISTRY_URL=external-registry.souvap-univention.de/sovereign-workplace
+export PRIVATE_IMAGE_REGISTRY_URL=my_private_registry.domain.tld
 ```
 
 If authentication is required, you can reference imagePullSecrets as following:
