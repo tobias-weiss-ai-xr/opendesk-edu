@@ -56,16 +56,16 @@ The deployment is designed to deploy each application/service under a dedicated 
 For your convenience, we recommend to create a `*.domain.tld` A-Record to your cluster ingress controller,
 otherwise you need to create an A-Record for each subdomain.
 
-| Record name             | Type | Value                                              | Additional information                                                                  |
-| ----------------------- | ---- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| *.domain.tld            | A    | IPv4 address of your Ingress Controller            |                                                                                         |
-| *.domain.tld            | AAAA | IPv6 address of your Ingress Controller            |                                                                                         |
-| mail.domain.tld         | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                        |
-| mail.domain.tld         | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                        |
-| domain.tld              | MX   | `10 mail.domain.tld`                               |                                                                                         |
-| domain.tld              | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                                              |
-| _dmarc.domain.tld       | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                                                |
-| _matrix._tcp.domain.tld | SRV  | `1 10 PORT matrix.domain.tld`                      | The `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service. |
+| Record name             | Type | Value                                              | Additional information                                                             |
+| ----------------------- | ---- | -------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| *.domain.tld            | A    | IPv4 address of your Ingress Controller            |                                                                                    |
+| *.domain.tld            | AAAA | IPv6 address of your Ingress Controller            |                                                                                    |
+| mail.domain.tld         | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                   |
+| mail.domain.tld         | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                   |
+| domain.tld              | MX   | `10 mail.domain.tld`                               |                                                                                    |
+| domain.tld              | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                                         |
+| _dmarc.domain.tld       | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                                           |
+| _matrix._tcp.domain.tld | SRV  | `1 10 PORT matrix.domain.tld`                      | `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service |
 
 ## Domain
 
@@ -91,40 +91,6 @@ or via environment variable
 ```shell
 export DOMAIN=domain.tld
 ```
-
-Additionally, you can announce/specify an alternative domain for mail and chat.
-
-As an example, if your domain is `domain.tld` and you want to send mails with this domain, then you can deploy openDesk to
-`*.opendesk.domain.tld` and send mail as `default.user@domain.tld`.
-Webmail will be accessed via `mail.opendesk.domain.tld` in this scenario.
-The required routing have to be implemented by yourself.
-
-The alternative domains have to be set either via `dev` environment
-
-```yaml
-global:
-  mailDomain: "open.desk"
-  synapseDomain: "open.desk"
-```
-
-or via environment variable
-
-```shell
-export MAIL_DOMAIN=open.desk
-export SYNAPSE_DOMAIN=open.desk
-```
-
-If you want to federate with other Matrix instances, you need to add an SRV record to signal Matrix delegation.
-
-| Record name                    | Type | Value                     |
-|--------------------------------|------|---------------------------|
-| _matrix._tcp.SYNAPSE_DOMAIN    | SRV  | `1 10 PORT matrix.DOMAIN` |
-| matrix-fed._tcp.SYNAPSE_DOMAIN | SRV  | `1 10 PORT matrix.DOMAIN` |
-| MAIL_DOMAIN                    | MX   | `10 mail.domain.tld`    |
-
-_Hint:_ Replace `SYNAPSE_DOMAIN`, `MAIL_DOMAIN` and `DOMAIN` with proper values of your domain settings.
-
-_Hint:_ `matrix.DOMAIN` can also be an IP address where synapse tls port is listening to.
 
 ### Apps
 

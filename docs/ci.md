@@ -15,17 +15,16 @@ This page covers openDesk deployment automation via Gitlab CI.
 
 The project includes a `.gitlab-ci.yml` that allows you to execute the deployment from a GitLab instance of your choice.
 
-
 When starting the pipeline through the GitLab UI, you will be queried for some variables plus the following ones:
 
-- `DOMAIN` = The domain to deploy to.
-- `MAIL_DOMAIN` = (optional) Specify domain (f.e. root FQDN) for Mail, defaults to `DOMAIN`.
-- `SYNAPSE_DOMAIN` = (optional) Specify domain (f.e. root FQDN) for Synapse, defaults to `DOMAIN`.
-- `NAMESPACE`: Defines into which namespace of your K8s cluster openDesk will be installed
-- `MASTER_PASSWORD_WEB_VAR`: Overwrites value of `MASTER_PASSWORD`
+- `DOMAIN`: Primary domain for your deployment making the openDesk services available e.g. as `https://portal.DOMAIN`.
+- `MAIL_DOMAIN`: (optional) Domain for the users mail addresses, defaults to `DOMAIN`.
+- `MATRIX_DOMAIN`: (optional) Domain for the users Matrix IDs, defaults to `DOMAIN`.
+- `NAMESPACE`: Namespace of your K8s cluster openDesk will be installed to.
+- `MASTER_PASSWORD_WEB_VAR`: Overwrites value of `MASTER_PASSWORD`.
 
 Based on your input, the following variables will be set:
-- `MASTER_PASSWORD` = `MASTER_PASSWORD_WEB_VAR`. If `MASTER_PASSWORD_WEB_VAR`
+- `MASTER_PASSWORD:`: `MASTER_PASSWORD_WEB_VAR`. If `MASTER_PASSWORD_WEB_VAR`
   is not set, the default for `MASTER_PASSWORD` will be used, unless you set
   `MASTER_PASSWORD` as a masked CI/CD variable in GitLab to supersede the default.
 
