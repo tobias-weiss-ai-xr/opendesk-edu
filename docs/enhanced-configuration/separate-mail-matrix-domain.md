@@ -1,0 +1,68 @@
+<!--
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<h1>Separate domains for mail and or matrix</h1>
+
+* [Use case](#use-case)
+* [Example configuration](#example-configuration)
+  * [Mail domain](#mail-domain)
+  * [Matrix domain](#matrix-domain)
+
+# Use case
+
+As communication over mail and chat can go beyond the borders of your openDesk installation you may want to use different domains for the mail and/or matrix.
+
+# Example configuration
+
+The following values are used in this example documentation. Please ensure when you come across such a value even if it is part of a URL hostname or path that you adapt it where needed to your setup:
+
+- `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in `https://mail.opendesk.domain.tld` to access emails and `https://chat.opendesk.domain.tld` to access the Element chat that is based on the Matrix protocol.
+- `my_organization.tld`: the alternative domain used for mail and/or Matrix.
+
+## Mail domain
+
+By default all email addresses in openDesk are created based on the `DOMAIN` you specified for your deployment. In our example resulting in the users having `<username>@opendesk.domain.tld` as mail addresses. In case you prefer the users to send and receive emails with another domain you can set that one using the optional `MAIL_DOMAIN` in the deployment:
+
+```yaml
+global:
+  mailDomain: "my_organization.tld"
+```
+
+or via environment variable
+
+```shell
+export MAIL_DOMAIN=my_organization.tld
+```
+
+This of course requires the MX record for the domain to point to the mail host for your openDesk deployment. Optionally add the SPF and DMARC records.
+
+| Record name                | Type | Value                                            |
+| -------------------------- | ---- | ------------------------------------------------ |
+| my_organization.tld        | MX   | `10 mail.opendesk.domain.tld`                    |
+| my_organization.tld        | TXT  | `v=spf1 +a +mx +a:mail.opendesk.domain.tld ~all` |
+| _dmarc.my_organization.tld | TXT  | `v=DMARC1; p=quarantine`                         |
+
+## Matrix domain
+
+Similar to the specific domain for email addresses you may want to specify a domain that differs from your deployment's default `DOMAIN` to define your users Matrix IDs. Use the `MATRIX_DOMAIN` to do so:
+
+```yaml
+global:
+  matrixDomain: "my_organization.tld"
+```
+
+or via environment variable
+
+```shell
+export MATRIX_DOMAIN=my_organization.tld
+```
+
+This setup requires also a different DNS setup:
+
+| Record name                      | Type | Value                                  | Comment                                                                            |
+| -------------------------------- | ---- | -------------------------------------- | ---------------------------------------------------------------------------------- |
+| _matrix._tcp.my_organization.tld | SRV  | `1 10 PORT matrix.opendesk.domain.tld` | `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service |
+
+*Note:* `matrix.opendesk.domain.tld` in the "Value" column can also be the IP address where synapse TLS port is listening to.
