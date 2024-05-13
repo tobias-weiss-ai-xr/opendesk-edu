@@ -28,6 +28,8 @@ config:
     intraCluster:
       enabled: true
       internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
+  twoFactorSettings:
+    additionalGroups: {{ .Values.authentication.twoFactor.groups }}
   custom:
     clientScopes:
       - name: "read_contacts"

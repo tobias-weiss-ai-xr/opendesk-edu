@@ -240,7 +240,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap"
     name: "opendesk-keycloak-bootstrap"
-    version: "1.0.7"
+    version: "1.1.0"
     verify: true
   openproject:
     # providerCategory: "Supplier"
