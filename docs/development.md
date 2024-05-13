@@ -84,12 +84,12 @@ with the many available examples in the yaml files.
 Example:
 ```
   synapse:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Element'
-    # upstreamRegistry: 'https://registry-1.docker.io'
-    # upstreamRepository: 'matrixdotorg/synapse'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "matrixdotorg/synapse"
     # upstreamMirrorTagFilterRegEx: '^v(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['1', '91', '2']
+    # upstreamMirrorStartFrom: ["1", "91", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/element/images-mirror/synapse"
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
@@ -99,9 +99,9 @@ Example:
 
 Uses a regular expression to match the values of the following attributes:
 
-- `# upstreamRegistry`: : required - Attribute's value must be prefixed with `https://` for Renovate.
-- `# upstreamrepository`: required
-- `tag`: required
+- `# upstreamRegistry` *required*: Attribute's value must be prefixed with `https://` for Renovate.
+- `# upstreamrepository` *required*
+- `tag` *required*
 
 Checks for newer versions of the given artefact and creates a MR containing the newest version's tag (and digest).
 
@@ -118,7 +118,7 @@ configured to pull artefacts that do not originate from Open CoDE into projects 
 The mirror script takes the information on what artefacts to mirror from the annotation inside the two yaml files:
 - `# upstreamRegistry` *required*: To identify the source registry
 - `# upstreamRepository` *required*: To identify the source repository
-- `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set it activates the mirror for the component. Only tags are being mirrored that match the given regular expression.
+- `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set it activates the mirror for the component. Only tags are being mirrored that match the given regular expression. **Note:** You have to use single quotes for this attribute's value in case you use backslash leading regex notation like `\d`.
 - `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artefacts beginning with a specific version. You must use capturing groups
   in `# upstreamMirrorTagFilterRegEx` to identify the single numeric elements of the version within the tag and use per capturing group (left to right) one numeric array
   element here to define the version the mirror should start with.

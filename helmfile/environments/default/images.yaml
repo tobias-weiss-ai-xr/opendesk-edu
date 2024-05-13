@@ -253,7 +253,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
-    tag: "1.0.4@sha256:28eebb647180aef95d816a7d788891fa780f552f699c38cedddecbcef7a0bd1d"
+    tag: "1.0.5@sha256:76ccd9a74ae2c2dabb6beaa0192c15b9c06763abbd632cd0f8db68e5d8d5883c"
   openproject:
     # providerCategory: "Supplier"
     # providerResponsible: "OpenProject"
