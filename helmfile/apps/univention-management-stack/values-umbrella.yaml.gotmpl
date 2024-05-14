@@ -1053,37 +1053,43 @@ keycloak-bootstrap:
     deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
     keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
 
-  config:
-    keycloak:
-      adminUser: "kcadmin"
-      adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
+  keycloak:
+    connection:
+      baseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
+    auth:
+      username: "kcadmin"
+      password: {{ .Values.secrets.keycloak.adminPassword | quote }}
       realm: {{ .Values.platform.realm | quote }}
-      intraCluster:
-        enabled: true
-        internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
-      loginLinks:
-        - link_number: 1
-          language: "de"
-          description: "Passwort vergessen?"
-          href: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/#/selfservice/passwordforgotten"
-        - link_number: 1
-          language: "en"
-          description: "Forgot password?"
-          href: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/#/selfservice/passwordforgotten"
-    ums:
-      ldap:
-        internalHostname: {{ .Values.ldap.host | quote }}
-        baseDN: {{ .Values.ldap.baseDn | quote }}
-        readUserDN: "uid=ldapsearch_keycloak,cn=users,dc=swp-ldap,dc=internal"
-        readUserPassword: {{ .Values.secrets.univentionManagementStack.ldapSearch.keycloak | quote }}
-        mappers:
-          - ldapAndUserModelAttributeName: "opendeskProjectmanagementAdmin"
-          - ldapAndUserModelAttributeName: "oxContextIDNum"
-      saml:
-        serviceProviderHostname: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+  ldap:
+    baseDn: {{ .Values.ldap.baseDn | quote }}
+    connection:
+      host: {{ .Values.ldap.host | quote }}
+      port: "389"
+      protocol: "ldap"
+    auth:
+      bindDn: "uid=ldapsearch_keycloak,cn=users,dc=swp-ldap,dc=internal"
+      password: {{ .Values.secrets.univentionManagementStack.ldapSearch.keycloak | quote }}
+
+  bootstrap:
+    ldapMappers:
+      - ldapAndUserModelAttributeName: "opendeskProjectmanagementAdmin"
+      - ldapAndUserModelAttributeName: "oxContextIDNum"
+    loginLinks:
+      - link_number: 1
+        language: "de"
+        description: "Passwort vergessen?"
+        href: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/#/selfservice/passwordforgotten"
+      - link_number: 1
+        language: "en"
+        description: "Forgot password?"
+        href: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/#/selfservice/passwordforgotten"
     twoFactorAuthentication:
       enabled: true
       group: "2fa-users"
+
+  config:
+    saml:
+      serviceProviderHostname: "{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
 
   containerSecurityContext:
     enabled: true
@@ -1115,11 +1121,13 @@ keycloak-bootstrap:
 keycloak-extensions:
   enabled: true
   keycloak:
-    host: "ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
-    adminUsername: "kcadmin"
-    adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
-    adminRealm: "master"
-    realm: {{ .Values.platform.realm | quote }}
+    connection:
+      host: "ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
+    auth:
+      username: "kcadmin"
+      password: {{ .Values.secrets.keycloak.adminPassword | quote }}
+      masterRealm: "master"
+      realm: {{ .Values.platform.realm | quote }}
   postgresql:
     connection:
       host: {{ .Values.databases.keycloakExtension.host | quote }}
@@ -1128,6 +1136,13 @@ keycloak-extensions:
       database: {{ .Values.databases.keycloakExtension.name | quote }}
       username: {{ .Values.databases.keycloakExtension.username | quote }}
       password: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
+  smtp:
+    connection:
+      host: {{ .Values.smtp.host | quote }}
+      port: {{ .Values.smtp.port | quote }}
+    auth:
+      username: {{ .Values.smtp.username | quote }}
+      password: {{ .Values.smtp.password | quote }}
   handler:
     replicaCount: {{ .Values.replicas.umsKeycloakExtensionsHandler }}
     podAnnotations:
@@ -1145,10 +1160,6 @@ keycloak-extensions:
       ipProtectionEnable: true
       logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
       newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
-      smtpPassword: {{ .Values.smtp.password | quote }}
-      smtpHost: {{ .Values.smtp.host | quote }}
-      smtpPort: {{ .Values.smtp.port | quote }}
-      smtpUsername: {{ .Values.smtp.username | quote }}
       mailFrom: "noreply@{{ .Values.global.domain }}"
     securityContext:
       allowPrivilegeEscalation: false
