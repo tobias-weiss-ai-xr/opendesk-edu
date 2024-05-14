@@ -542,13 +542,13 @@ images:
   umsKeycloakBootstrap:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention-keycloak-bootstrap"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/keycloak-bootstrap"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["1", "0", "5"]
+    # upstreamMirrorStartFrom: ["0", "1", "0"]
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/univention-keycloak-bootstrap"
-    tag: "1.0.8@sha256:fef48cb1b2552977e8a4253516249b59ef6c42189dd13cd6d98269b8988b362a"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-bootstrap"
+    tag: "0.1.0@sha256:351097e9e7b469f2fc149fe612ec6ad515d5e6b081d7e2785bd926a1d77209d2"
   umsKeycloakExtensionHandler:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -558,7 +558,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "0", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-handler"
-    tag: "0.3.1@sha256:98871e8d5acfe6bfa6ea7d140197ae41585cfb06c71514ffcf6e98df8315b9ee"
+    tag: "0.4.0@sha256:7c2728d6fce0fa6e6cc2a3c196294fcb4fcce0dd246b95ad96bd96325776a004"
   umsKeycloakExtensionProxy:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -568,7 +568,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "0", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/keycloak-proxy"
-    tag: "0.3.1@sha256:e6c2130310798e286cea84bf5226709021c12663fb9e8ca30f29515151741fa5"
+    tag: "0.4.0@sha256:d7369d8b9cb177fc19b08452266bf7440b683fd0a15c01baeb5c131db20081bf"
   umsLdapNotifier:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
