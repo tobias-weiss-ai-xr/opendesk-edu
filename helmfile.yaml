@@ -12,6 +12,7 @@ helmfiles:
   - path: "helmfile/apps/open-xchange/helmfile.yaml"
   - path: "helmfile/apps/nextcloud/helmfile.yaml"
   - path: "helmfile/apps/collabora/helmfile.yaml"
+  - path: "helmfile/apps/cryptpad/helmfile.yaml"
   - path: "helmfile/apps/jitsi/helmfile.yaml"
   - path: "helmfile/apps/element/helmfile.yaml"
   - path: "helmfile/apps/openproject/helmfile.yaml"
