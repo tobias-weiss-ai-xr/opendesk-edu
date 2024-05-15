@@ -58,7 +58,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
     name: "cryptpad"
-    version: "0.0.18"
+    version: "0.0.19"
     verify: true
   dovecot:
     # providerCategory: "Platform"
