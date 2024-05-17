@@ -993,22 +993,28 @@ keycloak:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
   config:
-    admin:
-      password: {{ .Values.secrets.keycloak.adminPassword | quote }}
-    database:
-      host: {{ .Values.databases.keycloak.host | quote }}
-      port: {{ .Values.databases.keycloak.port }}
-      user: {{ .Values.databases.keycloak.username | quote }}
-      database: {{ .Values.databases.keycloak.name | quote }}
-      existingSecret:
-        name: "ums-keycloak-postgresql-credentials"
-        key: "keycloakDatabasePassword"
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
     enableMetrics: true
     # The availability of the admin console is already restricted through the path settings in the Keycloak Extensions
     # Proxy which is used in openDesk. The setting here is just relevant when Keycloak endpoints are exposed directly
     # through an own ingress.
     exposeAdminConsole: false
+
+  postgresql:
+    connection:
+      host: {{ .Values.databases.keycloak.host | quote }}
+      port: {{ .Values.databases.keycloak.port }}
+    auth:
+      username: {{ .Values.databases.keycloak.username | quote }}
+      database: {{ .Values.databases.keycloak.name | quote }}
+      credentialSecret:
+        name: "ums-keycloak-postgresql-credentials"
+        key: "keycloakDatabasePassword"
+
+  keycloak:
+    auth:
+      username: "kcadmin"
+      password: {{ .Values.secrets.keycloak.adminPassword | quote }}
 
   containerSecurityContext:
     allowPrivilegeEscalation: false
