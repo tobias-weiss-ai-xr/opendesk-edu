@@ -3,7 +3,8 @@
 ---
 authentication:
   twoFactor:
-    # Define a list of groups to enable 2FA for. Removing a group from the list will not disable 2FA for the removed group.
+    # Define a list of groups to enable 2FA for.
+    # Note: Removing a group from the list will not disable 2FA for the removed group.
     groups:
       - "Domain Admins"
 ...

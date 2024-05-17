@@ -61,7 +61,8 @@ variables:
       - "yes"
       - "no"
   DEBUG_ENABLED:
-    description: "Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific configuration containting: `debug.enabled: {{ env \"DEBUG_ENABLED\" | default false }}`"
+    description: "Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific\
+     configuration containting: `debug.enabled: {{ env \"DEBUG_ENABLED\" | default false }}`"
     value: "no"
     options:
       - "yes"
@@ -636,7 +637,8 @@ release:
 
 renovate:
   rules:
-    - if: $RUN_RENOVATE == "yes"
+    - if: >
+        $RUN_RENOVATE == "yes"
       when: "on_success"
   # The `-full` image does not install the dependencies on the fly, that is our preferred approach
   image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/renovate/renovate:37.356-full"

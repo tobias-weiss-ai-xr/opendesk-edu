@@ -8,7 +8,8 @@ lint-opendesk:
   extends: ".lint-common"
   image: "${OPENDESK_CI_CLI_IMAGE}"
   rules:
-    - if: $RUN_RENOVATE == "yes"
+    - if: >
+        $RUN_RENOVATE == "yes"
       when: "never"
     - when: "always"
   script:
