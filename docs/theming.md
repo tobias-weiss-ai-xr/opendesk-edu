@@ -26,7 +26,7 @@ theme:
 
 # Colors
 
-The primary color and their derivates with lesser opacity be customized by:
+The primary color and their derives with lesser opacity be customized by:
 
 ```yaml
 theme:

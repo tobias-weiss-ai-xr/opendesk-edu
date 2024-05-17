@@ -20,7 +20,7 @@ This section covers the internal system requirements as well as external service
 # tl;dr
 openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s) cluster.
 
-- K8s cluster >= 1.24, [CNCF Certified Kubernetes Distro](https://www.cncf.io/certification/software-conformance/)
+- K8s cluster >= 1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
 - Ingress controller (supported are nginx-ingress, HAProxy)
 - [Helm](https://helm.sh/) >= v3.9.0
@@ -42,7 +42,7 @@ The following minimal requirements are thought for initial evaluation deployment
 # Kubernetes
 
 Any self-hosted or managed K8s cluster >= 1.24 listed in
-[CNCF Certified Kubernetes Distros](https://www.cncf.io/certification/software-conformance/) should be supported.
+[CNCF Certified Kubernetes distributions](https://www.cncf.io/certification/software-conformance/) should be supported.
 
 The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/kubespray) based clusters.
 
@@ -78,13 +78,13 @@ openDesk certificate management disabled.
 Evaluation the openDesk deployment does not require any external service to start, but features may be limited.
 
 | Group    | Type                | Version | Tested against        |
-|----------|---------------------|---------|-----------------------|
-| Cache    | Memached            | `1.6.x` | Memached              |
+| -------- | ------------------- | ------- | --------------------- |
+| Cache    | Memcached           | `1.6.x` | Memcached             |
 |          | Redis               | `7.x.x` | Redis                 |
 | Database | MariaDB             | `10.x`  | MariaDB               |
 |          | PostgreSQL          | `15.x`  | PostgreSQL            |
 | Mail     | Mail Transfer Agent |         | Postfix               |
-|          | PKI/CI (SMIME)      |         |                       |
+|          | PKI/CI (S/MIME)     |         |                       |
 | Security | AntiVirus/ICAP      |         | ClamAV                |
 | Storage  | K8s ReadWriteOnce   |         | Ceph / Cloud specific |
 |          | K8s ReadWriteMany   |         | Ceph / NFS            |

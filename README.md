@@ -31,7 +31,7 @@ openDesk currently features the following functional main components:
 | Function             | Functional Component        | Component<br/>Version                                                                                          | Upstream Documentation                                                                                                                       |
 | -------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Chat & collaboration | Element ft. Nordeck widgets | [1.11.59](https://github.com/element-hq/element-desktop/releases/tag/v1.11.59)                                 | [For the most recent release](https://element.io/user-guide)                                                                                 |
-| Diagram editor       | Cryptpad ft. diagrams.net   | [5.6.0](https://github.com/cryptpad/cryptpad/releases/tag/5.6.0)                                               | [For the most recent release](https://docs.cryptpad.org/en/)                                                                                 |
+| Diagram editor       | CryptPad ft. diagrams.net   | [5.6.0](https://github.com/cryptpad/cryptpad/releases/tag/5.6.0)                                               | [For the most recent release](https://docs.cryptpad.org/en/)                                                                                 |
 | File management      | Nextcloud                   | [28.0.5](https://nextcloud.com/de/changelog/#28-0-5)                                                           | [Nextcloud 28](https://docs.nextcloud.com/)                                                                                                  |
 | Groupware            | OX App Suite                | [8.23](https://documentation.open-xchange.com/appsuite/releases/8.23/)                                         | Online documentation available from within the installed application; [Additional resources](https://www.open-xchange.com/resources/oxpedia) |
 | Knowledge management | XWiki                       | [15.10.8](https://www.xwiki.org/xwiki/bin/view/Blog/XWiki15108Released)                                        | [For the most recent release](https://www.xwiki.org/xwiki/bin/view/Documentation)                                                            |
@@ -41,7 +41,7 @@ openDesk currently features the following functional main components:
 | Weboffice            | Collabora                   | [23.05.10.1.1](https://www.collaboraoffice.com/collabora-online-23-05-release-notes/)                           | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)               |
 
 While not all components are perfectly shaped for the execution inside containers, one of the project's objectives is to
-align the applications with best practises regarding container design and operations.
+align the applications with best practices regarding container design and operations.
 
 This documentation aims to give you all that is needed to set up your own instance of the openDesk.
 
@@ -91,7 +91,7 @@ Gitlab provides an
 [overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases)
 of this project.
 
-Please find a list of the artefacts related to the release either in the source code archive attached to the release or
+Please find a list of the artifacts related to the release either in the source code archive attached to the release or
 in the files from the release's git-tag:
 - `./helmfile/environments/default/images.yaml`
 - `./helmfile/environments/default/charts.yaml`
@@ -123,8 +123,7 @@ Copyright (C) 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwal
 # Footnotes
 
 [^1]: Nubus is the Cloud Portal and IAM from Univention.
-It is currently integrated as a product preview within openDesk therefore,
-not all resources like documentation and structured release notes are available,
-while the
+It is currently integrated as a product preview within openDesk therefore, not all resources like documentation
+and structured release notes are available, while the
 [source code can already be found on Open CoDE](https://gitlab.opencode.de/bmi/opendesk/component-code/crossfunctional/univention).
 Please find updates regarding the Nubus at https://nubus.io.

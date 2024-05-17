@@ -9,7 +9,7 @@ This document will cover the additional configuration to use external services l
 
 <!-- TOC -->
 * [Database](#database)
-* [Objectstore](#objectstore)
+* [Object storage](#object-storage)
 * [Cache](#cache)
 <!-- TOC -->
 
@@ -72,10 +72,10 @@ service.
 |             |                    |            | Username  | `databases.xwiki.username`               | `xwiki_user`               |
 |             |                    |            | Password  | `databases.xwiki.password`               |                            |
 
-# Objectstore
+# Object storage
 
-When deploying this suite to production, you need to configure the applications to use your production grade objectstore
-service.
+When deploying this suite to production, you need to configure the applications to use your production grade object
+storage service.
 
 | Component   | Name        | Parameter       | Key                                      | Default            |
 |-------------|-------------|-----------------|------------------------------------------|--------------------|
