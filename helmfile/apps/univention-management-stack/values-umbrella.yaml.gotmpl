@@ -13,7 +13,7 @@ tags:
   pre-release: true
 
 guardian:
-  enabled: false
+  enabled: true
   authorizationApi:
     podAnnotations:
       intents.otterize.com/service-name: "ums-guardian-authorization-api"
@@ -32,8 +32,7 @@ guardian:
       oauthAdapterWellKnownUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
       opaAdapterUrl: "http://ums-guardian-open-policy-agent/"
       udmDataAdapterUrl: "http://ums-udm-rest-api/udm/"
-      udmDataAdapterUsername: "cn=admin"
-      udmDataAdapterPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+      secretRef: "ums-guardian-udm-secret"
     ingress:
       enabled: false
     resources:
@@ -56,7 +55,8 @@ guardian:
       guardianManagementLoggingStructured: false
       guardianManagementAdapterAuthorizationApiUrl: "http://ums-guardian-authorization-api/guardian/authorization"
       oauthAdapterWellKnownUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080/realms/{{ .Values.platform.realm }}/.well-known/openid-configuration"
-      secretRef: "guardian-keycloak-client-secret"
+      guardianManagementBaseUrl: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+      secretRef: "ums-guardian-keycloak-client-secret"
     ingress:
       enabled: false
     resources:
@@ -76,9 +76,6 @@ guardian:
         {{- end }}
 
     config:
-      viteKeycloakAuthenticationAdapterClientId: "guardian-ui"
-      viteManagementUiAdapterAuthenticationPort: "keycloak"
-      viteManagementUiAdapterDataPort: "api"
       viteApiDataAdapterUri: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/guardian/management"
       viteKeycloakAuthenticationAdapterSsoUri: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
       viteKeycloakAuthenticationAdapterRealm: {{ .Values.platform.realm | quote }}
@@ -109,7 +106,8 @@ guardian:
 
 
   provisioning:
-    enabled: true
+    # Using openDesk keycloak provisioning
+    enabled: false
     image:
       registry: {{ .Values.global.imageRegistry | default .Values.images.umsGuardianProvisioning.registry | quote }}
       repository: {{ .Values.images.umsGuardianProvisioning.repository | quote }}
@@ -123,10 +121,16 @@ guardian:
       nubusBaseUrl: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
       keycloak:
         url: "http://ums-keycloak:8080"
-        fqdn: "id.uv-example.gaia.open-desk.cloud"
-        realm: "opendesk"
+        fqdn: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+        realm: {{ .Values.platform.realm | quote }}
         admin: "kcadmin"
-    credentialSecretName: "guardian-keycloak-secret"
+        credentialSecret:
+          name: "ums-guardian-keycloak-secret"
+          key: "adminPassword"
+      managementApi:
+        credentialSecret:
+          name: "ums-guardian-keycloak-secret"
+          key: "managementApiClientSecret"
 
   postgresql:
     bundled: false
@@ -1510,15 +1514,15 @@ stack-gateway:
       # }
 
       ## guardian
-      # location /univention/guardian/management-ui {
-      #   proxy_pass http://ums-guardian-management-ui:80/univention/guardian/management-ui;
-      # }
-      # location /guardian/management {
-      #   proxy_pass http://ums-guardian-management-api:80/guardian/management;
-      # }
-      # location /guardian/authorization {
-      #   proxy_pass http://ums-guardian-authorization-api:80/guardian/authorization;
-      # }
+      location /univention/guardian/management-ui {
+        proxy_pass http://ums-guardian-management-ui:80/univention/guardian/management-ui;
+      }
+      location /guardian/management {
+        proxy_pass http://ums-guardian-management-api:80/guardian/management;
+      }
+      location /guardian/authorization {
+        proxy_pass http://ums-guardian-authorization-api:80/guardian/authorization;
+      }
 
       ## object storage (minio)
       location /univention/portal/icons/entries/ {
@@ -1585,14 +1589,18 @@ extraSecrets:
     stringData:
       ldap.secret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
       machine.secret: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  - name: "ums-guardian-udm-secret"
+    stringData:
+      udmDataAdapterUsername: "cn=admin"
+      udmDataAdapterPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  - name: "ums-guardian-keycloak-client-secret"
+    stringData:
+      oauthAdapterM2mSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
   - name: "ums-keycloak-postgresql-credentials"
     stringData:
       keycloakDatabasePassword: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser | quote }}
-  - name: "guardian-keycloak-client-secret"
+  - name: "ums-guardian-keycloak-secret"
     stringData:
-      oauthAdapterM2mSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
-  - name: "guardian-keycloak-secret"
-    stringData:
-      KEYCLOAK_ADMIN_PASSWORD: {{ .Values.secrets.keycloak.adminPassword | quote }}
-      GUARDIAN_MANAGEMENT_API_CLIENT_SECRET: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
+      adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
+      managementApiClientSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
 ...
