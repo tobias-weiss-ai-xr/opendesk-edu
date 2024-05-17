@@ -528,7 +528,7 @@ images:
     # upstreamMirrorStartFrom: ['0', '3', '0']
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-init"
-    tag: "0.3.0@sha256:6ce026307cace794b33dddc616e37025974707b5c94fc52cff100b769cba722b"
+    tag: "0.4.0@sha256:390e20ad73a91ae2ecc33d91d1f21872a46e6af4d4d09095d1ce18a6d4a3635e"
   umsKeycloak:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
