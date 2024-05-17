@@ -41,17 +41,17 @@ repositories:
           - "helmfile/environments/default/images.yaml"
         datasourceTemplate: "docker"
         matchStrings:
-          # yamllint disable rule:line-length
+          # yamllint disable rule:line-length rule:quoted-strings
           - ' providerResponsible: "(?<depType>.+?)"[\s\S]+? upstreamRegistry: "(?<registryUrl>.+?)"[\s\S]+? upstreamRepository: "(?<depName>.+?)"[\s\S]+? tag: "(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)"'
-          # yamllint enable rule:line-length
+          # yamllint enable rule:line-length rule:quoted-strings
       - customType: "regex"
         fileMatch:
           - "helmfile/environments/default/charts.yaml"
         datasourceTemplate: "docker"
         matchStrings:
-          # yamllint disable rule:quoted-strings
+          # yamllint disable rule:line-length rule:quoted-strings
           - ' providerResponsible: "(?<depType>.+?)"[\s\S]+? upstreamRegistry: "(?<registryUrl>.+?)"[\s\S]+? upstreamRepository: "(?<depName>.+?)"[\s\S]+? version: "(?<currentValue>.+?)"'
-          # yamllint enable rule:line-length
+          # yamllint enable rule:line-length rule:quoted-strings
     # Rules for matching packages
     packageRules:
       - matchDatasources: [ "docker" ]
