@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: openDesk
-Upstream-Contact: <git+bmi-souveraener-arbeitsplatz-cla-1339-29pr0g9pj4or9yi6wfly6pbhg-issue@opencode.de>
-Source: https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace
+Upstream-Name: openDesk - der Souveräne Arbeitsplatz
+Upstream-Contact: <opendesk@zendis.de>
+Source: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk
 
 Files: helmfile/environments/default/theme/*
 Copyright: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
@@ -10,3 +10,7 @@ License: Apache-2.0
 Files: helmfile/files/gpg-pubkeys/*
 Copyright: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 License: CC0-1.0
+
+Files: cspell.json
+Copyright: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+License: Apache-2.0

@@ -31,10 +31,10 @@ environments you may want to make use of them in a very thoughtful and selective
 # Enable debugging
 
 Set `debug.enable` to `true` in [`debug.yaml`](../helmfile/environments/default/debug.yaml) to set the
-component's loglevel to debug and it get some features like:
+component's log level to debug and it get some features like:
 - The `/admin` console is routed for Keycloak.
 - An ingress for `http://minio-console.<your_domain>` is configured.
-and set the loglevel for components to "Debug".
+and set the log level for components to "Debug".
 
 **Note:** All containers should write their log output to STDOUT, if you find (valuable) logs inside a container, please let us know!
 
@@ -46,11 +46,11 @@ This can be a challenge the more security hardened container images are, because
 
 Adding a container to a Pod can ease the pain.
 
-Below you will find some wrap-up notes when it comes to debugging openDesk by adding debug containers. Of course there are a lot of more detailled resources out in the wild.
+Below you will find some wrap-up notes when it comes to debugging openDesk by adding debug containers. Of course there are a lot of more detailed resources out in the wild.
 
 ## Adding a container to a pod/deployment - Dev/Test only
 
-You can add a container by editing and updating an existing deployment, which is quite comforable with tools like [Lens](https://k8slens.dev/).
+You can add a container by editing and updating an existing deployment, which is quite comfortable with tools like [Lens](https://k8slens.dev/).
 
 - Select the container you want to make use of as debugging container, in the example below it's `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:1.0.0`.
 - Ensure the `shareProcessNamespace` option is enabled for the Pod.
@@ -92,8 +92,8 @@ Sometimes you do not want to add a container permanently to your existing deploy
 
 For the commands further down this section we set some environment variables first:
 - `NAMESPACE`: The namespace the Pod you want to inspects is running in.
-- `DEPLOYMENT_NAME`: The name of the deployment responsible for spawning the Pod you want to inspect within the prementioned namespace.
-- `POD_NAME`: The name of the Pod you want to inspect within the prementioned namespace.
+- `DEPLOYMENT_NAME`: The name of the deployment responsible for spawning the Pod you want to inspect within the pre-mentioned namespace.
+- `POD_NAME`: The name of the Pod you want to inspect within the pre-mentioned namespace.
 - `EPH_CONTAINER_NAME`: Chose the name for the container, "debugging" seem obvious.
 - `DEBUG_IMAGE`: The image you want to make use of for debugging purposes.
 
@@ -101,9 +101,9 @@ e.g.
 
 ```
 export EPH_CONTAINER_NAME=debugging
-export NAMESPACE=my_testdeployment
+export NAMESPACE=my_test_deployment
 export DEPLOYMENT_NAME=opendesk-nextcloud-php
-export POD_NAME=opendesk-nextcloud-php-6686d47cfb-7vtmf
+export POD_NAME=opendesk-nextcloud-php-6686d47cfb-7642f
 export DEBUG_IMAGE=registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:1.0.0
 ```
 

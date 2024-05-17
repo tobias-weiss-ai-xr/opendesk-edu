@@ -16,7 +16,7 @@ This document should cover the abilities to scale apps.
 The Replicas can be increased of almost any component, but is only effective for high-availability or load-balancing for
 apps with a check-mark in `Scaling (effective)` column.
 
-Verified positive effects are marke with a check-mark in `Scaling (verified)` column, apps which are not yet tested are
+Verified positive effects are marked with a check-mark in `Scaling (verified)` column, apps which are not yet tested are
 marked with a gear.
 
 

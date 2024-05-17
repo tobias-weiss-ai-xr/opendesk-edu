@@ -39,7 +39,7 @@ We will provide additional documents regarding user provisioning in the future, 
   - If you need to create more than just a couple of test accounts you can use the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/tooling/user-import) that utilizes the UDM REST API for user account creation.
   - Downsides: Managing groups and deleting accounts needs to be done manually.
 - Automated Pre-provisioning:
-  - Pre-provisioning users and groups including de-provisioning (deleting) accounts is the best practise as it ensures that openDesk is in sync with your organization's IAM.
+  - Pre-provisioning users and groups including de-provisioning (deleting) accounts is the best practice as it ensures that openDesk is in sync with your organization's IAM.
   - There are at least two ways of implementing the pre-provisioning:
   - UDM REST API:
     - Build a provisioning solution by yourself using the [UDM REST API](https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html).
@@ -90,7 +90,7 @@ For the following configuration steps login with user `kcadmin` and grab the pas
 
 As we use the Keycloak of another openDesk instance to simulate your organization's IdP in this example, especially URL paths within the Keycloak might differ if you use different products.
 
-Please let us know about your experiences or differences you came accross.
+Please let us know about your experiences or differences you came across.
 
 ### Separate realm
 
@@ -146,12 +146,12 @@ The following configuration is taking place in the Keycloak realm `opendesk`.
   - *Client ID*: Use the client ID you took form your organization's IdP config (`opendesk-federation-client` in this example)
   - *Client Secret*: Use the secret you took form your organization's IdP config
   - When completed with *Add* you get to the detailed IdP configured that also needs some updates (you may need to open the *Advanced* section to access some settings)
-	- *Backchannel logout*: `On`
+	- *Back-channel logout*: `On`
 	- *Disable user info*: `On`
     - *First login flow override*: `auto-federate-flow`
 
 - In case you want to forcefully redirect all users to your organizations IdP (disabling login with local openDesk accounts):
   - *Authentication* > `2fa-browser`
-    - Click on the cogwheel next to the *Identitify Provider Redirector*
+    - Click on the cogwheel next to the *Identity Provider Re-director*
       - *Alias*: `auto-federate-idp`
       - *Default Identity Provider*: `auto-federate-idp`

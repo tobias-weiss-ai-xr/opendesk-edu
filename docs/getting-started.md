@@ -132,7 +132,7 @@ jitsi:
 By default Helm charts and container images are fetched from OCI registries. These registries can be found for most cases
 in the [openDesk/component section on Open CoDE](https://gitlab.opencode.de/bmi/opendesk/components).
 
-For untouched upstream artefacts that do not belong to a functional component's core we use upstream registries
+For untouched upstream artifacts that do not belong to a functional component's core we use upstream registries
 like Docker Hub.
 
 Doing a test deployment will most likely be fine with this setup. In case you want to deploy multiple times a day
@@ -206,7 +206,7 @@ ingress:
 
 ### Container runtime
 
-Some apps require specific configuration for container runtimes. You can set your container runtime like `cri-o`,
+Some apps require specific configuration for the container runtime. You can set your container runtime like `cri-o`,
 `containerd` or `docker` by:
 
 ```yaml
@@ -239,7 +239,7 @@ persistence:
 
 ### Mail/SMTP configuration
 
-To use the full potential of the openDesk, you need to set up an SMTP Smarthost/Relay which allows to send emails from
+To use the full potential of the openDesk, you need to set up an SMTP relay which allows to send emails from
 the whole subdomain.
 
 ```yaml
@@ -367,7 +367,7 @@ section provide you with the desired information to login with the two default u
 | Username        | Password                                   | Description      |
 |-----------------|--------------------------------------------|------------------|
 | `default.user`  | `40615..............................e9e2f` | Application user |
-| `default.admin` | `bdbbb..............................04db6` | Administrator    |
+| `default.admin` | `17027..............................04db6` | Administrator    |
 
 # Uninstall
 

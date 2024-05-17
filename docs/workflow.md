@@ -46,7 +46,7 @@ The following section should provide a high-level view of the involved parties i
 - **Open source product suppliers**
   - Focus areas
     - Development of upstream products
-    - Development of integrational functionality relevant to openDesk and others
+    - Development of integrative functionality relevant to openDesk and others
     - Providing source code and the artifacts required to install openDesk to Open CoDE
   - Hand over to _openDesk platform development_
     - Helm charts
@@ -151,7 +151,7 @@ As the way to mark the license header as a comment differs between the various f
 
 ### Disclaimer
 
-openDesk consists only of community products, so there is no SLA to receive service updates or backports of critical security fixes. This has two consequences:
+openDesk consists only of community products, so there is no SLA to receive service updates or backport of critical security fixes. This has two consequences:
 - In production scenarios, you should replace the community versions of the functional components with supported, SLA-backed paid versions.
 - openDesk aims to always update to the latest available releases of the community components and we therefore have rolling technical releases.
 
@@ -230,7 +230,7 @@ The Standard Quality Gate addresses quality assurance steps that should be execu
 
 1. Linting
    - Blocking
-     - Licening: [reuse](https://github.com/fsfe/reuse-tool)
+     - Licensing: [reuse](https://github.com/fsfe/reuse-tool)
      - openDesk specific: Especially `images.yaml` and `charts.yaml`, find more details in the [development](./development.md) docu
    - Non Blocking
      - Security: [Kyverno policy check](../.kyverno) addressing some IT-Grundschutz requirements
@@ -249,7 +249,7 @@ The Standard Quality Gate addresses quality assurance steps that should be execu
 
 Steps #1 to #3 from above are executed as GitLab CI and therefore documented within GitLab.
 
-Step #4 is focussed on security and was not fully implemented yet. Its main objective is to check for regressions. That step is just the second step of a security check and monitoring chain as shown below. While some checks can be executed against the static artefacts (e.g. container images) other might require an up-and-running instance. These are especially located in the third step below which is not yet implemented.
+Step #4 is focussed on security and was not fully implemented yet. Its main objective is to check for regressions. That step is just the second step of a security check and monitoring chain as shown below. While some checks can be executed against the static artifacts (e.g. container images) other might require an up-and-running instance. These are especially located in the third step below which is not yet implemented.
 
 ```mermaid
 flowchart TD
@@ -258,7 +258,7 @@ flowchart TD
     e.g. based on openDesk
     reference implementation 'gitlab-config'.
     >> Can the artefact be integrated? <<
-    ] -->|integrate Artefacts| B[<u><b>Deployment automation</b></u> SQG
+    ] -->|integrate artifacts| B[<u><b>Deployment automation</b></u> SQG
     based on GitLab CI during
     technical release process.
     >> Can the platform be released? <<
@@ -311,7 +311,7 @@ This branch type requires the most activities on top of the actual development:
   - This is the actual interface between the platform development workflow and the supplier work package workflow.
   - The openDesk QA team validates the change, ideally based on the acceptance criteria defined in the supplier's work package definition.
     - If improvements are needed QA passes on the feedback to the developer/supplier.
-    - If the QA was successful test cases for the testautomation of the feature are defined.
+    - If the QA was successful test cases for the test automation of the feature are defined.
     - QA should also evaluate if there is a need for end-user documentation of the feature.
 - `Develop Test`: The test cases are implemented by the openDesk platform development and added to the openDesk end-to-end test suite.
 - `Documentation`: When required the documentation team has to update the end-user documentation.

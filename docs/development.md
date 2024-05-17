@@ -11,11 +11,12 @@ But contributions will be possible soon once the CLA process is sorted out.
 
 * [Overview](#overview)
 * [Default branch, `develop` and other branches](#default-branch-develop-and-other-branches)
-* [External artefacts - `charts.yaml` and `images.yaml`](#external-artefacts---chartsyaml-and-imagesyaml)
+* [External artifacts - `charts.yaml` and `images.yaml`](#external-artifacts---chartsyaml-and-imagesyaml)
   * [Linting](#linting)
+    * [Disable linting selectively](#disable-linting-selectively)
   * [Renovate](#renovate)
   * [Mirroring](#mirroring)
-    * [Get new artefacts mirrored](#get-new-artefacts-mirrored)
+    * [Get new artifacts mirrored](#get-new-artifacts-mirrored)
 * [Creating new charts / images](#creating-new-charts--images)
 
 # Overview
@@ -40,7 +41,7 @@ The `helmfile.yaml` in the root folder is the basis for the whole deployment. It
 global values files in `./environments/default`. It allows you to overwrite defaults by using one of the three predefined environments `dev`, `test`
 and `prod`.
 
-Before you look into any app specifc configuration it is recommended to review the contents of `./environments/default` to get an understanding of what
+Before you look into any app specific configuration it is recommended to review the contents of `./environments/default` to get an understanding of what
 details are maintained in there, as they are usually referenced by the app configurations.
 
 # Default branch, `develop` and other branches
@@ -54,17 +55,17 @@ for more details on naming conventions.
 There is a CI bot that automatically creates a merge request once you initially pushed your branch to Open CoDE.
 The merge request will of course target the `develop` branch, be in status `draft` and have you as assignee.
 
-In case you do not plan to actually merge from the branch you have pushed, please close or delete the autocreated MR.
+In case you do not plan to actually merge from the branch you have pushed, please close or delete the auto-created MR.
 
-# External artefacts - `charts.yaml` and `images.yaml`
+# External artifacts - `charts.yaml` and `images.yaml`
 
-The `charts.yaml` and `images.yaml` are the central place to reference external artefacts that are used for the deployment.
+The `charts.yaml` and `images.yaml` are the central place to reference external artifacts that are used for the deployment.
 
 Beside the deployment automation itself some tools work with the contents of the files:
 
 - **Linting**: Ensures consistency of the file contents for the other tools.
 - **Renovate**: Automatically create MRs that update the components to their latest version.
-- **Mirror**: Mirror artefacts to Open CoDE.
+- **Mirror**: Mirror artifacts to Open CoDE.
 
 Please find details on these tools below.
 
@@ -95,12 +96,22 @@ Example:
     tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
 ```
 
+### Disable linting selectively
+
+If you follow the "push early, push often" paradigm to save your work to the central Git instance or you just fix a typo in the text
+of an existing documentation you might want to avoid the CI with its linting to be executed, as it might not offer additional value.
+
+GitLab offers two options to skip the CI on a commit/push:
+- Add `[ci skip]` to your commit message ([details](https://docs.gitlab.com/ee/ci/pipelines/#skip-a-pipeline)).
+**Note:** The string has to be removed before merging your feature branch into `develop`.
+- Use the related git push option `git push -o ci.skip` ([details](https://docs.gitlab.com/ee/user/project/push_options.html#push-options-for-gitlab-cicd)).
+
 ## Renovate
 
 Uses a regular expression to match the values of the following attributes:
 
 - `# upstreamRegistry` *required*: Attribute's value must be prefixed with `https://` for Renovate.
-- `# upstreamrepository` *required*
+- `# upstreamRepository` *required*
 - `tag` *required*
 
 Checks for newer versions of the given artefact and creates a MR containing the newest version's tag (and digest).
@@ -111,19 +122,19 @@ Checks for newer versions of the given artefact and creates a MR containing the 
 
 **Note:** The mirror is scheduled to run every hour at 42 minutes past the hour.
 
-openDesk strives to make all relevant artefacts available on Open CoDE so there is the mirroring process
-configured to pull artefacts that do not originate from Open CoDE into projects called `*-Mirror` within the
+openDesk strives to make all relevant artifacts available on Open CoDE so there is the mirroring process
+configured to pull artifacts that do not originate from Open CoDE into projects called `*-Mirror` within the
 [openDesk Components section](https://gitlab.opencode.de/bmi/opendesk/components).
 
-The mirror script takes the information on what artefacts to mirror from the annotation inside the two yaml files:
+The mirror script takes the information on what artifacts to mirror from the annotation inside the two yaml files:
 - `# upstreamRegistry` *required*: To identify the source registry
 - `# upstreamRepository` *required*: To identify the source repository
 - `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set it activates the mirror for the component. Only tags are being mirrored that match the given regular expression. **Note:** You have to use single quotes for this attribute's value in case you use backslash leading regex notation like `\d`.
-- `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artefacts beginning with a specific version. You must use capturing groups
+- `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artifacts beginning with a specific version. You must use capturing groups
   in `# upstreamMirrorTagFilterRegEx` to identify the single numeric elements of the version within the tag and use per capturing group (left to right) one numeric array
   element here to define the version the mirror should start with.
 
-### Get new artefacts mirrored
+### Get new artifacts mirrored
 
 If you want new images or charts to be mirrored that are not yet included in one of the yaml files there are two options:
 
@@ -134,7 +145,7 @@ You include them in your branch with all required annotations and either
 # Creating new charts / images
 
 When you create new Helm charts please check out the
-[openDesk Best Practises](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-best-practises)
+[openDesk Best Practices](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-best-practises)
 for Helm charts.
 
 You may also want to make use of our [standard CI](https://gitlab.opencode.de/bmi/opendesk/tooling/gitlab-config) to

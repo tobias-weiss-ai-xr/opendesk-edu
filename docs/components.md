@@ -14,11 +14,9 @@ This section covers the internal system requirements as well as external service
   * [Filepicker](#filepicker)
   * [Central Navigation](#central-navigation)
   * [(Read \& write) Central contacts](#read--write-central-contacts)
-  * [OpenProject Filestore](#openproject-filestore)
+  * [OpenProject file store](#openproject-file-store)
 * [Identity data flows](#identity-data-flows)
 * [Provisioning](#provisioning)
-* [Component specific documentation](#component-specific-documentation)
-* [Links to component docs](#links-to-component-docs)
 <!-- TOC -->
 
 # Overview
@@ -50,7 +48,7 @@ they need to be replaced in production deployments.
 | PostgreSQL                  | Database                       | Eval       |
 | Redis                       | Cache Database                 | Eval       |
 | Univention Management Stack | Identity Management & Portal   | Functional |
-| XWiki                       | Knowledgebase                  | Functional |
+| XWiki                       | Knowledge Management           | Functional |
 
 # Component integration
 
@@ -66,7 +64,7 @@ flowchart TD
   OXAppSuiteBackend-->|Filepicker|Nextcloud
   Nextcloud-->|CentralNavigation|Portal
   OpenProject-->|CentralNavigation|Portal
-  OpenProject-->|Filestore|Nextcloud
+  OpenProject-->|File store|Nextcloud
   XWiki-->|CentralNavigation|Portal
   Nextcloud-->|CentralContacts|OXAppSuiteBackend
   OXAppSuiteFrontend-->|Filepicker|OXAppSuiteBackend
@@ -106,10 +104,10 @@ Open-Xchange App Suite is used to manage contacts within openDesk. There is an A
 Nextcloud to lookup contacts as well as to create contacts. This is maybe done when a file is shared with a not yet
 available personal contact.
 
-## OpenProject Filestore
+## OpenProject file store
 
 By default, Nextcloud is a configured option for storing attachments in OpenProject.
-The Filestore can be enabled on a per-project level in OpenProject's project admin section.
+The file store can be enabled on a per-project level in OpenProject's project admin section.
 
 # Identity data flows
 
@@ -157,27 +155,3 @@ deleting activities for the following objects to the OX AppSuite using the AppSu
 - Groups
 - Functional Mailboxes
 - Resources
-
-# Component specific documentation
-
-We want to provide more information per component in separate, component-specific markdown file.
-To establish a common view on the components, we are going to cover various aspects:
-
-- **Component overview**: Shall provide a quick introduction including the components prerequisites and subcomponents (f.e. pods).
-- **Resources**: Will contain a link to the component upstream documentation, the helm chart and image locations.
-- **Operational Capabilities**
-  - **Install**: The components install within the SWP.
-  - **Restart**: Deleting and restarting pods works seamlessly.
-  - **Update**: Redeploying the component with a different configuration works as expected. The component makes use of the updates configuration afterwards.
-  - **Upgrade**: Component allows upgrading existing deployments with more current versions of itself.
-  - **Secrets**: The component uses K8s secrets.
-  - **Logging**: Only logging to STDOUT, no logs inside the container.
-  - **Monitoring**: Application provides based on kube-prometheus-stack CRD: ServiceMonitor and PrometheusRule. Optional: Grafana Dashboard.
-  - **Scale**: If supported (as we use community products) the component should be manually scalable. Optional: Autoscaling.
-  - **Network policies**: Deny by default, allow application related traffic.
-  - **Uninstall**: Documented and working complete uninstallation of the component.
-- **Debugging**: Some helpful information when it comes to debugging a component, e.g. setting log level.
-
-# Links to component docs
-
-- [Intercom-Service](./components/intercom-service.md)
