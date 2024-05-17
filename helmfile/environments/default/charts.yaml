@@ -378,7 +378,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ums"
-    version: "0.13.0"
+    version: "0.15.0"
     verify: true
   umsKeycloakBootstrap:
     # providerCategory: "Supplier"
