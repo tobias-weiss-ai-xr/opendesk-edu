@@ -66,3 +66,20 @@ This setup requires also a different DNS setup:
 | _matrix._tcp.my_organization.tld | SRV  | `1 10 PORT matrix.opendesk.domain.tld` | `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service |
 
 *Note:* `matrix.opendesk.domain.tld` in the "Value" column can also be the IP address where synapse TLS port is listening to.
+
+If you want to use other Matrix clients,
+e.g., Element Messenger for [iOS](https://apps.apple.com/de/app/element-messenger/id1083446067)
+or [Android](https://play.google.com/store/apps/details?id=im.vector.app),
+you need to create a JSON file with the following contents that is served from
+`https://my_organization.tld/.well-known/matrix/client`:
+
+```json
+{
+  "m.homeserver": {
+    "base_url": "https://matrix.opendesk.domain.tld"
+  }
+}
+```
+
+This ensures clients know where to find the Matrix protocol endpoint when users specify `my_organization.tld`
+as their homeserver.
