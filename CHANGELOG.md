@@ -1,3 +1,23 @@
+## [0.7.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.7.0...v0.7.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* **ci:** Add Renovate dependency update automation. ([650c41c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/650c41c3f04b6c7c04a1d5eca76aba7f75e14b96))
+* **cryptpad:** Update Helm chart v0.0.19 and include CryptPad app in Helmfile deployment. ([931ed95](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/931ed95ce16d5be6bde7ea1c1140406f00fef060))
+* **docu:** Add IdP federation documentation. ([7167055](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7167055303bdbe9ad677b16635089c0328a849ff))
+* **docu:** Rename SYNAPSE_DOMAIN to MATRIX_DOMAIN. If you use SYNAPSE_DOMAIN in your deployment, ensure you set the MATRIX_DOMAIN accordingly before upgrading. ([96baa6c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/96baa6cc15bac8d3ce315132699e301093d5d6d8))
+* **element:** Provide certificate for alternative Synapse domain. ([88ac239](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/88ac2396e6888e0f28a80ceebaa0f51d2ba436ee))
+* **helmfile:** Use Open CoDE as default registry for Univention helm chart ([#71](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/71)). ([4e56ce4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4e56ce4073105003dffbcaa91af473c1f707cd13))
+* **jitsi:** Bump images to stable-9457-2. ([1d47fa6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d47fa681adf29e4b4ca432a9d5390972098d2e0))
+* **jitsi:** Raise Jibri memory limits to fullfil Jibri's 2Gi /dev/shm requirement and update Helm chart; To update an existing installation you need to manually delete the `jitsi-prosody` stateful set before the update e.g. `kubectl -n <your_namespace> delete --cascade=orphan statefulsets jitsi-prosody`. Ensure you use the `--cascade=orphan` part, otherwise you have to remove and reinstall the complete deployment. ([6570c13](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6570c13f3a3ad5864de5afe6afb4c60483cd489f))
+* **nextcloud:** Bump to 28.0.5 incl. latest app versions. ([04d9372](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/04d9372cfccc80145962faf4c2387949a43c8f2c))
+* **nubus:** Bump Keycloak to 24.0.3. ([923533d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/923533d7b7527de728f73813397ed0c2a0427da5))
+* **nubus:** Enable 2FA for group "Domain Admins" by default. ([1179669](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/11796699bb551f8b83badd13204654c880b65efe))
+* **nubus:** Update keycloak-bootstap and keycloak-extensions. ([1c6666f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1c6666fe45fb7acd83c26b5f2b808fce3fb9e20b))
+* **open-xchange:** Support change of username. ([b2cfa8b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b2cfa8b9965ce50f593295c80c363bad7ef0454e))
+* **openproject:** Bump version to 14.0.1, update Helm chart to 4.5.0. ([e085211](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e0852119e8e248431f51a86e3bd5177cef0b1e93))
+
 # [0.7.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.6.0...v0.7.0) (2024-05-06)
 
 
