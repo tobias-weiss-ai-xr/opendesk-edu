@@ -1,52 +1,29 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-#
-# Advanced Configuration: Nested States
-#
-helmfiles:
-  # Path to the helmfile state file being processed BEFORE releases in this state file
-  - path: "helmfile/apps/services/helmfile.yaml"
-  - path: "helmfile/apps/univention-management-stack/helmfile.yaml"
-  - path: "helmfile/apps/intercom-service/helmfile.yaml"
-  - path: "helmfile/apps/open-xchange/helmfile.yaml"
-  - path: "helmfile/apps/nextcloud/helmfile.yaml"
-  - path: "helmfile/apps/collabora/helmfile.yaml"
-  - path: "helmfile/apps/cryptpad/helmfile.yaml"
-  - path: "helmfile/apps/jitsi/helmfile.yaml"
-  - path: "helmfile/apps/element/helmfile.yaml"
-  - path: "helmfile/apps/openproject/helmfile.yaml"
-  - path: "helmfile/apps/xwiki/helmfile.yaml"
-  - path: "helmfile/apps/provisioning/helmfile.yaml"
-  - path: "helmfile/apps/openproject-bootstrap/helmfile.yaml"
-
-missingFileHandler: "Error"
-
-# Environment is defined here and in helmfile/bases/environments.yaml
-# This is a temporary solution to solve issue with different (relative) paths required when
-# - Installing all releases from root via helmfile apply
-# - Installing a single release from root via helmfile apply -f helmfile/apps/<app>/helmfile.yaml
-# - Installing a single release from app directory via helmfile apply
-# Issue: https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/issues/2
-
 environments:
-  default:
-    values:
-      - "helmfile/environments/default/*.gotmpl"
-      - "helmfile/environments/default/*.yaml"
   dev:
     values:
-      - "helmfile/environments/default/*.gotmpl"
-      - "helmfile/environments/default/*.yaml"
       - "helmfile/environments/dev/values.yaml.gotmpl"
   test:
     values:
-      - "helmfile/environments/default/*.gotmpl"
-      - "helmfile/environments/default/*.yaml"
       - "helmfile/environments/test/values.yaml.gotmpl"
   prod:
     values:
-      - "helmfile/environments/default/*.gotmpl"
-      - "helmfile/environments/default/*.yaml"
       - "helmfile/environments/prod/values.yaml.gotmpl"
+---
+# yamllint disable
+helmfiles:
+  - path: "./helmfile_generic.yaml"
+    values:
+      - {{ toYaml .Values | nindent 8 }}
+# {{/*
+#
+#   Use this format from a remote repository
+#
+#   - path: "git::https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk.git@helmfile_generic.yaml?ref=v0.7.1"
+#     values:
+#       - {{ toYaml .Values | nindent 8 }}
+# */}}
 ...

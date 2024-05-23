@@ -98,8 +98,14 @@ appsuite:
         pageHeaderPrefix: "as8.souvap App Suite"
         oidcLogin: true
         oidcPath: "/oidc"
-    masterAdmin: "admin"
-    masterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+    masterAdmin: "masteradmin"
+    masterPassword: {{ .Values.secrets.oxAppsuite.masterAdminPassword | quote }}
+    hzGroupName: "hzgroup"
+    hzGroupPassword: {{ .Values.secrets.oxAppsuite.hzGroupPassword | quote }}
+    basicAuthLogin: "oxlogin"
+    basicAuthPassword: {{ .Values.secrets.oxAppsuite.basicAuthPassword | quote }}
+    jolokiaLogin: "jolokia"
+    jolokiaPassword: {{ .Values.secrets.oxAppsuite.jolokiaPassword | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     serviceAccount:
       create: true
@@ -413,6 +419,10 @@ appsuite:
     enabled: false
 
   core-documentconverter:
+    adminUser: "admin"
+    adminPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+    basicAuthLogin: "oxlogin"
+    basicAuthPassword: {{ .Values.secrets.oxAppsuite.basicAuthPassword | quote }}
     enabled: true
     documentConverter:
       cache:
@@ -486,6 +496,10 @@ appsuite:
 
   core-imageconverter:
     enabled: true
+    adminUser: "admin"
+    adminPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+    basicAuthLogin: "oxlogin"
+    basicAuthPassword: {{ .Values.secrets.oxAppsuite.basicAuthPassword | quote }}
     image:
       registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeImageConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeImageConverter.repository | quote }}

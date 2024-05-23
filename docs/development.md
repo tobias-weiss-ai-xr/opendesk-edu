@@ -27,19 +27,29 @@ the development of the deployment automation of openDesk.
 
 ```mermaid
 flowchart TD
-    A[./helmfile.yaml]-->B[./helmfile/apps/*all_configured_apps*/helmfile.yaml\nReferences the relevant app Helm\ncharts using details from 'charts.yaml']
+    J[helmfile.yaml\nor a helmfile outside of this repository]-->A
+    J-->K[./helmfile/environemnts/*your_environment*/values.yaml.gotmpl\nor any an environment values file]
+    A[./helmfile_generic.yaml]-->B[./helmfile/apps/*all_configured_apps*/helmfile.yaml\nReferences the relevant app Helm\ncharts using details from 'charts.yaml']
     B-->C[./values-*all_configured_components*.yaml.gotmpl\nValues to template the charts\nwith references to the `images.yaml`]
     A-->D[./helmfile/environments/default/*\nwith just some examples below]
     D-->F[charts.yaml]
     D-->G[images.yaml]
     D-->H[global.*]
     D-->I[secrets.yaml\nreplicas.yaml\nresources.yaml\n...]
-    A-->|overwrite defaults with your\ndeployment/environment specific values|E[./helmfile/environments/*your_environment*/values.yaml.gotmpl]
+    A-->|overwrite defaults with your\ndeployment/environment specific values|E[./helmfile/environments/default/values.yaml.gotmpl]
 ```
 
-The `helmfile.yaml` in the root folder is the basis for the whole deployment. It references the app specific `helmfile.yaml` files as well as some
-global values files in `./environments/default`. It allows you to overwrite defaults by using one of the three predefined environments `dev`, `test`
-and `prod`.
+The `helmfile.yaml` file in the root folder serves as the foundation
+for the entire deployment. It references the `helmfile_generic.yaml`
+file, which includes app-specific `helmfile.yaml` files, as well as
+global values files located in `./environments/default`.
+
+`helmfile.yaml` also refers to three predefined environments: `dev`,
+`test`, and `prod`.
+
+The `helmfile_generic.yaml` file is designed to be referenced from
+external repositories, where custom environments may be defined. An
+example is demonstrated in the `helmfile.yaml` file.
 
 Before you look into any app specific configuration it is recommended to review the contents of `./environments/default` to get an understanding of what
 details are maintained in there, as they are usually referenced by the app configurations.

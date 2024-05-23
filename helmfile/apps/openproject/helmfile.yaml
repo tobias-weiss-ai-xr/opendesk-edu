@@ -1,33 +1,12 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
 bases:
   - "../../bases/environments.yaml"
 ---
-repositories:
-  # OpenProject
-  # Source: https://github.com/opf/helm-charts
-  - name: "openproject-repo"
-    keyring: "../../files/gpg-pubkeys/openproject-com.gpg"
-    verify: {{ .Values.charts.openproject.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.openproject.registry }}/\
-      {{ .Values.charts.openproject.repository }}"
-
-releases:
-  - name: "openproject"
-    chart: "openproject-repo/{{ .Values.charts.openproject.name }}"
-    version: "{{ .Values.charts.openproject.version }}"
-    wait: true
-    waitForJobs: true
+helmfiles:
+  - path: "./helmfile-child.yaml"
     values:
-      - "values.yaml.gotmpl"
-    installed: {{ .Values.openproject.enabled }}
-    timeout: 900
-
-commonLabels:
-  deploy-stage: "component-1"
-  component: "openproject"
+      - {{ toYaml .Values | nindent 8 }}
 ...

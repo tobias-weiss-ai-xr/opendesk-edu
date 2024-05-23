@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  # OX Connector
+  - name: "ox-connector-repo"
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.oxConnector.registry }}/\
+      {{ .Values.charts.oxConnector.repository }}"
+
+releases:
+  - name: "ox-connector"
+    chart: "ox-connector-repo/{{ .Values.charts.oxConnector.name }}"
+    version: "{{ .Values.charts.oxConnector.version }}"
+    values:
+      - "values-oxconnector.yaml.gotmpl"
+    installed: {{ .Values.oxConnector.enabled }}
+
+commonLabels:
+  deploy-stage: "component-2"
+  component: "provisioning"
+...
