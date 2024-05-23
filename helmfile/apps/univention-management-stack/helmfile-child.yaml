@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  # Univention Management Stack Umbrella Chart
+  - name: "ums"
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
+    verify: {{ .Values.charts.ums.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url:
+      "{{ .Values.global.helmRegistry | default .Values.charts.ums.registry }}/\
+      {{ .Values.charts.ums.repository }}"
+  # OpenDesk Keycloak Bootstrap Chart
+  - name: "opendesk-keycloak-bootstrap-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.opendeskKeycloakBootstrap.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskKeycloakBootstrap.registry }}/\
+      {{ .Values.charts.opendeskKeycloakBootstrap.repository }}"
+
+releases:
+  # Univention Management Stack Umbrella Chart
+  - name: "ums"
+    chart: "ums/{{ .Values.charts.ums.name }}"
+    version: "{{ .Values.charts.ums.version }}"
+    values:
+      - "values-umbrella.yaml.gotmpl"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
+  # OpenDesk Keycloak Bootstrap Chart
+  - name: "opendesk-keycloak-bootstrap"
+    chart: "opendesk-keycloak-bootstrap-repo/{{ .Values.charts.opendeskKeycloakBootstrap.name }}"
+    version: "{{ .Values.charts.opendeskKeycloakBootstrap.version }}"
+    values:
+      - "values-opendesk-keycloak-bootstrap.yaml.gotmpl"
+    needs:
+      - "ums"
+    installed: {{ .Values.univentionManagementStack.enabled }}
+    timeout: 900
+
+commonLabels:
+  deploy-stage: "component-1"
+  component: "univention-management-stack"
+...

@@ -369,6 +369,18 @@ section provide you with the desired information to login with the two default u
 | `default.user`  | `40615..............................e9e2f` | Application user |
 | `default.admin` | `17027..............................04db6` | Administrator    |
 
+## Using from external repository
+
+It is possible to refer to `./helmfile_generic.yaml` from an external
+directory or repository. The `helmfile.yaml` that refers to
+`./helmfile_generic.yaml` may define custom environments. These custom
+environments may overwrite certain configuration values. These
+configuration values are:
+
+* `global.domain`
+* `global.helmRegistry`
+* `global.master_password`
+
 # Uninstall
 
 You can uninstall the deployment by:

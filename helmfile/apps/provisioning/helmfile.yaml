@@ -1,27 +1,12 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
 bases:
   - "../../bases/environments.yaml"
 ---
-repositories:
-  # OX Connector
-  - name: "ox-connector-repo"
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.oxConnector.registry }}/\
-      {{ .Values.charts.oxConnector.repository }}"
-
-releases:
-  - name: "ox-connector"
-    chart: "ox-connector-repo/{{ .Values.charts.oxConnector.name }}"
-    version: "{{ .Values.charts.oxConnector.version }}"
+helmfiles:
+  - path: "./helmfile-child.yaml"
     values:
-      - "values-oxconnector.yaml.gotmpl"
-    installed: {{ .Values.oxConnector.enabled }}
-
-commonLabels:
-  deploy-stage: "component-2"
-  component: "provisioning"
+      - {{ toYaml .Values | nindent 8 }}
 ...
