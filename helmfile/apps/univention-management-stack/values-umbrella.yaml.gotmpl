@@ -1205,12 +1205,14 @@ keycloak-extensions:
       paths:
         {{- if .Values.debug.enabled }}
         - pathType: "Prefix"
-          path: "/admin"
+          path: "/admin/"
         {{- end }}
         - pathType: "Prefix"
-          path: "/realms"
+          path: "/realms/"
         - pathType: "Prefix"
-          path: "/resources"
+          path: "/js/"
+        - pathType: "Prefix"
+          path: "/resources/"
         - pathType: "Prefix"
           path: "/fingerprintjs"
         - pathType: "Exact"
