@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -14,6 +15,7 @@ configuration:
           portal_logo_svg_url: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
           portal_url: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/"
         custom_css_variables:
+          --cpd-color-bg-action-primary-rest: {{ .Values.theme.colors.primary | quote }}
           --cpd-color-text-action-accent: {{ .Values.theme.colors.primary | quote }}
 
     "net.nordeck.element_web.module.widget_lifecycle":

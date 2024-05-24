@@ -47,7 +47,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "8", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
-    tag: "1.11.0@sha256:633cc31a4c312cdb072136247ac382463ddbc458a5c57e139241394acee9baaf"
+    tag: "1.11.1@sha256:6ed72fccd302fc5891f31157bcffd14358e1f90f8b60d649fd261ba0f5d5fb91"
   freshclam:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"

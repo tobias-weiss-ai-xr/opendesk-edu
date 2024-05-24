@@ -20,7 +20,7 @@ include:
       - when: "always"
   - local: "/.gitlab/lint/lint-kyverno.yml"
     rules:
-      - if: "$JOB_KYVERNO_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|triggers'"
+      - if: "$JOB_KYVERNO_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web'"
         when: "never"
       - when: "always"
 
@@ -561,14 +561,14 @@ conventional-commits-linter:
 
 common-yaml-linter:
   rules:
-    - if: "$JOB_COMMON_YAML_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
+    - if: "$JOB_COMMON_YAML_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|web|merge_request_event'"
       when: "never"
     - when: "always"
 
 reuse-linter:
   allow_failure: false
   rules:
-    - if: "$JOB_REUSE_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|triggers|web|merge_request_event'"
+    - if: "$JOB_REUSE_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|web|merge_request_event'"
       when: "never"
     - when: "always"
 
