@@ -401,8 +401,8 @@ images:
   oxConnector:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/ox-connector-standalone"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/ox-connector-standalone"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "4", "2"]
     registry: "registry.opencode.de"
@@ -482,8 +482,8 @@ images:
   umsDataLoader:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/data-loader"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/data-loader"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "41", "5"]
     registry: "registry.opencode.de"
@@ -520,12 +520,12 @@ images:
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-management-ui-management-ui"
     tag: "2.0.0@sha256:57e2503a4772f0ff656e792a98fadef4d41c248218e6c368f76ce82a892478cf"
   umsGuardianProvisioning:
-    # providerCategory: 'Supplier'
-    # providerResponsible: 'Univention'
-    # upstreamRegistry: 'registry.souvap-univention.de'
-    # upstreamRepository: 'souvap/tooling/images/univention/guardian-init'
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/guardian-init"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ['0', '3', '0']
+    # upstreamMirrorStartFrom: ["0", "3", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/guardian-init"
     tag: "0.4.0@sha256:390e20ad73a91ae2ecc33d91d1f21872a46e6af4d4d09095d1ce18a6d4a3635e"
@@ -552,8 +552,8 @@ images:
   umsKeycloakExtensionHandler:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/keycloak-handler"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/keycloak-handler"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "0", "3"]
     registry: "registry.opencode.de"
@@ -562,8 +562,8 @@ images:
   umsKeycloakExtensionProxy:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/keycloak-proxy"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/keycloak-proxy"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "0", "3"]
     registry: "registry.opencode.de"
@@ -572,8 +572,8 @@ images:
   umsLdapNotifier:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/ldap-notifier"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/ldap-notifier"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "8", "2"]
     registry: "registry.opencode.de"
@@ -582,8 +582,8 @@ images:
   umsLdapServer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/ldap-server"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/ldap-server"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "8", "2"]
     registry: "registry.opencode.de"
@@ -616,8 +616,8 @@ images:
   umsNotificationsApi:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/notifications-api"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/notifications-api"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
@@ -636,8 +636,8 @@ images:
   umsPortalFrontend:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/portal-frontend"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/portal-frontend"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
@@ -646,8 +646,8 @@ images:
   umsPortalListener:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/portal-listener"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/portal-listener"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
@@ -656,8 +656,8 @@ images:
   umsPortalServer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/portal-server"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/portal-server"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
@@ -666,8 +666,8 @@ images:
   umsProvisioningDispatcher:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/provisioning-dispatcher"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/provisioning-dispatcher"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
@@ -676,8 +676,8 @@ images:
   umsProvisioningEventsAndConsumerApi:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/provisioning-events-and-consumer-api"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/provisioning-events-and-consumer-api"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
@@ -686,8 +686,8 @@ images:
   umsProvisioningPrefill:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/provisioning-prefill"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/provisioning-prefill"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
@@ -696,8 +696,8 @@ images:
   umsProvisioningUdmListener:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/provisioning-udm-listener"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/provisioning-udm-listener"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "14", "0"]
     registry: "registry.opencode.de"
@@ -706,23 +706,13 @@ images:
   umsSelfserviceInvitation:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/selfservice-invitation"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/selfservice-invitation"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "3", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-invitation"
     tag: "0.4.0@sha256:bd252758576e1733076c78756f04225ebed73d9c48de22440975ef11dd087caf"
-  umsSelfserviceListener:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/selfservice-listener"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["0", "3", "2"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-listener"
-    tag: "0.4.0@sha256:0bc0235fd64a19a183f112da73109b54712c2d70fe7fa77c6405beefb7167588"
   umsStackGateway:
     # providerCategory: "Community"
     # providerResponsible: "Univention"
@@ -744,8 +734,8 @@ images:
   umsUmcGateway:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/umc-gateway"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/umc-gateway"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "7", "3"]
     registry: "registry.opencode.de"
@@ -754,8 +744,8 @@ images:
   umsUmcServer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/umc-server"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/umc-server"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "7", "3"]
     registry: "registry.opencode.de"
@@ -764,8 +754,8 @@ images:
   umsWaitForDependency:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
-    # upstreamRegistry: "https://registry.souvap-univention.de"
-    # upstreamRepository: "souvap/tooling/images/univention/wait-for-dependency"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/wait-for-dependency"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
