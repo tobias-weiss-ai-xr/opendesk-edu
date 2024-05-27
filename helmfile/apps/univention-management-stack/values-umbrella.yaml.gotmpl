@@ -708,11 +708,6 @@ selfservice-listener:
       - name: {{ . | quote }}
       {{- end }}
 
-    selfserviceListener:
-      registry: {{ .Values.global.imageRegistry | default .Values.images.umsSelfserviceListener.registry | quote }}
-      repository: {{ .Values.images.umsSelfserviceListener.repository | quote }}
-      tag: {{ .Values.images.umsSelfserviceListener.tag | quote }}
-
     selfserviceInvitation:
       registry: {{ .Values.global.imageRegistry | default .Values.images.umsSelfserviceInvitation.registry | quote }}
       repository: {{ .Values.images.umsSelfserviceInvitation.repository | quote }}
