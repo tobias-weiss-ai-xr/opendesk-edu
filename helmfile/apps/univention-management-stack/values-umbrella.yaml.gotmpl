@@ -674,9 +674,11 @@ stack-data-swp:
 
   stackDataSwp:
     udmApiPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+    {{- if .Values.portal.enableDeploymentInformation }}
     systemInformation:
       deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
       releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
+    {{- end }}
     udmApiUser: "cn=admin"
     udmApiUrl: "http://ums-udm-rest-api/udm/"
     loadDevData: true
