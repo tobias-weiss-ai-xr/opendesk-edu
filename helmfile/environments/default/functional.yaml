@@ -16,4 +16,8 @@ externalServices:
   matrix:
     federation:
       enabled: true
+
+portal:
+  # Display deployment release and date in portal for admins.
+  enableDeploymentInformation: true
 ...

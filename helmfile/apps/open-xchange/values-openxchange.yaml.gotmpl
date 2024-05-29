@@ -5,6 +5,10 @@ SPDX-License-Identifier: Apache-2.0
 ---
 global:
   hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
+  appsuite:
+    cookieHashSalt: {{ .Values.secrets.oxAppsuite.cookieHashSalt }}
+    shareCryptKey: {{ .Values.secrets.oxAppsuite.shareCryptKey }}
+    sessiondEncryptionKey: {{ .Values.secrets.oxAppsuite.sessiondEncryptionKey }}
   mysql:
     host: {{ .Values.databases.oxAppsuite.host | quote }}
     database: {{ .Values.databases.oxAppsuite.name | quote }}
@@ -98,8 +102,8 @@ appsuite:
         pageHeaderPrefix: "as8.souvap App Suite"
         oidcLogin: true
         oidcPath: "/oidc"
-    masterAdmin: "masteradmin"
-    masterPassword: {{ .Values.secrets.oxAppsuite.masterAdminPassword | quote }}
+    masterAdmin: "admin"
+    masterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
     hzGroupName: "hzgroup"
     hzGroupPassword: {{ .Values.secrets.oxAppsuite.hzGroupPassword | quote }}
     basicAuthLogin: "oxlogin"
