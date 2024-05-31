@@ -15,12 +15,12 @@ include:
     ref: "main"
   - local: "/.gitlab/lint/lint-opendesk.yml"
     rules:
-      - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'"
+      - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'"
         when: "never"
       - when: "always"
   - local: "/.gitlab/lint/lint-kyverno.yml"
     rules:
-      - if: "$JOB_KYVERNO_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web'"
+      - if: "$JOB_KYVERNO_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'"
         when: "never"
       - when: "always"
 
@@ -192,7 +192,7 @@ env-cleanup:
   needs: []
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           $ENV_STOP_BEFORE != "no"
       when: "on_success"
@@ -217,7 +217,7 @@ env-start:
   image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/
       when: "on_success"
   script:
@@ -238,7 +238,7 @@ policies-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
       when: "on_success"
@@ -251,7 +251,7 @@ services-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
       when: "on_success"
@@ -263,7 +263,7 @@ provisioning-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no" || $DEPLOY_PROVISIONING != "no")
       when: "on_success"
@@ -275,7 +275,7 @@ ums-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no")
       when: "on_success"
@@ -288,7 +288,7 @@ ox-deploy:
   timeout: "30m"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OX != "no")
       when: "on_success"
@@ -300,7 +300,7 @@ ics-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ICS != "no")
       when: "on_success"
@@ -312,7 +312,7 @@ xwiki-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_XWIKI != "no")
       when: "on_success"
@@ -324,7 +324,7 @@ collabora-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_COLLABORA != "no")
       when: "on_success"
@@ -336,7 +336,7 @@ cryptpad-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_CRYPTPAD != "no")
       when: "on_success"
@@ -348,7 +348,7 @@ nextcloud-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no")
       when: "on_success"
@@ -360,7 +360,7 @@ openproject-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OPENPROJECT != "no")
       when: "on_success"
@@ -372,7 +372,7 @@ openproject-bootstrap-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || ($DEPLOY_OPENPROJECT != "no" && $DEPLOY_NEXTCLOUD != "no"))
       when: "on_success"
@@ -384,7 +384,7 @@ jitsi-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_JITSI != "no")
       when: "on_success"
@@ -396,7 +396,7 @@ element-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" &&
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ELEMENT != "no")
       when: "on_success"
@@ -412,7 +412,7 @@ env-stop:
   needs: []
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/
       when: "manual"
   script:
     - "echo 'We do not stop the env (delete the namespace) at the moment in this stage, as deleting a branches also
@@ -442,7 +442,7 @@ run-tests:
   stage: "tests"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|triggers" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
       when: "on_success"
   script:
     - *ums-default-password
