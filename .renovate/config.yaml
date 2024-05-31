@@ -21,6 +21,8 @@ repositories:
     # renovate setup when looking into your feature branch or when your default branch is
     # not the one you want to check on.
     baseBranches: [ "develop" ]
+    # Set a limit for the maximum number of parallel MRs (default 10)
+    prConcurrentLimit: 50
     # Prefix to use for all branch names created by renovate bot (default: "renovate/")
     branchPrefix: "renovate/"
     # Lowercase merge request and commit titles ("never" = leave titles untouched )
