@@ -83,6 +83,16 @@ containerSecurityContext:
   seLinuxOptions:
     {{ .Values.seLinuxOptions.synapse | toYaml | nindent 4 }}
 
+federation:
+  enabled: {{ .Values.externalServices.matrix.federation.enabled }}
+  ingress:
+    host: "{{ .Values.global.hosts.synapseFederation }}.{{ .Values.global.domain }}"
+    enabled: {{ .Values.ingress.enabled }}
+    ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+    tls:
+      enabled: {{ .Values.ingress.tls.enabled }}
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
+
 global:
   domain: {{ .Values.global.domain | quote }}
   hosts:

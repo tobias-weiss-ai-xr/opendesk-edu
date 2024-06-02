@@ -5,28 +5,58 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Matrix federation</h1>
 
+<!-- TOC -->
 * [Use case](#use-case)
 * [Example configuration](#example-configuration)
-  * [DNS setup](#dns-setup)
+  * [Disable federation](#disable-federation)
+  * [Separate Matrix domain](#separate-matrix-domain)
+<!-- TOC -->
 
 # Use case
 
-By default you only can chat with users that also have an account within your openDesk installation. The Element chat application and its server component Synapse are based on the Matrix protocol that supports federation with other Matrix servers to communicate with the users with accounts on these servers.
+The Element chat application and its server component Synapse are based on the Matrix protocol,
+that supports federation with other Matrix servers to communicate with the users with accounts on these servers.
+
+By default, you can chat with users that have an account within your openDesk installation and federate with other
+matrix-based servers.
+Federation support can be disabled.
 
 # Example configuration
 
-The following values are used in this example documentation. Please ensure when you come across such a value even if it is part of a URL hostname or path that you adapt it where needed to your setup:
+The following values are used in this example documentation.
+Please ensure when you come across such a value,
+even if it is part of a URL hostname or path, that you adapt it where needed to your setup:
 
-- `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in `https://chat.opendesk.domain.tld` to access the Element chat.
-- `my_organization.tld`: an optional alternative domain used for mail and/or Matrix. If not used it is also set to `opendesk.domain.tld`.
+- `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in
+`https://chat.opendesk.domain.tld` to access the Element chat.
+- `my_organization.tld`: an optional alternative domain used for mail and/or Matrix.
+If not used it is also set to `opendesk.domain.tld`.
 
-## DNS setup
+## Disable federation
 
-If you want to federate with other Matrix instances, you need to have both SRV records:
+The following setting can disable federation:
 
-| Record name                         | Type | Value                                  | Additional Information                                                             |
-| ----------------------------------- | ---- | -------------------------------------- | ---------------------------------------------------------------------------------- |
-| _matrix._tcp.my_organization.tld    | SRV  | `1 10 PORT matrix.opendesk.domain.tld` | `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service |
-| matrix-fed._tcp.my_organization.tld | SRV  | `1 10 PORT matrix.opendesk.domain.tld` | `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service |
+```yaml
+externalServices:
+  matrix:
+    federation:
+      enabled: false
+```
 
-*Note:* `matrix.opendesk.domain.tld` in the "Value" column can also be the IP address where synapse TLS port is listening to.
+## Separate Matrix domain
+
+If you want to federate with other Matrix instances and use a separate Matrix domain, you need to provide a JSON file on
+the Matrix domain to use delegation.
+This is not included inside openDesk.
+
+Domain path: `https://my_organization.tld/.well-known/matrix/server`
+
+Content:
+```JSON
+{
+    "m.server": "matrix-federation.opendesk.domain.tld:443"
+}
+```
+
+More detailed information can be found in Matrix/Synapse documentation:
+[Matrix Delegation](https://matrix-org.github.io/synapse/v1.98/delegate.html)
