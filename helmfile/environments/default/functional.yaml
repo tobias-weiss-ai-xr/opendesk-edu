@@ -13,4 +13,7 @@ externalServices:
     udmRestApi:
       # Set to 'true' if you don't want to make the UDM REST API from the Nubus stack externally available
       enabled: false
+  matrix:
+    federation:
+      enabled: true
 ...
