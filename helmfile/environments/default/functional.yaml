@@ -7,4 +7,10 @@ authentication:
     # Note: Removing a group from the list will not disable 2FA for the removed group.
     groups:
       - "Domain Admins"
+
+externalServices:
+  nubus:
+    udmRestApi:
+      # Set to 'true' if you don't want to make the UDM REST API from the Nubus stack externally available
+      enabled: false
 ...
