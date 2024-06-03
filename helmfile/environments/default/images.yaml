@@ -20,7 +20,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
-    tag: "23.05.10.1.1@sha256:022fe6dc680ce7168a54c0a4c525ac5dddce3373e740ccb85b8e342dc0320f39"
+    tag: "24.04.3.1.1@sha256:c1aa824227ea2b09ddef2ca3561a80282cda61c649b1bbdbbfa343e5a513a5a9"
   cryptpad:
     # providerCategory: "Supplier"
     # providerResponsible: "XWiki"
