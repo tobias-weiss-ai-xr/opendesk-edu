@@ -713,6 +713,16 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-invitation"
     tag: "0.4.0@sha256:bd252758576e1733076c78756f04225ebed73d9c48de22440975ef11dd087caf"
+  umsSelfserviceListener:
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/images/selfservice-listener"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
+    # upstreamMirrorStartFrom: ["0", "3", "2"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-listener"
+    tag: "0.4.0@sha256:0bc0235fd64a19a183f112da73109b54712c2d70fe7fa77c6405beefb7167588"
   umsStackGateway:
     # providerCategory: "Community"
     # providerResponsible: "Univention"
