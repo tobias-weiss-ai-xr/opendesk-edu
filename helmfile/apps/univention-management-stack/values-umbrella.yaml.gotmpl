@@ -1317,6 +1317,21 @@ stack-gateway:
       proxy_set_header X-Forwarded-Port $http_x_forwarded_port;
       proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
 
+
+      {{ if .Values.externalServices.nubus.udmRestApi.enabled }}
+      ## udm-rest-api
+      location /univention/udm/ {
+        # The UDM Rest API does return on some endpoints a lot of headers
+        proxy_busy_buffers_size 128k;
+        proxy_buffers 4 128k;
+        proxy_buffer_size 64k;
+
+        rewrite ^/univention(/udm/.*)$ $1 break;
+        proxy_pass http://ums-udm-rest-api:80;
+      }
+      {{ end }}
+
+
       ## portal-frontend
       # The frontend does not own "/univention/portal" nor
       # "/univention/selfservice", only these two bits
@@ -1419,18 +1434,6 @@ stack-gateway:
       }
 
 
-      ## udm-rest-api
-      location /univention/udm/ {
-        # The UDM Rest API does return on some endpoints a lot of headers
-        proxy_busy_buffers_size 128k;
-        proxy_buffers 4 128k;
-        proxy_buffer_size 64k;
-
-        rewrite ^/univention(/udm/.*)$ $1 break;
-        proxy_pass http://ums-udm-rest-api:80;
-      }
-
-
       ## umc-gateway
       location = /univention/languages.json {
         proxy_pass http://ums-umc-gateway:80;
@@ -1444,7 +1447,13 @@ stack-gateway:
       location /univention/js/ {
         proxy_pass http://ums-umc-gateway:80;
       }
-      location /univention/login/ {
+      location /univention/login/main.js {
+        proxy_pass http://ums-umc-gateway:80;
+      }
+      location /univention/login/LoginDialog.js {
+        proxy_pass http://ums-umc-gateway:80;
+      }
+      location /univention/login/i18n/ {
         proxy_pass http://ums-umc-gateway:80;
       }
       location /univention/management/ {
@@ -1455,12 +1464,13 @@ stack-gateway:
       }
 
 
-      ## umc-server
-      location = /univention/auth {
-        rewrite ^/univention(/.*)$ $1 break;
-        proxy_pass http://ums-umc-server:80;
-        proxy_set_header X-UMC-HTTPS 'on';
-      }
+      ### umc-server
+      ## Do not support local authentication
+      #location = /univention/auth {
+      #  rewrite ^/univention(/.*)$ $1 break;
+      #  proxy_pass http://ums-umc-server:80;
+      #  proxy_set_header X-UMC-HTTPS 'on';
+      #}
       location /univention/logout {
         rewrite ^/univention(/.*)$ $1 break;
         proxy_pass http://ums-umc-server:80;
