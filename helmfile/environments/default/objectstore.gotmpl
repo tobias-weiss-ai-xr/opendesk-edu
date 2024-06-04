@@ -16,12 +16,14 @@ objectstores:
     port: 443
   openproject:
     bucket: "openproject"
+    directUploads: true
+    enableSignatureV4Streaming: true
     endpoint: ""
     region: "eu-west-1"
     secretKey: ""
     username: "openproject_user"
     pathStyle: true
-    useIAMProfile: ""
+    useIamProfile: false
   univentionManagementStack:
     bucket: "ums"
     endpoint: ""
