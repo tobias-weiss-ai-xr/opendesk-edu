@@ -155,12 +155,14 @@ resources:
 
 s3:
   enabled: true
+  directUploads: {{ .Values.objectstores.openproject.directUploads }}
+  enableSignatureV4Streaming: {{ .Values.objectstores.openproject.enableSignatureV4Streaming }}
   endpoint: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
   host: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
-  pathStyle: {{ .Values.objectstores.openproject.pathStyle | quote }}
+  pathStyle: {{ .Values.objectstores.openproject.pathStyle }}
   region: {{ .Values.objectstores.openproject.region | quote }}
   bucketName: {{ .Values.objectstores.openproject.bucket | quote }}
-  use_iam_profile: {{ .Values.objectstores.openproject.useIAMProfile | default "false" | quote }}
+  useIamProfile: {{ .Values.objectstores.openproject.useIamProfile }}
   auth:
     accessKeyId: {{ .Values.objectstores.openproject.username | quote }}
     secretAccessKey: {{ .Values.objectstores.openproject.secretKey | default .Values.secrets.minio.openprojectUser | quote }}
