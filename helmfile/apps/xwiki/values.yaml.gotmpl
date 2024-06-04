@@ -86,10 +86,14 @@ ingress:
   enabled: {{ .Values.ingress.enabled }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   annotations:
-    kubernetes.io/ingress.class: null
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "250m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.xwiki }}"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.xwiki }}"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.xwiki }}"
+    nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.xwiki }}"
+    nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.xwiki }}s"
+    nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.xwiki }}s"
     haproxy-ingress.github.io/headers: "X-Forwarded-Host {{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   hosts:
     - host: "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"

@@ -37,9 +37,9 @@ ingress:
   annotations:
     # Ingress NGINX
     nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
     nginx.ingress.kubernetes.io/server-snippet: |
       # block admin and metrics endpoint from outside by default
       location /cool/getMetrics { deny all; return 403; }
@@ -48,21 +48,21 @@ ingress:
     # NGINX
     nginx.org/websocket-services: "collabora"
     nginx.org/lb-method: "hash $arg_WOPISrc consistent"
-    nginx.org/proxy-read-timeout: "600"
-    nginx.org/proxy-send-timeout: "600"
-    nginx.org/client-max-body-size: "0"
+    nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
     nginx.org/server-snippets: |
       # block admin and metrics endpoint from outside by default
       location /cool/getMetrics { deny all; return 403; }
       location /cool/adminws/ { deny all; return 403; }
       location /browser/dist/admin/admin.html { deny all; return 403; }
     # HAProxy
-    haproxy.org/timeout-tunnel: "3600s"
+    haproxy.org/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
     haproxy.org/backend-config-snippet: |
        balance url_param WOPISrc check_post
        hash-type consistent
     # HAProxy - Community: https://haproxy-ingress.github.io/
-    haproxy-ingress.github.io/timeout-tunnel: "3600s"
+    haproxy-ingress.github.io/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
     haproxy-ingress.github.io/balance-algorithm: "url_param WOPISrc check_post"
     haproxy-ingress.github.io/config-backend: |
       hash-type consistent
