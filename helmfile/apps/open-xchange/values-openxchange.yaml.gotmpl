@@ -92,6 +92,11 @@ appsuite:
       hosts:
         - "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     routes:
+      http-api-routes-appsuite-api:
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.openXchangeAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.openXchangeAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.openXchangeAppSuite }}"
       trailslash:
         enabled: false
   core-mw:

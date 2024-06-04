@@ -124,6 +124,13 @@ apache2:
       {{ .Values.seLinuxOptions.nextcloudApache2 | toYaml | nindent 6 }}
   ingress:
     enabled: {{ .Values.ingress.enabled }}
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.nextcloud }}"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}"
+      nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.nextcloud }}"
+      nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}s"
+      nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}s"
     ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
     host: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
     tls:

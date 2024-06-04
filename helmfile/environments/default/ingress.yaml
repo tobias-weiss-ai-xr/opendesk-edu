@@ -7,4 +7,19 @@ ingress:
   tls:
     enabled: true
     secretName: "opendesk-certificates-tls"
+  parameters:
+    bodySize:
+      collabora: "100M"
+      element: "100M"
+      nextcloud: "100M"
+      openproject: "100M"
+      openXchangeAppSuite: "100M"
+      xwiki: "100M"
+    bodyTimeout:
+      collabora: 600
+      element: 60
+      nextcloud: 600
+      openproject: 60
+      openXchangeAppSuite: 60
+      xwiki: 60
 ...

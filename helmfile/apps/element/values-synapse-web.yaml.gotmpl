@@ -33,6 +33,13 @@ image:
   tag: {{ .Values.images.synapseWeb.tag | quote }}
 
 ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.element }}"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.element }}"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.element }}"
+    nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.element }}"
+    nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.element }}s"
+    nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.element }}s"
   host: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.ingress.enabled }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
