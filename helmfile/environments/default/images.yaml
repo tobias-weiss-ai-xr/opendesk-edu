@@ -263,7 +263,7 @@ images:
     # upstreamMirrorStartFrom: ["13", "1", "1"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/images-mirror/open_desk"
-    tag: "14.1.0@sha256:e01756452b1f284ea16fd987ccad3d0d3202e02c50c0b813e8fa4e18336607c5"
+    tag: "14.1.1@sha256:ce1fabf4d02534990ebb5c934df8fbd227192a529a2e6e81c7feb412bb3eac8b"
   openprojectBootstrap:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -279,7 +279,7 @@ images:
     # upstreamRepository: "library/postgres"
     registry: "registry-1.docker.io"
     repository: "library/postgres"
-    tag: "13@sha256:ba6ef1f07410f29e9ccf0946c3fe17eb7a1466f826c46a30e7629c4f2e29b1d3"
+    tag: "13@sha256:681d00c915f371c152b37d2aa92c318ae5a0e0bfbed0d767ca4a89b5df852e17"
   openxchangeBootstrap:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
