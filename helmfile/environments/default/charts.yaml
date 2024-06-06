@@ -98,7 +98,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-home"
     name: "opendesk-home"
-    version: "1.0.1"
+    version: "1.0.2"
     verify: true
   intercomService:
     # providerCategory: "Supplier"
