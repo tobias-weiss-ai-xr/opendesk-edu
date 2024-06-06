@@ -452,7 +452,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "91", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/element/images-mirror/synapse"
-    tag: "v1.91.2@sha256:1d19508db417bb2b911c8e086bd3dc3b719ee75c6f6194d58af59b4c32b11322"
+    tag: "v1.108.0@sha256:0754a5c372f4cfb5f69f58ad4b70d05bc2e380354f1b0c9101611e9157082712"
   synapseCreateUser:
     # providerCategory: "Community"
     # providerResponsible: "Nordeck"
@@ -478,7 +478,7 @@ images:
     # upstreamRepository: "rapidfort/haproxy-official"
     registry: "registry-1.docker.io"
     repository: "rapidfort/haproxy-official"
-    tag: "2.6.6-bullseye@sha256:bf22cfb1301aae433213f5f8c687bc5d9ecc6b86daf1084be5f7a339bd27cadd"
+    tag: "2.6.15-bullseye@sha256:47b6ca4074347788cb414fbf3db35d0c51e9e47af33be46457f95c750540887c"
   umsDataLoader:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -778,7 +778,7 @@ images:
     # upstreamRepository: "library/nginx"
     registry: "registry-1.docker.io"
     repository: "library/nginx"
-    tag: "1.25.2-bookworm@sha256:9504f3f64a3f16f0eaf9adca3542ff8b2a6880e6abfb13e478cca23f6380080a"
+    tag: "1.27.0-bookworm@sha256:1445eb9c6dc5e9619346c836ef6fbd6a95092e4663f27dcfce116f051cdbd232"
   xwiki:
     # providerCategory: "Supplier"
     # providerResponsible: "XWiki"
