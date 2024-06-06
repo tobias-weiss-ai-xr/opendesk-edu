@@ -23,7 +23,6 @@ global:
     nextcloud: "fs"
     openproject: "project"
     openxchange: "webmail"
-    openxchangeProvisioning: "ox-provisioning"
     synapse: "matrix"
     synapseFederation: "matrix-federation"
     univentionManagementStack: "portal"
