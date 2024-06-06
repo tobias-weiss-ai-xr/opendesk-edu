@@ -121,7 +121,7 @@ images:
     # upstreamRepository: "bitnami/kubectl"
     registry: "registry-1.docker.io"
     repository: "bitnami/kubectl"
-    tag: "1.26.8@sha256:c6902a1fdce0a24c9f93ac8d1f317039b206a4b307d8fc76cab4a92911345757"
+    tag: "1.30.1@sha256:8087ef69a8bf8c88ca3a0f36f75f91c281810f6181698f0c35c3318922bd2ab7"
   jvb:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -149,7 +149,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "4", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-neoboard-widget"
-    tag: "1.14.0@sha256:1a00f33ed5f560e55b06011b2f81696fd8230820f6980edb826768af0e0b41d9"
+    tag: "1.17.0@sha256:f4e711473ba99159c878177f0f9e750fd6d9555b7d8c266ac7040f053be19513"
   matrixNeoChoiceWidget:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -460,7 +460,7 @@ images:
     # upstreamRepository: "alpine/k8s"
     registry: "registry-1.docker.io"
     repository: "alpine/k8s"
-    tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
+    tag: "1.30.0@sha256:d7a11b7032550e992667fd7725b039dcd639270fbceec368d7e66e3d9e41ee15"
   synapseGuestModule:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
