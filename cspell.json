@@ -60,7 +60,9 @@
         "Nordeck",
         "Nubus",
         "Souveräne",
-        "Arbeitsplatz"
+        "Arbeitsplatz",
+        "commandline",
+        "helmfiles"
     ],
     "ignoreWords": [],
     "import": []
