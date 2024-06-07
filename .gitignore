@@ -14,3 +14,10 @@ helmfile/environments/prod/values.yaml.gotmpl
 
 # Ignore editor backup files
 *~
+
+# Ignore ./log directory and *.log files
+logs
+*.log
+
+# Ignore backup files, e.g. created by the script that eases the local chart development
+*.bak
