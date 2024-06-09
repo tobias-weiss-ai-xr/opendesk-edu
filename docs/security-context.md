@@ -170,6 +170,7 @@ This list gives you an overview of templated security settings and if they compl
 | **nextcloud**/opendesk-nextcloud/apache2 | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/exporter | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/php | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
+| **open-xchange**/dovecot | :x: | no | n/a | yes | n/a | n/a | n/a | yes | no ["CHOWN","DAC_OVERRIDE","KILL","NET_BIND_SERVICE","SETGID","SETUID","SYS_CHROOT"] |
 | **open-xchange**/open-xchange/appsuite/core-documentconverter | :x: | no | no | no | yes | 987 | 1000 | yes | yes |
 | **open-xchange**/open-xchange/appsuite/core-guidedtours | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/open-xchange/appsuite/core-imageconverter | :x: | no | no | no | yes | 987 | 1000 | yes | yes |
@@ -196,31 +197,17 @@ This list gives you an overview of templated security settings and if they compl
 | **services**/postgresql | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services**/redis/master | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **univention-management-stack**/opendesk-keycloak-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-guardian-authorization-api | :x: | no | no | no | yes | 1000 | 1000 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-guardian-management-api | :x: | no | no | no | yes | 1000 | 1000 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-guardian-management-ui | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-keycloak | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-keycloak-bootstrap | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-keycloak-extensions/handler | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-keycloak-extensions/proxy | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-ldap-notifier | :x: | no | no | no | no | 0 | 0 | yes | yes |
-| **univention-management-stack**/ums-ldap-server | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-notifications-api | :x: | no | no | no | no | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-open-policy-agent | :x: | no | no | no | yes | 1000 | 1000 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-portal-frontend | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-portal-listener | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-portal-server | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-provisioning/dispatcher | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-provisioning/events-and-consumer-api | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums-provisioning/udm-listener | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-selfservice-listener | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-stack-data-swp | :x: | no | no | no | no | 0 | 0 | yes | yes |
-| **univention-management-stack**/ums-stack-data-ums | :x: | no | no | no | no | 0 | 0 | yes | yes |
-| **univention-management-stack**/ums-stack-gateway | :x: | no | no | no | yes | 1001 | 1001 | yes | yes |
-| **univention-management-stack**/ums-store-dav | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-udm-rest-api | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-umc-gateway | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums-umc-server | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
+| **univention-management-stack**/ums/keycloak | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
+| **univention-management-stack**/ums/keycloak-bootstrap | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
+| **univention-management-stack**/ums/keycloak-extensions/handler | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **univention-management-stack**/ums/keycloak-extensions/proxy | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **univention-management-stack**/ums/ldap-notifier | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
+| **univention-management-stack**/ums/portal-listener | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
+| **univention-management-stack**/ums/selfservice-listener | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
+| **univention-management-stack**/ums/stack-data-swp | :x: | no | no | no | no | 0 | 0 | yes | yes |
+| **univention-management-stack**/ums/stack-gateway | :x: | no | no | no | yes | 1001 | 0 | yes | yes |
+| **univention-management-stack**/ums/umc-gateway | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
+| **univention-management-stack**/ums/umc-server | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
 | **xwiki**/xwiki | :x: | no | no | no | yes | 100 | 101 | yes | yes |
 
 
