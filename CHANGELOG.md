@@ -1,3 +1,37 @@
+# [0.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.7.1...v0.8.0) (2024-06-10)
+
+
+### Bug Fixes
+
+* **ci:** Allow CI to be triggered by API authorized personal access token. ([b95fd11](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b95fd1152a2122de0fbc2b31cacb8a1b1c5917b7))
+* **collabora:** Semi-disable update checker. ([d7a127f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d7a127fe269ddf0347adce692f138eb1a6359508))
+* **collabora:** Update to 24.04.3.1.1. ([5869316](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/58693162e6c2f72ba6254dd0168dea48539b7d43))
+* **docs:** Spell check and streamline. ([4d99bf3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4d99bf3bf085a6f8d4dbdef442fa969150dfff4d))
+* **element:** Bump container images (widgets, community artifacts). ([f856205](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f856205afce914ea62a9e309b9400714f4c4d040))
+* **element:** Bump to v1.11.67. ([a4ff89b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a4ff89b213afef9fd35dd6ab3c54bf0e8e8b20c9))
+* **element:** Update Synapse. ([9fa8ace](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9fa8ace80f9af5d5c96073fe836cf606956c4f43))
+* **helmfile:** Remove unused ox-provisioning hostname. ([e31a0a2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e31a0a258e274274e20aab41c4c757d891bff639))
+* **jitsi:** Update jitsi-keycloak-adapter image to Docker tag v20240314. ([6202bc4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6202bc4719e96c537c67a65a9419aa183edc6d55))
+* **nubus:** Change to new Univention upstream registry. ([d7fbc57](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d7fbc572ca5b3ee4eca31bf50f4e00f257a72b83))
+* **nubus:** Disable UDM REST API routing by default and always disable UMC local login. ([e1e8a7f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e1e8a7f121c41c3f23db4541211d255dfb06591a))
+* **nubus:** Guardian version bump and refactoring. ([2f88752](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2f88752ae6a9df7ff3cb9a3c2d158589f7defb33))
+* **nubus:** Re-add selfservice-listener image configuration. ([af711b0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/af711b0edb05bb96fe2ad7e51d5862ed97043178))
+* **open-xchange:** Set Nubus LDAP attribute to render manager_name in address book. See https://forge.univention.org/bugzilla/show_bug.cgi?id=53741 for reference. ([4f92001](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4f92001d688416133fcfd3415afb5f4bbceb7356))
+* **openproject:** Bump library/postgres image to v16. ([742c293](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/742c293243e5c8165e065b5b53af7bac6647fad1))
+* **openproject:** Bump to 14.1.0, set default timezone on deployment to `Europe/Berlin` and raise default memory limit to 2Gi. ([6e49721](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6e4972107e8eac498ace98217488f4e07fabb6b1))
+* **openproject:** Update Helm chart to v5.1.4. ([75cd077](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/75cd077351c0a892afcd57c835b77206ea90da66))
+* **openproject:** Update to 14.1.1 and bump PostgreSQL 13 image for InitDB. ([bd2d7cf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bd2d7cf748f8cb6b1693056c4a5fc4a60b598acd))
+* **services:** Update `opendesk-home` to v1.0.2 to fix issue with Element `.well-known` ingress collision. ([b0eb28b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b0eb28bc3f577a46021444832e0cc132f6e4b0e1))
+* **univention-management-stack:** Add functional switch to disable deployment information. ([a31c5f5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a31c5f59a68e90ba9e80350ebd5827e7b05d4ef5))
+
+
+### Features
+
+* **element:** Enable Matrix federation via https. ([ecb566f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ecb566f61e9818ff204501730576af360e4e90d0))
+* **helmfile:** Add support for Ingress parameter configuration (proxy-body-size, proxy-read-timeout, proxy-send-timeout). ([dc39b94](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/dc39b94e8824683e54e0f2902e8b4bfe1c43442a))
+* **helmfile:** Create child helmfile for GitOps approach. ([a899699](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a899699e21b1d8da9886a93a2e74442799e23e96))
+* **nubus:** Cleanup Keycloak values. ([f3d8cf0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f3d8cf08efbba1b1dd5969821c3af7603202e67f))
+
 ## [0.7.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.7.0...v0.7.1) (2024-05-21)
 
 
