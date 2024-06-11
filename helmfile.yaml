@@ -5,13 +5,13 @@
 environments:
   dev:
     values:
-      - "helmfile/environments/dev/values.yaml.gotmpl"
+      - "helmfile/environments/dev/*.yaml.gotmpl"
   test:
     values:
-      - "helmfile/environments/test/values.yaml.gotmpl"
+      - "helmfile/environments/test/*.yaml.gotmpl"
   prod:
     values:
-      - "helmfile/environments/prod/values.yaml.gotmpl"
+      - "helmfile/environments/prod/*.yaml.gotmpl"
 ---
 # yamllint disable
 helmfiles:
