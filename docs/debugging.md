@@ -64,7 +64,7 @@ The following example can e.g. be used to debug the `openDesk-Nextcloud-PHP` con
       shareProcessNamespace: true
       containers:
         - name: debugging
-          image: registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:1.0.0
+          image: registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:latest
           command: ["/bin/bash", "-c", "while true; do echo 'This is a temporary container for debugging'; sleep 5 ; done"]
           securityContext:
             capabilities:

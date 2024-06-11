@@ -15,12 +15,16 @@ include:
     ref: "main"
   - local: "/.gitlab/lint/lint-opendesk.yml"
     rules:
-      - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'"
+      - if: >
+            $JOB_OPENDESK_LINTER_ENABLED == 'false' ||
+            $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'
         when: "never"
       - when: "always"
   - local: "/.gitlab/lint/lint-kyverno.yml"
     rules:
-      - if: "$JOB_KYVERNO_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'"
+      - if: >
+            $JOB_OPENDESK_LINTER_ENABLED == 'false' ||
+            $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'
         when: "never"
       - when: "always"
 

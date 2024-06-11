@@ -41,6 +41,13 @@ configuration:
         url: null
         sender_localpart: intercom-service
 
+    smtp:
+      senderAddress: "{{ .Values.localpartNoReply }}@{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}"
+      host: {{ .Values.smtp.host | quote }}
+      port: {{ .Values.smtp.port }}
+      username: {{ .Values.smtp.username | quote }}
+      password: {{ .Values.smtp.password | quote }}
+
     oidc:
       clientId: "opendesk-matrix"
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}

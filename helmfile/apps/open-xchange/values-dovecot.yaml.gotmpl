@@ -15,7 +15,7 @@ imagePullSecrets:
 {{- end }}
 
 dovecot:
-  mailDomain: {{ .Values.global.domain | quote }}
+  mailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   password: {{ .Values.secrets.dovecot.doveadm | quote }}
   ldap:
     enabled: true
@@ -37,8 +37,6 @@ dovecot:
     enabled: true
     ssl: "no"
     host: "postfix:25"
-
-
 
 certificate:
   secretName: {{ .Values.ingress.tls.secretName | quote }}

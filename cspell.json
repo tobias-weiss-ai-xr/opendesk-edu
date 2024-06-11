@@ -67,7 +67,9 @@
         "IMAPS",
         "xwiki",
         "cryptpad",
-        "clamav"
+        "clamav",
+        "templating",
+        "localpart"
     ],
     "ignoreWords": [],
     "import": []

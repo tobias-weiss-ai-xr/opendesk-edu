@@ -69,18 +69,16 @@ def create_or_switch_branch_base_repo():
     return branch
 
 
-def clone_charts_locally(branch):
+def clone_charts_locally(branch, charts):
     charts_clone_path = script_path+'/../../'+branch.replace('/', '_')
     charts_dict = {}
-    remote_dict = {}
+    doublette_dict = {}
     if os.path.isdir(charts_clone_path):
         logging.warning(f"Path {charts_clone_path} already exists, will not clone any charts.")
     else:
         logging.debug(f"creating directory {charts_clone_path} to clone charts into")
         Path(charts_clone_path).mkdir(parents=True, exist_ok=True)
 
-    with open(charts_yaml, 'r') as file:
-        charts = yaml.safe_load(file)
     for chart in charts['charts']:
         if 'opendesk/components/platform-development/charts' in charts['charts'][chart]['repository']:
             tag = charts['charts'][chart]['version']
@@ -88,9 +86,9 @@ def clone_charts_locally(branch):
             repository = charts['charts'][chart]['repository']
             git_url = options.git_hostname+':'+repository
             chart_repo_path = charts_clone_path+'/'+charts['charts'][chart]['name']
-            if git_url in remote_dict:
-                logging.debug(f"{chart} located at {git_url} is already checked out to {remote_dict[git_url]}")
-                charts_dict[chart] = remote_dict[git_url]
+            if git_url in doublette_dict:
+                logging.debug(f"{chart} located at {git_url} is already checked out to {doublette_dict[git_url]}")
+                charts_dict[chart] = doublette_dict[git_url]
             else:
                 if os.path.isdir(chart_repo_path):
                     logging.debug(f"Already exists {chart_repo_path} leaving it unmodified")
@@ -99,8 +97,8 @@ def clone_charts_locally(branch):
                     Repo.clone_from(git_url, chart_repo_path)
                     chart_repo = Repo(path=chart_repo_path)
                     chart_repo.git.checkout('v'+charts['charts'][chart]['version'])
+                doublette_dict[git_url] = chart_repo_path
                 charts_dict[chart] = chart_repo_path
-                remote_dict[git_url] = chart_repo_path
     return charts_dict
 
 
@@ -121,9 +119,8 @@ def get_child_helmfiles():
     return child_helmfiles
 
 
-def process_the_helmfiles(charts_dict):
+def process_the_helmfiles(charts_dict, charts):
     chart_def_prefix = '    chart: "'
-    name_def_prefix = '  - name: "'
     child_helmfiles = get_child_helmfiles()
     for child_helmfile in child_helmfiles:
         child_helmfile_updated = False
@@ -134,23 +131,18 @@ def process_the_helmfiles(charts_dict):
                     for chart_ident in charts_dict:
                         if '.Values.charts.'+chart_ident+'.name' in line:
                             logging.debug(f"found match with {chart_ident} in {line.strip()}")
-                            if name_def_prefix not in line_memory:
-                                sys.exit(f"Script requires `name` definition before the actual `chart` definition. Not the case for '{chart_ident}'")
-                            else:
-                                name = re.search(rf"^{name_def_prefix}(.+)\"", line_memory).group(1)
-                            line = chart_def_prefix+charts_dict[chart_ident]+'/charts/'+name+'" # replaced by local-dev script'+"\n"
+                            line = chart_def_prefix+charts_dict[chart_ident]+'/charts/'+charts['charts'][chart_ident]['name']+'" # replaced by local-dev script'+"\n"
                             child_helmfile_updated = True
                             break
                 output.append(line)
-                line_memory = line
         if child_helmfile_updated:
             child_helmfile_backup = child_helmfile+helmfile_backup_extension
-            logging.debug(f"Updated {child_helmfile}")
             if os.path.isfile(child_helmfile_backup):
                 logging.debug("backup {child_helmfile_backup} already exists, will not create a new one.")
             else:
                 logging.debug(f"creating backup {child_helmfile_backup}.")
                 shutil.copy2(child_helmfile, child_helmfile_backup)
+            logging.debug(f"Updating {child_helmfile}")
             with open(child_helmfile, 'w') as file:
                 file.writelines(output)
 
@@ -172,5 +164,7 @@ if options.revert:
     revert_the_helmfiles()
 else:
     branch = create_or_switch_branch_base_repo()
-    charts_dict = clone_charts_locally(branch)
-    process_the_helmfiles(charts_dict)
+    with open(charts_yaml, 'r') as file:
+        charts = yaml.safe_load(file)
+    charts_dict = clone_charts_locally(branch, charts)
+    process_the_helmfiles(charts_dict, charts)

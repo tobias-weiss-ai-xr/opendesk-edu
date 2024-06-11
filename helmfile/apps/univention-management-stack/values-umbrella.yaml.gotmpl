@@ -613,7 +613,7 @@ stack-data-ums:
     # The openDesk configuration brings its own UMC policies.
     installUmcPolicies: false
     domainname: {{ .Values.global.domain | quote }}
-    externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
+    externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
     hostname: {{ .Values.global.hosts.univentionManagementStack | quote }}
     ldapHost: {{ .Values.ldap.host | quote }}
     ldapBase: {{ .Values.ldap.baseDn | quote }}
@@ -654,7 +654,7 @@ stack-data-swp:
       {{- end }}
 
     externalDomainName: {{ .Values.global.domain | quote }}
-    externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
+    externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
 
     portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain | quote }}
     portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain | quote }}
@@ -1172,7 +1172,7 @@ keycloak-extensions:
       ipProtectionEnable: true
       logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
       newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
-      mailFrom: "noreply@{{ .Values.global.domain }}"
+      mailFrom: "{{ .Values.localpartNoReply }}@{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
