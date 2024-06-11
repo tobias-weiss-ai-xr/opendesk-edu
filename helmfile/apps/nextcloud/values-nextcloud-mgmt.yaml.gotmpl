@@ -78,6 +78,9 @@ configuration:
         value: {{ .Values.smtp.password | quote }}
     host: {{ .Values.smtp.host | quote }}
     port: {{ .Values.smtp.port | quote }}
+    fromAddress: {{ .Values.localpartNoReply | quote }}
+    mailDomain: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+
   serverinfo:
     token: {{ .Values.secrets.nextcloud.metricsToken | quote }}
 
@@ -102,7 +105,7 @@ debug:
 
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudManagement.registry | quote }}
-  repository: "{{ .Values.images.nextcloudManagement.repository }}"
+  repository: {{ .Values.images.nextcloudManagement.repository | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.nextcloudManagement.tag | quote }}
 

@@ -33,9 +33,6 @@ environment:
   OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER: "keycloak"
   OPENPROJECT_PER__PAGE__OPTIONS: "20, 50, 100, 200"
   OPENPROJECT_EMAIL__DELIVERY__METHOD: "smtp"
-  OPENPROJECT_SMTP__AUTHENTICATION: "plain"
-  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
-  OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "peer"
   OPENPROJECT_DEFAULT__COMMENT__SORT__ORDER: "desc"
   # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
   OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.ldap.host | quote }}
@@ -61,13 +58,16 @@ environment:
   OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_PASSWORD: {{ .Values.secrets.openproject.apiAdminPassword | quote }}
   OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
-  OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.domain | quote }}
+  OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   OPENPROJECT_SMTP__USER__NAME: {{ .Values.smtp.username | quote }}
   OPENPROJECT_SMTP__PASSWORD: {{ .Values.smtp.password | quote }}
   OPENPROJECT_SMTP__PORT: {{ .Values.smtp.port | quote }}
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
   OPENPROJECT_SMTP__ADDRESS: {{ .Values.smtp.host | quote }}
-  OPENPROJECT_MAIL__FROM: "do-not-reply@{{ .Values.global.domain }}"
+  OPENPROJECT_SMTP__AUTHENTICATION: "plain"
+  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
+  OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "peer"
+  OPENPROJECT_MAIL__FROM: "{{ .Values.localpartNoReply }}@{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
