@@ -22,7 +22,7 @@ openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s)
 
 - K8s cluster >= 1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
-- Ingress controller (supported are nginx-ingress, HAProxy)
+- Ingress controller (nginx-ingress)
 - [Helm](https://helm.sh/) >= v3.9.0
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v0.157.0**
 - [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
@@ -53,10 +53,11 @@ The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/
 The deployment is intended to use only over HTTPS via a configured FQDN, therefor it is required to have a proper
 configured ingress controller deployed.
 
-**Maintained controllers:**
+**Supported controllers:**
 - [NGINX Ingress Controller](https://github.com/nginxinc/kubernetes-ingress)
-- [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
-- [HAProxy Kubernetes Ingress Controller](https://github.com/haproxytech/kubernetes-ingress)
+
+Note: The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/).
+If you have feedback on that topic, please share it with us.
 
 # Volume provisioner
 
