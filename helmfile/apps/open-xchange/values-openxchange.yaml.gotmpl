@@ -407,9 +407,9 @@ appsuite:
         ca: ""
     resources:
       {{ .Values.resources.openxchangeCoreUIMiddleware | toYaml | nindent 6 }}
-      updater:
+    updater:
       resources:
-        {{ .Values.resources.openxchangeCoreUIMiddlewareUpdater | toYaml | nindent 6 }}
+        {{ .Values.resources.openxchangeCoreUIMiddlewareUpdater | toYaml | nindent 8 }}
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
