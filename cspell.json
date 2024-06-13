@@ -62,7 +62,12 @@
         "Souveräne",
         "Arbeitsplatz",
         "commandline",
-        "helmfiles"
+        "helmfiles",
+        "SMTPS",
+        "IMAPS",
+        "xwiki",
+        "cryptpad",
+        "clamav"
     ],
     "ignoreWords": [],
     "import": []
