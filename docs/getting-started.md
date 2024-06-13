@@ -21,6 +21,9 @@ This documentation should enable you to create your own evaluation instance of o
     * [Container runtime](#container-runtime)
     * [Volumes](#volumes)
   * [Connectivity](#connectivity)
+    * [Ports](#ports)
+      * [Web based user interface](#web-based-user-interface)
+      * [Mail clients](#mail-clients)
     * [Mail/SMTP configuration](#mailsmtp-configuration)
     * [TURN configuration](#turn-configuration)
     * [Certificate issuer](#certificate-issuer)
@@ -29,6 +32,7 @@ This documentation should enable you to create your own evaluation instance of o
   * [Install single app](#install-single-app)
   * [Install single release/chart](#install-single-releasechart)
 * [Access deployment](#access-deployment)
+  * [Using from external repository](#using-from-external-repository)
 * [Uninstall](#uninstall)
 <!-- TOC -->
 
@@ -97,7 +101,7 @@ export DOMAIN=domain.tld
 All available apps and their default value can be found in `helmfile/environments/default/workplace.yaml`.
 
 | Component                   | Name                                | Default | Description                    |
-|-----------------------------|-------------------------------------|---------|--------------------------------|
+| --------------------------- | ----------------------------------- | ------- | ------------------------------ |
 | Certificates                | `certificates.enabled`              | `true`  | TLS certificates               |
 | ClamAV (Distributed)        | `clamavDistributed.enabled`         | `false` | Antivirus engine               |
 | ClamAV (Simple)             | `clamavSimple.enabled`              | `true`  | Antivirus engine               |
@@ -118,7 +122,7 @@ All available apps and their default value can be found in `helmfile/environment
 | PostgreSQL                  | `postgresql.enabled`                | `true`  | Database                       |
 | Redis                       | `redis.enabled`                     | `true`  | Cache Database                 |
 | Univention Management Stack | `univentionManagementStack.enabled` | `true`  | Identity Management & Portal   |
-| XWiki                       | `xwiki.enabled`                     | `true`  | Knowledgebase                  |
+| XWiki                       | `xwiki.enabled`                     | `true`  | Knowledge management           |
 
 Exemplary, Jitsi can be disabled like:
 
@@ -237,9 +241,32 @@ persistence:
 
 ## Connectivity
 
+### Ports
+
+**Note:** If you use `NodePort` for service exposure, you need to check your deployment for the actual ports.
+
+#### Web based user interface
+
+To use the openDesk functionality with its web based user interface you need to publicly expose the following ports:
+
+| Component          | Description             |  Port | Type |
+| ------------------ | ----------------------- | ----: | ---: |
+| Jitsi Video Bridge | ICE Port for video data | 10000 |  UDP |
+
+#### Mail clients
+
+To connect with mail clients like [Thunderbird](https://www.thunderbird.net/), the following ports need public exposure:
+
+| Component          | Description             |  Port | Type |
+| ------------------ | ----------------------- | ----: | ---: |
+| Dovecot            | IMAPS                   |   993 |  TCP |
+|                    | POP3S                   |   995 |  TCP |
+| Postfix            | SMTP                    |    25 |  TCP |
+|                    | SMTPS                   |   587 |  TCP |
+
 ### Mail/SMTP configuration
 
-To use the full potential of the openDesk, you need to set up an SMTP relay which allows to send emails from
+To use the full potential of the openDesk, you need to set up an SMTP relay which allows sending emails from
 the whole subdomain.
 
 ```yaml
