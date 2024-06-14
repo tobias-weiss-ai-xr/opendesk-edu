@@ -1202,9 +1202,6 @@ keycloak-extensions:
       imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     imagePullSecrets: {{ .Values.global.imagePullSecrets }}
     ingress:
-      annotations:
-        nginx.org/proxy-buffer-size: "8k"
-        nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
       paths:
         {{- if .Values.debug.enabled }}
         - pathType: "Prefix"
