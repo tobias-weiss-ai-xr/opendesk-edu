@@ -5,8 +5,8 @@
 .yamllint
 
 # Ignore changes to sample environments
-helmfile/environments/dev/values.yaml.gotmpl
-helmfile/environments/prod/values.yaml.gotmpl
+helmfile/environments/dev/*.yaml.gotmpl
+helmfile/environments/prod/*.yaml.gotmpl
 
 # Ignore in CI generated files
 .kyverno/opendesk.yaml
