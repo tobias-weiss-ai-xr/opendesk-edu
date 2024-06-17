@@ -76,7 +76,9 @@ openDesk certificate management disabled.
 
 # External services
 
-Evaluation the openDesk deployment does not require any external service to start, but features may be limited.
+For development and evaluation of openDesk we bundle some service to start with. Be aware that for production
+deployments you need to make use of your own production grade services, see the
+[external-services.md](./external-services.md) for configuration details.
 
 | Group    | Type                | Version | Tested against        |
 | -------- | ------------------- | ------- | --------------------- |
