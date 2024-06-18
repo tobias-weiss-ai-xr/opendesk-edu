@@ -50,7 +50,7 @@ postfix:
       content:
         - {{ printf "%s %s:%s" .Values.smtp.host .Values.smtp.username .Values.smtp.password | quote }}
   rspamdHost: ""
-  relayHost: {{ printf "[%s]:%d" .Values.smtp.host .Values.smtp.port | quote }}
+  relayHost: {{ if .Values.smtp.host }}{{ printf "[%s]:%d" .Values.smtp.host .Values.smtp.port | quote }}{{ else }}""{{ end }}
   relayNets: {{ .Values.cluster.networking.cidr | quote}}
   smtpSASLAuthEnable: "yes"
   smtpSASLPasswordMaps: "lmdb:/etc/postfix/sasl_passwd.map"
