@@ -279,7 +279,7 @@ images:
     # upstreamRepository: "library/postgres"
     registry: "registry-1.docker.io"
     repository: "library/postgres"
-    tag: "16.3-alpine3.20@sha256:f18f3c509f481e4ddf167c108d11ecb07faca78b5e2204a702a379dee1d84f86"
+    tag: "16.3-alpine3.20@sha256:de3d7b6e4b5b3fe899e997579d6dfe95a99539d154abe03f0b6839133ed05065"
   openxchangeBootstrap:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
