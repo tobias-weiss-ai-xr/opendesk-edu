@@ -208,6 +208,8 @@ ingress:
   ingressClassName: "cilium"
 ```
 
+**Note:** Please check the [requirements.md](./requirements.md) for the supported Ingress controllers.
+
 ### Container runtime
 
 Some apps require specific configuration for the container runtime. You can set your container runtime like `cri-o`,
