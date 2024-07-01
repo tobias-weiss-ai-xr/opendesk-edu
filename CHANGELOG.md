@@ -1,3 +1,27 @@
+## [0.8.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.8.0...v0.8.1) (2024-07-01)
+
+
+### Bug Fixes
+
+* **collabora:** Bump image to 24.04.4.1.1. ([368fe13](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/368fe13ddb080f0c8f42cbd3612a29f818308708))
+* **collabora:** Bump image to 24.04.4.2.1. ([01767d3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/01767d38061259853e4bd8b2eba31d3b04c4e672))
+* **docs:** Add Ports section to getting started. ([c07b25c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c07b25c4b9a702e214373fe08d95827286ebd866))
+* **docs:** Correction regarding the currently supported ingress controller. ([8514908](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/85149086ae70cb85a1718715747985a3da2a7b64))
+* **docs:** Update regarding the currently supported ingress controller. ([064a5ad](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/064a5ad246ea7217c2fb107787228d7aca9b5028))
+* **element:** Provide the internal cluster domain to `synapse-web`. ([a8692d5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a8692d5506dc65895a562423d8ddb7da9078fc3a))
+* **helmfile:** Add script to ease local development of platform charts. ([d8f3e05](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d8f3e05e584116f6196d43e0ea9bb8946ab2e5ab))
+* **helmfile:** Enable SMTP for XWiki and Element/Synapse; Streamline mail sender addresses within platform based on `<localpart>@<component>.<domain>` and allow configuration of `<localpart>`. ([01c5e6b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/01c5e6b359dd5eb42c98e818da301871bea79264))
+* **helmfile:** Include all `.yaml.gotmpl` files for the envs in `environments.yaml`. ([e523434](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e52343440d81c0596177399058b4711cc0d5da67))
+* **helmfile:** Streamline `functional.yaml`. *Upgrade notice:* If you set a non default value for `.Values.portal.enableDeploymentInformation` please change it to `.Values.admin.portal.deploymentInformation.enabled` with this version. ([e89b16a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e89b16a747f95be7661b1fd4f5c90acce638542e))
+* **jitsi:** Update PatchJVB bitnami/kubectl image to 1.30.2. ([6ef3641](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6ef3641d82d88d6fed80652b239bc63115abbf2d))
+* **nubus:** Enable Keycloak's user account console. ([c03e4a5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c03e4a534090dde46363a7cfab718bb307e22621))
+* **nubus:** Remove doublette ingress annotations. ([890b36e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/890b36ecbb8c9311b5048d8d6d50ee5acf00ea61))
+* **open-xchange:** Fixing YAML indentation of updater resources ([0ce346b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0ce346b162feb0bc6fee7f18caee84917117abe1))
+* **openproject:** Bump image to 14.2.0. ([1ad35f1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1ad35f1e12e236607e3830da6d08010eb465b501))
+* **openproject:** Switch DBInit container image to Alpine based version to reduce footprint. ([c90f7c1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c90f7c1742d415d5a787ff5832959e2974b77b83))
+* **openproject:** Update PostgreSQL image for DB init to 16.3. ([45e5699](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/45e569955d09c584490e6826651f7564567c1f9b))
+* **services:** Allow Postfix "relayHost" to be empty. ([7268f60](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7268f607a5839c6e940ce07fa15c1ffec9610d19))
+
 # [0.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.7.1...v0.8.0) (2024-06-10)
 
 
