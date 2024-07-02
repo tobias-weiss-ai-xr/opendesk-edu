@@ -1,4 +1,5 @@
 {{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 */}}
@@ -87,6 +88,24 @@ aio:
     successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"0"{{ end }}
   debug:
     loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
+  {{- if .Values.certificate.selfSigned }}
+  extraEnvVars:
+    - name: "FS_IMPORT_CA_CERTIFICATES"
+      value: "true"
+  {{- end }}
+  {{- if .Values.certificate.selfSigned }}
+  extraVolumes:
+    - name: "trusted-cert-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "ca.crt"
+            path: "ca-certificates.crt"
+  extraVolumeMounts:
+    - name: "trusted-cert-secret-volume"
+      mountPath: "/etc/ssl/certs/ca-certificates.crt"
+      subPath: "ca-certificates.crt"
+  {{- end }}
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloud.registry | quote }}
     repository: {{ .Values.images.nextcloud.repository | quote }}

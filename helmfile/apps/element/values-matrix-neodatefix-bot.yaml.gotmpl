@@ -47,6 +47,22 @@ extraEnvVars:
       secretKeyRef:
         name: "matrix-neodatefix-bot-account"
         key: "access_token"
+{{- if .Values.certificate.selfSigned }}
+  - name: "NODE_EXTRA_CA_CERTS"
+    value: "/etc/ssl/certs/ca-certificates.crt"
+
+extraVolumes:
+  - name: "trusted-cert-secret-volume"
+    secret:
+      secretName: "opendesk-certificates-ca-tls"
+      items:
+        - key: "ca.crt"
+          path: "ca-certificates.crt"
+extraVolumeMounts:
+  - name: "trusted-cert-secret-volume"
+    mountPath: "/etc/ssl/certs/ca-certificates.crt"
+    subPath: "ca-certificates.crt"
+{{- end }}
 
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

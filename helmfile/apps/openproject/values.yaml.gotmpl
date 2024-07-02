@@ -87,6 +87,23 @@ environment:
   {{- if .Values.enterprise.openproject.token }}
   OPENPROJECT_ENTERPRISE__TOKEN: {{ .Values.enterprise.openproject.token | quote }}
   {{- end }}
+  {{- if .Values.certificate.selfSigned }}
+  SSL_CERT_FILE: "/etc/ssl/certs/ca-certificates.crt"
+  {{- end }}
+
+{{- if .Values.certificate.selfSigned }}
+extraVolumes:
+  - name: "trusted-cert-secret-volume"
+    secret:
+      secretName: "opendesk-certificates-ca-tls"
+      items:
+        - key: "ca.crt"
+          path: "ca-certificates.crt"
+extraVolumeMounts:
+  - name: "trusted-cert-secret-volume"
+    mountPath: "/etc/ssl/certs/ca-certificates.crt"
+    subPath: "ca-certificates.crt"
+{{- end }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openproject.registry | quote }}

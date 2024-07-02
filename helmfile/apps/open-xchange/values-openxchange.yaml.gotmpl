@@ -287,6 +287,30 @@ appsuite:
       com.openexchange.smime.test: "true"
       # Other
       com.openexchange.secret.secretSource: "\"<user-id> + '@' + <context-id> + '/' + <random>\""
+      {{- if .Values.certificate.selfSigned }}
+      # Selfsigned
+      com.openexchange.net.ssl.default.truststore.enabled: "false"
+      com.openexchange.net.ssl.custom.truststore.enabled: "true"
+      com.openexchange.net.ssl.custom.truststore.path: "/etc/ssl/certs/truststore.jks"
+      com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password | quote }}
+      {{- end }}
+    {{- if .Values.certificate.selfSigned }}
+    extraEnv:
+    - name: "JAVA_OPTS_APPEND"
+      value: {{ printf "%s %s=%s" "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks -Djavax.net.ssl.trustStoreType=jks" "-Djavax.net.ssl.trustStorePassword" (.Values.secrets.certificates.password | quote) | quote }}
+    extraVolumes:
+      - name: "trusted-cert-secret-volume"
+        secret:
+          secretName: "opendesk-certificates-ca-tls"
+          items:
+            - key: "truststore.jks"
+              path: "truststore.jks"
+            - key: "ca.crt"
+              path: "ca-certificates.crt"
+    extraMounts:
+      - name: "trusted-cert-secret-volume"
+        mountPath: "/etc/ssl/certs/"
+    {{- end }}
     secretProperties:
       com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppsuite.cookieHashSalt | quote }}
       com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppsuite.sessiondEncryptionKey | quote }}
