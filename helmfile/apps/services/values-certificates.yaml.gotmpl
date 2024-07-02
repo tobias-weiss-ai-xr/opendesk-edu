@@ -56,5 +56,13 @@ issuerRef:
 cleanup:
   keepRessourceOnDelete: {{ .Values.debug.cleanup.keepRessourceOnDelete }}
 
+selfSigned:
+  enabled: {{ .Values.certificate.selfSigned }}
+  keystores:
+    jks:
+      enabled: true
+      password:
+        value: {{ .Values.secrets.certificates.password | quote }}
+
 wildcard: {{ .Values.certificate.wildcard }}
 ...

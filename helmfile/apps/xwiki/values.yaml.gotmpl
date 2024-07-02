@@ -11,6 +11,14 @@ image:
 
 imagePullSecrets: {{ .Values.global.imagePullSecrets }}
 
+
+{{- if .Values.certificate.selfSigned }}
+javaOpts:
+  - "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks"
+  - "-Djavax.net.ssl.trustStoreType=jks"
+  - {{ printf "%s=%s" "-Djavax.net.ssl.trustStorePassword" .Values.secrets.certificates.password | quote }}
+{{- end }}
+
 externalDB:
   password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
   database: {{ .Values.databases.xwiki.name | quote }}
@@ -198,5 +206,20 @@ service:
 
 volumePermissions:
   enabled: true
+
+{{- if .Values.certificate.selfSigned }}
+extraVolumes:
+  - name: "trusted-cert-secret-volume"
+    secret:
+      secretName: "opendesk-certificates-ca-tls"
+      items:
+        - key: "truststore.jks"
+          path: "truststore.jks"
+        - key: "ca.crt"
+          path: "ca-certificates.crt"
+extraVolumeMounts:
+  - name: "trusted-cert-secret-volume"
+    mountPath: "/etc/ssl/certs"
+{{- end }}
 
 ...

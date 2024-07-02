@@ -13,3 +13,4 @@ The following enhanced configuration use cases are described in separate documen
 - [Federation with external identity provider](./enhanced-configuration/idp-federation.md)
 - [Matrix federation](./enhanced-configuration/matrix-federation.md)
 - [Groupware migration from M365 to openDesk](./enhanced-configuration/groupware-migration.md)
+- [Self-signed certificate and custom Certificate Authority (CA)](enhanced-configuration/self-signed-certificates.md)

@@ -74,7 +74,9 @@
         "filestore",
         "trashbin",
         "bootstrap",
-        "configurability"
+        "configurability",
+        "selfsigned",
+        "truststore"
     ],
     "ignoreWords": [],
     "import": []

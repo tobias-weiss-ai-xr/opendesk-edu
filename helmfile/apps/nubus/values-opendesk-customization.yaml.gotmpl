@@ -287,6 +287,38 @@ nubusPortalConsumer:
       type: "RuntimeDefault"
     seLinuxOptions:
       {{ .Values.seLinuxOptions.umsPortalConsumer | toYaml | nindent 6 }}
+  {{- if .Values.certificate.selfSigned }}
+  extraVolumes:
+    - name: "trusted-cert-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "ca.crt"
+            path: "ca-certificates.crt"
+          - key: "ca.crt"
+            path: "cacert.pem"
+  extraVolumeMounts:
+    - name: "trusted-cert-secret-volume"
+      mountPath: "/etc/ssl/certs/ca-certificates.crt"
+      subPath: "ca-certificates.crt"
+  waitForDependency:
+    extraVolumeMounts:
+      - name: "trusted-cert-secret-volume"
+        readOnly: true
+        mountPath: "/etc/ssl/certs/ca-certificates.crt"
+        subPath: "ca-certificates.crt"
+      - name: "trusted-cert-secret-volume"
+        readOnly: true
+        mountPath: "/usr/local/lib/python3.7/dist-packages/certifi/cacert.pem"
+        subPath: "cacert.pem"
+    extraEnvVars:
+      - name: "REQUESTS_CA_BUNDLE"
+        value: "/etc/ssl/certs/ca-certificates.crt"
+      - name: "DEFAULT_CA_BUNDLE_PATH"
+        value: "/etc/ssl/certs/ca-certificates.crt"
+      - name: "SSL_CERT_FILE"
+        value: "/etc/ssl/certs/ca-certificates.crt"
+  {{- end }}
 
 nubusUdmListener:
   containerSecurityContext:
@@ -333,6 +365,34 @@ nubusPortalServer:
   replicaCount: {{ .Values.replicas.umsPortalServer }}
   resources:
     {{ .Values.resources.umsPortalServer | toYaml | nindent 4 }}
+  {{- if .Values.certificate.selfSigned }}
+  extraVolumes:
+    - name: "trusted-cert-crt-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "ca.crt"
+            path: "ca-certificates.crt"
+          - key: "ca.crt"
+            path: "cacert.pem"
+  extraVolumeMounts:
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/etc/ssl/certs/ca-certificates.crt"
+      subPath: "ca-certificates.crt"
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/usr/local/lib/python3.7/dist-packages/certifi/cacert.pem"
+      subPath: "cacert.pem"
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/usr/lib/python3/dist-packages/botocore/cacert.pem"
+      subPath: "cacert.pem"
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/usr/lib/python3/dist-packages/certifi/cacert.pem"
+      subPath: "cacert.pem"
+  {{- end }}
 
 nubusLdapNotifier:
   containerSecurityContext:

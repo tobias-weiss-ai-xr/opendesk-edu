@@ -28,6 +28,25 @@ containerSecurityContext:
   seLinuxOptions:
     {{ .Values.seLinuxOptions.jitsiKeycloakAdapter | toYaml | nindent 4 }}
 
+
+{{- if .Values.certificate.selfSigned }}
+extraEnvVars:
+  - name: "DENO_CERT"
+    value: "/etc/ssl/certs/ca-certificates.crt"
+
+extraVolumes:
+  - name: "trusted-cert-secret-volume"
+    secret:
+      secretName: "opendesk-certificates-ca-tls"
+      items:
+        - key: "ca.crt"
+          path: "ca-certificates.crt"
+extraVolumeMounts:
+  - name: "trusted-cert-secret-volume"
+    mountPath: "/etc/ssl/certs/ca-certificates.crt"
+    subPath: "ca-certificates.crt"
+{{- end }}
+
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
 

@@ -161,6 +161,35 @@ minio:
 
 # Nubus services which use customer supplied services
 keycloak:
+  {{- if .Values.certificate.selfSigned }}
+  extraVolumes:
+    - name: "trusted-cert-crt-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "ca.crt"
+            path: "ca-certificates.crt"
+    - name: "trusted-cert-jks-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "truststore.jks"
+            path: "truststore.jks"
+  extraVolumeMounts:
+    - name: "trusted-cert-crt-secret-volume"
+      mountPath: "/etc/ssl/certs/ca-certificates.crt"
+      subPath: "ca-certificates.crt"
+    - name: "trusted-cert-jks-secret-volume"
+      mountPath: "/etc/ssl/certs/truststore.jks"
+      subPath: "truststore.jks"
+  extraEnvVars:
+    - name: "KC_HTTPS_TRUST_STORE_FILE"
+      value: "/etc/ssl/certs/truststore.jks"
+    - name: "KC_HTTPS_TRUST_STORE_PASSWORD"
+      value: {{ .Values.secrets.certificates.password | quote }}
+    - name: "KC_HTTPS_TRUST_STORE_TYPE"
+      value: "jks"
+  {{- end }}
   keycloak:
     auth:
       username: "kcadmin"
