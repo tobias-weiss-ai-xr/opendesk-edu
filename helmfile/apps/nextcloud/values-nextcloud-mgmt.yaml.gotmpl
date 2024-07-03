@@ -80,6 +80,11 @@ configuration:
     port: {{ .Values.smtp.port | quote }}
     fromAddress: {{ .Values.localpartNoReply | quote }}
     mailDomain: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+  quota:
+    default: "{{ .Values.filestore.quota.default }} GB"
+    retentionObligation:
+      trashbin: {{ .Values.filestore.nextcloud.retentionObligation.trashbin | quote }}
+      versions: {{ .Values.filestore.nextcloud.retentionObligation.versions | quote }}
 
   serverinfo:
     token: {{ .Values.secrets.nextcloud.metricsToken | quote }}
