@@ -10,11 +10,11 @@ This section covers the internal system requirements as well as external service
 <!-- TOC -->
 * [Overview](#overview)
 * [Component integration](#component-integration)
-  * [Intercom Service (ICS)](#intercom-service-ics)
+  * [Intercom Service / Silent Login](#intercom-service--silent-login)
   * [Filepicker](#filepicker)
   * [Central Navigation](#central-navigation)
-  * [(Read \& write) Central contacts](#read--write-central-contacts)
-  * [OpenProject file store](#openproject-file-store)
+  * [Central Contacts](#central-contacts)
+  * [File Store (OpenProject -\> Nextcloud)](#file-store-openproject---nextcloud)
 * [Identity data flows](#identity-data-flows)
 * [Provisioning](#provisioning)
 <!-- TOC -->
@@ -56,58 +56,91 @@ Some use cases require inter component integration.
 
 ```mermaid
 flowchart TD
-  OXAppSuiteFrontend-->|SilentLogin, Filepicker, CentralNavigation|IntercomService
-  Element-->|CentralNavigation|IntercomService
-  IntercomService-->|SilentLogin, TokenExchange|IdP
-  IntercomService-->|Filepicker|Nextcloud
-  IntercomService-->|CentralNavigation|Portal
-  OXAppSuiteBackend-->|Filepicker|Nextcloud
-  Nextcloud-->|CentralNavigation|Portal
-  OpenProject-->|CentralNavigation|Portal
-  OpenProject-->|File store|Nextcloud
-  XWiki-->|CentralNavigation|Portal
-  Nextcloud-->|CentralContacts|OXAppSuiteBackend
-  OXAppSuiteFrontend-->|Filepicker|OXAppSuiteBackend
+  OX-AppSuite_Frontend-->|Silent Login, Filepicker, Central Navigation|Intercom_Service
+  Element-->|Silent Login, Central Navigation|Intercom_Service
+  Intercom_Service-->|Silent Login, Token Exchange|IdP
+  Intercom_Service-->|Filepicker|Nextcloud
+  Intercom_Service-->|Central Navigation|Portal
+  OX-AppSuite_Backend-->|Filepicker|Nextcloud
+  Nextcloud-->|Central Navigation|Portal
+  OpenProject-->|Central Navigation|Portal
+  OpenProject-->|File Store|Nextcloud
+  XWiki-->|Central Navigation|Portal
+  Nextcloud-->|Central Contacts|OX-AppSuite_Backend
+  OX-AppSuite_Frontend-->|Filepicker|OX-AppSuite_Backend
 ```
 
-## Intercom Service (ICS)
+Most details can be found in the upstream documentation that is linked in the respective sections.
 
-The Univention Intercom Service's role is to enable cross-application integration based on browser interaction.
-Handling authentication when the frontend of an application is using the API from another application is often a
+## Intercom Service / Silent Login
+
+The Intercom Service's role is to enable cross-application integration based on the user's browser interaction as handling
+authentication when the frontend of an application has to call the API from another application is often a
 challenge.
-For more details on the ICS please refer to its own [doc](./components/intercom-service.md).
 
-To establish a session with the Intercom Service, the application that wants to use the ICS must initiate a silent
-login.
+To establish a session with the Intercom Service an application can use the silent login feature within an iframe.
 
-Currently only OX AppSuite is using the frontend-based integration, and therefore it is right now the only consumer of
-the ICS API.
+Currently only OX AppSuite and Element are using the frontend based integration.
+
+**Links**
+- [Intercom Service upstream documentation](https://docs.software-univention.de/intercom-service/latest/index.html).
 
 ## Filepicker
 
-The Nextcloud filepicker which is integrated into the OX AppSuite allows you to add attachments or links to files from
-and saving attachments to Nextcloud.
+The Nextcloud filepicker is integrated into the OX AppSuite supporting the following use cases against the respective openDesk instance's Nextcloud:
+- Attaching files from Nextcloud to emails.
+- Adding links of Nextcloud files to emails.
+- Saving attachments from emails into Nextcloud.
+- Attaching files from Nextcloud to calendar entries.
 
-The filepicker is using frontend and backend based integration.
-Frontend-based integration means that OX AppSuite in the browser is communicating with ICS.
-While using backend-based integration, OX AppSuite middleware is communicating with Nextcloud, which is especially used
-when adding a file to an email or storing a file into Nextcloud.
+The filepicker is using frontend and backend based integration:
+- For frontend based integration the OX AppSuite frontend uses the Intercom Service.
+- Backend based integration is coming from OX AppSuite middleware. The middleware is communicating directly with Nextcloud,
+which is used when adding a file to an email or storing a file into Nextcloud, to avoid passing these files through the user's browser.
+
+**Links**
+- [OX AppSuite Nextcloud Integration upstream documentation](https://gitlab.open-xchange.com/extensions/nextcloud-integration/-/tree/main/documentation).
 
 ## Central Navigation
 
-Central navigation is based on an API endpoint in the portal that provides the contents of the portal for a user to
-allow components to render the menu showing all available SWP applications for the user.
+Central navigation is based on an API endpoint in the Nubus portal that returns a JSON containing the contents of the portal for
+a given user. The response from the API endpoint is used in the openDesk applications to render the central navigation.
 
-## (Read & write) Central contacts
+The API can be called by
+- frontend services through the Intercom Service's `/navigation.json` endpoint or
+- backend services directly at the portal's `/univention/portal/navigation.json` endpoint.
 
-Open-Xchange App Suite is used to manage contacts within openDesk. There is an API in the AppSuite that is being used by
-Nextcloud to lookup contacts as well as to create contacts. This is maybe done when a file is shared with a not yet
-available personal contact.
+The central navigation expects the API caller to present a shared secret for authentication and the username for whom the portal
+contents should be returned for.
 
-## OpenProject file store
+A `curl` based request returning the navigation contents looks like this:
 
-By default, Nextcloud is a configured option for storing attachments in OpenProject.
-The file store can be enabled on a per-project level in OpenProject's project admin section.
+```
+curl 'https://portal.<DOMAIN>/univention/portal/navigation.json?base=https%3A//portal.<DOMAIN>&language=de-DE' -u "<USERNAME>:<SHARED_SECRET>"
+```
+
+## Central Contacts
+
+OX App Suite is managing contacts in openDesk. Therefore Nextcloud's PHP backend is using the OX AppSuite's middleware Contacts API to
+- create a new contact in the user's contacts folder when a file is shared with a yet unknown email address.
+- retrieve contacts from the user's contacts folder to support search-as-you-type when starting to share a file.
+
+**Links:**
+- Currently used [OX Contacts API (deprecated)](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Contacts).
+- New [OX Addressbooks API](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Addressbooks) the Central Contacts integration will switch to.
+
+## File Store (OpenProject -> Nextcloud)
+
+While OpenProject allows you to attach files to work packages directly, it is often preferred that the files are
+stored within Nextcloud or to link an existing file from your openDesk Nextcloud to a work package.
+
+Therefore openDesk pre-configures the trust between the openDesk instance's OpenProject and Nextcloud during the `openproject-boostrap` deployment step. As prerequisite for that openDesk's Nextcloud contains the `integration_openproject` app.
+
+The file store still needs to be enabled on a per-project level in OpenProject's project admin section.
+
+**Links:**
+- [OpenProject's documentation on Nextcloud integration](https://www.openproject.org/docs/system-admin-guide/integrations/nextcloud/)
+- [OpenProject Integration Nextcloud app](https://apps.nextcloud.com/apps/integration_openproject)
 
 # Identity data flows
 

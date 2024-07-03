@@ -69,7 +69,11 @@
         "cryptpad",
         "clamav",
         "templating",
-        "localpart"
+        "localpart",
+        "Addressbooks",
+        "filestore",
+        "trashbin",
+        "bootstrap"
     ],
     "ignoreWords": [],
     "import": []
