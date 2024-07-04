@@ -106,7 +106,7 @@ containerSecurityContext:
     {{ .Values.seLinuxOptions.nextcloudManagement | toYaml | nindent 4 }}
 
 debug:
-  loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"1"{{ end }}
+  loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
 
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudManagement.registry | quote }}
