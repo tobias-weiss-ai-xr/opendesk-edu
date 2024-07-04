@@ -4,6 +4,16 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 objectstores:
+  migrations:
+    bucket: "migrations"
+    endpoint: ""
+    region: "eu-west-1"
+    secretKey: ""
+    username: "migration_user"
+    storageClass: "STANDARD"
+    useSSL: true
+    pathStyle: true
+    port: 443
   nextcloud:
     bucket: "nextcloud"
     endpoint: ""

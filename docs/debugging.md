@@ -52,7 +52,7 @@ Below you will find some wrap-up notes when it comes to debugging openDesk by ad
 
 You can add a container by editing and updating an existing deployment, which is quite comfortable with tools like [Lens](https://k8slens.dev/).
 
-- Select the container you want to make use of as debugging container, in the example below it's `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:1.0.0`.
+- Select the container you want to make use of as debugging container, in the example below it's `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:latest`.
 - Ensure the `shareProcessNamespace` option is enabled for the Pod.
 - Reference the selected container within the `containers` array of the deployment.
 - In case you want to access another containers filesystem, ensure the user/group settings of both containers match.
