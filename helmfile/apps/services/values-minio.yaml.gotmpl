@@ -89,16 +89,43 @@ provisioning:
   extraCommands:
     - "mc anonymous set download provisioning/ums/portal-assets"
   buckets:
+    - name: {{ .Values.objectstores.migrations.bucket | quote }}
+      versioning: false
+      withLock: false
+    - name: {{ .Values.objectstores.nextcloud.bucket | quote }}
+      versioning: true
+      withLock: false
     - name: {{ .Values.objectstores.openproject.bucket | quote }}
       versioning: true
       withLock: false
     - name: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
       versioning: false
       withLock: false
-    - name: {{ .Values.objectstores.nextcloud.bucket | quote }}
-      versioning: true
-      withLock: false
   policies:
+    - name: "migrations-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::migrations"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::migrations/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "nextcloud-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::nextcloud"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::nextcloud/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
     - name: "openproject-bucket-policy"
       statements:
         - resources:
@@ -123,19 +150,19 @@ provisioning:
           effect: "Allow"
           actions:
             - "s3:*"
-    - name: "nextcloud-bucket-policy"
-      statements:
-        - resources:
-            - "arn:aws:s3:::nextcloud"
-          effect: "Allow"
-          actions:
-            - "s3:*"
-        - resources:
-            - "arn:aws:s3:::nextcloud/*"
-          effect: "Allow"
-          actions:
-            - "s3:*"
   users:
+    - username: {{ .Values.objectstores.migrations.username | quote }}
+      password: {{ .Values.secrets.minio.migrationsUser | quote }}
+      disabled: false
+      policies:
+        - "migrations-bucket-policy"
+      setPolicies: true
+    - username: {{ .Values.objectstores.nextcloud.username | quote }}
+      password: {{ .Values.secrets.minio.nextcloudUser | quote }}
+      disabled: false
+      policies:
+        - "nextcloud-bucket-policy"
+      setPolicies: true
     - username: {{ .Values.objectstores.openproject.username | quote }}
       password: {{ .Values.secrets.minio.openprojectUser | quote }}
       disabled: false
@@ -147,12 +174,6 @@ provisioning:
       disabled: false
       policies:
         - "ums-bucket-policy"
-      setPolicies: true
-    - username: {{ .Values.objectstores.nextcloud.username | quote }}
-      password: {{ .Values.secrets.minio.nextcloudUser | quote }}
-      disabled: false
-      policies:
-        - "nextcloud-bucket-policy"
       setPolicies: true
   resources:
     {{ .Values.resources.minio | toYaml | nindent 4 }}
