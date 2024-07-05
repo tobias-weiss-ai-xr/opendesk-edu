@@ -36,9 +36,11 @@ stages:
   - "env-cleanup"
   - "env"
   - "pre-services-deploy"
+  - "migrations-pre"
   - "basic-services-deploy"
   - "component-deploy-stage-1"
   - "component-deploy-stage-2"
+  - "migrations-post"
   - "lint"
   - "tests"
   - "env-stop"
@@ -73,6 +75,12 @@ variables:
       - "no"
   DEPLOY_ALL_COMPONENTS:
     description: "Enable all component deployment (overwrites 'no' setting on component level)."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  DEPLOY_MIGRATIONS:
+    description: "Deploy K8s job for migrations (pre & post)."
     value: "no"
     options:
       - "yes"
@@ -208,6 +216,7 @@ env-cleanup:
         done
         kubectl delete pvc --all --namespace ${NAMESPACE};
         kubectl delete jobs --all --namespace ${NAMESPACE};
+        kubectl delete configmaps --all --namespace ${NAMESPACE};
       else
         helmfile destroy --namespace ${NAMESPACE};
       fi
@@ -249,6 +258,30 @@ policies-deploy:
   variables:
     COMPONENT: "services"
     ADDITIONAL_ARGS: "-l name=opendesk-otterize"
+
+migrations-pre:
+  stage: "migrations-pre"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_MIGRATIONS != "no")
+      when: "on_success"
+  variables:
+    COMPONENT: "migrations-pre"
+
+migrations-post:
+  stage: "migrations-post"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_MIGRATIONS != "no")
+      when: "on_success"
+  variables:
+    COMPONENT: "migrations-post"
 
 services-deploy:
   stage: "basic-services-deploy"

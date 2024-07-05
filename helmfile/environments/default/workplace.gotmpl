@@ -1,0 +1,76 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+#
+# Note: Currently only single namespace deployments are supported.
+---
+certificates:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+clamavDistributed:
+  enabled: false
+  namespace: {{ env "NAMESPACE" | quote }}
+clamavSimple:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+collabora:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+cryptpad:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+dovecot:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+element:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+home:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+intercom:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+jitsi:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+mariadb:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+memcached:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+migrations:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+minio:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+nextcloud:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+openproject:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+oxAppsuite:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+oxConnector:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+postfix:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+postgresql:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+redis:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+univentionManagementStack:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+xwiki:
+  enabled: true
+  namespace: {{ env "NAMESPACE" | quote }}
+...

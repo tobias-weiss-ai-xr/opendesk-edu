@@ -198,6 +198,14 @@ images:
     registry: "registry-1.docker.io"
     repository: "bitnami/memcached"
     tag: "1.6.21-debian-11-r107@sha256:247ec29efd6030960047a623aef025021154662edf6b6d6e88c97936f164d99d"
+  migrations:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
+    tag: "1.0.2@sha256:fbe21b4e2a276d2c5d052c1bb52158debfcc146188e654661001d4ff45b1b453"
   milter:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -253,7 +261,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-keycloak-bootstrap"
-    tag: "1.0.5@sha256:76ccd9a74ae2c2dabb6beaa0192c15b9c06763abbd632cd0f8db68e5d8d5883c"
+    tag: "1.1.0@sha256:20e885e2f2cb19e4b45adfdd6f1622ea888fe26621a0a3ace12c074497ac04aa"
   openproject:
     # providerCategory: "Supplier"
     # providerResponsible: "OpenProject"
