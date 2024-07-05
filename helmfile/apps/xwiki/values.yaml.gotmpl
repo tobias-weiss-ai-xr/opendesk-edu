@@ -81,6 +81,7 @@ customConfigs:
     workplaceServices.navigationEndpoint: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
     workplaceServices.base: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
     workplaceServices.portalSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+    openoffice.serverType: "0"
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}
