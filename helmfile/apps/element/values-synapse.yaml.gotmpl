@@ -52,6 +52,9 @@ configuration:
       clientId: "opendesk-matrix"
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}
       issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+      scopes:
+        - "openid"
+        - "opendesk-matrix-scope"
 
     turn:
       sharedSecret: {{ .Values.turn.credentials | quote }}

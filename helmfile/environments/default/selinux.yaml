@@ -30,6 +30,7 @@ seLinuxOptions:
   matrixNeoDateFixWidget: ~
   matrixUserVerificationService: ~
   memcached: ~
+  migrations: ~
   milter: ~
   minio: ~
   nextcloudApache2: ~

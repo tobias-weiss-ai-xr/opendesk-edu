@@ -1,0 +1,59 @@
+{{/*
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: {{ .Values.global.domain | quote }}
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+cleanup:
+  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
+
+migrations:
+  runId: 1
+  currentOdRelease: {{ .Values.global.systemInformation.releaseVersion | quote }}
+  namespace: {{ .Values.migrations.namespace | quote }}
+  loglevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
+  failOnUnexpectedState: true
+  credentials:
+    keycloakAdminUsername: "kcadmin"
+    keycloakAdminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
+  urls:
+    keycloakBase: "http://ums-keycloak.{{ .Values.univentionManagementStack.namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  privileged: false
+  runAsUser: 1000
+  runAsGroup: 1000
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.migrations | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.migrations.registry | quote }}
+  repository: {{ .Values.images.migrations.repository | quote }}
+  tag: {{ .Values.images.migrations.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy |quote }}
+
+job:
+  enabled: true
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+  fsGroupChangePolicy: "OnRootMismatch"
+
+...

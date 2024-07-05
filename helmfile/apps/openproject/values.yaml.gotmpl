@@ -132,7 +132,7 @@ openproject:
     host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     identifier: "opendesk-openproject"
     provider: "keycloak"
-    scope: "[openid,opendesk]"
+    scope: "[openid,opendesk-openproject-scope]"
     secret: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
     tokenEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
     userinfoEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/userinfo"

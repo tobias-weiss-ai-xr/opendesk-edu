@@ -192,6 +192,16 @@ charts:
     name: "memcached"
     version: "6.7.1"
     verify: true
+  migrations:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-migrations"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-migrations"
+    name: "opendesk-migrations"
+    version: "1.0.1"
+    verify: true
   minio:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -240,7 +250,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap"
     name: "opendesk-keycloak-bootstrap"
-    version: "1.1.0"
+    version: "2.1.0"
     verify: true
   openproject:
     # providerCategory: "Supplier"

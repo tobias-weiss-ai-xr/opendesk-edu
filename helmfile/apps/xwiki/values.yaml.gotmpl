@@ -72,7 +72,7 @@ customConfigs:
     oidc.endpoint.userinfo.method: "GET"
     oidc.logoutMechanism: "rpInitiated"
     oidc.provider: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
-    oidc.scope: "openid,profile,email,address,opendesk"
+    oidc.scope: "openid,opendesk-xwiki-scope"
     oidc.secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
     oidc.skipped: false
     oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
