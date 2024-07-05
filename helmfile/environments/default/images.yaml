@@ -788,5 +788,5 @@ images:
     # upstreamMirrorStartFrom: ["0", "12"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/xwiki"
-    tag: "0.17-mariadb-jetty-alpine@sha256:9eb67520774c3022aa4485ce348be477f358263b716e647cacd057da3aca9739"
+    tag: "0.18-mariadb-jetty-alpine@sha256:28493067a218fcdbe1a6db52a65b4db3c3201caf10d7ae3f329663884d7d4c34"
 ...
