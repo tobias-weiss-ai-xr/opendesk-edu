@@ -76,6 +76,8 @@ postfix:
   virtualMailboxDomains: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   virtualTransport: "lmtps:dovecot:24"
 
+podAnnotations: {}
+
 replicaCount: {{ .Values.replicas.postfix }}
 
 resources:

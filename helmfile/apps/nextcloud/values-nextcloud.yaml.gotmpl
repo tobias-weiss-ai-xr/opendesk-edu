@@ -32,6 +32,7 @@ exporter:
     repository: "{{ .Values.images.nextcloudExporter.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudExporter.tag | quote }}
+  podAnnotations: {}
   prometheus:
     serviceMonitor:
       enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
@@ -91,6 +92,7 @@ php:
     repository: "{{ .Values.images.nextcloudPHP.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudPHP.tag | quote }}
+  podAnnotations: {}
   prometheus:
     serviceMonitor:
       enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
@@ -142,6 +144,7 @@ apache2:
     repository: {{ .Values.images.nextcloudApache2.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudApache2.tag | quote }}
+  podAnnotations: {}
   replicaCount: {{ .Values.replicas.nextcloudApache2 }}
   resources:
     {{ .Values.resources.nextcloudApache2 | toYaml | nindent 4 }}

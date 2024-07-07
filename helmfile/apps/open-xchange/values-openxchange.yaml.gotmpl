@@ -27,6 +27,7 @@ nextcloud-integration-ui:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
   {{- end }}
+  podAnnotations: {}
   replicaCount: {{ .Values.replicas.openxchangeNextcloudIntegrationUI }}
   resources:
     {{ .Values.resources.openxchangeNextcloudIntegrationUI | toYaml | nindent 4 }}
@@ -51,12 +52,14 @@ public-sector-ui:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangePublicSectorUI.registry | quote }}
     repository: {{ .Values.images.openxchangePublicSectorUI.repository | quote }}
     tag: {{ .Values.images.openxchangePublicSectorUI.tag | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
   {{- end }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   replicaCount: {{ .Values.replicas.openxchangePublicSectorUI }}
+  podAnnotations: {}
   resources:
     {{ .Values.resources.openxchangePublicSectorUI | toYaml | nindent 4 }}
   securityContext:
@@ -119,6 +122,7 @@ appsuite:
     jolokiaLogin: "jolokia"
     jolokiaPassword: {{ .Values.secrets.oxAppsuite.jolokiaPassword | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
+    podAnnotations: {}
     serviceAccount:
       create: true
     features:
@@ -138,6 +142,7 @@ appsuite:
         tag: {{ .Values.images.openxchangeGotenberg.tag | quote }}
         pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
       replicaCount: {{ .Values.replicas.openxchangeGotenberg }}
+      podAnnotations: {}
       resources:
         {{ .Values.resources.openxchangeGotenberg | toYaml | nindent 8 }}
       securityContext:
@@ -376,6 +381,7 @@ appsuite:
       tag: {{ .Values.images.openxchangeCoreUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     replicaCount: {{ .Values.replicas.openxchangeCoreUI }}
+    podAnnotations: {}
     resources:
       {{ .Values.resources.openxchangeCoreUI | toYaml | nindent 6 }}
     securityContext:
@@ -409,6 +415,7 @@ appsuite:
       tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     overrides: {}
+    podAnnotations: {}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreUIMiddleware }}
     resources:
@@ -447,6 +454,7 @@ appsuite:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeDocumentConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
+    podAnnotations: {}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreDocumentConverter }}
     resources:
@@ -494,6 +502,7 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreGuidedtours.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    podAnnotations: {}
     replicaCount: {{ .Values.replicas.openxchangeCoreGuidedtours }}
     resources:
       {{- .Values.resources.openxchangeCoreGuidedtours | toYaml | nindent 6 }}
@@ -528,6 +537,7 @@ appsuite:
           endpoint: "."
           accessKey: "."
           secretKey: "."
+    podAnnotations: {}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreImageConverter }}
     resources:
@@ -560,6 +570,7 @@ appsuite:
       repository: {{ .Values.images.openxchangeGuardUI.repository | quote }}
       tag: {{ .Values.images.openxchangeGuardUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    podAnnotations: {}
     replicaCount: {{ .Values.replicas.openxchangeGuardUI }}
     resources:
       {{- .Values.resources.openxchangeGuardUI | toYaml | nindent 6 }}
@@ -591,6 +602,7 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
     {{- end }}
+    podAnnotations: {}
     replicaCount: {{ .Values.replicas.openxchangeCoreUserGuide }}
     resources:
       {{- .Values.resources.openxchangeCoreUserGuide | toYaml | nindent 6 }}

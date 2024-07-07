@@ -68,6 +68,8 @@ persistence:
   size: {{ .Values.persistence.size.matrixNeoDateFixBot | quote }}
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
+podAnnotations: {}
+
 podSecurityContext:
   enabled: true
   fsGroup: 101

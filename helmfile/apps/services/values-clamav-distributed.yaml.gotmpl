@@ -25,6 +25,7 @@ clamd:
     repository: {{ .Values.images.clamd.repository | quote }}
     tag: {{ .Values.images.clamd.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podAnnotations: {}
   podSecurityContext:
     enabled: true
     fsGroup: 101
@@ -69,6 +70,7 @@ freshclam:
     repository: {{ .Values.images.freshclam.repository | quote }}
     tag: {{ .Values.images.freshclam.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podAnnotations: {}
   podSecurityContext:
     enabled: true
     fsGroup: 101
@@ -110,6 +112,7 @@ icap:
     repository: {{ .Values.images.icap.repository | quote }}
     tag: {{ .Values.images.icap.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podAnnotations: {}
   podSecurityContext:
     enabled: true
     fsGroup: 101
@@ -139,6 +142,7 @@ milter:
     repository: {{ .Values.images.milter.repository | quote }}
     tag: {{ .Values.images.milter.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podAnnotations: {}
   podSecurityContext:
     enabled: true
     fsGroup: 101

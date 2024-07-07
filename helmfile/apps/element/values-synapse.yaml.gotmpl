@@ -141,6 +141,8 @@ persistence:
   size: {{ .Values.persistence.size.synapse | quote }}
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
+podAnnotations: {}
+
 podSecurityContext:
   enabled: true
   fsGroup: 10991

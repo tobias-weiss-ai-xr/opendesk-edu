@@ -38,6 +38,7 @@ master:
   count: {{ .Values.replicas.redis }}
   persistence:
     size: {{ .Values.persistence.size.redis | quote }}
+  podAnnotations: {}
   resources:
     {{ .Values.resources.redis | toYaml | nindent 4 }}
 

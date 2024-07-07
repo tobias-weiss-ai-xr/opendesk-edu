@@ -90,6 +90,8 @@ persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
   size: {{ .Values.persistence.size.postgresql | quote }}
 
+podAnnotations: {}
+
 postgres:
   password: {{ .Values.secrets.postgresql.postgresUser | quote }}
 

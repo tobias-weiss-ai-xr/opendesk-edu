@@ -18,4 +18,8 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . | quote }}
 {{- end }}
+
+podAnnotations:
+  argocd.argoproj.io/hook: "Sync"
+  argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
 ...

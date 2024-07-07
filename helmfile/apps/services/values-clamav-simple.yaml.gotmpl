@@ -40,6 +40,8 @@ persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
   size: {{ .Values.persistence.size.clamav | quote }}
 
+podAnnotations: {}
+
 podSecurityContext:
   enabled: true
   fsGroup: 101
