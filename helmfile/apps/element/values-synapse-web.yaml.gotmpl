@@ -51,6 +51,8 @@ ingress:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 
+podAnnotations: {}
+
 podSecurityContext:
   enabled: true
   fsGroup: 101

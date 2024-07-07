@@ -44,6 +44,8 @@ resources:
 persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
+podAnnotations: {}
+
 ## Container deployment probes
 probes:
   liveness:

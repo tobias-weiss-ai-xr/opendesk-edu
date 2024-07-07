@@ -84,6 +84,8 @@ ingress:
       hosts:
         - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
+podAnnotations: {}
+
 podSecurityContext:
   fsGroup: 100
 

@@ -32,6 +32,8 @@ image:
   tag: {{ .Values.images.memcached.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
+podAnnotations: {}
+
 replicaCount: {{ .Values.replicas.memcached }}
 
 resources:

@@ -42,6 +42,8 @@ image:
   repository: {{ .Values.images.matrixUserVerificationService.repository | quote }}
   tag: {{ .Values.images.matrixUserVerificationService.tag | quote }}
 
+podAnnotations: {}
+
 podSecurityContext:
   enabled: true
   fsGroup: 101

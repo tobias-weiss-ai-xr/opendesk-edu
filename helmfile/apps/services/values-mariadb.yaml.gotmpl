@@ -73,6 +73,8 @@ persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
   size: {{ .Values.persistence.size.mariadb | quote }}
 
+podAnnotations: {}
+
 podSecurityContext:
   enabled: true
   fsGroup: 1001

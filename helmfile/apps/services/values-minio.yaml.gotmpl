@@ -182,6 +182,8 @@ provisioning:
   resources:
     {{ .Values.resources.minio | toYaml | nindent 4 }}
 
+podAnnotations: {}
+
 readinessProbe:
   enabled: true
   initialDelaySeconds: 5
