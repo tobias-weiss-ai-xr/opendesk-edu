@@ -71,6 +71,9 @@ environment:
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.univentionManagementStack .Values.global.domain | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
+  {{- if .Values.enterprise.openproject.token }}
+  OPENPROJECT_ENTERPRISE__TOKEN: {{ .Values.enterprise.openproject.token | quote }}
+  {{- end }}
 
 image:
   registry: {{ .Values.global.imageRegistry | default .Values.images.openproject.registry | quote }}

@@ -31,11 +31,13 @@ filestore:
   # Nextcloud specific configuration
   nextcloud:
     retentionObligation:
+      # yamllint disable rule:line-length
       # Set Nextcloud's `trashbin_retention_obligation`
       # Ref.: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#trashbin-retention-obligation
       trashbin: "auto"
       # Set Nextcloud's `versions_retention_obligation`
       # Ref.: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#versions-retention-obligation
       versions: "auto"
+      # yamllint enable rule:line-length
 
 ...
