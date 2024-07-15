@@ -69,10 +69,11 @@ resources:
     requests:
       cpu: 0.1
       memory: "384Mi"
+  # The jifico and jvb containers require 3GB memory for the Java process, so we limit it to 3.5Gi overall consumption.
   jicofo:
     limits:
       cpu: 99
-      memory: "512Mi"
+      memory: "3584Mi"
     requests:
       cpu: 0.1
       memory: "256Mi"
@@ -90,10 +91,11 @@ resources:
     requests:
       cpu: "10m"
       memory: "48Mi"
+  # The jifico and jvb containers require 3GB memory for the Java process, so we limit it to 3.5Gi overall consumption.
   jvb:
     limits:
       cpu: 99
-      memory: "768Mi"
+      memory: "3584Mi"
     requests:
       cpu: 0.1
       memory: "384Mi"
