@@ -674,7 +674,7 @@ stack-data-swp:
 
   stackDataSwp:
     udmApiPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
-    {{- if .Values.admin.portal.deploymentInformation.enabled }}
+    {{- if .Values.functional.admin.portal.deploymentInformation.enabled }}
     systemInformation:
       deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
       releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
@@ -1062,8 +1062,8 @@ keycloak-bootstrap:
     imagePullPolicy: {{ .Values.global.imagePullPolicy }}
 
   cleanup:
-    deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
-    keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
+    deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
+    keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
 
   keycloak:
     connection:
@@ -1172,7 +1172,7 @@ keycloak-extensions:
       ipProtectionEnable: true
       logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
       newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
-      mailFrom: "{{ .Values.localpartNoReply }}@{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+      mailFrom: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
@@ -1319,7 +1319,7 @@ stack-gateway:
       proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
 
 
-      {{ if .Values.externalServices.nubus.udmRestApi.enabled }}
+      {{ if .Values.functional.externalServices.nubus.udmRestApi.enabled }}
       ## udm-rest-api
       location /univention/udm/ {
         # The UDM Rest API does return on some endpoints a lot of headers

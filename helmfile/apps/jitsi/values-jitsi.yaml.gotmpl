@@ -27,7 +27,7 @@ containerSecurityContext:
     {{ .Values.seLinuxOptions.jitsiKeycloakAdapter | toYaml | nindent 4 }}
 
 cleanup:
-  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
 
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

@@ -137,7 +137,7 @@ properties:
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.server": "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.port": 443
   ## SMTP settings
-  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.localpartNoReply }}@{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.host": {{ .Values.smtp.host | quote }}
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.port": {{ .Values.smtp.port | quote }}
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.username": {{ .Values.smtp.username | quote }}

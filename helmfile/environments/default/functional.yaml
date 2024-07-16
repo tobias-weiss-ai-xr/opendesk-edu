@@ -1,43 +1,44 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
-authentication:
-  twoFactor:
-    # Define a list of groups to enable 2FA for.
-    # Note: Removing a group from the list will not disable 2FA for the removed group.
-    groups:
-      - "Domain Admins"
+functional:
+  admin:
+    portal:
+      deploymentInformation:
+        # Disable to not provide and update openDesk release version and deployment timestamp for admins in the portal.
+        enabled: true
 
-externalServices:
-  nubus:
-    udmRestApi:
-      # Enable to make the UDM REST API from the Nubus stack externally available.
-      enabled: false
-  matrix:
-    federation:
-      # Disable to not support Matrix federation with your installation.
-      enabled: true
+  authentication:
+    twoFactor:
+      # Define a list of groups to enable 2FA for.
+      # Note: Removing a group from the list will not disable 2FA for the removed group.
+      groups:
+        - "Domain Admins"
 
-admin:
-  portal:
-    deploymentInformation:
-      # Disable to not provide and update openDesk release version and deployment timestamp for admins in the portal.
-      enabled: true
+  externalServices:
+    nubus:
+      udmRestApi:
+        # Enable to make the UDM REST API from the Nubus stack externally available.
+        enabled: false
+    matrix:
+      federation:
+        # Disable to not support Matrix federation with your installation.
+        enabled: true
 
-filestore:
-  quota:
-    # Set the default quota for all users in GB
-    default: 1
-  # Nextcloud specific configuration
-  nextcloud:
-    retentionObligation:
-      # yamllint disable rule:line-length
-      # Set Nextcloud's `trashbin_retention_obligation`
-      # Ref.: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#trashbin-retention-obligation
-      trashbin: "auto"
-      # Set Nextcloud's `versions_retention_obligation`
-      # Ref.: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#versions-retention-obligation
-      versions: "auto"
-      # yamllint enable rule:line-length
+  filestore:
+    quota:
+      # Set the default quota for all users in GB
+      default: 1
+    # Nextcloud specific configuration
+    nextcloud:
+      retentionObligation:
+        # yamllint disable rule:line-length
+        # Set Nextcloud's `trashbin_retention_obligation`
+        # Ref.: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#trashbin-retention-obligation
+        trashbin: "auto"
+        # Set Nextcloud's `versions_retention_obligation`
+        # Ref.: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#versions-retention-obligation
+        versions: "auto"
+        # yamllint enable rule:line-length
 
 ...

@@ -14,7 +14,7 @@ additionalAnnotations:
   intents.otterize.com/service-name: "opendesk-nextcloud-php"
 
 cleanup:
-  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
 
 configuration:
   administrator:
@@ -78,13 +78,13 @@ configuration:
         value: {{ .Values.smtp.password | quote }}
     host: {{ .Values.smtp.host | quote }}
     port: {{ .Values.smtp.port | quote }}
-    fromAddress: {{ .Values.localpartNoReply | quote }}
+    fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
     mailDomain: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
   quota:
-    default: "{{ .Values.filestore.quota.default }} GB"
+    default: "{{ .Values.functional.filestore.quota.default }} GB"
     retentionObligation:
-      trashbin: {{ .Values.filestore.nextcloud.retentionObligation.trashbin | quote }}
-      versions: {{ .Values.filestore.nextcloud.retentionObligation.versions | quote }}
+      trashbin: {{ .Values.functional.filestore.nextcloud.retentionObligation.trashbin | quote }}
+      versions: {{ .Values.functional.filestore.nextcloud.retentionObligation.versions | quote }}
 
   serverinfo:
     token: {{ .Values.secrets.nextcloud.metricsToken | quote }}

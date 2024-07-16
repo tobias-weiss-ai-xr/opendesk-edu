@@ -12,7 +12,7 @@ issuerRef:
   name: {{ .Values.certificate.issuerRef.name | quote }}
 
 cleanup:
-  keepRessourceOnDelete: {{ .Values.cleanup.keepRessourceOnDelete }}
+  keepRessourceOnDelete: {{ .Values.debug.cleanup.keepRessourceOnDelete }}
 
 wildcard: {{ .Values.certificate.wildcard }}
 ...

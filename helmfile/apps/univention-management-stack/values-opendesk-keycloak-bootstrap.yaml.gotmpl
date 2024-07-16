@@ -17,8 +17,8 @@ image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 cleanup:
-  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
-  keepPVCOnDelete: {{ .Values.cleanup.keepPVCOnDelete }}
+  deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
+  keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
 
 config:
   keycloak:
@@ -29,7 +29,7 @@ config:
       enabled: true
       internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
   twoFactorSettings:
-    additionalGroups: {{ .Values.authentication.twoFactor.groups }}
+    additionalGroups: {{ .Values.functional.authentication.twoFactor.groups }}
   custom:
     # We use client specific scopes as we bind them to Keycloak role membership which itself is linked
     # to LDAP group membership to ensure a user cannot access an application without the required

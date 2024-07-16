@@ -67,9 +67,9 @@ mode: {{ if gt .Values.replicas.minio 1 }}"distributed"{{ else }}"standalone"{{ 
 
 metrics:
   serviceMonitor:
-    enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+    enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
     additionalLabels:
-      {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 6 }}
+      {{ .Values.monitoring.prometheus.serviceMonitors.labels | toYaml | nindent 6 }}
 
 networkPolicy:
   enabled: false

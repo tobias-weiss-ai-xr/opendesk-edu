@@ -7,6 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 * [Disclaimer](#disclaimer)
 * [From v0.8.1](#from-v081)
+  * [Updated customizable template attributes](#updated-customizable-template-attributes)
   * [`migrations` S3 bucket](#migrations-s3-bucket)
 
 # Disclaimer
@@ -17,7 +18,16 @@ Though we try to ease the pain when it comes to 0.x upgrades. That is what this 
 
 # From v0.8.1
 
+## Updated customizable template attributes
+
+- Action: Please ensure you update you custom deployment values according with the updated default value structure.
+- References:
+  - `functional.` prefix for `authentication.*`, `externalServices.*`, `admin.*` and `filestore.*`, see [functional.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/functional.yaml).
+  - `debug.` prefix for `cleanup.*`, see [debug.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/debug.yaml).
+  - `monitoring.` prefix for `prometheus.*` and `graphana.*`, see [monitoring.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/monitoring.yaml).
+  - `smtp.` prefix for `localpartNoReply`, see [smtp.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/smtp.yaml).
+
 ## `migrations` S3 bucket
 
-- Commit: [1e834fee](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/1e834fee9db6bdb948f31c994d5ab309e6f86947)
-- Action: Please ensure you add a bucket `migrations` to your S3.
+- Action: For self managed/external S3/object storages, please ensure you add a bucket `migrations` to your S3.
+- Reference: `objectstores.migrations` in [objectstores.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/objectstores.yaml)

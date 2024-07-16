@@ -34,13 +34,13 @@ exporter:
     tag: {{ .Values.images.nextcloudExporter.tag | quote }}
   prometheus:
     serviceMonitor:
-      enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+      enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
       labels:
-        {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
+        {{ .Values.monitoring.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
     prometheusRule:
-      enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+      enabled: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
       additionalLabels:
-        {{ .Values.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
+        {{ .Values.monitoring.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
   replicaCount: {{ .Values.replicas.nextcloudExporter }}
   resources:
     {{ .Values.resources.nextcloudExporter | toYaml | nindent 4 }}
@@ -92,13 +92,13 @@ php:
     tag: {{ .Values.images.nextcloudPHP.tag | quote }}
   prometheus:
     serviceMonitor:
-      enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+      enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
       labels:
-        {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
+        {{ .Values.monitoring.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
     prometheusRule:
-      enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+      enabled: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
       additionalLabels:
-        {{ .Values.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
+        {{ .Values.monitoring.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
   replicaCount: {{ .Values.replicas.nextcloudPHP }}
   resources:
     {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
