@@ -21,6 +21,11 @@ cleanup:
   keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
 
 config:
+  custom:
+    clientScopes:
+      {{ .Values.functional.authentication.oidc.clientScopes | toYaml | nindent 6 }}
+    clients:
+      {{ .Values.functional.authentication.oidc.clients | toYaml | nindent 6 }}
   keycloak:
     adminUser: "kcadmin"
     adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
@@ -30,7 +35,7 @@ config:
       internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
   twoFactorSettings:
     additionalGroups: {{ .Values.functional.authentication.twoFactor.groups }}
-  custom:
+  opendesk:
     # We use client specific scopes as we bind them to Keycloak role membership which itself is linked
     # to LDAP group membership to ensure a user cannot access an application without the required
     # group membership.
@@ -766,7 +771,6 @@ config:
               claim.name: "dn"
               jsonType.label: "String"
         defaultClientScopes:
-          - "opendesk"
           - "web-origins"
           - "acr"
           - "roles"
