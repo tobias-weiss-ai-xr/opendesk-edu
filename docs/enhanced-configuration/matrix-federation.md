@@ -37,10 +37,11 @@ If not used it is also set to `opendesk.domain.tld`.
 The following setting can disable federation:
 
 ```yaml
-externalServices:
-  matrix:
-    federation:
-      enabled: false
+functional:
+  externalServices:
+    matrix:
+      federation:
+        enabled: false
 ```
 
 ## Separate Matrix domain

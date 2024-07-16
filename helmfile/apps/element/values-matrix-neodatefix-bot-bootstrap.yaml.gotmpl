@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 cleanup:
-  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
-  deletePodsOnSuccessTimeout: {{ .Values.cleanup.deletePodsOnSuccessTimeout }}
+  deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
 
 configuration:
   username: "meetings-bot"

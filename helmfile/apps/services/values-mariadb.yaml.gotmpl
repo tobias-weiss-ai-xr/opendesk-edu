@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 cleanup:
-  deletePodsOnSuccess: {{ .Values.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false

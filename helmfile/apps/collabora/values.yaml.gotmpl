@@ -17,11 +17,11 @@ fullnameOverride: "collabora"
 
 grafana:
   dashboards:
-    enabled: {{ .Values.grafana.dashboards.enabled }}
+    enabled: {{ .Values.monitoring.grafana.dashboards.enabled }}
     labels:
-      {{ .Values.grafana.dashboards.labels | toYaml | nindent 6 }}
+      {{ .Values.monitoring.grafana.dashboards.labels | toYaml | nindent 6 }}
     annotations:
-      {{ .Values.grafana.dashboards.annotations | toYaml | nindent 6 }}
+      {{ .Values.monitoring.grafana.dashboards.annotations | toYaml | nindent 6 }}
 
 image:
   repository: "{{ .Values.global.imageRegistry | default .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
@@ -88,13 +88,13 @@ podSecurityContext:
 
 prometheus:
   servicemonitor:
-    enabled: {{ .Values.prometheus.serviceMonitors.enabled }}
+    enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
     labels:
-      {{ .Values.prometheus.serviceMonitors.labels | toYaml | nindent 6 }}
+      {{ .Values.monitoring.prometheus.serviceMonitors.labels | toYaml | nindent 6 }}
   rules:
-    enabled: {{ .Values.prometheus.prometheusRules.enabled }}
+    enabled: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
     additionalLabels:
-      {{ .Values.prometheus.prometheusRules.labels | toYaml | nindent 6 }}
+      {{ .Values.monitoring.prometheus.prometheusRules.labels | toYaml | nindent 6 }}
 
 replicaCount: {{ .Values.replicas.collabora }}
 

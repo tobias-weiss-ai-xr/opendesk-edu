@@ -42,7 +42,7 @@ configuration:
         sender_localpart: intercom-service
 
     smtp:
-      senderAddress: "{{ .Values.localpartNoReply }}@{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}"
+      senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}"
       host: {{ .Values.smtp.host | quote }}
       port: {{ .Values.smtp.port }}
       username: {{ .Values.smtp.username | quote }}
@@ -94,7 +94,7 @@ containerSecurityContext:
     {{ .Values.seLinuxOptions.synapse | toYaml | nindent 4 }}
 
 federation:
-  enabled: {{ .Values.externalServices.matrix.federation.enabled }}
+  enabled: {{ .Values.functional.externalServices.matrix.federation.enabled }}
   ingress:
     host: "{{ .Values.global.hosts.synapseFederation }}.{{ .Values.global.domain }}"
     enabled: {{ .Values.ingress.enabled }}

@@ -23,4 +23,39 @@ global:
   #
   helmRegistry: {{ env "PRIVATE_HELM_REGISTRY_URL" | quote }}
   imageRegistry: {{ env "PRIVATE_IMAGE_REGISTRY_URL" | quote }}
+
+  ## Define ingress/virtualservice host.
+  #
+  hosts:
+    collabora: "collabora"
+    cryptpad: "cryptpad"
+    element: "chat"
+    intercomService: "ics"
+    jitsi: "meet"
+    keycloak: "id"
+    matrixNeoBoardWidget: "matrix-neoboard-widget"
+    matrixNeoChoiceWidget: "matrix-neochoice-widget"
+    matrixNeoDateFixBot: "matrix-neodatefix-bot"
+    matrixNeoDateFixWidget: "matrix-neodatefix-widget"
+    minioApi: "minio"
+    minioConsole: "minio-console"
+    nextcloud: "fs"
+    openproject: "project"
+    openxchange: "webmail"
+    synapse: "matrix"
+    synapseFederation: "matrix-federation"
+    univentionManagementStack: "portal"
+    whiteboard: "whiteboard"
+    xwiki: "wiki"
+
+  ## Credentials to fetch images from private registry
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  #
+  imagePullSecrets:
+    - "external-registry"
+
+  ## Define the policy to pull container images.
+  ## Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
+  #
+  imagePullPolicy: "IfNotPresent"
 ...
