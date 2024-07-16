@@ -14,6 +14,11 @@ functional:
       # Note: Removing a group from the list will not disable 2FA for the removed group.
       groups:
         - "Domain Admins"
+    oidc:
+      # Define additional/custom OIDC clients to be created in the 'opendesk' realm of Keycloak.
+      clients: ~
+      # Define additional/custom OIDC client scopes to be created in the 'opendesk' realm of Keycloak.
+      clientScopes: ~
 
   externalServices:
     nubus:
