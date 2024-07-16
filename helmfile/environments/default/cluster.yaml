@@ -15,8 +15,9 @@ cluster:
   networking:
     # Kubernetes internal cluster domain.
     domain: "cluster.local"
-    # Kubernetes cluster network CIDR.
-    cidr: "10.0.0.0/8"
+    # Kubernetes cluster network CIDRs.
+    cidr:
+      - "10.0.0.0/8"
     # Ingress-gateway IP - only relevant for "NodePort" cluster services.
     # When ingress and egress gateway use different ips, which results that pods can't self-discover their incoming ip,
     # you need to provide the public (load-balanced) ingress gateways ip address.

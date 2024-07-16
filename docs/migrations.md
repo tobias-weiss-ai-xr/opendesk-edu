@@ -3,10 +3,11 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Migrations</h1>
+<h1>Upgrade migrations</h1>
 
 * [Disclaimer](#disclaimer)
 * [From v0.8.1](#from-v081)
+  * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
   * [Updated customizable template attributes](#updated-customizable-template-attributes)
   * [`migrations` S3 bucket](#migrations-s3-bucket)
 
@@ -17,6 +18,11 @@ We do not offer support for upgrades before we reach openDesk 1.0.
 Though we try to ease the pain when it comes to 0.x upgrades. That is what this document is for.
 
 # From v0.8.1
+
+## Updated `cluster.networking.cidr`
+
+- Action: `cluster.networking.cidr` is now an array (was a string until 0.8.1), please update your setup accordingly if you explicitly set this value.
+- Reference:[cluster.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/cluster.yaml)
 
 ## Updated customizable template attributes
 

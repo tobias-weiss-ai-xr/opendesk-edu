@@ -195,7 +195,8 @@ If your cluster has not the default `10.0.0.0/8` CIDR configured, you need to pr
 ```yaml
 cluster:
   networking:
-    cidr: "127.0.0.0/8"
+    cidr:
+      - "127.0.0.0/8"
 ```
 
 ### Ingress
