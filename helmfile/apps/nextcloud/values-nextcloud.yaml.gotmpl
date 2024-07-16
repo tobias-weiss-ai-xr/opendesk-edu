@@ -66,6 +66,7 @@ php:
           value: "nextcloud_user"
         password:
           value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
+    trustedProxies: {{ join " " .Values.cluster.networking.cidr | quote }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -107,6 +108,7 @@ apache2:
   configuration:
     php:
       host: "opendesk-nextcloud-php.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
+    trustedProxies: {{ join " " .Values.cluster.networking.cidr | quote }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -143,4 +145,5 @@ apache2:
   replicaCount: {{ .Values.replicas.nextcloudApache2 }}
   resources:
     {{ .Values.resources.nextcloudApache2 | toYaml | nindent 4 }}
+
 ...

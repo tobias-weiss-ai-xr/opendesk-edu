@@ -33,11 +33,11 @@ openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s)
 
 The following minimal requirements are thought for initial evaluation deployment:
 
-| Spec | Value                                                |
-|------|------------------------------------------------------|
-| CPU  | 8 Cores of x64 or x86 CPU (ARM is not supported yet) |
-| RAM  | 16 GB, recommended 32 GB                             |
-| Disk | HDD or SSD, >10 GB                                   |
+| Spec | Value                                                 |
+| ---- | ----------------------------------------------------- |
+| CPU  | 12 Cores of x64 or x86 CPU (ARM is not supported yet) |
+| RAM  | 32 GB, more recommended                               |
+| Disk | HDD or SSD, >10 GB                                    |
 
 # Kubernetes
 

@@ -31,7 +31,7 @@ dovecot:
     introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
     introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
     usernameAttribute: "opendesk_username"
-  loginTrustedNetworks: {{ .Values.cluster.networking.cidr | quote }}
+  loginTrustedNetworks: {{ join " " .Values.cluster.networking.cidr | quote }}
 
   submission:
     enabled: true

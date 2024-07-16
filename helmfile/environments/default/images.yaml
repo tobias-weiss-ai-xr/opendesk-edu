@@ -229,7 +229,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-apache2"
-    tag: "1.1.22@sha256:8bfa92fcfdcb2fee1b3560a623ffb319fcfcc7e5fbcc20d631df747427e88f84"
+    tag: "1.1.24@sha256:c9222da8be7af12c9076b41d1a14e019725afc075e1aaa2b727be21c1bf45f10"
   nextcloudExporter:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -245,7 +245,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
-    tag: "1.4.2@sha256:a4c12a624c76b44c8305a768ced33e2b9af9497ff9cfa639045df846d89fbda4"
+    tag: "1.4.4@sha256:b70c159d6a1827748ca1f8fe0b9fd5b011eaed8719172105e1e9c8b8d776cf97"
   nextcloudPHP:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -253,7 +253,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
-    tag: "1.10.1@sha256:8eb5ac95eaea69e0928e48aa5a121cbf10f359be4679040da8464810e9d799ff"
+    tag: "1.10.3@sha256:e659ab95d0d3a33d4937354449c12fa46fe2669a866bbf432a9d729bed6d54f7"
   opendeskKeycloakBootstrap:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
