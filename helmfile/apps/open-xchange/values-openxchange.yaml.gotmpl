@@ -241,6 +241,11 @@ appsuite:
       com.openexchange.file.storage.nextcloud.oauth.url: "http://opendesk-nextcloud-apache2/"
       com.openexchange.file.storage.nextcloud.oauth.webdav.username.strategy: "user"
       com.openexchange.nextcloud.filepicker.includeAccessToken: "false"
+      # Element integration
+      com.openexchange.conference.element.enabled: "true"
+      com.openexchange.conference.element.meetingHostUrl: http://matrix-neodatefix-bot
+      com.openexchange.conference.element.matrixLoginUrl: http://opendesk-synapse-web:8008/_matrix/client/v3/login
+      com.openexchange.conference.element.matrixUuidClaimName: opendesk_useruuid
       # GDPR
       com.openexchange.gdpr.dataexport.enabled: "false"
       com.openexchange.gdpr.dataexport.active: "false"
@@ -259,6 +264,7 @@ appsuite:
       com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppsuite.cookieHashSalt | quote }}
       com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppsuite.sessiondEncryptionKey | quote }}
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppsuite.shareCryptKey | quote }}
+      com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppsuite.synapseAsToken | quote }}
     propertiesFiles:
       /opt/open-xchange/etc/AdminDaemon.properties:
         MASTER_ACCOUNT_OVERRIDE: "true"
@@ -326,12 +332,13 @@ appsuite:
       oxguardpass: |
         {{ .Values.secrets.oxAppsuite.oxguardMC }}
         {{ .Values.secrets.oxAppsuite.oxguardRC }}
-    redis:
+    redis: &redisConfiguration
       enabled: true
       mode: "standalone"
       hosts:
-        - "redis-master"
+        - "redis-master:6379"
       auth:
+        enabled: true
         password: {{ .Values.secrets.redis.password | quote }}
     image:
       registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeCoreMW.registry | quote }}
@@ -396,15 +403,7 @@ appsuite:
       tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     overrides: {}
-    redis:
-      mode: "standalone"
-      hosts:
-        - "redis-master:6379"
-      auth:
-        enabled: true
-        password: {{ .Values.secrets.redis.password | quote }}
-        # Workaround for a bug in 8.23
-        ca: ""
+    redis: *redisConfiguration
     resources:
       {{ .Values.resources.openxchangeCoreUIMiddleware | toYaml | nindent 6 }}
     updater:
@@ -441,6 +440,7 @@ appsuite:
       registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeDocumentConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
+    redis: *redisConfiguration
     resources:
       {{- .Values.resources.openxchangeCoreDocumentConverter | toYaml | nindent 6 }}
     securityContext:
@@ -519,6 +519,7 @@ appsuite:
           endpoint: "."
           accessKey: "."
           secretKey: "."
+    redis: *redisConfiguration
     resources:
       {{- .Values.resources.openxchangeCoreImageConverter | toYaml | nindent 6 }}
     securityContext:
@@ -545,7 +546,8 @@ appsuite:
       - name: {{ . | quote }}
     {{- end }}
     image:
-      repository: "{{ .Values.global.imageRegistry | default .Values.images.openxchangeGuardUI.registry }}/{{ .Values.images.openxchangeGuardUI.repository }}"
+      registry: {{ .Values.global.imageRegistry | default .Values.images.openxchangeGuardUI.registry | quote }}
+      repository: {{ .Values.images.openxchangeGuardUI.repository | quote }}
       tag: {{ .Values.images.openxchangeGuardUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     resources:
