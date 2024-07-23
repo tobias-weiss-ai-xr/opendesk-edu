@@ -33,6 +33,7 @@ they need to be replaced in production deployments.
 | ClamAV (Simple)             | Antivirus engine               | Eval       |
 | Collabora                   | Weboffice                      | Functional |
 | CryptPad                    | Weboffice                      | Functional |
+| dkimpy-milter               | DKIM milter for Postfix        | Eval       |
 | Element                     | Secure communications platform | Functional |
 | Intercom Service            | Cross service data exchange    | Functional |
 | Jitsi                       | Videoconferencing              | Functional |

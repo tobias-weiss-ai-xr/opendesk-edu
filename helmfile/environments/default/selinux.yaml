@@ -11,6 +11,7 @@ seLinuxOptions:
   clamd: ~
   collabora: ~
   cryptpad: ~
+  dkimpy: ~
   dovecot: ~
   element: ~
   freshclam: ~

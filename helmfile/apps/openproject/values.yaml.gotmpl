@@ -59,14 +59,14 @@ environment:
   OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
   OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
-  OPENPROJECT_SMTP__USER__NAME: {{ .Values.smtp.username | quote }}
-  OPENPROJECT_SMTP__PASSWORD: {{ .Values.smtp.password | quote }}
-  OPENPROJECT_SMTP__PORT: {{ .Values.smtp.port | quote }}
+  OPENPROJECT_SMTP__USER__NAME: ""
+  OPENPROJECT_SMTP__PASSWORD: ""
+  OPENPROJECT_SMTP__PORT: 25
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
-  OPENPROJECT_SMTP__ADDRESS: {{ .Values.smtp.host | quote }}
-  OPENPROJECT_SMTP__AUTHENTICATION: "plain"
-  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
-  OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "peer"
+  OPENPROJECT_SMTP__ADDRESS: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+  OPENPROJECT_SMTP__AUTHENTICATION: "none"
+  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "false"
+  OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "none"
   OPENPROJECT_MAIL__FROM: "{{ .Values.smtp.localpartNoReply }}@{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.openproject }}.{{ end }}{{ .Values.global.domain }}"
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.nubus .Values.global.domain | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"

@@ -60,6 +60,18 @@ charts:
     name: "cryptpad"
     version: "0.0.19"
     verify: true
+  dkimpy:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-dkimpy-milter/opendesk-dkimpy-milter"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
+    # upstreamMirrorStartFrom: ["1", "0", "0"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-dkimpy-milter"
+    name: "opendesk-dkimpy-milter"
+    version: "1.0.0"
+    verify: true
   dovecot:
     # providerCategory: "Platform"
     # providerResponsible: "Open-Xchange"
@@ -78,7 +90,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-element"
-    version: "3.3.0"
+    version: "3.3.2"
     verify: true
   elementWellKnown:
     # providerCategory: "Platform"
@@ -88,7 +100,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-well-known"
-    version: "3.3.0"
+    version: "3.3.2"
     verify: true
   home:
     # providerCategory: "Platform"
@@ -180,7 +192,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-matrix-user-verification-service"
-    version: "3.3.0"
+    version: "3.3.2"
     verify: true
   memcached:
     # providerCategory: "Community"
@@ -338,7 +350,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-postfix"
     name: "postfix"
-    version: "2.2.0"
+    version: "2.3.0"
     verify: true
   postgresql:
     # providerCategory: "Platform"
@@ -368,7 +380,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse"
-    version: "3.3.0"
+    version: "3.3.2"
     verify: true
   synapseCreateAccount:
     # providerCategory: "Platform"
@@ -378,7 +390,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-create-account"
-    version: "3.3.0"
+    version: "3.3.2"
     verify: true
   synapseWeb:
     # providerCategory: "Platform"
@@ -388,7 +400,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-web"
-    version: "3.3.0"
+    version: "3.3.2"
     verify: true
   xwiki:
     # providerCategory: "Supplier"
