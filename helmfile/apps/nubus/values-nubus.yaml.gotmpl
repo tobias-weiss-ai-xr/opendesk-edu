@@ -83,7 +83,7 @@ keycloak:
 
 nubusGuardian:
   provisioning:
-    enabled: true
+    enabled: false
     config:
       keycloak:
         credentialSecret:
@@ -152,10 +152,13 @@ nubusKeycloakExtensions:
         key: "umcKeycloakExtensionsDatabasePassword"
   smtp:
     connection:
-      host: {{ .Values.smtp.host | quote }}
-      port: {{ .Values.smtp.port | quote }}
+      host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+      port: 25
+      ssl: false
+      starttls: false
     auth:
-      username: {{ .Values.smtp.username | quote }}
+      enabled: false
+      username: ""
       credentialSecret:
         name: "ums-keycloak-extensions-smtp-opendesk-credentials"
         key: "umcKeycloakExtensionsSmtpPassword"
@@ -213,6 +216,12 @@ nubusStackDataUms:
 
 # TODO: Remove values when upstreaming fixes
 nubusStackDataSwp:
+  stackDataSwp:
+    {{- if .Values.functional.admin.portal.deploymentInformation.enabled }}
+    systemInformation:
+      deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
+      releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
+    {{- end }}
   stackDataContext:
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
@@ -221,9 +230,10 @@ nubusStackDataSwp:
         lastname: "LDAP-Search-User"
       {{- end }}
     externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
-    smtpHost: {{ .Values.smtp.host | quote }}
-    smtpPort: {{ .Values.smtp.port | quote }}
-    smtpUser: {{ .Values.smtp.username | quote }}
+    smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    smtpPort: 25
+    smtpUser: ""
+    smtpStartTls: false
     ldapBase: {{ .Values.ldap.baseDn }}
     # FIXME: Should be templated correctly in the future
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
@@ -309,7 +319,7 @@ extraSecrets:
       umcKeycloakExtensionsDatabasePassword: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
   - name: "ums-keycloak-extensions-smtp-opendesk-credentials"
     stringData:
-      umcKeycloakExtensionsSmtpPassword: {{ .Values.smtp.password | quote }}
+      umcKeycloakExtensionsSmtpPassword: ""
   - name: "ums-portal-server-minio-opendesk-credentials"
     stringData:
       access-key-id: {{ .Values.objectstores.nubus.username | quote }}
@@ -320,4 +330,4 @@ extraSecrets:
       secret-key-id: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
   - name: "ums-umc-server-smtp-credentials-custom"
     stringData:
-      password: {{ .Values.smtp.password | quote }}
+      password: ""

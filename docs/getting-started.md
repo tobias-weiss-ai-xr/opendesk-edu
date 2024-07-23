@@ -60,16 +60,16 @@ The deployment is designed to deploy each application/service under a dedicated 
 For your convenience, we recommend to create a `*.domain.tld` A-Record to your cluster ingress controller,
 otherwise you need to create an A-Record for each subdomain.
 
-| Record name             | Type | Value                                              | Additional information                                                             |
-| ----------------------- | ---- | -------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| *.domain.tld            | A    | IPv4 address of your Ingress Controller            |                                                                                    |
-| *.domain.tld            | AAAA | IPv6 address of your Ingress Controller            |                                                                                    |
-| mail.domain.tld         | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                   |
-| mail.domain.tld         | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix                   |
-| domain.tld              | MX   | `10 mail.domain.tld`                               |                                                                                    |
-| domain.tld              | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                                         |
-| _dmarc.domain.tld       | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                                           |
-| _matrix._tcp.domain.tld | SRV  | `1 10 PORT matrix.domain.tld`                      | `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service |
+| Record name                   | Type | Value                                              | Additional information                                           |
+|-------------------------------|------|----------------------------------------------------|------------------------------------------------------------------|
+| *.domain.tld                  | A    | IPv4 address of your Ingress Controller            |                                                                  |
+| *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            |                                                                  |
+| mail.domain.tld               | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
+| mail.domain.tld               | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
+| domain.tld                    | MX   | `10 mail.domain.tld`                               |                                                                  |
+| domain.tld                    | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                       |
+| _dmarc.domain.tld             | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                         |
+| default._domainkey.domain.tld | TXT  | `v=DKIM1; k=rsa; h=sha256; ...`                    | Optional DKIM settings                                           |
 
 ## Domain
 
@@ -286,6 +286,20 @@ smtp:
   host: "mail.open.desk"
   username: "openDesk"
   password: "secret"
+```
+
+Enabling DKIM signing of emails helps to reduce spam and increases trust.
+openDesk ships dkimpy-milter as Postfix milter for signing mails.
+
+```yaml
+dkimpy:
+  enable: true
+  dkim:
+    key:
+      value: |
+        HzZs08QF1O7UiAkcM9T3U7rePPECtSFvWZIvyKqdg8E=
+    selector: "default"
+    useED25519: true # when false, RSA is used
 ```
 
 ### TURN configuration

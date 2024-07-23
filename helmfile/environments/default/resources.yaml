@@ -25,6 +25,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "512Mi"
+  dkimpy:
+    limits:
+      cpu: 99
+      memory: "256Mi"
+    requests:
+      cpu: 0.1
+      memory: "128Mi"
   dovecot:
     limits:
       cpu: 99

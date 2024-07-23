@@ -57,6 +57,17 @@ repositories:
     url: "{{ .Values.global.helmRegistry | default .Values.charts.mariadb.registry }}/\
       {{ .Values.charts.mariadb.repository }}"
 
+  # openDesk dkimpy-milter
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dkimpy-milter
+  - name: "dkimpy-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.dkimpy.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.dkimpy.registry }}/\
+      {{ .Values.charts.dkimpy.repository }}"
+
   # openDesk Postfix
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postfix
   - name: "postfix-repo"
@@ -176,6 +187,14 @@ releases:
     values:
       - "values-postfix.yaml.gotmpl"
     installed: {{ .Values.postfix.enabled }}
+    timeout: 900
+
+  - name: "opendesk-dkimpy-milter"
+    chart: "dkimpy-repo/{{ .Values.charts.dkimpy.name }}"
+    version: "{{ .Values.charts.dkimpy.version }}"
+    values:
+      - "values-dkimpy.yaml.gotmpl"
+    installed: {{ .Values.dkimpy.enabled }}
     timeout: 900
 
   - name: "clamav"

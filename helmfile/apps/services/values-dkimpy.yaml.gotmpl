@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+containerSecurityContext:
+  allowPrivilegeEscalation: true
+  capabilities: {}
+  enabled: true
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  privileged: false
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.dkimpy | toYaml | nindent 4 }}
+
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+image:
+  registry: {{ .Values.global.imageRegistry | default .Values.images.dkimpy.registry | quote }}
+  repository: {{ .Values.images.dkimpy.repository | quote }}
+  tag: {{ .Values.images.dkimpy.tag | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1000
+
+configuration:
+  domain: "{{ .Values.global.domain }}{{ if .Values.global.mailDomain }}, {{ .Values.global.mailDomain }}{{ end }}"
+  key:
+    {{ .Values.smtp.dkim.key | toYaml | nindent 4 }}
+  mode: "s"
+  selector: {{ .Values.smtp.dkim.selector }}
+  useED25519: {{ .Values.smtp.dkim.useED25519 }}
+
+replicaCount: {{ .Values.replicas.dkimpy }}
+
+resources:
+  {{ .Values.resources.dkimpy | toYaml | nindent 2 }}
+...

@@ -50,15 +50,17 @@ configuration:
         url: null
         sender_localpart: ox-appsuite
 
-    presence: 
+    presence:
       enabled: {{ .Values.functional.dataProtection.matrixPresence.enabled }}
-    
+
     smtp:
       senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.element }}.{{ end }}{{ .Values.global.domain }}"
-      host: {{ .Values.smtp.host | quote }}
-      port: {{ .Values.smtp.port }}
-      username: {{ .Values.smtp.username | quote }}
-      password: {{ .Values.smtp.password | quote }}
+      host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+      port: 25
+      tls: false
+      starttls: false
+      username: ""
+      password: ""
 
     oidc:
       clientId: "opendesk-matrix"

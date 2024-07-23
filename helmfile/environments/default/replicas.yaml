@@ -36,6 +36,8 @@ replicas:
   dovecot: 1
   # -- scalable: false
   postfix: 1
+  # -- scalable: true
+  dkimpy: 1
 
   # -- component: Chat (Element, Synapse)
   # -- scalable: true

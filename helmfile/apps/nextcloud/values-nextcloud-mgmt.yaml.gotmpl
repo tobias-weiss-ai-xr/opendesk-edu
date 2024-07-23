@@ -75,14 +75,17 @@ configuration:
       value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   smtp:
     auth:
+      enabled: false
       username:
-        value: {{ .Values.smtp.username | quote }}
+        value: ""
       password:
-        value: {{ .Values.smtp.password | quote }}
-    host: {{ .Values.smtp.host | quote }}
-    port: {{ .Values.smtp.port | quote }}
+        value: ""
+    host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    port: 25
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
     mailDomain: "{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.nextcloud }}.{{ end }}{{ .Values.global.domain }}"
+    security: ""
+    skipVerifyPeer: true
   quota:
     default: "{{ .Values.functional.filestore.quota.default }} GB"
     retentionObligation:

@@ -30,6 +30,14 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/cryptpad"
     tag: "opendesk-20231222@sha256:f4d20d5c38c87b11ed1a1b46ef6a3633d32c6758ebdff8556458f040318fa5e2"
+  dkimpy:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/dkimpy-milter"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/images/dkimpy-milter"
+    tag: "1.1.0@sha256:f140c7fc3fd9636addc612edd6e10f6aefa69e34ff637c95ce9036a32e44555f"
   dovecot:
     # providerCategory: "Supplier"
     # providerResponsible: "Open-Xchange"
@@ -763,7 +771,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/postfix"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/postfix"
-    tag: "1.0.0@sha256:61e4661a7323101dfb51c85c5a48c345c75436f3f533176f049d2660d711a8a5"
+    tag: "2.0.0@sha256:5b2432dc09318db172a593bca860887ee9d713b9987db64f8b265f3e08a1d374"
   postgresql:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
