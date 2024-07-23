@@ -271,7 +271,7 @@ images:
     # upstreamMirrorStartFrom: ["13", "1", "1"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/images-mirror/open_desk"
-    tag: "14.2.0@sha256:b4ea55b925de4fc8760ccf30268f0a2d472c4204bd4fc512720e8757489335d6"
+    tag: "14.3.0@sha256:922621b394c1a60e1c427b866284ac636b35717f03bde89302131ad369fbf9ad"
   openprojectBootstrap:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
