@@ -40,6 +40,16 @@ configuration:
               regex: "@.*"
         url: null
         sender_localpart: intercom-service
+      - as_token: {{ .Values.secrets.oxAppsuite.synapseAsToken | quote }}
+        hs_token: {{ .Values.secrets.oxAppsuite.synapseAsToken | quote }}
+        id: ox-appsuite
+        namespaces:
+          users:
+            - exclusive: false
+              regex: "@.*"
+        url: null
+        sender_localpart: ox-appsuite
+
     presence: 
       enabled: {{ .Values.functional.dataProtection.matrixPresence.enabled }}
     
