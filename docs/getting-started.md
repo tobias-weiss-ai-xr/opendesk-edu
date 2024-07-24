@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Getting stated</h1>
+<h1>Getting started</h1>
 
 This documentation should enable you to create your own evaluation instance of openDesk on your Kubernetes cluster.
 
