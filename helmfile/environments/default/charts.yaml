@@ -326,7 +326,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-postfix"
     name: "postfix"
-    version: "2.0.5"
+    version: "2.2.0"
     verify: true
   postgresql:
     # providerCategory: "Platform"
