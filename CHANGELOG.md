@@ -1,3 +1,31 @@
+# [0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.8.1...v0.9.0) (2024-07-24)
+
+
+### Bug Fixes
+
+* **collabora:** Update to 24.04.5.1.1. ([8a2d951](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8a2d951c3b59c3f8ddb508ad8f95798774b7c4b0))
+* **collabora:** Update to 24.04.5.1.2. ([74d444e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/74d444e2d6065082be3ca90373a4d3b1836ea7a8))
+* **docs:** Update workflow.md. ([fd3df7d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fd3df7df6740d8e54b433c039d294843582e8947))
+* **docu:** Update documentation on integration uses cases ([#95](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/95)). ([382af1d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/382af1dfb966b5d10da4790212d6422a4a8c5618))
+* **helmfile:** Add S3 bucket for migrations. ([972020f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/972020f946d8238e65b1c1e2942682c797306e1a))
+* **helmfile:** Streamline prefixes for customizable defaults. UPGRADES: See `./docs/migrations.md` for more details. ([26a7641](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/26a7641a5ab764196af6bbe26d97907de86f541e))
+* **jitsi:** Raise memory limit for jicofo and jvb as required by upstream product. ([fe923bb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fe923bb9cd58873957adb018c1410d33bb4d8f3a))
+* **keycloak:** Support for custom OIDC Clients and ClientScopes. ([46412d1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/46412d1a9e4547dea8d0da3e322400ea148edf19))
+* **nextcloud:** Support templating of default quota and `*_retention_obligation` settings ([#93](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/93)). ([23ef1d5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/23ef1d557bc0fdf6faac59f7a287f1ef1b302404))
+* **nextcloud:** Update to 28.0.7 including latest apps for 28. ([671f57a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/671f57a809eb4bb791698cda39f7711ac4833334))
+* **nextcloud:** Update to 28.0.7 including the apps, fix admin panel warnings ([#94](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/94)). Updated `cluster.networking.cidr` potentially requires manual migration, see `docs/migrations.md` for details. ([63f8394](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/63f8394e044670a89a642e933600b68ff740a102))
+* **openproject:** Bump to 14.3.0 and update Helm chart to 7.0.0. ([6b609ed](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6b609edc4a60601ca45372b4fc691f0ac7c9ed93))
+* **openproject:** Support for adding token to enable OpenProject Premium. ([dfaf4be](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/dfaf4be640209f5908815cceaf29db591212ddaa))
+* **xwiki:** Add email address mapping to LDAP sync; Fix hostname `null` value in notification links. ([1067e72](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1067e725b3dabce4ddfeb60b4cbe9e5b4d0db0e5))
+* **xwiki:** Remove .rtf and .odt export options as they are currently non functional. ([b806d51](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b806d51311c6d406ea3c93842601ddf5dbd13bb3))
+* **xwiki:** Update to 16.4. ([db7f5d6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/db7f5d60bdae437cebe58ab10f928a4a348e1ee3))
+* **xwiki:** Update to 16.4.1. ([e54aaab](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e54aaab072f31713b5172e4bab9ba7e9ca9c5c26))
+
+
+### Features
+
+* **authentication:** Avoid that users can open a app they do not have the appropriate LDAP group set for. Implementation is based on role based client scopes. Introducing also an openDesk migration approach with a pre and post deployment stage. ([b4570a9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b4570a9a873efa6c896fe543ab0ba3b94fd086c0))
+
 ## [0.8.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v0.8.0...v0.8.1) (2024-07-01)
 
 

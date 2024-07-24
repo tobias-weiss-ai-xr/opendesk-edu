@@ -3,5 +3,5 @@
 ---
 global:
   systemInformation:
-    releaseVersion: "v0.8.1"
+    releaseVersion: "v0.9.0"
 ...
