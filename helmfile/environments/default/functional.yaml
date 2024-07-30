@@ -30,6 +30,11 @@ functional:
         # Disable to not support Matrix federation with your installation.
         enabled: true
 
+  email:
+    systemGenerated:
+      # By disabling all mails are sent from @<domain> instead of @<component>.<domain>.
+      useComponentInSenderdomain: true
+
   filestore:
     quota:
       # Set the default quota for all users in GB

@@ -44,7 +44,7 @@ configuration:
       enabled: {{ .Values.functional.dataProtection.matrixPresence.enabled }}
     
     smtp:
-      senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}"
+      senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.element }}.{{ end }}{{ .Values.global.domain }}"
       host: {{ .Values.smtp.host | quote }}
       port: {{ .Values.smtp.port }}
       username: {{ .Values.smtp.username | quote }}

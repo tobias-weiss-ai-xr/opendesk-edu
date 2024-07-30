@@ -82,7 +82,7 @@ configuration:
     host: {{ .Values.smtp.host | quote }}
     port: {{ .Values.smtp.port | quote }}
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
-    mailDomain: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+    mailDomain: "{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.nextcloud }}.{{ end }}{{ .Values.global.domain }}"
   quota:
     default: "{{ .Values.functional.filestore.quota.default }} GB"
     retentionObligation:
