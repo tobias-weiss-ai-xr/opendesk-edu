@@ -40,7 +40,9 @@ configuration:
               regex: "@.*"
         url: null
         sender_localpart: intercom-service
-
+    presence: 
+      enabled: {{ .Values.functional.dataProtection.matrixPresence.enabled }}
+    
     smtp:
       senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}"
       host: {{ .Values.smtp.host | quote }}
