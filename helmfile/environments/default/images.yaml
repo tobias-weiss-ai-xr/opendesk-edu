@@ -279,7 +279,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-openproject-bootstrap"
-    tag: "1.1.3@sha256:401afe66c418fd130088edbed5cc3b4464dc667eb609f194ea68fd30dcbd1e90"
+    tag: "1.1.4@sha256:2fd97a316114428849aaeef87fb8755274e675830088a93afcafac91bb048d1d"
   openprojectInitDb:
     # providerCategory: "Community"
     # providerResponsible: "OpenProject"
