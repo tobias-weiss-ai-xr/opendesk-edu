@@ -83,7 +83,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jibri"
-    tag: "stable-9457-2@sha256:eb079f650649c6336dc93eb30cdc086c0b784f5c3fe80ea3441a1f00ebf073f3"
+    tag: "stable-9646@sha256:30173d35449d78f8958eaf4de77e76c534806db0e49bdbb930f8c81e003e5a3b"
   jicofo:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -93,7 +93,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jicofo"
-    tag: "stable-9457-2@sha256:7d3213eea740721755da81ecfd9b500c71c610d04939b26de4434619a66e15e1"
+    tag: "stable-9646@sha256:c2c72b6e4b6655d8758145f5c4d4201265626b7c3c1a03f41c7dda060ca7165d"
   jitsi:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -103,7 +103,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/web"
-    tag: "stable-9457-2@sha256:263e2e52934900547f1496eed965e2d3e01e9b8a251844bacbac49deba97f6b2"
+    tag: "stable-9646@sha256:04157797558743fa9c478b76d7332a45c6fbfbe4e34d6550f8716dd8526a1c6c"
   jitsiKeycloakAdapter:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -131,7 +131,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jvb"
-    tag: "stable-9457-2@sha256:2f10f28463e65a13a260d379c4cce62531d66a94bb8dcf2dbe88cdb4cd01b16c"
+    tag: "stable-9646@sha256:22dfb237cdda8142dcf2b141c28d40ec8a675dd379dda5e851dac49e43e677b7"
   mariadb:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -441,7 +441,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/prosody"
-    tag: "stable-9457-2@sha256:5364b0c9c6de654b7b31b5821e9cd7a39660a19010348e7ac56b85be2944daa0"
+    tag: "stable-9646@sha256:ebb258bda974cf5f5d7f7ee845bc7e6d918a68895c62fc1b1fea999960b01b3b"
   redis:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
