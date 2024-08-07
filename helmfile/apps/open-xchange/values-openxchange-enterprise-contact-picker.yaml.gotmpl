@@ -23,7 +23,7 @@ appsuite:
             type: "adminDN"
             adminDN:
               dn: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
-              password: {{ .Values.secrets.univentionManagementStack.ldapSearch.ox | quote }}
+              password: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
 
     uiSettings:
       # Enterprise contact picker

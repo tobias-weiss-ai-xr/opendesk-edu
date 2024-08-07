@@ -13,7 +13,7 @@ helmfiles:
       - {{ toYaml .Values | nindent 8 }}
   - path: "helmfile/apps/services/helmfile-child.yaml"
     values: *values
-  - path: "helmfile/apps/univention-management-stack/helmfile-child.yaml"
+  - path: "helmfile/apps/nubus/helmfile-child.yaml"
     values: *values
   - path: "helmfile/apps/intercom-service/helmfile-child.yaml"
     values: *values

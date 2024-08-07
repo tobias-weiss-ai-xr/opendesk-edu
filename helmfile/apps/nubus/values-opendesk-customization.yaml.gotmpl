@@ -1,0 +1,229 @@
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+keycloak:
+  enabled: true
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-keycloak"
+  replicaCount: {{ .Values.replicas.keycloak }}
+  resources:
+    {{ .Values.resources.umsKeycloak | toYaml | nindent 4 }}
+
+guardian:
+  authorizationApi:
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-guardian-authorization-api"
+    resources:
+      {{ .Values.resources.umsGuardianAuthorizationApi | toYaml | nindent 6 }}
+  managementApi:
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-guardian-management-api"
+    resources:
+      {{ .Values.resources.umsGuardianManagementApi | toYaml | nindent 6 }}
+  managementUi:
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-guardian-management-ui"
+    resources:
+      {{ .Values.resources.umsGuardianManagementUi | toYaml | nindent 6 }}#
+  openPolicyAgent:
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-ums-open-policy-agent"
+    resources:
+      {{ .Values.resources.umsOpenPolicyAgent | toYaml | nindent 6 }}
+  provisioning:
+    # Using openDesk keycloak provisioning
+    enabled: false
+
+nubusNotificationsApi:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-notifications-api"
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  replicaCount: {{ .Values.replicas.umsNotificationsApi }}
+  resources:
+    {{ .Values.resources.umsNotificationsApi | toYaml | nindent 4 }}
+
+nubusUmcServer:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-umc-server"
+  replicaCount: {{ .Values.replicas.umsUmcServer }}
+  resources:
+    {{ .Values.resources.umsUmcServer | toYaml | nindent 4 }}
+  selfService:
+    passwordresetEmailBody: |
+        Sehr geehrte Benutzerin, sehr geehrter Benutzer,
+
+        Ihr Benutzername für {domainname} lautet: {username}
+
+        Sie erhalten diese Nachricht, da Sie Ihr Passwort zurücksetzen möchten oder weil Ihr Benutzer neu im System angelegt wurde.
+
+        Klicken Sie bitte auf den folgenden Link, um Ihr Passwort zu setzen:
+        https://{fqdn}/univention/portal/#/selfservice/newpassword/?token={token}&username={username}
+
+        Der genannte Link ist nur 48 Stunden gültig, danach fordern Sie ihn bitte erneut an unter:
+        https://{fqdn}/univention/portal/#/selfservice/passwordforgotten
+
+        Mit freundlichen Grüßen
+        Ihr {domainname} Passwort-Service
+
+nubusKeycloakExtensions:
+  handler:
+    replicaCount: {{ .Values.replicas.umsKeycloakExtensionsHandler }}
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-keycloak-extensions-handler"
+    resources:
+      {{ .Values.resources.umsKeycloakExtensionHandler | toYaml | nindent 6 }}
+  proxy:
+    replicaCount: {{ .Values.replicas.umsKeycloakExtensionsProxy }}
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-keycloak-extensions-proxy"
+    resources:
+      {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 6 }}
+
+nubusPortalListener:
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-portal-listener"
+  replicaCount: {{ .Values.replicas.umsPortalListener }}
+  resources:
+    {{ .Values.resources.umsPortalListener | toYaml | nindent 4 }}
+  persistence:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.nubus.portalListener | quote }}
+
+nubusPortalServer:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-portal-server"
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  replicaCount: {{ .Values.replicas.umsPortalServer }}
+  resources:
+    {{ .Values.resources.umsPortalServer | toYaml | nindent 4 }}
+
+nubusLdapNotifier:
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-ldap-notifier"
+  replicaCount: {{ .Values.replicas.umsLdapNotifier }}
+  resources:
+    {{ .Values.resources.umsLdapNotifier | toYaml | nindent 4 }}
+
+nubusLdapServer:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-ldap-server"
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  initResources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
+  resources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
+  persistence:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.nubus.ldapServerData | quote }}
+
+nubusPortalFrontend:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-portal-frontend"
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  replicaCount: {{ .Values.replicas.umsPortalFrontend }}
+  resources:
+    {{ .Values.resources.umsPortalFrontend | toYaml | nindent 4 }}
+  portalFrontend:
+    branding:
+      css: {{ .Values.theme.imagery.portalCss | toJson }}
+      favicon: {{ .Values.theme.imagery.faviconIcoB64 | toJson }}
+      logo: {{ .Values.theme.imagery.logoHeaderSvgB64 | toJson }}
+      backgroundImage: {{ .Values.theme.imagery.logoPortalBackgroundSvgB64 | toJson }}
+
+nubusStackDataUms:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-stack-data-ums"
+  resources:
+    {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
+
+nubusStackDataSwp:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-stack-data-swp"
+  resources:
+    {{ .Values.resources.umsStackDataSwp | toYaml | nindent 4 }}
+
+nubusSelfServiceListener:
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-selfservice-listener"
+  resources:
+    {{ .Values.resources.umsSelfserviceListener | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsSelfserviceListener }}
+
+nubusUdmRestApi:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-udm-rest-api"
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  resources:
+    {{ .Values.resources.umsUdmRestApi | toYaml | nindent 4 }}
+  initResources:
+    {{ .Values.resources.umsUdmRestApiInit | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsUdmRestApi }}
+
+nubusUmcGateway:
+  replicaCount: {{ .Values.replicas.umsUmcGateway }}
+  resources:
+    {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
+  extraVolumes:
+    - name: "entrypoint-swp-patches"
+      configMap:
+        name: "ums-stack-data-swp-umc-gateway-entrypoint"
+        defaultMode: 0555
+  extraVolumeMounts:
+    - name: "entrypoint-swp-patches"
+      mountPath: "/entrypoint.d/90-swp.sh"
+      subPath: "90-swp.sh"
+
+nubusKeycloakBootstrap:
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-keycloak-bootstrap"
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  resources:
+    {{ .Values.resources.umsKeycloakBootstrap | toYaml | nindent 4 }}
+
+nubusProvisioning:
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  nats:
+    resources:
+      {{ .Values.resources.nubusProvisioning.nats | toYaml | nindent 6 }}
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-nats"
+    serviceAccount:
+      annotations:
+        intended.usage: "compliance"
+  api:
+    resources:
+      {{ .Values.resources.nubusProvisioning.api | toYaml | nindent 6 }}
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-api"
+  dispatcher:
+    resources:
+      {{ .Values.resources.nubusProvisioning.dispatcher | toYaml | nindent 6 }}
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-dispatcher"
+  prefill:
+    resources:
+      {{ .Values.resources.nubusProvisioning.prefill | toYaml | nindent 6 }}
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-prefill"
+  registerConsumers:
+    resources:
+      {{ .Values.resources.nubusProvisioning.registerConsumers | toYaml | nindent 6 }}
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-register-consumers"
+  udmTransformer:
+    resources:
+      {{ .Values.resources.nubusProvisioning.udmTransformer | toYaml | nindent 6 }}
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-udm-transformer"

@@ -3,8 +3,8 @@ Upstream-Name: openDesk - der Souveräne Arbeitsplatz
 Upstream-Contact: <opendesk@zendis.de>
 Source: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk
 
-Files: helmfile/environments/default/theme/*
-Copyright: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+Files: helmfile/files/theme/*
+Copyright: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 License: Apache-2.0
 
 Files: helmfile/files/gpg-pubkeys/*

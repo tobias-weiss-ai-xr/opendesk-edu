@@ -15,16 +15,13 @@ cleanup:
   keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
 
 migrations:
-  runId: 1
-  currentOdRelease: {{ .Values.global.systemInformation.releaseVersion | quote }}
-  namespace: {{ .Values.migrations.namespace | quote }}
+  runId: 2
+  namespace: {{ .Values.migrations.namespace | default .Release.Namespace | quote }}
   loglevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   failOnUnexpectedState: true
-  credentials:
-    keycloakAdminUsername: "kcadmin"
-    keycloakAdminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
-  urls:
-    keycloakBase: "http://ums-keycloak.{{ .Values.univentionManagementStack.namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
+  environmentDetails:
+    {{ .Values | toYaml | nindent 4 }}
+  cleanup: false
 
 containerSecurityContext:
   allowPrivilegeEscalation: false

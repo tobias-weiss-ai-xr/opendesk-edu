@@ -200,7 +200,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-migrations"
     name: "opendesk-migrations"
-    version: "1.0.1"
+    version: "1.2.1"
     verify: true
   minio:
     # providerCategory: "Community"
@@ -242,6 +242,18 @@ charts:
     name: "nginx"
     version: "15.9.3"
     verify: true
+  nubus:
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://artifacts.software-univention.de"
+    # upstreamRepository: "nubus/charts/nubus"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
+    # upstreamMirrorStartFrom: ["0", "19", "3"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
+    name: "nubus"
+    version: "0.33.0"
+    verify: true
   opendeskKeycloakBootstrap:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -250,7 +262,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap"
     name: "opendesk-keycloak-bootstrap"
-    version: "2.1.0"
+    version: "2.1.1"
     verify: true
   openproject:
     # providerCategory: "Supplier"
@@ -304,7 +316,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
     name: "opendesk-otterize"
-    version: "2.0.1"
+    version: "2.1.0"
     verify: true
   oxConnector:
     # providerCategory: "Supplier"
@@ -377,30 +389,6 @@ charts:
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-web"
     version: "3.3.0"
-    verify: true
-  ums:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Univention"
-    # upstreamRegistry: "https://artifacts.software-univention.de"
-    # upstreamRepository: "nubus/charts/ums"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["0", "12", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "ums"
-    version: "0.16.0"
-    verify: true
-  umsKeycloakBootstrap:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Univention"
-    # upstreamRegistry: "https://artifacts.software-univention.de"
-    # upstreamRepository: "nubus/charts/keycloak-bootstrap"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["0", "1", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
-    name: "keycloak-bootstrap"
-    version: "0.1.0"
     verify: true
   xwiki:
     # providerCategory: "Supplier"

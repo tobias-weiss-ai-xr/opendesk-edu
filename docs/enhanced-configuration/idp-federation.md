@@ -146,8 +146,8 @@ The following configuration is taking place in the Keycloak realm `opendesk`.
   - *Client ID*: Use the client ID you took form your organization's IdP config (`opendesk-federation-client` in this example)
   - *Client Secret*: Use the secret you took form your organization's IdP config
   - When completed with *Add* you get to the detailed IdP configured that also needs some updates (you may need to open the *Advanced* section to access some settings)
-	- *Back-channel logout*: `On`
-	- *Disable user info*: `On`
+    - *Back-channel logout*: `On`
+    - *Disable user info*: `On`
     - *First login flow override*: `auto-federate-flow`
 
 - In case you want to forcefully redirect all users to your organizations IdP (disabling login with local openDesk accounts):

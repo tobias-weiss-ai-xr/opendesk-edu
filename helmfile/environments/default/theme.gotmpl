@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+## The theme properties will be used to set the installations color an images.
+## This is currently not supported by most of the components, but we still
+## want to collect and provide the related information based on the attributes
+## defined in this file.
+#
+theme:
+  ## Define texts
+  #
+  texts:
+    productName: "openDesk"
+
+  ## Define colors
+  #
+  colors:
+    # Element, OX AppSuite, Xwiki
+    primary: "#5e27dd"
+    # OX AppSuite
+    primary15: "#e7dffa"
+    # OX AppSuite
+    black: "#000000"
+    # OX AppSuite, Xwiki
+    white: "#ffffff"
+    # OX AppSuite, Xwiki
+    secondaryGreyLight: "#f5f5f5"
+
+    # Not in use yet
+    primary65: "#9673e9"
+    primary35: "#c7b3f3"
+    secondaryBlue: "#52c1ff"
+    secondaryBlueHighcontrast: "#0c3ff3"
+    secondaryRed: "#ff529e"
+    secondaryYellow: "#ffc700"
+    secondaryGreen: "#00ffcd"
+    secondaryGrey: "#adb3bc"
+
+  ## Define imagery
+  #
+  imagery:
+    # Xwiki
+    faviconSvgB64: {{ readFile "./../../files/theme/favicon.svg" | b64enc | quote }}
+    faviconIcoB64: {{ readFile "./../../files/theme/favicon.ico" | b64enc | quote }}
+    favicon16PngB64: {{ readFile "./../../files/theme/favicon16.png" | b64enc | quote }}
+    favicon144PngB64: {{ readFile "./../../files/theme/favicon144.png" | b64enc | quote }}
+    logoHeaderSvgB64: {{ readFile "./../../files/theme/logoHeader.svg" | b64enc | quote }}
+
+    # Portal
+    logoPortalBackgroundSvgB64: {{ readFile "./../../files/theme/logoPortalBackground.svg" | b64enc | quote }}
+    portalCss: {{ readFile "./../../files/theme/portal.css" | b64enc }}
+
+...

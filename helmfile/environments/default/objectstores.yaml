@@ -33,7 +33,7 @@ objectstores:
     username: "openproject_user"
     pathStyle: true
     useIamProfile: false
-  univentionManagementStack:
+  nubus:
     bucket: "ums"
     endpoint: ""
     region: "eu-west-1"

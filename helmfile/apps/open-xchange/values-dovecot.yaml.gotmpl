@@ -23,7 +23,7 @@ dovecot:
     port: 389
     base: "dc=swp-ldap,dc=internal"
     dn: "uid=ldapsearch_dovecot,cn=users,dc=swp-ldap,dc=internal"
-    password: {{ .Values.secrets.univentionManagementStack.ldapSearch.dovecot | quote }}
+    password: {{ .Values.secrets.nubus.ldapSearch.dovecot | quote }}
   oidc:
     enabled: true
     clientID: "opendesk-dovecot"

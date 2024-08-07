@@ -3,15 +3,15 @@
 ---
 repositories:
   # Univention Management Stack Umbrella Chart
-  - name: "ums"
+  - name: "nubus"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
-    verify: {{ .Values.charts.ums.verify }}
+    verify: {{ .Values.charts.nubus.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url:
-      "{{ .Values.global.helmRegistry | default .Values.charts.ums.registry }}/\
-      {{ .Values.charts.ums.repository }}"
+      "{{ .Values.global.helmRegistry | default .Values.charts.nubus.registry }}/\
+      {{ .Values.charts.nubus.repository }}"
   # OpenDesk Keycloak Bootstrap Chart
   - name: "opendesk-keycloak-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
@@ -25,11 +25,13 @@ repositories:
 releases:
   # Univention Management Stack Umbrella Chart
   - name: "ums"
-    chart: "ums/{{ .Values.charts.ums.name }}"
-    version: "{{ .Values.charts.ums.version }}"
+    chart: "nubus/{{ .Values.charts.nubus.name }}"
+    version: "{{ .Values.charts.nubus.version }}"
     values:
-      - "values-umbrella.yaml.gotmpl"
-    installed: {{ .Values.univentionManagementStack.enabled }}
+      - "values-nubus.yaml.gotmpl"
+      - "values-opendesk-customization.yaml.gotmpl"
+      - "values-opendesk-images.yaml.gotmpl"
+    installed: {{ .Values.nubus.enabled }}
     timeout: 900
   # OpenDesk Keycloak Bootstrap Chart
   - name: "opendesk-keycloak-bootstrap"
@@ -39,10 +41,10 @@ releases:
       - "values-opendesk-keycloak-bootstrap.yaml.gotmpl"
     needs:
       - "ums"
-    installed: {{ .Values.univentionManagementStack.enabled }}
+    installed: {{ .Values.nubus.enabled }}
     timeout: 900
 
 commonLabels:
   deploy-stage: "component-1"
-  component: "univention-management-stack"
+  component: "nubus"
 ...
