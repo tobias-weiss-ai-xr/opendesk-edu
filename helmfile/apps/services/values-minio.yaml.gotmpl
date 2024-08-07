@@ -98,7 +98,7 @@ provisioning:
     - name: {{ .Values.objectstores.openproject.bucket | quote }}
       versioning: true
       withLock: false
-    - name: {{ .Values.objectstores.univentionManagementStack.bucket | quote }}
+    - name: {{ .Values.objectstores.nubus.bucket | quote }}
       versioning: false
       withLock: false
   policies:
@@ -169,7 +169,7 @@ provisioning:
       policies:
         - "openproject-bucket-policy"
       setPolicies: true
-    - username: {{ .Values.objectstores.univentionManagementStack.username | quote }}
+    - username: {{ .Values.objectstores.nubus.username | quote }}
       password: {{ .Values.secrets.minio.umsUser | quote }}
       disabled: false
       policies:

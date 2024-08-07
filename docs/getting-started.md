@@ -100,29 +100,29 @@ export DOMAIN=domain.tld
 
 All available apps and their default value can be found in `helmfile/environments/default/workplace.yaml`.
 
-| Component                   | Name                                | Default | Description                    |
-| --------------------------- | ----------------------------------- | ------- | ------------------------------ |
-| Certificates                | `certificates.enabled`              | `true`  | TLS certificates               |
-| ClamAV (Distributed)        | `clamavDistributed.enabled`         | `false` | Antivirus engine               |
-| ClamAV (Simple)             | `clamavSimple.enabled`              | `true`  | Antivirus engine               |
-| Collabora                   | `collabora.enabled`                 | `true`  | Weboffice                      |
-| CryptPad                    | `cryptpad.enabled`                  | `true`  | Weboffice                      |
-| Dovecot                     | `dovecot.enabled`                   | `true`  | Mail backend                   |
-| Element                     | `element.enabled`                   | `true`  | Secure communications platform |
-| Intercom Service            | `intercom.enabled`                  | `true`  | Cross service data exchange    |
-| Jitsi                       | `jitsi.enabled`                     | `true`  | Videoconferencing              |
-| MariaDB                     | `mariadb.enabled`                   | `true`  | Database                       |
-| Memcached                   | `memcached.enabled`                 | `true`  | Cache Database                 |
-| MinIO                       | `minio.enabled`                     | `true`  | Object Storage                 |
-| Nextcloud                   | `nextcloud.enabled`                 | `true`  | File share                     |
-| OpenProject                 | `openproject.enabled`               | `true`  | Project management             |
-| OX Appsuite                 | `oxAppsuite.enabled`                | `true`  | Groupware                      |
-| Provisioning                | `oxConnector.enabled`               | `true`  | Backend provisioning           |
-| Postfix                     | `postfix.enabled`                   | `true`  | MTA                            |
-| PostgreSQL                  | `postgresql.enabled`                | `true`  | Database                       |
-| Redis                       | `redis.enabled`                     | `true`  | Cache Database                 |
-| Univention Management Stack | `univentionManagementStack.enabled` | `true`  | Identity Management & Portal   |
-| XWiki                       | `xwiki.enabled`                     | `true`  | Knowledge management           |
+| Component            | Name                        | Default | Description                    |
+| -------------------- | --------------------------- | ------- | ------------------------------ |
+| Certificates         | `certificates.enabled`      | `true`  | TLS certificates               |
+| ClamAV (Distributed) | `clamavDistributed.enabled` | `false` | Antivirus engine               |
+| ClamAV (Simple)      | `clamavSimple.enabled`      | `true`  | Antivirus engine               |
+| Collabora            | `collabora.enabled`         | `true`  | Weboffice                      |
+| CryptPad             | `cryptpad.enabled`          | `true`  | Weboffice                      |
+| Dovecot              | `dovecot.enabled`           | `true`  | Mail backend                   |
+| Element              | `element.enabled`           | `true`  | Secure communications platform |
+| Intercom Service     | `intercom.enabled`          | `true`  | Cross service data exchange    |
+| Jitsi                | `jitsi.enabled`             | `true`  | Videoconferencing              |
+| MariaDB              | `mariadb.enabled`           | `true`  | Database                       |
+| Memcached            | `memcached.enabled`         | `true`  | Cache Database                 |
+| MinIO                | `minio.enabled`             | `true`  | Object Storage                 |
+| Nextcloud            | `nextcloud.enabled`         | `true`  | File share                     |
+| OpenProject          | `openproject.enabled`       | `true`  | Project management             |
+| OX Appsuite          | `oxAppsuite.enabled`        | `true`  | Groupware                      |
+| Provisioning         | `oxConnector.enabled`       | `true`  | Backend provisioning           |
+| Postfix              | `postfix.enabled`           | `true`  | MTA                            |
+| PostgreSQL           | `postgresql.enabled`        | `true`  | Database                       |
+| Redis                | `redis.enabled`             | `true`  | Cache Database                 |
+| Nubus                | `nubus.enabled`             | `true`  | Identity Management & Portal   |
+| XWiki                | `xwiki.enabled`             | `true`  | Knowledge management           |
 
 Exemplary, Jitsi can be disabled like:
 
@@ -378,8 +378,7 @@ When all apps are successfully deployed and pod status' went to `Running` or `Su
 https://portal.domain.tld
 ```
 
-If you change the subdomain of `univentionManagementStack`, you need to replace `portal`
-by your specified subdomain.
+If you change the subdomain of `nubus`, you need to replace `portal` by your specified subdomain.
 
 **Credentials:**
 

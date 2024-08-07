@@ -92,7 +92,7 @@ variables:
       - "yes"
       - "no"
   DEPLOY_UMS:
-    description: "Enable Univention Management Stack deployment."
+    description: "Enable Nubus deployment."
     value: "no"
     options:
       - "yes"
@@ -317,7 +317,7 @@ ums-deploy:
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no")
       when: "on_success"
   variables:
-    COMPONENT: "univention-management-stack"
+    COMPONENT: "nubus"
 
 ox-deploy:
   stage: "component-deploy-stage-1"

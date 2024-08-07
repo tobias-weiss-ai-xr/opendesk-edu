@@ -16,7 +16,7 @@ persistence:
     prosody: "1Gi"
     redis: "1Gi"
     synapse: "1Gi"
-    univentionManagementStack:
+    nubus:
       ldapServerData: "1Gi"
       ldapServerShared: "1Gi"
       portalListener: "1Gi"

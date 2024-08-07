@@ -1,0 +1,323 @@
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  nubusDeployment: true
+  ldap:
+    baseDn: {{ .Values.ldap.baseDn | quote }}
+    domainName: {{ .Values.global.domain | quote }}
+  domain: {{ .Values.global.domain | quote }}
+  ingressClass: {{ .Values.ingress.ingressClassName | default "nginx" | quote }}
+  certManagerIssuer: "letsencrypt-prod-dns"
+  nubusMasterPassword: {{ env "MASTER_PASSWORD" | default "sovereign-workplace" | quote }}
+  keycloak:
+    realm: {{ .Values.platform.realm | quote }}
+  objectStorage:
+    bucket: {{ .Values.objectstores.nubus.bucket | quote }}
+    connection:
+      host: "minio"
+      port: "9000"
+      protocol: "http"
+  credentialOverride:
+    ldapServer:
+      adminPassword: {{ .Values.secrets.nubus.ldapSecret | quote}}
+    defaultUsers:
+      defaultAdminPassword: {{ .Values.secrets.nubus.defaultAccounts.adminPassword | quote}}
+      defaultUserPassword: {{ .Values.secrets.nubus.defaultAccounts.userPassword | quote}}
+
+  # -- Extensions to load. Add entries to load additional extensions into Nubus.
+  extensions:
+    - name: "ox"
+      image:
+        registry: {{ .Values.images.nubusOxExtension.registry }}
+        repository: {{ .Values.images.nubusOxExtension.repository }}
+        tag: {{ .Values.images.nubusOxExtension.tag }}
+        imagePullPolicy: "IfNotPresent"
+    - name: "opendesk"
+      image:
+        registry: "registry.opencode.de"
+        repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
+        imagePullPolicy: "IfNotPresent"
+        tag: "1.1.0"
+
+  # -- Allows to configure the system extensions to load. This is intended for
+  # internal usage, prefer to use `global.extensions` for user configured
+  # extensions.
+  systemExtensions:
+    - name: "portal"
+      image:
+        registry: {{ .Values.images.nubusPortalExtension.registry }}
+        repository: {{ .Values.images.nubusPortalExtension.repository }}
+        tag: {{ .Values.images.nubusPortalExtension.tag }}
+        imagePullPolicy: "IfNotPresent"
+
+# Nubus bundled services
+postgresql:
+  enabled: false
+  provisioning:
+    enabled: false
+
+minio:
+  enabled: false
+
+# Nubus services which use customer supplied services
+keycloak:
+  keycloak:
+    auth:
+      username: "kcadmin"
+      credentialSecret:
+        name: "ums-opendesk-keycloak-credentials"
+        key: "admin_password"
+  postgresql:
+    connection:
+      host: {{ .Values.databases.keycloak.host | quote }}
+      port: {{ .Values.databases.keycloak.port | quote }}
+    auth:
+      username: {{ .Values.databases.keycloak.username | quote }}
+      database: {{ .Values.databases.keycloak.name | quote }}
+      credentialSecret:
+        name: "ums-keycloak-postgresql-opendesk-credentials"
+        key: "keycloakDatabasePassword"
+  config:
+    exposeAdminConsole: {{ .Values.debug.enabled }}
+
+nubusGuardian:
+  provisioning:
+    enabled: true
+    config:
+      keycloak:
+        credentialSecret:
+          name: "ums-opendesk-keycloak-credentials"
+          key: "admin_password"
+      managementApi:
+        credentialSecret:
+          name: "ums-opendesk-guardian-client-secret"
+          key: "managementApiClientSecret"
+
+  postgresql:
+    connection:
+      host: {{ .Values.databases.umsGuardianManagementApi.host | quote }}
+      port: {{ .Values.databases.umsGuardianManagementApi.port | quote }}
+    auth:
+      username: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
+      database: {{ .Values.databases.umsGuardianManagementApi.name | quote }}
+      credentialSecret:
+        name: "ums-guardian-postgresql-opendesk-credentials"
+        key: "guardianDatabasePassword"
+
+nubusNotificationsApi:
+  postgresql:
+    connection:
+      host: {{ .Values.databases.umsNotificationsApi.host | quote }}
+      port: {{ .Values.databases.umsNotificationsApi.port | quote }}
+    auth:
+      username: {{ .Values.databases.umsNotificationsApi.username | quote }}
+      database: {{ .Values.databases.umsNotificationsApi.name | quote }}
+      existingSecret: "ums-notifications-api-postgresql-opendesk-credentials"
+
+
+nubusKeycloakExtensions:
+  keycloak:
+    auth:
+      username: "kcadmin"
+      credentialSecret:
+        name: "ums-opendesk-keycloak-credentials"
+        key: "admin_password"
+  proxy:
+    ingress:
+      paths:
+        {{- if .Values.debug.enabled }}
+        - pathType: "Prefix"
+          path: "/admin/"
+        {{- end }}
+        - pathType: "Prefix"
+          path: "/realms/"
+        - pathType: "Prefix"
+          path: "/js/"
+        - pathType: "Prefix"
+          path: "/resources/"
+        - pathType: "Prefix"
+          path: "/fingerprintjs"
+
+
+  postgresql:
+    connection:
+      host: {{ .Values.databases.keycloakExtension.host | quote }}
+      port: {{ .Values.databases.keycloakExtension.port | quote }}
+    auth:
+      database: {{ .Values.databases.keycloakExtension.name | quote }}
+      username: {{ .Values.databases.keycloakExtension.username | quote }}
+      credentialSecret:
+        name: "ums-keycloak-extensions-postgresql-opendesk-credentials"
+        key: "umcKeycloakExtensionsDatabasePassword"
+  smtp:
+    connection:
+      host: {{ .Values.smtp.host | quote }}
+      port: {{ .Values.smtp.port | quote }}
+    auth:
+      username: {{ .Values.smtp.username | quote }}
+      credentialSecret:
+        name: "ums-keycloak-extensions-smtp-opendesk-credentials"
+        key: "umcKeycloakExtensionsSmtpPassword"
+  handler:
+    appConfig:
+      logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
+      newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
+      mailFrom: "{{ .Values.smtp.localpartNoReply }}@{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.keycloak }}.{{ end }}{{ .Values.global.domain }}"
+
+nubusPortalListener:
+  portalListener:
+    objectStorageEndpoint: {{ .Values.objectstores.nubus.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
+    objectStorageCredentialSecret:
+      name: "ums-portal-listener-minio-opendesk-credentials"
+      accessKeyKey: "access-key-id"
+      secretKeyKey: "secret-key-id"
+
+nubusPortalServer:
+  portalServer:
+    objectStorageEndpoint: {{ .Values.objectstores.nubus.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
+    objectStorageCredentialSecret:
+      name: "ums-portal-server-minio-opendesk-credentials"
+      accessKeyKey: "access-key-id"
+      secretKeyKey: "secret-key-id"
+    centralNavigation:
+      enabled: true
+      authenticatorSecretName: "ums-opendesk-portal-server-central-navigation"
+
+# NOTE: disabled until the next update.
+nubusProvisioning:
+  enabled: false
+nubusUdmListener:
+  enabled: false
+nubusSelfServiceListener:
+  enabled: true
+  selfserviceListener:
+    umcAdminUser: "default.admin"
+
+# Nubus services
+nubusStackDataUms:
+  stackDataContext:
+    umcPostgresqlHostname: {{ .Values.databases.umsSelfservice.host | quote }}
+    umcPostgresqlUsername: {{ .Values.databases.umsSelfservice.username | quote }}
+    umcMemcachedHostname: {{ .Values.cache.umsSelfservice.host | quote }}
+    umcMemcachedUsername: ""
+    externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
+    umcHtmlTitle: "openDesk Portal"
+    installUmcPolicies: true
+  nubusUmcServer:
+    memcached:
+      auth:
+        username: ""
+
+# TODO: Remove values when upstreaming fixes
+nubusStackDataSwp:
+  stackDataContext:
+    ldapSearchUsers:
+      {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
+      - username: {{ printf "ldapsearch_%s" $username | quote }}
+        password: {{ $password | quote }}
+        lastname: "LDAP-Search-User"
+      {{- end }}
+    externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
+    smtpHost: {{ .Values.smtp.host | quote }}
+    smtpPort: {{ .Values.smtp.port | quote }}
+    smtpUser: {{ .Values.smtp.username | quote }}
+    ldapBase: {{ .Values.ldap.baseDn }}
+    # FIXME: Should be templated correctly in the future
+    portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
+    portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
+    portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain }}
+    portalManagementKnowledgeLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.xwiki .Values.global.domain }}
+    portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
+    portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain }}
+    portalTitleDE: "openDesk Portal"
+    portalTitleEN: "openDesk Portal"
+    oxDefaultContext: "1"
+
+nubusUmcServer:
+  postgresql:
+    bundled: false
+    connection:
+      host: {{ .Values.databases.umsSelfservice.host | quote }}
+      port: {{ .Values.databases.umsSelfservice.port | quote }}
+    auth:
+      username: {{ .Values.databases.umsSelfservice.username | quote }}
+      database: {{ .Values.databases.umsSelfservice.name | quote }}
+      credentialSecret:
+        name: "ums-umc-server-postgresql-opendesk-credentials"
+        key: "umcServerDatabasePassword"
+  memcached:
+    bundled: false
+    server: {{ .Values.cache.umsSelfservice.host | quote }}
+    auth:
+      credentialSecret:
+        name: "ums-umc-server-memcached-opendesk-credentials"
+        key: "umcServerMemcachedPassword"
+  smtp:
+    credentialSecret:
+      name: "ums-umc-server-smtp-credentials-custom"
+
+nubusUmcGateway:
+  umcGateway:
+    umcHtmlTitle: "openDesk Portal"
+
+nubusKeycloakBootstrap:
+  keycloak:
+    auth:
+      username: "kcadmin"
+      credentialSecret:
+        name: "ums-opendesk-keycloak-credentials"
+        key: "admin_password"
+  bootstrap:
+    ldapMappers:
+      - ldapAndUserModelAttributeName: "opendeskProjectmanagementAdmin"
+      - ldapAndUserModelAttributeName: "oxContextIDNum"
+    twoFactorAuthentication:
+      enabled: true
+      group: "2fa-users"
+
+# Credential secrets for accessing customer supplied services
+extraSecrets:
+  - name: "ums-opendesk-portal-server-central-navigation"
+    stringData:
+      authenticator.secret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+  - name: "ums-opendesk-guardian-client-secret"
+    stringData:
+      managementApiClientSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
+  - name: "ums-opendesk-keycloak-credentials"
+    stringData:
+      admin_password: {{ .Values.secrets.keycloak.adminPassword | quote }}
+  - name: "ums-keycloak-postgresql-opendesk-credentials"
+    stringData:
+      keycloakDatabasePassword: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser | quote }}
+  - name: "ums-guardian-postgresql-opendesk-credentials"
+    stringData:
+      guardianDatabasePassword: {{ .Values.databases.umsGuardianManagementApi.password | default .Values.secrets.postgresql.umsGuardianManagementApiUser | quote }}
+  - name: "ums-notifications-api-postgresql-opendesk-credentials"
+    stringData:
+      password: {{ .Values.databases.umsNotificationsApi.password | default .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
+  - name: "ums-umc-server-postgresql-opendesk-credentials"
+    stringData:
+      umcServerDatabasePassword: {{ .Values.databases.umsSelfservice.password | default .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+  - name: "ums-umc-server-memcached-opendesk-credentials"
+    stringData:
+      umcServerMemcachedPassword: ""
+  - name: "ums-keycloak-extensions-postgresql-opendesk-credentials"
+    stringData:
+      umcKeycloakExtensionsDatabasePassword: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
+  - name: "ums-keycloak-extensions-smtp-opendesk-credentials"
+    stringData:
+      umcKeycloakExtensionsSmtpPassword: {{ .Values.smtp.password | quote }}
+  - name: "ums-portal-server-minio-opendesk-credentials"
+    stringData:
+      access-key-id: {{ .Values.objectstores.nubus.username | quote }}
+      secret-key-id: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+  - name: "ums-portal-listener-minio-opendesk-credentials"
+    stringData:
+      access-key-id: {{ .Values.objectstores.nubus.username | quote }}
+      secret-key-id: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+  - name: "ums-umc-server-smtp-credentials-custom"
+    stringData:
+      password: {{ .Values.smtp.password | quote }}

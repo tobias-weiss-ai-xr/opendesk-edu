@@ -45,7 +45,7 @@ marked with a gear.
 |                             | `replicas.jitsi `                        | :white_check_mark:  |       :gear:       |
 |                             | `replicas.jitsiKeycloakAdapter`          | :white_check_mark:  |       :gear:       |
 |                             | `replicas.jvb `                          |         :x:         |        :x:         |
-| Keycloak                    | `replicas.keycloak`                      | :white_check_mark:  |       :gear:       |
+| Keycloak                    | `replicas.keycloak`                      | :white_check_mark:  | :white_check_mark: |
 | Memcached                   | `replicas.memcached`                     |       :gear:        |       :gear:       |
 | Minio                       | `replicas.minioDistributed`              | :white_check_mark:  | :white_check_mark: |
 | Nextcloud                   | `replicas.nextcloudApache2`              | :white_check_mark:  | :white_check_mark: |

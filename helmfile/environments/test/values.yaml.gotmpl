@@ -18,16 +18,16 @@ persistence:
     mariadb: "42Gi"
     matrixNeoDateFixBot: "42Gi"
     minio: "42Gi"
+    nubus:
+      ldapServerData: "42Gi"
+      ldapServerShared: "42Gi"
+      portalListener: "42Gi"
+      selfserviceListener: "42Gi"
     postfix: "42Gi"
     postgresql: "42Gi"
     prosody: "42Gi"
     redis: "42Gi"
     synapse: "42Gi"
-    univentionManagementStack:
-      ldapServerData: "42Gi"
-      ldapServerShared: "42Gi"
-      portalListener: "42Gi"
-      selfserviceListener: "42Gi"
     xwiki: "42Gi"
 ingress:
   ingressClassName: "kyverno"

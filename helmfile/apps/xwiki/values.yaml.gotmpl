@@ -55,7 +55,7 @@ customConfigs:
     xwiki.authentication.ldap.port: 389
     ## Authentication to the LDAP server
     xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
-    xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.univentionManagementStack.ldapSearch.xwiki | quote }}
+    xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.nubus.ldapSearch.xwiki | quote }}
     ## Base DN used for searching for users
     xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
     ## Allow short update cycles of the LDAP group cache
@@ -83,8 +83,8 @@ customConfigs:
     # yamllint disable-line rule:line-length
     oidc.userinfoclaims: "xwiki_user_accessibility,xwiki_user_company,xwiki_user_displayHiddenDocuments,xwiki_user_editor,xwiki_user_usertype"
     url.trustedDomains: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
-    workplaceServices.navigationEndpoint: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
-    workplaceServices.base: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+    workplaceServices.navigationEndpoint: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
+    workplaceServices.base: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
     workplaceServices.portalSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
     openoffice.serverType: "0"
     notifications.emails.live.graceTime: "5"
@@ -129,8 +129,8 @@ postgresql:
   enabled: false
 
 properties:
-  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvg | b64enc }}"
-  "attachment:xwiki:XWiki.DefaultSkin@icons.xwiki.favicon.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.faviconSvg | b64enc }}"
+  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvgB64 }}"
+  "attachment:xwiki:XWiki.DefaultSkin@icons.xwiki.favicon.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.faviconSvgB64 }}"
   "attachment:xwiki:XWiki.DefaultSkin@icons.xwiki.favicon16.png": "data:image/png;base64,{{ .Values.theme.imagery.favicon16PngB64 }}"
   "attachment:xwiki:XWiki.DefaultSkin@icons.xwiki.favicon144.png": "data:image/png;base64,{{ .Values.theme.imagery.favicon144PngB64 }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.secure": 1

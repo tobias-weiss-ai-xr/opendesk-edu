@@ -1,0 +1,241 @@
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+keycloak:
+  image:
+    registry: {{ .Values.images.nubusKeycloak.registry }}
+    repository: {{ .Values.images.nubusKeycloak.repository }}
+    tag: {{ .Values.images.nubusKeycloak.tag }}
+
+nubusKeycloakBootstrap:
+  image:
+    registry: {{ .Values.images.nubusKeycloakBootstrap.registry }}
+    repository: {{ .Values.images.nubusKeycloakBootstrap.repository }}
+    tag: {{ .Values.images.nubusKeycloakBootstrap.tag }}
+
+nubusKeycloakExtensions:
+    handler:
+      image:
+        registry: {{ .Values.images.nubusKeycloakExtensionHandler.registry }}
+        repository: {{ .Values.images.nubusKeycloakExtensionHandler.repository }}
+        tag: {{ .Values.images.nubusKeycloakExtensionHandler.tag }}
+    
+    proxy:
+      image:
+        registry: {{ .Values.images.nubusKeycloakExtensionProxy.registry }}
+        repository: {{ .Values.images.nubusKeycloakExtensionProxy.repository }}
+        tag: {{ .Values.images.nubusKeycloakExtensionProxy.tag }}
+
+nubusLdapNotifier:
+  image:
+    registry: {{ .Values.images.nubusLdapNotifier.registry }}
+    repository: {{ .Values.images.nubusLdapNotifier.repository }}
+    tag: {{ .Values.images.nubusLdapNotifier.tag }}
+
+nubusLdapServer:
+  ldapServer:
+    image:
+      registry: {{ .Values.images.nubusLdapServer.registry }}
+      repository: {{ .Values.images.nubusLdapServer.repository }}
+      tag: {{ .Values.images.nubusLdapServer.tag }}
+  dhInitcontainer:
+    image:
+      registry: {{ .Values.images.nubusLdapServerDhInitContainer.registry }} 
+      repository: {{ .Values.images.nubusLdapServerDhInitContainer.repository }}
+      tag: {{ .Values.images.nubusLdapServerDhInitContainer.tag }}
+  waitForDependency:
+    image:
+      registry: {{ .Values.images.nubusWaitForDependency.registry }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      
+
+nubusPortalConsumer:
+  portalConsumer:
+    image:
+      registry: {{ .Values.images.nubusPortalConsumer.registry }}
+      repository: {{ .Values.images.nubusPortalConsumer.repository }}
+      tag: {{ .Values.images.nubusPortalConsumer.tag }}
+      
+
+nubusNotificationsApi:
+  image:
+    registry: {{ .Values.images.nubusNotificationsApi.registry }}
+    repository: {{ .Values.images.nubusNotificationsApi.repository }}
+    tag: {{ .Values.images.nubusNotificationsApi.tag }}
+
+nubusPortalFrontend:
+  image:
+    registry: {{ .Values.images.nubusPortalFrontend.registry }}
+    repository: {{ .Values.images.nubusPortalFrontend.repository }}
+    tag: {{ .Values.images.nubusPortalFrontend.tag }}
+
+nubusPortalListener:
+  image:
+    registry: {{ .Values.images.nubusPortalListener.registry }}
+    repository: {{ .Values.images.nubusPortalListener.repository }}
+    tag: {{ .Values.images.nubusPortalListener.tag }}
+  waitForDependency:
+    image:
+      registry: {{ .Values.images.nubusWaitForDependency.registry }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+
+nubusPortalServer:
+  image:
+    registry: {{ .Values.images.nubusPortalServer.registry }}
+    repository: {{ .Values.images.nubusPortalServer.repository }}
+    tag: {{ .Values.images.nubusPortalServer.tag }}
+
+nubusProvisioning:
+  api:
+    image:
+      registry: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.registry }}
+      repository: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.repository }}
+      tag: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.tag }}
+  dispatcher:
+    image:
+      registry: {{ .Values.images.nubusProvisioningDispatcher.registry }}
+      repository: {{ .Values.images.nubusProvisioningDispatcher.repository }}
+      tag: {{ .Values.images.nubusProvisioningDispatcher.tag }}
+  udmTransformer:
+    image:
+      registry: {{ .Values.images.nubusProvisioningUdmTransformer.registry }}
+      repository: {{ .Values.images.nubusProvisioningUdmTransformer.repository }}
+      tag: {{ .Values.images.nubusProvisioningUdmTransformer.tag }}
+  prefill:
+    image:
+      registry: {{ .Values.images.nubusProvisioningPrefill.registry }}
+      repository: {{ .Values.images.nubusProvisioningPrefill.repository }}
+      tag: {{ .Values.images.nubusProvisioningPrefill.tag }}
+  registerConsumers:
+    image:
+      registry: {{ .Values.images.nubusWaitForDependency.registry }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+  nats:
+    nats:
+        image:
+            registry: {{ .Values.images.nubusNats.registry }}
+            repository: {{ .Values.images.nubusNats.repository }}
+            tag: {{ .Values.images.nubusNats.tag }}
+    reloader:
+        image:
+            registry: {{ .Values.images.nubusNatsReloader.registry }}
+            repository: {{ .Values.images.nubusNatsReloader.repository }}
+            tag: {{ .Values.images.nubusNatsReloader.tag }}
+    natsBox:
+        image:
+            registry: {{ .Values.images.nubusNatsBox.registry }}
+            repository: {{ .Values.images.nubusNatsBox.repository }}
+            tag: {{ .Values.images.nubusNatsBox.tag }}
+
+nubusProvisioningEventsAndConsumerApi:
+  image:
+    registry: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.registry }}
+    repository: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.repository }}
+    tag: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.tag }}
+
+nubusProvisioningPrefill:
+  image:
+    registry: {{ .Values.images.nubusProvisioningPrefill.registry }}
+    repository: {{ .Values.images.nubusProvisioningPrefill.repository }}
+    tag: {{ .Values.images.nubusProvisioningPrefill.tag }}
+
+nubusUdmListener:
+  image:
+    registry: {{ .Values.images.nubusProvisioningUdmListener.registry }}
+    repository: {{ .Values.images.nubusProvisioningUdmListener.repository }}
+    tag: {{ .Values.images.nubusProvisioningUdmListener.tag }}
+
+nubusSelfServiceListener:
+  selfserviceListener:
+    image:
+      registry: {{ .Values.images.nubusSelfserviceListener.registry }}
+      repository: {{ .Values.images.nubusSelfserviceListener.repository }}
+      tag: {{ .Values.images.nubusSelfserviceListener.tag }}
+  selfserviceInvitation:
+    image:
+      registry: {{ .Values.images.nubusSelfserviceInvitation.registry }}
+      repository: {{ .Values.images.nubusSelfserviceInvitation.repository }}
+      tag: {{ .Values.images.nubusSelfserviceInvitation.tag }}
+  waitForDependency:
+    image:
+      registry: {{ .Values.images.nubusWaitForDependency.registry }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+
+nubusUdmRestApi:
+  # oxPlugin:
+  #   image:
+  #     registry: \{\{ .Values.images.nubusUdmRestApiOxPlugin.registry }}
+  #     repository: \{\{ .Values.images.nubusUdmRestApiOxPlugin.repository }}
+  #     tag: \{\{ .Values.images.nubusUdmRestApiOxPlugin.tag }}
+  # portalPlugin:
+  #   image:
+  #     registry: \{\{ .Values.images.nubusUdmRestApiPortalPlugin.registry }}
+  #     repository: \{\{ .Values.images.nubusUdmRestApiPortalPlugin.repository }}
+  #     tag: \{\{ .Values.images.nubusUdmRestApiPortalPlugin.tag }}
+  udmRestApi:
+    image:
+      registry: {{ .Values.images.nubusUdmRestApi.registry }}
+      repository: {{ .Values.images.nubusUdmRestApi.repository }}
+      tag: {{ .Values.images.nubusUdmRestApi.tag }}
+
+nubusUmcGateway:
+  image:
+    registry: {{ .Values.images.nubusUmcGateway.registry }}
+    repository: {{ .Values.images.nubusUmcGateway.repository }}
+    tag: {{ .Values.images.nubusUmcGateway.tag }}
+
+nubusUmcServer:
+  image:
+    registry: {{ .Values.images.nubusUmcServer.registry }}
+    repository: {{ .Values.images.nubusUmcServer.repository }}
+    tag: {{ .Values.images.nubusUmcServer.tag }}
+
+nubusWaitForDependency:
+  image:
+    registry: {{ .Values.images.nubusWaitForDependency.registry }}
+    repository: {{ .Values.images.nubusWaitForDependency.repository }}
+    tag: {{ .Values.images.nubusWaitForDependency.tag }}
+
+
+nubusGuardian:
+  provisioning:
+    image:
+      registry: {{ .Values.images.nubusGuardianProvisioning.registry }}
+      repository: {{ .Values.images.nubusGuardianProvisioning.repository }}
+      tag: {{ .Values.images.nubusGuardianProvisioning.tag }}
+  authorizationApi:
+    image:
+      registry: {{ .Values.images.nubusGuardianAuthorizationApi.registry }}
+      repository: {{ .Values.images.nubusGuardianAuthorizationApi.repository }}
+      tag: {{ .Values.images.nubusGuardianAuthorizationApi.tag }}
+  managementApi:
+    image:
+      registry: {{ .Values.images.nubusGuardianManagementApi.registry }}
+      repository: {{ .Values.images.nubusGuardianManagementApi.repository }}
+      tag: {{ .Values.images.nubusGuardianManagementApi.tag }}
+  managementUi:
+    image:
+      registry: {{ .Values.images.nubusGuardianManagementUi.registry }}
+      repository: {{ .Values.images.nubusGuardianManagementUi.repository }}
+      tag: {{ .Values.images.nubusGuardianManagementUi.tag }}
+  openPolicyAgent:
+    image:
+      registry: {{ .Values.images.nubusOpenPolicyAgent.registry }}
+      repository: {{ .Values.images.nubusOpenPolicyAgent.repository }}
+      tag: {{ .Values.images.nubusOpenPolicyAgent.tag }}
+
+nubusStackDataUms:
+  image:
+    registry: {{ .Values.images.nubusDataLoader.registry }}
+    repository: {{ .Values.images.nubusDataLoader.repository }}
+    tag: {{ .Values.images.nubusDataLoader.tag }}
+
+nubusStackDataSwp:
+  image:
+    registry: {{ .Values.images.nubusDataLoader.registry }}
+    repository: {{ .Values.images.nubusDataLoader.repository }}
+    tag: {{ .Values.images.nubusDataLoader.tag }}

@@ -17,12 +17,12 @@ lint-kyverno:
           - "intercom-service"
           - "jitsi"
           - "nextcloud"
+          - "nubus"
           - "open-xchange"
           - "openproject"
           - "openproject-bootstrap"
           - "provisioning"
           - "services"
-          - "univention-management-stack"
           - "xwiki"
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${APP}"

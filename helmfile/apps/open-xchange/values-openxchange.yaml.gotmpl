@@ -185,7 +185,7 @@ appsuite:
       com.openexchange.oidc.opLogoutEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
       com.openexchange.oidc.opTokenEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
       com.openexchange.oidc.rpRedirectURIAuth: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/appsuite/api/oidc/auth"
-      com.openexchange.oidc.rpRedirectURILogout: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}"
+      com.openexchange.oidc.rpRedirectURILogout: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
       com.openexchange.oidc.rpRedirectURIPostSSOLogout: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/appsuite/api/oidc/logout"
       com.openexchange.oidc.ssoLogout: "true"
       com.openexchange.oidc.startDefaultBackend: "true"
@@ -275,7 +275,7 @@ appsuite:
       /opt/open-xchange/etc/ldapauth.properties:
         java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/dc=swp-ldap,dc=internal"
         bindDN: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
-        bindDNPassword: {{ .Values.secrets.univentionManagementStack.ldapSearch.ox | quote }}
+        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
         bindOnly: "false"
       /opt/open-xchange/etc/antivirus.properties:
         com.openexchange.antivirus.enabled: "true"
@@ -317,7 +317,7 @@ appsuite:
       # io.ox/mail//contactCollectOnMailAccess: "true"
       # Dynamic theme
       io.ox/dynamic-theme//mainColor: {{ .Values.theme.colors.primary | quote }}
-      io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.univentionManagementStack }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
+      io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
       io.ox/dynamic-theme//topbarBackground: {{ .Values.theme.colors.white | quote }}
       io.ox/dynamic-theme//topbarColor: {{ .Values.theme.colors.black | quote }}
       io.ox/dynamic-theme//listSelected: {{ .Values.theme.colors.primary15 | quote }}

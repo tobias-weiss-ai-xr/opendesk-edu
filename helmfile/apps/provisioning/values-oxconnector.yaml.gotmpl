@@ -19,9 +19,9 @@ oxConnector:
   caCert: "ucctempldapstring"
   debugLevel: {{ if .Values.debug.enabled }}"4"{{ else }}"1"{{ end }}
   domainName: {{ .Values.global.domain | quote }}
-  ldapHost: {{ .Values.ldap.host | quote }}
+  ldapHost: "{{ .Values.ldap.host }}-primary"
   logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
-  ldapPassword: {{ .Values.secrets.univentionManagementStack.ldapSecret | quote }}
+  ldapPassword: {{ .Values.secrets.nubus.ldapSecret | quote }}
   ldapBaseDn: "dc=swp-ldap,dc=internal"
   ldapHostDn: "cn=admin,dc=swp-ldap,dc=internal"
   tlsMode: "off"
