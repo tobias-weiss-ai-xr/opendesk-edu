@@ -44,9 +44,9 @@ We will provide additional documents regarding user provisioning in the future, 
   - UDM REST API:
     - Build a provisioning solution by yourself using the [UDM REST API](https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html).
     - The API gives you full control over the contents of the IAM in order to create, update or delete users and groups.
-  - Directory Connector:
+  - Nubus Directory Importer:
     - It is based on a Python one-way directory synchronization for users and groups.
-    - We will provide more details on this approach soon one the tool is made publicly available.
+    - Please find more details in the [upstream product's documentation](https://docs.software-univention.de/nubus-kubernetes-operation/latest/en/howto-connect-external-iam.html).
 - Ad-hoc provisioning (AHP)
   - This feature is currently not available in the openDesk Keycloak, but there are plans by the Supplier Univention to make it available.
   - Ad-hoc provisioning creates an user account on the fly during a users first login.

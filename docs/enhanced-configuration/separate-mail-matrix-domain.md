@@ -9,6 +9,10 @@ SPDX-License-Identifier: Apache-2.0
 * [Example configuration](#example-configuration)
   * [Mail domain](#mail-domain)
   * [Matrix domain](#matrix-domain)
+    * [DNS](#dns)
+    * [Webserver](#webserver)
+      * [Content Security Policy](#content-security-policy)
+      * [.well-known](#well-known)
 
 # Use case
 
@@ -59,13 +63,23 @@ or via environment variable
 export MATRIX_DOMAIN=my_organization.tld
 ```
 
-This setup requires also a different DNS setup:
+### DNS
+
+The following changes apply to the standard DNS:
 
 | Record name                      | Type | Value                                  | Comment                                                                            |
 | -------------------------------- | ---- | -------------------------------------- | ---------------------------------------------------------------------------------- |
 | _matrix._tcp.my_organization.tld | SRV  | `1 10 PORT matrix.opendesk.domain.tld` | `PORT` is your NodePort/LoadBalancer port of `opendesk-synapse-federation` service |
 
 *Note:* `matrix.opendesk.domain.tld` in the "Value" column can also be the IP address where synapse TLS port is listening to.
+
+### Webserver
+
+#### Content Security Policy
+
+The webserver of `my_organization.tld` should add `*.opendesk.domain.tld` to it's CSP header.
+
+#### .well-known
 
 If you want to use other Matrix clients,
 e.g., Element Messenger for [iOS](https://apps.apple.com/de/app/element-messenger/id1083446067)
