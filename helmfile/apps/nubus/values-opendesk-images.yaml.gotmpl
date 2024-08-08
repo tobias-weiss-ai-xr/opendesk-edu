@@ -19,7 +19,7 @@ nubusKeycloakExtensions:
         registry: {{ .Values.images.nubusKeycloakExtensionHandler.registry }}
         repository: {{ .Values.images.nubusKeycloakExtensionHandler.repository }}
         tag: {{ .Values.images.nubusKeycloakExtensionHandler.tag }}
-    
+
     proxy:
       image:
         registry: {{ .Values.images.nubusKeycloakExtensionProxy.registry }}
@@ -40,7 +40,7 @@ nubusLdapServer:
       tag: {{ .Values.images.nubusLdapServer.tag }}
   dhInitcontainer:
     image:
-      registry: {{ .Values.images.nubusLdapServerDhInitContainer.registry }} 
+      registry: {{ .Values.images.nubusLdapServerDhInitContainer.registry }}
       repository: {{ .Values.images.nubusLdapServerDhInitContainer.repository }}
       tag: {{ .Values.images.nubusLdapServerDhInitContainer.tag }}
   waitForDependency:
@@ -48,7 +48,7 @@ nubusLdapServer:
       registry: {{ .Values.images.nubusWaitForDependency.registry }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
-      
+
 
 nubusPortalConsumer:
   portalConsumer:
@@ -56,7 +56,7 @@ nubusPortalConsumer:
       registry: {{ .Values.images.nubusPortalConsumer.registry }}
       repository: {{ .Values.images.nubusPortalConsumer.repository }}
       tag: {{ .Values.images.nubusPortalConsumer.tag }}
-      
+
 
 nubusNotificationsApi:
   image:

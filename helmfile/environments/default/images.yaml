@@ -205,7 +205,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
-    tag: "1.2.0@sha256:42ebe655680466fd4b1647719752f1a4e7482eb2bc44abff806c4ac69fcda3e8"
+    tag: "1.2.1@sha256:241561c51dee3ccd4d54cf732020634291f124025946e6be983f850bbf4eb1d3"
   milter:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -362,8 +362,8 @@ images:
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
     # upstreamMirrorStartFrom: ["0", "8", "2"]
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/ldap-server"
-    tag: "0.17.1@sha256:5b7b629b9655c7bb2857013f3399cefe5bdd3963d568bbf77d6d488c005e3b3b"
+    repository: "bmi/opendesk/components/platform-development/images/temp-nubus-ldap-2.5-upgrade"
+    tag: "1.1.20@sha256:90f46b8817fa05e6e3ac3b2f053911198675805fb82db8240bfa41239d7e7c61"
   nubusLdapServerDhInitContainer:
     # providerCategory: 'Community'
     # providerResponsible: 'Univention'
