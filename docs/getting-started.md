@@ -52,7 +52,7 @@ files.
 > All configuration options and their default values can be found in files at `helmfile/environments/default/`
 
 For the following guide, we will use `dev` as environment, where variables can be set in
-`helmfile/environments/dev/values.yaml`.
+`helmfile/environments/dev/values.yaml.gotmpl`.
 
 ## DNS
 
@@ -115,13 +115,13 @@ All available apps and their default value can be found in `helmfile/environment
 | Memcached            | `memcached.enabled`         | `true`  | Cache Database                 |
 | MinIO                | `minio.enabled`             | `true`  | Object Storage                 |
 | Nextcloud            | `nextcloud.enabled`         | `true`  | File share                     |
+| Nubus                | `nubus.enabled`             | `true`  | Identity Management & Portal   |
 | OpenProject          | `openproject.enabled`       | `true`  | Project management             |
 | OX Appsuite          | `oxAppsuite.enabled`        | `true`  | Groupware                      |
 | Provisioning         | `oxConnector.enabled`       | `true`  | Backend provisioning           |
 | Postfix              | `postfix.enabled`           | `true`  | MTA                            |
 | PostgreSQL           | `postgresql.enabled`        | `true`  | Database                       |
 | Redis                | `redis.enabled`             | `true`  | Cache Database                 |
-| Nubus                | `nubus.enabled`             | `true`  | Identity Management & Portal   |
 | XWiki                | `xwiki.enabled`             | `true`  | Knowledge management           |
 
 Exemplary, Jitsi can be disabled like:
@@ -201,15 +201,14 @@ cluster:
 
 ### Ingress
 
-By default, the `ingressClassName` is empty to choose your default ingress controller, you may want to customize it by
-setting:
+By default, the `ingressClassName` is empty to choose your default ingress controller. You may want to customize it by
+setting the following attribute to the name of the currently only supported ingress controller `ingress-nginx` (see
+[requirements.md](./requirements.md)) for reference) within your deployment if that is not the clusters default ingress.
 
 ```yaml
 ingress:
-  ingressClassName: "cilium"
+  ingressClassName: "name-of-my-nginx-ingress"
 ```
-
-**Note:** Please check the [requirements.md](./requirements.md) for the supported Ingress controllers.
 
 ### Container runtime
 
