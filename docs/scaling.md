@@ -7,55 +7,17 @@ SPDX-License-Identifier: Apache-2.0
 
 This document should cover the abilities to scale apps.
 
-<!-- TOC -->
-* [Replicas](#replicas)
-<!-- TOC -->
+# Horizontal scalability
 
-# Replicas
+We are working on generating this document automatically based on the file
+[`replicas.yaml`](../helmfile/environments/default/replicas.yaml) that contains necessary annotations.
+In the meantime this file can be used to check the components scaling support / capabilities.
 
-The Replicas can be increased of almost any component, but is only effective for high-availability or load-balancing for
-apps with a check-mark in `Scaling (effective)` column.
+# Upstream information
 
-Verified positive effects are marked with a check-mark in `Scaling (verified)` column, apps which are not yet tested are
-marked with a gear.
+While scaling services horizontally is the ideal solution, information about vertical scaling is helpful
+when it comes to defining the applications resources, see [`resources.yaml`](../helmfile/environments/default/resources.yaml) for references.
 
+Please find below links to the application's upstream resources about scaling:
 
-| Component                   | Name                                     | Scaling (effective) | Scaling (verified) |
-|-----------------------------|------------------------------------------|:-------------------:|:------------------:|
-| ClamAV                      | `replicas.clamav`                        | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.clamd`                         | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.freshclam`                     |         :x:         |        :x:         |
-|                             | `replicas.icap`                          | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.milter`                        | :white_check_mark:  | :white_check_mark: |
-| Collabora                   | `replicas.collabora`                     | :white_check_mark:  |       :gear:       |
-| CryptPad                    | `replicas.cryptpad`                      | :white_check_mark:  |       :gear:       |
-| Dovecot                     | `replicas.dovecot`                       |         :x:         |       :gear:       |
-| Element                     | `replicas.element`                       | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.matrixNeoBoardWidget`          | :white_check_mark:  |       :gear:       |
-|                             | `replicas.matrixNeoChoiceWidget`         | :white_check_mark:  |       :gear:       |
-|                             | `replicas.matrixNeoDateFixBot`           | :white_check_mark:  |       :gear:       |
-|                             | `replicas.matrixNeoDateFixWidget`        | :white_check_mark:  |       :gear:       |
-|                             | `replicas.matrixUserVerificationService` | :white_check_mark:  |       :gear:       |
-|                             | `replicas.synapse`                       |         :x:         |       :gear:       |
-|                             | `replicas.synapseWeb`                    | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.wellKnown`                     | :white_check_mark:  | :white_check_mark: |
-| Intercom Service            | `replicas.intercomService`               | :white_check_mark:  | :white_check_mark: |
-| Jitsi                       | `replicas.jibri`                         | :white_check_mark:  |       :gear:       |
-|                             | `replicas.jicofo`                        | :white_check_mark:  |       :gear:       |
-|                             | `replicas.jitsi `                        | :white_check_mark:  |       :gear:       |
-|                             | `replicas.jitsiKeycloakAdapter`          | :white_check_mark:  |       :gear:       |
-|                             | `replicas.jvb `                          |         :x:         |        :x:         |
-| Keycloak                    | `replicas.keycloak`                      | :white_check_mark:  | :white_check_mark: |
-| Memcached                   | `replicas.memcached`                     |       :gear:        |       :gear:       |
-| Minio                       | `replicas.minioDistributed`              | :white_check_mark:  | :white_check_mark: |
-| Nextcloud                   | `replicas.nextcloudApache2`              | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.nextcloudExporter`             | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.nextcloudPHP`                  | :white_check_mark:  | :white_check_mark: |
-| OpenProject                 | `replicas.openproject`                   | :white_check_mark:  | :white_check_mark: |
-| Postfix                     | `replicas.postfix`                       |         :x:         |       :gear:       |
-| Redis                       | `replicas.redis`                         |       :gear:        |       :gear:       |
-| Univention Management Stack |                                          |       :gear:        |       :gear:       |
-|                             | `replicas.umsPortalFrontend`             | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.umsPortalServer`               | :white_check_mark:  | :white_check_mark: |
-|                             | `replicas.umsUdmRestApi`                 | :white_check_mark:  | :white_check_mark: |
-| XWiki                       | `replicas.xwiki`                         |         :x:         |       :gear:       |
+- [OpenProject system requirements](https://www.openproject.org/docs/installation-and-operations/system-requirements/)

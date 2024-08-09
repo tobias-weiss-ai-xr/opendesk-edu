@@ -35,17 +35,13 @@ ingress:
     enabled: true
     secretName: "kyverno-tls"
 replicas:
-  # clamav-simple
   clamav: 42
-  # clamav-distributed
   clamd: 42
   collabora: 42
   cryptpad: 42
   dovecot: 42
   element: 42
-  # clamav-distributed
   freshclam: 42
-  # clamav-distributed
   icap: 42
   intercomService: 42
   jibri: 42
@@ -61,7 +57,6 @@ replicas:
   matrixNeoDateFixWidget: 42
   matrixUserVerificationService: 42
   memcached: 42
-  # clamav-distributed
   milter: 42
   minio: 42
   nextcloudApache2: 42

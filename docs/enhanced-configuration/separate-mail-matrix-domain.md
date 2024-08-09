@@ -77,7 +77,7 @@ The following changes apply to the standard DNS:
 
 #### Content Security Policy
 
-The webserver of `my_organization.tld` should add `*.opendesk.domain.tld` to it's CSP header.
+The webserver of `my_organization.tld` should add `*.opendesk.domain.tld` to its CSP header.
 
 #### .well-known
 
