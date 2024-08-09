@@ -37,7 +37,7 @@ configuration:
     port: {{ .Values.cache.nextcloud.port | quote }}
   collabora:
     # internalWopiUrl: ""
-    wopiAllowlist: {{ join " " .Values.cluster.networking.cidr | quote }}
+    wopiAllowlist: {{ join ", " ( concat .Values.cluster.networking.cidr .Values.cluster.networking.incomingCIDR ) | quote }}
   database:
     host: {{ .Values.databases.nextcloud.host | quote }}
     port: {{ .Values.databases.nextcloud.port | quote }}
