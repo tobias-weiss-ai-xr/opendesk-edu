@@ -199,6 +199,16 @@ cluster:
       - "127.0.0.0/8"
 ```
 
+If your load balancer / reverse proxy IPs are not already covered by the above `cidr` you need to
+explicitly configure the related IPs or IP ranges:
+
+```yaml
+cluster:
+  networking:
+    incomingCIDR:
+      - "172.16.0.0/12"
+```
+
 ### Ingress
 
 By default, the `ingressClassName` is empty to choose your default ingress controller. You may want to customize it by
