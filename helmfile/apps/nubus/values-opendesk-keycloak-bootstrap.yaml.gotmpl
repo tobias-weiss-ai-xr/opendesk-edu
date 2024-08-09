@@ -42,8 +42,7 @@ config:
     # We use client specific scopes as we bind them to Keycloak role membership which itself is linked
     # to LDAP group membership to ensure a user cannot access an application without the required
     # group membership.
-    # ToDo:
-    # - Jitsi does currently not care if it gets scopes/claims as long as the user is authenticated.
+    # ToDo: Ensure all applications verify the token's signature to ensure it is not tampered.
     clientScopes:
       - name: "read_contacts"
         protocol: "openid-connect"

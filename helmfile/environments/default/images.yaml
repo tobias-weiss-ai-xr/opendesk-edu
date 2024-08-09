@@ -113,7 +113,7 @@ images:
     # upstreamMirrorStartFrom: ["2023", "12", "14"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jitsi-keycloak-adapter"
-    tag: "v20240314@sha256:8abe8209a59c2d646fa3e7136f6a6ea15f3f692106bba92c0e777f8d383edc12"
+    tag: "v20240808@sha256:73db5ae9bb617d076b6a877500dbeece38fd15f8ae933ffadbd72d9aa82ad8da"
   jitsiPatchJVB:
     # providerCategory: "Community"
     # providerResponsible: "Nordeck"
