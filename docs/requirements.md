@@ -39,6 +39,8 @@ The following minimal requirements are thought for initial evaluation deployment
 | RAM  | 32 GB, more recommended                               |
 | Disk | HDD or SSD, >10 GB                                    |
 
+Check [`scaling.md`](./scaling.md) for more details on resource requirements and scalability.
+
 # Kubernetes
 
 Any self-hosted or managed K8s cluster >= 1.24 listed in

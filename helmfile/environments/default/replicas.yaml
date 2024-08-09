@@ -1,62 +1,138 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-# Before increasing the replicas of components, please consult the scaling documentation at "docs/scaling.md" to ensure
-# that scaling of the respective component is possible and has the desired effect.
+# This file contains annotations to (later) generate parts of "docs/scaling.md".
+# When adding new components in here, do not forget to add them as well to
+# `../test/values.yaml.gotmpl` to ensure their linting coverage.
 replicas:
-  # clamav-simple
+  # -- component: Antivirus (ClamAV)
+  # -- scalable: true
+  # -- comment: clamav-simple - supports `ReadWriteOnce` PVCs.
   clamav: 1
-  # clamav-distributed
+  # -- scalable: true
+  # -- comment: clamav-distributed - requires `ReadWriteMany` PVCs.
   clamd: 1
-  collabora: 1
-  cryptpad: 1
-  dovecot: 1
-  element: 1
-  # clamav-distributed
+  # -- scalable: true
+  # -- comment: clamav-distributed - You do not want to scale this service, as it just updates the signature files centrally an should be a singleton.
   freshclam: 1
-  # clamav-distributed
+  # -- scalable: true
+  # -- comment: clamav-distributed - requires `ReadWriteMany` PVCs.
   icap: 1
-  intercomService: 1
-  jibri: 1
-  jicofo: 1
-  jitsi: 1
-  jitsiKeycloakAdapter: 1
-  jvb: 1
-  keycloak: 1
-  mariadb: 1
-  matrixNeoBoardWidget: 1
-  matrixNeoChoiceWidget: 1
-  matrixNeoDateFixBot: 1
-  matrixNeoDateFixWidget: 1
-  matrixUserVerificationService: 1
-  memcached: 1
-  # clamav-distributed
+  # -- scalable: true
+  # -- comment: clamav-distributed - requires `ReadWriteMany` PVCs.
   milter: 1
-  minio: 1
-  nextcloudApache2: 1
-  nextcloudExporter: 1
-  nextcloudPHP: 1
-  openprojectWeb: 1
-  openprojectWorker: 1
-  oxConnector: 1
+
+  # -- component: Weboffice (Collabora)
+  # -- scalable: true
+  collabora: 1
+
+  # -- component: Pad (CryptPad)
+  # -- scalable: false
+  cryptpad: 1
+
+  # -- component: Groupware (OX AppSuite, OX Dovecot etc.)
+  # -- scalable: false
+  # -- comment: Scalable in openDesk Enterprise only
+  dovecot: 1
+  # -- scalable: false
   postfix: 1
-  postgres: 1
-  redis: 1
+
+  # -- component: Chat (Element, Synapse)
+  # -- scalable: true
+  element: 1
+  # -- scalable: tbd
+  matrixNeoBoardWidget: 1
+  # -- scalable: tbd
+  matrixNeoChoiceWidget: 1
+  # -- scalable: tbd
+  matrixNeoDateFixBot: 1
+  # -- scalable: tbd
+  matrixNeoDateFixWidget: 1
+  # -- scalable: tbd
+  matrixUserVerificationService: 1
+  # -- scalable: tbd
   synapse: 1
+  # -- scalable: true
   synapseWeb: 1
-  umsKeycloakExtensionsHandler: 1
-  umsKeycloakExtensionsProxy: 1
-  umsLdapNotifier: 1
-  umsLdapServer: 1
-  umsNotificationsApi: 1
-  umsPortalFrontend: 1
-  umsPortalListener: 1
-  umsPortalServer: 1
-  umsSelfserviceListener: 1
-  umsStackGateway: 1
-  umsUdmRestApi: 1
-  umsUmcGateway: 1
-  umsUmcServer: 1
+  # -- scalable: true
   wellKnown: 1
+
+  # -- component: IAM (Nubus)
+  # -- scalable: true
+  intercomService: 1
+  # -- scalable: true
+  keycloak: 1
+  # -- scalable: false
+  # -- comment: Will be removed soon.
+  oxConnector: 1
+  # -- scalable: false
+  # -- comment: Should not be scaled, is an async process.
+  umsKeycloakExtensionsHandler: 1
+  # -- scalable: true
+  umsKeycloakExtensionsProxy: 1
+  # -- scalable: tbd
+  umsLdapNotifier: 1
+  # -- scalable: tbd
+  umsLdapServer: 1
+  # -- scalable: tbd
+  umsNotificationsApi: 1
+  # -- scalable: true
+  umsPortalFrontend: 1
+  # -- scalable: tbd
+  umsPortalListener: 1
+  # -- scalable: true
+  umsPortalServer: 1
+  # -- scalable: tbd
+  umsSelfserviceListener: 1
+  # -- scalable: tbd
+  umsStackGateway: 1
+  # -- scalable: true
+  umsUdmRestApi: 1
+  # -- scalable: tbd
+  umsUmcGateway: 1
+  # -- scalable: tbd
+  umsUmcServer: 1
+
+  # -- component: Video conference (Jitsi)
+  # -- scalable: tbd
+  jibri: 1
+  # -- scalable: tbd
+  jicofo: 1
+  # -- scalable: tbd
+  jitsi: 1
+  # -- scalable: tbd
+  jitsiKeycloakAdapter: 1
+  # -- scalable: tbd
+  jvb: 1
+
+  # -- component: Persistence Layer
+  # -- scalable: false
+  mariadb: 1
+  # -- scalable: false
+  memcached: 1
+  # -- scalable: true
+  minio: 1
+  # -- scalable: false
+  postgres: 1
+  # -- scalable: tbd
+  redis: 1
+
+  # -- component: Filestore (Nextcloud)
+  # -- scalable: true
+  nextcloudApache2: 1
+  # -- scalable: true
+  nextcloudExporter: 1
+  # -- scalable: true
+  nextcloudPHP: 1
+
+  # -- component: Project management (OpenProject)
+  # -- scalable: true
+  openprojectWeb: 1
+  # -- scalable: tdb
+  # -- comment: Async process that usually has no need for scaling
+  openprojectWorker: 1
+
+  # -- component: Knowledge management (XWiki)
+  # -- scalable: false
   xwiki: 1
 ...
