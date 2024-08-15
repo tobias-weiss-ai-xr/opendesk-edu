@@ -142,7 +142,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-mariadb"
     name: "mariadb"
-    version: "2.2.1"
+    version: "2.3.1"
     verify: true
   matrixNeoboardWidget:
     # providerCategory: "Platform"
@@ -360,7 +360,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-postgresql"
     name: "postgresql"
-    version: "2.0.5"
+    version: "2.1.1"
     verify: true
   redis:
     # providerCategory: "Community"

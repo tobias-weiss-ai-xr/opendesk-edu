@@ -85,7 +85,8 @@ persistence:
 provisioning:
   enabled: true
   cleanupAfterFinished:
-    enabled: true
+    enabled: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
+    seconds: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
   extraCommands:
     - "mc anonymous set download provisioning/ums/portal-assets"
   buckets:
