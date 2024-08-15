@@ -2,62 +2,76 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 databases:
+  defaults:
+    userConnectionLimit: 100
   keycloak:
     name: "keycloak"
     host: "postgresql"
     port: 5432
     username: "keycloak_user"
     password: ""
+    connectionLimit: ~
   keycloakExtension:
     name: "keycloak_extensions"
     host: "postgresql"
     port: 5432
     username: "keycloak_extensions_user"
     password: ""
+    connectionLimit: ~
   nextcloud:
     name: "nextcloud"
     host: "mariadb"
     port: 3306
     username: "nextcloud_user"
     password: ""
+    connectionLimit: ~
   openproject:
     name: "openproject"
     host: "postgresql"
     port: 5432
     username: "openproject_user"
     password: ""
+    connectionLimit: ~
   oxAppsuite:
-    host: "mariadb"
     name: "configdb"
+    host: "mariadb"
+    port: 3306
     username: "root"
     password: ""
+    connectionLimit: ~
   synapse:
-    host: "postgresql"
     name: "matrix"
+    host: "postgresql"
+    port: 5432
     username: "matrix_user"
     password: ""
-    port: 5432
+    connectionLimit: ~
   umsGuardianManagementApi:
     name: "guardianmanagementapi"
     host: "postgresql"
     port: 5432
     username: "guardianmanagementapi_user"
     password: ""
+    connectionLimit: ~
   umsNotificationsApi:
     name: "notificationsapi"
     host: "postgresql"
     port: 5432
     username: "notificationsapi_user"
     password: ""
+    connectionLimit: ~
   umsSelfservice:
     name: "selfservice"
     host: "postgresql"
     port: 5432
     username: "selfservice_user"
     password: ""
+    connectionLimit: 10
   xwiki:
     name: "xwiki"
     host: "mariadb"
+    port: 3306
     username: "root"
     password: ""
+    connectionLimit: ~
 ...

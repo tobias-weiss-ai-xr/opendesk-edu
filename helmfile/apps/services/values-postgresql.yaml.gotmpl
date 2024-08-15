@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+cleanup:
+  deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -16,8 +20,6 @@ containerSecurityContext:
   runAsNonRoot: true
   seLinuxOptions:
     {{ .Values.seLinuxOptions.postgresql | toYaml | nindent 4 }}
-
-job:
 
 podSecurityContext:
   enabled: true
@@ -43,36 +45,43 @@ image:
 
 job:
   users:
-    - username: "keycloak_user"
+    - username: {{ .Values.databases.keycloak.username | quote }}
       password: {{ .Values.secrets.postgresql.keycloakUser | quote }}
-    - username: "openproject_user"
+      connectionLimit: {{ .Values.databases.keycloak.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.openproject.username | quote }}
       password: {{ .Values.secrets.postgresql.openprojectUser | quote }}
-    - username: "keycloak_extensions_user"
+      connectionLimit: {{ .Values.databases.openproject.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.keycloakExtension.username | quote }}
       password: {{ .Values.secrets.postgresql.keycloakExtensionUser | quote }}
-    - username: "matrix_user"
+      connectionLimit: {{ .Values.databases.keycloakExtension.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.synapse.username | quote }}
       password: {{ .Values.secrets.postgresql.matrixUser | quote }}
-    - username: "notificationsapi_user"
+      connectionLimit: {{ .Values.databases.synapse.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.umsNotificationsApi.username | quote }}
       password: {{ .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
-    - username: "guardianmanagementapi_user"
+      connectionLimit: {{ .Values.databases.umsNotificationsApi.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
       password: {{ .Values.secrets.postgresql.umsGuardianManagementApiUser | quote }}
-    - username: "selfservice_user"
+      connectionLimit: {{ .Values.databases.umsGuardianManagementApi.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.umsSelfservice.username | quote }}
       password: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+      connectionLimit: {{ .Values.databases.umsSelfservice.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
   databases:
-    - name: "keycloak"
-      user: "keycloak_user"
-    - name: "keycloak_extensions"
-      user: "keycloak_extensions_user"
-    - name: "openproject"
-      user: "openproject_user"
-    - name: "matrix"
-      user: "matrix_user"
+    - name: {{ .Values.databases.keycloak.name | quote }}
+      user: {{ .Values.databases.keycloak.username | quote }}
+    - name: {{ .Values.databases.keycloakExtension.name | quote }}
+      user: {{ .Values.databases.keycloakExtension.username | quote }}
+    - name: {{ .Values.databases.openproject.name | quote }}
+      user: {{ .Values.databases.openproject.username | quote }}
+    - name: {{ .Values.databases.synapse.name | quote }}
+      user: {{ .Values.databases.synapse.username | quote }}
       additionalParams: "ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0"
-    - name: "guardianmanagementapi"
-      user: "guardianmanagementapi_user"
-    - name: "notificationsapi"
-      user: "notificationsapi_user"
-    - name: "selfservice"
-      user: "selfservice_user"
+    - name: {{ .Values.databases.umsGuardianManagementApi.name | quote }}
+      user: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
+    - name: {{ .Values.databases.umsNotificationsApi.name | quote }}
+      user: {{ .Values.databases.umsNotificationsApi.username | quote }}
+    - name: {{ .Values.databases.umsSelfservice.name | quote }}
+      user: {{ .Values.databases.umsSelfservice.username | quote }}
 
 persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
