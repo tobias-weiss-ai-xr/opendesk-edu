@@ -30,11 +30,6 @@ functional:
         # Disable to not support Matrix federation with your installation.
         enabled: true
 
-  email:
-    systemGenerated:
-      # By disabling all mails are sent from @<domain> instead of @<component>.<domain>.
-      useComponentInSenderdomain: true
-
   filestore:
     quota:
       # Set the default quota for all users in GB
@@ -50,11 +45,11 @@ functional:
         # Ref.: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#versions-retention-obligation
         versions: "auto"
         # yamllint enable rule:line-length
-        
+
   dataProtection:
     matrixPresence:
       # Enable to allow information about the user presence status to be shared.
       # Ref.: https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#presence
       enabled: false
-  
+
 ...

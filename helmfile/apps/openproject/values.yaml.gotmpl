@@ -67,7 +67,7 @@ environment:
   OPENPROJECT_SMTP__AUTHENTICATION: "none"
   OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "false"
   OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "none"
-  OPENPROJECT_MAIL__FROM: "{{ .Values.smtp.localpartNoReply }}@{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.openproject }}.{{ end }}{{ .Values.global.domain }}"
+  OPENPROJECT_MAIL__FROM: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.nubus .Values.global.domain | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"

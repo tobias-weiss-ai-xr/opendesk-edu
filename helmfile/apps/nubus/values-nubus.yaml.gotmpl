@@ -166,7 +166,7 @@ nubusKeycloakExtensions:
     appConfig:
       logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
       newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
-      mailFrom: "{{ .Values.smtp.localpartNoReply }}@{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.keycloak }}.{{ end }}{{ .Values.global.domain }}"
+      mailFrom: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
 
 nubusPortalListener:
   portalListener:
