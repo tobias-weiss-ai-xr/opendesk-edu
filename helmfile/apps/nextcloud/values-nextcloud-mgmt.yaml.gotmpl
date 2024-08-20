@@ -83,7 +83,7 @@ configuration:
     host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     port: 25
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
-    mailDomain: "{{ if .Values.functional.email.systemGenerated.useComponentInSenderdomain }}{{ .Values.global.hosts.nextcloud }}.{{ end }}{{ .Values.global.domain }}"
+    mailDomain: "{{ .Values.global.domain }}"
     security: ""
     skipVerifyPeer: true
   quota:

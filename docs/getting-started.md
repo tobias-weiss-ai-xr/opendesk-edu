@@ -263,6 +263,8 @@ To use the openDesk functionality with its web based user interface you need to 
 
 | Component          | Description             |  Port | Type |
 | ------------------ | ----------------------- | ----: | ---: |
+| openDesk           | Kubernetes Ingress      |    80 |  TCP |
+| openDesk           | Kubernetes Ingress      |   443 |  TCP |
 | Jitsi Video Bridge | ICE Port for video data | 10000 |  UDP |
 
 #### Mail clients
