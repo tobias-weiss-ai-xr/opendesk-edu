@@ -73,7 +73,8 @@
         "Addressbooks",
         "filestore",
         "trashbin",
-        "bootstrap"
+        "bootstrap",
+        "configurability"
     ],
     "ignoreWords": [],
     "import": []

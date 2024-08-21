@@ -73,6 +73,12 @@ configuration:
       value: "opendesk_username"
     password:
       value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+  sharing:
+    allowLinks: {{ .Values.functional.filestore.sharing.enableExternalSharing }}
+    allowMailNotification: {{ .Values.functional.filestore.sharing.enableExternalSharing }}
+    allowPublicUpload: {{ .Values.functional.filestore.sharing.enableExternalSharing }}
+    enforceLinksPassword: {{ .Values.functional.filestore.sharing.enforceSharingPasswords }}
+    enforcePasswordProtection: {{ .Values.functional.filestore.sharing.enforceSharingPasswords }}
   smtp:
     auth:
       enabled: false

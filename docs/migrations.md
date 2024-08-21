@@ -8,7 +8,10 @@ SPDX-License-Identifier: Apache-2.0
 * [Disclaimer](#disclaimer)
 * [Releases upgrades](#releases-upgrades)
   * [From v0.9.0](#from-v090)
+    * [Manual interaction](#manual-interaction)
+      * [Fileshare configurability](#fileshare-configurability)
     * [Automated migrations](#automated-migrations)
+      * [Local Postfix as Relay](#local-postfix-as-relay)
       * [Updated IAM component Nubus](#updated-iam-component-nubus)
         * [Manual cleanup](#manual-cleanup)
   * [From v0.8.1](#from-v081)
@@ -31,18 +34,47 @@ Limitations:
 
 ## From v0.9.0
 
+### Manual interaction
+
+#### Fileshare configurability
+
+We provide now some configurability regarding the sharing capabilities of the Nextcloud component.
+
+The new default is different from the standard until now. To keep the current state after the upgrade from 0.9.0 you have to provide the following settings:
+
+```
+functional:
+  filestore:
+    sharing:
+      # Enables sharing of files with external participants (create external links, send links by mail and allow external upload in shared folders).
+      enableExternalSharing: true
+      # Enforces passwords to be used on external shares.
+      enforceSharingPasswords: false
+```
+
 ### Automated migrations
+
+#### Local Postfix as Relay
+
+All components relay outgoing mails to the local Postfix. In order for the configuration to be picked up by all components the following restarts are triggered in the migrations `POST` stage:
+
+- Deployments:
+  - `opendesk-nextcloud-php`
+  - `ums-umc-server`
+- Stateful Sets:
+  - `ums-selfservice-listener`
+  - `opendesk-synapse`
 
 #### Updated IAM component Nubus
 
 openDesk is integrating the latest [Nubus](https://www.univention.de/produkte/nubus/) development from Univention. The now redundant and scalable LDAP requires migration activities. These have been automated to avoid manual interaction. The `run_2` of the openDesk
 upgrade migrations executes the following steps:
 
-- Stage PRE:
+- Stage `PRE`:
   - Delete service `ums-keycloak`, as it will be recreated headless.
   - Scale down `statefulset/ums-ldap-server` and `statefulset/ums-ldap-notifier` in preparation or the next step:
   - Create two new PVCs `shared-data-ums-ldap-server-primary-0` and `shared-data-ums-ldap-server-primary-1` for the new LDAP primary pods as copy from the existing `shared-data-ums-ldap-server-0`. The LDAP secondaries will sync from the primary nodes.
-- Stage POST:
+- Stage `POST`:
   - Restart Keycloak.
 
 ##### Manual cleanup
