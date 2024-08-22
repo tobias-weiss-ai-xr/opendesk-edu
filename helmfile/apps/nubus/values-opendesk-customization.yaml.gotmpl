@@ -177,15 +177,6 @@ nubusUmcGateway:
   replicaCount: {{ .Values.replicas.umsUmcGateway }}
   resources:
     {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
-  extraVolumes:
-    - name: "entrypoint-swp-patches"
-      configMap:
-        name: "ums-stack-data-swp-umc-gateway-entrypoint"
-        defaultMode: 0555
-  extraVolumeMounts:
-    - name: "entrypoint-swp-patches"
-      mountPath: "/entrypoint.d/90-swp.sh"
-      subPath: "90-swp.sh"
 
 nubusKeycloakBootstrap:
   podAnnotations:

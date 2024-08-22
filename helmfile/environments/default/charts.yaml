@@ -212,7 +212,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-migrations"
     name: "opendesk-migrations"
-    version: "1.2.2"
+    version: "1.2.3"
     verify: true
   minio:
     # providerCategory: "Community"
@@ -264,7 +264,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "nubus"
-    version: "0.33.0"
+    version: "0.39.2"
     verify: true
   opendeskKeycloakBootstrap:
     # providerCategory: "Platform"

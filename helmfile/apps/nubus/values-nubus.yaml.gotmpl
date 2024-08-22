@@ -10,7 +10,7 @@ global:
     domainName: {{ .Values.global.domain | quote }}
   domain: {{ .Values.global.domain | quote }}
   ingressClass: {{ .Values.ingress.ingressClassName | default "nginx" | quote }}
-  certManagerIssuer: "letsencrypt-prod-dns"
+  certManagerIssuer: {{ .Values.certificate.issuerRef.name | quote }}
   nubusMasterPassword: {{ env "MASTER_PASSWORD" | default "sovereign-workplace" | quote }}
   keycloak:
     realm: {{ .Values.platform.realm | quote }}
@@ -52,6 +52,12 @@ global:
         repository: {{ .Values.images.nubusPortalExtension.repository }}
         tag: {{ .Values.images.nubusPortalExtension.tag }}
         imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+
+ingress:
+  certManager:
+    enabled: false
+  tls:
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 # Nubus bundled services
 postgresql:
@@ -95,7 +101,11 @@ nubusGuardian:
         credentialSecret:
           name: "ums-opendesk-guardian-client-secret"
           key: "managementApiClientSecret"
-
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
   postgresql:
     connection:
       host: {{ .Values.databases.umsGuardianManagementApi.host | quote }}
@@ -116,6 +126,11 @@ nubusNotificationsApi:
       username: {{ .Values.databases.umsNotificationsApi.username | quote }}
       database: {{ .Values.databases.umsNotificationsApi.name | quote }}
       existingSecret: "ums-notifications-api-postgresql-opendesk-credentials"
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 
 nubusKeycloakExtensions:
@@ -140,6 +155,10 @@ nubusKeycloakExtensions:
           path: "/resources/"
         - pathType: "Prefix"
           path: "/fingerprintjs"
+      certManager:
+        enabled: false
+      tls:
+        secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 
   postgresql:
@@ -170,6 +189,13 @@ nubusKeycloakExtensions:
       newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
       mailFrom: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
 
+nubusPortalFrontend:
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
+
 nubusPortalListener:
   portalListener:
     objectStorageEndpoint: {{ .Values.objectstores.nubus.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
@@ -190,6 +216,18 @@ nubusPortalServer:
     centralNavigation:
       enabled: true
       authenticatorSecretName: "ums-opendesk-portal-server-central-navigation"
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
+
+nubusUdmRestApi:
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 # NOTE: disabled until the next update.
 nubusProvisioning:
@@ -211,6 +249,44 @@ nubusStackDataUms:
     externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
     umcHtmlTitle: "openDesk Portal"
     installUmcPolicies: true
+  templateContext:
+    portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
+    portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
+    portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain }}
+    portalManagementKnowledgeLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.xwiki .Values.global.domain }}
+    portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
+    portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain }}
+    portalTitleDE: "openDesk Portal"
+    portalTitleEN: "openDesk Portal"
+    oxDefaultContext: "1"
+    ldapSearchUsers:
+      {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
+      - username: {{ printf "ldapsearch_%s" $username | quote }}
+        password: {{ $password | quote }}
+        lastname: "LDAP-Search-User"
+      {{- end }}
+    portaltileGroupUserStandard:
+      - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
+      - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupUserAdmin:
+      - 'cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}'
+      - 'cn=Support,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupUserAll:
+      - 'cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}'
+      - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupGroupware:
+      - 'cn=managed-by-attribute-Groupware,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupFileshare:
+      - 'cn=managed-by-attribute-Fileshare,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupManagementProject:
+      - 'cn=managed-by-attribute-Projectmanagement,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupManagementKnowledge:
+      - 'cn=managed-by-attribute-Knowledgemanagement,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupManagementLearn:
+      - 'cn=managed-by-attribute-Learnmanagement,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupLiveCollaboration:
+      - 'cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}'
+
   nubusUmcServer:
     memcached:
       auth:
@@ -270,10 +346,20 @@ nubusUmcServer:
   smtp:
     credentialSecret:
       name: "ums-umc-server-smtp-credentials-custom"
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 nubusUmcGateway:
   umcGateway:
     umcHtmlTitle: "openDesk Portal"
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 nubusKeycloakBootstrap:
   keycloak:
