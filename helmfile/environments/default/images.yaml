@@ -253,7 +253,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-management"
-    tag: "1.5.1@sha256:c9bb139b4553d015247ffaa6448e5c2c7d48d124da5dbdea42a6ff068a46e48a"
+    tag: "1.5.3@sha256:19f5354a951b043327906d8670c0466e2a00317ad0dd4b99d0edf882e213d22f"
   nextcloudPHP:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -261,7 +261,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-php"
-    tag: "1.11.1@sha256:f4ed857d6e746f5cbefbc8895b3083554f3018091c3e7df355bf0189522de06c"
+    tag: "1.11.3@sha256:c88af69971e2b2b1ead90db69d6af3355be5309d6c91b2b6a18fac2c6781b760"
   nubusDataLoader:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
