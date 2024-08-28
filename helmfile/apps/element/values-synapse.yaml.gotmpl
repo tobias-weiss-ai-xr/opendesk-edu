@@ -53,6 +53,9 @@ configuration:
     presence:
       enabled: {{ .Values.functional.dataProtection.matrixPresence.enabled }}
 
+    profile:
+      allowUsersToUpdateDisplayname: {{ .Values.functional.chat.matrix.profile.allowUsersToUpdateDisplayname }}
+
     smtp:
       senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
       host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
@@ -66,6 +69,7 @@ configuration:
       clientId: "opendesk-matrix"
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}
       issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+      matrixIdLocalpart: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"opendesk_useruuid"{{ else }}"opendesk_username"{{ end }}
       scopes:
         - "openid"
         - "opendesk-matrix-scope"
