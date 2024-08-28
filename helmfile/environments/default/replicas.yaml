@@ -67,6 +67,14 @@ replicas:
   # -- scalable: false
   # -- comment: Will be removed soon.
   oxConnector: 1
+  # -- scalable: tbd
+  umsGuardianAuthorizationApi: 1
+  # -- scalable: tbd
+  umsGuardianManagementApi: 1
+  # -- scalable: tbd
+  umsGuardianManagementUi: 1
+  # -- scalable: tbd
+  umsGuardianOpenPolicyAgent: 1
   # -- scalable: false
   # -- comment: Should not be scaled, is an async process.
   umsKeycloakExtensionsHandler: 1
@@ -133,6 +141,30 @@ replicas:
   # -- scalable: true
   # -- comment: Async service working on processing queue content. Can work on queues in parallel (when needed). See [upstream Helm chart documentation](https://www.openproject.org/docs/installation-and-operations/installation/helm-chart/) for details, as e.g. dedicated workers to specific queues are in general possible with OpenProject as well.Share 
   openprojectWorker: 1
+
+  # -- component: Groupware (OX Appsuite)
+  # -- scalable: tbd
+  openxchangeCoreDocumentConverter: 1
+  # -- scalable: tbd
+  openxchangeCoreGuidedtours: 1
+  # -- scalable: tbd
+  openxchangeCoreImageConverter: 1
+  # -- scalable: tbd
+  openxchangeCoreMW: 1
+  # -- scalable: tbd
+  openxchangeCoreUI: 1
+  # -- scalable: tbd
+  openxchangeCoreUIMiddleware: 1
+  # -- scalable: tbd
+  openxchangeCoreUserGuide: 1
+  # -- scalable: tbd
+  openxchangeGotenberg: 1
+  # -- scalable: tbd
+  openxchangeGuardUI: 1
+  # -- scalable: tbd
+  openxchangeNextcloudIntegrationUI: 1
+  # -- scalable: tbd
+  openxchangePublicSectorUI: 1
 
   # -- component: Knowledge management (XWiki)
   # -- scalable: false

@@ -26,6 +26,7 @@ nextcloud-integration-ui:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
   {{- end }}
+  replicaCount: {{ .Values.replicas.openxchangeNextcloudIntegrationUI }}
   resources:
     {{ .Values.resources.openxchangeNextcloudIntegrationUI | toYaml | nindent 4 }}
   securityContext:
@@ -54,6 +55,7 @@ public-sector-ui:
     - name: {{ . | quote }}
   {{- end }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  replicaCount: {{ .Values.replicas.openxchangePublicSectorUI }}
   resources:
     {{ .Values.resources.openxchangePublicSectorUI | toYaml | nindent 4 }}
   securityContext:
@@ -134,6 +136,7 @@ appsuite:
         repository: "{{ .Values.global.imageRegistry | default .Values.images.openxchangeGotenberg.registry }}/{{ .Values.images.openxchangeGotenberg.repository }}"
         tag: {{ .Values.images.openxchangeGotenberg.tag | quote }}
         pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+      replicaCount: {{ .Values.replicas.openxchangeGotenberg }}
       resources:
         {{ .Values.resources.openxchangeGotenberg | toYaml | nindent 8 }}
       securityContext:
@@ -356,6 +359,7 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
     {{- end }}
+    replicas: {{ .Values.replicas.openxchangeCoreMW }}
     resources:
       {{ .Values.resources.openxchangeCoreMW | toYaml | nindent 6 }}
 
@@ -370,6 +374,7 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreUI.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    replicaCount: {{ .Values.replicas.openxchangeCoreUI }}
     resources:
       {{ .Values.resources.openxchangeCoreUI | toYaml | nindent 6 }}
     securityContext:
@@ -404,6 +409,7 @@ appsuite:
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     overrides: {}
     redis: *redisConfiguration
+    replicaCount: {{ .Values.replicas.openxchangeCoreUIMiddleware }}
     resources:
       {{ .Values.resources.openxchangeCoreUIMiddleware | toYaml | nindent 6 }}
     updater:
@@ -441,6 +447,7 @@ appsuite:
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
     redis: *redisConfiguration
+    replicaCount: {{ .Values.replicas.openxchangeCoreDocumentConverter }}
     resources:
       {{- .Values.resources.openxchangeCoreDocumentConverter | toYaml | nindent 6 }}
     securityContext:
@@ -486,6 +493,7 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreGuidedtours.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    replicaCount: {{ .Values.replicas.openxchangeCoreGuidedtours }}
     resources:
       {{- .Values.resources.openxchangeCoreGuidedtours | toYaml | nindent 6 }}
     securityContext:
@@ -520,6 +528,7 @@ appsuite:
           accessKey: "."
           secretKey: "."
     redis: *redisConfiguration
+    replicaCount: {{ .Values.replicas.openxchangeCoreImageConverter }}
     resources:
       {{- .Values.resources.openxchangeCoreImageConverter | toYaml | nindent 6 }}
     securityContext:
@@ -550,6 +559,7 @@ appsuite:
       repository: {{ .Values.images.openxchangeGuardUI.repository | quote }}
       tag: {{ .Values.images.openxchangeGuardUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    replicaCount: {{ .Values.replicas.openxchangeGuardUI }}
     resources:
       {{- .Values.resources.openxchangeGuardUI | toYaml | nindent 6 }}
     securityContext:
@@ -580,6 +590,7 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
     {{- end }}
+    replicaCount: {{ .Values.replicas.openxchangeCoreUserGuide }}
     resources:
       {{- .Values.resources.openxchangeCoreUserGuide | toYaml | nindent 6 }}
     securityContext:
