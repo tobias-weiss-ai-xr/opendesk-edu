@@ -13,21 +13,25 @@ guardian:
   authorizationApi:
     podAnnotations:
       intents.otterize.com/service-name: "ums-guardian-authorization-api"
+    replicaCount: {{ .Values.replicas.umsGuardianAuthorizationApi }}
     resources:
       {{ .Values.resources.umsGuardianAuthorizationApi | toYaml | nindent 6 }}
   managementApi:
     podAnnotations:
       intents.otterize.com/service-name: "ums-guardian-management-api"
+    replicaCount: {{ .Values.replicas.umsGuardianManagementApi }}
     resources:
       {{ .Values.resources.umsGuardianManagementApi | toYaml | nindent 6 }}
   managementUi:
     podAnnotations:
       intents.otterize.com/service-name: "ums-guardian-management-ui"
+    replicaCount: {{ .Values.replicas.umsGuardianManagementUi }}
     resources:
       {{ .Values.resources.umsGuardianManagementUi | toYaml | nindent 6 }}#
   openPolicyAgent:
     podAnnotations:
       intents.otterize.com/service-name: "ums-ums-open-policy-agent"
+    replicaCount: {{ .Values.replicas.umsGuardianOpenPolicyAgent }}
     resources:
       {{ .Values.resources.umsOpenPolicyAgent | toYaml | nindent 6 }}
   provisioning:
