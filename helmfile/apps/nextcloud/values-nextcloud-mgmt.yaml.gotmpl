@@ -121,7 +121,7 @@ debug:
   loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudManagement.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloudManagement.registry | quote }}
   repository: {{ .Values.images.nextcloudManagement.repository | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.nextcloudManagement.tag | quote }}

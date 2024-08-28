@@ -1,10 +1,11 @@
 {{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.dovecot.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.dovecot.registry | quote }}
   repository: {{ .Values.images.dovecot.repository | quote }}
   tag: {{ .Values.images.dovecot.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

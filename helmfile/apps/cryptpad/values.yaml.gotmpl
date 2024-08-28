@@ -1,5 +1,8 @@
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: Apache-2.0
+{{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
 ---
 # https://github.com/cryptpad/helm/blob/main/charts/cryptpad/README.md or
 # https://github.com/cryptpad/helm/blob/main/charts/cryptpad/values.yaml
@@ -23,7 +26,7 @@ enableEmbedding: true
 fullnameOverride: "cryptpad"
 
 image:
-  repository: "{{ .Values.global.imageRegistry | default .Values.images.cryptpad.registry }}/{{ .Values.images.cryptpad.repository }}"
+  repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.cryptpad.registry }}/{{ .Values.images.cryptpad.repository }}"
   tag: {{ .Values.images.cryptpad.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 

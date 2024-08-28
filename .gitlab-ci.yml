@@ -307,7 +307,7 @@ provisioning-deploy:
   variables:
     COMPONENT: "provisioning"
 
-ums-deploy:
+nubus-deploy:
   stage: "component-deploy-stage-1"
   extends: ".deploy-common"
   rules:

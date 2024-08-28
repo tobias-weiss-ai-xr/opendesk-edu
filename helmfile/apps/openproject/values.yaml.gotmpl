@@ -1,4 +1,5 @@
 {{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 */}}
@@ -76,14 +77,14 @@ environment:
   {{- end }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.openproject.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openproject.registry | quote }}
   repository: {{ .Values.images.openproject.repository | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.openproject.tag | quote }}
 
 initdb:
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.openprojectInitDb.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.openprojectInitDb.registry | quote }}
     repository: {{ .Values.images.openprojectInitDb.repository | quote }}
     tag: {{ .Values.images.openprojectInitDb.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

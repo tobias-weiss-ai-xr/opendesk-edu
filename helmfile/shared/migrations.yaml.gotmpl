@@ -40,7 +40,7 @@ containerSecurityContext:
     {{ .Values.seLinuxOptions.migrations | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.migrations.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.migrations.registry | quote }}
   repository: {{ .Values.images.migrations.repository | quote }}
   tag: {{ .Values.images.migrations.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy |quote }}

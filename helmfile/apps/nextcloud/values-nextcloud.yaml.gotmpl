@@ -28,7 +28,7 @@ exporter:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.nextcloudExporter | toYaml | nindent 6 }}
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudExporter.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloudExporter.registry | quote }}
     repository: "{{ .Values.images.nextcloudExporter.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudExporter.tag | quote }}
@@ -87,7 +87,7 @@ php:
   debug:
     loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudPHP.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloudPHP.registry | quote }}
     repository: "{{ .Values.images.nextcloudPHP.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudPHP.tag | quote }}
@@ -138,7 +138,7 @@ apache2:
     tls:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.nextcloudApache2.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloudApache2.registry | quote }}
     repository: {{ .Values.images.nextcloudApache2.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudApache2.tag | quote }}

@@ -157,6 +157,15 @@ alternatively you can use an environment variable:
 export PRIVATE_IMAGE_REGISTRY_URL=my_private_registry.domain.tld
 ```
 
+or control repository override fine-granular per registry:
+
+```yaml
+repositories:
+  image:
+    dockerHub: "my_private_registry.domain.tld/docker.io/"
+    registryOpencodeDe: "my_private_registry.domain.tld/registry.opencode.de/"
+```
+
 If authentication is required, you can reference imagePullSecrets as following:
 
 ```yaml
