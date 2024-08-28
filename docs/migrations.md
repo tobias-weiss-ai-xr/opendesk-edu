@@ -8,7 +8,8 @@ SPDX-License-Identifier: Apache-2.0
 * [Disclaimer](#disclaimer)
 * [Releases upgrades](#releases-upgrades)
   * [From v0.9.0](#from-v090)
-    * [Manual interaction](#manual-interaction)
+    * [Changed openDesk defaults](#changed-opendesk-defaults)
+      * [MatrixID localpart update](#matrixid-localpart-update)
       * [Fileshare configurability](#fileshare-configurability)
     * [Automated migrations](#automated-migrations)
       * [Local Postfix as Relay](#local-postfix-as-relay)
@@ -34,7 +35,40 @@ Limitations:
 
 ## From v0.9.0
 
-### Manual interaction
+### Changed openDesk defaults
+
+#### MatrixID localpart update
+
+Until 0.9.0 openDesk used the LDAP entryUUID of a user to generate the user's MatrixID. Due to restrictions of the
+Matrix protocol an update of a MatrixID is not possible, therefore it was technically convenient to use the UUID
+as it is immutable (see https://de.wikipedia.org/wiki/Universally_Unique_Identifier for more details on UUIDs.)
+
+From the user experience perspective that was a bad approach, so from now on by default the username, that
+is also used for logging into openDesk, is used to define the localpart of the MatrixID.
+
+For existing installations: The changed setting only affects users that login to Element the first time. Existing
+user accounts will not be harmed. If you want existing users to get new MatrixIDs based on the new setting, you
+need to update their external ID in Synapse and deactivate the old user afterwards. The user will get a new
+Matrix account from the scratch, losing the existing contacts, chats and rooms.
+
+The following Admin API calls are helpful:
+- GET /_synapse/admin/v2/users/@<entryuuid>:<matrixdomain> get the user's existing external_id (auth_provider: "oidc")
+- PUT /_synapse/admin/v2/users/@<entryuuid>:<matrixdomain> update user's external_id with JSON payload:
+  `{ "external_ids": [ { "auth_provider": "oidc", "external_id": "<old_id>+deprecated" } ] }`
+- POST /_synapse/admin/v1/deactivate/@<entryuuid>:<matrixdomain> deactivate old user with JSON payload:
+  `{ "erase": true }`
+
+For more details check the Admin API documentation:
+https://element-hq.github.io/synapse/latest/usage/administration/admin_api/index.html
+
+You can enforce the old standard with the following setting:
+```
+functional:
+  chat:
+    matrix:
+      profile:
+        useImmutableIdentifierForLocalpart: true
+```
 
 #### Fileshare configurability
 
