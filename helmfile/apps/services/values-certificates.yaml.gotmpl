@@ -7,7 +7,48 @@ SPDX-License-Identifier: Apache-2.0
 global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
-    {{ .Values.global.hosts | toYaml | nindent 4 }}
+    {{- if .Values.collabora.enabled }}
+    collabora: {{ .Values.global.hosts.collabora }}
+    {{- end }}
+    {{- if .Values.cryptpad.enabled }}
+    cryptpad: {{ .Values.global.hosts.cryptpad }}
+    {{- end }}
+    {{- if .Values.element.enabled }}
+    element: {{ .Values.global.hosts.element }}
+    matrixNeoBoardWidget: {{ .Values.global.hosts.matrixNeoBoardWidget }}
+    matrixNeoChoiceWidget: {{ .Values.global.hosts.matrixNeoChoiceWidget }}
+    matrixNeoDateFixBot: {{ .Values.global.hosts.matrixNeoDateFixBot }}
+    matrixNeoDateFixWidget: {{ .Values.global.hosts.matrixNeoDateFixWidget }}
+    synapse: {{ .Values.global.hosts.synapse }}
+    synapseFederation: {{ .Values.global.hosts.synapseFederation }}
+    whiteboard: {{ .Values.global.hosts.whiteboard }}
+    {{- end }}
+    {{- if .Values.intercom.enabled }}
+    intercomService: {{ .Values.global.hosts.intercomService }}
+    {{- end }}
+    {{- if .Values.jitsi.enabled }}
+    jitsi: {{ .Values.global.hosts.jitsi }}
+    {{- end }}
+    {{- if .Values.minio.enabled }}
+    minioApi: {{ .Values.global.hosts.minioApi }}
+    minioConsole: {{ .Values.global.hosts.minioConsole }}
+    {{- end }}
+    {{- if .Values.nextcloud.enabled }}
+    nextcloud: {{ .Values.global.hosts.nextcloud }}
+    {{- end }}
+    {{- if .Values.openproject.enabled }}
+    openproject: {{ .Values.global.hosts.openproject }}
+    {{- end }}
+    {{- if .Values.oxAppsuite.enabled }}
+    openxchange: {{ .Values.global.hosts.openxchange }}
+    {{- end }}
+    {{- if .Values.nubus.enabled }}
+    keycloak: {{ .Values.global.hosts.keycloak }}
+    nubus: {{ .Values.global.hosts.nubus }}
+    {{- end }}
+    {{- if .Values.xwiki.enabled }}
+    xwiki: {{ .Values.global.hosts.xwiki }}
+    {{- end }}
 
 issuerRef:
   name: {{ .Values.certificate.issuerRef.name | quote }}

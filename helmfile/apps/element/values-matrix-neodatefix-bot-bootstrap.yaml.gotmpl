@@ -19,7 +19,7 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.synapseCreateUser.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.synapseCreateUser.registry | quote }}
   url: {{ .Values.images.synapseCreateUser.repository | quote }}
   tag: {{ .Values.images.synapseCreateUser.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

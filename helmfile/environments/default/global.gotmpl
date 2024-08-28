@@ -1,4 +1,5 @@
 {{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 */}}
@@ -24,11 +25,14 @@ global:
   helmRegistry: {{ env "PRIVATE_HELM_REGISTRY_URL" | quote }}
   imageRegistry: {{ env "PRIVATE_IMAGE_REGISTRY_URL" | quote }}
 
-  ## Define ingress/virtualservice host.
+  ## Define ingress host.
+  # Beware: Changing hostnames on an existing deployment will break links the users may already make use of.
+  #         Also some links are used directly in the portal and do not get updated after the initial
+  #         deployment.
   #
   hosts:
-    collabora: "collabora"
-    cryptpad: "cryptpad"
+    collabora: "office"
+    cryptpad: "pad"
     element: "chat"
     intercomService: "ics"
     jitsi: "meet"
@@ -37,11 +41,11 @@ global:
     matrixNeoChoiceWidget: "matrix-neochoice-widget"
     matrixNeoDateFixBot: "matrix-neodatefix-bot"
     matrixNeoDateFixWidget: "matrix-neodatefix-widget"
-    minioApi: "minio"
-    minioConsole: "minio-console"
-    nextcloud: "fs"
+    minioApi: "objectstore"
+    minioConsole: "objectstore-ui"
+    nextcloud: "files"
     nubus: "portal"
-    openproject: "project"
+    openproject: "projects"
     openxchange: "webmail"
     synapse: "matrix"
     synapseFederation: "matrix-federation"
@@ -51,8 +55,7 @@ global:
   ## Credentials to fetch images from private registry
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   #
-  imagePullSecrets:
-    - "external-registry"
+  imagePullSecrets: []
 
   ## Define the policy to pull container images.
   ## Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy

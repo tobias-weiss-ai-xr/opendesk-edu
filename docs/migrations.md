@@ -5,12 +5,15 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Upgrade migrations</h1>
 
+<!-- TOC -->
 * [Disclaimer](#disclaimer)
 * [Releases upgrades](#releases-upgrades)
   * [From v0.9.0](#from-v090)
     * [Changed openDesk defaults](#changed-opendesk-defaults)
       * [MatrixID localpart update](#matrixid-localpart-update)
-      * [Fileshare configurability](#fileshare-configurability)
+      * [File-share configurability](#file-share-configurability)
+      * [Updated default subdomains in `global.hosts`](#updated-default-subdomains-in-globalhosts)
+      * [Updated `global.imagePullSecrets`](#updated-globalimagepullsecrets)
     * [Automated migrations](#automated-migrations)
       * [Local Postfix as Relay](#local-postfix-as-relay)
       * [Updated IAM component Nubus](#updated-iam-component-nubus)
@@ -21,6 +24,7 @@ SPDX-License-Identifier: Apache-2.0
     * [`migrations` S3 bucket](#migrations-s3-bucket)
 * [Related components and artefacts](#related-components-and-artefacts)
   * [Development](#development)
+<!-- TOC -->
 
 # Disclaimer
 
@@ -28,8 +32,9 @@ We do not offer support for upgrades before we reach openDesk 1.0.
 
 Though we try to ease the pain when it comes to 0.x upgrades. That is what this document is for.
 
-Limitations:
-- We assume that the PV reclaim policy is set to `delete`, so expect that PVs get deleted as soon as the related PVC was deleted and will cover an explicit delete for PVs.
+**Limitations:**
+- We assume that the PV reclaim policy is set to `delete`, so expect that PVs get deleted as soon as the related PVC was
+  deleted and will cover an explicit delete for PVs.
 
 # Releases upgrades
 
@@ -40,16 +45,16 @@ Limitations:
 #### MatrixID localpart update
 
 Until 0.9.0 openDesk used the LDAP entryUUID of a user to generate the user's MatrixID. Due to restrictions of the
-Matrix protocol an update of a MatrixID is not possible, therefore it was technically convenient to use the UUID
+Matrix protocol, an update of a MatrixID is not possible, therefore, it was technically convenient to use the UUID
 as it is immutable (see https://de.wikipedia.org/wiki/Universally_Unique_Identifier for more details on UUIDs.)
 
-From the user experience perspective that was a bad approach, so from now on by default the username, that
-is also used for logging into openDesk, is used to define the localpart of the MatrixID.
+From the user experience perspective, that was a bad approach, so from now on, by default, the username which
+is also used for logging into openDesk is used to define the localpart of the MatrixID.
 
 For existing installations: The changed setting only affects users that login to Element the first time. Existing
 user accounts will not be harmed. If you want existing users to get new MatrixIDs based on the new setting, you
-need to update their external ID in Synapse and deactivate the old user afterwards. The user will get a new
-Matrix account from the scratch, losing the existing contacts, chats and rooms.
+need to update their external ID in Synapse and deactivate the old user afterward. The user will get a new
+Matrix account from scratch, losing the existing contacts, chats and rooms.
 
 The following Admin API calls are helpful:
 - GET /_synapse/admin/v2/users/@<entryuuid>:<matrixdomain> get the user's existing external_id (auth_provider: "oidc")
@@ -58,7 +63,7 @@ The following Admin API calls are helpful:
 - POST /_synapse/admin/v1/deactivate/@<entryuuid>:<matrixdomain> deactivate old user with JSON payload:
   `{ "erase": true }`
 
-For more details check the Admin API documentation:
+For more details, check the Admin API documentation:
 https://element-hq.github.io/synapse/latest/usage/administration/admin_api/index.html
 
 You can enforce the old standard with the following setting:
@@ -70,11 +75,12 @@ functional:
         useImmutableIdentifierForLocalpart: true
 ```
 
-#### Fileshare configurability
+#### File-share configurability
 
-We provide now some configurability regarding the sharing capabilities of the Nextcloud component.
+Now we provide some configurability regarding the sharing capabilities of the Nextcloud component.
 
-The new default is different from the standard until now. To keep the current state after the upgrade from 0.9.0 you have to provide the following settings:
+The new default is different from the standard until now.
+To keep the current state after the upgrade from 0.9.0, you have to provide the following settings:
 
 ```
 functional:
@@ -84,6 +90,64 @@ functional:
       enableExternalSharing: true
       # Enforces passwords to be used on external shares.
       enforceSharingPasswords: false
+```
+
+#### Updated default subdomains in `global.hosts`
+
+We have streamlined the subdomain names used by openDesk to be more user-friendly and to avoid the use of specific
+product names.
+
+This results in following change of default subdomain naming:
+
+- **collabora**: `collabora` → `office`
+- **cryptpad**: `cryptpad` → `pad`
+- **minioApi**: `minio` → `objectstore`
+- **minioConsole**: `minio-console` → `objectstore-ui`
+- **nextcloud**: `fs` → `files`
+- **openproject**: `project` → `projects`
+
+During upgrade, any existing environment needs to keep the old subdomains,
+cause url/link changes are not every supported and not tested at all.
+
+If you have not already defined the entire `global.hosts` dictionary in your custom environments values, please set it
+to the defaults that were used before the upgrade:
+
+```yaml
+global:
+  hosts:
+    collabora: "collabora"
+    cryptpad: "cryptpad"
+    element: "chat"
+    intercomService: "ics"
+    jitsi: "meet"
+    keycloak: "id"
+    matrixNeoBoardWidget: "matrix-neoboard-widget"
+    matrixNeoChoiceWidget: "matrix-neochoice-widget"
+    matrixNeoDateFixBot: "matrix-neodatefix-bot"
+    matrixNeoDateFixWidget: "matrix-neodatefix-widget"
+    minioApi: "minio"
+    minioConsole: "minio-console"
+    nextcloud: "fs"
+    openproject: "project"
+    openxchange: "webmail"
+    synapse: "matrix"
+    synapseFederation: "matrix-federation"
+    univentionManagementStack: "portal"
+    whiteboard: "whiteboard"
+    xwiki: "wiki"
+```
+
+#### Updated `global.imagePullSecrets`
+
+Without using a custom registry, you can pull all the openDesk images without authentication.
+Thus defining not existing imagePullSecrets creates unnecessary errors, so we removed them.
+
+You can keep the current settings by setting the `external-registry` in your custom environment values:
+
+```yaml
+global:
+  imagePullSecrets:
+    - "external-registry"
 ```
 
 ### Automated migrations
