@@ -1,5 +1,7 @@
-# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: Apache-2.0
+{{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-License-Identifier: Apache-2.0
+*/}}
 ---
 global:
   nubusDeployment: true
@@ -29,16 +31,16 @@ global:
   extensions:
     - name: "ox"
       image:
-        registry: {{ .Values.images.nubusOxExtension.registry }}
+        registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusOxExtension.registry | quote }}
         repository: {{ .Values.images.nubusOxExtension.repository }}
         tag: {{ .Values.images.nubusOxExtension.tag }}
-        imagePullPolicy: "IfNotPresent"
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
     - name: "opendesk"
       image:
-        registry: "registry.opencode.de"
-        repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
-        imagePullPolicy: "IfNotPresent"
-        tag: "1.1.0"
+        registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusOpendeskExtension.registry | quote }}
+        repository: {{ .Values.images.nubusOpendeskExtension.repository }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        tag: {{ .Values.images.nubusOpendeskExtension.tag }}
 
   # -- Allows to configure the system extensions to load. This is intended for
   # internal usage, prefer to use `global.extensions` for user configured
@@ -46,10 +48,10 @@ global:
   systemExtensions:
     - name: "portal"
       image:
-        registry: {{ .Values.images.nubusPortalExtension.registry }}
+        registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalExtension.registry | quote }}
         repository: {{ .Values.images.nubusPortalExtension.repository }}
         tag: {{ .Values.images.nubusPortalExtension.tag }}
-        imagePullPolicy: "IfNotPresent"
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
 
 # Nubus bundled services
 postgresql:

@@ -414,6 +414,14 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/notifications-api"
     tag: "0.27.0@sha256:d99173199f20c701b29b8a3c1a46465085a873b37f413882e7d2e106e258c35a"
+  nubusOpendeskExtension:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
+    tag: "1.1.0@sha256:3ff14d9c9611fc4d2bf818786b252eccda870e1beed6a716386cb6ab2bc8412b"
   nubusOpenPolicyAgent:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"

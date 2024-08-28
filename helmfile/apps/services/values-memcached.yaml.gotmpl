@@ -1,5 +1,8 @@
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: Apache-2.0
+{{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
 ---
 architecture: {{ if gt .Values.replicas.memcached 1 }}"high-availability"{{ else }}"standalone"{{ end }}
 
@@ -24,7 +27,7 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ .Values.global.imageRegistry | default .Values.images.memcached.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.memcached.registry | quote }}
   repository: {{ .Values.images.memcached.repository | quote }}
   tag: {{ .Values.images.memcached.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}

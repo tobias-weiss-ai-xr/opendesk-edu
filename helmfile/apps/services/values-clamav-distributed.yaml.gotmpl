@@ -1,5 +1,8 @@
-# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: Apache-2.0
+{{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
 ---
 clamd:
   containerSecurityContext:
@@ -18,7 +21,7 @@ clamd:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.clamd | toYaml | nindent 6 }}
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.clamd.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.clamd.registry | quote }}
     repository: {{ .Values.images.clamd.repository | quote }}
     tag: {{ .Values.images.clamd.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -62,7 +65,7 @@ freshclam:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.freshclam | toYaml | nindent 6 }}
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.freshclam.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.freshclam.registry | quote }}
     repository: {{ .Values.images.freshclam.repository | quote }}
     tag: {{ .Values.images.freshclam.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -73,7 +76,15 @@ freshclam:
   replicaCount: {{ .Values.replicas.freshclam }}
   resources:
     {{ .Values.resources.freshclam | toYaml | nindent 4 }}
-
+  settings:
+    database:
+      auth:
+        {{ .Values.repositories.clamav.auth | toYaml | nindent 8 }}
+      mirror:
+        scheme: {{ .Values.repositories.clamav.mirror.scheme | quote }}
+        url: {{ .Values.repositories.clamav.mirror.url | quote }}
+      customURLs:
+        {{ .Values.repositories.clamav.customURLs | toYaml | nindent 8 }}
 global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
@@ -95,7 +106,7 @@ icap:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.icap | toYaml | nindent 6 }}
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.icap.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.icap.registry | quote }}
     repository: {{ .Values.images.icap.repository | quote }}
     tag: {{ .Values.images.icap.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -124,7 +135,7 @@ milter:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.milter | toYaml | nindent 6 }}
   image:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.milter.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.milter.registry | quote }}
     repository: {{ .Values.images.milter.repository | quote }}
     tag: {{ .Values.images.milter.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
