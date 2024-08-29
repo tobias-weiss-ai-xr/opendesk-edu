@@ -34,7 +34,8 @@ functional:
     quota:
       # Set the default quota for all users in GB
       default: 1
-    # Options related to file sharing, changing these options might require a restart of the `opendesk-nextcloud-php` Pod(s).
+    # Options related to file sharing.
+    # Changing these options might require a restart of the `opendesk-nextcloud-php` Pod(s).
     sharing:
       # External shares
       external:

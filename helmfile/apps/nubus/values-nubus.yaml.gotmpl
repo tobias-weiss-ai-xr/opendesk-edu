@@ -375,6 +375,11 @@ nubusKeycloakBootstrap:
     twoFactorAuthentication:
       enabled: true
       group: "2fa-users"
+  ldap:
+    auth:
+      bindDn: {{ printf "uid=ldapsearch_keycloak,cn=users,%s" .Values.ldap.baseDn }}
+      credentialSecret:
+        name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
 
 # Credential secrets for accessing customer supplied services
 extraSecrets:
@@ -408,6 +413,9 @@ extraSecrets:
   - name: "ums-keycloak-extensions-smtp-opendesk-credentials"
     stringData:
       umcKeycloakExtensionsSmtpPassword: ""
+  - name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
+    stringData:
+      password: {{ .Values.secrets.nubus.ldapSearch.keycloak | quote }}
   - name: "ums-portal-server-minio-opendesk-credentials"
     stringData:
       access-key-id: {{ .Values.objectstores.nubus.username | quote }}
