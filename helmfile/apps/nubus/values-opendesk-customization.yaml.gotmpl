@@ -115,6 +115,10 @@ nubusLdapNotifier:
     {{ .Values.resources.umsLdapNotifier | toYaml | nindent 4 }}
 
 nubusLdapServer:
+  highAvailabilityMode: false
+  replicaCountPrimary: 1
+  replicaCountSecondary: 0 # {{ .Values.replicas.umsLdapServerSecondary }}
+  replicaCountProxy: 0 # {{ .Values.replicas.umsLdapServerProxy }}
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-ldap-server"
   serviceAccount:

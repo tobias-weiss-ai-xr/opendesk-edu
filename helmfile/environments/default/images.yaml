@@ -421,9 +421,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
-    # TODO: Replace with released version once available
-    # See: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-nubus/-/merge_requests/7
-    tag: "1.2.1-jtorres-fixup-icon@sha256:aa10b93e6e9d68a52add2e39bee4ceecc86c9571754db0bc505f00543673b12d"
+    tag: "1.2.1@sha256:479f072d8dd9fe445caa5fea4d882bf3aba24af0d22fc378a9839990c6f3a907"
   nubusOpenPolicyAgent:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"

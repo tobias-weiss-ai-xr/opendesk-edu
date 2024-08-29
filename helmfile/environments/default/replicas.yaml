@@ -82,8 +82,13 @@ replicas:
   umsKeycloakExtensionsProxy: 1
   # -- scalable: tbd
   umsLdapNotifier: 1
-  # -- scalable: tbd
-  umsLdapServer: 1
+  # -- scalable: false
+  # -- comment: Experimental feature and not supported.
+  umsLdapServerPrimary: 1
+  # -- scalable: true
+  umsLdapServerSecondary: 1
+  # -- scalable: true
+  umsLdapServerProxy: 1
   # -- scalable: tbd
   umsNotificationsApi: 1
   # -- scalable: true
@@ -139,7 +144,9 @@ replicas:
   # -- scalable: true
   openprojectWeb: 1
   # -- scalable: true
-  # -- comment: Async service working on processing queue content. Can work on queues in parallel (when needed). See [upstream Helm chart documentation](https://www.openproject.org/docs/installation-and-operations/installation/helm-chart/) for details, as e.g. dedicated workers to specific queues are in general possible with OpenProject as well.Share 
+  # -- comment: Async service working on processing queue content. Can work on queues in parallel (when needed). Check
+  # https://www.openproject.org/docs/installation-and-operations/installation/helm-chart/ for details, as e.g.
+  # dedicated workers for specific queues are possible with OpenProject.
   openprojectWorker: 1
 
   # -- component: Groupware (OX Appsuite)
