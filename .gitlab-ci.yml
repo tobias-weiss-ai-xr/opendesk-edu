@@ -495,7 +495,7 @@ run-tests:
           \"user_password\": \"${DEFAULT_USER_PASSWORD}\", \
           \"admin_name\": \"${DEFAULT_ADMIN_NAME}\", \
           \"admin_password\": \"${DEFAULT_ADMIN_PASSWORD}\", \
-          \"DEPLOY_ALL_COMPONENTS\": \"${DEPLOY_ALL_COMPONENTS}\", \
+          \"PF\": \"${DEPLOY_ALL_COMPONENTS}\", \
           \"DEPLOY_COLLABORA\": \"${DEPLOY_COLLABORA}\", \
           \"DEPLOY_ELEMENT\": \"${DEPLOY_ELEMENT}\", \
           \"DEPLOY_ICS\": \"${DEPLOY_ICS}\", \
