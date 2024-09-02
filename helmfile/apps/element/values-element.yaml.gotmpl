@@ -44,6 +44,8 @@ configuration:
             - org.matrix.msc3819.send.to_device:net.nordeck.whiteboard.connection_signaling
             - org.matrix.msc3819.receive.to_device:net.nordeck.whiteboard.connection_signaling
             - town.robin.msc3846.turn_servers
+            - org.matrix.msc4039.upload_file
+            - org.matrix.msc4039.download_file
         "https://{{ .Values.global.hosts.matrixNeoChoiceWidget }}.{{ .Values.global.domain }}/*":
           preload_approved: true
           capabilities_approved:
