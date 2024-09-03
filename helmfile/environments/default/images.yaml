@@ -50,12 +50,10 @@ images:
     # providerCategory: "Supplier"
     # providerResponsible: "Element"
     # upstreamRegistry: "https://registry.opencode.de"
-    # upstreamRepository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["1", "8", "0"]
+    # upstreamRepository: "bmi/opendesk/components/supplier/element/images/opendesk-element-web"
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
-    tag: "1.11.1@sha256:6ed72fccd302fc5891f31157bcffd14358e1f90f8b60d649fd261ba0f5d5fb91"
+    repository: "bmi/opendesk/components/supplier/element/images/opendesk-element-web"
+    tag: "1.11.4-amd64@sha256:1785ca0dcb608939533ce50067fb17c2152ceff00ea4e17a4cd500930727687b"
   freshclam:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -148,56 +146,6 @@ images:
     registry: "registry-1.docker.io"
     repository: "library/mariadb"
     tag: "10.5@sha256:aa1ccc18000c32d1f39ac0b055117b27bffd93e622ec961d682de40fe2a1a95f"
-  matrixNeoBoardWidget:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Nordeck"
-    # upstreamRegistry: "https://ghcr.io"
-    # upstreamRepository: "nordeck/matrix-neoboard-widget"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["1", "4", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-neoboard-widget"
-    tag: "1.17.0@sha256:f4e711473ba99159c878177f0f9e750fd6d9555b7d8c266ac7040f053be19513"
-  matrixNeoChoiceWidget:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Nordeck"
-    # upstreamRegistry: "https://ghcr.io"
-    # upstreamRepository: "nordeck/matrix-poll-widget"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["1", "4", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-poll-widget"
-    tag: "1.4.0@sha256:216cb88aaa47449a15af9a531d60eee593cb1923c4e8fcc67c119982972911e5"
-  matrixNeoDateFixBot:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Nordeck"
-    # upstreamRegistry: "https://ghcr.io"
-    # upstreamRepository: "nordeck/matrix-meetings-bot"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["2", "7", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-bot"
-    tag: "2.8.0@sha256:db1d99c13a9facfd08a7da1d0a9c7c05715bad47110e93649ad6b389e462b42c"
-  matrixNeoDateFixWidget:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Nordeck"
-    # upstreamRegistry: "https://ghcr.io"
-    # upstreamRepository: "nordeck/matrix-meetings-widget"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["1", "6", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-widget"
-    tag: "1.6.1@sha256:70bebd9293a977124a5da955e1a520381129d476d6414a083093c1b48a55dadd"
-  matrixUserVerificationService:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Element"
-    # upstreamRegistry: "https://registry-1.docker.io"
-    # upstreamRepository: "matrixdotorg/matrix-user-verification-service"
-    # upstreamMirrorTagFilterRegEx: '^v(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["3", "0", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/element/images-mirror/matrix-user-verification-service"
-    tag: "v3.0.0@sha256:25e685d595785e2a72e75a525dac78cf8c782445454f8ac090d3702431c38008"
   memcached:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -809,24 +757,6 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/element/images-mirror/synapse"
     tag: "v1.108.0@sha256:0754a5c372f4cfb5f69f58ad4b70d05bc2e380354f1b0c9101611e9157082712"
-  synapseCreateUser:
-    # providerCategory: "Community"
-    # providerResponsible: "Nordeck"
-    # upstreamRegistry: "https://registry-1.docker.io"
-    # upstreamRepository: "alpine/k8s"
-    registry: "registry-1.docker.io"
-    repository: "alpine/k8s"
-    tag: "1.30.0@sha256:d7a11b7032550e992667fd7725b039dcd639270fbceec368d7e66e3d9e41ee15"
-  synapseGuestModule:
-    # providerCategory: "Supplier"
-    # providerResponsible: "Nordeck"
-    # upstreamRegistry: "https://ghcr.io"
-    # upstreamRepository: "nordeck/synapse-guest-module"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["1", "0", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/synapse-guest-module"
-    tag: "1.0.0@sha256:6b3b17183a7d163148cc1bc5342604682ec67d898394fc743db2f339e61c722e"
   synapseWeb:
     # providerCategory: "Community"
     # providerResponsible: "Element"

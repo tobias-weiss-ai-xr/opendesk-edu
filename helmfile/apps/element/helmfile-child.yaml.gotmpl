@@ -32,52 +32,6 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.synapse.registry }}/{{ .Values.charts.synapse.repository }}"
-  - name: "synapse-create-account-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.synapseCreateAccount.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapseCreateAccount.registry }}/{{ .Values.charts.synapseCreateAccount.repository }}"
-
-  # openDesk Matrix Widgets
-  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-matrix-widgets
-  - name: "matrix-user-verification-service-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.matrixUserVerificationService.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixUserVerificationService.registry }}/{{ .Values.charts.matrixUserVerificationService.repository }}"
-  - name: "matrix-neoboard-widget-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.matrixNeoboardWidget.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
-  - name: "matrix-neochoice-widget-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.matrixNeoboardWidget.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeoboardWidget.registry }}/{{ .Values.charts.matrixNeoboardWidget.repository }}"
-  - name: "matrix-neodatefix-widget-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.matrixNeodatefixWidget.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeodatefixWidget.registry }}/{{ .Values.charts.matrixNeodatefixWidget.repository }}"
-  - name: "matrix-neodatefix-bot-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.matrixNeodatefixBot.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeodatefixBot.registry }}/{{ .Values.charts.matrixNeodatefixBot.repository }}"
-
 
 releases:
   - name: "opendesk-element"
@@ -109,62 +63,6 @@ releases:
     version: "{{ .Values.charts.synapse.version }}"
     values:
       - "values-synapse.yaml.gotmpl"
-    installed: {{ .Values.element.enabled }}
-    timeout: 900
-
-  - name: "opendesk-matrix-user-verification-service-bootstrap"
-    chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
-    version: "{{ .Values.charts.synapseCreateAccount.version }}"
-    values:
-      - "values-matrix-user-verification-service-bootstrap.yaml.gotmpl"
-    installed: {{ .Values.element.enabled }}
-    timeout: 900
-
-  - name: "opendesk-matrix-user-verification-service"
-    chart: "matrix-user-verification-service-repo/{{ .Values.charts.matrixUserVerificationService.name }}"
-    version: "{{ .Values.charts.matrixUserVerificationService.version }}"
-    values:
-      - "values-matrix-user-verification-service.yaml.gotmpl"
-    installed: {{ .Values.element.enabled }}
-    timeout: 900
-
-  - name: "matrix-neoboard-widget"
-    chart: "matrix-neoboard-widget-repo/{{ .Values.charts.matrixNeoboardWidget.name }}"
-    version: "{{ .Values.charts.matrixNeoboardWidget.version }}"
-    values:
-      - "values-matrix-neoboard-widget.yaml.gotmpl"
-    installed: {{ .Values.element.enabled }}
-    timeout: 900
-
-  - name: "matrix-neochoice-widget"
-    chart: "matrix-neochoice-widget-repo/{{ .Values.charts.matrixNeochoiseWidget.name }}"
-    version: "{{ .Values.charts.matrixNeochoiseWidget.version }}"
-    values:
-      - "values-matrix-neochoice-widget.yaml.gotmpl"
-    installed: {{ .Values.element.enabled }}
-    timeout: 900
-
-  - name: "matrix-neodatefix-widget"
-    chart: "matrix-neodatefix-widget-repo/{{ .Values.charts.matrixNeodatefixWidget.name }}"
-    version: "{{ .Values.charts.matrixNeodatefixWidget.version }}"
-    values:
-      - "values-matrix-neodatefix-widget.yaml.gotmpl"
-    installed: {{ .Values.element.enabled }}
-    timeout: 900
-
-  - name: "matrix-neodatefix-bot-bootstrap"
-    chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
-    version: "{{ .Values.charts.synapseCreateAccount.version }}"
-    values:
-      - "values-matrix-neodatefix-bot-bootstrap.yaml.gotmpl"
-    installed: {{ .Values.element.enabled }}
-    timeout: 900
-
-  - name: "matrix-neodatefix-bot"
-    chart: "matrix-neodatefix-bot-repo/{{ .Values.charts.matrixNeodatefixBot.name }}"
-    version: "{{ .Values.charts.matrixNeodatefixBot.version }}"
-    values:
-      - "values-matrix-neodatefix-bot.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
     timeout: 900
 

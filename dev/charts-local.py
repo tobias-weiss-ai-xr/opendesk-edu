@@ -25,7 +25,7 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 log_path = script_path+'/../logs'
 charts_yaml = script_path+'/../helmfile/environments/default/charts.yaml'
 base_repo_path = script_path+'/..'
-base_helmfile = base_repo_path+'/helmfile_generic.yaml'
+base_helmfile = base_repo_path+'/helmfile_generic.yaml.gotmpl'
 helmfile_backup_extension = '.bak'
 
 Path(log_path).mkdir(parents=True, exist_ok=True)
