@@ -74,11 +74,17 @@ configuration:
     password:
       value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   sharing:
-    allowLinks: {{ .Values.functional.filestore.sharing.enableExternalSharing }}
-    allowMailNotification: {{ .Values.functional.filestore.sharing.enableExternalSharing }}
-    allowPublicUpload: {{ .Values.functional.filestore.sharing.enableExternalSharing }}
-    enforceLinksPassword: {{ .Values.functional.filestore.sharing.enforceSharingPasswords }}
-    enforcePasswordProtection: {{ .Values.functional.filestore.sharing.enforceSharingPasswords }}
+    allowLinks: {{ .Values.functional.filestore.sharing.external.enabled }}
+    allowMailNotification: {{ .Values.functional.filestore.sharing.external.enabled }}
+    allowPublicUpload: {{ .Values.functional.filestore.sharing.external.enabled }}
+    enforceLinksPassword: {{ .Values.functional.filestore.sharing.external.enforcePasswords }}
+    enforcePasswordProtection: {{ .Values.functional.filestore.sharing.external.enforcePasswords }}
+    defaultInternalExpireEnabled: {{ .Values.functional.filestore.sharing.internal.expiry.activeByDefault }}
+    defaultInternalExpireEnforced: {{ .Values.functional.filestore.sharing.internal.expiry.enforced }}
+    defaultInternalExpireDays: {{ .Values.functional.filestore.sharing.internal.expiry.defaultDays | quote }}
+    defaultExternalExpireEnabled: {{ .Values.functional.filestore.sharing.external.expiry.activeByDefault }}
+    defaultExternalExpireEnforced: {{ .Values.functional.filestore.sharing.external.expiry.enforced }}
+    defaultExternalExpireDays: {{ .Values.functional.filestore.sharing.external.expiry.defaultDays | quote }}
   smtp:
     auth:
       enabled: false

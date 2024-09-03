@@ -36,11 +36,31 @@ functional:
       default: 1
     # Options related to file sharing, changing these options might require a restart of the `opendesk-nextcloud-php` Pod(s).
     sharing:
-      # Enables sharing of files with external participants (create external links, send links by mail and allow external upload in shared folders).
-      # If you disable this option existing external shares stop working, when re-enabling it the old shares are available again.
-      enableExternalSharing: false
-      # Enforces passwords to be used on external shares.
-      enforceSharingPasswords: true
+      # External shares
+      external:
+        # Enables sharing of files with external participants (create external links, send links by mail and allow external upload in shared folders).
+        # If you disable this option existing external shares stop working, when re-enabling it the old shares are available again.
+        enabled: false
+        # Enforces passwords to be used on external shares.
+        enforcePasswords: false
+        # Expiry settings for the external shares.
+        expiry:
+          # If true the check box for the expiry date is enabled by default.
+          activeByDefault: true
+          # Enforce an expiry date to be set overriding `activeByDefault` setting.
+          enforced: false
+          # Set the number of days the default expiry date is in the future (requires `activeByDefault` to be `true`)
+          defaultDays: 30
+      # External shares
+      internal:
+        # Expiry settings for the internal shares.
+        expiry:
+          # If true the check box for the expiry date is enabled by default.
+          activeByDefault: false
+          # Enforce an expiry date to be set overriding `activeByDefault` setting.
+          enforced: false
+          # Set the number of days the default expiry date is in the future (requires `activeByDefault` to be `true`).
+          defaultDays: 90
     # Nextcloud specific configuration
     nextcloud:
       retentionObligation:
