@@ -55,6 +55,8 @@ ics:
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     audience: "opendesk-oxappsuite"
   nextcloud:
+    origin: {{ .Values.global.hosts.nextcloud | quote }}
+    subdomain: {{ .Values.global.hosts.nextcloud | quote }}
     audience: "opendesk-nextcloud"
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
