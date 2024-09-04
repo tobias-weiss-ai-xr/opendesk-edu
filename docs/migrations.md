@@ -5,7 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Upgrade migrations</h1>
 
-<!-- TOC -->
 * [Disclaimer](#disclaimer)
 * [Releases upgrades](#releases-upgrades)
   * [From v0.9.0](#from-v090)
@@ -24,30 +23,6 @@ SPDX-License-Identifier: Apache-2.0
     * [`migrations` S3 bucket](#migrations-s3-bucket)
 * [Related components and artefacts](#related-components-and-artefacts)
   * [Development](#development)
->>>>>>> 240fb47 (fix(nextcloud): Add new settings to `functional.yaml` for expiry dates.)
-    * [Automated migrations](#automated-migrations)
-      * [Local Postfix as Relay](#local-postfix-as-relay)
-      * [Updated IAM component Nubus](#updated-iam-component-nubus)
-        * [Manual cleanup](#manual-cleanup)
-* [Disclaimer](#disclaimer)
-* [Releases upgrades](#releases-upgrades)
-  * [From v0.9.0](#from-v090)
-    * [Changed openDesk defaults](#changed-opendesk-defaults)
-      * [MatrixID localpart update](#matrixid-localpart-update)
-      * [File-share configurability](#file-share-configurability)
-      * [Updated default subdomains in `global.hosts`](#updated-default-subdomains-in-globalhosts)
-      * [Updated `global.imagePullSecrets`](#updated-globalimagepullsecrets)
-    * [Automated migrations](#automated-migrations)
-      * [Local Postfix as Relay](#local-postfix-as-relay)
-      * [Updated IAM component Nubus](#updated-iam-component-nubus)
-        * [Manual cleanup](#manual-cleanup)
-  * [From v0.8.1](#from-v081)
-    * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
-    * [Updated customizable template attributes](#updated-customizable-template-attributes)
-    * [`migrations` S3 bucket](#migrations-s3-bucket)
-* [Related components and artefacts](#related-components-and-artefacts)
-  * [Development](#development)
-<!-- TOC -->
 
 # Disclaimer
 
