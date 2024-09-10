@@ -46,9 +46,9 @@ exporter:
   resources:
     {{ .Values.resources.nextcloudExporter | toYaml | nindent 4 }}
 
-php:
+aio:
   additionalAnnotations:
-    intents.otterize.com/service-name: "opendesk-nextcloud-php"
+    intents.otterize.com/service-name: "opendesk-nextcloud"
   configuration:
     cache:
       auth:
@@ -75,57 +75,23 @@ php:
         - "ALL"
     enabled: true
     privileged: false
-    runAsUser: 65532
-    runAsGroup: 65532
+    runAsUser: 101
+    runAsGroup: 101
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     seLinuxOptions:
-      {{ .Values.seLinuxOptions.nextcloudPHP | toYaml | nindent 6 }}
+      {{ .Values.seLinuxOptions.nextcloud | toYaml | nindent 6 }}
   cron:
     successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"0"{{ end }}
   debug:
     loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
   image:
-    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloudPHP.registry | quote }}
-    repository: "{{ .Values.images.nextcloudPHP.repository }}"
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloud.registry | quote }}
+    repository: "{{ .Values.images.nextcloud.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-    tag: {{ .Values.images.nextcloudPHP.tag | quote }}
-  podAnnotations: {}
-  prometheus:
-    serviceMonitor:
-      enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
-      labels:
-        {{ .Values.monitoring.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
-    prometheusRule:
-      enabled: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
-      additionalLabels:
-        {{ .Values.monitoring.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
-  replicaCount: {{ .Values.replicas.nextcloudPHP }}
-  resources:
-    {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
-
-apache2:
-  configuration:
-    php:
-      host: "opendesk-nextcloud-php.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
-    trustedProxies: {{ join " " .Values.cluster.networking.cidr | quote }}
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - "ALL"
-    enabled: true
-    privileged: false
-    runAsUser: 65532
-    runAsGroup: 65532
-    seccompProfile:
-      type: "RuntimeDefault"
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    seLinuxOptions:
-      {{ .Values.seLinuxOptions.nextcloudApache2 | toYaml | nindent 6 }}
+    tag: {{ .Values.images.nextcloud.tag | quote }}
   ingress:
     enabled: {{ .Values.ingress.enabled }}
     annotations:
@@ -139,14 +105,20 @@ apache2:
     host: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
     tls:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
-  image:
-    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloudApache2.registry | quote }}
-    repository: {{ .Values.images.nextcloudApache2.repository | quote }}
-    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-    tag: {{ .Values.images.nextcloudApache2.tag | quote }}
   podAnnotations: {}
-  replicaCount: {{ .Values.replicas.nextcloudApache2 }}
+  podSecurityContext:
+    fsGroup: 101
+  prometheus:
+    serviceMonitor:
+      enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
+      labels:
+        {{ .Values.monitoring.prometheus.serviceMonitors.labels | toYaml | nindent 8 }}
+    prometheusRule:
+      enabled: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
+      additionalLabels:
+        {{ .Values.monitoring.prometheus.prometheusRules.labels | toYaml | nindent 8 }}
+  replicaCount: {{ .Values.replicas.nextcloud }}
   resources:
-    {{ .Values.resources.nextcloudApache2 | toYaml | nindent 4 }}
+    {{ .Values.resources.nextcloud | toYaml | nindent 4 }}
 
 ...
