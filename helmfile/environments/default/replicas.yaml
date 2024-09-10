@@ -148,11 +148,9 @@ replicas:
 
   # -- component: Filestore (Nextcloud)
   # -- scalable: true
-  nextcloudApache2: 1
+  nextcloud: 1
   # -- scalable: true
   nextcloudExporter: 1
-  # -- scalable: true
-  nextcloudPHP: 1
 
   # -- component: Project management (OpenProject)
   # -- scalable: true

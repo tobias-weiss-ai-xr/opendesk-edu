@@ -114,28 +114,30 @@ containerSecurityContext:
       - "ALL"
   enabled: true
   privileged: false
-  runAsUser: 65532
-  runAsGroup: 65532
+  runAsUser: 101
+  runAsGroup: 101
   seccompProfile:
     type: "RuntimeDefault"
   readOnlyRootFilesystem: false
   runAsNonRoot: true
   seLinuxOptions:
     {{ .Values.seLinuxOptions.nextcloudManagement | toYaml | nindent 4 }}
+podSecurityContext:
+  fsGroup: 101
 
 debug:
   loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
 
 image:
-  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloudManagement.registry | quote }}
-  repository: {{ .Values.images.nextcloudManagement.repository | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloud.registry | quote }}
+  repository: {{ .Values.images.nextcloud.repository | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  tag: {{ .Values.images.nextcloudManagement.tag | quote }}
+  tag: {{ .Values.images.nextcloud.tag | quote }}
 
 theme:
   {{ .Values.theme | toYaml | nindent 2 }}
 
 resources:
-  {{ .Values.resources.nextcloudPHP | toYaml | nindent 4 }}
+  {{ .Values.resources.nextcloud | toYaml | nindent 4 }}
 
 ...
