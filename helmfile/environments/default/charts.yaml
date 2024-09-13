@@ -46,7 +46,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/collabora/charts-mirror"
     name: "collabora-online"
-    version: "1.1.20"
+    version: "1.1.21"
     verify: true
   cryptpad:
     # providerCategory: "Supplier"
