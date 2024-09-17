@@ -1,0 +1,64 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  # openDesk Dovecot
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dovecot
+  - name: "dovecot-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.dovecot.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
+
+  # Open-Xchange
+  - name: "open-xchange-repo"
+    keyring: "../../files/gpg-pubkeys/open-xchange-com.gpg"
+    verify: {{ .Values.charts.openXchangeAppSuite.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.openXchangeAppSuite.registry }}/{{ .Values.charts.openXchangeAppSuite.repository }}"
+
+  # openDesk Open-Xchange Bootstrap
+  # Source:
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap
+  - name: "open-xchange-bootstrap-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.openXchangeAppSuiteBootstrap.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.openXchangeAppSuiteBootstrap.registry }}/{{ .Values.charts.openXchangeAppSuiteBootstrap.repository }}"
+
+releases:
+  - name: "dovecot"
+    chart: "dovecot-repo/{{ .Values.charts.dovecot.name }}"
+    version: "{{ .Values.charts.dovecot.version }}"
+    values:
+      - "values-dovecot.yaml.gotmpl"
+    installed: {{ .Values.dovecot.enabled }}
+    timeout: 900
+
+  - name: "open-xchange"
+    chart: "open-xchange-repo/{{ .Values.charts.openXchangeAppSuite.name }}"
+    version: "{{ .Values.charts.openXchangeAppSuite.version }}"
+    values:
+      - "values-openxchange.yaml.gotmpl"
+      - "values-openxchange-enterprise-contact-picker.yaml.gotmpl"
+    installed: {{ .Values.oxAppsuite.enabled }}
+    timeout: 900
+
+  - name: "opendesk-open-xchange-bootstrap"
+    chart: "open-xchange-bootstrap-repo/{{ .Values.charts.openXchangeAppSuiteBootstrap.name }}"
+    version: "{{ .Values.charts.openXchangeAppSuiteBootstrap.version }}"
+    values:
+      - "values-openxchange-bootstrap.yaml.gotmpl"
+    installed: {{ .Values.oxAppsuite.enabled }}
+    timeout: 900
+
+commonLabels:
+  deploy-stage: "component-1"
+  component: "open-xchange"
+...
