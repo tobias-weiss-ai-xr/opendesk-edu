@@ -138,6 +138,9 @@ configured to pull artifacts that do not originate from Open CoDE into projects 
 
 The mirror script takes the information on what artifacts to mirror from the annotation inside the two yaml files:
 - `# upstreamRegistry` *required*: To identify the source registry
+- `# upstreamRegistryCredentialId`: *optional*: In case the source registry is not public the access credentials have to be specified as ENV variables containing the value of this key in their name, so you want to specific that key all uppercase:
+  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_USERNAME`
+  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_PASSWORT`
 - `# upstreamRepository` *required*: To identify the source repository
 - `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set it activates the mirror for the component. Only tags are being mirrored that match the given regular expression. **Note:** You have to use single quotes for this attribute's value in case you use backslash leading regex notation like `\d`.
 - `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artifacts beginning with a specific version. You must use capturing groups
