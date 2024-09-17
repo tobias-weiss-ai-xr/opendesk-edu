@@ -46,6 +46,9 @@ theme:
     favicon144PngB64: {{ readFile "./../../files/theme/favicon144.png" | b64enc | quote }}
     logoHeaderSvgB64: {{ readFile "./../../files/theme/logoHeader.svg" | b64enc | quote }}
 
+    # Jitsi
+    logoHeaderInvertedSvgB64: {{ readFile "./../../files/theme/logoHeaderInverted.svg" | b64enc | quote }}
+
     # Portal
     logoPortalBackgroundSvgB64: {{ readFile "./../../files/theme/logoPortalBackground.svg" | b64enc | quote }}
     portalCss: {{ readFile "./../../files/theme/portal.css" | b64enc }}
