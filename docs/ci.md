@@ -33,10 +33,11 @@ You might want to set credential variables in the GitLab project at `Settings` >
 # Tests
 
 The GitLab CI pipeline contains a job named `run-tests` that can trigger a test suite pipeline on another GitLab project.
-The `DEPLOY_`-variables are used to determine which components should be tested.
 In order for the trigger to work, the variable `TESTS_PROJECT_URL` has to be set on this GitLab project's CI variables
 that can be found at `Settings` -> `CI/CD` -> `Variables`. The variable should have this format:
 `<domain of gitlab>/api/v4/projects/<id>`.
-
+To select the current testset, use the variable `TESTS_TESTSET`. Default: `Smoke`.
 If the branch of the test pipeline is not `main` this can be set with the `.gitlab-ci.yml` variable
 `TESTS_BRANCH` while creating a new pipeline.
+
+The variable `testprofile` within the job is set to `Namespace`, which tells the e2e tests to use environment specific settings that will be read from the cluster and namespace specific file in the opendesk-env repository.

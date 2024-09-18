@@ -171,7 +171,16 @@ variables:
       - "no"
   TESTS_BRANCH:
     description: "Branch of E2E-tests on which the test pipeline is triggered"
-    value: "main"
+    value: "develop"
+  TESTS_PROJECT_URL:
+    description: "Project url for e2e-tests (`<domain of gitlab>/api/v4/projects/<id>`)"
+    value: "gitlab.opencode.de/api/v4/projects/1506"
+  TESTS_TESTSET:
+    description: "Selects testset for E2E-tests"
+    value: "Smoke"
+    options:
+      - "Regression"
+      - "Smoke"
 
 .deploy-common:
   cache: {}
@@ -490,27 +499,27 @@ run-tests:
         \"ref\": \"${TESTS_BRANCH}\", \
         \"token\": \"${CI_JOB_TOKEN}\", \
         \"variables\": { \
-          \"url\": \"https://portal.${DOMAIN}\", \
+          \"operator\": \"${OPERATOR}\", \
+          \"cluster\": \"${CLUSTER}\", \
+          \"namespace\": \"${NAMESPACE}\", \
+          \"url\": \"https://portal.${DOMAIN}/\", \
           \"user_name\": \"${DEFAULT_USER_NAME}\", \
           \"user_password\": \"${DEFAULT_USER_PASSWORD}\", \
           \"admin_name\": \"${DEFAULT_ADMIN_NAME}\", \
           \"admin_password\": \"${DEFAULT_ADMIN_PASSWORD}\", \
-          \"DEPLOY_ALL_COMPONENTS\": \"${DEPLOY_ALL_COMPONENTS}\", \
-          \"DEPLOY_COLLABORA\": \"${DEPLOY_COLLABORA}\", \
-          \"DEPLOY_ELEMENT\": \"${DEPLOY_ELEMENT}\", \
-          \"DEPLOY_ICS\": \"${DEPLOY_ICS}\", \
-          \"DEPLOY_JITSI\": \"${DEPLOY_JITSI}\", \
-          \"DEPLOY_KEYCLOAK\": \"${DEPLOY_UMS}\", \
-          \"DEPLOY_NEXTCLOUD\": \"${DEPLOY_NEXTCLOUD}\", \
-          \"DEPLOY_OPENPROJECT\": \"${DEPLOY_OPENPROJECT}\", \
-          \"DEPLOY_OX\": \"${DEPLOY_OX}\", \
-          \"DEPLOY_SERVICES\": \"${DEPLOY_SERVICES}\", \
-          \"DEPLOY_UCS\": \"${DEPLOY_UMS}\", \
-          \"DEPLOY_XWIKI\": \"${DEPLOY_XWIKI}\", \
-          \"DEPLOY_PROVISIONING\": \"${DEPLOY_PROVISIONING}\" \
+          \"screenshot_test\": \"yes\", \
+          \"screenshot_before_step\": \"yes\", \
+          \"screenshot_after_step\": \"yes\", \
+          \"screenshot_redirect_step\": \"yes\", \
+          \"testset\": \"${TESTS_TESTSET}\", \
+          \"testprofile\": \"Namespace\", \
+          \"gitlab_functional_yaml\": \"https://gitlab.opencode.de/api/v4/projects/1317/repository/files/helmfile%2Fenvironments%2Fdefault%2Ffunctional.yaml?ref=develop\", \
+          \"gitlab_env_namespace_template\": \"https://gitlab.opencode.de/api/v4/projects/1564/repository/files/environments%2F{operator}%2F{cluster}%2F{namespace}.yaml.gotmpl?ref=main\", \
+          \"gitlab_default_env_namespace\": \"values\" \
         } \
       }" \
       "https://${TESTS_PROJECT_URL}/trigger/pipeline"
+  retry: 1
 
 avscan-prepare:
   stage: ".pre"
