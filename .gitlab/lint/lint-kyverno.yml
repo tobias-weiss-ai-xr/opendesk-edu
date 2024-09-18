@@ -26,6 +26,9 @@ lint-kyverno:
           - "xwiki"
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${APP}"
+    - >
+      node /app/opendesk-ci-cli/src/index.js generate-kyverno-env
+      -d ${CI_PROJECT_DIR}/helmfile/environments
     - "helmfile template -e test --include-needs > ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
     - >
       node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests
