@@ -75,6 +75,8 @@ replicas:
   umsGuardianManagementUi: 1
   # -- scalable: tbd
   umsGuardianOpenPolicyAgent: 1
+  # -- scalable: tbd
+  umsKeycloak: 1
   # -- scalable: false
   # -- comment: Should not be scaled, is an async process.
   umsKeycloakExtensionsHandler: 1
@@ -97,16 +99,30 @@ replicas:
   umsPortalConsumer: 1
   # -- scalable: true
   umsPortalServer: 1
+  # -- scalable: tdb
+  umsProvisioningApi: 1
+  # -- scalable: false
+  umsProvisioningDispatcher: 1
+  # -- scalable: tdb
+  umsProvisioningNats: 1
+  # -- scalable: tdb
+  umsProvisioningPrefill: 1
+  # -- scalable: false
+  umsProvisioningUdmTransformer: 1
   # -- scalable: tbd
   umsSelfserviceConsumer: 1
   # -- scalable: tbd
   umsStackGateway: 1
   # -- scalable: true
+  umsUdmListener: 1
+  # -- scalable: tbd
   umsUdmRestApi: 1
   # -- scalable: tbd
   umsUmcGateway: 1
   # -- scalable: tbd
   umsUmcServer: 1
+  # -- scalable: tbd
+  umsUmcServerProxy: 1
 
   # -- component: Video conference (Jitsi)
   # -- scalable: tbd

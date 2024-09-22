@@ -5,37 +5,126 @@ SPDX-License-Identifier: Apache-2.0
 ---
 keycloak:
   enabled: true
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsKeycloak | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak"
   replicaCount: {{ .Values.replicas.keycloak }}
   resources:
     {{ .Values.resources.umsKeycloak | toYaml | nindent 4 }}
 
-guardian:
+nubusGuardian:
   authorizationApi:
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     podAnnotations:
       intents.otterize.com/service-name: "ums-guardian-authorization-api"
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "Always"
     replicaCount: {{ .Values.replicas.umsGuardianAuthorizationApi }}
     resources:
       {{ .Values.resources.umsGuardianAuthorizationApi | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianAuthorizationApi | toYaml | nindent 8 }}
   managementApi:
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     podAnnotations:
       intents.otterize.com/service-name: "ums-guardian-management-api"
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "Always"
     replicaCount: {{ .Values.replicas.umsGuardianManagementApi }}
     resources:
       {{ .Values.resources.umsGuardianManagementApi | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianManagementApi | toYaml | nindent 8 }}
   managementUi:
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     podAnnotations:
       intents.otterize.com/service-name: "ums-guardian-management-ui"
     replicaCount: {{ .Values.replicas.umsGuardianManagementUi }}
     resources:
-      {{ .Values.resources.umsGuardianManagementUi | toYaml | nindent 6 }}#
+      {{ .Values.resources.umsGuardianManagementUi | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianManagementUi | toYaml | nindent 8 }}
   openPolicyAgent:
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "Always"
     podAnnotations:
       intents.otterize.com/service-name: "ums-ums-open-policy-agent"
     replicaCount: {{ .Values.replicas.umsGuardianOpenPolicyAgent }}
     resources:
       {{ .Values.resources.umsOpenPolicyAgent | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsGuardianOpenPolicyAgent | toYaml | nindent 8 }}
   provisioning:
     # Using openDesk keycloak provisioning
     enabled: false
@@ -43,9 +132,24 @@ guardian:
 nubusNotificationsApi:
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-notifications-api"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsNotificationsApi | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   serviceAccount:
-    annotations:
-      intended.usage: "compliance"
+    create: true
   replicaCount: {{ .Values.replicas.umsNotificationsApi }}
   resources:
     {{ .Values.resources.umsNotificationsApi | toYaml | nindent 4 }}
@@ -53,7 +157,40 @@ nubusNotificationsApi:
 nubusUmcServer:
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-umc-server"
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    runAsUser: 0
+    runAsGroup: 0
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
+  containerSecurityContextInit:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    runAsUser: 0
+    runAsGroup: 0
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  proxy:
+    replicaCount: {{ .Values.replicas.umsUmcServerProxy }}
   replicaCount: {{ .Values.replicas.umsUmcServer }}
+
   resources:
     {{ .Values.resources.umsUmcServer | toYaml | nindent 4 }}
   selfService:
@@ -75,19 +212,36 @@ nubusUmcServer:
 
 nubusKeycloakExtensions:
   handler:
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     replicaCount: {{ .Values.replicas.umsKeycloakExtensionsHandler }}
     podAnnotations:
       intents.otterize.com/service-name: "ums-keycloak-extensions-handler"
     resources:
       {{ .Values.resources.umsKeycloakExtensionHandler | toYaml | nindent 6 }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsKeycloakExtensionHandler | toYaml | nindent 8 }}
   proxy:
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     replicaCount: {{ .Values.replicas.umsKeycloakExtensionsProxy }}
     podAnnotations:
       intents.otterize.com/service-name: "ums-keycloak-extensions-proxy"
     resources:
       {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 6 }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsKeycloakExtensionHandler | toYaml | nindent 8 }}
 
 nubusPortalConsumer:
+  image:
+    pullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-portal-consumer"
   replicaCount: {{ .Values.replicas.umsPortalConsumer }}
@@ -99,29 +253,70 @@ nubusPortalConsumer:
     storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
     size: {{ .Values.persistence.size.nubus.portalConsumer | quote }}
 
-nubusPortalConsumer:
-  podAnnotations:
-    intents.otterize.com/service-name: "ums-portal-consumer"
-  replicaCount: {{ .Values.replicas.umsPortalConsumer }}
+
+nubusUdmListener:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 102
+    runAsGroup: 65534
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUdmListener | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsUdmListener }}
   resources:
-    {{ .Values.resources.umsPortalConsumer | toYaml | nindent 4 }}
-  resourcesWaitForDependency:
-    {{ .Values.resources.umsPortalConsumerDependencies | toYaml | nindent 4 }}
-  persistence:
-    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-    size: {{ .Values.persistence.size.nubus.portalConsumer | quote }}
+    {{ .Values.resources.umsUdmListener | toYaml | nindent 4 }}
 
 nubusPortalServer:
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-portal-server"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsPortalServer | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   serviceAccount:
-    annotations:
-      intended.usage: "compliance"
+    create: true
   replicaCount: {{ .Values.replicas.umsPortalServer }}
   resources:
     {{ .Values.resources.umsPortalServer | toYaml | nindent 4 }}
 
 nubusLdapNotifier:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 101
+    runAsGroup: 102
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsLdapNotifier | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-ldap-notifier"
   replicaCount: {{ .Values.replicas.umsLdapNotifier }}
@@ -129,6 +324,8 @@ nubusLdapNotifier:
     {{ .Values.resources.umsLdapNotifier | toYaml | nindent 4 }}
 
 nubusLdapServer:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   highAvailabilityMode: false
   replicaCountPrimary: 1
   replicaCountSecondary: 0 # {{ .Values.replicas.umsLdapServerSecondary }}
@@ -136,8 +333,7 @@ nubusLdapServer:
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-ldap-server"
   serviceAccount:
-    annotations:
-      intended.usage: "compliance"
+    create: true
   initResources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
   resources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
   persistence:
@@ -199,9 +395,24 @@ nubusLdapServer:
 nubusPortalFrontend:
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-portal-frontend"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsPortalFrontend | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   serviceAccount:
-    annotations:
-      intended.usage: "compliance"
+    create: true
   replicaCount: {{ .Values.replicas.umsPortalFrontend }}
   resources:
     {{ .Values.resources.umsPortalFrontend | toYaml | nindent 4 }}
@@ -219,6 +430,22 @@ nubusStackDataUms:
     {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
 
 nubusSelfServiceConsumer:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsSelfserviceConsumer | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-selfservice-listener"
   resources:
@@ -228,6 +455,22 @@ nubusSelfServiceConsumer:
 nubusUdmRestApi:
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-udm-rest-api"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUdmRestApi | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   serviceAccount:
     annotations:
       intended.usage: "compliance"
@@ -238,6 +481,22 @@ nubusUdmRestApi:
   replicaCount: {{ .Values.replicas.umsUdmRestApi }}
 
 nubusUmcGateway:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcGateway | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   replicaCount: {{ .Values.replicas.umsUmcGateway }}
   resources:
     {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
@@ -252,17 +511,56 @@ nubusKeycloakBootstrap:
     {{ .Values.resources.umsKeycloakBootstrap | toYaml | nindent 4 }}
 
 nubusProvisioning:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsProvisioning | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  replicaCount:
+    dispatcher: {{ .Values.replicas.umsProvisioningDispatcher }}
+    udmTransformer: {{ .Values.replicas.umsProvisioningUdmTransformer }}
+    prefill: {{ .Values.replicas.umsProvisioningPrefill }}
+    api: {{ .Values.replicas.umsProvisioningApi }}
+
   serviceAccount:
-    annotations:
-      intended.usage: "compliance"
+    create: true
   nats:
+    config:
+      cluster:
+        replicas: {{ .Values.replicas.umsProvisioningNats }}
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      enabled: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsProvisioningNats | toYaml | nindent 8 }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     resources:
       {{ .Values.resources.nubusProvisioning.nats | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-nats"
     serviceAccount:
-      annotations:
-        intended.usage: "compliance"
+      create: true
   api:
     resources:
       {{ .Values.resources.nubusProvisioning.api | toYaml | nindent 6 }}

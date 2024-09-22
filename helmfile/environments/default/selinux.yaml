@@ -68,6 +68,7 @@ seLinuxOptions:
   umsGuardianAuthorizationApi: ~
   umsGuardianManagementApi: ~
   umsGuardianManagementUi: ~
+  umsGuardianOpenPolicyAgent: ~
   umsKeycloak: ~
   umsKeycloakBootstrap: ~
   umsKeycloakExtensionHandler: ~
@@ -75,20 +76,16 @@ seLinuxOptions:
   umsLdapNotifier: ~
   umsLdapServer: ~
   umsNotificationsApi: ~
-  umsOpenPolicyAgent: ~
   umsPortalFrontend: ~
   umsPortalConsumer: ~
   umsPortalServer: ~
-  umsProvisioningDispatcher: ~
-  umsProvisioningEventsAndConsumerApi: ~
+  umsProvisioning: ~
   umsProvisioningNats: ~
-  umsProvisioningNatsBox: ~
-  umsProvisioningNatsReloader: ~
-  umsProvisioningUdmListener: ~
   umsSelfserviceInvitation: ~
   umsSelfserviceConsumer: ~
   umsStackGateway: ~
   umsStoreDav: ~
+  umsUdmListener: ~
   umsUdmRestApi: ~
   umsUmcGateway: ~
   umsUmcServer: ~
