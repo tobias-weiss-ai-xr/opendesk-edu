@@ -268,7 +268,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap"
     name: "opendesk-open-xchange-bootstrap"
-    version: "2.0.0"
+    version: "2.1.0"
     verify: true
   otterize:
     # providerCategory: "Platform"
