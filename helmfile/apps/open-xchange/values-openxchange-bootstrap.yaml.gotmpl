@@ -23,7 +23,6 @@ containerSecurityContext:
   seLinuxOptions:
     {{ .Values.seLinuxOptions.openxchangeBootstrap | toYaml | nindent 4 }}
 
-
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.openxchangeBootstrap.registry | quote }}
   url: {{ .Values.images.openxchangeBootstrap.repository | quote }}
