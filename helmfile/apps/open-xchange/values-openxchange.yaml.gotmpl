@@ -23,6 +23,7 @@ nextcloud-integration-ui:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeNextcloudIntegrationUI.registry | quote }}
     repository: {{ .Values.images.openxchangeNextcloudIntegrationUI.repository | quote }}
     tag: {{ .Values.images.openxchangeNextcloudIntegrationUI.tag | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
@@ -46,6 +47,8 @@ nextcloud-integration-ui:
       type: "RuntimeDefault"
     seLinuxOptions:
       {{ .Values.seLinuxOptions.openxchangeNextcloudIntegrationUI | toYaml | nindent 6 }}
+  serviceAccount:
+    create: false
 
 public-sector-ui:
   image:
@@ -77,6 +80,8 @@ public-sector-ui:
       type: "RuntimeDefault"
     seLinuxOptions:
       {{ .Values.seLinuxOptions.openxchangePublicSectorUI | toYaml | nindent 6 }}
+  serviceAccount:
+    create: false
 
 appsuite:
   appsuite-toolkit:
@@ -160,6 +165,8 @@ appsuite:
           type: "RuntimeDefault"
         seLinuxOptions:
           {{ .Values.seLinuxOptions.openxchangeGotenberg | toYaml | nindent 10 }}
+        serviceAccount:
+          create: false
     hooks:
       beforeAppsuiteStart:
         create-guard-dir.sh: |
@@ -398,6 +405,8 @@ appsuite:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeCoreUI | toYaml | nindent 8 }}
+    serviceAccount:
+      create: false
 
   core-ui-middleware:
     enabled: true
@@ -437,6 +446,9 @@ appsuite:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeCoreUIMiddleware | toYaml | nindent 8 }}
+    serviceAccount:
+      create: false
+
   core-cacheservice:
     enabled: false
 
@@ -454,6 +466,7 @@ appsuite:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeDocumentConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     podAnnotations: {}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreDocumentConverter }}
@@ -475,6 +488,8 @@ appsuite:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeDocumentConverter | toYaml | nindent 8 }}
+    serviceAccount:
+      create: false
 
   core-documents-collaboration:
     enabled: false
@@ -520,6 +535,8 @@ appsuite:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeCoreGuidedtours | toYaml | nindent 8 }}
+    serviceAccount:
+      create: false
 
   core-imageconverter:
     enabled: true
@@ -531,6 +548,7 @@ appsuite:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeImageConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeImageConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeImageConverter.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     objectCache:
       s3ObjectStores:
         - id: -1
@@ -558,6 +576,8 @@ appsuite:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeImageConverter | toYaml | nindent 8 }}
+    serviceAccount:
+      create: false
 
   guard-ui:
     enabled: true
@@ -588,6 +608,8 @@ appsuite:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeGuardUI | toYaml | nindent 8 }}
+    serviceAccount:
+      create: false
   core-spellcheck:
     enabled: false
 
@@ -620,4 +642,6 @@ appsuite:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeCoreUserGuide | toYaml | nindent 8 }}
+    serviceAccount:
+      create: false
 ...
