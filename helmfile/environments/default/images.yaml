@@ -480,7 +480,7 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/provisioning-udm-transformer"
     tag: "0.39.0@sha256:64166fae60856da544698b601b70037a93239e9f6072ced890cd5965fab148dc"
-  nubusSelfserviceInvitation:
+  nubusSelfServiceConsumer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
     # upstreamRegistry: "https://artifacts.software-univention.de"
@@ -489,7 +489,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "3", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-invitation"
-    tag: "0.7.2@sha256:a204a74575d4aed5f343d4ab4838fd6b11b4ae0d1a61e5cc464a5fde6d16ec37"
+    tag: "0.7.3@sha256:7eb99ca8e7b5af321c45a515d7999ec421a3644e34c47028e90b627e8af9d39d"
   nubusUdmRestApi:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -520,6 +520,14 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-server"
     tag: "0.30.0@sha256:78e20377a8cb3f6c5efa004a52aee444345e71d91e02e414c86c2a2631de5822"
+  nubusUmcServerProxy:
+    # providerCategory: "Supplier"
+    # providerResponsible: "Univention"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "traefik"
+    registry: "registry-1.docker.io"
+    repository: "traefik"
+    tag: "3.0@sha256:a208c74fd80a566d4ea376053bff73d31616d7af3f1465a7747b8b89ee34d97e"
   nubusWaitForDependency:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"

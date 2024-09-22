@@ -513,20 +513,6 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsPortalConsumer:
-    limits:
-      cpu: 99
-      memory: "1Gi"
-    requests:
-      cpu: 0.1
-      memory: "256Mi"
-  umsPortalConsumerDependencies:
-    limits:
-      cpu: 99
-      memory: "1Gi"
-    requests:
-      cpu: 0.1
-      memory: "256Mi"
   umsPortalServer:
     limits:
       cpu: 99
@@ -597,6 +583,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "16Mi"
+  umsUdmListener:
+    limits:
+      cpu: 99
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
   umsUdmRestApi:
     limits:
       cpu: 99

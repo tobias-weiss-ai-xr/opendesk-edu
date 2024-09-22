@@ -3,17 +3,22 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+global:
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
 keycloak:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloak.registry | quote }}
     repository: {{ .Values.images.nubusKeycloak.repository }}
     tag: {{ .Values.images.nubusKeycloak.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusKeycloakBootstrap:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakBootstrap.registry | quote }}
     repository: {{ .Values.images.nubusKeycloakBootstrap.repository }}
     tag: {{ .Values.images.nubusKeycloakBootstrap.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusKeycloakExtensions:
     handler:
@@ -21,18 +26,21 @@ nubusKeycloakExtensions:
         registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakExtensionHandler.registry | quote }}
         repository: {{ .Values.images.nubusKeycloakExtensionHandler.repository }}
         tag: {{ .Values.images.nubusKeycloakExtensionHandler.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
     proxy:
       image:
         registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakExtensionProxy.registry | quote }}
         repository: {{ .Values.images.nubusKeycloakExtensionProxy.repository }}
         tag: {{ .Values.images.nubusKeycloakExtensionProxy.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusLdapNotifier:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapNotifier.registry | quote }}
     repository: {{ .Values.images.nubusLdapNotifier.repository }}
     tag: {{ .Values.images.nubusLdapNotifier.tag }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusLdapServer:
   ldapServer:
@@ -40,28 +48,33 @@ nubusLdapServer:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServer.registry | quote }}
       repository: {{ .Values.images.nubusLdapServer.repository }}
       tag: {{ .Values.images.nubusLdapServer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   dhInitcontainer:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerDhInitContainer.registry | quote }}
       repository: {{ .Values.images.nubusLdapServerDhInitContainer.repository }}
       tag: {{ .Values.images.nubusLdapServerDhInitContainer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   waitForDependency:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusNotificationsApi:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusNotificationsApi.registry | quote }}
     repository: {{ .Values.images.nubusNotificationsApi.repository }}
     tag: {{ .Values.images.nubusNotificationsApi.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusPortalFrontend:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalFrontend.registry | quote }}
     repository: {{ .Values.images.nubusPortalFrontend.repository }}
     tag: {{ .Values.images.nubusPortalFrontend.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusPortalConsumer:
   portalConsumer:
@@ -69,17 +82,20 @@ nubusPortalConsumer:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalConsumer.registry | quote }}
       repository: {{ .Values.images.nubusPortalConsumer.repository }}
       tag: {{ .Values.images.nubusPortalConsumer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   waitForDependency:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusPortalServer:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalServer.registry | quote }}
     repository: {{ .Values.images.nubusPortalServer.repository }}
     tag: {{ .Values.images.nubusPortalServer.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusProvisioning:
   api:
@@ -87,72 +103,84 @@ nubusProvisioning:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningEventsAndConsumerApi.registry | quote }}
       repository: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.repository }}
       tag: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   dispatcher:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningDispatcher.registry | quote }}
       repository: {{ .Values.images.nubusProvisioningDispatcher.repository }}
       tag: {{ .Values.images.nubusProvisioningDispatcher.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   udmTransformer:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningUdmTransformer.registry | quote }}
       repository: {{ .Values.images.nubusProvisioningUdmTransformer.repository }}
       tag: {{ .Values.images.nubusProvisioningUdmTransformer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   prefill:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningPrefill.registry | quote }}
       repository: {{ .Values.images.nubusProvisioningPrefill.repository }}
       tag: {{ .Values.images.nubusProvisioningPrefill.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   registerConsumers:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   nats:
     nats:
-        image:
-            registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNats.registry | quote }}
-            repository: {{ .Values.images.nubusNats.repository }}
-            tag: {{ .Values.images.nubusNats.tag }}
+      image:
+        registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNats.registry | quote }}
+        repository: {{ .Values.images.nubusNats.repository }}
+        tag: {{ .Values.images.nubusNats.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     reloader:
-        image:
-            registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsReloader.registry | quote }}
-            repository: {{ .Values.images.nubusNatsReloader.repository }}
-            tag: {{ .Values.images.nubusNatsReloader.tag }}
+      image:
+        registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsReloader.registry | quote }}
+        repository: {{ .Values.images.nubusNatsReloader.repository }}
+        tag: {{ .Values.images.nubusNatsReloader.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     natsBox:
-        image:
-            registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsBox.registry | quote }}
-            repository: {{ .Values.images.nubusNatsBox.repository }}
-            tag: {{ .Values.images.nubusNatsBox.tag }}
+      image:
+        registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsBox.registry | quote }}
+        repository: {{ .Values.images.nubusNatsBox.repository }}
+        tag: {{ .Values.images.nubusNatsBox.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusProvisioningEventsAndConsumerApi:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningEventsAndConsumerApi.registry | quote }}
     repository: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.repository }}
     tag: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusProvisioningPrefill:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningPrefill.registry | quote }}
     repository: {{ .Values.images.nubusProvisioningPrefill.repository }}
     tag: {{ .Values.images.nubusProvisioningPrefill.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusUdmListener:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningUdmListener.registry | quote }}
     repository: {{ .Values.images.nubusProvisioningUdmListener.repository }}
     tag: {{ .Values.images.nubusProvisioningUdmListener.tag }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
-nubusSelfServiceListener:
-  selfserviceInvitation:
-    image:
-      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusSelfserviceInvitation.registry | quote }}
-      repository: {{ .Values.images.nubusSelfserviceInvitation.repository }}
-      tag: {{ .Values.images.nubusSelfserviceInvitation.tag }}
+nubusSelfServiceConsumer:
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusSelfServiceConsumer.registry | quote }}
+    repository: {{ .Values.images.nubusSelfServiceConsumer.repository }}
+    tag: {{ .Values.images.nubusSelfServiceConsumer.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   waitForDependency:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusUdmRestApi:
   udmRestApi:
@@ -160,24 +188,36 @@ nubusUdmRestApi:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusUdmRestApi.registry | quote }}
       repository: {{ .Values.images.nubusUdmRestApi.repository }}
       tag: {{ .Values.images.nubusUdmRestApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusUmcGateway:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusUmcGateway.registry | quote }}
     repository: {{ .Values.images.nubusUmcGateway.repository }}
     tag: {{ .Values.images.nubusUmcGateway.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusUmcServer:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusUmcServer.registry | quote }}
     repository: {{ .Values.images.nubusUmcServer.repository }}
     tag: {{ .Values.images.nubusUmcServer.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  proxy:
+    image:
+      registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusUmcServerProxy.registry | quote }}
+      repository: {{ .Values.images.nubusUmcServerProxy.repository }}
+      tag: {{ .Values.images.nubusUmcServerProxy.tag }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusWaitForDependency:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
     repository: {{ .Values.images.nubusWaitForDependency.repository }}
     tag: {{ .Values.images.nubusWaitForDependency.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 
 nubusGuardian:
@@ -186,29 +226,35 @@ nubusGuardian:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianProvisioning.registry | quote }}
       repository: {{ .Values.images.nubusGuardianProvisioning.repository }}
       tag: {{ .Values.images.nubusGuardianProvisioning.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   authorizationApi:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianAuthorizationApi.registry | quote }}
       repository: {{ .Values.images.nubusGuardianAuthorizationApi.repository }}
       tag: {{ .Values.images.nubusGuardianAuthorizationApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   managementApi:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianManagementApi.registry | quote }}
       repository: {{ .Values.images.nubusGuardianManagementApi.repository }}
       tag: {{ .Values.images.nubusGuardianManagementApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   managementUi:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianManagementUi.registry | quote }}
       repository: {{ .Values.images.nubusGuardianManagementUi.repository }}
       tag: {{ .Values.images.nubusGuardianManagementUi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   openPolicyAgent:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusOpenPolicyAgent.registry | quote }}
       repository: {{ .Values.images.nubusOpenPolicyAgent.repository }}
       tag: {{ .Values.images.nubusOpenPolicyAgent.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusStackDataUms:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusDataLoader.registry | quote }}
     repository: {{ .Values.images.nubusDataLoader.repository }}
     tag: {{ .Values.images.nubusDataLoader.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
