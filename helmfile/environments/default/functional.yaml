@@ -79,6 +79,10 @@ functional:
       # Enable to allow information about the user presence status to be shared.
       # Ref.: https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#presence
       enabled: false
+    jitsiRoomHistory:
+      # Enable to allow the room history to be stored in the user's browser local storage.
+      # Ref.:
+      enabled: false
 
   chat:
     matrix:
