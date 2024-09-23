@@ -174,9 +174,17 @@ appsuite:
           chown open-xchange:open-xchange /opt/open-xchange/guard-files
     packages:
       status:
+        {{- if .Values.functional.migration.oxAppsuite.enabled }}
+        open-xchange-authentication-masterpassword: "enabled"
+        open-xchange-authentication-ldap: "disabled"
+        open-xchange-authentication-oauth: "disabled"
+        open-xchange-oidc: "disabled"
+        {{- else }}
         open-xchange-oidc: "enabled"
         open-xchange-authentication-database: "disabled"
         open-xchange-authentication-oauth: "enabled"
+        open-xchange-authentication-ldap: "disabled"
+        {{- end }}
     properties:
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
@@ -282,6 +290,8 @@ appsuite:
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppsuite.shareCryptKey | quote }}
       com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppsuite.synapseAsToken | quote }}
     propertiesFiles:
+      /opt/open-xchange/etc/masterpassword-authentication.properties:
+        com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppsuite.migrationsMasterPassword | quote }}
       /opt/open-xchange/etc/AdminDaemon.properties:
         MASTER_ACCOUNT_OVERRIDE: "true"
       /opt/open-xchange/etc/AdminUser.properties:

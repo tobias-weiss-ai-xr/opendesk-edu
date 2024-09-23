@@ -80,7 +80,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-dovecot"
     name: "dovecot"
-    version: "1.3.10"
+    version: "1.4.0"
     verify: true
   element:
     # providerCategory: "Platform"
