@@ -63,6 +63,8 @@ jitsi:
         - secretName: {{ .Values.ingress.tls.secretName | quote }}
           hosts:
             - "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
+    extraConfigJs:
+      doNotStoreRoom: {{ not .Values.functional.dataProtection.jitsiRoomHistory.enabled }}
     extraEnvs:
       TURN_ENABLE: "1"
     resources:

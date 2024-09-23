@@ -132,7 +132,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-jitsi"
     name: "opendesk-jitsi"
-    version: "1.11.3"
+    version: "1.12.1"
     verify: true
   mariadb:
     # providerCategory: "Platform"
