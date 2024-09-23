@@ -98,4 +98,11 @@ functional:
         # If the LDAP entryUUID should be used for the localpart of user's MatrixIDs following setting must be `true`.
         useImmutableIdentifierForLocalpart: false
 
+  migration:
+    oxAppsuite:
+      # Note: Only available in openDesk Enterprise.
+      # Turn on temporary for migration purposes only. Will enable master password auth in OX AppSuite and Dovecot using
+      # `secrets.oxAppsuite.migrationsMasterPassword`.
+      enabled: false
+
 ...
