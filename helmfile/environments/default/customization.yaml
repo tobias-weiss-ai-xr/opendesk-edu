@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+# This variable allows customization of helmfile releases by loading custom values file.
+# Example:
+# customization:
+#   release:
+#     collaboraOnline: /path/to/additional/file.yaml
+customization:
+  release:
+    # collabora
+    collaboraOnline: ~
+    # cryptpad
+    cryptpad: ~
+    # element
+    opendeskElement: ~
+    opendeskWellKnown: ~
+    opendeskSynapseWeb: ~
+    opendeskSynapse: ~
+    # intercom-service
+    intercomService: ~
+    # jitsi
+    jitsi: ~
+    # migrations-post
+    migrationsPost: ~
+    # migrations-pre
+    migrationsPre: ~
+    # nextcloud
+    opendeskNextcloudManagement: ~
+    opendeskNextcloud: ~
+    # nubus
+    ums: ~
+    opendeskKeycloakBootstrap: ~
+    # open-xchange
+    dovecot: ~
+    openXchange: ~
+    opendeskOpenXchangeBootstrap: ~
+    # openproject
+    openproject: ~
+    # openproject-bootstrap
+    opendeskOpenprojectBootstrap: ~
+    # provisioning
+    oxConnector: ~
+    # services
+    opendeskOtterize: ~
+    opendeskHome: ~
+    opendeskCertificates: ~
+    redis: ~
+    memcached: ~
+    postgresql: ~
+    mariadb: ~
+    postfix: ~
+    opendeskDkimpyMilter: ~
+    clamav: ~
+    clamavSimple: ~
+    minio: ~
+    # xwiki
+    xwiki: ~
+...
