@@ -4,7 +4,7 @@
 ---
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
-    ref: "v2.3.3"
+    ref: "v2.3.4"
     file:
       - "ci/common/automr.yml"
       - "ci/common/lint.yml"
@@ -696,5 +696,4 @@ renovate:
   script:
     - "renovate ${RENOVATE_EXTRA_FLAGS}"
   stage: "renovate"
-
 ...
