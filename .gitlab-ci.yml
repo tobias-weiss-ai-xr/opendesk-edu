@@ -189,8 +189,8 @@ variables:
   cache: {}
   dependencies: []
   extends: ".environments"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:1.0.1\
-          @sha256:d38f41b88374e055332860018f2936db8807b763caf6089735db0484cbb2842a"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:1.1.0\
+          @sha256:74f349066ac5d20e3afaa6abd28781b4c8dc086f67e3d3c1b8345e4a9c3371b1"
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD

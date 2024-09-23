@@ -29,6 +29,7 @@ releases:
       - "values-nubus.yaml.gotmpl"
       - "values-opendesk-customization.yaml.gotmpl"
       - "values-opendesk-images.yaml.gotmpl"
+      - {{ .Values.customization.release.ums | default "additionalValues: false" }}
     installed: {{ .Values.nubus.enabled }}
     timeout: 900
   # OpenDesk Keycloak Bootstrap Chart
@@ -37,6 +38,7 @@ releases:
     version: "{{ .Values.charts.opendeskKeycloakBootstrap.version }}"
     values:
       - "values-opendesk-keycloak-bootstrap.yaml.gotmpl"
+      - {{ .Values.customization.release.opendeskKeycloakBootstrap | default "additionalValues: false" }}
     needs:
       - "ums"
     installed: {{ .Values.nubus.enabled }}

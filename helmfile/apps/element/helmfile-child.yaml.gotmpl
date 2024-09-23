@@ -39,6 +39,7 @@ releases:
     version: "{{ .Values.charts.element.version }}"
     values:
       - "values-element.yaml.gotmpl"
+      - {{ .Values.customization.release.opendeskElement | default "additionalValues: false" }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -47,6 +48,7 @@ releases:
     version: "{{ .Values.charts.elementWellKnown.version }}"
     values:
       - "values-well-known.yaml.gotmpl"
+      - {{ .Values.customization.release.opendeskWellKnown | default "additionalValues: false" }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -55,6 +57,7 @@ releases:
     version: "{{ .Values.charts.synapseWeb.version }}"
     values:
       - "values-synapse-web.yaml.gotmpl"
+      - {{ .Values.customization.release.opendeskSynapseWeb | default "additionalValues: false" }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -63,6 +66,7 @@ releases:
     version: "{{ .Values.charts.synapse.version }}"
     values:
       - "values-synapse.yaml.gotmpl"
+      - {{ .Values.customization.release.opendeskSynapse | default "additionalValues: false" }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 

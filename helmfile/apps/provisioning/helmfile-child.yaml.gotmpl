@@ -15,6 +15,7 @@ releases:
     version: "{{ .Values.charts.oxConnector.version }}"
     values:
       - "values-oxconnector.yaml.gotmpl"
+      - {{ .Values.customization.release.oxConnector | default "additionalValues: false" }}
     installed: {{ .Values.oxConnector.enabled }}
 
 commonLabels:

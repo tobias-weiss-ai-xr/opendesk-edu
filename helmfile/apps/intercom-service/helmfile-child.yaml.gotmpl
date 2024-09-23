@@ -18,6 +18,7 @@ releases:
     version: "{{ .Values.charts.intercomService.version }}"
     values:
       - "values.yaml.gotmpl"
+      - {{ .Values.customization.release.intercomService | default "additionalValues: false" }}
     installed: {{ .Values.intercom.enabled }}
 
 commonLabels:

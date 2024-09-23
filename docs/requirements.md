@@ -24,7 +24,7 @@ openDesk is a Kubernetes only solution and requires an existing Kubernetes (K8s)
 - Domain and DNS Service
 - Ingress controller (Ingress NGINX)
 - [Helm](https://helm.sh/) >= v3.9.0
-- [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v0.157.0**
+- [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v1.0.0-rc.5**
 - [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)

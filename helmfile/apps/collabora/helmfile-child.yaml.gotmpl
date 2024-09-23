@@ -18,6 +18,7 @@ releases:
     version: "{{ .Values.charts.collabora.version }}"
     values:
       - "values.yaml.gotmpl"
+      - {{ .Values.customization.release.collaboraOnline | default "additionalValues: false" }}
     installed: {{ .Values.collabora.enabled }}
 
 commonLabels:
