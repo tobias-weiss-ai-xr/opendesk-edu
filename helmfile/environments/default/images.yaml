@@ -756,7 +756,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "91", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/element/images-mirror/synapse"
-    tag: "v1.108.0@sha256:0754a5c372f4cfb5f69f58ad4b70d05bc2e380354f1b0c9101611e9157082712"
+    tag: "v1.115.0@sha256:abf4a5b5b2030f7deb555a8ec7b945607db9e98b057eb06364e66ba8308bdd40"
   synapseWeb:
     # providerCategory: "Community"
     # providerResponsible: "Element"
