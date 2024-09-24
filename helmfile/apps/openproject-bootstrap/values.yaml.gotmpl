@@ -16,6 +16,8 @@ cleanup:
   keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
 
 config:
+  debug:
+    enabled: {{ .Values.debug.enabled }}
   openproject:
     fileshareName: "Nextcloud at {{ .Values.global.domain }}"
     admin:

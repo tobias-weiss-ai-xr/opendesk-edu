@@ -135,6 +135,21 @@ global:
     xwiki: "wiki"
 ```
 
+In case you would like to use the updated hostnames you at least have to apply some manual changes. But do this at
+your own risk. Be also aware that some of your user's bookmarks and links will stop working.
+
+- Update the affected portal tiles:
+  - All tiles in the "Files" category.
+  - The "Projects" tile in the "Management" category.
+- There are two options to change the link for the portal tiles:
+  - Use an admin account to access the portal's edit mode (on the bottom of the sidebar portal's menu).
+  - Utilize the UDM REST API to update the portal tile objects.
+- Update the hostnames for the OpenProject-Nextcloud integration using a functional admin user for both components:
+  - In OpenProject: *Administration* > *Files* > *External file storages* > Select `Nextcloud at [your_domain]`
+    Edit *Details* - *General Information* - *Storage provider* and update the *hostname* to `files.<your_domain>`.
+  - In Nextcloud: *Administration* > *OpenProject* > *OpenProject server* update the *OpenProject host* to
+    to `projects.<your_domain>`.
+
 #### Updated `global.imagePullSecrets`
 
 Without using a custom registry, you can pull all the openDesk images without authentication.
