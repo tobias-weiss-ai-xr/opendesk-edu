@@ -248,14 +248,6 @@ env-start:
   script:
     - "echo \"Deploying to Environment ${NAMESPACE} in ${CLUSTER} Cluster\""
     - "kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -"
-    - >
-      kubectl create secret
-      --namespace "${NAMESPACE}"
-      docker-registry external-registry
-      --docker-server "${EXTERNAL_REGISTRY}"
-      --docker-username "${EXTERNAL_REGISTRY_USERNAME}"
-      --docker-password "${EXTERNAL_REGISTRY_PASSWORD}"
-      --dry-run=client -o yaml | kubectl apply -f -
   stage: "env"
 
 policies-deploy:
