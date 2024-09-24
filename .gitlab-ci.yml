@@ -181,6 +181,9 @@ variables:
     options:
       - "Regression"
       - "Smoke"
+  TESTS_GRACE_PERIOD:
+    description: "A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail. GRACE_PERIOD is the period in seconds that should be waited before running the tests."
+    value: "0"
 
 .deploy-common:
   cache: {}
@@ -515,7 +518,8 @@ run-tests:
           \"testprofile\": \"Namespace\", \
           \"gitlab_functional_yaml\": \"https://gitlab.opencode.de/api/v4/projects/1317/repository/files/helmfile%2Fenvironments%2Fdefault%2Ffunctional.yaml?ref=develop\", \
           \"gitlab_env_namespace_template\": \"https://gitlab.opencode.de/api/v4/projects/1564/repository/files/environments%2F{operator}%2F{cluster}%2F{namespace}.yaml.gotmpl?ref=main\", \
-          \"gitlab_default_env_namespace\": \"values\" \
+          \"gitlab_default_env_namespace\": \"values\", \
+          \"GRACE_PERIOD\": \"${TESTS_GRACE_PERIOD}\" \
         } \
       }" \
       "https://${TESTS_PROJECT_URL}/trigger/pipeline"
