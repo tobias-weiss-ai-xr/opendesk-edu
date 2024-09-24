@@ -79,6 +79,25 @@ podSecurityContext:
   fsGroup: 1000
   fsGroupChangePolicy: "Always"
 
+provisioning:
+  enabled: true
+  config:
+    nubusBaseUrl: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}"
+    keycloak:
+      url: "http://ums-keycloak:8080/realms/{{ .Values.platform.realm }}/"
+      username: "kcadmin"
+      realm: {{ .Values.platform.realm | quote }}
+      connection:
+        host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+        baseUrl: "http://ums-keycloak:8080"
+      credentialSecret:
+        name: "ums-opendesk-keycloak-credentials"
+        key: "admin_password"
+    ics_client:
+      clientSecret: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
+      credentialSecret:
+        key: "ics_secret"
+
 replicaCount: {{ .Values.replicas.intercomService }}
 
 resources:

@@ -499,14 +499,28 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsPortalListener:
+  umsPortalConsumer:
     limits:
       cpu: 99
       memory: "1Gi"
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsPortalListenerDependencies:
+  umsPortalConsumerDependencies:
+    limits:
+      cpu: 99
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsPortalConsumer:
+    limits:
+      cpu: 99
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsPortalConsumerDependencies:
     limits:
       cpu: 99
       memory: "1Gi"
@@ -555,7 +569,7 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsSelfserviceListener:
+  umsSelfserviceConsumer:
     limits:
       cpu: 99
       memory: "1Gi"
@@ -570,13 +584,6 @@ resources:
       cpu: 0.1
       memory: "256Mi"
   umsStackDataUms:
-    limits:
-      cpu: 99
-      memory: "1Gi"
-    requests:
-      cpu: 0.1
-      memory: "256Mi"
-  umsStackDataSwp:
     limits:
       cpu: 99
       memory: "1Gi"

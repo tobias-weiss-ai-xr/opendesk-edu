@@ -5,7 +5,7 @@ repositories:
   # Intercom Service
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/intercom-service
   - name: "intercom-service-repo"
-    keyring: "../../files/gpg-pubkeys/souvap-univention-de.gpg"
+    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.intercomService.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}

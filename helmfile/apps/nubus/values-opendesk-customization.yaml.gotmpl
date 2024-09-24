@@ -87,15 +87,29 @@ nubusKeycloakExtensions:
     resources:
       {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 6 }}
 
-nubusPortalListener:
+nubusPortalConsumer:
   podAnnotations:
-    intents.otterize.com/service-name: "ums-portal-listener"
-  replicaCount: {{ .Values.replicas.umsPortalListener }}
+    intents.otterize.com/service-name: "ums-portal-consumer"
+  replicaCount: {{ .Values.replicas.umsPortalConsumer }}
   resources:
-    {{ .Values.resources.umsPortalListener | toYaml | nindent 4 }}
+    {{ .Values.resources.umsPortalConsumer | toYaml | nindent 4 }}
+  resourcesWaitForDependency:
+    {{ .Values.resources.umsPortalConsumerDependencies | toYaml | nindent 4 }}
   persistence:
     storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-    size: {{ .Values.persistence.size.nubus.portalListener | quote }}
+    size: {{ .Values.persistence.size.nubus.portalConsumer | quote }}
+
+nubusPortalConsumer:
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-portal-consumer"
+  replicaCount: {{ .Values.replicas.umsPortalConsumer }}
+  resources:
+    {{ .Values.resources.umsPortalConsumer | toYaml | nindent 4 }}
+  resourcesWaitForDependency:
+    {{ .Values.resources.umsPortalConsumerDependencies | toYaml | nindent 4 }}
+  persistence:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.nubus.portalConsumer | quote }}
 
 nubusPortalServer:
   additionalAnnotations:
@@ -129,7 +143,59 @@ nubusLdapServer:
   persistence:
     storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
     size: {{ .Values.persistence.size.nubus.ldapServerData | quote }}
-
+  extraVolumes:
+    - name: "migration-scripts"
+      secret:
+        secretName: "ums-ldap-server-migration"
+        defaultMode: 0555
+  extraVolumeMounts:
+    - name: "migration-scripts"
+      mountPath: "/entrypoint.d/30-purge.sh"
+      subPath: "30-purge.sh"
+    - name: "migration-scripts"
+      mountPath: "/entrypoint.d/95-slapadd-24-ldiff.sh"
+      subPath: "95-slapadd-24-ldif.sh"
+  extraSecrets:
+    - name: "ums-ldap-server-migration"
+      stringData:
+        30-purge.sh: |
+          #!/usr/bin/env bash
+          me=$(basename "$0")
+          echo "- Running ${me}"
+          if [ -f /var/lib/univention-ldap/ldap-24-export.ldif ]; then
+            echo "- Cleaning up /var/lib/univention-ldap."
+            cd /var/lib/univention-ldap
+            rm -rf internal
+            rm -rf ldap
+            ls -l
+          else
+            echo "- File /var/lib/univention-ldap/ldap-24-export.ldif not found."
+          fi
+        95-slapadd-24-ldif.sh: |
+          #!/usr/bin/env bash
+          me=$(basename "$0")
+          echo "- Running ${me}"
+          ls -l /var/lib/univention-ldap
+          if [ -f /var/lib/univention-ldap/ldap-24-export.ldif ]; then
+            echo "- slapadd-ing /var/lib/univention-ldap/ldap-24-export.ldif"
+            ls -l /var/lib/univention-ldap/
+            rm -rf /var/lib/univention-ldap/ldap
+            rm -rf /var/lib/univention-ldap/internal
+            echo "- deleted /var/lib/univention-ldap/ldap and /var/lib/univention-ldap/internal"
+            ls -l /var/lib/univention-ldap/
+            mkdir /var/lib/univention-ldap/ldap
+            mkdir /var/lib/univention-ldap/internal
+            echo "- created /var/lib/univention-ldap/ldap and /var/lib/univention-ldap/internal"
+            ls -l /var/lib/univention-ldap/
+            /usr/sbin/slapadd -v -l /var/lib/univention-ldap/ldap-24-export.ldif
+            echo "- slapadd executed"
+            ls -l /var/lib/univention-ldap/
+            mv /var/lib/univention-ldap/ldap-24-export.ldif /var/lib/univention-ldap/ldap-24-export.ldif-imported
+            echo "- import file renamed"
+            ls -l /var/lib/univention-ldap/
+          else
+            echo "- File /var/lib/univention-ldap/ldap-24-export.ldif not found."
+          fi
 nubusPortalFrontend:
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-portal-frontend"
@@ -152,18 +218,12 @@ nubusStackDataUms:
   resources:
     {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
 
-nubusStackDataSwp:
-  additionalAnnotations:
-    intents.otterize.com/service-name: "ums-stack-data-swp"
-  resources:
-    {{ .Values.resources.umsStackDataSwp | toYaml | nindent 4 }}
-
-nubusSelfServiceListener:
+nubusSelfServiceConsumer:
   podAnnotations:
     intents.otterize.com/service-name: "ums-selfservice-listener"
   resources:
-    {{ .Values.resources.umsSelfserviceListener | toYaml | nindent 4 }}
-  replicaCount: {{ .Values.replicas.umsSelfserviceListener }}
+    {{ .Values.resources.umsSelfserviceConsumer | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsSelfserviceConsumer }}
 
 nubusUdmRestApi:
   additionalAnnotations:

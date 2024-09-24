@@ -51,15 +51,6 @@ nubusLdapServer:
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
 
-
-nubusPortalConsumer:
-  portalConsumer:
-    image:
-      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalConsumer.registry | quote }}
-      repository: {{ .Values.images.nubusPortalConsumer.repository }}
-      tag: {{ .Values.images.nubusPortalConsumer.tag }}
-
-
 nubusNotificationsApi:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusNotificationsApi.registry | quote }}
@@ -72,11 +63,12 @@ nubusPortalFrontend:
     repository: {{ .Values.images.nubusPortalFrontend.repository }}
     tag: {{ .Values.images.nubusPortalFrontend.tag }}
 
-nubusPortalListener:
-  image:
-    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalListener.registry | quote }}
-    repository: {{ .Values.images.nubusPortalListener.repository }}
-    tag: {{ .Values.images.nubusPortalListener.tag }}
+nubusPortalConsumer:
+  portalConsumer:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalConsumer.registry | quote }}
+      repository: {{ .Values.images.nubusPortalConsumer.repository }}
+      tag: {{ .Values.images.nubusPortalConsumer.tag }}
   waitForDependency:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
@@ -151,11 +143,6 @@ nubusUdmListener:
     tag: {{ .Values.images.nubusProvisioningUdmListener.tag }}
 
 nubusSelfServiceListener:
-  selfserviceListener:
-    image:
-      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusSelfserviceListener.registry | quote }}
-      repository: {{ .Values.images.nubusSelfserviceListener.repository }}
-      tag: {{ .Values.images.nubusSelfserviceListener.tag }}
   selfserviceInvitation:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusSelfserviceInvitation.registry | quote }}
@@ -221,12 +208,6 @@ nubusGuardian:
       tag: {{ .Values.images.nubusOpenPolicyAgent.tag }}
 
 nubusStackDataUms:
-  image:
-    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusDataLoader.registry | quote }}
-    repository: {{ .Values.images.nubusDataLoader.repository }}
-    tag: {{ .Values.images.nubusDataLoader.tag }}
-
-nubusStackDataSwp:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusDataLoader.registry | quote }}
     repository: {{ .Values.images.nubusDataLoader.repository }}

@@ -465,15 +465,11 @@ env-stop:
 
 .ums-default-password: &ums-default-password
   - |
-    UMS_PASSWORDS=$( \
-      kubectl -n ${NAMESPACE} get cm ums-stack-data-swp-data -o jsonpath='{.data.dev-test-users\.yaml}' \
-      | yq '.properties.password' > passwords.txt \
-    )
     DEFAULT_USER_PASSWORD=$( \
-      awk 'NR==1{print $1}' passwords.txt \
+       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.user_password}' | base64 -d \
     )
     DEFAULT_ADMIN_PASSWORD=$(
-      awk 'NR==3{print $1}' passwords.txt \
+       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.administrator_password}' | base64 -d \
     )
 
 run-tests:

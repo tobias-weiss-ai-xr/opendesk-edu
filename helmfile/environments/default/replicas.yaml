@@ -93,12 +93,12 @@ replicas:
   umsNotificationsApi: 1
   # -- scalable: true
   umsPortalFrontend: 1
-  # -- scalable: tbd
-  umsPortalListener: 1
+  # -- scalable: false
+  umsPortalConsumer: 1
   # -- scalable: true
   umsPortalServer: 1
   # -- scalable: tbd
-  umsSelfserviceListener: 1
+  umsSelfserviceConsumer: 1
   # -- scalable: tbd
   umsStackGateway: 1
   # -- scalable: true
