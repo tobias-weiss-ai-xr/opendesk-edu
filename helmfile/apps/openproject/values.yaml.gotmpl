@@ -8,6 +8,10 @@ global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
+appInit:
+  resources:
+    {{ .Values.resources.openprojectAppInit | toYaml | nindent 4 }}
+
 containerSecurityContext:
   enabled: true
   privileged: false
@@ -23,6 +27,15 @@ containerSecurityContext:
   runAsNonRoot: true
   seLinuxOptions:
     {{ .Values.seLinuxOptions.openproject | toYaml | nindent 4 }}
+
+dbInit:
+  image:
+    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.openprojectDbInit.registry | quote }}
+    repository: {{ .Values.images.openprojectDbInit.repository | quote }}
+    tag: {{ .Values.images.openprojectDbInit.tag | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  resources:
+    {{ .Values.resources.openprojectDbInit | toYaml | nindent 4 }}
 
 environment:
 # For more details and more options see
@@ -80,13 +93,6 @@ image:
   repository: {{ .Values.images.openproject.repository | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.openproject.tag | quote }}
-
-initdb:
-  image:
-    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.openprojectInitDb.registry | quote }}
-    repository: {{ .Values.images.openprojectInitDb.repository | quote }}
-    tag: {{ .Values.images.openprojectInitDb.tag | quote }}
-    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 memcached:
   bundled: false
@@ -182,5 +188,12 @@ s3:
 seederJob:
   annotations:
     intents.otterize.com/service-name: "openproject-seeder"
+  resources:
+    {{ .Values.resources.openprojectSeederJob | toYaml | nindent 4 }}
+
+workers:
+  default:
+    resources:
+      {{ .Values.resources.openprojectWorkers | toYaml | nindent 6 }}
 
 ...

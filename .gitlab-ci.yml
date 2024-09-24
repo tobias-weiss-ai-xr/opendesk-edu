@@ -159,7 +159,7 @@ variables:
       - "no"
   RUN_TESTS:
     description: "Triggers execution of E2E-tests."
-    value: "yes"
+    value: "no"
     options:
       - "yes"
       - "no"

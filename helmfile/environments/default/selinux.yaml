@@ -41,7 +41,7 @@ seLinuxOptions:
   opendeskKeycloakBootstrap: ~
   openproject: ~
   openprojectBootstrap: ~
-  openprojectInitDb: ~
+  openprojectDbInit: ~
   openxchangeBootstrap: ~
   openxchangeCoreGuidedtours: ~
   openxchangeCoreMW: ~
