@@ -77,7 +77,7 @@ seLinuxOptions:
   umsNotificationsApi: ~
   umsOpenPolicyAgent: ~
   umsPortalFrontend: ~
-  umsPortalListener: ~
+  umsPortalConsumer: ~
   umsPortalServer: ~
   umsProvisioningDispatcher: ~
   umsProvisioningEventsAndConsumerApi: ~
@@ -86,7 +86,7 @@ seLinuxOptions:
   umsProvisioningNatsReloader: ~
   umsProvisioningUdmListener: ~
   umsSelfserviceInvitation: ~
-  umsSelfserviceListener: ~
+  umsSelfserviceConsumer: ~
   umsStackGateway: ~
   umsStoreDav: ~
   umsUdmRestApi: ~

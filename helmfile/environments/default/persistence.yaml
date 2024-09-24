@@ -19,7 +19,6 @@ persistence:
     nubus:
       ldapServerData: "1Gi"
       ldapServerShared: "1Gi"
-      portalListener: "1Gi"
-      selfserviceListener: "1Gi"
+      portalConsumer: "1Gi"
     xwiki: "1Gi"
 ...

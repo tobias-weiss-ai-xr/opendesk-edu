@@ -9,6 +9,9 @@ global:
     baseDn: {{ .Values.ldap.baseDn | quote }}
     domainName: {{ .Values.global.domain | quote }}
   domain: {{ .Values.global.domain | quote }}
+  subDomains:
+    portal: {{ .Values.global.hosts.nubus | quote }}
+    keycloak: {{ .Values.global.hosts.keycloak | quote }}
   ingressClass: {{ .Values.ingress.ingressClassName | default "nginx" | quote }}
   certManagerIssuer: {{ .Values.certificate.issuerRef.name | quote }}
   nubusMasterPassword: {{ env "MASTER_PASSWORD" | default "sovereign-workplace" | quote }}
@@ -26,6 +29,30 @@ global:
     defaultUsers:
       defaultAdminPassword: {{ .Values.secrets.nubus.defaultAccounts.adminPassword | quote}}
       defaultUserPassword: {{ .Values.secrets.nubus.defaultAccounts.userPassword | quote}}
+      defaultAdministratorPassword: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote}}
+    portalConsumer:
+      minio:
+        accessKey: {{ .Values.objectstores.nubus.username | quote }}
+        secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      provisioningApi:
+        password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword | quote}}
+    provisioning:
+      api:
+        adminPassword: {{ .Values.secrets.nubus.provisioning.api.adminPassword | quote}}
+        natsPassword: {{ .Values.secrets.nubus.provisioning.api.natsPassword | quote}}
+        prefillPassword: {{ .Values.secrets.nubus.provisioning.api.prefillPassword | quote}}
+        udmTransformerPassword: {{ .Values.secrets.nubus.provisioning.api.udmTransformerPassword | quote}}
+      dispatcher:
+        natsPassword: {{ .Values.secrets.nubus.provisioning.dispatcherNatsPassword | quote}}
+      nats:
+        adminPassword: {{ .Values.secrets.nats.natsAdminPassword | quote}}
+      prefill:
+        natsPassword: {{ .Values.secrets.nubus.provisioning.prefillNatsPassword | quote}}
+      udmTransformer:
+        natsPassword: {{ .Values.secrets.nubus.provisioning.udmTransformerNatsPassword | quote}}
+    selfserviceConsumer:
+      provisioningApi:
+        password: {{ .Values.secrets.nubus.selfserviceConsumer.provisioningApiPassword | quote}}
 
   # -- Extensions to load. Add entries to load additional extensions into Nubus.
   extensions:
@@ -52,6 +79,61 @@ global:
         repository: {{ .Values.images.nubusPortalExtension.repository }}
         tag: {{ .Values.images.nubusPortalExtension.tag }}
         imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+  configUcr:
+    directory:
+      manager:
+        web:
+          modules:
+            users:
+              user:
+                add:
+                  default: cn=openDesk User,cn=templates,cn=univention,{{ .Values.ldap.baseDn }}
+                properties:
+                  description:
+                    syntax: TextArea
+                  firstname:
+                    required: "true"
+                  mailPrimaryAddress:
+                    required: "true"
+                  username:
+                    syntax: uid
+                search:
+                  autosearch: "False"
+                wizard:
+                  property:
+                    invite:
+                      default: "True"
+                    overridePWLength:
+                      default: "False"
+                      visible: "False"
+                    pwdChangeNextLogin:
+                      default: "True"
+                      visible: "False"
+            wizard:
+              disabled: "No"
+
+    ucs:
+      web:
+        theme: light
+
+    umc:
+      cookie-banner:
+        show: "false"
+      login:
+        password-complexity-message:
+          de: "Das Passwort muss den folgenden Anforderungen entsprechen:<br><ul><li>Mindestlänge: 8 Zeichen</li></ul>Anmerkung: Wird befinden uns nicht in einer Produktivumgebung."
+          en: "Password must comply with the following rules:<br><ul><li>Minimum length: 8 characters</li></ul>Note: We are in a non production (dev/test/demo) system."
+      module:
+        udm:
+          oxmail:
+            oxcontext:
+              disabled: "True"
+          portals:
+            all:
+              disabled: "True"
+      self-service:
+        passwordreset:
+          token_validity_period: 172800
 
 ingress:
   certManager:
@@ -94,7 +176,13 @@ nubusGuardian:
   provisioning:
     enabled: false
     config:
+      nubusBaseUrl: {{ printf "https://%s.%s" .Values.global.hosts.nubus .Values.global.domain }}
       keycloak:
+        realm: {{ .Values.platform.realm | quote }}
+        username: "kcadmin"
+        connection:
+          host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+          baseUrl: "http://ums-keycloak:8080"
         credentialSecret:
           name: "ums-opendesk-keycloak-credentials"
           key: "admin_password"
@@ -206,13 +294,17 @@ nubusPortalFrontend:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 nubusPortalListener:
-  portalListener:
+  enabled: false
+
+nubusPortalConsumer:
+  enabled: true
+  portalConsumer:
+    logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
     objectStorageEndpoint: {{ .Values.objectstores.nubus.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
     objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
-    objectStorageCredentialSecret:
-      name: "ums-portal-listener-minio-opendesk-credentials"
-      accessKeyKey: "access-key-id"
-      secretKeyKey: "secret-key-id"
+  provisioningApi:
+    auth:
+      username: "portal-consumer"
 
 nubusPortalServer:
   portalServer:
@@ -240,15 +332,22 @@ nubusUdmRestApi:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
 
-# NOTE: disabled until the next update.
 nubusProvisioning:
-  enabled: false
-nubusUdmListener:
-  enabled: false
-nubusSelfServiceListener:
+  nats:
+    config:
+      lame_duck_grace_period: |
+        10s
+              max_payload: 16MB
   enabled: true
-  selfserviceListener:
-    umcAdminUser: "default.admin"
+
+nubusUdmListener:
+  enabled: true
+
+nubusSelfServiceListener:
+  enabled: false
+
+nubusSelfServiceConsumer:
+  enabled: true
 
 # Nubus services
 nubusStackDataUms:
@@ -262,7 +361,11 @@ nubusStackDataUms:
     umcMemcachedUsername: ""
     externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
     umcHtmlTitle: "openDesk Portal"
-    installUmcPolicies: true
+    smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    smtpPort: 25
+    smtpUser: ""
+    smtpStartTls: false
+    ldapBase: {{ .Values.ldap.baseDn }}
   templateContext:
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
     portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
@@ -279,6 +382,7 @@ nubusStackDataUms:
         password: {{ $password | quote }}
         lastname: "LDAP-Search-User"
       {{- end }}
+    ldapSystemUsers: []
     portaltileGroupUserStandard:
       - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
       - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
@@ -300,46 +404,20 @@ nubusStackDataUms:
       - 'cn=managed-by-attribute-Learnmanagement,cn=groups,{{ .Values.ldap.baseDn }}'
     portaltileGroupLiveCollaboration:
       - 'cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}'
-
+    systemInformation:
+      enabled: true
+      releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
+      {{- if .Values.functional.admin.portal.deploymentInformation.enabled }}
+      deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
+      {{- else }}
+      deployDate: "not available"
+      {{- end }}
+  # In openDesk the external memcache does not expect a username to be set. Overwriting
+  # the default username of `selfservice` is part of the customizing:
   nubusUmcServer:
     memcached:
       auth:
         username: ""
-
-# TODO: Remove values when upstreaming fixes
-nubusStackDataSwp:
-  additionalAnnotations:
-    argocd.argoproj.io/hook: "Sync"
-    argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
-  stackDataSwp:
-    systemInformation:
-    {{- if .Values.functional.admin.portal.deploymentInformation.enabled }}
-      deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
-    {{- end }}
-      releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
-  stackDataContext:
-    ldapSearchUsers:
-      {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
-      - username: {{ printf "ldapsearch_%s" $username | quote }}
-        password: {{ $password | quote }}
-        lastname: "LDAP-Search-User"
-      {{- end }}
-    externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
-    smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
-    smtpPort: 25
-    smtpUser: ""
-    smtpStartTls: false
-    ldapBase: {{ .Values.ldap.baseDn }}
-    # FIXME: Should be templated correctly in the future
-    portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
-    portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
-    portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain }}
-    portalManagementKnowledgeLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.xwiki .Values.global.domain }}
-    portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
-    portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain }}
-    portalTitleDE: "openDesk Portal"
-    portalTitleEN: "openDesk Portal"
-    oxDefaultContext: "1"
 
 nubusUmcServer:
   postgresql:
@@ -438,10 +516,6 @@ extraSecrets:
     stringData:
       password: {{ .Values.secrets.nubus.ldapSearch.keycloak | quote }}
   - name: "ums-portal-server-minio-opendesk-credentials"
-    stringData:
-      access-key-id: {{ .Values.objectstores.nubus.username | quote }}
-      secret-key-id: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
-  - name: "ums-portal-listener-minio-opendesk-credentials"
     stringData:
       access-key-id: {{ .Values.objectstores.nubus.username | quote }}
       secret-key-id: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
