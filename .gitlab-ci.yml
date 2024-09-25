@@ -469,7 +469,7 @@ env-stop:
        kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.user_password}' | base64 -d \
     )
     DEFAULT_ADMIN_PASSWORD=$(
-       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.administrator_password}' | base64 -d \
+       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.admin_password}' | base64 -d \
     )
 
 run-tests:
@@ -481,6 +481,11 @@ run-tests:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
       when: "on_success"
+  parallel:
+    matrix:
+      - LANGUAGE:
+        - "de"
+        - "en"
   script:
     - *ums-default-password
     - |
@@ -494,6 +499,7 @@ run-tests:
           \"cluster\": \"${CLUSTER}\", \
           \"namespace\": \"${NAMESPACE}\", \
           \"url\": \"https://portal.${DOMAIN}/\", \
+          \"language\": \"${LANGUAGE}\", \
           \"user_name\": \"${DEFAULT_USER_NAME}\", \
           \"user_password\": \"${DEFAULT_USER_PASSWORD}\", \
           \"admin_name\": \"${DEFAULT_ADMIN_NAME}\", \
