@@ -239,9 +239,10 @@ nubusKeycloakExtensions:
         {{ .Values.seLinuxOptions.umsKeycloakExtensionHandler | toYaml | nindent 8 }}
 
 nubusPortalConsumer:
-  image:
-    pullSecrets:
-      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+  portalConsumer:
+    image:
+      pullSecrets:
+        {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-portal-consumer"
   replicaCount: {{ .Values.replicas.umsPortalConsumer }}
@@ -252,7 +253,11 @@ nubusPortalConsumer:
   persistence:
     storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
     size: {{ .Values.persistence.size.nubus.portalConsumer | quote }}
-
+  securityContext:
+    seccompProfile:
+      type: "RuntimeDefault"
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsPortalConsumer | toYaml | nindent 8 }}
 
 nubusUdmListener:
   containerSecurityContext:
@@ -424,6 +429,22 @@ nubusPortalFrontend:
       backgroundImage: {{ .Values.theme.imagery.logoPortalBackgroundSvgB64 | toJson }}
 
 nubusStackDataUms:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsStackDataUms | toYaml | nindent 6 }}
+  pullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-stack-data-ums"
   resources:
@@ -502,6 +523,22 @@ nubusUmcGateway:
     {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
 
 nubusKeycloakBootstrap:
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    readOnlyRootFilesystem: false
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsKeycloakBootstrap | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak-bootstrap"
   serviceAccount:
@@ -577,8 +614,6 @@ nubusProvisioning:
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-prefill"
   registerConsumers:
-    resources:
-      {{ .Values.resources.nubusProvisioning.registerConsumers | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-register-consumers"
   udmTransformer:
@@ -586,3 +621,6 @@ nubusProvisioning:
       {{ .Values.resources.nubusProvisioning.udmTransformer | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-udm-transformer"
+  resources:
+    registerConsumers:
+      {{ .Values.resources.nubusProvisioning.registerConsumers | toYaml | nindent 6 }}
