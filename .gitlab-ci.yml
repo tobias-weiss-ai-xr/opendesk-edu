@@ -484,8 +484,8 @@ run-tests:
   parallel:
     matrix:
       - LANGUAGE:
-        - "de"
-        - "en"
+          - "de"
+          - "en"
   script:
     - *ums-default-password
     - |
