@@ -225,49 +225,6 @@ resources:
     requests:
       cpu: 0.1
       memory: "512Mi"
-  nubusProvisioning:
-    nats:
-      limits:
-        cpu: 288
-        memory: "1Gi"
-      requests:
-        cpu: 0.1
-        memory: "128Mi"
-    dispatcher:
-      limits:
-        cpu: 1
-        memory: "1Gi"
-      requests:
-        cpu: 0.1
-        memory: "64Mi"
-    registerConsumers:
-      limits:
-        cpu: 1
-        memory: "1Gi"
-      requests:
-        cpu: 0.1
-        memory: "64Mi"
-    udmTransformer:
-      limits:
-        cpu: 1
-        memory: "1Gi"
-      requests:
-        cpu: 0.1
-        memory: "64Mi"
-    prefill:
-      limits:
-        cpu: 1
-        memory: "1Gi"
-      requests:
-        cpu: 0.1
-        memory: "64Mi"
-    api:
-      limits:
-        cpu: 1
-        memory: "1Gi"
-      requests:
-        cpu: 0.1
-        memory: "100Mi"
   openproject:
     limits:
       cpu: 99
@@ -478,13 +435,6 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsLdapServerInit:
-    limits:
-      cpu: 99
-      memory: "1Gi"
-    requests:
-      cpu: 0.1
-      memory: "256Mi"
   umsNotificationsApi:
     limits:
       cpu: 99
@@ -520,13 +470,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsProvisioningEventsAndConsumerApi:
+  umsProvisioningApi:
     limits:
       cpu: 99
       memory: "1Gi"
     requests:
       cpu: 0.1
-      memory: "256Mi"
+      memory: "100Mi"
   umsProvisioningDispatcher:
     limits:
       cpu: 99
@@ -541,28 +491,28 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsProvisioningUdmListener:
+  umsProvisioningRegisterConsumers:
     limits:
       cpu: 99
       memory: "1Gi"
     requests:
       cpu: 0.1
-      memory: "256Mi"
+      memory: "64Mi"
+  umsProvisioningUdmTransformer:
+    limits:
+      cpu: 99
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "64Mi"
   umsProvisioningNats:
     limits:
       cpu: 99
       memory: "1Gi"
     requests:
       cpu: 0.1
-      memory: "256Mi"
+      memory: "128Mi"
   umsSelfserviceConsumer:
-    limits:
-      cpu: 99
-      memory: "1Gi"
-    requests:
-      cpu: 0.1
-      memory: "256Mi"
-  umsSelfserviceListenerDependencies:
     limits:
       cpu: 99
       memory: "1Gi"
@@ -576,13 +526,6 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
-  umsStackGateway:
-    limits:
-      cpu: 99
-      memory: "64Mi"
-    requests:
-      cpu: 0.1
-      memory: "16Mi"
   umsUdmListener:
     limits:
       cpu: 99

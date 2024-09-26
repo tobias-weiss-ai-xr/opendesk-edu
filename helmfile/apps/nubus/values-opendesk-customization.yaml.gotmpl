@@ -242,7 +242,7 @@ nubusPortalConsumer:
   portalConsumer:
     image:
       pullSecrets:
-        {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+        {{ .Values.global.imagePullSecrets | toYaml | nindent 8 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-portal-consumer"
   replicaCount: {{ .Values.replicas.umsPortalConsumer }}
@@ -256,8 +256,8 @@ nubusPortalConsumer:
   securityContext:
     seccompProfile:
       type: "RuntimeDefault"
-      seLinuxOptions:
-        {{ .Values.seLinuxOptions.umsPortalConsumer | toYaml | nindent 8 }}
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsPortalConsumer | toYaml | nindent 6 }}
 
 nubusUdmListener:
   containerSecurityContext:
@@ -593,24 +593,24 @@ nubusProvisioning:
     imagePullSecrets:
       {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     resources:
-      {{ .Values.resources.nubusProvisioning.nats | toYaml | nindent 6 }}
+      {{ .Values.resources.umsProvisioningNats | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-nats"
     serviceAccount:
       create: true
   api:
     resources:
-      {{ .Values.resources.nubusProvisioning.api | toYaml | nindent 6 }}
+      {{ .Values.resources.umsProvisioningApi | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-api"
   dispatcher:
     resources:
-      {{ .Values.resources.nubusProvisioning.dispatcher | toYaml | nindent 6 }}
+      {{ .Values.resources.umsProvisioningDispatcher | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-dispatcher"
   prefill:
     resources:
-      {{ .Values.resources.nubusProvisioning.prefill | toYaml | nindent 6 }}
+      {{ .Values.resources.umsProvisioningPrefill | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-prefill"
   registerConsumers:
@@ -618,9 +618,9 @@ nubusProvisioning:
       intents.otterize.com/service-name: "ums-provisioning-register-consumers"
   udmTransformer:
     resources:
-      {{ .Values.resources.nubusProvisioning.udmTransformer | toYaml | nindent 6 }}
+      {{ .Values.resources.umsProvisioningUdmTransformer | toYaml | nindent 6 }}
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-udm-transformer"
   resources:
     registerConsumers:
-      {{ .Values.resources.nubusProvisioning.registerConsumers | toYaml | nindent 6 }}
+      {{ .Values.resources.umsProvisioningRegisterConsumers | toYaml | nindent 6 }}
