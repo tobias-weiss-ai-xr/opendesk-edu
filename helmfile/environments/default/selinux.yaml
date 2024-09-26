@@ -60,11 +60,7 @@ seLinuxOptions:
   prosody: ~
   redis: ~
   synapse: ~
-  synapseCreateUser: ~
-  synapseGuestModule: ~
   synapseWeb: ~
-  umsConfigHtpasswd: ~
-  umsDataLoader: ~
   umsGuardianAuthorizationApi: ~
   umsGuardianManagementApi: ~
   umsGuardianManagementUi: ~
@@ -81,16 +77,12 @@ seLinuxOptions:
   umsPortalServer: ~
   umsProvisioning: ~
   umsProvisioningNats: ~
-  umsSelfserviceInvitation: ~
   umsSelfserviceConsumer: ~
   umsStackDataUms: ~
-  umsStackGateway: ~
-  umsStoreDav: ~
   umsUdmListener: ~
   umsUdmRestApi: ~
   umsUmcGateway: ~
   umsUmcServer: ~
-  umsWaitForDependency: ~
   wellKnown: ~
   xwiki: ~
 ...

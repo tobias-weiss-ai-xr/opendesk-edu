@@ -111,8 +111,6 @@ replicas:
   umsProvisioningUdmTransformer: 1
   # -- scalable: tbd
   umsSelfserviceConsumer: 1
-  # -- scalable: tbd
-  umsStackGateway: 1
   # -- scalable: true
   umsUdmListener: 1
   # -- scalable: tbd
