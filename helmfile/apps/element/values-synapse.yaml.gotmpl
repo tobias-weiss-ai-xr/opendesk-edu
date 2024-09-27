@@ -13,6 +13,16 @@ configuration:
       additional_event_types:
         - "m.space.parent"
         - "m.room.power_levels"
+    # To allow intercom service logins for the users and also allow proper testautomation we want to raise the
+    # ratelimit in a reasonable manner.
+    # https://matrix-org.github.io/synapse/v1.59/usage/configuration/config_documentation.html#ratelimiting
+    rc_login:
+      account:
+        per_second: 2
+        burst_count: 8
+      address:
+        per_second: 2
+        burst_count: 12
 
   database:
     host: {{ .Values.databases.synapse.host | quote }}
