@@ -388,11 +388,6 @@ nubusUdmRestApi:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 nubusProvisioning:
-  nats:
-    config:
-      lame_duck_grace_period: |
-        10s
-              max_payload: 16MB
   enabled: true
 
 nubusUdmListener:

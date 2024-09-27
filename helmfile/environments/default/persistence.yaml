@@ -20,5 +20,6 @@ persistence:
       ldapServerData: "1Gi"
       ldapServerShared: "1Gi"
       portalConsumer: "1Gi"
+      provisioningNats: "1Gi"
     xwiki: "1Gi"
 ...
