@@ -592,6 +592,8 @@ nubusProvisioning:
         {{ .Values.seLinuxOptions.umsProvisioningNats | toYaml | nindent 8 }}
     imagePullSecrets:
       {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    persistence:
+      size: {{ .Values.persistence.size.nubus.provisioningNats }}
     resources:
       {{ .Values.resources.umsProvisioningNats | toYaml | nindent 6 }}
     additionalAnnotations:
