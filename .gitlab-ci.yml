@@ -121,12 +121,6 @@ variables:
     options:
       - "yes"
       - "no"
-  DEPLOY_ICS:
-    description: "Enable ICS deployment."
-    value: "no"
-    options:
-      - "yes"
-      - "no"
   DEPLOY_XWIKI:
     description: "Enable XWiki deployment."
     value: "no"
@@ -317,18 +311,6 @@ ox-deploy:
       when: "on_success"
   variables:
     COMPONENT: "open-xchange"
-
-ics-deploy:
-  stage: "component-deploy-stage-1"
-  extends: ".deploy-common"
-  rules:
-    - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
-          $NAMESPACE =~ /.+/ &&
-          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ICS != "no")
-      when: "on_success"
-  variables:
-    COMPONENT: "intercom-service"
 
 xwiki-deploy:
   stage: "component-deploy-stage-1"
