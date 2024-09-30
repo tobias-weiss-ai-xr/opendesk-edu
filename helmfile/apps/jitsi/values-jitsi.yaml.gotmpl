@@ -52,6 +52,7 @@ jitsi:
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.jitsi.registry }}/{{ .Values.images.jitsi.repository }}"
       tag: {{ .Values.images.jitsi.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     ingress:
       enabled: {{ .Values.ingress.enabled }}
       ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
@@ -85,6 +86,7 @@ jitsi:
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.prosody.registry }}/{{ .Values.images.prosody.repository }}"
       tag: {{ .Values.images.prosody.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
@@ -134,6 +136,7 @@ jitsi:
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.jicofo.registry }}/{{ .Values.images.jicofo.repository }}"
       tag: {{ .Values.images.jicofo.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     xmpp:
       password: {{ .Values.secrets.jitsi.jicofoAuthPassword | quote }}
       componentSecret: {{ .Values.secrets.jitsi.jicofoComponentPassword | quote }}
@@ -156,6 +159,7 @@ jitsi:
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.jvb.registry }}/{{ .Values.images.jvb.repository }}"
       tag: {{ .Values.images.jvb.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     xmpp:
       password: {{ .Values.secrets.jitsi.jvbAuthPassword | quote }}
     resources:
@@ -179,6 +183,7 @@ jitsi:
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.jibri.registry }}/{{ .Values.images.jibri.repository }}"
       tag: {{ .Values.images.jibri.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     recorder:
       password: {{ .Values.secrets.jitsi.jibriRecorderPassword | quote }}
     xmpp:

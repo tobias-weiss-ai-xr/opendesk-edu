@@ -242,7 +242,9 @@ nubusPortalConsumer:
   portalConsumer:
     image:
       pullSecrets:
-        {{ .Values.global.imagePullSecrets | toYaml | nindent 8 }}
+        {{- range .Values.global.imagePullSecrets }}
+        - name: {{ . | quote }}
+        {{- end }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-portal-consumer"
   replicaCount: {{ .Values.replicas.umsPortalConsumer }}

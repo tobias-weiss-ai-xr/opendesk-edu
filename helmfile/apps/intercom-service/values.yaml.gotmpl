@@ -97,6 +97,21 @@ provisioning:
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
       credentialSecret:
         key: "ics_secret"
+  image:
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
+    repository: {{ .Values.images.nubusWaitForDependency.repository | quote }}
+    tag: {{ .Values.images.nubusWaitForDependency.tag | quote }}
+  provisioningImage:
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakBootstrap.registry | quote }}
+    repository: {{ .Values.images.nubusKeycloakBootstrap.repository | quote }}
+    tag: {{ .Values.images.nubusKeycloakBootstrap.tag | quote }}
+  securityContext:
+    seccompProfile:
+      type: "RuntimeDefault"
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.intercom | toYaml | nindent 6 }}
 
 replicaCount: {{ .Values.replicas.intercomService }}
 
