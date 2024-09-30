@@ -35,12 +35,11 @@ customization:
     dovecot: ~
     openXchange: ~
     opendeskOpenXchangeBootstrap: ~
+    oxConnector: ~
     # openproject
     openproject: ~
     # openproject-bootstrap
     opendeskOpenprojectBootstrap: ~
-    # provisioning
-    oxConnector: ~
     # services
     opendeskOtterize: ~
     opendeskHome: ~

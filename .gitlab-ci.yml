@@ -97,12 +97,6 @@ variables:
     options:
       - "yes"
       - "no"
-  DEPLOY_PROVISIONING:
-    description: "Enable Provisioning Components."
-    value: "no"
-    options:
-      - "yes"
-      - "no"
   DEPLOY_COLLABORA:
     description: "Enable Collabora deployment."
     value: "no"
@@ -298,18 +292,6 @@ services-deploy:
       when: "on_success"
   variables:
     COMPONENT: "services"
-
-provisioning-deploy:
-  stage: "component-deploy-stage-2"
-  extends: ".deploy-common"
-  rules:
-    - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
-          $NAMESPACE =~ /.+/ &&
-          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no" || $DEPLOY_PROVISIONING != "no")
-      when: "on_success"
-  variables:
-    COMPONENT: "provisioning"
 
 nubus-deploy:
   stage: "component-deploy-stage-1"

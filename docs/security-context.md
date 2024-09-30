@@ -183,7 +183,7 @@ This list gives you an overview of templated security settings and if they compl
 | **open-xchange**/open-xchange/public-sector-ui | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **openproject**/openproject | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **openproject-bootstrap**/opendesk-openproject-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **provisioning**/ox-connector | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
+| **open-xchange**/ox-connector | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
 | **services**/clamav | :x: | no | no | yes | no | 0 | 0 | yes | no |
 | **services**/clamav-simple | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
 | **services**/clamav/clamd | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
