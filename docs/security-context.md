@@ -158,7 +158,6 @@ This list gives you an overview of templated security settings and if they compl
 | **element**/opendesk-synapse | :white_check_mark: | no | no | yes | yes | 10991 | 10991 | yes | yes |
 | **element**/opendesk-synapse-web | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **element**/opendesk-well-known | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
-| **intercom-service**/intercom-service | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **jitsi**/jitsi | :white_check_mark: | no | no | yes | yes | 1993 | 1993 | yes | yes |
 | **jitsi**/jitsi/jitsi/jibri | :x: | n/a | n/a | n/a | n/a | n/a | n/a | n/a | no ["SYS_ADMIN"] |
 | **jitsi**/jitsi/jitsi/jicofo | :x: | no | no | no | no | 0 | 0 | yes | no |
@@ -196,6 +195,7 @@ This list gives you an overview of templated security settings and if they compl
 | **services**/postfix | :x: | yes | yes | no | no | 0 | 0 | yes | no |
 | **services**/postgresql | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services**/redis/master | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **univention-management-stack**/intercom-service | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **univention-management-stack**/opendesk-keycloak-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **univention-management-stack**/ums/keycloak | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
 | **univention-management-stack**/ums/keycloak-bootstrap | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |

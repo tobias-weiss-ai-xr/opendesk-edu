@@ -355,7 +355,7 @@ Commit messages must adhere to the [Conventional Commit standard](https://www.co
   │       │              |
   │       │              └─> Issue reference (optional)
   │       │
-  │       └─> Commit Scope: helmfile, docs, collabora, intercom-service, ...
+  │       └─> Commit Scope: helmfile, docs, collabora, nextcloud, open-xhcange etc.
   │
   └─> Commit Type: chore, ci, docs, feat, fix
 ```

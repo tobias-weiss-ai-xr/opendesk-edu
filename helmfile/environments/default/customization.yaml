@@ -17,8 +17,6 @@ customization:
     opendeskWellKnown: ~
     opendeskSynapseWeb: ~
     opendeskSynapse: ~
-    # intercom-service
-    intercomService: ~
     # jitsi
     jitsi: ~
     # migrations-post
@@ -30,6 +28,7 @@ customization:
     opendeskNextcloud: ~
     # nubus
     ums: ~
+    intercomService: ~
     opendeskKeycloakBootstrap: ~
     # open-xchange
     dovecot: ~

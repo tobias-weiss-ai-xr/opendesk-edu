@@ -109,7 +109,6 @@ All available apps and their default value can be found in `helmfile/environment
 | CryptPad             | `cryptpad.enabled`          | `true`  | Weboffice                      |
 | Dovecot              | `dovecot.enabled`           | `true`  | Mail backend                   |
 | Element              | `element.enabled`           | `true`  | Secure communications platform |
-| Intercom Service     | `intercom.enabled`          | `true`  | Cross service data exchange    |
 | Jitsi                | `jitsi.enabled`             | `true`  | Videoconferencing              |
 | MariaDB              | `mariadb.enabled`           | `true`  | Database                       |
 | Memcached            | `memcached.enabled`         | `true`  | Cache Database                 |

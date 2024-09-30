@@ -35,19 +35,18 @@ they need to be replaced in production deployments.
 | CryptPad                    | Weboffice                      | Functional |
 | dkimpy-milter               | DKIM milter for Postfix        | Eval       |
 | Element                     | Secure communications platform | Functional |
-| Intercom Service            | Cross service data exchange    | Functional |
 | Jitsi                       | Videoconferencing              | Functional |
 | MariaDB                     | Database                       | Eval       |
 | Memcached                   | Cache Database                 | Eval       |
 | MinIO                       | Object Storage                 | Eval       |
 | Nextcloud                   | File share                     | Functional |
+| Nubus (UMS)                 | Identity Management & Portal   | Functional |
 | OpenProject                 | Project management             | Functional |
 | OX Appsuite                 | Groupware                      | Functional |
 | OX Dovecot                  | Mail backend (IMAP)            | Functional |
 | Postfix                     | MTA                            | Eval       |
 | PostgreSQL                  | Database                       | Eval       |
 | Redis                       | Cache Database                 | Eval       |
-| Univention Management Stack | Identity Management & Portal   | Functional |
 | XWiki                       | Knowledge Management           | Functional |
 
 # Component integration
@@ -74,9 +73,9 @@ Most details can be found in the upstream documentation that is linked in the re
 
 ## Intercom Service / Silent Login
 
-The Intercom Service's role is to enable cross-application integration based on the user's browser interaction as handling
-authentication when the frontend of an application has to call the API from another application is often a
-challenge.
+The Intercom Service is deployed in context of Nubus/UMS. Its role is to enable cross-application integration
+based on the user's browser interaction as handling authentication when the frontend of an application has to call
+the API from another application is often a challenge.
 
 To establish a session with the Intercom Service an application can use the silent login feature within an iframe.
 

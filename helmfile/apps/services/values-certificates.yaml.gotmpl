@@ -23,7 +23,7 @@ global:
     synapseFederation: {{ .Values.global.hosts.synapseFederation }}
     whiteboard: {{ .Values.global.hosts.whiteboard }}
     {{- end }}
-    {{- if .Values.intercom.enabled }}
+    {{- if .Values.nubus.enabled }}
     intercomService: {{ .Values.global.hosts.intercomService }}
     {{- end }}
     {{- if .Values.jitsi.enabled }}
