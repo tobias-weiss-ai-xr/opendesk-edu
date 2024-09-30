@@ -8,12 +8,10 @@ image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.dovecot.registry | quote }}
   repository: {{ .Values.images.dovecot.repository | quote }}
   tag: {{ .Values.images.dovecot.tag | quote }}
-  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . | quote }}
-{{- end }}
+  {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
 dovecot:
   mailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}

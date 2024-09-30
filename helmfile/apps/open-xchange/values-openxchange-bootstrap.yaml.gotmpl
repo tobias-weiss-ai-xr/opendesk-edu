@@ -8,6 +8,12 @@ cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
   deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
 
+containerSecurityContext:
+  seccompProfile:
+    type: "RuntimeDefault"
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.openxchangeBootstrap | toYaml | nindent 4 }}
+
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.openxchangeBootstrap.registry | quote }}
   url: {{ .Values.images.openxchangeBootstrap.repository | quote }}
@@ -15,9 +21,7 @@ image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 imagePullSecrets:
-{{- range .Values.global.imagePullSecrets }}
-  - name: {{ . | quote }}
-{{- end }}
+  {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
 podAnnotations:
   argocd.argoproj.io/hook: "Sync"
