@@ -13,6 +13,8 @@ SPDX-License-Identifier: Apache-2.0
       * [File-share configurability](#file-share-configurability)
       * [Updated default subdomains in `global.hosts`](#updated-default-subdomains-in-globalhosts)
       * [Updated `global.imagePullSecrets`](#updated-globalimagepullsecrets)
+      * [Removal of unnecessary OX-Profiles in Nubus](#removal-of-unnecessary-ox-profiles-in-nubus)
+      * [Dedicated group for access of the UDM REST API](#dedicated-group-for-access-of-the-udm-rest-api)
     * [Automated migrations](#automated-migrations)
       * [Local Postfix as Relay](#local-postfix-as-relay)
       * [Updated IAM component Nubus](#updated-iam-component-nubus)
@@ -162,6 +164,49 @@ global:
   imagePullSecrets:
     - "external-registry"
 ```
+
+#### Removal of unnecessary OX-Profiles in Nubus
+
+The update will remove unnecessary OX-Profiles in Nubus, but can't as long as these profiles are in use.
+
+So please ensure that only the following two supported profiles are assigned to your users:
+- `opendesk_standard`: "opendesk Standard"
+- `none`: "Login disabled"
+
+You can check and update the profiles as follows:
+- Login as IAM admin.
+- Open the user module.
+- Open the extended search by clicking the funnel (Trichter) icon next to the search input field.
+- Open the "Property" (Eigenschaft) list and select "OX Access" (OX-Berechtigung).
+- In the input field right next to the list enter an asterisk (*).
+- Start the search by clicking once more on the funnel icon.
+- Sort the result list for the "OX Access" column
+- Edit every user that has a value different to `opendesk_standard` or `none`:
+  - Open the user.
+  - Go to section "OX App Suite".
+  - Change the value in the dropdown "OX Access" to either:
+    - "openDesk Standard" if the user should be able to use the Groupware module or
+    - "Login disabled" if the user should not user the Groupware module.
+    - Update the user account with the green "SAVE" button on top of the page.
+
+#### Dedicated group for access of the UDM REST API
+
+Prerequisite: You allow the use of the [IAM's API](https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html)
+with the following settings:
+
+```
+functional:
+  externalServices:
+    nubus:
+      udmRestApi:
+        enabled: true
+```
+
+With 0.9.0 all members of the group "Domain Admins" were able to successfully authenticate with the API.
+
+This has been changed and there is now a dedicated group required for using the API: `IAM API - Full Access`
+
+If you need specific accounts to make use of the API, please go ahead and assign them to the aforementioned group.
 
 ### Automated migrations
 
