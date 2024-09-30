@@ -36,6 +36,9 @@ component's log level to debug and it get some features like:
 - An ingress for `http://minio-console.<your_domain>` is configured.
 and set the log level for components to "Debug".
 
+**Note**: When enabling debug and running upgrades you must manually delete all jobs before the upgrade. As with debug
+we keep the jobs and some job fields are immutable it could otherwise lead into an upgrade failure.
+
 **Note:** All containers should write their log output to STDOUT, if you find (valuable) logs inside a container, please let us know!
 
 # Adding containers to a pod for debugging purposes

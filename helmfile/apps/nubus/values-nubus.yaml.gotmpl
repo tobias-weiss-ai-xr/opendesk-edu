@@ -82,23 +82,27 @@ global:
   configUcr:
     directory:
       manager:
+        rest:
+          authorized-groups:
+            domain-admins: __DELETE_KEY__
+            iam-api-full-access: "cn=IAM API - Full Access,cn=groups,{{ .Values.ldap.baseDn }}"
         web:
           modules:
             users:
               user:
                 add:
-                  default: cn=openDesk User,cn=templates,cn=univention,{{ .Values.ldap.baseDn }}
+                  default: "cn=openDesk User,cn=templates,cn=univention,{{ .Values.ldap.baseDn }}"
                 properties:
                   description:
-                    syntax: TextArea
+                    syntax: "TextArea"
                   firstname:
                     required: "true"
                   mailPrimaryAddress:
                     required: "true"
                   username:
-                    syntax: uid
+                    syntax: "uid"
                 search:
-                  autosearch: "False"
+                  autosearch: "True"
                 wizard:
                   property:
                     invite:
@@ -114,7 +118,7 @@ global:
 
     ucs:
       web:
-        theme: light
+        theme: "light"
 
     umc:
       cookie-banner:
@@ -132,8 +136,12 @@ global:
             all:
               disabled: "True"
       self-service:
+        account-registration:
+          usertemplate: __DELETE_KEY__
         passwordreset:
           token_validity_period: 172800
+          blacklist:
+            groups: __DELETE_KEY__
 
 ingress:
   certManager:
@@ -417,6 +425,10 @@ nubusStackDataUms:
     smtpStartTls: false
     ldapBase: {{ .Values.ldap.baseDn }}
   templateContext:
+    # creates the default.user and default.admin
+    loadDevData: true
+    portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+    portalTiles: {{ toYaml .Values.theme.portalTiles | nindent 6 }}
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
     portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
     portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain }}
@@ -455,12 +467,11 @@ nubusStackDataUms:
     portaltileGroupLiveCollaboration:
       - 'cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}'
     systemInformation:
-      enabled: true
       releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
-      {{- if .Values.functional.admin.portal.deploymentInformation.enabled }}
+      {{- if .Values.functional.admin.portal.deploymentTimestamp.enabled }}
       deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
       {{- else }}
-      deployDate: "not available"
+      deployDate: false
       {{- end }}
   # In openDesk the external memcache does not expect a username to be set. Overwriting
   # the default username of `selfservice` is part of the customizing:
