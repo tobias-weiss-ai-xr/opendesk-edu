@@ -44,7 +44,6 @@ they need to be replaced in production deployments.
 | OpenProject                 | Project management             | Functional |
 | OX Appsuite                 | Groupware                      | Functional |
 | OX Dovecot                  | Mail backend (IMAP)            | Functional |
-| Provisioning (OX Connector) | Groupware provisioning         | Functional |
 | Postfix                     | MTA                            | Eval       |
 | PostgreSQL                  | Database                       | Eval       |
 | Redis                       | Cache Database                 | Eval       |

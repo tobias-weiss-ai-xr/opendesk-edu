@@ -32,6 +32,13 @@ repositories:
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.openXchangeAppSuiteBootstrap.registry }}/{{ .Values.charts.openXchangeAppSuiteBootstrap.repository }}"
 
+  # OX Connector
+  - name: "ox-connector-repo"
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.oxConnector.registry }}/{{ .Values.charts.oxConnector.repository }}"
+
 releases:
   - name: "dovecot"
     chart: "dovecot-repo/{{ .Values.charts.dovecot.name }}"
@@ -60,6 +67,16 @@ releases:
       - {{ .Values.customization.release.opendeskOpenXchangeBootstrap | default "additionalValues: false" }}
     installed: {{ .Values.oxAppsuite.enabled }}
     timeout: 900
+
+  - name: "ox-connector"
+    chart: "ox-connector-repo/{{ .Values.charts.oxConnector.name }}"
+    version: "{{ .Values.charts.oxConnector.version }}"
+    values:
+      - "values-oxconnector.yaml.gotmpl"
+      - {{ .Values.customization.release.oxConnector | default "additionalValues: false" }}
+    installed: {{ .Values.oxAppsuite.enabled }}
+    needs:
+      - "open-xchange"
 
 commonLabels:
   deploy-stage: "component-1"

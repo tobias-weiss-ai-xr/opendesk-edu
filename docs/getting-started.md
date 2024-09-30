@@ -118,7 +118,6 @@ All available apps and their default value can be found in `helmfile/environment
 | Nubus                | `nubus.enabled`             | `true`  | Identity Management & Portal   |
 | OpenProject          | `openproject.enabled`       | `true`  | Project management             |
 | OX Appsuite          | `oxAppsuite.enabled`        | `true`  | Groupware                      |
-| Provisioning         | `oxConnector.enabled`       | `true`  | Backend provisioning           |
 | Postfix              | `postfix.enabled`           | `true`  | MTA                            |
 | PostgreSQL           | `postgresql.enabled`        | `true`  | Database                       |
 | Redis                | `redis.enabled`             | `true`  | Cache Database                 |

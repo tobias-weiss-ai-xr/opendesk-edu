@@ -21,7 +21,6 @@ lint-kyverno:
           - "open-xchange"
           - "openproject"
           - "openproject-bootstrap"
-          - "provisioning"
           - "services"
           - "xwiki"
   script:

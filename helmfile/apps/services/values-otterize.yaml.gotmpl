@@ -32,8 +32,6 @@ apps:
     enabled: {{ .Values.openproject.enabled }}
   oxAppsuite:
     enabled: {{ .Values.oxAppsuite.enabled }}
-  oxConnector:
-    enabled: {{ .Values.oxConnector.enabled }}
   postfix:
     enabled: {{ .Values.postfix.enabled }}
   postgresql:
@@ -47,7 +45,6 @@ apps:
 
 ingressController:
   {{ .Values.security.ingressController | toYaml | nindent 2 }}
-
 
 extraApps:
   clusterPostfix:
