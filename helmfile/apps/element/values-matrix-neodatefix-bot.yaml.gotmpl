@@ -1,0 +1,85 @@
+{{/*
+SPDX-FileCopyrightText: 2024 Center for Digital Sovereignty of Public Administration (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2023 Federal Ministry of the Interior and Community, PG ZenDiS "Project group for the development of ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+global:
+  domain: {{ .Values.global.domain | quote }}
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+configuration:
+  bot:
+    username: "meetings-bot"
+    display name: "Scheduler Bot"
+  openxchangeBaseUrl: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
+  strings:
+    breakoutSessionWidgetName: "Breakout Sessions"
+    calendarRoomName: "Scheduler"
+    calendarWidgetName: "Scheduler"
+    cockpitWidgetName: "Meeting control"
+    jitsiWidgetName: "Video conference"
+    matrixNeoBoardWidgetName: "Whiteboard"
+    matrixNeoChoiceWidgetName: "Votes"
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+  enabled: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsGroup: 101
+  runAsNonRoot: true
+  runAsUser: 101
+  seccompProfile:
+    type: "RuntimeDefault"
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.matrixNeoDateFixBot | toYaml | nindent 4 }}
+
+extraEnvVars:
+  - name: "ACCESS_TOKEN"
+    valueFrom:
+      secretKeyRef:
+        name: "matrix-neodatefix-bot-account"
+        key: "access_token"
+
+image:
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.matrixNeoDateFixBot.registry | quote }}
+  repository: {{ .Values.images.matrixNeoDateFixBot.repository | quote }}
+  tag: {{ .Values.images.matrixNeoDateFixBot.tag | quote }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  tls:
+    enabled: {{ .Values.ingress.tls.enabled }}
+    secretName: {{ .Values.ingress.tls.secretName | quote }}
+
+liveness sample:
+  enabled: true
+
+persistence:
+  size: {{ .Values.persistence.size.matrixNeoDateFixBot | quote }}
+  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+
+podAnnotations: {}
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 101
+
+readinessProbe:
+  enabled: true
+
+replicaCount: {{ .Values.replicas.matrixNeoDateFixBot }}
+
+resources:
+  {{ .Values.resources.matrixNeoDateFixBot | toYaml | nindent 2 }}
+
+...

@@ -12,6 +12,7 @@ configuration:
     room_prejoin_state:
       additional_event_types:
         - "m.space.parent"
+        - "net.nordeck.meetings.metadata"
         - "m.room.power_levels"
     # To allow intercom service logins for the users and also allow proper testautomation we want to raise the
     # ratelimit in a reasonable manner.
@@ -32,6 +33,25 @@ configuration:
 
   homeserver:
     serverName: {{ .Values.global.matrixDomain | default .Values.global.domain }}
+    appServiceConfigs:
+      - as_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}
+        hs_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}
+        id: intercom-service
+        namespaces:
+          users:
+            - exclusive: false
+              regex: "@.*"
+        url: null
+        sender_localpart: intercom-service
+      - as_token: {{ .Values.secrets.oxAppsuite.synapseAsToken | quote }}
+        hs_token: {{ .Values.secrets.oxAppsuite.synapseAsToken | quote }}
+        id: ox-appsuite
+        namespaces:
+          users:
+            - exclusive: false
+              regex: "@.*"
+        url: null
+        sender_localpart: ox-appsuite
 
     presence:
       enabled: {{ .Values.functional.dataProtection.matrixPresence.enabled }}
@@ -69,6 +89,14 @@ configuration:
           port: {{ .Values.turn.server.port }}
           transport: {{ .Values.turn.transport | quote }}
         {{- end }}
+
+    guestModule:
+      enabled: true
+      image:
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+        registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.synapseGuestModule.registry | quote }}
+        repository: {{ .Values.images.synapseGuestModule.repository | quote }}
+        tag: {{ .Values.images.synapseGuestModule.tag | quote }}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false

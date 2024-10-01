@@ -59,6 +59,8 @@ seLinuxOptions:
   prosody: ~
   redis: ~
   synapse: ~
+  synapseCreateUser :  ~
+  synapseGuestModule :  ~
   synapseWeb: ~
   umsGuardianAuthorizationApi: ~
   umsGuardianManagementApi: ~
