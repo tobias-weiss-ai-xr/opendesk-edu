@@ -165,8 +165,8 @@ appsuite:
           type: "RuntimeDefault"
         seLinuxOptions:
           {{ .Values.seLinuxOptions.openxchangeGotenberg | toYaml | nindent 10 }}
-        serviceAccount:
-          create: false
+      serviceAccount:
+        create: false
     hooks:
       beforeAppsuiteStart:
         create-guard-dir.sh: |

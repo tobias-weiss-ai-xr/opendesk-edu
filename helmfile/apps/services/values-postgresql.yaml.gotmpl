@@ -29,9 +29,6 @@ podSecurityContext:
   fsGroup: 1001
   fsGroupChangePolicy: "OnRootMismatch"
 
-postgres:
-  user: "postgres"
-
 replicaCount: {{ .Values.replicas.postgres }}
 
 global:
@@ -90,9 +87,12 @@ persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
   size: {{ .Values.persistence.size.postgresql | quote }}
 
-podAnnotations: {}
+podAnnotations:
+  argocd.argoproj.io/hook: "PostSync"
+  argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
 
 postgres:
+  user: "postgres"
   password: {{ .Values.secrets.postgresql.postgresUser | quote }}
 
 resources:

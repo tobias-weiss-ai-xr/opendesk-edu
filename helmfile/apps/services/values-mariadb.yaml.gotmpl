@@ -73,7 +73,9 @@ persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
   size: {{ .Values.persistence.size.mariadb | quote }}
 
-podAnnotations: {}
+podAnnotations:
+  argocd.argoproj.io/hook: "PostSync"
+  argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
 
 podSecurityContext:
   enabled: true

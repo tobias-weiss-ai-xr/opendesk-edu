@@ -13,7 +13,6 @@ containerSecurityContext:
   capabilities:
     drop:
       - "ALL"
-  enabled: true
   runAsUser: 1000
   runAsGroup: 1000
   seccompProfile:
@@ -32,7 +31,7 @@ image:
 imagePullSecrets:
   {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
-podAnnotations:
+additionalAnnotations:
   argocd.argoproj.io/hook: "Sync"
   argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
 ...

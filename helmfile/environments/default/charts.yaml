@@ -132,7 +132,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-jitsi"
     name: "opendesk-jitsi"
-    version: "1.12.1"
+    version: "1.12.3"
     verify: true
   mariadb:
     # providerCategory: "Platform"
@@ -232,7 +232,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
     name: "opendesk-nextcloud"
-    version: "3.3.4"
+    version: "3.3.5"
     verify: true
   nextcloudManagement:
     # providerCategory: "Platform"
@@ -242,7 +242,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-nextcloud"
     name: "opendesk-nextcloud-management"
-    version: "3.3.4"
+    version: "3.3.5"
     verify: true
   nginx:
     # providerCategory: "Community"
@@ -296,7 +296,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-openproject-bootstrap"
     name: "opendesk-openproject-bootstrap"
-    version: "2.0.0"
+    version: "2.1.1"
     verify: true
   openXchangeAppSuite:
     # providerCategory: "Supplier"
@@ -318,7 +318,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap"
     name: "opendesk-open-xchange-bootstrap"
-    version: "2.1.0"
+    version: "2.1.2"
     verify: true
   otterize:
     # providerCategory: "Platform"
