@@ -188,6 +188,8 @@ s3:
 seederJob:
   annotations:
     intents.otterize.com/service-name: "openproject-seeder"
+    argocd.argoproj.io/hook: "Sync"
+    argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
   resources:
     {{ .Values.resources.openprojectSeederJob | toYaml | nindent 4 }}
 
