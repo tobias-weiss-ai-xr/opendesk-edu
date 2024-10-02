@@ -161,7 +161,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
-    tag: "1.3.10@sha256:8cdc1d497840bbf3a1d824969e471503b42b8d8fae0ad22c275947085fc3179a"
+    tag: "1.3.12@sha256:9f9b74970a26a52153c864ab2096449a413a6245679a67b113907c24c2917bce"
   milter:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
