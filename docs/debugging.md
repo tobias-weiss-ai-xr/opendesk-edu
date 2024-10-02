@@ -156,7 +156,7 @@ OpenProject is a Ruby on Rails application. Therefore you can make use of the Ra
 and run debug code like this:
 
 ```
-uri = URI('https://nextcloud.url/index.php/apps/integration_openproject/check-config')
+uri = URI('https://nextcloud.url/apps/integration_openproject/check-config')
 Net::HTTP.start(uri.host, uri.port,
   :use_ssl => uri.scheme == 'https') do |http|
   request = Net::HTTP::Get.new uri
