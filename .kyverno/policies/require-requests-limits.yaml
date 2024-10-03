@@ -27,6 +27,20 @@ spec:
         message: "CPU and memory resource requests and limits are required."
         pattern:
           spec:
+            =(ephemeralContainers):
+              - resources:
+                  limits:
+                    memory: "?*"
+                  requests:
+                    cpu: "?*"
+                    memory: "?*"
+            =(initContainers):
+              - resources:
+                  limits:
+                    memory: "?*"
+                  requests:
+                    cpu: "?*"
+                    memory: "?*"
             containers:
               - resources:
                   limits:
