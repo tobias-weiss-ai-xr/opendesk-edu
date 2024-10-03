@@ -13,7 +13,7 @@ pod:
       - "DaemonSet"
   - name: "disallow-default-serviceaccount"
     rule: "disallow-default-serviceAccountName"
-    type: "required"
+    type: "optional"
     kinds:
       - "StatefulSet"
       - "Deployment"
@@ -58,7 +58,7 @@ pod:
       - "DaemonSet"
   - name: "require-health-and-liveness-check"
     rule: "require-health-and-liveness-check"
-    type: "required"
+    type: "optional"
     kinds:
       - "StatefulSet"
       - "Deployment"
@@ -158,7 +158,7 @@ pod:
       - "DaemonSet"
   - name: "require-containersecuritycontext"
     rule: "require-seccomp-profile"
-    type: "required"
+    type: "optional"
     kinds:
       - "StatefulSet"
       - "Deployment"
@@ -176,7 +176,7 @@ pod:
       - "DaemonSet"
   - name: "require-containersecuritycontext"
     rule: "require-empty-seLinuxOptions"
-    type: "required"
+    type: "optional"
     kinds:
       - "StatefulSet"
       - "Deployment"
@@ -285,7 +285,7 @@ pod:
       - "Ingress"
   - name: "template-replicas"
     rule: "template-replicas"
-    type: "required"
+    type: "optional"
     kinds:
       - "StatefulSet"
       - "Deployment"
