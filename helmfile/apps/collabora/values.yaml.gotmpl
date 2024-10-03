@@ -8,7 +8,13 @@ autoscaling:
   enabled: false
 
 collabora:
-  extra_params: "--o:ssl.enable=false --o:ssl.termination=true --o:fetch_update_check=0 --o:remote_font_config.url=https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/apps/richdocuments/settings/fonts.json"
+  extra_params: >
+    --o:ssl.enable=false
+    --o:ssl.termination=true
+    --o:fetch_update_check=0
+    --o:remote_font_config.url=https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/apps/richdocuments/settings/fonts.json
+    --o:net.proto={{ if eq .Values.cluster.networking.ipFamilies "DualStack" }}all{{ else }}{{ .Values.cluster.networking.ipFamilies }}{{ end }}
+
   username: "collabora-internal-admin"
   password: {{ .Values.secrets.collabora.adminPassword | quote }}
   aliasgroups:
