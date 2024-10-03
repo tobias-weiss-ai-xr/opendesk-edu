@@ -29,6 +29,8 @@ cluster:
     # The IP/DNS of your load-balancer will be fetched for some components from 'status' map of services.
     # Most providers use '.status.loadBalancer.ingress[0].ip' to store public ip. You can modify the chosen field here.
     loadBalancerStatusField: "ip"
+    # Network protocol options: "IPv4", "IPv6", "DualStack"
+    ipFamilies: "DualStack"
 
   container:
     # Used container engine in kubernetes cluster.
