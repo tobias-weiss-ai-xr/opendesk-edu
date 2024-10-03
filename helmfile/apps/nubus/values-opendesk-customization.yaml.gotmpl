@@ -185,6 +185,33 @@ nubusUmcServer:
     runAsNonRoot: false
     seLinuxOptions:
       {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
+  containerSecurityContextSssd:
+    enabled: true
+    allowPrivilegeEscalation: true
+    capabilities:
+      drop:
+        - "ALL"
+      add:
+        - "DAC_OVERRIDE"
+        - "SETGID"
+        - "AUDIT_WRITE"
+        - "SETUID"
+        - "CHOWN"
+        - "SETPCAP"
+        - "FOWNER"
+        - "FSETID"
+        - "KILL"
+        - "MKNOD"
+        - "NET_BIND_SERVICE"
+        - "SYS_CHROOT"
+    runAsUser: 0
+    runAsGroup: 0
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   proxy:
