@@ -9,11 +9,11 @@ SPDX-License-Identifier: Apache-2.0
 * [Releases upgrades](#releases-upgrades)
   * [From v0.9.0](#from-v090)
     * [Changed openDesk defaults](#changed-opendesk-defaults)
+      * [Removal of unnecessary OX-Profiles in Nubus](#removal-of-unnecessary-ox-profiles-in-nubus)
       * [MatrixID localpart update](#matrixid-localpart-update)
       * [File-share configurability](#file-share-configurability)
       * [Updated default subdomains in `global.hosts`](#updated-default-subdomains-in-globalhosts)
       * [Updated `global.imagePullSecrets`](#updated-globalimagepullsecrets)
-      * [Removal of unnecessary OX-Profiles in Nubus](#removal-of-unnecessary-ox-profiles-in-nubus)
       * [Dedicated group for access of the UDM REST API](#dedicated-group-for-access-of-the-udm-rest-api)
     * [Automated migrations](#automated-migrations)
       * [Local Postfix as Relay](#local-postfix-as-relay)
@@ -41,6 +41,36 @@ Though we try to ease the pain when it comes to 0.x upgrades. That is what this 
 ## From v0.9.0
 
 ### Changed openDesk defaults
+
+
+#### Removal of unnecessary OX-Profiles in Nubus
+
+**Warning: If you do not address this section with your current deployment the upgrade will fail.**
+
+The update will remove unnecessary OX-Profiles in Nubus, but can't as long as these profiles are in use.
+
+So please ensure that only the following two supported profiles are assigned to your users:
+- `opendesk_standard`: "opendesk Standard"
+- `none`: "Login disabled"
+
+You can review and update other accounts as follows:
+- Login as IAM admin.
+- Open the user module.
+- Open the extended search by clicking the funnel (Trichter) icon next to the search input field.
+- Open the "Property" (Eigenschaft) list and select "OX Access" (OX-Berechtigung).
+- In the input field right next to the list enter an asterisk (*).
+- Start the search by clicking once more on the funnel icon.
+- Sort the result list for the "OX Access" column
+- Edit every user that has a value different to `opendesk_standard` or `none`:
+  - Open the user.
+  - Go to section "OX App Suite".
+  - Change the value in the dropdown "OX Access" to either:
+    - "openDesk Standard" if the user should be able to use the Groupware module or
+    - "Login disabled" if the user should not user the Groupware module.
+    - Update the user account with the green "SAVE" button on top of the page.
+
+Please check the "OX Access" setting of the user `Administrator` explicitly as that user is likely not to
+show up in the search described above.
 
 #### MatrixID localpart update
 
@@ -164,30 +194,6 @@ global:
   imagePullSecrets:
     - "external-registry"
 ```
-
-#### Removal of unnecessary OX-Profiles in Nubus
-
-The update will remove unnecessary OX-Profiles in Nubus, but can't as long as these profiles are in use.
-
-So please ensure that only the following two supported profiles are assigned to your users:
-- `opendesk_standard`: "opendesk Standard"
-- `none`: "Login disabled"
-
-You can check and update the profiles as follows:
-- Login as IAM admin.
-- Open the user module.
-- Open the extended search by clicking the funnel (Trichter) icon next to the search input field.
-- Open the "Property" (Eigenschaft) list and select "OX Access" (OX-Berechtigung).
-- In the input field right next to the list enter an asterisk (*).
-- Start the search by clicking once more on the funnel icon.
-- Sort the result list for the "OX Access" column
-- Edit every user that has a value different to `opendesk_standard` or `none`:
-  - Open the user.
-  - Go to section "OX App Suite".
-  - Change the value in the dropdown "OX Access" to either:
-    - "openDesk Standard" if the user should be able to use the Groupware module or
-    - "Login disabled" if the user should not user the Groupware module.
-    - Update the user account with the green "SAVE" button on top of the page.
 
 #### Dedicated group for access of the UDM REST API
 
