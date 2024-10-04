@@ -466,6 +466,8 @@ nubusStackDataUms:
       - 'cn=managed-by-attribute-Learnmanagement,cn=groups,{{ .Values.ldap.baseDn }}'
     portaltileGroupLiveCollaboration:
       - 'cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupVideoconference:
+      - 'cn=managed-by-attribute-Videoconference,cn=groups,{{ .Values.ldap.baseDn }}'
     systemInformation:
       releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
       {{- if .Values.functional.admin.portal.deploymentTimestamp.enabled }}
