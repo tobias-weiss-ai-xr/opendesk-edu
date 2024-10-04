@@ -9,6 +9,7 @@ SPDX-License-Identifier: Apache-2.0
 
 The following enhanced configuration use cases are described in separate documents.
 
-- [Separate mail & Matrix domain](enhanced-configuration/separate-mail-matrix-domain.md)
-- [Federation with external identity provider](enhanced-configuration/idp-federation.md)
-- [Matrix federation](enhanced-configuration/matrix-federation.md)
+- [Separate mail & Matrix domain](./enhanced-configuration/separate-mail-matrix-domain.md)
+- [Federation with external identity provider](./enhanced-configuration/idp-federation.md)
+- [Matrix federation](./enhanced-configuration/matrix-federation.md)
+- [Groupware migration from M365 to openDesk](./enhanced-configuration/groupware-migration.md)

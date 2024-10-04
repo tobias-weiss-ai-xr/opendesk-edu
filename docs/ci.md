@@ -17,27 +17,22 @@ The project includes a `.gitlab-ci.yml` that allows you to execute the deploymen
 
 When starting the pipeline through the GitLab UI, you will be queried for some variables plus the following ones:
 
-- `DOMAIN`: Primary domain for your deployment making the openDesk services available e.g. as `https://portal.DOMAIN`.
-- `MAIL_DOMAIN`: (optional) Domain for the users mail addresses, defaults to `DOMAIN`.
-- `MATRIX_DOMAIN`: (optional) Domain for the users Matrix IDs, defaults to `DOMAIN`.
-- `NAMESPACE`: Namespace of your K8s cluster openDesk will be installed to.
+- `DOMAIN`: The primary domain for your deployment, making the openDesk services available, e.g., as `https://portal.DOMAIN`.
+- `MAIL_DOMAIN` (optional): The domain for the users' email addresses; it defaults to `DOMAIN`.
+- `MATRIX_DOMAIN` (optional): The domain for the users' Matrix IDs; it defaults to `DOMAIN`.
+- `NAMESPACE`: Namespace of your K8s cluster openDesk will be installed.
 - `MASTER_PASSWORD_WEB_VAR`: Overwrites value of `MASTER_PASSWORD`.
-
-Based on your input, the following variables will be set:
-- `MASTER_PASSWORD:`: `MASTER_PASSWORD_WEB_VAR`. If `MASTER_PASSWORD_WEB_VAR`
-  is not set, the default for `MASTER_PASSWORD` will be used, unless you set
-  `MASTER_PASSWORD` as a masked CI/CD variable in GitLab to supersede the default.
 
 You might want to set credential variables in the GitLab project at `Settings` > `CI/CD` > `Variables`.
 
 # Tests
 
 The GitLab CI pipeline contains a job named `run-tests` that can trigger a test suite pipeline on another GitLab project.
-In order for the trigger to work, the variable `TESTS_PROJECT_URL` has to be set on this GitLab project's CI variables
-that can be found at `Settings` -> `CI/CD` -> `Variables`. The variable should have this format:
+For the trigger to work, the variable `TESTS_PROJECT_URL` has to be set on this GitLab project's CI variables,
+which can be found at `Settings` -> `CI/CD` -> `Variables`. The variable should have this format:
 `<domain of gitlab>/api/v4/projects/<id>`.
-To select the current testset, use the variable `TESTS_TESTSET`. Default: `Smoke`.
-If the branch of the test pipeline is not `main` this can be set with the `.gitlab-ci.yml` variable
+To select the current test set, use the variable `TESTS_TESTSET`. Default: `Smoke`.
+If the branch of the test pipeline is not `main`, this can be set with the `.gitlab-ci.yml` variable
 `TESTS_BRANCH` while creating a new pipeline.
 
-The variable `testprofile` within the job is set to `Namespace`, which tells the e2e tests to use environment specific settings that will be read from the cluster and namespace specific file in the opendesk-env repository.
+The variable `testprofile` within the job is set to `Namespace`, which tells the e2e tests to use environment-specific settings that will be read from the cluster and namespace-specific file to be found in the project internal `opendesk-env` repository.

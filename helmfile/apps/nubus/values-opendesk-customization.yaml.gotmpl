@@ -452,10 +452,12 @@ nubusPortalFrontend:
     {{ .Values.resources.umsPortalFrontend | toYaml | nindent 4 }}
   portalFrontend:
     branding:
-      css: {{ .Values.theme.imagery.portalCss | toJson }}
+      css: {{ .Values.theme.styles.portalCss | toJson }}
+      # Requires .ico, .svg does not work.
       favicon: {{ .Values.theme.imagery.faviconIcoB64 | toJson }}
-      logo: {{ .Values.theme.imagery.logoHeaderSvgB64 | toJson }}
-      backgroundImage: {{ .Values.theme.imagery.logoPortalBackgroundSvgB64 | toJson }}
+      # The actual `logo` is set in customizing image, the logo down here is for for waiting spinner.
+      logo: {{ .Values.theme.imagery.portalWaitingSpinnerSvgB64 | toJson }}
+      backgroundImage: {{ .Values.theme.imagery.portalLogoBackgroundSvgB64 | toJson }}
 
 nubusStackDataUms:
   containerSecurityContext:

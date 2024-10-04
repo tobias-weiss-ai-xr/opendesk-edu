@@ -28,7 +28,6 @@ config:
       {{ .Values.functional.authentication.oidc.clients | toYaml | nindent 6 }}
   managed:
     clientScopes: [ 'acr', 'web-origins', 'email', 'profile', 'microprofile-jwt', 'role_list', 'offline_access', 'roles', 'address', 'phone' ]
-    # 'guardian-management-api', 'guardian-scripts', 'guardian-ui' clients have been added explicitly for the moment (see further down this file)
     clients: [ 'opendesk-intercom', 'guardian-management-api', 'guardian-scripts', 'guardian-ui', 'UMC', '${client_account}', '${client_account-console}', '${client_admin-cli}', '${client_broker}', '${client_realm-management}', '${client_security-admin-console}' ]
   keycloak:
     adminUser: "kcadmin"
@@ -424,22 +423,6 @@ config:
           post.logout.redirect.uris: "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
         defaultClientScopes:
           - "opendesk-matrix-scope"
-      # The following is a temporary OIDC client for matrix, as the OIDC logout still uses "matrix" as client ID.
-      # Unless that is solved and also is able to use "opendesk-matrix" we keep that dummy client that
-      - name: "matrix"
-        clientId: "matrix"
-        protocol: "openid-connect"
-        clientAuthenticatorType: "client-secret"
-        standardFlowEnabled: true
-        directAccessGrantsEnabled: true
-        consentRequired: false
-        frontchannelLogout: false
-        publicClient: false
-        authorizationServicesEnabled: false
-        attributes:
-          post.logout.redirect.uris: "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
-        defaultClientScopes: []
-        optionalClientScopes: []
       - name: "opendesk-nextcloud"
         clientId: "opendesk-nextcloud"
         protocol: "openid-connect"
