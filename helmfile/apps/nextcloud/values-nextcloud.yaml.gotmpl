@@ -89,7 +89,7 @@ aio:
     loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nextcloud.registry | quote }}
-    repository: "{{ .Values.images.nextcloud.repository }}"
+    repository: {{ .Values.images.nextcloud.repository | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloud.tag | quote }}
   ingress:

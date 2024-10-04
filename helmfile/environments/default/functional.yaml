@@ -88,14 +88,14 @@ functional:
   chat:
     matrix:
       profile:
-        # Once connected with a user that user's MatrixID is rarely checked by their communication partners, as the
+        # Once connected with a user that user's Matrix ID is rarely checked by their communication partners, as the
         # display name is used to see whom they are communicating with. Not allowing users to change their
         # own display name reduces the risk of identity fraud.
         # To get the display name updated from the central identity and access management you have to have the Synapse
         # enterprise feature "groupsync" configured.
         allowUsersToUpdateDisplayname: true
 
-        # If the LDAP entryUUID should be used for the localpart of user's MatrixIDs following setting must be `true`.
+        # If the LDAP entryUUID should be used for the localpart of user's Matrix IDs following setting must be `true`.
         useImmutableIdentifierForLocalpart: false
 
   migration:

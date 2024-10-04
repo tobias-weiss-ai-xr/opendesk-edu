@@ -6,20 +6,20 @@ SPDX-License-Identifier: Apache-2.0
 <h1>Matrix federation</h1>
 
 <!-- TOC -->
-* [Use case](#use-case)
+* [Context](#context)
 * [Example configuration](#example-configuration)
   * [Disable federation](#disable-federation)
   * [Separate Matrix domain](#separate-matrix-domain)
 <!-- TOC -->
 
-# Use case
+# Context
 
 The Element chat application and its server component Synapse are based on the Matrix protocol,
 that supports federation with other Matrix servers to communicate with the users with accounts on these servers.
 
-By default, you can chat with users that have an account within your openDesk installation and federate with other
+By default, you can chat with users who have an account within your openDesk installation and federate with other
 matrix-based servers.
-Federation support can be disabled.
+Federation support can be turned off.
 
 # Example configuration
 
@@ -28,36 +28,35 @@ Please ensure when you come across such a value,
 even if it is part of a URL hostname or path, that you adapt it where needed to your setup:
 
 - `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in
-`https://chat.opendesk.domain.tld` to access the Element chat.
+`https://chat.opendesk.domain.tld` for access to the Element chat.
 - `my_organization.tld`: an optional alternative domain used for mail and/or Matrix.
-If not used it is also set to `opendesk.domain.tld`.
+It is also set to `opendesk.domain.tld` if not used.
 
 ## Disable federation
 
-The following setting can disable federation:
+The following setting can turn off federation:
 
 ```yaml
 functional:
-  externalServices:
-    matrix:
-      federation:
-        enabled: false
+  externalServices:
+    matrix:
+      federation:
+        enabled: false
 ```
 
 ## Separate Matrix domain
 
 If you want to federate with other Matrix instances and use a separate Matrix domain, you need to provide a JSON file on
-the Matrix domain to use delegation.
-This is not included inside openDesk.
+the Matrix domain to use delegation. It is not part of your openDesk deployment.
 
 Domain path: `https://my_organization.tld/.well-known/matrix/server`
 
 Content:
 ```JSON
 {
-    "m.server": "matrix-federation.opendesk.domain.tld:443"
+    "m.server": "matrix-federation.opendesk.domain.tld:443"
 }
 ```
 
 More detailed information can be found in Matrix/Synapse documentation:
-[Matrix Delegation](https://matrix-org.github.io/synapse/v1.98/delegate.html)
+[Matrix Delegation](https://element-hq.github.io/synapse/latest/delegate.html)

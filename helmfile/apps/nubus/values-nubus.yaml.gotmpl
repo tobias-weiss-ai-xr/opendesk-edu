@@ -125,8 +125,8 @@ global:
         show: "false"
       login:
         password-complexity-message:
-          de: "Das Passwort muss den folgenden Anforderungen entsprechen:<br><ul><li>Mindestlänge: 8 Zeichen</li></ul>Anmerkung: Wird befinden uns nicht in einer Produktivumgebung."
-          en: "Password must comply with the following rules:<br><ul><li>Minimum length: 8 characters</li></ul>Note: We are in a non production (dev/test/demo) system."
+          de: "Das Passwort muss mindestens 8 Zeichen lang sein und darf keine Zahlenabfolge oder ganze Worte enthalten, wie  '1234Test'."
+          en: "Password must be at least 8 characters long and cannot include a number series or regular words, like '1234Test'."
       module:
         udm:
           oxmail:
@@ -368,7 +368,7 @@ nubusStackDataUms:
     # creates the default.user and default.admin
     loadDevData: true
     portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
-    portalTiles: {{ toYaml .Values.theme.portalTiles | nindent 6 }}
+    portalTiles: {{ toYaml .Values.theme.imagery.portalTiles | nindent 6 }}
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
     portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
     portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain }}

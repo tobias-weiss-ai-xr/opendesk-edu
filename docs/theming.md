@@ -5,53 +5,26 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Theming</h1>
 
-This document will cover the theming and customization of your openDesk deployment.
+This document will cover the theming options for an openDesk deployment.
 
 <!-- TOC -->
-* [Strings and texts](#strings-and-texts)
-* [Colors](#colors)
-  * [Images and Logos](#images-and-logos)
-* [Known limits](#known-limits)
+* [Settings](#settings)
+* [Known limitations](#known-limitations)
 <!-- TOC -->
 
-# Strings and texts
+# Settings
 
-The deployment name can be changed by:
+All default settings can be found in the [`theme.gotmpl`](../helmfile/environments/default/theme.gotmpl). Most of the components adhere to these settings.
 
-```yaml
-theme:
-  texts:
-    productName: "openDesk Cloud"
-```
+Please review the default configuration that is applied to understand your customization options.
 
-# Colors
+You can just update the files in:
+- [helmfile/files/theme](../helmfile/files/theme): To change logos, favicons etc.
+- [helmfile/files/portal-tiles](../helmfile/files/portal-tiles): To change the icons in the portal.
 
-The primary color and their derives with lesser opacity be customized by:
-
-```yaml
-theme:
-  colors:
-    primary: "#5e27dd"
-    primary65: "#9673e9"
-    primary35: "#c7b3f3"
-    primary15: "#e7dffa"
-```
-
-## Images and Logos
-
-You can customize the logo and favicon by providing SVG or icon as inline value:
-
-```yaml
-theme:
-  imagery:
-    logoHeaderSvg: '<?xml version="1.0" encoding="UTF-8"?>...</svg>'
-    logoHeaderSvgWhite: '<?xml version="1.0" encoding="UTF-8"?>...</svg>'
-    logoPortalBackgroundSvg: '<?xml version="1.0" encoding="UTF-8"?>...</svg>'
-    faviconIco: "..."
-```
-
-# Known limits
+# Known limitations
 
 Not all applications support theming. Known exceptions are:
-  - OpenProject
-  - Jitsi
+- OpenProject, comes with a build in openDesk theming that can be modified in the Enterprise version's OpenProject web interface.
+- The portal background logo can (currently) only be set on initial deployment.
+- Portal and Keycloak screen styles must be applied in the [`portalStylesheets.css`](../helmfile/files/theme/portalStylesheet.css).

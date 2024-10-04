@@ -211,7 +211,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-migrations"
-    tag: "1.3.16@sha256:663c4038831d814f67153d73255d2663bb7130680f9b2b9c125b4aca115ec25f"
+    tag: "1.3.18@sha256:d7f13322cc9cc7ab157f926280070850b0dfc6169c93a306ec4c3cf7c21eff69"
   milter:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -403,7 +403,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
-    tag: "1.7.0@sha256:be8d1ec76e0d87a96fd08cf18fcec4afef2a5388567da866c482da6cf2c594ab"
+    tag: "1.7.4@sha256:23976c92c1b9f366b04e5e17fb52912b624720e3a97f5fee0da43afe75a6645e"
   nubusOpenPolicyAgent:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -449,11 +449,9 @@ images:
     # providerResponsible: "Univention"
     # upstreamRegistry: "https://artifacts.software-univention.de"
     # upstreamRepository: "nubus/images/portal-frontend"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend"
-    tag: "0.42.2@sha256:0339694a2b1a657a77bef2a65c85270cfec9c08e965550695b18c2360440cb65"
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus-portal-update"
+    tag: "1.8.0@sha256:5ae4d38d67aab0678e227d45737a4113382015225ef317dde1fbe8574689449e"
   nubusPortalServer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
