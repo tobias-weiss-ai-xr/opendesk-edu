@@ -429,11 +429,8 @@ env-stop:
 
 .ums-default-password: &ums-default-password
   - |
-    DEFAULT_USER_PASSWORD=$( \
-       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.user_password}' | base64 -d \
-    )
-    DEFAULT_ADMIN_PASSWORD=$(
-       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.admin_password}' | base64 -d \
+    DEFAULT_ADMINISTRATOR_PASSWORD=$(
+       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.administrator_password}' | base64 -d \
     )
 
 run-tests:
@@ -464,10 +461,8 @@ run-tests:
           \"namespace\": \"${NAMESPACE}\", \
           \"url\": \"https://portal.${DOMAIN}/\", \
           \"language\": \"${LANGUAGE}\", \
-          \"user_name\": \"${DEFAULT_USER_NAME}\", \
-          \"user_password\": \"${DEFAULT_USER_PASSWORD}\", \
-          \"admin_name\": \"${DEFAULT_ADMIN_NAME}\", \
-          \"admin_password\": \"${DEFAULT_ADMIN_PASSWORD}\", \
+          \"udm_api_username\": \"Administrator\", \
+          \"udm_api_password\": \"${DEFAULT_ADMINISTRATOR_PASSWORD}\", \
           \"screenshot_test\": \"yes\", \
           \"screenshot_before_step\": \"yes\", \
           \"screenshot_after_step\": \"yes\", \
