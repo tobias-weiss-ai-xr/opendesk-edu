@@ -13,7 +13,8 @@ replicas:
   # -- comment: clamav-distributed - requires `ReadWriteMany` PVCs.
   clamd: 1
   # -- scalable: true
-  # -- comment: clamav-distributed - You do not want to scale this service, as it just updates the signature files centrally an should be a singleton.
+  # -- comment: clamav-distributed - You do not want to scale this service, as it just updates the signature files
+  # centrally an should be a singleton.
   freshclam: 1
   # -- scalable: true
   # -- comment: clamav-distributed - requires `ReadWriteMany` PVCs.

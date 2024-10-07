@@ -430,7 +430,10 @@ env-stop:
 .ums-default-password: &ums-default-password
   - |
     DEFAULT_ADMINISTRATOR_PASSWORD=$(
-       kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.administrator_password}' | base64 -d \
+       kubectl \
+         -n ${NAMESPACE} \
+         get secret ums-nubus-credentials \
+         -o jsonpath='{.data.administrator_password}' | base64 -d \
     )
 
 run-tests:
