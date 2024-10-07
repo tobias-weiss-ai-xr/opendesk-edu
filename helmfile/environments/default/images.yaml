@@ -235,7 +235,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud"
-    tag: "2.2.0@sha256:a7ba27a7a8df4afae1937898ae64dbae6181629295bcb6b9bbd39fd9b8c25903"
+    tag: "2.2.1@sha256:81d434d48e562fde6c33ad865970e342a41e3edf5f55c1219623939945ab4478"
   nextcloudExporter:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
