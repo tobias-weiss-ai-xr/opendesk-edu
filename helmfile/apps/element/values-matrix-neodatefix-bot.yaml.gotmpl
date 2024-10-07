@@ -14,16 +14,16 @@ global:
 configuration:
   bot:
     username: "meetings-bot"
-    display name: "Scheduler Bot"
+    display name: "Terminplaner Bot"
   openxchangeBaseUrl: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
   strings:
-    breakoutSessionWidgetName: "Breakout Sessions"
-    calendarRoomName: "Scheduler"
-    calendarWidgetName: "Scheduler"
-    cockpitWidgetName: "Meeting control"
-    jitsiWidgetName: "Video conference"
+    breakoutSessionWidgetName: "Breakoutsessions"
+    calendarRoomName: "Terminplaner"
+    calendarWidgetName: "Terminplaner"
+    cockpitWidgetName: "Meeting Steuerung"
+    jitsiWidgetName: "Videokonferenz"
     matrixNeoBoardWidgetName: "Whiteboard"
-    matrixNeoChoiceWidgetName: "Votes"
+    matrixNeoChoiceWidgetName: "Abstimmungen"
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
