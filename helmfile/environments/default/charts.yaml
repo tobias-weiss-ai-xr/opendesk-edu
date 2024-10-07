@@ -264,7 +264,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "nubus"
-    version: "0.62.2"
+    version: "0.63.2"
     verify: true
   opendeskKeycloakBootstrap:
     # providerCategory: "Platform"
