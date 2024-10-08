@@ -69,9 +69,6 @@ You can review and update other accounts as follows:
     - "Login disabled" if the user should not user the Groupware module.
     - Update the user account with the green "SAVE" button on top of the page.
 
-Please check the "OX Access" setting of the user `Administrator` explicitly as that user is likely not to
-show up in the search described above.
-
 #### MatrixID localpart update
 
 Until 0.9.0 openDesk used the LDAP entryUUID of a user to generate the user's MatrixID. Due to restrictions of the
