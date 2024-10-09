@@ -79,7 +79,7 @@ images:
     # upstreamMirrorStartFrom: ["2", "1", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/intercom-service"
-    tag: "2.2.0@sha256:6e02a3b06827d8f23615ea43ed87f510018b8ecf77b2a8404b1554077b1bdc6b"
+    tag: "2.4.0@sha256:df743b7ea30077dc941815ccc60198820d67bbba94853fa7a6f939c0f36af335"
   jibri:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"

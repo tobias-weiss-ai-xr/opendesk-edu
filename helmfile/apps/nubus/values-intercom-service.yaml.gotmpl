@@ -31,6 +31,7 @@ ics:
   secret: {{ .Values.secrets.intercom.secret | quote }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   originRegex: "{{ .Values.global.domain }}"
+  userUniqueMapper: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"entryuuid"{{ else }}"phoenixusername"{{ end }}
   keycloak:
     realm: {{ .Values.platform.realm | quote }}
   default:
