@@ -122,7 +122,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "intercom-service"
-    version: "2.2.0"
+    version: "2.4.0"
     verify: true
   jitsi:
     # providerCategory: "Platform"
