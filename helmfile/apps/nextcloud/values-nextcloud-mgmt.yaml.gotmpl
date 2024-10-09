@@ -18,8 +18,10 @@ cleanup:
 
 configuration:
   administrator:
-    username: "nextcloud"
-    password: {{ .Values.secrets.nextcloud.adminPassword | quote }}
+    username:
+      value: "nextcloud"
+    password:
+      value: {{ .Values.secrets.nextcloud.adminPassword | quote }}
   antivirus:
     {{- if .Values.clamavDistributed.enabled }}
     host: "clamav-icap"
@@ -48,7 +50,8 @@ configuration:
         value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
   ldap:
     host: {{ .Values.ldap.host | quote }}
-    password: {{ .Values.secrets.nubus.ldapSearch.nextcloud | quote }}
+    password:
+      value: {{ .Values.secrets.nubus.ldapSearch.nextcloud | quote }}
     adminGroupName: "managed-by-attribute-FileshareAdmin"
   objectstore:
     auth:
