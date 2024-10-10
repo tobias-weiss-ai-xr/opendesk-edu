@@ -239,66 +239,6 @@ nubusPortalFrontend:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName }}
 
-    # TODO: Remove the block "items" once the "redirects" section has been
-    # corrected.
-    #
-    # This does override the path configuration of the ingress
-    # "ums-portal-frontend-redirects" to avoid that "/univention/*" is
-    # redirected to "/univention/portal/".
-    items:
-      - name: rewrites
-        # -- Define the Fully Qualified Domain Name (FQDN) where application should be reachable.
-        host: ""
-
-        # -- Define the Ingress paths.
-        paths:
-          - path: /univention/(portal|selfservice)/
-            pathType: ImplementationSpecific
-          - path: /univention/(portal|selfservice)/index.html
-            pathType: ImplementationSpecific
-          - path: /univention/(portal|selfservice)/(css|fonts|i18n|media|js|oidc|custom)(/.*)
-            pathType: ImplementationSpecific
-          - path: /univention/(portal)/(icons)(/.*)$
-            pathType: ImplementationSpecific
-
-        # -- The Ingress controller class name.
-        ingressClassName: ""
-
-        # -- Define custom ingress annotations.
-        # annotations:
-        #   nginx.ingress.kubernetes.io/rewrite-target: /
-        annotations:
-          nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
-          nginx.ingress.kubernetes.io/use-regex: "true"
-
-        # -- Secure an Ingress by specifying a Secret that contains a TLS private key and certificate.
-        #
-        # Ref.: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-        tls:
-          # enabled: true
-          # Set to override the global secretName
-          secretName: ""
-      - name: redirects
-        host: ""
-        paths:
-          - pathType: Exact
-            path: /$
-          - pathType: Exact
-            path: /univention$
-          - pathType: Exact
-            path: /univention/$
-          - pathType: Exact
-            path: /univention/portal$
-          - pathType: Exact
-            path: /univention/selfservice$
-        ingressClassName: ""
-        annotations:
-          nginx.ingress.kubernetes.io/permanent-redirect: "/univention/portal/"
-        tls:
-          # enabled: true
-          # Set to override the global secretName
-          secretName: ""
-
 nubusKeycloakExtensions:
   keycloak:
     auth:
@@ -520,15 +460,6 @@ nubusUmcGateway:
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
-
-    # TODO: Remove the block "paths" once it has been corrected upstream.
-    paths:
-        - path: /()(univention/)(languages.json|meta.json|theme.css)
-          pathType: ImplementationSpecific
-        - path: /()(univention/)((js|management|themes)/.*)
-          pathType: ImplementationSpecific
-        - path: /()(univention/login/)(dialog.js|main.js|LoginDialog.js|i18n/.*?/main.json)
-          pathType: ImplementationSpecific
 
 nubusKeycloakBootstrap:
   additionalAnnotations:
