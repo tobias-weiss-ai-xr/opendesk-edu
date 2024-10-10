@@ -88,6 +88,8 @@ customConfigs:
     workplaceServices.base: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
     workplaceServices.portalSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
     openoffice.serverType: "0"
+    openoffice.autoStart: "false"
+    openoffice.homePath: "/tmp"
     notifications.emails.live.graceTime: "5"
 
 ingress:
