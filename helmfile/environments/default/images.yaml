@@ -253,7 +253,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "41", "5"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/data-loader"
-    tag: "0.70.0@sha256:d1d916f11d3b035eb95b46fbc3da2f9c797f89d3f3ac56b9ab1c89482413bac6"
+    tag: "0.73.0@sha256:9babbdd0879aed7da928bf5034bf5f311511a8d07c242d2b10d067cc5dc0fd41"
   nubusGuardianAuthorizationApi:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -395,7 +395,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/notifications-api"
-    tag: "0.41.0@sha256:2cc3c6fba7199f2747b7da4ae43b0faeeaf623411dbe16d702e454e8bfdd92ef"
+    tag: "0.42.2@sha256:ff744b2d5388bfc413a4d25108f37ba086d2a08cb14ceb02d17e93de003a1078"
   nubusOpendeskExtension:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -433,7 +433,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "27", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-consumer"
-    tag: "0.41.0@sha256:7e722ea44e46985b0831c59a8eb1d404e9a671f6cccf1737502b286225fb68c9"
+    tag: "0.42.2@sha256:5afee47e4d3d5f8bf51ffca66578a98318f49ee41e8f4b306cb75826b66a1804"
   nubusPortalExtension:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -453,7 +453,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-frontend"
-    tag: "0.41.0@sha256:37e9603aab4868c7a31405c9a1c5b6012e12db09164e4abed78cc4cfca4c01de"
+    tag: "0.42.2@sha256:0339694a2b1a657a77bef2a65c85270cfec9c08e965550695b18c2360440cb65"
   nubusPortalServer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -463,7 +463,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "9", "4"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/portal-server"
-    tag: "0.41.0@sha256:b55a6baa433410e600fc5742e084ee1617e3875e6f9fd2c16e0397e8776ca86f"
+    tag: "0.42.2@sha256:00b45c354c421ad6bc0ee046444cc0a2caf633787c770cad60e7c06c4307a248"
   nubusProvisioningDispatcher:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -523,7 +523,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "3", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/selfservice-invitation"
-    tag: "0.11.2@sha256:f6c6c9bbfca8ea6568b7b5f09a5bf64f76a7d9a9b55e18981f9e8635ff103bb0"
+    tag: "0.11.3@sha256:cd51246ae9436426bd7ee12bc85466cafc18a43ba05ab3ede35dfcf3a012656f"
   nubusUdmRestApi:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -533,7 +533,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "9", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/udm-rest-api"
-    tag: "0.24.0@sha256:113251d8052f69ac0c7af721954d1711231ca72de1ce6565bb86cdadf53a0ad9"
+    tag: "0.25.1@sha256:0078b16ecf5539e6f3c7e6d5a7ddb57937d3d2d143754fbd6d439a3a8741abe8"
   nubusUmcGateway:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -543,7 +543,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "7", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-gateway"
-    tag: "0.32.0@sha256:d47716784ea86659ef93b1e79b0edd72a69d5e8169704accaf6213f01d4e395e"
+    tag: "0.34.1@sha256:ab4ffccc182bae115dc8f264c051f1c23102b1416ac00709d95285218829ce39"
   nubusUmcServer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -553,7 +553,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "7", "3"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/umc-server"
-    tag: "0.34.0@sha256:dc2d2673f6ff3a901c1198606c624cf6abc2d869cd93c6299e641114853ede7e"
+    tag: "0.34.1@sha256:4addb518b7b622f0e82dbdde30bbb8d8da6cc197528268d2ad856635f3bbe64a"
   nubusUmcServerProxy:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
