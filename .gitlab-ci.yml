@@ -506,7 +506,7 @@ avscan-prepare:
           - "freshclam"
           - "mkdir /scan"
         script:
-          - "export IMAGE=${EXTERNAL_REGISTRY:-${CONTAINER_REGISTRY}}/${CONTAINER_IMAGE}:${CONTAINER_TAG}"
+          - "export IMAGE=${AV_SCAN_PROXY:-${CONTAINER_REGISTRY}}/${CONTAINER_IMAGE}:${CONTAINER_TAG}"
           - "echo Pulling and scanning $IMAGE..."
           - "crane pull $IMAGE /scan/image.tar"
           - "clamscan /scan"
@@ -514,7 +514,7 @@ avscan-prepare:
           CONTAINER_IMAGE: ""
           CONTAINER_REGISTRY: ""
           CONTAINER_TAG: ""
-          DATABASE_MIRROR: "https://nexus.souvap-univention.de/repository/ClamAV"
+          DATABASE_MIRROR: "https://registry.open-de.sk/repository/clamavdb.c3sl.ufpr.br"
       EOF
     - >
       yq '.images
