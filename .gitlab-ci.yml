@@ -553,7 +553,7 @@ avscan-start:
 
 # Overwrite shared settings
 .common-semantic-release:
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release-patched:latest"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release:1.1.0"
   tags: []
 
 conventional-commits-linter:
