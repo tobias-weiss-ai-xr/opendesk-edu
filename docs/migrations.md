@@ -3,20 +3,23 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Upgrade migrations</h1>
+<h1>Updates & Upgrades</h1>
 
 * [Disclaimer](#disclaimer)
-* [Releases upgrades](#releases-upgrades)
+* [openDesk supported upgrade path](#opendesk-supported-upgrade-path)
+* [Releases upgrade details](#releases-upgrade-details)
   * [From v0.9.0](#from-v090)
-    * [Changed openDesk defaults](#changed-opendesk-defaults)
-      * [Removal of unnecessary OX-Profiles in Nubus](#removal-of-unnecessary-ox-profiles-in-nubus)
-      * [Matrix ID localpart update](#matrix-id-localpart-update)
-      * [File-share configurability](#file-share-configurability)
-      * [Updated default subdomains in `global.hosts`](#updated-default-subdomains-in-globalhosts)
-      * [Updated `global.imagePullSecrets`](#updated-globalimagepullsecrets)
-      * [Dedicated group for access to the UDM REST API](#dedicated-group-for-access-to-the-udm-rest-api)
+    * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
+      * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
+      * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
+      * [Changed openDesk defaults: Matrix ID](#changed-opendesk-defaults-matrix-id)
+      * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
+      * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
+      * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
     * [Automated migrations](#automated-migrations)
-      * [Manual cleanup](#manual-cleanup)
+    * [Post-upgrade: Manual steps](#post-upgrade-manual-steps)
+      * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
+      * [Optional Cleanup](#optional-cleanup)
   * [From v0.8.1](#from-v081)
     * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
     * [Updated customizable template attributes](#updated-customizable-template-attributes)
@@ -26,20 +29,39 @@ SPDX-License-Identifier: Apache-2.0
 
 # Disclaimer
 
-With openDesk 1.0, we aim to offer hassle-free updates. Though some situations may require manual interaction, these are described in this document.
+With openDesk 1.0, we aim to offer hassle-free updates/upgrades.
+
+But openDesk requires a defined upgrade path that is described in the section [openDesk supported upgrade path](#opendesk-supported-upgrade-path).
+
+Some upgrades even require manual interaction, which are referenced in the aforementioned section and described further down this document.
 
 > **Known limitations:**<br>
 > We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC was deleted; we will not address explicit deletion for PVs.
 
-# Releases upgrades
+# openDesk supported upgrade path
+
+When updating your openDesk installation you have to install the releases listed below in the sequential order from
+the lowest version number you are already on to the more current version you are looking to install.
+
+Explanation of the table's columns:
+- *Coming from*: Check the column for the release you are currently on.
+- *Mandatory release*: Defines which release(s) support the upgrade from your currently installed version.
+- *Automatic migration*: Summary of, or link to openDesk's automatic migration details.
+- *Manual activities*: Reference to required manual steps to upgrade your openDesk installation to the *Mandatory release*.
+
+| Coming from   | Mandatory (minimum) release | Automatic migration                                                                                                                                           | Manual activities             |
+| ------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| v0.9.0        | v1.x.x                      | [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_2.py) | See [From v0.9.0](#from-v090) |
+| v0.8.1        | v0.9.0                      | Initializes migration system                                                                                                                                  | See [From v0.8.1](#from-v081)     |
+| not supported | v0.8.1                      | First release that supporting updates                                                                                                                         |                               |
+
+# Releases upgrade details
 
 ## From v0.9.0
 
-Before openDesk 1.0, we faced significant changes in some components and the overall platform configuration. Therefore, please review the
+### Pre-upgrade: Manual steps
 
-### Changed openDesk defaults
-
-#### Removal of unnecessary OX-Profiles in Nubus
+#### Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus
 
 > **Warning**<br>
 > The upgrade will fail if you do not address this section for your current deployment.
@@ -66,7 +88,20 @@ You can review and update other accounts as follows:
     - "Login disabled" if the user should not use the Groupware module.
   - Update the user account with the green "SAVE" button at the top of the page.
 
-#### Matrix ID localpart update
+#### Configuration Cleanup: Updated `global.imagePullSecrets`
+
+Without using a custom registry, you can pull all the openDesk images without authentication.
+Thus defining not existing imagePullSecrets creates unnecessary errors, so we removed them.
+
+You can keep the current settings by setting the `external-registry` in your custom environment values:
+
+```yaml
+global:
+  imagePullSecrets:
+    - "external-registry"
+```
+
+#### Changed openDesk defaults: Matrix ID
 
 Until 0.9.0 openDesk used the LDAP entryUUID of a user to generate the user's Matrix ID. Due to restrictions on the
 Matrix protocol, an update of a Matrix ID is not possible; therefore, it was technically convenient to use the UUID
@@ -99,7 +134,7 @@ functional:
        useImmutableIdentifierForLocalpart: true
 ```
 
-#### File-share configurability
+#### Changed openDesk defaults: File-share configurability
 
 Now, we provide some configurability regarding the sharing capabilities of the Nextcloud component.
 
@@ -118,7 +153,7 @@ functional:
          activeByDefault: false
 ```
 
-#### Updated default subdomains in `global.hosts`
+#### Changed openDesk defaults: Updated default subdomains in `global.hosts`
 
 We have streamlined the subdomain names in openDesk to be more user-friendly and to avoid the use of specific
 product names.
@@ -174,20 +209,7 @@ In case you would like to update an existing deployment to the new hostnames, pl
   - In Nextcloud: *Administration* > *OpenProject* > *OpenProject server*
     - Update the *OpenProject host* to `projects.<your_domain>`
 
-#### Updated `global.imagePullSecrets`
-
-Without using a custom registry, you can pull all the openDesk images without authentication.
-Thus defining not existing imagePullSecrets creates unnecessary errors, so we removed them.
-
-You can keep the current settings by setting the `external-registry` in your custom environment values:
-
-```yaml
-global:
-  imagePullSecrets:
-    - "external-registry"
-```
-
-#### Dedicated group for access to the UDM REST API
+#### Changed openDesk defaults: Dedicated group for access to the UDM REST API
 
 Prerequisite: You allow the use of the [IAM's API](https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html)
 with the following settings:
@@ -216,7 +238,26 @@ The permissions required to execute the migrations can be found in the migration
 
 The actual actions are described as code comments in the related run module [`run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_2.py).
 
-#### Manual cleanup
+### Post-upgrade: Manual steps
+
+#### Configuration Improvement: Separate user permission for using Video Conference component
+
+With openDesk 1.0 the user permission for authenticated access to the Chat and Video Conference components was split into two separate permissions.
+
+Therefore the newly added *Video Conference* permission has to be added to users that should have continued access to the component.
+
+This can be done as IAM admin:
+- Open the *user* module.
+- Select all users that should get the permission for *Video Conference* using the select box left from the users entry.
+- In top bar of the user table click on *Edit*.
+- Select the *openDesk* section the the left-hand menu.
+- Check the check box for *Video Conference* and the directly below check box for *Overwrite*.
+- Click on the green *Save* button on top of the screen to apply the change.
+
+> **Hint**<br>
+> If you have a lot of users andd want to update (almost) all them, you can select all users by clicking the check box in the user's table header and then de-selecting the users you do not want to update.
+
+#### Optional Cleanup
 
 We do not execute possible cleanup steps as part of the migrations POST stage. So you might want to remove the no longer used PVCs after a successful upgrade:
 
