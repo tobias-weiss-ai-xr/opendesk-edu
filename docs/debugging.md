@@ -14,6 +14,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Nextcloud](#nextcloud)
   * [OpenProject](#openproject)
   * [PostgreSQL](#postgresql)
+  * [Keycloak](#keycloak)
 
 # Disclaimer
 
@@ -31,11 +32,16 @@ environments, you should use them thoughtfully and carefully if needed.
 
 # Enable debugging
 
-Set `debug.enable` to `true` in [`debug.yaml`](../helmfile/environments/default/debug.yaml) to set the
-component's log level to debug, and it gets some features like:
-- The `/admin` console is routed for Keycloak.
-- An ingress for `http://minio-console.<your_domain>` is configured.
-and set the log level for components to "Debug".
+Check the openDesk [`debug.yaml`](../helmfile/environments/default/debug.yaml) and set for your deployment
+```
+debug:
+  enable: true
+```
+
+This will result in:
+- setting most component's log level to debug
+- making the Keycloak admin console available by default at `https://id.<your_domain>/admin/`
+- configured the ingress for `http://minio-console.<your_domain>`
 
 > **Note**<br>
 > When enabling debug mode and updating your deployment, you must manually delete all jobs before updating. In debug mode, we keep the jobs, and some job fields are immutable, leading to a deployment failure.
@@ -176,3 +182,19 @@ While you will find all details in the [psql subsection](https://www.postgresql.
 - `\c <databasename>`: Connect to `<databasename>`
 - `\dt`: List (describe) tables within the currently connected database
 - `\q`: Quit the client
+
+## Keycloak
+
+Keycloak is the gateway to integrate other authentication management systems or applications. It can be desired to
+avoid enabling debug mode for the whole platform when you just need to look into Keycloak.
+
+That can easily be achieved in two steps:
+
+1. Updating the value for `KC_LOG_LEVEL` in the related configmap `ums-keycloak`.
+```shell
+export NAMESPACE=<your_namespace>
+export CONFIGMAP_NAME=ums-keycloak
+kubectl patch -n ${NAMESPACE} configmap ${CONFIGMAP_NAME} --type merge -p '{"data":{"KC_LOG_LEVEL":"DEBUG"}}'
+```
+
+2. Restart the Keycloak Pod(s).
