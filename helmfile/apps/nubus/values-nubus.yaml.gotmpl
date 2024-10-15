@@ -179,6 +179,7 @@ keycloak:
         key: "keycloakDatabasePassword"
   config:
     exposeAdminConsole: {{ .Values.debug.enabled }}
+    logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
 
 nubusGuardian:
   provisioning:
