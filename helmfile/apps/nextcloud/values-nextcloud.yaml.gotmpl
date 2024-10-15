@@ -67,7 +67,7 @@ aio:
           value: "nextcloud_user"
         password:
           value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
-    trustedProxies: {{ join " " .Values.cluster.networking.cidr | quote }}
+    trustedProxy: {{ join " " .Values.cluster.networking.cidr | quote }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
