@@ -240,17 +240,7 @@ cluster:
 ```
 
 ### Volumes
-
-When your cluster has a `ReadWriteMany` volume provisioner, you can benefit from the distribution or scaling of apps. By
-default, only `ReadWriteOnce` is enabled. To enable `ReadWriteMany` you can set:
-
-```yaml
-cluster:
-  persistence:
-    readWriteMany: true
-```
-
-The **StorageClass** can be set by:
+The **StorageClass** must be set by:
 
 ```yaml
 persistence:
@@ -258,6 +248,18 @@ persistence:
     RWX: "my-read-write-many-class"
     RWO: "my-read-write-once-class"
 ```
+
+`RWX` is optional and requires that your cluster has a `ReadWriteMany` volume provisioner. If you can make use
+of it it benefits the distribution or scaling of apps. By default, only `ReadWriteOnce` is enabled.
+To enable `ReadWriteMany` you have to set:
+
+```yaml
+cluster:
+  persistence:
+    readWriteMany: true
+```
+
+
 
 ## Connectivity
 
