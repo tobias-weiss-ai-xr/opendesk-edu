@@ -201,3 +201,6 @@ kubectl patch -n ${NAMESPACE} configmap ${CONFIGMAP_NAME} --type merge -p '{"dat
 ```
 
 2. Restart the Keycloak Pod(s).
+
+> **Note**<br>
+> As the `ums-keycloak-extensions-handler` is performing frequent (one per second) requests to Keycloak for retrieval of the Keycloak event history, you might want to stop/remove the deployment while debugging/analysing Keycloak to not get your debug output spammed by these requests.

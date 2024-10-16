@@ -7,6 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <!-- TOC -->
 * [Context](#context)
+* [References](#references)
 * [Prerequisites](#prerequisites)
   * [User accounts](#user-accounts)
   * [External IdP with OIDC](#external-idp-with-oidc)
@@ -23,6 +24,15 @@ SPDX-License-Identifier: Apache-2.0
 Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on to internal or external web applications.
 
 This document shows how to configure your organization's IdP and the openDesk IdP to support account federation with openDesk single sign-on based on your organization's login.
+
+# References
+
+We would like to list successful IdP federation scenarios, so we are also happy about input from the community:
+
+| External IdP                                                        | last openDesk version tested |
+| ------------------------------------------------------------------- | ---------------------------- |
+| [EU Login](https://webgate.ec.europa.eu/cas/userdata/myAccount.cgi) | v0.9.0                       |
+| [ProConnect](https://www.proconnect.gouv.fr/)                       | v0.9.0                       |
 
 # Prerequisites
 
