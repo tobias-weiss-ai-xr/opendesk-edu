@@ -83,9 +83,9 @@ functional:
       # Ref.: https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#presence
       enabled: false
     jitsiRoomHistory:
-      # Enable to allow the room history to be stored in the user's browser local storage.
-      # Ref.:
-      enabled: false
+      # Disable to avoid the room history to be stored in the user's browser local storage.
+      # Ref.: https://github.com/jitsi/docker-jitsi-meet/issues/898
+      enabled: true
 
   portal:
     # Configure if the a re-direct to the login dialogue is enforced, or if the portal is shown and the user as to actively

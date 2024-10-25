@@ -11,7 +11,8 @@ SPDX-License-Identifier: Apache-2.0
 * [Releases upgrade details](#releases-upgrade-details)
   * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual checks/steps](#pre-upgrade-manual-checkssteps)
-      * [New default enforces login](#new-default-enforces-login)
+      * [New openDesk default: Enforce login](#new-opendesk-default-enforce-login)
+      * [Changed openDesk default: Jitsi room history enabled](#changed-opendesk-default-jitsi-room-history-enabled)
       * [Streamlining `openxchange` and `oxAppSuite` attribute names](#streamlining-openxchange-and-oxappsuite-attribute-names)
       * [Dicts to define `customization.release`](#dicts-to-define-customizationrelease)
       * [Redis 7.4](#redis-74)
@@ -69,7 +70,7 @@ Explanation of the table's columns:
 
 ### Pre-upgrade: Manual checks/steps
 
-#### New default enforces login
+#### New openDesk default: Enforce login
 
 Users accessing the openDesk portal are now automatically redirected to the login screen as a default.
 
@@ -79,6 +80,21 @@ In case you want to keep the previous behavior you need to set the following `fu
 functional:
   portal:
     enforceLogin: false
+```
+
+#### Changed openDesk default: Jitsi room history enabled
+
+The default to store the Jitsi room history in the local storage of a user's browser has changed.
+
+It is now enabled and therefore stored by default.
+
+To preserve the 1.0.0 behavior of not storing the room history you have to explicitly configure it:
+
+```
+functional:
+  dataProtection:
+    jitsiRoomHistory:
+      enabled: false
 ```
 
 #### Streamlining `openxchange` and `oxAppSuite` attribute names
