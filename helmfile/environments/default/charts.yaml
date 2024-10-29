@@ -286,7 +286,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/charts-mirror"
     name: "openproject"
-    version: "8.0.0"
+    version: "8.3.2"
     verify: true
   openprojectBootstrap:
     # providerCategory: "Platform"
