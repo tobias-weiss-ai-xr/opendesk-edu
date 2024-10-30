@@ -185,6 +185,10 @@ appsuite:
         open-xchange-authentication-oauth: "enabled"
         open-xchange-authentication-ldap: "disabled"
         {{- end }}
+        # OX Documents (office-web) is not used in openDesk
+        open-xchange-documents-backend: "disabled"
+        open-xchange-documents-monitoring: "disabled"
+        open-xchange-documents-templates: "disabled"
     properties:
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
