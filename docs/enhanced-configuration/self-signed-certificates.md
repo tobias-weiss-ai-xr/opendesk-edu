@@ -12,8 +12,6 @@ SPDX-License-Identifier: Apache-2.0
   * [Option 2: Use cert-manager.io](#option-2-use-cert-managerio)
 <!-- TOC -->
 
-# Use case
-
 Deploying openDesk into an environment with custom public key infrastructure (PKI) that is usually not part of
 public certificate authority chains or deploying openDesk into a local cluster without ACME challenge.
 

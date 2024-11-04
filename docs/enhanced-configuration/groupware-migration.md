@@ -1,10 +1,11 @@
-r<!--
+<!--
 SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
 
 <h1>Migration from M365 with audriga migration service and master authentication</h1>
 
+<!-- TOC -->
 * [Context](#context)
 * [Prerequisites](#prerequisites)
   * [Prepare M365 tenant for access](#prepare-m365-tenant-for-access)
@@ -17,8 +18,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Add multiple user accounts via CSV file](#add-multiple-user-accounts-via-csv-file)
   * [Start the migration](#start-the-migration)
   * [Monitor migration status](#monitor-migration-status)
-
-# Context
+<!-- TOC -->
 
 Most organizations already have email accounts on various platforms that need to be migrated to openDesk. This document describes the migration from M365 accounts to openDesk using the [audriga Migration Service](https://www.audriga.com) in combination with the master authentication option in openDesk. Other source platforms are also supported, and their migrations work in a similar manner.
 

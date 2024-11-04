@@ -5,6 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Separate domains for mail and or Matrix </h1>
 
+<!-- TOC -->
 * [Context](#context)
 * [Example configuration](#example-configuration)
   * [Mail domain](#mail-domain)
@@ -13,8 +14,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Webserver](#webserver)
       * [Content Security Policy](#content-security-policy)
       * [.well-known](#well-known)
-
-# Context
+<!-- TOC -->
 
 As communication over mail and chat can go beyond the borders of your openDesk installation, you may want to use different domains for the mail and/or Matrix.
 

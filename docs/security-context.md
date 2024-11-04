@@ -2,8 +2,10 @@
 SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
+
 <h1>Kubernetes Security Context</h1>
 
+<!-- TOC -->
 * [Container Security Context](#container-security-context)
   * [allowPrivilegeEscalation](#allowprivilegeescalation)
   * [capabilities](#capabilities)
@@ -14,6 +16,7 @@ SPDX-License-Identifier: Apache-2.0
   * [readOnlyRootFilesystem](#readonlyrootfilesystem)
   * [runAsNonRoot](#runasnonroot)
 * [Status quo](#status-quo)
+<!-- TOC -->
 
 # Container Security Context
 

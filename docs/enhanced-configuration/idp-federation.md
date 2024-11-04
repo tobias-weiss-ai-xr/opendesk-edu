@@ -5,6 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Federation with external identity provider (IdP)</h1>
 
+<!-- TOC -->
 * [Context](#context)
 * [Prerequisites](#prerequisites)
   * [User accounts](#user-accounts)
@@ -17,8 +18,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Separate realm](#separate-realm)
     * [OIDC Client](#oidc-client)
   * [openDesk IdP](#opendesk-idp)
-
-# Context
+<!-- TOC -->
 
 Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on to internal or external web applications.
 

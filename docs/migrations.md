@@ -5,6 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Updates & Upgrades</h1>
 
+<!-- TOC -->
 * [Disclaimer](#disclaimer)
 * [openDesk supported upgrade path](#opendesk-supported-upgrade-path)
 * [Releases upgrade details](#releases-upgrade-details)
@@ -26,6 +27,7 @@ SPDX-License-Identifier: Apache-2.0
     * [`migrations` S3 bucket](#migrations-s3-bucket)
 * [Related components and artifacts](#related-components-and-artifacts)
   * [Development](#development)
+<!-- TOC -->
 
 # Disclaimer
 
