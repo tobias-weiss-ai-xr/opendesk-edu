@@ -7,8 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 <h1>Developing openDesk deployment automation</h1>
 
 Active development on the deployment is currently only available for project members.
-However, contributions will be possible using the CLA process.
+However, contributions are possible using the [CLA](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/CONTRIBUTING.md?ref_type=heads) process.
 
+<!-- TOC -->
 * [Overview](#overview)
 * [Default branch, `develop` and other branches](#default-branch-develop-and-other-branches)
 * [External artifacts - `charts.yaml` and `images.yaml`](#external-artifacts---chartsyaml-and-imagesyaml)
@@ -18,6 +19,7 @@ However, contributions will be possible using the CLA process.
   * [Mirroring](#mirroring)
     * [Get new artifacts mirrored](#get-new-artifacts-mirrored)
 * [Creating new charts/images](#creating-new-chartsimages)
+<!-- TOC -->
 
 # Overview
 

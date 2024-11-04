@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Scaling</h1>
 
-This document should cover the ability to scale apps.
+This document covers the ability to scale applications.
 
 # Horizontal scalability
 

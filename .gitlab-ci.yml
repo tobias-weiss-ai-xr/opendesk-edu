@@ -4,7 +4,7 @@
 ---
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
-    ref: "v2.4.2"
+    ref: "v2.4.3"
     file:
       - "ci/common/automr.yml"
       - "ci/common/lint.yml"
@@ -514,7 +514,7 @@ avscan-prepare:
           CONTAINER_IMAGE: ""
           CONTAINER_REGISTRY: ""
           CONTAINER_TAG: ""
-          DATABASE_MIRROR: "https://registry.open-de.sk/repository/clamavdb.c3sl.ufpr.br"
+          DATABASE_MIRROR: "https://gitlab.opencode.de/bmi/opendesk/tooling/clamav-db-mirror/-/raw/main"
       EOF
     - >
       yq '.images

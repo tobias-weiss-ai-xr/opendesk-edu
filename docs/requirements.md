@@ -2,6 +2,7 @@
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
+
 <h1>Requirements</h1>
 
 This section covers the internal system requirements and external service requirements for productive use.

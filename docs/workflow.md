@@ -6,6 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Technical development and release workflow</h1>
 
+<!-- TOC -->
 * [Scope](#scope)
 * [Roles and responsibilities](#roles-and-responsibilities)
 * [Deployment automation](#deployment-automation)
@@ -29,6 +30,7 @@ SPDX-License-Identifier: Apache-2.0
       * [Commit messages / Conventional Commits](#commit-messages--conventional-commits)
       * [Verified commits](#verified-commits)
 * [Footnotes](#footnotes)
+<!-- TOC -->
 
 # Scope
 

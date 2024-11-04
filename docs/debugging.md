@@ -2,8 +2,10 @@
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
+
 <h1>Debugging</h1>
 
+<!-- TOC -->
 * [Disclaimer](#disclaimer)
 * [Enable debugging](#enable-debugging)
 * [Adding containers to a pod for debugging purposes](#adding-containers-to-a-pod-for-debugging-purposes)
@@ -15,6 +17,7 @@ SPDX-License-Identifier: Apache-2.0
   * [OpenProject](#openproject)
   * [PostgreSQL](#postgresql)
   * [Keycloak](#keycloak)
+<!-- TOC -->
 
 # Disclaimer
 
