@@ -57,7 +57,8 @@ image:
   tag: {{ .Values.images.jitsiKeycloakAdapter.tag | quote }}
 
 settings:
-  jwtAppSecret: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
+  jwtAppSecret:
+    value: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
   keycloakRealm: {{ .Values.platform.realm | quote }}
   keycloakClientId: "opendesk-jitsi"
 
@@ -175,6 +176,10 @@ jitsi:
         {{ .Values.seLinuxOptions.jicofo | toYaml | nindent 8 }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
+    # The `useNodeIP` option provided by the upstream charts does not support all relevant scenarios, but since
+    # upstream charts v1.4.0 a value for `publicIPs` is required. We set a dummy value as we anyway update it
+    # later with the `patchJVB` job.
+    publicIPs: [ 0.0.0.0 ]
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.jvb.registry }}/{{ .Values.images.jvb.repository }}"
       tag: {{ .Values.images.jvb.tag | quote }}

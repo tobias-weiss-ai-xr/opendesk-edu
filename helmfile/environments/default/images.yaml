@@ -89,7 +89,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jibri"
-    tag: "stable-9646@sha256:30173d35449d78f8958eaf4de77e76c534806db0e49bdbb930f8c81e003e5a3b"
+    tag: "stable-9779@sha256:7a0dfa397e7c6c03eb1dc2b49d94f0dc2d6fc44fe85761f67a45ea0e34056b3e"
   jicofo:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -99,7 +99,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jicofo"
-    tag: "stable-9646@sha256:c2c72b6e4b6655d8758145f5c4d4201265626b7c3c1a03f41c7dda060ca7165d"
+    tag: "stable-9779@sha256:6b00d53a899e01058a99fa71a3238442e18c43bc62d4212b6647b4f7aa67aae1"
   jitsi:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -109,7 +109,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/web"
-    tag: "stable-9646@sha256:04157797558743fa9c478b76d7332a45c6fbfbe4e34d6550f8716dd8526a1c6c"
+    tag: "stable-9779@sha256:77f9cb45bb8c1053002b1ce8987ac26aa1d3724e79b23b0403ca0e92469b7d14"
   jitsiKeycloakAdapter:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -119,7 +119,7 @@ images:
     # upstreamMirrorStartFrom: ["2023", "12", "14"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jitsi-keycloak-adapter"
-    tag: "v20240808@sha256:73db5ae9bb617d076b6a877500dbeece38fd15f8ae933ffadbd72d9aa82ad8da"
+    tag: "v20241023@sha256:2391799c5168222f0e3ebb94d7c3cb3bcea6f075399458197f0c1bbbb8f293fe"
   jitsiPatchJVB:
     # providerCategory: "Community"
     # providerResponsible: "Nordeck"
@@ -137,7 +137,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jvb"
-    tag: "stable-9646@sha256:22dfb237cdda8142dcf2b141c28d40ec8a675dd379dda5e851dac49e43e677b7"
+    tag: "stable-9779@sha256:126719d4bd6fc3a85b61e786936a561a41527223b7b6a9c6204df41b1af48a50"
   mariadb:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -757,7 +757,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/prosody"
-    tag: "stable-9457-2@sha256:5364b0c9c6de654b7b31b5821e9cd7a39660a19010348e7ac56b85be2944daa0"
+    tag: "stable-9779@sha256:5864f3f72d3605a52a1b90ec845a4a1837a851d7774dcbfdc9490beb4bdda18a"
   redis:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
