@@ -72,7 +72,7 @@ For your convenience, we recommend creating a `*.domain.tld` A-Record to your cl
 
 ## Domain
 
-A list of all subdomains can be found in `helmfile/environments/default/global.yaml`.
+A list of all subdomains can be found in `helmfile/environments/default/global.gotmpl`.
 
 All subdomains can be customized. For example, _Nextcloud_ can be changed to `files.domain.tld` in `dev` environment:
 
