@@ -442,9 +442,12 @@ nubusStackDataUms:
     portalManagementKnowledgeLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.xwiki .Values.global.domain }}
     portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
     portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain }}
+    portalNotesLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain }}
     portalTitleDE: "openDesk Portal"
     portalTitleEN: "openDesk Portal"
     oxDefaultContext: "1"
+    componentEnabled:
+      notes: {{ .Values.notes.enabled }}
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
       - username: {{ printf "ldapsearch_%s" $username | quote }}
@@ -453,7 +456,6 @@ nubusStackDataUms:
       {{- end }}
     ldapSystemUsers: []
     portaltileGroupUserStandard:
-      - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
       - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
     portaltileGroupUserAdmin:
       - 'cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}'
@@ -475,6 +477,8 @@ nubusStackDataUms:
       - 'cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}'
     portaltileGroupVideoconference:
       - 'cn=managed-by-attribute-Videoconference,cn=groups,{{ .Values.ldap.baseDn }}'
+    portaltileGroupNotes:
+      - 'cn=managed-by-attribute-Notes,cn=groups,{{ .Values.ldap.baseDn }}'
     systemInformation:
       releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}"
       {{- if .Values.functional.admin.portal.deploymentTimestamp.enabled }}

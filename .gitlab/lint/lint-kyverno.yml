@@ -16,6 +16,7 @@ lint-kyverno:
           - "element"
           - "jitsi"
           - "nextcloud"
+          - "notes"
           - "nubus"
           - "open-xchange"
           - "opendesk-migrations-post"

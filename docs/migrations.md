@@ -24,6 +24,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
       * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
+      * [Changed openDesk defaults: Matrix presence status disabled](#changed-opendesk-defaults-matrix-presence-status-disabled)
       * [Changed openDesk defaults: Matrix ID](#changed-opendesk-defaults-matrix-id)
       * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
       * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
@@ -283,6 +284,19 @@ You can keep the current settings by setting the `external-registry` in your cus
 global:
   imagePullSecrets:
     - "external-registry"
+```
+
+#### Changed openDesk defaults: Matrix presence status disabled
+
+Show other user's Matrix presence status is now disabled by default to comply with data protection requirements.
+
+To enable it or keep the v0.9.0 default please set:
+
+```yaml
+functional:
+  dataProtection:
+    matrixPresence:
+      enabled: true
 ```
 
 #### Changed openDesk defaults: Matrix ID

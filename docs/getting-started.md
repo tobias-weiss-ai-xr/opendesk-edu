@@ -49,7 +49,7 @@ Before deploying openDesk, you must configure the deployment to fit your environ
 To keep your deployment up to date, we recommend customizing in `dev`, `test`, or `prod` and not in `default` environment
 files.
 
-> All configuration options and their default values can be found in files at `helmfile/environments/default/`
+> All configuration options and their default values can be found in files at [`helmfile/environments/default/`](../helmfile/environments/default/)
 
 For the following guide, we will use `dev` as environment where variables can be set in
 `helmfile/environments/dev/values.yaml.gotmpl`.
@@ -141,7 +141,7 @@ like Docker Hub.
 Doing a test deployment will be fine with this setup. In case you want to deploy multiple times a day
 and fetch from the same IP address, you might run into rate limits at Docker Hub. In that case and in cases you
 prefer the use of a private image registry, you can configure such for
-[your target environment](./../helmfile/environments/dev/values.yaml.gotmpl.sample) by setting
+[your target environment](../helmfile/environments/dev/values.yaml.gotmpl.sample) by setting
 - `global.imageRegistry` for a private image registry and
 - `global.helmRegistry` for a private Helm chart registry.
 
@@ -221,7 +221,7 @@ cluster:
 
 By default, the `ingressClassName` is empty to select your default ingress controller. You may want to customize it by
 setting the following attribute to the name of the currently only supported ingress controller `ingress-nginx` (see
-[requirements.md](./requirements.md)) for reference) within your deployment if that is not the cluster's default ingress.
+[requirements.md](requirements.md)) for reference) within your deployment if that is not the cluster's default ingress.
 
 ```yaml
 ingress:
