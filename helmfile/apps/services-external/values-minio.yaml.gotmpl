@@ -99,6 +99,9 @@ provisioning:
     - name: {{ .Values.objectstores.nextcloud.bucket | quote }}
       versioning: true
       withLock: false
+    - name: {{ .Values.objectstores.notes.bucket | quote }}
+      versioning: true
+      withLock: false
     - name: {{ .Values.objectstores.openproject.bucket | quote }}
       versioning: true
       withLock: false
@@ -127,6 +130,18 @@ provisioning:
             - "s3:*"
         - resources:
             - "arn:aws:s3:::nextcloud/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    - name: "notes-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::notes"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::notes/*"
           effect: "Allow"
           actions:
             - "s3:*"
@@ -166,6 +181,12 @@ provisioning:
       disabled: false
       policies:
         - "nextcloud-bucket-policy"
+      setPolicies: true
+    - username: {{ .Values.objectstores.notes.username | quote }}
+      password: {{ .Values.secrets.minio.notesUser | quote }}
+      disabled: false
+      policies:
+        - "notes-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.openproject.username | quote }}
       password: {{ .Values.secrets.minio.openprojectUser | quote }}

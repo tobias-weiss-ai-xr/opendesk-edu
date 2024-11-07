@@ -106,6 +106,27 @@ resources:
     requests:
       cpu: 0.1
       memory: "384Mi"
+  notesBackend:
+    limits:
+      cpu: 99
+      memory: "768Mi"
+    requests:
+      cpu: 0.1
+      memory: "512Mi"
+  notesFrontend:
+    limits:
+      cpu: 99
+      memory: "128Mi"
+    requests:
+      cpu: 0.1
+      memory: "32Mi"
+  notesYProvider:
+    limits:
+      cpu: 99
+      memory: "256Mi"
+    requests:
+      cpu: 0.1
+      memory: "128Mi"
   opendeskKeycloakBootstrap:
     limits:
       cpu: 99

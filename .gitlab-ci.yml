@@ -70,7 +70,7 @@ variables:
       - "no"
   DEBUG_ENABLED:
     description: "Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific\
-     configuration containting: `debug.enabled: {{ env \"DEBUG_ENABLED\" | default false }}`"
+     configuration containing: `debug.enabled: {{ env \"DEBUG_ENABLED\" | default false }}`"
     value: "no"
     options:
       - "yes"
@@ -154,6 +154,12 @@ variables:
     options:
       - "yes"
       - "no"
+  DEPLOY_NOTES:
+    description: "Enable Notes deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
   RUN_TESTS:
     description: "Triggers execution of E2E-tests."
     value: "no"
@@ -183,10 +189,17 @@ variables:
                   GRACE_PERIOD is the period in seconds that should be waited before running the tests."
     value: "0"
 
+# Declare .environments which is in `opendesk-env` repository. In case it is not available
+# 'cache' is used because job as a dummy key, as the job is not allowed to be empty.
+.environments:
+  cache: {}
+
 .deploy-common:
   cache: {}
   dependencies: []
   extends: ".environments"
+  environment:
+    name: "${NAMESPACE}"
   image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:1.1.0\
           @sha256:74f349066ac5d20e3afaa6abd28781b4c8dc086f67e3d3c1b8345e4a9c3371b1"
   script:
@@ -208,9 +221,6 @@ variables:
 
 env-cleanup:
   extends: ".deploy-common"
-  environment:
-    name: "${NAMESPACE}"
-    action: "stop"
   needs: []
   rules:
     - if: >
@@ -444,6 +454,18 @@ jitsi-deploy:
   variables:
     COMPONENT: "jitsi"
 
+notes-deploy:
+  stage: "050-components"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NOTES != "no")
+      when: "on_success"
+  variables:
+    COMPONENT: "notes"
+
 element-deploy:
   stage: "050-components"
   extends: ".deploy-common"
@@ -458,8 +480,6 @@ element-deploy:
 
 fetch-administrator-credentials:
   extends: ".deploy-common"
-  environment:
-    name: "${NAMESPACE}"
   stage: "post-prepare"
   rules:
     - if: >
@@ -612,11 +632,6 @@ avscan-start:
       - artifact: "dynamic-scans.yml"
         job: "avscan-prepare"
     strategy: "depend"
-
-# Declare .environments which is in `opendesk-env` repository. In case it is not available
-# 'cache' is used because job as a dummy key, as the job is not allowed to be empty.
-.environments:
-  cache: {}
 
 # Overwrite shared settings
 .common-semantic-release:

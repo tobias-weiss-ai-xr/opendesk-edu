@@ -48,6 +48,9 @@ job:
     - username: {{ .Values.databases.keycloak.username | quote }}
       password: {{ .Values.secrets.postgresql.keycloakUser | quote }}
       connectionLimit: {{ .Values.databases.keycloak.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.notes.username | quote }}
+      password: {{ .Values.secrets.postgresql.notesUser | quote }}
+      connectionLimit: {{ .Values.databases.notes.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
     - username: {{ .Values.databases.openproject.username | quote }}
       password: {{ .Values.secrets.postgresql.openprojectUser | quote }}
       connectionLimit: {{ .Values.databases.openproject.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
@@ -71,6 +74,8 @@ job:
       user: {{ .Values.databases.keycloak.username | quote }}
     - name: {{ .Values.databases.keycloakExtension.name | quote }}
       user: {{ .Values.databases.keycloakExtension.username | quote }}
+    - name: {{ .Values.databases.notes.name | quote }}
+      user: {{ .Values.databases.notes.username | quote }}
     - name: {{ .Values.databases.openproject.name | quote }}
       user: {{ .Values.databases.openproject.username | quote }}
     - name: {{ .Values.databases.synapse.name | quote }}
