@@ -29,7 +29,7 @@ images:
     # upstreamMirrorTagFilterRegEx: '^opendesk-(\d+)$'
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/cryptpad"
-    tag: "opendesk-20231222@sha256:f4d20d5c38c87b11ed1a1b46ef6a3633d32c6758ebdff8556458f040318fa5e2"
+    tag: "opendesk-20241022@sha256:3e5bf06cb9d0a7ec8257874b8b347599200eb677fc428a2e043ccab06ef2be17"
   dkimpy:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -235,7 +235,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud"
-    tag: "2.2.3@sha256:b5e36b4922b50be96ecdd8628d8124880251da5b2e98cfa5b12cf1ef715d042f"
+    tag: "2.2.5@sha256:1ad3d78f790f39826a855ac49324b24395ffe93ccb3ff50e2b9ea1da02b46bda"
   nextcloudExporter:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
