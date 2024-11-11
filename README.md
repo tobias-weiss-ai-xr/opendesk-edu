@@ -12,7 +12,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Requirements](#requirements)
 * [Getting started](#getting-started)
 * [Advanced customization](#advanced-customization)
-* [Components](#components)
+* [Architecture](#architecture)
 * [Releases](#releases)
 * [Feedback](#feedback)
 * [Development](#development)
@@ -73,9 +73,9 @@ You would like to install openDesk in your own infrastructure?
 - [Monitoring](./docs/monitoring.md)
 - [Theming](./docs/theming.md)
 
-# Components
+# Architecture
 
-More information on openDesk's components and their integration can be found in our detailed [Component docs](./docs/components.md).
+More information on openDesk's architecture can be found in our [Architecture docs](./docs/architecture.md).
 
 # Releases
 
