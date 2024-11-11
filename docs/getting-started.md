@@ -482,6 +482,7 @@ done
 # Delete leftover resources
 kubectl delete pvc --all --namespace ${NAMESPACE};
 kubectl delete jobs --all --namespace ${NAMESPACE};
+kubectl delete configmaps --all --namespace ${NAMESPACE};
 ```
 
 > **Warning**<br>

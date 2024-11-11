@@ -224,6 +224,7 @@ env-cleanup:
         for OPENDESK_RELEASE in $(helm ls -n ${NAMESPACE} -aq); do
           helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE};
         done
+        # if you update the section below, please also update the respective section in getting_started.md
         kubectl delete pvc --all --namespace ${NAMESPACE};
         kubectl delete jobs --all --namespace ${NAMESPACE};
         kubectl delete configmaps --all --namespace ${NAMESPACE};
