@@ -23,7 +23,7 @@ externalDB:
   password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
   database: {{ .Values.databases.xwiki.name | quote }}
   user: {{ .Values.databases.xwiki.username | quote }}
-  host: {{ .Values.databases.xwiki.host | quote }}
+  host: {{ printf "%s:%d" .Values.databases.xwiki.host .Values.databases.xwiki.port | quote }}
   customKeyRef:
     enabled: false
 
