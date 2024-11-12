@@ -46,7 +46,7 @@ configuration:
     port: {{ .Values.databases.nextcloud.port | quote }}
     auth:
       username:
-        value: "nextcloud_user"
+        value: {{ .Values.databases.nextcloud.username | quote }}
       password:
         value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
   ldap:
