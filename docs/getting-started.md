@@ -419,12 +419,12 @@ openDesk deploys with the standard user account `Administrator`, which password 
 NAMESPACE=your-namespace
 
 # Get password for IAM "Administrator" account
-kubectl -n ${NAMESPACE} secret ums-nubus-credentials -o jsonpath='{.data.administrator_password}' | base64 -d
+kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.administrator_password}' | base64 -d
 ```
 
 In openDesk Community Edition, you get two more default accounts:
-- `default.admin`: `kubectl -n ${NAMESPACE} secret ums-nubus-credentials -o jsonpath='{.data.admin_password}' | base64 -d`
-- `default.user`: `kubectl -n ${NAMESPACE} secret ums-nubus-credentials -o jsonpath='{.data.user_password}' | base64 -d`
+- `default.admin`: `kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.admin_password}' | base64 -d`
+- `default.user`: `kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.user_password}' | base64 -d`
 
 ## Using from external repository
 
