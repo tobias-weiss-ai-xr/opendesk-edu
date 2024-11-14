@@ -218,6 +218,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "32Mi"
+  nginxS3Gateway:
+    limits:
+      cpu: 99
+      memory: "64Mi"
+    requests:
+      cpu: "100m"
+      memory: "16Mi"
   openproject:
     limits:
       cpu: 99
