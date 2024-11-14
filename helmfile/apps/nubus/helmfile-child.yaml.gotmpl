@@ -28,6 +28,14 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskKeycloakBootstrap.registry }}/{{ .Values.charts.opendeskKeycloakBootstrap.repository }}"
+  # NGINX S3 Gateway Chart
+  - name: "nginx-s3-gateway-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.nginxS3Gateway.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.nginxS3Gateway.registry }}/{{ .Values.charts.nginxS3Gateway.repository }}"
 
 releases:
   # Univention Management Stack Umbrella Chart
@@ -60,6 +68,16 @@ releases:
     needs:
       - "ums"
     installed: {{ .Values.nubus.enabled }}
+    timeout: 900
+
+  # NGINX S3 Gateway (when cluster minio is not used)
+  - name: "nubus"
+    chart: "nginx-s3-gateway-repo/{{ .Values.charts.nginxS3Gateway.name }}"
+    version: "{{ .Values.charts.nginxS3Gateway.version }}"
+    values:
+      - "values-nginx-s3-gateway.yaml.gotmpl"
+      - {{ .Values.customization.release.nginxS3Gateway | default "additionalValues: false" }}
+    installed: {{ not .Values.minio.enabled }}
     timeout: 900
 
 commonLabels:

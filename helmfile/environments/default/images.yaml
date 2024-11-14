@@ -244,6 +244,14 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud-exporter"
     tag: "1.0.1@sha256:63e63c7420e37d3989fa0ffdbcf18a07b2a603ab9b2a849c2e7e44342dd82af0"
+  nginxS3Gateway:
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "nginxinc/nginx-s3-gateway"
+    registry: "registry-1.docker.io"
+    repository: "nginxinc/nginx-s3-gateway"
+    tag: "unprivileged-oss-20241111@sha256:20d6b6ec5fc987b18c3e345de33674374a8335c593d6d0841ac64eb49ae2dea4"
   nubusDataLoader:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"

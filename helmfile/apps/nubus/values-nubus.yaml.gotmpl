@@ -144,6 +144,10 @@ global:
             groups: __DELETE_KEY__
 
 ingress:
+  # temporary fix
+  {{- if not .Values.minio.enabled }}
+  enabled: false
+  {{- end }}
   certManager:
     enabled: false
   tls:
@@ -333,7 +337,7 @@ nubusPortalConsumer:
   enabled: true
   portalConsumer:
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
-    objectStorageEndpoint: {{ .Values.objectstores.nubus.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    objectStorageEndpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
     objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
   provisioningApi:
     auth:
@@ -341,7 +345,7 @@ nubusPortalConsumer:
 
 nubusPortalServer:
   portalServer:
-    objectStorageEndpoint: {{ .Values.objectstores.nubus.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    objectStorageEndpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
     objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
     objectStorageCredentialSecret:
       name: "ums-portal-server-minio-opendesk-credentials"

@@ -122,6 +122,8 @@ replicas:
   umsUmcServer: 1
   # -- scalable: tbd
   umsUmcServerProxy: 1
+  # -- scalable: true
+  nginxS3Gateway: 1
 
   # -- component: Video conference (Jitsi)
   # -- scalable: tbd

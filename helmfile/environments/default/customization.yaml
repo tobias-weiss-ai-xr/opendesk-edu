@@ -30,6 +30,7 @@ customization:
     ums: ~
     intercomService: ~
     opendeskKeycloakBootstrap: ~
+    nginxS3Gateway: ~
     # open-xchange
     dovecot: ~
     openXchange: ~
