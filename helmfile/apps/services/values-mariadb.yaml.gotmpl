@@ -67,7 +67,8 @@ job:
     #   user: {{ .Values.databases.xwiki.username | quote }}
 
 mariadb:
-  rootPassword: {{ .Values.secrets.mariadb.rootPassword | quote }}
+  rootPassword:
+    value: {{ .Values.secrets.mariadb.rootPassword | quote }}
 
 persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
