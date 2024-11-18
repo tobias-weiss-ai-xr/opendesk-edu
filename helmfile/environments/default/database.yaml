@@ -45,6 +45,21 @@ databases:
     port: 5432
     username: "matrix_user"
     password: ""
+    requireAuth: []
+    channelBinding: "prefer"
+    connectTimeout: 10
+    clientEncoding: "auto"
+    keepalives: 1
+    keepalivesIdle: 10
+    keepalivesInterval: 10
+    keepalivesCount: 3
+    replication: false
+    gssencmode: "prefer"
+    sslmode: "prefer"
+    sslcompression: 0
+    sslMinProtocolVersion: "TLSv1.2"
+    connectionPoolMin: "3"
+    connectionPoolMax: "5"
     connectionLimit: ~
   umsGuardianManagementApi:
     name: "guardianmanagementapi"

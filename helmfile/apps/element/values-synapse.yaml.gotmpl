@@ -27,9 +27,26 @@ configuration:
 
   database:
     host: {{ .Values.databases.synapse.host | quote }}
+    port: {{ .Values.databases.synapse.port }}
     name: {{ .Values.databases.synapse.name | quote }}
     user: {{ .Values.databases.synapse.username | quote }}
-    password: {{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser | quote }}
+    password:
+      value: {{ .Values.databases.synapse.password | default .Values.secrets.postgresql.matrixUser | quote }}
+    requireAuth: {{ .Values.databases.synapse.requireAuth }}
+    channelBinding: {{ .Values.databases.synapse.channelBinding | quote }}
+    connectTimeout: {{ .Values.databases.synapse.connectTimeout }}
+    clientEncoding: {{ .Values.databases.synapse.clientEncoding | quote }}
+    keepalives: {{ .Values.databases.synapse.keepalives }}
+    keepalivesIdle: {{ .Values.databases.synapse.keepalivesIdle }}
+    keepalivesInterval: {{ .Values.databases.synapse.keepalivesInterval }}
+    keepalivesCount: {{ .Values.databases.synapse.keepalivesCount }}
+    replication: {{ .Values.databases.synapse.replication }}
+    gssencmode: {{ .Values.databases.synapse.gssencmode | quote }}
+    sslmode: {{ .Values.databases.synapse.sslmode | quote }}
+    sslcompression: {{ .Values.databases.synapse.sslcompression }}
+    sslMinProtocolVersion: {{ .Values.databases.synapse.sslMinProtocolVersion | quote }}
+    connectionPoolMin: {{ .Values.databases.synapse.connectionPoolMin }}
+    connectionPoolMax: {{ .Values.databases.synapse.connectionPoolMax }}
 
   homeserver:
     serverName: {{ .Values.global.matrixDomain | default .Values.global.domain }}
