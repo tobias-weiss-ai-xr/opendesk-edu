@@ -192,8 +192,8 @@ s3:
   enabled: true
   directUploads: {{ .Values.objectstores.openproject.directUploads }}
   enableSignatureV4Streaming: {{ .Values.objectstores.openproject.enableSignatureV4Streaming }}
-  endpoint: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
-  host: {{ .Values.objectstores.openproject.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+  endpoint: {{ printf "https://%s" (.Values.objectstores.openproject.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+  host: {{ printf "https://%s" (.Values.objectstores.openproject.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   pathStyle: {{ .Values.objectstores.openproject.pathStyle }}
   region: {{ .Values.objectstores.openproject.region | quote }}
   bucketName: {{ .Values.objectstores.openproject.bucket | quote }}
