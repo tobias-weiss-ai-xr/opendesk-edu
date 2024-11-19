@@ -223,9 +223,6 @@ env-cleanup:
   stage: "env-cleanup"
 
 env-start:
-  environment:
-    name: "${NAMESPACE}"
-    on_stop: "env-stop"
   extends: ".deploy-common"
   image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
   rules:
@@ -236,6 +233,34 @@ env-start:
   script:
     - "echo \"Deploying to Environment ${NAMESPACE} in ${CLUSTER} Cluster\""
     - "kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -"
+    - "export FILENAME_CERT_SECRET=cert_to_import.yaml"
+    # from self-signed-certificates.md:
+    # "Copy this cert's secret into the/each namespace you want to make use of the cert."
+    - |
+      kubectl get secret opendesk-root-cert-secret -n cert-manager -o yaml | \
+        grep -v \ uid\: | \
+        grep -v \ resourceVersion\: | \
+        grep -v \ creationTimestamp\: | \
+        sed --expression 's/namespace\:\ cert-manager/namespace: '"${NAMESPACE}"'/g' \
+        >${FILENAME_CERT_SECRET} || true
+    - |
+      if [ -s ${FILENAME_CERT_SECRET} ]; then
+        echo "Applying ${FILENAME_CERT_SECRET}"
+        kubectl apply -f ${FILENAME_CERT_SECRET}
+      fi
+    # from self-signed-certificates.md:
+    # "Create issuer in the/each namespace you want to make use of the cert."
+    - |
+      kubectl apply -f - <<EOF
+      apiVersion: cert-manager.io/v1
+      kind: Issuer
+      metadata:
+        name: "selfsigned-issuer"
+        namespace: ${NAMESPACE}
+      spec:
+        ca:
+          secretName: opendesk-root-cert-secret
+      EOF
   stage: "env"
 
 policies-deploy:
@@ -407,25 +432,6 @@ element-deploy:
       when: "on_success"
   variables:
     COMPONENT: "element"
-
-env-stop:
-  extends: ".deploy-common"
-  environment:
-    name: "${NAMESPACE}"
-    action: "stop"
-  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
-  needs: []
-  rules:
-    - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/
-      when: "manual"
-  script:
-    - "echo 'We do not stop the env (delete the namespace) at the moment in this stage, as deleting a branches also
-      triggers this env-stop stage and we do not want this to happen.'"
-    # - kubectl delete namespace "${NAMESPACE}"
-  stage: "env-stop"
-  variables:
-    GIT_STRATEGY: "none"
 
 .ums-default-password: &ums-default-password
   - |
