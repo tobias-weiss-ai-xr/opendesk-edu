@@ -393,10 +393,11 @@ appsuite:
       enabled: true
       mode: "standalone"
       hosts:
-        - "redis-master:6379"
+        - {{ printf "%s:%s" .Values.cache.oxAppsuite.host .Values.cache.oxAppsuite.port | quote }}
       auth:
         enabled: true
-        password: {{ .Values.secrets.redis.password | quote }}
+        username: {{ .Values.cache.oxAppsuite.username | quote }}
+        password: {{ .Values.cache.oxAppsuite.password | default .Values.secrets.redis.password | quote }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeCoreMW.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}

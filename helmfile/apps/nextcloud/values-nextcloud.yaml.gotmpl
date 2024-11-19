@@ -55,7 +55,7 @@ aio:
       auth:
         enabled: true
         username:
-          value: "default"
+          value: {{ .Values.cache.nextcloud.username }}
         password:
           value: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
       host: {{ .Values.cache.nextcloud.host | quote }}

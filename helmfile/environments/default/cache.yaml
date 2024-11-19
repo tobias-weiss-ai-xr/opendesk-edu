@@ -5,14 +5,21 @@ cache:
   intercomService:
     host: "redis-headless"
     port: 6379
+    username: "default"
     password: ""
   nextcloud:
     host: "redis-headless"
     port: 6379
+    username: "default"
     password: ""
   openproject:
     host: "memcached"
     port: 11211
+  oxAppsuite:
+    host: "redis-headless"
+    port: 6379
+    username: "default"
+    password: ""
   umsSelfservice:
     host: "memcached"
     port: 11211

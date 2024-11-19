@@ -32,10 +32,15 @@ extraVolumeMounts:
   - name: "trusted-cert-secret-volume"
     mountPath: "/etc/ssl/certs/ca-certificates.crt"
     subPath: "ca-certificates.crt"
+{{- end }}
+
 extraEnvVars:
+  - name: "REDIS_USER"
+    value: {{ .Values.cache.intercomService.username }}
+  {{- if .Values.certificate.selfSigned }}
   - name: "NODE_EXTRA_CA_CERTS"
     value: "/etc/ssl/certs/ca-certificates.crt"
-{{- end }}
+  {{- end }}
 
 global:
   domain: {{ .Values.global.domain | quote }}
