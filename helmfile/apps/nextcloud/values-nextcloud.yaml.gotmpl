@@ -60,6 +60,7 @@ aio:
           value: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
       host: {{ .Values.cache.nextcloud.host | quote }}
       port: {{ .Values.cache.nextcloud.port | quote }}
+      tls: {{ .Values.cache.nextcloud.tls }}
     database:
       host: {{ .Values.databases.nextcloud.host | quote }}
       port: {{ .Values.databases.nextcloud.port | quote }}

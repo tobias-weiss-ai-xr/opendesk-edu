@@ -12,6 +12,7 @@ cache:
     port: 6379
     username: "default"
     password: ""
+    tls: false
   openproject:
     host: "memcached"
     port: 11211

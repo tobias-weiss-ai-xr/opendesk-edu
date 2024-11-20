@@ -393,7 +393,7 @@ appsuite:
       enabled: true
       mode: "standalone"
       hosts:
-        - {{ printf "%s:%s" .Values.cache.oxAppsuite.host .Values.cache.oxAppsuite.port | quote }}
+        - {{ printf "%s:%v" .Values.cache.oxAppsuite.host .Values.cache.oxAppsuite.port | quote }}
       auth:
         enabled: true
         username: {{ .Values.cache.oxAppsuite.username | quote }}
