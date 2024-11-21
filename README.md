@@ -14,6 +14,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Advanced customization](#advanced-customization)
 * [Architecture](#architecture)
 * [Releases](#releases)
+* [Data Storage](#data-storage)
 * [Feedback](#feedback)
 * [Development](#development)
 * [License](#license)
@@ -91,6 +92,11 @@ in the files from the release's git-tag:
 - `./helmfile/environments/default/charts.yaml.gotmpl`
 
 Find more information in our [Workflow documentation](./docs/workflow.md).
+
+# Data Storage
+
+More information about different data storages used within openDesk are described in the
+[Data Storage documentation](./docs/data-storage.md).
 
 # Feedback
 
