@@ -9,8 +9,11 @@ SPDX-License-Identifier: Apache-2.0
 * [Disclaimer](#disclaimer)
 * [openDesk supported upgrade path](#opendesk-supported-upgrade-path)
 * [Releases upgrade details](#releases-upgrade-details)
-  * [From v0.9.0](#from-v090)
+  * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
+      * [Redis 7.4](#redis-74)
+  * [From v0.9.0](#from-v090)
+    * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps-1)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
       * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
       * [Changed openDesk defaults: Matrix ID](#changed-opendesk-defaults-matrix-id)
@@ -58,6 +61,16 @@ Explanation of the table's columns:
 | not supported | v0.8.1                      | First release that supporting updates                                                                                                                         |                               |
 
 # Releases upgrade details
+
+## From v1.0.0
+
+### Pre-upgrade: Manual steps
+
+#### Redis 7.4
+
+The update from openDesk 1.0.0 contains Redis 7.4.1, like the other openDesk bundled services the bundled Redis is as well not meant to be used in production.
+
+Please ensure for the Redis you are using that it is updated to at least 7.4 to support the requirement of OX App Suite.
 
 ## From v0.9.0
 
