@@ -90,7 +90,7 @@ multiple namespaces in a cluster.
       commonName: opendesk.eu
       secretName: opendesk-root-cert-secret
       subject:
-        organizations: "openDesk cluster root certificate organization"
+        organizations: [ "openDesk cluster root certificate organization" ]
       privateKey:
         algorithm: ECDSA
         size: 256

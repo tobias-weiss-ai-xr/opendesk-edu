@@ -59,16 +59,16 @@ For the following guide, we will use `dev` as environment where variables can be
 The deployment is designed to deploy each application/service under a dedicated subdomain.
 For your convenience, we recommend creating a `*.domain.tld` A-Record to your cluster ingress controller; otherwise, you must create an A-Record for each subdomain.
 
-| Record name                   | Type | Value                                              | Additional information                                           |
-|-------------------------------|------|----------------------------------------------------|------------------------------------------------------------------|
-| *.domain.tld                  | A    | IPv4 address of your Ingress Controller            |                                                                  |
-| *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            |                                                                  |
-| mail.domain.tld               | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
-| mail.domain.tld               | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
-| domain.tld                    | MX   | `10 mail.domain.tld` |                                                                  |
-| domain.tld                    | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all` | Optional, use proper MTA record if present                       |
-| _dmarc.domain.tld             | TXT  | `v=DMARC1; p=quarantine` | Optional                                                         |
-| default._domainkey.domain.tld | TXT  | `v=DKIM1; k=rsa; h=sha256; ...` | Optional DKIM settings                                           |
+| Record name                   | Type | Value                                              | Additional information                                           |
+| ----------------------------- | ---- | -------------------------------------------------- | ---------------------------------------------------------------- |
+| *.domain.tld                  | A    | IPv4 address of your Ingress Controller            |                                                                  |
+| *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            |                                                                  |
+| mail.domain.tld               | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
+| mail.domain.tld               | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
+| domain.tld                    | MX   | `10 mail.domain.tld`                               |                                                                  |
+| domain.tld                    | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                       |
+| _dmarc.domain.tld             | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                         |
+| default._domainkey.domain.tld | TXT  | `v=DKIM1; k=rsa; h=sha256; ...`                    | Optional DKIM settings                                           |
 
 ## Domain
 
@@ -99,27 +99,27 @@ export DOMAIN=domain.tld
 
 All available apps and their default value are in `helmfile/environments/default/workplace.yaml`.
 
-| Component            | Name                        | Default | Description                    |
+| Component            | Name                        | Default | Description                    |
 | -------------------- | --------------------------- | ------- | ------------------------------ |
-| Certificates         | `certificates.enabled` | `true` | TLS certificates               |
-| ClamAV (Distributed) | `clamavDistributed.enabled` | `false` | Antivirus engine               |
-| ClamAV (Simple)      | `clamavSimple.enabled` | `true` | Antivirus engine               |
-| Collabora            | `collabora.enabled` | `true` | Weboffice                      |
-| CryptPad             | `cryptpad.enabled` | `true` | Weboffice                      |
-| Dovecot              | `dovecot.enabled` | `true` | Mail backend                   |
-| Element              | `element.enabled` | `true` | Secure communications platform |
-| Jitsi                | `jitsi.enabled` | `true` | Videoconferencing              |
-| MariaDB              | `mariadb.enabled` | `true` | Database                       |
-| Memcached            | `memcached.enabled` | `true` | Cache Database                 |
-| MinIO                | `minio.enabled` | `true` | Object Storage                 |
-| Nextcloud            | `nextcloud.enabled` | `true` | File share                     |
-| Nubus                | `nubus.enabled` | `true` | Identity Management & Portal   |
-| OpenProject          | `openproject.enabled` | `true` | Project management             |
-| OX Appsuite          | `oxAppsuite.enabled` | `true` | Groupware                      |
-| Postfix              | `postfix.enabled` | `true` | MTA                            |
-| PostgreSQL           | `postgresql.enabled` | `true` | Database                       |
-| Redis                | `redis.enabled` | `true` | Cache Database                 |
-| XWiki                | `xwiki.enabled` | `true` | Knowledge management           |
+| Certificates         | `certificates.enabled`      | `true`  | TLS certificates               |
+| ClamAV (Distributed) | `clamavDistributed.enabled` | `false` | Antivirus engine               |
+| ClamAV (Simple)      | `clamavSimple.enabled`      | `true`  | Antivirus engine               |
+| Collabora            | `collabora.enabled`         | `true`  | Weboffice                      |
+| CryptPad             | `cryptpad.enabled`          | `true`  | Weboffice                      |
+| Dovecot              | `dovecot.enabled`           | `true`  | Mail backend                   |
+| Element              | `element.enabled`           | `true`  | Secure communications platform |
+| Jitsi                | `jitsi.enabled`             | `true`  | Videoconferencing              |
+| MariaDB              | `mariadb.enabled`           | `true`  | Database                       |
+| Memcached            | `memcached.enabled`         | `true`  | Cache Database                 |
+| MinIO                | `minio.enabled`             | `true`  | Object Storage                 |
+| Nextcloud            | `nextcloud.enabled`         | `true`  | File share                     |
+| Nubus                | `nubus.enabled`             | `true`  | Identity Management & Portal   |
+| OpenProject          | `openproject.enabled`       | `true`  | Project management             |
+| OX Appsuite          | `oxAppsuite.enabled`        | `true`  | Groupware                      |
+| Postfix              | `postfix.enabled`           | `true`  | MTA                            |
+| PostgreSQL           | `postgresql.enabled`        | `true`  | Database                       |
+| Redis                | `redis.enabled`             | `true`  | Cache Database                 |
+| XWiki                | `xwiki.enabled`             | `true`  | Knowledge management           |
 
 Exemplary, Jitsi can be disabled like:
 
