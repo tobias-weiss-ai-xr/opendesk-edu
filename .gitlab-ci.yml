@@ -478,9 +478,6 @@ run-tests:
           \"screenshot_redirect_step\": \"yes\", \
           \"testset\": \"${TESTS_TESTSET}\", \
           \"testprofile\": \"Namespace\", \
-          \"gitlab_functional_yaml\": \"https://gitlab.opencode.de/api/v4/projects/1317/repository/files/helmfile%2Fenvironments%2Fdefault%2Ffunctional.yaml?ref=develop\", \
-          \"gitlab_env_namespace_template\": \"https://gitlab.opencode.de/api/v4/projects/1564/repository/files/environments%2F{operator}%2F{cluster}%2F{namespace}.yaml.gotmpl?ref=main\", \
-          \"gitlab_default_env_namespace\": \"values\", \
           \"GRACE_PERIOD\": \"${TESTS_GRACE_PERIOD}\" \
         } \
       }" \
@@ -492,7 +489,7 @@ avscan-prepare:
   rules:
     - if: >
           $JOB_AVSCAN_ENABLED != 'false' &&
-          $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+          $CI_COMMIT_BRANCH == 'main' &&
           $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "always"
     - when: "never"
@@ -542,7 +539,7 @@ avscan-start:
   rules:
     - if: >
         $JOB_AVSCAN_ENABLED != 'false' &&
-        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+        $CI_COMMIT_BRANCH == 'main' &&
         $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "always"
     - when: "never"
