@@ -80,9 +80,15 @@ repositories:
     url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeodatefixBot.registry }}/{{ .Values.charts.matrixNeodatefixBot.repository }}"
 
 releases:
+  # During upgrade 1.0.0 -> 1.1.0 the chart 'opendesk-element' has been moved to 'opendesk-element-web'
   - name: "opendesk-element"
     chart: "element-repo/{{ .Values.charts.element.name }}"
     version: "{{ .Values.charts.element.version }}"
+    installed: false
+
+  - name: "opendesk-element-web"
+    chart: "element-repo/{{ .Values.charts.elementWeb.name }}"
+    version: "{{ .Values.charts.elementWeb.version }}"
     values:
       - "values-element.yaml.gotmpl"
       - {{ .Values.customization.release.opendeskElement | default "additionalValues: false" }}

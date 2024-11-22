@@ -89,6 +89,16 @@ charts:
     # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-element"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
+    name: "opendesk-element"
+    version: "5.0.0"
+    verify: true
+  elementWeb:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-element"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-element-web"
     version: "5.0.0"
     verify: true
