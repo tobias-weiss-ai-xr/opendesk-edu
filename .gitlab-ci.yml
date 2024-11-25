@@ -47,6 +47,7 @@ stages:
   - ".post"
 
 variables:
+  RELEASE_BRANCH: "main"
   NAMESPACE:
     description: "The name of namespaces to deploy to."
     value: ""
@@ -489,7 +490,7 @@ avscan-prepare:
   rules:
     - if: >
           $JOB_AVSCAN_ENABLED != 'false' &&
-          $CI_COMMIT_BRANCH == 'main' &&
+          $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
           $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "always"
     - when: "never"
@@ -539,7 +540,7 @@ avscan-start:
   rules:
     - if: >
         $JOB_AVSCAN_ENABLED != 'false' &&
-        $CI_COMMIT_BRANCH == 'main' &&
+        $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
         $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "always"
     - when: "never"
@@ -585,7 +586,7 @@ generate-release-version:
   rules:
     - if: >
         $JOB_RELEASE_ENABLED != 'false' &&
-        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+        $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
         $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "on_success"
 
@@ -593,7 +594,7 @@ release:
   rules:
     - if: >
         $JOB_AVSCAN_ENABLED != 'false' &&
-        $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH &&
+        $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
         $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
       when: "on_success"
   script:
@@ -621,7 +622,7 @@ release:
     - |
       cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
       {
-        "branches": ["main"],
+        "branches": ["${RELEASE_BRANCH}"],
         "plugins": [
           "@semantic-release/gitlab",
           "@semantic-release/release-notes-generator",
