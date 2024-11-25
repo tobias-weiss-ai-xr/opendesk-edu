@@ -57,8 +57,10 @@ customConfigs:
     xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
     ## Enable the synchronization of the LDAP profile picture
     xwiki.authentication.ldap.update_photo: 1
-    ## Password of default user
+    {{ if .Values.debug.enabled }}
+    ## Password of "superadmin" user, disables account if not password is set
     xwiki.superadminpassword: {{ .Values.secrets.xwiki.superadminpassword | quote }}
+    {{ end }}
     ## LDAP Server configuration
     xwiki.authentication.ldap.server: {{ .Values.ldap.host | quote }}
     xwiki.authentication.ldap.port: 389
