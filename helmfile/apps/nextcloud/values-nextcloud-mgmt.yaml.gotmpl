@@ -24,10 +24,16 @@ configuration:
     password:
       value: {{ .Values.secrets.nextcloud.adminPassword | quote }}
   antivirus:
+    {{- if .Values.antivirus.icap.host }}
+    host: {{ .Values.antivirus.icap.host | quote }}
+    port: {{ .Values.antivirus.icap.port | quote }}
+    {{- else }}
     {{- if .Values.clamavDistributed.enabled }}
     host: "clamav-icap"
     {{- else if .Values.clamavSimple.enabled }}
     host: "clamav-simple"
+    {{- end }}
+    port: 1344
     {{- end }}
   cache:
     auth:
