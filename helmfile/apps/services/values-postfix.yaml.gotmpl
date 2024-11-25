@@ -68,10 +68,14 @@ postfix:
   smtpdTLSCertFile: "/etc/tls/tls.crt"
   smtpdKeyFile: "/etc/tls/tls.key"
   smtpdSASLPath: "inet:dovecot:3659"
+  {{- if .Values.antivirus.milter.host }}
+  smtpdMilters: "inet:{{ .Values.antivirus.milter.host }}:{{ .Values.antivirus.milter.port }}"
+  {{- else }}
   {{- if .Values.clamavDistributed.enabled }}
   smtpdMilters: "inet:clamav-milter:7357"
   {{- else if .Values.clamavSimple.enabled }}
   smtpdMilters: "inet:clamav-simple:7357"
+  {{- end }}
   {{- end }}
   virtualMailboxDomains: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   virtualTransport: "lmtps:dovecot:24"

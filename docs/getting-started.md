@@ -78,15 +78,15 @@ All subdomains can be customized. For example, _Nextcloud_ can be changed to `fi
 
 ```yaml
 global:
-  hosts:
-    nextcloud: "files"
+  hosts:
+    nextcloud: "files"
 ```
 
 The domain has to be set either via `dev` environment
 
 ```yaml
 global:
-  domain: "domain.tld"
+  domain: "domain.tld"
 ```
 
 or via environment variable
@@ -97,17 +97,19 @@ export DOMAIN=domain.tld
 
 ### Apps
 
-All available apps and their default value are in `helmfile/environments/default/workplace.yaml`.
+All available apps and their default value are in `helmfile/environments/default/opendesk_main.gotmpl`.
 
 | Component            | Name                        | Default | Description                    |
-| -------------------- | --------------------------- | ------- | ------------------------------ |
+|----------------------|-----------------------------|---------|--------------------------------|
 | Certificates         | `certificates.enabled`      | `true`  | TLS certificates               |
 | ClamAV (Distributed) | `clamavDistributed.enabled` | `false` | Antivirus engine               |
 | ClamAV (Simple)      | `clamavSimple.enabled`      | `true`  | Antivirus engine               |
 | Collabora            | `collabora.enabled`         | `true`  | Weboffice                      |
 | CryptPad             | `cryptpad.enabled`          | `true`  | Weboffice                      |
+| dkimpy               | `dkimpy.enabled`            | `false` | Postfix milter for DKIM        |
 | Dovecot              | `dovecot.enabled`           | `true`  | Mail backend                   |
 | Element              | `element.enabled`           | `true`  | Secure communications platform |
+| Home                 | `home.enabled`              | `true`  | Base domain portal redirect    |
 | Jitsi                | `jitsi.enabled`             | `true`  | Videoconferencing              |
 | MariaDB              | `mariadb.enabled`           | `true`  | Database                       |
 | Memcached            | `memcached.enabled`         | `true`  | Cache Database                 |
@@ -125,7 +127,7 @@ Exemplary, Jitsi can be disabled like:
 
 ```yaml
 jitsi:
-  enabled: false
+  enabled: false
 ```
 
 ## Private registries
@@ -145,7 +147,7 @@ prefer the use of a private image registry, you can configure such for
 
 ```yaml
 global:
-  imageRegistry: "my_private_registry.domain.tld"
+  imageRegistry: "my_private_registry.domain.tld"
 ```
 
 alternatively, you can use an environment variable:
@@ -158,16 +160,16 @@ or control repository override fine-granular per registry:
 
 ```yaml
 repositories:
-  image:
-    dockerHub: "my_private_registry.domain.tld/docker.io/"
-    registryOpencodeDe: "my_private_registry.domain.tld/registry.opencode.de/"
+  image:
+    dockerHub: "my_private_registry.domain.tld/docker.io/"
+    registryOpencodeDe: "my_private_registry.domain.tld/registry.opencode.de/"
 ```
 
 If authentication is required, you can reference `imagePullSecrets` as follows:
 
 ```yaml
 global:
-  imagePullSecrets:
+  imagePullSecrets:
     - "external-registry"
 ```
 
@@ -182,8 +184,8 @@ used:
 
 ```yaml
 cluster:
-  service:
-    type: "NodePort"
+  service:
+    type: "NodePort"
 ```
 
 ### Networking
@@ -192,16 +194,16 @@ If your cluster has not the default `cluster.local` domain configured, you need 
 
 ```yaml
 cluster:
-  networking:
-    domain: "acme.internal"
+  networking:
+    domain: "acme.internal"
 ```
 
 If your cluster has not the default `10.0.0.0/8` CIDR configured, you need to provide the CIDR via the following:
 
 ```yaml
 cluster:
-  networking:
-    cidr:
+  networking:
+    cidr:
       - "127.0.0.0/8"
 ```
 
@@ -210,8 +212,8 @@ explicitly configure the related IPs or IP ranges:
 
 ```yaml
 cluster:
-  networking:
-    incomingCIDR:
+  networking:
+    incomingCIDR:
       - "172.16.0.0/12"
 ```
 
@@ -223,7 +225,7 @@ setting the following attribute to the name of the currently only supported ingr
 
 ```yaml
 ingress:
-  ingressClassName: "name-of-my-nginx-ingress"
+  ingressClassName: "name-of-my-nginx-ingress"
 ```
 
 ### Container runtime
@@ -233,8 +235,8 @@ Some apps require specific configurations for the container runtime. You can set
 
 ```yaml
 cluster:
-  container:
-    engine: "containerd"
+  container:
+    engine: "containerd"
 ```
 
 ### Volumes
@@ -244,17 +246,17 @@ default, only `ReadWriteOnce` is enabled. To enable `ReadWriteMany` you can set:
 
 ```yaml
 cluster:
-  persistence:
-    readWriteMany: true
+  persistence:
+    readWriteMany: true
 ```
 
 The **StorageClass** can be set by:
 
 ```yaml
 persistence:
-  storageClassNames:
-    RWX: "my-read-write-many-class"
-    RWO: "my-read-write-once-class"
+  storageClassNames:
+    RWX: "my-read-write-many-class"
+    RWO: "my-read-write-once-class"
 ```
 
 ## Connectivity
@@ -267,22 +269,22 @@ persistence:
 
 To use the openDesk functionality with its web-based user interface, you need to expose the following ports publicly:
 
-| Component          | Description             |  Port | Type |
+| Component          | Description             |  Port | Type |
 | ------------------ | ----------------------- | ----: | ---: |
-| openDesk           | Kubernetes Ingress      |    80 |  TCP |
-| openDesk           | Kubernetes Ingress      |   443 |  TCP |
-| Jitsi Video Bridge | ICE Port for video data | 10000 |  UDP |
+| openDesk           | Kubernetes Ingress      |    80 |  TCP |
+| openDesk           | Kubernetes Ingress      |   443 |  TCP |
+| Jitsi Video Bridge | ICE Port for video data | 10000 |  UDP |
 
 #### Mail clients
 
 To connect with mail clients like [Thunderbird](https://www.thunderbird.net/), the following ports need public exposure:
 
-| Component          | Description             |  Port | Type |
+| Component          | Description             |  Port | Type |
 | ------------------ | ----------------------- | ----: | ---: |
-| Dovecot            | IMAPS                   |   993 |  TCP |
-|                    | POP3S                   |   995 |  TCP |
-| Postfix            | SMTP                    |    25 |  TCP |
-|                    | SMTPS                   |   587 |  TCP |
+| Dovecot            | IMAPS                   |   993 |  TCP |
+|                    | POP3S                   |   995 |  TCP |
+| Postfix            | SMTP                    |    25 |  TCP |
+|                    | SMTPS                   |   587 |  TCP |
 
 ### Mail/SMTP configuration
 
@@ -291,9 +293,9 @@ the whole subdomain.
 
 ```yaml
 smtp:
-  host: "mail.open.desk"
-  username: "openDesk"
-  password: "secret"
+  host: "mail.open.desk"
+  username: "openDesk"
+  password: "secret"
 ```
 
 Enabling DKIM signing of emails helps to reduce spam and increases trust.
@@ -301,12 +303,12 @@ openDesk ships dkimpy-milter as Postfix milter for signing emails.
 
 ```yaml
 dkimpy:
-  enable: true
-  dkim:
-    key:
-      value: "HzZs08QF1O7UiAkcM9T3U7rePPECtSFvWZIvyKqdg8E="
-    selector: "default"
-    useED25519: true # when false, RSA is used
+  enable: true
+  dkim:
+    key:
+      value: "HzZs08QF1O7UiAkcM9T3U7rePPECtSFvWZIvyKqdg8E="
+    selector: "default"
+    useED25519: true # when false, RSA is used
 ```
 
 ### TURN configuration
@@ -316,14 +318,14 @@ these options:
 
 ```yaml
 turn:
-  transport: "udp" # or tcp
-  credentials: "secret"
-  server:
-    host: "turn.open.desk"
-    port: "3478"
-  tls:
-    host: "turns.open.desk"
-    port: "5349"
+  transport: "udp" # or tcp
+  credentials: "secret"
+  server:
+    host: "turn.open.desk"
+    port: "3478"
+  tls:
+    host: "turns.open.desk"
+    port: "5349"
 ```
 
 ### Certificate issuer
@@ -334,7 +336,7 @@ turn off `Certificate` resource creation by:
 
 ```yaml
 certificates:
-  enabled: false
+  enabled: false
 ```
 
 If you want to leverage the `cert-manager.io` to handle certificates, like `Let's encrypt`, you need to provide the
@@ -342,15 +344,15 @@ configured cluster issuer:
 
 ```yaml
 certificate:
-  issuerRef:
-    name: "letsencrypt-prod"
+  issuerRef:
+    name: "letsencrypt-prod"
 ```
 
 Additionally, it is possible to request wildcard certificates by:
 
 ```yaml
 certificate:
-  wildcard: true
+  wildcard: true
 ```
 
 ## Password seed
@@ -456,7 +458,7 @@ NAMESPACE=your-namespace
 
 # Uninstall all Helm charts
 for OPENDESK_RELEASE in $(helm ls -n ${NAMESPACE} -aq); do
-  helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE};
+  helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE};
 done
 
 # Delete leftover resources
