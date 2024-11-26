@@ -759,11 +759,17 @@ containerSecurityContext:
     {{ .Values.seLinuxOptions.opendeskKeycloakBootstrap | toYaml | nindent 4 }}
 
 additionalAnnotations:
-    argocd.argoproj.io/hook: "Sync"
-    argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+  argocd.argoproj.io/hook: "Sync"
+  argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+  {{- with .Values.annotations.nubusKeycloakBootstrap.additional }}
+  {{. | toYaml | nindent 2 }}
+  {{- end }}
 
 podAnnotations:
   intents.otterize.com/service-name: "ums-keycloak-bootstrap"
+  {{- with .Values.annotations.nubusKeycloakBootstrap.pod }}
+  {{. | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true
@@ -772,6 +778,10 @@ podSecurityContext:
 
 resources:
   {{ .Values.resources.opendeskKeycloakBootstrap | toYaml | nindent 2 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.nubusKeycloakBootstrap.serviceAccount | toYaml | nindent 4 }}
 
 {{- if .Values.certificate.selfSigned }}
 extraVolumes:

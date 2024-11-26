@@ -3,7 +3,15 @@
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
-podAnnotations: {}
+additionalAnnotations:
+  {{ .Values.annotations.opendeskMigrationsPost.additional | toYaml | nindent 2 }}
+
+podAnnotations:
+  {{ .Values.annotations.opendeskMigrationsPost.pod | toYaml | nindent 2 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.opendeskMigrationsPost.serviceAccount | toYaml | nindent 4 }}
 
 migrations:
   stage: "POST"

@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+commonAnnotations:
+  {{ .Values.annotations.elementWellKnown.common | toYaml | nindent 2 }}
+
 configuration:
   e2ee:
     forceDisable: false
@@ -44,8 +47,11 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.elementWellKnown.ingress | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementWellKnown.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -56,4 +62,11 @@ replicaCount: {{ .Values.replicas.wellKnown }}
 resources:
   {{ .Values.resources.wellKnown | toYaml | nindent 2 }}
 
+service:
+  annotations:
+    {{ .Values.annotations.elementWellKnown.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementWellKnown.serviceAccount | toYaml | nindent 4 }}
 ...

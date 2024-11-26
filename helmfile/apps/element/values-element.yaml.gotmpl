@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+commonAnnotations:
+  {{ .Values.annotations.element.common | toYaml | nindent 2 }}
+
 configuration:
   endToEndEncryption: true
   additionalConfiguration:
@@ -136,8 +139,11 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.element.ingress | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.element.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -147,6 +153,14 @@ replicaCount: {{ .Values.replicas.element }}
 
 resources:
   {{ .Values.resources.element | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.element.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.element.serviceAccount | toYaml | nindent 4 }}
 
 theme:
   title: "Chat - {{ .Values.theme.texts.productName }}"

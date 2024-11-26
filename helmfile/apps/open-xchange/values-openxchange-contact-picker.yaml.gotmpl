@@ -6,7 +6,11 @@ SPDX-License-Identifier: Apache-2.0
 ---
 appsuite:
   core-mw:
-
+    podAnnotations:
+      logging.open-xchange.com/format: "appsuite-json"
+      {{- with .Values.annotations.openxchangeEnterpriseContactPicker.appsuiteCoreMwPod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     properties:
       # Enterprise contact picker
       com.openexchange.contacts.ldap.accounts: "opendesk,other,functional"
@@ -27,6 +31,10 @@ appsuite:
             adminDN:
               dn: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
               password: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
+
+    serviceAccount:
+      annotations:
+        {{ .Values.annotations.openxchangeEnterpriseContactPicker.appsuiteCoreMwServiceAccount | toYaml | nindent 8 }}
 
     uiSettings:
       # Enterprise contact picker

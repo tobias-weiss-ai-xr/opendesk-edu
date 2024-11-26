@@ -7,6 +7,9 @@ global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
+additionalAnnotations:
+  {{ .Values.annotations.nubusNginxS3Gateway.additional | toYaml | nindent 2 }}
+
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nginxS3Gateway.registry | quote }}
   repository: {{ .Values.images.nginxS3Gateway.repository | quote }}
@@ -20,6 +23,10 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: "/portal-assets/icons/$2/$3"
     nginx.ingress.kubernetes.io/use-regex: "true"
+    {{- with .Values.annotations.nubusNginxS3Gateway.ingress }}
+    {{. | toYaml | nindent 4 }}
+    {{- end }}
+
   path: "/univention/(portal|selfservice)/icons/(logos|entries)/(.*)$"
   tls:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
@@ -36,8 +43,20 @@ configuration:
     secretKey:
       value: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
 
+podAnnotations:
+  {{ .Values.annotations.nubusNginxS3Gateway.pod | toYaml | nindent 2 }}
+
 resources:
   {{ .Values.resources.nginxS3Gateway | toYaml | nindent 2 }}
 
 replicaCount: {{ .Values.replicas.nginxS3Gateway }}
+
+service:
+  annotations:
+    {{ .Values.annotations.nubusNginxS3Gateway.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.nubusNginxS3Gateway.serviceAccount | toYaml | nindent 4 }}
+
 ...

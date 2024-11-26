@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Federal Ministry of the Interior and Community, PG 
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+additionalAnnotations:
+  {{ .Values.annotations.elementMatrixNeodatefixBot.additional | toYaml | nindent 2 }}
+
 global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
@@ -76,6 +79,8 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixBot.ingress | toYaml | nindent 4 }}
 
 liveness sample:
   enabled: true
@@ -83,8 +88,11 @@ liveness sample:
 persistence:
   size: {{ .Values.persistence.storages.matrixNeoDateFixBot.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.matrixNeoDateFixBot.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixBot.persistence | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementMatrixNeodatefixBot.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -97,5 +105,13 @@ replicaCount: {{ .Values.replicas.matrixNeoDateFixBot }}
 
 resources:
   {{ .Values.resources.matrixNeoDateFixBot | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixBot.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixBot.serviceAccount | toYaml | nindent 4 }}
 
 ...

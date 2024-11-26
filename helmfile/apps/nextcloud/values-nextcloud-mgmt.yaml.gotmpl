@@ -12,7 +12,10 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 additionalAnnotations:
-  intents.otterize.com/service-name: "opendesk-nextcloud-management"
+  intents.otterize.com/service-name: "opendesk-nextcloud-php"
+  {{- with .Values.annotations.nextcloudNextcloudMgmt.additional }}
+  {{ . | toYaml | nindent 2}}
+  {{- end }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
@@ -184,8 +187,6 @@ containerSecurityContext:
   runAsNonRoot: true
   seLinuxOptions:
     {{ .Values.seLinuxOptions.nextcloudManagement | toYaml | nindent 4 }}
-podSecurityContext:
-  fsGroup: 101
 
 debug:
   loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
@@ -214,10 +215,20 @@ image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.nextcloud.tag | quote }}
 
-theme:
-  {{ .Values.theme | toYaml | nindent 2 }}
+podAnnotations:
+  {{ .Values.annotations.nextcloudNextcloudMgmt.pod | toYaml | nindent 2 }}
+
+podSecurityContext:
+  fsGroup: 101
 
 resources:
   {{ .Values.resources.nextcloud | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.nextcloudNextcloudMgmt.serviceAccount | toYaml | nindent 4 }}
+
+theme:
+  {{ .Values.theme | toYaml | nindent 2 }}
 
 ...

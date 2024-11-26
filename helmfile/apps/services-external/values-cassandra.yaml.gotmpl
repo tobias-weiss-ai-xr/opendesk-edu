@@ -33,6 +33,10 @@ image:
   tag: {{ .Values.images.cassandra.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
+ingress:
+  annotations:
+    {{ .Values.annotations.cassandra.ingress | toYaml | nindent 6 }}
+
 initDB:
   initUserData.cql: >
     CREATE KEYSPACE IF NOT EXISTS {{ .Values.databases.dovecotDictmap.name | quote }} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
@@ -70,7 +74,8 @@ persistence:
   size: {{ .Values.persistence.storages.cassandra.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.cassandra.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.cassandra.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -91,6 +96,10 @@ replicaCount: {{ .Values.replicas.cassandra }}
 
 resources:
   {{ .Values.resources.cassandra | toYaml | nindent 2 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.cassandra.serviceAccount | toYaml | nindent 4 }}
 
 startupProbe:
   enabled: false

@@ -84,7 +84,8 @@ postfix:
   virtualMailboxDomains: {{ if .Values.global.additionalMailDomains }}{{ printf "%s,%s" (.Values.global.mailDomain | default .Values.global.domain) .Values.global.additionalMailDomains }}{{ else }}{{ .Values.global.mailDomain | default .Values.global.domain | quote }}{{ end }}
   virtualTransport: "lmtps:dovecot:24"
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.openxchangePostfix.pod | toYaml | nindent 2 }}
 
 replicaCount: {{ .Values.replicas.postfix }}
 
@@ -93,6 +94,8 @@ resources:
 
 {{- if or (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "LoadBalancer") }}
 service:
+  annotations:
+    {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
   external:
     enabled: true
     type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}

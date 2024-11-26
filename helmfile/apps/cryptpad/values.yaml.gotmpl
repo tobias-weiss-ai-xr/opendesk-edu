@@ -39,6 +39,9 @@ ingress:
   enabled: {{ .Values.ingress.enabled }}
   annotations:
     nginx.org/websocket-services: "cryptpad"
+   {{- with .Values.annotations.cryptpad.ingress }}
+   {{ . | toYaml | nindent 4 }}
+   {{- end }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:
     - host: "{{ .Values.global.hosts.cryptpad }}.{{ .Values.global.domain }}"
@@ -53,7 +56,8 @@ ingress:
 persistence:
   enabled: false
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.cryptpad.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   fsGroup: 4001
@@ -80,6 +84,8 @@ securityContext:
 
 serviceAccount:
   create: true
+  annotations:
+    {{ .Values.annotations.cryptpad.serviceAccount | toYaml | nindent 4 }}
 
 workloadStateful: false
 

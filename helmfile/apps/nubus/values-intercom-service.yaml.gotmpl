@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+additionalAnnotations:
+  {{ .Values.annotations.nubusIntercomService.additional | toYaml | nindent 2 }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -99,8 +102,11 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.nubusIntercomService.ingress | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.nubusIntercomService.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -150,4 +156,11 @@ replicaCount: {{ .Values.replicas.intercomService }}
 resources:
   {{ .Values.resources.intercomService | toYaml | nindent 2 }}
 
+service:
+  annotations:
+    {{ .Values.annotations.nubusIntercomService.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.nubusIntercomService.serviceAccount | toYaml | nindent 4 }}
 ...

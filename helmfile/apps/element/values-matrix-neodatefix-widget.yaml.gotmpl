@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Federal Ministry of the Interior and Community, PG 
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+additionalAnnotations:
+  {{ .Values.annotations.elementMatrixNeodatefixWidget.additional | toYaml | nindent 2 }}
+
 configuration:
   bot:
     username: "meetings-bot"
@@ -44,8 +47,11 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixWidget.ingress | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementMatrixNeodatefixWidget.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -58,6 +64,14 @@ resources:
 
 theme:
   {{ .Values.theme | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixWidget.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixWidget.serviceAccount | toYaml | nindent 4 }}
 
 nginx:
   ipv4Only: {{ if eq .Values.cluster.networking.ipFamilies "IPv4" }}true{{ else }}false{{ end }}

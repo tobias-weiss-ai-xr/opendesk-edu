@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+additionalAnnotations:
+  {{ .Values.annotations.servicesExternalDkimpy.additional | toYaml | nindent 2 }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: true
   capabilities: {}
@@ -28,6 +31,9 @@ image:
   tag: {{ .Values.images.dkimpy.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
+podAnnotations:
+  {{ .Values.annotations.servicesExternalDkimpy.service | toYaml | nindent 2 }}
+
 podSecurityContext:
   enabled: true
   fsGroup: 1000
@@ -44,4 +50,13 @@ replicaCount: {{ .Values.replicas.dkimpy }}
 
 resources:
   {{ .Values.resources.dkimpy | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.servicesExternalDkimpy.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.servicesExternalDkimpy.serviceAccount | toYaml | nindent 4 }}
+
 ...
