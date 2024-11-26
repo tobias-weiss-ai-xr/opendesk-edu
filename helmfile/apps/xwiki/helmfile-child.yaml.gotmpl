@@ -19,7 +19,9 @@ releases:
     wait: true
     values:
       - "values.yaml.gotmpl"
-      - {{ .Values.customization.release.xwiki | default "additionalValues: false" }}
+      {{ range .Values.customization.release.xwiki }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.xwiki.enabled }}
     timeout: 1800
 

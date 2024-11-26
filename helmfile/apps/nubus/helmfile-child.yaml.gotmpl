@@ -46,7 +46,9 @@ releases:
       - "values-nubus.yaml.gotmpl"
       - "values-opendesk-customization.yaml.gotmpl"
       - "values-opendesk-images.yaml.gotmpl"
-      - {{ .Values.customization.release.ums | default "additionalValues: false" }}
+      {{ range .Values.customization.release.ums }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.nubus.enabled }}
     timeout: 900
   # Intercom-Service
@@ -55,7 +57,9 @@ releases:
     version: "{{ .Values.charts.intercomService.version }}"
     values:
       - "values-intercom-service.yaml.gotmpl"
-      - {{ .Values.customization.release.intercomService | default "additionalValues: false" }}
+      {{ range .Values.customization.release.intercomService }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.nubus.enabled }}
 
   # openDesk Keycloak Bootstrap Chart
@@ -64,7 +68,9 @@ releases:
     version: "{{ .Values.charts.opendeskKeycloakBootstrap.version }}"
     values:
       - "values-opendesk-keycloak-bootstrap.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskKeycloakBootstrap | default "additionalValues: false" }}
+      {{ range .Values.customization.release.opendeskKeycloakBootstrap }}
+      - {{ . }}
+      {{ end }}
     needs:
       - "ums"
     installed: {{ .Values.nubus.enabled }}
@@ -76,7 +82,9 @@ releases:
     version: "{{ .Values.charts.nginxS3Gateway.version }}"
     values:
       - "values-nginx-s3-gateway.yaml.gotmpl"
-      - {{ .Values.customization.release.nginxS3Gateway | default "additionalValues: false" }}
+      {{ range .Values.customization.release.nginxS3Gateway }}
+      - {{ . }}
+      {{ end }}
     installed: {{ not .Values.minio.enabled }}
     timeout: 900
 

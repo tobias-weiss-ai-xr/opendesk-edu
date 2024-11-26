@@ -119,7 +119,9 @@ releases:
     version: "{{ .Values.charts.otterize.version }}"
     values:
       - "values-otterize.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskOtterize | default "additionalValues: false" }}
+      {{ range .Values.customization.release.opendeskOtterize }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.security.otterizeIntents.enabled }}
     timeout: 900
 
@@ -128,7 +130,9 @@ releases:
     version: "{{ .Values.charts.home.version }}"
     values:
       - "values-home.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskHome | default "additionalValues: false" }}
+      {{ range .Values.customization.release.opendeskHome }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.home.enabled }}
 
   - name: "opendesk-certificates"
@@ -136,7 +140,9 @@ releases:
     version: "{{ .Values.charts.certificates.version }}"
     values:
       - "values-certificates.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskCertificates | default "additionalValues: false" }}
+      {{ range .Values.customization.release.opendeskCertificates }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.certificates.enabled }}
     timeout: 900
 
@@ -145,7 +151,9 @@ releases:
     version: "{{ .Values.charts.redis.version }}"
     values:
       - "values-redis.yaml.gotmpl"
-      - {{ .Values.customization.release.redis | default "additionalValues: false" }}
+      {{ range .Values.customization.release.redis }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.redis.enabled }}
     timeout: 900
 
@@ -154,7 +162,9 @@ releases:
     version: "{{ .Values.charts.memcached.version }}"
     values:
       - "values-memcached.yaml.gotmpl"
-      - {{ .Values.customization.release.memcached | default "additionalValues: false" }}
+      {{ range .Values.customization.release.memcached }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.memcached.enabled }}
     timeout: 900
 
@@ -163,7 +173,9 @@ releases:
     version: "{{ .Values.charts.postgresql.version }}"
     values:
       - "values-postgresql.yaml.gotmpl"
-      - {{ .Values.customization.release.postgresql | default "additionalValues: false" }}
+      {{ range .Values.customization.release.postgresql }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.postgresql.enabled }}
     timeout: 900
 
@@ -172,7 +184,9 @@ releases:
     version: "{{ .Values.charts.mariadb.version }}"
     values:
       - "values-mariadb.yaml.gotmpl"
-      - {{ .Values.customization.release.mariadb | default "additionalValues: false" }}
+      {{ range .Values.customization.release.mariadb }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.mariadb.enabled }}
     timeout: 900
 
@@ -181,7 +195,9 @@ releases:
     version: "{{ .Values.charts.postfix.version }}"
     values:
       - "values-postfix.yaml.gotmpl"
-      - {{ .Values.customization.release.postfix | default "additionalValues: false" }}
+      {{ range .Values.customization.release.postfix }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.postfix.enabled }}
     timeout: 900
 
@@ -190,7 +206,9 @@ releases:
     version: "{{ .Values.charts.dkimpy.version }}"
     values:
       - "values-dkimpy.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskDkimpyMilter | default "additionalValues: false" }}
+      {{ range .Values.customization.release.opendeskDkimpyMilter }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.dkimpy.enabled }}
     timeout: 900
 
@@ -199,7 +217,9 @@ releases:
     version: "{{ .Values.charts.clamav.version }}"
     values:
       - "values-clamav-distributed.yaml.gotmpl"
-      - {{ .Values.customization.release.clamav | default "additionalValues: false" }}
+      {{ range .Values.customization.release.clamav }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.clamavDistributed.enabled }}
     timeout: 900
 
@@ -208,7 +228,9 @@ releases:
     version: "{{ .Values.charts.clamavSimple.version }}"
     values:
       - "values-clamav-simple.yaml.gotmpl"
-      - {{ .Values.customization.release.clamavSimple | default "additionalValues: false" }}
+      {{ range .Values.customization.release.clamavSimple }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.clamavSimple.enabled }}
     timeout: 900
 
@@ -217,7 +239,9 @@ releases:
     version: "{{ .Values.charts.minio.version }}"
     values:
       - "values-minio.yaml.gotmpl"
-      - {{ .Values.customization.release.minio | default "additionalValues: false" }}
+      {{ range .Values.customization.release.minio }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.minio.enabled }}
     timeout: 900
 
