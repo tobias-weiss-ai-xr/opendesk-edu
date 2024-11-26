@@ -9,50 +9,50 @@
 customization:
   release:
     # collabora
-    collaboraOnline: ~
+    collaboraOnline: {}
     # cryptpad
-    cryptpad: ~
+    cryptpad: {}
     # element
-    opendeskElement: ~
-    opendeskWellKnown: ~
-    opendeskSynapseWeb: ~
-    opendeskSynapse: ~
+    opendeskElement: {}
+    opendeskWellKnown: {}
+    opendeskSynapseWeb: {}
+    opendeskSynapse: {}
     # jitsi
-    jitsi: ~
+    jitsi: {}
     # migrations-post
-    migrationsPost: ~
+    migrationsPost: {}
     # migrations-pre
-    migrationsPre: ~
+    migrationsPre: {}
     # nextcloud
-    opendeskNextcloudManagement: ~
-    opendeskNextcloud: ~
+    opendeskNextcloudManagement: {}
+    opendeskNextcloud: {}
     # nubus
-    ums: ~
-    intercomService: ~
-    opendeskKeycloakBootstrap: ~
-    nginxS3Gateway: ~
+    ums: {}
+    intercomService: {}
+    opendeskKeycloakBootstrap: {}
+    nginxS3Gateway: {}
     # open-xchange
-    dovecot: ~
-    openXchange: ~
-    opendeskOpenXchangeBootstrap: ~
-    oxConnector: ~
+    dovecot: {}
+    openXchange: {}
+    opendeskOpenXchangeBootstrap: {}
+    oxConnector: {}
     # openproject
-    openproject: ~
+    openproject: {}
     # openproject-bootstrap
-    opendeskOpenprojectBootstrap: ~
+    opendeskOpenprojectBootstrap: {}
     # services
-    opendeskOtterize: ~
-    opendeskHome: ~
-    opendeskCertificates: ~
-    redis: ~
-    memcached: ~
-    postgresql: ~
-    mariadb: ~
-    postfix: ~
-    opendeskDkimpyMilter: ~
-    clamav: ~
-    clamavSimple: ~
-    minio: ~
+    opendeskOtterize: {}
+    opendeskHome: {}
+    opendeskCertificates: {}
+    redis: {}
+    memcached: {}
+    postgresql: {}
+    mariadb: {}
+    postfix: {}
+    opendeskDkimpyMilter: {}
+    clamav: {}
+    clamavSimple: {}
+    minio: {}
     # xwiki
-    xwiki: ~
+    xwiki: {}
 ...

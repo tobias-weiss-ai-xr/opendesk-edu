@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Releases upgrade details](#releases-upgrade-details)
   * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
+      * [`customization.release`](#customizationrelease)
       * [Redis 7.4](#redis-74)
   * [From v0.9.0](#from-v090)
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps-1)
@@ -57,7 +58,7 @@ Explanation of the table's columns:
 | Coming from   | Mandatory (minimum) release | Automatic migration                                                                                                                                           | Manual activities             |
 | ------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | v0.9.0        | v1.x.x                      | [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_2.py) | See [From v0.9.0](#from-v090) |
-| v0.8.1        | v0.9.0                      | Initializes migration system                                                                                                                                  | See [From v0.8.1](#from-v081)     |
+| v0.8.1        | v0.9.0                      | Initializes migration system                                                                                                                                  | See [From v0.8.1](#from-v081) |
 | not supported | v0.8.1                      | First release that supporting updates                                                                                                                         |                               |
 
 # Releases upgrade details
@@ -65,6 +66,27 @@ Explanation of the table's columns:
 ## From v1.0.0
 
 ### Pre-upgrade: Manual steps
+
+#### `customization.release`
+
+If you make use of the `customization.release` option, you have to switch to a dictionary based definition of customization files e.g. from
+
+```
+customization:
+  release:
+    collaboraOnline: "./my_custom_templating.yaml"
+```
+
+to
+
+```
+customization:
+  release:
+    collaboraOnline:
+      file1: "./my_custom_templating.yaml"
+```
+
+You can freely choose the `file1` dictionary key used in the example above, but it should start with a letter.
 
 #### Redis 7.4
 

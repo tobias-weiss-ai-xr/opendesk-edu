@@ -45,7 +45,9 @@ releases:
     version: "{{ .Values.charts.dovecot.version }}"
     values:
       - "values-dovecot.yaml.gotmpl"
-      - {{ .Values.customization.release.dovecot | default "additionalValues: false" }}
+      {{ range .Values.customization.release.dovecot }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.dovecot.enabled }}
     timeout: 900
 
@@ -55,7 +57,9 @@ releases:
     values:
       - "values-openxchange.yaml.gotmpl"
       - "values-openxchange-enterprise-contact-picker.yaml.gotmpl"
-      - {{ .Values.customization.release.openXchange | default "additionalValues: false" }}
+      {{ range .Values.customization.release.openXchange }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.oxAppsuite.enabled }}
     timeout: 900
 
@@ -64,7 +68,9 @@ releases:
     version: "{{ .Values.charts.openXchangeAppSuiteBootstrap.version }}"
     values:
       - "values-openxchange-bootstrap.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskOpenXchangeBootstrap | default "additionalValues: false" }}
+      {{ range .Values.customization.release.opendeskOpenXchangeBootstrap }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.oxAppsuite.enabled }}
     timeout: 900
 
@@ -73,7 +79,9 @@ releases:
     version: "{{ .Values.charts.oxConnector.version }}"
     values:
       - "values-oxconnector.yaml.gotmpl"
-      - {{ .Values.customization.release.oxConnector | default "additionalValues: false" }}
+      {{ range .Values.customization.release.oxConnector }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.oxAppsuite.enabled }}
     needs:
       - "open-xchange"

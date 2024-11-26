@@ -20,7 +20,9 @@ releases:
     waitForJobs: true
     values:
       - "values.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskOpenprojectBootstrap | default "additionalValues: false" }}
+      {{ range .Values.customization.release.opendeskOpenprojectBootstrap }}
+      - {{ . }}
+      {{ end }}
     installed: {{ .Values.openproject.enabled }}
     timeout: 900
 
