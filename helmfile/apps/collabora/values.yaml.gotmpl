@@ -65,6 +65,35 @@ ingress:
       location /cool/getMetrics { deny all; return 403; }
       location /cool/adminws/ { deny all; return 403; }
       location /browser/dist/admin/admin.html { deny all; return 403; }
+    # NGINX
+    nginx.org/websocket-services: "collabora"
+    nginx.org/lb-method: "hash $arg_WOPISrc consistent"
+    nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
+    nginx.org/server-snippets: |
+      # block admin and metrics endpoint from outside by default
+      location /cool/getMetrics { deny all; return 403; }
+      location /cool/adminws/ { deny all; return 403; }
+      location /browser/dist/admin/admin.html { deny all; return 403; }
+    # HAProxy
+    haproxy.org/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    haproxy.org/backend-config-snippet: |
+       balance url_param WOPISrc check_post
+       hash-type consistent
+    # HAProxy - Community: https://haproxy-ingress.github.io/
+    haproxy-ingress.github.io/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    haproxy-ingress.github.io/balance-algorithm: "url_param WOPISrc check_post"
+    haproxy-ingress.github.io/config-backend: |
+      hash-type consistent
+      # block admin urls from outside
+      acl admin_url path_beg /cool/getMetrics
+      acl admin_url path_beg /cool/adminws/
+      acl admin_url path_beg /browser/dist/admin/admin.html
+      http-request deny if admin_url
+   {{- with .Values.annotations.collabora.ingress }}
+   {{ . | toYaml | nindent 4 }}
+   {{- end }}
   enabled: {{ .Values.ingress.enabled }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:
@@ -77,7 +106,8 @@ ingress:
       hosts:
         - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.collabora.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   fsGroup: 1001
@@ -116,6 +146,13 @@ securityContext:
 
   seLinuxOptions:
     {{ .Values.seLinuxOptions.collabora | toYaml | nindent 4 }}
+
 serviceAccount:
   create: true
+  annotations:
+    {{ .Values.annotations.collabora.serviceAccount | toYaml | nindent 4 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.collabora.service | toYaml | nindent 4 }}
 ...

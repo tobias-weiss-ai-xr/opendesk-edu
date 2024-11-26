@@ -15,9 +15,15 @@ apiIngress:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "4G"
     nginx.org/client-max-body-size: "4G"
+    {{- with .Values.annotations.servicesExternalMinio.apiIngress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
 
 auth:
   rootPassword: {{ .Values.secrets.minio.rootPassword | quote }}
+
+commonAnnotations:
+  {{ .Values.annotations.servicesExternalMinio.common | toYaml | nindent 2 }}
 
 containerSecurityContext:
   enabled: true
@@ -66,6 +72,9 @@ ingress:
       secretName: "{{ .Values.ingress.tls.secretName }}"
   annotations:
     nginx.org/websocket-services: "minio"
+    {{- with .Values.annotations.servicesExternalMinio.ingress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
 {{- end }}
 
 livenessProbe:
@@ -92,6 +101,8 @@ podSecurityContext:
 persistence:
   size: {{ .Values.persistence.storages.minio.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.minio.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  annotations:
+    {{ .Values.annotations.servicesExternalMinio.persistence | toYaml | nindent 4 }}
 
 provisioning:
   enabled: true
@@ -121,6 +132,8 @@ provisioning:
       versioning: "Suspended"
       withLock: false
     {{- end }}
+  podAnnotations:
+    {{ .Values.annotations.servicesExternalMinio.provisioningPod | toYaml | nindent 4 }}
   policies:
     - name: "migrations-bucket-policy"
       statements:
@@ -238,7 +251,8 @@ provisioning:
   resources:
     {{ .Values.resources.minio | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.servicesExternalMinio.pod | toYaml | nindent 2 }}
 
 readinessProbe:
   enabled: true
@@ -248,6 +262,17 @@ readinessProbe:
 
 resources:
   {{ .Values.resources.minio | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.servicesExternalMinio.serviceService | toYaml | nindent 4 }}
+  headless:
+    annotations:
+      {{ .Values.annotations.servicesExternalMinio.serviceHeadless | toYaml | nindent 6 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.servicesExternalMinio.serviceAccount | toYaml | nindent 4 }}
 
 startupProbe:
   enabled: true

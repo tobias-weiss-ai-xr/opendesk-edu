@@ -9,6 +9,9 @@ certificate:
   request:
     enabled: false
 
+commonAnnotations:
+  {{ .Values.annotations.servicesExternalPostfix.common | toYaml | nindent 2 }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: true
   capabilities: {}
@@ -36,6 +39,11 @@ image:
 persistence:
   size: {{ .Values.persistence.storages.postfix.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.postfix.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  annotations:
+    {{ .Values.annotations.servicesExternalPostfix.persistence | toYaml | nindent 4 }}
+
+podAnnotations:
+  {{ .Values.annotations.servicesExternalPostfix.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -99,6 +107,12 @@ resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
 
 service:
+  annotations:
+    {{ .Values.annotations.servicesExternalPostfix.service | toYaml | nindent 4 }}
   external:
     enabled: false
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.servicesExternalPostfix.serviceAccount | toYaml | nindent 4 }}
 ...

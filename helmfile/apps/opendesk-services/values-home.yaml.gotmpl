@@ -3,6 +3,9 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+additionalAnnotations:
+  {{ .Values.annotations.opendeskServicesHome.additional | toYaml | nindent 2 }}
+
 global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
@@ -12,4 +15,6 @@ ingress:
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   tls:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.opendeskServicesHome.ingress | toYaml | nindent 4 }}
 ...

@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+commonAnnotations:
+  {{ .Values.annotations.servicesExternalClamavSimple.common | toYaml | nindent 2 }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -39,8 +42,11 @@ image:
 persistence:
   size: {{ .Values.persistence.storages.clamav.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.clamav.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  annotations:
+    {{ .Values.annotations.servicesExternalClamavSimple.persistence | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.servicesExternalClamavSimple.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -62,4 +68,13 @@ settings:
         url: {{ .Values.repositories.clamav.mirror.url | quote }}
       customURLs:
         {{ .Values.repositories.clamav.customURLs | toYaml | nindent 8 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.servicesExternalClamavSimple.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.servicesExternalClamavSimple.serviceAccount | toYaml | nindent 4 }}
+
 ...

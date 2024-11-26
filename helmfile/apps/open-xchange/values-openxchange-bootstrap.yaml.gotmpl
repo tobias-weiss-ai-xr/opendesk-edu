@@ -4,6 +4,13 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+additionalAnnotations:
+  argocd.argoproj.io/hook: "Sync"
+  argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
+  {{- with .Values.annotations.openxchangeBootstrap.additional }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
+
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
   deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
@@ -31,7 +38,8 @@ image:
 imagePullSecrets:
   {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
-additionalAnnotations:
-  argocd.argoproj.io/hook: "Sync"
-  argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.openxchangeBootstrap.serviceAccount | toYaml | nindent 4 }}
+
 ...

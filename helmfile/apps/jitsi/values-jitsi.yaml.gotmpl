@@ -10,7 +10,8 @@ global:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.jitsiGlobal.pod | toYaml | nindent 4}}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
@@ -77,6 +78,10 @@ jitsi:
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     ingress:
       enabled: {{ .Values.ingress.enabled }}
+      annotations:
+        {{- with .Values.annotations.jitsiWeb.ingress }}
+        {{ . | toYaml | nindent 8 }}
+        {{- end }}
       ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
       hosts:
         - host: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
@@ -104,6 +109,8 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jitsi | toYaml | nindent 8 }}
+    podAnnotations:
+      {{ .Values.annotations.jitsiWeb.pod | toYaml | nindent 6 }}
   prosody:
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.prosody.registry }}/{{ .Values.images.prosody.repository }}"
@@ -153,6 +160,8 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.prosody | toYaml | nindent 8 }}
+    podAnnotations:
+      {{ .Values.annotations.jitsiProsody.pod | toYaml | nindent 6 }}
   jicofo:
     replicaCount: {{ .Values.replicas.jicofo }}
     image:
@@ -176,6 +185,8 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jicofo | toYaml | nindent 8 }}
+    podAnnotations:
+      {{ .Values.annotations.jitsiJicofo.pod | toYaml | nindent 6 }}
   jigasi:
     replicaCount: {{ .Values.replicas.jigasi }}
     enabled: {{ .Values.sip.jigasi.enabled }}
@@ -205,6 +216,8 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jigasi | toYaml | nindent 8 }}
+    podAnnotations:
+      {{ .Values.annotations.jitsiJigasi.pod | toYaml | nindent 6 }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     # The `useNodeIP` option provided by the upstream charts does not support all relevant scenarios, but since
@@ -221,6 +234,8 @@ jitsi:
       {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
       type: {{ coalesce .Values.service.type.jitsiVideoBridge .Values.cluster.service.type | quote }}
+      annotations:
+        {{ .Values.annotations.jitsiJvb.service | toYaml | nindent 8 }}
     securityContext:
       allowPrivilegeEscalation: false
       capabilities: {}
@@ -233,6 +248,14 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jvb | toYaml | nindent 8 }}
+    podAnnotations:
+      {{ .Values.annotations.jitsiJvb.pod | toYaml | nindent 6 }}
+    metrics:
+      prometheusAnnotations:
+        {{ .Values.annotations.jitsiJvb.metricsPrometheus | toYaml | nindent 8 }}
+      grafanaDashboards:
+        annotations:
+          {{ .Values.annotations.jitsiJvb.metricsGrafana | toYaml | nindent 10 }}
   jibri:
     replicaCount: {{ .Values.replicas.jibri }}
     image:
@@ -249,10 +272,16 @@ jitsi:
       # Chart does not allow to template more
       capabilities:
         add: ["SYS_ADMIN"]
+    podAnnotations:
+      {{ .Values.annotations.jitsiJibri.pod | toYaml | nindent 6 }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
   {{- end }}
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.jitsi.serviceAccount | toYaml | nindent 6 }}
+
 
 patchJVB:
   configuration:
@@ -279,10 +308,15 @@ patchJVB:
     repository: {{ .Values.images.jitsiPatchJVB.repository | quote }}
     tag: {{ .Values.images.jitsiPatchJVB.tag | quote }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.jitsi.pod | toYaml | nindent 2 }}
 
 replicaCount: {{ .Values.replicas.jitsiKeycloakAdapter }}
 
 resources:
   {{ .Values.resources.jitsiKeycloakAdapter | toYaml | nindent 2 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.jitsi.serviceAccount | toYaml | nindent 4 }}
 ...

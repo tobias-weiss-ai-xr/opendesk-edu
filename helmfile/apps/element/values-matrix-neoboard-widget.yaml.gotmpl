@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Federal Ministry of the Interior and Community, PG 
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+additionalAnnotations:
+  {{ .Values.annotations.elementMatrixNeoboardWidget.additional | toYaml | nindent 2 }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -39,8 +42,11 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.elementMatrixNeoboardWidget.ingress | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementMatrixNeoboardWidget.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -50,6 +56,14 @@ replicaCount: {{ .Values.replicas.matrixNeoBoardWidget }}
 
 resources:
   {{ .Values.resources.matrixNeoBoardWidget | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.elementMatrixNeoboardWidget.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementMatrixNeoboardWidget.serviceAccount | toYaml | nindent 4 }}
 
 theme:
   {{ .Values.theme | toYaml | nindent 2 }}

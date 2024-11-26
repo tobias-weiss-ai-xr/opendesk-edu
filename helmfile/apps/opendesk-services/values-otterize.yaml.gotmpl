@@ -8,6 +8,9 @@ global:
   hosts:
     {{ .Values.global.hosts | toYaml | nindent 4 }}
 
+additionalAnnotations:
+  {{ .Values.annotations.opendeskServicesOtterize.additional | toYaml | nindent 2 }}
+
 apps:
   clamavDistributed:
     enabled: {{ .Values.apps.clamavDistributed.enabled }}

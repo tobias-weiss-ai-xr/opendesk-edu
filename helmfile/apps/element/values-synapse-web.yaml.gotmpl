@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+commonAnnotations:
+  {{ .Values.annotations.elementSynapseWeb.common | toYaml | nindent 2 }}
+
 clusterDomain: {{ .Values.cluster.networking.domain }}
 
 containerSecurityContext:
@@ -44,6 +47,9 @@ ingress:
     nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.element }}"
     nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.element }}s"
     nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.element }}s"
+    {{- with .Values.annotations.elementSynapseWeb.ingress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   host: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.ingress.enabled }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
@@ -51,7 +57,8 @@ ingress:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementSynapseWeb.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -61,5 +68,13 @@ replicaCount: {{ .Values.replicas.synapseWeb }}
 
 resources:
   {{ .Values.resources.synapseWeb | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.elementSynapseWeb.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementSynapseWeb.serviceAccount | toYaml | nindent 4 }}
 
 ...

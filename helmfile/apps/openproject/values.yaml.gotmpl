@@ -131,7 +131,8 @@ memcached:
 persistence:
   enabled: false
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.openproject.pod | toYaml | nindent 2 }}
 
 postgresql:
   bundled: false
@@ -179,6 +180,12 @@ openproject:
       login: "opendesk_username"
       admin: "openproject_admin"
   useTmpVolumes: true
+  tmpVolumesAnnotations:
+    {{ .Values.annotations.openproject.openprojectTempVolumes | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.openproject.serviceAccount | toYaml | nindent 4 }}
 
 ingress:
   annotations:
@@ -188,6 +195,9 @@ ingress:
     nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.openproject }}"
     nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.openproject }}s"
     nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.openproject }}s"
+    {{- with .Values.annotations.openproject.ingress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
   enabled: {{ .Values.ingress.enabled }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
@@ -221,6 +231,9 @@ seederJob:
     intents.otterize.com/service-name: "openproject-seeder"
     argocd.argoproj.io/hook: "Sync"
     argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
+    {{- with .Values.annotations.openproject.seederJob }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   resources:
     {{ .Values.resources.openprojectSeederJob | toYaml | nindent 4 }}
 

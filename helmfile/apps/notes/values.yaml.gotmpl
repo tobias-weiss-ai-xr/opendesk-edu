@@ -33,6 +33,9 @@ ingressCollaborationWS:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "86400"
     nginx.ingress.kubernetes.io/upstream-hash-by: $arg_room
+    {{- with .Values.annotations.notes.ingressCollaborationWS }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
 
 ingressAdmin:
   enabled: {{ .Values.ingress.enabled }}
@@ -41,6 +44,8 @@ ingressAdmin:
   tls:
     enabled: "{{ .Values.ingress.tls.enabled }}"
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.notes.ingressAdmin | toYaml | nindent 4 }}
 
 ingressMedia:
   enabled: {{ .Values.ingress.enabled }}
@@ -54,6 +59,9 @@ ingressMedia:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /{{ .Values.objectstores.notes.bucket }}/$1
     nginx.ingress.kubernetes.io/session-cookie-path: /media
+    {{- with .Values.annotations.notes.ingressMedia }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   tls:
     enabled: "{{ .Values.ingress.tls.enabled }}"
     secretName: {{ .Values.ingress.tls.secretName | quote }}
@@ -66,11 +74,14 @@ ingressCollaborationApi:
   tls:
     enabled: "{{ .Values.ingress.tls.enabled }}"
     secretName: {{ .Values.ingress.tls.secretName | quote }}
-
+  annotations:
+    {{ .Values.annotations.notes.ingressCollaborationAPI | toYaml | nindent 4 }}
 
 serviceMedia:
   host: {{ .Values.objectstores.notes.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
   port: {{ .Values.objectstores.notes.port | default 443 }}
+  annotations:
+    {{ .Values.annotations.notes.serviceMedia | toYaml | nindent 4 }}
 
 frontend:
   image:
@@ -103,6 +114,13 @@ frontend:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.notesFrontend | toYaml | nindent 6 }}
 
+  podAnnotations:
+    {{ .Values.annotations.notesFrontend.pod | toYaml | nindent 4 }}
+
+  service:
+    annotations:
+      {{ .Values.annotations.notesFrontend.service | toYaml | nindent 6 }}
+
 yProvider:
   image:
     repository: {{ printf "%s/%s" (coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.notesYProvider.registry) (.Values.images.notesYProvider.repository) | quote }}
@@ -130,6 +148,13 @@ yProvider:
     COLLABORATION_SERVER_ORIGIN: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
     COLLABORATION_SERVER_SECRET: {{ .Values.secrets.notes.collaborationSecret | quote }}
     Y_PROVIDER_API_KEY: {{ .Values.secrets.notes.collaborationSecret | quote }}
+
+  podAnnotations:
+    {{ .Values.annotations.notesYProvider.pod | toYaml | nindent 4 }}
+
+  service:
+    annotations:
+      {{ .Values.annotations.notesYProvider.service | toYaml | nindent 6 }}
 
 oidc:
   clientId: "opendesk-notes"
@@ -215,6 +240,9 @@ backend:
         python manage.py migrate --no-input
     restartPolicy: Never
 
+  migrateJobAnnotations:
+    {{ .Values.annotations.notesBackend.migrateJob | toYaml | nindent 4 }}
+
   createsuperuser:
     command:
       - "/bin/sh"
@@ -222,6 +250,9 @@ backend:
       - |
         python manage.py createsuperuser --email default.admin@{{ .Values.global.domain }} --password {{ .Values.secrets.notes.superuser }}
     restartPolicy: Never
+
+  podAnnotations:
+    {{ .Values.annotations.notesBackend.pod | toYaml | nindent 4 }}
 
   resources:
     {{ .Values.resources.notesBackend | toYaml | nindent 4 }}
@@ -239,4 +270,9 @@ backend:
     runAsNonRoot: true
     seLinuxOptions:
       {{ .Values.seLinuxOptions.notesBackend | toYaml | nindent 6 }}
+
+  service:
+    annotations:
+      {{ .Values.annotations.notesBackend.service | toYaml | nindent 6 }}
+
 ...

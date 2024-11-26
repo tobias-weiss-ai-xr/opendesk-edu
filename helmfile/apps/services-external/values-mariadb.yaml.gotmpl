@@ -8,6 +8,9 @@ cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
   deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
 
+commonAnnotations:
+  {{ .Values.annotations.servicesExternalMariadb.common | toYaml | nindent 2 }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -73,10 +76,15 @@ mariadb:
 persistence:
   size: {{ .Values.persistence.storages.mariadb.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.mariadb.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  annotations:
+    {{ .Values.annotations.servicesExternalMariadb.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
   argocd.argoproj.io/hook: "PostSync"
   argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+  {{- with .Values.annotations.servicesExternalMariadb.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true
@@ -87,5 +95,13 @@ replicaCount: {{ .Values.replicas.mariadb }}
 
 resources:
   {{ .Values.resources.mariadb | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.servicesExternalMariadb.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.servicesExternalMariadb.serviceAccount | toYaml | nindent 4 }}
 
 ...

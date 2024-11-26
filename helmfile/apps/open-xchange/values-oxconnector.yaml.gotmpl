@@ -69,7 +69,8 @@ persistence:
   size: {{ .Values.persistence.storages.oxConnector.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.oxConnector.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.nubusOxConnector.pod | toYaml | nindent 2 }}
 
 replicaCount: {{ .Values.replicas.oxConnector }}
 
@@ -92,6 +93,8 @@ securityContext:
     {{ .Values.seLinuxOptions.oxConnector | toYaml | nindent 4 }}
 
 serviceAccount:
+  annotations:
+    {{ .Values.annotations.nubusOxConnector.serviceAccount | toYaml | nindent 4 }}
   create: true
 
 ...

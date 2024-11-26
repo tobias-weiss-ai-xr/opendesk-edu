@@ -26,7 +26,8 @@ image:
 
 fullnameOverride: "opendesk-matrix-user-verification-service-bootstrap"
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementMatrixUserVerificationServiceBootstrap.pod | toYaml | nindent 2 }}
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -42,4 +43,10 @@ securityContext:
     type: "RuntimeDefault"
   seLinuxOptions:
     {{ .Values.seLinuxOptions.synapseCreateUser | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementMatrixUserVerificationServiceBootstrap.serviceAccount | toYaml | nindent 4 }}
+
+
 ...

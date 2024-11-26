@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+commonAnnotations:
+  {{ .Values.annotations.elementSynapse.common | toYaml | nindent 2 }}
+
 configuration:
   additionalConfiguration:
     user_directory:
@@ -217,6 +220,8 @@ federation:
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
+    annotations:
+      {{ .Values.annotations.elementSynapse.federationIngress | toYaml | nindent 6 }}
 
 global:
   domain: {{ .Values.global.domain | quote }}
@@ -234,8 +239,11 @@ image:
 persistence:
   size: {{ .Values.persistence.storages.synapse.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.synapse.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  annotations:
+    {{ .Values.annotations.elementSynapse.persistence | toYaml | nindent 4 }}
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementSynapse.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -249,6 +257,14 @@ replicaCount: {{ .Values.replicas.synapse }}
 
 resources:
   {{ .Values.resources.synapse | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.elementSynapse.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementSynapse.serviceAccount | toYaml | nindent 4 }}
 
 tls:
   secretName: {{ if .Values.global.matrixDomain }}"opendesk-certificates-synapse-tls"{{ else }}"opendesk-certificates-tls"{{ end }}

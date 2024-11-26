@@ -26,7 +26,8 @@ image:
 
 fullnameOverride: "matrix-neodatefix-bot-bootstrap"
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.elementMatrixNeodatefixBotBootstrap.pod | toYaml | nindent 2 }}
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -42,5 +43,8 @@ securityContext:
     type: "RuntimeDefault"
   seLinuxOptions:
     {{ .Values.seLinuxOptions.synapseCreateUser | toYaml | nindent 4 }}
+
+podAnnotations:
+  {{ .Values.annotations.elementMatrixNeodatefixBotBootstrap.serviceAccount | toYaml | nindent 2 }}
 
 ...

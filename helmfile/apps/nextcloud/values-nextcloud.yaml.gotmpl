@@ -9,6 +9,13 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 exporter:
+
+  additionalAnnotations:
+    intents.otterize.com/service-name: "opendesk-nextcloud-exporter"
+    {{- with .Values.annotations.nextcloudExporter.additional }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
+
   enabled: true
   configuration:
     server: "http://opendesk-nextcloud-aio"
@@ -34,7 +41,8 @@ exporter:
     repository: "{{ .Values.images.nextcloudExporter.repository }}"
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudExporter.tag | quote }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.nextcloudExporter.pod | toYaml | nindent 4 }}
   prometheus:
     serviceMonitor:
       enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
@@ -48,9 +56,17 @@ exporter:
   resources:
     {{ .Values.resources.nextcloudExporter | toYaml | nindent 4 }}
 
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.nextcloudExporter.serviceAccount | toYaml | nindent 6 }}
+
 aio:
   additionalAnnotations:
     intents.otterize.com/service-name: "opendesk-nextcloud-aio"
+    {{- with .Values.annotations.nextcloudAio.additional }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
+
   configuration:
     cache:
       auth:
@@ -139,11 +155,15 @@ aio:
       nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.nextcloud }}"
       nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}s"
       nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}s"
+      {{- with .Values.annotations.nextcloudAio.ingress }}
+        {{ . | toYaml | nindent 6 }}
+      {{- end }}
     ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
     host: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
     tls:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.nextcloudAio.pod | toYaml | nindent 4 }}
   podSecurityContext:
     fsGroup: 101
   prometheus:
@@ -158,5 +178,13 @@ aio:
   replicaCount: {{ .Values.replicas.nextcloud }}
   resources:
     {{ .Values.resources.nextcloud | toYaml | nindent 4 }}
+
+  service:
+    annotations:
+      {{ .Values.annotations.nextcloudAio.service | toYaml | nindent 6 }}
+
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.nextcloudAio.serviceAccount | toYaml | nindent 6 }}
 
 ...

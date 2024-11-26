@@ -10,6 +10,9 @@ global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
+additionalAnnotations:
+  {{ .Values.annotations.opendeskServicesStaticFiles.additional | toYaml | nindent 2 }}
+
 assets:
   element:
     subdomain: {{ .Values.global.hosts.element }}
@@ -96,6 +99,8 @@ ingress:
   host: "{{ .Values.global.hosts.static }}.{{ .Values.global.domain }}"
   tls:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    {{ .Values.annotations.opendeskServicesStaticFiles.ingress | toYaml | nindent 4 }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.opendeskStaticFiles.registry | quote }}
@@ -103,6 +108,8 @@ image:
   tag: {{ .Values.images.opendeskStaticFiles.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
+podAnnotations:
+  {{ .Values.annotations.opendeskServicesStaticFiles.pod | toYaml | nindent 2 }}
 
 podSecurityContext:
   enabled: true
@@ -116,4 +123,11 @@ resources:
 
 service:
   type: "ClusterIP"
+  annotations:
+    {{ .Values.annotations.opendeskServicesStaticFiles.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.opendeskServicesStaticFiles.serviceAccount | toYaml | nindent 4 }}
+
 ...

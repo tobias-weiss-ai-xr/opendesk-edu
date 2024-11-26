@@ -9,6 +9,9 @@ architecture: "standalone"
 auth:
   password: {{ .Values.secrets.redis.password | quote }}
 
+commonAnnotations:
+  {{ .Values.annotations.servicesExternalRedis.common | toYaml | nindent 2 }}
+
 global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
@@ -21,6 +24,8 @@ image:
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 master:
+  annotations:
+    {{ .Values.annotations.servicesExternalRedis.masterMaster | toYaml | nindent 4 }}
   containerSecurityContext:
     privileged: false
     readOnlyRootFilesystem: true
@@ -38,12 +43,39 @@ master:
   count: {{ .Values.replicas.redis }}
   persistence:
     size: {{ .Values.persistence.storages.redis.size | quote }}
-  podAnnotations: {}
+    annotations:
+      {{ .Values.annotations.servicesExternalRedis.masterPersistence | toYaml | nindent 6 }}
+  podAnnotations:
+    {{ .Values.annotations.servicesExternalRedis.masterPod | toYaml | nindent 4 }}
   resources:
     {{ .Values.resources.redis | toYaml | nindent 4 }}
+  service:
+    annotations:
+      {{ .Values.annotations.servicesExternalRedis.masterService | toYaml | nindent 6 }}
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.servicesExternalRedis.masterServiceAccount | toYaml | nindent 6 }}
 
 metrics:
   enabled: false
+
+replica:
+  annotations:
+    {{ .Values.annotations.servicesExternalRedis.replicaReplica | toYaml | nindent 4 }}
+  persistence:
+    annotations:
+      {{ .Values.annotations.servicesExternalRedis.replicaPersistence | toYaml | nindent 6 }}
+  podAnnotations:
+    {{ .Values.annotations.servicesExternalRedis.replicaPod | toYaml | nindent 4 }}
+  service:
+    annotations:
+      {{ .Values.annotations.servicesExternalRedis.replicaService | toYaml | nindent 6 }}
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.servicesExternalRedis.replicaServiceAccount | toYaml | nindent 6 }}
+
+secretAnnotations:
+  {{ .Values.annotations.servicesExternalRedis.secret | toYaml | nindent 2 }}
 
 sentinel:
   enabled: false

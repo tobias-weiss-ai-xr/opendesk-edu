@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+commonAnnotations:
+  {{ .Values.annotations.xwiki.common | toYaml | nindent 2 }}
+
 image:
   {{- if eq .Values.databases.xwiki.type "mariadb" }}
   name: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.xwikiMariadb.registry }}/{{ .Values.images.xwikiMariadb.repository }}"
@@ -129,6 +132,9 @@ ingress:
     nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.xwiki }}s"
     nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.xwiki }}s"
     haproxy-ingress.github.io/headers: "X-Forwarded-Host {{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
+    {{- with .Values.annotations.xwiki.ingress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   hosts:
     - host: "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
       paths:
@@ -149,6 +155,8 @@ mysql:
   enabled: false
 
 persistence:
+  annotations:
+    {{ .Values.annotations.xwiki.persistence | toYaml | nindent 4 }}
   size: {{ .Values.persistence.storages.xwiki.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.xwiki.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
@@ -217,8 +225,14 @@ resources:
   {{ .Values.resources.xwiki | toYaml | nindent 2 }}
 
 service:
+  annotations:
+    {{ .Values.annotations.xwiki.service | toYaml | nindent 4 }}
   externalPort: 80
   enabled: true
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.xwiki.serviceAccount | toYaml | nindent 4 }}
 
 volumePermissions:
   enabled: true

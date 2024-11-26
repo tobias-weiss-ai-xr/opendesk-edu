@@ -33,6 +33,8 @@ imagePullSecrets:
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}
+  annotations:
+    {{ .Values.annotations.coco.ingress | toYaml | nindent 4 }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:
     - host: "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
@@ -44,7 +46,8 @@ ingress:
       hosts:
         - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
-podAnnotations: {}
+podAnnotations:
+  {{ .Values.annotations.coco.pod | toYaml | nindent 2 }}
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -65,4 +68,7 @@ replicaCount: {{ .Values.replicas.collaboraController }}
 resources:
   {{ .Values.resources.collaboraController | toYaml | nindent 2 }}
 
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.coco.serviceAccount | toYaml | nindent 4 }}
 ...

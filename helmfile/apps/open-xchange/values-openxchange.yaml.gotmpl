@@ -32,7 +32,8 @@ nextcloud-integration-ui:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
   {{- end }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.openxchangeNextcloudIntegrationUi.pod | toYaml | nindent 4 }}
   replicaCount: {{ .Values.replicas.openxchangeNextcloudIntegrationUI }}
   resources:
     {{ .Values.resources.openxchangeNextcloudIntegrationUI | toYaml | nindent 4 }}
@@ -66,7 +67,8 @@ public-sector-ui:
   {{- end }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   replicaCount: {{ .Values.replicas.openxchangePublicSectorUI }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.openxchangePublicSectorUi.pod | toYaml | nindent 4 }}
   resources:
     {{ .Values.resources.openxchangePublicSectorUI | toYaml | nindent 4 }}
   securityContext:
@@ -95,6 +97,8 @@ appsuite:
   istio:
     enabled: false
   ingress:
+    annotations:
+      {{ .Values.annotations.openxchangeAppsuiteIngress.ingress | toYaml | nindent 6 }}
     enabled: {{ .Values.ingress.enabled }}
     ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
     tls:
@@ -107,11 +111,101 @@ appsuite:
       hosts:
         - "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     routes:
+      appsuite-base:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.appsuitebase | toYaml | nindent 10 }}
+      rootredirect:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.rootredirect | toYaml | nindent 10 }}
+      trailslash:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.trailslash | toYaml | nindent 10 }}
+      rest-routes-admin:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdmin | toYaml | nindent 10 }}
+      rest-routes-advertisement:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdvertisement | toYaml | nindent 10 }}
+      rest-routes-chronos:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesChronos | toYaml | nindent 10 }}
+      rest-routes-preliminary:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesPreliminary | toYaml | nindent 10 }}
+      rest-routes-userfeedback:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesUserfeedback | toYaml | nindent 10 }}
+      static-routes-servlet:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesServlet | toYaml | nindent 10 }}
+      static-routes-realtime:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesRealtime | toYaml | nindent 10 }}
+      static-routes-infostore:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesInfostore | toYaml | nindent 10 }}
+      static-routes-webservices:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesWebservices | toYaml | nindent 10 }}
+      drive-client-windows-ox-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.driveClientWindowsOxRoute | toYaml | nindent 10 }}
+      guard-api-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.guardApiRoute | toYaml | nindent 10 }}
+      guard-support-api-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.guardSupportApiRoute | toYaml | nindent 10 }}
+      guard-pgp-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.guardPgpRoute | toYaml | nindent 10 }}
+      http-api-routes-api:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesApi | toYaml | nindent 10 }}
+      http-api-routes-ajax:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAjax | toYaml | nindent 10 }}
       http-api-routes-appsuite-api:
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
           nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAppsuiteApi }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
+      http-api-routes-app-root-api:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAppRootApi | toYaml | nindent 10 }}
+      rt2-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.rt2Route | toYaml | nindent 10 }}
+      documents-help-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.documentsHelpRoute | toYaml | nindent 10 }}
+      drive-help-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.driveHelpRoute | toYaml | nindent 10 }}
+      core-help-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.coreHelpRoute | toYaml | nindent 10 }}
+      office-web-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.officeWebRoute | toYaml | nindent 10 }}
+      caldav-well-known-redirect:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.caldavWellKnownRedirect | toYaml | nindent 10 }}
+      carddav-well-known-redirect:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.carddavWellKnownRedirect | toYaml | nindent 10 }}
+      dav-infostore-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.davInfostoreRoute | toYaml | nindent 10 }}
+      dav-root-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.davRootRoute | toYaml | nindent 10 }}
+      wopi-server-route:
+        annotations:
+          {{ .Values.annotations.openxchangeAppsuiteIngress.wopiServerRoute | toYaml | nindent 10 }}
       trailslash:
         enabled: false
   core-mw:
@@ -131,8 +225,11 @@ appsuite:
     jolokiaLogin: "jolokia"
     jolokiaPassword: {{ .Values.secrets.oxAppSuite.jolokiaPassword | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
-    podAnnotations: {}
+    podAnnotations:
+      {{ .Values.annotations.openxchangeAppsuiteCoreMw.pod | toYaml | nindent 6 }}
     serviceAccount:
+      annotations:
+        {{ .Values.annotations.openxchangeAppsuiteCoreMw.serviceAccount | toYaml | nindent 8 }}
       create: true
     features:
       status:
@@ -151,7 +248,8 @@ appsuite:
         tag: {{ .Values.images.openxchangeGotenberg.tag | quote }}
         pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
       replicaCount: {{ .Values.replicas.openxchangeGotenberg }}
-      podAnnotations: {}
+      podAnnotations:
+        {{ .Values.annotations.openxchangeAppsuiteCoreMw.gotenbergPod | toYaml | nindent 8 }}
       resources:
         {{ .Values.resources.openxchangeGotenberg | toYaml | nindent 8 }}
       securityContext:
@@ -421,6 +519,8 @@ appsuite:
     # podSecurityContext: {}
     # securityContext: {}
     update:
+      podAnnotations:
+        {{ .Values.annotations.openxchangeAppsuiteCoreMw.updatePod | toYaml | nindent 8 }}
       image:
         repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
         tag: {{ .Values.images.openxchangeCoreMW.tag | quote }}
@@ -447,7 +547,8 @@ appsuite:
       tag: {{ .Values.images.openxchangeCoreUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     replicaCount: {{ .Values.replicas.openxchangeCoreUI }}
-    podAnnotations: {}
+    podAnnotations:
+      {{ .Values.annotations.openxchangeAppsuiteCoreUi.pod | toYaml | nindent 6 }}
     resources:
       {{ .Values.resources.openxchangeCoreUI | toYaml | nindent 6 }}
     securityContext:
@@ -483,7 +584,8 @@ appsuite:
       tag: {{ .Values.images.openxchangeCoreUIMiddleware.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     overrides: {}
-    podAnnotations: {}
+    podAnnotations:
+      {{ .Values.annotations.openxchangeAppsuiteCoreUiMiddleware.pod | toYaml | nindent 6 }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreUIMiddleware }}
     resources:
@@ -526,7 +628,8 @@ appsuite:
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-    podAnnotations: {}
+    podAnnotations:
+      {{ .Values.annotations.openxchangeAppsuiteCoreDocumentconverter.pod | toYaml | nindent 6 }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreDocumentConverter }}
     resources:
@@ -576,7 +679,8 @@ appsuite:
       repository: {{ .Values.images.openxchangeCoreGuidedtours.repository | quote }}
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-    podAnnotations: {}
+    podAnnotations:
+      {{ .Values.annotations.openxchangeAppsuiteCoreGuidedtours.pod | toYaml | nindent 6 }}
     replicaCount: {{ .Values.replicas.openxchangeCoreGuidedtours }}
     resources:
       {{- .Values.resources.openxchangeCoreGuidedtours | toYaml | nindent 6 }}
@@ -614,7 +718,8 @@ appsuite:
           endpoint: "."
           accessKey: "."
           secretKey: "."
-    podAnnotations: {}
+    podAnnotations:
+      {{ .Values.annotations.openxchangeAppsuiteCoreImageconverter.pod | toYaml | nindent 6 }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreImageConverter }}
     resources:
@@ -683,7 +788,8 @@ appsuite:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
     {{- end }}
-    podAnnotations: {}
+    podAnnotations:
+      {{ .Values.annotations.openxchangeAppsuiteCoreUserGuide.pod | toYaml | nindent 6 }}
     replicaCount: {{ .Values.replicas.openxchangeCoreUserGuide }}
     resources:
       {{- .Values.resources.openxchangeCoreUserGuide | toYaml | nindent 6 }}

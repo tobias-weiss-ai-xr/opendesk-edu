@@ -8,6 +8,9 @@ cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
   deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
 
+commonAnnotations:
+  {{ .Values.annotations.servicesExternalPostgresql.common | toYaml | nindent 2 }}
+
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -110,10 +113,15 @@ job:
 persistence:
   size: {{ .Values.persistence.storages.postgresql.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.postgresql.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  annotations:
+    {{ .Values.annotations.servicesExternalPostgresql.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
   argocd.argoproj.io/hook: "PostSync"
   argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+  {{- with .Values.annotations.servicesExternalPostgresql.pod}}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 postgres:
   user: "postgres"
@@ -121,4 +129,13 @@ postgres:
 
 resources:
   {{ .Values.resources.postgresql | toYaml | nindent 2 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.servicesExternalPostgresql.service | toYaml | nindent 4 }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.servicesExternalPostgresql.serviceAccount | toYaml | nindent 4 }}
+
 ...

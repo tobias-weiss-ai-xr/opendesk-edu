@@ -4,6 +4,9 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+commonAnnotations:
+  {{ .Values.annotations.openxchangeDovecot.common | toYaml | nindent 2 }}
+
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.dovecot.registry | quote }}
   repository: {{ .Values.images.dovecot.repository | quote }}
@@ -79,9 +82,6 @@ containerSecurityContext:
   seLinuxOptions:
     {{ .Values.seLinuxOptions.dovecot | toYaml | nindent 4 }}
 
-
-podAnnotations: {}
-
 {{- if .Values.certificate.selfSigned }}
 extraVolumes:
   - name: "trusted-cert-secret-volume"
@@ -111,14 +111,26 @@ persistence:
     - "ReadWriteOnce"
   {{- end }}
   size: {{ .Values.persistence.storages.dovecot.size | quote }}
+  annotations:
+    {{ .Values.annotations.openxchangeDovecot.persistence | toYaml | nindent 4 }}
+
+podAnnotations:
+  {{ .Values.annotations.openxchangeDovecot.pod | toYaml | nindent 2 }}
 
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}
 
 {{- if or (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "LoadBalancer") }}
 service:
+  annotations:
+    {{ .Values.annotations.openxchangeDovecot.service | toYaml | nindent 4 }}
   external:
     enabled: true
     type: {{ coalesce .Values.service.type.dovecot .Values.cluster.service.type | quote }}
 {{- end }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.openxchangeDovecot.serviceAccount | toYaml | nindent 4 }}
+
 ...

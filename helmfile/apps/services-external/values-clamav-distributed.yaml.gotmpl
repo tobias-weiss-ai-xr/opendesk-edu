@@ -5,6 +5,8 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 clamd:
+  commonAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.clamdCommon | toYaml | nindent 4 }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -25,7 +27,8 @@ clamd:
     repository: {{ .Values.images.clamd.repository | quote }}
     tag: {{ .Values.images.clamd.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.clamdPod | toYaml | nindent 4 }}
   podSecurityContext:
     enabled: true
     fsGroup: 101
@@ -33,6 +36,13 @@ clamd:
   replicaCount: {{ .Values.replicas.clamd }}
   resources:
     {{ .Values.resources.clamd | toYaml | nindent 4 }}
+  service:
+    annotations:
+      {{ .Values.annotations.servicesExternalClamavDistributed.clamdService | toYaml | nindent 6 }}
+
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.servicesExternalClamavDistributed.clamdServiceAccount | toYaml | nindent 6 }}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
@@ -50,6 +60,8 @@ containerSecurityContext:
     {{ .Values.seLinuxOptions.clamav | toYaml | nindent 4 }}
 
 freshclam:
+  commonAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.freshclamCommon | toYaml | nindent 4 }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -70,7 +82,8 @@ freshclam:
     repository: {{ .Values.images.freshclam.repository | quote }}
     tag: {{ .Values.images.freshclam.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.freshclamPod | toYaml | nindent 4 }}
   podSecurityContext:
     enabled: true
     fsGroup: 101
@@ -78,6 +91,9 @@ freshclam:
   replicaCount: {{ .Values.replicas.freshclam }}
   resources:
     {{ .Values.resources.freshclam | toYaml | nindent 4 }}
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.servicesExternalClamavDistributed.freshclamServiceAccount | toYaml | nindent 6 }}
   settings:
     database:
       auth:
@@ -92,6 +108,8 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 icap:
+  commonAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.icapCommon | toYaml | nindent 4 }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -112,7 +130,8 @@ icap:
     repository: {{ .Values.images.icap.repository | quote }}
     tag: {{ .Values.images.icap.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.icapPod | toYaml | nindent 4 }}
   podSecurityContext:
     enabled: true
     fsGroup: 101
@@ -120,8 +139,17 @@ icap:
   replicaCount: {{ .Values.replicas.icap }}
   resources:
     {{ .Values.resources.icap | toYaml | nindent 4 }}
+  service:
+    annotations:
+      {{ .Values.annotations.servicesExternalClamavDistributed.icapService | toYaml | nindent 6 }}
+
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.servicesExternalClamavDistributed.icapServiceAccount | toYaml | nindent 6 }}
 
 milter:
+  commonAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.milterCommon | toYaml | nindent 4 }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -142,7 +170,8 @@ milter:
     repository: {{ .Values.images.milter.repository | quote }}
     tag: {{ .Values.images.milter.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  podAnnotations: {}
+  podAnnotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.milterPod | toYaml | nindent 4 }}
   podSecurityContext:
     enabled: true
     fsGroup: 101
@@ -150,8 +179,17 @@ milter:
   replicaCount: {{ .Values.replicas.milter }}
   resources:
     {{ .Values.resources.milter | toYaml | nindent 4 }}
+  service:
+    annotations:
+      {{ .Values.annotations.servicesExternalClamavDistributed.milterService | toYaml | nindent 6 }}
+
+  serviceAccount:
+    annotations:
+      {{ .Values.annotations.servicesExternalClamavDistributed.milterServiceAccount | toYaml | nindent 6 }}
 
 persistence:
   size: {{ .Values.persistence.storages.clamav.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.clamav.storageClassName .Values.persistence.storageClassNames.RWX | quote }}
+  annotations:
+    {{ .Values.annotations.servicesExternalClamavDistributed.persistence | toYaml | nindent 4 }}
 ...
