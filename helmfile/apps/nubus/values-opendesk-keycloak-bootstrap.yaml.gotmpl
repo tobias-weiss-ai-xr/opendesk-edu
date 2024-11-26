@@ -375,6 +375,71 @@ config:
               claim.name: "opendesk_username"
               jsonType.label: "String"
     clients:
+      - name: "opendesk-intercom"
+        clientId: "opendesk-intercom"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
+        redirectUris:
+          - "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/callback"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          backchannel.logout.session.required: true
+          backchannel.logout.revoke.offline.tokens: true
+          backchannel.logout.url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/backchannel-logout"
+        protocolMappers:
+          - name: "intercom-audience"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-audience-mapper"
+            consentRequired: false
+            config:
+              included.client.audience: "opendesk-intercom"
+              id.token.claim: false
+              access.token.claim: true
+          # temporary additional claim while entryuuid is a hardcoded attribute in IntercomService and we cannot set
+          # it to `opendesk_useruuid` standard claim. For reference:
+          # https://github.com/univention/intercom-service/blob/cd819b6ced6433e532e74a8878943d05412c1416/intercom/app.js#L89
+          - name: "entryuuid_temp"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "entryUUID"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "entryuuid"
+              jsonType.label: "String"
+          # temporary additional claim while phoenixusername is a hardcoded attribute in IntercomService and we cannot
+          # set it to `opendesk_username` standard claim. For reference:
+          # https://github.com/univention/intercom-service/blob/cd819b6ced6433e532e74a8878943d05412c1416/intercom/routes/navigation.js#L27
+          - name: "phoenixusername_temp"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "uid"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "phoenixusername"
+              jsonType.label: "String"
+          - name: "opendesk_username"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "uid"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_username"
+              jsonType.label: "String"
+        defaultClientScopes:
+          - "offline_access"
       - name: "opendesk-dovecot"
         clientId: "opendesk-dovecot"
         protocol: "openid-connect"

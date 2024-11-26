@@ -53,7 +53,8 @@ ics:
   secret: {{ .Values.secrets.intercom.secret | quote }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   originRegex: "{{ .Values.global.domain }}"
-  userUniqueMapper: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"entryuuid"{{ else }}"phoenixusername"{{ end }}
+  userUniqueMapper: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"entryuuid"{{ else }}"opendesk_username"{{ end }}
+  usernameClaim: "opendesk_username"
   keycloak:
     realm: {{ .Values.platform.realm | quote }}
   default:
@@ -77,6 +78,9 @@ ics:
     oci: true
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     audience: "opendesk-oxappsuite"
+  xwiki:
+    subdomain: {{ .Values.global.hosts.xwiki | quote }}
+    audience: "opendesk-xwiki"
   nextcloud:
     origin: {{ .Values.global.hosts.nextcloud | quote }}
     subdomain: {{ .Values.global.hosts.nextcloud | quote }}
@@ -103,7 +107,9 @@ podSecurityContext:
   fsGroupChangePolicy: "Always"
 
 provisioning:
-  enabled: true
+  # intercom OIDC client is created by opendesk-keycloak-bootstrap, as we have control over the
+  # client's claims this way.
+  enabled: false
   config:
     nubusBaseUrl: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}"
     keycloak:

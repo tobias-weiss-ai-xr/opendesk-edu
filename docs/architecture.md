@@ -23,6 +23,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Central Contacts](#central-contacts)
   * [Central Navigation](#central-navigation)
   * [Filepicker](#filepicker)
+  * [Newsfeed](#newsfeed)
   * [(OpenProject) File Store](#openproject-file-store)
 * [Applications vs. Services](#applications-vs-services)
   * [Collabora (Office)](#collabora-office)
@@ -256,6 +257,7 @@ flowchart TD
  Intercom_Service-->|Silent Login, Token Exchange|IdP
  Intercom_Service-->|Filepicker|Nextcloud
  Intercom_Service-->|Central Navigations|Portal
+ Intercom_Service-->|Newsfeed|XWiki
  OX-AppSuite_Backend-->|Filepicker|Nextcloud
  OX-AppSuite_Backend-->|Videoconferences|Element
  Nextcloud-->|Central Navigation|Portal
@@ -264,6 +266,7 @@ flowchart TD
  XWiki-->|Central Navigation|Portal
  Nextcloud-->|Central Contacts|OX-AppSuite_Backend
  OX-AppSuite_Frontend-->|Filepicker|OX-AppSuite_Backend
+ Portal-->|Newsfeed|Intercom_Service
 ```
 
 Details can be found in the upstream documentation that is linked in the respective sections.
@@ -324,6 +327,14 @@ when adding a file to an email or storing a file into Nextcloud to avoid passing
 
 **Links**
 - [OX AppSuite Nextcloud Integration upstream documentation](https://gitlab.open-xchange.com/extensions/nextcloud-integration/-/tree/main/documentation).
+
+## Newsfeed
+
+The portal renders a newsfeed based on entries of a predefined openDesk blog in XWiki. It accesses the required XWiki
+service through the Intercom Service's `/wiki` endpoint, in combination with the previously described silent login.
+
+**Links:**
+- [XWiki Blog feature](https://extensions.xwiki.org/xwiki/bin/view/Extension/Blog%20Application)
 
 ## (OpenProject) File Store
 
