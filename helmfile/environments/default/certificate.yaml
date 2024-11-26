@@ -5,6 +5,7 @@
 certificate:
   issuerRef:
     name: "letsencrypt-prod"
+    kind: "ClusterIssuer"
   wildcard: false
   selfSigned: false
 ...

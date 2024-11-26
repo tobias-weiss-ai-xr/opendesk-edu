@@ -52,6 +52,7 @@ global:
 
 issuerRef:
   name: {{ .Values.certificate.issuerRef.name | quote }}
+  kind: {{ .Values.certificate.issuerRef.kind | quote }}
 
 cleanup:
   keepRessourceOnDelete: {{ .Values.debug.cleanup.keepRessourceOnDelete }}
