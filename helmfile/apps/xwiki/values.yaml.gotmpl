@@ -147,6 +147,7 @@ properties:
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.secure": 1
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.server": "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.port": 443
+
   ## This option overwrites the LDAP group mappings including all dynamically created mappings, therefore on XWiki restart an LDAP sync is triggered to load the dynamic mapping.
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.ldap_group_mapping": "xwiki:XWiki.XWikiAdminGroup=cn=managed-by-attribute-KnowledgemanagementAdmin,cn=groups,dc=swp-ldap,dc=internal"
   ## SMTP settings
@@ -175,7 +176,7 @@ properties:
   # yamllint disable-line rule:line-length
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.lessCode": "li#tmWorkplaceServices { padding-left: 16px; padding-top: 5px; } .navbar-right { padding-top: 8px; } .navbar { border-bottom: 1px solid #ddd !important; height: 64px;} div#companylogo { width: 90px; height: auto; padding-top: 7px; padding-left: 9px; }"
 
-  "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "oidc"
+  "property:xwiki:XWiki.AuthService.Configuration^XWiki.AuthService.ConfigurationClass.authService": "keycloak-bridge-auth"
   ## Fields to search in when importing users from the administration UI (not completely in scope for now)
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapUserAttributes":
     "sn,givenname,uid,mailPrimaryAddress"
