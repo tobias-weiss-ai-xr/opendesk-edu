@@ -19,6 +19,8 @@ cleanup:
 
 configuration:
   administrator:
+    # The admin user is (currently) required to bootstrap the OpenProject <> Nextcloud integration.
+    enabled: true
     username:
       value: "nextcloud"
     password:
@@ -97,6 +99,7 @@ configuration:
     defaultExternalExpireEnabled: {{ .Values.functional.filestore.sharing.external.expiry.activeByDefault }}
     defaultExternalExpireEnforced: {{ .Values.functional.filestore.sharing.external.expiry.enforced }}
     defaultExternalExpireDays: {{ .Values.functional.filestore.sharing.external.expiry.defaultDays | quote }}
+    sendPasswordMail: {{ .Values.functional.filestore.sharing.external.sendPasswordMail | quote }}
   smtp:
     auth:
       enabled: false
@@ -139,6 +142,7 @@ podSecurityContext:
 
 debug:
   loglevel: {{ if .Values.debug.enabled }}"0"{{ else }}"2"{{ end }}
+  bootstrap: {{ .Values.debug.enabled }}
 
 {{- if .Values.certificate.selfSigned }}
 extraEnvVars:

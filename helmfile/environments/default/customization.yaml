@@ -2,10 +2,18 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 # This variable allows customization of helmfile releases by loading custom values file.
+#
+# **Warning**: Customizations are a very powerful tool to apply individual changes to your
+# openDesk installation. As there are no limits set for what you use it, openDesk cannot
+# support the configurations you are about to create using the customization-option. If you
+# have the demand for a specific configuration, try to get it into the openDesk standard
+# by creating a ticket at https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues
+#
 # Example:
 # customization:
 #   release:
-#     collaboraOnline: /path/to/additional/file.yaml
+#     collaboraOnline:
+#       myCustomConfig: "/path/to/additional/file.yaml"
 customization:
   release:
     # collabora
