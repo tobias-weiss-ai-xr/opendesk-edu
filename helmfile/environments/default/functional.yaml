@@ -45,6 +45,8 @@ functional:
         enabled: false
         # Enforces passwords to be used on external shares.
         enforcePasswords: false
+        # Let Nextcloud send the password set for the share by mail to the recipient of the share.
+        sendPasswordMail: true
         # Expiry settings for the external shares.
         expiry:
           # If true the check box for the expiry date is enabled by default.
