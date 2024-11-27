@@ -89,7 +89,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jibri"
-    tag: "stable-9779@sha256:7a0dfa397e7c6c03eb1dc2b49d94f0dc2d6fc44fe85761f67a45ea0e34056b3e"
+    tag: "stable-9823@sha256:dd7a330cb14d95b7661167d7b4e1a8f2e988952ba4ea24baa0a96e09bebd40b1"
   jicofo:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -99,7 +99,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jicofo"
-    tag: "stable-9779@sha256:6b00d53a899e01058a99fa71a3238442e18c43bc62d4212b6647b4f7aa67aae1"
+    tag: "stable-9823@sha256:551aa2adf078f8872474481a9bda7b7526fc5cae2853ce0be2aa1f6d91bf2ecc"
   jitsi:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -109,7 +109,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/web"
-    tag: "stable-9779@sha256:77f9cb45bb8c1053002b1ce8987ac26aa1d3724e79b23b0403ca0e92469b7d14"
+    tag: "stable-9823@sha256:d37d0d34715a0089437c5c030251010e068926f93395d46753e1767d0ee16247"
   jitsiKeycloakAdapter:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -137,7 +137,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/jvb"
-    tag: "stable-9779@sha256:126719d4bd6fc3a85b61e786936a561a41527223b7b6a9c6204df41b1af48a50"
+    tag: "stable-9823@sha256:e6e43071ce26628c816bea46a259c7462c8d5edbbd2ed66f983b1e0f2d9a6cb2"
   mariadb:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -765,7 +765,7 @@ images:
     # upstreamMirrorStartFrom: ["8922"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/prosody"
-    tag: "stable-9779@sha256:5864f3f72d3605a52a1b90ec845a4a1837a851d7774dcbfdc9490beb4bdda18a"
+    tag: "stable-9823@sha256:1c52b4ca8397545d54067c67a54c50473d83242c75f001fbf20ee628dfc80b7b"
   redis:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
