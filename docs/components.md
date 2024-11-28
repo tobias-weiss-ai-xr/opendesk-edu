@@ -27,28 +27,28 @@ openDesk consists of a variety of open-source projects. Here is a list with the 
 Components of type `Eval` are used for development and evaluation purposes only,
 they need to be replaced in production deployments.
 
-| Component                   | Description                    | Type       |
-|-----------------------------|--------------------------------|------------|
-| Certificates                | TLS certificates               | Eval       |
-| ClamAV (Distributed)        | Antivirus engine               | Eval       |
-| ClamAV (Simple)             | Antivirus engine               | Eval       |
-| Collabora                   | Weboffice                      | Functional |
-| CryptPad                    | Weboffice                      | Functional |
-| dkimpy-milter               | DKIM milter for Postfix        | Eval       |
-| Element                     | Secure communications platform | Functional |
-| Jitsi                       | Videoconferencing              | Functional |
-| MariaDB                     | Database                       | Eval       |
-| Memcached                   | Cache Database                 | Eval       |
-| MinIO                       | Object Storage                 | Eval       |
-| Nextcloud                   | File share                     | Functional |
-| Nubus (UMS)                 | Identity Management & Portal   | Functional |
-| OpenProject                 | Project management             | Functional |
-| OX Appsuite                 | Groupware                      | Functional |
-| OX Dovecot                  | Mail backend (IMAP)            | Functional |
-| Postfix                     | MTA                            | Eval       |
-| PostgreSQL                  | Database                       | Eval       |
-| Redis                       | Cache Database                 | Eval       |
-| XWiki                       | Knowledge Management           | Functional |
+| Component            | Description                    | Type       |
+| -------------------- | ------------------------------ | ---------- |
+| Certificates         | TLS certificates               | Eval       |
+| ClamAV (Distributed) | Antivirus engine               | Eval       |
+| ClamAV (Simple)      | Antivirus engine               | Eval       |
+| Collabora            | Weboffice                      | Functional |
+| CryptPad             | Weboffice                      | Functional |
+| dkimpy-milter        | DKIM milter for Postfix        | Eval       |
+| Element              | Secure communications platform | Functional |
+| Jitsi                | Videoconferencing              | Functional |
+| MariaDB              | Database                       | Eval       |
+| Memcached            | Cache Database                 | Eval       |
+| MinIO                | Object Storage                 | Eval       |
+| Nextcloud            | File share                     | Functional |
+| Nubus (UMS)          | Identity Management & Portal   | Functional |
+| OpenProject          | Project management             | Functional |
+| OX App Suite         | Groupware                      | Functional |
+| OX Dovecot           | Mail backend (IMAP)            | Functional |
+| Postfix              | MTA                            | Eval       |
+| PostgreSQL           | Database                       | Eval       |
+| Redis                | Cache Database                 | Eval       |
+| XWiki                | Knowledge Management           | Functional |
 
 # Component integration
 

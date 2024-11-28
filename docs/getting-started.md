@@ -100,7 +100,7 @@ export DOMAIN=domain.tld
 All available apps and their default value are in `helmfile/environments/default/opendesk_main.gotmpl`.
 
 | Component            | Name                        | Default | Description                    |
-|----------------------|-----------------------------|---------|--------------------------------|
+| -------------------- | --------------------------- | ------- | ------------------------------ |
 | Certificates         | `certificates.enabled`      | `true`  | TLS certificates               |
 | ClamAV (Distributed) | `clamavDistributed.enabled` | `false` | Antivirus engine               |
 | ClamAV (Simple)      | `clamavSimple.enabled`      | `true`  | Antivirus engine               |
@@ -117,7 +117,7 @@ All available apps and their default value are in `helmfile/environments/default
 | Nextcloud            | `nextcloud.enabled`         | `true`  | File share                     |
 | Nubus                | `nubus.enabled`             | `true`  | Identity Management & Portal   |
 | OpenProject          | `openproject.enabled`       | `true`  | Project management             |
-| OX Appsuite          | `oxAppsuite.enabled`        | `true`  | Groupware                      |
+| OX App Suite         | `oxAppSuite.enabled`        | `true`  | Groupware                      |
 | Postfix              | `postfix.enabled`           | `true`  | MTA                            |
 | PostgreSQL           | `postgresql.enabled`        | `true`  | Database                       |
 | Redis                | `redis.enabled`             | `true`  | Cache Database                 |

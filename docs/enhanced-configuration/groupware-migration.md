@@ -6,7 +6,6 @@ SPDX-License-Identifier: Apache-2.0
 <h1>Migration from M365 with audriga migration service and master authentication</h1>
 
 <!-- TOC -->
-* [Context](#context)
 * [Prerequisites](#prerequisites)
   * [Prepare M365 tenant for access](#prepare-m365-tenant-for-access)
   * [Provisioning user accounts in openDesk](#provisioning-user-accounts-in-opendesk)
@@ -75,18 +74,18 @@ With openDesk 1.0 Enterprise, you can set openDesk's email components (OX AppSui
 
 ```
 secrets:
-  oxAppsuite:
+  oxAppSuite:
     adminPassword: "your_temporary_master_password"
 functional:
   migration:
-    oxAppsuite:
+    oxAppSuite:
       enabled: true
 ```
 
 1. You must specify the master password referenced in the document's following sections.
 2. You need to enable the actual master authentication mode.
 
-Updating your deployment with these settings will allow you to continue with the migration scenario. Once the migration is completed, you can remove `secrets.oxAppsuite.adminPassword` and need to turn off the migration mode by setting `functional.migration.oxAppsuite.enabled` to `false` or removing that setting, as `false` is the default before you update your deployment once again.
+Updating your deployment with these settings will allow you to continue with the migration scenario. Once the migration is completed, you can remove `secrets.oxAppSuite.adminPassword` and need to turn off the migration mode by setting `functional.migration.oxAppSuite.enabled` to `false` or removing that setting, as `false` is the default before you update your deployment once again.
 
 > **Note**<br>
 > For the changes to take effect, it is sufficient to deploy the `open-xchange` component.

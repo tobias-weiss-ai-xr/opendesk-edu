@@ -33,8 +33,8 @@ customization:
     nginxS3Gateway: {}
     # open-xchange
     dovecot: {}
-    openXchange: {}
-    opendeskOpenXchangeBootstrap: {}
+    openxchange: {}
+    opendeskOpenxchangeBootstrap: {}
     oxConnector: {}
     # openproject
     openproject: {}

@@ -7,16 +7,16 @@ SPDX-License-Identifier: Apache-2.0
 global:
   hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
   appsuite:
-    cookieHashSalt: {{ .Values.secrets.oxAppsuite.cookieHashSalt }}
-    shareCryptKey: {{ .Values.secrets.oxAppsuite.shareCryptKey }}
-    sessiondEncryptionKey: {{ .Values.secrets.oxAppsuite.sessiondEncryptionKey }}
+    cookieHashSalt: {{ .Values.secrets.oxAppSuite.cookieHashSalt }}
+    shareCryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey }}
+    sessiondEncryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey }}
   mysql:
-    host: {{ .Values.databases.oxAppsuite.host | quote }}
-    database: {{ .Values.databases.oxAppsuite.name | quote }}
+    host: {{ .Values.databases.oxAppSuite.host | quote }}
+    database: {{ .Values.databases.oxAppSuite.name | quote }}
     auth:
-      user: {{ .Values.databases.oxAppsuite.username | quote }}
-      password: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
-      rootPassword: {{ .Values.databases.oxAppsuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
+      user: {{ .Values.databases.oxAppSuite.username | quote }}
+      password: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
+      rootPassword: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
 
 nextcloud-integration-ui:
   image:
@@ -105,9 +105,9 @@ appsuite:
     routes:
       http-api-routes-appsuite-api:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.openXchangeAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.openXchangeAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.openXchangeAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
       trailslash:
         enabled: false
   core-mw:
@@ -119,13 +119,13 @@ appsuite:
         oidcLogin: true
         oidcPath: "/oidc"
     masterAdmin: "admin"
-    masterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+    masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     hzGroupName: "hzgroup"
-    hzGroupPassword: {{ .Values.secrets.oxAppsuite.hzGroupPassword | quote }}
+    hzGroupPassword: {{ .Values.secrets.oxAppSuite.hzGroupPassword | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppsuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
     jolokiaLogin: "jolokia"
-    jolokiaPassword: {{ .Values.secrets.oxAppsuite.jolokiaPassword | quote }}
+    jolokiaPassword: {{ .Values.secrets.oxAppSuite.jolokiaPassword | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     podAnnotations: {}
     serviceAccount:
@@ -174,7 +174,7 @@ appsuite:
           chown open-xchange:open-xchange /opt/open-xchange/guard-files
     packages:
       status:
-        {{- if .Values.functional.migration.oxAppsuite.enabled }}
+        {{- if .Values.functional.migration.oxAppSuite.enabled }}
         open-xchange-authentication-masterpassword: "enabled"
         open-xchange-authentication-ldap: "disabled"
         open-xchange-authentication-oauth: "disabled"
@@ -316,13 +316,13 @@ appsuite:
         mountPath: "/etc/ssl/certs/"
     {{- end }}
     secretProperties:
-      com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppsuite.cookieHashSalt | quote }}
-      com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppsuite.sessiondEncryptionKey | quote }}
-      com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppsuite.shareCryptKey | quote }}
-      com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppsuite.synapseAsToken | quote }}
+      com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppSuite.cookieHashSalt | quote }}
+      com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey | quote }}
+      com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
+      com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
     propertiesFiles:
       /opt/open-xchange/etc/masterpassword-authentication.properties:
-        com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppsuite.migrationsMasterPassword | quote }}
+        com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
       /opt/open-xchange/etc/AdminDaemon.properties:
         MASTER_ACCOUNT_OVERRIDE: "true"
       /opt/open-xchange/etc/AdminUser.properties:
@@ -392,17 +392,17 @@ appsuite:
       # MC+base64(20 random bytes)
       # RC+base64(20 random bytes)
       oxguardpass: |
-        {{ .Values.secrets.oxAppsuite.oxguardMC }}
-        {{ .Values.secrets.oxAppsuite.oxguardRC }}
+        {{ .Values.secrets.oxAppSuite.oxguardMC }}
+        {{ .Values.secrets.oxAppSuite.oxguardRC }}
     redis: &redisConfiguration
       enabled: true
       mode: "standalone"
       hosts:
-        - {{ printf "%s:%v" .Values.cache.oxAppsuite.host .Values.cache.oxAppsuite.port | quote }}
+        - {{ printf "%s:%v" .Values.cache.oxAppSuite.host .Values.cache.oxAppSuite.port | quote }}
       auth:
         enabled: true
-        username: {{ .Values.cache.oxAppsuite.username | quote }}
-        password: {{ .Values.cache.oxAppsuite.password | default .Values.secrets.redis.password | quote }}
+        username: {{ .Values.cache.oxAppSuite.username | quote }}
+        password: {{ .Values.cache.oxAppSuite.password | default .Values.secrets.redis.password | quote }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeCoreMW.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
@@ -501,9 +501,9 @@ appsuite:
 
   core-documentconverter:
     adminUser: "admin"
-    adminPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppsuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
     enabled: true
     documentConverter:
       cache:
@@ -588,9 +588,9 @@ appsuite:
   core-imageconverter:
     enabled: true
     adminUser: "admin"
-    adminPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppsuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeImageConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeImageConverter.repository | quote }}

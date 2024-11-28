@@ -15,22 +15,22 @@ repositories:
   # Open-Xchange
   - name: "open-xchange-repo"
     keyring: "../../files/gpg-pubkeys/open-xchange-com.gpg"
-    verify: {{ .Values.charts.openXchangeAppSuite.verify }}
+    verify: {{ .Values.charts.oxAppSuite.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.openXchangeAppSuite.registry }}/{{ .Values.charts.openXchangeAppSuite.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.oxAppSuite.registry }}/{{ .Values.charts.oxAppSuite.repository }}"
 
   # openDesk Open-Xchange Bootstrap
   # Source:
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap
   - name: "open-xchange-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.openXchangeAppSuiteBootstrap.verify }}
+    verify: {{ .Values.charts.oxAppSuiteBootstrap.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.openXchangeAppSuiteBootstrap.registry }}/{{ .Values.charts.openXchangeAppSuiteBootstrap.repository }}"
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.oxAppSuiteBootstrap.registry }}/{{ .Values.charts.oxAppSuiteBootstrap.repository }}"
 
   # OX Connector
   - name: "ox-connector-repo"
@@ -52,26 +52,26 @@ releases:
     timeout: 900
 
   - name: "open-xchange"
-    chart: "open-xchange-repo/{{ .Values.charts.openXchangeAppSuite.name }}"
-    version: "{{ .Values.charts.openXchangeAppSuite.version }}"
+    chart: "open-xchange-repo/{{ .Values.charts.oxAppSuite.name }}"
+    version: "{{ .Values.charts.oxAppSuite.version }}"
     values:
       - "values-openxchange.yaml.gotmpl"
       - "values-openxchange-enterprise-contact-picker.yaml.gotmpl"
-      {{ range .Values.customization.release.openXchange }}
+      {{ range .Values.customization.release.openxchange }}
       - {{ . }}
       {{ end }}
-    installed: {{ .Values.oxAppsuite.enabled }}
+    installed: {{ .Values.oxAppSuite.enabled }}
     timeout: 900
 
   - name: "opendesk-open-xchange-bootstrap"
-    chart: "open-xchange-bootstrap-repo/{{ .Values.charts.openXchangeAppSuiteBootstrap.name }}"
-    version: "{{ .Values.charts.openXchangeAppSuiteBootstrap.version }}"
+    chart: "open-xchange-bootstrap-repo/{{ .Values.charts.oxAppSuiteBootstrap.name }}"
+    version: "{{ .Values.charts.oxAppSuiteBootstrap.version }}"
     values:
       - "values-openxchange-bootstrap.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskOpenXchangeBootstrap }}
+      {{ range .Values.customization.release.opendeskOpenxchangeBootstrap }}
       - {{ . }}
       {{ end }}
-    installed: {{ .Values.oxAppsuite.enabled }}
+    installed: {{ .Values.oxAppSuite.enabled }}
     timeout: 900
 
   - name: "ox-connector"
@@ -82,7 +82,7 @@ releases:
       {{ range .Values.customization.release.oxConnector }}
       - {{ . }}
       {{ end }}
-    installed: {{ .Values.oxAppsuite.enabled }}
+    installed: {{ .Values.oxAppSuite.enabled }}
     needs:
       - "open-xchange"
 

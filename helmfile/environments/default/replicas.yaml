@@ -164,7 +164,7 @@ replicas:
   # dedicated workers for specific queues are possible with OpenProject.
   openprojectWorker: 1
 
-  # -- component: Groupware (OX Appsuite)
+  # -- component: Groupware (OX App Suite)
   # -- scalable: tbd
   openxchangeCoreDocumentConverter: 1
   # -- scalable: tbd
