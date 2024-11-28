@@ -10,11 +10,12 @@ SPDX-License-Identifier: Apache-2.0
 * [openDesk supported upgrade path](#opendesk-supported-upgrade-path)
 * [Releases upgrade details](#releases-upgrade-details)
   * [From v1.0.0](#from-v100)
-    * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
+    * [Pre-upgrade: Manual checks/steps](#pre-upgrade-manual-checkssteps)
+      * [Streamlining `openxchange` and `oxAppSuite` attribute names.](#streamlining-openxchange-and-oxappsuite-attribute-names)
       * [`customization.release`](#customizationrelease)
       * [Redis 7.4](#redis-74)
   * [From v0.9.0](#from-v090)
-    * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps-1)
+    * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
       * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
       * [Changed openDesk defaults: Matrix ID](#changed-opendesk-defaults-matrix-id)
@@ -65,7 +66,70 @@ Explanation of the table's columns:
 
 ## From v1.0.0
 
-### Pre-upgrade: Manual steps
+### Pre-upgrade: Manual checks/steps
+
+#### Streamlining `openxchange` and `oxAppSuite` attribute names.
+
+We have updated some attribute names around Open-Xchange / OX App Suite to be consistent within our Helmfile
+deployment and to aligning with the actual brand names as well as with our rule of thumb for brand based
+attribute names[^1].
+
+In case you are using any of the customizations below (`WAS`), please update as shown (`NOW`):
+
+```
+WAS: oxAppsuite: ...
+NOW: oxAppSuite: ...
+```
+
+```
+WAS: cache.oxAppsuite: ...
+NOW: cache.oxAppSuite: ...
+```
+
+```
+WAS: charts.openXchangeAppSuite: ...
+NOW: charts.oxAppSuite: ...
+```
+
+```
+WAS: charts.openXchangeAppSuiteBootstrap: ...
+NOW: charts.oxAppSuiteBootstrap: ...
+```
+
+```
+WAS: customization.release.openXchange: ...
+NOW: customization.release.openxchange: ...
+```
+
+```
+WAS: customization.release.opendeskOpenXchangeBootstrap: ...
+NOW: customization.release.opendeskOpenxchangeBootstrap: ...
+```
+
+```
+WAS: databases.oxAppsuite: ...
+NOW: databases.oxAppSuite: ...
+```
+
+```
+WAS: ingress.parameters.openXchangeAppSuite: ...
+NOW: ingress.parameters.oxAppSuite: ...
+```
+
+```
+WAS: ingress.bodyTimeout.openXchangeAppSuite: ...
+NOW: ingress.bodyTimeout.oxAppSuite: ...
+```
+
+```
+WAS: migration.oxAppsuite: ...
+NOW: migration.oxAppSuite: ...
+```
+
+```
+WAS: secrets.oxAppsuite: ...
+NOW: secrets.oxAppSuite: ...
+```
 
 #### `customization.release`
 
@@ -346,3 +410,6 @@ When a new upgrade migration is required, ensure to address the following list:
 - You most likely have to update the [`opendesk-migrations` Helm chart](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations) within the `rules` section of the [`role.yaml`](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/templates/role.yaml) to provide the permissions required for the execution of your migration's logic.
 - You must set the runner's ID you want to execute in the [migrations.yaml.gotmpl](../helmfile/shared/migrations.yaml.gotmpl). See also the `migrations.*` section of [the Helm chart's README.md](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/README.md).
 - Update the [`charts.yaml`](../helmfile/environments/default/charts.yaml) and [`images.yaml`](../helmfile/environments/default/images.yaml) to reflect the newer releases of the `opendesk-migrations` Helm chart and container image.
+
+[^1]: We do not follow a brand name's specific spelling when it comes to upper and lower case and only use new word
+uppercase when names consist of multiple, space divided words.

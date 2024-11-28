@@ -16,7 +16,7 @@ cache:
   openproject:
     host: "memcached"
     port: 11211
-  oxAppsuite:
+  oxAppSuite:
     host: "redis-headless"
     port: 6379
     username: "default"

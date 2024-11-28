@@ -318,7 +318,17 @@ charts:
     name: "opendesk-openproject-bootstrap"
     version: "2.1.1"
     verify: true
-  openXchangeAppSuite:
+  otterize:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize/opendesk-otterize"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
+    name: "opendesk-otterize"
+    version: "2.1.0"
+    verify: true
+  oxAppSuite:
     # providerCategory: "Supplier"
     # providerResponsible: "Open-Xchange"
     # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
@@ -330,7 +340,7 @@ charts:
     name: "appsuite-public-sector"
     version: "2.12.85"
     verify: false
-  openXchangeAppSuiteBootstrap:
+  oxAppSuiteBootstrap:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry.opencode.de"
@@ -339,16 +349,6 @@ charts:
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-open-xchange-bootstrap"
     name: "opendesk-open-xchange-bootstrap"
     version: "2.1.2"
-    verify: true
-  otterize:
-    # providerCategory: "Platform"
-    # providerResponsible: "openDesk"
-    # upstreamRegistry: "https://registry.opencode.de"
-    # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize/opendesk-otterize"
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/platform-development/charts/opendesk-otterize"
-    name: "opendesk-otterize"
-    version: "2.1.0"
     verify: true
   oxConnector:
     # providerCategory: "Supplier"

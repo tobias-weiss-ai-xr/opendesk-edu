@@ -17,8 +17,8 @@ dovecot:
   mailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   password: {{ .Values.secrets.dovecot.doveadm | quote }}
   migration:
-    enabled: {{ .Values.functional.migration.oxAppsuite.enabled }}
-    masterPassword: {{ .Values.secrets.oxAppsuite.migrationsMasterPassword | quote }}
+    enabled: {{ .Values.functional.migration.oxAppSuite.enabled }}
+    masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
   ldap:
     enabled: true
     host: {{ .Values.ldap.host | quote }}

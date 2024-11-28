@@ -50,7 +50,7 @@ oxConnector:
   oxLocalTimezone: "Europe/Berlin"
   oxLanguage: "de_DE"
   oxMasterAdmin: "admin"
-  oxMasterPassword: {{ .Values.secrets.oxAppsuite.adminPassword | quote }}
+  oxMasterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
   oxSmtpServer: "smtp://127.0.0.1:587"
   oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
 

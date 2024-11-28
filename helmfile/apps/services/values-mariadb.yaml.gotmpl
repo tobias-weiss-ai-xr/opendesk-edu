@@ -47,9 +47,9 @@ job:
     - username: "openxchange_user"
     # - username: {{ .Values.databases.xwiki.username | quote }}
       password: {{ .Values.secrets.mariadb.openxchangeUser | quote }}
-      connectionLimit: {{ .Values.databases.oxAppsuite.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+      connectionLimit: {{ .Values.databases.oxAppSuite.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
     - username: "xwiki_user"
-    # - username: {{ .Values.databases.oxAppsuite.username | quote }}
+    # - username: {{ .Values.databases.oxAppSuite.username | quote }}
       password: {{ .Values.secrets.mariadb.xwikiUser | quote }}
       connectionLimit: {{ .Values.databases.xwiki.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
   databases:
@@ -59,8 +59,8 @@ job:
     # users for the moment.
     - name: "openxchange"
       user: "openxchange_user"
-    # - name: {{ .Values.databases.oxAppsuite.name | quote }}
-    #   user: {{ .Values.databases.oxAppsuite.username | quote }}
+    # - name: {{ .Values.databases.oxAppSuite.name | quote }}
+    #   user: {{ .Values.databases.oxAppSuite.username | quote }}
     - name: "xwiki"
       user: "xwiki_user"
     # - name: {{ .Values.databases.xwiki.name | quote }}

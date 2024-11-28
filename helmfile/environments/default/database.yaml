@@ -32,7 +32,7 @@ databases:
     username: "openproject_user"
     password: ""
     connectionLimit: ~
-  oxAppsuite:
+  oxAppSuite:
     name: "configdb"
     host: "mariadb"
     port: 3306

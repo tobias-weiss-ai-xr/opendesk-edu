@@ -18,59 +18,59 @@ This document will cover the additional configuration for external services like
 When deploying this suite to production, you need to configure the applications to use your production-grade database
 service.
 
-| Component   | Name               | Type       | Parameter | Key                                      | Default                    |
-|-------------|--------------------|------------|-----------|------------------------------------------|----------------------------|
-| Element     | Synapse            | PostgreSQL |           |                                          |                            |
-|             |                    |            | Name      | `databases.synapse.name` | `matrix` |
-|             |                    |            | Host      | `databases.synapse.host` | `postgresql` |
-|             |                    |            | Port      | `databases.synapse.port` | `5432` |
-|             |                    |            | Username  | `databases.synapse.username` | `matrix_user` |
-|             |                    |            | Password  | `databases.synapse.password` |                            |
-| Keycloak    | Keycloak           | PostgreSQL |           |                                          |                            |
-|             |                    |            | Name      | `databases.keycloak.name` | `keycloak` |
-|             |                    |            | Host      | `databases.keycloak.host` | `postgresql` |
-|             |                    |            | Port      | `databases.keycloak.port` | `5432` |
-|             |                    |            | Username  | `databases.keycloak.username` | `keycloak_user` |
-|             |                    |            | Password  | `databases.keycloak.password` |                            |
-|             | Keycloak Extension | PostgreSQL |           |                                          |                            |
-|             |                    |            | Name      | `databases.keycloakExtension.name` | `keycloak_extensions` |
-|             |                    |            | Host      | `databases.keycloakExtension.host` | `postgresql` |
-|             |                    |            | Port      | `databases.keycloakExtension.port` | `5432` |
-|             |                    |            | Username  | `databases.keycloakExtension.username` | `keycloak_extensions_user` |
-|             |                    |            | Password  | `databases.keycloakExtension.password` |                            |
-| UMS         | Notifications API  | PostgreSQL |           |                                          |                            |
-|             |                    |            | Name      | `databases.umsNotificationsApi.name` | `notificationsapi` |
-|             |                    |            | Host      | `databases.umsNotificationsApi.host` | `postgresql` |
-|             |                    |            | Port      | `databases.umsNotificationsApi.port` | `5432` |
-|             |                    |            | Username  | `databases.umsNotificationsApi.username` | `notificationsapi_user` |
-|             |                    |            | Password  | `databases.umsNotificationsApi.password` |                            |
-|             | Self Service       | PostgreSQL |           |                                          |                            |
-|             |                    |            | Name      | `databases.umsSelfservice.name` | `selfservice` |
-|             |                    |            | Host      | `databases.umsSelfservice.host` | `postgresql` |
-|             |                    |            | Port      | `databases.umsSelfservice.port` | `5432` |
-|             |                    |            | Username  | `databases.umsSelfservice.username` | `selfservice_user` |
-|             |                    |            | Password  | `databases.umsSelfservice.password` |                            |
-| Nextcloud   | Nextcloud          | MariaDB    |           |                                          |                            |
-|             |                    |            | Name      | `databases.nextcloud.name` | `nextcloud` |
-|             |                    |            | Host      | `databases.nextcloud.host` | `mariadb` |
-|             |                    |            | Username  | `databases.nextcloud.username` | `nextcloud_user` |
-|             |                    |            | Password  | `databases.nextcloud.password` |                            |
-| OpenProject | OpenProject        | PostgreSQL |           |                                          |                            |
-|             |                    |            | Name      | `databases.openproject.name` | `openproject` |
-|             |                    |            | Host      | `databases.openproject.host` | `postgresql` |
-|             |                    |            | Port      | `databases.openproject.port` | `5432` |
-|             |                    |            | Username  | `databases.openproject.username` | `openproject_user` |
-|             |                    |            | Password  | `databases.openproject.password` |                            |
-| OX Appsuite | OX Appsuite        | MariaDB    |           |                                          |                            |
-|             |                    |            | Name      | `databases.oxAppsuite.name` | `CONFIGDB` |
-|             |                    |            | Host      | `databases.oxAppsuite.host` | `mariadb` |
-|             |                    |            | Username  | `databases.oxAppsuite.username` | `root` |
-|             |                    |            | Password  | `databases.oxAppsuite.password` |                            |
-| XWiki       | XWiki              | MariaDB    |           |                                          |                            |
-|             |                    |            | Name      | `databases.xwiki.name` | `xwiki` |
-|             |                    |            | Host      | `databases.xwiki.host` | `mariadb` |
-|             |                    |            | Username  | `databases.xwiki.username` | `xwiki_user` |
-|             |                    |            | Password  | `databases.xwiki.password` |                            |
+| Component    | Name               | Type       | Parameter | Key                                      | Default                    |
+| ------------ | ------------------ | ---------- | --------- | ---------------------------------------- | -------------------------- |
+| Element      | Synapse            | PostgreSQL |           |                                          |                            |
+|              |                    |            | Name      | `databases.synapse.name`                 | `matrix`                   |
+|              |                    |            | Host      | `databases.synapse.host`                 | `postgresql`               |
+|              |                    |            | Port      | `databases.synapse.port`                 | `5432`                     |
+|              |                    |            | Username  | `databases.synapse.username`             | `matrix_user`              |
+|              |                    |            | Password  | `databases.synapse.password`             |                            |
+| Keycloak     | Keycloak           | PostgreSQL |           |                                          |                            |
+|              |                    |            | Name      | `databases.keycloak.name`                | `keycloak`                 |
+|              |                    |            | Host      | `databases.keycloak.host`                | `postgresql`               |
+|              |                    |            | Port      | `databases.keycloak.port`                | `5432`                     |
+|              |                    |            | Username  | `databases.keycloak.username`            | `keycloak_user`            |
+|              |                    |            | Password  | `databases.keycloak.password`            |                            |
+|              | Keycloak Extension | PostgreSQL |           |                                          |                            |
+|              |                    |            | Name      | `databases.keycloakExtension.name`       | `keycloak_extensions`      |
+|              |                    |            | Host      | `databases.keycloakExtension.host`       | `postgresql`               |
+|              |                    |            | Port      | `databases.keycloakExtension.port`       | `5432`                     |
+|              |                    |            | Username  | `databases.keycloakExtension.username`   | `keycloak_extensions_user` |
+|              |                    |            | Password  | `databases.keycloakExtension.password`   |                            |
+| UMS          | Notifications API  | PostgreSQL |           |                                          |                            |
+|              |                    |            | Name      | `databases.umsNotificationsApi.name`     | `notificationsapi`         |
+|              |                    |            | Host      | `databases.umsNotificationsApi.host`     | `postgresql`               |
+|              |                    |            | Port      | `databases.umsNotificationsApi.port`     | `5432`                     |
+|              |                    |            | Username  | `databases.umsNotificationsApi.username` | `notificationsapi_user`    |
+|              |                    |            | Password  | `databases.umsNotificationsApi.password` |                            |
+|              | Self Service       | PostgreSQL |           |                                          |                            |
+|              |                    |            | Name      | `databases.umsSelfservice.name`          | `selfservice`              |
+|              |                    |            | Host      | `databases.umsSelfservice.host`          | `postgresql`               |
+|              |                    |            | Port      | `databases.umsSelfservice.port`          | `5432`                     |
+|              |                    |            | Username  | `databases.umsSelfservice.username`      | `selfservice_user`         |
+|              |                    |            | Password  | `databases.umsSelfservice.password`      |                            |
+| Nextcloud    | Nextcloud          | MariaDB    |           |                                          |                            |
+|              |                    |            | Name      | `databases.nextcloud.name`               | `nextcloud`                |
+|              |                    |            | Host      | `databases.nextcloud.host`               | `mariadb`                  |
+|              |                    |            | Username  | `databases.nextcloud.username`           | `nextcloud_user`           |
+|              |                    |            | Password  | `databases.nextcloud.password`           |                            |
+| OpenProject  | OpenProject        | PostgreSQL |           |                                          |                            |
+|              |                    |            | Name      | `databases.openproject.name`             | `openproject`              |
+|              |                    |            | Host      | `databases.openproject.host`             | `postgresql`               |
+|              |                    |            | Port      | `databases.openproject.port`             | `5432`                     |
+|              |                    |            | Username  | `databases.openproject.username`         | `openproject_user`         |
+|              |                    |            | Password  | `databases.openproject.password`         |                            |
+| OX App Suite | OX App Suite       | MariaDB    |           |                                          |                            |
+|              |                    |            | Name      | `databases.oxAppSuite.name`              | `CONFIGDB`                 |
+|              |                    |            | Host      | `databases.oxAppSuite.host`              | `mariadb`                  |
+|              |                    |            | Username  | `databases.oxAppSuite.username`          | `root`                     |
+|              |                    |            | Password  | `databases.oxAppSuite.password`          |                            |
+| XWiki        | XWiki              | MariaDB    |           |                                          |                            |
+|              |                    |            | Name      | `databases.xwiki.name`                   | `xwiki`                    |
+|              |                    |            | Host      | `databases.xwiki.host`                   | `mariadb`                  |
+|              |                    |            | Username  | `databases.xwiki.username`               | `xwiki_user`               |
+|              |                    |            | Password  | `databases.xwiki.password`               |                            |
 
 # Object storage
 
