@@ -36,11 +36,11 @@ stages:
   - "env-cleanup"
   - "env"
   - "pre-services-deploy"
-  - "migrations-pre"
-  - "basic-services-deploy"
-  - "component-deploy-stage-1"
-  - "component-deploy-stage-2"
-  - "migrations-post"
+  - "010-migrations-pre"
+  - "030-services"
+  - "050-components"
+  - "060-components"
+  - "090-migrations-post"
   - "lint"
   - "tests"
   - "env-stop"
@@ -278,7 +278,7 @@ policies-deploy:
     ADDITIONAL_ARGS: "-l name=opendesk-otterize"
 
 migrations-pre:
-  stage: "migrations-pre"
+  stage: "010-migrations-pre"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -290,7 +290,7 @@ migrations-pre:
     COMPONENT: "migrations-pre"
 
 migrations-post:
-  stage: "migrations-post"
+  stage: "090-migrations-post"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -302,7 +302,7 @@ migrations-post:
     COMPONENT: "migrations-post"
 
 services-deploy:
-  stage: "basic-services-deploy"
+  stage: "030-services"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -314,7 +314,7 @@ services-deploy:
     COMPONENT: "services"
 
 nubus-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -326,7 +326,7 @@ nubus-deploy:
     COMPONENT: "nubus"
 
 ox-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   timeout: "30m"
   rules:
@@ -339,7 +339,7 @@ ox-deploy:
     COMPONENT: "open-xchange"
 
 xwiki-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -351,7 +351,7 @@ xwiki-deploy:
     COMPONENT: "xwiki"
 
 collabora-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -363,7 +363,7 @@ collabora-deploy:
     COMPONENT: "collabora"
 
 cryptpad-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -375,7 +375,7 @@ cryptpad-deploy:
     COMPONENT: "cryptpad"
 
 nextcloud-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -387,7 +387,7 @@ nextcloud-deploy:
     COMPONENT: "nextcloud"
 
 openproject-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -399,7 +399,7 @@ openproject-deploy:
     COMPONENT: "openproject"
 
 openproject-bootstrap-deploy:
-  stage: "component-deploy-stage-2"
+  stage: "060-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -411,7 +411,7 @@ openproject-bootstrap-deploy:
     COMPONENT: "openproject-bootstrap"
 
 jitsi-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >
@@ -423,7 +423,7 @@ jitsi-deploy:
     COMPONENT: "jitsi"
 
 element-deploy:
-  stage: "component-deploy-stage-1"
+  stage: "050-components"
   extends: ".deploy-common"
   rules:
     - if: >

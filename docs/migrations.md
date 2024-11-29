@@ -12,7 +12,7 @@ SPDX-License-Identifier: Apache-2.0
   * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual checks/steps](#pre-upgrade-manual-checkssteps)
       * [Streamlining `openxchange` and `oxAppSuite` attribute names.](#streamlining-openxchange-and-oxappsuite-attribute-names)
-      * [`customization.release`](#customizationrelease)
+      * [Dicts to define `customization.release`](#dicts-to-define-customizationrelease)
       * [Redis 7.4](#redis-74)
   * [From v0.9.0](#from-v090)
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
@@ -131,7 +131,7 @@ WAS: secrets.oxAppsuite: ...
 NOW: secrets.oxAppSuite: ...
 ```
 
-#### `customization.release`
+#### Dicts to define `customization.release`
 
 If you make use of the `customization.release` option, you have to switch to a dictionary based definition of customization files e.g. from
 
