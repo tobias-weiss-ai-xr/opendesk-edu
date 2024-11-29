@@ -401,6 +401,7 @@ nubusStackDataUms:
   templateContext:
     # creates the default.user and default.admin
     loadDevData: true
+    portalEnforceLogin: {{ .Values.functional.portal.enforceLogin }}
     portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
     portalTiles: {{ toYaml .Values.theme.imagery.portalTiles | nindent 6 }}
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}

@@ -87,6 +87,10 @@ functional:
       # Ref.:
       enabled: false
 
+  portal:
+    # Configure if the a re-direct to the login dialogue is enforced, or if the portal is shown and the user as to actively
+    # trigger the login flow, e.g. but clicking on the "Login" portal tile.
+    enforceLogin: true
   chat:
     matrix:
       profile:

@@ -411,7 +411,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus"
-    tag: "1.7.5@sha256:cc38d339abea18dc3644b7764d7be13798956161d1c87e34b26b5d8b7a11edc6"
+    tag: "1.8.1@sha256:8101e27a930cb2252914440680f16eb4bb395cb89b630a251e91b7301e0f7d41"
   nubusOpenPolicyAgent:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"
@@ -459,7 +459,7 @@ images:
     # upstreamRepository: "nubus/images/portal-frontend"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nubus-portal-update"
-    tag: "1.8.1@sha256:dd2c8e16b57d5b2a97f465b15e108231782e3ee2df1cc07cee0388459bf40e1c"
+    tag: "1.10.5@sha256:75461683a2233c2e5c99499791ceb576b717c68baa28eef2c307e7052aaaf754"
   nubusPortalServer:
     # providerCategory: "Supplier"
     # providerResponsible: "Univention"

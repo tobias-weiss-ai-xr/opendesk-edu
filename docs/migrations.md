@@ -11,7 +11,8 @@ SPDX-License-Identifier: Apache-2.0
 * [Releases upgrade details](#releases-upgrade-details)
   * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual checks/steps](#pre-upgrade-manual-checkssteps)
-      * [Streamlining `openxchange` and `oxAppSuite` attribute names.](#streamlining-openxchange-and-oxappsuite-attribute-names)
+      * [New default enforces login](#new-default-enforces-login)
+      * [Streamlining `openxchange` and `oxAppSuite` attribute names](#streamlining-openxchange-and-oxappsuite-attribute-names)
       * [Dicts to define `customization.release`](#dicts-to-define-customizationrelease)
       * [Redis 7.4](#redis-74)
   * [From v0.9.0](#from-v090)
@@ -68,7 +69,19 @@ Explanation of the table's columns:
 
 ### Pre-upgrade: Manual checks/steps
 
-#### Streamlining `openxchange` and `oxAppSuite` attribute names.
+#### New default enforces login
+
+Users accessing the openDesk portal are now automatically redirected to the login screen as a default.
+
+In case you want to keep the previous behavior you need to set the following `functional` flag:
+
+```yaml
+functional:
+  portal:
+    enforceLogin: false
+```
+
+#### Streamlining `openxchange` and `oxAppSuite` attribute names
 
 We have updated some attribute names around Open-Xchange / OX App Suite to be consistent within our Helmfile
 deployment and to aligning with the actual brand names as well as with our rule of thumb for brand based
@@ -135,7 +148,7 @@ NOW: secrets.oxAppSuite: ...
 
 If you make use of the `customization.release` option, you have to switch to a dictionary based definition of customization files e.g. from
 
-```
+```yaml
 customization:
   release:
     collaboraOnline: "./my_custom_templating.yaml"
@@ -143,7 +156,7 @@ customization:
 
 to
 
-```
+```yaml
 customization:
   release:
     collaboraOnline:
