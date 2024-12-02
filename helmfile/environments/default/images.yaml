@@ -20,7 +20,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
-    tag: "24.04.7.2.1@sha256:5b00478f2c6c7372b2a67e68783d9b1a91265679bbd4afdc1416e50720d50ce6"
+    tag: "24.04.9.2.1@sha256:749917bf9146d8507b3a63d422a30ebe4f499700421c30527e32f322a015c73d"
   cryptpad:
     # providerCategory: "Supplier"
     # providerResponsible: "XWiki"
@@ -235,7 +235,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/images/opendesk-nextcloud"
-    tag: "2.3.3@sha256:449ea2b0ed5031b8c08f00471f788ac248eb0cd33a60bbc6341098a4faf1fb78"
+    tag: "2.3.4@sha256:46c596818861486ee621cf8a454c2539a4e230e58b1aebb5735022de849de8e6"
   nextcloudExporter:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"

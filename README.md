@@ -37,7 +37,7 @@ openDesk currently features the following functional main components:
 | Portal & IAM         | Nubus                       | [1.0](https://www.univention.de/produkte/nubus/)                                      | [Univention's documentation website](https://docs.software-univention.de/n/en/nubus.html)                                            |
 | Project management   | OpenProject                 | [15.0.2](https://www.openproject.org/docs/release-notes/15-0-2/)                      | [For the most recent release](https://www.openproject.org/docs/user-guide/)                                                          |
 | Videoconferencing    | Jitsi                       | [2.0.9823](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_9823) | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/)                                           |
-| Weboffice            | Collabora                   | [24.04.7.2](https://www.collaboraoffice.com/code-24-04-release-notes/)                | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)       |
+| Weboffice            | Collabora                   | [24.04.9.2](https://www.collaboraoffice.com/code-24-04-release-notes/)                | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)       |
 
 While not all components are perfectly shaped for the execution inside containers, one of the project's objectives is to
 align the applications with best practices regarding container design and operations.
