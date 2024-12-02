@@ -63,4 +63,7 @@ customization:
     minio: {}
     # xwiki
     xwiki: {}
+
+    # openDesk Enterprise Components
+    cassandra: {}
 ...

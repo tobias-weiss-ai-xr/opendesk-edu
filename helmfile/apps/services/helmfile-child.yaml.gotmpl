@@ -113,6 +113,18 @@ repositories:
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
 
+  # openDesk Enterprise Repositories
+
+  # Cassandra
+  # Source: https://github.com/bitnami/charts/
+  - name: "cassandra-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.cassandra.verify }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.cassandra.registry }}/{{ .Values.charts.cassandra.repository }}"
+
 releases:
   - name: "opendesk-otterize"
     chart: "otterize-repo/{{ .Values.charts.otterize.name }}"
@@ -243,6 +255,17 @@ releases:
       - {{ . }}
       {{ end }}
     installed: {{ .Values.minio.enabled }}
+    timeout: 900
+
+  # openDesk Enterprise Releases
+  - name: "cassandra"
+    chart: "cassandra-repo/{{ .Values.charts.cassandra.name }}"
+    version: "{{ .Values.charts.cassandra.version }}"
+    values:
+      {{ range .Values.customization.release.cassandra }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.cassandra.enabled }}
     timeout: 900
 
 commonLabels:
