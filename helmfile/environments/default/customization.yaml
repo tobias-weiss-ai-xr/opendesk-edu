@@ -52,6 +52,7 @@ customization:
     opendeskOtterize: {}
     opendeskHome: {}
     opendeskCertificates: {}
+    opendeskAlerts: {}
     redis: {}
     memcached: {}
     postgresql: {}
