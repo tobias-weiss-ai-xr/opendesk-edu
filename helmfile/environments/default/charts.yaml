@@ -296,6 +296,16 @@ charts:
     name: "nubus"
     version: "0.64.2"
     verify: true
+  opendeskAlerts:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-alerts"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-alerts"
+    name: "opendesk-alerts"
+    version: "1.1.0"
+    verify: true
   opendeskKeycloakBootstrap:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"

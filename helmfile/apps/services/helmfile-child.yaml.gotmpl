@@ -89,6 +89,16 @@ repositories:
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
 
+  # openDesk Alerts
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-alerts
+  - name: "opendesk-alerts-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.opendeskAlerts.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskAlerts.registry }}/{{ .Values.charts.opendeskAlerts.repository }}"
+
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
   - name: "memcached-repo"
@@ -156,6 +166,17 @@ releases:
       - {{ . }}
       {{ end }}
     installed: {{ .Values.certificates.enabled }}
+    timeout: 900
+
+  - name: "opendesk-alerts"
+    chart: "opendesk-alerts-repo/{{ .Values.charts.opendeskAlerts.name }}"
+    version: "{{ .Values.charts.opendeskAlerts.version }}"
+    values:
+      - "values-opendesk-alerts.yaml.gotmpl"
+      {{ range .Values.customization.release.opendeskAlerts}}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
     timeout: 900
 
   - name: "redis"

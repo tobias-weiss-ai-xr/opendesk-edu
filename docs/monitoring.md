@@ -46,7 +46,10 @@ prometheus:
 
 # Alerts
 
-Some Helm charts provide a default set of prometheusRules for alerting; enable it by:
+openDesk ships with a set of Prometheus alerting rules that are specific to the operation of openDesk.
+Some of these are created by our partners while others are defined in [opendesk-alerts](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-alerts).
+
+All alert rules are deployed as [PrometheusRule](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.PrometheusRule) and can be enabled like this:
 
 ```yaml
 prometheus:
