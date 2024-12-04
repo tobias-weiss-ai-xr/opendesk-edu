@@ -97,7 +97,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-element"
-    version: "5.0.0"
+    version: "5.0.1"
     verify: true
   elementWeb:
     # providerCategory: "Platform"
@@ -107,7 +107,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-element-web"
-    version: "5.0.0"
+    version: "5.0.1"
     verify: true
   elementWellKnown:
     # providerCategory: "Platform"
@@ -117,7 +117,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-well-known"
-    version: "5.0.0"
+    version: "5.0.1"
     verify: true
   home:
     # providerCategory: "Platform"
@@ -209,7 +209,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-matrix-user-verification-service"
-    version: "3.4.0"
+    version: "5.0.1"
     verify: true
   memcached:
     # providerCategory: "Community"
@@ -427,7 +427,21 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse"
-    version: "5.0.0"
+    version: "5.0.1"
+    verify: true
+  synapseAdmin:
+    # Component is required for openDesk Enterprise only.
+    registry: ""
+    repository: ""
+    name: ""
+    version: ""
+    verify: true
+  synapseAdminbotWeb:
+    # Component is required for openDesk Enterprise only.
+    registry: ""
+    repository: ""
+    name: ""
+    version: ""
     verify: true
   synapseCreateAccount:
     # providerCategory: "Platform"
@@ -437,7 +451,21 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-create-account"
-    version: "5.0.0"
+    version: "5.0.1"
+    verify: true
+  synapseGroupsync:
+    # Component is required for openDesk Enterprise only.
+    registry: ""
+    repository: ""
+    name: ""
+    version: ""
+    verify: true
+  synapsePipe:
+    # Component is required for openDesk Enterprise only.
+    registry: ""
+    repository: ""
+    name: ""
+    version: ""
     verify: true
   synapseWeb:
     # providerCategory: "Platform"
@@ -447,7 +475,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
     name: "opendesk-synapse-web"
-    version: "5.0.0"
+    version: "5.0.1"
     verify: true
   xwiki:
     # providerCategory: "Supplier"
