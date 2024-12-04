@@ -1,0 +1,54 @@
+{{/*
+SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-License-Identifier: Apache-2.0
+*/}}
+---
+additionalAnnotations:
+  {{ .Values.monitoring.grafana.dashboards.annotations | toYaml | nindent 2 }}
+additionalLabels:
+  {{ .Values.monitoring.grafana.dashboards.labels | toYaml | nindent 2 }}
+
+config:
+  apps:
+    collabora:
+      enable: {{ .Values.collabora.enabled }}
+      selectors:
+        namespace: {{ .Values.collabora.namespace | quote }}
+    matrixElement:
+      enable: {{ .Values.element.enabled }}
+      selectors:
+        namespace: {{ .Values.element.namespace | quote }}
+    diagrams:
+      enable: {{ .Values.cryptpad.enabled }}
+      selectors:
+        namespace: {{ .Values.cryptpad.namespace | quote }}
+    nextcloud:
+      enable: {{ .Values.nextcloud.enabled }}
+      selectors:
+        namespace: {{ .Values.nextcloud.namespace | quote }}
+    openxchange:
+      enable: {{ .Values.oxAppSuite.enabled }}
+      selectors:
+        namespace: {{ .Values.oxAppSuite.namespace | quote }}
+    xwiki:
+      enable: {{ .Values.xwiki.enabled }}
+      selectors:
+        namespace: {{ .Values.xwiki.namespace | quote }}
+    nubus:
+      enable: {{ .Values.nubus.enabled }}
+      selectors:
+        namespace: {{ .Values.nubus.namespace | quote }}
+    openproject:
+      enable: {{ .Values.openproject.enabled }}
+      selectors:
+        namespace: {{ .Values.openproject.namespace | quote }}
+    jitsi:
+      enable: {{ .Values.jitsi.enabled }}
+      selectors:
+        namespace: {{ .Values.jitsi.namespace | quote }}
+    collabora:
+      enable: {{ .Values.collabora.enabled }}
+      selectors:
+        namespace: {{ .Values.collabora.namespace | quote }}
+...

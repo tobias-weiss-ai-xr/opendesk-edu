@@ -53,6 +53,7 @@ customization:
     opendeskHome: {}
     opendeskCertificates: {}
     opendeskAlerts: {}
+    opendeskDashboards: {}
     redis: {}
     memcached: {}
     postgresql: {}

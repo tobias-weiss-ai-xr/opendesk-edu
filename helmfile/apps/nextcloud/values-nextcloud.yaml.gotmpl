@@ -11,6 +11,7 @@ global:
 exporter:
   enabled: true
   configuration:
+    server: "http://opendesk-nextcloud-aio"
     token:
       value: {{ .Values.secrets.nextcloud.metricsToken | quote }}
   containerSecurityContext:
