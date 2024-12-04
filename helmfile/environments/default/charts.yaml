@@ -303,6 +303,16 @@ charts:
     name: "opendesk-alerts"
     version: "1.1.0"
     verify: true
+  opendeskDashboards:
+    # providerCategory: "Platform"
+    # providerResponsible: "openDesk"
+    # upstreamRegiostry: "https://registry.opencode.de"
+    # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-dashboards"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-dashboards"
+    name: "opendesk-dashboards"
+    version: "1.1.0"
+    verify: true
   opendeskKeycloakBootstrap:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"

@@ -99,6 +99,16 @@ repositories:
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskAlerts.registry }}/{{ .Values.charts.opendeskAlerts.repository }}"
 
+    # openDesk Grafana Dashboards
+    # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dashboards
+  - name: "dashboards-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.opendeskDashboards.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskDashboards.registry }}/{{ .Values.charts.opendeskDashboards.repository }}"
+
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
   - name: "memcached-repo"
@@ -265,6 +275,15 @@ releases:
       - {{ . }}
       {{ end }}
     installed: {{ .Values.clamavSimple.enabled }}
+    timeout: 900
+
+  - name: "opendesk-dashboards"
+    chart: "dashboards-repo/{{ .Values.charts.opendeskDashboards.name }}"
+    version: "{{ .Values.charts.opendeskDashboards.version }}"
+    values:
+      - "values-dashboards.yaml.gotmpl"
+      - {{ .Values.customization.release.opendeskDashboards | default "additionalValues: false" }}
+    installed: {{ .Values.monitoring.grafana.dashboards.enabled }}
     timeout: 900
 
   - name: "minio"

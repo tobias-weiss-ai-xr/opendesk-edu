@@ -22,14 +22,6 @@ collabora:
 
 fullnameOverride: "collabora"
 
-grafana:
-  dashboards:
-    enabled: {{ .Values.monitoring.grafana.dashboards.enabled }}
-    labels:
-      {{ .Values.monitoring.grafana.dashboards.labels | toYaml | nindent 6 }}
-    annotations:
-      {{ .Values.monitoring.grafana.dashboards.annotations | toYaml | nindent 6 }}
-
 image:
   repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
   tag: {{ .Values.images.collabora.tag | quote }}
