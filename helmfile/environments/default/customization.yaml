@@ -68,4 +68,11 @@ customization:
 
     # openDesk Enterprise Components
     cassandra: {}
+    opendeskSynapseAdmin: {}
+    opendeskSynapseAdminbotBootstrap: {}
+    opendeskSynapseAdminbotPipe: {}
+    opendeskSynapseAdminbotWeb: {}
+    opendeskSynapseAuditbotBootstrap: {}
+    opendeskSynapseAuditbotPipe: {}
+    opendeskSynapseGroupsync: {}
 ...

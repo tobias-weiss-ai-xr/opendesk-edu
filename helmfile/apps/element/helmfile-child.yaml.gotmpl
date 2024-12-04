@@ -32,7 +32,6 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.synapse.registry }}/{{ .Values.charts.synapse.repository }}"
-
   - name: "synapse-create-account-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.synapseCreateAccount.verify }}
@@ -78,6 +77,39 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.matrixNeodatefixBot.registry }}/{{ .Values.charts.matrixNeodatefixBot.repository }}"
+
+  # openDesk Enterprise Repositories
+
+  # openDesk Element
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-element
+  - name: "synapse-admin-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.synapseAdmin.verify }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapseAdmin.registry }}/{{ .Values.charts.synapseAdmin.repository }}"
+  - name: "synapse-adminbot-web-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.synapseAdminbotWeb.verify }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapseAdminbotWeb.registry }}/{{ .Values.charts.synapseAdminbotWeb.repository }}"
+  - name: "synapse-groupsync-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.synapseGroupsync.verify }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapseGroupsync.registry }}/{{ .Values.charts.synapseGroupsync.repository }}"
+  - name: "synapse-pipe-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.synapsePipe.verify }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.synapsePipe.registry }}/{{ .Values.charts.synapsePipe.repository }}"
 
 releases:
   # During upgrade 1.0.0 -> 1.1.0 the chart 'opendesk-element' has been moved to 'opendesk-element-web'
@@ -184,6 +216,77 @@ releases:
     values:
       - "values-matrix-neodatefix-bot.yaml.gotmpl"
     installed: {{ .Values.element.enabled }}
+    timeout: 900
+
+  # openDesk Enterprise Releases
+  - name: "opendesk-synapse-admin"
+    chart: "synapse-admin-repo/{{ .Values.charts.synapseAdmin.name }}"
+    version: "{{ .Values.charts.synapseAdmin.version }}"
+    values:
+      {{ range .Values.customization.release.opendeskSynapseAdmin }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.elementAdmin.enabled }}
+    timeout: 900
+
+  - name: "opendesk-synapse-adminbot-bootstrap"
+    chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
+    version: "{{ .Values.charts.synapseCreateAccount.version }}"
+    values:
+      {{ range .Values.customization.release.opendeskSynapseAdminbotBootstrap }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.elementAdmin.enabled }}
+    timeout: 900
+
+  - name: "opendesk-synapse-adminbot-pipe"
+    chart: "synapse-pipe-repo/{{ .Values.charts.synapsePipe.name }}"
+    version: "{{ .Values.charts.synapsePipe.version }}"
+    values:
+      {{ range .Values.customization.release.opendeskSynapseAdminbotPipe }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.elementAdmin.enabled }}
+    timeout: 900
+
+  - name: "opendesk-synapse-adminbot-web"
+    chart: "synapse-adminbot-web-repo/{{ .Values.charts.synapseAdminbotWeb.name }}"
+    version: "{{ .Values.charts.synapseAdminbotWeb.version }}"
+    values:
+      {{ range .Values.customization.release.opendeskSynapseAdminbotWeb }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.elementAdmin.enabled }}
+    timeout: 900
+
+  - name: "opendesk-synapse-auditbot-bootstrap"
+    chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
+    version: "{{ .Values.charts.synapseCreateAccount.version }}"
+    values:
+      {{ range .Values.customization.release.opendeskSynapseAuditbotBootstrap }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.elementAdmin.enabled }}
+    timeout: 900
+
+  - name: "opendesk-synapse-auditbot-pipe"
+    chart: "synapse-pipe-repo/{{ .Values.charts.synapsePipe.name }}"
+    version: "{{ .Values.charts.synapsePipe.version }}"
+    values:
+      {{ range .Values.customization.release.opendeskSynapseAuditbotPipe }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.elementAdmin.enabled }}
+    timeout: 900
+
+  - name: "opendesk-synapse-groupsync"
+    chart: "synapse-groupsync-repo/{{ .Values.charts.synapseGroupsync.name }}"
+    version: "{{ .Values.charts.synapseGroupsync.version }}"
+    values:
+      {{ range .Values.customization.release.opendeskSynapseGroupsync }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.elementGroupsync.enabled }}
     timeout: 900
 
 commonLabels:
