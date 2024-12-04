@@ -5,6 +5,8 @@ SPDX-License-Identifier: Apache-2.0
 ---
 keycloak:
   enabled: true
+  ingress:
+    enabled: false
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -238,6 +240,7 @@ nubusUmcServer:
         Ihr {domainname} Passwort-Service
 
 nubusKeycloakExtensions:
+  enabled: true
   handler:
     imagePullSecrets:
       {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}

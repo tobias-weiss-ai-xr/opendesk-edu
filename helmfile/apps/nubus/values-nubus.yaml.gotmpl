@@ -8,6 +8,9 @@ global:
   ldap:
     baseDn: {{ .Values.ldap.baseDn | quote }}
     domainName: {{ .Values.global.domain | quote }}
+    auth:
+      cnAdmin:
+        password: {{ .Values.secrets.nubus.ldapSecret | quote }}
   domain: {{ .Values.global.domain | quote }}
   subDomains:
     portal: {{ .Values.global.hosts.nubus | quote }}
@@ -23,36 +26,6 @@ global:
       host: "minio"
       port: "9000"
       protocol: "http"
-  credentialOverride:
-    ldapServer:
-      adminPassword: {{ .Values.secrets.nubus.ldapSecret | quote}}
-    defaultUsers:
-      defaultAdminPassword: {{ .Values.secrets.nubus.defaultAccounts.adminPassword | quote}}
-      defaultUserPassword: {{ .Values.secrets.nubus.defaultAccounts.userPassword | quote}}
-      defaultAdministratorPassword: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote}}
-    portalConsumer:
-      minio:
-        accessKey: {{ .Values.objectstores.nubus.username | quote }}
-        secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
-      provisioningApi:
-        password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword | quote}}
-    provisioning:
-      api:
-        adminPassword: {{ .Values.secrets.nubus.provisioning.api.adminPassword | quote}}
-        natsPassword: {{ .Values.secrets.nubus.provisioning.api.natsPassword | quote}}
-        prefillPassword: {{ .Values.secrets.nubus.provisioning.api.prefillPassword | quote}}
-        udmTransformerPassword: {{ .Values.secrets.nubus.provisioning.api.udmTransformerPassword | quote}}
-      dispatcher:
-        natsPassword: {{ .Values.secrets.nubus.provisioning.dispatcherNatsPassword | quote}}
-      nats:
-        adminPassword: {{ .Values.secrets.nats.natsAdminPassword | quote}}
-      prefill:
-        natsPassword: {{ .Values.secrets.nubus.provisioning.prefillNatsPassword | quote}}
-      udmTransformer:
-        natsPassword: {{ .Values.secrets.nubus.provisioning.udmTransformerNatsPassword | quote}}
-    selfserviceConsumer:
-      provisioningApi:
-        password: {{ .Values.secrets.nubus.selfserviceConsumer.provisioningApiPassword | quote}}
 
   # -- Extensions to load. Add entries to load additional extensions into Nubus.
   extensions:
@@ -197,9 +170,10 @@ keycloak:
   keycloak:
     auth:
       username: "kcadmin"
-      credentialSecret:
+      existingSecret:
         name: "ums-opendesk-keycloak-credentials"
-        key: "admin_password"
+        keyMapping:
+          adminPassword: "admin_password"
   postgresql:
     connection:
       host: {{ .Values.databases.keycloak.host | quote }}
@@ -207,9 +181,10 @@ keycloak:
     auth:
       username: {{ .Values.databases.keycloak.username | quote }}
       database: {{ .Values.databases.keycloak.name | quote }}
-      credentialSecret:
+      existingSecret:
         name: "ums-keycloak-postgresql-opendesk-credentials"
-        key: "keycloakDatabasePassword"
+        keyMapping:
+          password: keycloakDatabasePassword
   config:
     exposeAdminConsole: {{ .Values.debug.enabled }}
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
@@ -257,7 +232,8 @@ nubusNotificationsApi:
     auth:
       username: {{ .Values.databases.umsNotificationsApi.username | quote }}
       database: {{ .Values.databases.umsNotificationsApi.name | quote }}
-      existingSecret: "ums-notifications-api-postgresql-opendesk-credentials"
+      existingSecret:
+        name: "ums-notifications-api-postgresql-opendesk-credentials"
   ingress:
     certManager:
       enabled: false
@@ -277,9 +253,10 @@ nubusKeycloakExtensions:
   keycloak:
     auth:
       username: "kcadmin"
-      credentialSecret:
+      existingSecret:
         name: "ums-opendesk-keycloak-credentials"
-        key: "admin_password"
+        keyMapping:
+          adminPassword: "admin_password"
   proxy:
     ingress:
       paths:
@@ -301,7 +278,6 @@ nubusKeycloakExtensions:
         enabled: {{ .Values.ingress.tls.enabled }}
         secretName: {{ .Values.ingress.tls.secretName | quote }}
 
-
   postgresql:
     connection:
       host: {{ .Values.databases.keycloakExtension.host | quote }}
@@ -309,9 +285,10 @@ nubusKeycloakExtensions:
     auth:
       database: {{ .Values.databases.keycloakExtension.name | quote }}
       username: {{ .Values.databases.keycloakExtension.username | quote }}
-      credentialSecret:
+      existingSecret:
         name: "ums-keycloak-extensions-postgresql-opendesk-credentials"
-        key: "umcKeycloakExtensionsDatabasePassword"
+        keyMapping:
+          password: "umcKeycloakExtensionsDatabasePassword"
   smtp:
     connection:
       host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
@@ -321,9 +298,10 @@ nubusKeycloakExtensions:
     auth:
       enabled: false
       username: ""
-      credentialSecret:
+      existingSecret:
         name: "ums-keycloak-extensions-smtp-opendesk-credentials"
-        key: "umcKeycloakExtensionsSmtpPassword"
+        keyMapping:
+          password: "umcKeycloakExtensionsSmtpPassword"
   handler:
     appConfig:
       logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
@@ -342,8 +320,21 @@ nubusPortalConsumer:
   provisioningApi:
     auth:
       username: "portal-consumer"
+      password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword | quote }}
+      # TODO: Workaround for a small bug introduced during the secrets refactoring.
+      # The fix will be part of a future Nubus release and the two lines can then be deleted.
+      existingSecret:
+        name: "ums-portal-consumer-credentials"
+  objectStorage:
+    auth:
+      accessKey: {{ .Values.objectstores.nubus.username | quote }}
+      secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
 
 nubusPortalServer:
+  objectStorage:
+    auth:
+      accessKey: {{ .Values.objectstores.nubus.username | quote }}
+      secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
   portalServer:
     objectStorageEndpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
     objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
@@ -371,6 +362,43 @@ nubusUdmRestApi:
 
 nubusProvisioning:
   enabled: true
+  ldap:
+    auth:
+      password: {{ .Values.secrets.nubus.ldapSecret | quote }}
+  nats:
+    auth:
+      adminPassword: {{ .Values.secrets.nats.natsAdminPassword | quote }}
+  api:
+    auth:
+      adminPassword: {{ .Values.secrets.nubus.provisioning.api.adminPassword | quote }}
+      prefillPassword: {{ .Values.secrets.nubus.provisioning.api.prefillPassword | quote}}
+      udmTransformerPassword: {{ .Values.secrets.nubus.provisioning.api.udmTransformerPassword | quote}}
+    nats:
+      auth:
+        password: {{ .Values.secrets.nubus.provisioning.api.natsPassword | quote}}
+
+  dispatcher:
+    nats:
+      auth:
+        password: {{ .Values.secrets.nubus.provisioning.dispatcherNatsPassword | quote}}
+
+  prefill:
+    nats:
+      auth:
+        password: {{ .Values.secrets.nubus.provisioning.prefillNatsPassword | quote}}
+
+  udmTransformer:
+    nats:
+      auth:
+        password: {{ .Values.secrets.nubus.provisioning.udmTransformerNatsPassword | quote}}
+
+  registerConsumers:
+    createUsers:
+      oxConsumer:
+        existingSecret:
+          name: ums-provisioning-ox-credentials
+          keyMapping:
+            password: "ox-connector.json"
 
 nubusUdmListener:
   enabled: true
@@ -380,6 +408,9 @@ nubusSelfServiceListener:
 
 nubusSelfServiceConsumer:
   enabled: true
+  provisioningApi:
+    auth:
+      password: {{ .Values.secrets.nubus.selfserviceConsumer.provisioningApiPassword | quote}}
 
 # Nubus services
 nubusStackDataUms:
@@ -399,6 +430,9 @@ nubusStackDataUms:
     smtpStartTls: false
     ldapBase: {{ .Values.ldap.baseDn }}
   templateContext:
+    initialPasswordDefaultAdmin: {{ .Values.secrets.nubus.defaultAccounts.adminPassword | quote }}
+    initialPasswordDefaultUser: {{ .Values.secrets.nubus.defaultAccounts.userPassword | quote }}
+    initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote }}
     # creates the default.user and default.admin
     loadDevData: true
     portalEnforceLogin: {{ .Values.functional.portal.enforceLogin }}
@@ -466,18 +500,20 @@ nubusUmcServer:
     auth:
       username: {{ .Values.databases.umsSelfservice.username | quote }}
       database: {{ .Values.databases.umsSelfservice.name | quote }}
-      credentialSecret:
+      existingSecret:
         name: "ums-umc-server-postgresql-opendesk-credentials"
-        key: "umcServerDatabasePassword"
+        keyMapping:
+          password: "umcServerDatabasePassword"
   memcached:
     bundled: false
     server: {{ .Values.cache.umsSelfservice.host | quote }}
     auth:
-      credentialSecret:
+      existingSecret:
         name: "ums-umc-server-memcached-opendesk-credentials"
-        key: "umcServerMemcachedPassword"
+        keyMapping:
+          memcached-password: "umcServerMemcachedPassword"
   smtp:
-    credentialSecret:
+    existingSecret:
       name: "ums-umc-server-smtp-credentials-custom"
   ingress:
     certManager:
@@ -502,9 +538,8 @@ nubusKeycloakBootstrap:
   keycloak:
     auth:
       username: "kcadmin"
-      credentialSecret:
+      existingSecret:
         name: "ums-opendesk-keycloak-credentials"
-        key: "admin_password"
   bootstrap:
     ldapMappers:
       - ldapAndUserModelAttributeName: "opendeskProjectmanagementAdmin"
@@ -515,7 +550,7 @@ nubusKeycloakBootstrap:
   ldap:
     auth:
       bindDn: {{ printf "uid=ldapsearch_keycloak,cn=users,%s" .Values.ldap.baseDn }}
-      credentialSecret:
+      existingSecret:
         name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
 
 # Credential secrets for accessing customer supplied services
@@ -560,3 +595,6 @@ extraSecrets:
   - name: "ums-umc-server-smtp-credentials-custom"
     stringData:
       password: ""
+  - name: "ums-provisioning-ox-credentials"
+    stringData:
+      ox-connector.json: "{ \"name\": \"ox-connector\", \"realms_topics\": [{\"realm\": \"udm\", \"topic\": \"oxmail/oxcontext\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/accessprofile\"}, {\"realm\": \"udm\", \"topic\": \"users/user\"}, {\"realm\": \"udm\", \"topic\": \"oxresources/oxresources\"}, {\"realm\": \"udm\", \"topic\": \"groups/group\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/functional_account\"}], \"request_prefill\": true, \"password\": \"{{ .Values.secrets.oxConnector.provisioningApiPassword }}\" }"
