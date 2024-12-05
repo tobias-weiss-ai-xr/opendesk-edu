@@ -419,16 +419,32 @@ If you change the subdomain of `nubus`, you must replace `portal` with the speci
 openDesk deploys with the standard user account `Administrator`, which password you get retrieved as follows:
 
 ```shell
-# Replace with your namespace
-NAMESPACE=your-namespace
+# Set your namespace
+NAMESPACE=<your_namespace>
 
 # Get password for IAM "Administrator" account
 kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.administrator_password}' | base64 -d
 ```
 
-In openDesk Community Edition, you get two more default accounts:
-- `default.admin`: `kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.admin_password}' | base64 -d`
-- `default.user`: `kubectl -n ${NAMESPACE} get secret ums-nubus-credentials -o jsonpath='{.data.user_password}' | base64 -d`
+Using the aforementioned account, you can either create new accounts manually or make use of the
+[openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import/)
+script or container.
+
+For example you get a `default` and `default-admin` account by running the following snippet, after settings the
+appropriate values in the first three lines.
+
+```shell
+ADMINISTRATOR_PASSWORD=<your_administrator_password_see_above>
+DOMAIN=<your_domain>
+DEFAULT_USERS_PASSWORD=<password_for_the_created_default_accounts>
+docker run --rm registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.0.0 \
+  ./user_import_udm_rest_api.py \
+    --import_domain ${DOMAIN} \
+    --udm_api_password ${ADMINISTRATOR_PASSWORD} \
+    --set_default_password ${DEFAULT_USERS_PASSWORD} \
+    --import_filename template.ods \
+    --create_admin_accounts True
+```
 
 ## Using from external repository
 

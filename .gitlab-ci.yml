@@ -42,7 +42,8 @@ stages:
   - "060-components"
   - "090-migrations-post"
   - "lint"
-  - "tests"
+  - "post-prepare"
+  - "post-execute"
   - "env-stop"
   - ".post"
 
@@ -142,6 +143,12 @@ variables:
       - "no"
   DEPLOY_JITSI:
     description: "Enable Jitsi deployment."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+  CREATE_DEFAULT_ACCOUNTS:
+    description: "Creates `default` and `default-admin` in the instance using the password defined as CI variable `DEFAULT_ACCOUNTS_PASSWORD`."
     value: "no"
     options:
       - "yes"
@@ -434,20 +441,62 @@ element-deploy:
   variables:
     COMPONENT: "element"
 
-.ums-default-password: &ums-default-password
-  - |
-    DEFAULT_ADMINISTRATOR_PASSWORD=$(
+fetch-administrator-credentials:
+  extends: ".deploy-common"
+  environment:
+    name: "${NAMESPACE}"
+  stage: "post-prepare"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api"
+          && $NAMESPACE =~ /.+/
+          && ($CREATE_DEFAULT_ACCOUNTS == "yes" || $RUN_TESTS == "yes")
+      when: "on_success"
+  script:
+    - |
+      echo "DEFAULT_ADMINISTRATOR_PASSWORD=$(
        kubectl \
          -n ${NAMESPACE} \
          get secret ums-nubus-credentials \
          -o jsonpath='{.data.administrator_password}' | base64 -d \
-    )
+      )" >> .env
+  artifacts:
+    reports:
+      dotenv: .env
 
-run-tests:
-  extends: ".deploy-common"
+import-default-accounts:
+  stage: "post-execute"
+  extends: ".environments"
+  dependencies:
+    - fetch-administrator-credentials
   environment:
     name: "${NAMESPACE}"
-  stage: "tests"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/ && $CREATE_DEFAULT_ACCOUNTS == "yes"
+      when: "on_success"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.0.0"
+  script:
+    - echo "Starting default account import for ${DOMAIN}"
+    - cd /app
+    - |
+      ./user_import_udm_rest_api.py \
+        --import_domain ${DOMAIN} \
+        --udm_api_password ${DEFAULT_ADMINISTRATOR_PASSWORD} \
+        --set_default_password ${DEFAULT_ACCOUNTS_PASSWORD} \
+        --import_filename ./template.ods \
+        --admin_enable_fileshare True \
+        --admin_enable_knowledgemanagement True \
+        --admin_enable_projectmanagement True \
+        --create_admin_accounts True
+
+run-tests:
+  stage: "post-execute"
+  extends: ".deploy-common"
+  dependencies:
+    - fetch-administrator-credentials
+  environment:
+    name: "${NAMESPACE}"
   rules:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
@@ -458,7 +507,6 @@ run-tests:
           - "de"
           - "en"
   script:
-    - *ums-default-password
     - |
       curl --request POST \
       --header "Content-Type: application/json" \
@@ -550,8 +598,8 @@ avscan-start:
         job: "avscan-prepare"
     strategy: "depend"
 
-# Declare .environments which is in environments repository. In case it is not available
-# 'cache' is used because job must contain at least one key, so cache is just a dummy key.
+# Declare .environments which is in `opendesk-env` repository. In case it is not available
+# 'cache' is used because job as a dummy key, as the job is not allowed to be empty.
 .environments:
   cache: {}
 
