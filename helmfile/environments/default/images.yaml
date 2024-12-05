@@ -53,7 +53,7 @@ images:
     # upstreamRepository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
-    tag: "1.11.2@sha256:faf57be74ff715e0f7c833a977f9f7b974ed3230d5d4e30733be7ed01b295a4c"
+    tag: "1.11.3@sha256:cd0693af163acccfe31bc6d505cc1f17918e7475c7b77d63f94a802a3071b2b3"
   freshclam:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -127,7 +127,7 @@ images:
     # upstreamRepository: "bitnami/kubectl"
     registry: "registry-1.docker.io"
     repository: "bitnami/kubectl"
-    tag: "1.30.2@sha256:3ec696e5ce1b79f78eb0eac1fed4ef20fa6584662cdf3c7ad933b0b03b9ce3f6"
+    tag: "1.31.3@sha256:e90b9642d3daeabcfe73cf9aadcbbc624d1de7f88185095307c785f1c266bdb9"
   jvb:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -165,7 +165,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "4", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-poll-widget"
-    tag: "1.4.0@sha256:216cb88aaa47449a15af9a531d60eee593cb1923c4e8fcc67c119982972911e5"
+    tag: "1.4.1@sha256:7bfe43b60a4c1ba04e4bbb0d22071604699df0443ee6f3fb6be4cc2c80013ecc"
   matrixNeoDateFixBot:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -619,7 +619,7 @@ images:
     # upstreamRepository: "alpine/k8s"
     registry: "registry-1.docker.io"
     repository: "alpine/k8s"
-    tag: "1.26.8@sha256:acde24d2a8ebaafda76f464591a5ddc7d0acd08bb38b12560961c1b1c4fc85ec"
+    tag: "1.31.3@sha256:77812543abe5649b286d5f0dc17a7dbaa4056433225f6f695150f329cb4b6803"
   openxchangeCoreGuidedtours:
     # providerCategory: "Supplier"
     # providerResponsible: "Open-Xchange"
@@ -783,7 +783,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "91", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/element/images-mirror/synapse"
-    tag: "v1.115.0@sha256:abf4a5b5b2030f7deb555a8ec7b945607db9e98b057eb06364e66ba8308bdd40"
+    tag: "v1.120.2@sha256:daee887fa4ca6370e297439bb33a61896ff3413c9454540446a94e461f097d33"
   synapseCreateUser:
     # providerCategory: "Community"
     # providerResponsible: "Nordeck"
@@ -791,7 +791,7 @@ images:
     # upstreamRepository: "alpine/k8s"
     registry: "registry-1.docker.io"
     repository: "alpine/k8s"
-    tag: "1.30.0@sha256:d7a11b7032550e992667fd7725b039dcd639270fbceec368d7e66e3d9e41ee15"
+    tag: "1.31.3@sha256:77812543abe5649b286d5f0dc17a7dbaa4056433225f6f695150f329cb4b6803"
   synapseGuestModule:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
