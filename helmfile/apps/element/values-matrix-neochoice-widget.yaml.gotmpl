@@ -54,4 +54,7 @@ theme:
 resources:
   {{ .Values.resources.matrixNeoChoiceWidget | toYaml | nindent 2 }}
 
+nginx:
+  ipv4Only: {{ if eq .Values.cluster.networking.ipFamilies "IPv4" }}true{{ else }}false{{ end }}
+
 ...

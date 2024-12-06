@@ -155,7 +155,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "4", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-neoboard-widget"
-    tag: "1.20.0@sha256:e72bca018af1c0087587f6bcd1748c820ff520c8cf2a042b9b58354cdc878345"
+    tag: "2.0.0@sha256:dea11481404c2368d0089543d977fb26af51753073e9e5cb73e389bde82c4004"
   matrixNeoChoiceWidget:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -165,7 +165,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "4", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-poll-widget"
-    tag: "1.4.1@sha256:7bfe43b60a4c1ba04e4bbb0d22071604699df0443ee6f3fb6be4cc2c80013ecc"
+    tag: "1.5.0@sha256:29f332c5b79774201cc4fe2724e13017b6f4acc492211bc1cbfd6b4aa78b05fd"
   matrixNeoDateFixBot:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -175,7 +175,7 @@ images:
     # upstreamMirrorStartFrom: ["2", "7", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-bot"
-    tag: "2.8.0@sha256:db1d99c13a9facfd08a7da1d0a9c7c05715bad47110e93649ad6b389e462b42c"
+    tag: "2.8.1@sha256:d23b08e3b6f322ffdc67029a35bd110cefb98de7a2a023b7f52fb7729886078b"
   matrixNeoDateFixWidget:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -185,7 +185,7 @@ images:
     # upstreamMirrorStartFrom: ["1", "6", "0"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images-mirror/matrix-meetings-widget"
-    tag: "1.6.1@sha256:70bebd9293a977124a5da955e1a520381129d476d6414a083093c1b48a55dadd"
+    tag: "1.7.0@sha256:a3547f064dff6b469bb3ed931acd4edba9654699e1af59a9180987bbbfd8104b"
   matrixUserVerificationService:
     # providerCategory: "Supplier"
     # providerResponsible: "Element"
