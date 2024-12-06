@@ -345,6 +345,15 @@ appsuite:
       com.openexchange.mail.transport.authType: "xoauth2"
       com.openexchange.mail.transportServer: "postfix-ox"
       com.openexchange.mail.transportServerSource: "global"
+      # Mail Login Resolver
+      com.openexchange.mail.login.resolver.enabled: "true"
+      com.openexchange.mail.login.resolver.ldap.enabled: "true"
+      com.openexchange.mail.login.resolver.ldap.clientId: "contactsLdapClient"
+      com.openexchange.mail.login.resolver.ldap.mailLoginSearchFilter: "(entryUUID=[mailLogin])"
+      com.openexchange.mail.login.resolver.ldap.userNameAttribute: "uid"
+      com.openexchange.mail.login.resolver.ldap.contextNameAttribute: "oxContextIDNum"
+      com.openexchange.mail.login.resolver.ldap.entitySearchFilter: "(&(oxContextIDNum=[cid])(uid=[uname]))"
+      com.openexchange.mail.login.resolver.ldap.mailLoginAttribute: "entryUUID"
       # Requirements for OX-Connector
       com.openexchange.user.enforceUniqueDisplayName: "false"
       com.openexchange.folderstorage.database.preferDisplayName: "false"
