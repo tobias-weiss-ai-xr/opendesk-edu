@@ -35,7 +35,7 @@ environments, you should use them thoughtfully and carefully if needed.
 
 # Enable debugging
 
-Check the openDesk [`debug.yaml`](../helmfile/environments/default/debug.yaml) and set for your deployment
+Check the openDesk [`debug.yaml.gotmpl`](../helmfile/environments/default/debug.yaml.gotmpl) and set for your deployment
 ```
 debug:
   enable: true

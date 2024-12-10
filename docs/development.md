@@ -12,7 +12,7 @@ However, contributions are possible using the [CLA](https://gitlab.opencode.de/b
 <!-- TOC -->
 * [Overview](#overview)
 * [Default branch, `develop` and other branches](#default-branch-develop-and-other-branches)
-* [External artifacts - `charts.yaml` and `images.yaml`](#external-artifacts---chartsyaml-and-imagesyaml)
+* [External artifacts - `charts.yaml.gotmpl` and `images.yaml.gotmpl`](#external-artifacts---chartsyamlgotmpl-and-imagesyamlgotmpl)
   * [Linting](#linting)
     * [Disable linting selectively](#disable-linting-selectively)
   * [Renovate](#renovate)
@@ -29,29 +29,29 @@ developing the openDesk platform.
 
 ```mermaid
 flowchart TD
- J[helmfile.yaml\nor a helmfile outside of this repository]-->A
+ J[helmfile.yaml.gotmpl\nor a helmfile outside of this repository]-->A
  J-->K[./helmfile/environemnts/*your_environment*/values.yaml.gotmpl\nor any an environment values file]
- A[./helmfile_generic.yaml]-->B[./helmfile/apps/*all_configured_apps*/helmfile.yaml\nReferences the relevant app Helm\ncharts using details from 'charts.yaml']
- B-->C[./values-*all_configured_components*.yaml.gotmpl\nValues to template the charts\nwith references to the `images.yaml`]
+ A[./helmfile_generic.yaml.gotmpl]-->B[./helmfile/apps/*all_configured_apps*/helmfile.yaml.gotmpl\nReferences the relevant app Helm\ncharts using details from 'charts.yaml.gotmpl']
+ B-->C[./values-*all_configured_components*.yaml.gotmpl\nValues to template the charts\nwith references to the `images.yaml.gotmpl`]
  A-->D[./helmfile/environments/default/*\nwith just some examples below]
- D-->F[charts.yaml]
- D-->G[images.yaml]
+ D-->F[charts.yaml.gotmpl]
+ D-->G[images.yaml.gotmpl]
  D-->H[global.*]
- D-->I[secrets.yaml\nreplicas.yaml\nresources.yaml\n...]
+ D-->I[secrets.yaml.gotmpl\nreplicas.yaml.gotmpl\nresources.yaml.gotmpl\n...]
  A-->|overwrite defaults with your\ndeployment/environment specific values|E[./helmfile/environments/default/values.yaml.gotmpl]
 ```
 
-The `helmfile.yaml` file in the root folder is the foundation
-for the entire deployment. It references the `helmfile_generic.yaml`
-file, which includes app-specific `helmfile.yaml` files and
+The `helmfile.yaml.gotmpl` file in the root folder is the foundation
+for the entire deployment. It references the `helmfile_generic.yaml.gotmpl`
+file, which includes app-specific `helmfile.yaml.gotmpl` files and
 global values files located in `./environments/default`.
 
-`helmfile.yaml` also refers to three predefined environments: `dev`,
+`helmfile.yaml.gotmpl` also refers to three predefined environments: `dev`,
 `test`, and `prod`.
 
-The `helmfile_generic.yaml` file is designed to be referenced from
+The `helmfile_generic.yaml.gotmpl` file is designed to be referenced from
 external repositories, where custom environments may be defined. An
-example is demonstrated in the `helmfile.yaml` file.
+example is demonstrated in the `helmfile.yaml.gotmpl` file.
 
 Before you investigate any app-specific configuration, it is recommended that you review the contents of `./helmfile/environments/default` to understand what configuration details are set there, as the app deployments reference them.
 
@@ -68,9 +68,9 @@ Of course, the merge request will target the `develop` branch, be in status `dra
 
 If you do not plan to merge from the branch you have pushed, please close the auto-created MR.
 
-# External artifacts - `charts.yaml` and `images.yaml`
+# External artifacts - `charts.yaml.gotmpl` and `images.yaml.gotmpl`
 
-The `charts.yaml` and `images.yaml` files are the central place to reference external artifacts used for the deployment.
+The `charts.yaml.gotmpl` and `images.yaml.gotmpl` files are the central place to reference external artifacts used for the deployment.
 
 Besides the deployment automation itself, some tools work with the contents of the files:
 
@@ -142,7 +142,7 @@ The mirror script takes the information on what artifacts to mirror from the ann
 - `# upstreamRegistry` *required*: To identify the source registry
 - `# upstreamRegistryCredentialId`: *optional*: In case the source registry is not public, the access credentials have to be specified as ENV variables containing the value of this key in their name, so you want to specify that key all uppercase:
   - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_USERNAME`
-  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_PASSWORT`
+  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_PASSWORD`
 - `# upstreamRepository` *required*: To identify the source repository
 - `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set, the mirror for the component will be activated. Only tags that match the given regular expression are being mirrored. **Note:** You must use single quotes for this attribute's value if you use backslash leading regex notation like `\d`.
 - `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artifacts beginning with a specific version. You must use capturing group

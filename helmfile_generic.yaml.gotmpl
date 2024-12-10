@@ -8,8 +8,7 @@ helmfiles:
   # Path to the helmfile state file being processed BEFORE releases in this state file
   - path: "helmfile/apps/migrations-pre/helmfile-child.yaml.gotmpl"
     values: &values
-      - "helmfile/environments/default/*.yaml"
-      - "helmfile/environments/default/*.gotmpl"
+      - "helmfile/environments/default/*.yaml.gotmpl"
       - {{ toYaml .Values | nindent 8 }}
   - path: "helmfile/apps/services/helmfile-child.yaml.gotmpl"
     values: *values

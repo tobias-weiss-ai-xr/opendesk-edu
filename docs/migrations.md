@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Releases upgrade details](#releases-upgrade-details)
   * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual checks/steps](#pre-upgrade-manual-checkssteps)
+      * [Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
       * [New openDesk default: Enforce login](#new-opendesk-default-enforce-login)
       * [Changed openDesk default: Jitsi room history enabled](#changed-opendesk-default-jitsi-room-history-enabled)
       * [Streamlining `openxchange` and `oxAppSuite` attribute names](#streamlining-openxchange-and-oxappsuite-attribute-names)
@@ -69,6 +70,16 @@ Explanation of the table's columns:
 ## From v1.0.0
 
 ### Pre-upgrade: Manual checks/steps
+
+#### Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`
+
+In v1.0.0 the files in [`/helmfile/environments/default`](../helmfile/environments/default/) had mixed extensions,
+we have streamlined them to consistently use `*.yaml.gotmpl`.
+
+This change requires manual action likely in two situations:
+
+1. You are referencing our upstream files from the aforementioned directory, e.g. in your Argo CD deployment. Please update your references to use the filenames with the new extension.
+2. You have custom files containing configuration information that are named just `*.yaml`: Please rename them to `*.yaml.gotmpl`.
 
 #### New openDesk default: Enforce login
 
@@ -167,7 +178,7 @@ If you make use of the `customization.release` option, you have to switch to a d
 ```yaml
 customization:
   release:
-    collaboraOnline: "./my_custom_templating.yaml"
+    collaboraOnline: "./my_custom_templating.yaml.gotmpl"
 ```
 
 to
@@ -176,7 +187,7 @@ to
 customization:
   release:
     collaboraOnline:
-      file1: "./my_custom_templating.yaml"
+      file1: "./my_custom_templating.yaml.gotmpl"
 ```
 
 You can freely choose the `file1` dictionary key used in the example above, but it should start with a letter.
@@ -434,11 +445,11 @@ The status of the upgrade migrations is tracked in the ConfigMap `migrations-sta
 
 When a new upgrade migration is required, ensure to address the following list:
 
-- Update the generated release version file [`global.generated.yaml`](../helmfile/environments/default/global.generated.yaml) at least on the patch level to test the upgrade in your feature branch and trigger it in the `develop` branch after the feature branch was merged. During the release process, the value is overwritten by the release's version number.
+- Update the generated release version file [`global.generated.yaml.gotmpl`](../helmfile/environments/default/global.generated.yaml.gotmpl) at least on the patch level to test the upgrade in your feature branch and trigger it in the `develop` branch after the feature branch was merged. During the release process, the value is overwritten by the release's version number.
 - You have to implement the migration logic as a runner script in the [`opendesk-migrations`](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations) image. Please find more instructions in the linked repository.
 - You most likely have to update the [`opendesk-migrations` Helm chart](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations) within the `rules` section of the [`role.yaml`](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/templates/role.yaml) to provide the permissions required for the execution of your migration's logic.
 - You must set the runner's ID you want to execute in the [migrations.yaml.gotmpl](../helmfile/shared/migrations.yaml.gotmpl). See also the `migrations.*` section of [the Helm chart's README.md](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/README.md).
-- Update the [`charts.yaml`](../helmfile/environments/default/charts.yaml) and [`images.yaml`](../helmfile/environments/default/images.yaml) to reflect the newer releases of the `opendesk-migrations` Helm chart and container image.
+- Update the [`charts.yaml.gotmpl`](../helmfile/environments/default/charts.yaml.gotmpl) and [`images.yaml.gotmpl`](../helmfile/environments/default/images.yaml.gotmpl) to reflect the newer releases of the `opendesk-migrations` Helm chart and container image.
 
 [^1]: We do not follow a brand name's specific spelling when it comes to upper and lower case and only use new word
 uppercase when names consist of multiple, space divided words.

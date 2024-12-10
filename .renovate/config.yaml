@@ -35,12 +35,12 @@ repositories:
     dependencyDashboard: true
     # Include package files only within these defined paths
     includePaths:
-      - "helmfile/environments/default/images.yaml"
-      - "helmfile/environments/default/charts.yaml"
+      - "helmfile/environments/default/images.yaml.gotmpl"
+      - "helmfile/environments/default/charts.yaml.gotmpl"
     customManagers:
       - customType: "regex"
         fileMatch:
-          - "helmfile/environments/default/images.yaml"
+          - "helmfile/environments/default/images.yaml.gotmpl"
         datasourceTemplate: "docker"
         matchStrings:
           # yamllint disable rule:line-length rule:quoted-strings
@@ -48,7 +48,7 @@ repositories:
           # yamllint enable rule:line-length rule:quoted-strings
       - customType: "regex"
         fileMatch:
-          - "helmfile/environments/default/charts.yaml"
+          - "helmfile/environments/default/charts.yaml.gotmpl"
         datasourceTemplate: "docker"
         matchStrings:
           # yamllint disable rule:line-length rule:quoted-strings

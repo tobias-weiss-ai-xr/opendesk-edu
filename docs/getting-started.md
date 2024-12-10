@@ -448,9 +448,9 @@ docker run --rm registry.opencode.de/bmi/opendesk/components/platform-developmen
 
 ## Using from external repository
 
-Referring to `./helmfile_generic.yaml` from an external
-directory or repository is possible. The `helmfile.yaml` that refers to
-`./helmfile_generic.yaml` may define custom environments. These custom
+Referring to `./helmfile_generic.yaml.gotmpl` from an external
+directory or repository is possible. The `helmfile.yaml.gotmpl` that refers to
+`./helmfile_generic.yaml.gotmpl` may define custom environments. These custom
 environments may overwrite specific configuration values. These
 configuration values are:
 

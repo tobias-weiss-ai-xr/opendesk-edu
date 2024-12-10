@@ -39,7 +39,7 @@ access openDesk.
     ```
 
 1. Create a Kubernetes secret named `opendesk-certificates-tls` of type `kubernetes.io/tls` containing either a valid
-wildcard certificate or a certificate with [all required subdomains](../../helmfile/environments/default/global.yaml)
+wildcard certificate or a certificate with [all required subdomains](../../helmfile/environments/default/global.yaml.gotmpl)
 set as SANs (Subject Alternative Name).
 
 1. Create a Kubernetes secret with name `opendesk-certificates-ca-tls` of type `kubernetes.io/tls` containing the custom
