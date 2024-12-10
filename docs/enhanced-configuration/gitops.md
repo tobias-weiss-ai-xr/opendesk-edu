@@ -44,6 +44,10 @@ References:
 
 Afterwards, you can use the resulting manifests within an standard Argo CD workflow.
 
+> **Note**<br>
+> When creating the Argo CD application based on the resulting manifests you must not use the `Automated Sync Policy`
+> offered by Argo CD, as you have to manually ensure the applications are updated in the required sequence.
+
 ## Option 2: Helmfile plugin
 
 It is possible to deploy openDesk via Argo CD with community developed
@@ -52,4 +56,5 @@ It is possible to deploy openDesk via Argo CD with community developed
 You can find an example for this approach in the
 [Argo CD Deployments](https://gitlab.opencode.de/bmi/opendesk/deployment/options/argocd-deploy) repository.
 It contains an example Helm chart (`opendesk-parent`) to create Argo CD Applications via a Helm chart (`opendesk`)
-according to `app of apps pattern` and is using sync waves to follow dependencies.
+according to `app of apps pattern` and is using sync waves to ensure to required deployment and update sequence
+for openDesk is met.

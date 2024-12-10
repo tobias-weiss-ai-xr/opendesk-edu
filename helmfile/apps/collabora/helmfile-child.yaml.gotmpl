@@ -12,6 +12,16 @@ repositories:
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.collabora.registry }}/{{ .Values.charts.collabora.repository }}"
 
+  # Collabora Controller - Enterprise Only
+  # Source: https://github.com/CollaboraOnline/online
+  - name: "collabora-controller-repo"
+    keyring: "../../files/gpg-pubkeys/collaboraoffice-com.gpg"
+    verify: {{ .Values.charts.collaboraController.verify }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.collaboraController.registry }}/{{ .Values.charts.collaboraController.repository }}"
+
 releases:
   - name: "collabora-online"
     chart: "collabora-online-repo/{{ .Values.charts.collabora.name }}"
@@ -22,6 +32,14 @@ releases:
       - {{ . }}
       {{ end }}
     installed: {{ .Values.collabora.enabled }}
+  - name: "collabora-controller"
+    chart: "collabora-controller-repo/{{ .Values.charts.collaboraController.name }}"
+    version: "{{ .Values.charts.collaboraController.version }}"
+    values:
+      {{ range .Values.customization.release.collaboraController }}
+      - {{ . }}
+      {{ end }}
+    installed: {{ .Values.collaboraController.enabled }}
 
 commonLabels:
   deployStage: "050-components"

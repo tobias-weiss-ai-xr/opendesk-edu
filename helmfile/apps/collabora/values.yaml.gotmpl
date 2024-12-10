@@ -8,17 +8,30 @@ autoscaling:
   enabled: false
 
 collabora:
+  aliasgroups:
+    - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+  env:
+    - name: "POD_NAME"
+      valueFrom:
+        fieldRef:
+          fieldPath: "metadata.name"
   extra_params: >
     --o:ssl.enable=false
     --o:ssl.termination=true
     --o:fetch_update_check=0
+    --o:num_prespawn_children={{ .Values.technical.collabora.numPrespawnChildren }}
     --o:remote_font_config.url=https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/apps/richdocuments/settings/fonts.json
     --o:net.proto={{ if eq .Values.cluster.networking.ipFamilies "DualStack" }}all{{ else }}{{ .Values.cluster.networking.ipFamilies }}{{ end }}
-
+    {{- if .Values.debug.enabled }}
+    --o:logging.level=debug
+    {{- end }}
+    {{- if .Values.collaboraController.enabled }}
+    --o:indirection_endpoint.url=https://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/routeToken
+    --o:monitors.monitor[0]=wss://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/ws
+    --o:monitors.monitor[@retryInterval]=5
+    {{- end }}
   username: "collabora-internal-admin"
   password: {{ .Values.secrets.collabora.adminPassword | quote }}
-  aliasgroups:
-    - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
 
 fullnameOverride: "collabora"
 
@@ -34,8 +47,11 @@ imagePullSecrets:
 
 ingress:
   annotations:
-    # Ingress NGINX
+    {{- if .Values.collaboraController.enabled }}
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_RouteToken"
+    {{- else }}
     nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
+    {{- end }}
     nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
@@ -44,32 +60,6 @@ ingress:
       location /cool/getMetrics { deny all; return 403; }
       location /cool/adminws/ { deny all; return 403; }
       location /browser/dist/admin/admin.html { deny all; return 403; }
-    # NGINX
-    nginx.org/websocket-services: "collabora"
-    nginx.org/lb-method: "hash $arg_WOPISrc consistent"
-    nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
-    nginx.org/server-snippets: |
-      # block admin and metrics endpoint from outside by default
-      location /cool/getMetrics { deny all; return 403; }
-      location /cool/adminws/ { deny all; return 403; }
-      location /browser/dist/admin/admin.html { deny all; return 403; }
-    # HAProxy
-    haproxy.org/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    haproxy.org/backend-config-snippet: |
-       balance url_param WOPISrc check_post
-       hash-type consistent
-    # HAProxy - Community: https://haproxy-ingress.github.io/
-    haproxy-ingress.github.io/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    haproxy-ingress.github.io/balance-algorithm: "url_param WOPISrc check_post"
-    haproxy-ingress.github.io/config-backend: |
-      hash-type consistent
-      # block admin urls from outside
-      acl admin_url path_beg /cool/getMetrics
-      acl admin_url path_beg /cool/adminws/
-      acl admin_url path_beg /browser/dist/admin/admin.html
-      http-request deny if admin_url
   enabled: {{ .Values.ingress.enabled }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:
