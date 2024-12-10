@@ -2,36 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
-  # openDesk Otterize
-  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-otterize
-  - name: "otterize-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.otterize.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
-
-  # openDesk Home
-  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-home
-  - name: "home-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.home.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.home.registry }}/{{ .Values.charts.home.repository }}"
-
-  # openDesk Certificates
-  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-certificates
-  - name: "certificates-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.certificates.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
-
   # openDesk PostgreSQL
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postgresql
   - name: "postgresql-repo"
@@ -89,26 +59,6 @@ repositories:
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
 
-  # openDesk Alerts
-  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-alerts
-  - name: "opendesk-alerts-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.opendeskAlerts.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskAlerts.registry }}/{{ .Values.charts.opendeskAlerts.repository }}"
-
-    # openDesk Grafana Dashboards
-    # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dashboards
-  - name: "dashboards-repo"
-    keyring: "../../files/gpg-pubkeys/opencode.gpg"
-    verify: {{ .Values.charts.opendeskDashboards.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskDashboards.registry }}/{{ .Values.charts.opendeskDashboards.repository }}"
-
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
   - name: "memcached-repo"
@@ -146,49 +96,6 @@ repositories:
     url: "{{ .Values.global.helmRegistry | default .Values.charts.cassandra.registry }}/{{ .Values.charts.cassandra.repository }}"
 
 releases:
-  - name: "opendesk-otterize"
-    chart: "otterize-repo/{{ .Values.charts.otterize.name }}"
-    version: "{{ .Values.charts.otterize.version }}"
-    values:
-      - "values-otterize.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskOtterize }}
-      - {{ . }}
-      {{ end }}
-    installed: {{ .Values.security.otterizeIntents.enabled }}
-    timeout: 900
-
-  - name: "opendesk-home"
-    chart: "home-repo/{{ .Values.charts.home.name }}"
-    version: "{{ .Values.charts.home.version }}"
-    values:
-      - "values-home.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskHome }}
-      - {{ . }}
-      {{ end }}
-    installed: {{ .Values.home.enabled }}
-
-  - name: "opendesk-certificates"
-    chart: "certificates-repo/{{ .Values.charts.certificates.name }}"
-    version: "{{ .Values.charts.certificates.version }}"
-    values:
-      - "values-certificates.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskCertificates }}
-      - {{ . }}
-      {{ end }}
-    installed: {{ .Values.certificates.enabled }}
-    timeout: 900
-
-  - name: "opendesk-alerts"
-    chart: "opendesk-alerts-repo/{{ .Values.charts.opendeskAlerts.name }}"
-    version: "{{ .Values.charts.opendeskAlerts.version }}"
-    values:
-      - "values-opendesk-alerts.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskAlerts}}
-      - {{ . }}
-      {{ end }}
-    installed: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
-    timeout: 900
-
   - name: "redis"
     chart: "redis-repo/{{ .Values.charts.redis.name }}"
     version: "{{ .Values.charts.redis.version }}"
@@ -277,15 +184,6 @@ releases:
     installed: {{ .Values.clamavSimple.enabled }}
     timeout: 900
 
-  - name: "opendesk-dashboards"
-    chart: "dashboards-repo/{{ .Values.charts.opendeskDashboards.name }}"
-    version: "{{ .Values.charts.opendeskDashboards.version }}"
-    values:
-      - "values-dashboards.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskDashboards | default "additionalValues: false" }}
-    installed: {{ .Values.monitoring.grafana.dashboards.enabled }}
-    timeout: 900
-
   - name: "minio"
     chart: "minio-repo/{{ .Values.charts.minio.name }}"
     version: "{{ .Values.charts.minio.version }}"
@@ -309,6 +207,6 @@ releases:
     timeout: 900
 
 commonLabels:
-  deployStage: "030-services"
-  component: "services"
+  deployStage: "030-services-external"
+  component: "services-external"
 ...

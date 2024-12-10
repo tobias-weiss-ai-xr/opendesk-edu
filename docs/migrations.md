@@ -12,11 +12,13 @@ SPDX-License-Identifier: Apache-2.0
   * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual checks/steps](#pre-upgrade-manual-checkssteps)
       * [Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
-      * [New openDesk default: Enforce login](#new-opendesk-default-enforce-login)
-      * [Changed openDesk default: Jitsi room history enabled](#changed-opendesk-default-jitsi-room-history-enabled)
-      * [Streamlining `openxchange` and `oxAppSuite` attribute names](#streamlining-openxchange-and-oxappsuite-attribute-names)
-      * [Dicts to define `customization.release`](#dicts-to-define-customizationrelease)
-      * [Redis 7.4](#redis-74)
+      * [Helmfile Cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
+      * [Helmfile Cleanup: Helmfile Cleanup: Splitting external vs. openDesk services](#helmfile-cleanup-helmfile-cleanup-splitting-external-vs-opendesk-services)
+      * [Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names](#helmfile-cleanup-streamlining-openxchange-and-oxappsuite-attribute-names)
+      * [Helmfile feature update: Dicts to define `customization.release`](#helmfile-feature-update-dicts-to-define-customizationrelease)
+      * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
+      * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
+      * [External requirements: Redis 7.4](#external-requirements-redis-74)
   * [From v0.9.0](#from-v090)
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
@@ -81,34 +83,35 @@ This change requires manual action likely in two situations:
 1. You are referencing our upstream files from the aforementioned directory, e.g. in your Argo CD deployment. Please update your references to use the filenames with the new extension.
 2. You have custom files containing configuration information that are named just `*.yaml`: Please rename them to `*.yaml.gotmpl`.
 
-#### New openDesk default: Enforce login
+#### Helmfile Cleanup: Prefixing certain app directories with `opendesk-`
 
-Users accessing the openDesk portal are now automatically redirected to the login screen as a default.
+To make it more obvious that some elements from below the [`apps`](../helmfile/apps/) directory are completely
+provided by openDesk, we have prefixed these app directories with `opendesk-`.
 
-In case you want to keep the previous behavior you need to set the following `functional` flag:
+Affected are the following directories, here listed directly with the new prefix:
 
-```yaml
-functional:
-  portal:
-    enforceLogin: false
-```
+- [`./helmfile/apps/opendesk-migrations-pre`](../helmfile/apps/opendesk-migrations-pre)
+- [`./helmfile/apps/opendesk-migrations-post`](../helmfile/apps/opendesk-migrations-post)
+- [`./helmfile/apps/opendesk-openproject-bootstrap`](../helmfile/apps/opendesk-openproject-bootstrap)
 
-#### Changed openDesk default: Jitsi room history enabled
+The described changes most likely require manual action in the following situation:
 
-The default to store the Jitsi room history in the local storage of a user's browser has changed.
+- You are referencing our upstream files e.g. in your Argo CD deployment, please update your references to use the new directory names.
 
-It is now enabled and therefore stored by default.
+#### Helmfile Cleanup: Helmfile Cleanup: Splitting external vs. openDesk services
 
-To preserve the 1.0.0 behavior of not storing the room history you have to explicitly configure it:
+In v1.0.0 there was a directory `/helmfile/apps/services` that was intended to contain all the services an operator had to provide externally for production deployments.
 
-```
-functional:
-  dataProtection:
-    jitsiRoomHistory:
-      enabled: false
-```
+As some services that are actually part of openDesk snuck in there, so we had to split the directory into two separate ones:
 
-#### Streamlining `openxchange` and `oxAppSuite` attribute names
+- [`./helmfile/apps/opendesk-services`](../helmfile/apps/opendesk-services)
+- [`./helmfile/apps/services-external`](../helmfile/apps/services-external)
+
+The described changes most likely require manual action in the following situation:
+
+- You are referencing our upstream files e.g. in your Argo CD deployment, please update your references to use the new directory names.
+
+#### Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names
 
 We have updated some attribute names around Open-Xchange / OX App Suite to be consistent within our Helmfile
 deployment and to aligning with the actual brand names as well as with our rule of thumb for brand based
@@ -171,7 +174,7 @@ WAS: secrets.oxAppsuite: ...
 NOW: secrets.oxAppSuite: ...
 ```
 
-#### Dicts to define `customization.release`
+#### Helmfile feature update: Dicts to define `customization.release`
 
 If you make use of the `customization.release` option, you have to switch to a dictionary based definition of customization files e.g. from
 
@@ -192,7 +195,34 @@ customization:
 
 You can freely choose the `file1` dictionary key used in the example above, but it should start with a letter.
 
-#### Redis 7.4
+#### openDesk defaults (new): Enforce login
+
+Users accessing the openDesk portal are now automatically redirected to the login screen as a default.
+
+In case you want to keep the previous behavior you need to set the following `functional` flag:
+
+```yaml
+functional:
+  portal:
+    enforceLogin: false
+```
+
+#### openDesk defaults (changed): Jitsi room history enabled
+
+The default to store the Jitsi room history in the local storage of a user's browser has changed.
+
+It is now enabled and therefore stored by default.
+
+To preserve the 1.0.0 behavior of not storing the room history you have to explicitly configure it:
+
+```yaml
+functional:
+  dataProtection:
+    jitsiRoomHistory:
+      enabled: false
+```
+
+#### External requirements: Redis 7.4
 
 The update from openDesk 1.0.0 contains Redis 7.4.1, like the other openDesk bundled services the bundled Redis is as well not meant to be used in production.
 
