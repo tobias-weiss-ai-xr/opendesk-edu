@@ -87,8 +87,8 @@ of this project.
 
 Please find a list of the artifacts related to the release either in the source code archive attached to the release or
 in the files from the release's git-tag:
-- `./helmfile/environments/default/images.yaml`
-- `./helmfile/environments/default/charts.yaml`
+- `./helmfile/environments/default/images.yaml.gotmpl`
+- `./helmfile/environments/default/charts.yaml.gotmpl`
 
 Find more information in our [Workflow documentation](./docs/workflow.md).
 

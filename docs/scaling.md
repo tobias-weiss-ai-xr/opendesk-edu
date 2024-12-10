@@ -10,13 +10,13 @@ This document covers the ability to scale applications.
 # Horizontal scalability
 
 We are working on generating this document automatically based on the file
-[`replicas.yaml`](../helmfile/environments/default/replicas.yaml) that contains necessary annotations.
+[`replicas.yaml.gotmpl`](../helmfile/environments/default/replicas.yaml.gotmpl) that contains necessary annotations.
 In the meantime, this file can be used to check the components scaling support/capabilities.
 
 # Upstream information
 
 While scaling services horizontally is the ideal solution, information about vertical scaling is helpful
-when defining the application's resources, see [`resources.yaml`](../helmfile/environments/default/resources.yaml) for references.
+when defining the application's resources, see [`resources.yaml.gotmpl`](../helmfile/environments/default/resources.yaml.gotmpl) for references.
 
 Please find below links to the application's upstream resources about scaling:
 

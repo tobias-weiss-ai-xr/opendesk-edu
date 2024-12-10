@@ -30,7 +30,7 @@ repository or Prometheus operator.
 # Defaults
 
 All configurable options and their defaults can be found in
-[`monitoring.yaml`](../helmfile/environments/default/monitoring.yaml).
+[`monitoring.yaml.gotmpl`](../helmfile/environments/default/monitoring.yaml.gotmpl).
 
 # Metrics
 

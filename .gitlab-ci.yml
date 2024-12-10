@@ -148,7 +148,8 @@ variables:
       - "yes"
       - "no"
   CREATE_DEFAULT_ACCOUNTS:
-    description: "Creates `default` and `default-admin` in the instance using the password defined as CI variable `DEFAULT_ACCOUNTS_PASSWORD`."
+    description: "Creates `default` and `default-admin` in the instance using the password defined as CI variable
+                 `DEFAULT_ACCOUNTS_PASSWORD`."
     value: "no"
     options:
       - "yes"
@@ -172,13 +173,14 @@ variables:
     description: "Project url for e2e-tests (`<domain of gitlab>/api/v4/projects/<id>`)"
     value: "gitlab.opencode.de/api/v4/projects/1506"
   TESTS_TESTSET:
-    description: "Selects testset for E2E-tests"
+    description: "Selects test set for E2E-tests"
     value: "Smoke"
     options:
       - "Regression"
       - "Smoke"
   TESTS_GRACE_PERIOD:
-    description: "A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail. GRACE_PERIOD is the period in seconds that should be waited before running the tests."
+    description: "A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail.
+                  GRACE_PERIOD is the period in seconds that should be waited before running the tests."
     value: "0"
 
 .deploy-common:
@@ -462,13 +464,13 @@ fetch-administrator-credentials:
       )" >> .env
   artifacts:
     reports:
-      dotenv: .env
+      dotenv: ".env"
 
 import-default-accounts:
   stage: "post-execute"
   extends: ".environments"
   dependencies:
-    - fetch-administrator-credentials
+    - "fetch-administrator-credentials"
   environment:
     name: "${NAMESPACE}"
   rules:
@@ -477,8 +479,8 @@ import-default-accounts:
       when: "on_success"
   image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.0.0"
   script:
-    - echo "Starting default account import for ${DOMAIN}"
-    - cd /app
+    - "echo \"Starting default account import for ${DOMAIN}\""
+    - "cd /app"
     - |
       ./user_import_udm_rest_api.py \
         --import_domain ${DOMAIN} \
@@ -494,7 +496,7 @@ run-tests:
   stage: "post-execute"
   extends: ".deploy-common"
   dependencies:
-    - fetch-administrator-credentials
+    - "fetch-administrator-credentials"
   environment:
     name: "${NAMESPACE}"
   rules:
@@ -658,7 +660,7 @@ release:
       fi
     - |
       echo -e "\n[INFO] Writing data to helm value file..."
-      cat <<EOF >helmfile/environments/default/global.generated.yaml
+      cat <<EOF >helmfile/environments/default/global.generated.yaml.gotmpl
       # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
       # SPDX-License-Identifier: Apache-2.0
       ---
@@ -680,7 +682,7 @@ release:
               "charts/**/Chart.yaml",
               "CHANGELOG.md",
               "charts/**/README.md",
-              "helmfile/environments/default/global.generated.yaml",
+              "helmfile/environments/default/global.generated.yaml.gotmpl",
               ".kyverno/kyverno-test.yaml",
               "docs"
             ],

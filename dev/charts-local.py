@@ -23,7 +23,7 @@ options = p.parse_args()
 script_path = os.path.dirname(os.path.realpath(__file__))
 # some static definitions
 log_path = script_path+'/../logs'
-charts_yaml = script_path+'/../helmfile/environments/default/charts.yaml'
+charts_yaml = script_path+'/../helmfile/environments/default/charts.yaml.gotmpl'
 base_repo_path = script_path+'/..'
 base_helmfile = base_repo_path+'/helmfile_generic.yaml.gotmpl'
 helmfile_backup_extension = '.bak'
@@ -43,8 +43,8 @@ consoleHandler.setFormatter(logFormatter)
 rootLogger.addHandler(consoleHandler)
 
 logging.debug(f"Working with relative paths from script location: {script_path}")
-logging.debug(f"Log directory: {log_path}")
-logging.debug(f"charts.yaml  : {charts_yaml}")
+logging.debug(f"Log directory:      {log_path}")
+logging.debug(f"charts.yaml.gotmpl: {charts_yaml}")
 
 
 def create_or_switch_branch_base_repo():

@@ -42,7 +42,7 @@ job:
     - username: {{ .Values.databases.nextcloud.username | quote }}
       password: {{ .Values.secrets.mariadb.nextcloudUser | quote}}
       connectionLimit: {{ .Values.databases.nextcloud.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
-    # OX and XWiki are using the db's `root` users (see `database.yaml`). So we are statically referencing their dedicated
+    # OX and XWiki are using the db's `root` users (see `database.yaml.gotmpl`). So we are statically referencing their dedicated
     # users for the moment.
     - username: "openxchange_user"
     # - username: {{ .Values.databases.xwiki.username | quote }}
@@ -55,7 +55,7 @@ job:
   databases:
     - name: {{ .Values.databases.nextcloud.name | quote }}
       user: {{ .Values.databases.nextcloud.username | quote }}
-    # OX and XWiki are using the db's `root` users (see `database.yaml`). So we are statically referencing their dedicated
+    # OX and XWiki are using the db's `root` users (see `database.yaml.gotmpl`). So we are statically referencing their dedicated
     # users for the moment.
     - name: "openxchange"
       user: "openxchange_user"
