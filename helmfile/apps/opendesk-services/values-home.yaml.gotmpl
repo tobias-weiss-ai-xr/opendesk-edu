@@ -10,7 +10,6 @@ global:
 
 ingress:
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
-  host: "{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
   tls:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 ...
