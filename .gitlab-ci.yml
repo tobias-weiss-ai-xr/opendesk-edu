@@ -283,7 +283,7 @@ policies-deploy:
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
       when: "on_success"
   variables:
-    COMPONENT: "services"
+    COMPONENT: "opendesk-services"
     ADDITIONAL_ARGS: "-l name=opendesk-otterize"
 
 migrations-pre:
@@ -296,7 +296,7 @@ migrations-pre:
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_MIGRATIONS != "no")
       when: "on_success"
   variables:
-    COMPONENT: "migrations-pre"
+    COMPONENT: "opendesk-migrations-pre"
 
 migrations-post:
   stage: "090-migrations-post"
@@ -308,9 +308,9 @@ migrations-post:
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_MIGRATIONS != "no")
       when: "on_success"
   variables:
-    COMPONENT: "migrations-post"
+    COMPONENT: "opendesk-migrations-post"
 
-services-deploy:
+services-external-deploy:
   stage: "030-services"
   extends: ".deploy-common"
   rules:
@@ -320,7 +320,19 @@ services-deploy:
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
       when: "on_success"
   variables:
-    COMPONENT: "services"
+    COMPONENT: "services-external"
+
+opendesk-services-deploy:
+  stage: "030-services"
+  extends: ".deploy-common"
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $NAMESPACE =~ /.+/ &&
+          ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
+      when: "on_success"
+  variables:
+    COMPONENT: "opendesk-services"
 
 nubus-deploy:
   stage: "050-components"
@@ -417,7 +429,7 @@ openproject-bootstrap-deploy:
           ($DEPLOY_ALL_COMPONENTS != "no" || ($DEPLOY_OPENPROJECT != "no" && $DEPLOY_NEXTCLOUD != "no"))
       when: "on_success"
   variables:
-    COMPONENT: "openproject-bootstrap"
+    COMPONENT: "opendesk-openproject-bootstrap"
 
 jitsi-deploy:
   stage: "050-components"
