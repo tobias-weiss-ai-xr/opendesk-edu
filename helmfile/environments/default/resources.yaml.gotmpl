@@ -134,6 +134,13 @@ resources:
     requests:
       cpu: 0.1
       memory: "256Mi"
+  opendeskStaticFiles:
+    limits:
+      cpu: 99
+      memory: "64Mi"
+    requests:
+      cpu: 0.01
+      memory: "16Mi"
   umsKeycloak:
     limits:
       cpu: 99

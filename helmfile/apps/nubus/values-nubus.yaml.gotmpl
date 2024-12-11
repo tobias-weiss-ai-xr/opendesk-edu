@@ -423,7 +423,7 @@ nubusStackDataUms:
     umcMemcachedHostname: {{ .Values.cache.umsSelfservice.host | quote }}
     umcMemcachedUsername: ""
     externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
-    umcHtmlTitle: "openDesk Portal"
+    umcHtmlTitle: "Portal - {{ .Values.theme.texts.productName }}"
     smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     smtpPort: 25
     smtpUser: ""
@@ -443,8 +443,8 @@ nubusStackDataUms:
     portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
     portalFileshareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.nextcloud .Values.global.domain }}
     portalNotesLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain }}
-    portalTitleDE: "openDesk Portal"
-    portalTitleEN: "openDesk Portal"
+    portalTitleDE: "Portal - {{ .Values.theme.texts.productName }}"
+    portalTitleEN: "Portal - {{ .Values.theme.texts.productName }}"
     oxDefaultContext: "1"
     componentEnabled:
       notes: {{ .Values.notes.enabled }}
@@ -526,7 +526,7 @@ nubusUmcServer:
 
 nubusUmcGateway:
   umcGateway:
-    umcHtmlTitle: "openDesk Portal"
+    umcHtmlTitle: "Portal - {{ .Values.theme.texts.productName }}"
   ingress:
     certManager:
       enabled: false

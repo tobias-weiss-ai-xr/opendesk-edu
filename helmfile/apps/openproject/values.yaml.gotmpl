@@ -40,7 +40,7 @@ dbInit:
 environment:
 # For more details and more options see
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/
-  OPENPROJECT_APP__TITLE: "Projects | {{ .Values.theme.texts.productName }}"
+  OPENPROJECT_APP__TITLE: "Projekte - {{ .Values.theme.texts.productName }}"
   OPENPROJECT_LOG__LEVEL: {{ if .Values.debug.enabled }}"debug"{{ else }}"info"{{ end }}
   OPENPROJECT_LOGIN__REQUIRED: "true"
   OPENPROJECT_USER__DEFAULT__TIMEZONE: "Europe/Berlin"

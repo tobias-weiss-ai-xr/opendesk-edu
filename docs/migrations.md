@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Releases upgrade details](#releases-upgrade-details)
   * [From v1.0.0](#from-v100)
     * [Pre-upgrade: Manual checks/steps from v1.0.0](#pre-upgrade-manual-checkssteps-from-v100)
+      * [Helmfile Cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
       * [Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
       * [Helmfile Cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
       * [Helmfile Cleanup: Helmfile Cleanup: Splitting external vs. openDesk services](#helmfile-cleanup-helmfile-cleanup-splitting-external-vs-opendesk-services)
@@ -75,6 +76,10 @@ Explanation of the table's columns:
 ## From v1.0.0
 
 ### Pre-upgrade: Manual checks/steps from v1.0.0
+
+#### Helmfile Cleanup: Restructured `/helmfile/files/theme` folder
+
+If you make use of the [theme folder](../helmfile/files/theme/) or the [`theme.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl), e.g. to applying your own imagery, please ensure you adhere to the new structure of the folder and the yaml-file.
 
 #### Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`
 

@@ -63,6 +63,7 @@ settings:
   keycloakClientId: "opendesk-jitsi"
 
 theme:
+  title: "Videokonferenz - {{ .Values.theme.texts.productName }}"
   {{ .Values.theme | toYaml | nindent 2 }}
 
 jitsi:

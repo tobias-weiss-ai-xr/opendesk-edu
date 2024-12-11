@@ -14,7 +14,7 @@ SPDX-FileCopyrightText = "2023 Bundesministerium des Innern und für Heimat, PG 
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = "helmfile/files/theme/*"
+path = "helmfile/files/theme/**"
 SPDX-FileCopyrightText = "2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH"
 SPDX-License-Identifier = "Apache-2.0"
 
