@@ -44,13 +44,23 @@ repositories:
 
     # openDesk Grafana Dashboards
     # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dashboards
-  - name: "dashboards-repo"
+  - name: "opendesk-dashboards-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.opendeskDashboards.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskDashboards.registry }}/{{ .Values.charts.opendeskDashboards.repository }}"
+
+    # openDesk Static Files
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-static-files
+  - name: "opendesk-static-files-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.opendeskStaticFiles.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskStaticFiles.registry }}/{{ .Values.charts.opendeskStaticFiles.repository }}"
 
 releases:
   - name: "opendesk-otterize"
@@ -97,12 +107,21 @@ releases:
     timeout: 900
 
   - name: "opendesk-dashboards"
-    chart: "dashboards-repo/{{ .Values.charts.opendeskDashboards.name }}"
+    chart: "opendesk-dashboards-repo/{{ .Values.charts.opendeskDashboards.name }}"
     version: "{{ .Values.charts.opendeskDashboards.version }}"
     values:
-      - "values-dashboards.yaml.gotmpl"
+      - "values-opendesk-dashboards.yaml.gotmpl"
       - {{ .Values.customization.release.opendeskDashboards | default "additionalValues: false" }}
     installed: {{ .Values.monitoring.grafana.dashboards.enabled }}
+    timeout: 900
+
+  - name: "opendesk-static-files"
+    chart: "opendesk-static-files-repo/{{ .Values.charts.opendeskStaticFiles.name }}"
+    version: "{{ .Values.charts.opendeskStaticFiles.version }}"
+    values:
+      - "values-opendesk-static-files.yaml.gotmpl"
+      - {{ .Values.customization.release.opendeskStaticFiles | default "additionalValues: false" }}
+    installed: {{ .Values.staticFiles.enabled }}
     timeout: 900
 
 commonLabels:

@@ -141,9 +141,6 @@ postgresql:
 
 properties:
   "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvgB64 }}"
-  "attachment:xwiki:XWiki.DefaultSkin@icons.xwiki.favicon.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.faviconSvgB64 }}"
-  "attachment:xwiki:XWiki.DefaultSkin@icons.xwiki.favicon16.png": "data:image/png;base64,{{ .Values.theme.imagery.favicon16PngB64 }}"
-  "attachment:xwiki:XWiki.DefaultSkin@icons.xwiki.favicon144.png": "data:image/png;base64,{{ .Values.theme.imagery.favicon144PngB64 }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.secure": 1
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.server": "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.port": 443
@@ -193,7 +190,7 @@ properties:
   ## LDAP filter to only synchronize some groups
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
     "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"
-  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.title": "{{ .Values.theme.texts.productName }} Wissen - $!tdoc.displayTitle"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.title": "Wissen - $!tdoc.displayTitle - {{ .Values.theme.texts.productName }}"
 
 cluster:
   replicas: {{ .Values.replicas.xwiki }}
