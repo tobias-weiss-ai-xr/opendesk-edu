@@ -148,6 +148,9 @@ openproject:
     mail: "openproject-admin@swp-domain.internal"
     password_reset: "false"
     password: {{ .Values.secrets.openproject.adminPassword | quote }}
+    # Lock the admin user, preventing internal logins.
+    # Switch to true once the NC filestore bootstrapping is optimized.
+    locked: false
   oidc:
     enabled: true
     authorizationEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
