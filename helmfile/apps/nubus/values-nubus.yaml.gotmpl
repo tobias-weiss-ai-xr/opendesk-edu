@@ -321,10 +321,6 @@ nubusPortalConsumer:
     auth:
       username: "portal-consumer"
       password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword | quote }}
-      # TODO: Workaround for a small bug introduced during the secrets refactoring.
-      # The fix will be part of a future Nubus release and the two lines can then be deleted.
-      existingSecret:
-        name: "ums-portal-consumer-credentials"
   objectStorage:
     auth:
       accessKey: {{ .Values.objectstores.nubus.username | quote }}
