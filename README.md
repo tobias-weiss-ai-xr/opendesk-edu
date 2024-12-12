@@ -79,7 +79,11 @@ You would like to install openDesk in your own infrastructure?
 
 # Architecture
 
-More information on openDesk's architecture can be found in our [Architecture docs](./docs/architecture.md).
+More information on openDesk's architecture can be found in our [architecture docs](./docs/architecture.md).
+
+# Testing
+
+openDesk is continously tested to ensure a high quality. Read how we test in openDesk in our [test concept](./docs/testing.md).
 
 # Permissions
 
@@ -125,4 +129,4 @@ This project uses the following license: Apache-2.0
 
 # Copyright
 
-Copyright (C) 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+Copyright (C) 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
