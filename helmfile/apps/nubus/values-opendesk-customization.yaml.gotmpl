@@ -312,7 +312,7 @@ nubusPortalConsumer:
         subPath: "ca-certificates.crt"
       - name: "trusted-cert-secret-volume"
         readOnly: true
-        mountPath: "/usr/local/lib/python3.7/dist-packages/certifi/cacert.pem"
+        mountPath: "/usr/local/lib/python3.11/dist-packages/certifi/cacert.pem"
         subPath: "cacert.pem"
     extraEnvVars:
       - name: "REQUESTS_CA_BUNDLE"
@@ -385,7 +385,7 @@ nubusPortalServer:
       subPath: "ca-certificates.crt"
     - name: "trusted-cert-crt-secret-volume"
       readOnly: true
-      mountPath: "/usr/local/lib/python3.7/dist-packages/certifi/cacert.pem"
+      mountPath: "/usr/local/lib/python3.11/dist-packages/certifi/cacert.pem"
       subPath: "cacert.pem"
     - name: "trusted-cert-crt-secret-volume"
       readOnly: true
