@@ -16,7 +16,7 @@ additionalAnnotations:
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
-  keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
+  deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
 
 migrations:
   runId: 2
