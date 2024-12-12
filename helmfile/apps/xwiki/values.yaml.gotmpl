@@ -11,7 +11,6 @@ image:
 
 imagePullSecrets: {{ .Values.global.imagePullSecrets }}
 
-
 {{- if .Values.certificate.selfSigned }}
 javaOpts:
   - "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks"
@@ -26,7 +25,6 @@ externalDB:
   host: {{ printf "%s:%d" .Values.databases.xwiki.host .Values.databases.xwiki.port | quote }}
   customKeyRef:
     enabled: false
-
 
 securityContext:
   enabled: true
