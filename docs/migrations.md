@@ -10,7 +10,7 @@ SPDX-License-Identifier: Apache-2.0
 * [openDesk supported upgrade path](#opendesk-supported-upgrade-path)
 * [Releases upgrade details](#releases-upgrade-details)
   * [From v1.0.0](#from-v100)
-    * [Pre-upgrade: Manual checks/steps](#pre-upgrade-manual-checkssteps)
+    * [Pre-upgrade: Manual checks/steps from v1.0.0](#pre-upgrade-manual-checkssteps-from-v100)
       * [Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
       * [Helmfile Cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
       * [Helmfile Cleanup: Helmfile Cleanup: Splitting external vs. openDesk services](#helmfile-cleanup-helmfile-cleanup-splitting-external-vs-opendesk-services)
@@ -19,6 +19,7 @@ SPDX-License-Identifier: Apache-2.0
       * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
       * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
       * [External requirements: Redis 7.4](#external-requirements-redis-74)
+    * [Automated migrations from v1.0.0](#automated-migrations-from-v100)
   * [From v0.9.0](#from-v090)
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
@@ -27,7 +28,7 @@ SPDX-License-Identifier: Apache-2.0
       * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
       * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
       * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
-    * [Automated migrations](#automated-migrations)
+    * [Automated migrations from v0.9.0](#automated-migrations-from-v090)
     * [Post-upgrade: Manual steps](#post-upgrade-manual-steps)
       * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
       * [Optional Cleanup](#optional-cleanup)
@@ -61,17 +62,18 @@ Explanation of the table's columns:
 - *Automatic migration*: Summary of, or link to openDesk's automatic migration details.
 - *Manual activities*: Reference to required manual steps to upgrade your openDesk installation to the *Mandatory release*.
 
-| Coming from   | Mandatory (minimum) release | Automatic migration                                                                                                                                           | Manual activities             |
-| ------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| v0.9.0        | v1.x.x                      | [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_2.py) | See [From v0.9.0](#from-v090) |
-| v0.8.1        | v0.9.0                      | Initializes migration system                                                                                                                                  | See [From v0.8.1](#from-v081) |
-| not supported | v0.8.1                      | First release that supporting updates                                                                                                                         |                               |
+| Coming from   | Mandatory (minimum) release | Manual steps required                                                             | Details                       |
+| ------------- | --------------------------- | --------------------------------------------------------------------------------- | ----------------------------- |
+| v1.0.0        | v1.1.0                      | [Before upgrade](#pre-upgrade-manual-checkssteps-from-v100)                       | See [From v1.0.0](#from-v100) |
+| v0.9.0        | v1.0.0                      | [Before](#pre-upgrade-manual-steps) & [After upgrade](#post-upgrade-manual-steps) | See [From v0.9.0](#from-v090) |
+| v0.8.1        | v0.9.0                      | Initializes migration system                                                      | See [From v0.8.1](#from-v081) |
+| not supported | v0.8.1                      | First release that supporting updates                                             |                               |
 
 # Releases upgrade details
 
 ## From v1.0.0
 
-### Pre-upgrade: Manual checks/steps
+### Pre-upgrade: Manual checks/steps from v1.0.0
 
 #### Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`
 
@@ -227,6 +229,17 @@ functional:
 The update from openDesk 1.0.0 contains Redis 7.4.1, like the other openDesk bundled services the bundled Redis is as well not meant to be used in production.
 
 Please ensure for the Redis you are using that it is updated to at least 7.4 to support the requirement of OX App Suite.
+
+### Automated migrations from v1.0.0
+
+With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
+
+openDesk's automated migrations takes care of this upgrade requirement described here for
+[Nubus 1.5.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.5.1/en/changelog.html#migrate-existing-ldap-server-to-mirror-mode-readiness),
+creating the config map with the mentioned label.
+
+> **Note**<br>
+> Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
 ## From v0.9.0
 
@@ -401,13 +414,14 @@ The IAMs admin account `Administrator` is a member of this group by default, but
 
 If you need other accounts to use the API, please assign them to the aforementioned group.
 
-### Automated migrations
+### Automated migrations from v0.9.0
 
 The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
 
 The permissions required to execute the migrations can be found in the migration's Helm chart [`role.yaml'](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/v1.3.5/charts/opendesk-migrations/templates/role.yaml?ref_type=tags#L29)
 
-The actual actions are described as code comments in the related run module [`run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_2.py).
+> **Note**<br>
+> Details can be found in [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
 ### Post-upgrade: Manual steps
 
