@@ -7,7 +7,7 @@ import logging
 import yaml
 import sys
 import shutil
-import re
+import subprocess
 import configargparse
 
 from pathlib import Path
@@ -17,6 +17,8 @@ p = configargparse.ArgParser()
 p.add('--branch', env_var='CHART_DEV_BRANCH', help='The branch you want to work with. Will be created by the script if it does not exist yet.')
 p.add('--git_hostname', env_var='GIT_HOSTNAME', default='git@gitlab.opencode.de', help='Set the hostname for the chart git checkouts.')
 p.add('--revert', default=False, action='store_true', help='Set this parameter if you want to revert the referencing of the local helm chart checkout paths in the helmfiles.')
+p.add('--match', default='', help="Clone/pull only charts that contain the given string in their name.")
+p.add('--pull', default=False, action='store_true', help='Will also pull and unpack Helm charts that are not developed by product development.')
 p.add('--loglevel', env_var='LOGLEVEL', default='DEBUG', help='Set the loglevel: DEBUG, INFO, WARNING, ERROR, CRITICAL-')
 options = p.parse_args()
 
@@ -68,22 +70,34 @@ def create_or_switch_branch_base_repo():
             base_repo.git.switch(branch)
     return branch
 
+def create_path_if_not_exists(path):
+    if os.path.isdir(path):
+        logging.warning(f"Path {path} already exists.")
+    else:
+        logging.debug(f"creating directory {path}.")
+        Path(path).mkdir(parents=True, exist_ok=True)
 
 def clone_charts_locally(branch, charts):
-    charts_clone_path = script_path+'/../../'+branch.replace('/', '_')
+    charts_clone_path = script_path+'/../../chart-repo/'+branch.replace('/', '_')
+    charts_pull_path = script_path+'/../../chart-pull/'+branch.replace('/', '_')
     charts_dict = {}
     doublette_dict = {}
-    if os.path.isdir(charts_clone_path):
-        logging.warning(f"Path {charts_clone_path} already exists, will not clone any charts.")
-    else:
-        logging.debug(f"creating directory {charts_clone_path} to clone charts into")
-        Path(charts_clone_path).mkdir(parents=True, exist_ok=True)
+    create_path_if_not_exists(charts_clone_path)
+    if options.pull:
+        create_path_if_not_exists(charts_pull_path)
 
     for chart in charts['charts']:
-        if 'opendesk/components/platform-development/charts' in charts['charts'][chart]['repository']:
-            tag = charts['charts'][chart]['version']
-            logging.debug(f"Working on {chart} / tag {tag}")
-            repository = charts['charts'][chart]['repository']
+        tag = charts['charts'][chart]['version']
+        repository = charts['charts'][chart]['repository']
+        registry = charts['charts'][chart]['registry']
+        name = charts['charts'][chart]['name']
+        logging.debug(f"Working on {chart} / tag {tag} / repo {repository}")
+        if not options.match in name:
+            logging.info(f"Chart name {name} does not match {options.match} - skipping...")
+        elif registry == '':
+            logging.info("Empty registry definition - skipping...")
+        elif 'opendesk/components/platform-development/charts' in repository:
+            logging.info("Cloning the charts repo")
             git_url = options.git_hostname+':'+repository
             chart_repo_path = charts_clone_path+'/'+charts['charts'][chart]['name']
             if git_url in doublette_dict:
@@ -99,6 +113,17 @@ def clone_charts_locally(branch, charts):
                     chart_repo.git.checkout('v'+charts['charts'][chart]['version'])
                 doublette_dict[git_url] = chart_repo_path
                 charts_dict[chart] = chart_repo_path
+        elif options.pull:
+            logging.info("Pulling the chart")
+            helm_command = f"helm pull oci://{registry}/{repository}/{name} --version {tag} --untar --destination {charts_pull_path}"
+            logging.debug(f"CLI command: {helm_command}")
+            try:
+                output = subprocess.check_output(helm_command, shell = True)
+            except subprocess.CalledProcessError:
+                sys.exit(f"! CLI command '{helm_command}' failed")
+        else:
+            logging.debug("Not a product development chart and `--pull` option not enabled - skipping...")
+
     return charts_dict
 
 
