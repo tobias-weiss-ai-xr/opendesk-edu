@@ -422,6 +422,9 @@ appsuite:
     replicas: {{ .Values.replicas.openxchangeCoreMW }}
     resources:
       {{ .Values.resources.openxchangeCoreMW | toYaml | nindent 6 }}
+    initContainer:
+      resources:
+        {{ .Values.resources.openxchangeCoreMW | toYaml | nindent 8 }}
 
   core-ui:
     enabled: true

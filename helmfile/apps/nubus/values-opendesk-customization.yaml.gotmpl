@@ -421,12 +421,13 @@ nubusLdapNotifier:
     {{ .Values.resources.umsLdapNotifier | toYaml | nindent 4 }}
 
 nubusLdapServer:
-  imagePullSecrets:
-    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
-  highAvailabilityMode: false
-  replicaCountPrimary: 1
-  replicaCountSecondary: 0 # {{ .Values.replicas.umsLdapServerSecondary }}
-  replicaCountProxy: 0 # {{ .Values.replicas.umsLdapServerProxy }}
+  global:
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+  replicaCountPrimary: {{ .Values.replicas.umsLdapServerPrimary }}
+  replicaCountSecondary: {{ .Values.replicas.umsLdapServerSecondary }}
+  replicaCountProxy: {{ .Values.replicas.umsLdapServerProxy }}
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-ldap-server"
   serviceAccount:
@@ -543,6 +544,8 @@ nubusStackDataUms:
     intents.otterize.com/service-name: "ums-stack-data-ums"
   resources:
     {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
+  initResources:
+    {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
 
 nubusSelfServiceConsumer:
   containerSecurityContext:
@@ -614,6 +617,8 @@ nubusUmcGateway:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   replicaCount: {{ .Values.replicas.umsUmcGateway }}
   resources:
+    {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
+  initResources:
     {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
 
 nubusKeycloakBootstrap:
