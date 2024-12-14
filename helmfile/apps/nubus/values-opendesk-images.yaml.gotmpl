@@ -49,6 +49,12 @@ nubusLdapServer:
       repository: {{ .Values.images.nubusLdapServer.repository }}
       tag: {{ .Values.images.nubusLdapServer.tag }}
       imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    leaderElector:
+      image:
+        registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerLeaderElector.registry | quote }}
+        repository: {{ .Values.images.nubusLdapServerLeaderElector.repository }}
+        tag: {{ .Values.images.nubusLdapServerLeaderElector.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   dhInitcontainer:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerDhInitContainer.registry | quote }}

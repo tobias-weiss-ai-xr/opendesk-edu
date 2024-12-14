@@ -130,6 +130,8 @@ provisioning:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakBootstrap.registry | quote }}
     repository: {{ .Values.images.nubusKeycloakBootstrap.repository | quote }}
     tag: {{ .Values.images.nubusKeycloakBootstrap.tag | quote }}
+  resources:
+    {{ .Values.resources.intercomService | toYaml | nindent 4 }}
   securityContext:
     seccompProfile:
       type: "RuntimeDefault"

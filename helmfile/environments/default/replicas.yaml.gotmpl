@@ -66,7 +66,6 @@ replicas:
   # -- scalable: true
   keycloak: 1
   # -- scalable: false
-  # -- comment: Will be removed soon.
   oxConnector: 1
   # -- scalable: tbd
   umsGuardianAuthorizationApi: 1
@@ -85,13 +84,14 @@ replicas:
   umsKeycloakExtensionsProxy: 1
   # -- scalable: tbd
   umsLdapNotifier: 1
-  # -- scalable: false
-  # -- comment: Experimental feature and not supported.
+  # -- scalable: true
+  # -- comment: Please find details on the following `umsLdapServer*` entries in the upstream documentation:
+  # https://docs.software-univention.de/nubus-kubernetes-operation/latest/en/configuration/ldap.html#directory-service-high-availability-and-scalability
   umsLdapServerPrimary: 1
   # -- scalable: true
-  umsLdapServerSecondary: 1
+  umsLdapServerSecondary: 0
   # -- scalable: true
-  umsLdapServerProxy: 1
+  umsLdapServerProxy: 0
   # -- scalable: tbd
   umsNotificationsApi: 1
   # -- scalable: true

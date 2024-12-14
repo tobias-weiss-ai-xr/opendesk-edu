@@ -401,6 +401,10 @@ nubusUdmListener:
 
 nubusSelfServiceListener:
   enabled: false
+  resources:
+    {{ .Values.resources.umsSelfserviceConsumer | toYaml | nindent 4 }}
+  resourcesWaitForDependency:
+    {{ .Values.resources.umsSelfserviceConsumer | toYaml | nindent 4 }}
 
 nubusSelfServiceConsumer:
   enabled: true

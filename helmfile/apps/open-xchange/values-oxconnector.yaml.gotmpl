@@ -63,29 +63,13 @@ provisioningApi:
 
 resources:
   {{ .Values.resources.oxConnector | toYaml | nindent 2 }}
+resourcesWaitForDependency:
+  {{ .Values.resources.oxConnector | toYaml | nindent 2 }}
 
 persistence:
   storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations: {}
-
-## Container deployment probes
-probes:
-  liveness:
-    enabled: true
-    initialDelaySeconds: 120
-    timeoutSeconds: 3
-    periodSeconds: 30
-    failureThreshold: 3
-    successThreshold: 1
-
-  readiness:
-    enabled: true
-    initialDelaySeconds: 30
-    timeoutSeconds: 3
-    periodSeconds: 15
-    failureThreshold: 30
-    successThreshold: 1
 
 replicaCount: {{ .Values.replicas.oxConnector }}
 
