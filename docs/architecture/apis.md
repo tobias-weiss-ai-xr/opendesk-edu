@@ -51,6 +51,10 @@ This chapter presents APIs available in openDesk grouped by applications.
   * [Matrix Server-Server API](#matrix-server-server-api)
   * [Matrix Push Gateway API](#matrix-push-gateway-api)
   * [Matrix Identity Service API](#matrix-identity-service-api)
+  * [Matrix React SDK Module API](#matrix-react-sdk-module-api)
+  * [Matrix Widget API](#matrix-widget-api)
+  * [NeoBoard Data Model API](#neoboard-data-model-api)
+  * [NeoDateFix REST API](#neodatefix-rest-api)
 * [Knowledge management - XWiki](#knowledge-management---xwiki)
   * [REST API](#rest-api-1)
   * [Scripting API](#scripting-api)
@@ -647,7 +651,56 @@ Following are APIs used by the Project management application:
 
 While Jitsi is available as standalone videoconferencing in openDesk, it is also used in [Element as videoconferencing backend](https://github.com/element-hq/element-web/blob/develop/docs/jitsi.md).
 
-![APIs of Element and Jitsi providing Communication Service](./apis_images/ChatVC-overview.png)
+```mermaid
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
+classDiagram
+    class CommunicationService["Communication Service"] {
+        <<interface>>
+    }
+
+    class MxChat["Element Matrix Chat"] {
+        <<interface>>
+    }
+    class JitsiVideoConference["Jitsi Video Conference"] {
+        <<interface>>
+    }
+
+    CommunicationService <|.. MxChat
+    CommunicationService <|.. JitsiVideoConference
+    MxChat <-- JitsiVideoConference
+
+    class MxAppServiceApi["Matrix Application Service API"]
+    class MxClientServerApi["Matrix Client Server API"]
+    class MxServerServerApi["Matrix Server Server API"]
+    class MxPushGatewayApi["Matrix Push Gateway API"]
+    class MxIdentityServiceApi["Matrix Identity Service API"]
+    class MxRtc["Matrix RTC"]
+    class MxElementWebModuleApi["Matrix React SDK Module API"]
+    class MxWidgetApi["Matrix Widget API"]
+    class NeoBoardDataModelApi["NeoBoard Data Model API"]
+    class NeoDateFixRestApi["NeoDateFix REST API"]
+
+    MxChat *-- MxAppServiceApi
+    MxChat *-- MxClientServerApi
+    MxChat *-- MxServerServerApi
+    MxChat *-- MxPushGatewayApi
+    MxChat *-- MxIdentityServiceApi
+    MxChat *-- MxRtc
+    MxChat *-- MxElementWebModuleApi
+    MxChat *-- MxWidgetApi
+
+    class JitsiIframeApi["Jitsi iFrame API"]
+    class JitsiMeetApi["Jitsi Meet API"]
+    class JitsiMeetReactSdk["Jitsi Meet React SDK"]
+
+    JitsiVideoConference *-- JitsiIframeApi
+    JitsiVideoConference *-- JitsiMeetApi
+    JitsiVideoConference *-- JitsiMeetReactSdk
+```
 
 Following are APIs used by the Chat application:
 
@@ -741,6 +794,74 @@ Following are APIs used by the Chat application:
 | Supported standards            | [Matrix](https://spec.matrix.org/latest/identity-service-api/)                                                                               |
 | Documentation                  | [Synapse](https://element-hq.github.io/synapse/latest/) is the reference implementation of the Matrix protocol, see standard for API details |
 
+## Matrix React SDK Module API
+
+| Name                           | Matrix React SDK Module API                                                                                                                                                                                                        |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Purpose                        | The module system in Element Web is a way to add or modify functionality of Element Web itself, bundled at compile time for the app.                                                                                               |
+| Versioning                     | [Releases in the Git repository](https://github.com/matrix-org/matrix-react-sdk-module-api/releases); [Dependency in `package.json` in Element (Chat Web-UI)](https://github.com/element-hq/element-web/blob/develop/package.json) |
+| Authentication                 | n/a - used as a library                                                                                                                                                                                                            |
+| In openDesk provided by        | Element (Chat Web-UI)                                                                                                                                                                                                              |
+| Transport protocol             | n/a - used as a library                                                                                                                                                                                                            |
+| Usage within component         | [Element (Chat-Web-UI) Modules](https://github.com/nordeck/element-web-modules/)                                                                                                                                                   |
+| Usage within openDesk          | none                                                                                                                                                                                                                               |
+| Usage for external integration | n/a - uses as a library                                                                                                                                                                                                            |
+| Parallel access                | Allowed                                                                                                                                                                                                                            |
+| Message protocol               | n/a - used as a library                                                                                                                                                                                                            |
+| Supported standards            | n/a - Element (Chat Web-UI) specific                                                                                                                                                                                               |
+| Documentation                  | [Element (Chat Web-UI) Documentation](https://github.com/element-hq/element-web/blob/develop/docs/modules.md); [matrix-react-sdk-module-api Git repository](https://github.com/matrix-org/matrix-react-sdk-module-api)             |
+
+## Matrix Widget API
+
+| Name                           | Matrix Widget API                                                                                                                                                                                                    |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Purpose                        | Matrix Widgets are HTML and Javascript content / applications that can be embedded within, and communicate with Matrix clients.                                                                                      |
+| Versioning                     | n/a                                                                                                                                                                                                                  |
+| Authentication                 | Widgets request capabilities. They must be confirmed by a user or by the [Widget Lifecycle Module](https://github.com/nordeck/element-web-modules/blob/main/packages/element-web-widget-lifecycle-module/README.md). |
+| In openDesk provided by        | Element (Chat Web-UI)                                                                                                                                                                                                |
+| Transport protocol             | [HTML window.postMessage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)                                                                                                                   |
+| Usage within component         | [NeoDateFix](https://github.com/nordeck/matrix-meetings/), [NeoBoard](https://github.com/nordeck/matrix-neoboard), [NeoChoice](https://github.com/nordeck/matrix-poll)                                                                                                    |
+| Usage within openDesk          | none                                                                                                                                                                                                                 |
+| Usage for external integration | none                                                                                                                                                                                                                 |
+| Parallel access                | Allowed                                                                                                                                                                                                              |
+| Message protocol               | JSON                                                                                                                                                                                                                 |
+| Supported standards            | [Matrix - MSC2764](https://github.com/matrix-org/matrix-spec-proposals/pull/2764)                                                                                                                                    |
+| Documentation                  | [Matrix - MSC2764](https://github.com/matrix-org/matrix-spec-proposals/pull/2764)                                                                                                                                    |
+
+## NeoBoard Data Model API
+
+| Name                           | NeoBoard Data Model API                                                                                                               |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Purpose                        | The NeoBoard data model can be used to generate whiteboard documents.                                                                 |
+| Versioning                     | `version` field in the [NeoBoard data model](https://github.com/nordeck/matrix-neoboard/blob/main/docs/model/export-format.md#fields) |
+| Authentication                 | n/a                                                                                                                                   |
+| In openDesk provided by        | [NeoBoard](https://github.com/nordeck/matrix-neoboard)                                                                                |
+| Transport protocol             | n/a                                                                                                                                   |
+| Usage within component         | [NeoBoard](https://github.com/nordeck/matrix-neoboard)                                                                                |
+| Usage within openDesk          | none                                                                                                                                  |
+| Usage for external integration | none                                                                                                                                  |
+| Parallel access                | n/a                                                                                                                                   |
+| Message protocol               | JSON                                                                                                                                  |
+| Supported standards            | n/a                                                                                                                                   |
+| Documentation                  | [NeoBoard data model](https://github.com/nordeck/matrix-neoboard/tree/main/docs/model)                                                |
+
+## NeoDateFix REST API
+
+| Name                           | NeoDateFix REST API                                                                                                                                |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Purpose                        | Can be used to query and set up NeoDateFix Matrix meetings.                                                                                        |
+| Versioning                     | Path segment in the [Meetings Bot API](https://github.com/nordeck/matrix-meetings/blob/main/docs/data-model.md#http-api)                           |
+| Authentication                 | n/a                                                                                                                                                |
+| In openDesk provided by        | [NeoDateFix](https://github.com/nordeck/matrix-meetings)                                                                                           |
+| Transport protocol             | HTTP(S)                                                                                                                                            |
+| Usage within component         | [NeoDateFix](https://github.com/nordeck/matrix-meetings)                                                                                           |
+| Usage within openDesk          | Used by OX to sync calendar entries to NeoDateFix                                                                                                  |
+| Usage for external integration | none                                                                                                                                               |
+| Parallel access                | n/a                                                                                                                                                |
+| Message protocol               | JSON                                                                                                                                               |
+| Supported standards            | n/a                                                                                                                                                |
+| Documentation                  | [NeoDateFix ADR001](https://github.com/nordeck/matrix-meetings/blob/main/docs/adrs/adr001-use-the-widget-api-to-interact-with-the-meetings-bot.md) |
+
 # Knowledge management - XWiki
 
 Following are APIs used by the Knowledge management application:
@@ -804,7 +925,7 @@ Following are APIs used by the Knowledge management application:
 
 ## JavaScript API
 
-| Name                           | Javascript API                                                                               |
+| Name                           | JavaScript API                                                                               |
 | ------------------------------ | -------------------------------------------------------------------------------------------- |
 | Purpose                        | Include dynamic components in XWiki/web pages                                                |
 | Versioning                     |                                                                                              |
