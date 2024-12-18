@@ -26,26 +26,34 @@ containerSecurityContext:
     drop:
       - "ALL"
   privileged: false
-  runAsUser: 1000
-  runAsGroup: 0
+  runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   seccompProfile:
     type: "RuntimeDefault"
   seLinuxOptions:
     {{ .Values.seLinuxOptions.minio | toYaml | nindent 4 }}
 
-defaultBuckets: "openproject,openxchange,ums,nextcloud"
-
 global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  security:
+    allowInsecureImages: true
 
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.minio.registry | quote }}
-  repository: "{{ .Values.images.minio.repository }}"
-  tag: "{{ .Values.images.minio.tag }}"
-  pullPolicy: "{{ .Values.global.imagePullPolicy }}"
+  repository: {{ .Values.images.minio.repository | quote }}
+  tag: {{ .Values.images.minio.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+volumePermissions:
+  enabled: true
+  image:
+    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.minio.registry | quote }}
+    repository: {{ .Values.images.bitnamiOSShell.repository | quote }}
+    tag: {{ .Values.images.bitnamiOSShell.tag | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 {{- if .Values.debug.enabled }}
 ingress:
@@ -79,7 +87,7 @@ networkPolicy:
 
 podSecurityContext:
   enabled: true
-  fsGroup: 1000
+  fsGroup: 1001
 
 persistence:
   storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
@@ -94,19 +102,19 @@ provisioning:
     - "mc anonymous set download provisioning/ums/portal-assets"
   buckets:
     - name: {{ .Values.objectstores.migrations.bucket | quote }}
-      versioning: false
+      versioning: "Suspended"
       withLock: false
     - name: {{ .Values.objectstores.nextcloud.bucket | quote }}
-      versioning: true
+      versioning: "Suspended"
       withLock: false
     - name: {{ .Values.objectstores.notes.bucket | quote }}
-      versioning: true
+      versioning: "Versioned"
       withLock: false
     - name: {{ .Values.objectstores.openproject.bucket | quote }}
-      versioning: true
+      versioning: "Suspended"
       withLock: false
     - name: {{ .Values.objectstores.nubus.bucket | quote }}
-      versioning: false
+      versioning: "Suspended"
       withLock: false
   policies:
     - name: "migrations-bucket-policy"
@@ -221,6 +229,7 @@ startupProbe:
 
 statefulset:
   replicaCount: {{ .Values.replicas.minio }}
+  drivesPerNode: {{ if gt .Values.replicas.minio 1 }}2{{ else }}1{{ end }}
 
 {{- if .Values.certificate.selfSigned }}
 extraVolumes:
