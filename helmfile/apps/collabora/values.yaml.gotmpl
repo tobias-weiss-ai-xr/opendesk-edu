@@ -24,11 +24,13 @@ collabora:
     --o:net.proto={{ if eq .Values.cluster.networking.ipFamilies "DualStack" }}all{{ else }}{{ .Values.cluster.networking.ipFamilies }}{{ end }}
     {{- if .Values.debug.enabled }}
     --o:logging.level=debug
+    {{- else }}
+    --o:logging.anonymize.anonymize_user_data=true
     {{- end }}
     {{- if .Values.collaboraController.enabled }}
     --o:indirection_endpoint.url=https://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/routeToken
     --o:monitors.monitor[0]=wss://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/ws
-    --o:monitors.monitor[@retryInterval]=5
+    --o:monitors.monitor[0][@retryInterval]=5
     {{- end }}
   username: "collabora-internal-admin"
   password: {{ .Values.secrets.collabora.adminPassword | quote }}
