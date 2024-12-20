@@ -717,6 +717,8 @@ nubusProvisioning:
   registerConsumers:
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-register-consumers"
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-register-consumers"
   udmTransformer:
     resources:
       {{ .Values.resources.umsProvisioningUdmTransformer | toYaml | nindent 6 }}

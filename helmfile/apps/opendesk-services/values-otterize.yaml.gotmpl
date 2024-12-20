@@ -3,6 +3,11 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+global:
+  domain: {{ .Values.global.domain | quote }}
+  hosts:
+    {{ .Values.global.hosts | toYaml | nindent 4 }}
+
 apps:
   clamavDistributed:
     enabled: {{ .Values.clamavDistributed.enabled }}
@@ -12,6 +17,8 @@ apps:
     enabled: {{ .Values.collabora.enabled }}
   cryptpad:
     enabled: {{ .Values.cryptpad.enabled }}
+  dkimpy:
+    enabled: {{ .Values.dkimpy.enabled }}
   dovecot:
     enabled: {{ .Values.dovecot.enabled }}
   element:
@@ -22,10 +29,16 @@ apps:
     enabled: {{ .Values.mariadb.enabled }}
   memcached:
     enabled: {{ .Values.memcached.enabled }}
+  migrations:
+    enabled: {{ .Values.migrations.enabled }}
   minio:
     enabled: {{ .Values.minio.enabled }}
   nextcloud:
     enabled: {{ .Values.nextcloud.enabled }}
+  notes:
+    enabled: {{ .Values.notes.enabled }}
+  nubus:
+    enabled: {{ .Values.nubus.enabled }}
   openproject:
     enabled: {{ .Values.openproject.enabled }}
   oxAppsuite:
@@ -36,8 +49,6 @@ apps:
     enabled: {{ .Values.postgresql.enabled }}
   redis:
     enabled: {{ .Values.redis.enabled }}
-  univentionManagementStack:
-    enabled: {{ .Values.nubus.enabled }}
   xwiki:
     enabled: {{ .Values.xwiki.enabled }}
 
