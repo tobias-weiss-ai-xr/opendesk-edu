@@ -80,6 +80,11 @@ theme:
             data: {{ .Values.theme.imagery.files.faviconPng }}
           - path: "/core/img/favicon.ico"
             data: {{ .Values.theme.imagery.files.faviconIco }}
+      notes:
+        subdomain: {{ .Values.global.hosts.notes }}
+        paths:
+          - path: "/favicon.ico"
+            data: {{ .Values.theme.imagery.notes.faviconIco }}
       openproject:
         subdomain: {{ .Values.global.hosts.openproject }}
         paths:
