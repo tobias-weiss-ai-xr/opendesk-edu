@@ -535,8 +535,6 @@ nubusUmcGateway:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 nubusKeycloakBootstrap:
-  additionalAnnotations:
-    argocd.argoproj.io/hook: "Sync"
   keycloak:
     auth:
       username: "kcadmin"
