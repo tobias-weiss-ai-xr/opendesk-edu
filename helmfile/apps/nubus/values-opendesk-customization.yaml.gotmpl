@@ -622,6 +622,8 @@ nubusUmcGateway:
     {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
 
 nubusKeycloakBootstrap:
+  additionalAnnotations:
+    argocd.argoproj.io/hook: "Sync"
   containerSecurityContext:
     enabled: true
     allowPrivilegeEscalation: false
@@ -640,9 +642,6 @@ nubusKeycloakBootstrap:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak-bootstrap"
-  serviceAccount:
-    annotations:
-      intended.usage: "compliance"
   resources:
     {{ .Values.resources.umsKeycloakBootstrap | toYaml | nindent 4 }}
 
