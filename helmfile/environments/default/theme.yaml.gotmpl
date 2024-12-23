@@ -57,6 +57,9 @@ theme:
       faviconSvg: {{ readFile "./../../files/theme/knowledge/favicon.svg" | b64enc | quote }}
       faviconPng: {{ readFile "./../../files/theme/knowledge/favicon.png" | b64enc | quote }}
 
+    notes:
+      faviconIco: {{ readFile "./../../files/theme/notes/favicon.ico" | b64enc | quote }}
+
     portal:
       faviconIco: {{ readFile "./../../files/theme/portal/favicon.ico" | b64enc | quote }}
       waitingSpinnerSvg: {{ readFile "./../../files/theme/portal/waitingSpinner.svg" | b64enc  }}
