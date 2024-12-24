@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 variables:
-  OPENDESK_CI_CLI_IMAGE: "registry.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli:2.5.3\
-    @sha256:1296e8590b59f02311881307bb14c58b72bafc92a58e7e7e7212508abf902b00"
-  OPENDESK_LINT_IMAGE: "registry.opencode.de/bmi/opendesk/components/platform-development/images/ci-lint:1.0.8\
-    @sha256:59e714cad38e873cf8a9a132af76ad868b46a51ed12d0bd45477f328c0136991"
+  OPENDESK_CI_CLI_IMAGE: "registry.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli:2.5.5\
+    @sha256:0d13434878ae2c1e7cdf7e124c83672845ceef2f760691dc1db5b118655dfd36"
+  OPENDESK_LINT_IMAGE: "registry.opencode.de/bmi/opendesk/components/platform-development/images/ci-lint:1.0.10\
+    @sha256:65db95e84fd16f4b2c6df00bd0a3d6d485d1daaa3a9f3a647226a0ba8989054b"
 
 .common:
   cache: {}
