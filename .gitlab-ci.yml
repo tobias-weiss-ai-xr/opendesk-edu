@@ -4,7 +4,7 @@
 ---
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
-    ref: "v2.4.3"
+    ref: "v2.4.8"
     file:
       - "ci/common/automr.yml"
       - "ci/common/lint.yml"
@@ -612,7 +612,7 @@ avscan-prepare:
       | del(.[].repository)
       | del(.[].tag)
       | del(.[].registry)'
-      helmfile/environments/default/images.yaml
+      helmfile/environments/default/images.yaml.gotmpl
       >> dynamic-scans.yml
   artifacts:
     paths:
