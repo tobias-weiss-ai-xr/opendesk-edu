@@ -700,7 +700,7 @@ release:
     - |
       cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
       {
-        "branches": ["${RELEASE_BRANCH}"],
+        "branches": ["main"],
         "plugins": [
           "@semantic-release/gitlab",
           "@semantic-release/release-notes-generator",
