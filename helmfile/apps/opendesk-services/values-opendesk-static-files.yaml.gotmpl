@@ -10,6 +10,59 @@ global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
+assets:
+  element:
+    subdomain: {{ .Values.global.hosts.element }}
+    paths:
+      - path: "/vector-icons/favicon.........ico"
+        data: {{ .Values.theme.imagery.chat.faviconIco }}
+  jitsi:
+    subdomain: {{ .Values.global.hosts.jitsi }}
+    paths:
+      - path: "/images/favicon.svg"
+        data: {{ .Values.theme.imagery.videoconference.faviconSvg }}
+  keycloak:
+    subdomain: {{ .Values.global.hosts.keycloak }}
+    paths:
+      - path: "/resources/...../login/UCS/img/favicon.ico"
+        data: {{ .Values.theme.imagery.portal.faviconIco }}
+  nextcloud:
+    subdomain: {{ .Values.global.hosts.nextcloud }}
+    paths:
+      - path: "/core/img/favicon-touch.png"
+        data: {{ .Values.theme.imagery.files.faviconPng }}
+      - path: "/core/img/favicon.ico"
+        data: {{ .Values.theme.imagery.files.faviconIco }}
+  notes:
+    subdomain: {{ .Values.global.hosts.notes }}
+    paths:
+      - path: "/favicon.ico"
+        data: {{ .Values.theme.imagery.notes.faviconIco }}
+  openproject:
+    subdomain: {{ .Values.global.hosts.openproject }}
+    paths:
+      - path: "/custom_style/........../favicon/favicon.svg"
+        data: {{ .Values.theme.imagery.projects.faviconSvg }}
+  openxchange:
+    subdomain: {{ .Values.global.hosts.openxchange }}
+    paths:
+      - path: "/appsuite/favicon.ico"
+        data: {{ .Values.theme.imagery.groupware.faviconIco }}
+      - path: "/appsuite/favicon.svg"
+        data: {{ .Values.theme.imagery.groupware.faviconSvg }}
+  portal:
+    subdomain: {{ .Values.global.hosts.nubus }}
+    paths:
+      - path: "/favicon.ico"
+        data: {{ .Values.theme.imagery.portal.faviconIco }}
+  xwiki:
+    subdomain: {{ .Values.global.hosts.xwiki }}
+    paths:
+      - path: "/resources/icons/xwiki/favicon.svg"
+        data: {{ .Values.theme.imagery.knowledge.faviconSvg }}
+      - path: "/resources/icons/xwiki/favicon16.png"
+        data: {{ .Values.theme.imagery.knowledge.faviconPng }}
+
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
   deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
@@ -54,59 +107,4 @@ resources:
 
 service:
   type: "ClusterIP"
-
-theme:
-  imagery:
-    assets:
-      element:
-        subdomain: {{ .Values.global.hosts.element }}
-        paths:
-          - path: "/vector-icons/favicon.........ico"
-            data: {{ .Values.theme.imagery.chat.faviconIco }}
-      jitsi:
-        subdomain: {{ .Values.global.hosts.jitsi }}
-        paths:
-          - path: "/images/favicon.svg"
-            data: {{ .Values.theme.imagery.videoconference.faviconSvg }}
-      keycloak:
-        subdomain: {{ .Values.global.hosts.keycloak }}
-        paths:
-          - path: "/resources/...../login/UCS/img/favicon.ico"
-            data: {{ .Values.theme.imagery.portal.faviconIco }}
-      nextcloud:
-        subdomain: {{ .Values.global.hosts.nextcloud }}
-        paths:
-          - path: "/core/img/favicon-touch.png"
-            data: {{ .Values.theme.imagery.files.faviconPng }}
-          - path: "/core/img/favicon.ico"
-            data: {{ .Values.theme.imagery.files.faviconIco }}
-      notes:
-        subdomain: {{ .Values.global.hosts.notes }}
-        paths:
-          - path: "/favicon.ico"
-            data: {{ .Values.theme.imagery.notes.faviconIco }}
-      openproject:
-        subdomain: {{ .Values.global.hosts.openproject }}
-        paths:
-          - path: "/custom_style/........../favicon/favicon.svg"
-            data: {{ .Values.theme.imagery.projects.faviconSvg }}
-      openxchange:
-        subdomain: {{ .Values.global.hosts.openxchange }}
-        paths:
-          - path: "/appsuite/favicon.ico"
-            data: {{ .Values.theme.imagery.groupware.faviconIco }}
-          - path: "/appsuite/favicon.svg"
-            data: {{ .Values.theme.imagery.groupware.faviconSvg }}
-      portal:
-        subdomain: {{ .Values.global.hosts.nubus }}
-        paths:
-          - path: "/favicon.ico"
-            data: {{ .Values.theme.imagery.portal.faviconIco }}
-      xwiki:
-        subdomain: {{ .Values.global.hosts.xwiki }}
-        paths:
-          - path: "/resources/icons/xwiki/favicon.svg"
-            data: {{ .Values.theme.imagery.knowledge.faviconSvg }}
-          - path: "/resources/icons/xwiki/favicon16.png"
-            data: {{ .Values.theme.imagery.knowledge.faviconPng }}
 ...
