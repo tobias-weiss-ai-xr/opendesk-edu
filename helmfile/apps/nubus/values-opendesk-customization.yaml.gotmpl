@@ -521,7 +521,7 @@ nubusPortalFrontend:
       favicon: {{ .Values.theme.imagery.portal.faviconIco | toJson }}
       # The actual `logo` is set in customizing image, the logo down here is for for waiting spinner.
       logo: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | toJson }}
-      backgroundImage: {{ .Values.theme.imagery.portal.logoBackgroundSvg | toJson }}
+      backgroundImage: {{ .Values.theme.imagery.portal.backgroundSvg | toJson }}
 
 nubusStackDataUms:
   containerSecurityContext:

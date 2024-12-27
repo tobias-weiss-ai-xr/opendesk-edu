@@ -25,7 +25,9 @@ assets:
     subdomain: {{ .Values.global.hosts.keycloak }}
     paths:
       - path: "/resources/...../login/UCS/img/favicon.ico"
-        data: {{ .Values.theme.imagery.portal.faviconIco }}
+        data: {{ .Values.theme.imagery.login.faviconIco }}
+      - path: "/static-files/login/logo.svg"
+        data: {{ .Values.theme.imagery.login.logoSvg }}
   nextcloud:
     subdomain: {{ .Values.global.hosts.nextcloud }}
     paths:
@@ -55,6 +57,13 @@ assets:
     paths:
       - path: "/favicon.ico"
         data: {{ .Values.theme.imagery.portal.faviconIco }}
+      - path: "/static-files/portal/background.svg"
+        data: {{ .Values.theme.imagery.portal.backgroundSvg }}
+      - path: "/static-files/portal/waiting-spinner.svg"
+        data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg }}
+      - path: "/static-files/login/background.jpg"
+        data: {{ .Values.theme.imagery.login.backgroundJpg }}
+
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki }}
     paths:

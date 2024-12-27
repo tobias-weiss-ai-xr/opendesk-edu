@@ -49,6 +49,11 @@ theme:
       faviconIco: {{ readFile "./../../files/theme/files/favicon.ico" | b64enc | quote }}
       faviconPng: {{ readFile "./../../files/theme/files/favicon.png" | b64enc | quote }}
 
+    login:
+      faviconIco: {{ readFile "./../../files/theme/login/favicon.ico" | b64enc | quote }}
+      backgroundJpg: {{ readFile "./../../files/theme/login/background.jpg" | b64enc | quote }}
+      logoSvg: {{ readFile "./../../files/theme/login/logo.svg" | b64enc | quote }}
+
     groupware:
       faviconIco: {{ readFile "./../../files/theme/groupware/favicon.ico" | b64enc | quote }}
       faviconSvg: {{ readFile "./../../files/theme/groupware/favicon.svg" | b64enc | quote }}
@@ -62,8 +67,8 @@ theme:
 
     portal:
       faviconIco: {{ readFile "./../../files/theme/portal/favicon.ico" | b64enc | quote }}
-      waitingSpinnerSvg: {{ readFile "./../../files/theme/portal/waitingSpinner.svg" | b64enc  }}
-      logoBackgroundSvg: {{ readFile "./../../files/theme/empty.svg" | b64enc | quote }}
+      waitingSpinnerSvg: {{ readFile "./../../files/theme/portal/waiting-spinner.svg" | b64enc  }}
+      backgroundSvg: {{ readFile "./../../files/theme/portal/background.svg" | b64enc | quote }}
     portalTiles:
       adminAnnouncement: {{ readFile "./../../files/theme/portal-tiles/admin_announcement.svg" | b64enc | quote }}
       adminContext: {{ readFile "./../../files/theme/portal-tiles/admin_context.svg" | b64enc | quote }}
