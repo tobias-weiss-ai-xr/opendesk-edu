@@ -12,6 +12,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Adding a container to a pod/deployment - Dev/Test only](#adding-a-container-to-a-poddeployment---devtest-only)
   * [Temporary/ephemeral containers](#temporaryephemeral-containers)
 * [Components](#components)
+  * [Helmfile](#helmfile)
   * [MariaDB](#mariadb)
   * [Nextcloud](#nextcloud)
   * [OpenProject](#openproject)
@@ -141,6 +142,15 @@ kubectl -n ${NAMESPACE} attach -it -c ${EPH_CONTAINER_NAME} ${POD_NAME}
 ```
 
 # Components
+
+## Helmfile
+
+When refactoring the Helmfile structure you want to ensure that there are not unintended mistakes by e.g. `diff`
+comparing the output of Helmfile from before and after the change by calling:
+
+```shell
+helmfile template -e dev >output_to_compare.yaml
+```
 
 ## MariaDB
 

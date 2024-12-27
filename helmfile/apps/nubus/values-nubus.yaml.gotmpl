@@ -4,28 +4,29 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 global:
-  nubusDeployment: true
+  certManagerIssuer: {{ .Values.certificate.issuerRef.name | quote }}
+  domain: {{ .Values.global.domain | quote }}
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  ingressClass: {{ .Values.ingress.ingressClassName | default "nginx" | quote }}
+  keycloak:
+    realm: {{ .Values.platform.realm | quote }}
   ldap:
     baseDn: {{ .Values.ldap.baseDn | quote }}
     domainName: {{ .Values.global.domain | quote }}
     auth:
       cnAdmin:
         password: {{ .Values.secrets.nubus.ldapSecret | quote }}
-  domain: {{ .Values.global.domain | quote }}
-  subDomains:
-    portal: {{ .Values.global.hosts.nubus | quote }}
-    keycloak: {{ .Values.global.hosts.keycloak | quote }}
-  ingressClass: {{ .Values.ingress.ingressClassName | default "nginx" | quote }}
-  certManagerIssuer: {{ .Values.certificate.issuerRef.name | quote }}
+  nubusDeployment: true
   nubusMasterPassword: {{ env "MASTER_PASSWORD" | default "sovereign-workplace" | quote }}
-  keycloak:
-    realm: {{ .Values.platform.realm | quote }}
   objectStorage:
     bucket: {{ .Values.objectstores.nubus.bucket | quote }}
     connection:
       host: "minio"
       port: "9000"
       protocol: "http"
+  subDomains:
+    portal: {{ .Values.global.hosts.nubus | quote }}
+    keycloak: {{ .Values.global.hosts.keycloak | quote }}
 
   # -- Extensions to load. Add entries to load additional extensions into Nubus.
   extensions:
@@ -138,6 +139,56 @@ minio:
 
 # Nubus services which use customer supplied services
 keycloak:
+  enabled: true
+  config:
+    exposeAdminConsole: {{ .Values.debug.enabled }}
+    logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsKeycloak | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloak.registry | quote }}
+    repository: {{ .Values.images.nubusKeycloak.repository }}
+    tag: {{ .Values.images.nubusKeycloak.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  ingress:
+    enabled: false
+  keycloak:
+    auth:
+      username: "kcadmin"
+      existingSecret:
+        name: "ums-opendesk-keycloak-credentials"
+        keyMapping:
+          adminPassword: "admin_password"
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-keycloak"
+  postgresql:
+    connection:
+      host: {{ .Values.databases.keycloak.host | quote }}
+      port: {{ .Values.databases.keycloak.port | quote }}
+    auth:
+      username: {{ .Values.databases.keycloak.username | quote }}
+      database: {{ .Values.databases.keycloak.name | quote }}
+      existingSecret:
+        name: "ums-keycloak-postgresql-opendesk-credentials"
+        keyMapping:
+          password: keycloakDatabasePassword
+  replicaCount: {{ .Values.replicas.keycloak }}
+  resources:
+    {{ .Values.resources.umsKeycloak | toYaml | nindent 4 }}
   {{- if .Values.certificate.selfSigned }}
   extraVolumes:
     - name: "trusted-cert-crt-secret-volume"
@@ -167,29 +218,141 @@ keycloak:
     - name: "KC_HTTPS_TRUST_STORE_TYPE"
       value: "jks"
   {{- end }}
-  keycloak:
-    auth:
-      username: "kcadmin"
-      existingSecret:
-        name: "ums-opendesk-keycloak-credentials"
-        keyMapping:
-          adminPassword: "admin_password"
-  postgresql:
-    connection:
-      host: {{ .Values.databases.keycloak.host | quote }}
-      port: {{ .Values.databases.keycloak.port | quote }}
-    auth:
-      username: {{ .Values.databases.keycloak.username | quote }}
-      database: {{ .Values.databases.keycloak.name | quote }}
-      existingSecret:
-        name: "ums-keycloak-postgresql-opendesk-credentials"
-        keyMapping:
-          password: keycloakDatabasePassword
-  config:
-    exposeAdminConsole: {{ .Values.debug.enabled }}
-    logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
 
 nubusGuardian:
+  authorizationApi:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianAuthorizationApi.registry | quote }}
+      repository: {{ .Values.images.nubusGuardianAuthorizationApi.repository }}
+      tag: {{ .Values.images.nubusGuardianAuthorizationApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-guardian-authorization-api"
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "Always"
+    replicaCount: {{ .Values.replicas.umsGuardianAuthorizationApi }}
+    resources:
+      {{ .Values.resources.umsGuardianAuthorizationApi | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianAuthorizationApi | toYaml | nindent 8 }}
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      enabled: {{ .Values.ingress.tls.enabled }}
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
+  managementApi:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianManagementApi.registry | quote }}
+      repository: {{ .Values.images.nubusGuardianManagementApi.repository }}
+      tag: {{ .Values.images.nubusGuardianManagementApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-guardian-management-api"
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "Always"
+    replicaCount: {{ .Values.replicas.umsGuardianManagementApi }}
+    resources:
+      {{ .Values.resources.umsGuardianManagementApi | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianManagementApi | toYaml | nindent 8 }}
+  managementUi:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianManagementUi.registry | quote }}
+      repository: {{ .Values.images.nubusGuardianManagementUi.repository }}
+      tag: {{ .Values.images.nubusGuardianManagementUi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-guardian-management-ui"
+    replicaCount: {{ .Values.replicas.umsGuardianManagementUi }}
+    resources:
+      {{ .Values.resources.umsGuardianManagementUi | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianManagementUi | toYaml | nindent 8 }}
+  openPolicyAgent:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusOpenPolicyAgent.registry | quote }}
+      repository: {{ .Values.images.nubusOpenPolicyAgent.repository }}
+      tag: {{ .Values.images.nubusOpenPolicyAgent.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "Always"
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-ums-open-policy-agent"
+    replicaCount: {{ .Values.replicas.umsGuardianOpenPolicyAgent }}
+    resources:
+      {{ .Values.resources.umsOpenPolicyAgent | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsGuardianOpenPolicyAgent | toYaml | nindent 8 }}
+  postgresql:
+    connection:
+      host: {{ .Values.databases.umsGuardianManagementApi.host | quote }}
+      port: {{ .Values.databases.umsGuardianManagementApi.port | quote }}
+    auth:
+      username: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
+      database: {{ .Values.databases.umsGuardianManagementApi.name | quote }}
+      credentialSecret:
+        name: "ums-guardian-postgresql-opendesk-credentials"
+        key: "guardianDatabasePassword"
   provisioning:
     enabled: false
     config:
@@ -207,24 +370,42 @@ nubusGuardian:
         credentialSecret:
           name: "ums-opendesk-guardian-client-secret"
           key: "managementApiClientSecret"
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianProvisioning.registry | quote }}
+      repository: {{ .Values.images.nubusGuardianProvisioning.repository }}
+      tag: {{ .Values.images.nubusGuardianProvisioning.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+nubusNotificationsApi:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-notifications-api"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsNotificationsApi | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusNotificationsApi.registry | quote }}
+    repository: {{ .Values.images.nubusNotificationsApi.repository }}
+    tag: {{ .Values.images.nubusNotificationsApi.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   ingress:
     certManager:
       enabled: false
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
-  postgresql:
-    connection:
-      host: {{ .Values.databases.umsGuardianManagementApi.host | quote }}
-      port: {{ .Values.databases.umsGuardianManagementApi.port | quote }}
-    auth:
-      username: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
-      database: {{ .Values.databases.umsGuardianManagementApi.name | quote }}
-      credentialSecret:
-        name: "ums-guardian-postgresql-opendesk-credentials"
-        key: "guardianDatabasePassword"
-
-nubusNotificationsApi:
   postgresql:
     connection:
       host: {{ .Values.databases.umsNotificationsApi.host | quote }}
@@ -234,22 +415,58 @@ nubusNotificationsApi:
       database: {{ .Values.databases.umsNotificationsApi.name | quote }}
       existingSecret:
         name: "ums-notifications-api-postgresql-opendesk-credentials"
-  ingress:
-    certManager:
-      enabled: false
-    tls:
-      enabled: {{ .Values.ingress.tls.enabled }}
-      secretName: {{ .Values.ingress.tls.secretName | quote }}
+  serviceAccount:
+    create: true
+  replicaCount: {{ .Values.replicas.umsNotificationsApi }}
+  resources:
+    {{ .Values.resources.umsNotificationsApi | toYaml | nindent 4 }}
 
 nubusPortalFrontend:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-portal-frontend"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsPortalFrontend | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalFrontend.registry | quote }}
+    repository: {{ .Values.images.nubusPortalFrontend.repository }}
+    tag: {{ .Values.images.nubusPortalFrontend.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   ingress:
     certManager:
       enabled: false
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName }}
+  portalFrontend:
+    branding:
+      css: {{ .Values.theme.styles.portal.main | toJson }}
+      # Requires .ico, .svg does not work.
+      favicon: {{ .Values.theme.imagery.portal.faviconIco | toJson }}
+      # The actual `logo` is set in customizing image, the logo down here is for for waiting spinner.
+      logo: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | toJson }}
+      backgroundImage: {{ .Values.theme.imagery.portal.backgroundSvg | toJson }}
+  serviceAccount:
+    create: true
+  replicaCount: {{ .Values.replicas.umsPortalFrontend }}
+  resources:
+    {{ .Values.resources.umsPortalFrontend | toYaml | nindent 4 }}
 
 nubusKeycloakExtensions:
+  enabled: true
   keycloak:
     auth:
       username: "kcadmin"
@@ -258,6 +475,13 @@ nubusKeycloakExtensions:
         keyMapping:
           adminPassword: "admin_password"
   proxy:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakExtensionProxy.registry | quote }}
+      repository: {{ .Values.images.nubusKeycloakExtensionProxy.repository }}
+      tag: {{ .Values.images.nubusKeycloakExtensionProxy.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
     ingress:
       paths:
         {{- if .Values.debug.enabled }}
@@ -277,7 +501,16 @@ nubusKeycloakExtensions:
       tls:
         enabled: {{ .Values.ingress.tls.enabled }}
         secretName: {{ .Values.ingress.tls.secretName | quote }}
-
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-keycloak-extensions-proxy"
+    replicaCount: {{ .Values.replicas.umsKeycloakExtensionsProxy }}
+    resources:
+      {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 6 }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsKeycloakExtensionHandler | toYaml | nindent 8 }}
   postgresql:
     connection:
       host: {{ .Values.databases.keycloakExtension.host | quote }}
@@ -307,6 +540,23 @@ nubusKeycloakExtensions:
       logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
       newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
       mailFrom: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakExtensionHandler.registry | quote }}
+      repository: {{ .Values.images.nubusKeycloakExtensionHandler.repository }}
+      tag: {{ .Values.images.nubusKeycloakExtensionHandler.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-keycloak-extensions-handler"
+    replicaCount: {{ .Values.replicas.umsKeycloakExtensionsHandler }}
+    resources:
+      {{ .Values.resources.umsKeycloakExtensionHandler | toYaml | nindent 6 }}
+    securityContext:
+      seccompProfile:
+        type: "RuntimeDefault"
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsKeycloakExtensionHandler | toYaml | nindent 8 }}
 
 nubusPortalListener:
   enabled: false
@@ -314,19 +564,110 @@ nubusPortalListener:
 nubusPortalConsumer:
   enabled: true
   portalConsumer:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalConsumer.registry | quote }}
+      repository: {{ .Values.images.nubusPortalConsumer.repository }}
+      tag: {{ .Values.images.nubusPortalConsumer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+      pullSecrets:
+        {{- range .Values.global.imagePullSecrets }}
+        - name: {{ . | quote }}
+        {{- end }}
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
     objectStorageEndpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
     objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
-  provisioningApi:
-    auth:
-      username: "portal-consumer"
-      password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword | quote }}
   objectStorage:
     auth:
       accessKey: {{ .Values.objectstores.nubus.username | quote }}
       secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+  persistence:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.nubus.portalConsumer | quote }}
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-portal-consumer"
+  provisioningApi:
+    auth:
+      username: "portal-consumer"
+      password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword | quote }}
+  replicaCount: {{ .Values.replicas.umsPortalConsumer }}
+  resources:
+    {{ .Values.resources.umsPortalConsumer | toYaml | nindent 4 }}
+  resourcesWaitForDependency:
+    {{ .Values.resources.umsPortalConsumerDependencies | toYaml | nindent 4 }}
+  securityContext:
+    seccompProfile:
+      type: "RuntimeDefault"
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsPortalConsumer | toYaml | nindent 6 }}
+  waitForDependency:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  {{- if .Values.certificate.selfSigned }}
+  extraVolumes:
+    - name: "trusted-cert-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "ca.crt"
+            path: "ca-certificates.crt"
+          - key: "ca.crt"
+            path: "cacert.pem"
+  extraVolumeMounts:
+    - name: "trusted-cert-secret-volume"
+      mountPath: "/etc/ssl/certs/ca-certificates.crt"
+      subPath: "ca-certificates.crt"
+  waitForDependency:
+    extraVolumeMounts:
+      - name: "trusted-cert-secret-volume"
+        readOnly: true
+        mountPath: "/etc/ssl/certs/ca-certificates.crt"
+        subPath: "ca-certificates.crt"
+      - name: "trusted-cert-secret-volume"
+        readOnly: true
+        mountPath: "/usr/local/lib/python3.11/dist-packages/certifi/cacert.pem"
+        subPath: "cacert.pem"
+    extraEnvVars:
+      - name: "REQUESTS_CA_BUNDLE"
+        value: "/etc/ssl/certs/ca-certificates.crt"
+      - name: "DEFAULT_CA_BUNDLE_PATH"
+        value: "/etc/ssl/certs/ca-certificates.crt"
+      - name: "SSL_CERT_FILE"
+        value: "/etc/ssl/certs/ca-certificates.crt"
+  {{- end }}
 
 nubusPortalServer:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-portal-server"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsPortalServer | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalServer.registry | quote }}
+    repository: {{ .Values.images.nubusPortalServer.repository }}
+    tag: {{ .Values.images.nubusPortalServer.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      enabled: {{ .Values.ingress.tls.enabled }}
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
   objectStorage:
     auth:
       accessKey: {{ .Values.objectstores.nubus.username | quote }}
@@ -341,63 +682,382 @@ nubusPortalServer:
     centralNavigation:
       enabled: true
       authenticatorSecretName: "ums-opendesk-portal-server-central-navigation"
-  ingress:
-    certManager:
-      enabled: false
-    tls:
-      enabled: {{ .Values.ingress.tls.enabled }}
-      secretName: {{ .Values.ingress.tls.secretName | quote }}
+  replicaCount: {{ .Values.replicas.umsPortalServer }}
+  resources:
+    {{ .Values.resources.umsPortalServer | toYaml | nindent 4 }}
+  serviceAccount:
+    create: true
+  {{- if .Values.certificate.selfSigned }}
+  extraVolumes:
+    - name: "trusted-cert-crt-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "ca.crt"
+            path: "ca-certificates.crt"
+          - key: "ca.crt"
+            path: "cacert.pem"
+  extraVolumeMounts:
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/etc/ssl/certs/ca-certificates.crt"
+      subPath: "ca-certificates.crt"
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/usr/local/lib/python3.11/dist-packages/certifi/cacert.pem"
+      subPath: "cacert.pem"
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/usr/lib/python3/dist-packages/botocore/cacert.pem"
+      subPath: "cacert.pem"
+    - name: "trusted-cert-crt-secret-volume"
+      readOnly: true
+      mountPath: "/usr/lib/python3/dist-packages/certifi/cacert.pem"
+      subPath: "cacert.pem"
+  {{- end }}
 
 nubusUdmRestApi:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-udm-rest-api"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUdmRestApi | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   ingress:
     certManager:
       enabled: false
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
+  initResources:
+    {{ .Values.resources.umsUdmRestApiInit | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsUdmRestApi }}
+  resources:
+    {{ .Values.resources.umsUdmRestApi | toYaml | nindent 4 }}
+  serviceAccount:
+    annotations:
+      intended.usage: "compliance"
+  udmRestApi:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusUdmRestApi.registry | quote }}
+      repository: {{ .Values.images.nubusUdmRestApi.repository }}
+      tag: {{ .Values.images.nubusUdmRestApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+nubusLdapNotifier:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 101
+    runAsGroup: 102
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsLdapNotifier | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapNotifier.registry | quote }}
+    repository: {{ .Values.images.nubusLdapNotifier.repository }}
+    tag: {{ .Values.images.nubusLdapNotifier.tag }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-ldap-notifier"
+  replicaCount: {{ .Values.replicas.umsLdapNotifier }}
+  resources:
+    {{ .Values.resources.umsLdapNotifier | toYaml | nindent 4 }}
+
+nubusLdapServer:
+  global:
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-ldap-server"
+  dhInitcontainer:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerDhInitContainer.registry | quote }}
+      repository: {{ .Values.images.nubusLdapServerDhInitContainer.repository }}
+      tag: {{ .Values.images.nubusLdapServerDhInitContainer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+  extraVolumes:
+    - name: "migration-scripts"
+      secret:
+        secretName: "ums-ldap-server-migration"
+        defaultMode: 0555
+  extraVolumeMounts:
+    - name: "migration-scripts"
+      mountPath: "/entrypoint.d/30-purge.sh"
+      subPath: "30-purge.sh"
+    - name: "migration-scripts"
+      mountPath: "/entrypoint.d/95-slapadd-24-ldiff.sh"
+      subPath: "95-slapadd-24-ldif.sh"
+  extraSecrets:
+    - name: "ums-ldap-server-migration"
+      stringData:
+        30-purge.sh: |
+          #!/usr/bin/env bash
+          me=$(basename "$0")
+          echo "- Running ${me}"
+          if [ -f /var/lib/univention-ldap/ldap-24-export.ldif ]; then
+            echo "- Cleaning up /var/lib/univention-ldap."
+            cd /var/lib/univention-ldap
+            rm -rf internal
+            rm -rf ldap
+            ls -l
+          else
+            echo "- File /var/lib/univention-ldap/ldap-24-export.ldif not found."
+          fi
+        95-slapadd-24-ldif.sh: |
+          #!/usr/bin/env bash
+          me=$(basename "$0")
+          echo "- Running ${me}"
+          ls -l /var/lib/univention-ldap
+          if [ -f /var/lib/univention-ldap/ldap-24-export.ldif ]; then
+            echo "- slapadd-ing /var/lib/univention-ldap/ldap-24-export.ldif"
+            ls -l /var/lib/univention-ldap/
+            rm -rf /var/lib/univention-ldap/ldap
+            rm -rf /var/lib/univention-ldap/internal
+            echo "- deleted /var/lib/univention-ldap/ldap and /var/lib/univention-ldap/internal"
+            ls -l /var/lib/univention-ldap/
+            mkdir /var/lib/univention-ldap/ldap
+            mkdir /var/lib/univention-ldap/internal
+            echo "- created /var/lib/univention-ldap/ldap and /var/lib/univention-ldap/internal"
+            ls -l /var/lib/univention-ldap/
+            /usr/sbin/slapadd -v -l /var/lib/univention-ldap/ldap-24-export.ldif
+            echo "- slapadd executed"
+            ls -l /var/lib/univention-ldap/
+            mv /var/lib/univention-ldap/ldap-24-export.ldif /var/lib/univention-ldap/ldap-24-export.ldif-imported
+            echo "- import file renamed"
+            ls -l /var/lib/univention-ldap/
+          else
+            echo "- File /var/lib/univention-ldap/ldap-24-export.ldif not found."
+          fi
+  initResources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
+  ldapServer:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServer.registry | quote }}
+      repository: {{ .Values.images.nubusLdapServer.repository }}
+      tag: {{ .Values.images.nubusLdapServer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    leaderElector:
+      image:
+        registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerLeaderElector.registry | quote }}
+        repository: {{ .Values.images.nubusLdapServerLeaderElector.repository }}
+        tag: {{ .Values.images.nubusLdapServerLeaderElector.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  persistence:
+    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+    size: {{ .Values.persistence.size.nubus.ldapServerData | quote }}
+  replicaCountPrimary: {{ .Values.replicas.umsLdapServerPrimary }}
+  replicaCountSecondary: {{ .Values.replicas.umsLdapServerSecondary }}
+  replicaCountProxy: {{ .Values.replicas.umsLdapServerProxy }}
+  resources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
+  serviceAccount:
+    create: true
+  waitForDependency:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusProvisioning:
   enabled: true
-  ldap:
-    auth:
-      password: {{ .Values.secrets.nubus.ldapSecret | quote }}
-  nats:
-    auth:
-      adminPassword: {{ .Values.secrets.nats.natsAdminPassword | quote }}
   api:
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-api"
     auth:
       adminPassword: {{ .Values.secrets.nubus.provisioning.api.adminPassword | quote }}
       prefillPassword: {{ .Values.secrets.nubus.provisioning.api.prefillPassword | quote}}
       udmTransformerPassword: {{ .Values.secrets.nubus.provisioning.api.udmTransformerPassword | quote}}
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningEventsAndConsumerApi.registry | quote }}
+      repository: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.repository }}
+      tag: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     nats:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.api.natsPassword | quote}}
-
+    resources:
+      {{ .Values.resources.umsProvisioningApi | toYaml | nindent 6 }}
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsProvisioning | toYaml | nindent 6 }}
   dispatcher:
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-dispatcher"
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningDispatcher.registry | quote }}
+      repository: {{ .Values.images.nubusProvisioningDispatcher.repository }}
+      tag: {{ .Values.images.nubusProvisioningDispatcher.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     nats:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.dispatcherNatsPassword | quote}}
-
+    resources:
+      {{ .Values.resources.umsProvisioningDispatcher | toYaml | nindent 6 }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  ldap:
+    auth:
+      password: {{ .Values.secrets.nubus.ldapSecret | quote }}
+  nats:
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-nats"
+    auth:
+      adminPassword: {{ .Values.secrets.nats.natsAdminPassword | quote }}
+    config:
+      cluster:
+        replicas: {{ .Values.replicas.umsProvisioningNats }}
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      enabled: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsProvisioningNats | toYaml | nindent 8 }}
+    imagePullSecrets:
+      {{ .Values.global.imagePullSecrets | toYaml | nindent 6 }}
+    nats:
+      image:
+        registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNats.registry | quote }}
+        repository: {{ .Values.images.nubusNats.repository }}
+        tag: {{ .Values.images.nubusNats.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    natsBox:
+      image:
+        registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsBox.registry | quote }}
+        repository: {{ .Values.images.nubusNatsBox.repository }}
+        tag: {{ .Values.images.nubusNatsBox.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    persistence:
+      size: {{ .Values.persistence.size.nubus.provisioningNats }}
+    reloader:
+      image:
+        registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsReloader.registry | quote }}
+        repository: {{ .Values.images.nubusNatsReloader.repository }}
+        tag: {{ .Values.images.nubusNatsReloader.tag }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    resources:
+      {{ .Values.resources.umsProvisioningNats | toYaml | nindent 6 }}
+    serviceAccount:
+      create: true
   prefill:
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-prefill"
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningPrefill.registry | quote }}
+      repository: {{ .Values.images.nubusProvisioningPrefill.repository }}
+      tag: {{ .Values.images.nubusProvisioningPrefill.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     nats:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.prefillNatsPassword | quote}}
-
+    resources:
+      {{ .Values.resources.umsProvisioningPrefill | toYaml | nindent 6 }}
   udmTransformer:
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-udm-transformer"
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningUdmTransformer.registry | quote }}
+      repository: {{ .Values.images.nubusProvisioningUdmTransformer.repository }}
+      tag: {{ .Values.images.nubusProvisioningUdmTransformer.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     nats:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.udmTransformerNatsPassword | quote}}
-
+    resources:
+      {{ .Values.resources.umsProvisioningUdmTransformer | toYaml | nindent 6 }}
+  replicaCount:
+    dispatcher: {{ .Values.replicas.umsProvisioningDispatcher }}
+    udmTransformer: {{ .Values.replicas.umsProvisioningUdmTransformer }}
+    prefill: {{ .Values.replicas.umsProvisioningPrefill }}
+    api: {{ .Values.replicas.umsProvisioningApi }}
   registerConsumers:
+    additionalAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-register-consumers"
     createUsers:
       oxConsumer:
         existingSecret:
           name: ums-provisioning-ox-credentials
           keyMapping:
             password: "ox-connector.json"
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    podAnnotations:
+      intents.otterize.com/service-name: "ums-provisioning-register-consumers"
+  resources:
+    registerConsumers:
+      {{ .Values.resources.umsProvisioningRegisterConsumers | toYaml | nindent 6 }}
+  serviceAccount:
+    create: true
 
 nubusUdmListener:
   enabled: true
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 102
+    runAsGroup: 65534
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUdmListener | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningUdmListener.registry | quote }}
+    repository: {{ .Values.images.nubusProvisioningUdmListener.repository }}
+    tag: {{ .Values.images.nubusProvisioningUdmListener.tag }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsUdmListener }}
+  resources:
+    {{ .Values.resources.umsUdmListener | toYaml | nindent 4 }}
 
 nubusSelfServiceListener:
   enabled: false
@@ -408,15 +1068,79 @@ nubusSelfServiceListener:
 
 nubusSelfServiceConsumer:
   enabled: true
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsSelfserviceConsumer | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusSelfServiceConsumer.registry | quote }}
+    repository: {{ .Values.images.nubusSelfServiceConsumer.repository }}
+    tag: {{ .Values.images.nubusSelfServiceConsumer.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-selfservice-listener"
   provisioningApi:
     auth:
       password: {{ .Values.secrets.nubus.selfserviceConsumer.provisioningApiPassword | quote}}
+  resources:
+    {{ .Values.resources.umsSelfserviceConsumer | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsSelfserviceConsumer }}
+  waitForDependency:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 # Nubus services
 nubusStackDataUms:
   additionalAnnotations:
     argocd.argoproj.io/hook: "Sync"
     argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
+    intents.otterize.com/service-name: "ums-stack-data-ums"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsStackDataUms | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusDataLoader.registry | quote }}
+    repository: {{ .Values.images.nubusDataLoader.repository }}
+    tag: {{ .Values.images.nubusDataLoader.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  initResources:
+    {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
+  # In openDesk the external memcache does not expect a username to be set. Overwriting
+  # the default username of `selfservice` is part of the customizing:
+  nubusUmcServer:
+    memcached:
+      auth:
+        username: ""
+  pullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  resources:
+    {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
   stackDataContext:
     umcPostgresqlHostname: {{ .Values.databases.umsSelfservice.host | quote }}
     umcPostgresqlUsername: {{ .Values.databases.umsSelfservice.username | quote }}
@@ -486,14 +1210,87 @@ nubusStackDataUms:
       {{- else }}
       deployDate: false
       {{- end }}
-  # In openDesk the external memcache does not expect a username to be set. Overwriting
-  # the default username of `selfservice` is part of the customizing:
-  nubusUmcServer:
-    memcached:
-      auth:
-        username: ""
 
 nubusUmcServer:
+  additionalAnnotations:
+    intents.otterize.com/service-name: "ums-umc-server"
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    runAsUser: 0
+    runAsGroup: 0
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
+  containerSecurityContextInit:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    runAsUser: 0
+    runAsGroup: 0
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
+  containerSecurityContextSssd:
+    enabled: true
+    allowPrivilegeEscalation: true
+    capabilities:
+      drop:
+        - "ALL"
+      add:
+        - "DAC_OVERRIDE"
+        - "SETGID"
+        - "AUDIT_WRITE"
+        - "SETUID"
+        - "CHOWN"
+        - "SETPCAP"
+        - "FOWNER"
+        - "FSETID"
+        - "KILL"
+        - "MKNOD"
+        - "NET_BIND_SERVICE"
+        - "SYS_CHROOT"
+    runAsUser: 0
+    runAsGroup: 0
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusUmcServer.registry | quote }}
+    repository: {{ .Values.images.nubusUmcServer.repository }}
+    tag: {{ .Values.images.nubusUmcServer.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  ingress:
+    certManager:
+      enabled: false
+    tls:
+      enabled: {{ .Values.ingress.tls.enabled }}
+      secretName: {{ .Values.ingress.tls.secretName | quote }}
+  memcached:
+    bundled: false
+    server: {{ .Values.cache.umsSelfservice.host | quote }}
+    auth:
+      existingSecret:
+        name: "ums-umc-server-memcached-opendesk-credentials"
+        keyMapping:
+          memcached-password: "umcServerMemcachedPassword"
   postgresql:
     bundled: false
     connection:
@@ -506,40 +1303,76 @@ nubusUmcServer:
         name: "ums-umc-server-postgresql-opendesk-credentials"
         keyMapping:
           password: "umcServerDatabasePassword"
-  memcached:
-    bundled: false
-    server: {{ .Values.cache.umsSelfservice.host | quote }}
-    auth:
-      existingSecret:
-        name: "ums-umc-server-memcached-opendesk-credentials"
-        keyMapping:
-          memcached-password: "umcServerMemcachedPassword"
+  proxy:
+    image:
+      registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusUmcServerProxy.registry | quote }}
+      repository: {{ .Values.images.nubusUmcServerProxy.repository }}
+      tag: {{ .Values.images.nubusUmcServerProxy.tag }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    replicaCount: {{ .Values.replicas.umsUmcServerProxy }}
+  replicaCount: {{ .Values.replicas.umsUmcServer }}
+  resources:
+    {{ .Values.resources.umsUmcServer | toYaml | nindent 4 }}
+  selfService:
+    passwordresetEmailBody: |
+        Sehr geehrte Benutzerin, sehr geehrter Benutzer,
+
+        Ihr Benutzername für {domainname} lautet: {username}
+
+        Sie erhalten diese Nachricht, da Sie Ihr Passwort zurücksetzen möchten oder weil Ihr Benutzer neu im System angelegt wurde.
+
+        Klicken Sie bitte auf den folgenden Link, um Ihr Passwort zu setzen:
+        https://{fqdn}/univention/portal/#/selfservice/newpassword/?token={token}&username={username}
+
+        Der genannte Link ist nur 48 Stunden gültig, danach fordern Sie ihn bitte erneut an unter:
+        https://{fqdn}/univention/portal/#/selfservice/passwordforgotten
+
+        Mit freundlichen Grüßen
+        Ihr {domainname} Passwort-Service
   smtp:
     existingSecret:
       name: "ums-umc-server-smtp-credentials-custom"
-  ingress:
-    certManager:
-      enabled: false
-    tls:
-      enabled: {{ .Values.ingress.tls.enabled }}
-      secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 nubusUmcGateway:
-  umcGateway:
-    umcHtmlTitle: "Portal - {{ .Values.theme.texts.productName }}"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsUmcGateway | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusUmcGateway.registry | quote }}
+    repository: {{ .Values.images.nubusUmcGateway.repository }}
+    tag: {{ .Values.images.nubusUmcGateway.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   ingress:
     certManager:
       enabled: false
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName | quote }}
+  initResources:
+    {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
+  replicaCount: {{ .Values.replicas.umsUmcGateway }}
+  resources:
+    {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
+  umcGateway:
+    umcHtmlTitle: "Portal - {{ .Values.theme.texts.productName }}"
 
 nubusKeycloakBootstrap:
-  keycloak:
-    auth:
-      username: "kcadmin"
-      existingSecret:
-        name: "ums-opendesk-keycloak-credentials"
+  additionalAnnotations:
+    argocd.argoproj.io/hook: "Sync"
   bootstrap:
     ldapMappers:
       - ldapAndUserModelAttributeName: "opendeskProjectmanagementAdmin"
@@ -547,11 +1380,41 @@ nubusKeycloakBootstrap:
     twoFactorAuthentication:
       enabled: true
       group: "2fa-users"
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    readOnlyRootFilesystem: false
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsKeycloakBootstrap | toYaml | nindent 6 }}
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakBootstrap.registry | quote }}
+    repository: {{ .Values.images.nubusKeycloakBootstrap.repository }}
+    tag: {{ .Values.images.nubusKeycloakBootstrap.tag }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  keycloak:
+    auth:
+      username: "kcadmin"
+      existingSecret:
+        name: "ums-opendesk-keycloak-credentials"
   ldap:
     auth:
       bindDn: {{ printf "uid=ldapsearch_keycloak,cn=users,%s" .Values.ldap.baseDn }}
       existingSecret:
         name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
+  podAnnotations:
+    intents.otterize.com/service-name: "ums-keycloak-bootstrap"
+  resources:
+    {{ .Values.resources.umsKeycloakBootstrap | toYaml | nindent 4 }}
 
 # Credential secrets for accessing customer supplied services
 extraSecrets:
