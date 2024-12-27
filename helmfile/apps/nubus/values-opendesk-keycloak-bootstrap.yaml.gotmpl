@@ -30,7 +30,7 @@ config:
       {{ .Values.functional.authentication.oidc.clients | toYaml | nindent 6 }}
   managed:
     clientScopes: [ 'acr', 'web-origins', 'email', 'profile', 'microprofile-jwt', 'role_list', 'offline_access', 'roles', 'address', 'phone' ]
-    clients: [ 'opendesk-intercom', 'guardian-management-api', 'guardian-scripts', 'guardian-ui', 'UMC', '${client_account}', '${client_account-console}', '${client_admin-cli}', '${client_broker}', '${client_realm-management}', '${client_security-admin-console}' ]
+    clients: [ 'guardian-management-api', 'guardian-scripts', 'guardian-ui', 'UMC', '${client_account}', '${client_account-console}', '${client_admin-cli}', '${client_broker}', '${client_realm-management}', '${client_security-admin-console}' ]
   keycloak:
     adminUser: "kcadmin"
     adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
@@ -442,34 +442,6 @@ config:
               included.client.audience: "opendesk-intercom"
               id.token.claim: false
               access.token.claim: true
-          # temporary additional claim while entryuuid is a hardcoded attribute in IntercomService and we cannot set
-          # it to `opendesk_useruuid` standard claim. For reference:
-          # https://github.com/univention/intercom-service/blob/cd819b6ced6433e532e74a8878943d05412c1416/intercom/app.js#L89
-          - name: "entryuuid_temp"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "entryUUID"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "entryuuid"
-              jsonType.label: "String"
-          # temporary additional claim while phoenixusername is a hardcoded attribute in IntercomService and we cannot
-          # set it to `opendesk_username` standard claim. For reference:
-          # https://github.com/univention/intercom-service/blob/cd819b6ced6433e532e74a8878943d05412c1416/intercom/routes/navigation.js#L27
-          - name: "phoenixusername_temp"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "uid"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "phoenixusername"
-              jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
@@ -480,6 +452,17 @@ config:
               id.token.claim: true
               access.token.claim: true
               claim.name: "opendesk_username"
+              jsonType.label: "String"
+          - name: "opendesk_useruuid"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "entryUUID"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_useruuid"
               jsonType.label: "String"
         defaultClientScopes:
           - "offline_access"
