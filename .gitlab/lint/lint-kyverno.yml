@@ -31,6 +31,7 @@ lint-kyverno:
     - >
       node /app/opendesk-ci-cli/src/index.js generate-kyverno-env
       -d ${CI_PROJECT_DIR}/helmfile/environments
+      -x ${CI_PROJECT_DIR}/.kyverno/_overwrite.yaml
     - "helmfile template -e test --include-needs --skip-tests > ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
     - "cd ${CI_PROJECT_DIR}/.kyverno"
     # Test optional
