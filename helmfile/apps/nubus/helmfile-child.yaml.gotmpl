@@ -44,8 +44,6 @@ releases:
     version: "{{ .Values.charts.nubus.version }}"
     values:
       - "values-nubus.yaml.gotmpl"
-      - "values-opendesk-customization.yaml.gotmpl"
-      - "values-opendesk-images.yaml.gotmpl"
       {{ range .Values.customization.release.ums }}
       - {{ . }}
       {{ end }}
