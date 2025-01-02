@@ -809,7 +809,7 @@ nubusLdapServer:
         registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerLeaderElector.registry | quote }}
         repository: {{ .Values.images.nubusLdapServerLeaderElector.repository }}
         tag: {{ .Values.images.nubusLdapServerLeaderElector.tag }}
-        imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+        pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   persistence:
     storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
     size: {{ .Values.persistence.size.nubus.ldapServerData | quote }}
