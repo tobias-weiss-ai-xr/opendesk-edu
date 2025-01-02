@@ -797,60 +797,6 @@ nubusLdapServer:
       repository: {{ .Values.images.nubusLdapServerDhInitContainer.repository }}
       tag: {{ .Values.images.nubusLdapServerDhInitContainer.tag }}
       imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-
-  extraVolumes:
-    - name: "migration-scripts"
-      secret:
-        secretName: "ums-ldap-server-migration"
-        defaultMode: 0555
-  extraVolumeMounts:
-    - name: "migration-scripts"
-      mountPath: "/entrypoint.d/30-purge.sh"
-      subPath: "30-purge.sh"
-    - name: "migration-scripts"
-      mountPath: "/entrypoint.d/95-slapadd-24-ldiff.sh"
-      subPath: "95-slapadd-24-ldif.sh"
-  extraSecrets:
-    - name: "ums-ldap-server-migration"
-      stringData:
-        30-purge.sh: |
-          #!/usr/bin/env bash
-          me=$(basename "$0")
-          echo "- Running ${me}"
-          if [ -f /var/lib/univention-ldap/ldap-24-export.ldif ]; then
-            echo "- Cleaning up /var/lib/univention-ldap."
-            cd /var/lib/univention-ldap
-            rm -rf internal
-            rm -rf ldap
-            ls -l
-          else
-            echo "- File /var/lib/univention-ldap/ldap-24-export.ldif not found."
-          fi
-        95-slapadd-24-ldif.sh: |
-          #!/usr/bin/env bash
-          me=$(basename "$0")
-          echo "- Running ${me}"
-          ls -l /var/lib/univention-ldap
-          if [ -f /var/lib/univention-ldap/ldap-24-export.ldif ]; then
-            echo "- slapadd-ing /var/lib/univention-ldap/ldap-24-export.ldif"
-            ls -l /var/lib/univention-ldap/
-            rm -rf /var/lib/univention-ldap/ldap
-            rm -rf /var/lib/univention-ldap/internal
-            echo "- deleted /var/lib/univention-ldap/ldap and /var/lib/univention-ldap/internal"
-            ls -l /var/lib/univention-ldap/
-            mkdir /var/lib/univention-ldap/ldap
-            mkdir /var/lib/univention-ldap/internal
-            echo "- created /var/lib/univention-ldap/ldap and /var/lib/univention-ldap/internal"
-            ls -l /var/lib/univention-ldap/
-            /usr/sbin/slapadd -v -l /var/lib/univention-ldap/ldap-24-export.ldif
-            echo "- slapadd executed"
-            ls -l /var/lib/univention-ldap/
-            mv /var/lib/univention-ldap/ldap-24-export.ldif /var/lib/univention-ldap/ldap-24-export.ldif-imported
-            echo "- import file renamed"
-            ls -l /var/lib/univention-ldap/
-          else
-            echo "- File /var/lib/univention-ldap/ldap-24-export.ldif not found."
-          fi
   initResources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
   ldapServer:
     image:
