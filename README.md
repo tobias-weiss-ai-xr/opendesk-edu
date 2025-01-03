@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Getting started](#getting-started)
 * [Advanced customization](#advanced-customization)
 * [Architecture](#architecture)
+* [Permissions](#permissions)
 * [Releases](#releases)
 * [Data Storage](#data-storage)
 * [Feedback](#feedback)
@@ -77,6 +78,10 @@ You would like to install openDesk in your own infrastructure?
 # Architecture
 
 More information on openDesk's architecture can be found in our [Architecture docs](./docs/architecture.md).
+
+# Permissions
+
+Find out more about the permission system in the[roles & permissions concept](./docs/permissions.md)
 
 # Releases
 

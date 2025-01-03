@@ -237,7 +237,7 @@ The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisio
 - (Managed) Resources
 - Users
 
-To find out more, see [Roles & Permissions](roles-and-permissions.md).
+To find out more, see [Roles & Permissions](permissions.md).
 
 ## SCIM
 

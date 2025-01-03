@@ -48,7 +48,8 @@ Any self-hosted or managed K8s cluster >= 1.24 listed in
 
 The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/kubespray) based clusters.
 
-> **Note:** The deployment is not tested against OpenShift.
+> **Note**<br>
+> The deployment is not tested against OpenShift.
 
 # Ingress controller
 
