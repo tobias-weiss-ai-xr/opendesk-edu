@@ -78,7 +78,8 @@
         "Weboffice",
         "Xchange",
         "xwiki",
-        "Zentrum"
+        "Zentrum",
+        "analysed"
     ],
     "ignoreWords": [],
     "import": []
