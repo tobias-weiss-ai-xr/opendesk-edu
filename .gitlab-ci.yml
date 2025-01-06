@@ -73,6 +73,12 @@ variables:
     options:
       - "yes"
       - "no"
+  FLUSH_EXTERNAL_SERVICES_BEFORE:
+    description: "Recreates databases and purges objectstorage. Useful when using external services and required overrides."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
   DEBUG_ENABLED:
     description: >
       Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific
@@ -244,9 +250,135 @@ variables:
   variables:
     HELMFILE_ENVIRONMENT: "dev"
 
+db-cleanup:
+  extends: ".deploy-common"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-ci-toolbox:1.0.0\
+          @sha256:8c00f96cbfca32e4a724c552143c7172980dd03c573fb097e57a2351db6421ab"
+  needs:
+    - job: "env-cleanup"
+      optional: true
+  rules:
+    - if: >
+          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $NAMESPACE =~ /.+/ &&
+          $ENV_STOP_BEFORE != "no" &&
+          $FLUSH_EXTERNAL_SERVICES_BEFORE != "no"
+      when: "on_success"
+  script:
+    - export FILES=(${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl ${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl)
+    # Cleanup MariaDB
+    - |
+      export DATABASES="nextcloud oxAppSuite xwiki"
+      export MARIADB_HOST=""
+      export MARIADB_PORT=""
+      export MARIADB_USERNAME=""
+      export MARIADB_PASSWORD=""
+
+      for DATABASE in $DATABASES; do
+        export ENV_DATABASE=${DATABASE}
+
+        # Parse cluster values
+        for FILE in ${FILES[@]}; do
+          if [ -f ${FILE} ]; then
+            if [[ $(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
+              MARIADB_DATABASE=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].name')
+              MARIADB_USERNAME=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].username')
+              MARIADB_PASSWORD=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].password')
+              MARIADB_HOST=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].host')
+              MARIADB_PORT=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].port')
+            fi;
+          fi;
+        done;
+
+        CONNECTION="--host=${MARIADB_HOST} \
+                    --port=${MARIADB_PORT} \
+                    --user=${MARIADB_USERNAME} \
+                    --password=${MARIADB_PASSWORD} \
+                    --skip-ssl"
+
+        echo "[mysql] [${ENV_DATABASE}] DROP ${MARIADB_DATABASE} on ${MARIADB_HOST}"
+        mariadb ${CONNECTION} -e "DROP DATABASE IF EXISTS ${MARIADB_DATABASE};"
+
+        if [ "${ENV_DATABASE}" = "oxAppSuite" ]; then
+          echo "[mysql] [${ENV_DATABASE}] DROP oxguard on ${MARIADB_HOST}"
+          mariadb ${CONNECTION} -e "DROP DATABASE IF EXISTS oxguard;"
+          echo "[mysql] [${ENV_DATABASE}] DROP oxguard_1 on ${MARIADB_HOST}"
+          mariadb ${CONNECTION} -e "DROP DATABASE IF EXISTS oxguard_1;"
+          echo "[mysql] [${ENV_DATABASE}] DROP PRIMARYDB_9 on ${MARIADB_HOST}"
+          mariadb ${CONNECTION} -e "DROP DATABASE IF EXISTS PRIMARYDB_9;"
+        else
+          mariadb ${CONNECTION} -e "CREATE DATABASE ${MARIADB_DATABASE};"
+          mariadb ${CONNECTION} -e "GRANT ALL PRIVILEGES ON ${MARIADB_DATABASE}.* TO ${MARIADB_USERNAME}@\"%\";"
+          mariadb ${CONNECTION} -e "FLUSH PRIVILEGES;"
+        fi;
+      done;
+    # Cleanup PostgreSQL
+    - |
+      export DATABASES="keycloak keycloakExtension notes openproject synapse umsGuardianManagementApi umsNotificationsApi umsSelfservice" 
+      export PGDATABASE="postgres"
+      export PGHOST=""
+      export PGPORT=""
+      export PGUSER=""
+      export PGPASSWORD=""
+      export PGPARAMS=""
+
+      for DATABASE in $DATABASES; do
+        export ENV_DATABASE=${DATABASE}
+
+        # Parse cluster values
+        for FILE in ${FILES[@]}; do
+          if [ -f $FILE ]; then
+            if [[ $(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
+              POSTGRES_DATABASE=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].name')
+              PGUSER=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].username')
+              PGPASSWORD=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].password')
+              PGHOST=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].host')
+              PGPORT=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].port')
+              PGPARAMS=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].parameters')
+            fi;
+          fi;
+        done;
+
+        echo "[psql] [${ENV_DATABASE}] DROP ${POSTGRES_DATABASE} on ${PGHOST}"
+        psql -c "DROP DATABASE ${POSTGRES_DATABASE}" || true;
+        if [ "${PGPARAMS}" = "null" ]; then
+        psql -c "CREATE DATABASE \"${POSTGRES_DATABASE}\";"
+        else
+        psql -c "CREATE DATABASE \"${POSTGRES_DATABASE}\" ${PGPARAMS};"
+        fi;
+        psql -c "ALTER DATABASE \"${POSTGRES_DATABASE}\" OWNER TO \"${PGUSER}\"";
+        psql -c "GRANT ALL PRIVILEGES ON DATABASE \"${POSTGRES_DATABASE}\" TO \"${PGUSER}\"";
+      done;
+    # Cleanup Objectstore
+    - |
+      export BUCKETS="migrations nextcloud openproject nubus notes"
+      export AWS_DEFAULT_REGION=""
+      export AWS_ENDPOINT=""
+      export AWS_ACCESS_KEY_ID=""
+      export AWS_SECRET_ACCESS_KEY=""
+      
+      for BUCKET in $BUCKETS; do
+        export ENV_BUCKET=${BUCKET}
+
+        # Parse cluster values
+        for FILE in ${FILES[@]}; do
+          if [ -f $FILE ]; then
+            if [[ $(tail -n +5 $FILE | yq '.objectstores.[env(ENV_BUCKET)]') != "null" ]]; then
+              AWS_BUCKET=$(tail -n +5 $FILE | yq '.objectstores.[env(ENV_BUCKET)].bucket')
+              AWS_ENDPOINT=$(tail -n +5 $FILE | yq '.objectstores.[env(ENV_BUCKET)].endpoint')
+              AWS_ACCESS_KEY_ID=$(tail -n +5 $FILE | yq '.objectstores.[env(ENV_BUCKET)].username')
+              AWS_SECRET_ACCESS_KEY=$(tail -n +5 $FILE | yq '.objectstores.[env(ENV_BUCKET)].secretKey')
+              AWS_DEFAULT_REGION=$(tail -n +5 $FILE | yq '.objectstores.[env(ENV_BUCKET)].region')
+            fi;
+          fi;
+        done;
+
+        aws s3 --endpoint "https://${AWS_ENDPOINT}" rm s3://${AWS_BUCKET} --recursive
+      done;
+  stage: "env-cleanup"
+
 env-cleanup:
   extends: ".deploy-common"
-  needs: []
   rules:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
