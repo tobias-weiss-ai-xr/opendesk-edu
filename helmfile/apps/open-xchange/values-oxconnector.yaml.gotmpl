@@ -23,9 +23,8 @@ image:
   repository: {{ .Values.images.oxConnector.repository | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.oxConnector.tag | quote }}
-
   waitForDependency:
-    registry: {{ .Values.global.imageRegistry | default .Values.images.nubusWaitForDependency.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
     repository: {{ .Values.images.nubusWaitForDependency.repository }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy }}
     pullSecrets:
