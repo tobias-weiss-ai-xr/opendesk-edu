@@ -1,12 +1,11 @@
+# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
     ref: "v2.4.8"
     file:
-      - "ci/common/automr.yml"
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"
   - local: "/.gitlab/generate/generate-docs.yml"
@@ -32,7 +31,6 @@ stages:
   - ".pre"
   - "renovate"
   - "scan"
-  - "automr"
   - "env-cleanup"
   - "env"
   - "pre-services-deploy"
