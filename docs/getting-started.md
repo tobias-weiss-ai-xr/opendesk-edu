@@ -41,7 +41,7 @@ deploy openDesk onto your Kubernetes infrastructure.
 
 # Requirements
 
-Detailed system requirements are covered on the [requirements](requirements.md) page.
+Detailed system requirements are covered on the [requirements](./docs/requirements.md) page.
 
 # Customize environment
 

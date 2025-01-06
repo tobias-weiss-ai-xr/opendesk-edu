@@ -5,6 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Architecture</h1>
 
+<!-- TOC -->
 * [Overview](#overview)
 * [Nubus (IAM)](#nubus-iam)
 * [Authentication](#authentication)
@@ -37,6 +38,7 @@ SPDX-License-Identifier: Apache-2.0
   * [XWiki (Knowledge management)](#xwiki-knowledge-management)
 * [Application specific user accounts](#application-specific-user-accounts)
 * [Footnotes](#footnotes)
+<!-- TOC -->
 
 openDesk is designed as a [Kubernetes](https://kubernetes.io) deployment.
 
