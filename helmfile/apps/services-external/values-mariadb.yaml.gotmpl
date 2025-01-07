@@ -39,32 +39,32 @@ job:
   retries: 10
   wait: 30
   users:
+    - username: "openxchange_user"
+      password: {{ .Values.secrets.mariadb.openxchangeUser | quote }}
+      connectionLimit: {{ .Values.databases.oxAppSuite.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+{{ if or (eq .Values.databases.nextcloud.type "mariadb") (eq .Values.databases.nextcloud.type "mysql") }}
     - username: {{ .Values.databases.nextcloud.username | quote }}
       password: {{ .Values.secrets.mariadb.nextcloudUser | quote}}
       connectionLimit: {{ .Values.databases.nextcloud.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
-    # OX and XWiki are using the db's `root` users (see `database.yaml.gotmpl`). So we are statically referencing their dedicated
-    # users for the moment.
-    - username: "openxchange_user"
-    # - username: {{ .Values.databases.xwiki.username | quote }}
-      password: {{ .Values.secrets.mariadb.openxchangeUser | quote }}
-      connectionLimit: {{ .Values.databases.oxAppSuite.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+{{ end }}
+{{ if eq .Values.databases.xwiki.type "mariadb" }}
     - username: "xwiki_user"
-    # - username: {{ .Values.databases.oxAppSuite.username | quote }}
       password: {{ .Values.secrets.mariadb.xwikiUser | quote }}
       connectionLimit: {{ .Values.databases.xwiki.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+{{ end }}
   databases:
+    # OX uses root user and auto automanages the database, we add a dummy user and create a dummy/empty database.
+    - name: "openxchange_dummy"
+      user: "openxchange_user"
+{{ if or (eq .Values.databases.nextcloud.type "mariadb") (eq .Values.databases.nextcloud.type "mysql") }}
     - name: {{ .Values.databases.nextcloud.name | quote }}
       user: {{ .Values.databases.nextcloud.username | quote }}
-    # OX and XWiki are using the db's `root` users (see `database.yaml.gotmpl`). So we are statically referencing their dedicated
-    # users for the moment.
-    - name: "openxchange"
-      user: "openxchange_user"
-    # - name: {{ .Values.databases.oxAppSuite.name | quote }}
-    #   user: {{ .Values.databases.oxAppSuite.username | quote }}
-    - name: "xwiki"
+{{ end }}
+{{ if eq .Values.databases.xwiki.type "mariadb" }}
+    # XWiki uses root user to create new subwiki databases, we add a dummy user.
+    - name: {{ .Values.databases.xwiki.name | quote }}
       user: "xwiki_user"
-    # - name: {{ .Values.databases.xwiki.name | quote }}
-    #   user: {{ .Values.databases.xwiki.username | quote }}
+{{ end }}
 
 mariadb:
   rootPassword:

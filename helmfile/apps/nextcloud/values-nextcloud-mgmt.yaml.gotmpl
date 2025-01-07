@@ -51,6 +51,13 @@ configuration:
     # internalWopiUrl: ""
     wopiAllowlist: {{ join ", " ( concat .Values.cluster.networking.cidr .Values.cluster.networking.incomingCIDR ) | quote }}
   database:
+    {{ if eq .Values.databases.nextcloud.type "mariadb" }}
+    type: "mysql"
+    {{ else if eq .Values.databases.nextcloud.type "postgresql" }}
+    type: "pgsql"
+    {{ else }}
+    {{ .Values.databases.nextcloud.type | quote }}
+    {{ end }}
     host: {{ .Values.databases.nextcloud.host | quote }}
     port: {{ .Values.databases.nextcloud.port | quote }}
     name: {{ .Values.databases.nextcloud.name | quote }}
@@ -58,7 +65,13 @@ configuration:
       username:
         value: {{ .Values.databases.nextcloud.username | quote }}
       password:
+        {{- if or (eq .Values.databases.nextcloud.type "mariadb") (eq .Values.databases.nextcloud.type "mysql") }}
         value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
+        {{- else if or (eq .Values.databases.nextcloud.type "postgresql") (eq .Values.databases.nextcloud.type "psql") }}
+        value: {{ .Values.databases.nextcloud.password | default .Values.secrets.postgresql.nextcloudUser | quote }}
+        {{- else }}
+        value: {{ .Values.databases.nextcloud.password | quote }}
+        {{- end }}
   ldap:
     host: {{ .Values.ldap.host | quote }}
     password:

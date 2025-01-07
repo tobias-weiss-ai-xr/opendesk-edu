@@ -868,7 +868,7 @@ images:
     registry: "registry-1.docker.io"
     repository: "library/nginx"
     tag: "1.27.3-alpine3.20@sha256:41523187cf7d7a2f2677a80609d9caa14388bf5c1fbca9c410ba3de602aaaab4"
-  xwiki:
+  xwikiMariadb:
     # providerCategory: "Supplier"
     # providerResponsible: "XWiki"
     # upstreamRegistry: "https://git.xwikisas.com:5050"
@@ -878,4 +878,14 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/xwiki"
     tag: "0.23-mariadb-jetty-alpine@sha256:d358212cc5c3addc4be02cfd0f2b08aa8b88399ac5848e152111f231356558da"
+  xwikiPostgres:
+    # providerCategory: "Supplier"
+    # providerResponsible: "XWiki"
+    # upstreamRegistry: "https://git.xwikisas.com:5050"
+    # upstreamRepository: "xwikisas/swp/xwiki"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)-postgres.+$'
+    # upstreamMirrorStartFrom: ["0", "23"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/supplier/xwiki/images-mirror/xwiki"
+    tag: "0.23-postgres-jetty-alpine@sha256:01f7d6fd8397a7903c23452cded4866220d733554066b6f5746eecde183fe15a"
 ...
