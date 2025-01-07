@@ -69,6 +69,16 @@ job:
     - username: {{ .Values.databases.umsSelfservice.username | quote }}
       password: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
       connectionLimit: {{ .Values.databases.umsSelfservice.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+{{ if or (eq .Values.databases.nextcloud.type "postgresql") (eq .Values.databases.nextcloud.type "psql") }}
+    - username: {{ .Values.databases.nextcloud.username | quote }}
+      password: {{ .Values.secrets.postgresql.nextcloudUser | quote }}
+      connectionLimit: {{ .Values.databases.nextcloud.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+{{ end }}
+{{ if eq .Values.databases.xwiki.type "postgresql" }}
+    - username: {{ .Values.databases.xwiki.username | quote }}
+      password: {{ .Values.secrets.postgresql.xwikiUser | quote }}
+      connectionLimit: {{ .Values.databases.xwiki.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+{{ end }}
   databases:
     - name: {{ .Values.databases.keycloak.name | quote }}
       user: {{ .Values.databases.keycloak.username | quote }}
@@ -87,6 +97,15 @@ job:
       user: {{ .Values.databases.umsNotificationsApi.username | quote }}
     - name: {{ .Values.databases.umsSelfservice.name | quote }}
       user: {{ .Values.databases.umsSelfservice.username | quote }}
+{{ if or (eq .Values.databases.nextcloud.type "postgresql") (eq .Values.databases.nextcloud.type "psql") }}
+    - name: {{ .Values.databases.nextcloud.name | quote }}
+      user: {{ .Values.databases.nextcloud.username | quote }}
+{{ end }}
+{{ if eq .Values.databases.xwiki.type "postgresql" }}
+    - name: {{ .Values.databases.xwiki.name | quote }}
+      user: {{ .Values.databases.xwiki.username | quote }}
+      additionalParams: "ENCODING 'UNICODE' template=template0"
+{{ end }}
 
 persistence:
   size: {{ .Values.persistence.storages.postgresql.size | quote }}

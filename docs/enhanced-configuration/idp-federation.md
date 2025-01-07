@@ -6,7 +6,6 @@ SPDX-License-Identifier: Apache-2.0
 <h1>Federation with external identity provider (IdP)</h1>
 
 <!-- TOC -->
-* [Context](#context)
 * [References](#references)
 * [Prerequisites](#prerequisites)
   * [User accounts](#user-accounts)
@@ -153,10 +152,9 @@ The following configuration is taking place in the Keycloak realm `opendesk`.
   - *Client authentication*: `Client secret sent as post` (default)
   - *Client ID*: Use the client ID you took from your organization's IdP config (`opendesk-federation-client` in this example)
   - *Client Secret*: Use the secret you took from your organization's IdP config
-  - When completed with *Add*, you get to the detailed IdP configured that also needs some updates (you may need to open the *Advanced* section to access some settings)
-    - *Back-channel logout*: `On`
-    - *Disable user info*: `On`
+  - When completed with *Add*, you get to the detailed IdP configuration that at least needs some the following update:
     - *First login flow override*: `auto-federate-flow`
+    - Depending on your organizations IdP and process preferences additional setting may be required
 
 - In case you want to forcefully redirect all users to your organization's IdP (disabling login with local openDesk accounts):
   - *Authentication* > `2fa-browser`

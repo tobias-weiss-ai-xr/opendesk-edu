@@ -5,10 +5,16 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  name: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.xwiki.registry }}/{{ .Values.images.xwiki.repository }}"
-  tag: {{ .Values.images.xwiki.tag | quote }}
+  {{- if eq .Values.databases.xwiki.type "mariadb" }}
+  name: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.xwikiMariadb.registry }}/{{ .Values.images.xwikiMariadb.repository }}"
+  tag: {{ .Values.images.xwikiMariadb.tag | quote }}
+  {{- else if eq .Values.databases.xwiki.type "postgresql" }}
+  name: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.xwikiPostgres.registry }}/{{ .Values.images.xwikiPostgres.repository }}"
+  tag: {{ .Values.images.xwikiPostgres.tag | quote }}
+  {{- else }}
+  {{- fail "Unsupported value for .Values.databases.xwiki.type, supported values are 'mariadb' or 'postgresql'" }}
+  {{- end }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-
 imagePullSecrets: {{ .Values.global.imagePullSecrets }}
 
 {{- if .Values.certificate.selfSigned }}
@@ -19,7 +25,11 @@ javaOpts:
 {{- end }}
 
 externalDB:
+  {{- if eq .Values.databases.xwiki.type "mariadb" }}
   password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
+  {{- else }}
+  password: {{ .Values.databases.xwiki.password | default .Values.secrets.postgresql.xwikiUser | quote }}
+  {{- end }}
   database: {{ .Values.databases.xwiki.name | quote }}
   user: {{ .Values.databases.xwiki.username | quote }}
   host: {{ printf "%s:%d" .Values.databases.xwiki.host .Values.databases.xwiki.port | quote }}

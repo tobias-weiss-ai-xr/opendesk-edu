@@ -1,10 +1,13 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
+#
+# See `external-services.md` for more details on the database configuration
 ---
 databases:
   defaults:
     userConnectionLimit: 100
   keycloak:
+    type: "postgresql"
     name: "keycloak"
     host: "postgresql"
     port: 5432
@@ -12,6 +15,7 @@ databases:
     password: ""
     connectionLimit: ~
   keycloakExtension:
+    type: "postgresql"
     name: "keycloak_extensions"
     host: "postgresql"
     port: 5432
@@ -19,6 +23,8 @@ databases:
     password: ""
     connectionLimit: ~
   nextcloud:
+    # Nextcloud itself also supports `postgresql` or `oci`
+    type: "mariadb"
     name: "nextcloud"
     host: "mariadb"
     port: 3306
@@ -26,6 +32,7 @@ databases:
     password: ""
     connectionLimit: ~
   notes:
+    type: "postgresql"
     name: "notes"
     host: "postgresql"
     port: 5432
@@ -33,6 +40,7 @@ databases:
     password: ""
     connectionLimit: ~
   openproject:
+    type: "postgresql"
     name: "openproject"
     host: "postgresql"
     port: 5432
@@ -40,6 +48,7 @@ databases:
     password: ""
     connectionLimit: ~
   oxAppSuite:
+    type: "mariadb"
     name: "configdb"
     host: "mariadb"
     port: 3306
@@ -47,6 +56,7 @@ databases:
     password: ""
     connectionLimit: ~
   synapse:
+    type: "postgresql"
     name: "matrix"
     host: "postgresql"
     port: 5432
@@ -69,6 +79,7 @@ databases:
     connectionPoolMax: "5"
     connectionLimit: ~
   umsGuardianManagementApi:
+    type: "postgresql"
     name: "guardianmanagementapi"
     host: "postgresql"
     port: 5432
@@ -76,6 +87,7 @@ databases:
     password: ""
     connectionLimit: ~
   umsNotificationsApi:
+    type: "postgresql"
     name: "notificationsapi"
     host: "postgresql"
     port: 5432
@@ -83,6 +95,7 @@ databases:
     password: ""
     connectionLimit: ~
   umsSelfservice:
+    type: "postgresql"
     name: "selfservice"
     host: "postgresql"
     port: 5432
@@ -90,6 +103,8 @@ databases:
     password: ""
     connectionLimit: 10
   xwiki:
+    # XWiki itself also supports `postgresql`
+    type: "mariadb"
     name: "xwiki"
     host: "mariadb"
     port: 3306
