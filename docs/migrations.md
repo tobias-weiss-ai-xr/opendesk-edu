@@ -7,10 +7,13 @@ SPDX-License-Identifier: Apache-2.0
 
 <!-- TOC -->
 * [Disclaimer](#disclaimer)
-* [openDesk supported upgrade path](#opendesk-supported-upgrade-path)
-* [Releases upgrade details](#releases-upgrade-details)
-  * [From v1.0.0](#from-v100)
-    * [Pre-upgrade: Manual checks/steps from v1.0.0](#pre-upgrade-manual-checkssteps-from-v100)
+* [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
+* [Manual update steps](#manual-update-steps)
+  * [From v1.1.0: Manual checks/steps](#from-v110-manual-checkssteps)
+    * [Pre-upgrade](#pre-upgrade)
+      * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
+  * [From v1.0.0: Manual checks/steps](#from-v100-manual-checkssteps)
+    * [Pre-upgrade](#pre-upgrade-1)
       * [Helmfile Cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
       * [Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
       * [Helmfile Cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
@@ -20,8 +23,7 @@ SPDX-License-Identifier: Apache-2.0
       * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
       * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
       * [External requirements: Redis 7.4](#external-requirements-redis-74)
-    * [Automated migrations from v1.0.0](#automated-migrations-from-v100)
-  * [From v0.9.0](#from-v090)
+  * [From v0.9.0: Manual checks/steps](#from-v090-manual-checkssteps)
     * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
       * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
@@ -30,52 +32,68 @@ SPDX-License-Identifier: Apache-2.0
       * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
       * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
       * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
-    * [Automated migrations from v0.9.0](#automated-migrations-from-v090)
-    * [Post-upgrade: Manual steps](#post-upgrade-manual-steps)
+    * [Post-upgrade](#post-upgrade)
       * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
       * [Optional Cleanup](#optional-cleanup)
-  * [From v0.8.1](#from-v081)
-    * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
-    * [Updated customizable template attributes](#updated-customizable-template-attributes)
-    * [`migrations` S3 bucket](#migrations-s3-bucket)
-* [Related components and artifacts](#related-components-and-artifacts)
+  * [From v1.1.0: Manual checks/steps](#from-v110-manual-checkssteps-1)
+    * [Pre-upgrade](#pre-upgrade-2)
+      * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
+      * [Updated customizable template attributes](#updated-customizable-template-attributes)
+      * [`migrations` S3 bucket](#migrations-s3-bucket)
+* [Automated migrations - Details](#automated-migrations---details)
+  * [From v1.1.0: Automated migrations](#from-v110-automated-migrations)
+  * [From v0.9.0: Automated migrations](#from-v090-automated-migrations)
+  * [Related components and artifacts](#related-components-and-artifacts)
   * [Development](#development)
 <!-- TOC -->
 
 # Disclaimer
 
-With openDesk 1.0, we aim to offer hassle-free updates/upgrades.
+Starting with openDesk 1.0, we aim to offer hassle-free updates/upgrades.
 
-But openDesk requires a defined upgrade path that is described in the section [openDesk supported upgrade path](#opendesk-supported-upgrade-path).
+Therefore openDesk contains automated migrations between versions to lower the requirements for manual interaction. These automated migrations can have limitations in the way that they need a certain openDesk version to be installed causing a mandatory upgrade path that is described in the section [Automated migrations](#automated-migrations).
 
-Some upgrades even require manual interaction, which are referenced in the aforementioned section and described further down this document.
+Manual checks and possible activities are also required by openDesk updates, they are described in the section [Manual update steps](#manual-update-steps).
 
-> **Known limitations:**<br>
+> **Note**<br>
+> Please be sure you read / follow the requirements before you update / upgrade thoroughly.
+
+> **Known limitations**<br>
 > We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC was deleted; we will not address explicit deletion for PVs.
 
-# openDesk supported upgrade path
+# Automated migrations - Overview and mandatory upgrade path
 
-When updating your openDesk installation you have to install the releases listed below in the sequential order from
-the lowest version number you are already on to the more current version you are looking to install.
+The following table gives an overview of the mandatory upgrade path of openDesk for the automated migrations to work as expected.
 
-Explanation of the table's columns:
-- *Coming from*: Check the column for the release you are currently on.
-- *Mandatory release*: Defines which release(s) support the upgrade from your currently installed version.
-- *Automatic migration*: Summary of, or link to openDesk's automatic migration details.
-- *Manual activities*: Reference to required manual steps to upgrade your openDesk installation to the *Mandatory release*.
+To upgrade existing deployments, you cannot skip any version mentioned in the column *Mandatory version*. When a version number is not fully defined (e.g. `v1.1.x`), you can install any version matching the given schema.
 
-| Coming from   | Mandatory (minimum) release | Manual steps required                                                             | Details                       |
-| ------------- | --------------------------- | --------------------------------------------------------------------------------- | ----------------------------- |
-| v1.0.0        | v1.1.0                      | [Before upgrade](#pre-upgrade-manual-checkssteps-from-v100)                       | See [From v1.0.0](#from-v100) |
-| v0.9.0        | v1.0.0                      | [Before](#pre-upgrade-manual-steps) & [After upgrade](#post-upgrade-manual-steps) | See [From v0.9.0](#from-v090) |
-| v0.8.1        | v0.9.0                      | Initializes migration system                                                      | See [From v0.8.1](#from-v081) |
-| not supported | v0.8.1                      | First release that supporting updates                                             |                               |
+| Mandatory version |
+| ----------------- |
+| v1.1.x            |
+| v1.0.0            |
+| v0.9.0            |
+| v0.8.1            |
 
-# Releases upgrade details
+> **Note**<br>
+> Be sure you check out the table in the release version you are going to install, an not the one that is currently installed.
 
-## From v1.0.0
+When interested in more details about the automated migrations, please read section [Automated migrations - Details](#automated-migrations---details).
 
-### Pre-upgrade: Manual checks/steps from v1.0.0
+# Manual update steps
+
+Be sure you check all the sections for the releases your are going to update your current deployment from.
+
+## From v1.1.0: Manual checks/steps
+
+### Pre-upgrade
+
+#### Helmfile new secret: `secrets.nubus.masterpassword`
+
+A not yet templated secret was discovered in the Nubus deployment that is now defined in [`secrets.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl) with the key `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the value of the `MASTER_PASSWORD` environment variable used in your deployment.
+
+## From v1.0.0: Manual checks/steps
+
+### Pre-upgrade
 
 #### Helmfile Cleanup: Restructured `/helmfile/files/theme` folder
 
@@ -236,18 +254,7 @@ The update from openDesk 1.0.0 contains Redis 7.4.1, like the other openDesk bun
 
 Please ensure for the Redis you are using that it is updated to at least 7.4 to support the requirement of OX App Suite.
 
-### Automated migrations from v1.0.0
-
-With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
-
-openDesk's automated migrations takes care of this upgrade requirement described here for
-[Nubus 1.5.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.5.1/en/changelog.html#migrate-existing-ldap-server-to-mirror-mode-readiness),
-creating the config map with the mentioned label.
-
-> **Note**<br>
-> Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
-
-## From v0.9.0
+## From v0.9.0: Manual checks/steps
 
 ### Pre-upgrade: Manual steps
 
@@ -433,16 +440,7 @@ The IAMs admin account `Administrator` is a member of this group by default, but
 
 If you need other accounts to use the API, please assign them to the aforementioned group.
 
-### Automated migrations from v0.9.0
-
-The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
-
-The permissions required to execute the migrations can be found in the migration's Helm chart [`role.yaml'](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/v1.3.5/charts/opendesk-migrations/templates/role.yaml?ref_type=tags#L29)
-
-> **Note**<br>
-> Details can be found in [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
-
-### Post-upgrade: Manual steps
+### Post-upgrade
 
 #### Configuration Improvement: Separate user permission for using Video Conference component
 
@@ -472,14 +470,16 @@ kubectl -n ${NAMESPACE} delete pvc shared-run-ums-ldap-server-0
 kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 ```
 
-## From v0.8.1
+## From v1.1.0: Manual checks/steps
 
-### Updated `cluster.networking.cidr`
+### Pre-upgrade
+
+#### Updated `cluster.networking.cidr`
 
 - Action: `cluster.networking.cidr` is now an array (was a string until 0.8.1); please update your setup accordingly if you explicitly set this value.
 - Reference:[cluster.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/cluster.yaml)
 
-### Updated customizable template attributes
+#### Updated customizable template attributes
 
 - Action: Please update your custom deployment values according to the updated default value structure.
 - References:
@@ -488,12 +488,34 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
   - `monitoring.` prefix for `prometheus.*` and `graphana.*`, see [monitoring.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/monitoring.yaml).
   - `smtp.` prefix for `localpartNoReply`, see [smtp.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/smtp.yaml).
 
-### `migrations` S3 bucket
+#### `migrations` S3 bucket
 
 - Action: For self-managed/external S3/object storages, please ensure you add a bucket `migrations` to your S3.
 - Reference: `objectstores.migrations` in [objectstores.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/objectstores.yaml)
 
-# Related components and artifacts
+# Automated migrations - Details
+
+## From v1.1.0: Automated migrations
+
+With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
+
+openDesk's automated migrations takes care of this upgrade requirement described here for
+[Nubus 1.5.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.5.1/en/changelog.html#migrate-existing-ldap-server-to-mirror-mode-readiness),
+creating the config map with the mentioned label.
+
+> **Note**<br>
+> Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
+
+## From v0.9.0: Automated migrations
+
+The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
+
+The permissions required to execute the migrations can be found in the migration's Helm chart [`role.yaml'](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/v1.3.5/charts/opendesk-migrations/templates/role.yaml?ref_type=tags#L29)
+
+> **Note**<br>
+> Details can be found in [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
+
+## Related components and artifacts
 
 openDesk comes with two upgrade steps as part of the deployment; they can be found in the folder [/helmfile/apps](../helmfile/apps/) as all other components:
 

@@ -17,7 +17,7 @@ global:
       cnAdmin:
         password: {{ .Values.secrets.nubus.ldapSecret | quote }}
   nubusDeployment: true
-  nubusMasterPassword: {{ env "MASTER_PASSWORD" | default "sovereign-workplace" | quote }}
+  nubusMasterPassword: {{ .Values.secrets.nubus.masterpassword | quote }}
   objectStorage:
     bucket: {{ .Values.objectstores.nubus.bucket | quote }}
     connection:
