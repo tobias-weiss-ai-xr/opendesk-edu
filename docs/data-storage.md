@@ -95,8 +95,8 @@ XWiki,PersistentVolume,1
 | **OpenProject**      | PostgreSQL   | Yes      | Application's main database                                                                | `openproject`                                  |                                                       |
 |                      | S3           | Yes      | Attachments, custom styles                                                                 | `openproject`                                  |                                                       |
 |                      | Memcached    | No       | Cache                                                                                      |                                                |                                                       |
-|                      | PVC          | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs               | `openproject-<web|worker>-*-tmp`               | `/tmp`                                                |
-|                      |              | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs               | `openproject-<web|worker>-app-*-tmp`           | `/app/tmp`                                            |
+|                      | PVC          | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs               | `openproject-<web/worker>-*-tmp`               | `/tmp`                                                |
+|                      |              | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs               | `openproject-<web/worker>-app-*-tmp`           | `/app/tmp`                                            |
 | **Open-Xchange**     | MariaDB      | Yes      | Application's control database to coordiate dynamically created ones                       | `configdb`                                     |                                                       |
 |                      |              | Yes      | Dynamically creates databases of schema `PRIMARYDB_n`containing multiple contexts          | `PRIMARYDB_*`                                  |                                                       |
 |                      |              | Yes      | OX Guard related settings                                                                  | `oxguard*`                                     |                                                       |
@@ -113,5 +113,5 @@ Additionally, the following persistent volumes are mounted by pods that serve as
 | ---------- | ---------------- | ------------ | --------------------------- | --------------------- |
 | MariaDB    | `mariadb-*`      | `data`       | `data-mariadb-0`            | `/var/lib/mysql`      |
 | MinIO      | `minio-*-*`      | `data`       | `minio`                     | `/bitnami/minio/data` |
-| PostgreSQK | `postgresql-*`   | `data`       | `data-postgresql-0`         | `/mnt/postgresql`     |
+| PostgreSQL | `postgresql-*`   | `data`       | `data-postgresql-0`         | `/mnt/postgresql`     |
 | Redis      | `redis-master-*` | `redis-data` | `redis-data-redis-master-0` | `/data`               |
