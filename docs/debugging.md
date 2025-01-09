@@ -30,7 +30,7 @@ We for sure do not want to reinvent the wheel, so we might link to external sour
 information where available.
 
 > **Warning**<br>
-> You should never enable the debug option in production environments! By looking up `debug.enable` in the deployment, you
+> You should never enable the debug option in production environments! By looking up `debug.enabled` in the deployment, you
 will find the various places changes are applied when enabling debugging. So, outside of development and test
 environments, you should use them thoughtfully and carefully if needed.
 
@@ -39,7 +39,7 @@ environments, you should use them thoughtfully and carefully if needed.
 Check the openDesk [`debug.yaml.gotmpl`](../helmfile/environments/default/debug.yaml.gotmpl) and set for your deployment
 ```
 debug:
-  enable: true
+  enabled: true
 ```
 
 This will result in:
