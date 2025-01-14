@@ -29,8 +29,11 @@ config:
     clients:
       {{ .Values.functional.authentication.oidc.clients | toYaml | nindent 6 }}
   managed:
-    clientScopes: [ 'acr', 'web-origins', 'email', 'profile', 'microprofile-jwt', 'role_list', 'offline_access', 'roles', 'address', 'phone' ]
-    clients: [ 'guardian-management-api', 'guardian-scripts', 'guardian-ui', 'UMC', '${client_account}', '${client_account-console}', '${client_admin-cli}', '${client_broker}', '${client_realm-management}', '${client_security-admin-console}' ]
+    clientScopes: [ 'acr', 'web-origins', 'email', 'profile', 'microprofile-jwt', 'role_list',
+                    'offline_access', 'roles', 'address', 'phone' ]
+    clients: [ 'guardian-management-api', 'guardian-scripts', 'guardian-ui', 'UMC', '${client_account}',
+               '${client_account-console}', '${client_admin-cli}', '${client_broker}', '${client_realm-management}',
+               '${client_security-admin-console}' ]
   keycloak:
     adminUser: "kcadmin"
     adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
@@ -40,6 +43,15 @@ config:
       internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
   twoFactorSettings:
     additionalGroups: {{ .Values.functional.authentication.twoFactor.groups }}
+  precreateGroups: [ 'Domain Admins', 'Domain Users', '2fa-users', 'IAM API - Full Access',
+                     'managed-by-attribute-Fileshare', 'managed-by-attribute-FileshareAdmin',
+                     'managed-by-attribute-Knowledgemanagement', 'managed-by-attribute-KnowledgemanagementAdmin',
+                     'managed-by-attribute-Livecollaboration', 'managed-by-attribute-LivecollaborationAdmin',
+                     'managed-by-attribute-Projectmanagement', 'managed-by-attribute-ProjectmanagementAdmin',
+                     'managed-by-attribute-Videoconference',
+                     'managed-by-attribute-Groupware',
+                     'managed-by-attribute-Notes' ]
+
   opendesk:
     # We use client specific scopes as we bind them to Keycloak role membership which itself is linked
     # to LDAP group membership to ensure a user cannot access an application without the required
