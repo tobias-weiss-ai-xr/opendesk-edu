@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Manual update steps](#manual-update-steps)
   * [From v1.1.0: Manual checks/steps](#from-v110-manual-checkssteps)
     * [Pre-upgrade](#pre-upgrade)
+      * [Helmfile Feature: Component specific `storageClassName`](#helmfile-feature-component-specific-storageclassname)
       * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
   * [From v1.0.0: Manual checks/steps](#from-v100-manual-checkssteps)
     * [Pre-upgrade](#pre-upgrade-1)
@@ -86,6 +87,53 @@ Be sure you check all the sections for the releases your are going to update you
 ## From v1.1.0: Manual checks/steps
 
 ### Pre-upgrade
+
+#### Helmfile Feature: Component specific `storageClassName`
+
+With openDesk 1.1.1 we support component specific `storageClassName` definitions beside the global ones, but we had to adapt the structure that can be found in `persistence.yaml.gotmpl` to achieve this in a clean manner.
+
+If you have set custom `persistence.size.*`-values for your deployment, please continue reading as you need to adapt your `persistence` settings to the new structure.
+
+When comparing the [old 1.1.0 structure](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/v1.1.0/helmfile/environments/default/persistence.yaml.gotmpl) with the [new one](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/v1.1.1/helmfile/environments/default/persistence.yaml.gotmpl) you can spot the changes:
+
+- We replaced `persistence.size` with `persistence.storages`.
+- Below each component you can define now the `size` and the optional component specific `storageClassName`.
+- We streamlined all components to be on the same level, as Nubus had an additional level of nesting before.
+
+So a setting of:
+
+```yaml
+persistence:
+  size:
+    synapse: "1Gi"
+```
+
+needs to be changed to:
+
+```yaml
+persistence:
+  storages:
+    synapse:
+      size: "1Gi"
+```
+
+or for the Nubus related entries, the following:
+
+```yaml
+persistence:
+  size:
+    nubus:
+      ldapServerData: "1Gi"
+```
+
+needs to be changed to:
+
+```yaml
+persistence:
+  storages:
+    nubusLdapServerData:
+      size: "1Gi"
+```
 
 #### Helmfile new secret: `secrets.nubus.masterpassword`
 

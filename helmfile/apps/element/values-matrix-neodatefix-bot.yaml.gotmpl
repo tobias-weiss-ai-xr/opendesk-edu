@@ -81,8 +81,8 @@ liveness sample:
   enabled: true
 
 persistence:
-  size: {{ .Values.persistence.size.matrixNeoDateFixBot | quote }}
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.storages.matrixNeoDateFixBot.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.matrixNeoDateFixBot.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations: {}
 

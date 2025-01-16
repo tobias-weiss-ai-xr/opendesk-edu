@@ -34,8 +34,8 @@ image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 persistence:
-  size: {{ .Values.persistence.size.postfix | quote }}
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.storages.postfix.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.postfix.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podSecurityContext:
   enabled: true

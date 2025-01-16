@@ -12,7 +12,7 @@ auth:
 global:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.redis.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.redis.registry | quote }}
@@ -37,7 +37,7 @@ master:
       {{ .Values.seLinuxOptions.redis | toYaml | nindent 6 }}
   count: {{ .Values.replicas.redis }}
   persistence:
-    size: {{ .Values.persistence.size.redis | quote }}
+    size: {{ .Values.persistence.storages.redis.size | quote }}
   podAnnotations: {}
   resources:
     {{ .Values.resources.redis | toYaml | nindent 4 }}

@@ -90,8 +90,8 @@ podSecurityContext:
   fsGroup: 1001
 
 persistence:
-  storageClass: "{{ .Values.persistence.storageClassNames.RWO }}"
-  size: "{{ .Values.persistence.size.minio }}"
+  size: {{ .Values.persistence.storages.minio.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.minio.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 provisioning:
   enabled: true

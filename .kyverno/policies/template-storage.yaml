@@ -10,7 +10,7 @@ metadata:
     policies.kyverno.io/subject: "Pod"
     policies.kyverno.io/description: >-
       This policy validates if `.Values.persistence.storageClassNames` variables are used in templates and if the size
-      of volumes can be customized by `.Values.persistence.size` variable.
+      of volumes can be customized by `.Values.persistence.storages.<COMPONENT>.size` variable.
 spec:
   background: true
   rules:

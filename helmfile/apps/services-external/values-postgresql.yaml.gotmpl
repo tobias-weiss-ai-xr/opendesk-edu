@@ -89,8 +89,8 @@ job:
       user: {{ .Values.databases.umsSelfservice.username | quote }}
 
 persistence:
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-  size: {{ .Values.persistence.size.postgresql | quote }}
+  size: {{ .Values.persistence.storages.postgresql.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.postgresql.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations:
   argocd.argoproj.io/hook: "PostSync"

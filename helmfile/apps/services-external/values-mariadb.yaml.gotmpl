@@ -71,8 +71,8 @@ mariadb:
     value: {{ .Values.secrets.mariadb.rootPassword | quote }}
 
 persistence:
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-  size: {{ .Values.persistence.size.mariadb | quote }}
+  size: {{ .Values.persistence.storages.mariadb.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.mariadb.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations:
   argocd.argoproj.io/hook: "PostSync"
