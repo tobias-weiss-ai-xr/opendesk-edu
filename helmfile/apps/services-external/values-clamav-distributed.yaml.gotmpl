@@ -152,6 +152,6 @@ milter:
     {{ .Values.resources.milter | toYaml | nindent 4 }}
 
 persistence:
-  storageClass: {{ .Values.persistence.storageClassNames.RWX | quote }}
-  size: {{ .Values.persistence.size.clamav | quote }}
+  size: {{ .Values.persistence.storages.clamav.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.clamav.storageClassName .Values.persistence.storageClassNames.RWX | quote }}
 ...

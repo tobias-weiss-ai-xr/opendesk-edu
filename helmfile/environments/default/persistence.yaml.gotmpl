@@ -2,24 +2,55 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 persistence:
+  # Will be used as default if not otherwise define on the component level
   storageClassNames:
     RWX: ""
     RWO: ""
-  size:
-    clamav: "1Gi"
-    dovecot: "1Gi"
-    mariadb: "1Gi"
-    matrixNeoDateFixBot: "1Gi"
-    minio: "10Gi"
-    postfix: "1Gi"
-    postgresql: "1Gi"
-    prosody: "1Gi"
-    redis: "1Gi"
-    synapse: "1Gi"
-    nubus:
-      ldapServerData: "1Gi"
-      ldapServerShared: "1Gi"
-      portalConsumer: "1Gi"
-      provisioningNats: "1Gi"
-    xwiki: "1Gi"
+
+  storages:
+    clamav:
+      size: "1Gi"
+      storageClassName: ~
+    dovecot:
+      size: "1Gi"
+      storageClassName: ~
+    mariadb:
+      size: "1Gi"
+      storageClassName: ~
+    matrixNeoDateFixBot:
+      size: "1Gi"
+      storageClassName: ~
+    minio:
+      size: "10Gi"
+      storageClassName: ~
+    nubusLdapServerData:
+      size: "1Gi"
+      storageClassName: ~
+    nubusPortalConsumer:
+      size: "1Gi"
+      storageClassName: ~
+    nubusProvisioningNats:
+      size: "1Gi"
+      storageClassName: ~
+    oxConnector:
+      size: "1Gi"
+      storageClassName: ~
+    postfix:
+      size: "1Gi"
+      storageClassName: ~
+    postgresql:
+      size: "1Gi"
+      storageClassName: ~
+    prosody:
+      size: "1Gi"
+      storageClassName: ~
+    redis:
+      size: "1Gi"
+      storageClassName: ~
+    synapse:
+      size: "1Gi"
+      storageClassName: ~
+    xwiki:
+      size: "1Gi"
+      storageClassName: ~
 ...

@@ -133,8 +133,8 @@ mysql:
   enabled: false
 
 persistence:
-  size: {{ .Values.persistence.size.xwiki | quote }}
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.storages.xwiki.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.xwiki.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 postgresql:
   enabled: false

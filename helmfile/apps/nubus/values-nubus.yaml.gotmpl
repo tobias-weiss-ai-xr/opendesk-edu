@@ -581,8 +581,8 @@ nubusPortalConsumer:
       accessKey: {{ .Values.objectstores.nubus.username | quote }}
       secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
   persistence:
-    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-    size: {{ .Values.persistence.size.nubus.portalConsumer | quote }}
+    size: {{ .Values.persistence.storages.nubusPortalConsumer.size | quote }}
+    storageClass: {{ coalesce .Values.persistence.storages.nubusPortalConsumer.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-portal-consumer"
   provisioningApi:
@@ -811,8 +811,8 @@ nubusLdapServer:
         tag: {{ .Values.images.nubusLdapServerLeaderElector.tag }}
         pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   persistence:
-    storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-    size: {{ .Values.persistence.size.nubus.ldapServerData | quote }}
+    size: {{ .Values.persistence.storages.nubusLdapServerData.size | quote }}
+    storageClass: {{ coalesce .Values.persistence.storages.nubusLdapServerData.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   replicaCountPrimary: {{ .Values.replicas.umsLdapServerPrimary }}
   replicaCountSecondary: {{ .Values.replicas.umsLdapServerSecondary }}
   replicaCountProxy: {{ .Values.replicas.umsLdapServerProxy }}
@@ -914,7 +914,8 @@ nubusProvisioning:
         tag: {{ .Values.images.nubusNatsBox.tag }}
         imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     persistence:
-      size: {{ .Values.persistence.size.nubus.provisioningNats }}
+      size: {{ .Values.persistence.storages.nubusProvisioningNats.size }}
+      storageClass: {{ coalesce .Values.persistence.storages.nubusProvisioningNats.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
     reloader:
       image:
         registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsReloader.registry | quote }}

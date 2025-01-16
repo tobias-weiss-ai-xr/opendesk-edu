@@ -138,8 +138,8 @@ jitsi:
     resources:
       {{ .Values.resources.prosody | toYaml | nindent 6 }}
     persistence:
-      size: {{ .Values.persistence.size.prosody | quote }}
-      storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+      size: {{ .Values.persistence.storages.prosody.size | quote }}
+      storageClassName: {{ coalesce .Values.persistence.storages.prosody.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
     securityContext:
       allowPrivilegeEscalation: false
       capabilities: {}

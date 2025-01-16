@@ -37,8 +37,8 @@ image:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 persistence:
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
-  size: {{ .Values.persistence.size.clamav | quote }}
+  size: {{ .Values.persistence.storages.clamav.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.clamav.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations: {}
 

@@ -176,8 +176,8 @@ image:
   tag: {{ .Values.images.synapse.tag | quote }}
 
 persistence:
-  size: {{ .Values.persistence.size.synapse | quote }}
-  storageClass: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  size: {{ .Values.persistence.storages.synapse.size | quote }}
+  storageClass: {{ coalesce .Values.persistence.storages.synapse.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations: {}
 

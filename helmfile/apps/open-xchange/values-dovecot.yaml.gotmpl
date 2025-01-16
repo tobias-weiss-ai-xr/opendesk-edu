@@ -92,15 +92,15 @@ podSecurityContext:
 
 persistence:
   {{- if .Values.cluster.persistence.readWriteMany.enabled }}
-  storageClassName: {{ .Values.persistence.storageClassNames.RWX | quote }}
+  storageClassName: {{ coalesce .Values.persistence.storages.dovecot.storageClassName .Values.persistence.storageClassNames.RWX | quote }}
   accessModes:
     - "ReadWriteMany"
   {{- else }}
-  storageClassName: {{ .Values.persistence.storageClassNames.RWO | quote }}
+  storageClassName: {{ coalesce .Values.persistence.storages.dovecot.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   accessModes:
     - "ReadWriteOnce"
   {{- end }}
-  size: {{ .Values.persistence.size.dovecot | quote }}
+  size: {{ .Values.persistence.storages.dovecot.size | quote }}
 
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}
