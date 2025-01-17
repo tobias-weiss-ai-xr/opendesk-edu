@@ -8,24 +8,26 @@ SPDX-License-Identifier: Apache-2.0
 <!-- TOC -->
 * [Disclaimer](#disclaimer)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
-* [Manual update steps](#manual-update-steps)
-  * [From v1.1.0: Manual checks/steps](#from-v110-manual-checkssteps)
-    * [Pre-upgrade](#pre-upgrade)
-      * [Helmfile Feature: Component specific `storageClassName`](#helmfile-feature-component-specific-storageclassname)
+* [Manual checks/actions](#manual-checksactions)
+  * [From v1.1.0](#from-v110)
+    * [Pre-upgrade from v1.1.0](#pre-upgrade-from-v110)
+      * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
       * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
-  * [From v1.0.0: Manual checks/steps](#from-v100-manual-checkssteps)
-    * [Pre-upgrade](#pre-upgrade-1)
-      * [Helmfile Cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
-      * [Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
-      * [Helmfile Cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
-      * [Helmfile Cleanup: Helmfile Cleanup: Splitting external vs. openDesk services](#helmfile-cleanup-helmfile-cleanup-splitting-external-vs-opendesk-services)
+  * [From v1.0.0](#from-v100)
+    * [Pre-upgrade from v1.0.0](#pre-upgrade-from-v100)
+      * [Helmfile cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
+      * [Helmfile cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
+      * [Helmfile cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
+      * [Helmfile cleanup: Helmfile cleanup: Splitting external vs. openDesk services](#helmfile-cleanup-helmfile-cleanup-splitting-external-vs-opendesk-services)
       * [Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names](#helmfile-cleanup-streamlining-openxchange-and-oxappsuite-attribute-names)
       * [Helmfile feature update: Dicts to define `customization.release`](#helmfile-feature-update-dicts-to-define-customizationrelease)
       * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
       * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
       * [External requirements: Redis 7.4](#external-requirements-redis-74)
-  * [From v0.9.0: Manual checks/steps](#from-v090-manual-checkssteps)
-    * [Pre-upgrade: Manual steps](#pre-upgrade-manual-steps)
+    * [Post-upgrade from v1.0.0](#post-upgrade-from-v100)
+      * [XWiki fix-ups](#xwiki-fix-ups)
+  * [From v0.9.0](#from-v090)
+    * [Pre-upgrade from v0.9.0](#pre-upgrade-from-v090)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
       * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
       * [Changed openDesk defaults: Matrix presence status disabled](#changed-opendesk-defaults-matrix-presence-status-disabled)
@@ -33,17 +35,17 @@ SPDX-License-Identifier: Apache-2.0
       * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
       * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
       * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
-    * [Post-upgrade](#post-upgrade)
+    * [Post-upgrade from v0.9.0](#post-upgrade-from-v090)
       * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
       * [Optional Cleanup](#optional-cleanup)
-  * [From v1.1.0: Manual checks/steps](#from-v110-manual-checkssteps-1)
-    * [Pre-upgrade](#pre-upgrade-2)
+  * [From v0.8.1](#from-v081)
+    * [Pre-upgrade from v0.8.1](#pre-upgrade-from-v081)
       * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
       * [Updated customizable template attributes](#updated-customizable-template-attributes)
       * [`migrations` S3 bucket](#migrations-s3-bucket)
 * [Automated migrations - Details](#automated-migrations---details)
-  * [From v1.1.0: Automated migrations](#from-v110-automated-migrations)
-  * [From v0.9.0: Automated migrations](#from-v090-automated-migrations)
+  * [From v1.0.0 (automated)](#from-v100-automated)
+  * [From v0.9.0 (automated)](#from-v090-automated)
   * [Related components and artifacts](#related-components-and-artifacts)
   * [Development](#development)
 <!-- TOC -->
@@ -80,15 +82,15 @@ To upgrade existing deployments, you cannot skip any version mentioned in the co
 
 When interested in more details about the automated migrations, please read section [Automated migrations - Details](#automated-migrations---details).
 
-# Manual update steps
+# Manual checks/actions
 
 Be sure you check all the sections for the releases your are going to update your current deployment from.
 
-## From v1.1.0: Manual checks/steps
+## From v1.1.0
 
-### Pre-upgrade
+### Pre-upgrade from v1.1.0
 
-#### Helmfile Feature: Component specific `storageClassName`
+#### Helmfile feature update: Component specific `storageClassName`
 
 With openDesk 1.1.1 we support component specific `storageClassName` definitions beside the global ones, but we had to adapt the structure that can be found in `persistence.yaml.gotmpl` to achieve this in a clean manner.
 
@@ -139,15 +141,15 @@ persistence:
 
 A not yet templated secret was discovered in the Nubus deployment that is now defined in [`secrets.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl) with the key `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the value of the `MASTER_PASSWORD` environment variable used in your deployment.
 
-## From v1.0.0: Manual checks/steps
+## From v1.0.0
 
-### Pre-upgrade
+### Pre-upgrade from v1.0.0
 
-#### Helmfile Cleanup: Restructured `/helmfile/files/theme` folder
+#### Helmfile cleanup: Restructured `/helmfile/files/theme` folder
 
 If you make use of the [theme folder](../helmfile/files/theme/) or the [`theme.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl), e.g. to applying your own imagery, please ensure you adhere to the new structure of the folder and the yaml-file.
 
-#### Helmfile Cleanup: Consistent use of `*.yaml.gotmpl`
+#### Helmfile cleanup: Consistent use of `*.yaml.gotmpl`
 
 In v1.0.0 the files in [`/helmfile/environments/default`](../helmfile/environments/default/) had mixed extensions,
 we have streamlined them to consistently use `*.yaml.gotmpl`.
@@ -157,7 +159,7 @@ This change requires manual action likely in two situations:
 1. You are referencing our upstream files from the aforementioned directory, e.g. in your Argo CD deployment. Please update your references to use the filenames with the new extension.
 2. You have custom files containing configuration information that are named just `*.yaml`: Please rename them to `*.yaml.gotmpl`.
 
-#### Helmfile Cleanup: Prefixing certain app directories with `opendesk-`
+#### Helmfile cleanup: Prefixing certain app directories with `opendesk-`
 
 To make it more obvious that some elements from below the [`apps`](../helmfile/apps/) directory are completely
 provided by openDesk, we have prefixed these app directories with `opendesk-`.
@@ -172,7 +174,7 @@ The described changes most likely require manual action in the following situati
 
 - You are referencing our upstream files e.g. in your Argo CD deployment, please update your references to use the new directory names.
 
-#### Helmfile Cleanup: Helmfile Cleanup: Splitting external vs. openDesk services
+#### Helmfile cleanup: Helmfile cleanup: Splitting external vs. openDesk services
 
 In v1.0.0 there was a directory `/helmfile/apps/services` that was intended to contain all the services an operator had to provide externally for production deployments.
 
@@ -302,9 +304,34 @@ The update from openDesk 1.0.0 contains Redis 7.4.1, like the other openDesk bun
 
 Please ensure for the Redis you are using that it is updated to at least 7.4 to support the requirement of OX App Suite.
 
-## From v0.9.0: Manual checks/steps
+### Post-upgrade from v1.0.0
 
-### Pre-upgrade: Manual steps
+#### XWiki fix-ups
+
+Unfortunately XWiki does not upgrade itself as expected. A bug with the supplier has already been filed. The following additional steps are required:
+
+1. To enforce re-indexing of the now fixed full-text search access the XWiki Pod and run the following commands to delete two search related directories. To complete this you need to restart the XWiki Pod, but that is anyway part of the next step:
+   ```
+   rm -rf /usr/local/xwiki/data/store/solr/search_9
+   rm -rf /usr/local/xwiki/data/cache/solr/search_9
+   ```
+
+2. This is necessary if the openDesk single sign-on does not longer work and you get a standard XWiki login dialogue instead.
+   - Find the XWiki ConfigMap `xwiki-init-scripts` and find in its `entrypoint` key data the lines beginning with `xwiki_replace_or_add "/usr/local/xwiki/data/xwiki.cfg"`
+   - Before those lines add the following line, of course setting `<YOUR_TEMPORARY_SUPERADMIN_PASSWORD>` to a value you are happy with.
+     ```
+         xwiki_replace_or_add "/usr/local/xwiki/data/xwiki.cfg" 'xwiki.superadminpassword' '<YOUR_TEMPORARY_SUPERADMIN_PASSWORD>'
+     ```
+   - Restart the XWiki Pod.
+   - Access XWiki's web UI and login with `superadmin` and the above set password.
+   - Once XWiki UI is fully rendered, remove the line with the temporary `superadmin` password from the aforementioned ConfigMap.
+   - Restart the XWiki Pod.
+
+You should have now a properly working XWiki instance with single sign-on and full-text search.
+
+## From v0.9.0
+
+### Pre-upgrade from v0.9.0
 
 #### Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus
 
@@ -488,7 +515,7 @@ The IAMs admin account `Administrator` is a member of this group by default, but
 
 If you need other accounts to use the API, please assign them to the aforementioned group.
 
-### Post-upgrade
+### Post-upgrade from v0.9.0
 
 #### Configuration Improvement: Separate user permission for using Video Conference component
 
@@ -518,9 +545,9 @@ kubectl -n ${NAMESPACE} delete pvc shared-run-ums-ldap-server-0
 kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 ```
 
-## From v1.1.0: Manual checks/steps
+## From v0.8.1
 
-### Pre-upgrade
+### Pre-upgrade from v0.8.1
 
 #### Updated `cluster.networking.cidr`
 
@@ -543,7 +570,7 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 # Automated migrations - Details
 
-## From v1.1.0: Automated migrations
+## From v1.0.0 (automated)
 
 With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
 
@@ -554,7 +581,7 @@ creating the config map with the mentioned label.
 > **Note**<br>
 > Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
-## From v0.9.0: Automated migrations
+## From v0.9.0 (automated)
 
 The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
 
