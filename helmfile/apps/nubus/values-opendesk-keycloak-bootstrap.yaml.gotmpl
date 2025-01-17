@@ -21,6 +21,50 @@ cleanup:
   keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
 
 config:
+  clientAccessRestrictions:
+    matrix:
+      client: "opendesk-matrix"
+      scope: "opendesk-matrix-scope"
+      role: "opendesk-matrix-access-control"
+      group: "managed-by-attribute-Livecollaboration"
+    jitsi:
+      client: "opendesk-jitsi"
+      scope: "opendesk-jitsi-scope"
+      role: "opendesk-jitsi-access-control"
+      group: "managed-by-attribute-Videoconference"
+    xwiki:
+      client: "opendesk-xwiki"
+      scope: "opendesk-xwiki-scope"
+      role: "opendesk-xwiki-access-control"
+      group: "managed-by-attribute-Knowledgemanagement"
+    openproject:
+      client: "opendesk-openproject"
+      scope: "opendesk-openproject-scope"
+      role: "opendesk-openproject-access-control"
+      group: "managed-by-attribute-Projectmanagement"
+    nextcloud:
+      client: "opendesk-nextcloud"
+      scope: "opendesk-nextcloud-scope"
+      role: "opendesk-nextcloud-access-control"
+      group: "managed-by-attribute-Fileshare"
+    oxAppSuite:
+      client: "opendesk-oxappsuite"
+      scope: "opendesk-oxappsuite-scope"
+      role: "opendesk-oxappsuite-access-control"
+      group: "managed-by-attribute-Groupware"
+    dovecot:
+      client: "opendesk-dovecot"
+      scope: "opendesk-dovecot-scope"
+      role: "opendesk-dovecot-access-control"
+      group: "managed-by-attribute-Groupware"
+    {{- if .Values.notes.enabled }}
+    notes:
+      client: "opendesk-notes"
+      scope: "opendesk-notes-scope"
+      role: "opendesk-notes-access-control"
+      group: "managed-by-attribute-Notes"
+    {{- end }}
+
   componentEnabled:
     notes: {{ .Values.notes.enabled }}
   custom:
