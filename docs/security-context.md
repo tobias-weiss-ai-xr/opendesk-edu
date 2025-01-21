@@ -164,6 +164,7 @@ This list gives you an overview of templated security settings and if they compl
 | **jitsi**/jitsi | :white_check_mark: | no | no | yes | yes | 1993 | 1993 | yes | yes |
 | **jitsi**/jitsi/jitsi/jibri | :x: | n/a | n/a | n/a | n/a | n/a | n/a | n/a | no ["SYS_ADMIN"] |
 | **jitsi**/jitsi/jitsi/jicofo | :x: | no | no | no | no | 0 | 0 | yes | no |
+| **jitsi**/jitsi/jitsi/jigasi | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/jitsi/jvb | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/jitsi/prosody | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/jitsi/web | :x: | no | no | no | no | 0 | 0 | yes | no |
