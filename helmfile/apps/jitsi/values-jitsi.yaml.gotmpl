@@ -85,7 +85,7 @@ jitsi:
         - secretName: {{ .Values.ingress.tls.secretName | quote }}
           hosts:
             - "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
-    extraConfigJs:
+    extraConfig:
       doNotStoreRoom: {{ not .Values.functional.dataProtection.jitsiRoomHistory.enabled }}
     extraEnvs:
       TURN_ENABLE: "1"
@@ -175,6 +175,35 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jicofo | toYaml | nindent 8 }}
+  jigasi:
+    replicaCount: {{ .Values.replicas.jigasi }}
+    enabled: {{ .Values.sip.jigasi.enabled }}
+    image:
+      repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.jigasi.registry }}/{{ .Values.images.jigasi.repository }}"
+      tag: {{ .Values.images.jigasi.tag | quote }}
+      pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    extraEnvs:
+      JIGASI_SIP_PASSWORD: {{ .Values.sip.jigasi.password | quote }}
+      JIGASI_SIP_PORT: {{ .Values.sip.jigasi.port | quote }}
+      JIGASI_SIP_SERVER: {{ .Values.sip.jigasi.server | quote }}
+      JIGASI_SIP_TRANSPORT: {{ .Values.sip.jigasi.transport | quote }}
+      JIGASI_SIP_URI: {{ .Values.sip.jigasi.uri | quote }}
+    xmpp:
+      password: {{ .Values.secrets.jitsi.jigasiXmppPassword | quote }}
+    resources:
+      {{ .Values.resources.jigasi | toYaml | nindent 6 }}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      privileged: false
+      readOnlyRootFilesystem: false
+      runAsGroup: 0
+      runAsNonRoot: false
+      runAsUser: 0
+      seccompProfile:
+        type: "RuntimeDefault"
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.jigasi | toYaml | nindent 8 }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     # The `useNodeIP` option provided by the upstream charts does not support all relevant scenarios, but since
