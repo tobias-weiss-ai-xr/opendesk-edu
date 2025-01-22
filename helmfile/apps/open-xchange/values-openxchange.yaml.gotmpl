@@ -280,7 +280,7 @@ appsuite:
       com.openexchange.conference.element.enabled: "true"
       com.openexchange.conference.element.meetingHostUrl: http://matrix-neodatefix-bot
       com.openexchange.conference.element.matrixLoginUrl: http://opendesk-synapse-web:8008/_matrix/client/v3/login
-      com.openexchange.conference.element.matrixUuidClaimName: opendesk_useruuid
+      com.openexchange.conference.element.matrixUuidClaimName: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"opendesk_useruuid"{{ else }}"opendesk_username"{{ end }}
       # GDPR
       com.openexchange.gdpr.dataexport.enabled: "false"
       com.openexchange.gdpr.dataexport.active: "false"
