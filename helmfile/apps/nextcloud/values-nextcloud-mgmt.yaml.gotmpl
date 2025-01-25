@@ -25,6 +25,7 @@ configuration:
       value: "nextcloud"
     password:
       value: {{ .Values.secrets.nextcloud.adminPassword | quote }}
+
   antivirus:
     {{- if .Values.antivirus.icap.host }}
     host: {{ .Values.antivirus.icap.host | quote }}
@@ -37,6 +38,7 @@ configuration:
     {{- end }}
     port: 1344
     {{- end }}
+
   cache:
     auth:
       enabled: true
@@ -47,9 +49,28 @@ configuration:
     host: {{ .Values.cache.nextcloud.host | quote }}
     port: {{ .Values.cache.nextcloud.port | quote }}
     tls: {{ .Values.cache.nextcloud.tls }}
+
+  feature:
+    apps:
+      contacts:
+        enabled: false
+      cryptpad:
+        enabled: {{ .Values.cryptpad.enabled }}
+      filesZip:
+        enabled: true
+      groupfolders:
+        enabled: true
+      integrationOpenproject:
+        enabled: {{ .Values.openproject.enabled }}
+      spreed:
+        enabled: true
+    circles:
+      enabled: false
+
   collabora:
     # internalWopiUrl: ""
     wopiAllowlist: {{ join ", " ( concat .Values.cluster.networking.cidr .Values.cluster.networking.incomingCIDR ) | quote }}
+
   database:
     {{ if eq .Values.databases.nextcloud.type "mariadb" }}
     type: "mysql"
@@ -72,11 +93,13 @@ configuration:
         {{- else }}
         value: {{ .Values.databases.nextcloud.password | quote }}
         {{- end }}
+
   ldap:
     host: {{ .Values.ldap.host | quote }}
     password:
       value: {{ .Values.secrets.nubus.ldapSearch.nextcloud | quote }}
     adminGroupName: "managed-by-attribute-FileshareAdmin"
+
   objectstore:
     auth:
       accessKey:
@@ -90,16 +113,19 @@ configuration:
     port: {{ .Values.objectstores.nextcloud.port | quote }}
     pathStyle: {{ .Values.objectstores.nextcloud.pathStyle | quote }}
     useSSL: {{ .Values.objectstores.nextcloud.useSSL | quote }}
+
   oidc:
     username:
       value: "opendesk-nextcloud"
     password:
       value: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
+
   opendeskIntegration:
     username:
       value: "opendesk_username"
     password:
       value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+
   sharing:
     allowLinks: {{ .Values.functional.filestore.sharing.external.enabled }}
     allowMailNotification: {{ .Values.functional.filestore.sharing.external.enabled }}
@@ -113,6 +139,7 @@ configuration:
     defaultExternalExpireEnforced: {{ .Values.functional.filestore.sharing.external.expiry.enforced }}
     defaultExternalExpireDays: {{ .Values.functional.filestore.sharing.external.expiry.defaultDays | quote }}
     sendPasswordMail: {{ .Values.functional.filestore.sharing.external.sendPasswordMail | quote }}
+
   smtp:
     auth:
       enabled: false
@@ -126,6 +153,7 @@ configuration:
     mailDomain: "{{ .Values.global.domain }}"
     security: ""
     skipVerifyPeer: true
+
   quota:
     default: "{{ .Values.functional.filestore.quota.default }} GB"
     retentionObligation:
