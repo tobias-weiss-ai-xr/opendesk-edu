@@ -8,6 +8,10 @@ persistence:
     RWO: ""
 
   storages:
+    cassandra:
+      data: "1Gi"
+      commitLogsize: "256Mi"
+      storageClassName: ~
     clamav:
       size: "1Gi"
       storageClassName: ~

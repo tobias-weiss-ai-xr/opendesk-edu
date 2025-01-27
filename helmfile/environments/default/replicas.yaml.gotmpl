@@ -5,6 +5,9 @@
 # When adding new components in here, do not forget to add them as well to
 # `../test/values.yaml.gotmpl` to ensure their linting coverage.
 replicas:
+  # -- component: Cassandra
+  # -- scalable: tbd
+  cassandra: 1
   # -- component: Antivirus (ClamAV)
   # -- scalable: true
   # -- comment: clamav-simple - supports `ReadWriteOnce` PVCs.
@@ -25,7 +28,13 @@ replicas:
 
   # -- component: Weboffice (Collabora)
   # -- scalable: true
+  # -- comment: If Collabora Controller is enabled, Collabora is autoscaling and the value below will be ignored.
+  # Please check `enterpriseFeatures.collabora.autoscaling` for autoscaling settings.
   collabora: 1
+  # -- scalable: true
+  # -- comment: Load between Collabora Controller Pods is going to one Pod (the leader) only, therefore raise the number
+  # e.g. to `2` for high availability of the Collabora Controller.
+  collaboraController: 1
 
   # -- component: Pad (CryptPad)
   # -- scalable: false
@@ -189,6 +198,8 @@ replicas:
   openxchangeGuardUI: 1
   # -- scalable: tbd
   openxchangeNextcloudIntegrationUI: 1
+  # -- scalable: tbd
+  openxchangePluginsUI: 1
   # -- scalable: tbd
   openxchangePublicSectorUI: 1
 

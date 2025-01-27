@@ -27,6 +27,8 @@ SPDX-License-Identifier: Apache-2.0
 openDesk is a Kubernetes based, open-source and cloud-native digital workplace suite provided by the
 *Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH*.
 
+For production use the [openDesk Enterprise Edition](./README-EE.md) is required.
+
 openDesk currently features the following functional main components:
 
 | Function             | Functional Component        | Component<br/>Version                                                                                | Upstream Documentation                                                                                                                |

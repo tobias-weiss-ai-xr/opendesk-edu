@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -13,6 +13,22 @@ images:
     registry: "registry-1.docker.io"
     repository: "bitnami/os-shell"
     tag: "12-debian-12-r34@sha256:41e0561b0f08011c24acc5e8ad4c0d09a36062cfab35d9ec7b3fdd4cfecc01e0"
+  cassandra:
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnami/cassandra"
+    registry: "registry-1.docker.io"
+    repository: "bitnami/cassandra"
+    tag: "5.0.2-debian-12-r1@sha256:9f5fd6fe3a24b7e5ea215a99a0e0d6a10d11a914d6eb8c511780271a9097f5ea"
+  cassandraExporter:
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnami/cassandra-exporter"
+    registry: "registry-1.docker.io"
+    repository: "bitnami/cassandra-exporter"
+    tag: "2.3.8-debian-12-r31@sha256:ae861f6c8712dd32c2304c680e4564802df689a62dc4aed2f4e7cfcbba8a8051"
   clamd:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -29,6 +45,13 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/collabora/images/collabora-online-for-opendesk"
     tag: "24.04.9.2.1@sha256:749917bf9146d8507b3a63d422a30ebe4f499700421c30527e32f322a015c73d"
+  collaboraController:
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Collabora"
+    registry: "registry.opencode.de"
+    repository: "zendis/opendesk-enterprise/components/supplier/collabora/images-mirror/cool-controller"
+    tag: "1.1.0@sha256:dfbbb6a9bfac94d39bd735eb143084803a774d2fc673a138bf08d4044e8d942a"
   cryptpad:
     # providerCategory: "Supplier"
     # providerResponsible: "XWiki"
@@ -62,6 +85,48 @@ images:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/nordeck/images/opendesk-element-web"
     tag: "1.11.7@sha256:c5881cea86a721252e724000e4ed870cae66f9b3eabc45074e1f43b1818423bc"
+  elementAdminBot:
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "zendis/opendesk-enterprise/components/supplier/element/images-mirror/access_element_web"
+    tag: "v1.11.85@sha256:0e36121cbaab5a8146ef8561d8e77b38f711f855f1a353df3bb96a8d13303812"
+  elementGroupsync:
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "zendis/opendesk-enterprise/components/supplier/element/images-mirror/groupsync"
+    tag: "v0.14.0@sha256:a8cee92b9035d8cc80cc13194e4e0118c7dfbfcbc4c0ee5ac173582d0cd55846"
+  elementHaProxy:
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "zendis/opendesk-enterprise/components/supplier/element/images-mirror/haproxy"
+    tag: "3.0-alpine@sha256:c22c8710886104a48b920306f063401f0d11811858e3c6b9d87d88a7556b2e61"
+  elementPipe:
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "zendis/opendesk-enterprise/components/supplier/element/images-mirror/pipe"
+    tag: "6.3.1@sha256:7f487af25f220d31aa987665f9d1393b42e925c6b1a7e0458daaa91e8e7bf0c4"
+  elementSynapseAdmin:
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "zendis/opendesk-enterprise/components/supplier/element/images-mirror/synapse_admin"
+    tag: "v16.105.5-24.10@sha256:563979fc69162adf93f1286cf79dcbe58adf878a0e4e9332044e5ab6a7170350"
+  elementSyncAdmins:
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/images/opendesk-element-syncadmins"
+    tag: "1.0.3@sha256:1dea24d5f65a6f9ac63b402c772dd81dcd07a847d24845901c8a039461043097"
   freshclam:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"

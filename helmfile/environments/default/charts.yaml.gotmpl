@@ -7,11 +7,14 @@
 ---
 charts:
   cassandra:
-    # Component is required for openDesk Enterprise only.
-    registry: ""
-    repository: ""
-    name: ""
-    version: ""
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk"
+    # upstreamRegistry: "https://registry-1.docker.io"
+    # upstreamRepository: "bitnamicharts/cassandra"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/external/charts/bitnami-charts"
+    name: "cassandra"
+    version: "12.0.4"
     verify: true
   certificates:
     # providerCategory: "Platform"
@@ -56,12 +59,14 @@ charts:
     version: "1.1.21"
     verify: true
   collaboraController:
-    # Component is required for openDesk Enterprise only.
-    registry: ""
-    repository: ""
-    name: ""
-    version: ""
-    verify: true
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Collabora"
+    registry: "registry.opencode.de"
+    repository: "zendis/opendesk-enterprise/components/supplier/collabora/charts-mirror"
+    name: "cool-controller"
+    version: "1.1.1"
+    verify: false
   cryptpad:
     # providerCategory: "Supplier"
     # providerResponsible: "XWiki"
@@ -447,8 +452,8 @@ charts:
     version: "18.6.1"
     verify: true
   synapse:
-    # providerCategory: "Platform"
-    # providerResponsible: "openDesk"
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
     # upstreamRegistry: "https://registry.opencode.de"
     # upstreamRepository: "bmi/opendesk/components/platform-development/charts/opendesk-element/opendesk-synapse"
     registry: "registry.opencode.de"
@@ -457,18 +462,22 @@ charts:
     version: "6.0.2"
     verify: true
   synapseAdmin:
-    # Component is required for openDesk Enterprise only.
-    registry: ""
-    repository: ""
-    name: ""
-    version: ""
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
+    name: "opendesk-synapse-admin"
+    version: "5.0.1"
     verify: true
   synapseAdminbotWeb:
-    # Component is required for openDesk Enterprise only.
-    registry: ""
-    repository: ""
-    name: ""
-    version: ""
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
+    name: "opendesk-synapse-adminbot-web"
+    version: "5.0.1"
     verify: true
   synapseCreateAccount:
     # providerCategory: "Platform"
@@ -481,18 +490,22 @@ charts:
     version: "6.0.2"
     verify: true
   synapseGroupsync:
-    # Component is required for openDesk Enterprise only.
-    registry: ""
-    repository: ""
-    name: ""
-    version: ""
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
+    name: "opendesk-synapse-groupsync"
+    version: "5.0.1"
     verify: true
   synapsePipe:
-    # Component is required for openDesk Enterprise only.
-    registry: ""
-    repository: ""
-    name: ""
-    version: ""
+    # Enterprise Component
+    # providerCategory: "Supplier"
+    # providerResponsible: "Element"
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/opendesk-element"
+    name: "opendesk-synapse-pipe"
+    version: "5.0.1"
     verify: true
   synapseWeb:
     # providerCategory: "Platform"

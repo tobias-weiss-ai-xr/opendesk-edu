@@ -11,7 +11,7 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ .Values.global.helmRegistry | default .Values.charts.xwiki.registry }}/{{ .Values.charts.xwiki.repository }}"
-    
+
 releases:
   - name: "xwiki"
     chart: "xwiki-repo/{{ .Values.charts.xwiki.name }}"
@@ -19,9 +19,9 @@ releases:
     wait: true
     values:
       - "values.yaml.gotmpl"
-      {{ range .Values.customization.release.xwiki }}
+      {{- range .Values.customization.release.xwiki }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.xwiki.enabled }}
     timeout: 1800
 

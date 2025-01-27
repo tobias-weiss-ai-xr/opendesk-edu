@@ -100,9 +100,9 @@ releases:
     version: "{{ .Values.charts.redis.version }}"
     values:
       - "values-redis.yaml.gotmpl"
-      {{ range .Values.customization.release.redis }}
+      {{- range .Values.customization.release.redis }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.redis.enabled }}
     timeout: 900
 
@@ -111,9 +111,9 @@ releases:
     version: "{{ .Values.charts.memcached.version }}"
     values:
       - "values-memcached.yaml.gotmpl"
-      {{ range .Values.customization.release.memcached }}
+      {{- range .Values.customization.release.memcached }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.memcached.enabled }}
     timeout: 900
 
@@ -122,9 +122,9 @@ releases:
     version: "{{ .Values.charts.postgresql.version }}"
     values:
       - "values-postgresql.yaml.gotmpl"
-      {{ range .Values.customization.release.postgresql }}
+      {{- range .Values.customization.release.postgresql }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.postgresql.enabled }}
     timeout: 900
 
@@ -133,9 +133,9 @@ releases:
     version: "{{ .Values.charts.mariadb.version }}"
     values:
       - "values-mariadb.yaml.gotmpl"
-      {{ range .Values.customization.release.mariadb }}
+      {{- range .Values.customization.release.mariadb }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.mariadb.enabled }}
     timeout: 900
 
@@ -144,9 +144,9 @@ releases:
     version: "{{ .Values.charts.postfix.version }}"
     values:
       - "values-postfix.yaml.gotmpl"
-      {{ range .Values.customization.release.postfix }}
+      {{- range .Values.customization.release.postfix }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.postfix.enabled }}
     timeout: 900
 
@@ -155,9 +155,9 @@ releases:
     version: "{{ .Values.charts.dkimpy.version }}"
     values:
       - "values-dkimpy.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskDkimpyMilter }}
+      {{- range .Values.customization.release.opendeskDkimpyMilter }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.dkimpy.enabled }}
     timeout: 900
 
@@ -166,9 +166,9 @@ releases:
     version: "{{ .Values.charts.clamav.version }}"
     values:
       - "values-clamav-distributed.yaml.gotmpl"
-      {{ range .Values.customization.release.clamav }}
+      {{- range .Values.customization.release.clamav }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.clamavDistributed.enabled }}
     timeout: 900
 
@@ -177,9 +177,9 @@ releases:
     version: "{{ .Values.charts.clamavSimple.version }}"
     values:
       - "values-clamav-simple.yaml.gotmpl"
-      {{ range .Values.customization.release.clamavSimple }}
+      {{- range .Values.customization.release.clamavSimple }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.clamavSimple.enabled }}
     timeout: 900
 
@@ -188,9 +188,9 @@ releases:
     version: "{{ .Values.charts.minio.version }}"
     values:
       - "values-minio.yaml.gotmpl"
-      {{ range .Values.customization.release.minio }}
+      {{- range .Values.customization.release.minio }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.minio.enabled }}
     timeout: 900
 
@@ -199,9 +199,10 @@ releases:
     chart: "cassandra-repo/{{ .Values.charts.cassandra.name }}"
     version: "{{ .Values.charts.cassandra.version }}"
     values:
-      {{ range .Values.customization.release.cassandra }}
+      - "values-cassandra.yaml.gotmpl"
+      {{- range .Values.customization.release.cassandra }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.cassandra.enabled }}
     timeout: 900
 

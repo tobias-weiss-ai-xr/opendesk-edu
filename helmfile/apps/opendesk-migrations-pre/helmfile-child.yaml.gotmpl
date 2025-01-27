@@ -21,9 +21,9 @@ releases:
     values:
       - "values.yaml.gotmpl"
       - "../../shared/migrations.yaml.gotmpl"
-      {{ range .Values.customization.release.migrationsPre }}
+      {{- range .Values.customization.release.migrationsPre }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.migrations.enabled }}
     timeout: 900
 

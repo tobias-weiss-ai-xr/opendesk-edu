@@ -18,9 +18,9 @@ releases:
     version: "{{ .Values.charts.jitsi.version }}"
     values:
       - "values-jitsi.yaml.gotmpl"
-      {{ range .Values.customization.release.jitsi }}
+      {{- range .Values.customization.release.jitsi }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.jitsi.enabled }}
     timeout: 900
 
