@@ -17,12 +17,15 @@ image:
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 imagePullSecrets: {{ .Values.global.imagePullSecrets }}
 
-{{- if .Values.certificate.selfSigned }}
 javaOpts:
+  {{- if and (env "OPENDESK_ENTERPRISE") .Values.enterprise.xwiki.opendeskEnterpriseLicense .Values.enterprise.xwiki.proApplicationslicense }}
+  - "-Dlicenses={{ .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense }},{{ .Values.enterpriseKeys.xwiki.proApplicationslicense }}"
+  {{- end }}
+  {{- if .Values.certificate.selfSigned }}
   - "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks"
   - "-Djavax.net.ssl.trustStoreType=jks"
   - {{ printf "%s=%s" "-Djavax.net.ssl.trustStorePassword" .Values.secrets.certificates.password | quote }}
-{{- end }}
+  {{- end }}
 
 externalDB:
   {{- if eq .Values.databases.xwiki.type "mariadb" }}
@@ -83,6 +86,9 @@ customConfigs:
     xwiki.authentication.ldap.fields_mapping: "last_name=sn,first_name=givenName,email=mailPrimaryAddress"
 
   xwiki.properties:
+    {{- if (env "OPENDESK_ENTERPRISE") }}
+    distribution.defaultUI: "com.xwiki.projects.swp:xwiki-swp-flavor-enterprise-main"
+    {{- end }}
     wikiInitializer.initialRequest.xwiki.url: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/distribution/"
     wikiInitializer.initialRequest.xwiki.contextPath: "/"
     wikiInitializer.initialRequest.xwiki.remoteAddress: "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"

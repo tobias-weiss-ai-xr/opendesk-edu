@@ -28,17 +28,23 @@ releases:
     version: "{{ .Values.charts.collabora.version }}"
     values:
       - "values.yaml.gotmpl"
-      {{ range .Values.customization.release.collaboraOnline }}
+      {{- if (env "OPENDESK_ENTERPRISE") }}
+      - "values-enterprise.yaml.gotmpl"
+      {{- end }}
+      {{- range .Values.customization.release.collaboraOnline }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.collabora.enabled }}
   - name: "collabora-controller"
     chart: "collabora-controller-repo/{{ .Values.charts.collaboraController.name }}"
     version: "{{ .Values.charts.collaboraController.version }}"
     values:
-      {{ range .Values.customization.release.collaboraController }}
+      {{- if (env "OPENDESK_ENTERPRISE") }}
+      - "values-coco-enterprise.yaml.gotmpl"
+      {{- end }}
+      {{- range .Values.customization.release.collaboraController }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.collaboraController.enabled }}
 
 commonLabels:

@@ -25,9 +25,12 @@ releases:
     version: "{{ .Values.charts.nextcloudManagement.version }}"
     values:
       - "values-nextcloud-mgmt.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskNextcloudManagement }}
+      {{- if (env "OPENDESK_ENTERPRISE") }}
+      - "values-nextcloud-mgmt-enterprise.yaml.gotmpl"
+      {{- end }}
+      {{- range .Values.customization.release.opendeskNextcloudManagement }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     waitForJobs: true
     wait: true
     installed: {{ .Values.nextcloud.enabled }}
@@ -37,9 +40,12 @@ releases:
     version: "{{ .Values.charts.nextcloud.version }}"
     values:
       - "values-nextcloud.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskNextcloud }}
+      {{- if (env "OPENDESK_ENTERPRISE") }}
+      - "values-nextcloud-enterprise.yaml.gotmpl"
+      {{- end }}
+      {{- range .Values.customization.release.opendeskNextcloud }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     needs:
       - "opendesk-nextcloud-management"
     installed: {{ .Values.nextcloud.enabled }}

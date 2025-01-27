@@ -6,6 +6,14 @@
 databases:
   defaults:
     userConnectionLimit: 100
+  dovecot:
+    type: "cassandra"
+    name: "dovecot"
+    host: "cassandra"
+    port: 9042
+    username: "dovecot_user"
+    password: ""
+    connectionLimit: ~
   keycloak:
     type: "postgresql"
     name: "keycloak"

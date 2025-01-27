@@ -68,9 +68,9 @@ releases:
     version: "{{ .Values.charts.otterize.version }}"
     values:
       - "values-otterize.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskOtterize }}
+      {{- range .Values.customization.release.opendeskOtterize }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.security.otterizeIntents.enabled }}
     timeout: 900
 
@@ -79,9 +79,9 @@ releases:
     version: "{{ .Values.charts.home.version }}"
     values:
       - "values-home.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskHome }}
+      {{- range .Values.customization.release.opendeskHome }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.home.enabled }}
 
   - name: "opendesk-certificates"
@@ -89,9 +89,9 @@ releases:
     version: "{{ .Values.charts.certificates.version }}"
     values:
       - "values-certificates.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskCertificates }}
+      {{- range .Values.customization.release.opendeskCertificates }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.certificates.enabled }}
     timeout: 900
 
@@ -100,9 +100,9 @@ releases:
     version: "{{ .Values.charts.opendeskAlerts.version }}"
     values:
       - "values-opendesk-alerts.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskAlerts}}
+      {{- range .Values.customization.release.opendeskAlerts }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
     timeout: 900
 
@@ -111,7 +111,9 @@ releases:
     version: "{{ .Values.charts.opendeskDashboards.version }}"
     values:
       - "values-opendesk-dashboards.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskDashboards | default "additionalValues: false" }}
+      {{- range .Values.customization.release.opendeskDashboards }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.monitoring.grafana.dashboards.enabled }}
     timeout: 900
 
@@ -120,7 +122,9 @@ releases:
     version: "{{ .Values.charts.opendeskStaticFiles.version }}"
     values:
       - "values-opendesk-static-files.yaml.gotmpl"
-      - {{ .Values.customization.release.opendeskStaticFiles | default "additionalValues: false" }}
+      {{- range .Values.customization.release.opendeskStaticFiles }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.staticFiles.enabled }}
     timeout: 900
 

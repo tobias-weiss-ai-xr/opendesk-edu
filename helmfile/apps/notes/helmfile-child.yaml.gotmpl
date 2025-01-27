@@ -19,9 +19,9 @@ releases:
     wait: true
     values:
       - "values.yaml.gotmpl"
-      {{ range .Values.customization.release.notes }}
+      {{- range .Values.customization.release.notes }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.notes.enabled }}
     timeout: 1800
 

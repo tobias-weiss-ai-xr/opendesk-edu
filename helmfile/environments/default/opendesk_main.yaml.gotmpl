@@ -4,6 +4,9 @@
 #
 # Note: Currently only single namespace deployments are supported.
 ---
+cassandra:
+  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
+  namespace: ~
 certificates:
   enabled: true
   namespace: ~
@@ -16,6 +19,9 @@ clamavSimple:
 collabora:
   enabled: true
   namespace: ~
+collaboraController:
+  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
+  namespace: ~
 cryptpad:
   enabled: true
   namespace: ~
@@ -27,6 +33,12 @@ dovecot:
   namespace: ~
 element:
   enabled: true
+  namespace: ~
+elementAdmin:
+  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
+  namespace: ~
+elementGroupsync:
+  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
   namespace: ~
 home:
   enabled: true
@@ -75,19 +87,5 @@ staticFiles:
   namespace: ~
 xwiki:
   enabled: true
-  namespace: ~
-
-# openDesk Enterprise Components
-cassandra:
-  enabled: false
-  namespace: ~
-elementAdmin:
-  enabled: false
-  namespace: ~
-elementGroupsync:
-  enabled: false
-  namespace: ~
-collaboraController:
-  enabled: false
   namespace: ~
 ...

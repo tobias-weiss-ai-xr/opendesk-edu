@@ -117,9 +117,9 @@ releases:
     version: "{{ .Values.charts.element.version }}"
     values:
       - "values-element.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskElement }}
+      {{- range .Values.customization.release.opendeskElement }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -128,9 +128,9 @@ releases:
     version: "{{ .Values.charts.elementWellKnown.version }}"
     values:
       - "values-well-known.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskWellKnown }}
+      {{- range .Values.customization.release.opendeskWellKnown }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -139,9 +139,9 @@ releases:
     version: "{{ .Values.charts.synapseWeb.version }}"
     values:
       - "values-synapse-web.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskSynapseWeb }}
+      {{- range .Values.customization.release.opendeskSynapseWeb }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -150,9 +150,9 @@ releases:
     version: "{{ .Values.charts.synapse.version }}"
     values:
       - "values-synapse.yaml.gotmpl"
-      {{ range .Values.customization.release.opendeskSynapse }}
+      {{- range .Values.customization.release.opendeskSynapse }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.element.enabled }}
     timeout: 900
 
@@ -217,9 +217,9 @@ releases:
     chart: "synapse-admin-repo/{{ .Values.charts.synapseAdmin.name }}"
     version: "{{ .Values.charts.synapseAdmin.version }}"
     values:
-      {{ range .Values.customization.release.opendeskSynapseAdmin }}
+      {{- range .Values.customization.release.opendeskSynapseAdmin }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.elementAdmin.enabled }}
     timeout: 900
 
@@ -227,9 +227,9 @@ releases:
     chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
-      {{ range .Values.customization.release.opendeskSynapseAdminbotBootstrap }}
+      {{- range .Values.customization.release.opendeskSynapseAdminbotBootstrap }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.elementAdmin.enabled }}
     timeout: 900
 
@@ -237,9 +237,9 @@ releases:
     chart: "synapse-pipe-repo/{{ .Values.charts.synapsePipe.name }}"
     version: "{{ .Values.charts.synapsePipe.version }}"
     values:
-      {{ range .Values.customization.release.opendeskSynapseAdminbotPipe }}
+      {{- range .Values.customization.release.opendeskSynapseAdminbotPipe }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.elementAdmin.enabled }}
     timeout: 900
 
@@ -247,9 +247,9 @@ releases:
     chart: "synapse-adminbot-web-repo/{{ .Values.charts.synapseAdminbotWeb.name }}"
     version: "{{ .Values.charts.synapseAdminbotWeb.version }}"
     values:
-      {{ range .Values.customization.release.opendeskSynapseAdminbotWeb }}
+      {{- range .Values.customization.release.opendeskSynapseAdminbotWeb }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.elementAdmin.enabled }}
     timeout: 900
 
@@ -257,9 +257,9 @@ releases:
     chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
-      {{ range .Values.customization.release.opendeskSynapseAuditbotBootstrap }}
+      {{- range .Values.customization.release.opendeskSynapseAuditbotBootstrap }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.elementAdmin.enabled }}
     timeout: 900
 
@@ -267,9 +267,9 @@ releases:
     chart: "synapse-pipe-repo/{{ .Values.charts.synapsePipe.name }}"
     version: "{{ .Values.charts.synapsePipe.version }}"
     values:
-      {{ range .Values.customization.release.opendeskSynapseAuditbotPipe }}
+      {{- range .Values.customization.release.opendeskSynapseAuditbotPipe }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.elementAdmin.enabled }}
     timeout: 900
 
@@ -277,9 +277,9 @@ releases:
     chart: "synapse-groupsync-repo/{{ .Values.charts.synapseGroupsync.name }}"
     version: "{{ .Values.charts.synapseGroupsync.version }}"
     values:
-      {{ range .Values.customization.release.opendeskSynapseGroupsync }}
+      {{- range .Values.customization.release.opendeskSynapseGroupsync }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.elementGroupsync.enabled }}
     timeout: 900
 

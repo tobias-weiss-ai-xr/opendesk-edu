@@ -18,9 +18,9 @@ releases:
     version: "{{ .Values.charts.cryptpad.version }}"
     values:
       - "values.yaml.gotmpl"
-      {{ range .Values.customization.release.cryptpad }}
+      {{- range .Values.customization.release.cryptpad }}
       - {{ . }}
-      {{ end }}
+      {{- end }}
     installed: {{ .Values.cryptpad.enabled }}
 
 commonLabels:
