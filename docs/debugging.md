@@ -168,7 +168,7 @@ While you will find all the details for the CLI tool in [the online documentatio
 
 `occ` is the CLI for Nextcloud; all the details can be found in the [upstream documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/occ_command.html).
 
-You can run occ commands in the `opendesk-nextcloud-php` pod like this: `php /var/www/html/occ config:list`
+You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php /var/www/html/occ config:list`
 
 ## OpenProject
 

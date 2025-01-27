@@ -55,8 +55,8 @@ theme:
       logoSvg: {{ readFile "./../../files/theme/login/logo.svg" | b64enc | quote }}
 
     groupware:
-      faviconIco: {{ readFile "./../../files/theme/groupware/favicon.ico" | b64enc | quote }}
-      faviconSvg: {{ readFile "./../../files/theme/groupware/favicon.svg" | b64enc | quote }}
+      faviconIco: {{ readFile "./../../files/theme/groupware_mail/favicon.ico" | b64enc | quote }}
+      faviconSvg: {{ readFile "./../../files/theme/groupware_mail/favicon.svg" | b64enc | quote }}
 
     knowledge:
       faviconSvg: {{ readFile "./../../files/theme/knowledge/favicon.svg" | b64enc | quote }}
@@ -70,31 +70,32 @@ theme:
       waitingSpinnerSvg: {{ readFile "./../../files/theme/portal/waiting-spinner.svg" | b64enc  }}
       backgroundSvg: {{ readFile "./../../files/theme/portal/background.svg" | b64enc | quote }}
     portalTiles:
-      adminAnnouncement: {{ readFile "./../../files/theme/portal-tiles/admin_announcement.svg" | b64enc | quote }}
-      adminContext: {{ readFile "./../../files/theme/portal-tiles/admin_context.svg" | b64enc | quote }}
-      adminFunctionalmailbox: {{ readFile "./../../files/theme/portal-tiles/admin_functionalmailbox.svg" | b64enc | quote }}
-      adminGroup: {{ readFile "./../../files/theme/portal-tiles/admin_group.svg" | b64enc | quote }}
-      adminResource: {{ readFile "./../../files/theme/portal-tiles/admin_resource.svg" | b64enc | quote }}
-      adminUser: {{ readFile "./../../files/theme/portal-tiles/admin_user.svg" | b64enc | quote }}
-      anonymousLogin: {{ readFile "./../../files/theme/portal-tiles/anonymous_login.svg" | b64enc | quote }}
-      dummyCircle: {{ readFile "./../../files/theme/portal-tiles/dummy_circle.svg" | b64enc | quote }}
-      fileshareActivity: {{ readFile "./../../files/theme/portal-tiles/fileshare_activity.svg" | b64enc | quote }}
-      fileshareDirectdocOdp: {{ readFile "./../../files/theme/portal-tiles/fileshare_directdoc_odp.svg" | b64enc | quote }}
-      fileshareDirectdocOds: {{ readFile "./../../files/theme/portal-tiles/fileshare_directdoc_ods.svg" | b64enc | quote }}
-      fileshareDirectdocOdt: {{ readFile "./../../files/theme/portal-tiles/fileshare_directdoc_odt.svg" | b64enc | quote }}
-      fileshareFiles: {{ readFile "./../../files/theme/portal-tiles/fileshare_files.svg" | b64enc | quote }}
-      groupwareCalendar: {{ readFile "./../../files/theme/portal-tiles/groupware_calendar.svg" | b64enc | quote }}
-      groupwareContacts: {{ readFile "./../../files/theme/portal-tiles/groupware_contacts.svg" | b64enc | quote }}
-      groupwareMail: {{ readFile "./../../files/theme/portal-tiles/groupware_mail.svg" | b64enc | quote }}
-      groupwareTasks: {{ readFile "./../../files/theme/portal-tiles/groupware_tasks.svg" | b64enc | quote }}
-      managementKnowledge: {{ readFile "./../../files/theme/portal-tiles/management_knowledge.svg" | b64enc | quote }}
-      managementProject: {{ readFile "./../../files/theme/portal-tiles/management_project.svg" | b64enc | quote }}
-      notes: {{ readFile "./../../files/theme/portal-tiles/misc_notes.svg" | b64enc | quote }}
-      realtimeCollaboration: {{ readFile "./../../files/theme/portal-tiles/realtime_collaboration.svg" | b64enc | quote }}
-      realtimeVideoconference: {{ readFile "./../../files/theme/portal-tiles/realtime_videoconference.svg" | b64enc | quote }}
-      selfserviceChangepassword: {{ readFile "./../../files/theme/portal-tiles/selfservice_changepassword.svg" | b64enc | quote }}
-      selfserviceEditprofile: {{ readFile "./../../files/theme/portal-tiles/selfservice_editprofile.svg" | b64enc | quote }}
-      selfserviceProtectaccount: {{ readFile "./../../files/theme/portal-tiles/selfservice_protectaccount.svg" | b64enc | quote }}
+      adminAnnouncement: {{ readFile "./../../files/theme/admin_announcements/favicon.svg" | b64enc | quote }}
+      adminFunctionalmailbox: {{ readFile "./../../files/theme/admin_functionalmailbox/favicon.svg" | b64enc | quote }}
+      adminGroup: {{ readFile "./../../files/theme/admin_groups/favicon.svg" | b64enc | quote }}
+      adminResource: {{ readFile "./../../files/theme/admin_resource/favicon.svg" | b64enc | quote }}
+      adminUser: {{ readFile "./../../files/theme/admin_user/favicon.svg" | b64enc | quote }}
+      anonymousLogin: {{ readFile "./../../files/theme/login/favicon.svg" | b64enc | quote }}
+      fileshareDirectdocOdp: {{ readFile "./../../files/theme/directdocs_odp/favicon.svg" | b64enc | quote }}
+      fileshareDirectdocOds: {{ readFile "./../../files/theme/directdocs_ods/favicon.svg" | b64enc | quote }}
+      fileshareDirectdocOdt: {{ readFile "./../../files/theme/directdocs_odt/favicon.svg" | b64enc | quote }}
+      fileshareFiles: {{ readFile "./../../files/theme/files/favicon.svg" | b64enc | quote }}
+      groupwareCalendar: {{ readFile "./../../files/theme/groupware_calendar/favicon.svg" | b64enc | quote }}
+      groupwareContacts: {{ readFile "./../../files/theme/groupware_contacts/favicon.svg" | b64enc | quote }}
+      groupwareMail: {{ readFile "./../../files/theme/groupware_mail/favicon.svg" | b64enc | quote }}
+      groupwareTasks: {{ readFile "./../../files/theme/groupware_tasks/favicon.svg" | b64enc | quote }}
+      managementKnowledge: {{ readFile "./../../files/theme/knowledge/favicon.svg" | b64enc | quote }}
+      managementProject: {{ readFile "./../../files/theme/projects/favicon.svg" | b64enc | quote }}
+      notes: {{ readFile "./../../files/theme/notes/favicon.svg" | b64enc | quote }}
+      realtimeCollaboration: {{ readFile "./../../files/theme/chat/favicon.svg" | b64enc | quote }}
+      realtimeVideoconference: {{ readFile "./../../files/theme/videoconference/favicon.svg" | b64enc | quote }}
+      # dummy_circle.svg
+      dummyCircle: {{ readFile "./../../files/theme/_dev/dummy_circle.svg" | b64enc | quote }}
+      fileshareActivity: {{ readFile "./../../files/theme/_dev/dummy_circle.svg" | b64enc | quote }}
+      adminContext: {{ readFile "./../../files/theme/_dev/dummy_circle.svg" | b64enc | quote }}
+      selfserviceChangepassword: {{ readFile "./../../files/theme/_dev/dummy_circle.svg" | b64enc | quote }}
+      selfserviceEditprofile: {{ readFile "./../../files/theme/_dev/dummy_circle.svg" | b64enc | quote }}
+      selfserviceProtectaccount: {{ readFile "./../../files/theme/_dev/dummy_circle.svg" | b64enc | quote }}
 
     projects:
       faviconSvg: {{ readFile "./../../files/theme/projects/favicon.svg" | b64enc | quote }}
