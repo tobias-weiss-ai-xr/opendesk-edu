@@ -1,3 +1,36 @@
+## [1.1.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.1.0...v1.1.1) (2025-01-27)
+
+
+### Bug Fixes
+
+* **docs:** Add permissions.md ([04ab28c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/04ab28c029bb60575c1936ca5acdd2f829b26c06))
+* **element:** MatrixID for Element "Welcome User" to support deployments where matrix domain differs from homeserver FQDN ([ccb51a0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ccb51a0de32525a93fd982d52dc8e6a35db8f09a))
+* **element:** Update Element to 1.11.90 ([335806a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/335806a53e51c3fc6a03440316e909aa51af5be8))
+* **element:** Update Helm chart to v6.0.2 for a fix when using non generated secrets in `opendesk-synapse` ([d5e73fe](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d5e73feb880c33e8127f284fcc685ffdc15874a8))
+* **element:** Update Synapse to 1.121.1 ([33ff922](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/33ff9227b745f99e3abdde6dbbe6b00042fca655))
+* **helmfile:** Move the access restriction configuration for Keycloak client scopes into helmfile templating, instead of hardcoded Helm chart values ([3662b5c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3662b5cd255b37321d3a3625f78feff07b7e633c))
+* **helmfile:** Remove duplicate entries from `secrets.yaml.gotmpl` ([a13cf63](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a13cf630242343dc8f759cfeb423ff626480b086))
+* **helmfile:** Support component specific storageClassNames. **Note:** Please check the migration.md if you upgrade a deployment that has set custom PVC sizes using `persistence.size` settings. ([bacf51e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bacf51efb1b042b80f13f5cf3f50557006f32374))
+* **helmfile:** Support PostgreSQL as alternative database backend for Nextcloud and XWiki. **Note:** PostgreSQL is likely to become the preferred option/default in the future and MariaDB might be deprecated at a later point. ([a0f52ee](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a0f52ee7d4f6a9b82c9d4e288bc4c6cc96018985))
+* **helmfile:** Update `opendesk-alerts` and `opendesk-dashboards` to get predictable sort order, improving GitOps deployments ([0c91117](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0c91117575a3b56ff9f0b4ae72a501b9f3b4384c))
+* **helmfile:** Update upstream images for k8s/kubectl to v1.32.0 ([b71c2e5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b71c2e57eec10093d96804e249fbaf81c51fb22e))
+* **intercom:** Remove legacy OIDC claims ([6796f32](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6796f320f72db02d67b73685aa6356cda9ac86d1))
+* **nextcloud:** Update image and Helm chart to support app toggles during deployment ([1cdfcf2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1cdfcf2784271f2b8ea61d2e8e534db2aa386f4b))
+* **nextcloud:** Update to Nextcloud 29.0.10 ([d096fb1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d096fb1154dbcd092e105d4450e7996dfda0388e))
+* **nubus:** Fix `pullPolicy` setting for `ldapServer.leaderElector` to satisfy Kyverno linter ([6f2f7cd](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6f2f7cd5db6708c1fc523e3cf3160f39f1dba2bb))
+* **nubus:** Merge yaml files for better maintainability ([6c67eca](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6c67eca7aa68c3f597cc5790ba1046ca0855c329))
+* **nubus:** Pre-create groups in Keycloak to avoid race condition on group sync when initial users login parallel ([5496317](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5496317fee1ca47a80d0798b9048a1474ca8e2a6))
+* **nubus:** Remove `extra` settings from ldapServer needed for openDesk 1.0.0 LDAP migration ([fab862e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fab862eec689bf8ef547c4bd06244313f24f6d0b))
+* **nubus:** Remove b64 encoded files from CSS, instead use `opendesk-static-files` ([2926e2c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2926e2c93a2b4be24abd1e6dd4ce02071a629cb4))
+* **nubus:** Template `secrets.nubus.masterpassword`. **Note:** Please check migrations.md for details. ([5aae75a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5aae75a1521f73e497859fe3d3b89a8752bb47a1))
+* **nubus:** Update customizations for group cleanup ([0b230fa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0b230fa2cc841edfde99f5d94dc9c8054bfbb5ec))
+* **open-xchange:** Add missing `registryOpencodeDe` to OX-Connector's `waitForDependency` image ([a16d907](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a16d9071c96ef7fde87e6579c328e1e05509824b))
+* **openproject:** Update to 15.1.1 ([b4b714f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b4b714ff41a8f01d4b44c6d5ced3f036f7d90699))
+* **openproject:** Update to 15.2.0 ([9d8e9c3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9d8e9c3ade9917fb8044331ebdea8d7bca4066b0))
+* **static-files:** Update Helm chart to use more generic `assets` over `theme.imagery.assets` ([63562c1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/63562c1aae6b2c33ea39b93c11e842c2ab1e2c25))
+* **static-files:** Update Helm chart to v4.0.1 to support longer domain names ([b0e665b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b0e665b031baf36c59eea85b3d575f1a49290bf1))
+* **xwiki:** Update Helm chart to v1.4.1 to fix support for custom `ingressClassName` values. Ref [#144](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/144) ([033cb55](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/033cb558ddc0b47d17b006cdc75c593c5c356147))
+
 # [1.1.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.0.0...v1.1.0) (2024-12-24)
 
 
