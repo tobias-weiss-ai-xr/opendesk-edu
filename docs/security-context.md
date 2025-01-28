@@ -1,8 +1,7 @@
 <!--
-SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
-
 <h1>Kubernetes Security Context</h1>
 
 <!-- TOC -->
@@ -63,7 +62,7 @@ containerSecurityContext:
 ## privileged
 
 
-Privileged Pods disable most security mechanisms and must be disallowed.
+Privileged Pods eliminate most security mechanisms and must be disallowed.
 
 ```yaml
 containerSecurityContext:
@@ -93,7 +92,7 @@ containerSecurityContext:
 ## seccompProfile
 
 
-Seccomp profile must be explicitly set to one of the allowed values. An unconfined profile and the complete absence of the profile are prohibited.
+The seccompProfile must be explicitly set to one of the allowed values. An unconfined profile and the complete absence of the profile are prohibited.
 
 ```yaml
 containerSecurityContext:
@@ -113,7 +112,7 @@ containerSecurityContext:
 ## readOnlyRootFilesystem
 
 
-Containers should have an immutable file systems, so that attackers could not modify application code or download malicious code.
+Containers should have an immutable file systems, so that attackers can not modify application code or download malicious code.
 
 ```yaml
 containerSecurityContext:
@@ -133,10 +132,10 @@ containerSecurityContext:
 # Status quo
 
 
-openDesk aims to achieve that all security relevant settings are explicitly templated and comply with security recommendations.
+openDesk aims to ensure that all security relevant settings are explicitly templated and comply with security recommendations.
 
 
-The rendered manifests are also validated against Kyverno [policies](/.kyverno/policies) in CI to ensure that the provided values inside openDesk are also properly templated by the given Helm charts.
+The rendered manifests are also validated against Kyverno [policies](/.kyverno/policies) in CI to ensure that the provided values inside openDesk are properly templated by the Helm charts.
 
 
 This list gives you an overview of templated security settings and if they comply with security standards:
@@ -144,11 +143,11 @@ This list gives you an overview of templated security settings and if they compl
 
  - **yes**: Value is set to `true`
  - **no**: Value is set to `false`
- - **n/a**: No explicitly templated in openDesk and default is used.
+ - **n/a**: Not explicitly templated in openDesk; default is used.
 
 | process | status | allowPrivilegeEscalation | privileged | readOnlyRootFilesystem | runAsNonRoot | runAsUser | runAsGroup | seccompProfile | capabilities |
 | ------- | ------ | ------------------------ | ---------- | ---------------------- | ------------ | --------- | ---------- | -------------- | ------------ |
-| **collabora**/collabora-online | :x: | yes | no | no | yes | 100 | 101 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT","MKNOD"] |
+| **collabora**/collabora-online | :x: | yes | no | no | yes | 100 | 101 | yes | no ["CHOWN","FOWNER","SYS_CHROOT"] |
 | **cryptpad**/cryptpad | :x: | no | no | no | yes | 4001 | 4001 | yes | yes |
 | **element**/matrix-neoboard-widget | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **element**/matrix-neochoice-widget | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
@@ -169,10 +168,36 @@ This list gives you an overview of templated security settings and if they compl
 | **jitsi**/jitsi/jitsi/prosody | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/jitsi/web | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/patchJVB | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
-| **nextcloud**/opendesk-nextcloud-management | :x: | no | no | no | yes | 65532 | 65532 | yes | yes |
-| **nextcloud**/opendesk-nextcloud/apache2 | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
+| **nextcloud**/opendesk-nextcloud-management | :x: | no | no | no | yes | 101 | 101 | yes | yes |
+| **nextcloud**/opendesk-nextcloud/aio | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/exporter | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
-| **nextcloud**/opendesk-nextcloud/php | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
+| **notes**/impress/backend | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **notes**/impress/frontend | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **notes**/impress/yProvider | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **nubus**/intercom-service | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/intercom-service/provisioning | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
+| **nubus**/opendesk-keycloak-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/keycloak | :x: | no | n/a | no | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusGuardian/authorizationApi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusGuardian/managementApi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusGuardian/managementUi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusGuardian/openPolicyAgent | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusKeycloakBootstrap | :x: | no | n/a | no | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusKeycloakExtensions/handler | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
+| **nubus**/ums/nubusKeycloakExtensions/proxy | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
+| **nubus**/ums/nubusLdapNotifier | :x: | no | n/a | yes | yes | 101 | 102 | yes | yes |
+| **nubus**/ums/nubusNotificationsApi | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusPortalConsumer | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
+| **nubus**/ums/nubusPortalFrontend | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusPortalServer | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusProvisioning | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusProvisioning/nats | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusSelfServiceConsumer | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusStackDataUms | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusUdmListener | :x: | no | n/a | yes | yes | 102 | 65534 | yes | yes |
+| **nubus**/ums/nubusUdmRestApi | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusUmcGateway | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusUmcServer | :x: | no | n/a | yes | no | 0 | 0 | yes | yes |
 | **open-xchange**/dovecot | :x: | no | n/a | yes | n/a | n/a | n/a | yes | no ["CHOWN","DAC_OVERRIDE","KILL","NET_BIND_SERVICE","SETGID","SETUID","SYS_CHROOT"] |
 | **open-xchange**/open-xchange/appsuite/core-documentconverter | :x: | no | no | no | yes | 987 | 1000 | yes | yes |
 | **open-xchange**/open-xchange/appsuite/core-guidedtours | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
@@ -184,34 +209,26 @@ This list gives you an overview of templated security settings and if they compl
 | **open-xchange**/open-xchange/appsuite/guard-ui | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/open-xchange/nextcloud-integration-ui | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/open-xchange/public-sector-ui | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **open-xchange**/opendesk-open-xchange-bootstrap | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **opendesk-migrations-post**/opendesk-migrations-post | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **opendesk-migrations-pre**/opendesk-migrations-pre | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **opendesk-openproject-bootstrap**/opendesk-openproject-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **opendesk-services**/opendesk-static-files | :x: | no | n/a | yes | yes | 101 | 101 | yes | yes |
 | **openproject**/openproject | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **openproject-bootstrap**/opendesk-openproject-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **open-xchange**/ox-connector | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **services**/clamav | :x: | no | no | yes | no | 0 | 0 | yes | no |
-| **services**/clamav-simple | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
-| **services**/clamav/clamd | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
-| **services**/clamav/freshclam | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
-| **services**/clamav/icap | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
-| **services**/clamav/milter | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
-| **services**/mariadb | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
-| **services**/memcached | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
-| **services**/minio | :x: | no | no | no | yes | 1000 | 0 | yes | yes |
-| **services**/postfix | :x: | yes | yes | no | no | 0 | 0 | yes | no |
-| **services**/postgresql | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
-| **services**/redis/master | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
-| **univention-management-stack**/intercom-service | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/opendesk-keycloak-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums/keycloak | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums/keycloak-bootstrap | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums/keycloak-extensions/handler | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums/keycloak-extensions/proxy | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **univention-management-stack**/ums/ldap-notifier | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
-| **univention-management-stack**/ums/portal-listener | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums/selfservice-listener | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums/stack-data-swp | :x: | no | no | no | no | 0 | 0 | yes | yes |
-| **univention-management-stack**/ums/stack-gateway | :x: | no | no | no | yes | 1001 | 0 | yes | yes |
-| **univention-management-stack**/ums/umc-gateway | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
-| **univention-management-stack**/ums/umc-server | :x: | no | no | no | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","FSETID","KILL","SETGID","SETUID","SETPCAP","NET_BIND_SERVICE","NET_RAW","SYS_CHROOT"] |
+| **services-external**/cassandra | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **services-external**/clamav | :x: | no | no | yes | no | 0 | 0 | yes | no |
+| **services-external**/clamav-simple | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
+| **services-external**/clamav/clamd | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
+| **services-external**/clamav/freshclam | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
+| **services-external**/clamav/icap | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
+| **services-external**/clamav/milter | :white_check_mark: | no | no | yes | yes | 100 | 101 | yes | yes |
+| **services-external**/mariadb | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **services-external**/memcached | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **services-external**/minio | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **services-external**/opendesk-dkimpy-milter | :x: | yes | no | yes | yes | 1000 | 1000 | yes | no |
+| **services-external**/postfix | :x: | yes | yes | no | no | 0 | 0 | yes | no |
+| **services-external**/postgresql | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **services-external**/redis/master | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **xwiki**/xwiki | :x: | no | no | no | yes | 100 | 101 | yes | yes |
 
 
