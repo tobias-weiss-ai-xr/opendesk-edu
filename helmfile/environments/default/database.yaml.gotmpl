@@ -6,12 +6,20 @@
 databases:
   defaults:
     userConnectionLimit: 100
-  dovecot:
+  dovecotDictmap:
     type: "cassandra"
-    name: "dovecot"
+    name: "dovecot_dictmap"
     host: "cassandra"
     port: 9042
-    username: "dovecot_user"
+    username: "dovecot_dictmap_user"
+    password: ""
+    connectionLimit: ~
+  dovecotACL:
+    type: "cassandra"
+    name: "dovecot_acl"
+    host: "cassandra"
+    port: 9042
+    username: "dovecot_acl_user"
     password: ""
     connectionLimit: ~
   keycloak:
