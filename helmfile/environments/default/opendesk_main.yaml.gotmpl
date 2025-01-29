@@ -5,7 +5,7 @@
 # Note: Currently only single namespace deployments are supported.
 ---
 cassandra:
-  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
+  enabled: {{ if eq (env "OPENDESK_ENTERPRISE") "true" }}true{{ else }}false{{ end }}
   namespace: ~
 certificates:
   enabled: true
@@ -20,7 +20,7 @@ collabora:
   enabled: true
   namespace: ~
 collaboraController:
-  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
+  enabled: {{ if eq (env "OPENDESK_ENTERPRISE") "true" }}true{{ else }}false{{ end }}
   namespace: ~
 cryptpad:
   enabled: true
@@ -35,10 +35,10 @@ element:
   enabled: true
   namespace: ~
 elementAdmin:
-  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
+  enabled: {{ if eq (env "OPENDESK_ENTERPRISE") "true" }}true{{ else }}false{{ end }}
   namespace: ~
 elementGroupsync:
-  enabled: {{ if (env "OPENDESK_ENTERPRISE") }}true{{ else }}false{{ end }}
+  enabled: {{ if eq (env "OPENDESK_ENTERPRISE") "true" }}true{{ else }}false{{ end }}
   namespace: ~
 home:
   enabled: true

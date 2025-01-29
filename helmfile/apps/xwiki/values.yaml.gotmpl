@@ -86,7 +86,7 @@ customConfigs:
     xwiki.authentication.ldap.fields_mapping: "last_name=sn,first_name=givenName,email=mailPrimaryAddress"
 
   xwiki.properties:
-    {{- if (env "OPENDESK_ENTERPRISE") }}
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
     distribution.defaultUI: "com.xwiki.projects.swp:xwiki-swp-flavor-enterprise-main"
     {{- end }}
     wikiInitializer.initialRequest.xwiki.url: "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/distribution/"
