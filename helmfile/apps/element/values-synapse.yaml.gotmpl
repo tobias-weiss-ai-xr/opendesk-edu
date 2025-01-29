@@ -69,6 +69,60 @@ configuration:
               regex: "@.*"
         url: null
         sender_localpart: ox-appsuite
+    {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if .Values.elementAdmin.enabled }}
+      - as_token: {{ .Values.secrets.matrixAdminBot.synapseAsToken | quote }}
+        hs_token: {{ .Values.secrets.matrixAdminBot.synapseAsToken | quote }}
+        id: "element-adminbot-pipe"
+        namespaces:
+          rooms:
+            - exclusive: false
+              regex: "!.*:{{ .Values.global.domain }}"
+          users:
+            - exclusive: false
+              regex: "@.*:.*"
+            - exclusive: true
+              regex: "@adminbot:{{ .Values.global.domain }}"
+        de.sorunome.msc2409.push_ephemeral: true
+        org.matrix.msc3202: true
+        url: "http://opendesk-synapse-adminbot-pipe:9995"
+        rate_limited: false
+        sender_localpart: "adminbot-sendernotinuse"
+      - as_token: {{ .Values.secrets.matrixAuditBot.synapseAsToken | quote }}
+        hs_token: {{ .Values.secrets.matrixAuditBot.synapseAsToken | quote }}
+        id: "element-auditbot-pipe"
+        namespaces:
+          rooms:
+            - exclusive: false
+              regex: "!.*:{{ .Values.global.domain }}"
+          users:
+            - exclusive: false
+              regex: "@.*:.*"
+            - exclusive: true
+              regex: "@auditbot:{{ .Values.global.domain }}"
+        de.sorunome.msc2409.push_ephemeral: true
+        org.matrix.msc3202: true
+        url: "http://opendesk-synapse-auditbot-pipe:9995"
+        rate_limited: false
+        sender_localpart: "auditbot-sendernotinuse"
+      {{- end }}
+      {{- if .Values.elementGroupsync.enabled }}
+      - as_token: {{ .Values.secrets.matrixGroupsync.synapseAsToken | quote }}
+        hs_token: {{ .Values.secrets.matrixGroupsync.synapseAsToken | quote }}
+        id: "gps"
+        namespaces:
+          rooms:
+            - exclusive: false
+              regex: "!.*:{{ .Values.global.domain }}"
+          users:
+            - exclusive: false
+              regex: '@.*:{{ .Values.global.domain }}'
+        url: "http://opendesk-synapse-groupsync:10010"
+        rate_limited: false
+        sender_localpart: "groupsyncbot"
+      {{- end }}
+    registrationSharedSecret: {{ .Values.secrets.synapse.registrationSharedSecret | quote }}
+    {{- end }}
 
     presence:
       enabled: {{ .Values.functional.dataProtection.matrixPresence.enabled }}

@@ -217,6 +217,7 @@ releases:
     chart: "synapse-admin-repo/{{ .Values.charts.synapseAdmin.name }}"
     version: "{{ .Values.charts.synapseAdmin.version }}"
     values:
+      - "values-synapse-admin.yaml.gotmpl"
       {{- range .Values.customization.release.opendeskSynapseAdmin }}
       - {{ . }}
       {{- end }}
@@ -227,6 +228,7 @@ releases:
     chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
+      - "values-synapse-adminbot-bootstrap.yaml.gotmpl"
       {{- range .Values.customization.release.opendeskSynapseAdminbotBootstrap }}
       - {{ . }}
       {{- end }}
@@ -237,6 +239,7 @@ releases:
     chart: "synapse-pipe-repo/{{ .Values.charts.synapsePipe.name }}"
     version: "{{ .Values.charts.synapsePipe.version }}"
     values:
+      - "values-synapse-adminbot-pipe.yaml.gotmpl"
       {{- range .Values.customization.release.opendeskSynapseAdminbotPipe }}
       - {{ . }}
       {{- end }}
@@ -247,6 +250,7 @@ releases:
     chart: "synapse-adminbot-web-repo/{{ .Values.charts.synapseAdminbotWeb.name }}"
     version: "{{ .Values.charts.synapseAdminbotWeb.version }}"
     values:
+      - "values-synapse-adminbot-web.yaml.gotmpl"
       {{- range .Values.customization.release.opendeskSynapseAdminbotWeb }}
       - {{ . }}
       {{- end }}
@@ -257,6 +261,7 @@ releases:
     chart: "synapse-create-account-repo/{{ .Values.charts.synapseCreateAccount.name }}"
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
+      - "values-synapse-auditbot-bootstrap.yaml.gotmpl"
       {{- range .Values.customization.release.opendeskSynapseAuditbotBootstrap }}
       - {{ . }}
       {{- end }}
@@ -267,6 +272,7 @@ releases:
     chart: "synapse-pipe-repo/{{ .Values.charts.synapsePipe.name }}"
     version: "{{ .Values.charts.synapsePipe.version }}"
     values:
+      - "values-synapse-auditbot-pipe.yaml.gotmpl"
       {{- range .Values.customization.release.opendeskSynapseAuditbotPipe }}
       - {{ . }}
       {{- end }}
@@ -277,6 +283,7 @@ releases:
     chart: "synapse-groupsync-repo/{{ .Values.charts.synapseGroupsync.name }}"
     version: "{{ .Values.charts.synapseGroupsync.version }}"
     values:
+      - "values-synapse-groupsync.yaml.gotmpl"
       {{- range .Values.customization.release.opendeskSynapseGroupsync }}
       - {{ . }}
       {{- end }}
