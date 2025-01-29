@@ -25,7 +25,7 @@ releases:
     version: "{{ .Values.charts.nextcloudManagement.version }}"
     values:
       - "values-nextcloud-mgmt.yaml.gotmpl"
-      {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "values-nextcloud-mgmt-enterprise.yaml.gotmpl"
       {{- end }}
       {{- range .Values.customization.release.opendeskNextcloudManagement }}
@@ -40,7 +40,7 @@ releases:
     version: "{{ .Values.charts.nextcloud.version }}"
     values:
       - "values-nextcloud.yaml.gotmpl"
-      {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "values-nextcloud-enterprise.yaml.gotmpl"
       {{- end }}
       {{- range .Values.customization.release.opendeskNextcloud }}

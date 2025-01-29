@@ -5,27 +5,27 @@ environments:
   default:
     values:
       - "../../environments/default/*.yaml.gotmpl"
-      {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "../../environments/default-enterprise-overrides/*.yaml.gotmpl"
       {{- end }}
   dev:
     values:
       - "../../environments/default/*.yaml.gotmpl"
-      {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "../../environments/default-enterprise-overrides/*.yaml.gotmpl"
       {{- end }}
       - "../../environments/dev/*.yaml.gotmpl"
   test:
     values:
       - "../../environments/default/*.yaml.gotmpl"
-      {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "../../environments/default-enterprise-overrides/*.yaml.gotmpl"
       {{- end }}
       - "../../environments/test/*.yaml.gotmpl"
   prod:
     values:
       - "../../environments/default/*.yaml.gotmpl"
-      {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "../../environments/default-enterprise-overrides/*.yaml.gotmpl"
       {{- end }}
       - "../../environments/prod/*.yaml.gotmpl"

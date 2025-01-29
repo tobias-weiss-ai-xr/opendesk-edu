@@ -69,7 +69,7 @@ configuration:
               regex: "@.*"
         url: null
         sender_localpart: ox-appsuite
-    {{- if (env "OPENDESK_ENTERPRISE") }}
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       {{- if .Values.elementAdmin.enabled }}
       - as_token: {{ .Values.secrets.matrixAdminBot.synapseAsToken | quote }}
         hs_token: {{ .Values.secrets.matrixAdminBot.synapseAsToken | quote }}

@@ -57,7 +57,7 @@ releases:
     values:
       - "values-openxchange.yaml.gotmpl"
       - "values-openxchange-contact-picker.yaml.gotmpl"
-      {{- if (env "OPENDESK_ENTERPRISE") }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "values-openxchange-enterprise.yaml.gotmpl"
       {{- end }}
       {{- range .Values.customization.release.openxchange }}
