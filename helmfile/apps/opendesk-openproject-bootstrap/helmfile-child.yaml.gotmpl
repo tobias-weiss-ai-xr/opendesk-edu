@@ -10,7 +10,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.openprojectBootstrap.registry }}/{{ .Values.charts.openprojectBootstrap.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.openprojectBootstrap.registry }}/{{ .Values.charts.openprojectBootstrap.repository }}"
 
 releases:
   - name: "opendesk-openproject-bootstrap"
@@ -23,7 +23,7 @@ releases:
       {{- range .Values.customization.release.opendeskOpenprojectBootstrap }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.openproject.enabled }}
+    installed: {{ .Values.apps.openproject.enabled }}
     timeout: 900
 
 commonLabels:

@@ -7,13 +7,13 @@ SPDX-License-Identifier: Apache-2.0
 global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
-    {{- if .Values.collabora.enabled }}
+    {{- if .Values.apps.collabora.enabled }}
     collabora: {{ .Values.global.hosts.collabora }}
     {{- end }}
-    {{- if .Values.cryptpad.enabled }}
+    {{- if .Values.apps.cryptpad.enabled }}
     cryptpad: {{ .Values.global.hosts.cryptpad }}
     {{- end }}
-    {{- if .Values.element.enabled }}
+    {{- if .Values.apps.element.enabled }}
     element: {{ .Values.global.hosts.element }}
     matrixNeoBoardWidget: {{ .Values.global.hosts.matrixNeoBoardWidget }}
     matrixNeoChoiceWidget: {{ .Values.global.hosts.matrixNeoChoiceWidget }}
@@ -23,30 +23,30 @@ global:
     synapseFederation: {{ .Values.global.hosts.synapseFederation }}
     whiteboard: {{ .Values.global.hosts.whiteboard }}
     {{- end }}
-    {{- if .Values.nubus.enabled }}
+    {{- if .Values.apps.nubus.enabled }}
     intercomService: {{ .Values.global.hosts.intercomService }}
     {{- end }}
-    {{- if .Values.jitsi.enabled }}
+    {{- if .Values.apps.jitsi.enabled }}
     jitsi: {{ .Values.global.hosts.jitsi }}
     {{- end }}
-    {{- if .Values.minio.enabled }}
+    {{- if .Values.apps.minio.enabled }}
     minioApi: {{ .Values.global.hosts.minioApi }}
     minioConsole: {{ .Values.global.hosts.minioConsole }}
     {{- end }}
-    {{- if .Values.nextcloud.enabled }}
+    {{- if .Values.apps.nextcloud.enabled }}
     nextcloud: {{ .Values.global.hosts.nextcloud }}
     {{- end }}
-    {{- if .Values.openproject.enabled }}
+    {{- if .Values.apps.openproject.enabled }}
     openproject: {{ .Values.global.hosts.openproject }}
     {{- end }}
-    {{- if .Values.oxAppSuite.enabled }}
+    {{- if .Values.apps.oxAppSuite.enabled }}
     openxchange: {{ .Values.global.hosts.openxchange }}
     {{- end }}
-    {{- if .Values.nubus.enabled }}
+    {{- if .Values.apps.nubus.enabled }}
     keycloak: {{ .Values.global.hosts.keycloak }}
     nubus: {{ .Values.global.hosts.nubus }}
     {{- end }}
-    {{- if .Values.xwiki.enabled }}
+    {{- if .Values.apps.xwiki.enabled }}
     xwiki: {{ .Values.global.hosts.xwiki }}
     {{- end }}
 

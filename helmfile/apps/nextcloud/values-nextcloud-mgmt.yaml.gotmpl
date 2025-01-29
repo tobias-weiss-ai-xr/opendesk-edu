@@ -31,9 +31,9 @@ configuration:
     host: {{ .Values.antivirus.icap.host | quote }}
     port: {{ .Values.antivirus.icap.port | quote }}
     {{- else }}
-    {{- if .Values.clamavDistributed.enabled }}
+    {{- if .Values.apps.clamavDistributed.enabled }}
     host: "clamav-icap"
-    {{- else if .Values.clamavSimple.enabled }}
+    {{- else if .Values.apps.clamavSimple.enabled }}
     host: "clamav-simple"
     {{- end }}
     port: 1344
@@ -55,13 +55,13 @@ configuration:
       contacts:
         enabled: false
       cryptpad:
-        enabled: {{ .Values.cryptpad.enabled }}
+        enabled: {{ .Values.apps.cryptpad.enabled }}
       filesZip:
         enabled: true
       groupfolders:
         enabled: true
       integrationOpenproject:
-        enabled: {{ .Values.openproject.enabled }}
+        enabled: {{ .Values.apps.openproject.enabled }}
       spreed:
         enabled: true
     circles:
@@ -147,7 +147,7 @@ configuration:
         value: ""
       password:
         value: ""
-    host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     port: 25
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
     mailDomain: "{{ .Values.global.domain }}"

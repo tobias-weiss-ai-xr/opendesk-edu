@@ -10,7 +10,7 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url:
-      "{{ .Values.global.helmRegistry | default .Values.charts.nubus.registry }}/{{ .Values.charts.nubus.repository }}"
+      "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.nubus.registry }}/{{ .Values.charts.nubus.repository }}"
   # Intercom Service
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/intercom-service
   - name: "intercom-service-repo"
@@ -19,7 +19,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
   # openDesk Keycloak Bootstrap Chart
   - name: "opendesk-keycloak-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
@@ -27,7 +27,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskKeycloakBootstrap.registry }}/{{ .Values.charts.opendeskKeycloakBootstrap.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.opendeskKeycloakBootstrap.registry }}/{{ .Values.charts.opendeskKeycloakBootstrap.repository }}"
   # NGINX S3 Gateway Chart
   - name: "nginx-s3-gateway-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
@@ -35,7 +35,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.nginxS3Gateway.registry }}/{{ .Values.charts.nginxS3Gateway.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.nginxS3Gateway.registry }}/{{ .Values.charts.nginxS3Gateway.repository }}"
 
 releases:
   # Univention Management Stack Umbrella Chart
@@ -47,7 +47,7 @@ releases:
       {{- range .Values.customization.release.ums }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.nubus.enabled }}
+    installed: {{ .Values.apps.nubus.enabled }}
     timeout: 900
   # Intercom-Service
   - name: "intercom-service"
@@ -58,7 +58,7 @@ releases:
       {{- range .Values.customization.release.intercomService }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.nubus.enabled }}
+    installed: {{ .Values.apps.nubus.enabled }}
 
   # openDesk Keycloak Bootstrap Chart
   - name: "opendesk-keycloak-bootstrap"
@@ -71,7 +71,7 @@ releases:
       {{- end }}
     needs:
       - "ums"
-    installed: {{ .Values.nubus.enabled }}
+    installed: {{ .Values.apps.nubus.enabled }}
     timeout: 900
 
   # NGINX S3 Gateway (when cluster minio is not used)
@@ -83,7 +83,7 @@ releases:
       {{- range .Values.customization.release.nginxS3Gateway }}
       - {{ . }}
       {{- end }}
-    installed: {{ not .Values.minio.enabled }}
+    installed: {{ not .Values.apps.minio.enabled }}
     timeout: 900
 
 commonLabels:

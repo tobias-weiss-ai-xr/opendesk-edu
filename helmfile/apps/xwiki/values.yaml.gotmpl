@@ -18,7 +18,7 @@ image:
 imagePullSecrets: {{ .Values.global.imagePullSecrets }}
 
 javaOpts:
-  {{- if and (env "OPENDESK_ENTERPRISE") .Values.enterprise.xwiki.opendeskEnterpriseLicense .Values.enterprise.xwiki.proApplicationslicense }}
+  {{- if and (env "OPENDESK_ENTERPRISE") .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense .Values.enterpriseKeys.xwiki.proApplicationslicense }}
   - "-Dlicenses={{ .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense }},{{ .Values.enterpriseKeys.xwiki.proApplicationslicense }}"
   {{- end }}
   {{- if .Values.certificate.selfSigned }}
@@ -165,7 +165,7 @@ properties:
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.ldap_group_mapping": "xwiki:XWiki.XWikiAdminGroup=cn=managed-by-attribute-KnowledgemanagementAdmin,cn=groups,dc=swp-ldap,dc=internal"
   ## SMTP settings
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
-  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.host": {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.host": {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.port": 25
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.properties": "mail.smtp.starttls.enable=false"
   ## Link LDAP users and users authenticated through OIDC

@@ -119,7 +119,7 @@ global:
 
 ingress:
   # temporary fix
-  {{- if not .Values.minio.enabled }}
+  {{- if not .Values.apps.minio.enabled }}
   enabled: false
   {{- end }}
   certManager:
@@ -524,7 +524,7 @@ nubusKeycloakExtensions:
           password: "umcKeycloakExtensionsDatabasePassword"
   smtp:
     connection:
-      host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+      host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       port: 25
       ssl: false
       starttls: false
@@ -1095,7 +1095,7 @@ nubusStackDataUms:
     umcMemcachedUsername: ""
     externalMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain }}
     umcHtmlTitle: "Portal - {{ .Values.theme.texts.productName }}"
-    smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     smtpPort: 25
     smtpUser: ""
     smtpStartTls: false
@@ -1118,7 +1118,7 @@ nubusStackDataUms:
     portalTitleEN: "Portal - {{ .Values.theme.texts.productName }}"
     oxDefaultContext: "1"
     componentEnabled:
-      notes: {{ .Values.notes.enabled }}
+      notes: {{ .Values.apps.notes.enabled }}
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
       - username: {{ printf "ldapsearch_%s" $username | quote }}

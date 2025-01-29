@@ -10,43 +10,43 @@ additionalLabels:
 
 config:
   collabora:
-    enable: {{ .Values.collabora.enabled }}
+    enable: {{ .Values.apps.collabora.enabled }}
     selectors:
-      namespace: {{ .Values.collabora.namespace | quote }}
+      namespace: {{ .Values.apps.collabora.namespace | quote }}
   matrix:
-    enable: {{ .Values.element.enabled }}
+    enable: {{ .Values.apps.element.enabled }}
     selectors:
-      namespace: {{ .Values.element.namespace | quote }}
+      namespace: {{ .Values.apps.element.namespace | quote }}
   diagrams:
-    enable: {{ .Values.cryptpad.enabled }}
+    enable: {{ .Values.apps.cryptpad.enabled }}
     selectors:
-      namespace: {{ .Values.cryptpad.namespace | quote }}
+      namespace: {{ .Values.apps.cryptpad.namespace | quote }}
   nextcloud:
-    enable: {{ .Values.nextcloud.enabled }}
+    enable: {{ .Values.apps.nextcloud.enabled }}
     selectors:
-      namespace: {{ .Values.nextcloud.namespace | quote }}
+      namespace: {{ .Values.apps.nextcloud.namespace | quote }}
   openXChange:
-    enable: {{ .Values.oxAppSuite.enabled }}
+    enable: {{ .Values.apps.oxAppSuite.enabled }}
     selectors:
-      namespace: {{ .Values.oxAppSuite.namespace | quote }}
+      namespace: {{ .Values.apps.oxAppSuite.namespace | quote }}
   xwiki:
-    enable: {{ .Values.xwiki.enabled }}
+    enable: {{ .Values.apps.xwiki.enabled }}
     selectors:
-      namespace: {{ .Values.xwiki.namespace | quote }}
+      namespace: {{ .Values.apps.xwiki.namespace | quote }}
   nubus:
-    enable: {{ .Values.nubus.enabled }}
+    enable: {{ .Values.apps.nubus.enabled }}
     selectors:
-      namespace: {{ .Values.nubus.namespace | quote }}
+      namespace: {{ .Values.apps.nubus.namespace | quote }}
   openProject:
-    enable: {{ .Values.openproject.enabled }}
+    enable: {{ .Values.apps.openproject.enabled }}
     selectors:
-      namespace: {{ .Values.openproject.namespace | quote }}
+      namespace: {{ .Values.apps.openproject.namespace | quote }}
   jitsi:
-    enable: {{ .Values.jitsi.enabled }}
+    enable: {{ .Values.apps.jitsi.enabled }}
     selectors:
-      namespace: {{ .Values.jitsi.namespace | quote }}
+      namespace: {{ .Values.apps.jitsi.namespace | quote }}
   collabora:
-    enable: {{ .Values.collabora.enabled }}
+    enable: {{ .Values.apps.collabora.enabled }}
     selectors:
-      namespace: {{ .Values.collabora.namespace | quote }}
+      namespace: {{ .Values.apps.collabora.namespace | quote }}
 

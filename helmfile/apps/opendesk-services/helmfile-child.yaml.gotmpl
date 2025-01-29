@@ -10,7 +10,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.otterize.registry }}/{{ .Values.charts.otterize.repository }}"
 
   # openDesk Home
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-home
@@ -20,7 +20,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.home.registry }}/{{ .Values.charts.home.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.home.registry }}/{{ .Values.charts.home.repository }}"
 
   # openDesk Certificates
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-certificates
@@ -30,7 +30,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.certificates.registry }}/{{ .Values.charts.certificates.repository }}"
 
     # openDesk Alerts
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-alerts
@@ -40,7 +40,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskAlerts.registry }}/{{ .Values.charts.opendeskAlerts.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.opendeskAlerts.registry }}/{{ .Values.charts.opendeskAlerts.repository }}"
 
     # openDesk Grafana Dashboards
     # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dashboards
@@ -50,7 +50,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskDashboards.registry }}/{{ .Values.charts.opendeskDashboards.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.opendeskDashboards.registry }}/{{ .Values.charts.opendeskDashboards.repository }}"
 
     # openDesk Static Files
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-static-files
@@ -60,7 +60,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.opendeskStaticFiles.registry }}/{{ .Values.charts.opendeskStaticFiles.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.opendeskStaticFiles.registry }}/{{ .Values.charts.opendeskStaticFiles.repository }}"
 
 releases:
   - name: "opendesk-otterize"
@@ -82,7 +82,7 @@ releases:
       {{- range .Values.customization.release.opendeskHome }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.home.enabled }}
+    installed: {{ .Values.apps.home.enabled }}
 
   - name: "opendesk-certificates"
     chart: "certificates-repo/{{ .Values.charts.certificates.name }}"
@@ -92,7 +92,7 @@ releases:
       {{- range .Values.customization.release.opendeskCertificates }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.certificates.enabled }}
+    installed: {{ .Values.apps.certificates.enabled }}
     timeout: 900
 
   - name: "opendesk-alerts"
@@ -125,7 +125,7 @@ releases:
       {{- range .Values.customization.release.opendeskStaticFiles }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.staticFiles.enabled }}
+    installed: {{ .Values.apps.staticFiles.enabled }}
     timeout: 900
 
 commonLabels:

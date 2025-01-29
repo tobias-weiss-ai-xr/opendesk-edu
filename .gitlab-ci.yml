@@ -73,6 +73,12 @@ variables:
     options:
       - "yes"
       - "no"
+  OPENDESK_ENTERPRISE:
+    description: "Set to `true` if you want to deploy openDesk EE (but be sure you provide the required EE keys/tokens for the application)"
+    value: "false"
+    options:
+      - "true"
+      - "false"
   DEPLOY_ALL_COMPONENTS:
     description: "Enable all component deployment (overwrites 'no' setting on component level)."
     value: "no"
@@ -286,7 +292,7 @@ env-start:
   after_script:
     # Set credentials for openDesk Enterprise Registry
     - |
-      if [[ -n "${OPENDESK_ENTERPRISE}" ]]; then
+      if [ "${OPENDESK_ENTERPRISE}" = "true" ]; then
         kubectl create secret
         --namespace "${NAMESPACE}"
         docker-registry enterprise-registry
@@ -575,6 +581,7 @@ run-tests:
           \"screenshot_redirect_step\": \"yes\", \
           \"testset\": \"${TESTS_TESTSET}\", \
           \"testprofile\": \"Namespace\", \
+          \"OPENDESK_ENTERPRISE\": \"${OPENDESK_ENTERPRISE}\", \
           \"GRACE_PERIOD\": \"${TESTS_GRACE_PERIOD}\", \
           \"NUMBER_OF_THREADS\": \"${TESTS_NUMBER_OF_THREADS}\" \
         } \

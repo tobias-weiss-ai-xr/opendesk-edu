@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 image:
   repository: "{{ coalesce .Values.repositories.image.registryOpencodeDeEnterprise .Values.global.imageRegistry .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
 autoscaling:
-  enabled: {{ .Values.collaboraController.enabled }}
+  enabled: {{ .Values.apps.collaboraController.enabled }}
   minReplicas: {{ .Values.enterpriseFeatures.collabora.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.enterpriseFeatures.collabora.autoscaling.maxReplicas }}
   targetMemoryUtilizationPercentage: {{ .Values.enterpriseFeatures.collabora.autoscaling.targetMemoryUtilizationPercentage }}

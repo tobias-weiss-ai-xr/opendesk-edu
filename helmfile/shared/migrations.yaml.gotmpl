@@ -20,7 +20,7 @@ cleanup:
 
 migrations:
   runId: 3
-  namespace: {{ .Values.migrations.namespace | default .Release.Namespace | quote }}
+  namespace: {{ .Values.apps.migrations.namespace | default .Release.Namespace | quote }}
   loglevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   failOnUnexpectedState: true
   environmentDetails:

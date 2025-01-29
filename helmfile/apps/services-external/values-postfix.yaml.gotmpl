@@ -52,7 +52,7 @@ postfix:
     - fileName: "sasl_passwd.map"
       content:
         - {{ printf "%s %s:%s" .Values.smtp.host .Values.smtp.username .Values.smtp.password | quote }}
-  {{- if .Values.dkimpy.enabled }}
+  {{- if .Values.apps.dkimpy.enabled }}
   dkimpyHost: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}:8892"
   {{- end }}
   rspamdHost: ""
@@ -71,9 +71,9 @@ postfix:
   {{- if .Values.antivirus.milter.host }}
   smtpdMilters: "inet:{{ .Values.antivirus.milter.host }}:{{ .Values.antivirus.milter.port }}"
   {{- else }}
-  {{- if .Values.clamavDistributed.enabled }}
+  {{- if .Values.apps.clamavDistributed.enabled }}
   smtpdMilters: "inet:clamav-milter:7357"
-  {{- else if .Values.clamavSimple.enabled }}
+  {{- else if .Values.apps.clamavSimple.enabled }}
   smtpdMilters: "inet:clamav-simple:7357"
   {{- end }}
   {{- end }}

@@ -10,7 +10,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.notes.registry }}/{{ .Values.charts.notes.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.notes.registry }}/{{ .Values.charts.notes.repository }}"
 
 releases:
   - name: "impress"
@@ -22,7 +22,7 @@ releases:
       {{- range .Values.customization.release.notes }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.notes.enabled }}
+    installed: {{ .Values.apps.notes.enabled }}
     timeout: 1800
 
 commonLabels:

@@ -12,7 +12,7 @@ controller:
   # Therefore we use the default of `collabora-online` for the `resourceName`
   resourceName: "collabora-online"
   statsInterval: 2000
-  watchNamespace: {{ (.Values.collabora.namespace | default .Release.Namespace | quote) }}
+  watchNamespace: {{ (.Values.apps.collabora.namespace | default .Release.Namespace | quote) }}
 
   documentMigrator:
     enabled: true

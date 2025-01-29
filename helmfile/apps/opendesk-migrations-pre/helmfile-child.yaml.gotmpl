@@ -10,7 +10,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.migrations.registry }}/{{ .Values.charts.migrations.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.migrations.registry }}/{{ .Values.charts.migrations.repository }}"
 
 releases:
   - name: "opendesk-migrations-pre"
@@ -24,7 +24,7 @@ releases:
       {{- range .Values.customization.release.migrationsPre }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.migrations.enabled }}
+    installed: {{ .Values.apps.migrations.enabled }}
     timeout: 900
 
 commonLabels:

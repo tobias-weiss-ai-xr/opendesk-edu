@@ -10,7 +10,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.postgresql.registry }}/{{ .Values.charts.postgresql.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.postgresql.registry }}/{{ .Values.charts.postgresql.repository }}"
 
   # openDesk MariaDB
   # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-mariadb
@@ -20,7 +20,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.mariadb.registry }}/{{ .Values.charts.mariadb.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.mariadb.registry }}/{{ .Values.charts.mariadb.repository }}"
 
   # openDesk dkimpy-milter
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dkimpy-milter
@@ -30,7 +30,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.dkimpy.registry }}/{{ .Values.charts.dkimpy.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.dkimpy.registry }}/{{ .Values.charts.dkimpy.repository }}"
 
   # openDesk Postfix
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postfix
@@ -40,7 +40,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
 
   # openDesk ClamAV
   # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-clamav
@@ -50,14 +50,14 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.clamav.registry }}/{{ .Values.charts.clamav.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.clamav.registry }}/{{ .Values.charts.clamav.repository }}"
   - name: "clamav-simple-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.clamavSimple.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.clamavSimple.registry }}/{{ .Values.charts.clamavSimple.repository }}"
 
   # VMWare Bitnami
   # Source: https://github.com/bitnami/charts/
@@ -67,21 +67,21 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.memcached.registry }}/{{ .Values.charts.memcached.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.memcached.registry }}/{{ .Values.charts.memcached.repository }}"
   - name: "redis-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.redis.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.redis.registry }}/{{ .Values.charts.redis.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.redis.registry }}/{{ .Values.charts.redis.repository }}"
   - name: "minio-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.minio.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
 
   # openDesk Enterprise
   # Cassandra
@@ -92,7 +92,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.cassandra.registry }}/{{ .Values.charts.cassandra.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.cassandra.registry }}/{{ .Values.charts.cassandra.repository }}"
 
 releases:
   - name: "redis"
@@ -103,7 +103,7 @@ releases:
       {{- range .Values.customization.release.redis }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.redis.enabled }}
+    installed: {{ .Values.apps.redis.enabled }}
     timeout: 900
 
   - name: "memcached"
@@ -114,7 +114,7 @@ releases:
       {{- range .Values.customization.release.memcached }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.memcached.enabled }}
+    installed: {{ .Values.apps.memcached.enabled }}
     timeout: 900
 
   - name: "postgresql"
@@ -125,7 +125,7 @@ releases:
       {{- range .Values.customization.release.postgresql }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.postgresql.enabled }}
+    installed: {{ .Values.apps.postgresql.enabled }}
     timeout: 900
 
   - name: "mariadb"
@@ -136,7 +136,7 @@ releases:
       {{- range .Values.customization.release.mariadb }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.mariadb.enabled }}
+    installed: {{ .Values.apps.mariadb.enabled }}
     timeout: 900
 
   - name: "postfix"
@@ -147,7 +147,7 @@ releases:
       {{- range .Values.customization.release.postfix }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.postfix.enabled }}
+    installed: {{ .Values.apps.postfix.enabled }}
     timeout: 900
 
   - name: "opendesk-dkimpy-milter"
@@ -158,7 +158,7 @@ releases:
       {{- range .Values.customization.release.opendeskDkimpyMilter }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.dkimpy.enabled }}
+    installed: {{ .Values.apps.dkimpy.enabled }}
     timeout: 900
 
   - name: "clamav"
@@ -169,7 +169,7 @@ releases:
       {{- range .Values.customization.release.clamav }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.clamavDistributed.enabled }}
+    installed: {{ .Values.apps.clamavDistributed.enabled }}
     timeout: 900
 
   - name: "clamav-simple"
@@ -180,7 +180,7 @@ releases:
       {{- range .Values.customization.release.clamavSimple }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.clamavSimple.enabled }}
+    installed: {{ .Values.apps.clamavSimple.enabled }}
     timeout: 900
 
   - name: "minio"
@@ -191,7 +191,7 @@ releases:
       {{- range .Values.customization.release.minio }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.minio.enabled }}
+    installed: {{ .Values.apps.minio.enabled }}
     timeout: 900
 
   # openDesk Enterprise Releases
@@ -203,7 +203,7 @@ releases:
       {{- range .Values.customization.release.cassandra }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.cassandra.enabled }}
+    installed: {{ .Values.apps.cassandra.enabled }}
     timeout: 900
 
 commonLabels:

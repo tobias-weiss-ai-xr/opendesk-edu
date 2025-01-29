@@ -4,17 +4,17 @@
 repositories:
   # openDesk Migrations
   # Source:
-  - name: "openproject-migrations-repo"
+  - name: "opendesk-migrations-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.migrations.verify }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.migrations.registry }}/{{ .Values.charts.migrations.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.migrations.registry }}/{{ .Values.charts.migrations.repository }}"
 
 releases:
   - name: "opendesk-migrations-post"
-    chart: "openproject-migrations-repo/{{ .Values.charts.migrations.name }}"
+    chart: "opendesk-migrations-repo/{{ .Values.charts.migrations.name }}"
     version: "{{ .Values.charts.migrations.version }}"
     wait: true
     waitForJobs: true
@@ -24,7 +24,7 @@ releases:
       {{- range .Values.customization.release.migrationsPost }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.migrations.enabled }}
+    installed: {{ .Values.apps.migrations.enabled }}
     timeout: 900
 
 commonLabels:
