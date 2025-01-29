@@ -57,7 +57,7 @@ config:
       scope: "opendesk-dovecot-scope"
       role: "opendesk-dovecot-access-control"
       group: "managed-by-attribute-Groupware"
-    {{- if .Values.notes.enabled }}
+    {{- if .Values.apps.notes.enabled }}
     notes:
       client: "opendesk-notes"
       scope: "opendesk-notes-scope"
@@ -66,7 +66,7 @@ config:
     {{- end }}
 
   componentEnabled:
-    notes: {{ .Values.notes.enabled }}
+    notes: {{ .Values.apps.notes.enabled }}
   custom:
     clientScopes:
       {{ .Values.functional.authentication.oidc.clientScopes | toYaml | nindent 6 }}
@@ -431,7 +431,7 @@ config:
               access.token.claim: true
               claim.name: "opendesk_username"
               jsonType.label: "String"
-{{ if .Values.notes.enabled }}
+{{ if .Values.apps.notes.enabled }}
       - name: "opendesk-notes-scope"
         description: "Scope for the claims required by openDesk's Notes instance."
         protocol: "openid-connect"
@@ -522,7 +522,7 @@ config:
               jsonType.label: "String"
         defaultClientScopes:
           - "offline_access"
-{{ if .Values.notes.enabled }}
+{{ if .Values.apps.notes.enabled }}
       - name: "opendesk-notes"
         clientId: "opendesk-notes"
         protocol: "openid-connect"

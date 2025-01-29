@@ -10,7 +10,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ .Values.global.helmRegistry | default .Values.charts.jitsi.registry }}/{{ .Values.charts.jitsi.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.jitsi.registry }}/{{ .Values.charts.jitsi.repository }}"
 
 releases:
   - name: "jitsi"
@@ -21,7 +21,7 @@ releases:
       {{- range .Values.customization.release.jitsi }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.jitsi.enabled }}
+    installed: {{ .Values.apps.jitsi.enabled }}
     timeout: 900
 
 commonLabels:

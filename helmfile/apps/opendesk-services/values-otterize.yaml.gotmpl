@@ -10,47 +10,47 @@ global:
 
 apps:
   clamavDistributed:
-    enabled: {{ .Values.clamavDistributed.enabled }}
+    enabled: {{ .Values.apps.clamavDistributed.enabled }}
   clamavSimple:
-    enabled: {{ .Values.clamavSimple.enabled }}
+    enabled: {{ .Values.apps.clamavSimple.enabled }}
   collabora:
-    enabled: {{ .Values.collabora.enabled }}
+    enabled: {{ .Values.apps.collabora.enabled }}
   cryptpad:
-    enabled: {{ .Values.cryptpad.enabled }}
+    enabled: {{ .Values.apps.cryptpad.enabled }}
   dkimpy:
-    enabled: {{ .Values.dkimpy.enabled }}
+    enabled: {{ .Values.apps.dkimpy.enabled }}
   dovecot:
-    enabled: {{ .Values.dovecot.enabled }}
+    enabled: {{ .Values.apps.dovecot.enabled }}
   element:
-    enabled: {{ .Values.element.enabled }}
+    enabled: {{ .Values.apps.element.enabled }}
   jitsi:
-    enabled: {{ .Values.jitsi.enabled }}
+    enabled: {{ .Values.apps.jitsi.enabled }}
   mariadb:
-    enabled: {{ .Values.mariadb.enabled }}
+    enabled: {{ .Values.apps.mariadb.enabled }}
   memcached:
-    enabled: {{ .Values.memcached.enabled }}
+    enabled: {{ .Values.apps.memcached.enabled }}
   migrations:
-    enabled: {{ .Values.migrations.enabled }}
+    enabled: {{ .Values.apps.migrations.enabled }}
   minio:
-    enabled: {{ .Values.minio.enabled }}
+    enabled: {{ .Values.apps.minio.enabled }}
   nextcloud:
-    enabled: {{ .Values.nextcloud.enabled }}
+    enabled: {{ .Values.apps.nextcloud.enabled }}
   notes:
-    enabled: {{ .Values.notes.enabled }}
+    enabled: {{ .Values.apps.notes.enabled }}
   nubus:
-    enabled: {{ .Values.nubus.enabled }}
+    enabled: {{ .Values.apps.nubus.enabled }}
   openproject:
-    enabled: {{ .Values.openproject.enabled }}
+    enabled: {{ .Values.apps.openproject.enabled }}
   oxAppsuite:
-    enabled: {{ .Values.oxAppSuite.enabled }}
+    enabled: {{ .Values.apps.oxAppSuite.enabled }}
   postfix:
-    enabled: {{ .Values.postfix.enabled }}
+    enabled: {{ .Values.apps.postfix.enabled }}
   postgresql:
-    enabled: {{ .Values.postgresql.enabled }}
+    enabled: {{ .Values.apps.postgresql.enabled }}
   redis:
-    enabled: {{ .Values.redis.enabled }}
+    enabled: {{ .Values.apps.redis.enabled }}
   xwiki:
-    enabled: {{ .Values.xwiki.enabled }}
+    enabled: {{ .Values.apps.xwiki.enabled }}
 
 ingressController:
   {{ .Values.security.ingressController | toYaml | nindent 2 }}

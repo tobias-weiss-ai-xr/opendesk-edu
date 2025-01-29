@@ -9,6 +9,9 @@ SPDX-License-Identifier: Apache-2.0
 * [Disclaimer](#disclaimer)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
+  * [From v1.1.1](#from-v111)
+    * [Pre-upgrade from v1.1.1](#pre-upgrade-from-v111)
+      * [Helmfile feature update: App settings wrapped in `apps.` element](#helmfile-feature-update-app-settings-wrapped-in-apps-element)
   * [From v1.1.0](#from-v110)
     * [Pre-upgrade from v1.1.0](#pre-upgrade-from-v110)
       * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
@@ -85,6 +88,37 @@ When interested in more details about the automated migrations, please read sect
 # Manual checks/actions
 
 Be sure you check all the sections for the releases your are going to update your current deployment from.
+
+## From v1.1.1
+
+### Pre-upgrade from v1.1.1
+
+#### Helmfile feature update: App settings wrapped in `apps.` element
+
+We require now [Helmfile v1.0.0-rc.8](https://github.com/helmfile/helmfile/releases/tag/v1.0.0-rc.8) for the deployment. This enables openDesk to lay the foundation for some significant cleanups where the information for the different apps especially on their `enabled` state is needed.
+
+Therefore it was required to introduce the `apps` level in [`opendesk_main.yaml.gotmpl`](../helmfile/environments/default/opendesk_main.yaml.gotmpl).
+
+If you have a deployment where you specify settings that can be found in the aforementioned file, usually to disable components or enable others, please ensure you insert the top-level attribute `apps` like shown in the following example:
+
+So a setting of:
+
+```
+certificates:
+  enabled: false
+notes:
+  enabled: true
+```
+
+needs to be changed to:
+
+```
+apps:
+  certificates:
+    enabled: false
+  notes:
+    enabled: true
+```
 
 ## From v1.1.0
 

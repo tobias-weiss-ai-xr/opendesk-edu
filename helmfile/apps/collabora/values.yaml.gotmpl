@@ -27,7 +27,7 @@ collabora:
     {{- else }}
     --o:logging.anonymize.anonymize_user_data=true
     {{- end }}
-    {{- if .Values.collaboraController.enabled }}
+    {{- if .Values.apps.collaboraController.enabled }}
     --o:indirection_endpoint.url=https://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/routeToken
     --o:monitors.monitor[0]=wss://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/ws
     --o:monitors.monitor[0][@retryInterval]=5
@@ -49,7 +49,7 @@ imagePullSecrets:
 
 ingress:
   annotations:
-    {{- if .Values.collaboraController.enabled }}
+    {{- if .Values.apps.collaboraController.enabled }}
     nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_RouteToken"
     {{- else }}
     nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"

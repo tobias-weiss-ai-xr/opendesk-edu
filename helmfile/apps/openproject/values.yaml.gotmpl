@@ -80,7 +80,7 @@ environment:
   OPENPROJECT_SMTP__PASSWORD: ""
   OPENPROJECT_SMTP__PORT: 25
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
-  OPENPROJECT_SMTP__ADDRESS: {{ printf "%s.%s.svc.%s" "postfix" (.Values.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+  OPENPROJECT_SMTP__ADDRESS: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
   OPENPROJECT_SMTP__AUTHENTICATION: "none"
   OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "false"
   OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "none"

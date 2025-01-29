@@ -340,9 +340,9 @@ appsuite:
         com.openexchange.antivirus.server: {{ .Values.antivirus.icap.host | quote }}
         com.openexchange.antivirus.port: {{ .Values.antivirus.icap.port | quote }}
         {{- else }}
-        {{- if .Values.clamavDistributed.enabled }}
+        {{- if .Values.apps.clamavDistributed.enabled }}
         com.openexchange.antivirus.server: "clamav-icap"
-        {{- else if .Values.clamavSimple.enabled }}
+        {{- else if .Values.apps.clamavSimple.enabled }}
         com.openexchange.antivirus.server: "clamav-simple"
         {{- end }}
         com.openexchange.antivirus.port: "1344"

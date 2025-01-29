@@ -38,10 +38,10 @@ The following components have - at least partially - Enterprise specific artifac
 
 # Enabling the Enterprise deployment
 
-To enable the oD EE deployment you must set the environment variable `OPENDESK_ENTERPRISE` to any value.
+To enable the oD EE deployment you must set the environment variable `OPENDESK_ENTERPRISE` to any value that does not evaluate to boolean *false* for [Helm flow control](https://helm.sh/docs/chart_template_guide/control_structures/#ifelse), e.g. `"true"`, `"yes"` or `"1"`:
 
 ```shell
-OPENDESK_ENTERPRISE=any_value
+OPENDESK_ENTERPRISE=true
 ```
 
 # Configuring the oD EE deployment for self-hosted installations
