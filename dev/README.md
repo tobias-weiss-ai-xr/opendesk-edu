@@ -7,30 +7,40 @@ SPDX-License-Identifier: Apache-2.0
 
 * [charts-local.py](#charts-localpy)
   * [Commandline parameter](#commandline-parameter)
-    * [`--branch`](#--branch)
+    * [`--match <your_string>`](#--match-your_string)
     * [`--revert`](#--revert)
+    * [`--branch` (deprecated)](#--branch-deprecated)
 
 # charts-local.py
 
-This script helps you on cloning the platform development Helm charts and referencing them directly in the openDesk
-Helmfile deployment for comfortable local test and development. The charts will be cloned into a directory
-parallel created next to the `opendesk` repo containing this documentation and the `charts-local.py` script.
-The name of the chart directory is derived from the branch name you are working with in this `opendesk` repo.
+This script helps you with cloning/pulling Helm charts and referencing them directly in the openDesk
+Helmfile deployment for comfortable local test and development. The charts will be cloned/pulled into a directory
+created next to the `opendesk` repo containing this documentation and the `charts-local.py` script.
 
-The script will create `.bak` copies of the helmfiles that have been touched.
+The name of the directory containing the charts is based on the (currently) selected branch of the openDesk
+repo prefixed with `charts-`.
+
+The script will create `.bak` copies of the helmfiles that have been touched that can easily be reverted to
+using the `--revert` option.
 
 Run the script with `-h` to get information about the script's parameter on commandline.
 
 ## Commandline parameter
 
-### `--branch`
+### `--match <your_string>`
+
+Will only fetch repos or pull images for charts which name matches `<your_string>`.
+
+### `--revert`
+
+Reverts the changes in the helmfiles pointing to the local Helm charts by copying the backup files created by the
+scripts itself back to their original location.
+
+### `--branch` (deprecated)
 
 Optional parameter: Defines a branch for the `opendesk` repo to work with. The script will create the branch if it
 does not exist yet. Otherwise it will switch to defined branch.
 
 If parameter is omitted the current branch of the `opendesk` repo will be used.
 
-### `--revert`
-
-Reverts the changes in the helmfiles pointing to the local Helm charts by copying the backup files created by the
-scripts itself back to their original location.
+As this parameter was used rarely, we might remove the support in a later version.

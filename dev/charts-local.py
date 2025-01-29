@@ -18,7 +18,6 @@ p.add('--branch', env_var='CHART_DEV_BRANCH', help='The branch you want to work 
 p.add('--git_hostname', env_var='GIT_HOSTNAME', default='git@gitlab.opencode.de', help='Set the hostname for the chart git checkouts.')
 p.add('--revert', default=False, action='store_true', help='Set this parameter if you want to revert the referencing of the local helm chart checkout paths in the helmfiles.')
 p.add('--match', default='', help="Clone/pull only charts that contain the given string in their name.")
-p.add('--pull', default=False, action='store_true', help='Will also pull and unpack Helm charts that are not developed by product development.')
 p.add('--loglevel', env_var='LOGLEVEL', default='DEBUG', help='Set the loglevel: DEBUG, INFO, WARNING, ERROR, CRITICAL-')
 options = p.parse_args()
 
@@ -78,13 +77,10 @@ def create_path_if_not_exists(path):
         Path(path).mkdir(parents=True, exist_ok=True)
 
 def clone_charts_locally(branch, charts):
-    charts_clone_path = script_path+'/../../chart-repo/'+branch.replace('/', '_')
-    charts_pull_path = script_path+'/../../chart-pull/'+branch.replace('/', '_')
+    charts_path = script_path+'/../../charts-'+branch.replace('/', '_')
     charts_dict = {}
     doublette_dict = {}
-    create_path_if_not_exists(charts_clone_path)
-    if options.pull:
-        create_path_if_not_exists(charts_pull_path)
+    create_path_if_not_exists(charts_path)
 
     for chart in charts['charts']:
         tag = charts['charts'][chart]['version']
@@ -92,40 +88,40 @@ def clone_charts_locally(branch, charts):
         registry = charts['charts'][chart]['registry']
         name = charts['charts'][chart]['name']
         logging.debug(f"Working on {chart} / tag {tag} / repo {repository}")
+        chart_local_path = charts_path+'/'+name
         if not options.match in name:
             logging.info(f"Chart name {name} does not match {options.match} - skipping...")
+            continue
         elif registry == '':
             logging.info("Empty registry definition - skipping...")
+            continue
+        if os.path.isdir(chart_local_path):
+            logging.debug(f"Found pre-existing {chart_local_path} skipping clone/pull, but will still reference chart in Helmfile...")
+            charts_dict[chart] = chart_local_path
+            continue
         elif 'opendesk/components/platform-development/charts' in repository:
             logging.info("Cloning the charts repo")
             git_url = options.git_hostname+':'+repository
-            chart_repo_path = charts_clone_path+'/'+charts['charts'][chart]['name']
             if git_url in doublette_dict:
                 logging.debug(f"{chart} located at {git_url} is already checked out to {doublette_dict[git_url]}")
                 charts_dict[chart] = doublette_dict[git_url]
             else:
-                if os.path.isdir(chart_repo_path):
-                    logging.debug(f"Already exists {chart_repo_path} leaving it unmodified")
-                else:
-                    logging.debug(f"Cloning into {chart_repo_path}")
-                    Repo.clone_from(git_url, chart_repo_path)
-                    chart_repo = Repo(path=chart_repo_path)
-                    chart_repo.git.checkout('v'+charts['charts'][chart]['version'])
-                doublette_dict[git_url] = chart_repo_path
-                charts_dict[chart] = chart_repo_path
-        elif options.pull:
+                logging.debug(f"Cloning into {chart_local_path}")
+                Repo.clone_from(git_url, chart_local_path)
+                chart_repo = Repo(path=chart_local_path)
+                chart_repo.git.checkout('v'+charts['charts'][chart]['version'])
+                doublette_dict[git_url] = chart_local_path
+                charts_dict[chart] = chart_local_path
+        else:
             logging.info("Pulling the chart")
-            helm_command = f"helm pull oci://{registry}/{repository}/{name} --version {tag} --untar --destination {charts_pull_path}"
+            helm_command = f"helm pull oci://{registry}/{repository}/{name} --version {tag} --untar --destination {charts_path}"
             logging.debug(f"CLI command: {helm_command}")
             try:
-                output = subprocess.check_output(helm_command, shell = True)
+                subprocess.check_output(helm_command, shell = True)
             except subprocess.CalledProcessError:
                 sys.exit(f"! CLI command '{helm_command}' failed")
-        else:
-            logging.debug("Not a product development chart and `--pull` option not enabled - skipping...")
-
+            charts_dict[chart] = chart_local_path
     return charts_dict
-
 
 def grep_yaml(file):
     with open(file, 'r') as file:
@@ -156,7 +152,12 @@ def process_the_helmfiles(charts_dict, charts):
                     for chart_ident in charts_dict:
                         if '.Values.charts.'+chart_ident+'.name' in line:
                             logging.debug(f"found match with {chart_ident} in {line.strip()}")
-                            line = chart_def_prefix+charts_dict[chart_ident]+'/charts/'+charts['charts'][chart_ident]['name']+'" # replaced by local-dev script'+"\n"
+                            line = charts_dict[chart_ident]
+                            if os.path.isdir(line+'/charts/'+chart_ident):
+                                line += '/charts/'+charts['charts'][chart_ident]['name']
+                            elif not os.path.isdir(line):
+                                sys.exit(f"! Did not find directory to reference in Helmfile: '{line}'")
+                            line = chart_def_prefix+line+'" # replaced by local-dev script'+"\n"
                             child_helmfile_updated = True
                             break
                 output.append(line)
