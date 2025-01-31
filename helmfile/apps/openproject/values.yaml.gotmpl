@@ -38,7 +38,7 @@ dbInit:
     {{ .Values.resources.openprojectDbInit | toYaml | nindent 4 }}
 
 environment:
-  {{- if and (env "OPENDESK_ENTERPRISE") .Values.enterpriseKeys.openproject.token }}
+  {{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.openproject.token }}
   OPENPROJECT_ENTERPRISE__TOKEN: {{ .Values.enterpriseKeys.openproject.token | quote }}
   {{- end }}
 # For more details and more options see
