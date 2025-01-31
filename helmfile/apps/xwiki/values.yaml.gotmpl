@@ -18,7 +18,7 @@ image:
 imagePullSecrets: {{ .Values.global.imagePullSecrets }}
 
 javaOpts:
-  {{- if and (env "OPENDESK_ENTERPRISE") .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense .Values.enterpriseKeys.xwiki.proApplicationslicense }}
+  {{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense .Values.enterpriseKeys.xwiki.proApplicationslicense }}
   - "-Dlicenses={{ .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense }},{{ .Values.enterpriseKeys.xwiki.proApplicationslicense }}"
   {{- end }}
   {{- if .Values.certificate.selfSigned }}

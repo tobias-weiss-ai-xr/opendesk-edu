@@ -13,7 +13,7 @@ repositories:
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
 
   # Open-Xchange
-  {{- if (env "OPENDESK_ENTERPRISE") }}
+  {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
   - name: "open-xchange-repo"
     keyring: "../../files/gpg-pubkeys/open-xchange-com.gpg"
     verify: {{ .Values.charts.oxAppSuite.verify }}
