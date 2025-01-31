@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 repositories:
@@ -7,27 +7,29 @@ repositories:
   - name: "dovecot-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.dovecot.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
-
-  # Open-Xchange
   {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
-  - name: "open-xchange-repo"
-    keyring: "../../files/gpg-pubkeys/open-xchange-com.gpg"
-    verify: {{ .Values.charts.oxAppSuite.verify }}
     username: {{ env "ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDeEnterprise .Values.global.helmRegistry | default .Values.charts.oxAppSuite.registry }}/{{ .Values.charts.oxAppSuite.repository }}"
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDeEnterprise .Values.global.helmRegistry | default .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
   {{- else }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
+  {{- end }}
+
+  # Open-Xchange
   - name: "open-xchange-repo"
     keyring: "../../files/gpg-pubkeys/open-xchange-com.gpg"
     verify: {{ .Values.charts.oxAppSuite.verify }}
+    oci: true
+  {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    username: {{ env "ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDeEnterprise .Values.global.helmRegistry | default .Values.charts.oxAppSuite.registry }}/{{ .Values.charts.oxAppSuite.repository }}"
+  {{- else }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.oxAppSuite.registry }}/{{ .Values.charts.oxAppSuite.repository }}"
   {{- end }}
 
@@ -55,6 +57,9 @@ releases:
     version: "{{ .Values.charts.dovecot.version }}"
     values:
       - "values-dovecot.yaml.gotmpl"
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+      - "values-dovecot-enterprise.yaml.gotmpl"
+      {{- end }}
       {{- range .Values.customization.release.dovecot }}
       - {{ . }}
       {{- end }}
