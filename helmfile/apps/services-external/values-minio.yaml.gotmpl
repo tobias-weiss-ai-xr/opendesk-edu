@@ -1,5 +1,5 @@
 {{/*
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 */}}
@@ -116,6 +116,11 @@ provisioning:
     - name: {{ .Values.objectstores.nubus.bucket | quote }}
       versioning: "Suspended"
       withLock: false
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    - name: {{ .Values.objectstores.dovecot.bucket | quote }}
+      versioning: "Suspended"
+      withLock: false
+    {{- end }}
   policies:
     - name: "migrations-bucket-policy"
       statements:
@@ -177,6 +182,20 @@ provisioning:
           effect: "Allow"
           actions:
             - "s3:*"
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    - name: "dovecot-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::dovecot"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::dovecot/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+    {{- end }}
   users:
     - username: {{ .Values.objectstores.migrations.username | quote }}
       password: {{ .Values.secrets.minio.migrationsUser | quote }}
@@ -208,6 +227,14 @@ provisioning:
       policies:
         - "ums-bucket-policy"
       setPolicies: true
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    - username: {{ .Values.objectstores.dovecot.username | quote }}
+      password: {{ .Values.secrets.minio.dovecotUser | quote }}
+      disabled: false
+      policies:
+        - "dovecot-bucket-policy"
+      setPolicies: true
+    {{- end }}
   resources:
     {{ .Values.resources.minio | toYaml | nindent 4 }}
 
