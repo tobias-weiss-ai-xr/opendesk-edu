@@ -377,6 +377,7 @@ nubusGuardian:
       imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 nubusNotificationsApi:
+  enabled: false
   additionalAnnotations:
     intents.otterize.com/service-name: "ums-notifications-api"
   containerSecurityContext:
