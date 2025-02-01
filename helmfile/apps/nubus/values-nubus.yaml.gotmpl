@@ -736,6 +736,7 @@ nubusUdmRestApi:
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   ingress:
+    enabled: {{ .Values.functional.externalServices.nubus.udmRestApi.enabled }}
     certManager:
       enabled: false
     tls:
