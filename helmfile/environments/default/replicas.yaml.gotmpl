@@ -100,6 +100,8 @@ replicas:
   # -- scalable: true
   umsLdapServerSecondary: 0
   # -- scalable: true
+  # -- comment: The LDAP proxy is only required in situations where there are clients outside of UDM writing into the
+  # LDAP like Samba. This is not a use case within openDesk so the LDAP Proxy's replica count should be kept at `0`
   umsLdapServerProxy: 0
   # -- scalable: tbd
   umsNotificationsApi: 1
