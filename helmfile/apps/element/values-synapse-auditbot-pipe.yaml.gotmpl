@@ -12,7 +12,6 @@ global:
 
 configuration:
   secretName: "matrix-auditbot-config"
-  #serviceName: "opendesk-synapse-auditbot-pipe"
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDeEnterprise .Values.global.imageRegistry .Values.images.elementPipe.registry | quote }}
   url: {{ .Values.images.elementPipe.repository | quote }}
