@@ -13,7 +13,6 @@ global:
 configuration:
   homeserver:
     serverName: {{ .Values.global.matrixDomain | default .Values.global.domain }}
-#fullnameOverride: "opendesk-synapse-adminbot-web"
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDeEnterprise .Values.global.imageRegistry .Values.images.elementAdminBot.registry | quote }}
   repository: {{ .Values.images.elementAdminBot.repository | quote }}

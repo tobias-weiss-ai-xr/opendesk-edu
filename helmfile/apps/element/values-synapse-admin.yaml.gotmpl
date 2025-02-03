@@ -45,7 +45,6 @@ configuration:
   homeserver:
     # -- URL of synapse deployment. As default the url of synapse will be used.
     #baseUrl: ""
-  homeserver:
     serverName: {{ .Values.global.matrixDomain | default .Values.global.domain | quote }}
   ldap:
     base: {{ .Values.ldap.baseDn | quote }}
