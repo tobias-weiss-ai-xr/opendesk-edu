@@ -1103,9 +1103,7 @@ nubusStackDataUms:
     smtpStartTls: false
     ldapBase: {{ .Values.ldap.baseDn }}
   templateContext:
-    initialPasswordDefaultAdmin: {{ .Values.secrets.nubus.defaultAccounts.adminPassword | quote }}
-    initialPasswordDefaultUser: {{ .Values.secrets.nubus.defaultAccounts.userPassword | quote }}
-    initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote }}
+    apps: {{ .Values.apps | toYaml | nindent 6 }}
     portalEnforceLogin: {{ .Values.functional.portal.enforceLogin }}
     portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
     portalTiles: {{ toYaml .Values.theme.imagery.portalTiles | nindent 6 }}
@@ -1118,9 +1116,10 @@ nubusStackDataUms:
     portalNotesLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain }}
     portalTitleDE: "Portal - {{ .Values.theme.texts.productName }}"
     portalTitleEN: "Portal - {{ .Values.theme.texts.productName }}"
+    portalLinkLegalNotice: {{ .Values.functional.portal.linkLegalNotice }}
+    portalLinkPrivacyStatement: {{ .Values.functional.portal.linkPrivacyStatement }}
+
     oxDefaultContext: "1"
-    componentEnabled:
-      notes: {{ .Values.apps.notes.enabled }}
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
       - username: {{ printf "ldapsearch_%s" $username | quote }}
