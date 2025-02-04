@@ -1103,6 +1103,7 @@ nubusStackDataUms:
     smtpStartTls: false
     ldapBase: {{ .Values.ldap.baseDn }}
   templateContext:
+    initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote }}
     apps: {{ .Values.apps | toYaml | nindent 6 }}
     portalEnforceLogin: {{ .Values.functional.portal.enforceLogin }}
     portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
