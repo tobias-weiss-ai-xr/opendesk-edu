@@ -330,8 +330,8 @@ appsuite:
       /opt/open-xchange/etc/system.properties:
         SERVER_NAME: "oxserver"
       /opt/open-xchange/etc/ldapauth.properties:
-        java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/dc=swp-ldap,dc=internal"
-        bindDN: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
+        java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/{{ .Values.ldap.baseDn }}"
+        bindDN: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
         bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
         bindOnly: "false"
       /opt/open-xchange/etc/antivirus.properties:

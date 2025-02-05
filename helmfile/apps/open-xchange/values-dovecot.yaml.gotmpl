@@ -23,8 +23,8 @@ dovecot:
     enabled: true
     host: {{ .Values.ldap.host | quote }}
     port: 389
-    base: "dc=swp-ldap,dc=internal"
-    dn: "uid=ldapsearch_dovecot,cn=users,dc=swp-ldap,dc=internal"
+    base: "{{ .Values.ldap.baseDn }}"
+    dn: "uid=ldapsearch_dovecot,cn=users,{{ .Values.ldap.baseDn }}"
     password: {{ .Values.secrets.nubus.ldapSearch.dovecot | quote }}
   oidc:
     enabled: true
