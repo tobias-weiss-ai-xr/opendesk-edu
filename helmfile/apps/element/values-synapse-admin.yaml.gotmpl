@@ -48,9 +48,9 @@ configuration:
     serverName: {{ .Values.global.matrixDomain | default .Values.global.domain | quote }}
   ldap:
     base: {{ .Values.ldap.baseDn | quote }}
-    bind_dn: "uid=ldapsearch_element,cn=users,dc=swp-ldap,dc=internal"
+    bind_dn: "uid=ldapsearch_element,cn=users,{{ .Values.ldap.baseDn }}"
     bind_password: {{ .Values.secrets.nubus.ldapSearch.element | quote }}
-    filter: "(memberOf=cn=managed-by-attribute-LivecollaborationAdmin,cn=groups,dc=swp-ldap,dc=internal)"
+    filter: "(memberOf=cn=managed-by-attribute-LivecollaborationAdmin,cn=groups,{{ .Values.ldap.baseDn }})"
     uri: {{ printf "ldap://%s:389" .Values.ldap.host | quote }}
 cron:
   image:

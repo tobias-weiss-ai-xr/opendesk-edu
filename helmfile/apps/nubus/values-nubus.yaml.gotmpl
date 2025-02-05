@@ -1119,7 +1119,6 @@ nubusStackDataUms:
     portalTitleEN: "Portal - {{ .Values.theme.texts.productName }}"
     portalLinkLegalNotice: {{ .Values.functional.portal.linkLegalNotice }}
     portalLinkPrivacyStatement: {{ .Values.functional.portal.linkPrivacyStatement }}
-
     oxDefaultContext: "1"
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
@@ -1159,6 +1158,12 @@ nubusStackDataUms:
       {{- else }}
       deployDate: false
       {{- end }}
+    # executes a list of UDM commands as step `03-custom-initializer.yaml` of the opendesk-nubus customization
+    # Ref. https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-nubus/-/tree/main/udm/udm-data-loader
+    udmCustomInitializer: []
+    # executes a list of UDM commands as step `97-custom-finalizer.yaml` of the opendesk-nubus customization
+    # Ref. https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-nubus/-/tree/main/udm/udm-data-loader
+    udmCustomFinalizer: []
 
 nubusUmcServer:
   additionalAnnotations:

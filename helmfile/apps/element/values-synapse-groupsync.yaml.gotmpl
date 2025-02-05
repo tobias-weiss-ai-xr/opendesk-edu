@@ -24,21 +24,21 @@ configuration:
       name: "description"
       uid: "uid"
     base: {{ .Values.ldap.baseDn | quote }}
-    bind_dn: "uid=ldapsearch_element,cn=users,dc=swp-ldap,dc=internal"
+    bind_dn: "uid=ldapsearch_element,cn=users,{{ .Values.ldap.baseDn }}"
     bind_password: {{ .Values.secrets.nubus.ldapSearch.element | quote }}
     check_interval_seconds: 60
     type: mapped-ldap
     uri: "ldap://ums-ldap-server:389"
   spaces:
     - groups:
-        - externalId: "cn=managed-by-attribute-LivecollaborationAdmin,cn=groups,dc=swp-ldap,dc=internal"
+        - externalId: "cn=managed-by-attribute-LivecollaborationAdmin,cn=groups,{{ .Values.ldap.baseDn }}"
           powerLevel: 50
-        - externalId: "cn=managed-by-attribute-Livecollaboration,cn=groups,dc=swp-ldap,dc=internal"
+        - externalId: "cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}"
       id: "c3122e32-4e05-4bf8-8a5d-66679076ed36"
       name: "openDesk"
       subspaces:
         - groups:
-            - externalId: "cn=managed-by-attribute-LivecollaborationAdmin,cn=groups,dc=swp-ldap,dc=internal"
+            - externalId: "cn=managed-by-attribute-LivecollaborationAdmin,cn=groups,{{ .Values.ldap.baseDn }}"
               powerLevel: 50
           id: "e7889d96-5baa-4e21-be6e-12c66b2e9565"
           name: "openDesk Element Admins"

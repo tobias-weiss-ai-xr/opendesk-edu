@@ -76,10 +76,10 @@ customConfigs:
     xwiki.authentication.ldap.server: {{ .Values.ldap.host | quote }}
     xwiki.authentication.ldap.port: 389
     ## Authentication to the LDAP server
-    xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,dc=swp-ldap,dc=internal"
+    xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,{{ .Values.ldap.baseDn }}"
     xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.nubus.ldapSearch.xwiki | quote }}
     ## Base DN used for searching for users
-    xwiki.authentication.ldap.base_DN: "dc=swp-ldap,dc=internal"
+    xwiki.authentication.ldap.base_DN: "{{ .Values.ldap.baseDn }}"
     ## Allow short update cycles of the LDAP group cache
     xwiki.authentication.ldap.groupcache_expiration: 300
     ## Mapping for XWiki attributes to the respective LDAP attributes
@@ -162,7 +162,7 @@ properties:
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.port": 443
 
   ## This option overwrites the LDAP group mappings including all dynamically created mappings, therefore on XWiki restart an LDAP sync is triggered to load the dynamic mapping.
-  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.ldap_group_mapping": "xwiki:XWiki.XWikiAdminGroup=cn=managed-by-attribute-KnowledgemanagementAdmin,cn=groups,dc=swp-ldap,dc=internal"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.ldap_group_mapping": "xwiki:XWiki.XWikiAdminGroup=cn=managed-by-attribute-KnowledgemanagementAdmin,cn=groups,{{ .Values.ldap.baseDn }}"
   ## SMTP settings
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.host": {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
@@ -202,7 +202,7 @@ properties:
     1
   ## Base DN under which groups should be searched for
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchDN":
-    "dc=swp-ldap,dc=internal"
+    "{{ .Values.ldap.baseDn }}"
   ## LDAP filter to only synchronize some groups
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.ldapGroupImportSearchFilter":
     "(&(objectClass=opendeskKnowledgemanagementGroup)(opendeskKnowledgemanagementEnabled=TRUE))"

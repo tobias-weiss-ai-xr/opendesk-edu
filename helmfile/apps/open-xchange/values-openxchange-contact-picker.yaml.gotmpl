@@ -25,7 +25,7 @@ appsuite:
           auth:
             type: "adminDN"
             adminDN:
-              dn: "uid=ldapsearch_ox,cn=users,dc=swp-ldap,dc=internal"
+              dn: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
               password: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
 
     uiSettings:
