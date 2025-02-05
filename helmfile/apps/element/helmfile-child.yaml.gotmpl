@@ -161,6 +161,9 @@ releases:
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
       - "values-matrix-user-verification-service-bootstrap.yaml.gotmpl"
+      {{- range .Values.customization.release.matrixUserVerificationServiceBootstrap }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.element.enabled }}
     timeout: 900
 
@@ -169,6 +172,9 @@ releases:
     version: "{{ .Values.charts.matrixUserVerificationService.version }}"
     values:
       - "values-matrix-user-verification-service.yaml.gotmpl"
+      {{- range .Values.customization.release.matrixUserVerificationService }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.element.enabled }}
     timeout: 900
 
@@ -177,14 +183,20 @@ releases:
     version: "{{ .Values.charts.matrixNeoboardWidget.version }}"
     values:
       - "values-matrix-neoboard-widget.yaml.gotmpl"
+      {{- range .Values.customization.release.matrixNeoboardWidget }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.element.enabled }}
     timeout: 900
 
   - name: "matrix-neochoice-widget"
-    chart: "matrix-neochoice-widget-repo/{{ .Values.charts.matrixNeochoiseWidget.name }}"
-    version: "{{ .Values.charts.matrixNeochoiseWidget.version }}"
+    chart: "matrix-neochoice-widget-repo/{{ .Values.charts.matrixNeochoiceWidget.name }}"
+    version: "{{ .Values.charts.matrixNeochoiceWidget.version }}"
     values:
       - "values-matrix-neochoice-widget.yaml.gotmpl"
+      {{- range .Values.customization.release.matrixNeochoiceWidget }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.element.enabled }}
     timeout: 900
 
@@ -193,6 +205,9 @@ releases:
     version: "{{ .Values.charts.matrixNeodatefixWidget.version }}"
     values:
       - "values-matrix-neodatefix-widget.yaml.gotmpl"
+      {{- range .Values.customization.release.matrixNeodatefixWidget }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.element.enabled }}
     timeout: 900
 
@@ -201,6 +216,9 @@ releases:
     version: "{{ .Values.charts.synapseCreateAccount.version }}"
     values:
       - "values-matrix-neodatefix-bot-bootstrap.yaml.gotmpl"
+      {{- range .Values.customization.release.matrixNeodatefixBotBootstrap }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.element.enabled }}
     timeout: 900
 
@@ -209,6 +227,9 @@ releases:
     version: "{{ .Values.charts.matrixNeodatefixBot.version }}"
     values:
       - "values-matrix-neodatefix-bot.yaml.gotmpl"
+      {{- range .Values.customization.release.matrixNeodatefixBot }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.element.enabled }}
     timeout: 900
 
