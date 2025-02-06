@@ -10,13 +10,15 @@ global:
 
   ## Define host
   #
-  domain: {{ env "DOMAIN" | default "souvap.cloud" | quote }}
+  domain: {{ requiredEnv "DOMAIN" | quote }}
 
   ## Define mail host
+  ## If this is unset the "domain" value above should be used in all references
   #
   mailDomain: {{ env "MAIL_DOMAIN" | quote }}
 
   ## Define synapse host
+  ## If this is unset the "domain" value above should be used in all references
   #
   matrixDomain: {{ env "MATRIX_DOMAIN" | quote }}
 
