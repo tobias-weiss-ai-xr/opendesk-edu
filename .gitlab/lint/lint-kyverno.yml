@@ -27,6 +27,7 @@ lint-kyverno:
           - "services-external"
           - "xwiki"
   script:
+    - "export DOMAIN=opendesk.internal"
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${APP}"
     - >
       node /app/opendesk-ci-cli/src/index.js generate-kyverno-env
