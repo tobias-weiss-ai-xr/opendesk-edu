@@ -10,6 +10,10 @@ functional:
         enabled: true
 
   authentication:
+    newDeviceLoginNotification:
+      # openDesk's Keycloak extensions can send out an email every time a user logs in with a new "device".
+      # It uses device/browser fingerprinting to identify such an event. The feature can be toggled below.
+      enabled: true
     twoFactor:
       # Define a list of groups to enable 2FA for.
       # Note: Removing a group from the list will not disable 2FA for the removed group.
