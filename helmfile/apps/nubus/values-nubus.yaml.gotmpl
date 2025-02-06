@@ -538,6 +538,7 @@ nubusKeycloakExtensions:
           password: "umcKeycloakExtensionsSmtpPassword"
   handler:
     appConfig:
+      newDeviceLoginNotificationEnable: {{ if .Values.functional.authentication.newDeviceLoginNotification.enabled }}"True"{{ else }}"False"{{ end }}
       logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"WARN"{{ end }}
       newDeviceLoginSubject: "New device login on your {{ .Values.theme.texts.productName }} account"
       mailFrom: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
