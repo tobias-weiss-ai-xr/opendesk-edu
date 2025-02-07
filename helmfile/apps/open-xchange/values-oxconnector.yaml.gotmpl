@@ -73,29 +73,21 @@ podAnnotations: {}
 
 replicaCount: {{ .Values.replicas.oxConnector }}
 
+podSecurityContext:
+  fsGroup: 1000
+
 securityContext:
+  privileged: false
   allowPrivilegeEscalation: false
   capabilities:
     drop:
       - "ALL"
-    add:
-      - "CHOWN"
-      - "DAC_OVERRIDE"
-      - "FOWNER"
-      - "FSETID"
-      - "KILL"
-      - "SETGID"
-      - "SETUID"
-      - "SETPCAP"
-      - "NET_BIND_SERVICE"
-      - "SYS_CHROOT"
-  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
   seccompProfile:
     type: "RuntimeDefault"
-  runAsUser: 0
-  runAsGroup: 0
-  runAsNonRoot: false
-  readOnlyRootFilesystem: false
   seLinuxOptions:
     {{ .Values.seLinuxOptions.oxConnector | toYaml | nindent 4 }}
 
