@@ -42,6 +42,12 @@ global:
         repository: {{ .Values.images.nubusOpendeskExtension.repository }}
         imagePullPolicy: {{ .Values.global.imagePullPolicy }}
         tag: {{ .Values.images.nubusOpendeskExtension.tag }}
+    - name: "opendesk-a2g-mapper"
+      image:
+        registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusOpendeskExtensionA2gMapper.registry | quote }}
+        repository: {{ .Values.images.nubusOpendeskExtensionA2gMapper.repository }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        tag: {{ .Values.images.nubusOpendeskExtensionA2gMapper.tag }}
 
   # -- Allows to configure the system extensions to load. This is intended for
   # internal usage, prefer to use `global.extensions` for user configured
@@ -1106,6 +1112,10 @@ nubusStackDataUms:
   templateContext:
     initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote }}
     apps: {{ .Values.apps | toYaml | nindent 6 }}
+    opendeskEnterprise: {{ env "OPENDESK_ENTERPRISE" }}
+    opendeskAdminAttributes: true
+    opendeskGroupAttributes: true
+    opendeskUserAttributes: true
     portalEnforceLogin: {{ .Values.functional.portal.enforceLogin }}
     portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
     portalTiles: {{ toYaml .Values.theme.imagery.portalTiles | nindent 6 }}

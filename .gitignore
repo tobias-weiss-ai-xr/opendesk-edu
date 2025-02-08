@@ -8,6 +8,9 @@
 helmfile/environments/dev/*.yaml.gotmpl
 helmfile/environments/test/*.yaml.gotmpl
 helmfile/environments/prod/*.yaml.gotmpl
+helmfile/environments/dev/*/
+helmfile/environments/test/*/
+helmfile/environments/prod/*/
 !helmfile/environments/dev/sample.yaml.gotmpl
 !helmfile/environments/test/sample.yaml.gotmpl
 !helmfile/environments/prod/sample.yaml.gotmpl
