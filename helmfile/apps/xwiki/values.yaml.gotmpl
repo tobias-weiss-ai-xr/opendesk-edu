@@ -161,7 +161,8 @@ properties:
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.server": "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.port": 443
 
-  ## This option overwrites the LDAP group mappings including all dynamically created mappings, therefore on XWiki restart an LDAP sync is triggered to load the dynamic mapping.
+  ## This option overwrites the LDAP group mappings including all dynamically created mappings,
+  # therefore on XWiki restart an LDAP sync is triggered to load the dynamic mapping.
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.ldap_group_mapping": "xwiki:XWiki.XWikiAdminGroup=cn=managed-by-attribute-KnowledgemanagementAdmin,cn=groups,{{ .Values.ldap.baseDn }}"
   ## SMTP settings
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
