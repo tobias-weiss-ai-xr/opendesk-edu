@@ -70,6 +70,11 @@ databases:
     port: 3306
     username: "root"
     password: ""
+    # Optional settings: Route read queries to a different host.
+    readHost: ~
+    # If provided, uses a different set of credentials for read queries. By default oxAppSuite.username and oxAppsuite.password are used.
+    readUser: ~
+    readPassword: ~
     connectionLimit: ~
   synapse:
     type: "postgresql"

@@ -13,10 +13,14 @@ global:
   mysql:
     host: {{ .Values.databases.oxAppSuite.host | quote }}
     database: {{ .Values.databases.oxAppSuite.name | quote }}
+    readHost: {{ .Values.databases.oxAppSuite.readHost | quote }}
+    readDatabase: {{ .Values.databases.oxAppSuite.name | quote }}
     auth:
       user: {{ .Values.databases.oxAppSuite.username | quote }}
       password: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
       rootPassword: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
+      readUser: {{ .Values.databases.oxAppSuite.readUser | default .Values.databases.oxAppSuite.username | quote }}
+      readPassword: {{ .Values.databases.oxAppSuite.readPassword | default .Values.databases.oxAppSuite.password | quote}}
 
 nextcloud-integration-ui:
   image:
