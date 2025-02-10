@@ -10,7 +10,7 @@ global:
 
   ## Define host
   #
-  domain: {{ requiredEnv "DOMAIN" | quote }}
+  domain: {{ env "DOMAIN" | default "opendesk.internal" | quote }}
 
   ## Define mail host
   ## If this is unset the "domain" value above should be used in all references
