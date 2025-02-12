@@ -104,10 +104,10 @@ persistence:
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}
 
-{{- if or (eq .Values.cluster.service.type "NodePort") (eq .Values.cluster.service.type "LoadBalancer") }}
+{{- if or (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "LoadBalancer") }}
 service:
   external:
     enabled: true
-    type: {{ .Values.cluster.service.type | quote }}
+    type: {{ coalesce .Values.service.type.dovecot .Values.cluster.service.type | quote }}
 {{- end }}
 ...
