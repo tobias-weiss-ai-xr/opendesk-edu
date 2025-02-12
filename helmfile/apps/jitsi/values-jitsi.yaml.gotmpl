@@ -219,7 +219,7 @@ jitsi:
     resources:
       {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
-      type: {{ .Values.cluster.service.type | quote }}
+      type: {{ coalesce .Values.service.type.jitsiVideoBridge .Values.cluster.service.type | quote }}
     securityContext:
       allowPrivilegeEscalation: false
       capabilities: {}
