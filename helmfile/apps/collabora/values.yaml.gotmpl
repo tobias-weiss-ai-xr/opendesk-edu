@@ -1,5 +1,5 @@
 {{/*
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 */}}
@@ -26,6 +26,9 @@ collabora:
     --o:logging.level=debug
     {{- else }}
     --o:logging.anonymize.anonymize_user_data=true
+    {{- end }}
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    --o:user_interface.use_integration_theme=false
     {{- end }}
     {{- if .Values.apps.collaboraController.enabled }}
     --o:indirection_endpoint.url=https://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/routeToken
