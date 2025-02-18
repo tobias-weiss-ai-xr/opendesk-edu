@@ -9,6 +9,12 @@ include:
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"
   - local: "/.gitlab/generate/generate-docs.yml"
+  - local: "/.gitlab/renovate/renovate.yml"
+  - local: "/.gitlab/release/release-common.yml"
+  - local: "/.gitlab/release/release-generate-version.yml"
+  - local: "/.gitlab/release/release-semantic.yml"
+  - local: "/.gitlab/lint/lint-common.yml"
+  - local: "/.gitlab/lint/lint-reuse.yml"
   - project: "${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
     file: "gitlab/environments.yaml"
     ref: "main"
@@ -653,110 +659,4 @@ avscan-start:
       - artifact: "dynamic-scans.yml"
         job: "avscan-prepare"
     strategy: "depend"
-
-# Overwrite shared settings
-.common-semantic-release:
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release:1.1.0"
-  tags: []
-
-conventional-commits-linter:
-  rules:
-    - if: >
-          $RUN_RENOVATE == "yes" ||
-          $JOB_CONVENTIONAL_COMMITS_LINTER_ENABLED == 'false' ||
-          $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event'
-      when: "never"
-    - when: "always"
-
-common-yaml-linter:
-  rules:
-    - if: "$JOB_COMMON_YAML_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|web|merge_request_event'"
-      when: "never"
-    - when: "always"
-
-reuse-linter:
-  allow_failure: false
-  rules:
-    - if: "$JOB_REUSE_LINTER_ENABLED == 'false' || $CI_PIPELINE_SOURCE =~ 'tags|web|merge_request_event'"
-      when: "never"
-    - when: "always"
-
-generate-release-version:
-  rules:
-    - if: >
-        $JOB_RELEASE_ENABLED != 'false' &&
-        $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
-        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
-      when: "on_success"
-
-release:
-  rules:
-    - if: >
-        $JOB_AVSCAN_ENABLED != 'false' &&
-        $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
-        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
-      when: "on_success"
-  script:
-    - >
-      export RELEASE_VERSION=$(semantic-release --dry-run --branches $CI_COMMIT_REF_NAME --plugins
-      "@semantic-release/gitlab" | grep -oP "Published release [0-9]+\.[0-9]+\.[0-9]+ on" |
-      grep -oP "[0-9]+\.[0-9]+\.[0-9]+")
-    - |
-      if [ -z "${RELEASE_VERSION}" ]; then
-        echo "RELEASE_VERSION=$(git describe --tags --abbrev=0 | sed s@^v@@g )"
-      else
-        echo "RELEASE_VERSION=${RELEASE_VERSION}"
-      fi
-    - |
-      echo -e "\n[INFO] Writing data to helm value file..."
-      cat <<EOF >helmfile/environments/default/global.generated.yaml.gotmpl
-      # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-      # SPDX-License-Identifier: Apache-2.0
-      ---
-      global:
-        systemInformation:
-          releaseVersion: "v$(echo -E "$RELEASE_VERSION")"
-      ...
-      EOF
-    - |
-      cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
-      {
-        "branches": ["main"],
-        "plugins": [
-          "@semantic-release/gitlab",
-          "@semantic-release/release-notes-generator",
-          "@semantic-release/changelog",
-          ["@semantic-release/git", {
-            "assets": [
-              "charts/**/Chart.yaml",
-              "CHANGELOG.md",
-              "charts/**/README.md",
-              "helmfile/environments/default/global.generated.yaml.gotmpl",
-              ".kyverno/kyverno-test.yaml",
-              "docs"
-            ],
-            "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-          }]
-        ]
-      }
-      EOF
-    - "semantic-release"
-  needs:
-    - "generate-docs"
-
-renovate:
-  rules:
-    - if: >
-        $RUN_RENOVATE == "yes"
-      when: "on_success"
-  # The `-full` image does not install the dependencies on the fly, that is our preferred approach
-  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/renovate/renovate:37.356-full"
-  variables:
-    RENOVATE_CONFIG_FILE: "${CI_PROJECT_DIR}/.renovate/config.yaml"
-    RENOVATE_ENDPOINT: "${CI_API_V4_URL}"
-    # Increase the renovatebot log level on stdout
-    LOG_LEVEL: "DEBUG"
-  script:
-    - "renovate ${RENOVATE_EXTRA_FLAGS}"
-  stage: "renovate"
 ...
