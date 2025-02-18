@@ -9,8 +9,8 @@ repositories:
     verify: {{ .Values.charts.dovecot.verify }}
     oci: true
   {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
-    username: {{ env "ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDeEnterprise .Values.global.helmRegistry | default .Values.charts.dovecot.registry }}/{{ .Values.charts.dovecot.repository }}"
   {{- else }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
@@ -24,8 +24,8 @@ repositories:
     verify: {{ .Values.charts.oxAppSuite.verify }}
     oci: true
   {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
-    username: {{ env "ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    username: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD" | quote }}
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDeEnterprise .Values.global.helmRegistry | default .Values.charts.oxAppSuite.registry }}/{{ .Values.charts.oxAppSuite.repository }}"
   {{- else }}
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}

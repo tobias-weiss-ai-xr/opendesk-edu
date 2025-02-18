@@ -299,12 +299,12 @@ env-start:
     # Set credentials for openDesk Enterprise Registry
     - |
       if [ "${OPENDESK_ENTERPRISE}" = "true" ]; then
-        kubectl create secret
-        --namespace "${NAMESPACE}"
-        docker-registry enterprise-registry
-        --docker-server "registry.opencode.de"
-        --docker-username "${OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME}"
-        --docker-password "${OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD}"
+        kubectl create secret \
+        --namespace "${NAMESPACE}" \
+        docker-registry enterprise-registry \
+        --docker-server "registry.opencode.de" \
+        --docker-username "${OD_ENTERPRISE_PRIVATE_REGISTRY_USERNAME}" \
+        --docker-password "${OD_ENTERPRISE_PRIVATE_REGISTRY_PASSWORD}" \
         --dry-run=client -o yaml | kubectl apply -f -
       fi
   stage: "env"
