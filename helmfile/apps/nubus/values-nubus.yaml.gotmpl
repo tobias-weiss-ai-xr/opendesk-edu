@@ -522,6 +522,7 @@ nubusKeycloakExtensions:
     connection:
       host: {{ .Values.databases.keycloakExtension.host | quote }}
       port: {{ .Values.databases.keycloakExtension.port | quote }}
+      ssl: {{ .Values.databases.keycloakExtension.ssl | quote }}
     auth:
       database: {{ .Values.databases.keycloakExtension.name | quote }}
       username: {{ .Values.databases.keycloakExtension.username | quote }}
