@@ -36,10 +36,10 @@ apps:
     enabled: true
     namespace: ~
   elementAdmin:
-    enabled: {{ if eq (env "OPENDESK_ENTERPRISE") "true" }}true{{ else }}false{{ end }}
+    enabled: false
     namespace: ~
   elementGroupsync:
-    enabled: {{ if eq (env "OPENDESK_ENTERPRISE") "true" }}true{{ else }}false{{ end }}
+    enabled: false
     namespace: ~
   home:
     enabled: true
