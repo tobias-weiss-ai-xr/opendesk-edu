@@ -1,3 +1,35 @@
+## [1.1.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.1.1...v1.1.2) (2025-02-19)
+
+
+### Bug Fixes
+
+* **dovecot:** Add Dovecot Pro [EE] ([6e343c7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6e343c76a32a5bf4b431bdad6be1f7d107caa4f5))
+* **element:** Add Element EE components ([61d94a8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/61d94a8de655d1289aaf59c42f0dbf30b0156e1f))
+* **helmfile:** Add missing customizing option for Matrix widgets ([9c79c44](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9c79c44453af7b0c68f4ee2a5e40f1f9fb298570))
+* **helmfile:** Add SSL option for Keycloak Extensions Proxy's PostgreSQL connection ([91d0f98](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/91d0f9868226b08128af518be741c8614342581e))
+* **helmfile:** Fine-grained service types ([de8b560](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/de8b560fe7e2294229a959398be60bec9b6a7790))
+* **helmfile:** Integrate oD EE ([03ec704](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/03ec70435c365eca9f555a195b7ab92cc9eee907))
+* **helmfile:** Introduce `apps` as top level in `opendesk_main.yaml.gotmpl`; Please check migrations.md for upgrades of existing installations ([2fcf014](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2fcf014894ac3356ef8c6e57dda30c5176172e5e))
+* **helmfile:** Make openDesk IAM attributes optional with enabled as default ([b32996d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b32996da347c7ec24fb53afe72fee8c07631bebe))
+* **helmfile:** Provide toggle in `functional.yaml.gotmpl` for "new device notification" mails ([284c9fe](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/284c9fe0c7e217e3f92ec70eaad6ccf593ff2a87))
+* **helmfile:** Remove reference to no longer required `elementWeb` chart ([cd9c54b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cd9c54b17733f9e334c558ccd86e69677264970a))
+* **helmfile:** Set default for domain to `opendesk.internal` to avoid enforcing DOMAIN environment variable for deployments using YAML overrides ([930ae9d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/930ae9d3e71bcd3f4034aa4dae5eabb3ae04d11b))
+* **helmfile:** Update/streamline theming ([8eeaa23](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8eeaa23c2f68e8e0cbda5b3763ab15ba8262c48d))
+* **jitsi:** Support for phone dial-in into Jitsi conferences ([1323ef1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1323ef142e789820acb05cb4991d10502a35498b))
+* **nextcloud:** Update `groupfolders` app to fix group selection in admin mode ([ab49bf9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ab49bf9f6bb945cdce3950e46382b7361c48e6e4))
+* **nextcloud:** Update Nextcloud to 29.0.11 and support for Cron-Job specific resource definitions ([09f4829](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/09f482981b96774b3fe0948b7bb120be90157148))
+* **nubus:** Disable unused notification feature ([955f17e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/955f17ef8bb72459beb536cdcf6b502b16eabbff))
+* **nubus:** Fix Keycloak dialogue background length on small screens ([4662709](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/466270967310fab9333b892c904efa86d21f7d17))
+* **nubus:** Only configure apps that are deployed to show up in IAM admin UI and Keycloak ([1f051e7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1f051e777905668297c98dfa507875c08158bfda))
+* **nubus:** Re-implement toggle for UDM-REST-API based on `functional.externalServices.nubus.udmRestApi.enabled` ([777e7d2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/777e7d2fc6afa9c53a4ff1c6853c9960b9a22d5f))
+* **nubus:** Remove doublet `resources` key in `udm-listener` StatefulSet ([10e0b0a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/10e0b0ad6cbd89bd88b119f17b6cba6ec698f698))
+* **nubus:** Support for custom UDM commands ([aff8edb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/aff8edbde2150763d6a36f97b9403c8c67e51fab))
+* **nubus:** Update Keycloak Extensions Proxy ([601e649](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/601e6499132c3adaaaea374033511eab09132cb2))
+* **open-xchange:** Parameters to split read and write queries to MariaDB ([370247b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/370247b95197792a65b84b2d01b9c1806f8b059a))
+* **open-xchange:** Update OX App Suite to 8.33 ([581c8ae](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/581c8aed1f86bad251141ecb105e59d0054d5a1a))
+* **openproject:** Update OpenProject to 15.2.1 ([83c311b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/83c311b101a6fa551d9c25ea4e9a7ef6673137ca))
+* **oxconnector:** Update to strict `securityContext` from upstream defaults ([32df165](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/32df1657d29a2d73495d52b62bb77521cb8b8e86))
+
 ## [1.1.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.1.0...v1.1.1) (2025-01-27)
 
 
