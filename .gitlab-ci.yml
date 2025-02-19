@@ -548,7 +548,8 @@ import-default-accounts:
         --admin_enable_fileshare True \
         --admin_enable_knowledgemanagement True \
         --admin_enable_projectmanagement True \
-        --create_admin_accounts True
+        --create_admin_accounts True \
+        --verify_certificate False
 
 run-tests:
   stage: "post-execute"
