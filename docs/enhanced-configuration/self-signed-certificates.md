@@ -98,6 +98,8 @@ multiple namespaces in a cluster.
         name: selfsigned-issuer
         kind: ClusterIssuer
         group: cert-manager.io
+      duration: 87600h # 10y
+      renewBefore: 87599h
     ```
 
 1. Copy this cert's secret into the/each namespace you want to make use of the cert.
