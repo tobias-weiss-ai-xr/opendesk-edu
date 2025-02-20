@@ -10,7 +10,7 @@ smtp:
   password: {{ env "SMTP_PASSWORD" | quote }}
   localpartNoReply: "no-reply"
 
-  # For the following settings to have effect `dkimpy.enabled` must be `true`.
+  # For the following settings to have effect `apps.dkimpy.enabled` must be `true`.
   dkim:
     key:
       # DKIM private key as plaintext value.

@@ -101,33 +101,34 @@ All available apps and their default value are in `helmfile/environments/default
 
 | Component            | Name                        | Default | Description                    |
 | -------------------- | --------------------------- | ------- | ------------------------------ |
-| Certificates         | `certificates.enabled`      | `true`  | TLS certificates               |
-| ClamAV (Distributed) | `clamavDistributed.enabled` | `false` | Antivirus engine               |
-| ClamAV (Simple)      | `clamavSimple.enabled`      | `true`  | Antivirus engine               |
-| Collabora            | `collabora.enabled`         | `true`  | Weboffice                      |
-| CryptPad             | `cryptpad.enabled`          | `true`  | Weboffice                      |
-| dkimpy               | `dkimpy.enabled`            | `false` | Postfix milter for DKIM        |
-| Dovecot              | `dovecot.enabled`           | `true`  | Mail backend                   |
-| Element              | `element.enabled`           | `true`  | Secure communications platform |
-| Home                 | `home.enabled`              | `true`  | Base domain portal redirect    |
-| Jitsi                | `jitsi.enabled`             | `true`  | Videoconferencing              |
-| MariaDB              | `mariadb.enabled`           | `true`  | Database                       |
-| Memcached            | `memcached.enabled`         | `true`  | Cache Database                 |
-| MinIO                | `minio.enabled`             | `true`  | Object Storage                 |
-| Nextcloud            | `nextcloud.enabled`         | `true`  | File share                     |
-| Nubus                | `nubus.enabled`             | `true`  | Identity Management & Portal   |
-| OpenProject          | `openproject.enabled`       | `true`  | Project management             |
-| OX App Suite         | `oxAppSuite.enabled`        | `true`  | Groupware                      |
-| Postfix              | `postfix.enabled`           | `true`  | MTA                            |
-| PostgreSQL           | `postgresql.enabled`        | `true`  | Database                       |
-| Redis                | `redis.enabled`             | `true`  | Cache Database                 |
-| XWiki                | `xwiki.enabled`             | `true`  | Knowledge management           |
+| Certificates         | `apps.certificates.enabled`      | `true`  | TLS certificates               |
+| ClamAV (Distributed) | `apps.clamavDistributed.enabled` | `false` | Antivirus engine               |
+| ClamAV (Simple)      | `apps.clamavSimple.enabled`      | `true`  | Antivirus engine               |
+| Collabora            | `apps.collabora.enabled`         | `true`  | Weboffice                      |
+| CryptPad             | `apps.cryptpad.enabled`          | `true`  | Weboffice                      |
+| dkimpy               | `apps.dkimpy.enabled`            | `false` | Postfix milter for DKIM        |
+| Dovecot              | `apps.dovecot.enabled`           | `true`  | Mail backend                   |
+| Element              | `apps.element.enabled`           | `true`  | Secure communications platform |
+| Home                 | `apps.home.enabled`              | `true`  | Base domain portal redirect    |
+| Jitsi                | `apps.jitsi.enabled`             | `true`  | Videoconferencing              |
+| MariaDB              | `apps.mariadb.enabled`           | `true`  | Database                       |
+| Memcached            | `apps.memcached.enabled`         | `true`  | Cache Database                 |
+| MinIO                | `apps.minio.enabled`             | `true`  | Object Storage                 |
+| Nextcloud            | `apps.nextcloud.enabled`         | `true`  | File share                     |
+| Nubus                | `apps.nubus.enabled`             | `true`  | Identity Management & Portal   |
+| OpenProject          | `apps.openproject.enabled`       | `true`  | Project management             |
+| OX App Suite         | `apps.oxAppSuite.enabled`        | `true`  | Groupware                      |
+| Postfix              | `apps.postfix.enabled`           | `true`  | MTA                            |
+| PostgreSQL           | `apps.postgresql.enabled`        | `true`  | Database                       |
+| Redis                | `apps.redis.enabled`             | `true`  | Cache Database                 |
+| XWiki                | `apps.xwiki.enabled`             | `true`  | Knowledge management           |
 
 Exemplary, Jitsi can be disabled like:
 
 ```yaml
-jitsi:
-  enabled: false
+apps:
+  jitsi:
+    enabled: false
 ```
 
 ## Private registries
@@ -304,8 +305,10 @@ Enabling DKIM signing of emails helps to reduce spam and increases trust.
 openDesk ships dkimpy-milter as Postfix milter for signing emails.
 
 ```yaml
-dkimpy:
-  enable: true
+apps:
+  dkimpy:
+    enabled: true
+smtp:
   dkim:
     key:
       value: "HzZs08QF1O7UiAkcM9T3U7rePPECtSFvWZIvyKqdg8E="
@@ -337,8 +340,9 @@ secret named `opendesk-certificates-tls` must be present in the application name
 turn off `Certificate` resource creation by:
 
 ```yaml
-certificates:
-  enabled: false
+apps:
+  certificates:
+    enabled: false
 ```
 
 If you want to leverage the `cert-manager.io` to handle certificates, like `Let's encrypt`, you need to provide the
