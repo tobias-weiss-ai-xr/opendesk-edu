@@ -39,7 +39,7 @@ dbInit:
 
 environment:
   {{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.openproject.token }}
-  OPENPROJECT_ENTERPRISE__TOKEN: {{ .Values.enterpriseKeys.openproject.token | quote }}
+  OPENPROJECT_SEED__ENTERPRISE__TOKEN: {{ .Values.enterpriseKeys.openproject.token | quote }}
   {{- end }}
 # For more details and more options see
 # https://www.openproject.org/docs/installation-and-operations/configuration/environment/
@@ -88,6 +88,16 @@ environment:
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.nubus .Values.global.domain | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
+  OPENPROJECT_SEED_DESIGN_PRIMARY__BUTTON__COLOR: {{ .Values.theme.colors.primary | quote }}
+  OPENPROJECT_SEED_DESIGN_ACCENT__COLOR: {{ .Values.theme.colors.primary | quote }}
+  OPENPROJECT_SEED_DESIGN_HEADER__BG__COLOR: {{ .Values.theme.colors.white | quote }}
+  OPENPROJECT_SEED_DESIGN_HEADER__ITEM__BG__HOVER__COLOR: {{ .Values.theme.colors.secondaryGreyLight | quote }}
+  OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__COLOR: {{ .Values.theme.colors.white | quote }}
+  OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__SELECTED__BACKGROUND: {{ .Values.theme.colors.primary | quote }}
+  OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__HOVER__BACKGROUND: {{ .Values.theme.colors.secondaryGreyLight | quote }}
+  OPENPROJECT_SEED_DESIGN_LOGO: "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvgB64 }}"
+  OPENPROJECT_SEED_DESIGN_FAVICON: "data:image/svg+xml;base64,{{ .Values.theme.imagery.projects.faviconSvg }}"
+
   {{- if .Values.certificate.selfSigned }}
   SSL_CERT_FILE: "/etc/ssl/certs/ca-certificates.crt"
   {{- end }}
