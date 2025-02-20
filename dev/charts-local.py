@@ -98,6 +98,8 @@ def clone_charts_locally(branch, charts):
         if os.path.isdir(chart_local_path):
             logging.debug(f"Found pre-existing {chart_local_path} skipping clone/pull, but will still reference chart in Helmfile...")
             charts_dict[chart] = chart_local_path
+            git_url = options.git_hostname+':'+repository
+            doublette_dict[git_url] = chart_local_path
             continue
         elif 'opendesk/components/platform-development/charts' in repository:
             logging.info("Cloning the charts repo")
@@ -153,7 +155,7 @@ def process_the_helmfiles(charts_dict, charts):
                         if '.Values.charts.'+chart_ident+'.name' in line:
                             logging.debug(f"found match with {chart_ident} in {line.strip()}")
                             line = charts_dict[chart_ident]
-                            if os.path.isdir(line+'/charts/'+chart_ident):
+                            if os.path.isdir(line+'/charts/'+charts['charts'][chart_ident]['name']):
                                 line += '/charts/'+charts['charts'][chart_ident]['name']
                             elif not os.path.isdir(line):
                                 sys.exit(f"! Did not find directory to reference in Helmfile: '{line}'")
