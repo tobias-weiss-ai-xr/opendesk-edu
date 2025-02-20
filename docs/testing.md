@@ -9,12 +9,12 @@ SPDX-License-Identifier: Apache-2.0
 * [Overview](#overview)
 * [Test concept](#test-concept)
   * [Rely on upstream applications QA](#rely-on-upstream-applications-qa)
-  * [Run minimal functional QA](#run-minimal-functional-qa-end-to-end-tests)
-  * [Run extensive load-and performance tests](#run-extensive-load--and-performance-tests)
+  * [Run minimal functional QA (end-to-end tests)](#run-minimal-functional-qa-end-to-end-tests)
+  * [Run extensive load- and performance tests](#run-extensive-load--and-performance-tests)
     * [Base performance testing](#base-performance-testing)
     * [Load testing to saturation point](#load-testing-to-saturation-point)
     * [Load testing up to a defined user count](#load-testing-up-to-a-defined-user-count)
-    * [Overload/recovery-tests](#overloadrecovery-tests)
+    * [Overload/recovery tests](#overloadrecovery-tests)
 * [Reporting and test results](#reporting-and-test-results)
   * [Allure TestOps](#allure-testops)
 <!-- TOC -->
@@ -29,18 +29,18 @@ The following section provides an overview of the testing approach adopted to en
 
 These efforts are designed to complement each other, minimizing redundancy while ensuring robust testing coverage.
 
-# Test Concept
+# Test concept
 
 ## Rely on upstream applications QA
 
-As a software suite, openDesk contains different applications from different vendors (suppliers).
-So as a general approach, we rely on the testing of the applications itself.
-To ensure a reliable and sufficient QA of the underlying applications, we stay in contact with
-the application manufacturers and regularly review the QA measures done by the vendors.
+openDesk contains applications from different suppliers, as a general approach, we rely on the testing
+conducted by these suppliers for their respective applications.
+
+We review the supplier's QA measures on a regular basis, to ensure a reliable and sufficient QA of the underlying applications.
 
 We receive the release notes early before a new application release is integrated into openDesk, so
 we are able to check the existence of a sufficient set of test scases.
-The vendors should create a set of test cases for each new functionality.
+The suppliers create a set of test cases for each new functionality.
 
 ## Run minimal functional QA (end-to-end tests)
 
@@ -49,7 +49,7 @@ basic functionality of openDesk and all integrated applications.
 
 Furthermore, we analyze all features/usecases which are implemented by a set of more than one
 applications.
-All these features are not testable naturally by the manufacturers itself, so we develop testcases
+All these features are not testable naturally by the suppliers, so we develop testcases
 for such features.
 
 The openDesk application owners prioritize then this list of end-to-end-testcases, and we
@@ -57,17 +57,18 @@ implement these testcases in the [test automation framework](https://gitlab.open
 
 ## Run extensive load- and performance tests
 
-We want to deliver openDesk as a applicationion-grade software with the ability to serve a large user base.
+We want to deliver openDesk as an application-grade software with the ability to serve a large user base.
+
 We create and perform extensive load- and performance tests for every release of openDesk.
 
 Our approach consists of different layers of load testing.
 
 ### Base performance testing
 
-For thse tests we define a set of "normal", not to complicated user-interactions with openDes.
+For these tests we define a set of "normal", not too complicated user-interactions with openDesk.
+
 For each testcase in this set, we measure the duration of the whole testcase (and steps inside the
-testcase) on a given, unloaded environment, installed with a predefined setup and predefined releases
-of all relevant software components.
+testcase) on a given, unloaded environment, installed with a predefined setup and openDesk release.
 
 As a result, we receive the total runtime of one iteration of the given testcase, the runtime of each
 step inside the testcase, the error rate and min/max/median runtimes.
@@ -75,18 +76,18 @@ step inside the testcase, the error rate and min/max/median runtimes.
 Most importantly, the environment should not be used by other users or background tasks, so it should
 be an environment being mostly in idle state.
 
-The results can be compared with the results of the previous release, so we can see whether changes
-in software components improve or decrease the performance of one testcase.
+The results can be compared with the results of the previous release, so we can see if changes
+in software components improve or decrease the performance of a testcase.
 
 ### Load testing to saturation point
 
 These tests are performed to ensure the correct processing and user interactions even in
 high-load scenarios.
 
-Here we use the same testcases as in the base performance tests.
+We use the same test cases as in the base performance tests.
 
-Now we measure the duration on a well-defined environment while the system is being used by a defined number of test users
-in parallel. This number will be scaled up.
+Now we measure the duration on a well-defined environment while the system is being used
+by a predefined number of test users in parallel. This number will be scaled up.
 
 Our goal is to see constant runtimes of each testcase iteration, while the total throughput
 of requests increases consistently with the number of users in parallel usage of the system.
@@ -100,30 +101,27 @@ leads to increased response times and increased error rates.
 
 ### Load testing up to a defined user count
 
-For interested partners we offer a load testing scenario up to a defined count of parallel users
-in one or more defined use cases.
-This way, we can ensure to our partners that the planned sizing and user numbers are reachable and stable
-with openDesk.
+For interested partners, that are looking into large scale openDesk deployments,
+we offer a load testing analysis based on defined scenarios to be discussed together with the partner in a workshop.
 
-For these tests the suppliers should get in touch with us,
-then a workshop will be planned and all relevant data will be discussed.
+This way, we can help to decide on the appropriate sizing for the planned openDesk usage scenario.
 
-### Overload/recovery-tests
+### Overload/recovery tests
 
 If necessary, we perform overload tests, which will saturate the system with multiple
 test cases until no further increase in throughput is visible. Then we add even more load
-until the first HTTP requests run into timeouts. After a few minutes, we reduce the load
-below the saturation point.
-Now we can checkwhether the system is able to recover from the overload status.
+until the first HTTP requests run into timeouts or errors.
+After a few minutes, we reduce the load below the saturation point.
+Now we can check if the system is able to recover from the overload status.
 
 # Reporting and test results
 
 We perform testruns every night on every of our environments.
 
 For each environment, we define so called profiles, these contains the features enabled
-per environment. 
-For example: Testing the email features in an environment without
-deployment of Open-Xchange makes no sense at all.
+per environment.
+
+For example: Testing the email features in an environment without deployment of Open-Xchange makes no sense at all.
 
 Also we test the whole system via a browser with `language=DE` and another browser with `language=EN`.
 
