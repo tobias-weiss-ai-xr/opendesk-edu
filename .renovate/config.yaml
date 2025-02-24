@@ -32,7 +32,7 @@ repositories:
     # Commit type to use if Semantic Commits are enabled (default: "chore")
     semanticCommitType: "chore"
     # Enable dependency dashboard
-    dependencyDashboard: true
+    dependencyDashboard: false
     # Include package files only within these defined paths
     includePaths:
       - "helmfile/environments/default/images.yaml.gotmpl"
@@ -59,30 +59,47 @@ repositories:
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "openDesk" ]
         groupName: "Platform"
+        groupSlug: "platform"
+        branchTopic: "platform"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "Collabora" ]
         groupName: "Collabora"
+        groupSlug: "collabora"
+        branchTopic: "collabora"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "Element" ]
         groupName: "Element"
+        groupSlug: "element"
+        branchTopic: "element"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "Nordeck" ]
         groupName: "Nordeck"
+        groupSlug: "nordeck"
+        branchTopic: "nordeck"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "Open-Xchange" ]
         groupName: "Open-Xchange"
+        groupSlug: "openxchange"
+        branchTopic: "openxchang"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "OpenProject" ]
         groupName: "OpenProject"
+        groupSlug: "openproject"
+        branchTopic: "openproject"
       - matchDatasources: [ "docker" ]
-        matchDepTypes: [ "OpenProject" ]
-        groupName: "OpenProject"
+        matchDepTypes: [ "Nextcloud" ]
+        groupName: "nextcloud"
+        branchTopic: "nextcloud"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "Univention" ]
         groupName: "Univention"
+        groupSlug: "univention"
+        branchTopic: "univention"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "XWiki" ]
         groupName: "XWiki"
+        groupSlug: "xwiki"
+        branchTopic: "xwiki"
     # Add merge request labels
     labels:
       - "renovate"
