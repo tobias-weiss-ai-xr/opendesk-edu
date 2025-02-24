@@ -208,6 +208,8 @@ extraVolumeMounts:
 
 federation:
   enabled: {{ .Values.functional.externalServices.matrix.federation.enabled }}
+  domainAllowList:
+    {{ .Values.functional.externalServices.matrix.federation.domainAllowList | toYaml | nindent 4 }}
   ingress:
     host: "{{ .Values.global.hosts.synapseFederation }}.{{ .Values.global.domain }}"
     enabled: {{ .Values.ingress.enabled }}
