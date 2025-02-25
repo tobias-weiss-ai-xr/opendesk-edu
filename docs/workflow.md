@@ -143,13 +143,16 @@ As a standard, the openDesk platform development team uses [reuse.software](http
 
 openDesk uses Apache 2.0 as the license for their work. A typical reuse copyright and license header looks like this:
 ```
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ```
 The way to mark the license header as a comment differs between the various file types. Please find matching examples for all types across the [deployment automation repository](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace).
 
 > **Note**<br>
-> If an `SPDX-FileCopyrightText` already exists, do not replace but add an additional line based on the above example.
+> If a `SPDX-FileCopyrightText` already exists with the copyright owner described above but with an past year (e.g. 2024), please update this copyright header line to cover (up to and including) the current year, e.g. `2024-2025`.
+
+> **Note**<br>
+> If line(s) with `SPDX-FileCopyrightText` containing a different copyright owner exist in the file you are working on, do not replace existing one(s) but add an additional header above these.
 
 ## Development workflow
 
