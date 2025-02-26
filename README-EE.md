@@ -44,6 +44,10 @@ To enable the oD EE deployment you must set the environment variable `OPENDESK_E
 OPENDESK_ENTERPRISE=true
 ```
 
+> **Note**
+> Upgrading from oD CE to EE is currently not supported, especially due to the fact it requires a migration
+> from Dovecot 2.x (standard storage) to Dovecot Pro 3.x (S3).
+
 # Configuring the oD EE deployment for self-hosted installations
 
 ## Registry access
