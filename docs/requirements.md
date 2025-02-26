@@ -16,6 +16,7 @@ This section covers the internal system requirements and external service requir
 * [Certificate management](#certificate-management)
 * [External services](#external-services)
 * [Deployment](#deployment)
+* [Footnotes](#footnotes)
 <!-- TOC -->
 
 # tl;dr
@@ -31,6 +32,7 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 - [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
+- [OpenKruise](https://openkruise.io/)[^1] >= 1.6
 
 # Hardware
 
@@ -85,19 +87,20 @@ For the development and evaluation of openDesk, we bundle some services. Be awar
 deployments, you need to make use of your own production-grade services; see the
 [external-services.md](./external-services.md) for configuration details.
 
-| Group    | Type                | Version | Tested against        |
+| Group    | Type                | Version | Tested against        |
 | -------- | ------------------- | ------- | --------------------- |
-| Cache    | Memcached           | `1.6.x` | Memcached             |
-|          | Redis               | `7.x.x` | Redis                 |
-| Database | MariaDB             | `10.x` | MariaDB               |
-|          | PostgreSQL          | `15.x` | PostgreSQL            |
-| Mail     | Mail Transfer Agent |         | Postfix               |
-|          | PKI/CI (S/MIME)     |         |                       |
-| Security | AntiVirus/ICAP      |         | ClamAV                |
-| Storage  | K8s ReadWriteOnce   |         | Ceph / Cloud specific |
-|          | K8s ReadWriteMany   |         | Ceph / NFS            |
-|          | Object Storage      |         | MinIO                 |
-| Voice    | TURN                |         | Coturn                |
+| Cache    | Memcached           | `1.6.x` | Memcached             |
+|          | Redis               | `7.x.x` | Redis                 |
+| Database | Cassandra[^1]       | `5.0.x` | Cassandra             |
+|          | MariaDB             | `10.x`  | MariaDB               |
+|          | PostgreSQL          | `15.x`  | PostgreSQL            |
+| Mail     | Mail Transfer Agent |         | Postfix               |
+|          | PKI/CI (S/MIME)     |         |                       |
+| Security | AntiVirus/ICAP      |         | ClamAV                |
+| Storage  | K8s ReadWriteOnce   |         | Ceph / Cloud specific |
+|          | K8s ReadWriteMany   |         | Ceph / NFS            |
+|          | Object Storage      |         | MinIO                 |
+| Voice    | TURN                |         | Coturn                |
 
 # Deployment
 
@@ -105,3 +108,7 @@ The deployment of each component is [Helm](https://helm.sh/) based. The 35+ Helm
 templated via [Helmfile](https://helmfile.readthedocs.io/en/latest/) to provide a streamlined deployment experience.
 
 Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare the desired against the deployed state.
+
+# Footnotes
+
+[^1]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
