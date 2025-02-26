@@ -105,7 +105,7 @@ global:
         show: "false"
       login:
         password-complexity-message:
-          de: "Das Passwort muss mindestens 8 Zeichen lang sein und darf keine Zahlenabfolge oder ganze Worte enthalten, wie  '1234Test'."
+          de: "Das Passwort muss mindestens 8 Zeichen lang sein und darf keine Zahlenabfolge oder ganze Worte enthalten, wie '1234Test'."
           en: "Password must be at least 8 characters long and cannot include a number series or regular words, like '1234Test'."
       module:
         udm:
@@ -826,7 +826,8 @@ nubusLdapServer:
   replicaCountPrimary: {{ .Values.replicas.umsLdapServerPrimary }}
   replicaCountSecondary: {{ .Values.replicas.umsLdapServerSecondary }}
   replicaCountProxy: {{ .Values.replicas.umsLdapServerProxy }}
-  resources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
+  resourcesPrimary: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
+  resourcesSecondary: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
   serviceAccount:
     create: true
   waitForDependency:
@@ -1113,6 +1114,7 @@ nubusStackDataUms:
   templateContext:
     initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote }}
     apps: {{ .Values.apps | toYaml | nindent 6 }}
+    defaultGroupOtherObjects: "cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}"
     opendeskEnterprise: {{ env "OPENDESK_ENTERPRISE" }}
     opendeskAdminAttributes: true
     opendeskGroupAttributes: true
@@ -1132,6 +1134,7 @@ nubusStackDataUms:
     portalLinkLegalNotice: {{ .Values.functional.portal.linkLegalNotice }}
     portalLinkPrivacyStatement: {{ .Values.functional.portal.linkPrivacyStatement }}
     oxDefaultContext: "1"
+    oxContextHidden: true
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
       - username: {{ printf "ldapsearch_%s" $username | quote }}
@@ -1140,29 +1143,29 @@ nubusStackDataUms:
       {{- end }}
     ldapSystemUsers: []
     portaltileGroupUserStandard:
-      - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupUserAdmin:
-      - 'cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}'
-      - 'cn=Support,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}"
+      - "cn=Support,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupUserAll:
-      - 'cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}'
-      - 'cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=Domain Admins,cn=groups,{{ .Values.ldap.baseDn }}"
+      - "cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupGroupware:
-      - 'cn=managed-by-attribute-Groupware,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Groupware,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupFileshare:
-      - 'cn=managed-by-attribute-Fileshare,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Fileshare,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupManagementProject:
-      - 'cn=managed-by-attribute-Projectmanagement,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Projectmanagement,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupManagementKnowledge:
-      - 'cn=managed-by-attribute-Knowledgemanagement,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Knowledgemanagement,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupManagementLearn:
-      - 'cn=managed-by-attribute-Learnmanagement,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Learnmanagement,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupLiveCollaboration:
-      - 'cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Livecollaboration,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupVideoconference:
-      - 'cn=managed-by-attribute-Videoconference,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Videoconference,cn=groups,{{ .Values.ldap.baseDn }}"
     portaltileGroupNotes:
-      - 'cn=managed-by-attribute-Notes,cn=groups,{{ .Values.ldap.baseDn }}'
+      - "cn=managed-by-attribute-Notes,cn=groups,{{ .Values.ldap.baseDn }}"
     systemInformation:
       releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}{{ if eq (env "OPENDESK_ENTERPRISE") "true" }}-ee{{ end }}"
       {{- if .Values.functional.admin.portal.deploymentTimestamp.enabled }}
@@ -1333,8 +1336,6 @@ nubusUmcGateway:
   replicaCount: {{ .Values.replicas.umsUmcGateway }}
   resources:
     {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
-  umcGateway:
-    umcHtmlTitle: "Portal - {{ .Values.theme.texts.productName }}"
 
 nubusKeycloakBootstrap:
   additionalAnnotations:
