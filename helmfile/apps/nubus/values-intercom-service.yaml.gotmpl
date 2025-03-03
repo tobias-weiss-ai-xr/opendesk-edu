@@ -53,6 +53,7 @@ ics:
   secret: {{ .Values.secrets.intercom.secret | quote }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   originRegex: "{{ .Values.global.domain }}"
+  enableSessionCookie: true
   userUniqueMapper: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"opendesk_useruuid"{{ else }}"opendesk_username"{{ end }}
   usernameClaim: "opendesk_username"
   keycloak:
