@@ -161,7 +161,8 @@ configuration:
       versions: {{ .Values.functional.filestore.nextcloud.retentionObligation.versions | quote }}
 
   serverinfo:
-    token: {{ .Values.secrets.nextcloud.metricsToken | quote }}
+    token:
+      value: {{ .Values.secrets.nextcloud.metricsToken | quote }}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
