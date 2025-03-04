@@ -47,7 +47,7 @@ postfix:
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   hostname: "postfix"
   inetProtocols: "ipv4"
-  milterDefaultAction: "accept"
+  milterDefaultAction: "tempfail"
   overrides:
     - fileName: "sasl_passwd.map"
       content:
@@ -63,16 +63,14 @@ postfix:
   smtpTLSSecurityLevel: "encrypt"
   smtpdSASLAuthEnable: "yes"
   smtpdSASLSecurityOptions: "noanonymous"
-  smtpdSASLType: "cyrus"
-  smtpdTLSSecurityLevel: "may"
+  smtpdSASLType: "dovecot"
+  smtpdTLSSecurityLevel: "encrypt"
   smtpdTLSCertFile: "/etc/tls/tls.crt"
   smtpdKeyFile: "/etc/tls/tls.key"
-  smtpdSASLPath: "smtpd"
+  smtpdSASLPath: "inet:dovecot:3659"
 
   staticAuthDB:
-    enabled: true
-    username: "opendesk-system"
-    password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+    enabled: false
 
   {{- if .Values.antivirus.milter.host }}
   smtpdMilters: "inet:{{ .Values.antivirus.milter.host }}:{{ .Values.antivirus.milter.port }}"
@@ -93,7 +91,10 @@ replicaCount: {{ .Values.replicas.postfix }}
 resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
 
+{{- if or (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "LoadBalancer") }}
 service:
   external:
-    enabled: false
+    enabled: true
+    type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}
+{{- end }}
 ...

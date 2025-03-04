@@ -537,8 +537,9 @@ nubusKeycloakExtensions:
       ssl: false
       starttls: false
     auth:
-      enabled: false
-      username: ""
+      enabled: true
+      username: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+      password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
       existingSecret:
         name: "ums-keycloak-extensions-smtp-opendesk-credentials"
         keyMapping:
@@ -1108,7 +1109,7 @@ nubusStackDataUms:
     umcHtmlTitle: "Portal - {{ .Values.theme.texts.productName }}"
     smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     smtpPort: 25
-    smtpUser: ""
+    smtpUser: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
     smtpStartTls: false
     ldapBase: {{ .Values.ldap.baseDn }}
   templateContext:
@@ -1414,7 +1415,7 @@ extraSecrets:
       umcKeycloakExtensionsDatabasePassword: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
   - name: "ums-keycloak-extensions-smtp-opendesk-credentials"
     stringData:
-      umcKeycloakExtensionsSmtpPassword: ""
+      umcKeycloakExtensionsSmtpPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
   - name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
     stringData:
       password: {{ .Values.secrets.nubus.ldapSearch.keycloak | quote }}
@@ -1424,7 +1425,7 @@ extraSecrets:
       secret-key-id: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
   - name: "ums-umc-server-smtp-credentials-custom"
     stringData:
-      password: ""
+      password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
   - name: "ums-provisioning-ox-credentials"
     stringData:
       ox-connector.json: "{ \"name\": \"ox-connector\", \"realms_topics\": [{\"realm\": \"udm\", \"topic\": \"oxmail/oxcontext\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/accessprofile\"}, {\"realm\": \"udm\", \"topic\": \"users/user\"}, {\"realm\": \"udm\", \"topic\": \"oxresources/oxresources\"}, {\"realm\": \"udm\", \"topic\": \"groups/group\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/functional_account\"}], \"request_prefill\": true, \"password\": \"{{ .Values.secrets.oxConnector.provisioningApiPassword }}\" }"

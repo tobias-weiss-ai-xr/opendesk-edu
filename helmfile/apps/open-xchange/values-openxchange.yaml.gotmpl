@@ -241,7 +241,7 @@ appsuite:
       com.openexchange.mail.mailServer: "dovecot"
       com.openexchange.mail.mailServerSource: "global"
       com.openexchange.mail.transport.authType: "xoauth2"
-      com.openexchange.mail.transportServer: "postfix"
+      com.openexchange.mail.transportServer: "postfix-ox"
       com.openexchange.mail.transportServerSource: "global"
       # Requirements for OX-Connector
       com.openexchange.user.enforceUniqueDisplayName: "false"
@@ -287,7 +287,12 @@ appsuite:
       # Guard
       com.openexchange.guard.storage.file.fileStorageType: "file"
       com.openexchange.guard.storage.file.uploadDirectory: "/opt/open-xchange/guard-files/"
+      com.openexchange.guard.guestSMTPMailFrom: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+      com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      com.openexchange.guard.guestSMTPPort: "25"
       com.openexchange.guard.guestSMTPServer: "postfix"
+      com.openexchange.guard.guestSMTPUsername: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+      com.openexchange.guard.useStartTLS: "false"
       # S/MIME
       # Usage (in browser console after login):
       # http = (await import('./io.ox/core/http.js')).default
