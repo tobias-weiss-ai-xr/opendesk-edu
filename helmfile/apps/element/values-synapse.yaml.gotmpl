@@ -136,8 +136,8 @@ configuration:
       port: 25
       tls: false
       starttls: false
-      username: ""
-      password: ""
+      username: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+      password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
 
     oidc:
       clientId: "opendesk-matrix"

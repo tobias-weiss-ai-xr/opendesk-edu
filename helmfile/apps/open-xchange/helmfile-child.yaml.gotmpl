@@ -51,6 +51,16 @@ repositories:
     oci: true
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.oxConnector.registry }}/{{ .Values.charts.oxConnector.repository }}"
 
+  # openDesk Postfix
+  # https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-postfix
+  - name: "postfix-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.postfix.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.postfix.registry }}/{{ .Values.charts.postfix.repository }}"
+
 releases:
   - name: "dovecot"
     chart: "dovecot-repo/{{ .Values.charts.dovecot.name }}"
@@ -64,6 +74,17 @@ releases:
       - {{ . }}
       {{- end }}
     installed: {{ .Values.apps.dovecot.enabled }}
+    timeout: 900
+
+  - name: "postfix-ox"
+    chart: "postfix-repo/{{ .Values.charts.postfix.name }}"
+    version: "{{ .Values.charts.postfix.version }}"
+    values:
+      - "values-postfix.yaml.gotmpl"
+      {{- range .Values.customization.release.postfix }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.postfix.enabled }}
     timeout: 900
 
   - name: "open-xchange"

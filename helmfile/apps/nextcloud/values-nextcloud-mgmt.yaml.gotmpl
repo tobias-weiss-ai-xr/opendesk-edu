@@ -142,16 +142,16 @@ configuration:
 
   smtp:
     auth:
-      enabled: false
+      enabled: true
       username:
-        value: ""
+        value: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       password:
-        value: ""
+        value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
     host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
-    port: 25
+    port: 587
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
     mailDomain: "{{ .Values.global.domain }}"
-    security: ""
+    security: "tls"
     skipVerifyPeer: true
 
   quota:

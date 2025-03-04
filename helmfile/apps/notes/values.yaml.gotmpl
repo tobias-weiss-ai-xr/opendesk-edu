@@ -168,6 +168,9 @@ backend:
     DJANGO_EMAIL_HOST: "postfix"
     DJANGO_EMAIL_PORT: 25
     DJANGO_EMAIL_USE_SSL: False
+    DJANGO_EMAIL_HOST_USER: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+    DJANGO_EMAIL_HOST_PASSWORD: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+    DJANGO_EMAIL_USE_TLS: False
     OIDC_RP_CLIENT_ID: "opendesk-notes"
     OIDC_RP_CLIENT_SECRET: {{ .Values.secrets.keycloak.clientSecret.notes | quote }}
     OIDC_OP_JWKS_ENDPOINT: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
