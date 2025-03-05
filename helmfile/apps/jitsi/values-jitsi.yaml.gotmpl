@@ -49,6 +49,7 @@ extraVolumeMounts:
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
 
 image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}

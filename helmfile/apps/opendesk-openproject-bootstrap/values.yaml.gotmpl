@@ -13,6 +13,7 @@ global:
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
+  deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
   keepPVCOnDelete: {{ .Values.debug.cleanup.keepPVCOnDelete }}
 
 config:
