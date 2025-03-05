@@ -121,10 +121,13 @@ configuration:
       value: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
 
   opendeskIntegration:
-    username:
-      value: "opendesk_username"
-    password:
-      value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+    centralnavigation:
+      username:
+        value: "opendesk_username"
+      password:
+        value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+    oxAppSuite:
+      enabled: {{ .Values.apps.oxAppSuite.enabled }}
 
   sharing:
     allowLinks: {{ .Values.functional.filestore.sharing.external.enabled }}
