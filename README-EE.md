@@ -36,6 +36,11 @@ The following components have - at least partially - Enterprise specific artifac
 - OX AppSuite: oD CE and EE are using the same release version, in EE an enterprise-built container of the AppSuite's Core-Middleware is being integrated.
 - OX Dovecot Pro 3: Dovecot Pro provides support for S3 storage and this feature is used by default.
 
+If you want to check in detail which artifacts are specific to openDesk Enterprise and thereby may contain non open source code, please check the `repository:` 
+values in the image ([1](./helmfile/environments/default/images.yaml.gotmpl) / [2](./helmfile/environments/default-enterprise-overrides/images.yaml.gotmpl)) 
+and chart ([1](./helmfile/environments/default/charts.yaml.gotmpl) / [2](./helmfile/environments/default-enterprise-overrides/charts.yaml.gotmpl)) definitions. 
+When a repository path starts with `/zendis` the artifact is only available in an openDesk Enterprise deployment.
+
 # Enabling the Enterprise deployment
 
 To enable the oD EE deployment you must set the environment variable `OPENDESK_ENTERPRISE` to any value that does not evaluate to boolean *false* for [Helm flow control](https://helm.sh/docs/chart_template_guide/control_structures/#ifelse), e.g. `"true"`, `"yes"` or `"1"`:
