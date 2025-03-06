@@ -407,6 +407,8 @@ In openDesk, Element is used for chat and direct audio & video calling.
 
 In openDesk, Jitsi is used for video conferencing and online meetings. It integrates with other applications to provide seamless communication capabilities.
 
+[Jigasi](https://github.com/jitsi/jigasi) (Jitsi's SIP component) also allows joining the meeting via phone call if an external SIP server and SIP trunk are provided.
+
 ## Nextcloud (Files)
 
 [Nextcloud](https://nextcloud.com) is a file storage and sync platform with powerful collaboration capabilities with desktop, mobile and web interfaces.
