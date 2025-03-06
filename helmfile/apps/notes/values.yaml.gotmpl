@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */}}
 ---
 image:
-  repository: {{ printf "%s/%s" (coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.notesBackend.registry) (.Values.images.notesBackend.repository) | quote }}
+  repository: {{ printf "%s/%s" (coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.notesBackend.registry) (.Values.images.notesBackend.repository) | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   tag: {{ .Values.images.notesBackend.tag }}
   credentials:
@@ -48,7 +48,7 @@ ingressMedia:
   host: "{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}"
   annotations:
     nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Amz-Date, X-Amz-Content-SHA256"
-    nginx.ingress.kubernetes.io/auth-url: "https://{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}/api/v1.0/documents/retrieve-auth/"
+    nginx.ingress.kubernetes.io/auth-url: "https://{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}/api/v1.0/documents/media-auth/"
     nginx.ingress.kubernetes.io/upstream-vhost: {{ .Values.objectstores.notes.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/use-regex: "true"
@@ -143,6 +143,10 @@ djangoSuperUserPass: {{ .Values.secrets.notes.superuser }}
 djangoSecretKey: {{ .Values.secrets.notes.djangoSecretKey }}
 
 backend:
+  image:
+    repository: {{ printf "%s/%s" (coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.notesBackend.registry) (.Values.images.notesBackend.repository) | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ .Values.images.notesBackend.tag }}
   replicas: {{ .Values.replicas.notesBackend }}
   envVars:
     DB_HOST: {{ .Values.databases.notes.host | quote }}
@@ -160,11 +164,16 @@ backend:
     AWS_S3_SECRET_ACCESS_KEY: {{ .Values.objectstores.notes.secretKey | default .Values.secrets.minio.notesUser | quote }}
     AWS_STORAGE_BUCKET_NAME: {{ .Values.objectstores.notes.bucket }}
     DJANGO_CSRF_TRUSTED_ORIGINS: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
+    DJANGO_SITE_DOMAIN: {{ printf "%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
+    DJANGO_SITE_NAME: {{ printf "%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
     DJANGO_CONFIGURATION: Production
     DJANGO_ALLOWED_HOSTS: "*"
     DJANGO_SECRET_KEY: {{ .Values.secrets.notes.djangoSecretKey }}
     DJANGO_SETTINGS_MODULE: impress.settings
     DJANGO_SUPERUSER_PASSWORD: {{ .Values.secrets.notes.superuser }}
+    DJANGO_EMAIL_BRAND_NAME: "openDesk"
+    DJANGO_EMAIL_LOGO_IMG: {{ printf "https://%s.%s/univention/portal/icons/entries/swp.notes.svg" .Values.global.hosts.nubus .Values.global.domain | quote }}
+    DJANGO_EMAIL_FROM: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
     DJANGO_EMAIL_HOST: "postfix"
     DJANGO_EMAIL_PORT: 25
     DJANGO_EMAIL_USE_SSL: False
@@ -181,7 +190,8 @@ backend:
     OIDC_RP_SIGN_ALGO: RS256
     OIDC_RP_SCOPES: "openid opendesk-notes-scope"
     USER_OIDC_FIELD_TO_SHORTNAME: "given_name"
-    USER_OIDC_FIELDS_TO_FULLNAME: "given_name family_name"
+    USER_OIDC_FIELDS_TO_FULLNAME: "given_name,family_name"
+    USER_OIDC_ESSENTIAL_CLAIMS: "email"
     OIDC_REDIRECT_ALLOWED_HOSTS: {{ printf "https://%s.%s/*" .Values.global.hosts.notes .Values.global.domain | quote }}
     OIDC_AUTH_REQUEST_EXTRA_PARAMS: "{}"
     OIDC_RENEW_ID_TOKEN: "False"
@@ -202,8 +212,7 @@ backend:
       - "/bin/sh"
       - "-c"
       - |
-        python manage.py migrate --no-input &&
-        python manage.py create_demo --force
+        python manage.py migrate --no-input
     restartPolicy: Never
 
   createsuperuser:
