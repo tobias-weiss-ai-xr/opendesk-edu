@@ -185,15 +185,16 @@ variables:
   TESTS_BRANCH:
     description: "Branch of E2E-tests on which the test pipeline is triggered"
     value: "develop"
-  TESTS_PROJECT_URL:
-    description: "Project url for e2e-tests (`<domain of gitlab>/api/v4/projects/<id>`)"
-    value: "gitlab.opencode.de/api/v4/projects/1506"
   TESTS_TESTSET:
-    description: "Selects test set for E2E-tests"
+    description: "Selects test set for E2E-tests (Regression, Smoke or Nightly), name multiple comma separated to trigger the sets in one launch, use semikolon to trigger the sets in different launches."
     value: "Smoke"
+  TESTS_BROWSER:
+    description: "Select the browser (engine) to use for the test run."
+    value: "chromium"
     options:
-      - "Regression"
-      - "Smoke"
+      - "chromium"
+      - "webkit"
+      - "firefox"
   TESTS_GRACE_PERIOD:
     description: "A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail.
                   GRACE_PERIOD is the period in seconds that should be waited before running the tests."
@@ -201,6 +202,9 @@ variables:
   TESTS_NUMBER_OF_THREADS:
     description: "How many threads are used for executing the tests in parallel?"
     value: "8"
+  TESTS_PROJECT_URL:
+    description: "Project url for e2e-tests (`<domain of gitlab>/api/v4/projects/<id>`)"
+    value: "gitlab.opencode.de/api/v4/projects/1506"
 
 # Declare .environments which is in `opendesk-env` repository. In case it is not available
 # 'cache' is used because job as a dummy key, as the job is not allowed to be empty.
@@ -580,6 +584,7 @@ run-tests:
           \"namespace\": \"${NAMESPACE}\", \
           \"url\": \"https://portal.${DOMAIN}/\", \
           \"language\": \"${LANGUAGE}\", \
+          \"browser\": \"${TESTS_BROWSER}\", \
           \"udm_api_username\": \"Administrator\", \
           \"udm_api_password\": \"${DEFAULT_ADMINISTRATOR_PASSWORD}\", \
           \"screenshot_test\": \"yes\", \
