@@ -83,8 +83,11 @@ postfix:
   smtpdMilters: "inet:clamav-simple:7357"
   {{- end }}
   {{- end }}
+  # Only deliver mail to Dovecot, if it is available
+  {{- if .Values.apps.oxAppSuite.enabled }}
   virtualMailboxDomains: {{ if .Values.global.additionalMailDomains }}{{ printf "%s,%s" (.Values.global.mailDomain | default .Values.global.domain) .Values.global.additionalMailDomains }}{{ else }}{{ .Values.global.mailDomain | default .Values.global.domain | quote }}{{ end }}
   virtualTransport: "lmtps:dovecot:24"
+  {{- end }}
 
 podAnnotations: {}
 
