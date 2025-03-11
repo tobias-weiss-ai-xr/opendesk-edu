@@ -49,6 +49,10 @@ global:
     {{- if .Values.apps.xwiki.enabled }}
     xwiki: {{ .Values.global.hosts.xwiki }}
     {{- end }}
+    {{- if .Values.apps.notes.enabled }}
+    notes: {{ .Values.global.hosts.notes }}
+    {{- end }}
+
 
 issuerRef:
   name: {{ .Values.certificate.issuerRef.name | quote }}
