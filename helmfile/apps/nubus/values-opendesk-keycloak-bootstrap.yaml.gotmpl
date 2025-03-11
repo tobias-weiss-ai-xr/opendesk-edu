@@ -90,8 +90,10 @@ config:
                '${client_account-console}', '${client_admin-cli}', '${client_broker}', '${client_realm-management}',
                '${client_security-admin-console}' ]
   keycloak:
-    adminUser: "kcadmin"
-    adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
+    admin:
+      values:
+        username: "kcadmin"
+        password: {{ .Values.secrets.keycloak.adminPassword | quote }}
     realm: {{ .Values.platform.realm | quote }}
     intraCluster:
       enabled: true
