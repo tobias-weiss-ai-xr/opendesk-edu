@@ -119,7 +119,7 @@ appsuite:
     asConfig:
       default:
         host: "all"
-        pageHeaderPrefix: "as8.souvap App Suite"
+        productName: {{ .Values.theme.texts.productName | quote }}
         oidcLogin: true
         oidcPath: "/oidc"
     masterAdmin: "admin"
