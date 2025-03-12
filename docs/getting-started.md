@@ -20,6 +20,9 @@ This documentation lets you create an openDesk evaluation instance on your Kuber
     * [Ingress](#ingress)
     * [Container runtime](#container-runtime)
     * [Volumes](#volumes)
+  * [Customize deployment](#customize-deployment)
+    * [Functional features](#functional-features)
+    * [Features through Customization](#features-through-customization)
   * [Connectivity](#connectivity)
     * [Ports](#ports)
       * [Web-based user interface](#web-based-user-interface)
@@ -260,7 +263,9 @@ cluster:
     readWriteMany: true
 ```
 
+## Customize deployment
 
+While openDesk configures the applications with meaningful defaults, you can check [functional.md](functional.md) if you want to change these defaults to better match your use case.
 
 ## Connectivity
 
