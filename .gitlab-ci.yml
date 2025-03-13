@@ -573,6 +573,10 @@ run-tests:
           - "en"
   script:
     - |
+      if [ "${LANGUAGE}" = "en" ]; then 
+        sleep 30
+      fi
+    - |
       curl --request POST \
       --header "Content-Type: application/json" \
       --data "{ \
