@@ -17,13 +17,8 @@ global:
       cnAdmin:
         password: {{ .Values.secrets.nubus.ldapSecret | quote }}
   nubusDeployment: true
-  nubusMasterPassword: {{ .Values.secrets.nubus.masterpassword | quote }}
-  objectStorage:
-    bucket: {{ .Values.objectstores.nubus.bucket | quote }}
-    connection:
-      host: "minio"
-      port: "9000"
-      protocol: "http"
+  secrets:
+    masterPassword: {{ .Values.secrets.nubus.masterpassword | quote }}
   subDomains:
     portal: {{ .Values.global.hosts.nubus | quote }}
     keycloak: {{ .Values.global.hosts.keycloak | quote }}
@@ -133,6 +128,8 @@ ingress:
   tls:
     enabled: {{ .Values.ingress.tls.enabled }}
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  minio:
+    enabled: false
 
 # Nubus bundled services
 postgresql:
@@ -583,13 +580,14 @@ nubusPortalConsumer:
         {{- range .Values.global.imagePullSecrets }}
         - name: {{ . | quote }}
         {{- end }}
+    assetsBaseUrl: {{ printf "https://%s/%s/%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) (.Values.objectstores.nubus.bucket) "portal-assets" | quote }}
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
-    objectStorageEndpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
-    objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
   objectStorage:
     auth:
       accessKey: {{ .Values.objectstores.nubus.username | quote }}
       secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+    bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
+    endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   persistence:
     size: {{ .Values.persistence.storages.nubusPortalConsumer.size | quote }}
     storageClass: {{ coalesce .Values.persistence.storages.nubusPortalConsumer.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
@@ -682,9 +680,8 @@ nubusPortalServer:
     auth:
       accessKey: {{ .Values.objectstores.nubus.username | quote }}
       secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
-  portalServer:
-    objectStorageEndpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
-    objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
+    bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
+    endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
     objectStorageCredentialSecret:
       name: "ums-portal-server-minio-opendesk-credentials"
       accessKeyKey: "access-key-id"
@@ -692,6 +689,9 @@ nubusPortalServer:
     centralNavigation:
       enabled: true
       authenticatorSecretName: "ums-opendesk-portal-server-central-navigation"
+  portalServer:
+    featureToggles:
+      notifications_api: false
   replicaCount: {{ .Values.replicas.umsPortalServer }}
   resources:
     {{ .Values.resources.umsPortalServer | toYaml | nindent 4 }}
@@ -1017,6 +1017,9 @@ nubusUdmListener:
   replicaCount: {{ .Values.replicas.umsUdmListener }}
   resources:
     {{ .Values.resources.umsUdmListener | toYaml | nindent 4 }}
+  nats:
+    auth:
+      password: {{ .Values.secrets.nubus.provisioning.udmListenerNatsPassword | quote}}
 
 nubusSelfServiceListener:
   enabled: false
@@ -1055,6 +1058,8 @@ nubusSelfServiceConsumer:
       password: {{ .Values.secrets.nubus.selfserviceConsumer.provisioningApiPassword | quote}}
   resources:
     {{ .Values.resources.umsSelfserviceConsumer | toYaml | nindent 4 }}
+  resourcesWaitForDependency:
+    {{ .Values.resources.umsSelfserviceConsumer | toYaml | nindent 4 }}
   replicaCount: {{ .Values.replicas.umsSelfserviceConsumer }}
   waitForDependency:
     image:
@@ -1088,6 +1093,14 @@ nubusStackDataUms:
     repository: {{ .Values.images.nubusDataLoader.repository }}
     tag: {{ .Values.images.nubusDataLoader.tag }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  nubusPortalConsumer:
+    objectStorage:
+      bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
+      endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+  nubusPortalServer:
+    objectStorage:
+      bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
+      endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   initResources:
     {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
   # In openDesk the external memcache does not expect a username to be set. Overwriting
@@ -1096,6 +1109,13 @@ nubusStackDataUms:
     memcached:
       auth:
         username: ""
+      connection:
+        host: {{ .Values.cache.umsSelfservice.host | quote }}
+    postgresql:
+      auth:
+        username: {{ .Values.databases.umsSelfservice.username | quote }}
+      connection:
+        host: {{ .Values.databases.umsSelfservice.host | quote }}
   pullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   resources:
@@ -1383,6 +1403,12 @@ nubusKeycloakBootstrap:
     intents.otterize.com/service-name: "ums-keycloak-bootstrap"
   resources:
     {{ .Values.resources.umsKeycloakBootstrap | toYaml | nindent 4 }}
+  waitForDependency:
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
+      repository: {{ .Values.images.nubusWaitForDependency.repository }}
+      tag: {{ .Values.images.nubusWaitForDependency.tag }}
+      imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 # Credential secrets for accessing customer supplied services
 extraSecrets:
