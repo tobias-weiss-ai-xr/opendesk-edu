@@ -57,9 +57,10 @@ variables:
     description: "The name of namespaces to deploy to."
     value: ""
   CLUSTER:
-    description: "Which cluster to use. Cluster must be defined in `gitlab/environments.yaml` of the
-        repo that is included above using the env var `PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG`:
-        ${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
+    description: >
+      Which cluster to use. Cluster must be defined in `gitlab/environments.yaml` of the
+      repo that is included above using the env var `PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG`:
+      ${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}
     value: "dev"
   MASTER_PASSWORD_WEB_VAR:
     description: >
@@ -73,14 +74,17 @@ variables:
       - "yes"
       - "no"
   DEBUG_ENABLED:
-    description: "Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific\
-     configuration containing: `debug.enabled: {{ env \"DEBUG_ENABLED\" | default false }}`"
+    description: >
+      Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific
+      configuration containing: `debug.enabled: {{ env "DEBUG_ENABLED" | default false }}`
     value: "no"
     options:
       - "yes"
       - "no"
   OPENDESK_ENTERPRISE:
-    description: "Set to `true` if you want to deploy openDesk EE (but be sure you provide the required EE keys/tokens for the application)"
+    description: >
+      Set to `true` if you want to deploy openDesk EE (but be sure you provide the required EE keys/tokens
+      for the application)
     value: "false"
     options:
       - "true"
@@ -158,8 +162,9 @@ variables:
       - "yes"
       - "no"
   CREATE_DEFAULT_ACCOUNTS:
-    description: "Creates `default` and `default-admin` in the instance using the password defined as CI variable
-                 `DEFAULT_ACCOUNTS_PASSWORD`."
+    description: >
+      Creates `default` and `default-admin` in the instance using the password defined as CI variable
+      `DEFAULT_ACCOUNTS_PASSWORD`.
     value: "no"
     options:
       - "yes"
@@ -186,7 +191,9 @@ variables:
     description: "Branch of E2E-tests on which the test pipeline is triggered"
     value: "develop"
   TESTS_TESTSET:
-    description: "Selects test set for E2E-tests (Regression, Smoke or Nightly), name multiple comma separated to trigger the sets in one launch, use semikolon to trigger the sets in different launches."
+    description: >
+      Selects test set for E2E-tests (Regression, Smoke or Nightly), name multiple comma separated to trigger the
+      sets in one launch, use semikolon to trigger the sets in different launches.
     value: "Smoke"
   TESTS_BROWSER:
     description: "Select the browser (engine) to use for the test run."
@@ -196,8 +203,9 @@ variables:
       - "webkit"
       - "firefox"
   TESTS_GRACE_PERIOD:
-    description: "A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail.
-                  GRACE_PERIOD is the period in seconds that should be waited before running the tests."
+    description: >
+      A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail. Here you
+      can set the time in seconds that should be waited before running the tests.
     value: "0"
   TESTS_NUMBER_OF_THREADS:
     description: "How many threads are used for executing the tests in parallel?"
@@ -573,7 +581,7 @@ run-tests:
           - "en"
   script:
     - |
-      if [ "${LANGUAGE}" = "en" ]; then 
+      if [ "${LANGUAGE}" = "en" ]; then
         sleep 30
       fi
     - |
