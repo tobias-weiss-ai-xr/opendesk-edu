@@ -67,7 +67,9 @@ grafana:
     enabled: true
 ```
 
-# Components
+Please find the details in the [related Helm chart](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dashboards).
+
+# Component overview
 
 | Component | Metrics (pod- or serviceMonitor)  | Alerts (prometheusRule) | Dashboard (Grafana) |
 |:----------|-----------------------------------|-------------------------|---------------------|
