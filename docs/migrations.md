@@ -75,6 +75,7 @@ To upgrade existing deployments, you cannot skip any version mentioned in the co
 
 | Mandatory version |
 | ----------------- |
+| v1.2.x            |
 | v1.1.x            |
 | v1.0.0            |
 | v0.9.0            |
@@ -643,6 +644,20 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 - Reference: `objectstores.migrations` in [objectstores.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/objectstores.yaml)
 
 # Automated migrations - Details
+
+## From v1.1.2 (automated)
+
+> **Note**<br>
+> Details can be found in [run_4.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_4.py).
+
+### migrations-pre
+
+- Delete PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
+- Delete StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
+
+### migrations-post
+
+- Restarting Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` as well as deleting the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
 
 ## From v1.0.0 (automated)
 

@@ -589,9 +589,9 @@ nubusPortalConsumer:
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
     endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   persistence:
-#    groupMembershipCache:
-    size: {{ .Values.persistence.storages.nubusPortalConsumer.size | quote }}
-    storageClass: {{ coalesce .Values.persistence.storages.nubusPortalConsumer.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+    groupMembershipCache:
+      size: {{ .Values.persistence.storages.nubusPortalConsumer.size | quote }}
+      storageClass: {{ coalesce .Values.persistence.storages.nubusPortalConsumer.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-portal-consumer"
   provisioningApi:

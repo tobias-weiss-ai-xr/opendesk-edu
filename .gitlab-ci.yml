@@ -74,7 +74,8 @@ variables:
       - "yes"
       - "no"
   FLUSH_EXTERNAL_SERVICES_BEFORE:
-    description: "Recreates databases and purges objectstorage. Useful when using external services and required overrides."
+    description: >
+      Recreates databases and purges objectstorage. Useful when using external services and required overrides.
     value: "no"
     options:
       - "yes"
@@ -265,7 +266,8 @@ db-cleanup:
           $FLUSH_EXTERNAL_SERVICES_BEFORE != "no"
       when: "on_success"
   script:
-    - export FILES=(${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl ${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl)
+    - export FILES="(${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl \
+      ${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl)"
     # Cleanup MariaDB
     - |
       export DATABASES="oxAppSuite"
@@ -314,7 +316,8 @@ db-cleanup:
       done;
     # Cleanup PostgreSQL
     - |
-      export DATABASES="keycloak keycloakExtension nextcloud notes openproject synapse umsGuardianManagementApi umsNotificationsApi umsSelfservice xwiki"
+      export DATABASES="keycloak keycloakExtension nextcloud notes openproject synapse umsGuardianManagementApi \
+      umsNotificationsApi umsSelfservice xwiki"
       export PGDATABASE="postgres"
       export PGHOST=""
       export PGPORT=""
