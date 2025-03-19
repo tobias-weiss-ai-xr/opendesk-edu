@@ -3,6 +3,16 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 objectstores:
+  dovecot:
+    bucket: "dovecot"
+    endpoint: ""
+    region: "eu-west-1"
+    secretKey: ""
+    username: "dovecot_user"
+    storageClass: "STANDARD"
+    useSSL: true
+    pathStyle: true
+    port: 443
   migrations:
     bucket: "migrations"
     endpoint: ""
@@ -29,6 +39,12 @@ objectstores:
     secretKey: ""
     username: "notes_user"
     port: 443
+  nubus:
+    bucket: "ums"
+    endpoint: ""
+    region: "eu-west-1"
+    secretKey: ""
+    username: "ums_user"
   openproject:
     bucket: "openproject"
     directUploads: true
@@ -39,10 +55,4 @@ objectstores:
     username: "openproject_user"
     pathStyle: true
     useIamProfile: false
-  nubus:
-    bucket: "ums"
-    endpoint: ""
-    region: "eu-west-1"
-    secretKey: ""
-    username: "ums_user"
 ...
