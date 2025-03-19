@@ -40,11 +40,10 @@ databases:
     password: ""
     connectionLimit: ~
   nextcloud:
-    # Nextcloud itself also supports `postgresql` or `oci`
-    type: "mariadb"
+    type: "postgresql"
     name: "nextcloud"
-    host: "mariadb"
-    port: 3306
+    host: "postgresql"
+    port: 5432
     username: "nextcloud_user"
     password: ""
     connectionLimit: ~
@@ -125,12 +124,11 @@ databases:
     password: ""
     connectionLimit: 10
   xwiki:
-    # XWiki itself also supports `postgresql`
-    type: "mariadb"
+    type: "postgresql"
     name: "xwiki"
-    host: "mariadb"
-    port: 3306
-    username: "root"
+    host: "postgresql"
+    port: 5432
+    username: "xwiki_user"
     password: ""
     connectionLimit: ~
 ...

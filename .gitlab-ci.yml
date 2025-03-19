@@ -268,7 +268,7 @@ db-cleanup:
     - export FILES=(${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl ${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl)
     # Cleanup MariaDB
     - |
-      export DATABASES="nextcloud oxAppSuite xwiki"
+      export DATABASES="oxAppSuite"
       export MARIADB_HOST=""
       export MARIADB_PORT=""
       export MARIADB_USERNAME=""
@@ -314,7 +314,7 @@ db-cleanup:
       done;
     # Cleanup PostgreSQL
     - |
-      export DATABASES="keycloak keycloakExtension notes openproject synapse umsGuardianManagementApi umsNotificationsApi umsSelfservice" 
+      export DATABASES="keycloak keycloakExtension nextcloud notes openproject synapse umsGuardianManagementApi umsNotificationsApi umsSelfservice xwiki"
       export PGDATABASE="postgres"
       export PGHOST=""
       export PGPORT=""
@@ -356,7 +356,7 @@ db-cleanup:
       export AWS_ENDPOINT=""
       export AWS_ACCESS_KEY_ID=""
       export AWS_SECRET_ACCESS_KEY=""
-      
+
       for BUCKET in $BUCKETS; do
         export ENV_BUCKET=${BUCKET}
 

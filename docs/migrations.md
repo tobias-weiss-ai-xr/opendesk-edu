@@ -89,6 +89,46 @@ When interested in more details about the automated migrations, please read sect
 
 Be sure you check all the sections for the releases your are going to update your current deployment from.
 
+## From v1.1.2
+
+#### Helmfile new default: PostgreSQL for XWiki and Nextcloud
+
+openDesk now uses PostgreSQL as default database backend for Nextcloud and XWiki.
+
+When upgrading existing instances you likely want to keep the current database backend (MariaDB). Please follow the instructions below.
+
+**If you use your own external database services**, you just have to add the new `type` attribute and set it to `mariadb`:
+
+```yaml
+databases:
+  nextcloud:
+    type: "mariadb"
+  xwiki:
+    type: "mariadb"
+```
+
+**If you use the openDesk supplied database services**, ensure you set the following attributes before upgrading, this includes the aforementioned `type` attribute.
+
+```yaml
+databases:
+  nextcloud:
+    type: "mariadb"
+    host: "mariadb"
+    port: 3306
+  xwiki:
+    type: "mariadb"
+    host: "mariadb"
+    port: 3306
+    username: "root"
+```
+
+In case you are planning to migrate an existing instance from MariaDB to PostgreSQL please check the upstream documentation for details:
+
+- Nextcloud database migration: https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
+- XWiki:
+  - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
+  - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport
+
 ## From v1.1.1
 
 ### Pre-upgrade from v1.1.1
