@@ -231,7 +231,7 @@ ingress:
 ```
 
 Currently, the only supported ingress controller is `ingress-nginx` (see
-[requirements.md](./docs/requirements.md)) for reference).
+[requirements.md](./docs/requirements.md) for reference).
 
 ### Container runtime
 
