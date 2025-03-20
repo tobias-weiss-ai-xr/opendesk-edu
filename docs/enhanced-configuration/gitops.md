@@ -25,7 +25,7 @@ This documentation will use Argo CD to explain how to deploy openDesk GitOps-sty
 # ArgoCD
 
 We are continuously improving our Argo CD support, please share you experience with Argo CD deployments e.g. by [creating
-at ticket](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues).
+a ticket](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues).
 
 There are two options to deploy openDesk via Argo CD described in the following sections.
 
@@ -42,19 +42,19 @@ References:
 - [Helmfile CLI documentation](https://helmfile.readthedocs.io/en/latest/#cli-reference)
 - [Generate K8s YAML Manifests for openDesk](https://gitlab.opencode.de/bmi/opendesk/deployment/options/generate-k8s-yaml-manifests)
 
-Afterwards, you can use the resulting manifests within an standard Argo CD workflow.
+Afterwards, you can use the resulting manifests within a standard Argo CD workflow.
 
 > **Note**<br>
-> When creating the Argo CD application based on the resulting manifests you must not use the `Automated Sync Policy`
+> When creating the Argo CD application based on the resulting manifests, you must not use the `Automated Sync Policy`
 > offered by Argo CD, as you have to manually ensure the applications are updated in the required sequence.
 
 ## Option 2: Helmfile plugin
 
-It is possible to deploy openDesk via Argo CD with community developed
+It is possible to deploy openDesk via Argo CD with the community developed
 [Helmfile plugin](https://github.com/travisghansen/argo-cd-helmfile).
 
 You can find an example for this approach in the
 [Argo CD Deployments](https://gitlab.opencode.de/bmi/opendesk/deployment/options/argocd-deploy) repository.
 It contains an example Helm chart (`opendesk-parent`) to create Argo CD Applications via a Helm chart (`opendesk`)
-according to `app of apps pattern` and is using sync waves to ensure to required deployment and update sequence
-for openDesk is met.
+according to `app of apps pattern`. It uses sync waves to ensure the deployment matches requirements and the update sequence
+for openDesk is satisfied.

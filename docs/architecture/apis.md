@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>openDesk APIs</h1>
 
-This chapter presents APIs available in openDesk grouped by applications.
+This chapter presents APIs available in openDesk, grouped by application.
 
 <!-- TOC -->
 * [IAM - Nubus](#iam---nubus)
@@ -88,19 +88,19 @@ This chapter presents APIs available in openDesk grouped by applications.
 
 ## UMC store API
 
-| Name                           | UMC store API (also named UMC JavaScript API or Dojo/UMC JavaScript API)                                  |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| Purpose                        | Encapsulate and ease the access to module data from JavaScript                                            |
-| Versioning                     |                                                                                                           |
-| Authentication                 |                                                                                                           |
-| In openDesk provided by        | Nubus UMC                                                                                                 |
-| Transport protocol             |                                                                                                           |
-| Usage within component         |                                                                                                           |
-| Usage within openDesk          |                                                                                                           |
-| Usage for external integration |                                                                                                           |
-| Parallel access                | Allowed                                                                                                   |
-| Message protocol               |                                                                                                           |
-| Supported standards            |                                                                                                           |
+| Name                           | UMC store API (also named UMC JavaScript API or Dojo/UMC JavaScript API)                                 |
+| ------------------------------ |----------------------------------------------------------------------------------------------------------|
+| Purpose                        | Encapsulate and ease the access to JavaScript module data                                                |
+| Versioning                     |                                                                                                          |
+| Authentication                 |                                                                                                          |
+| In openDesk provided by        | Nubus UMC                                                                                                |
+| Transport protocol             |                                                                                                          |
+| Usage within component         |                                                                                                          |
+| Usage within openDesk          |                                                                                                          |
+| Usage for external integration |                                                                                                          |
+| Parallel access                | Allowed                                                                                                  |
+| Message protocol               |                                                                                                          |
+| Supported standards            |                                                                                                          |
 | Documentation                  | https://docs.software-univention.de/developer-reference/5.0/en/umc/local-system-module.html#umc-store-api |
 
 ## IntercomService (ICS) API
@@ -113,7 +113,7 @@ This chapter presents APIs available in openDesk grouped by applications.
 | In openDesk provided by        | Nubus UMC                                                                                                                                                                                                                           |
 | Transport protocol             | HTTP(S)                                                                                                                                                                                                                             |
 | Usage within component         |                                                                                                                                                                                                                                     |
-| Usage within openDesk          | The ICS implements the BFF pattern for various openDesk inter-component integrations, see also [components.md](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/docs/components.md#component-integration) |
+| Usage within openDesk          | The ICS implements the BFF pattern for various openDesk inter-component integrations, see [components.md](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/docs/components.md#component-integration) |
 | Usage for external integration |                                                                                                                                                                                                                                     |
 | Parallel access                | Allowed                                                                                                                                                                                                                             |
 | Message protocol               | Depends on the integration use case.                                                                                                                                                                                                |
@@ -129,7 +129,7 @@ This chapter presents APIs available in openDesk grouped by applications.
 | Authentication                 |                                                                                                                                                                                                                                     |
 | In openDesk provided by        | Univention Event Processing                                                                                                                                                                                                         |
 | Transport protocol             |                                                                                                                                                                                                                                     |
-| Usage within component         | The listener mechanism is used to dispatch events from the LDAP to the Nubus provisioning service. It should be replaced by another approach in the future.                                                                          |
+| Usage within component         | The listener mechanism is used to dispatch events from the LDAP to the Nubus provisioning service. It should be replaced with another approach in the future.                                                                       |
 | Usage within openDesk          | The ICS implements the BFF pattern for various openDesk inter-component integrations, see also [components.md](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/docs/components.md#component-integration) |
 | Usage for external integration |                                                                                                                                                                                                                                     |
 | Parallel access                | Allowed                                                                                                                                                                                                                             |
@@ -144,8 +144,8 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 ![Composition of UMC component with APIs highlighted](./apis_images/IAM-udm.png)
 
 | Name                           | UDM Simple API                                                    |
-| ------------------------------ | ----------------------------------------------------------------- |
-| Purpose                        | Allows to use capability and objects directly in Python programs. |
+| ------------------------------ |-------------------------------------------------------------------|
+| Purpose                        | Allows use of capability and objects directly in Python programs. |
 | Versioning                     |                                                                   |
 | Authentication                 |                                                                   |
 | In openDesk provided by        | Univention Directory Manager                                      |
@@ -167,7 +167,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Authentication                 | Basic Auth                                                                                                                                 |
 | In openDesk provided by        | Univention Directory Manager                                                                                                               |
 | Transport protocol             | HTTP(S)                                                                                                                                    |
-| Usage within component         | The Nubus bootstrapping makes use of the API.                                                                                               |
+| Usage within component         | The Nubus bootstrapping process makes use of the API.                                                                                      |
 | Usage within openDesk          |                                                                                                                                            |
 | Usage for external integration | The [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import) utilizes the API. |
 | Parallel access                | Allowed                                                                                                                                    |
@@ -186,7 +186,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Authentication                 |                                                                                                     |
 | In openDesk provided by        | Nubus                                                                                               |
 | Transport protocol             |                                                                                                     |
-| Usage within component         | The Nubus bootstrapping makes use of the API.                                                       |
+| Usage within component         | The Nubus bootstrapping process makes use of the API.                                               |
 | Usage within openDesk          |                                                                                                     |
 | Usage for external integration |                                                                                                     |
 | Parallel access                | Allowed                                                                                             |
@@ -196,20 +196,20 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 ## LDAP
 
-| Name                           | LDAP                                                                                                                   |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| Purpose                        | Read access to Nubus LDAP                                                                                              |
-| Versioning                     | n/a                                                                                                                    |
-| Authentication                 | LDAP user auth                                                                                                         |
-| In openDesk provided by        | Nubus openLDAP                                                                                                         |
-| Transport protocol             | LDAP                                                                                                                   |
-| Usage within component         | Data backend for Nubus                                                                                                 |
-| Usage within openDesk          | Used by multiple application to access user/group data, e.g. Nextcloud Server, OpenProject, OX AppSuite backend, XWiki |
-| Usage for external integration | No recommended                                                                                                         |
-| Parallel access                | Allowed                                                                                                                |
-| Message protocol               | LDAP                                                                                                                   |
-| Supported standards            | LDAP                                                                                                                   |
-| Documentation                  | https://docs.software-univention.de/manual/5.0/en/domain-ldap/ldap-directory.html                                      |
+| Name                           | LDAP                                                                                                                    |
+| ------------------------------ |-------------------------------------------------------------------------------------------------------------------------|
+| Purpose                        | Read access to Nubus LDAP                                                                                               |
+| Versioning                     | n/a                                                                                                                     |
+| Authentication                 | LDAP user auth                                                                                                          |
+| In openDesk provided by        | Nubus openLDAP                                                                                                          |
+| Transport protocol             | LDAP                                                                                                                    |
+| Usage within component         | Data backend for Nubus                                                                                                  |
+| Usage within openDesk          | Used by multiple applications to access user/group data, e.g. Nextcloud Server, OpenProject, OX AppSuite backend, XWiki |
+| Usage for external integration | Not recommended                                                                                                         |
+| Parallel access                | Allowed                                                                                                                 |
+| Message protocol               | LDAP                                                                                                                    |
+| Supported standards            | LDAP                                                                                                                    |
+| Documentation                  | https://docs.software-univention.de/manual/5.0/en/domain-ldap/ldap-directory.html                                       |
 
 ## Nubus Provisioning Service (**TBD**)
 
@@ -221,24 +221,24 @@ To be delivered.
 
 # Groupware - OX AppSuite / OX Dovecot
 
-![OX AppSuite APIs overview](./apis_images/Groupware-apis.png)
+![OX AppSuite APIs overview](./apis_images/Groupware-api.png)
 
 ![Use of OX AppSuite APIs by other components](./apis_images/Groupware-api-usage.png)
 
 ## Usage of APIs within openDesk
 
-Following are APIs used by the Groupware application:
+The following are the APIs used by the Groupware application:
 
 | Used by                        | Accessed component | Service            | Purpose                                                     | Message format                   |
 | ------------------------------ | ------------------ | ------------------ | ----------------------------------------------------------- | -------------------------------- |
 | AppSuite Middleware            | Keycloak           | Authentication     | Single sign-on / sign-out                                   | OIDC                             |
 | Dovecot                        | Keycloak           | Authentication     | Authenticate user                                           | OIDC                             |
-| AppSuite Frontend (in Browser) | Intercom Service   | Silent Login       | Stablish Intercom Service session                           |                                  |
+| AppSuite Frontend (in Browser) | Intercom Service   | Silent Login       | Establish Intercom Service session                          |                                  |
 | AppSuite Frontend (in Browser) | Intercom Service   | Central Navigation | Retrieve content for openDesk Navigation drop-down          | JSON                             |
 | AppSuite Frontend (in Browser) | Intercom Service   | Element Bot        | Manage (CUD) meetings in Element                            | Custom JSON (based on iCalender) |
 | AppSuite Frontend (in Browser) | Intercom Service   | Filepicker         | Read/write contents from/to Nextcloud or create share links | WebDAV & Nextcloud API           |
 | AppSuite Middleware            | Nextcloud          | Filepicker         | Read/write files from/to Nextcloud                          | WebDAV & Nextcloud API           |
-| AppSuite Middleware            | Element Bot        | Element Bot        | Update/delete meetings in Element                            | Custom JSON (based on iCalender) |
+| AppSuite Middleware            | Element Bot        | Element Bot        | Update/delete meetings in Element                           | Custom JSON (based on iCalender) |
 | AppSuite Middleware            | LDAP               | Address book       | Search for global contacts and retrieve contact details     | LDAP                             |
 | Dovecot                        | LDAP               | Data retrieval     | Retrieve necessary user details to handle mailboxes         | LDAP                             |
 
@@ -249,13 +249,13 @@ Following are APIs used by the Groupware application:
 | Name                           | HTTP API                                                                                                                                                                                                     |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Purpose                        | Login, accessing email, contacts, calendar, tasks, configs, email filtering, task automation, workflow automation, etc – most of the AppSuite's functionality that is available to the user through the Web-UI. |
-| Versioning                     | No API-specific versioning. The version can be considered identical with OX App Suite version, which is contained in URL of online documentation of API.                                                        |
+| Versioning                     | No API-specific versioning. The version can be considered identical to the OX App Suite version, which is contained in the URL of the online API documentation.                                                 |
 | Authentication                 |                                                                                                                                                                                                                 |
 | In openDesk provided by        | OX AppSuite Middleware                                                                                                                                                                                          |
 | Transport protocol             | HTTP(S)                                                                                                                                                                                                         |
 | Usage within component         | Used by OX Web-UI (Frontend)                                                                                                                                                                                    |
-| Usage within openDesk          | - Nextcloud used the SearchAPI to synchronize contacts<br>- Nordeck Meeting bot synchronizes OX meeting changes applied in Element.                                                                             |
-| Usage for external integration | Not used at the moment, but recommended way to integrate with OX AppSuite.                                                                                                                                      |
+| Usage within openDesk          | - Nextcloud uses the SearchAPI to synchronize contacts<br>- Nordeck Meeting bot synchronizes OX meeting changes applied in Element.                                                                             |
+| Usage for external integration | Not used at the moment, but is the recommended way to integrate with OX AppSuite.                                                                                                                               |
 | Parallel access                | Allowed                                                                                                                                                                                                         |
 | Message protocol               | JSON based, AppSuite specific format                                                                                                                                                                            |
 | Supported standards            | iCal, defined by RFC, fully implemented                                                                                                                                                                         |
@@ -283,26 +283,26 @@ Following are APIs used by the Groupware application:
 
 ## REST API
 
-| Name                           | REST API                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Purpose                        | Delivers services in following functional groups:<br>- *Admin*: Interface for provisioning and other administrative operations<br>- *Advertisement*: The advertisement module<br>- *Health*: The health-check module<br>- *InternetFreeBusy*: Servlet for requesting free busy data<br>- *Metrics*: The metrics module<br>- *Preliminary*: This module contains preliminary endpoints which can change in the future<br>- *Push*: The push module<br>- *Userfeedback*: The user feedback module |
-| Versioning                     | No API-specific versioning. The version can be considered identical with OX App Suite version, which is contained in URL of online documentation of API.                                                                                                                                                                                                                                                                                                                                        |
-| Authentication                 | Basic Auth                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| In openDesk provided by        | OX AppSuite Middleware                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| Transport protocol             | HTTP(S)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Usage within component         | Push module is used by OX Frontend.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| Usage within openDesk          | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| Usage for external integration | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| Parallel access                | Allowed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Message protocol               | - Email Body RFC 822 is used by Push<br>- Prometheus format is used by Metrics API<br>- API iCal format is used by InternetFreeBusy                                                                                                                                                                                                                                                                                                                                                             |
-| Supported standards            | SOAP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| Documentation                  | https://documentation.open-xchange.com/components/middleware/rest/8/index.html                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Name                           | REST API                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------ |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Purpose                        | Delivers services in the following functional groups:<br>- *Admin*: Interface for provisioning and other administrative operations<br>- *Advertisement*: The advertisement module<br>- *Health*: The health-check module<br>- *InternetFreeBusy*: Servlet for requesting free busy data<br>- *Metrics*: The metrics module<br>- *Preliminary*: This module contains preliminary endpoints which may change in the future<br>- *Push*: The push module<br>- *Userfeedback*: The user feedback module |
+| Versioning                     | No API-specific versioning. The version can be considered identical to the OX App Suite version, which is contained in the URL of the online API documentation.                                                                                                                                                                                                                                                                                                                                     |
+| Authentication                 | Basic Auth                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| In openDesk provided by        | OX AppSuite Middleware                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| Transport protocol             | HTTP(S)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Usage within component         | Push module is used by OX Frontend.                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Usage within openDesk          | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Usage for external integration | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Parallel access                | Allowed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Message protocol               | - Email Body RFC 822 is used by Push<br>- Prometheus format is used by Metrics API<br>- API iCal format is used by InternetFreeBusy                                                                                                                                                                                                                                                                                                                                                                 |
+| Supported standards            | SOAP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Documentation                  | https://documentation.open-xchange.com/components/middleware/rest/8/index.html                                                                                                                                                                                                                                                                                                                                                                                                                      |
 ## CardDAV
 
 | Name                           | CardDAV                                                                                                                                                                 |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Purpose                        | Designed for rich clients. Synchronization of contact entries in both directions (i.e. as a server and as a client); vCard import and export are available via OX HTTP API |
-| Versioning                     | Yes, API version is specific to the version of underlying protocol                                                                                                         |
+| Versioning                     | Yes, API version is specific to the version of the underlying protocol                                                                                                     |
 | Authentication                 |                                                                                                                                                                            |
 | In openDesk provided by        | OX AppSuite Middleware                                                                                                                                                     |
 | Transport protocol             | HTTP(S)                                                                                                                                                                    |
@@ -319,7 +319,7 @@ Following are APIs used by the Groupware application:
 | Name                           | CalDAV                                                                                                                                                                  |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Purpose                        | Designed for rich clients. Synchronization of contact entries in both directions (i.e. as a server and as a client); vCard import and export are available via OX HTTP API |
-| Versioning                     | Yes, API version is specific to the version of underlying protocol                                                                                                         |
+| Versioning                     | Yes, API version is specific to the version of the underlying protocol                                                                                                     |
 | Authentication                 |                                                                                                                                                                            |
 | In openDesk provided by        | OX AppSuite Middleware                                                                                                                                                     |
 | Transport protocol             | HTTP(S)                                                                                                                                                                    |
@@ -333,37 +333,37 @@ Following are APIs used by the Groupware application:
 
 ## IMAP
 
-| Name                           | IMAP                                                               |
-| ------------------------------ | ------------------------------------------------------------------ |
-| Purpose                        | Used for retrieval of emails, designed for rich clients            |
-| Versioning                     | Yes, API version is specific to the version of underlying protocol |
-| Authentication                 |                                                                    |
-| In openDesk provided by        | OX Dovecot                                                         |
-| Transport protocol             | TCP                                                                |
-| Usage within component         | Used by OX AppSuite middleware to read/write mail and folders      |
-| Usage within openDesk          | none                                                               |
-| Usage for external integration | Can be used by local IMAP clients (e.g. Thunderbird)               |
-| Parallel access                | Allowed                                                            |
-| Message protocol               | RFC 9051                                                           |
-| Supported standards            | IMAP                                                               |
-| Documentation                  | https://www.rfc-editor.org/rfc/rfc9051                             |
+| Name                           | IMAP                                                                                 |
+| ------------------------------ |--------------------------------------------------------------------------------------|
+| Purpose                        | Used for retrieval of emails, designed for rich clients                              |
+| Versioning                     | Yes, API version is specific to the version of the underlying protocol               |
+| Authentication                 |                                                                                      |
+| In openDesk provided by        | OX Dovecot                                                                           |
+| Transport protocol             | TCP                                                                                  |
+| Usage within component         | Used by OX AppSuite middleware to read/write mail and folders                        |
+| Usage within openDesk          | none                                                                                 |
+| Usage for external integration | Can be used by local IMAP clients (e.g. Thunderbird)                                 |
+| Parallel access                | Allowed                                                                              |
+| Message protocol               | RFC 9051                                                                             |
+| Supported standards            | IMAP                                                                                 |
+| Documentation                  | https://www.rfc-editor.org/rfc/rfc9051                                               |
 
 ## POP3
 
-| Name                           | POP3                                                               |
-| ------------------------------ | ------------------------------------------------------------------ |
-| Purpose                        | Used for retrieval of emails, designed for rich clients            |
-| Versioning                     | Yes, API version is specific to the version of underlying protocol |
-| Authentication                 |                                                                    |
-| In openDesk provided by        | OX Dovecot                                                         |
-| Transport protocol             | TCP                                                                |
-| Usage within component         | none                                                               |
-| Usage within openDesk          | none                                                               |
-| Usage for external integration | Can be used by local POP3 clients (e.g. Thunderbird)               |
-| Parallel access                | Allowed                                                            |
-| Message protocol               | RFC 1939                                                           |
-| Supported standards            | IMAP                                                               |
-| Documentation                  | https://www.rfc-editor.org/rfc/rfc1939                             |
+| Name                           | POP3                                                                   |
+| ------------------------------ |------------------------------------------------------------------------|
+| Purpose                        | Used for retrieval of emails, designed for rich clients                |
+| Versioning                     | Yes, API version is specific to the version of the underlying protocol |
+| Authentication                 |                                                                        |
+| In openDesk provided by        | OX Dovecot                                                             |
+| Transport protocol             | TCP                                                                    |
+| Usage within component         | none                                                                   |
+| Usage within openDesk          | none                                                                   |
+| Usage for external integration | Can be used by local POP3 clients (e.g. Thunderbird)                   |
+| Parallel access                | Allowed                                                                |
+| Message protocol               | RFC 1939                                                               |
+| Supported standards            | IMAP                                                                   |
+| Documentation                  | https://www.rfc-editor.org/rfc/rfc1939                                 |
 
 # Files - Nextcloud
 
@@ -371,7 +371,7 @@ Following are APIs used by the Groupware application:
 
 ## Usage of APIs within openDesk
 
-Following are APIs used by the Files application:
+The following are the APIs used by the Files application:
 
 | Used by          | Accessed component     | Service                | Purpose                                            | Message format |
 | ---------------- | ---------------------- | ---------------------- | -------------------------------------------------- | -------------- |
@@ -385,12 +385,12 @@ Following are APIs used by the Files application:
 | Name                           | OCS API                                                                                                                                                                                                                                |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Purpose                        | Obtain and/or manage user status, user preferences, shares, sharees, recommendations. API is likely to be extended to other use cases in the future. Nextcloud apps can extend the functionality of OCS API by providing new endpoints |
-| Versioning                     | Identical with component release version                                                                                                                                                                                               |
+| Versioning                     | Identical to component release version                                                                                                                                                                                                  |
 | Authentication                 | Basic Auth or by passing a set of valid session cookies                                                                                                                                                                                |
 | In openDesk provided by        | Nextcloud Server                                                                                                                                                                                                                       |
 | Transport protocol             | HTTP(S)                                                                                                                                                                                                                                |
 | Usage within component         | none                                                                                                                                                                                                                                   |
-| Usage within openDesk          | Filepicker is using the API to create share links.                                                                                                                                                                                     |
+| Usage within openDesk          | Filepicker uses the API to create share links.                                                                                                                                                                                         |
 | Usage for external integration | none                                                                                                                                                                                                                                   |
 | Parallel access                | Allowed                                                                                                                                                                                                                                |
 | Message protocol               | Requests in JSON, responses in JSON or XML                                                                                                                                                                                             |
@@ -417,49 +417,49 @@ Following are APIs used by the Files application:
 
 ## Activity API
 
-| Name                           | Activity API                                                                                                                                           |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Purpose                        | Allows to obtain the list of actions initiated or involving a specific user (files created, shared, deleted etc and other activities reported by apps) |
-| Versioning                     | Identical with component release version                                                                                                               |
-| Authentication                 | See linked documentation (which also names the version), address via URL path, e.g. `/ocs/v2.php/apps/activity/api/v2`                                 |
-| In openDesk provided by        | Nextcloud Server                                                                                                                                       |
-| Transport protocol             | HTTP(S)                                                                                                                                                |
-| Usage within component         | none                                                                                                                                                   |
-| Usage within openDesk          | none                                                                                                                                                   |
-| Usage for external integration | none                                                                                                                                                   |
-| Parallel access                | Allowed                                                                                                                                                |
-| Message protocol               | Requests in JSON, responses in JSON or XML                                                                                                             |
-| Supported standards            |                                                                                                                                                        |
-| Documentation                  | https://github.com/nextcloud/activity/blob/master/docs/endpoint-v2.md                                                                                  |
+| Name                           | Activity API                                                                                                                                       |
+| ------------------------------ |----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Purpose                        | Obtaining the list of actions initiated by or involving a specific user (files created, shared, deleted etc and other activities reported by apps) |
+| Versioning                     | Identical to component release version                                                                                                           |
+| Authentication                 | See linked documentation (which also names the version), address via URL path, e.g. `/ocs/v2.php/apps/activity/api/v2`                             |
+| In openDesk provided by        | Nextcloud Server                                                                                                                                   |
+| Transport protocol             | HTTP(S)                                                                                                                                            |
+| Usage within component         | none                                                                                                                                               |
+| Usage within openDesk          | none                                                                                                                                               |
+| Usage for external integration | none                                                                                                                                               |
+| Parallel access                | Allowed                                                                                                                                            |
+| Message protocol               | Requests in JSON, responses in JSON or XML                                                                                                         |
+| Supported standards            |                                                                                                                                                    |
+| Documentation                  | https://github.com/nextcloud/activity/blob/master/docs/endpoint-v2.md                                                                              |
 
 ## Remote wipe API
 
-| Name                           | Remote wipe API                                                                             |
-| ------------------------------ | ------------------------------------------------------------------------------------------- |
-| Purpose                        | Used to wipe storage remotely (e.g. on a lost device)                                       |
-| Versioning                     | Identical with component release version                                                    |
-| Authentication                 | Login flow token                                                                            |
-| In openDesk provided by        | Nextcloud Server                                                                            |
-| Transport protocol             | HTTP(S)                                                                                     |
-| Usage within component         | none                                                                                        |
-| Usage within openDesk          | none                                                                                        |
-| Usage for external integration | none                                                                                        |
-| Parallel access                | Allowed                                                                                     |
-| Message protocol               | JSON                                                                                        |
-| Supported standards            |                                                                                             |
+| Name                           | Remote wipe API                                                                            |
+| ------------------------------ |--------------------------------------------------------------------------------------------|
+| Purpose                        | Used to wipe storage remotely (e.g. on a lost device)                                      |
+| Versioning                     | Identical to component release version                                                     |
+| Authentication                 | Login flow token                                                                           |
+| In openDesk provided by        | Nextcloud Server                                                                           |
+| Transport protocol             | HTTP(S)                                                                                    |
+| Usage within component         | none                                                                                       |
+| Usage within openDesk          | none                                                                                       |
+| Usage for external integration | none                                                                                       |
+| Parallel access                | Allowed                                                                                    |
+| Message protocol               | JSON                                                                                       |
+| Supported standards            |                                                                                            |
 | Documentation                  | https://docs.nextcloud.com/server/latest/developer_manual/client_apis/RemoteWipe/index.html |
 
 ## WebDAV
 
 | Name                           | WebDAV                                                                                  |
-| ------------------------------ | --------------------------------------------------------------------------------------- |
-| Purpose                        | Accessing files and folders, conducting search                                          |
-| Versioning                     | Identical with component release version                                                |
+| ------------------------------ |-----------------------------------------------------------------------------------------|
+| Purpose                        | Accessing files and folders, conducting searches                                        |
+| Versioning                     | Identical to component release version                                                  |
 | Authentication                 | Basic Auth or by passing a set of valid session cookies                                 |
 | In openDesk provided by        | Nextcloud Server                                                                        |
 | Transport protocol             | HTTP(S)                                                                                 |
 | Usage within component         | none                                                                                    |
-| Usage within openDesk          | Used by OX AppSuite to put/retrieve files (attachments)                                 |
+| Usage within openDesk          | Used by OX AppSuite to get/put files (attachments)                                      |
 | Usage for external integration | none                                                                                    |
 | Parallel access                | Allowed                                                                                 |
 | Message protocol               | Requests in JSON, responses in JSON or XML                                              |
@@ -472,7 +472,7 @@ CalDAV and CardDAV APIs are available in Nextcloud, but as openDesk uses OX AppS
 
 # Weboffice - Collabora
 
-Following are APIs used by the Weboffice application:
+The following are the APIs used by the Weboffice application:
 
 | Used by   | Accessed component | Service           | Purpose                                     | Message format |
 | --------- | ------------------ | ----------------- | ------------------------------------------- | -------------- |
@@ -496,20 +496,20 @@ sequenceDiagram
 
 ## PostMessage API
 
-| Name                           | PostMessage API                                                                                                                                 |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Purpose                        | Interact with parent frame when Collabora browser part is enclosed in one, mostly based on WOPI specification with few extensions/modifications |
-| Versioning                     | N/A                                                                                                                                             |
-| Authentication                 | CSP rules protect unauthorized communication. In practice editor is embedded in an iframe and can communicate only with the iframe's parent.    |
-| In openDesk provided by        | Collabora                                                                                                                                       |
-| Transport protocol             | HTTP                                                                                                                                            |
-| Usage within component         | N/A                                                                                                                                             |
-| Usage within openDesk          | Query number of users in a document, query supported export formats, manage sessions, manage actions like save, insert image, print etc.        |
-| Usage for external integration | In openDesk Collabora Online is integrated with Nextcloud but other integrations exist and are possible, see the documentation.                 |
-| Parallel access                | Allowed                                                                                                                                         |
-| Message protocol               | JSON                                                                                                                                            |
-| Supported standards            | [WOPI](https://learn.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/6a8bb410-68ad-47e4-9dc3-6cf29c6b046b)                               |
-| Documentation                  | https://sdk.collaboraonline.com/docs/postmessage_api.html                                                                                       |
+| Name                           | PostMessage API                                                                                                                                   |
+| ------------------------------ |---------------------------------------------------------------------------------------------------------------------------------------------------|
+| Purpose                        | Interact with parent frame when Collabora browser part is enclosed in one, mostly based on WOPI specification with few extensions/modifications   |
+| Versioning                     | N/A                                                                                                                                               |
+| Authentication                 | CSP rules protect unauthorized communication. In practice, the editor is embedded in an iframe and can communicate only with the iframe's parent. |
+| In openDesk provided by        | Collabora                                                                                                                                         |
+| Transport protocol             | HTTP                                                                                                                                              |
+| Usage within component         | N/A                                                                                                                                               |
+| Usage within openDesk          | Query the number of users in a document, query supported export formats, manage sessions, manage actions like save, insert image, print etc.      |
+| Usage for external integration | In openDesk Collabora Online is integrated with Nextcloud but other integrations exist and are possible, see the documentation.                   |
+| Parallel access                | Allowed                                                                                                                                           |
+| Message protocol               | JSON                                                                                                                                              |
+| Supported standards            | [WOPI](https://learn.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/6a8bb410-68ad-47e4-9dc3-6cf29c6b046b)                                 |
+| Documentation                  | https://sdk.collaboraonline.com/docs/postmessage_api.html                                                                                         |
 
 ## Conversion API
 
@@ -524,13 +524,13 @@ sequenceDiagram
 | Usage within openDesk          | To generate thumbnails in Nextcloud for supported document types.                                       |
 | Usage for external integration | It is possible to set up Collabora Online as a general document converter service.                      |
 | Parallel access                | Allowed                                                                                                 |
-| Message protocol               | text based, see the documentation                                                                                                        |
+| Message protocol               | Text based, see the documentation                                                                       |
 | Supported standards            | N/A                                                                                                     |
 | Documentation                  | https://sdk.collaboraonline.com/docs/conversion_api.html                                                |
 
 # Project management - OpenProject
 
-Following are APIs used by the Project management application:
+The following are the APIs used by the Project management application:
 
 | Used by         | Accessed component | Service            | Purpose                                            | Message format |
 | --------------- | ------------------ | ------------------ | -------------------------------------------------- | -------------- |
@@ -567,50 +567,50 @@ Following are APIs used by the Project management application:
 
 *How does it work? (What do users need to know about architecture an internal components?)*
 - HAL is a standard to define resources with embedding and links between them
-- HAL contains action links depending on the user’s permissions, allows to derive allowed actions from object keys in json
+- HAL contains action links depending on the user’s permissions, allows permitted actions to be derived from object keys in json
 
-*What knowledge prerequisites for the developer before using the API?*
+*What knowledge should the developer have before using the API?*
 - Knowledge of REST
 - (Optional) Knowledge of HAL standard
 
-*Any extensions or APIs in development or in planning users should know about?*
+*Are there any extensions or APIs in (or planned for) development that users should know about?*
 - Signaling to receive only selected attributes/nested resources from the API for performance improvements
 
 ## BCF API
 
-| Name                           | BCF API                                                                                                                                                                            |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Purpose                        | Implementation of subset of [BCF](https://en.wikipedia.org/wiki/BIM_Collaboration_Format) standard for [BIM](https://en.wikipedia.org/wiki/Building_information_modeling) projects |
-| Versioning                     | URL based versioning scheme, e.g. `/api/bcf/2.1`                                                                                                                                   |
-| Authentication                 | OAuth2                                                                                                                                                                             |
-| In openDesk provided by        | OpenProject                                                                                                                                                                        |
-| Transport protocol             | HTTP(S)                                                                                                                                                                            |
-| Usage within component         | none                                                                                                                                                                               |
-| Usage within openDesk          | none                                                                                                                                                                               |
-| Usage for external integration | none                                                                                                                                                                               |
-| Parallel access                | Allowed                                                                                                                                                                            |
-| Message protocol               | JSON                                                                                                                                                                               |
-| Supported standards            | [BCF 2.1](https://github.com/buildingSMART/BCF-API/blob/release_2_1/README.md)                                                                                                     |
-| Documentation                  | https://www.openproject.org/docs/api/bcf-rest-api/                                                                                                                                 |
+| Name                           | BCF API                                                                                                                                                                              |
+| ------------------------------ |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Purpose                        | Implementation of a subset of [BCF](https://en.wikipedia.org/wiki/BIM_Collaboration_Format) standard for [BIM](https://en.wikipedia.org/wiki/Building_information_modeling) projects |
+| Versioning                     | URL based versioning scheme, e.g. `/api/bcf/2.1`                                                                                                                                     |
+| Authentication                 | OAuth2                                                                                                                                                                               |
+| In openDesk provided by        | OpenProject                                                                                                                                                                          |
+| Transport protocol             | HTTP(S)                                                                                                                                                                              |
+| Usage within component         | none                                                                                                                                                                                 |
+| Usage within openDesk          | none                                                                                                                                                                                 |
+| Usage for external integration | none                                                                                                                                                                                 |
+| Parallel access                | Allowed                                                                                                                                                                              |
+| Message protocol               | JSON                                                                                                                                                                                 |
+| Supported standards            | [BCF 2.1](https://github.com/buildingSMART/BCF-API/blob/release_2_1/README.md)                                                                                                       |
+| Documentation                  | https://www.openproject.org/docs/api/bcf-rest-api/                                                                                                                                   |
 
 # Video Conferencing - Jitsi
 
 ## IFrame API
 
-| Name                           | IFrame API                                                             |
-| ------------------------------ | ---------------------------------------------------------------------- |
-| Purpose                        | Embed Jitsi video conferencing features into existing application/site |
-| Versioning                     | Identical to the Jitsi release version                                 |
-| Authentication                 | Optional (JWT-based authentication in openDesk context)                |
-| In openDesk provided by        | Jitsi-Web                                                              |
-| Transport protocol             | HTTP(S)                                                                |
-| Usage within component         | none                                                                   |
-| Usage within openDesk          | Used by Element (Chat Web-UI)                                          |
-| Usage for external integration | none                                                                   |
-| Parallel access                | Allowed                                                                |
-| Message protocol               |                                                                        |
-| Supported standards            |                                                                        |
-| Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe/      |
+| Name                           | IFrame API                                                               |
+| ------------------------------ |--------------------------------------------------------------------------|
+| Purpose                        | Embed Jitsi video conferencing features into existing applications/sites |
+| Versioning                     | Identical to the Jitsi release version                                   |
+| Authentication                 | Optional (JWT-based authentication in openDesk context)                  |
+| In openDesk provided by        | Jitsi-Web                                                                |
+| Transport protocol             | HTTP(S)                                                                  |
+| Usage within component         | none                                                                     |
+| Usage within openDesk          | Used by Element (Chat Web-UI)                                            |
+| Usage for external integration | none                                                                     |
+| Parallel access                | Allowed                                                                  |
+| Message protocol               |                                                                          |
+| Supported standards            |                                                                          |
+| Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe/        |
 
 ## lib-jitsi-meet API
 
@@ -704,7 +704,7 @@ classDiagram
     JitsiVideoConference *-- JitsiMeetReactSdk
 ```
 
-Following are APIs used by the Chat application:
+The following are the APIs used by the Chat application:
 
 | Used by         | Accessed component | Service            | Purpose                                            | Message format |
 | --------------- | ------------------ | ------------------ | -------------------------------------------------- | -------------- |
@@ -748,8 +748,8 @@ Following are APIs used by the Chat application:
 ## Matrix Server-Server API
 
 | Name                           | Matrix Server-Server API                                                                                                                     |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Purpose                        | Communication between Matrix server (also known as FederationAPIs)                                                                           |
+| ------------------------------ |----------------------------------------------------------------------------------------------------------------------------------------------|
+| Purpose                        | Communication between Matrix servers (also known as FederationAPIs)                                                                          |
 | Versioning                     | URL based with version bumps on breaking changes (e.g. `/_matrix/federation/v2`)                                                             |
 | Authentication                 | HTTP-Authorization header with Bearer token                                                                                                  |
 | In openDesk provided by        | Synapse                                                                                                                                      |
@@ -866,7 +866,7 @@ Following are APIs used by the Chat application:
 
 # Knowledge management - XWiki
 
-Following are APIs used by the Knowledge management application:
+The following are the APIs used by the Knowledge management application:
 
 | Used by | Accessed component | Service            | Purpose                                            | Message format |
 | ------- | ------------------ | ------------------ | -------------------------------------------------- | -------------- |
@@ -877,8 +877,8 @@ Following are APIs used by the Knowledge management application:
 ## REST API
 
 | Name                           | REST API                                                                                                                                                                                                                                                   |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Purpose                        | Perform low level action, e.g. interact with XWiki stored data                                                                                                                                                                                             |
+| ------------------------------ |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Purpose                        | Perform low-level actions, e.g. interact with XWiki stored data                                                                                                                                                                                            |
 | Versioning                     |                                                                                                                                                                                                                                                            |
 | Authentication                 | Anonymous or username/password on each request (stateless)                                                                                                                                                                                                 |
 | In openDesk provided by        | XWiki                                                                                                                                                                                                                                                      |
@@ -897,7 +897,7 @@ Following are APIs used by the Knowledge management application:
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Purpose                        | Feature-rich API to access any module, use any functionality, modify existing functionality; allows definition of new REST API endpoints - API scope is identical to Java API |
 | Versioning                     |                                                                                                                                                                               |
-| Authentication                 | Executed in context of (authenticated) user or anonymous - permissions (scripting rights, programming rights) of that context apply                                           |
+| Authentication                 | Performed in the context of an (authenticated) user or anonymously - permissions (scripting rights, programming rights) of that context apply                                 |
 | In openDesk provided by        | XWiki                                                                                                                                                                         |
 | Transport protocol             |                                                                                                                                                                               |
 | Usage within component         |                                                                                                                                                                               |
@@ -914,7 +914,7 @@ Following are APIs used by the Knowledge management application:
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Purpose                        | Feature-rich API to access any module, use any functionality, modify existing functionality; allows definition of new REST API endpoints - API scope is identical to Scripting API |
 | Versioning                     |                                                                                                                                                                                    |
-| Authentication                 | Executed in context of (authenticated) user or anonymous - but without the permission check (in opposite to the Scripting API)                                                     |
+| Authentication                 | Performed in the context of an (authenticated) user or anonymously - but without the permission check (in contrast to the Scripting API)                                           |
 | In openDesk provided by        | XWiki                                                                                                                                                                              |
 | Transport protocol             |                                                                                                                                                                                    |
 | Usage within component         |                                                                                                                                                                                    |
@@ -931,7 +931,7 @@ Following are APIs used by the Knowledge management application:
 | ------------------------------ | -------------------------------------------------------------------------------------------- |
 | Purpose                        | Include dynamic components in XWiki/web pages                                                |
 | Versioning                     |                                                                                              |
-| Authentication                 | Executed in context of (authenticated) user or anonymous                                     |
+| Authentication                 | Performed in the context of an (authenticated) user or anonymously                           |
 | In openDesk provided by        | Jitsi                                                                                        |
 | Transport protocol             |                                                                                              |
 | Usage within component         |                                                                                              |

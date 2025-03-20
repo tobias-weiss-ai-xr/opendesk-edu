@@ -25,10 +25,10 @@ SPDX-License-Identifier: Apache-2.0
 
 # Overview
 
-openDesk is a Kubernetes based, open-source and cloud-native digital workplace suite provided by the
+openDesk is a Kubernetes-based, open-source and cloud-native digital workplace suite provided by the
 *Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH*.
 
-For production use, [openDesk Enterprise Edition](./README-EE.md) is recommended.
+For production use, the [openDesk Enterprise Edition](./README-EE.md) is recommended.
 
 openDesk currently features the following functional main components:
 
@@ -45,7 +45,7 @@ openDesk currently features the following functional main components:
 | Videoconferencing    | Jitsi                       | [2.0.9955](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_9955)                                         | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/)                                            |
 | Weboffice            | Collabora                   | [24.04.12.4](https://www.collaboraoffice.com/code-24-04-release-notes/)                                                       | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)        |
 
-While not all components are perfectly shaped for the execution inside containers, one of the project's objectives is to
+While not all components are perfectly designed for the execution inside containers, one of the project's objectives is to
 align the applications with best practices regarding container design and operations.
 
 This documentation aims to give you all that is needed to set up your own instance of the openDesk.
@@ -81,19 +81,19 @@ You would like to install openDesk in your own infrastructure?
 
 # Architecture
 
-More information on openDesk's architecture can be found in our [architecture docs](./docs/architecture.md).
+More information on openDesk's architecture can be found in our [architecture documentation](./docs/architecture.md).
 
 # Testing
 
-openDesk is continously tested to ensure a high quality. Read how we test in openDesk in our [test concept](./docs/testing.md).
+openDesk is continuously tested to ensure it meets high quality standards. Read how we test in openDesk in our [testing concept](./docs/testing.md).
 
 # Permissions
 
-Find out more about the permission system in the[roles & permissions concept](./docs/permissions.md)
+Find out more about the permission system in the [roles & permissions concept](./docs/permissions.md)
 
 # Releases
 
-All technical releases are created using [Semantic Versioning](https://semver.org/lang/de/).
+All technical releases are created using [Semantic Versioning](https://semver.org/).
 
 Gitlab provides an
 [overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases)

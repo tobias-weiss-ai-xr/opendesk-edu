@@ -44,7 +44,7 @@ openDesk is designed as a [Kubernetes](https://kubernetes.io) deployment.
 
 It consists of a set of [Helm charts](https://helm.sh/) orchestrated by [Helmfile](https://github.com/helmfile/helmfile).
 
-openDesk includes the functional applications, like file management, chat, and email. Other services such
+openDesk includes functional applications, like file management, chat, and email. Other services such
 as databases and object storage are included for evaluation purposes only. In production, you must provide
 these services yourself.
 
@@ -73,12 +73,12 @@ flowchart TD
 openDesk includes a portal that allows navigation to the respective application. The portal is part of the
 Identity and Access Management (IAM) application shipped with openDesk: *Nubus*. Nubus includes OpenLDAP
 for storing users, groups, and permissions, and Keycloak for single sign-on with LDAP user federation
-configured to the aforementioned OpenLDAP.
+configured to use the aforementioned OpenLDAP.
 
 When the user is authenticated by Keycloak, the portal shows the applications the user is permitted to access.
 
-The user can now access applications and use the corresponding functionality without the need to authenticate to
-applications again. This is implemented using the OpenID Connect (OIDC) protocol.
+The user can now access applications and use the corresponding functionality without the need to authenticate 
+again. This is implemented using the OpenID Connect (OIDC) protocol.
 
 # Nubus (IAM)
 
@@ -111,11 +111,11 @@ In openDesk, Nubus serves the following purposes:
 
 6. Frontend Integration Authentication
 
-    A specialized component - the Intercom Service - acts according to the Backend-for-Frontend pattern when it comes to certain integration use cases requiring the frontend of one application to call the API of another service that also has the need for user authentication. See [Component integration](#component-integration) for more details.
+    A specialized component - the Intercom Service - acts according to the Backend-for-Frontend pattern when it comes to certain integration use cases, for example, ones that require the frontend of one application to call the API of another service, that also has the need for user authentication. See [Component integration](#component-integration) for more details.
 
 7. Portal
 
-   Nubus provides a Portal component for users to access the connected applications, that also includes a self service e.g. for password reset.
+   Nubus provides a Portal component for users to access the connected applications. This component also includes self-service possibilities  e.g. for password resetting.
 
 For additional information, refer to the [Nubus for Kubernetes Architecture Manual](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/index.html).
 
@@ -197,16 +197,16 @@ For more information, see the [Keycloak Documentation](https://www.keycloak.org/
 
 ## Keycloak Extensions
 
-Part of Nubus are the [Keycloak Extensions](https://docs.software-univention.de/nubus-kubernetes-operation/1.0/en/configuration/keycloak-extensions.html) used for
+Part of Nubus are the [Keycloak Extensions](https://docs.software-univention.de/nubus-kubernetes-operation/1.0/en/configuration/keycloak-extensions.html) which are used for:
 
-- Login brute force protection: Blocking authentication requests upon too much failed attempts from a device or IP. The available [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) option is deactivated in openDesk.
-- New device notification: Sending the use an email after successful login from a new device.
+- Login brute force protection: Blocking authentication requests upon too many failed attempts from a device or IP. _The available [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) option is deactivated in openDesk._
+- New device notification: Sending the user an email after successful login from a new device.
 
-To address these use cases the Keycloak Extensions act as a proxy to Keycloak.
+To address these use cases, the Keycloak Extensions act as a proxy to Keycloak.
 
 ## OpenLDAP
 
-[OpenLDAP](https://www.openldap.org) is an open-source implementation of the Lightweight Directory Access Protocol (LDAP) that provides a central repository for user and group information. In openDesk, OpenLDAP is used as the user directory to store user and group data and manage access control policies across the applications.
+[OpenLDAP](https://www.openldap.org) is an open-source implementation of the Lightweight Directory Access Protocol (LDAP) that provides a central repository for user and group information. In openDesk, OpenLDAP is used as the user directory to store user and group data, and also manages access control policies across the applications.
 
 # Authorization
 
@@ -214,21 +214,21 @@ To address these use cases the Keycloak Extensions act as a proxy to Keycloak.
 
 LDAP group synchronization ensures that user group memberships are consistent across the applications in openDesk that make use of the IAM group information. Nubus uses OpenLDAP to store and manage user groups, which are synchronized with integrated applications to enforce access control policies.
 
-Beside Keycloak LDAP groups are available to the following applications, none of the application supports nested groups. It means that users must be direct members of a group, as members of sub groups are ignored.
-- Files / Nextcloud: Reads all groups that are enabled for Nextcloud twice a day based on the setting `background_sync_interval` in the `user_ldap` app.
-- Knowledge Management / XWiki: Reads all groups that are enabled for XWiki use, this is done nightly based the jobs `LDAP Group Import Job` and `Mapped groups daily updater` that admin users can access in `/bin/view/Scheduler`.
-- Project Management / OpenProject: Reads all groups that are enabled for OpenProject [hourly](https://www.openproject.org/docs/system-admin-guide/authentication/ldap-connections/ldap-group-synchronization/#create-a-synchronized-group).
-- Webmail / OX AppSuite: Requires a webmail user to be part of a group before the group is actively provisioned to OX AppSuite.
+Keycloak LDAP groups are available to the following applications, however, none of the applications support nested groups. This means that users must be direct members of a group, as members of subgroups will be ignored.
+- Files / Nextcloud: Reads all groups that are enabled for Nextcloud, twice a day. Determined by the setting `background_sync_interval` in the `user_ldap` app.
+- Knowledge Management / XWiki: Reads all groups that are enabled for XWiki use, once daily during the night. Based on the jobs `LDAP Group Import Job` and `Mapped groups daily updater` that are accessible to admin users in `/bin/view/Scheduler`.
+- Project Management / OpenProject: Reads all groups that are enabled for OpenProject, [hourly](https://www.openproject.org/docs/system-admin-guide/authentication/ldap-connections/ldap-group-synchronization/#create-a-synchronized-group).
+- Webmail / OX AppSuite: Requires a webmail user to be a part of a group before the group is actively provisioned to OX AppSuite.
 
 # Provisioning
 
 Part of the already mentioned Nubus IAM is a [provisioning service](https://docs.software-univention.de/nubus-kubernetes-architecture/0.5/en/components/provisioning-service.html).
 
-Beside the Nubus internal user of the provisioning service the OX AppSuite is currently the only openDesk application that is getting data actively provisioned in contrast to scenarios where applications fetch the required information from the LDAP.
+Besides the Nubus internal user of the provisioning service, the OX AppSuite is currently the only openDesk application that is getting data actively provisioned to it. This is in contrast to the norm, where applications fetch the required information from the LDAP themselves.
 
 ## OX Connector
 
-As the OX AppSuite is using an application specific format to get e.g. users provisioned, there is also a specific connector component that links to provisioning service to the OX AppSuite, it is called the [OX Connector](https://docs.software-univention.de/manual/5.0/de/mail/ox-connector.html).
+As the OX AppSuite is using an application specific format to get e.g. users provisioned, there is also a specific connector component that links the provisioning service to the OX AppSuite, it is called the [OX Connector](https://docs.software-univention.de/manual/5.0/de/mail/ox-connector.html).
 
 The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisioning_using_SOAP) is used by the OX Connector to synchronize information about the follow OX AppSuite objects:
 - Contexts
@@ -243,14 +243,14 @@ To find out more, see [Roles & Permissions](./docs/permissions.md).
 
 [System for Cross-domain Identity Management](https://scim.cloud) (SCIM) is an open standard for automating the exchange of user identity information between identity domains or IT systems. SCIM is designed to make user provisioning and management easier by providing a standardized way to manage user identities in cloud-based applications and services.
 
-In openDesk, SCIM will be used in the future to automate the process of creating, updating, and deactivating user accounts across the applications. This ensures that user data is consistent and up-to-date across all applications, reducing the administrative overhead and potential for errors.
+In openDesk, SCIM will be used in the future to automate the process of creating, updating, and deactivating user accounts across the applications. This ensures that user data is consistent across all applications, reducing the administrative overhead and potential for errors.
 
 > **Note:**<br>
 > SCIM support is planned in openDesk for 2025.
 
 # Component integration
 
-Important, especially from the end user perspective are the functional integrations between the different openDesk applications.
+Important, especially from the end user perspective, are the functional integrations between the different openDesk applications.
 
 ```mermaid
 flowchart TD
@@ -276,19 +276,19 @@ Details can be found in the upstream documentation that is linked in the respect
 ## Intercom Service / Silent Login
 
 The Intercom Service is deployed in the context of Nubus. Its role is to enable cross-application integration
-based on the user's browser interaction as handling authentication when the frontend of an application has to call
-the API from another application is often a challenge.
+based on the user's browser interaction, as handling authentication when the frontend of an application has to call
+the API from another application is often challenging.
 
 To establish a session with the Intercom Service, applications can use the silent login feature within an iframe.
 
 Currently, only OX AppSuite and Element are using the frontend-based integration.
 
-**Links**
+**Links:**
 - [Intercom Service upstream documentation](https://docs.software-univention.de/intercom-service/latest/index.html).
 
 ## Central Contacts
 
-OX App Suite is managing contacts in openDesk. Therefore, Nextcloud's PHP backend is using the OX AppSuite's middleware Contacts API to
+OX App Suite is responsible for managing contacts in openDesk. Therefore, Nextcloud's PHP backend is using the OX AppSuite's middleware Contacts API to
 - create a new contact in the user's contacts folder when a file is shared with an unknown email address.
 - retrieve contacts from the user's contacts folder to support search-as-you-type when starting to share a file.
 
@@ -302,7 +302,7 @@ Central navigation is based on an API endpoint in the Nubus portal that returns 
 a given user. The response from the API endpoint is used in the openDesk applications to render the central navigation.
 
 The API can be called by
-- frontend services through the Intercom Service's `/navigation.json` endpoint or
+- frontend services through the Intercom Service's `/navigation.json` endpoint.
 - backend services directly at the portal's `/univention/portal/navigation.json` endpoint.
 
 The central navigation expects the API caller to present a shared secret for authentication and the username for whom the portal
@@ -316,7 +316,7 @@ curl 'https://portal.<DOMAIN>/univention/portal/navigation.json?base=https%3A//p
 
 ## Filepicker
 
-The Nextcloud Filepicker is integrated into the OX AppSuite, supporting the following use cases against the respective openDesk instance's Nextcloud:
+The Nextcloud Filepicker is integrated into the OX AppSuite, supporting the following use cases within the respective openDesk instance's Nextcloud:
 - Attach files from Nextcloud to emails.
 - Create and add links to Nextcloud files into emails.
 - Save attachments from emails into Nextcloud.
@@ -324,10 +324,10 @@ The Nextcloud Filepicker is integrated into the OX AppSuite, supporting the foll
 
 The Filepicker uses frontend and backend-based integration:
 - For frontend-based integration, the OX AppSuite frontend uses the Intercom Service.
-- Backend-based integration is coming from OX AppSuite middleware. The middleware communicates directly with Nextcloud
-when adding a file to an email or storing a file into Nextcloud to avoid passing these files through the user's browser.
+- Backend-based integration is coming from the OX AppSuite middleware. The middleware communicates directly with Nextcloud
+when attaching a file to an email or storing a file in Nextcloud to avoid passing these files through the user's browser.
 
-**Links**
+**Links:**
 - [OX AppSuite Nextcloud Integration upstream documentation](https://gitlab.open-xchange.com/extensions/nextcloud-integration/-/tree/main/documentation).
 
 ## Newsfeed
@@ -391,7 +391,7 @@ In openDesk, Collabora is used for editing Office documents such as rich texts, 
 
 ## CryptPad Online (Diagrams)
 
-[CryptPad](https://cryptpad.org/) is a collaborative editor framework supporting end-to-end encryption..
+[CryptPad](https://cryptpad.org/) is a collaborative editor framework supporting end-to-end encryption.
 
 In openDesk, CryptPad is for editing diagrams.net documents.
 
@@ -417,7 +417,7 @@ In openDesk, Jitsi is used for video conferencing and online meetings. It integr
 
 [Nubus](https://www.univention.com/products/nubus/) is a unified Identity & Access Management, providing you with full control and digital sovereignty over your IAM processes and data.
 
-In openDesk Nubus is providing the management for user, groups and other IAM stored objects, as well as the portal, the Identity provider for Single Sign-On and federation scenarios and the
+In openDesk, Nubus provides the management required for users, groups and other IAM objects, as well as the portal, the Identity provider for Single Sign-On and federation scenarios.
 
 ## OpenProject (Project management)
 
@@ -435,7 +435,7 @@ In openDesk, OX App Suite is used for email, calendar, address book and personal
 
 # Application specific user accounts
 
-While the IAM managed users centrally, some applications come with local accounts for administrative purposes.
+While the IAM manages users centrally, some applications come with local accounts for administrative purposes:
 
 | Application  | Account name                                  | Purpose                                                                                                                 | Password                                         |
 | ------------ | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |

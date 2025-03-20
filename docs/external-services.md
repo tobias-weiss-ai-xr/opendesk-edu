@@ -20,7 +20,7 @@ When deploying this suite to production, you need to configure the applications 
 service.
 
 > **Note**<br>
-> openDesk supports PostgreSQL as alternative database backend for Nextcloud and XWiki. PostgreSQL is likely become the preferred option/default in the future and MariaDB might be deprecated at a later point requiring migrations[^1] if you do not select PostgreSQL for new installations.
+> openDesk supports PostgreSQL as alternative database backend for Nextcloud and XWiki. PostgreSQL is likely to become the preferred option/default in the future should MariaDB become deprecated. This would cause migration[^1] to be necessary if you do not select PostgreSQL for new installations.
 
 | Component          | Name               | Parameter | Key                                           | Default                      |
 | ------------------ | ------------------ | --------- | --------------------------------------------- | ---------------------------- |
@@ -155,7 +155,7 @@ service.
 
 # Footnotes
 
-[^1] The upstream product provide some valuable information regarding database migrations:
+[^1] The upstream product documentation provides some valuable information regarding database migrations:
 - Nextcloud: https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
 - XWiki:
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
@@ -165,4 +165,4 @@ service.
 
 [^3] openDesk Enterprise only.
 
-[^4] XWiki requires root access when using MariaDB as sub-wikis are using separate databases that are managed by XWiki. When using PostgreSQL with XWiki no root user is required as the sub-wikis are managed within multiple schemes within a single database.
+[^4] XWiki requires root access when using MariaDB due to the fact that sub-wikis use separate databases that are managed by XWiki. When using PostgreSQL with XWiki no root user is required as the sub-wikis are managed within multiple schemas within a single database.

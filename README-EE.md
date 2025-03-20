@@ -15,13 +15,13 @@ SPDX-License-Identifier: Apache-2.0
 
 openDesk Enterprise Edition is recommended for production use. It receives support and patches from ZenDiS and the suppliers of the components due to the included product subscriptions.
 
-The document refers to openDesk Community Edition as "oD CE" and for the openDesk Enterprise Edition it is "oD EE".
+This document refers to the openDesk Community Edition as "oD CE" and the openDesk Enterprise Edition as "oD EE".
 
-Please contact [ZenDiS](mailto:opendesk@zendis.de) to get openDesk Enterprise, either as SaaS offering or for you on-premise installation.
+Please contact [ZenDiS](mailto:opendesk@zendis.de) to get openDesk Enterprise, either as a SaaS offering or for you on-premise installation.
 
 # Components
 
-The following components using the same codebase and artifacts for their Enterprise and Community offering:
+The following components are using the same codebase and artifacts for their Enterprise and Community offering:
 - Cryptpad
 - Jitsi
 - Nubus
@@ -31,15 +31,15 @@ The following components using the same codebase and artifacts for their Enterpr
 The following components have - at least partially - Enterprise specific artifacts:
 
 - Collabora: Collabora Online image version `<major>.<minor>.<patch>.3` will be used once available, at the same time the Collabora Development Edition image will be updated to `<major>.<minor>.<patch>.2` for oD CE.
-- Element: Some artifacts providing additional functionality are only available in oD EE. For the shared artifacts we keep the ones in oD CE and oD EE in sync.
-- Nextcloud: Specific enterprise image based on the NC Enterprise package is build based on the same release version as used in oD CE.
-- OX AppSuite: oD CE and EE are using the same release version, in EE an enterprise-built container of the AppSuite's Core-Middleware is being integrated.
+- Element: Some artifacts providing additional functionality are only available in oD EE. For the shared artifacts, we keep the ones in oD CE and oD EE in sync.
+- Nextcloud: An enterprise image based on the NC Enterprise package is built, which uses the same release version as the one used in oD CE.
+- OX AppSuite: oD CE and EE use the same release version, in EE however, an enterprise-built container of the AppSuite's Core-Middleware is integrated.
 - OX Dovecot Pro 3: Dovecot Pro provides support for S3 storage and this feature is used by default.
 
-If you want to check in detail which artifacts are specific to openDesk Enterprise and thereby may contain non open source code, please check the `repository:` 
+If you want to check in detail which artifacts are specific to openDesk Enterprise and thereby may contain proprietary code, please check the `repository:` 
 values in the image ([1](./helmfile/environments/default/images.yaml.gotmpl) / [2](./helmfile/environments/default-enterprise-overrides/images.yaml.gotmpl)) 
 and chart ([1](./helmfile/environments/default/charts.yaml.gotmpl) / [2](./helmfile/environments/default-enterprise-overrides/charts.yaml.gotmpl)) definitions. 
-When a repository path starts with `/zendis` the artifact is only available in an openDesk Enterprise deployment.
+When a repository path starts with `/zendis`, the artifact is only available in an openDesk Enterprise deployment.
 
 # Enabling the Enterprise deployment
 
@@ -59,7 +59,7 @@ OPENDESK_ENTERPRISE=true
 
 With openDesk EE you get access to the related artifact registry owned by ZenDiS.
 
-Three steps are required to access the registry - for step #1 and #2 you can set some variables. You can to define a `<your_name_for_the_secret>` freely, like `enterprise-secret`, as long as it consistent in step #1 and #3.
+Three steps are required to access the registry - for step #1 and #2 you can set some variables. Below, you can define `<your_name_for_the_secret>` freely, like `enterprise-secret`, as long as it consistent in step #1 and #3.
 
 ```shell
 NAMESPACE=<your_namespace>
@@ -68,7 +68,7 @@ YOUR_ENTERPRISE_REGISTRY_USERNAME=<your_registry_credential_username>
 YOUR_ENTERPRISE_REGISTRY_PASSWORD=<your_registry_credential_password>
 ```
 
-1. Add your registry credentials as secret to the namespace you want to deploy openDesk to. Do not forget to create the namespace if it does not exist yet (`kubectl create namespace ${NAMESPACE}`).
+1. Add your registry credentials as a secret to the namespace you want to deploy openDesk to. Do not forget to create the namespace if it does not exist yet (`kubectl create namespace ${NAMESPACE}`).
 
 ```shell
 kubectl create secret --namespace "${NAMESPACE}" \

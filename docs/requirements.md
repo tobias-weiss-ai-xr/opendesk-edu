@@ -23,31 +23,31 @@ This section covers the internal system requirements and external service requir
 
 openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s) cluster.
 
-- K8s cluster >= 1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
+- K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
-- Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - tested with 1.11.1 up to 1.11.5
+- Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - tested with v1.11.1 up to v1.11.5
   - **Important Note**: We are working on support for more recent versions, but please ensure to use at least 1.11.5 due to ["security issues"](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
   - Ingress-NGINX introduced new security defaults in version 1.12.0, which are currently not compatible with openDesk. While we are working to adhere to these defaults, you can find additional information below on how to configure Ingress-NGINX >= 1.12.0 to be compatible with openDesk.
 - [Helm](https://helm.sh/) >= v3.9.0
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v1.0.0-rc8**
-- [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
+- [HelmDiff](https://github.com/databus23/helm-diff) >= v3.6.0
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
-- [OpenKruise](https://openkruise.io/)[^1] >= 1.6
+- [OpenKruise](https://openkruise.io/)[^1] >= v1.6
 
 # Hardware
 
-The following minimal requirements are thought for initial evaluation deployment:
+The following minimum requirements are intended for initial evaluation deployment:
 
-| Spec | Value                                                 |
-| ---- | ----------------------------------------------------- |
-| CPU  | 12 Cores of x64 or x86 CPU (ARM is not supported yet) |
-| RAM  | 32 GB, more recommended                               |
-| Disk | HDD or SSD, >10 GB                                    |
+| Spec | Value                                                 |
+|------|-------------------------------------------------------|
+| CPU  | 12 Cores of x64 or x86 CPU (ARM is not supported yet) |
+| RAM  | 32 GB, more recommended                               |
+| Disk | HDD or SSD, >10 GB                                    |
 
 # Kubernetes
 
-Any self-hosted or managed K8s cluster >= 1.24 listed in
+Any self-hosted or managed K8s cluster >= v1.24 listed in
 [CNCF Certified Kubernetes distributions](https://www.cncf.io/certification/software-conformance/) should be supported.
 
 The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/kubespray) based clusters.
@@ -57,8 +57,8 @@ The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/
 
 # Ingress controller
 
-The deployment is intended to be used only over HTTPS via a configured FQDN, therefore it is required to have a proper
-configured ingress controller deployed.
+The deployment is intended to be used only over HTTPS via a configured FQDN, therefore it is required to have a properly
+configured ingress controller deployed in your cluster.
 
 **Supported controllers:**
 - [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
@@ -74,7 +74,7 @@ With the release 1.12.0 Ingress NGINX introduced new security default settings, 
 
 
 > **Note**<br>
-> The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/). If you have feedback on that topic, please share it with us.
+> The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/). If you can provide input on that topic, please get in contact with us.
 
 # Volume provisioner
 
@@ -82,7 +82,7 @@ Initial evaluation deployment requires a `ReadWriteOnce` volume provisioner. For
 provisioner is sufficient.
 
 > **Note**<br>
-> Some components require a `ReadWriteMany` volume provisioner for distributed mode or scaling.
+> Some components require a `ReadWriteMany` volume provisioner for distributed mode or horizontal scaling.
 
 # Certificate management
 
@@ -90,7 +90,7 @@ This deployment leverages [cert-manager](https://cert-manager.io/) to generate v
 but a secret containing a valid TLS certificate is required.
 
 Only `Certificate` resources will be deployed; the `cert-manager`, including its CRD must be installed before this or
-openDesk certificate management switched off.
+openDesk certificate management is switched off.
 
 # External services
 
@@ -99,7 +99,7 @@ deployments, you need to make use of your own production-grade services; see the
 [external-services.md](./external-services.md) for configuration details.
 
 | Group    | Type                | Version | Tested against        |
-| -------- | ------------------- | ------- | --------------------- |
+|----------|---------------------|---------|-----------------------|
 | Cache    | Memcached           | `1.6.x` | Memcached             |
 |          | Redis               | `7.x.x` | Redis                 |
 | Database | Cassandra[^1]       | `5.0.x` | Cassandra             |
@@ -118,7 +118,7 @@ deployments, you need to make use of your own production-grade services; see the
 The deployment of each component is [Helm](https://helm.sh/) based. The 35+ Helm charts are configured and
 templated via [Helmfile](https://helmfile.readthedocs.io/en/latest/) to provide a streamlined deployment experience.
 
-Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare the desired against the deployed state.
+Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare the desired state against the deployed state.
 
 # Footnotes
 

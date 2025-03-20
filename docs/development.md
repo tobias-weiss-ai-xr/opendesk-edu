@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Developing openDesk deployment automation</h1>
 
-Active development on the deployment is currently only available for project members.
+Active development on the deployment is currently only available to project members.
 However, contributions are possible using the [CLA](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/CONTRIBUTING.md?ref_type=heads) process.
 
 <!-- TOC -->
@@ -30,7 +30,7 @@ developing the openDesk platform.
 ```mermaid
 flowchart TD
  J[helmfile.yaml.gotmpl\nor a helmfile outside of this repository]-->A
- J-->K[./helmfile/environemnts/*your_environment*/values.yaml.gotmpl\nor any an environment values file]
+ J-->K[./helmfile/environemnts/*your_environment*/values.yaml.gotmpl\nor another environment values file]
  A[./helmfile_generic.yaml.gotmpl]-->B[./helmfile/apps/*all_configured_apps*/helmfile.yaml.gotmpl\nReferences the relevant app Helm\ncharts using details from 'charts.yaml.gotmpl']
  B-->C[./values-*all_configured_components*.yaml.gotmpl\nValues to template the charts\nwith references to the `images.yaml.gotmpl`]
  A-->D[./helmfile/environments/default/*\nwith just some examples below]
@@ -57,20 +57,15 @@ Before you investigate any app-specific configuration, it is recommended that yo
 
 # Default branch, `develop` and other branches
 
-The `main` branch is configured to be the default branch, as visitors of the project on openCode should see that
+The `main` branch is configured to be the default branch, as visitors to the project on openCode should see that
 branch by default.
 
 Please use the `develop` branch to diverge your branch(es) from. See the [workflow guide](./docs/workflow.md)
 for more details on naming conventions.
 
-There is a CI bot that automatically creates a merge request once you initially push your branch to openCode.
-Of course, the merge request will target the `develop` branch, be in status `draft`, and you are set as the assignee.
-
-If you do not plan to merge from the branch you have pushed, please close the auto-created MR.
-
 # External artifacts - `charts.yaml.gotmpl` and `images.yaml.gotmpl`
 
-The `charts.yaml.gotmpl` and `images.yaml.gotmpl` files are the central place to reference external artifacts used for the deployment.
+The `charts.yaml.gotmpl` and `images.yaml.gotmpl` files are the central place to reference any external artifacts used for the deployment.
 
 Besides the deployment automation itself, some tools work with the contents of the files:
 
@@ -83,11 +78,11 @@ Please find details on these tools below.
 ## Linting
 
 In the project's CI, there is a step dedicated to lint the two yaml files, as we want them to be in
-- alphabetical order regarding the components and
-- in a logical order regarding the non-commented lines (registry > repository > tag).
+- alphabetical order regarding the components
+- logical order regarding the non-commented lines (registry > repository > tag).
 
 In the linting step, the [openDesk CI CLI](https://gitlab.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli) is used to apply the
-just mentioned sorting, and the result is compared with the unsorted version. If there is a delta, the linting fails, and you can fix it by running the CLI tool locally, verifying and applying the result to your branch.
+aforementioned sorting, and the result is compared with the unsorted version. If there is a delta, the linting fails, and you can fix it by running the CLI tool locally, verifying and applying the result to your branch.
 
 > **Note**<br>
 > Please ensure that in component blocks, you use comments only at the beginning of the block or at its end. Ideally, you stick
@@ -140,11 +135,11 @@ configured to pull artifacts that do not originate from openCode into projects c
 
 The mirror script takes the information on what artifacts to mirror from the annotation inside the two yaml files:
 - `# upstreamRegistry` *required*: To identify the source registry
-- `# upstreamRegistryCredentialId`: *optional*: In case the source registry is not public, the access credentials have to be specified as ENV variables containing the value of this key in their name, so you want to specify that key all uppercase:
-  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_USERNAME`
-  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_PASSWORD`
+- `# upstreamRegistryCredentialId`: *optional*: In case the source registry is not public, the access credentials have to be specified as environment variables and contain the value of this key in their name, so you want to specify the key in uppercase:
+  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_USERNAME`
+  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_PASSWORD`
 - `# upstreamRepository` *required*: To identify the source repository
-- `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set, the mirror for the component will be activated. Only tags that match the given regular expression are being mirrored. **Note:** You must use single quotes for this attribute's value if you use backslash leading regex notation like `\d`.
+- `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set, the mirror for the component will be activated. Only tags that match the given regular expression will be mirrored. **Note:** You must use single quotes for this attribute's value if you use backslash leading regex notation like `\d`.
 - `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artifacts beginning with a specific version. You must use capturing group
  in `# upstreamMirrorTagFilterRegEx` to identify the single numeric elements of the version within the tag and use per capturing group (left to right) one numeric array
  element here to define the version the mirror should start with.
@@ -163,4 +158,4 @@ for Helm charts.
 
 You may also want to make use of our [standard CI](https://gitlab.opencode.de/bmi/opendesk/tooling/gitlab-config) to
 quickly get Helm charts and container images that are signed, linted, scanned, and released.
-Check out the `.gitlab-ci.yaml` files in the project's [Charts](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts) or [Images](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images) to get an idea how little you need to do yourself.
+Check out the `.gitlab-ci.yaml` files in the project's [Charts](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts) or [Images](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images) to get an idea just how little you need to do by yourself.

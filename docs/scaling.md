@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <h1>Scaling</h1>
 
-This document covers the ability to scale applications.
+This document covers the possibilities to scale applications.
 
 # Horizontal scalability
 
@@ -18,6 +18,6 @@ In the meantime, this file can be used to check the components scaling support/c
 While scaling services horizontally is the ideal solution, information about vertical scaling is helpful
 when defining the application's resources, see [`resources.yaml.gotmpl`](../helmfile/environments/default/resources.yaml.gotmpl) for references.
 
-Please find below links to the application's upstream resources about scaling:
+Linked below is documentation related to scaling from the upstream application:
 
 - [OpenProject system requirements](https://www.openproject.org/docs/installation-and-operations/system-requirements/)

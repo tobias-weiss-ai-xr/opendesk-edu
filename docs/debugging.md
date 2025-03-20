@@ -24,7 +24,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Disclaimer
 
-This document collects information on how to deal with debugging an openDesk deployment.
+This document collects information on how to go about debugging an openDesk deployment.
 
 It will be extended over time as we deal with debugging cases.
 
@@ -38,7 +38,7 @@ environments, you should use them thoughtfully and carefully if needed.
 
 # Enable debugging
 
-Check the openDesk [`debug.yaml.gotmpl`](../helmfile/environments/default/debug.yaml.gotmpl) and set for your deployment
+Check the openDesk [`debug.yaml.gotmpl`](../helmfile/environments/default/debug.yaml.gotmpl) and configure it for your deployment
 ```
 debug:
   enabled: true
@@ -47,13 +47,13 @@ debug:
 This will result in:
 - setting most component's log level to debug
 - making the Keycloak admin console available by default at `https://id.<your_domain>/admin/`
-- configured the ingress for `http://minio-console.<your_domain>`
+- ingress for `http://minio-console.<your_domain>` being configured
 
 > **Note**<br>
 > When enabling debug mode and updating your deployment, you must manually delete all jobs before updating. In debug mode, we keep the jobs, and some job fields are immutable, leading to a deployment failure.
 
 > **Note**<br>
-> All containers should write their log output to STDOUT; if you find (valuable) logs inside a container, please let us know!
+> All containers should write their log output to STDOUT; if you find (valuable) logs inside a container which were not in STDOUT, please let us know!
 
 # Adding containers to a pod for debugging purposes
 
@@ -63,13 +63,13 @@ This can be a challenge the more security-hardened the container images are beca
 
 Adding a container to a Pod can ease the pain.
 
-Below are some wrap-up notes on debugging openDesk by adding debug containers. Of course, there are many more detailed resources out there.
+Below are some brief notes on debugging openDesk by adding debug containers. Of course, there are many more detailed resources out there.
 
 ## Adding a container to a pod/deployment - Dev/Test only
 
 You can add a container by editing and updating an existing deployment, which is quite comfortable with tools like [Lens](https://k8slens.dev/).
 
-- Select the container you want to make use of as a debugging container; in the example below, it is `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:latest`.
+- Select the container you want to use as a debugging container; in the example below, it is `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:latest`.
 - Ensure the `shareProcessNamespace` option is enabled for the Pod.
 - Reference the selected container within the `containers` array of the deployment.
 - If you want to access another container's filesystem, ensure both containers' user/group settings match.
@@ -98,29 +98,29 @@ The following example can be used to debug the `openDesk-Nextcloud-PHP` containe
 ```
 
 - After the deployment has been reloaded, open the shell of the debugging container.
-- When you've succeeded, you will see the processes of both/all containers in the Pod when doing a `ps aux`.
+- When you've succeeded, you will see the processes of both/all containers in the Pod when executing `ps aux`.
 - To access other containers' filesystems, select the PID of a process from the other container and do a `cd /proc/<selected_process_id>/root`.
 
 ## Temporary/ephemeral containers
 
-An interesting read we picked most of the details below from: https://iximiuz.com/en/posts/kubernetes-ephemeral-containers/
+An interesting read from which we picked most of the details below from: https://iximiuz.com/en/posts/kubernetes-ephemeral-containers/
 
 Sometimes, you do not want to add a container permanently to your existing deployment. In that case, you could use [ephemeral containers](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/).
 
-For the commands further down this section, we set some environment variables first:
+For the commands further down this section, we need to set some environment variables first:
 - `NAMESPACE`: The namespace in which the Pod you want to inspect is running.
-- `DEPLOYMENT_NAME`: The deployment's name responsible for spawning the Pod you want to inspect within the pre-mentioned namespace.
-- `POD_NAME`: The name of the Pod you want to inspect within the pre-mentioned namespace.
-- `EPH_CONTAINER_NAME`: Choose the name for the container, and "debugging" seems obvious.
+- `DEPLOYMENT_NAME`: The deployment's name responsible for spawning the Pod you want to inspect within the aforementioned namespace.
+- `POD_NAME`: The name of the Pod you want to inspect within the aforementioned namespace.
+- `EPH_CONTAINER_NAME`: The name of your debugging container, "debugging" seems obvious.
 - `DEBUG_IMAGE`: The image you want to use for debugging purposes.
 
 e.g.
 
 ```shell
-export EPH_CONTAINER_NAME=debugging
 export NAMESPACE=my_test_deployment
 export DEPLOYMENT_NAME=opendesk-nextcloud-php
 export POD_NAME=opendesk-nextcloud-php-6686d47cfb-7642f
+export EPH_CONTAINER_NAME=debugging
 export DEBUG_IMAGE=registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:latest
 ```
 
@@ -147,7 +147,7 @@ kubectl -n ${NAMESPACE} attach -it -c ${EPH_CONTAINER_NAME} ${POD_NAME}
 
 ## Helmfile
 
-When refactoring the Helmfile structure you want to ensure that there are not unintended mistakes by e.g. `diff`
+When refactoring the Helmfile structure, you want to ensure that there are no unintended edits by executing e.g. `diff` and
 comparing the output of Helmfile from before and after the change by calling:
 
 ```shell
@@ -156,9 +156,9 @@ helmfile template -e dev >output_to_compare.yaml
 
 ## MariaDB
 
-When using the openDesk bundled MariaDB, you can explore the database(s) using the MariaDB interactive terminal from the Pod's command line: `mariadb -u root -p`. On the password prompt, provide the value for `MARIADB_ROOT_PASSWORD` found in the Pod's environment.
+When using the openDesk bundled MariaDB, you can explore the database(s) using the MariaDB interactive terminal from the Pod's command line: `mariadb -u root -p`. On the password prompt, provide the value for `MARIADB_ROOT_PASSWORD` which can be found in the Pod's environment.
 
-While you will find all the details for the CLI tool in [the online documentation](https://mariadb.com/kb/en/mariadb-command-line-client/), some quick commands are:
+While you will find all the details for the CLI tool in the [MariaDB documentation](https://mariadb.com/kb/en/mariadb-command-line-client/), some commonly used commands are:
 
 - `help`: Get help on the psql command set
 - `show databases`: Lists all databases
@@ -190,7 +190,7 @@ end
 
 Using the openDesk bundled PostgreSQL, you can explore database(s) using the PostgreSQL interactive terminal from the Pod's command line: `psql -U postgres`.
 
-While you will find all details in the [psql subsection](https://www.postgresql.org/docs/current/app-psql.html)) of the PostgreSQL documentation, some quick commands are:
+While you will find all details about the cli tool `psql` in the [PostgreSQL documentation](https://www.postgresql.org/docs/current/app-psql.html)), some commonly used commands are:
 
 - `\?`: Get help on the psql command set
 - `\l`: Lists all databases
@@ -202,10 +202,9 @@ While you will find all details in the [psql subsection](https://www.postgresql.
 
 ### Setting the log level
 
-Keycloak is the gateway to integrate other authentication management systems or applications. It can be desired to
-avoid enabling debug mode for the whole platform when you just need to look into Keycloak.
+Keycloak is the gateway to integrate other authentication management systems or applications. It is undesirable to enable debug mode for the whole platform if you just need to look into Keycloak.
 
-That can easily be achieved in two steps:
+Enabling debugging mode for Keycloak can easily be achieved in two steps:
 
 1. Updating the value for `KC_LOG_LEVEL` in the related configmap `ums-keycloak`.
 ```shell
@@ -217,7 +216,7 @@ kubectl patch -n ${NAMESPACE} configmap ${CONFIGMAP_NAME} --type merge -p '{"dat
 2. Restart the Keycloak Pod(s).
 
 > **Note**<br>
-> As the `ums-keycloak-extensions-handler` is performing frequent (one per second) requests to Keycloak for retrieval of the Keycloak event history, you might want to stop/remove the deployment while debugging/analysing Keycloak to not get your debug output spammed by these requests.
+> Because the `ums-keycloak-extensions-handler` is sending frequent requests (one per second) to Keycloak for retrieval of the Keycloak event history, you might want to stop/remove the deployment while debugging/analysing Keycloak to not get your debug output spammed by these requests.
 
 ### Accessing the Keycloak admin console
 

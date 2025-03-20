@@ -58,18 +58,18 @@ For the following guide, we will use `dev` as environment where variables can be
 ## DNS
 
 The deployment is designed to deploy each application/service under a dedicated subdomain.
-For your convenience, we recommend creating a `*.domain.tld` A-Record to your cluster ingress controller; otherwise, you must create an A-Record for each subdomain.
+For your convenience, we recommend creating a `*.domain.tld` A-Record for your cluster Ingress Controller; otherwise, you must create an A-Record for each subdomain.
 
-| Record name                   | Type | Value                                              | Additional information                                           |
-| ----------------------------- | ---- | -------------------------------------------------- | ---------------------------------------------------------------- |
-| *.domain.tld                  | A    | IPv4 address of your Ingress Controller            |                                                                  |
-| *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            |                                                                  |
-| mail.domain.tld               | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
-| mail.domain.tld               | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional mail should directly be delivered to openDesk's Postfix |
-| domain.tld                    | MX   | `10 mail.domain.tld`                               |                                                                  |
-| domain.tld                    | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                       |
-| _dmarc.domain.tld             | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                         |
-| default._domainkey.domain.tld | TXT  | `v=DKIM1; k=rsa; h=sha256; ...`                    | Optional DKIM settings                                           |
+| Record name                   | Type | Value                                              | Additional information                                            |
+|-------------------------------|------|----------------------------------------------------|-------------------------------------------------------------------|
+| *.domain.tld                  | A    | IPv4 address of your Ingress Controller            |                                                                   |
+| *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            |                                                                   |
+| mail.domain.tld               | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional, mail should directly be delivered to openDesk's Postfix |
+| mail.domain.tld               | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional, mail should directly be delivered to openDesk's Postfix |
+| domain.tld                    | MX   | `10 mail.domain.tld`                               |                                                                   |
+| domain.tld                    | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                        |
+| _dmarc.domain.tld             | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                          |
+| default._domainkey.domain.tld | TXT  | `v=DKIM1; k=rsa; h=sha256; ...`                    | Optional, DKIM settings                                           |
 
 ## Domain
 
@@ -83,14 +83,14 @@ global:
     nextcloud: "files"
 ```
 
-The domain has to be set either via `dev` environment
+The domain has to be set either via `dev` environment:
 
 ```yaml
 global:
   domain: "domain.tld"
 ```
 
-or via environment variable
+or alternatively via environment variable:
 
 ```shell
 export DOMAIN=domain.tld
@@ -98,7 +98,8 @@ export DOMAIN=domain.tld
 
 ### Apps
 
-All available apps and their default value are in `helmfile/environments/default/opendesk_main.gotmpl`.
+Depending on your ideal openDesk deployment, you may wish to disable or enable certain apps.
+All available apps and their default values are located in `helmfile/environments/default/opendesk_main.gotmpl`.
 
 | Component            | Name                        | Default | Description                    |
 | -------------------- | --------------------------- | ------- | ------------------------------ |
@@ -124,7 +125,7 @@ All available apps and their default value are in `helmfile/environments/default
 | Redis                | `apps.redis.enabled`             | `true`  | Cache Database                 |
 | XWiki                | `apps.xwiki.enabled`             | `true`  | Knowledge management           |
 
-Exemplary, Jitsi can be disabled like:
+For example, Jitsi can be disabled like this:
 
 ```yaml
 apps:
@@ -141,8 +142,8 @@ For untouched upstream artifacts that do not belong to a functional component's 
 like Docker Hub.
 
 Doing a test deployment will be fine with this setup. In case you want to deploy multiple times a day
-and fetch from the same IP address, you might run into rate limits at Docker Hub. In that case and in cases you
-prefer the use of a private image registry, you can configure such for
+and fetch from the same IP address, you might run into rate limits at Docker Hub. In that case, and in case you
+prefer the use of a private image registry, you can configure these in
 [your target environment](../helmfile/environments/dev/values.yaml.gotmpl.sample) by setting
 - `global.imageRegistry` for a private image registry and
 - `global.helmRegistry` for a private Helm chart registry.
@@ -158,7 +159,7 @@ alternatively, you can use an environment variable:
 export PRIVATE_IMAGE_REGISTRY_URL=my_private_registry.domain.tld
 ```
 
-or control repository override fine-granular per registry:
+or for more granular control over repository overrides per registry (rewrites):
 
 ```yaml
 repositories:
@@ -179,7 +180,7 @@ global:
 
 ### Service
 
-Some apps, like Jitsi or Dovecot, require HTTP and external TCP connections.
+Some apps, like Jitsi and Dovecot, require HTTP and external TCP connections.
 These apps create a Kubernetes service object.
 You can configure whether `NodePort` (for on-premise), `LoadBalancer` (for cloud), or `ClusterIP` (to disable) should be
 used:
@@ -192,7 +193,7 @@ cluster:
 
 ### Networking
 
-If your cluster has not the default `cluster.local` domain configured, you need to provide the domain via:
+If your cluster does not have the default `cluster.local` domain configured, you need to provide the domain via:
 
 ```yaml
 cluster:
@@ -200,7 +201,7 @@ cluster:
     domain: "acme.internal"
 ```
 
-If your cluster has not the default `10.0.0.0/8` CIDR configured, you need to provide the CIDR via the following:
+If your cluster does not have the default `10.0.0.0/8` CIDR configured, you need to provide the CIDR via the following:
 
 ```yaml
 cluster:
@@ -209,8 +210,8 @@ cluster:
       - "127.0.0.0/8"
 ```
 
-If your load balancer / reverse proxy IPs are not already covered by the above `cidr` you need to
-explicitly configure the related IPs or IP ranges:
+If your load balancer / reverse proxy IPs are not already included in the above `cidr` you need to
+explicitly configure their related IPs or IP ranges:
 
 ```yaml
 cluster:
@@ -221,9 +222,8 @@ cluster:
 
 ### Ingress
 
-By default, the `ingressClassName` is empty to select your default ingress controller. You may want to customize it by
-setting the following attribute to the name of the currently only supported ingress controller `ingress-nginx` (see
-[requirements.md](requirements.md)) for reference) within your deployment if that is not the cluster's default ingress.
+By default, the `ingressClassName` is empty and selects the default ingress controller in your cluster. You can customize it by
+setting the following attribute to the name of the ingress controller the within your deployment you wish to use. Useful if the ingress controller you wish to use is not the default.
 
 ```yaml
 ingress:
@@ -236,7 +236,7 @@ Currently, the only supported ingress controller is `ingress-nginx` (see
 ### Container runtime
 
 Some apps require specific configurations for the container runtime. You can set your container runtime like `cri-o`,
-`containerd` or `docker` by:
+`containerd` or `docker` by using the following attribute:
 
 ```yaml
 cluster:
@@ -245,7 +245,7 @@ cluster:
 ```
 
 ### Volumes
-The **StorageClass** must be set by:
+The StorageClass must be set using the following attribute:
 
 ```yaml
 persistence:
@@ -255,8 +255,8 @@ persistence:
 ```
 
 `RWX` is optional and requires that your cluster has a `ReadWriteMany` volume provisioner. If you can make use
-of it it benefits the distribution or scaling of apps. By default, only `ReadWriteOnce` is enabled.
-To enable `ReadWriteMany` you have to set:
+of it, it largely benefits the distribution and scaling of apps. By default, only `ReadWriteOnce` is enabled.
+To enable `ReadWriteMany` you can use the following attribute:
 
 ```yaml
 cluster:
@@ -272,7 +272,7 @@ While openDesk configures the applications with meaningful defaults, you can che
 
 ### Ports
 
-**Note:** If you use `NodePort` for service exposure, you must check your deployment for the actual ports.
+**Note:** If you use `NodePort` for service exposure, you must check your deployment for the actual ports and ensure they are opened where necessary.
 
 #### Web-based user interface
 
@@ -286,7 +286,7 @@ To use the openDesk functionality with its web-based user interface, you need to
 
 #### Mail clients
 
-To connect with mail clients like [Thunderbird](https://www.thunderbird.net/), the following ports need public exposure:
+To connect with mail clients like [Thunderbird](https://www.thunderbird.net/), the following ports need to be publicly exposed:
 
 | Component          | Description             |  Port | Type |
 | ------------------ | ----------------------- | ----: | ---: |
@@ -298,7 +298,7 @@ To connect with mail clients like [Thunderbird](https://www.thunderbird.net/), t
 ### Mail/SMTP configuration
 
 To use the full potential of the openDesk, you need to set up an SMTP relay that allows sending emails from
-the whole subdomain.
+the whole subdomain. The following attribute can be set:
 
 ```yaml
 smtp:
@@ -308,7 +308,7 @@ smtp:
 ```
 
 Enabling DKIM signing of emails helps to reduce spam and increases trust.
-openDesk ships dkimpy-milter as Postfix milter for signing emails.
+openDesk ships dkimpy-milter as Postfix milter for signing emails. The following attributes can be set:
 
 ```yaml
 apps:
@@ -341,9 +341,9 @@ turn:
 
 ### Certificate issuer
 
-As mentioned in [requirements](requirements.md#certificate-management), you can provide your own valid certificate. A TLS
+As mentioned in [requirements](requirements.md#certificate-management), you can provide your own valid certificate. A TLS type
 secret named `opendesk-certificates-tls` must be present in the application namespace. For deployment, you can
-turn off `Certificate` resource creation by:
+turn off `Certificate` resource creation with:
 
 ```yaml
 apps:
@@ -351,7 +351,7 @@ apps:
     enabled: false
 ```
 
-If you want to leverage the `cert-manager.io` to handle certificates, like `Let's encrypt`, you need to provide the
+If you want to leverage `cert-manager.io` to handle certificates, like `Let's encrypt`, you need to provide the
 configured cluster issuer:
 
 ```yaml
@@ -360,7 +360,7 @@ certificate:
     name: "letsencrypt-prod"
 ```
 
-Additionally, it is possible to request wildcard certificates by:
+Additionally, it is possible to request wildcard certificates with:
 
 ```yaml
 certificate:
@@ -393,13 +393,13 @@ helmfile apply -e dev -n <NAMESPACE> [-l <label>] [--suppress-diff]
 
 ## Install single app
 
-You can also install or upgrade only a single app like Collabora, either by label selector:
+You can also install or upgrade only a single app like Collabora, either by using a label selector:
 
 ```shell
 helmfile apply -e dev -n <NAMESPACE> -l component=collabora
 ```
 
-or by switching into the apps' directory (faster):
+or by switching to the apps' directory (faster) and install or upgrade from there directly:
 
 ```shell
 cd helmfile/apps/collabora
@@ -408,7 +408,7 @@ helmfile apply -e dev -n <NAMESPACE>
 
 ## Install single release/chart
 
-Instead of iteration through all services, you can also deploy a single release like `mariadb` by:
+Instead of iterating through all services, you can also deploy a single release like `mariadb` by executing the following:
 
 ```shell
 helmfile apply -e dev -n <NAMESPACE> -l name=mariadb
@@ -416,17 +416,17 @@ helmfile apply -e dev -n <NAMESPACE> -l name=mariadb
 
 # Access deployment
 
-When all apps are successfully deployed, and their Pod's status is `Running` or `Succeeded`, you can navigate to
+When all apps are successfully deployed, and their Pod status is `Running` or `Succeeded`, you can navigate to
 
 ```text
 https://portal.domain.tld
 ```
 
-If you change the subdomain of `nubus`, you must replace `portal` with the specified subdomain.
+If you change the subdomain of `nubus`, you must replace the subdomain of `portal` with the same subdomain.
 
 **Credentials:**
 
-openDesk deploys with the standard user account `Administrator`, which password you get retrieved as follows:
+openDesk deploys with the standard user account `Administrator`, the password for which can be retrieved as follows:
 
 ```shell
 # Set your namespace
@@ -440,8 +440,8 @@ Using the aforementioned account, you can either create new accounts manually or
 [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import/)
 script or container.
 
-For example you get a `default` and `default-admin` account by running the following snippet, after settings the
-appropriate values in the first three lines.
+In the following snippet, after defining the values of the first three lines and executing the command,
+you get two accounts, `default` and `default-admin`:
 
 ```shell
 ADMINISTRATOR_PASSWORD=<your_administrator_password_see_above>
@@ -470,7 +470,7 @@ configuration values are:
 
 # Uninstall
 
-You can uninstall the deployment by:
+You can uninstall the deployment by executing the following:
 
 ```shell
 helmfile destroy -n <NAMESPACE>
@@ -496,4 +496,4 @@ kubectl delete configmaps --all --namespace ${NAMESPACE};
 ```
 
 > **Warning**<br>
-> Without specifying or empty `--namespace` flag, cluster-wide components get deleted!
+> Without specifying a `--namespace` flag, or by leaving it empty, cluster-wide components will get deleted!
