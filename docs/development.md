@@ -159,4 +159,3 @@ for Helm charts.
 You may also want to make use of our [standard CI](https://gitlab.opencode.de/bmi/opendesk/tooling/gitlab-config) to
 quickly get Helm charts and container images that are signed, linted, scanned, and released.
 Check out the `.gitlab-ci.yaml` files in the project's [Charts](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts) or [Images](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images) to get an idea just how little you need to do by yourself.
-components
