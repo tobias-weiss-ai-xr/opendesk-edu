@@ -18,7 +18,7 @@ following subsection.
 
 The provided diagram shows all relevant openDesk applications on the left and
 their utilized data storages on the right. For more detailed information about each
-application refer to the table show in Section [Details](#details)
+application refer to the table in [Details](#details).
 
 ```mermaid
 ---

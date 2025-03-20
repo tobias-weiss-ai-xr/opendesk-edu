@@ -14,7 +14,7 @@ This document covers the theming options for an openDesk deployment.
 
 # Settings
 
-All default settings can be found in the [`theme.gotmpl`](../helmfile/environments/default/theme.gotmpl). Most of the components adhere to these settings.
+All default settings can be found in [`theme.gotmpl`](../helmfile/environments/default/theme.gotmpl). Most of the components adhere to these settings.
 
 Please review the default configuration that is applied to understand your customization options.
 

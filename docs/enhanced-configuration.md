@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Overview
 
-The following enhanced configuration use cases are described in separate documents.
+The following enhanced configuration use cases are described in their respective documents:
 
 - [Separate mail & Matrix domain](./enhanced-configuration/separate-mail-matrix-domain.md)
 - [Federation with external identity provider](./enhanced-configuration/idp-federation.md)

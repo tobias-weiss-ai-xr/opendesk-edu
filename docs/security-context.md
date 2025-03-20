@@ -100,7 +100,6 @@ containerSecurityContext:
     type: "RuntimeDefault"
 ```
 
-
 or
 
 ```yaml
@@ -112,7 +111,7 @@ containerSecurityContext:
 ## readOnlyRootFilesystem
 
 
-Containers should have an immutable file systems, so that attackers can not modify application code or download malicious code.
+Containers should have immutable file systems, so that attackers can not modify application code or download malicious code.
 
 ```yaml
 containerSecurityContext:

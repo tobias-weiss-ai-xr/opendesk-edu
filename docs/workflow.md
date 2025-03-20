@@ -34,16 +34,16 @@ SPDX-License-Identifier: Apache-2.0
 
 # Scope
 
-This document covers the development of a technical release, thereby addressing
-- the development and branching concept for the openDesk deployment automation,
-- the related quality gates and
-- how technical releases are being created.
+This document covers the development of a technical release, thereby addressing:
+- the development and branching concept for the openDesk deployment automation
+- the related quality gates
+- the creation of technical releases
 
 It does not cover additional artifacts that might be related to a functional release.
 
 # Roles and responsibilities
 
-The following section should provide a high-level view of the involved parties in the openDesk context and their responsibilities:
+The following section provides a high-level view of the involved parties in the openDesk context and their responsibilities:
 
 - **Open source product suppliers**
   - Focus areas
@@ -56,7 +56,7 @@ The following section should provide a high-level view of the involved parties i
     - Documentation
 - **openDesk platform development**
   - Focus areas
-    - Integration of the supplier's artifacts addressing basic operational needs
+    - Integration of the supplier's artifacts, addressing basic operational needs
     - Implementation of services required (e.g. persistence layer) to develop and test openDesk
     - Implementation of the required quality gates (QG)
     - Ensuring the quality gates are passed
@@ -64,26 +64,26 @@ The following section should provide a high-level view of the involved parties i
     - Deployment automation
 - **Operator**
   - Focus areas
-    - Providing production-grade required services (e.g. persistence layer) to operate openDesk
-    - Rollout, operate and support openDesk
-    - Further develop the deployment automation to meet extended operational requirements, ideally providing these developments upstream to openDesk platform development to adopt them into the standard
-  - The operator can either use a self-operated Kubernetes cluster to deploy openDesk or make use of managed Kubernetes offerings of a **Cloud Provider**.
+    - Provide production-grade services (e.g. persistence layer) to operate openDesk
+    - Rollout, operate, and support openDesk
+    - Further develop the deployment automation to meet extended operational requirements, ideally providing these developments upstream to the openDesk platform development in order to have them included as standard in the future.
+  - The operator can either use a self-operated Kubernetes cluster to deploy openDesk or make use of a managed Kubernetes offering from a **Cloud Provider**
 
 # Deployment automation
 
 The openDesk deployment automation is the core outcome of the platform development process.
 
-The openDesk platform development team created and maintains the deployment automation to allow interested parties to deploy openDesk into their cloud infrastructure with a low entry barrier. The core technology for the automation is [Helm](https://helm.sh/), which is orchestrated using [Helmfile](https://github.com/helmfile/helmfile). Of course, this deployment is also used by the suppliers and the platform team in everyday work.
+The openDesk platform development team created and maintains the deployment automation, which allows interested parties to deploy openDesk onto their cloud infrastructure with a low barrier to entry. The core technology for the automation is [Helm](https://helm.sh/), which is orchestrated using [Helmfile](https://github.com/helmfile/helmfile). Of course, this deployment is also used by the suppliers and the platform team in everyday work.
 
 Please find the deployment automation, including its documentation, in the following project: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk
 
-The automation supports Gitlab CI/CD and local execution, triggering the Helmfile deployment for the whole platform or single applications.
+The automation supports Gitlab CI/CD, local execution, and triggering the Helmfile deployment for the whole platform or single applications.
 
 ## openDesk technical component classes
 
-The below rendering in class diagram notation shows the three component classes openDesk consists of. In each of these:
-- the first section below the name of the class shows the required **characteristics** of each component of the given class and
-- the second section shows the **methods** like linting that must be applied to that class's artifacts.
+The below rendering in [class diagram](https://en.wikipedia.org/wiki/Class_diagram) notation shows the three component classes openDesk consists of. In each of these:
+- the first section below the name of the class shows the required **characteristics** of each component of the given class
+- the second section shows the **methods** like linting that must be applied to that class's artifacts
 
 > **Note**<br>
 > The methods prefixed with '-' are not yet available in `gitlab-config`. You will learn about them later.
@@ -119,7 +119,7 @@ classDiagram
 
 ## Functional vs. service components
 
-The focus of openDesk is to provide an integrated functional productivity platform based on the involved suppliers' functional components (products). These functional components usually rely on specific service components, e.g. database services for persistence. When running openDesk in production, the operator is responsible for providing these services in production-grade. For evaluation and development purposes, the openDesk deployment automation includes these services.
+The focus of openDesk is to provide an integrated and functional productivity platform based on the involved suppliers' functional components (products). These functional components usually rely on specific service components, e.g. database services for persistence. When running openDesk in production, the operator is responsible for providing these production-grade services. For evaluation and development purposes, the openDesk deployment automation includes these services.
 
 Find the list of functional and service components in the [archictecture documentation](./docs/architecture.md).
 
@@ -129,7 +129,7 @@ The openDesk platform consolidates the technical components from various origins
 
 1) *Supplier* for functional components: Provide their upstream product, sometimes including openDesk-specific builds or extensions and product deployment (Helm charts).
 2) *Third-party upstream* for service components: The platform development team tries to use as many community upstream components as possible for the services they have to provide within openDesk.
-3) Platform development* filling the gap: Some suppliers might not provide Helm charts or images for their products that fit the needs of openDesk, and some third-party upstream components are not built to fit into openDesk. In these cases, the platform development team creates its own Helm charts and images.
+3) *Platform development* filling the gap: Some suppliers might not provide Helm charts or images for their products that fit the needs of openDesk, and some third-party upstream components are not built to fit into openDesk. In such cases, the platform development team creates its own Helm charts and images.
 
 ## Reference CI for creating Images and Helm charts (gitlab-config)
 
@@ -139,7 +139,7 @@ For that purpose openDesk provides a [GitLab CI-based reference implementation](
 
 ## Licensing
 
-As a standard, the openDesk platform development team uses [reuse.software](https://reuse.software/) wherever possible to annotate license and copyright.
+As a standard, the openDesk platform development team uses [reuse.software](https://reuse.software/) wherever possible to annotate license and copyright information.
 
 openDesk uses Apache 2.0 as the license for their work. A typical reuse copyright and license header looks like this:
 ```
@@ -149,18 +149,18 @@ openDesk uses Apache 2.0 as the license for their work. A typical reuse copyrigh
 The way to mark the license header as a comment differs between the various file types. Please find matching examples for all types across the [deployment automation repository](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk).
 
 > **Note**<br>
-> If a `SPDX-FileCopyrightText` already exists with the copyright owner described above but with an past year (e.g. 2024), please update this copyright header line to cover (up to and including) the current year, e.g. `2024-2025`.
+> If a `SPDX-FileCopyrightText` already exists with the copyright owner described above but with a past year (e.g. 2024), please update this copyright header line to cover (up to and including) the current year, e.g. `2024-2025`.
 
 > **Note**<br>
-> If line(s) with `SPDX-FileCopyrightText` containing a different copyright owner exist in the file you are working on, do not replace existing one(s) but add an additional header above these.
+> If line(s) with `SPDX-FileCopyrightText` containing a different copyright owner exist in the file you are working on, do not replace existing one(s), but rather add another header above these.
 
 ## Development workflow
 
 ### Disclaimer
 
-openDesk consists only of community products, so there is no SLA to receive service updates or backport of critical security fixes. This has two consequences:
+openDesk consists only of community products, so there is no SLA related to service updates or backport of critical security fixes. This has two consequences:
 - In production scenarios, you should replace the community versions of the functional components with supported, SLA-backed paid versions.
-- openDesk aims to update the community components' latest available releases continually; therefore, we have rolling technical releases.
+- openDesk aims to update to the community components' latest available releases continually; therefore, we have rolling technical releases.
 
 ### Workflow
 
@@ -171,18 +171,18 @@ This chapter describes the deployment automation's development workflow. The sup
 The picture below uses Gitflow notation to give an overview of the different types of development flows.
 
 The basic facts for the flow are:
-- When the `develop` branch is merged into `main` a technical release is created (except when the merge commit(s) are of type `chore` or `docs`)
+- When the `develop` branch is merged into `main`, a technical release is created (except when the merge commit(s) are of type `chore` or `docs`).
 - Changes that will be applied to openDesk have to branch off from `develop`; we call these branches *feature* branches.
   - Developers can create sub-branches from their feature branch(es) as needed.
 - When a *feature* branch gets pushed a Merge Request in `Draft` state is automatically created.
 - We know three types of *feature* branches:
-  - `docs`: Doing just documentation changes
-  - `fix`: Maintenance of the openDesk software components and minor configurational changes
-  - `feat`: All changes that do not fall into the two categories above, especially
-    - supplier deliverables and
-    - configurational changes that have a significant impact on openDesk users or require migrations[^1]
-- The *QG* entries in the workflow refer to quality gates that are explained in more detail later
-- All merges into `develop` or `main` require two approvals from the platform development team[^2]. The approvers must ensure that the defined quality gates have been passed successfully.
+  - `docs`: Includes only documentation changes.
+  - `fix`: Maintenance of the openDesk software components and minor configurational changes.
+  - `feat`: All changes that do not fall into the two categories above, especially:
+    - supplier deliverables
+    - configuration changes that have a significant impact on openDesk users or require migrations
+- The *QG* entries in the workflow refer to quality gates that are explained in more detail later.
+- All merges into `develop` or `main` require two approvals from the platform development team[^1]. Those approving must ensure that the defined quality gates have been successfully passed.
 
 ```mermaid
 gitGraph
@@ -242,21 +242,21 @@ The Standard Quality Gate addresses quality assurance steps that should be execu
    - Non-Blocking
      - Security: [Kyverno policy check](../.kyverno) addressing some IT-Grundschutz requirements
      - Formal: Yaml
-1. Deploy the full openDesk stack from scratch:
+2. Deploy the full openDesk stack from scratch:
    - All deployment steps must be successful (green)
    - All tests from the end-to-end test set must be successful
-1. Update deployment[^3] of the full openDesk stack and apply the quality measures from the step #1:
+3. Update deployment of the full openDesk stack and apply the quality measures from the step #1:
    - Deploy the current merge target baseline (`develop` or `main`)
    - Update deploy from your QA branch into the instance from the previous step
-1. No showstopper found regarding
-   - SBOM compliance[^4]
+4. No showstopper found regarding:
+   - SBOM compliance[^2]
    - Malware check
-   - CVE check[^5]
-   - Kubescape scan[^5]
+   - CVE check[^3]
+   - Kubescape scan[^3]
 
 Steps #1 to #3 from above are executed as GitLab CI and documented within GitLab.
 
-Step #4 is focused on security and has not been fully implemented yet. Its main objective is to check for regressions. That step is just the second step of a security check and monitoring chain, as shown below. While some checks can be executed against static artifacts (e.g., container images), others might require an up-and-running instance. These are especially located in the third step below, which has not yet been implemented.
+Step #4 is focused on security and has not been fully implemented yet. Its main objective is to check for regressions. That step is just the second step of a security check and monitoring chain, as shown below. While some checks can be executed against static artifacts (e.g., container images), others might require an up-and-running instance. These are specifically located in the third step below, which has not yet been implemented.
 
 ```mermaid
 flowchart TD
@@ -278,7 +278,7 @@ flowchart TD
 
 #### Branch workflows
 
-This section will explain the workflow for each branch (type) based on the Gitflow picture from above.
+This section will explain the workflow for each branch type based on the Gitflow picture from above.
 
 ##### `main`
 
@@ -298,7 +298,7 @@ Merge points: We are using the [Semantic Release convention](https://github.com/
   - That the SQG was successfully executed upon the to-be merged state - it could be done explicitly or based on a `QA 'nightly develop'`
   - In case of `fix` changes that usually have no test automation, Changes have been verified by a member of the platform development team.
   - That the changes have been reviewed by at least two members of the platform development team, giving their approval on the Merge Request.
-- Merge points (from `docs`, `fix`, and `feat` branches): No additional activity on these merge points as the QA is ensured before the merge in the just-named branch types.
+- Merge points (from `docs`, `fix`, and `feat` branches): No additional activity on these merge points as the QA is ensured before the merge in the aforementioned branch types.
 
 ##### `docs`
 
@@ -381,12 +381,8 @@ We only allow verified commits; please read on about the options you have to mak
 
 # Footnotes
 
-[^1]: Migrations are in general not supported before openDesk hits [technical release](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases) v1.0.0
+[^1]: These approval rules are not available in the GitLab Free Tier, which is one of the main reasons why deployment automation is not developed on openCode.
 
-[2]: These approval rules are not available in the GitLab Free Tier, which is one of the main reasons why deployment automation is not developed on openCode.
+[^2]: The SBOM process is executed asynchronously with the development process and tests the most current technical release from the `main` branch. The process still needs to be fully automated.
 
-[^3]: As long as migrations/upgrade paths are not provided - see also footnote #1 - this step is optional.
-
-[^4]: The SBOM process is executed asynchronously with the development process and tests the most current technical release from the `main` branch. The process still needs to be fully automated.
-
-[^5]: The quality gate needs to be implemented primarily when identifying regressions.
+[^3]: The quality gate needs to be implemented primarily when identifying regressions.

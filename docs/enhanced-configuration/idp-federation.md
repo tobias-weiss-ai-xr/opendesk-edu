@@ -20,18 +20,20 @@ SPDX-License-Identifier: Apache-2.0
   * [openDesk IdP](#opendesk-idp)
 <!-- TOC -->
 
-Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on to internal or external web applications.
+Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on (SSO) to internal or external web applications.
 
-This document shows how to configure your organization's IdP and the openDesk IdP to support account federation with openDesk single sign-on based on your organization's login.
+This document explains how to configure your organization's IdP and the openDesk IdP to support account federation with openDesk SSO based on your organization's login.
 
 # References
 
-We would like to list successful IdP federation scenarios, so we are also happy about input from the community:
+We would like to list successful IdP federation scenarios:
 
 | External IdP                                                        | openDesk versions tested |
 |---------------------------------------------------------------------|--------------------------|
 | [EU Login](https://webgate.ec.europa.eu/cas/userdata/myAccount.cgi) | v0.9.0, v1.2.0           |
 | [ProConnect](https://www.proconnect.gouv.fr/)                       | v0.9.0                   |
+
+>If you have successfully federated using another External IdP, please let us know so we can update the list above.
 
 # Prerequisites
 
@@ -58,7 +60,7 @@ In addition to the configuration, it is required that user accounts with the sam
   - This feature is currently unavailable in openDesk's Keycloak, but Univention plans to make it available in the future.
   - Ad-hoc provisioning creates a user account on the fly during a user's first login.
   - While ad-hoc provisioning is an excellent approach for a quick start with openDesk, it has various downsides:
-    - Users are created after their first login, so you cannot find your colleagues in the openDesk apps unless they have already logged in.
+    - Users are created after their first login, so you cannot find your colleagues in the openDesk apps unless they have already logged in once.
     - A user account would never be deactivated or deleted in openDesk.
     - Group memberships are not transferred.
 
@@ -70,7 +72,7 @@ This document focuses on the OIDC federation between an external IdP and the ope
 
 ## Versions
 
-The example was tested with openDesk v0.7.0 using its integrated Keycloak v24.0.3. As external IdP, we also used an openDesk deployment of the same version but created a separate realm for proper configuration separation.
+The example was tested with openDesk v0.7.0 using its integrated Keycloak v24.0.3. As external IdP, we also used an openDesk deployment of the same version, but created a separate realm for proper configuration separation.
 
 ## Example values
 
@@ -85,7 +87,7 @@ The following values are used in this example documentation. Please ensure when 
 
 ## Keycloak admin console access
 
-To access Keycloak's admin console in an openDesk deployment, you must add a route for `/admin` to the Keycloak's ingress. This is done automatically if you deploy openDesk with `debug.enabled: true`, but beware that this will also cause a lot of log output across all openDesk pods.
+To access the Keycloak admin console in an openDesk deployment, you must add a route for `/admin` to the Keycloak ingress. This is done automatically if you deploy openDesk with `debug.enabled: true`, but beware that this will also cause a lot of log output across all openDesk pods.
 
 The admin console will be available at:
 - Organization's IdP: https://idp.organization.tld/admin/master/console/
@@ -97,7 +99,7 @@ For the following configuration steps, log in with user `kcadmin` and grab the p
 
 In this example, we use the Keycloak of another openDesk instance to simulate your organization's IdP. However, URL paths differ if you use another product.
 
-Please let us know about your experiences or differences you came across.
+Please let us know about your experiences or any differences you encountered.
 
 ### Separate realm
 
@@ -115,7 +117,7 @@ If you just created the `fed-test-idp-realm`, you are already in the admin scree
   - Client create wizard page 1:
     - *Client type*: `OpenID Connect`
     - *Client-ID*: `opendesk-federation-client`
-    - *Name*: `openDesk @ your organization` (is the descriptive text of the client that might show up in your IdP's UI and therefore should explain what the client is used for)
+    - *Name*: `openDesk @ your organization` (this is the descriptive text of the client that might show up in your IdP's UI and therefore should explain what the client is used for)
   - Client create wizard page 2:
     - *Client authentication*: `On`
     - *Authorization*: `Off` (default)
@@ -124,7 +126,7 @@ If you just created the `fed-test-idp-realm`, you are already in the admin scree
       - `Direct access grants`
   - Client create wizard page 3:
     - *Valid Redirect URLs*: `https://id.opendesk.tld/realms/opendesk/broker/auto-federate-idp/endpoint`
-  - When completed with *Save*, you get to the detailed client configured that also needs some updates:
+  - When completed with *Save*, you get to the detailed client configuration that also needs some updates:
     - Tab *Settings* > Section *Logout settings*
       - *Front channel logout*: `Off`
       - *Back channel logout URL*: `https://id.opendesk.tld/realms/opendesk/protocol/openid-connect/logout/backchannel-logout`
@@ -152,9 +154,9 @@ The following configuration is taking place in the Keycloak realm `opendesk`.
   - *Client authentication*: `Client secret sent as post` (default)
   - *Client ID*: Use the client ID you took from your organization's IdP config (`opendesk-federation-client` in this example)
   - *Client Secret*: Use the secret you took from your organization's IdP config
-  - When completed with *Add*, you get to the detailed IdP configuration that at least needs some the following update:
+  - When completed with *Add*, you get to the detailed IdP configuration which at least needs the following update:
     - *First login flow override*: `auto-federate-flow`
-    - Depending on your organizations IdP and process preferences additional setting may be required
+    - Depending on your organizations IdP and process preferences, additional configuration may be required
 
 - In case you want to forcefully redirect all users to your organization's IdP (disabling login with local openDesk accounts):
   - *Authentication* > `2fa-browser`

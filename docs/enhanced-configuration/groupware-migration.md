@@ -21,11 +21,11 @@ SPDX-License-Identifier: Apache-2.0
 
 Most organizations already have email accounts on various platforms that need to be migrated to openDesk. This document describes the migration from M365 accounts to openDesk using the [audriga Migration Service](https://www.audriga.com) in combination with the master authentication option in openDesk. Other source platforms are also supported, and their migrations work in a similar manner.
 
-The migration can be configured on audriga's self-service website, accessed with most common web browsers (e.g. IE, Firefox, Safari or Chrome). No software needs to be installed on your machine. The service connects to your mailbox similarly to what your email client does. Emails, attachments, folders, and, depending on the source systems, contacts, tasks, notes, and calendar data are being copied to your destination account. See [M365 to OX Migration Guide](https://audriga.com/fileadmin/guides/en/MS365-OX.pdf) for the scope and limitations of the process.
+The migration can be configured on audriga's self-service website, accessed with most common web browsers (e.g. IE, Firefox, Safari or Chrome). No software needs to be installed on your machine. The service connects to your mailbox similarly to what your email client does. Emails, attachments, folders, and, depending on the source systems, contacts, tasks, notes, and calendar data are copied to your destination account. See [M365 to OX Migration Guide](https://audriga.com/fileadmin/guides/en/MS365-OX.pdf) for the scope and limitations of the process.
 
 The data in the source mailbox will not be deleted or altered. To configure a migration, only three simple steps in audriga's self-service portal have to be completed. After the migration has started, its status can be continuously monitored on the website.
 
-It may not be possible to complete especially large or complex migrations with only this guide. If you identify issues related to I/O, bandwidth, timeline constraints, or anything else that makes the migration more complicated than you feel comfortable handling on your own using the self-service, please get in touch with contact [audriga's support](mailto:support@audriga.com).
+It may not be possible to complete especially large or complex migrations with only this guide. If you identify issues related to I/O, bandwidth, time constraints, or anything else that makes the migration more complicated than you are comfortable handling on your own using the self-service, please contact [audriga's support](mailto:support@audriga.com).
 
 # Prerequisites
 
@@ -33,7 +33,7 @@ It may not be possible to complete especially large or complex migrations with o
 
 The following instructions provide information on how to authenticate Microsoft 365 / Exchange Online accounts in the audriga migration service with "modern authentication" using a service account without the need to provide a username and password for each mailbox that will be migrated.
 
-You will have to select an existing user account that will be used as a service account for the migration. You have to register the audriga application and create an M365 email group known only to you as described in the following steps:
+You will have to select an existing user account that will be used as a service account for the migration. You have to register the audriga application and create an M365 email group known only to you, as described in the following steps:
 
 ***1. Select one account to serve as a service account***
 
@@ -49,7 +49,7 @@ To register the audriga app in your tenant, log into your admin account and acce
  https://login.microsoftonline.com/organizations/v2.0/adminconsent?client_id=3cd27a72-a19e-4945-9715-fc24d940428f&redirect_uri=https://umzug.audriga.com/SMESwitchWebApp/oauth_complete.jsp&scope=https://outlook.office.com/.default
 
 - Accept the App "audriga CloudMovr migration"
-- You will be redirected to an audriga page, which you can close without requiring additional interaction.
+- You will be redirected to an audriga page, which you can close - it does not require additional interaction.
 
 > **Note**<br>
 > The audriga application is created under the "Enterprise application" tab in the AzureAD console.
@@ -70,7 +70,7 @@ In openDesk, you have to have all user accounts with mailboxes pre-defined befor
 
 ## Deploy openDesk with master authentication
 
-With openDesk 1.0 Enterprise, you can set openDesk's email components (OX AppSuite and OX Dovecot) into master authentication mode to run the migration as described in this document using the following two settings for your deployment:
+With openDesk 1.0 Enterprise, you can set openDesk's email components (OX AppSuite and OX Dovecot) to master authentication mode to run the migration as described in this document using the following two settings for your deployment:
 
 ```
 secrets:
@@ -82,13 +82,13 @@ functional:
       enabled: true
 ```
 
-1. You must specify the master password referenced in the document's following sections.
+1. You must specify a master password, it will be referenced later in this document.
 2. You need to enable the actual master authentication mode.
 
 Updating your deployment with these settings will allow you to continue with the migration scenario. Once the migration is completed, you can remove `secrets.oxAppSuite.adminPassword` and need to turn off the migration mode by setting `functional.migration.oxAppSuite.enabled` to `false` or removing that setting, as `false` is the default before you update your deployment once again.
 
 > **Note**<br>
-> For the changes to take effect, it is sufficient to deploy the `open-xchange` component.
+> For the changes to take effect, it is sufficient to re-deploy the `open-xchange` component alone.
 
 > **Note**<br>
 > While in master authentication mode, regular users cannot log in to the webmail module of openDesk or access the mail using IMAP, as it is not recommended that users interact with the target mail infrastructure during the migration scenario described in this document.
@@ -110,12 +110,12 @@ Configure openDesk as your destination server:
 - Select "Configure provider or server" in the provider selection box of the migration application.
 - In the following dialog, select "Open-Xchange" as protocol.
 - On the tab "IMAP"
-  - For "Mailserver (host name or IP address)" enter your IMAP host, e.g. "webmail.your-opendesk-domain.tld".
-  - If your IMAP server is not running on default port 993, enter your nonstandard IMAP port under Details -> Port.
-  - Press check.
+  - For "Mailserver (host name or IP address)" enter your IMAP host, e.g. "webmail.your-opendesk-domain.tld".
+  - If your IMAP server is not running on default port 993, enter your nonstandard IMAP port under Details -> Port.
+  - Press check.
 - On the tab "Open-Xchange"
-  - Set the hostname of your OX AppSuite installation, e.g. "webmail.your-opendesk-domain.tld".
-  - Press check.
+  - Set the hostname of your OX AppSuite installation, e.g. "webmail.your-opendesk-domain.tld".
+  - Press check.
 - If you receive a green checkmark on both tabs, click "Save". Otherwise, check your settings until you get the green checkmark.
 
 ## Adding accounts
@@ -142,7 +142,7 @@ Click on check to verify the credentials. If the data is correct, a green checkm
 
 After checking and confirming, you can use the same procedure to add further mailboxes.
 
-Alternatively, you can add multiple accounts via CSV upload. Find information in the following.
+Alternatively, you can add multiple accounts via CSV upload. More info on that below.
 
 ### Add multiple user accounts via CSV file
 
