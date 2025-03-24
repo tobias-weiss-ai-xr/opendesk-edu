@@ -828,6 +828,7 @@ nubusLdapServer:
   replicaCountPrimary: {{ .Values.replicas.umsLdapServerPrimary }}
   replicaCountSecondary: {{ .Values.replicas.umsLdapServerSecondary }}
   replicaCountProxy: {{ .Values.replicas.umsLdapServerProxy }}
+  resources: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
   resourcesPrimary: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
   resourcesSecondary: {{ .Values.resources.umsLdapServer | toYaml | nindent 4 }}
   serviceAccount:
