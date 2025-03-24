@@ -92,13 +92,32 @@ Be sure you check all the sections for the releases your are going to update you
 
 ## From v1.1.2
 
+#### Helmfile cleanup: Do not configure OX provisioning when no OX installed
+
+**Target group:** Installations that have no OX App Suite installed.
+
+With openDesk 1.2.0 the OX provisioning consumer will not be registered when there is no OX installed.
+
+We do not remove the consumer for existing installations, if you want to do that for your existing installation please perform the following steps:
+
+```
+export NAMESPACE=<your_namespace>
+kubectl -n ${NAMESPACE} exec -it ums-provisioning-nats-0 -c nats-box -- sh -c 'nats consumer rm stream:ox-connector durable_name:ox-connector --user=admin --password=${NATS_PASSWORD} --force'
+kubectl -n ${NAMESPACE} exec -it ums-provisioning-nats-0 -c nats-box -- sh -c 'nats stream rm stream:ox-connector --user=admin --password=${NATS_PASSWORD} --force'
+kubectl -n ${NAMESPACE} delete secret ums-provisioning-ox-credentials-test
+```
+
 #### Helmfile new default: PostgreSQL for XWiki and Nextcloud
+
+**Target group:** All upgrade installations that do not already use the previous optional PostgreSQL database backend for Nextcloud and XWiki.
 
 openDesk now uses PostgreSQL as default database backend for Nextcloud and XWiki.
 
-When upgrading existing instances you likely want to keep the current database backend (MariaDB). Please follow the instructions below.
+When upgrading existing instances you likely want to keep the current database backend (MariaDB).
 
-**If you use your own external database services**, you just have to add the new `type` attribute and set it to `mariadb`:
+**Use case A:** You use your own external database services, if not see "Use case B" further down.
+
+You just have to add the new `type` attribute and set it to `mariadb`:
 
 ```yaml
 databases:
@@ -108,7 +127,9 @@ databases:
     type: "mariadb"
 ```
 
-**If you use the openDesk supplied database services**, ensure you set the following attributes before upgrading, this includes the aforementioned `type` attribute.
+**Use case B:** You use the openDesk supplied database services.
+
+Ensure you set the following attributes before upgrading, this includes the aforementioned `type` attribute.
 
 ```yaml
 databases:
