@@ -974,12 +974,14 @@ nubusProvisioning:
   registerConsumers:
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-register-consumers"
+    {{- if .Values.apps.oxAppSuite.enabled }}
     createUsers:
       oxConsumer:
         existingSecret:
           name: ums-provisioning-ox-credentials
           keyMapping:
             password: "ox-connector.json"
+    {{- end }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
