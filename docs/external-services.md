@@ -67,10 +67,10 @@ service.
 |                    |                    | Username  | `databases.umsSelfservice.username`           | `selfservice_user`           |
 |                    |                    | Password  | `databases.umsSelfservice.password`           |                              |
 | Nextcloud          | Nextcloud          |           |                                               |                              |
-|                    |                    | Type      | `databases.nextcloud.type`                    | `mariadb`                    |
+|                    |                    | Type      | `databases.nextcloud.type`                    | `postgresql`                 |
 |                    |                    | Name      | `databases.nextcloud.name`                    | `nextcloud`                  |
-|                    |                    | Host      | `databases.nextcloud.host`                    | `mariadb`                    |
-|                    |                    | Port      | `databases.nextcloud.port`                    | `3306`                       |
+|                    |                    | Host      | `databases.nextcloud.host`                    | `postgresql`                 |
+|                    |                    | Port      | `databases.nextcloud.port`                    | `5432`                       |
 |                    |                    | Username  | `databases.nextcloud.username`                | `nextcloud_user`             |
 |                    |                    | Password  | `databases.nextcloud.password`                |                              |
 | Notes              | Notes              |           |                                               |                              |
@@ -109,11 +109,11 @@ service.
 |                    |                    | Username  | `databases.dovecotDictmap.username`           | `dovecot_dictmap_user`       |
 |                    |                    | Password  | `databases.dovecotDictmap.password`           |                              |
 | XWiki[^4]          | XWiki              |           |                                               |                              |
-|                    |                    | Type      | `databases.xwiki.type`                        | `mariadb`                    |
+|                    |                    | Type      | `databases.xwiki.type`                        | `postgresql`                 |
 |                    |                    | Name      | `databases.xwiki.name`                        | `xwiki`                      |
-|                    |                    | Host      | `databases.xwiki.host`                        | `mariadb`                    |
-|                    |                    | Port      | `databases.xwiki.port`                        | `3306`                       |
-|                    |                    | Username  | `databases.xwiki.username`                    | `root`                       |
+|                    |                    | Host      | `databases.xwiki.host`                        | `postgresql`                 |
+|                    |                    | Port      | `databases.xwiki.port`                        | `5432`                       |
+|                    |                    | Username  | `databases.xwiki.username`                    | `xwiki_user`                 |
 |                    |                    | Password  | `databases.xwiki.password`                    |                              |
 
 # Object storage
