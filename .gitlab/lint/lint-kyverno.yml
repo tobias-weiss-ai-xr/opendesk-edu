@@ -5,7 +5,7 @@ include:
   - local: "/.gitlab/lint/lint-common.yml"
 
 lint-kyverno:
-  allow_failure: true
+  allow_failure: false
   extends: ".lint-common"
   image: "${OPENDESK_LINT_IMAGE}"
   parallel:
