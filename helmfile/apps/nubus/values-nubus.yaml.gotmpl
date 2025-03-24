@@ -580,7 +580,7 @@ nubusPortalConsumer:
         {{- range .Values.global.imagePullSecrets }}
         - name: {{ . | quote }}
         {{- end }}
-    assetsBaseUrl: {{ printf "https://%s/%s/%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) (.Values.objectstores.nubus.bucket) "portal-assets" | quote }}
+    assetsBaseUrl: {{ printf "https://%s.%s/univention/portal" .Values.global.hosts.nubus .Values.global.domain | quote }}
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   objectStorage:
     auth:
