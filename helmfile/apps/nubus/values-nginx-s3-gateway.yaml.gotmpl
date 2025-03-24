@@ -3,6 +3,10 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
+global:
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nginxS3Gateway.registry | quote }}
   repository: {{ .Values.images.nginxS3Gateway.repository | quote }}
