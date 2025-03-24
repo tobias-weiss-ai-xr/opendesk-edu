@@ -74,7 +74,7 @@ releases:
     installed: {{ .Values.apps.nubus.enabled }}
     timeout: 900
 
-  # NGINX S3 Gateway (when cluster minio is not used)
+  # NGINX S3 Gateway
   - name: "nubus"
     chart: "nginx-s3-gateway-repo/{{ .Values.charts.nginxS3Gateway.name }}"
     version: "{{ .Values.charts.nginxS3Gateway.version }}"
@@ -83,7 +83,7 @@ releases:
       {{- range .Values.customization.release.nginxS3Gateway }}
       - {{ . }}
       {{- end }}
-    installed: {{ not .Values.apps.minio.enabled }}
+    installed: {{ .Values.apps.nubus.enabled }}
     timeout: 900
 
 commonLabels:
