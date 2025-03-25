@@ -155,7 +155,7 @@ This list gives you an overview of templated security settings and if they compl
 | **element**/matrix-neodatefix-bot-bootstrap | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **element**/matrix-neodatefix-widget | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **element**/opendesk-element | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
-| **element**/opendesk-matrix-user-verification-service | :x: | no | no | no | no | 0 | 0 | yes | yes |
+| **element**/opendesk-matrix-user-verification-service | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
 | **element**/opendesk-matrix-user-verification-service-bootstrap | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **element**/opendesk-synapse | :white_check_mark: | no | no | yes | yes | 10991 | 10991 | yes | yes |
 | **element**/opendesk-synapse-web | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
@@ -210,6 +210,7 @@ This list gives you an overview of templated security settings and if they compl
 | **open-xchange**/open-xchange/nextcloud-integration-ui | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/open-xchange/public-sector-ui | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/opendesk-open-xchange-bootstrap | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **open-xchange**/postfix-ox | :x: | yes | yes | yes | no | 0 | 0 | yes | no |
 | **opendesk-migrations-post**/opendesk-migrations-post | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **opendesk-migrations-pre**/opendesk-migrations-pre | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **opendesk-openproject-bootstrap**/opendesk-openproject-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
@@ -226,7 +227,7 @@ This list gives you an overview of templated security settings and if they compl
 | **services-external**/memcached | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/minio | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/opendesk-dkimpy-milter | :x: | yes | no | yes | yes | 1000 | 1000 | yes | no |
-| **services-external**/postfix | :x: | yes | yes | no | no | 0 | 0 | yes | no |
+| **services-external**/postfix | :x: | yes | yes | yes | no | 0 | 0 | yes | no |
 | **services-external**/postgresql | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/redis/master | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **xwiki**/xwiki | :x: | no | no | no | yes | 100 | 101 | yes | yes |
