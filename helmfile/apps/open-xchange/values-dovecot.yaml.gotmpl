@@ -10,26 +10,37 @@ image:
   tag: {{ .Values.images.dovecot.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
+imageInitDovecot:
+  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.dovecotBootstrap.registry | quote }}
+  repository: {{ .Values.images.dovecotBootstrap.repository | quote }}
+  tag: {{ .Values.images.dovecotBootstrap.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
 imagePullSecrets:
   {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
 dovecot:
   mailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
-  password: {{ .Values.secrets.dovecot.doveadm | quote }}
+  password:
+    value: {{ .Values.secrets.dovecot.doveadm | quote }}
   migration:
     enabled: {{ .Values.functional.migration.oxAppSuite.enabled }}
-    masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+    masterPassword:
+      value: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
   ldap:
     enabled: true
     host: {{ .Values.ldap.host | quote }}
     port: 389
     base: "{{ .Values.ldap.baseDn }}"
     dn: "uid=ldapsearch_dovecot,cn=users,{{ .Values.ldap.baseDn }}"
-    password: {{ .Values.secrets.nubus.ldapSearch.dovecot | quote }}
+    password:
+      value: {{ .Values.secrets.nubus.ldapSearch.dovecot | quote }}
   oidc:
     enabled: true
-    clientID: "opendesk-dovecot"
-    clientSecret: {{ .Values.secrets.keycloak.clientSecret.dovecot | quote }}
+    clientID:
+      value: "opendesk-dovecot"
+    clientSecret:
+      value: {{ .Values.secrets.keycloak.clientSecret.dovecot | quote }}
     introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
     introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
     usernameAttribute: "opendesk_username"
