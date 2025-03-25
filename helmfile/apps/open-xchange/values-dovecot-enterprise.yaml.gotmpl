@@ -24,14 +24,16 @@ dovecot:
     host: {{ .Values.databases.dovecotDictmap.host | quote }}
     port: {{ .Values.databases.dovecotDictmap.port }}
     username: {{ .Values.databases.dovecotDictmap.username | quote }}
-    password: {{ .Values.secrets.cassandra.dovecotDictmapUser | quote }}
+    password:
+      value: {{ .Values.secrets.cassandra.dovecotDictmapUser | quote }}
     keyspace: {{ .Values.databases.dovecotDictmap.name | quote }}
   sharedMailboxes:
     enabled: false
     host: {{ .Values.databases.dovecotACL.host | quote }}
     port: {{ .Values.databases.dovecotACL.port }}
     username: {{ .Values.databases.dovecotACL.username | quote }}
-    password: {{ .Values.secrets.cassandra.dovecotACLUser | quote }}
+    password:
+      value: {{ .Values.secrets.cassandra.dovecotACLUser | quote }}
     keyspace: {{ .Values.databases.dovecotACL.name | quote }}
   objectStorage:
     encryption:
@@ -41,5 +43,6 @@ dovecot:
         value: {{ env "DOVECOT_CRYPT_PUBLIC_KEY" | quote }}
     fqdn: {{ .Values.objectstores.dovecot.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
     username: {{ .Values.objectstores.dovecot.username | quote }}
-    password: {{ .Values.secrets.minio.dovecotUser | quote }}
+    password:
+      value: {{ .Values.secrets.minio.dovecotUser | quote }}
 ...

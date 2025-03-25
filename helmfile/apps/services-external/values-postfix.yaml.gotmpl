@@ -71,8 +71,10 @@ postfix:
 
   staticAuthDB:
     enabled: true
-    username: "opendesk-system"
-    password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+    username:
+      value: "opendesk-system"
+    password:
+      value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
 
   {{- if .Values.antivirus.milter.host }}
   smtpdMilters: "inet:{{ .Values.antivirus.milter.host }}:{{ .Values.antivirus.milter.port }}"
