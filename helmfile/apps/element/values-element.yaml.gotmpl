@@ -14,7 +14,7 @@ configuration:
         banner:
           ics_navigation_json_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/navigation.json"
           ics_silent_url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/silent"
-          portal_logo_svg_url: "https://{{ .Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) }}/{{ .Values.objectstores.nubus.bucket }}/portal-assets/icons/logos/domain.svg"
+          portal_logo_svg_url: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
           portal_url: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/"
         custom_css_variables:
           --cpd-color-bg-action-primary-rest: {{ .Values.theme.colors.primary | quote }}

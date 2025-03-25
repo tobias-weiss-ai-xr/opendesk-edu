@@ -388,7 +388,7 @@ appsuite:
       # io.ox/mail//contactCollectOnMailAccess: "true"
       # Dynamic theme
       io.ox/dynamic-theme//mainColor: {{ .Values.theme.colors.primary | quote }}
-      io.ox/dynamic-theme//logoURL: "https://{{ .Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) }}/{{ .Values.objectstores.nubus.bucket }}/portal-assets/icons/logos/domain.svg"
+      io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
       io.ox/dynamic-theme//topbarBackground: {{ .Values.theme.colors.white | quote }}
       io.ox/dynamic-theme//topbarColor: {{ .Values.theme.colors.black | quote }}
       io.ox/dynamic-theme//listSelected: {{ .Values.theme.colors.primary15 | quote }}
