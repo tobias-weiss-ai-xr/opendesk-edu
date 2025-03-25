@@ -25,8 +25,8 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 
 - K8s cluster >= 1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
-- Ingress controller (Ingress NGINX) == [4.11.x/1.11.x](https://github.com/kubernetes/ingress-nginx/releases) - tested with 1.11.1 up to 1.11.4
-  - **Note**: We are working on support for more recent versions, as issues have been reported with 1.12.x.
+- Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - tested with 1.11.1 up to 1.11.5
+  - **Important Note**: We are working on support for more recent versions, but please ensure to use at least 1.11.5 due to ["security issues"](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
 - [Helm](https://helm.sh/) >= v3.9.0
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v1.0.0-rc8**
 - [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
