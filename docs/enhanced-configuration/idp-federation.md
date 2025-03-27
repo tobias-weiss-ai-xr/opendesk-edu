@@ -28,10 +28,10 @@ This document shows how to configure your organization's IdP and the openDesk Id
 
 We would like to list successful IdP federation scenarios, so we are also happy about input from the community:
 
-| External IdP                                                        | last openDesk version tested |
-| ------------------------------------------------------------------- | ---------------------------- |
-| [EU Login](https://webgate.ec.europa.eu/cas/userdata/myAccount.cgi) | v0.9.0                       |
-| [ProConnect](https://www.proconnect.gouv.fr/)                       | v0.9.0                       |
+| External IdP                                                        | openDesk versions tested |
+|---------------------------------------------------------------------|--------------------------|
+| [EU Login](https://webgate.ec.europa.eu/cas/userdata/myAccount.cgi) | v0.9.0, v1.2.0           |
+| [ProConnect](https://www.proconnect.gouv.fr/)                       | v0.9.0                   |
 
 # Prerequisites
 

@@ -18,6 +18,8 @@ SPDX-License-Identifier: Apache-2.0
   * [OpenProject](#openproject)
   * [PostgreSQL](#postgresql)
   * [Keycloak](#keycloak)
+    * [Setting the log level](#setting-the-log-level)
+    * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
 <!-- TOC -->
 
 # Disclaimer
@@ -198,6 +200,8 @@ While you will find all details in the [psql subsection](https://www.postgresql.
 
 ## Keycloak
 
+### Setting the log level
+
 Keycloak is the gateway to integrate other authentication management systems or applications. It can be desired to
 avoid enabling debug mode for the whole platform when you just need to look into Keycloak.
 
@@ -214,3 +218,9 @@ kubectl patch -n ${NAMESPACE} configmap ${CONFIGMAP_NAME} --type merge -p '{"dat
 
 > **Note**<br>
 > As the `ums-keycloak-extensions-handler` is performing frequent (one per second) requests to Keycloak for retrieval of the Keycloak event history, you might want to stop/remove the deployment while debugging/analysing Keycloak to not get your debug output spammed by these requests.
+
+### Accessing the Keycloak admin console
+
+Deployments set to `debug.enable: true` expose the Keycloak admin console at `http://id.<your_opendesk_domain>/admin/`. This can also be achieved by updating the Ingress `ums-keycloak-extensions-proxy` with an additional path that allows access to `/admin/`.
+
+The admin console login is using the default Keycloak admin account `kcadmin` and the password from the secret `ums-opendesk-keycloak-credentials`.

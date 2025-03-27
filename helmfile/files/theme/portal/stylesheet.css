@@ -136,7 +136,9 @@
 #kc-login,
 #kc-logout,
 #saveTOTPBtn,
-.pf-c-button.btn-lg {
+.pf-c-button.btn-lg,
+.kc-social-provider-name
+{
   color: var(--color-opendesk-white);
   border: 2px solid;
 }
