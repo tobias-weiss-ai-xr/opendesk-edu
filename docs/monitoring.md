@@ -14,7 +14,7 @@ well as the overall status of monitoring integration.
 * [Metrics](#metrics)
 * [Alerts](#alerts)
 * [Dashboards for Grafana](#dashboards-for-grafana)
-* [Components](#components)
+* [Component overview](#component-overview)
 <!-- TOC -->
 
 # Technology

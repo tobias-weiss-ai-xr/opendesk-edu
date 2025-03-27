@@ -7,6 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 
 This document addresses the available functional configuration options of an openDesk deployment.
 
+<!-- TOC -->
+* [Supported functional configuration](#supported-functional-configuration)
+* [Customization of functional options](#customization-of-functional-options)
+<!-- TOC -->
+
 ## Supported functional configuration
 
 While the openDesk applications allow a wide range of configuration options, only a small subset of them are supported by openDesk. This subset can be found in [`helmfile/environments/default/functional.yaml.gotmpl`](../helmfile/environments/default/functional.yaml.gotmpl)
@@ -27,4 +32,4 @@ The following categories are available. Each category contains a set of options 
 In case the options from [`functional.yaml.gotmpl`](../helmfile/environments/default/functional.yaml.gotmpl) are not sufficient, you might want to look into [`customization.yaml.gotmpl`](../helmfile/environments/default/customization.yaml.gotmpl). The customizations give you control over all templating that is being done in openDesk, but be aware it is an unsupported approach, so in case you have a strong need for customizations, please let us know by opening a ticket. We will check if it is a use case that can be supported by implementing it as part of the aforementioned [`functional.yaml.gotmpl`](../helmfile/environments/default/functional.yaml.gotmpl).
 
 > **Note<br>**
-> You can not directly template your own values in the structure found in [`customization.yaml.gotmpl`](../helmfile/environments/default/customization.yaml.gotmpl), rather, you need to reference your custom value files to overwrite the openDesk defaults. In the app specific `helmfile-child.yaml.gotmpl` files, the openDesk value files are referenced first, then afterwards, the files you define in the customizations are read. 
+> You can not directly template your own values in the structure found in [`customization.yaml.gotmpl`](../helmfile/environments/default/customization.yaml.gotmpl), rather, you need to reference your custom value files to overwrite the openDesk defaults. In the app specific `helmfile-child.yaml.gotmpl` files, the openDesk value files are referenced first, then afterwards, the files you define in the customizations are read.

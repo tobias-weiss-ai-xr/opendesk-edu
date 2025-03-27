@@ -21,8 +21,6 @@ This documentation lets you create an openDesk evaluation instance on your Kuber
     * [Container runtime](#container-runtime)
     * [Volumes](#volumes)
   * [Customize deployment](#customize-deployment)
-    * [Functional features](#functional-features)
-    * [Features through Customization](#features-through-customization)
   * [Connectivity](#connectivity)
     * [Ports](#ports)
       * [Web-based user interface](#web-based-user-interface)
