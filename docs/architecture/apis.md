@@ -7,6 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 This chapter presents APIs available in openDesk grouped by applications.
 
+<!-- TOC -->
 * [IAM - Nubus](#iam---nubus)
   * [UMC Python API](#umc-python-api)
   * [UMC store API](#umc-store-api)
@@ -43,7 +44,7 @@ This chapter presents APIs available in openDesk grouped by applications.
   * [BCF API](#bcf-api)
 * [Video Conferencing - Jitsi](#video-conferencing---jitsi)
   * [IFrame API](#iframe-api)
-  * [Lib-jitsi-meet API](#lib-jitsi-meet-api)
+  * [lib-jitsi-meet API](#lib-jitsi-meet-api)
   * [Jitsi Meet React SDK](#jitsi-meet-react-sdk)
 * [Chat - Element](#chat---element)
   * [Matrix Application Service API](#matrix-application-service-api)
@@ -60,6 +61,7 @@ This chapter presents APIs available in openDesk grouped by applications.
   * [Scripting API](#scripting-api)
   * [Java API](#java-api)
   * [JavaScript API](#javascript-api)
+<!-- TOC -->
 
 # IAM - Nubus
 

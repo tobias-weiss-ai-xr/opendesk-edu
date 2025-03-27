@@ -6,7 +6,6 @@ SPDX-License-Identifier: Apache-2.0
 <h1>Matrix federation</h1>
 
 <!-- TOC -->
-* [Context](#context)
 * [Example configuration](#example-configuration)
   * [Disable federation](#disable-federation)
   * [Separate Matrix domain](#separate-matrix-domain)
