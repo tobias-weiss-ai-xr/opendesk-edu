@@ -1,3 +1,12 @@
+## [1.2.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.2.0...v1.2.1) (2025-03-28)
+
+
+### Bug Fixes
+
+* **dovecot:** Support external secrets ([f758685](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f758685a2eb4c04bad6bce103cc5ba273c80606d))
+* **element:** Update Synapse to 1.127.1; Fixes https://www.cve.org/CVERecord?id=CVE-2025-30355 which applies to Synapse installations with unrestricted (no allow list) federation enabled ([5cd12b9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5cd12b91c78269b84749280e71aee0fcb195da17))
+* **openproject:** Update to 15.4.2 ([aa8e30b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/aa8e30b34f24302c756b2297b05e138d15ed0d2d))
+
 # [1.2.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.1.2...v1.2.0) (2025-03-25)
 
 
