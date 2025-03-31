@@ -25,6 +25,7 @@ controller:
 image:
   repository: "{{ coalesce .Values.repositories.image.registryOpencodeDeEnterprise .Values.global.imageRegistry .Values.images.collaboraController.registry }}/{{ .Values.images.collaboraController.repository }}"
   tag: {{ .Values.images.collaboraController.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
   - name: {{ . | quote }}
@@ -38,6 +39,10 @@ ingress:
       paths:
         - path: "/controller"
           pathType: "Prefix"
+  tls:
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
+      hosts:
+        - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
 podAnnotations: {}
 

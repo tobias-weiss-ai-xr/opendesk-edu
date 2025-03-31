@@ -29,7 +29,7 @@ include:
     rules:
       - if: >
             $JOB_OPENDESK_LINTER_ENABLED == 'false' ||
-            $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api|schedules'
+            $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'
         when: "never"
       - when: "always"
 
