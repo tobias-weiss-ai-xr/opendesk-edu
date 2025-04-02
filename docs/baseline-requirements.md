@@ -119,7 +119,7 @@ openDesk should be compliant with the "Deutsche Verwaltungscloud Strategie" (DVS
 
 ## IT-Grundschutz
 
-The IT-Grundschutz catalog knowns a lot of modules ("Bausteine"), but not all of them apply to all components, as there are some related to hardware or some just relevant for the operator while openDesk is "just" the software platform. The first step for an IT-Grundschutz evaluation of a component (or the platform as a whole) requires defining which modules are applicable. Other modules apply to all components e.g. [APP.4.4 Kubernetes](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/06_APP_Anwendungen/APP_4_4_Kubernetes_Edition_2023.pdf), [SYS.1.6 Containerisierung](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/07_SYS_IT_Systeme/SYS_1_6_Containerisierung_Edition_2023.pdf) and [CON 2 Datenschutz](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/03_CON_Konzepte_und_Vorgehensweisen/CON_2_Datenschutz_Edition_2023.pdf).
+The IT-Grundschutz catalog knowns a lot of modules ("Bausteine"), but not all of them apply to all components, as there are some related to hardware or some just relevant for the operator while openDesk is "just" the software platform. The first step for an IT-Grundschutz evaluation of a component (or the platform as a whole) requires defining which modules are applicable. Other modules apply to all components e.g. [APP.4.4 Kubernetes](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/06_APP_Anwendungen/APP_4_4_Kubernetes_Edition_2023.pdf), [SYS.1.6 Containerisierung](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/07_SYS_IT_Systeme/SYS_1_6_Containerisierung_Edition_2023.pdf) and [CON.2 Datenschutz](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/03_CON_Konzepte_und_Vorgehensweisen/CON_2_Datenschutz_Edition_2023.pdf).
 
 Within each module are multiple requirements ("Anforderungen") that are usually composed of multiple partial requirements ("Teilanforderungen"). Each requirement has a given category:
 - B for basic ("Basis") - the requirement must be fulfilled.
@@ -133,7 +133,7 @@ Different requirements address different roles in IT-Grundschutz.
 - Operator: processes & product (service)
 - Customer: processes.
 
-As a supplier of an openDesk component, you will focus on the "Supplier" requirements, while the outcome (your product) must enable the Provider to fulfill the requirements that lay with its responsibility for the openDesk platform. Operators use openDesk to provide a service, therefore the openDesk platform must enable an Operator to fulfill the related requirements. Finally, the service must enable the customer to align with the scope of the IT Grundschutz catalog. So it will happen that a requirement from e.g. the customer level needs a specific capability by the product (Supplier's responsibility), a defined core configuration from the platform (Provider's responsibility), or a certain service setup from the Operator.
+As a supplier of an openDesk component, you will focus on the "Supplier" requirements, while the outcome (your product) must enable the Provider to fulfill the requirements that lay with its responsibility for the openDesk platform. Operators use openDesk to provide a service, therefore the openDesk platform must enable an Operator to fulfill the related requirements. Finally, the service must enable the customer to align with the scope of the IT-Grundschutz catalog. So it will happen that a requirement from e.g. the customer level needs a specific capability by the product (Supplier's responsibility), a defined core configuration from the platform (Provider's responsibility), or a certain service setup from the Operator.
 
 We are aware that IT-Grundschutz is a complex topic and are working towards a streamlined process to reduce overhead as much as possible and ensure to maximize the use of synergies.
 
@@ -167,7 +167,7 @@ Each component must be able to operate according to the [EU's General Data Prote
 
 While this can be answered by each component that will be in the spotlight for the suppliers, we also need an aligned overall picture for openDesk that at least has the platform-specific user lifecycle and cross-application interfaces in focus.
 
-Note: The topics of availability, integrity, and confidentiality of personal data are also being addressed by the IT-Grundschutz module "CON 2". It has to be ensured that it is not in contradiction to what is being done in the general area of data protection.
+Note: The topics of availability, integrity, and confidentiality of personal data are also being addressed by the IT-Grundschutz module "CON.2". It has to be ensured that it is not in contradiction to what is being done in the general area of data protection.
 
 **Reference:** https://gitlab.opencode.de/bmi/opendesk/documentation/datenschutz
 
