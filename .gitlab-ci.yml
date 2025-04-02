@@ -168,16 +168,16 @@ variables:
     options:
       - "yes"
       - "no"
-  CREATE_DEFAULT_ACCOUNTS:
-    description: >
-      Creates `default` and `default-admin` in the instance using the password defined as CI variable
-      `DEFAULT_ACCOUNTS_PASSWORD`.
+  DEPLOY_NOTES:
+    description: "Enable Notes deployment."
     value: "no"
     options:
       - "yes"
       - "no"
-  DEPLOY_NOTES:
-    description: "Enable Notes deployment."
+  CREATE_DEFAULT_ACCOUNTS:
+    description: >
+      Creates `default` and `default-admin` in the instance using the password defined as CI variable
+      `DEFAULT_ACCOUNTS_PASSWORD`.
     value: "no"
     options:
       - "yes"
