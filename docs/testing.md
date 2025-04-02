@@ -9,14 +9,14 @@ SPDX-License-Identifier: Apache-2.0
 * [Overview](#overview)
 * [Test concept](#test-concept)
   * [Rely on upstream applications QA](#rely-on-upstream-applications-qa)
-  * [Run minimal functional QA (end-to-end tests)](#run-minimal-functional-qa-end-to-end-tests)
-  * [Run extensive load and performance tests](#run-extensive-load-and-performance-tests)
+  * [Functional QA (end-to-end tests)](#functional-qa-end-to-end-tests)
+    * [Nightly testing](#nightly-testing)
+    * [Reporting test results](#reporting-test-results)
+  * [Load- and performance testing](#load--and-performance-testing)
     * [Base performance testing](#base-performance-testing)
     * [Load testing to saturation point](#load-testing-to-saturation-point)
     * [Load testing up to a defined user count](#load-testing-up-to-a-defined-user-count)
     * [Overload/recovery tests](#overloadrecovery-tests)
-* [Reporting and test results](#reporting-and-test-results)
-  * [Allure TestOps](#allure-testops)
 <!-- TOC -->
 
 # Overview
@@ -42,24 +42,65 @@ We receive the release notes early before a new application release is integrate
 we are able to check for the existence of a sufficient set of test cases.
 The suppliers create a set of test cases for each new function.
 
-## Run minimal functional QA (end-to-end tests)
+## Functional QA (end-to-end tests)
 
-To ensure the function of all applications, we run a minimal set of testcases to check the
-basic functionality of openDesk along with the integrated applications.
+We develop and maintain a [set of end-to-end tests](https://gitlab.opencode.de/bmi/opendesk/deployment/e2e-tests) focussing on:
 
-Furthermore, we analyze all features and use cases which are implemented by a set of more than one
-application.
-Not all of these features are testable by the suppliers, so we develop testcases
-for such features.
+- use cases that are spanning more than a single application, e.g.
+  - the filepicker in OX App Suite for selecting files from Nextcloud or
+  - the central navigation that is part of the top bar of most applications.
+- openDesk specific configurations/supported settings that can be found in the `functional.yaml.gotmpl`, e.g.
+  - SSO federation or
+  - sharing settings for Nextcloud.
+- bugs identified in the past, e.g.
+  - creating a folder in OX or
+  - enforcement of an account's password renewal.
 
-The openDesk application owners prioritize this list of end-to-end-testcases, and we
-implement these testcases in the [test automation framework](https://gitlab.opencode.de/bmi/opendesk/deployment/e2e-tests).
+We execute the tests using English and German as language profile.
 
-## Run extensive load and performance tests
+The development team utilizes the test automation described above for QA'ing their feature branches.
+
+### Nightly testing
+
+We use the functional e2e-tests in nightly testruns on a matrix of deployments addressing different application profiles to ensure the quality of the development branch's current state.
+
+The following naming scheme is applied for the deployment matrix:
+
+- `<edition>-<type>-<profile>` resulting e.g. in  `ce-init-default` or `ee-upgr-extsrv`
+
+**`<edition>`**
+
+- `ce`: openDesk Community Edition
+- `ee`: openDesk Enterprise Edition
+
+**`<type>`**
+
+- `init`: Initial / fresh / from the scratch deployment of `develop` branch into an empty namespace.
+- `upgr`: Deploy latest migration release (needs to be pinned manually) into an empty namespace, afterwards run upgrade deployment with current state of `develop` branch.
+- `upd`: Deploy latest release (`main` branch) into an empty namespace, afterwards run upgrade deployment with current state of `develop` branch.
+
+**`<profile>`**: The following profiles are defined
+- `default`: With
+  - *`functional.yaml`*: No changes beside specific `2FA testing` group and enabled UDM REST API (required for user import).
+  - *Services*: Internal services deployed with openDesk are used.
+  - *Secrets*: Master password based secrets based on `secrets.yaml.gotmpl`
+  - *Certificates*: Letsencrypt-prod certificates are used.
+  - *Deployment*: GitLab CI based deployment.
+- `funct1`: Different configuration of `functional.yaml`, self-signed-certs [and when available external secrets].
+- `extsrv`: External services (where possible).
+- `gitops`: Argo CD based deployment.
+
+### Reporting test results
+
+All executions of the end-to-end tests are tracked in a central platform running [Allure TestOps](https://docs.qameta.io/allure-testops/).
+
+As the TestOps tool contains infrastructure details of our development and test clusters it is currently only accessible for to project members.
+
+## Load- and performance testing
 
 Our goal is to deliver openDesk as application-grade software with the ability to serve large user bases.
 
-We create and perform extensive load and performance tests for each release of openDesk.
+We create and perform [load- and performance tests](https://gitlab.opencode.de/bmi/opendesk/deployment/load-tests) for each release of openDesk.
 
 Our approach consists of different layers of load testing.
 
@@ -109,30 +150,4 @@ If necessary, we perform overload tests, which will saturate the system with mul
 test cases until no further increase in throughput is visible. Then we add even more load
 until the first HTTP requests run into timeouts or errors.
 After a few minutes, we reduce the load below the saturation point.
-Then we check if the system is able to recover from the overload status.
-
-# Reporting and test results
-
-We perform test runs every night, on all of our environments.
-
-For each environment, we define so-called profiles, these contain the features enabled
-per environment.
-
-For example: Testing the email features in an environment without deployment of Open-Xchange makes no sense at all.
-
-Also, we test the whole system via a browser with `language=DE` and another browser with `language=EN`.
-
-The test results are saved in an [Allure TestOps](https://qameta.io/) server, so interested persons
-are able to view the test results later in detail.
-
-## Allure TestOps
-
-The Allure TestOps [server](https://testops.opendesk.run/) is currently only accessible to project members.
-
-The relevant project is called *opendesk*.
-
-To get an overview, click in the left symbol list onto the symbol "Rocket" to
-check all relevant launches.
-
-Now you can see the launch #xxxx, and directly check for the success
-of this launch.
+Now we can check if the system is able to recover from the overload status.
