@@ -98,6 +98,18 @@ config:
     intraCluster:
       enabled: true
       internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
+  realmSettings:
+    accessTokenLifespan: {{ .Values.functional.authentication.realmSettings.accessTokenLifespan }}
+    revokeRefreshToken: {{ .Values.functional.authentication.realmSettings.revokeRefreshToken }}
+    ssoSessionIdleTimeout: {{ .Values.functional.authentication.realmSettings.ssoSessionIdleTimeout }}
+    ssoSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.ssoSessionMaxLifespan }}
+    offlineSessionIdleTimeout: {{ .Values.functional.authentication.realmSettings.offlineSessionIdleTimeout }}
+    offlineSessionMaxLifespanEnabled: {{ .Values.functional.authentication.realmSettings.offlineSessionMaxLifespanEnabled }}
+    offlineSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.offlineSessionMaxLifespan }}
+    clientSessionIdleTimeout: {{ .Values.functional.authentication.realmSettings.clientSessionIdleTimeout }}
+    clientSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.clientSessionMaxLifespan }}
+    clientOfflineSessionIdleTimeout: {{ .Values.functional.authentication.realmSettings.clientOfflineSessionIdleTimeout }}
+    clientOfflineSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.clientOfflineSessionMaxLifespan }}
   twoFactorSettings:
     additionalGroups: {{ .Values.functional.authentication.twoFactor.groups }}
   precreateGroups: [ 'Domain Admins', 'Domain Users', '2fa-users', 'IAM API - Full Access',

@@ -20,10 +20,26 @@ functional:
       groups:
         - "Domain Admins"
     oidc:
-      # Define additional/custom OIDC clients to be created in the 'opendesk' realm of Keycloak.
+      # Define additional/custom OIDC clients to be created in the 'opendesk' realm within Keycloak.
       clients: ~
-      # Define additional/custom OIDC client scopes to be created in the 'opendesk' realm of Keycloak.
+      # Define additional/custom OIDC client scopes to be created in the 'opendesk' realm within Keycloak.
       clientScopes: ~
+    # Configure global settings of the 'opendesk' realm within Keycloak. The values are directly
+    # passed into the `realmSettings` section of the `opendesk-keycloak-bootstrap` chart.
+    # Ref.: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap
+    # Note: Global settings can potentially be overridden on a client level.
+    realmSettings:
+      accessTokenLifespan: 300
+      revokeRefreshToken: false
+      ssoSessionIdleTimeout: 14400
+      ssoSessionMaxLifespan: 57600
+      offlineSessionIdleTimeout: 2592000
+      offlineSessionMaxLifespanEnabled: false
+      offlineSessionMaxLifespan: 5184000
+      clientSessionIdleTimeout: 0
+      clientSessionMaxLifespan: 0
+      clientOfflineSessionIdleTimeout: 0
+      clientOfflineSessionMaxLifespan: 0
 
   externalServices:
     nubus:
