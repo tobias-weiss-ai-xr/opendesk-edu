@@ -1,5 +1,5 @@
 {{/*
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 */}}
 ---
@@ -110,8 +110,13 @@ config:
     clientSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.clientSessionMaxLifespan }}
     clientOfflineSessionIdleTimeout: {{ .Values.functional.authentication.realmSettings.clientOfflineSessionIdleTimeout }}
     clientOfflineSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.clientOfflineSessionMaxLifespan }}
+  ssoFederation:
+    enabled: {{ .Values.functional.authentication.ssoFederation.enabled }}
+    enforceFederatedLogin: {{ .Values.functional.authentication.ssoFederation.enforceFederatedLogin }}
+    name: {{ .Values.functional.authentication.ssoFederation.name | quote }}
+    idpDetails: {{ .Values.functional.authentication.ssoFederation.idpDetails | toYaml | nindent 6 }}
   twoFactorSettings:
-    additionalGroups: {{ .Values.functional.authentication.twoFactor.groups }}
+    additionalGroups: {{ .Values.functional.authentication.twoFactor.groups | toYaml | nindent 6 }}
   precreateGroups: [ 'Domain Admins', 'Domain Users', '2fa-users', 'IAM API - Full Access',
                      {{ if .Values.apps.nextcloud.enabled }}'managed-by-attribute-Fileshare', 'managed-by-attribute-FileshareAdmin',{{ end }}
                      {{ if .Values.apps.xwiki.enabled }}'managed-by-attribute-Knowledgemanagement', 'managed-by-attribute-KnowledgemanagementAdmin',{{ end }}
@@ -120,7 +125,7 @@ config:
                      {{ if .Values.apps.jitsi.enabled }}'managed-by-attribute-Videoconference',{{ end }}
                      {{ if .Values.apps.oxAppSuite.enabled }}'managed-by-attribute-Groupware',{{ end }}
                      {{ if .Values.apps.notes.enabled }}'managed-by-attribute-Notes',{{ end }}
-                      ]
+                   ]
 
   opendesk:
     # We use client specific scopes as we bind them to Keycloak role membership which itself is linked

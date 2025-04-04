@@ -40,6 +40,27 @@ functional:
       clientSessionMaxLifespan: 0
       clientOfflineSessionIdleTimeout: 0
       clientOfflineSessionMaxLifespan: 0
+    # SSO federation allows an external OIDC IdP to authenticate users within openDesk
+    ssoFederation:
+      # Enabling SSO federation requires an upstream IdP specific configuration in `idpDetails` below.
+      enabled: false
+      # When enforcing the federated login all users are immediately redirected to the federated IdP when a login
+      # is requested or required.
+      enforceFederatedLogin: false
+      # Name of the SSO federation, if you do not enforce the login the name is shown as a login option the user can select
+      # within the openDesk login dialog.
+      name: "My upstream IdP"
+      # Configuration details for your upstream IdP, when you configured them manually in the Keycloak UI e.g. for
+      # testing the setup, you can get them from a Keycloak realm export in the `identityProviders` list.
+      # Notes:
+      # - You have to convert the configuration into YAML to apply it below.
+      # - You have to omit the following attributes as they are either defined explicitly above or implicitly by
+      #   the openDesk configuration
+      #  - `displayName`
+      #  - `alias`
+      #  - `firstBrokerLoginFlowAlias`
+      #  - `internalId`
+      idpDetails: {}
 
   externalServices:
     nubus:
