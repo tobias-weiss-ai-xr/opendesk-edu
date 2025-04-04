@@ -136,11 +136,13 @@
 #kc-login,
 #kc-logout,
 #saveTOTPBtn,
-.pf-c-button.btn-lg,
-.kc-social-provider-name
-{
-  color: var(--color-opendesk-white);
+.pf-c-button.btn-lg {
+  color: var(--color-opendesk-white) !important;
   border: 2px solid;
+}
+
+.kc-social-provider-name {
+  color: var(--color-opendesk-white) !important;
 }
 
 #kc-login:hover,

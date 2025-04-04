@@ -272,7 +272,8 @@ While openDesk configures the applications with meaningful defaults, you can che
 
 ### Ports
 
-**Note:** If you use `NodePort` for service exposure, you must check your deployment for the actual ports and ensure they are opened where necessary.
+> **Note**<br>
+> If you use `NodePort` for service exposure, you must check your deployment for the actual ports and ensure they are opened where necessary.
 
 #### Web-based user interface
 

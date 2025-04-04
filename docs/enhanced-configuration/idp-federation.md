@@ -82,8 +82,8 @@ The following values are used in this example documentation. Please ensure when 
 - `id.opendesk.tld`: hostname for the openDesk IdP, so openDesk is deployed at `opendesk.tld`.
 - `fed-test-idp-realm`: realm name for your organization's IdP.
 - `opendesk-federation-client`: OIDC client for the openDesk federation defined in your organization's IdP.
-- `auto-federate-idp`: Identifier of your organization IdP's configuration within the openDesk Keycloak.
-- `auto-federate-flow`: Identifier of the required additional login flow to be created and referenced in the openDesk Keycloak.
+- `sso-federation-idp`: Identifier of your organization IdP's configuration within the openDesk Keycloak.
+- `sso-federation-flow`: Identifier of the required additional login flow to be created and referenced in the openDesk Keycloak.
 
 ## Keycloak admin console access
 
@@ -125,7 +125,7 @@ If you just created the `fed-test-idp-realm`, you are already in the admin scree
       - `Standard flow`
       - `Direct access grants`
   - Client create wizard page 3:
-    - *Valid Redirect URLs*: `https://id.opendesk.tld/realms/opendesk/broker/auto-federate-idp/endpoint`
+    - *Valid Redirect URLs*: `https://id.opendesk.tld/realms/opendesk/broker/sso-federation-idp/endpoint`
   - When completed with *Save*, you get to the detailed client configuration that also needs some updates:
     - Tab *Settings* > Section *Logout settings*
       - *Front channel logout*: `Off`
@@ -135,17 +135,21 @@ If you just created the `fed-test-idp-realm`, you are already in the admin scree
 
 ## openDesk IdP
 
+> **Note**
+> While manual configuration is possible, an SSO federation can also be configured as part of the deployment.
+> Check `functional.authentication.ssoFederation` section from the `functional.yaml.gotmpl` for details.
+
 The following configuration is taking place in the Keycloak realm `opendesk`.
 
 - *Authentication* > *Create flow*
-  - *Name*: `auto-federate-flow`
+  - *Name*: `sso-federation-flow`
   - *Flow type*: `Basic flow`
   - *Create*
   - *Add execution*: Add `Detect existing broker user` and set it to `Required`
   - *Add step*: `Automatically set existing user` and set it to `Required`
 
 - *Identity providers* > *User-defined* > *OpenID Connect 1.0*
-  - *Alias*: `auto-federate-idp` (used in our example)
+  - *Alias*: `sso-federation-idp` (used in our example)
   - *Display Name*: A descriptive Name, in case you do not forcefully redirect the user to the IdP, that name is shown on the login screen for manual selection.
   - *Use discovery endpoint*: `On` (default)
   - *Discovery endpoint*: `https://idp.organization.tld/realms/fed-test-idp-realm/.well-known/openid-configuration` - this URL may look different if you do not use Keycloak or a different Keycloak version as IdP in your organization
@@ -155,11 +159,11 @@ The following configuration is taking place in the Keycloak realm `opendesk`.
   - *Client ID*: Use the client ID you took from your organization's IdP config (`opendesk-federation-client` in this example)
   - *Client Secret*: Use the secret you took from your organization's IdP config
   - When completed with *Add*, you get to the detailed IdP configuration which at least needs the following update:
-    - *First login flow override*: `auto-federate-flow`
+    - *First login flow override*: `sso-federation-flow`
     - Depending on your organizations IdP and process preferences, additional configuration may be required
 
 - In case you want to forcefully redirect all users to your organization's IdP (disabling login with local openDesk accounts):
   - *Authentication* > `2fa-browser`
     - Click on the cogwheel next to the *Identity Provider Re-director*
-      - *Alias*: `auto-federate-idp`
-      - *Default Identity Provider*: `auto-federate-idp`
+      - *Alias*: `sso-federation-idp`
+      - *Default Identity Provider*: `sso-federation-idp`
