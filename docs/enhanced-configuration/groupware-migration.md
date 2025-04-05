@@ -39,7 +39,7 @@ You will have to select an existing user account that will be used as a service 
 
 Please note that the account that shall serve as the service account requires a Microsoft 365/Exchange online license (mailbox).
 
-> **Notes**<br>
+> **Note**<br>
 > If you want to designate your admin account as a service account, you have to provide the admin with a license.
 
 ***2. Register the audriga app in your tenant***

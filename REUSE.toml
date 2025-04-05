@@ -24,6 +24,6 @@ SPDX-FileCopyrightText = "2024 Zentrum für Digitale Souveränität der Öffentl
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
-path = "helmfile/files/portal-tiles/*"
-SPDX-FileCopyrightText = "2024 Google LLC"
-SPDX-License-Identifier = "Apache-2.0"
+path = ".opencode/screenshots/*"
+SPDX-FileCopyrightText = "2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH"
+SPDX-License-Identifier = "CC-BY-SA-4.0"

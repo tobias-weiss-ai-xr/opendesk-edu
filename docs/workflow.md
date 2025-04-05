@@ -49,7 +49,7 @@ The following section should provide a high-level view of the involved parties i
   - Focus areas
     - Development of upstream products
     - Development of integrative functionality relevant to openDesk and others
-    - Providing source code and the artifacts required to install openDesk to Open CoDE
+    - Providing source code and the artifacts required to install openDesk to openCode
   - Hand over to _openDesk platform development_
     - Helm charts
     - Container images
@@ -383,7 +383,7 @@ We only allow verified commits; please read on about the options you have to mak
 
 [^1]: Migrations are in general not supported before openDesk hits [technical release](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases) v1.0.0
 
-[2]: These approval rules are not available in the Gitlab Free Tier, which is one of the main reasons why deployment automation is not developed on Open CoDE.
+[2]: These approval rules are not available in the GitLab Free Tier, which is one of the main reasons why deployment automation is not developed on openCode.
 
 [^3]: As long as migrations/upgrade paths are not provided - see also footnote #1 - this step is optional.
 
