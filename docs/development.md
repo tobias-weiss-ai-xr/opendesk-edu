@@ -57,13 +57,13 @@ Before you investigate any app-specific configuration, it is recommended that yo
 
 # Default branch, `develop` and other branches
 
-The `main` branch is configured to be the default branch, as visitors of the project on Open CoDE should see that
+The `main` branch is configured to be the default branch, as visitors of the project on openCode should see that
 branch by default.
 
 Please use the `develop` branch to diverge your branch(es) from. See the [workflow guide](./docs/workflow.md)
 for more details on naming conventions.
 
-There is a CI bot that automatically creates a merge request once you initially push your branch to Open CoDE.
+There is a CI bot that automatically creates a merge request once you initially push your branch to openCode.
 Of course, the merge request will target the `develop` branch, be in status `draft`, and you are set as the assignee.
 
 If you do not plan to merge from the branch you have pushed, please close the auto-created MR.
@@ -76,7 +76,7 @@ Besides the deployment automation itself, some tools work with the contents of t
 
 - **Linting**: Ensures consistency of the file contents for the other tools.
 - **Renovate**: Automatically create MRs that update the components to their latest version.
-- **Mirror**: Mirror artifacts to Open CoDE.
+- **Mirror**: Mirror artifacts to openCode.
 
 Please find details on these tools below.
 
@@ -134,8 +134,8 @@ Checks for newer versions of the given artifact and creates an MR containing the
 > **Note:**<br>
 > The mirror is scheduled to run every hour at 42 minutes past the hour.
 
-openDesk strives to make all relevant artifacts available on Open CoDE so there is a mirroring process
-configured to pull artifacts that do not originate from Open CoDE into projects called `*-Mirror` within the
+openDesk strives to make all relevant artifacts available on openCode so there is a mirroring process
+configured to pull artifacts that do not originate from openCode into projects called `*-Mirror` within the
 [openDesk Components section](https://gitlab.opencode.de/bmi/opendesk/components).
 
 The mirror script takes the information on what artifacts to mirror from the annotation inside the two yaml files:

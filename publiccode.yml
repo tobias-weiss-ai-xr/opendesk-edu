@@ -1,0 +1,102 @@
+# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+#
+# This repository adheres to the publiccode.yml standard by including this
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+---
+publiccodeYmlVersion: "0.4"
+applicationSuite: "openDesk"
+categories:
+  - "email-management"
+  - "contact-management"
+  - "document-management"
+  - "instant-messaging"
+  - "knowledge-management"
+  - "office"
+  - "project-management"
+  - "task-management"
+  - "time-management"
+  - "video-conferencing"
+name: "openDesk"
+platforms:
+  - "web"
+developmentStatus: "stable"
+softwareVersion: "1.2.1"
+releaseDate: "2025-03-21"
+softwareType: "standalone/web"
+url: "https://gitlab.opencode.de/bmi/opendesk/"
+logo: "openDesk-logo-rgb-color.svg"
+maintenance:
+  type: "contract"
+
+  contractors:
+    - name: "B1 Systems"
+      email: "info@b1-systems.de"
+      website: "https://www.b1-systems.de/"
+      until: "2026-08-31"
+
+  contacts:
+    - name: "René Fischer"
+      email: "opendesk@zendis.de"
+      affiliation: >-
+        Zentrum für Digitale Souveränität der Öffentlichen Verwaltung
+        (ZenDiS) GmbH
+
+legal:
+  license: "Apache-2.0"
+  mainCopyrightOwner: >-
+    2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung
+    (ZenDiS) GmbH
+intendedAudience:
+  countries:
+    - "de"
+  scope:
+    - "government"
+    - "local-authorities"
+localisation:
+  availableLanguages:
+    - "de"
+    - "en"
+  localisationReady: true
+roadmap: "https://opendesk.eu/produkt/"
+description:
+  de:
+    features:
+      - "Produktivität"
+      - "Kollaboration"
+      - "Kommunikation"
+    genericName: "Kollaboration & Kommunikation"
+    longDescription: >
+      openDesk ist die anpassungsfähige Office- und Kollaborations-Suite,
+      die speziell für Ihre Bedürfnisse in der Öffentlichen Verwaltung entwickelt wurde.
+
+
+      Mit Schwerpunkt auf Datensouveränität, Sicherheit und reibungslose Zusammenarbeit
+      bietet openDesk alle vertrauten Werkzeuge für den Verwaltungsalltag.
+      openDesk vereint alle essenziellen Büro-Anwendungen unter einer einzigen
+      benutzerfreundlichen Oberfläche.
+
+
+      openDesk ist die Weiterentwicklung des „Souveränen Arbeitsplatzes“,
+      einer Initiative des Bundesministeriums des Innern und für Heimat.
+      Durch openDesk erhält die Öffentliche Verwaltung mehr Kontrolle über
+      ihre digitalen Werkzeuge und kann flexibler auf sich ändernde Anforderungen reagieren.
+      Bund, Länder und Kommunen erhalten mit openDesk eine Office-Komplettlösung,
+      die betreiberunabhängig in jedem Browser und auf allen Endgeräten funktioniert.
+    shortDescription: >
+      Die anpassungsfähige Office- und Kollaborations-Suite für die Öffentliche Verwaltung.
+    screenshots:
+      - ".opencode/screenshots/01-portal-desktop.png"
+      - ".opencode/screenshots/02-dateien-desktop.png"
+      - ".opencode/screenshots/03-projekte-desktop.png"
+      - ".opencode/screenshots/04-wiki-desktop.png"
+    videos:
+      - ".opencode/screenshots/openDesk_Intro.mp4"
+    documentation: "https://docs.opendesk.eu/user"
+usedBy:
+  - "Robert Koch-Institut"
+  - "Bundesamt für Seeschifffahrt und Hydrographie"
+  - "Föderale IT-Kooperation (FITKO)"
+  - "ZenDiS"
+...

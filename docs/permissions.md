@@ -130,7 +130,7 @@ Users get roles assigned based on their responsibilities and the tasks they need
 
 openDesk defines [templates](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-nubus/-/blob/main/udm/udm-data-loader/65-usertemplate.yaml) for the *User* and *Administrator* roles. The templates can be used to create users with these roles by an *openDesk Administrator* using the [administration portal](https://docs.opendesk.eu/administration/).
 
-> **Notes**<br>
+> **Note**<br>
 > Additional/custom templates can be created using the UDM REST API.
 
 ### *openDesk User*

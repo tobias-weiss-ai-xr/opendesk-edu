@@ -135,7 +135,7 @@ apps:
 ## Private registries
 
 By default, Helm charts and container images are fetched from OCI registries. These registries can be found in most cases
-in the [openDesk/component section on Open CoDE](https://gitlab.opencode.de/bmi/opendesk/components).
+in the [openDesk/component section on openCode](https://gitlab.opencode.de/bmi/opendesk/components).
 
 For untouched upstream artifacts that do not belong to a functional component's core, we use upstream registries
 like Docker Hub.
