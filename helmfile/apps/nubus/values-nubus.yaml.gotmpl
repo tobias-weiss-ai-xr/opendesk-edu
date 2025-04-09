@@ -603,7 +603,7 @@ nubusPortalConsumer:
     {{ .Values.resources.umsPortalConsumer | toYaml | nindent 4 }}
   resourcesWaitForDependency:
     {{ .Values.resources.umsPortalConsumerDependencies | toYaml | nindent 4 }}
-  securityContext:
+  containerSecurityContext:
     seccompProfile:
       type: "RuntimeDefault"
     seLinuxOptions:
@@ -679,8 +679,8 @@ nubusPortalServer:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
   objectStorage:
     auth:
-      accessKey: {{ .Values.objectstores.nubus.username | quote }}
-      secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
     endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
     objectStorageCredentialSecret:
@@ -690,7 +690,8 @@ nubusPortalServer:
   portalServer:
     centralNavigation:
       enabled: true
-      authenticatorSecretName: "ums-opendesk-portal-server-central-navigation"
+      existingSecret:
+        name: "ums-opendesk-portal-server-central-navigation"
     featureToggles:
       notifications_api: false
   replicaCount: {{ .Values.replicas.umsPortalServer }}
@@ -1418,7 +1419,7 @@ nubusKeycloakBootstrap:
 extraSecrets:
   - name: "ums-opendesk-portal-server-central-navigation"
     stringData:
-      authenticator.secret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+      password: {{ .Values.secrets.centralnavigation.apiKey | quote }}
   - name: "ums-opendesk-guardian-client-secret"
     stringData:
       managementApiClientSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
