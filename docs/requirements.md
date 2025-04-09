@@ -27,6 +27,7 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 - Domain and DNS Service
 - Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - tested with 1.11.1 up to 1.11.5
   - **Important Note**: We are working on support for more recent versions, but please ensure to use at least 1.11.5 due to ["security issues"](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
+  - Ingress-NGINX introduced new security defaults in version 1.12.0, which are currently not compatible with openDesk. While we are working to adhere to these defaults, you can find additional information below on how to configure Ingress-NGINX >= 1.12.0 to be compatible with openDesk.
 - [Helm](https://helm.sh/) >= v3.9.0
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v1.0.0-rc8**
 - [HelmDiff](https://github.com/databus23/helm-diff) >= 3.6.0
@@ -61,6 +62,16 @@ configured ingress controller deployed.
 
 **Supported controllers:**
 - [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
+
+**Compatibility with Ingress NGINX >= 1.12.0**
+
+With the release 1.12.0 Ingress NGINX introduced new security default settings, which are incompatible with current openDesk releases. If you want to use Ingress-NGINX >= 1.12.0 the following settings have to be set
+- The annotation risk level has to be set to `critical`. See the [documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#annotations-risk-level) for details.
+- Strict path type validation has to be disabled. See the [documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#strict-validate-path-type) for details.
+
+> **Important Note**<br>
+> Ensure to install at least Ingress NGINX 1.12.1 due to ["security issues"](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in 1.12.0.
+
 
 > **Note**<br>
 > The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/). If you have feedback on that topic, please share it with us.
