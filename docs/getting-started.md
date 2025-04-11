@@ -230,6 +230,9 @@ ingress:
   ingressClassName: "name-of-my-nginx-ingress"
 ```
 
+Currently, the only supported ingress controller is `ingress-nginx` (see
+[requirements.md](./docs/requirements.md)) for reference).
+
 ### Container runtime
 
 Some apps require specific configurations for the container runtime. You can set your container runtime like `cri-o`,
@@ -263,7 +266,7 @@ cluster:
 
 ## Customize deployment
 
-While openDesk configures the applications with meaningful defaults, you can check [functional.md](functional.md) if you want to change these defaults to better match your use case.
+While openDesk configures the applications with meaningful defaults, you can check [functional.md](./docs/functional.md) if you want to change these defaults to better match your use case.
 
 ## Connectivity
 

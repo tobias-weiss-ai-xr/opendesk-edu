@@ -60,7 +60,7 @@ Before you investigate any app-specific configuration, it is recommended that yo
 The `main` branch is configured to be the default branch, as visitors of the project on Open CoDE should see that
 branch by default.
 
-Please use the `develop` branch to diverge your branch(es) from. See the [workflow guide](./workflow.md)
+Please use the `develop` branch to diverge your branch(es) from. See the [workflow guide](./docs/workflow.md)
 for more details on naming conventions.
 
 There is a CI bot that automatically creates a merge request once you initially push your branch to Open CoDE.
