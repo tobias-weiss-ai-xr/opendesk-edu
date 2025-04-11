@@ -121,7 +121,7 @@ classDiagram
 
 The focus of openDesk is to provide an integrated functional productivity platform based on the involved suppliers' functional components (products). These functional components usually rely on specific service components, e.g. database services for persistence. When running openDesk in production, the operator is responsible for providing these services in production-grade. For evaluation and development purposes, the openDesk deployment automation includes these services.
 
-Find the list of functional and service components in the [deployment automation's components.md](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/blob/main/docs/components.md).
+Find the list of functional and service components in the [archictecture documentation](./docs/architecture.md).
 
 ## Origins
 
@@ -146,7 +146,7 @@ openDesk uses Apache 2.0 as the license for their work. A typical reuse copyrigh
 # SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ```
-The way to mark the license header as a comment differs between the various file types. Please find matching examples for all types across the [deployment automation repository](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/deployment/sovereign-workplace).
+The way to mark the license header as a comment differs between the various file types. Please find matching examples for all types across the [deployment automation repository](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk).
 
 > **Note**<br>
 > If a `SPDX-FileCopyrightText` already exists with the copyright owner described above but with an past year (e.g. 2024), please update this copyright header line to cover (up to and including) the current year, e.g. `2024-2025`.
@@ -238,7 +238,7 @@ The Standard Quality Gate addresses quality assurance steps that should be execu
 1. Linting
    - Blocking
      - Licensing: [reuse](https://github.com/fsfe/reuse-tool)
-     - openDesk specific: Especially `images.yaml.gotmpl` and `charts.yaml.gotmpl`, find more details in [development.md](./development.md).
+     - openDesk specific: Especially `images.yaml.gotmpl` and `charts.yaml.gotmpl`, find more details in [development.md](./docs/development.md).
    - Non-Blocking
      - Security: [Kyverno policy check](../.kyverno) addressing some IT-Grundschutz requirements
      - Formal: Yaml
@@ -370,14 +370,14 @@ Commit messages must adhere to the [Conventional Commit standard](https://www.co
 Example: `fix(open-xchange): Bump to 8.26 to heal issue with functional mailbox provisioning.`
 
 > **Note**<br>
-> The commit messages are an essential part of the [technical releases](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases) as the release's notes are generated from the messages.
+> The commit messages are an essential part of the [technical releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases) as the release's notes are generated from the messages.
 
 #### Verified commits
 
 We only allow verified commits; please read on about the options you have to make your commits verified:
-- https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/
-- https://docs.gitlab.com/ee/user/project/repository/gpg_signed_commits/
-- https://docs.gitlab.com/ee/user/project/repository/x509_signed_commits/
+- https://docs.gitlab.com/user/project/repository/signed_commits/ssh/
+- https://docs.gitlab.com/user/project/repository/signed_commits/gpg/
+- https://docs.gitlab.com/user/project/repository/signed_commits/x509/
 
 # Footnotes
 

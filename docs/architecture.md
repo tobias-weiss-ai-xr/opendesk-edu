@@ -237,7 +237,7 @@ The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisio
 - (Managed) Resources
 - Users
 
-To find out more, see [Roles & Permissions](permissions.md).
+To find out more, see [Roles & Permissions](./docs/permissions.md).
 
 ## SCIM
 
@@ -381,7 +381,7 @@ The end user focussed components are called applications and provide the functio
 
 Other components are of type "Service", these are used for development and evaluation purposes only, they need to be replaced in production deployments.
 
-For the APIs / Protocols supported by the applications, please read the [apis.md](./architecture/apis.md).
+For the APIs / Protocols supported by the applications, please read the [apis.md](./docs/architecture/apis.md).
 
 ## Collabora (Office)
 

@@ -96,7 +96,7 @@ Find out more about the permission system in the[roles & permissions concept](./
 All technical releases are created using [Semantic Versioning](https://semver.org/lang/de/).
 
 Gitlab provides an
-[overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/releases)
+[overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases)
 of this project.
 
 Please find a list of the artifacts related to the release either in the source code archive attached to the release or
@@ -115,8 +115,8 @@ More information about different data storages used within openDesk are describe
 
 We love to get feedback from you!
 
-Related to the deployment / contents of this repository,
-please use the [issues within this project](https://gitlab.opencode.de/bmi/opendesk/deployment/sovereign-workplace/-/issues).
+For feedback related to the deployment / contents of this repository,
+please use the [issues within this project](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues).
 
 If you want to address other topics, please check the section
 ["Rückmeldungen und Beteiligung" in the OVERVIEW.md](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung) of the [openDesk Info Repository](https://gitlab.opencode.de/bmi/opendesk/info).
