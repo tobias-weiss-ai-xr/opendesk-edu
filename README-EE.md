@@ -123,7 +123,7 @@ When a repository path starts with `/zendis`, the artifact is only available in 
 - Collabora Online (COOL) container image: Is build from the same public source code as Collabora Development Edition (CODE), only the build configurations might differ. COOL includes a brand package that is not public and its license is not open source.
 - COOL Controller container image and Helm chart: Source code and chart are using Mozilla Public License Version 2.0, but the source code is not public. It is provided to customers upon request.
 
-openDesk updates Collabora once a COOL image based on the version pattern `<major>.<minor>.<patch>.3` is available, at the same time the CODE image will be updated to `<major>.<minor>.<patch>.2`.
+openDesk updates Collabora once a COOL image based on the version pattern `<major>.<minor>.<patch>.3+.<build>` was made available. This happens usually at the same time the CODE image with `<major>.<minor>.<patch>.2+.<build>` is made available.
 
 ### Element
 

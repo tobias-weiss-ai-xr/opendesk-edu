@@ -185,7 +185,8 @@ With a central Identity- and Access Management (IAM) also the user lifecycle (UL
 
 The focus is to have all the account information in all applications including the account's state, profile picture ([reference](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues/27)) and - where required - the user's group memberships. This cannot be done purely by pushing that data through OIDC claims when a user logs in to an application therefore two ways of managing an account are applicable and described in the following subchapters.
 
-Note: Allowing ad hoc updates of account data through OIDC claims during login is still encouraged.
+> **Note**<br>
+> Allowing ad hoc updates of account data through OIDC claims during login is still encouraged.
 
 ### Pull: LDAP
 
