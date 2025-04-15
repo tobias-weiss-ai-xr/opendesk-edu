@@ -80,7 +80,7 @@ ingress:
 podAnnotations: {}
 
 podSecurityContext:
-  fsGroup: 100
+  fsGroup: 1001
 
 prometheus:
   servicemonitor:
@@ -102,8 +102,8 @@ securityContext:
   privileged: false
   readOnlyRootFilesystem: false
   runAsNonRoot: true
-  runAsUser: 100
-  runAsGroup: 101
+  runAsUser: 1001
+  runAsGroup: 1001
   seccompProfile:
     type: "RuntimeDefault"
   capabilities:
