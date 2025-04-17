@@ -73,7 +73,7 @@ For your convenience, we recommend creating a `*.domain.tld` A-Record for your c
 
 ## Domain
 
-A list of all subdomains can be found in `helmfile/environments/default/global.gotmpl`.
+A list of all subdomains can be found in `helmfile/environments/default/global.yaml.gotmpl`.
 
 All subdomains can be customized. For example, _Nextcloud_ can be changed to `files.domain.tld` in `dev` environment:
 
@@ -99,7 +99,7 @@ export DOMAIN=domain.tld
 ### Apps
 
 Depending on your ideal openDesk deployment, you may wish to disable or enable certain apps.
-All available apps and their default values are located in `helmfile/environments/default/opendesk_main.gotmpl`.
+All available apps and their default values are located in `helmfile/environments/default/opendesk_main.yaml.gotmpl`.
 
 | Component            | Name                        | Default | Description                    |
 | -------------------- | --------------------------- | ------- | ------------------------------ |
