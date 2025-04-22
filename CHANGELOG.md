@@ -1,3 +1,25 @@
+# [1.3.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.2.1...v1.3.0) (2025-04-22)
+
+
+### Bug Fixes
+
+* **helmfile:** Fix Kyverno lint issues for EE components ([46b3834](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/46b38342d3cb6789e1734cd6eba412bc726c834b))
+* **helmfile:** Remove no longer used `secrets.nubus.defaultAccounts.*` ([6e6d155](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6e6d15552e87a77870755db3b48f2af686916c1f))
+* **helmfile:** Support for Keycloak session settings via `functional.authentication.realmSettings.*` ([3fcfa00](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3fcfa00503854f752a3885321b16b3f3597cb09a))
+* **migrations:** Optional delete of `ums-minio-rewrites` Ingress, as it is non-existing in deployments with external object storage ([6932953](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/693295391bb02892b537a48513c9e0c2824ed466))
+* **ox-connector:** Update to v0.19.0 ([fe664a7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fe664a7f8d696fea53b6abadec5a0cb5db751f43))
+* **xwiki:** Update Helm chart to v1.4.4 to fix the problem with XWiki not starting when secrets contained specific (XML interpreted) characters ([67a1df0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/67a1df0f80dc598287174a8dd6bda3f477227f0d))
+
+
+### Features
+
+* **collabora:** Update to 24.04.13 ([8f12208](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8f12208074b2947ec65ebc3c21920d4f775e0c6e))
+* **helmfile:** Add template support for annotations ([9cde57d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9cde57d74b8cfdd09e4f6b82cf45f1b1a686e035))
+* **helmfile:** Support for SSO federation; see `ssoFederation` section in `functional.yaml.gotmpl` for details ([79975a5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/79975a58e3a4f50e59d1d790045c22a32ab49372))
+* **nubus:** Show openDesk version to all users (instead of admin users only) ([393ee31](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/393ee311630630fd1aae8354ead90bcaaf5e4dba))
+* **nubus:** Update to 1.8.0 ([90c49f6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/90c49f6f83df0b34b86c17164eaa4e137d0cd9be))
+* **openproject:** Update to 15.5.0 ([7f1cfc5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7f1cfc55551f608603e0401dfef24bbb9cc334e5))
+
 ## [1.2.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.2.0...v1.2.1) (2025-03-28)
 
 

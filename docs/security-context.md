@@ -100,6 +100,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
 ```
 
+
 or
 
 ```yaml
@@ -111,7 +112,7 @@ containerSecurityContext:
 ## readOnlyRootFilesystem
 
 
-Containers should have immutable file systems, so that attackers can not modify application code or download malicious code.
+Containers should have an immutable file systems, so that attackers can not modify application code or download malicious code.
 
 ```yaml
 containerSecurityContext:
@@ -146,7 +147,7 @@ This list gives you an overview of templated security settings and if they compl
 
 | process | status | allowPrivilegeEscalation | privileged | readOnlyRootFilesystem | runAsNonRoot | runAsUser | runAsGroup | seccompProfile | capabilities |
 | ------- | ------ | ------------------------ | ---------- | ---------------------- | ------------ | --------- | ---------- | -------------- | ------------ |
-| **collabora**/collabora-online | :x: | yes | no | no | yes | 100 | 101 | yes | no ["CHOWN","FOWNER","SYS_CHROOT"] |
+| **collabora**/collabora-online | :x: | yes | no | no | yes | 1001 | 1001 | yes | no ["CHOWN","FOWNER","SYS_CHROOT"] |
 | **cryptpad**/cryptpad | :x: | no | no | no | yes | 4001 | 4001 | yes | yes |
 | **element**/matrix-neoboard-widget | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **element**/matrix-neochoice-widget | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
