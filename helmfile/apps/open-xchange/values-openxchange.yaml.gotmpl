@@ -628,8 +628,10 @@ appsuite:
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
       tag: {{ .Values.images.openxchangeDocumentConverter.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    {{- if .Values.annotations.openxchangeAppsuiteCoreDocumentconverter.pod }}
     podAnnotations:
       {{ .Values.annotations.openxchangeAppsuiteCoreDocumentconverter.pod | toYaml | nindent 6 }}
+    {{- end }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreDocumentConverter }}
     resources:
@@ -718,8 +720,10 @@ appsuite:
           endpoint: "."
           accessKey: "."
           secretKey: "."
+    {{- if .Values.annotations.openxchangeAppsuiteCoreImageconverter.pod }}
     podAnnotations:
       {{ .Values.annotations.openxchangeAppsuiteCoreImageconverter.pod | toYaml | nindent 6 }}
+    {{- end }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreImageConverter }}
     resources:
