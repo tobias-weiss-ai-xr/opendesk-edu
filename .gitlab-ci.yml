@@ -769,6 +769,17 @@ avscan-prepare:
         stage: "scan"
         image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/clamav-imagescan:1.0.0"
         before_script:
+          - "mkdir -p ~/.docker"
+          - |
+            cat << EOF > ~/.docker/config.json
+            {
+              "auths": {
+                "$CI_REGISTRY": {
+                  "auth": "$(printf %s:%s ${CI_REGISTRY_USER} ${CI_REGISTRY_PASSWORD} | base64 | tr -d '\n')"
+                }
+              }
+            }
+            EOF
           - "sed -i \"/^DatabaseMirror .*$/c DatabaseMirror ${DATABASE_MIRROR}\" /etc/clamav/freshclam.conf"
           - "freshclam"
           - "mkdir /scan"
