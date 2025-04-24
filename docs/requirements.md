@@ -1,4 +1,5 @@
 <!--
+SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -12,6 +13,8 @@ This section covers the internal system requirements and external service requir
 * [Hardware](#hardware)
 * [Kubernetes](#kubernetes)
 * [Ingress controller](#ingress-controller)
+  * [Supported controllers](#supported-controllers)
+  * [Minimal configuration](#minimal-configuration)
 * [Volume provisioner](#volume-provisioner)
 * [Certificate management](#certificate-management)
 * [External services](#external-services)
@@ -25,15 +28,13 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 
 - K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
-- Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - tested with v1.11.1 up to v1.11.5
-  - **Important Note**: We are working on support for more recent versions, but please ensure to use at least 1.11.5 due to ["security issues"](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
-  - Ingress-NGINX introduced new security defaults in version 1.12.0, which are currently not compatible with openDesk. While we are working to adhere to these defaults, you can find additional information below on how to configure Ingress-NGINX >= 1.12.0 to be compatible with openDesk.
+- Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases)
 - [Helm](https://helm.sh/) >= v3.9.0
-- [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= **v1.0.0-rc8**
+- [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0-rc8
 - [HelmDiff](https://github.com/databus23/helm-diff) >= v3.6.0
-- Volume provisioner supporting RWO (read-write-once)
+- Volume provisioner supporting RWO (read-write-once)[^1]
 - Certificate handling with [cert-manager](https://cert-manager.io/)
-- [OpenKruise](https://openkruise.io/)[^1] >= v1.6
+- [OpenKruise](https://openkruise.io/)[^2] >= v1.6
 
 # Hardware
 
@@ -60,21 +61,33 @@ The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/
 The deployment is intended to be used only over HTTPS via a configured FQDN, therefore it is required to have a properly
 configured ingress controller deployed in your cluster.
 
-**Supported controllers:**
+## Supported controllers
+
 - [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
+
+> **Note**<br>
+> The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/).
 
 **Compatibility with Ingress NGINX >= 1.12.0**
 
-With the release 1.12.0 Ingress NGINX introduced new security default settings, which are incompatible with current openDesk releases. If you want to use Ingress-NGINX >= 1.12.0 the following settings have to be set
-- The annotation risk level has to be set to `critical`. See the [documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#annotations-risk-level) for details.
-- Strict path type validation has to be disabled. See the [documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#strict-validate-path-type) for details.
+With the release 1.12.0 Ingress NGINX introduced new security default settings, which are incompatible with current openDesk releases. If you want to use Ingress-NGINX >= 1.12.0 the following settings have to be set:
+```
+controller.config.annotations-risk-level=Critical
+controller.config.strict-validate-path-type=false
+```
+See the [`annotations-risk-level` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#annotations-risk-level) and [`strict-validate-path-type` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#strict-validate-path-type) for details.
 
 > **Important Note**<br>
-> Ensure to install at least Ingress NGINX 1.12.1 due to ["security issues"](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in 1.12.0.
+> Ensure to install at least Ingress NGINX 1.11.5 or 1.12.1 due to [security issues](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
 
+## Minimal configuration
 
-> **Note**<br>
-> The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/). If you can provide input on that topic, please get in contact with us.
+Several components in openDesk make use of snippet annotations, which are disabled by default. Please enable them using the following configuration:
+```
+controller.allowSnippetAnnotations=true
+controller.admissionWebhooks.allowSnippetAnnotations=true
+```
+See the [`allowSnippetAnnotations` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#allow-snippet-annotations) for context.
 
 # Volume provisioner
 
@@ -122,4 +135,6 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 
 # Footnotes
 
-[^1]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
+[^1]: Due to [restrictions on Kubernetes `emptyDir`](https://github.com/kubernetes/kubernetes/pull/130277) you need a volume provisioner that has sticky bit support, otherwise the OpenProject seeder job will fail.
+
+[^2]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
