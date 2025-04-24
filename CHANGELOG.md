@@ -1,3 +1,14 @@
+## [1.3.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.3.0...v1.3.1) (2025-04-24)
+
+
+### Bug Fixes
+
+* **ci:** Update Helm to v3.17.3 ([9446faa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9446faaa597777e9fb15d33953e02fdbfef646b2))
+* **ci:** Update Helm to v3.17.3 ([d794a20](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d794a2036ed6543bf89a0b661cc8a4c8a383a5f0))
+* **docs:** Update "Ingress controller" section and add footnote on volume provisioner in `requirements.md` ([17efbd7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/17efbd79f177f635885735823696a6e50b919d3e))
+* **helmfile:** Conditional templating of additional annotations in selected components to unblock openDesk deployment despite a bug in Helm 3.17 (https://github.com/helm/helm/issues/30587) ([861b84b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/861b84b14de9fb42c483f3ddb9e083305750d137))
+* **postfix:** Disable unauthenticated relaying of mails in `postfix-ox` ([7414f05](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7414f05005e019f2121e8458fe63e795819fe92c))
+
 # [1.3.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.2.1...v1.3.0) (2025-04-22)
 
 
