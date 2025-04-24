@@ -232,8 +232,8 @@ variables:
   extends: ".environments"
   environment:
     name: "${NAMESPACE}"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:1.1.0\
-          @sha256:74f349066ac5d20e3afaa6abd28781b4c8dc086f67e3d3c1b8345e4a9c3371b1"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:1.3.0\
+          @sha256:0b9ad6375dca1370c491ccd3dc6acc058ee2ddf71ed4694c9348b978879cd9fd"
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
