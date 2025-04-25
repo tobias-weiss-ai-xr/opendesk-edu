@@ -75,6 +75,7 @@ configuration:
   collabora:
     # internalWopiUrl: ""
     wopiAllowlist: {{ join ", " ( concat .Values.cluster.networking.cidr .Values.cluster.networking.incomingCIDR ) | quote }}
+    defaultFormat: {{ .Values.functional.weboffice.defaultFormat | quote }}
 
   database:
     {{ if eq .Values.databases.nextcloud.type "mariadb" }}

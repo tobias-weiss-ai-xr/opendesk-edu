@@ -1472,6 +1472,15 @@ nubusStackDataUms:
     opendeskAdminAttributes: true
     opendeskGroupAttributes: true
     opendeskUserAttributes: true
+    {{- if eq .Values.functional.weboffice.defaultFormat "OOXML"}}
+    portalDirectDocsExtensionText: "docx"
+    portalDirectDocsExtensionSheet: "xlsx"
+    portalDirectDocsExtensionPresentation: "pptx"
+    {{- else }}
+    portalDirectDocsExtensionText: "odt"
+    portalDirectDocsExtensionSheet: "ods"
+    portalDirectDocsExtensionPresentation: "odp"
+    {{- end }}
     portalEnforceLogin: {{ .Values.functional.portal.enforceLogin }}
     portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
     portalTiles: {{ toYaml .Values.theme.imagery.portalTiles | nindent 6 }}
