@@ -84,7 +84,7 @@ To upgrade existing deployments, you cannot skip any version mentioned in the co
 
 | Mandatory version |
 | ----------------- |
-| v1.2+             |
+<!--| v1.2+             | add the entry to the table as soon as we get new migration requiring the set version (range) to be deployed first -->
 | v1.1.x            |
 | v1.0.0            |
 | v0.9.0            |

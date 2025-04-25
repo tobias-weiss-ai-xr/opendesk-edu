@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 functional:
+
   admin:
     portal:
       deploymentTimestamp:
@@ -62,6 +63,19 @@ functional:
       #  - `internalId`
       idpDetails: {}
 
+  chat:
+    matrix:
+      profile:
+        # Once connected with a user that user's Matrix ID is rarely checked by their communication partners, as the
+        # display name is used to see whom they are communicating with. Not allowing users to change their
+        # own display name reduces the risk of identity fraud.
+        # To get the display name updated from the central identity and access management you have to have the Synapse
+        # enterprise feature "groupsync" configured.
+        allowUsersToUpdateDisplayname: true
+
+        # If the LDAP entryUUID should be used for the localpart of user's Matrix IDs following setting must be `true`.
+        useImmutableIdentifierForLocalpart: false
+
   externalServices:
     nubus:
       udmRestApi:
@@ -73,6 +87,16 @@ functional:
         enabled: true
         # List of matrix homeserver domains you want to allow federation with
         domainAllowList: []
+
+  dataProtection:
+    matrixPresence:
+      # Enable to allow information about the user presence status to be shared.
+      # Ref.: https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#presence
+      enabled: false
+    jitsiRoomHistory:
+      # Disable to avoid the room history to be stored in the user's browser local storage.
+      # Ref.: https://github.com/jitsi/docker-jitsi-meet/issues/898
+      enabled: true
 
   filestore:
     quota:
@@ -120,15 +144,12 @@ functional:
         versions: "auto"
         # yamllint enable rule:line-length
 
-  dataProtection:
-    matrixPresence:
-      # Enable to allow information about the user presence status to be shared.
-      # Ref.: https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#presence
+  migration:
+    oxAppSuite:
+      # Note: Only available in openDesk Enterprise.
+      # Turn on temporary for migration purposes only. Will enable master password auth in OX AppSuite and Dovecot using
+      # `secrets.oxAppSuite.migrationsMasterPassword`.
       enabled: false
-    jitsiRoomHistory:
-      # Disable to avoid the room history to be stored in the user's browser local storage.
-      # Ref.: https://github.com/jitsi/docker-jitsi-meet/issues/898
-      enabled: true
 
   portal:
     # Configure if the a re-direct to the login dialogue is enforced, or if the portal is shown and the user as to actively
@@ -139,24 +160,10 @@ functional:
     # Link to the privacy statement shown in the portal menu, set to "~" if you want to remove the link
     linkPrivacyStatement: "https://zendis.de/datenschutzerklaerung"
 
-  chat:
-    matrix:
-      profile:
-        # Once connected with a user that user's Matrix ID is rarely checked by their communication partners, as the
-        # display name is used to see whom they are communicating with. Not allowing users to change their
-        # own display name reduces the risk of identity fraud.
-        # To get the display name updated from the central identity and access management you have to have the Synapse
-        # enterprise feature "groupsync" configured.
-        allowUsersToUpdateDisplayname: true
-
-        # If the LDAP entryUUID should be used for the localpart of user's Matrix IDs following setting must be `true`.
-        useImmutableIdentifierForLocalpart: false
-
-  migration:
-    oxAppSuite:
-      # Note: Only available in openDesk Enterprise.
-      # Turn on temporary for migration purposes only. Will enable master password auth in OX AppSuite and Dovecot using
-      # `secrets.oxAppSuite.migrationsMasterPassword`.
-      enabled: false
+  weboffice:
+    # Set the file format to be used by default when creating new documents from the portal or the Nextcloud app.
+    # You can choose between "ODF" and "OOXML".
+    # Ref.: https://en.wikipedia.org/wiki/Comparison_of_Office_Open_XML_and_OpenDocument
+    defaultFormat: "ODF"
 
 ...
