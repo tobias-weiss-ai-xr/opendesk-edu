@@ -182,7 +182,7 @@ global:
 
 Some apps, like Jitsi and Dovecot, require HTTP and external TCP connections.
 These apps create a Kubernetes service object.
-You can configure whether `NodePort` (for on-premise), `LoadBalancer` (for cloud), or `ClusterIP` (to disable) should be
+You can configure whether `NodePort` (for on-premises), `LoadBalancer` (for cloud), or `ClusterIP` (to disable) should be
 used:
 
 ```yaml

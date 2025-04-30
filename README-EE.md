@@ -25,7 +25,7 @@ openDesk Enterprise Edition is recommended for production use. It receives suppo
 
 This document refers to the openDesk Community Edition as "oD CE" and the openDesk Enterprise Edition as "oD EE".
 
-Please contact [ZenDiS](mailto:opendesk@zendis.de) to get openDesk Enterprise, either as a SaaS offering or for you on-premise installation.
+Please contact [ZenDiS](mailto:opendesk@zendis.de) to get openDesk Enterprise, either as a SaaS offering or for your on-premises installation.
 
 # Enabling the Enterprise deployment
 
