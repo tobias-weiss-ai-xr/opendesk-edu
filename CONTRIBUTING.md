@@ -9,7 +9,7 @@ Please read the [project's entire CONTRIBUTING.md](https://gitlab.opencode.de/bm
 
 # How to contribute?
 
-Please also read the [project's workflow documentation](./docs/workflow.md) for more details on standards like commit
+Please also read the [project's workflow documentation](./docs/developer/workflow.md) for more details on standards like commit
 messages and branching convention.
 
 ## Helm vs. Operators vs. Manifests

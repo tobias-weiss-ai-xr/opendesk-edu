@@ -104,7 +104,7 @@ in the files from the release's git-tag:
 - `./helmfile/environments/default/images.yaml.gotmpl`
 - `./helmfile/environments/default/charts.yaml.gotmpl`
 
-Find more information in our [Workflow documentation](./docs/workflow.md).
+Find more information in our [Workflow documentation](./docs/developer/workflow.md).
 
 # Data Storage
 
@@ -123,7 +123,7 @@ If you want to address other topics, please check the section
 
 # Development
 
-If you want to join or contribute to the development of openDesk please read the [Development guide](./docs/development.md).
+If you want to join or contribute to the development of openDesk please read the [Development guide](./docs/developer/development.md).
 
 # License
 

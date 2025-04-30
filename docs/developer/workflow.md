@@ -238,7 +238,7 @@ The Standard Quality Gate addresses quality assurance steps that should be execu
 1. Linting
    - Blocking
      - Licensing: [reuse](https://github.com/fsfe/reuse-tool)
-     - openDesk specific: Especially `images.yaml.gotmpl` and `charts.yaml.gotmpl`, find more details in [development.md](./docs/development.md).
+     - openDesk specific: Especially `images.yaml.gotmpl` and `charts.yaml.gotmpl`, find more details in [development.md](./docs/developer/development.md).
    - Non-Blocking
      - Security: [Kyverno policy check](../.kyverno) addressing some IT-Grundschutz requirements
      - Formal: Yaml
