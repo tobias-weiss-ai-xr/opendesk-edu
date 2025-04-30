@@ -115,7 +115,7 @@ deployments, you need to make use of your own production-grade services; see the
 |----------|---------------------|---------|-----------------------|
 | Cache    | Memcached           | `1.6.x` | Memcached             |
 |          | Redis               | `7.x.x` | Redis                 |
-| Database | Cassandra[^1]       | `5.0.x` | Cassandra             |
+| Database | Cassandra[^2]       | `5.0.x` | Cassandra             |
 |          | MariaDB             | `10.x`  | MariaDB               |
 |          | PostgreSQL          | `15.x`  | PostgreSQL            |
 | Mail     | Mail Transfer Agent |         | Postfix               |
