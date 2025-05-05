@@ -14,14 +14,14 @@ Consequently, we strongly recommend implementing monitoring and logging solution
 
 | Application  | Recommendation | Note(s) |
 | ------------ | -------------- | ------- |
-| Collabora    | * 15 active users per CPU thread <br/> * 10 active users per Mbit/s <br/> * 50 MB RAM per active user | - |
-| Element      | Per 10k users (with federation / no federation): <br/><br/> Homeserver: <br/> * 10 vCPU / 15 vCPU <br/> * 8150 MiB RAM / 11650  MiB RAM <br/><br/>Postgres: <br/> * 4 vCPU / 10 vCPU <br/> * 16 GiB RAM  / 32 GiB RAM | Required hardware resources really depend on federation vs. no federation |
-| Cryptpad     | No large-scale deployments seen, minimum requirements: <br/> * 2 vCPU <br/> * 2 GB RAM <br/> * 20 GB storage (depending on planned usage) | Most of the computation is done client-side |
-| Jitsi        | Jitsi-Meet server: <br/> * 4 vCPU <br/> * 8 GB RAM <br/> <br/> For every 200 concurrent users one JVB with: <br/> * 8 vCPU <br/> * 8 GB RAM <br/><br/> Network bandwidth: <br/> * 1 GBit/s - 10 GBit/s small deployments <br/> * 10 Gbit/s *per bridge* large deployments<br/> | JVB network bandwidth calculation depends on the stream resolution (HD vs. 4k). |
-| Nextcloud    | Up to 5,000 / more than 5,000 users: <br/> * 4 to 20 application servers with 8 cores and 32GB / 64GB RAM each <br/> * 2/4 DB servers with 8 / 16 cores and 64GB / 128GB RAM each (/ plus DB load balancer) <br/> * 1 / 2 HAproxy load balancer with 2 cores and 16GB RAM | - |
-| OpenProject  | * 4-6 vCPU per ~500 users <br/> * 6-8 GB per ~500 users <br/> * +20-50 GB storage per ~500 users, depending on workload and attachment storage[^1] <br/><br/> * Web Workers: +4 per ~500 users <br/> * Background Workers: +1-2 multithreaded workers per ~500 users, depending on workload | These values are guidelines and should be adjusted based on actual monitoring of resource usage. Scaling should prioritize CPU and RAM, prioritize scaling Web Workers first, followed by Background Workers and Disk Space as needed. |
-| Open-Xchange | For ~200 users (64 concurrent users to App Suite & 128 users to Dovecot): <br/> * 10 vCPU <br/> * 58 GB RAM <br/> * 660 GB storage | - |
-| XWiki        | Advise for small instances: <br> * 4 vCPU <br/> * 6GB RAM | - |
+| Collabora    | - 1 vCPU per 15 active users <br/> - 50 MB RAM per active user <br/> - 1 MBit/s per 10 active users | - |
+| Element      | Per 10k users with values for federation enabled / federation switched off:<br/><br/> Homeserver:<br/> - 15 / 10 vCPU<br/> - 12 / 8 GB RAM<br/><br/>Postgres:<br/> - 10 / 4 vCPU<br/> - 16 / 32 GB RAM | Required hardware resources are impacted by whether or not federation is being used |
+| Cryptpad     | No large-scale deployments seen, minimum requirements: <br/> - 2 vCPU <br/> - 2 GB RAM <br/> - 20 GB storage (depending on planned usage) | Most of the computation is done client-side |
+| Jitsi        | Jitsi-Meet server: <br/> - 4 vCPU <br/> - 8 GB RAM <br/> <br/> For every 200 concurrent users one JVB with: <br/> - 8 vCPU <br/> - 8 GB RAM <br/><br/> Network bandwidth: <br/> - 1 GBit/s - 10 GBit/s small deployments <br/> - 10 Gbit/s *per bridge* large deployments<br/> | JVB network bandwidth calculation depends on the stream resolution (HD vs. 4k). |
+| Nextcloud    | Up to 5k / more than 5k users: <br/> - 4 to 20 Nextcloud AIO Pods with 8 vCPUs and 32 / 64 GB RAM each <br/> - 2 / 4 DB servers with 8 / 16 vCPUs and 64 / 128 GB RAM each, plus DB load balancer | - |
+| OpenProject  | - 4-6 vCPU per ~500 users <br/> - 6-8 GB per ~500 users <br/> - +20-50 GB storage per ~500 users, depending on workload and attachment storage[^1] <br/><br/> - Web Workers: +4 per ~500 users <br/> - Background Workers: +1-2 multithreaded workers per ~500 users, depending on workload | These values are guidelines and should be adjusted based on actual monitoring of resource usage. Scaling should prioritize CPU and RAM, prioritize scaling Web Workers first, followed by Background Workers and Disk Space as needed. |
+| Open-Xchange | For ~200 users (64 concurrent users to App Suite & 128 users to Dovecot): <br/> - 10 vCPU <br/> - 58 GB RAM <br/> - 660 GB storage | - |
+| XWiki        | Advise for small instances: <br> - 4 vCPU <br/> - 6 GB RAM | - |
 
 [^1]: Nextcloud is configured for attachment storage as well.
 
