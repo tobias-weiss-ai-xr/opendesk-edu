@@ -628,7 +628,7 @@ nubusPortalFrontend:
       css: {{ .Values.theme.styles.portal.main | toJson }}
       # Requires .ico, .svg does not work.
       favicon: {{ .Values.theme.imagery.portal.faviconIco | toJson }}
-      # The actual `logo` is set in customizing image, the logo down here is for for waiting spinner.
+      # The actual `logo` is set in customizing image, the logo down here is for waiting spinner.
       logo: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | toJson }}
       backgroundImage: {{ .Values.theme.imagery.portal.backgroundSvg | toJson }}
   service:

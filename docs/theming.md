@@ -18,13 +18,8 @@ All default settings can be found in [`theme.yaml.gotmpl`](../helmfile/environme
 
 Please review the default configuration that is applied to understand your customization options.
 
-You can just update the files in:
-- [helmfile/files/theme](../helmfile/files/theme): To change logos, favicons etc.
-- [helmfile/files/portal-tiles](../helmfile/files/portal-tiles): To change the icons in the portal.
+You can just update the files in [helmfile/files/theme](../helmfile/files/theme) to change logos, favicons etc. Note that the `.svg` versions of the favicons are also used for the portal tiles.
 
 # Known limitations
 
-Not all applications support theming. Known exceptions are:
-- OpenProject, comes with a build in openDesk theming that can be modified in the Enterprise version's OpenProject web interface.
-- The portal background logo can (currently) only be set on initial deployment.
-- Portal and Keycloak screen styles must be applied in the [`portalStylesheets.css`](../helmfile/files/theme/portalStylesheet.css).
+- Portal and Keycloak screen styles, especially colors, must be applied in the [`portalStylesheets.css`](../helmfile/files/theme/portalStylesheet.css),
