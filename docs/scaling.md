@@ -15,7 +15,7 @@ Consequently, we strongly recommend implementing monitoring and logging solution
 | Application  | Recommendation | Note(s) |
 | ------------ | -------------- | ------- |
 | Collabora    | - 1 vCPU per 15 active users <br/> - 50 MB RAM per active user <br/> - 1 MBit/s per 10 active users | - |
-| Element      | Per 10k users with values for federation enabled / federation switched off:<br/><br/> Homeserver:<br/> - 15 / 10 vCPU<br/> - 12 / 8 GB RAM<br/><br/>Postgres:<br/> - 10 / 4 vCPU<br/> - 16 / 32 GB RAM | Required hardware resources are impacted by whether or not federation is being used |
+| Element      | Per 10k users with values for federation activated / federation deactivated:<br/><br/> Homeserver:<br/> - 15 / 10 vCPU<br/> - 12 / 8 GB RAM<br/><br/>Postgres:<br/> - 10 / 4 vCPU<br/> - 32 / 16 GB RAM | Required hardware resources are impacted by whether or not federation is being used |
 | Cryptpad     | No large-scale deployments seen, minimum requirements: <br/> - 2 vCPU <br/> - 2 GB RAM <br/> - 20 GB storage (depending on planned usage) | Most of the computation is done client-side |
 | Jitsi        | Jitsi-Meet server: <br/> - 4 vCPU <br/> - 8 GB RAM <br/> <br/> For every 200 concurrent users one JVB with: <br/> - 8 vCPU <br/> - 8 GB RAM <br/><br/> Network bandwidth: <br/> - 1 GBit/s - 10 GBit/s small deployments <br/> - 10 Gbit/s *per bridge* large deployments<br/> | JVB network bandwidth calculation depends on the stream resolution (HD vs. 4k). |
 | Nextcloud    | Up to 5k / more than 5k users: <br/> - 4 to 20 Nextcloud AIO Pods with 8 vCPUs and 32 / 64 GB RAM each <br/> - 2 / 4 DB servers with 8 / 16 vCPUs and 64 / 128 GB RAM each, plus DB load balancer | - |
