@@ -277,14 +277,16 @@ appsuite:
     packages:
       status:
         {{- if .Values.functional.migration.oxAppSuite.enabled }}
-        open-xchange-authentication-masterpassword: "enabled"
-        open-xchange-authentication-ldap: "disabled"
-        open-xchange-authentication-oauth: "disabled"
         open-xchange-oidc: "disabled"
+        open-xchange-authentication-oauth: "disabled"
+        open-xchange-authentication-masterpassword: "enabled"
+        open-xchange-authentication-database: "disabled"
+        open-xchange-authentication-ldap: "disabled"
         {{- else }}
         open-xchange-oidc: "enabled"
-        open-xchange-authentication-database: "disabled"
         open-xchange-authentication-oauth: "enabled"
+        open-xchange-authentication-masterpassword: "disabled"
+        open-xchange-authentication-database: "disabled"
         open-xchange-authentication-ldap: "disabled"
         {{- end }}
         # OX Documents (office-web) is not used in openDesk
@@ -428,8 +430,10 @@ appsuite:
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
       com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
     propertiesFiles:
+      {{- if .Values.functional.migration.oxAppSuite.enabled }}
       /opt/open-xchange/etc/masterpassword-authentication.properties:
         com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+      {{- end }}
       /opt/open-xchange/etc/AdminDaemon.properties:
         MASTER_ACCOUNT_OVERRIDE: "true"
       /opt/open-xchange/etc/AdminUser.properties:
