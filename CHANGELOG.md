@@ -1,3 +1,11 @@
+## [1.3.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.3.1...v1.3.2) (2025-05-06)
+
+
+### Bug Fixes
+
+* **dovecot:** Update Helm chart to fix migration mode ([7ba84b9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7ba84b99caf61e5a4a35b71d875e9ede0f71423e))
+* **helmfile:** Explicitly template auth-modules in OX App Suite; Streamline name of OX App Suite EE image ([6cbb6b6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6cbb6b6922864467ca365bcc9b1cfa49182df050))
+
 ## [1.3.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.3.0...v1.3.1) (2025-04-24)
 
 
