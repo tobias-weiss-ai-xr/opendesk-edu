@@ -17,6 +17,8 @@ SPDX-License-Identifier: Apache-2.0
     * [Add multiple user accounts via CSV file](#add-multiple-user-accounts-via-csv-file)
   * [Start the migration](#start-the-migration)
   * [Monitor migration status](#monitor-migration-status)
+* [Appendix](#appendix)
+  * [Validating master authentication](#validating-master-authentication)
 <!-- TOC -->
 
 Most organizations already have email accounts on various platforms that need to be migrated to openDesk. This document describes the migration from M365 accounts to openDesk using the [audriga Migration Service](https://www.audriga.com) in combination with the master authentication option in openDesk. Other source platforms are also supported, and their migrations work in a similar manner.
@@ -70,7 +72,7 @@ In openDesk, you have to have all user accounts with mailboxes pre-defined befor
 
 ## Deploy openDesk with master authentication
 
-With openDesk 1.0 Enterprise, you can set openDesk's email components (OX AppSuite and OX Dovecot) to master authentication mode to run the migration as described in this document using the following two settings for your deployment:
+With openDesk 1.0 Enterprise, you can set openDesk's email components (OX AppSuite and OX Dovecot) to master authentication mode to run the migration as described in this document using the following two settings for your deployment. This is NOT available in openDesk Community deployments:
 
 ```
 secrets:
@@ -85,10 +87,12 @@ functional:
 1. You must specify a master password, it will be referenced later in this document.
 2. You need to enable the actual master authentication mode.
 
+To validate the master authentication mode please read the appendix section at the end of the document.
+
 Updating your deployment with these settings will allow you to continue with the migration scenario. Once the migration is completed, you can remove `secrets.oxAppSuite.adminPassword` and need to turn off the migration mode by setting `functional.migration.oxAppSuite.enabled` to `false` or removing that setting, as `false` is the default before you update your deployment once again.
 
 > **Note**<br>
-> For the changes to take effect, it is sufficient to re-deploy the `open-xchange` component alone.
+> For the changes to take effect, it is sufficient to re-deploy the `open-xchange` component alone. But you have to restart the Dovecot Pod(s) manually when switching to/from the master authentication mode for the changes to take effect.
 
 > **Note**<br>
 > While in master authentication mode, regular users cannot log in to the webmail module of openDesk or access the mail using IMAP, as it is not recommended that users interact with the target mail infrastructure during the migration scenario described in this document.
@@ -182,3 +186,39 @@ Click on "Details" to get further information about the migration.
 You can access a detailed log for each account by clicking "Protocol" on the right-hand side. Here, you can see detected duplicates or encountered errors (e.g., if emails cannot be transferred due to your provider's size limitations).
 
 You will receive status emails for the migration job's submission and start, as well as when the migration job is finished. The emails are sent to the email address you have entered during the configuration. Those emails include a link to the status website so you can easily track and monitor your migration. Once the migration has been started, you can safely close the status website and shut down your computer; the migration will continue. You can re-open the status website anytime.
+
+# Appendix
+
+## Validating master authentication
+
+Below are details in case you want to verify master authentication for Dovecot and OX AppSuite.
+
+Set a few variables first:
+
+```shell
+export MIG_DOMAIN=your-opendesk-domain.tld
+export MIG_WEBMAIL_HOST=webmail
+export MIG_USERNAME=eva
+export MIG_MASTER_PASSWORD=YourMasterPassword
+export MIG_IMAP_PORT=31123
+```
+
+Ensure that you have defined a (your) default context for the migration where the account (in this example `eva`) can be found. The following should be executed in OX App Suite's `open-xchange-core-mw-default-0` container, in the example we set the default context to `1`:
+
+```shell
+/opt/open-xchange/sbin/changecontext -c 1 -L defaultcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+```
+
+With the preparation from above you should be able to successfully authenticate to both components:
+
+**OX App Suite**
+
+```shell
+curl -X POST -d "name=${MIG_USERNAME}&password=${MIG_MASTER_PASSWORD}" "https://${MIG_WEBMAIL_HOST}.${MIG_DOMAIN}/appsuite/api/login?action=login"
+```
+
+**Dovecot**
+
+```shell
+echo "a001 LOGIN ${MIG_USERNAME} ${MIG_MASTER_PASSWORD}" | openssl s_client -ign_eof -connect ${MIG_DOMAIN}:${MIG_IMAP_PORT}
+```
