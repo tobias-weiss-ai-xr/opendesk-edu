@@ -818,21 +818,7 @@ nubusPortalConsumer:
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
       imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  {{- if .Values.certificate.selfSigned }}
-  extraVolumes:
-    - name: "trusted-cert-secret-volume"
-      secret:
-        secretName: "opendesk-certificates-ca-tls"
-        items:
-          - key: "ca.crt"
-            path: "ca-certificates.crt"
-          - key: "ca.crt"
-            path: "cacert.pem"
-  extraVolumeMounts:
-    - name: "trusted-cert-secret-volume"
-      mountPath: "/etc/ssl/certs/ca-certificates.crt"
-      subPath: "ca-certificates.crt"
-  waitForDependency:
+    {{- if .Values.certificate.selfSigned }}
     extraVolumeMounts:
       - name: "trusted-cert-secret-volume"
         readOnly: true
@@ -849,6 +835,21 @@ nubusPortalConsumer:
         value: "/etc/ssl/certs/ca-certificates.crt"
       - name: "SSL_CERT_FILE"
         value: "/etc/ssl/certs/ca-certificates.crt"
+    {{- end }}
+  {{- if .Values.certificate.selfSigned }}
+  extraVolumes:
+    - name: "trusted-cert-secret-volume"
+      secret:
+        secretName: "opendesk-certificates-ca-tls"
+        items:
+          - key: "ca.crt"
+            path: "ca-certificates.crt"
+          - key: "ca.crt"
+            path: "cacert.pem"
+  extraVolumeMounts:
+    - name: "trusted-cert-secret-volume"
+      mountPath: "/etc/ssl/certs/ca-certificates.crt"
+      subPath: "ca-certificates.crt"
   {{- end }}
 
 nubusPortalServer:
