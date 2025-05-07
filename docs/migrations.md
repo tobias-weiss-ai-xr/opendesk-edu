@@ -9,19 +9,22 @@ SPDX-License-Identifier: Apache-2.0
 * [Disclaimer](#disclaimer)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
-  * [From v1.1.2](#from-v112)
-    * [Pre-upgrade from v1.1.2](#pre-upgrade-from-v112)
+  * [v1.4.0+](#v140)
+    * [Pre-upgrade to v1.4.0+](#pre-upgrade-to-v140)
+      * [Helmfile cleanup: `global.additionalMailDomains` as list](#helmfile-cleanup-globaladditionalmaildomains-as-list)
+  * [v1.2.0+](#v120)
+    * [Pre-upgrade to v1.2.0+](#pre-upgrade-to-v120)
       * [Helmfile cleanup: Do not configure OX provisioning when no OX installed](#helmfile-cleanup-do-not-configure-ox-provisioning-when-no-ox-installed)
       * [Helmfile new default: PostgreSQL for XWiki and Nextcloud](#helmfile-new-default-postgresql-for-xwiki-and-nextcloud)
-  * [From v1.1.1](#from-v111)
-    * [Pre-upgrade from v1.1.1](#pre-upgrade-from-v111)
+  * [v1.1.2+](#v112)
+    * [Pre-upgrade to v1.1.2+](#pre-upgrade-to-v112)
       * [Helmfile feature update: App settings wrapped in `apps.` element](#helmfile-feature-update-app-settings-wrapped-in-apps-element)
-  * [From v1.1.0](#from-v110)
-    * [Pre-upgrade from v1.1.0](#pre-upgrade-from-v110)
+  * [v1.1.1+](#v111)
+    * [Pre-upgrade to v1.1.1](#pre-upgrade-to-v111)
       * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
       * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
-  * [From v1.0.0](#from-v100)
-    * [Pre-upgrade from v1.0.0](#pre-upgrade-from-v100)
+  * [v1.1.0+](#v110)
+    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110)
       * [Helmfile cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
       * [Helmfile cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
       * [Helmfile cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
@@ -31,10 +34,10 @@ SPDX-License-Identifier: Apache-2.0
       * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
       * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
       * [External requirements: Redis 7.4](#external-requirements-redis-74)
-    * [Post-upgrade from v1.0.0](#post-upgrade-from-v100)
+    * [Post-upgrade to v1.1.0+](#post-upgrade-to-v110)
       * [XWiki fix-ups](#xwiki-fix-ups)
-  * [From v0.9.0](#from-v090)
-    * [Pre-upgrade from v0.9.0](#pre-upgrade-from-v090)
+  * [v1.1.0](#v110-1)
+    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110-1)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
       * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
       * [Changed openDesk defaults: Matrix presence status disabled](#changed-opendesk-defaults-matrix-presence-status-disabled)
@@ -42,20 +45,20 @@ SPDX-License-Identifier: Apache-2.0
       * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
       * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
       * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
-    * [Post-upgrade from v0.9.0](#post-upgrade-from-v090)
+    * [Post-upgrade to v1.0.0+](#post-upgrade-to-v100)
       * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
       * [Optional Cleanup](#optional-cleanup)
-  * [From v0.8.1](#from-v081)
-    * [Pre-upgrade from v0.8.1](#pre-upgrade-from-v081)
+  * [v0.9.0](#v090)
+    * [Pre-upgrade to v0.9.0](#pre-upgrade-to-v090)
       * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
       * [Updated customizable template attributes](#updated-customizable-template-attributes)
       * [`migrations` S3 bucket](#migrations-s3-bucket)
 * [Automated migrations - Details](#automated-migrations---details)
-  * [From v1.1.2 (automated)](#from-v112-automated)
+  * [v1.2.0+ (automated)](#v120-automated)
     * [migrations-pre](#migrations-pre)
     * [migrations-post](#migrations-post)
-  * [From v1.0.0 (automated)](#from-v100-automated)
-  * [From v0.9.0 (automated)](#from-v090-automated)
+  * [v1.1.0+ (automated)](#v110-automated)
+  * [v1.0.0+ (automated)](#v100-automated)
   * [Related components and artifacts](#related-components-and-artifacts)
   * [Development](#development)
 <!-- TOC -->
@@ -97,11 +100,35 @@ If you would like more details about the automated migrations, please read secti
 
 # Manual checks/actions
 
-Be sure you check all the sections for the releases you are going to update your current deployment from.
+## v1.4.0+
 
-## From v1.1.2
+### Pre-upgrade to v1.4.0+
 
-### Pre-upgrade from v1.1.2
+#### Helmfile cleanup: `global.additionalMailDomains` as list
+
+**Target group:** Installations that have set `global.additionalMailDomains`.
+
+The `additionalMailDomains` had to be defined as a comma separated string. That now needs to change into a list of domains.
+
+For example the following config:
+
+```yaml
+global:
+  additionalMailDomains: "sub1.maildomain.de,sub2.maildomain.de"
+```
+
+Needs to change to:
+
+```yaml
+global:
+  additionalMailDomains:
+    - "sub1.maildomain.de"
+    - "sub2.maildomain.de"
+```
+
+## v1.2.0+
+
+### Pre-upgrade to v1.2.0+
 
 #### Helmfile cleanup: Do not configure OX provisioning when no OX installed
 
@@ -111,7 +138,7 @@ With openDesk 1.2.0 the OX provisioning consumer will not be registered when the
 
 We do not remove the consumer for existing installations, if you want to do that for your existing installation please perform the following steps:
 
-```
+```shell
 export NAMESPACE=<your_namespace>
 kubectl -n ${NAMESPACE} exec -it ums-provisioning-nats-0 -c nats-box -- sh -c 'nats consumer rm stream:ox-connector durable_name:ox-connector --user=admin --password=${NATS_PASSWORD} --force'
 kubectl -n ${NAMESPACE} exec -it ums-provisioning-nats-0 -c nats-box -- sh -c 'nats stream rm stream:ox-connector --user=admin --password=${NATS_PASSWORD} --force'
@@ -162,9 +189,9 @@ In case you are planning to migrate an existing instance from MariaDB to Postgre
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport
 
-## From v1.1.1
+## v1.1.2+
 
-### Pre-upgrade from v1.1.1
+### Pre-upgrade to v1.1.2+
 
 #### Helmfile feature update: App settings wrapped in `apps.` element
 
@@ -176,7 +203,7 @@ If you have a deployment where you specify settings found in the aforementioned 
 
 The following configuration:
 
-```
+```yaml
 certificates:
   enabled: false
 notes:
@@ -185,7 +212,7 @@ notes:
 
 Needs to be changed to:
 
-```
+```yaml
 apps:
   certificates:
     enabled: false
@@ -193,9 +220,9 @@ apps:
     enabled: true
 ```
 
-## From v1.1.0
+## v1.1.1+
 
-### Pre-upgrade from v1.1.0
+### Pre-upgrade to v1.1.1
 
 #### Helmfile feature update: Component specific `storageClassName`
 
@@ -248,9 +275,9 @@ persistence:
 
 A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
 
-## From v1.0.0
+## v1.1.0+
 
-### Pre-upgrade from v1.0.0
+### Pre-upgrade to v1.1.0
 
 #### Helmfile cleanup: Restructured `/helmfile/files/theme` folder
 
@@ -413,7 +440,7 @@ The update from openDesk v1.0.0 contains Redis 7.4.1, like the other openDesk bu
 
 Please ensure the Redis you are using is updated to at least version 7.4 to support the requirement of OX App Suite.
 
-### Post-upgrade from v1.0.0
+### Post-upgrade to v1.1.0+
 
 #### XWiki fix-ups
 
@@ -439,9 +466,9 @@ Unfortunately XWiki does not upgrade itself as expected. The bug has been report
 
 You should have now a fully functional XWiki instance with single sign-on and full-text search.
 
-## From v0.9.0
+## v1.1.0
 
-### Pre-upgrade from v0.9.0
+### Pre-upgrade to v1.1.0
 
 #### Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus
 
@@ -623,7 +650,7 @@ The IAM admin account `Administrator` is the only member of this group by defaul
 
 If you need other accounts to use the API, please assign them to the aforementioned group.
 
-### Post-upgrade from v0.9.0
+### Post-upgrade to v1.0.0+
 
 #### Configuration Improvement: Separate user permission for using Video Conference component
 
@@ -653,9 +680,9 @@ kubectl -n ${NAMESPACE} delete pvc shared-run-ums-ldap-server-0
 kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 ```
 
-## From v0.8.1
+## v0.9.0
 
-### Pre-upgrade from v0.8.1
+### Pre-upgrade to v0.9.0
 
 #### Updated `cluster.networking.cidr`
 
@@ -678,7 +705,7 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 # Automated migrations - Details
 
-## From v1.1.2 (automated)
+## v1.2.0+ (automated)
 
 > **Note**<br>
 > Details can be found in [run_4.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_4.py).
@@ -692,7 +719,7 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 - Restarting Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` as well as deleting the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
 
-## From v1.0.0 (automated)
+## v1.1.0+ (automated)
 
 With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
 
@@ -703,7 +730,7 @@ creating the config map with the mentioned label.
 > **Note**<br>
 > Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
-## From v0.9.0 (automated)
+## v1.0.0+ (automated)
 
 The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
 
