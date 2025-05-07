@@ -246,6 +246,8 @@ keycloak:
   extraEnvVars:
     - name: "KC_HTTPS_TRUST_STORE_FILE"
       value: "/etc/ssl/certs/truststore.jks"
+    - name: "KC_TRUSTSTORE_PATHS"
+      value: "/etc/ssl/certs/ca-certificates.crt"
     - name: "KC_HTTPS_TRUST_STORE_PASSWORD"
       value: {{ .Values.secrets.certificates.password | quote }}
     - name: "KC_HTTPS_TRUST_STORE_TYPE"
