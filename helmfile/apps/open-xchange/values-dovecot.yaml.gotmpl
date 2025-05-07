@@ -23,7 +23,8 @@ imagePullSecrets:
   {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
 dovecot:
-  mailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
+  mailDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
+  defaultMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   password:
     value: {{ .Values.secrets.dovecot.doveadm | quote }}
   migration:

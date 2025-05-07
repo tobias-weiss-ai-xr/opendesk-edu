@@ -81,7 +81,7 @@ postfix:
   smtpdMilters: "inet:clamav-simple:7357"
   {{- end }}
   {{- end }}
-  virtualMailboxDomains: {{ if .Values.global.additionalMailDomains }}{{ printf "%s,%s" (.Values.global.mailDomain | default .Values.global.domain) .Values.global.additionalMailDomains }}{{ else }}{{ .Values.global.mailDomain | default .Values.global.domain | quote }}{{ end }}
+  virtualMailboxDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
   virtualTransport: "lmtps:dovecot:24"
 
 podAnnotations:
