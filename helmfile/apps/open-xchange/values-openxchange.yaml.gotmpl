@@ -108,8 +108,9 @@ appsuite:
       hosts:
         - "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     dav:
+      enabled: {{ .Values.functional.groupware.davSupport.enabled }}
       hosts:
-        - "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
+        - "{{ .Values.global.hosts.openxchangeDav }}.{{ .Values.global.domain }}"
     routes:
       appsuite-base:
         annotations:
@@ -323,6 +324,8 @@ appsuite:
       com.openexchange.oidc.startDefaultBackend: "true"
       com.openexchange.oidc.userLookupClaim: "opendesk_username"
       com.openexchange.oidc.userLookupNamePart: "full"
+      com.openexchange.oidc.enablePasswordGrant: "true"
+      com.openexchange.oidc.passwordGrantUserNamePart: "local-part"
       # OAUTH
       com.openexchange.oauth.provider.enabled: "true"
       com.openexchange.oauth.provider.allowedIssuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
@@ -398,6 +401,13 @@ appsuite:
       # http = (await import('./io.ox/core/http.js')).default
       # await http.POST({ module: 'oxguard/smime', params: { action: 'test' } })
       com.openexchange.smime.test: "true"
+      # DAV
+      #com.openexchange.dav.prefixPath: "/"
+      #com.openexchange.dav.proxyPrefixPath: "/"
+      com.openexchange.caldav.enabled: "true"
+      com.openexchange.caldav.url: {{ printf "https://%s.%s/caldav/[folderId]" .Values.global.hosts.openxchangeDav .Values.global.domain }}
+      com.openexchange.carddav.enabled: "true"
+      com.openexchange.carddav.url: {{ printf "https://%s.%s/carddav/[folderId]" .Values.global.hosts.openxchangeDav .Values.global.domain }}
       # Other
       com.openexchange.secret.secretSource: "\"<user-id> + '@' + <context-id> + '/' + <random>\""
       {{- if .Values.certificate.selfSigned }}
