@@ -216,7 +216,7 @@ appsuite:
         host: "all"
         productName: {{ .Values.theme.texts.productName | quote }}
         oidcLogin: true
-        oidcPath: "/oidc"
+        oidcPath: "/oidc/"
     masterAdmin: "admin"
     masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     hzGroupName: "hzgroup"
@@ -279,17 +279,14 @@ appsuite:
       status:
         {{- if .Values.functional.migration.oxAppSuite.enabled }}
         open-xchange-oidc: "disabled"
-        open-xchange-authentication-oauth: "disabled"
         open-xchange-authentication-masterpassword: "enabled"
-        open-xchange-authentication-database: "disabled"
-        open-xchange-authentication-ldap: "disabled"
         {{- else }}
         open-xchange-oidc: "enabled"
-        open-xchange-authentication-oauth: "enabled"
         open-xchange-authentication-masterpassword: "disabled"
+        {{- end }}
+        open-xchange-authentication-oauth: "disabled"
         open-xchange-authentication-database: "disabled"
         open-xchange-authentication-ldap: "disabled"
-        {{- end }}
         # OX Documents (office-web) is not used in openDesk
         open-xchange-documents-backend: "disabled"
         open-xchange-documents-monitoring: "disabled"
