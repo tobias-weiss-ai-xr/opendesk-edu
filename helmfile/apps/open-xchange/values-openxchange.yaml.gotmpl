@@ -323,18 +323,6 @@ appsuite:
       com.openexchange.oidc.userLookupNamePart: "full"
       com.openexchange.oidc.enablePasswordGrant: "true"
       com.openexchange.oidc.passwordGrantUserNamePart: "local-part"
-      # OAUTH
-      com.openexchange.oauth.provider.enabled: "true"
-      com.openexchange.oauth.provider.allowedIssuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
-      com.openexchange.oauth.provider.contextLookupClaim: "context"
-      com.openexchange.oauth.provider.contextLookupNamePart: "full"
-      com.openexchange.oauth.provider.jwt.jwksUri: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
-      com.openexchange.oauth.provider.mode: "expect_jwt"
-      com.openexchange.oauth.provider.userLookupNamePart: "full"
-      com.openexchange.oauth.provider.userLookupClaim: "opendesk_username"
-      com.openexchange.authentication.oauth.clientId: "opendesk-oxappsuite"
-      com.openexchange.authentication.oauth.tokenEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
-      com.openexchange.authentication.oauth.clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
       # MAIL
       com.openexchange.mail.authType: "xoauth2"
       com.openexchange.mail.loginSource: "mail"
@@ -399,12 +387,14 @@ appsuite:
       # await http.POST({ module: 'oxguard/smime', params: { action: 'test' } })
       com.openexchange.smime.test: "true"
       # DAV
-      #com.openexchange.dav.prefixPath: "/"
-      #com.openexchange.dav.proxyPrefixPath: "/"
+      {{- if .Values.functional.groupware.davSupport.enabled }}
       com.openexchange.caldav.enabled: "true"
       com.openexchange.caldav.url: {{ printf "https://%s.%s/caldav/[folderId]" .Values.global.hosts.openxchangeDav .Values.global.domain }}
       com.openexchange.carddav.enabled: "true"
       com.openexchange.carddav.url: {{ printf "https://%s.%s/carddav/[folderId]" .Values.global.hosts.openxchangeDav .Values.global.domain }}
+      com.openexchange.client.onboarding.caldav.url: {{ printf "https://%s.%s/" .Values.global.hosts.openxchangeDav .Values.global.domain }}
+      com.openexchange.client.onboarding.carddav.url: {{ printf "https://%s.%s/" .Values.global.hosts.openxchangeDav .Values.global.domain }}
+      {{- end }}
       # Other
       com.openexchange.secret.secretSource: "\"<user-id> + '@' + <context-id> + '/' + <random>\""
       {{- if .Values.certificate.selfSigned }}
