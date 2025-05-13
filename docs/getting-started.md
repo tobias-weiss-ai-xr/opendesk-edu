@@ -70,6 +70,10 @@ For your convenience, we recommend creating a `*.domain.tld` A-Record for your c
 | domain.tld                    | TXT  | `v=spf1 +a +mx +a:mail.domain.tld ~all`            | Optional, use proper MTA record if present                        |
 | _dmarc.domain.tld             | TXT  | `v=DMARC1; p=quarantine`                           | Optional                                                          |
 | default._domainkey.domain.tld | TXT  | `v=DKIM1; k=rsa; h=sha256; ...`                    | Optional, DKIM settings                                           |
+| _caldavs._tcp.domain.tld      | SRV  | 10 1 443 dav.domain.tld.                           | Optional, CalDav auto discovery                                   |
+| _caldav._tcp.domain.tld       | SRV  | 10 1  80 dav.domain.tld.                           | Optional, CalDav auto discovery                                   |
+| _carddavs._tcp.domain.tld     | SRV  | 10 1 443 dav.domain.tld.                           | Optional, CardDav auto discovery                                  |
+| _carddav._tcp.domain.tld      | SRV  | 10 1  80 dav.domain.tld.                           | Optional, CardDav auto discovery                                  |
 
 ## Domain
 
