@@ -1399,7 +1399,7 @@ nubusSelfServiceConsumer:
 nubusStackDataUms:
   additionalAnnotations:
     argocd.argoproj.io/hook: "Sync"
-    argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
+    argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
     intents.otterize.com/service-name: "ums-stack-data-ums"
     {{- with .Values.annotations.nubusStackDataUms.additional }}
     {{ . | toYaml | nindent 4 }}
@@ -1732,6 +1732,7 @@ nubusUmcGateway:
 nubusKeycloakBootstrap:
   additionalAnnotations:
     argocd.argoproj.io/hook: "Sync"
+    argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
     {{- with .Values.annotations.nubusKeycloakBootstrapNubus.additional }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
