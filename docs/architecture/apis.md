@@ -16,9 +16,9 @@ This chapter presents APIs available in openDesk, grouped by application.
   * [UDM Simple API](#udm-simple-api)
   * [UDM REST API](#udm-rest-api)
   * [UCR Python API](#ucr-python-api)
-  * [LDAP](#ldap)
-  * [Nubus Provisioning Service (**TBD**)](#nubus-provisioning-service-tbd)
-  * [Nubus Authorization Service (**TBD**)](#nubus-authorization-service-tbd)
+  * [Identity Store and Directory Service (LDAP)](#identity-store-and-directory-service-ldap)
+  * [Nubus Provisioning Service](#nubus-provisioning-service)
+  * [Nubus Authorization Service](#nubus-authorization-service)
 * [Groupware - OX AppSuite / OX Dovecot](#groupware---ox-appsuite--ox-dovecot)
   * [Usage of APIs within openDesk](#usage-of-apis-within-opendesk)
   * [HTTP API](#http-api)
@@ -65,11 +65,13 @@ This chapter presents APIs available in openDesk, grouped by application.
 
 # IAM - Nubus
 
-![High-level architecture of Univention part withAPIs/interfaces highlighted](./apis_images/IAM-overview.png)
+![Overview of functional components in Univention Nubus for Kubernetes](./apis_images/IAM-overview_functional_components_structured.svg)  
+[Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/components.html#overview-components-fig)
 
 ## UMC Python API
 
-![Composition of UMC component with APIs highlighted](./apis_images/IAM-umc-architecture.png)
+![Composition of UMC component with APIs highlighted](./apis_images/IAM-umc-architecture.png)  
+[Source](https://docs.software-univention.de/developer-reference/latest/en/umc/architecture.html#umc-api)
 
 | Name                           | UMC Python API                                                                                                                                                                                                                                 |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -88,20 +90,20 @@ This chapter presents APIs available in openDesk, grouped by application.
 
 ## UMC store API
 
-| Name                           | UMC store API (also named UMC JavaScript API or Dojo/UMC JavaScript API)                                 |
-| ------------------------------ |----------------------------------------------------------------------------------------------------------|
-| Purpose                        | Encapsulate and ease the access to JavaScript module data                                                |
-| Versioning                     |                                                                                                          |
-| Authentication                 |                                                                                                          |
-| In openDesk provided by        | Nubus UMC                                                                                                |
-| Transport protocol             |                                                                                                          |
-| Usage within component         |                                                                                                          |
-| Usage within openDesk          |                                                                                                          |
-| Usage for external integration |                                                                                                          |
-| Parallel access                | Allowed                                                                                                  |
-| Message protocol               |                                                                                                          |
-| Supported standards            |                                                                                                          |
-| Documentation                  | https://docs.software-univention.de/developer-reference/5.0/en/umc/local-system-module.html#umc-store-api |
+| Name                           | UMC store API (also named UMC JavaScript API or Dojo/UMC JavaScript API)                                     |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------   |
+| Purpose                        | Encapsulate and ease the access to JavaScript module data                                                    |
+| Versioning                     |                                                                                                              |
+| Authentication                 |                                                                                                              |
+| In openDesk provided by        | Nubus UMC                                                                                                    |
+| Transport protocol             |                                                                                                              |
+| Usage within component         |                                                                                                              |
+| Usage within openDesk          |                                                                                                              |
+| Usage for external integration |                                                                                                              |
+| Parallel access                | Allowed                                                                                                      |
+| Message protocol               |                                                                                                              |
+| Supported standards            |                                                                                                              |
+| Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/umc/local-system-module.html#umc-store-api |
 
 ## IntercomService (ICS) API
 
@@ -113,7 +115,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 | In openDesk provided by        | Nubus UMC                                                                                                                                                                                                                           |
 | Transport protocol             | HTTP(S)                                                                                                                                                                                                                             |
 | Usage within component         |                                                                                                                                                                                                                                     |
-| Usage within openDesk          | The ICS implements the BFF pattern for various openDesk inter-component integrations, see [components.md](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/docs/components.md#component-integration) |
+| Usage within openDesk          | The ICS implements the BFF pattern for various openDesk inter-component integrations, see [components.md](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/docs/components.md#component-integration)      |
 | Usage for external integration |                                                                                                                                                                                                                                     |
 | Parallel access                | Allowed                                                                                                                                                                                                                             |
 | Message protocol               | Depends on the integration use case.                                                                                                                                                                                                |
@@ -135,28 +137,29 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Parallel access                | Allowed                                                                                                                                                                                                                             |
 | Message protocol               | Depends on the integration use case.                                                                                                                                                                                                |
 | Supported standards            |                                                                                                                                                                                                                                     |
-| Documentation                  | https://docs.software-univention.de/developer-reference/5.0/en/listener/api.html                                                                                                                                                    |
+| Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/listener/api.html                                                                                                                                                 |
 
-More details on the Nubus provisioning service can be found here: https://docs.software-univention.de/nubus-kubernetes-architecture/0.5/en/components/provisioning-service.html
+More details on the Nubus provisioning service can be found here: https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html
 
 ## UDM Simple API
 
-![Composition of UMC component with APIs highlighted](./apis_images/IAM-udm.png)
+![Architecture of UDM](./apis_images/IAM-udm-architecture.svg)  
+[Source](https://docs.software-univention.de/architecture/latest/en/services/udm.html#architecture-model-udm)
 
-| Name                           | UDM Simple API                                                    |
-| ------------------------------ |-------------------------------------------------------------------|
-| Purpose                        | Allows use of capability and objects directly in Python programs. |
-| Versioning                     |                                                                   |
-| Authentication                 |                                                                   |
-| In openDesk provided by        | Univention Directory Manager                                      |
-| Transport protocol             |                                                                   |
-| Usage within component         |                                                                   |
-| Usage within openDesk          |                                                                   |
-| Usage for external integration |                                                                   |
-| Parallel access                | Allowed                                                           |
-| Message protocol               | Depends on the integration use case.                              |
-| Supported standards            |                                                                   |
-| Documentation                  |                                                                   |
+| Name                           | UDM Simple API                                                                                                                                    |
+| ------------------------------ | -------------------------------------------------------------------                                                                               |
+| Purpose                        | Allows use of capability and objects directly in Python programs.                                                                                 |
+| Versioning                     |                                                                                                                                                   |
+| Authentication                 |                                                                                                                                                   |
+| In openDesk provided by        | Univention Directory Manager                                                                                                                      |
+| Transport protocol             |                                                                                                                                                   |
+| Usage within component         | Allows to use UDM capability and objects directly in Python programs. UDM Simple API provides Python modules and classes below `univention.udm.*` |
+| Usage within openDesk          |                                                                                                                                                   |
+| Usage for external integration |                                                                                                                                                   |
+| Parallel access                | Allowed                                                                                                                                           |
+| Message protocol               | Depends on the integration use case.                                                                                                              |
+| Supported standards            |                                                                                                                                                   |
+| Documentation                  | https://docs.software-univention.de/ucs-python-api/univention.udm.html#module-univention.udm.                                                     |
 
 ## UDM REST API
 
@@ -166,58 +169,72 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Versioning                     |                                                                                                                                            |
 | Authentication                 | Basic Auth                                                                                                                                 |
 | In openDesk provided by        | Univention Directory Manager                                                                                                               |
-| Transport protocol             | HTTP(S)                                                                                                                                    |
+| Transport protocol             | HTTP()                                                                                                                                     |
 | Usage within component         | The Nubus bootstrapping process makes use of the API.                                                                                      |
 | Usage within openDesk          |                                                                                                                                            |
 | Usage for external integration | The [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import) utilizes the API. |
 | Parallel access                | Allowed                                                                                                                                    |
 | Message protocol               | Depends on the integration use case.                                                                                                       |
 | Supported standards            |                                                                                                                                            |
-| Documentation                  | https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html                                                           |
+| Documentation                  | https://docs.software-univention.de/nubus-kubernetes-customization/latest/en/api/udm-rest.html                                             |
 
 ## UCR Python API
 
-![Composition of UCR component with APIs/interfaces highlighted](./apis_images/IAM-ucr.png)
+![Architecture overview of UCR](./apis_images/IAM-ucr-architecture.svg)  
+[Source](https://docs.software-univention.de/architecture/latest/en/services/ucr.html#services-ucr-architecture-model)
 
-| Name                           | UCR Python API                                                                                      |
-| ------------------------------ | --------------------------------------------------------------------------------------------------- |
-| Purpose                        | Offers a programming interface for components and other Python programs.                            |
-| Versioning                     |                                                                                                     |
-| Authentication                 |                                                                                                     |
-| In openDesk provided by        | Nubus                                                                                               |
-| Transport protocol             |                                                                                                     |
-| Usage within component         | The Nubus bootstrapping process makes use of the API.                                               |
-| Usage within openDesk          |                                                                                                     |
-| Usage for external integration |                                                                                                     |
-| Parallel access                | Allowed                                                                                             |
-| Message protocol               |                                                                                                     |
-| Supported standards            |                                                                                                     |
-| Documentation                  | https://docs.software-univention.de/developer-reference/5.0/en/ucr/usage.html#using-ucr-from-python |
+| Name                           | UCR Python API                                                                                         |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------    |
+| Purpose                        | Offers a programming interface for components and other Python programs.                               |
+| Versioning                     |                                                                                                        |
+| Authentication                 |                                                                                                        |
+| In openDesk provided by        | Nubus                                                                                                  |
+| Transport protocol             |                                                                                                        |
+| Usage within component         | The Nubus bootstrapping process makes use of the API.                                                  |
+| Usage within openDesk          |                                                                                                        |
+| Usage for external integration |                                                                                                        |
+| Parallel access                | Allowed                                                                                                |
+| Message protocol               |                                                                                                        |
+| Supported standards            |                                                                                                        |
+| Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/ucr/usage.html#using-ucr-from-python |
 
-## LDAP
+## Identity Store and Directory Service (LDAP)
 
-| Name                           | LDAP                                                                                                                    |
-| ------------------------------ |-------------------------------------------------------------------------------------------------------------------------|
-| Purpose                        | Read access to Nubus LDAP                                                                                               |
-| Versioning                     | n/a                                                                                                                     |
-| Authentication                 | LDAP user auth                                                                                                          |
-| In openDesk provided by        | Nubus openLDAP                                                                                                          |
-| Transport protocol             | LDAP                                                                                                                    |
-| Usage within component         | Data backend for Nubus                                                                                                  |
-| Usage within openDesk          | Used by multiple applications to access user/group data, e.g. Nextcloud Server, OpenProject, OX AppSuite backend, XWiki |
-| Usage for external integration | Not recommended                                                                                                         |
-| Parallel access                | Allowed                                                                                                                 |
-| Message protocol               | LDAP                                                                                                                    |
-| Supported standards            | LDAP                                                                                                                    |
-| Documentation                  | https://docs.software-univention.de/manual/5.0/en/domain-ldap/ldap-directory.html                                       |
+![Overview of the Identity Store and Directory Service](./apis_images/IAM-functional_component_identity_store.svg)  
+[Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/identity-store.html#component-identity-store-figure)
 
-## Nubus Provisioning Service (**TBD**)
+| Name                           | Identity Store and Directory Service (LDAP)                                                                                                           |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------                             |
+| Purpose                        | Read access to Nubus LDAP                                                                                                                             |
+| Versioning                     | n/a                                                                                                                                                   |
+| Authentication                 | LDAP user auth                                                                                                                                        |
+| In openDesk provided by        | Nubus openLDAP                                                                                                                                        |
+| Transport protocol             | LDAP                                                                                                                                                  |
+| Usage within component         | Data backend for Nubus                                                                                                                                |
+| Usage within openDesk          | Used by multiple applications to access user/group data, e.g. Nextcloud Server, OpenProject, OX AppSuite backend, XWiki                               |
+| Usage for external integration | Not recommended                                                                                                                                       |
+| Parallel access                | Allowed                                                                                                                                               |
+| Message protocol               | LDAP                                                                                                                                                  |
+| Supported standards            | LDAP                                                                                                                                                  |
+| Documentation                  | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/identity-store.html#component-identity-store-directory-service |
 
-To be delivered.
+## Nubus Provisioning Service
 
-## Nubus Authorization Service (**TBD**)
+![Overview of the Provisioning Service and its components](./apis_images/IAM-functional_component_provisioning_service_complete.svg)  
+[Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html#component-provisioning-service-complete-figure)
 
-To be delivered.
+| Name          | Nubus Proisioning Service                                                                                        |
+| ------------- | ---------------------------------------------------------------------------------------------------              |
+| Documentation | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html |
+
+## Nubus Authorization Service
+
+![ArchiMate view of the interfaces and protocols of the Authorization Service](./apis_images/IAM-interfaces_authorization_service.svg)  
+[Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/interfaces-protocols.html#authorization-service)
+
+| Name          | Nubus Authorization Service                                                                                                          |
+| ------------- | ---------------------------------------------------------------------------------------------------                                  |
+| Documentation | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/interfaces-protocols.html#authorization-service |
 
 # Groupware - OX AppSuite / OX Dovecot
 
