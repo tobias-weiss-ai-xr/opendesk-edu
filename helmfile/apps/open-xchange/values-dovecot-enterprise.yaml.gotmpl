@@ -36,6 +36,7 @@ dovecot:
       value: {{ .Values.secrets.cassandra.dovecotACLUser | quote }}
     keyspace: {{ .Values.databases.dovecotACL.name | quote }}
   objectStorage:
+    bucket: {{ .Values.objectstores.dovecot.bucket | quote }}
     encryption:
       privateKey:
         value: {{ env "DOVECOT_CRYPT_PRIVATE_KEY" | quote }}

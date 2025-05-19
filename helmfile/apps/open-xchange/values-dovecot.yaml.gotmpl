@@ -83,6 +83,10 @@ containerSecurityContext:
   seLinuxOptions:
     {{ .Values.seLinuxOptions.dovecot | toYaml | nindent 4 }}
 
+{{- if .Values.debug.enabled }}
+debug: true
+{{- end }}
+
 {{- if .Values.certificate.selfSigned }}
 extraVolumes:
   - name: "trusted-cert-secret-volume"
