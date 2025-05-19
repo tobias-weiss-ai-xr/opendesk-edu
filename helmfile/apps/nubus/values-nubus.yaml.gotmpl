@@ -197,6 +197,12 @@ keycloak:
         name: "ums-opendesk-keycloak-credentials"
         keyMapping:
           adminPassword: "admin_password"
+    login:
+      messages:
+        de:
+          loginTitle: "Anmeldung bei opendesk"
+        en:
+          loginTitle: "Sign in to opendesk"
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak"
     {{- with .Values.annotations.nubusKeycloak.pod }}
@@ -256,6 +262,20 @@ keycloak:
 
 nubusGuardian:
   authorizationApi:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianAuthorizationApi | toYaml | nindent 8 }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianAuthorizationApi.registry | quote }}
       repository: {{ .Values.images.nubusGuardianAuthorizationApi.repository }}
@@ -274,20 +294,6 @@ nubusGuardian:
     replicaCount: {{ .Values.replicas.umsGuardianAuthorizationApi }}
     resources:
       {{ .Values.resources.umsGuardianAuthorizationApi | toYaml | nindent 6 }}
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      privileged: false
-      readOnlyRootFilesystem: true
-      runAsGroup: 1000
-      runAsNonRoot: true
-      runAsUser: 1000
-      seccompProfile:
-        type: RuntimeDefault
-      seLinuxOptions:
-        {{ .Values.seLinuxOptions.umsGuardianAuthorizationApi | toYaml | nindent 8 }}
   global:
     podAnnotations:
       {{ .Values.annotations.nubusGuardian.globalPod | toYaml | nindent 6 }}
@@ -350,6 +356,20 @@ nubusGuardian:
           # enabled: true
           secretName: ""
   managementApi:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      seLinuxOptions:
+        {{ .Values.seLinuxOptions.umsGuardianManagementApi | toYaml | nindent 8 }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianManagementApi.registry | quote }}
       repository: {{ .Values.images.nubusGuardianManagementApi.repository }}
@@ -368,7 +388,8 @@ nubusGuardian:
     replicaCount: {{ .Values.replicas.umsGuardianManagementApi }}
     resources:
       {{ .Values.resources.umsGuardianManagementApi | toYaml | nindent 6 }}
-    securityContext:
+  managementUi:
+    containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
@@ -381,8 +402,7 @@ nubusGuardian:
       seccompProfile:
         type: RuntimeDefault
       seLinuxOptions:
-        {{ .Values.seLinuxOptions.umsGuardianManagementApi | toYaml | nindent 8 }}
-  managementUi:
+        {{ .Values.seLinuxOptions.umsGuardianManagementUi | toYaml | nindent 8 }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianManagementUi.registry | quote }}
       repository: {{ .Values.images.nubusGuardianManagementUi.repository }}
@@ -398,7 +418,8 @@ nubusGuardian:
     replicaCount: {{ .Values.replicas.umsGuardianManagementUi }}
     resources:
       {{ .Values.resources.umsGuardianManagementUi | toYaml | nindent 6 }}
-    securityContext:
+  openPolicyAgent:
+    containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
@@ -410,9 +431,8 @@ nubusGuardian:
       runAsUser: 1000
       seccompProfile:
         type: RuntimeDefault
-      seLinuxOptions:
-        {{ .Values.seLinuxOptions.umsGuardianManagementUi | toYaml | nindent 8 }}
-  openPolicyAgent:
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsGuardianOpenPolicyAgent | toYaml | nindent 8 }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusOpenPolicyAgent.registry | quote }}
       repository: {{ .Values.images.nubusOpenPolicyAgent.repository }}
@@ -428,20 +448,6 @@ nubusGuardian:
     replicaCount: {{ .Values.replicas.umsGuardianOpenPolicyAgent }}
     resources:
       {{ .Values.resources.umsOpenPolicyAgent | toYaml | nindent 6 }}
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      privileged: false
-      readOnlyRootFilesystem: true
-      runAsGroup: 1000
-      runAsNonRoot: true
-      runAsUser: 1000
-      seccompProfile:
-        type: RuntimeDefault
-    seLinuxOptions:
-      {{ .Values.seLinuxOptions.umsGuardianOpenPolicyAgent | toYaml | nindent 8 }}
   postgresql:
     connection:
       host: {{ .Values.databases.umsGuardianManagementApi.host | quote }}
@@ -449,26 +455,29 @@ nubusGuardian:
     auth:
       username: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
       database: {{ .Values.databases.umsGuardianManagementApi.name | quote }}
-      credentialSecret:
+      existingSecret:
         name: "ums-guardian-postgresql-opendesk-credentials"
-        key: "guardianDatabasePassword"
+        keyMapping:
+          password: "guardianDatabasePassword"
   provisioning:
     enabled: false
     config:
       nubusBaseUrl: {{ printf "https://%s.%s" .Values.global.hosts.nubus .Values.global.domain }}
       keycloak:
-        realm: {{ .Values.platform.realm | quote }}
-        username: "kcadmin"
-        connection:
-          host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
-          baseUrl: "http://ums-keycloak:8080"
         credentialSecret:
           name: "ums-opendesk-keycloak-credentials"
           key: "admin_password"
-      managementApi:
-        credentialSecret:
+      realm: {{ .Values.platform.realm | quote }}
+      username: "kcadmin"
+    keycloak:
+      auth:
+        existingSecret:
           name: "ums-opendesk-guardian-client-secret"
-          key: "managementApiClientSecret"
+          keyMapping:
+            password: "managementApiClientSecret"
+      connection:
+        host: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+        baseUrl: "http://ums-keycloak:8080"
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusGuardianProvisioning.registry | quote }}
       repository: {{ .Values.images.nubusGuardianProvisioning.repository }}
@@ -787,8 +796,15 @@ nubusPortalConsumer:
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   objectStorage:
     auth:
+      accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
       accessKey: {{ .Values.objectstores.nubus.username | quote }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
       secretKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      existingSecret:
+        name: "{{ .Release.Name }}-portal-consumer-minio-credentials"
+        keyMapping:
+          accessKey: "accessKey"
+          secretKey: "secretKey"
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
     endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   persistence:
@@ -1557,12 +1573,12 @@ nubusUmcServer:
     capabilities:
       drop:
         - "ALL"
-    runAsUser: 0
-    runAsGroup: 0
+    runAsUser: 999
+    runAsGroup: 999
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-    runAsNonRoot: false
+    runAsNonRoot: true
     seLinuxOptions:
       {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
   containerSecurityContextInit:
@@ -1598,12 +1614,12 @@ nubusUmcServer:
         - "MKNOD"
         - "NET_BIND_SERVICE"
         - "SYS_CHROOT"
-    runAsUser: 0
-    runAsGroup: 0
+    runAsUser: 999
+    runAsGroup: 999
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-    runAsNonRoot: false
+    runAsNonRoot: true
     seLinuxOptions:
       {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
   image:
