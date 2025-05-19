@@ -27,12 +27,12 @@ ingressCollaborationWS:
     enabled: "{{ .Values.ingress.tls.enabled }}"
     secretName: {{ .Values.ingress.tls.secretName | quote }}
   annotations:
-    nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Can-Edit, X-User-Id"
-    nginx.ingress.kubernetes.io/auth-url: https://{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}/api/v1.0/documents/collaboration-auth/
     nginx.ingress.kubernetes.io/enable-websocket: "true"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "86400"
     nginx.ingress.kubernetes.io/upstream-hash-by: $arg_room
+    nginx.ingress.kubernetes.io/auth-response-headers: null
+    nginx.ingress.kubernetes.io/auth-url: null
     {{- with .Values.annotations.notes.ingressCollaborationWS }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -91,7 +91,6 @@ frontend:
   envVars:
     PORT: 8080
     NEXT_PUBLIC_API_ORIGIN: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
-    NEXT_PUBLIC_Y_PROVIDER_URL: {{ printf "wss://%s.%s/ws" .Values.global.hosts.notes .Values.global.domain | quote }}
     NEXT_PUBLIC_MEDIA_URL: {{ printf "https://%s" (.Values.objectstores.notes.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   runtimeEnvs:
     ICS_BASE_URL: {{ printf "https://%s.%s" .Values.global.hosts.intercomService .Values.global.domain | quote }}
@@ -144,6 +143,7 @@ yProvider:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.notesBackend | toYaml | nindent 6 }}
   envVars:
+    COLLABORATION_BACKEND_BASE_URL: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
     COLLABORATION_LOGGING: {{ if .Values.debug.enabled }}"true"{{ else }}"false"{{ end }}
     COLLABORATION_SERVER_ORIGIN: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
     COLLABORATION_SERVER_SECRET: {{ .Values.secrets.notes.collaborationSecret | quote }}
@@ -214,8 +214,8 @@ backend:
     OIDC_OP_LOGOUT_ENDPOINT: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/logout"
     OIDC_RP_SIGN_ALGO: RS256
     OIDC_RP_SCOPES: "openid opendesk-notes-scope"
-    USER_OIDC_FIELD_TO_SHORTNAME: "given_name"
-    USER_OIDC_FIELDS_TO_FULLNAME: "given_name,family_name"
+    OIDC_USERINFO_SHORTNAME_FIELD: "given_name"
+    OIDC_USERINFO_FULLNAME_FIELDS: "given_name,family_name"
     USER_OIDC_ESSENTIAL_CLAIMS: "email"
     OIDC_REDIRECT_ALLOWED_HOSTS: {{ printf "https://%s.%s/*" .Values.global.hosts.notes .Values.global.domain | quote }}
     OIDC_AUTH_REQUEST_EXTRA_PARAMS: "{}"
@@ -232,6 +232,8 @@ backend:
     COLLABORATION_SERVER_ORIGIN: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain | quote }}
     COLLABORATION_SERVER_SECRET: {{ .Values.secrets.notes.collaborationSecret | quote }}
     COLLABORATION_WS_URL:  {{ printf "wss://%s.%s/collaboration/ws/" .Values.global.hosts.notes .Values.global.domain | quote }}
+    FRONTEND_HOMEPAGE_FEATURE_ENABLED: False
+    FRONTEND_FOOTER_FEATURE_ENABLED: False
   migrate:
     command:
       - "/bin/sh"
