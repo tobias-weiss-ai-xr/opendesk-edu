@@ -706,6 +706,17 @@ nubusKeycloakExtensions:
     resources:
       {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 6 }}
     securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      enabled: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      seccompProfile:
+        type: "RuntimeDefault"
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
       seccompProfile:
         type: "RuntimeDefault"
       seLinuxOptions:
