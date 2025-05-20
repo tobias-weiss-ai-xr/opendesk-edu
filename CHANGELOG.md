@@ -1,3 +1,28 @@
+# [1.4.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.3.2...v1.4.0) (2025-05-20)
+
+
+### Bug Fixes
+
+* **docs:** Update requirements, bump helmfile to v1.0.0 ([88b29c5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/88b29c57e8197f072b9c80019255ee0b7d1188e1))
+* **dovecot:** Encode object storage password and add more template values ([c40de73](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c40de73ccf02bf77df0c3a17c2fccf2e113c4b35))
+* **nubus:** [[#182](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/182)] Add `KC_TRUSTSTORE_PATHS` to Keycloak when using self-signed certificates ([006aed7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/006aed791e5cf58850712e468a15c8abe1ee0973))
+* **nubus:** [[#183](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/183)] Do not override `nubusPortalConsumer.waitForDependency.image` when using self-signed certificates ([b45a0bf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b45a0bf832506fb60488cd01c9c883b58e1d60b6))
+* **nubus:** Update ArgoCD hook annotations ([f2b1384](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f2b13846700d8a49a066b3343b043dac89d326f5))
+* **open-xchange:** Update Open-Xchange to v8.36 ([b40b863](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b40b8630c1a5ba7452d0461d38b1175fa647226d))
+* **open-xchange:** Update Open-Xchange to v8.37 ([174c73c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/174c73c012e911342644bdcb89d22b35be9baa36))
+* **openproject:** Update to 15.5.1 ([e91efa8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e91efa8ecc1be9b444092e1a291747bb9f0c00ea))
+* **openxchange:** Add proper dav URLs in client onboarding and disable unnecessary oauth section ([bba2af0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bba2af0f06942bd2063cc7b79f3e39fdb07838f0))
+* **openxchange:** Disable redundant o-x-authentication-oauth package ([1d2b17b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d2b17b4951581e1f60d8a7f2402512dc1c1c568))
+* **openxchange:** Enable DAV support ([709e50f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/709e50ff7c020347dad953be7380d08438d3ab69))
+
+
+### Features
+
+* **collabora:** Update enterprise image to 24.04.13.4.1 ([b590810](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b5908100ddbd7497f7f858e874bcbf7979480d1b))
+* **helmfile:** Define `global.additionalMailDomains` as list; if you use the setting already, check `migrations.md` for details ([4b30576](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4b305768c444c166e28829ee05631451ba997126))
+* **helmfile:** Option to select default file format for weboffice using; see `functional.weboffice.defaultFormat` in `functional.yaml.gotmpl` for details ([5f58a85](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5f58a857acab38fa7f56e1e14ef0a6f805c7622e))
+* **nubus:** Update nubus to v1.9.1 ([3d694a8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3d694a8248d5e983ab3e05753326088b375f2d82))
+
 ## [1.3.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.3.1...v1.3.2) (2025-05-06)
 
 
