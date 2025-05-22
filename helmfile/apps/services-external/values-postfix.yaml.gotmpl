@@ -65,8 +65,14 @@ postfix:
   {{- end }}
   rspamdHost: ""
   relayHost: {{ if .Values.smtp.host }}{{ printf "[%s]:%d" .Values.smtp.host .Values.smtp.port | quote }}{{ else }}""{{ end }}
+
+  # Warning: This setting allows unauthenticated mail relay from relayNets!
   relayNets: {{ join " " .Values.cluster.networking.cidr | quote }}
   allowRelayNets: true
+
+  minTLSVersion: "TLSv1.3"
+  smtpdTLSMandatoryCiphers: "high"
+
   smtpSASLAuthEnable: "yes"
   smtpSASLPasswordMaps: "lmdb:/etc/postfix/sasl_passwd.map"
   smtpTLSSecurityLevel: "encrypt"
