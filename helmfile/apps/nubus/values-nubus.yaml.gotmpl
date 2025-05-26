@@ -200,9 +200,9 @@ keycloak:
     login:
       messages:
         de:
-          loginTitle: "Anmeldung bei opendesk"
+          loginTitle: "Anmeldung bei {{ .Values.theme.texts.productName }}"
         en:
-          loginTitle: "Sign in to opendesk"
+          loginTitle: "Sign in to {{ .Values.theme.texts.productName }}"
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak"
     {{- with .Values.annotations.nubusKeycloak.pod }}
