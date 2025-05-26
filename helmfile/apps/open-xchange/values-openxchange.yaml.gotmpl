@@ -291,7 +291,10 @@ appsuite:
         open-xchange-documents-backend: "disabled"
         open-xchange-documents-monitoring: "disabled"
         open-xchange-documents-templates: "disabled"
+        # Needed to set com.openexchange.hostname
+        open-xchange-hostname-config-cascade: "enabled"
     properties:
+      com.openexchange.hostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
       # PDF Export
