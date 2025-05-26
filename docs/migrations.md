@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Manual checks/actions](#manual-checksactions)
   * [v1.4.0+](#v140)
     * [Pre-upgrade to v1.4.0+](#pre-upgrade-to-v140)
+      * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
       * [Helmfile cleanup: `global.additionalMailDomains` as list](#helmfile-cleanup-globaladditionalmaildomains-as-list)
   * [v1.2.0+](#v120)
     * [Pre-upgrade to v1.2.0+](#pre-upgrade-to-v120)
@@ -103,6 +104,12 @@ If you would like more details about the automated migrations, please read secti
 ## v1.4.0+
 
 ### Pre-upgrade to v1.4.0+
+
+#### Helmfile new feature: `functional.authentication.ssoFederation`
+
+**Target group:** Deployments that make use of IdP federation as described in [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
+
+Please ensure to configure your IdP federation config details as part of `functional.authentication.ssoFederation`. You can find more details in the "Example configuration" section of [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
 
 #### Helmfile cleanup: `global.additionalMailDomains` as list
 
