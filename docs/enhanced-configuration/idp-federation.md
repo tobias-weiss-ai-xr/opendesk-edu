@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
 
 Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on (SSO) to internal or external web applications.
 
-This document explains how to configure your organization's IdP and the openDesk IdP to support account federation with openDesk SSO based on your organization's login.
+This document helps in setting up your organization's IdP and openDesk to enable IdP federation.
 
 # References
 
@@ -33,7 +33,7 @@ We would like to list successful IdP federation scenarios:
 | [EU Login](https://webgate.ec.europa.eu/cas/userdata/myAccount.cgi) | v0.9.0, v1.2.0           |
 | [ProConnect](https://www.proconnect.gouv.fr/)                       | v0.9.0                   |
 
->If you have successfully federated using another External IdP, please let us know so we can update the list above.
+> If you have successfully federated using another External IdP, please let us know so we can update the list above.
 
 # Prerequisites
 
@@ -69,6 +69,23 @@ In addition to the configuration, it is required that user accounts with the sam
 This document focuses on the OIDC federation between an external IdP and the openDesk IdP. It uses the OpenID Connect (OIDC) protocol, so your external IdP must support OIDC.
 
 # Example configuration
+
+The following section explains how to configure the IdP federation manually in an example upstream IdP and in openDesk.
+
+With openDesk 1.4.0 IdP federation has to be enabled as part of the deployment using the `functional.authentication.ssoFederation` section, see [`functional.yaml.gotmpl`](../../helmfile/environments/default/functional.yaml.gotmpl) for reference.
+
+You can use the description below to configure and test the federation that can be exported and used as part of the deployment afterwards, e.g. with the following commands from within the Keycloak Pod:
+
+```shell
+# Set the variables according to your deployment first, below are just example values.
+export FEDERATION_IDP_ALIAS=sso-federation-idp
+export NAMESPACE=example_namespace
+export CLUSTER_NETWORKING_DOMAIN=svc.cluster.local
+# Authenticate with Keycloak
+/opt/keycloak/bin/kcadm.sh config credentials --server http://ums-keycloak.${NAMESPACE}.${CLUSTER_NETWORKING_DOMAIN}:8080 --realm master --user ${KEYCLOAK_ADMIN} --password ${KEYCLOAK_ADMIN_PASSWORD}
+# Request details of IdP configuration
+/opt/keycloak/bin/kcadm.sh get identity-provider/instances/${FEDERATION_IDP_ALIAS} -r opendesk
+```
 
 ## Versions
 
