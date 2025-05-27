@@ -291,6 +291,8 @@ appsuite:
         open-xchange-documents-backend: "disabled"
         open-xchange-documents-monitoring: "disabled"
         open-xchange-documents-templates: "disabled"
+        # Required for the central contacts integration
+        open-xchange-oauth-provider: "enabled"
         # Needed to set com.openexchange.hostname
         open-xchange-hostname-config-cascade: "enabled"
     properties:
@@ -326,6 +328,15 @@ appsuite:
       com.openexchange.oidc.userLookupNamePart: "full"
       com.openexchange.oidc.enablePasswordGrant: "true"
       com.openexchange.oidc.passwordGrantUserNamePart: "local-part"
+      # OAUTH
+      com.openexchange.oauth.provider.enabled: "true"
+      com.openexchange.oauth.provider.allowedIssuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+      com.openexchange.oauth.provider.contextLookupClaim: "context"
+      com.openexchange.oauth.provider.contextLookupNamePart: "full"
+      com.openexchange.oauth.provider.jwt.jwksUri: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
+      com.openexchange.oauth.provider.mode: "expect_jwt"
+      com.openexchange.oauth.provider.userLookupNamePart: "full"
+      com.openexchange.oauth.provider.userLookupClaim: "opendesk_username"
       # MAIL
       com.openexchange.mail.authType: "xoauth2"
       com.openexchange.mail.loginSource: "mail"
