@@ -28,7 +28,7 @@ dovecot:
       value: {{ .Values.secrets.cassandra.dovecotDictmapUser | quote }}
     keyspace: {{ .Values.databases.dovecotDictmap.name | quote }}
   sharedMailboxes:
-    enabled: false
+    enabled: true
     host: {{ .Values.databases.dovecotACL.host | quote }}
     port: {{ .Values.databases.dovecotACL.port }}
     username: {{ .Values.databases.dovecotACL.username | quote }}
