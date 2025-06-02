@@ -1,3 +1,16 @@
+## [1.4.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.4.0...v1.4.1) (2025-06-02)
+
+
+### Bug Fixes
+
+* **nextcloud:** Update NC CE to 30.0.10 ([785be8b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/785be8b6621305e79acca62250720028b9ca7a30))
+* **nextcloud:** Update Nextcloud incl. apps to 30.0.10 ([559fbf6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/559fbf6801fc785f26f9e6287e0730f86b459a01))
+* **nubus:** Use `.Values.theme.texts.productName` for Keycloak's `loginTitle` instead of static product name string ([d1a1e5d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d1a1e5dc29ca21fd822abd127406f6859603b9c7))
+* **open-xchange:** Re-adding `com.openexchange.oauth.provider.*` to fix central contacts feature ([561e44f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/561e44fd4cc42089954868da60edbd210b9a2608))
+* **open-xchange:** Set `com.openexchange.hostname` to get working links in outgoing system mails (e.g. task assignments) ([0d61687](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0d616871e3f5114ec429714658500c09af842fe6))
+* **postfix:** Require TLSv1.3 ([3b3d8ac](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3b3d8aca54bdaea055289c993e3f158d93864223))
+* **requirements.md:** Helm 3.18.x is not supported due to upstream bug ([1ea9cae](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1ea9cae1ce46f864dc03d94c1a72956c5f5ba9a9))
+
 # [1.4.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.3.2...v1.4.0) (2025-05-20)
 
 
