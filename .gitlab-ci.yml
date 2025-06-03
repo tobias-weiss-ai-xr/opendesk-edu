@@ -4,7 +4,7 @@
 ---
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
-    ref: "v2.4.9"
+    ref: "v2.4.10"
     file:
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"

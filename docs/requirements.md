@@ -29,14 +29,14 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 - K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
 - Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases)
-- [Helm](https://helm.sh/) >= v3.17.3 && < 3.18.x[^3]
+- [Helm](https://helm.sh/) >= v3.17.3, but not v3.18.0[^1]
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
 - [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
-- Volume provisioner supporting RWO (read-write-once)[^1]
+- Volume provisioner supporting RWO (read-write-once)[^2]
 - Certificate handling with [cert-manager](https://cert-manager.io/)
 
 **Additional openDesk Enterprise requirements**
-- [OpenKruise](https://openkruise.io/)[^2] >= v1.6
+- [OpenKruise](https://openkruise.io/)[^3] >= v1.6
 
 # Hardware
 
@@ -117,7 +117,7 @@ deployments, you need to make use of your own production-grade services; see the
 |----------|---------------------|---------|-----------------------|
 | Cache    | Memcached           | `1.6.x` | Memcached             |
 |          | Redis               | `7.x.x` | Redis                 |
-| Database | Cassandra[^2]       | `5.0.x` | Cassandra             |
+| Database | Cassandra[^3]       | `5.0.x` | Cassandra             |
 |          | MariaDB             | `10.x`  | MariaDB               |
 |          | PostgreSQL          | `15.x`  | PostgreSQL            |
 | Mail     | Mail Transfer Agent |         | Postfix               |
@@ -137,8 +137,8 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 
 # Footnotes
 
-[^1]: Due to [restrictions on Kubernetes `emptyDir`](https://github.com/kubernetes/kubernetes/pull/130277) you need a volume provisioner that has sticky bit support, otherwise the OpenProject seeder job will fail.
+[^1]: Due to a [Helm bug](https://github.com/helm/helm/issues/30890) Helm 3.18.0 is not supported.
 
-[^2]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
+[^2]: Due to [restrictions on Kubernetes `emptyDir`](https://github.com/kubernetes/kubernetes/pull/130277) you need a volume provisioner that has sticky bit support, otherwise the OpenProject seeder job will fail.
 
-[^3]: Due to a [bug in Helm 3.18.x](https://github.com/helm/helm/issues/30890), fixed versions are likely to be supported again.
+[^3]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
