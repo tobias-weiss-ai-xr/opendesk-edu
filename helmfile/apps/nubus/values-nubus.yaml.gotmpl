@@ -1485,6 +1485,7 @@ nubusStackDataUms:
       {{ .Values.annotations.nubusStackDataUms.serviceAccount | toYaml | nindent 6 }}
   templateContext:
     initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote }}
+    additionalMailDomains: {{ .Values.global.additionalMailDomains | toYaml | nindent 6 }}
     apps: {{ .Values.apps | toYaml | nindent 6 }}
     defaultGroupOtherObjects: "cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}"
     opendeskEnterprise: {{ env "OPENDESK_ENTERPRISE" }}
