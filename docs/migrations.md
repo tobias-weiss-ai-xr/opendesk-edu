@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Manual checks/actions](#manual-checksactions)
   * [v1.6.0+](#v160)
     * [Pre-upgrade to v1.6.0+](#pre-upgrade-to-v160)
+      * [Upstream contraint: Nubus' external secrets](#upstream-contraint-nubus-external-secrets)
       * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
       * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
       * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
@@ -56,15 +57,136 @@ SPDX-License-Identifier: Apache-2.0
     * [Post-upgrade to v1.0.0+](#post-upgrade-to-v100)
       * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
       * [Optional Cleanup](#optional-cleanup)
-  * [v0.9.0](#v090)
-    * [Pre-upgrade to v0.9.0](#pre-upgrade-to-v090)
-      * [Updated `cluster.networking.cidr`](#updated-clusternetworkingcidr)
-      * [Updated customizable template attributes](#updated-customizable-template-attributes)
-      * [`migrations` S3 bucket](#migrations-s3-bucket)
 * [Automated migrations - Details](#automated-migrations---details)
+  * [v1.6.0+ (automated)](#v160-automated)
+    * [v1.6.0+ migrations-post](#v160-migrations-post)
   * [v1.2.0+ (automated)](#v120-automated)
-    * [migrations-pre](#migrations-pre)
-    * [migrations-post](#migrations-post)
+    * [v1.2.0+ migrations-pre](#v120-migrations-pre)
+    * [v1.2.0+ migrations-post](#v120-migrations-post)
+  * [v1.1.0+ (automated)](#v110-automated)
+  * [v1.0.0+ (automated)](#v100-automated)
+  * [Related components and artifacts](#related-components-and-artifacts)
+  * [Development](#development)
+>>>>>>> 66e78530 (fix(Nubus): Update migrations for Nubus 1.10.x)
+* [Disclaimer](#disclaimer)
+* [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
+* [Manual checks/actions](#manual-checksactions)
+  * [v1.6.0+](#v160)
+    * [Pre-upgrade to v1.6.0+](#pre-upgrade-to-v160)
+      * [Upstream contraint: Nubus' external secrets](#upstream-contraint-nubus-external-secrets)
+      * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
+      * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
+      * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
+    * [Post-upgrade to v1.6.0+](#post-upgrade-to-v160)
+      * [OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
+  * [v1.4.0+](#v140)
+    * [Pre-upgrade to v1.4.0+](#pre-upgrade-to-v140)
+      * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
+      * [Helmfile cleanup: `global.additionalMailDomains` as list](#helmfile-cleanup-globaladditionalmaildomains-as-list)
+  * [v1.2.0+](#v120)
+    * [Pre-upgrade to v1.2.0+](#pre-upgrade-to-v120)
+      * [Helmfile cleanup: Do not configure OX provisioning when no OX installed](#helmfile-cleanup-do-not-configure-ox-provisioning-when-no-ox-installed)
+      * [Helmfile new default: PostgreSQL for XWiki and Nextcloud](#helmfile-new-default-postgresql-for-xwiki-and-nextcloud)
+  * [v1.1.2+](#v112)
+    * [Pre-upgrade to v1.1.2+](#pre-upgrade-to-v112)
+      * [Helmfile feature update: App settings wrapped in `apps.` element](#helmfile-feature-update-app-settings-wrapped-in-apps-element)
+  * [v1.1.1+](#v111)
+    * [Pre-upgrade to v1.1.1](#pre-upgrade-to-v111)
+      * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
+      * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
+  * [v1.1.0+](#v110)
+    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110)
+      * [Helmfile cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
+      * [Helmfile cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
+      * [Helmfile cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
+      * [Helmfile cleanup: Splitting external services and openDesk services](#helmfile-cleanup-splitting-external-services-and-opendesk-services)
+      * [Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names](#helmfile-cleanup-streamlining-openxchange-and-oxappsuite-attribute-names)
+      * [Helmfile feature update: Dicts to define `customization.release`](#helmfile-feature-update-dicts-to-define-customizationrelease)
+      * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
+      * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
+      * [External requirements: Redis 7.4](#external-requirements-redis-74)
+    * [Post-upgrade to v1.1.0+](#post-upgrade-to-v110)
+      * [XWiki fix-ups](#xwiki-fix-ups)
+  * [v1.1.0](#v110-1)
+    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110-1)
+      * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
+      * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
+      * [Changed openDesk defaults: Matrix presence status disabled](#changed-opendesk-defaults-matrix-presence-status-disabled)
+      * [Changed openDesk defaults: Matrix ID](#changed-opendesk-defaults-matrix-id)
+      * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
+      * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
+      * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
+    * [Post-upgrade to v1.0.0+](#post-upgrade-to-v100)
+      * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
+      * [Optional Cleanup](#optional-cleanup)
+* [Automated migrations - Details](#automated-migrations---details)
+  * [v1.6.0+ (automated)](#v160-automated)
+    * [v1.6.0+ migrations-post](#v160-migrations-post)
+  * [v1.2.0+ (automated)](#v120-automated)
+    * [v1.2.0+ migrations-pre](#v120-migrations-pre)
+    * [v1.2.0+ migrations-post](#v120-migrations-post)
+  * [v1.1.0+ (automated)](#v110-automated)
+  * [v1.0.0+ (automated)](#v100-automated)
+  * [Related components and artifacts](#related-components-and-artifacts)
+  * [Development](#development)
+>>>>>>> 58fde95a (feat(nubus): Update from 1.9.1 to 1.11.1; required minimum openDesk version for this upgrade is 1.5.0, see `migrations.md` for details)
+* [Disclaimer](#disclaimer)
+* [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
+* [Manual checks/actions](#manual-checksactions)
+  * [v1.6.0+](#v160)
+    * [Pre-upgrade to v1.6.0+](#pre-upgrade-to-v160)
+      * [Upstream contraint: Nubus' external secrets](#upstream-contraint-nubus-external-secrets)
+      * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
+      * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
+      * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
+    * [Post-upgrade to v1.6.0+](#post-upgrade-to-v160)
+      * [OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
+  * [v1.4.0+](#v140)
+    * [Pre-upgrade to v1.4.0+](#pre-upgrade-to-v140)
+      * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
+      * [Helmfile cleanup: `global.additionalMailDomains` as list](#helmfile-cleanup-globaladditionalmaildomains-as-list)
+  * [v1.2.0+](#v120)
+    * [Pre-upgrade to v1.2.0+](#pre-upgrade-to-v120)
+      * [Helmfile cleanup: Do not configure OX provisioning when no OX installed](#helmfile-cleanup-do-not-configure-ox-provisioning-when-no-ox-installed)
+      * [Helmfile new default: PostgreSQL for XWiki and Nextcloud](#helmfile-new-default-postgresql-for-xwiki-and-nextcloud)
+  * [v1.1.2+](#v112)
+    * [Pre-upgrade to v1.1.2+](#pre-upgrade-to-v112)
+      * [Helmfile feature update: App settings wrapped in `apps.` element](#helmfile-feature-update-app-settings-wrapped-in-apps-element)
+  * [v1.1.1+](#v111)
+    * [Pre-upgrade to v1.1.1](#pre-upgrade-to-v111)
+      * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
+      * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
+  * [v1.1.0+](#v110)
+    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110)
+      * [Helmfile cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
+      * [Helmfile cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
+      * [Helmfile cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
+      * [Helmfile cleanup: Splitting external services and openDesk services](#helmfile-cleanup-splitting-external-services-and-opendesk-services)
+      * [Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names](#helmfile-cleanup-streamlining-openxchange-and-oxappsuite-attribute-names)
+      * [Helmfile feature update: Dicts to define `customization.release`](#helmfile-feature-update-dicts-to-define-customizationrelease)
+      * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
+      * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
+      * [External requirements: Redis 7.4](#external-requirements-redis-74)
+    * [Post-upgrade to v1.1.0+](#post-upgrade-to-v110)
+      * [XWiki fix-ups](#xwiki-fix-ups)
+  * [v1.1.0](#v110-1)
+    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110-1)
+      * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
+      * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
+      * [Changed openDesk defaults: Matrix presence status disabled](#changed-opendesk-defaults-matrix-presence-status-disabled)
+      * [Changed openDesk defaults: Matrix ID](#changed-opendesk-defaults-matrix-id)
+      * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
+      * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
+      * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
+    * [Post-upgrade to v1.0.0+](#post-upgrade-to-v100)
+      * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
+      * [Optional Cleanup](#optional-cleanup)
+* [Automated migrations - Details](#automated-migrations---details)
+  * [v1.6.0+ (automated)](#v160-automated)
+    * [v1.6.0+ migrations-post](#v160-migrations-post)
+  * [v1.2.0+ (automated)](#v120-automated)
+    * [v1.2.0+ migrations-pre](#v120-migrations-pre)
+    * [v1.2.0+ migrations-post](#v120-migrations-post)
   * [v1.1.0+ (automated)](#v110-automated)
   * [v1.0.0+ (automated)](#v100-automated)
   * [Related components and artifacts](#related-components-and-artifacts)
@@ -95,7 +217,8 @@ To upgrade existing deployments, you cannot skip any version mentioned in the co
 
 | Mandatory version |
 | ----------------- |
-<!--| v1.2+             | add the entry to the table as soon as we get new migration requiring the set version (range) to be deployed first -->
+<!-- | 1.x.x        |  add the entry to the table as soon as we get new migration requiring that the former migration was executed -->
+| v1.5.0            |
 | v1.1.x            |
 | v1.0.0            |
 | v0.9.0            |
@@ -111,6 +234,15 @@ If you would like more details about the automated migrations, please read secti
 ## v1.6.0+
 
 ### Pre-upgrade to v1.6.0+
+
+#### Upstream contraint: Nubus' external secrets
+
+**Target group:** Operators that use external secrets for Nubus.
+
+> **Note**<br>
+> External Secrets are not yet a supported feature. We are working on making it available in 2025, though it is possible to make use of the support for external secrets within single applications using the openDesk [customization](../helmfile/environments/default/customization.yaml.gotmpl) options.
+
+Please ensure you read the [Nubus 1.10.0 "Migration steps" section](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/changelog.html#v1-10-0-migration-steps) with focus on the paragraph "Operators that make use of the following UDM Listener secrets variables" and act accordingly.
 
 #### Helmfile new secret: `secrets.minio.openxchangeUser`
 
@@ -781,42 +913,31 @@ kubectl -n ${NAMESPACE} delete pvc shared-run-ums-ldap-server-0
 kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 ```
 
-## v0.9.0
-
-### Pre-upgrade to v0.9.0
-
-#### Updated `cluster.networking.cidr`
-
-- Action: `cluster.networking.cidr` is now an array (was a string until v0.8.1); please update your setup accordingly if you explicitly set this value.
-- Reference:[cluster.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/cluster.yaml)
-
-#### Updated customizable template attributes
-
-- Action: Please update your custom deployment values according to the updated default value structure.
-- References:
-  - `functional.` prefix for `authentication.*`, `externalServices.*`, `admin.*` and `filestore.*`, see [functional.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/functional.yaml).
-  - `debug.` prefix for `cleanup.*`, see [debug.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/debug.yaml).
-  - `monitoring.` prefix for `prometheus.*` and `grafana.*`, see [monitoring.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/monitoring.yaml).
-  - `smtp.` prefix for `localpartNoReply`, see [smtp.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/smtp.yaml).
-
-#### `migrations` S3 bucket
-
-- Action: For self-managed/external S3/object storages, please create a bucket called `migrations` using your S3 endpoint.
-- Reference: `objectstores.migrations` in [objectstores.yaml](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/helmfile/environments/default/objectstores.yaml)
-
 # Automated migrations - Details
+
+## v1.6.0+ (automated)
+
+> **Note**<br>
+> Details can be found in [run_5.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_5.py).
+
+### v1.6.0+ migrations-post
+
+Restarting the StatefulSets `ums-provisioning-nats` and `ox-connector` due to a workaround applied on the NATS secrets, see the "Notes" segment of the ["Password seed" heading in getting-started.md](./docs/getting-started.md#password-seed)
+
+> **Note**<br>
+> This change aims to prevent authentication failures with NATS in some Pods, which can lead to errors such as: `wait-for-nats Unavailable, waiting 2 seconds. Error: nats: 'Authorization Violation'`.
 
 ## v1.2.0+ (automated)
 
 > **Note**<br>
 > Details can be found in [run_4.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_4.py).
 
-### migrations-pre
+### v1.2.0+ migrations-pre
 
 - Delete PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
 - Delete StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
 
-### migrations-post
+### v1.2.0+ migrations-post
 
 - Restarting Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` as well as deleting the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
 

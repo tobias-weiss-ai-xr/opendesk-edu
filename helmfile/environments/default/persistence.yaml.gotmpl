@@ -36,6 +36,14 @@ persistence:
     nubusProvisioningNats:
       size: "1Gi"
       storageClassName: ~
+    # This option was introduced with openDesk 1.6. For now we want to use the Helm charts default empty string
+    # to avoid issues during the upgrade modifying an existing PV, as the migrations in 1.6 required a smooth
+    # Nubus deployment.
+    # In a later openDesk release we will advise in the migrations.md to explicitly set this on existing deployments
+    # to the default storage class.
+    nubusUdmListener:
+      size: "1Gi"
+      #storageClassName: ""
     oxConnector:
       size: "1Gi"
       storageClassName: ~
