@@ -20,6 +20,11 @@ Please review the default configuration that is applied to understand your custo
 
 You can just update the files in [helmfile/files/theme](../helmfile/files/theme) to change logos, favicons etc. Note that the `.svg` versions of the favicons are also used for the portal tiles.
 
+> **Note**<br>
+> Theming focusses on colors, iconography and imagery. If you like to adapt the default links in the portal pointing to external
+> resources (like "Support", "Legal Notice") please check the `functional.portal` section
+> in [`functional.yaml.gotmpl`](../helmfile/environments/default/functional.yaml.gotmpl)
+
 # Known limitations
 
 - Portal and Keycloak screen styles, especially colors, must be applied in the [`portalStylesheets.css`](../helmfile/files/theme/portalStylesheet.css),
