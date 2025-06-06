@@ -66,7 +66,13 @@ theme:
       faviconIco: {{ readFile "./../../files/theme/notes/favicon.ico" | b64enc | quote }}
 
     portal:
-      faviconIco: {{ readFile "./../../files/theme/portal/favicon.ico" | b64enc | quote }}
+      faviconIco: {{ readFile "./../../files/theme/portal/favicon/favicon.ico" | b64enc | quote }}
+      faviconSvg: {{ readFile "./../../files/theme/portal/favicon/favicon.svg" | b64enc | quote }}
+      favicon96Png: {{ readFile "./../../files/theme/portal/favicon/favicon-96x96.png" | b64enc | quote }}
+      appleTouchIcon: {{ readFile "./../../files/theme/portal/favicon/apple-touch-icon.png" | b64enc | quote }}
+      webManifestIcon192: {{ readFile "./../../files/theme/portal/favicon/web-app-manifest-192x192.png" | b64enc | quote }}
+      webManifestIcon512: {{ readFile "./../../files/theme/portal/favicon/web-app-manifest-512x512.png" | b64enc | quote }}
+
       waitingSpinnerSvg: {{ readFile "./../../files/theme/portal/waiting-spinner.svg" | b64enc  }}
       backgroundSvg: {{ readFile "./../../files/theme/portal/background.svg" | b64enc | quote }}
     portalTiles:
@@ -89,6 +95,10 @@ theme:
       notes: {{ readFile "./../../files/theme/notes/favicon.svg" | b64enc | quote }}
       realtimeCollaboration: {{ readFile "./../../files/theme/chat/favicon.svg" | b64enc | quote }}
       realtimeVideoconference: {{ readFile "./../../files/theme/videoconference/favicon.svg" | b64enc | quote }}
+      # links
+      documentation: {{ readFile "./../../files/theme/link_documentation/favicon.svg" | b64enc | quote }}
+      feedback: {{ readFile "./../../files/theme/link_feedback/favicon.svg" | b64enc | quote }}
+      support: {{ readFile "./../../files/theme/link_support/favicon.svg" | b64enc | quote }}
       # empty.svg
       empty: {{ readFile "./../../files/theme/_dev/empty.svg" | b64enc | quote }}
       fileshareActivity: {{ readFile "./../../files/theme/_dev/empty.svg" | b64enc | quote }}

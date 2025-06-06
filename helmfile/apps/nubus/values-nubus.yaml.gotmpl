@@ -409,8 +409,12 @@ nubusPortalFrontend:
   portalFrontend:
     branding:
       css: {{ .Values.theme.styles.portal.main | toJson }}
-      # Requires .ico, .svg does not work.
       favicon: {{ .Values.theme.imagery.portal.faviconIco | toJson }}
+      faviconSvg: {{ .Values.theme.imagery.portal.faviconSvg | toJson }}
+      favicon96Png: {{ .Values.theme.imagery.portal.favicon96Png | toJson }}
+      appleTouchIcon: {{ .Values.theme.imagery.portal.appleTouchIcon | toJson }}
+      webManifestIcon192: {{ .Values.theme.imagery.portal.webManifestIcon192 | toJson }}
+      webManifestIcon512: {{ .Values.theme.imagery.portal.webManifestIcon512 | toJson }}
       # The actual `logo` is set in customizing image, the logo down here is for waiting spinner.
       logo: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | toJson }}
       backgroundImage: {{ .Values.theme.imagery.portal.backgroundSvg | toJson }}
@@ -680,7 +684,6 @@ nubusPortalServer:
         {{- with .Values.annotations.nubusPortalServer.ingress }}
         {{ . | toYaml | nindent 8 }}
         {{- end }}
-
     certManager:
       enabled: false
     tls:
@@ -704,6 +707,25 @@ nubusPortalServer:
         sharedSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
     featureToggles:
       notifications_api: false
+      centered_layout: true
+      newsfeed: {{ .Values.apps.xwiki.enabled }}
+      umc_session_refresh: true
+      welcome_message: true
+    newsfeed:
+      feedType: "xwiki"
+      feedUrl:
+        en_US: {{ printf "https://%s.%s/wiki/bin/get/Blog/BlogRss?xpage=plain&blog=openDesk.Newsfeed.WebHome" .Values.global.hosts.intercomService .Values.global.domain }}
+        de_DE: {{ printf "https://%s.%s/wiki/bin/get/Blog/BlogRss?xpage=plain&blog=openDesk.Newsfeed.WebHome" .Values.global.hosts.intercomService .Values.global.domain }}
+      homeUrl:
+        en_US: {{ printf "https://%s.%s/bin/view/openDesk/Newsfeed/" .Values.global.hosts.xwiki .Values.global.domain }}
+        de_DE: {{ printf "https://%s.%s/bin/view/openDesk/Newsfeed/" .Values.global.hosts.xwiki .Values.global.domain }}
+      icsSilentLoginUrl: {{ printf "https://%s.%s/silent" .Values.global.hosts.intercomService .Values.global.domain }}
+    objectStorageEndpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+    objectStorageBucket: {{ .Values.objectstores.nubus.bucket | quote }}
+    objectStorageCredentialSecret:
+      name: "ums-portal-server-minio-opendesk-credentials"
+      accessKeyKey: "access-key-id"
+      secretKeyKey: "secret-key-id"
   replicaCount: {{ .Values.replicas.umsPortalServer }}
   resources:
     {{ .Values.resources.umsPortalServer | toYaml | nindent 4 }}
