@@ -86,7 +86,7 @@ repositories:
 
 ## License keys
 
-Some applications require license information for their Enterprise features to be enabled. With the aforementioned registry credentials you will also receive a file called `enterprise.yaml` containing the relevant license keys.
+Some applications require license information for their Enterprise features to be enabled. With the aforementioned registry credentials you will also receive a file called [`enterprise.yaml`](./helmfile/environments/default/enterprise_keys.yaml.gotmpl) containing the relevant license keys.
 
 Please place the file next your other `.yaml.gotmpl` file(s) that configure your deployment.
 
