@@ -17,6 +17,13 @@ ingress:
   tls:
     enabled: "{{ .Values.ingress.tls.enabled }}"
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.notes }}"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.notes }}"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.notes }}"
+    nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.notes }}"
+    nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.notes }}s"
+    nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.notes }}s"
 
 ingressCollaborationWS:
   enabled: {{ .Values.ingress.enabled }}
