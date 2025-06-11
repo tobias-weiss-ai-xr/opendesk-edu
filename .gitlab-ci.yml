@@ -681,9 +681,11 @@ diff-on-branch:
   cache: {}
   dependencies: []
   extends: ".environments"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:${HELM_IMAGE_PIN}"
+  variables:
+    DIFF_ON_BRANCH_SUBDIRECTORY: "diff-on-branch"
   environment:
     name: "${NAMESPACE}"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:${HELM_IMAGE_PIN}"
   rules:
     - if: "$DIFF_ON_BRANCH"
   script:
@@ -693,8 +695,8 @@ diff-on-branch:
       BASE_URL="https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/archive"
       FILE_NAME="opendesk-${SAFE_BRANCH_NAME}.tar.gz"
       curl -L "${BASE_URL}/${DIFF_ON_BRANCH}/${FILE_NAME}" -o branch.tar.gz
-      mkdir branch && tar -xzf branch.tar.gz -C branch --strip-components=1
-      cd branch
+      mkdir ${DIFF_ON_BRANCH_SUBDIRECTORY} && tar -xzf branch.tar.gz -C ${DIFF_ON_BRANCH_SUBDIRECTORY} --strip-components=1
+      cd ${DIFF_ON_BRANCH_SUBDIRECTORY}
       helmfile --namespace ${NAMESPACE} diff | grep -v '^ ' || true
   tags:
     - "docker"
