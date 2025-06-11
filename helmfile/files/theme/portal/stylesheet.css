@@ -145,6 +145,13 @@
   color: var(--color-opendesk-white) !important;
 }
 
+#social-sso-federation-idp {
+    margin: 0;
+    color: var(--color-opendesk-white);
+    background-color: var(--pf-c-button--m-primary--BackgroundColor);
+    border-radius: var(--border-radius-interactable, 0.25rem);
+}
+
 #kc-login:hover,
 #kc-logout:hover,
 #saveTOTPBtn:hover,
