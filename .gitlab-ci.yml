@@ -681,8 +681,6 @@ diff-on-branch:
   cache: {}
   dependencies: []
   extends: ".environments"
-  variables:
-    DIFF_ON_BRANCH_SUBDIRECTORY: "diff-on-branch"
   environment:
     name: "${NAMESPACE}"
   image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:${HELM_IMAGE_PIN}"
@@ -704,6 +702,7 @@ diff-on-branch:
     - "${CLUSTER}"
   variables:
     HELMFILE_ENVIRONMENT: "dev"
+    DIFF_ON_BRANCH_SUBDIRECTORY: "diff-on-branch"
 
 import-default-accounts:
   stage: "post-execute"
