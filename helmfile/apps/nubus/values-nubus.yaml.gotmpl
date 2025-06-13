@@ -708,9 +708,9 @@ nubusPortalServer:
     featureToggles:
       notifications_api: false
       centered_layout: true
-      newsfeed: {{ .Values.apps.xwiki.enabled }}
+      newsfeed: {{ and .Values.apps.xwiki.enabled .Values.functional.portal.newsfeed.enabled }}
       umc_session_refresh: true
-      welcome_message: true
+      welcome_message: {{ .Values.functional.portal.welcomeMessage.enabled }}
     newsfeed:
       feedType: "xwiki"
       feedUrl:
@@ -1299,8 +1299,11 @@ nubusStackDataUms:
     portalNotesLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.notes .Values.global.domain }}
     portalTitleDE: "Portal - {{ .Values.theme.texts.productName }}"
     portalTitleEN: "Portal - {{ .Values.theme.texts.productName }}"
-    portalLinkLegalNotice: {{ .Values.functional.portal.linkLegalNotice }}
-    portalLinkPrivacyStatement: {{ .Values.functional.portal.linkPrivacyStatement }}
+    portalLinkLegalNotice: {{ .Values.functional.portal.linkLegalNotice | quote }}
+    portalLinkPrivacyStatement: {{ .Values.functional.portal.linkPrivacyStatement | quote }}
+    portalLinkDocumentation: {{ .Values.functional.portal.linkDocumentation | quote }}
+    portalLinkSupport: {{ .Values.functional.portal.linkSupport | quote }}
+    portalLinkFeedback: {{ .Values.functional.portal.linkFeedback | quote }}
     oxDefaultContext: "1"
     oxContextHidden: true
     ldapSearchUsers:
