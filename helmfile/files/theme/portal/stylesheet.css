@@ -97,41 +97,6 @@
   --login-logo: url("/static-files/login/logo.svg") no-repeat center;
 }
 
-/* Beta overlay for Notes */
-.portal-tile[target="tab_notes"]:before {
-  position: absolute;
-  content: "Beta";
-  color: #571EFA;
-  transform: rotate(45deg);
-  top: 8px;
-  right: 0px;
-  font-size: var(--font-size-5);
-  font-weight: bold;
-  z-index: 1;
-}
-
-@media screen and (max-width: 748px) {
-  .portal-tile[target="tab_notes"]:before {
-      top: 5px;
-      font-size: 10px;
-  }
-  .portal-tile__name {
-      font-size: 13px;
-  }
-}
-
-.portal-tile[target="tab_notes"]:after {
-  position: absolute;
-  content: "";
-  top: 1px;
-  right: 1px;
-  border-style: solid;
-  border-width: 0 calc(var(--app-tile-side-length) / 2) calc(var(--app-tile-side-length) / 2) 0;
-  border-color: transparent #E9E4FC transparent transparent;
-  z-index: 0;
-  border-top-right-radius: calc(var(--border-radius-apptile) - 1px);
-}
-
 /* Keycloak user screens begin */
 #kc-login,
 #kc-logout,
