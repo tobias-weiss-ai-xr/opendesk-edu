@@ -1,3 +1,28 @@
+# [1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.4.1...v1.5.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* **dovecot:** Enable Dovecot ACL for CE (file) & EE (cassandra) ([9354ee7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9354ee719628c876c26e91e1b57a4a0cfafedca1))
+* **notes:** Support templating of Ingress annotations `bodyTimeout` and `bodySize` to allow application defined upload limits to be reached ([69faf77](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/69faf77d15d1df441eb62c58374620f8035f2596))
+* **nubus:** Create required LDAP objects for `global.additionalMailDomains` ([4dcb683](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4dcb6831189fc9cedb244c3fd7997d57e8a78c5a))
+* **nubus:** Explicitly template security context for Keycloak proxy ([e959438](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e9594382ed7a2469240d62134b34bcf3e5d06a59))
+* **nubus:** Update CSS for login screen to show login button for federated IdP ([0d4e1b0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0d4e1b01e3e82ace7f7438a754235a009036b90d))
+* **nubus:** Use read-only root filesystem for Keycloak bootstrap ([1edd7c3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1edd7c3f062ec411b8b38f45be9ef22a200b4bea))
+* **open-xchange:** Enabled mail login resolver ([7547f49](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7547f4948ea13357c4cbc3ae69ae4e7210fdf4a2))
+* **open-xchange:** Update Dovecot CE chart to support ACLs (mailbox sharing) and usernames different from local part of mail address ([87c30ab](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/87c30ab8e32c1b405f6aff8eda5eed5f74d5df0a))
+* **open-xchange:** Use login name instead of email between OX and Dovecot ([8e9ef08](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8e9ef0867beb8381ad4a5f55f2e9d12bd7dbbba2))
+* **openproject:** Update from 16.0.0 to 16.0.1 ([b60f9c7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b60f9c7576deca327ad36c48ad0b1a7e3e9d3c9c))
+* **openxchange:** Update App Suite 8.37 to latest patch level (8.37.69) ([bc436b2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bc436b248525bf76584dd21f735694065bcb67a5))
+
+
+### Features
+
+* **ci:** Update Helm to 3.18.1 and Helmfile to 1.1.1 ([59a4086](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/59a40864edbdf9775e0d6003425c3b05b7b7cb15))
+* **notes:** Update from 2.4.0 to 3.2.1 ([9f4e3c8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9f4e3c86c74ef6c6f618150a7a9d0935fb5ed437))
+* **open-xchange:** Support for `mailAlternativAddress`(es) for sending and receiving emails ([6d6b1a6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6d6b1a6dd754dcb283fd23f08f9df937f8e08c59))
+* **openproject:** Update from 15.5.1 to 16.0.0 including Helm chart update ([add7266](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/add72669aedfcd57b41fe8680f14940ab77f6aef))
+
 ## [1.4.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.4.0...v1.4.1) (2025-06-02)
 
 
