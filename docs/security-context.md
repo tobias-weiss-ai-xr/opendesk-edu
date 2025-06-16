@@ -182,9 +182,9 @@ This list gives you an overview of templated security settings and if they compl
 | **nubus**/ums/nubusGuardian/managementApi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/nubusGuardian/managementUi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/nubusGuardian/openPolicyAgent | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **nubus**/ums/nubusKeycloakBootstrap | :x: | no | n/a | no | yes | 1000 | 1000 | yes | yes |
+| **nubus**/ums/nubusKeycloakBootstrap | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/nubusKeycloakExtensions/handler | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
-| **nubus**/ums/nubusKeycloakExtensions/proxy | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
+| **nubus**/ums/nubusKeycloakExtensions/proxy | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/nubusLdapNotifier | :x: | no | n/a | yes | yes | 101 | 102 | yes | yes |
 | **nubus**/ums/nubusNotificationsApi | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/nubusPortalConsumer | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
