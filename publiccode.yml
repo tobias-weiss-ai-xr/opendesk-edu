@@ -22,7 +22,7 @@ name: "openDesk"
 platforms:
   - "web"
 developmentStatus: "stable"
-softwareVersion: "1.3.1"
+softwareVersion: "1.5.0"
 releaseDate: "2025-04-23"
 softwareType: "standalone/web"
 url: "https://gitlab.opencode.de/bmi/opendesk/"
