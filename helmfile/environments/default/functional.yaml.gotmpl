@@ -145,7 +145,12 @@ functional:
         # yamllint enable rule:line-length
 
   groupware:
+    # Related settings for the CalDAV and CardCAV support of the groupware module.
     davSupport:
+      # Enabled by default it is available at:
+      # - https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/caldav/[folderId]"
+      # - https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/carddav/[folderId]"
+      # Can be switched off using the below feature toggle.
       enabled: true
 
   migration:
