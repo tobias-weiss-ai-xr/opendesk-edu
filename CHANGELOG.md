@@ -10,10 +10,10 @@
 * **nubus:** Update CSS for login screen to show login button for federated IdP ([0d4e1b0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0d4e1b01e3e82ace7f7438a754235a009036b90d))
 * **nubus:** Use read-only root filesystem for Keycloak bootstrap ([1edd7c3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1edd7c3f062ec411b8b38f45be9ef22a200b4bea))
 * **open-xchange:** Enabled mail login resolver ([7547f49](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7547f4948ea13357c4cbc3ae69ae4e7210fdf4a2))
+* **open-xchange:** Update App Suite 8.37 to latest patch level (8.37.69) ([bc436b2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bc436b248525bf76584dd21f735694065bcb67a5))
 * **open-xchange:** Update Dovecot CE chart to support ACLs (mailbox sharing) and usernames different from local part of mail address ([87c30ab](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/87c30ab8e32c1b405f6aff8eda5eed5f74d5df0a))
 * **open-xchange:** Use login name instead of email between OX and Dovecot ([8e9ef08](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8e9ef0867beb8381ad4a5f55f2e9d12bd7dbbba2))
 * **openproject:** Update from 16.0.0 to 16.0.1 ([b60f9c7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b60f9c7576deca327ad36c48ad0b1a7e3e9d3c9c))
-* **openxchange:** Update App Suite 8.37 to latest patch level (8.37.69) ([bc436b2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bc436b248525bf76584dd21f735694065bcb67a5))
 
 
 ### Features
