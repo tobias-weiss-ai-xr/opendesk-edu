@@ -1513,6 +1513,9 @@ nubusKeycloakBootstrap:
     twoFactorAuthentication:
       enabled: true
       group: "2fa-users"
+  config:
+    debug:
+      enabled: {{ .Values.debug.enabled }}
   containerSecurityContext:
     enabled: true
     allowPrivilegeEscalation: false
