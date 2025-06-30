@@ -647,6 +647,10 @@ appsuite:
       cache:
         remoteCache:
           enabled: false
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . | quote }}
+    {{- end }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeDocumentConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeDocumentConverter.repository | quote }}
@@ -733,6 +737,10 @@ appsuite:
     adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     basicAuthLogin: "oxlogin"
     basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
+    imagePullSecrets:
+    {{- range .Values.global.imagePullSecrets }}
+      - name: {{ . | quote }}
+    {{- end }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeImageConverter.registry | quote }}
       repository: {{ .Values.images.openxchangeImageConverter.repository | quote }}
