@@ -9,6 +9,13 @@ SPDX-License-Identifier: Apache-2.0
 * [Disclaimer](#disclaimer)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
+  * [v1.6.0+](#v160)
+    * [Pre-upgrade to v1.6.0+](#pre-upgrade-to-v160)
+      * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
+      * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
+      * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
+    * [Post-upgrade to v1.6.0+](#post-upgrade-to-v160)
+      * [OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
   * [v1.4.0+](#v140)
     * [Pre-upgrade to v1.4.0+](#pre-upgrade-to-v140)
       * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
@@ -100,6 +107,93 @@ To upgrade existing deployments, you cannot skip any version mentioned in the co
 If you would like more details about the automated migrations, please read section [Automated migrations - Details](#automated-migrations---details).
 
 # Manual checks/actions
+
+## v1.6.0+
+
+### Pre-upgrade to v1.6.0+
+
+#### Helmfile new secret: `secrets.minio.openxchangeUser`
+
+**Target group:** All existing deployments that have OX App Suite enabled and that use externally defined secrets in combination with openDesk provided MinIO object storage.
+
+For OX App Suite to access the object storage a new secret has been introduced.
+
+It is declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key: `secrets.minio.openxchangeUser`. If you define your own secrets, please ensure that you provide a value for this secret as well, otherwise the aforementioned secret will be derived from the `MASTER_PASSWORD`.
+
+#### Helmfile new object storage: `objectstores.openxchange.*`
+
+**Target group:** All deployments that use an external object storage.
+
+For OX App Suite's newly introduced filestore you have to configure a new object storage (bucket). When you are using
+an external object storage you did this already for all the entries in
+[`objectstores.yaml.gotmpl`](../helmfile/environments/default/objectstores.yaml.gotmpl). Where we now introduced
+`objectstores.openxchange` section that you also need to provide you external configuration for.
+
+#### OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)
+
+**Target group:** All existing deployments that have OX App Suite enabled.
+
+With openDesk 1.6.0 OX App Suite persists the attachments on contact, calendar or task objects in object storage.
+
+To enable the use of this new filestore backend existing deployments must execute the following steps.
+
+Preparation:
+- Ensure your `kubeconfig` is pointing to the cluster that is running your deployment.
+- Identify/create a e.g. local temporary directory that can keep the attachments while upgrading openDesk.
+- Set some environment variables to prepare running the documented commands:
+
+```shell
+export ATTACHMENT_TEMP_DIR=<your_temporary_directory_for_the_attachments>
+export NAMESPACE=<your_namespace>
+```
+
+1. Copy the existing attachments from all `open-xchange-core-mw-default-*` Pods to the identified directory, example for `open-xchange-core-mw-default-0`:
+```shell
+kubectl cp -n ${NAMESPACE} open-xchange-core-mw-default-0:/opt/open-xchange/ox-filestore ${ATTACHMENT_TEMP_DIR}
+```
+2. Run the upgrade.
+3. Continue with the [related post-upgrade steps](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
+
+### Post-upgrade to v1.6.0+
+
+#### OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)
+
+**Target group:** All existing deployments having OX App Suite enabled.
+
+Continued from the [related pre-upgrade section](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade).
+
+1. Copy the attachments back from your temporary directory into `open-xchange-core-mw-default-0`.
+```shell
+kubectl cp -n ${NAMESPACE} ${ATTACHMENT_TEMP_DIR}/* open-xchange-core-mw-default-0:/opt/open-xchange/ox-filestore
+```
+2. Ideally you verify the files have been copied as expected checking the target directory in the `open-xchange-core-mw-default-0` Pod. All the following commands are for execution within the aforementioned Pod.
+3. Get the `id` of the new object storage based OX filestore, using the following command in the first line of the following block. In the shown example output the `id` for the new filestore would be `10` as the filestore can be identified by its path value `s3://ox-filestore-s3`, the `id` of the existing filestore would be `3` identified by the corresponding path `/opt/open-xchange/ox-filestore`:
+```shell
+/opt/open-xchange/sbin/listfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+id path                             size reserved used max-entities cur-entities
+ 3 /opt/open-xchange/ox-filestore 100000      200    5         5000            1
+10 s3://ox-filestore-s3           100000        0    0         5000            0
+```
+4. Get the list of your OX contexts IDs (`cid` column in the output of the `listcontext` command), as the next step needs to be executed per OX context. Most installation will just have a single OX context (`1`).
+```shell
+/opt/open-xchange/sbin/listcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+cid fid fname       enabled qmax qused name lmappings
+  1   3 1_ctx_store true             5 1    1,context1
+```
+5. For each of your OX contexts IDs run the final filestore migration command and you will get output like this: `context 1 to filestore 10 scheduled as job 1`:
+```shell
+/opt/open-xchange/sbin/movecontextfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -f <your_s3_filestore_id_from_step_3> -c <your_context_id_from_step_4>
+```
+6. Depending on the size of your filestore, moving the contexts will take some time. You can check the status of a context's jobs with the command below. When the job status is `Done` you can also doublecheck that everything worked as expected by running the `listfilestore` command from step #3 and should see that the filestore is no longer used.
+```shell
+/opt/open-xchange/sbin/jobcontrol -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -c <your_context_id_from_step_4> -l
+ID    Type of Job                              Status     Further Information
+1     movefilestore                            Done       move context 1 to filestore 10
+```
+7. Finally you can unregister the old filestore:
+```shell
+/opt/open-xchange/sbin/unregisterfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -i <your_old_filestore_id_from_step_3>
+```
 
 ## v1.4.0+
 
@@ -280,7 +374,7 @@ persistence:
 
 #### Helmfile new secret: `secrets.nubus.masterpassword`
 
-A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
+A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
 
 ## v1.1.0+
 

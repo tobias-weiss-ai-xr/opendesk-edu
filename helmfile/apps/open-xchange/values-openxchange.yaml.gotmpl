@@ -295,6 +295,8 @@ appsuite:
         open-xchange-oauth-provider: "enabled"
         # Needed to set com.openexchange.hostname
         open-xchange-hostname-config-cascade: "enabled"
+        # Enable s3 storage
+        open-xchange-filestore-s3: "enabled"
     properties:
       com.openexchange.hostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
@@ -479,6 +481,11 @@ appsuite:
         com.openexchange.antivirus.port: "1344"
         {{- end }}
         com.openexchange.antivirus.maxFileSize: "1024"
+      /opt/open-xchange/etc/filestore-s3.properties:
+        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ .Values.objectstores.openxchange.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+        com.openexchange.filestore.s3.ox-filestore-s3.bucketName: {{ .Values.objectstores.openxchange.bucket | quote }}
+        com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
+        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | default .Values.secrets.minio.openxchangeUser | quote }}
     uiSettings:
       io.ox.nextcloud//server: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
       io.ox.public-sector//ics/url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
