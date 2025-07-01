@@ -7,6 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <!-- TOC -->
 * [Disclaimer](#disclaimer)
+* [Deprecation warnings](#deprecation-warnings)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
   * [v1.6.0+](#v160)
@@ -84,6 +85,15 @@ Manual checks and possible activities are also required by openDesk updates, the
 
 > **Known limitations**<br>
 > We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC is deleted; we will not address explicit deletion for PVs.
+
+# Deprecation warnings
+
+We cannot hold back all migrations as some are required e.g. due to a change in a specific component that we want/need to update, we try to bundle others only with major releases.
+
+This section should provide you with an overview of what changes to expect in the next major release (openDesk 2.0) expected in September 2025.
+
+- `functional.portal.link*` (see `functional.yaml.gotmpl` for details) are going to be moved into the `theme.*` tree, we are also going to move the icons used for the links currently found under `theme.imagery.portalEntries` in this step.
+- We will explicitly set the [database schema configuration](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/#HConfigurethenamesofdatabaseschemas) for XWiki to avoid the use of the `public` schema.
 
 # Automated migrations - Overview and mandatory upgrade path
 
