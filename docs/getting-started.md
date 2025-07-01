@@ -384,7 +384,7 @@ export MASTER_PASSWORD="your_individual_master_password"
 > **Note**<br>
 > Currently a [documented](https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/configuration/nats.html#configure-the-secrets) upstream [bug](https://forge.univention.org/bugzilla/show_bug.cgi?id=58357) causes a failure when passwords/secrets beginning with certain numbers are using for the Nubus subcomponent NATS.
 > With openDesk 1.6.0 an update-aware workaround was implemented that prefixes the affected secrets in the openDesk included `secrets.yaml.gotmpl` that derives all secrets from the previously mentioned `MASTER_PASSWORD`.
-> When you are using externally provided passwords/secrets you best ensure that non of the ones listed below are starting with a number:
+> If you are using externally provided passwords/secrets make sure that none of the ones listed below are starting with a number:
 >
 > - `secrets.nubus.provisioning.api.natsPassword`
 > - `secrets.nubus.provisioning.dispatcherNatsPassword`
