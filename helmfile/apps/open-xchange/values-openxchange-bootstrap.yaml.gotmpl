@@ -42,4 +42,8 @@ serviceAccount:
   annotations:
     {{ .Values.annotations.openxchangeBootstrap.serviceAccount | toYaml | nindent 4 }}
 
+filestore:
+  # identifier must match identifier in /opt/open-xchange/etc/filestore-s3.properties
+  identifier: "ox-filestore-s3"
+  size: {{ .Values.objectstores.openxchange.maxSize }}
 ...

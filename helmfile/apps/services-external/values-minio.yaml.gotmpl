@@ -124,6 +124,9 @@ provisioning:
     - name: {{ .Values.objectstores.openproject.bucket | quote }}
       versioning: "Suspended"
       withLock: false
+    - name: {{ .Values.objectstores.openxchange.bucket | quote }}
+      versioning: "Suspended"
+      withLock: false
     - name: {{ .Values.objectstores.nubus.bucket | quote }}
       versioning: "Suspended"
       withLock: false
@@ -183,6 +186,18 @@ provisioning:
           effect: "Allow"
           actions:
             - "s3:*"
+    - name: "openxchange-bucket-policy"
+      statements:
+        - resources:
+            - "arn:aws:s3:::openxchange"
+          effect: "Allow"
+          actions:
+            - "s3:*"
+        - resources:
+            - "arn:aws:s3:::openxchange/*"
+          effect: "Allow"
+          actions:
+            - "s3:*"
     - name: "ums-bucket-policy"
       statements:
         - resources:
@@ -233,6 +248,12 @@ provisioning:
       disabled: false
       policies:
         - "openproject-bucket-policy"
+      setPolicies: true
+    - username: {{ .Values.objectstores.openxchange.username | quote }}
+      password: {{ .Values.secrets.minio.openxchangeUser | quote }}
+      disabled: false
+      policies:
+        - "openxchange-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.nubus.username | quote }}
       password: {{ .Values.secrets.minio.umsUser | quote }}
