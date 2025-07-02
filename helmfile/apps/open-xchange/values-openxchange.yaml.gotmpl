@@ -410,7 +410,7 @@ appsuite:
       # Usage (in browser console after login):
       # http = (await import('./io.ox/core/http.js')).default
       # await http.POST({ module: 'oxguard/smime', params: { action: 'test' } })
-      com.openexchange.smime.test: "true"
+      com.openexchange.smime.test: {{ .Values.debug.enabled | quote }}
       # DAV
       {{- if .Values.functional.groupware.davSupport.enabled }}
       com.openexchange.caldav.enabled: "true"
