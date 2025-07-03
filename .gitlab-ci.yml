@@ -395,6 +395,7 @@ env-cleanup:
       when: "on_success"
   script:
     - |
+      echo "Cleaning up ${NAMESPACE}"
       if [ "${OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED}" = "yes" ]; then
         for OPENDESK_RELEASE in $(helm ls -n ${NAMESPACE} -aq); do
           helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE};
