@@ -23,7 +23,7 @@ platforms:
   - "web"
 developmentStatus: "stable"
 softwareVersion: "1.5.0"
-releaseDate: "2025-04-23"
+releaseDate: "2025-06-16"
 softwareType: "standalone/web"
 url: "https://gitlab.opencode.de/bmi/opendesk/"
 logo: ".opencode/openDesk-logo-rgb-color.svg"
@@ -92,9 +92,37 @@ description:
       - ".opencode/screenshots/03-projekte-desktop.png"
       - ".opencode/screenshots/04-wiki-desktop.png"
     documentation: "https://docs.opendesk.eu/user"
+  en:
+    features:
+      - "productivity"
+      - "collaboration"
+      - "communication"
+    genericName: "collaboration & communication"
+    shortDescription: >
+      The adaptable office and collaboration suite for the public administration.
+    longDescription: >
+      openDesk is the adaptable office and collaboration suite specifically developed to meet
+      the needs of the public administration.
+
+
+      Focusing on data sovereignty, security, and seamless collaboration, openDesk provides
+      all the familiar tools required for day-to-day administrative work. It brings together
+      all essential office applications under a single, user-friendly interface.
+
+
+      openDesk is the evolution of the “Sovereign Workplace,” an initiative by the
+      Federal Ministry of the Interior.
+      With openDesk, the public administration gains greater control over its digital tools
+      and can respond more flexibly to changing requirements.
+      Federal, state, and local authorities receive a comprehensive office solution that
+      works independently of specific providers, in any browser, and on all devices.
+    screenshots:
+      - ".opencode/screenshots/01-portal-desktop.png"
+      - ".opencode/screenshots/02-dateien-desktop.png"
+      - ".opencode/screenshots/03-projekte-desktop.png"
+      - ".opencode/screenshots/04-wiki-desktop.png"
 usedBy:
   - "Robert Koch-Institut"
   - "Bundesamt für Seeschifffahrt und Hydrographie"
   - "Föderale IT-Kooperation (FITKO)"
   - "ZenDiS"
-...
