@@ -73,7 +73,7 @@ theme:
       webManifestIcon192: {{ readFile "./../../files/theme/portal/favicon/web-app-manifest-192x192.png" | b64enc | quote }}
       webManifestIcon512: {{ readFile "./../../files/theme/portal/favicon/web-app-manifest-512x512.png" | b64enc | quote }}
 
-      waitingSpinnerSvg: {{ readFile "./../../files/theme/portal/waiting-spinner.svg" | b64enc  }}
+      waitingSpinnerSvg: {{ readFile "./../../files/theme/portal/waiting-spinner.svg" | b64enc | quote }}
       backgroundSvg: {{ readFile "./../../files/theme/portal/background.svg" | b64enc | quote }}
     portalTiles:
       adminAnnouncement: {{ readFile "./../../files/theme/admin_announcements/favicon.svg" | b64enc | quote }}

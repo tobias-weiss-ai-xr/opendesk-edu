@@ -226,16 +226,16 @@ cluster:
 
 ### Ingress
 
-By default, the `ingressClassName` is empty and selects the default ingress controller in your cluster. You can customize it by
-setting the following attribute to the name of the ingress controller the within your deployment you wish to use. Useful if the ingress controller you wish to use is not the default.
+You need to explicitly set the `ingressClassName`, as openDesk defines it as an empty string by default. This prevents fallback to the cluster’s default ingress class, since the Helm charts used by openDesk components are not consistently aligned in how they handle a missing or empty `ingressClassName`.
 
 ```yaml
 ingress:
-  ingressClassName: "name-of-my-nginx-ingress"
+  ingressClassName: "nginx"
 ```
 
-Currently, the only supported ingress controller is `ingress-nginx` (see
-[requirements.md](./docs/requirements.md) for reference).
+> **Note**<br>
+> Currently, the only supported ingress controller is `ingress-nginx`
+> (see [requirements.md](./docs/requirements.md) for reference).
 
 ### Container runtime
 
