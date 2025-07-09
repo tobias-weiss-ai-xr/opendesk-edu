@@ -215,6 +215,15 @@ appsuite:
         productName: {{ .Values.theme.texts.productName | quote }}
         oidcLogin: true
         oidcPath: "/oidc/"
+    defaultScaling:
+      nodes:
+        default:
+          roles:
+            - http-api
+            - sync
+            - admin
+            - businessmobility
+            - request-analyzer
     masterAdmin: "admin"
     masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     hzGroupName: "hzgroup"
