@@ -292,7 +292,12 @@ db-cleanup:
           exit 1
           ;;
       esac
-    - export FILES=(${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl ${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl ${CI_PROJECT_DIR}/helmfile/environments/dev/values.yaml.gotmpl)
+    - |
+      export FILES=(
+        "${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl"
+        "${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl"
+        "${CI_PROJECT_DIR}/helmfile/environments/dev/values.yaml.gotmpl"
+      )
     # Cleanup MariaDB
     - |
       export DATABASES="oxAppSuite"
@@ -727,7 +732,8 @@ diff-on-branch:
       BASE_URL="https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/archive"
       FILE_NAME="opendesk-${SAFE_BRANCH_NAME}.tar.gz"
       curl -L "${BASE_URL}/${DIFF_ON_BRANCH}/${FILE_NAME}" -o branch.tar.gz
-      mkdir ${DIFF_ON_BRANCH_SUBDIRECTORY} && tar -xzf branch.tar.gz -C ${DIFF_ON_BRANCH_SUBDIRECTORY} --strip-components=1
+      mkdir ${DIFF_ON_BRANCH_SUBDIRECTORY} &&
+        tar -xzf branch.tar.gz -C ${DIFF_ON_BRANCH_SUBDIRECTORY} --strip-components=1
       cd ${DIFF_ON_BRANCH_SUBDIRECTORY}
       helmfile --namespace ${NAMESPACE} diff | grep -v '^ ' || true
   tags:
@@ -763,6 +769,7 @@ import-default-accounts:
         --admin_enable_knowledgemanagement True \
         --admin_enable_projectmanagement True \
         --create_admin_accounts True \
+        --create_maildomains True \
         --verify_certificate False
 
 run-tests:

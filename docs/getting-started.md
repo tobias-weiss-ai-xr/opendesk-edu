@@ -226,7 +226,10 @@ cluster:
 
 ### Ingress
 
-You need to explicitly set the `ingressClassName`, as openDesk defines it as an empty string by default. This prevents fallback to the cluster’s default ingress class, since the Helm charts used by openDesk components are not consistently aligned in how they handle a missing or empty `ingressClassName`.
+The default value for the `ingressClassName` in openDesk is set to `nginx`. This prevents fallback to the
+cluster’s default ingress class, since the Helm charts used by openDesk components are not consistently aligned in
+how they handle a missing or empty `ingressClassName`. In case you are using a non-standard `ingressClassName` for
+your `ingress-nginx` controller you have to configure it as follows:
 
 ```yaml
 ingress:

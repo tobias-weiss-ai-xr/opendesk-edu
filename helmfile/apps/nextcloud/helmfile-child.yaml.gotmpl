@@ -24,9 +24,9 @@ releases:
     chart: "nextcloud-repo/{{ .Values.charts.nextcloudManagement.name }}"
     version: "{{ .Values.charts.nextcloudManagement.version }}"
     values:
-      - "values-nextcloud-mgmt.yaml.gotmpl"
+      - "values-nextcloud-management.yaml.gotmpl"
       {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
-      - "values-nextcloud-mgmt-enterprise.yaml.gotmpl"
+      - "values-nextcloud-management-ee.yaml.gotmpl"
       {{- end }}
       {{- range .Values.customization.release.opendeskNextcloudManagement }}
       - {{ . }}
@@ -34,14 +34,14 @@ releases:
     waitForJobs: true
     wait: true
     installed: {{ .Values.apps.nextcloud.enabled }}
-    timeout: 900
+    timeout: 1800
   - name: "opendesk-nextcloud"
     chart: "nextcloud-repo/{{ .Values.charts.nextcloud.name }}"
     version: "{{ .Values.charts.nextcloud.version }}"
     values:
       - "values-nextcloud.yaml.gotmpl"
       {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
-      - "values-nextcloud-enterprise.yaml.gotmpl"
+      - "values-nextcloud-ee.yaml.gotmpl"
       {{- end }}
       {{- range .Values.customization.release.opendeskNextcloud }}
       - {{ . }}
@@ -49,6 +49,23 @@ releases:
     needs:
       - "opendesk-nextcloud-management"
     installed: {{ .Values.apps.nextcloud.enabled }}
+    timeout: 1800
+  - name: "opendesk-nextcloud-notifypush"
+    chart: "nextcloud-repo/{{ .Values.charts.nextcloudNotifyPush.name }}"
+    version: "{{ .Values.charts.nextcloudNotifyPush.version }}"
+    values:
+      - "values-nextcloud-notifypush.yaml.gotmpl"
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+      - "values-nextcloud-notifypush-ee.yaml.gotmpl"
+      {{- end }}
+      {{- range .Values.customization.release.opendeskNextcloudNotifyPush }}
+      - {{ . }}
+      {{- end }}
+    wait: true
+    needs:
+      - "opendesk-nextcloud"
+    installed: {{ and .Values.apps.nextcloud.enabled (gt .Values.replicas.nextcloudNotifyPush 0) }}
+    timeout: 1800
 
 commonLabels:
   deployStage: "050-components"

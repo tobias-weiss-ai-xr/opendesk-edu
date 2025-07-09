@@ -67,6 +67,8 @@ configuration:
         enabled: true
       integrationOpenproject:
         enabled: {{ .Values.apps.openproject.enabled }}
+      notifyPush:
+        enabled: {{ gt .Values.replicas.nextcloudNotifyPush 0 }}
       spreed:
         enabled: true
     circles:
@@ -101,7 +103,9 @@ configuration:
         {{- end }}
 
   ldap:
+    base: {{ .Values.ldap.baseDn | quote }}
     host: {{ .Values.ldap.host | quote }}
+    dn: "uid=ldapsearch_nextcloud,cn=users,{{ .Values.ldap.baseDn }}"
     password:
       value: {{ .Values.secrets.nubus.ldapSearch.nextcloud | quote }}
     adminGroupName: "managed-by-attribute-FileshareAdmin"
