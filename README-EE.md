@@ -150,3 +150,14 @@ openDesk updates OX App Suite in od CE and EE always to the same release version
 - Dovecot Pro container image: Dovecot Pro is based on the open source components Dovecot and Pigeonhole but extended by modules providing additional functionality like obox2, cluster, cluster controller and dovecot fts. The additional modules make up about 15% of the overall Dovecot Pro code and are subject to a closed source license.
 
 openDesk aims to keep Dovecot's shared codebases in sync between oD CE and EE, though the versioning between the releases differs (CE: 2.x, EE: 3.y).
+
+Dovecot Pro requires two additional environment variables:
+
+- `DOVECOT_CRYPT_PRIVATE_KEY`
+- `DOVECOT_CRYPT_PUBLIC_KEY`
+
+These variables must contain the base64 encoded strings of the private and public
+key. These keys can be generated with the following commands:
+
+- Private Key: `openssl genpkey -algorithm X25519 -out private.pem && cat private.pem | base64 -w0`
+- Public Key: `openssl pkey -in private.pem -out public.pem -pubout && cat public.pem | base64 -w0`
