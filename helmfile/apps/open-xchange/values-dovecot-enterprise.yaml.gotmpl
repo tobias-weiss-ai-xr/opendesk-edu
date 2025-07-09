@@ -37,9 +37,9 @@ dovecot:
     bucket: {{ .Values.objectstores.dovecot.bucket | quote }}
     encryption:
       privateKey:
-        value: {{ env "DOVECOT_CRYPT_PRIVATE_KEY" | quote }}
+        value: {{ requiredEnv "DOVECOT_CRYPT_PRIVATE_KEY" | quote }}
       publicKey:
-        value: {{ env "DOVECOT_CRYPT_PUBLIC_KEY" | quote }}
+        value: {{ requiredEnv "DOVECOT_CRYPT_PUBLIC_KEY" | quote }}
     fqdn: {{ .Values.objectstores.dovecot.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
     username: {{ .Values.objectstores.dovecot.username | quote }}
     password:
