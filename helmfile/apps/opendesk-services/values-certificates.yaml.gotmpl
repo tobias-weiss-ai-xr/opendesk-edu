@@ -23,8 +23,9 @@ global:
     synapseFederation: {{ .Values.global.hosts.synapseFederation }}
     whiteboard: {{ .Values.global.hosts.whiteboard }}
     {{- end }}
-    {{- if .Values.apps.nubus.enabled }}
-    intercomService: {{ .Values.global.hosts.intercomService }}
+    {{- if .Values.apps.elementAdmin.enabled }}
+    adminBot: {{ .Values.global.hosts.adminBot }}
+    synapseAdmin: {{ .Values.global.hosts.synapseAdmin }}
     {{- end }}
     {{- if .Values.apps.jitsi.enabled }}
     jitsi: {{ .Values.global.hosts.jitsi }}
@@ -36,23 +37,27 @@ global:
     {{- if .Values.apps.nextcloud.enabled }}
     nextcloud: {{ .Values.global.hosts.nextcloud }}
     {{- end }}
+    {{- if .Values.apps.notes.enabled }}
+    notes: {{ .Values.global.hosts.notes }}
+    {{- end }}
+    {{- if .Values.apps.nubus.enabled }}
+    intercomService: {{ .Values.global.hosts.intercomService }}
+    keycloak: {{ .Values.global.hosts.keycloak }}
+    nubus: {{ .Values.global.hosts.nubus }}
+    {{- end }}
     {{- if .Values.apps.openproject.enabled }}
     openproject: {{ .Values.global.hosts.openproject }}
     {{- end }}
     {{- if .Values.apps.oxAppSuite.enabled }}
     openxchange: {{ .Values.global.hosts.openxchange }}
+    openxchangeDav: {{ .Values.global.hosts.openxchangeDav }}
     {{- end }}
-    {{- if .Values.apps.nubus.enabled }}
-    keycloak: {{ .Values.global.hosts.keycloak }}
-    nubus: {{ .Values.global.hosts.nubus }}
+    {{- if .Values.apps.staticFiles.enabled }}
+    static: {{ .Values.global.hosts.static }}
     {{- end }}
     {{- if .Values.apps.xwiki.enabled }}
     xwiki: {{ .Values.global.hosts.xwiki }}
     {{- end }}
-    {{- if .Values.apps.notes.enabled }}
-    notes: {{ .Values.global.hosts.notes }}
-    {{- end }}
-
 
 issuerRef:
   name: {{ .Values.certificate.issuerRef.name | quote }}

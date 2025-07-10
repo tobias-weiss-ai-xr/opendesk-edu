@@ -35,6 +35,8 @@ global:
   # Beware: Changing hostnames on an existing deployment will break links the users may already make use of.
   #         Also some links are used directly in the portal and do not get updated after the initial
   #         deployment.
+  # Attention: When adding hosts here, please make sure to also add them in
+  #            /helmfile/apps/opendesk-services/values-certificates.yaml.gotmpl
   #
   hosts:
     adminBot: "adminbot"
