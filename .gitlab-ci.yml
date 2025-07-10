@@ -295,57 +295,55 @@ db-cleanup:
     - |
       export FILES=(
         "${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl"
-        "${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl"
         "${CI_PROJECT_DIR}/helmfile/environments/dev/values.yaml.gotmpl"
+        "${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl"
       )
     # Cleanup MariaDB
+    - "export MARIADB_HOST=\"\""
+    - "export MARIADB_PORT=\"\""
+    - "export MARIADB_USERNAME=\"\""
+    - "export MARIADB_PASSWORD=\"\""
+    - "export ENV_DATABASE=\"oxAppSuite\""
+
+      # Parse cluster values
     - |
-      export DATABASES="oxAppSuite"
-      export MARIADB_HOST=""
-      export MARIADB_PORT=""
-      export MARIADB_USERNAME=""
-      export MARIADB_PASSWORD=""
-
-      for DATABASE in $DATABASES; do
-        export ENV_DATABASE=${DATABASE}
-
-        # Parse cluster values
-        for FILE in ${FILES[@]}; do
-          if [ -f ${FILE} ]; then
-            if [[ $(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
-              MARIADB_DATABASE=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].name')
-              MARIADB_USERNAME=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].username')
-              MARIADB_PASSWORD=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].password')
-              MARIADB_HOST=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].host')
-              MARIADB_PORT=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].port')
-            fi;
+      for FILE in ${FILES[@]}; do
+        if [ -f ${FILE} ]; then
+          if [[ $(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
+            MARIADB_DATABASE=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].name')
+            MARIADB_USERNAME=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].username')
+            MARIADB_PASSWORD=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].password')
+            MARIADB_HOST=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].host')
+            MARIADB_PORT=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].port')
           fi;
-        done;
-
-        CONNECTION=(
-          "--host=${MARIADB_HOST}"
-          "--port=${MARIADB_PORT}"
-          "--user=${MARIADB_USERNAME}"
-          "--password=${MARIADB_PASSWORD}"
-          "--skip-ssl"
-        )
-
-        echo "[mysql] [${ENV_DATABASE}] DROP ${MARIADB_DATABASE} on ${MARIADB_HOST}"
-        mariadb ${CONNECTION[@]} -e "DROP DATABASE IF EXISTS ${MARIADB_DATABASE};"
-
-        if [ "${ENV_DATABASE}" = "oxAppSuite" ]; then
-          echo "[mysql] [${ENV_DATABASE}] DROP oxguard on ${MARIADB_HOST}"
-          mariadb ${CONNECTION[@]} -e "DROP DATABASE IF EXISTS oxguard;"
-          echo "[mysql] [${ENV_DATABASE}] DROP oxguard_1 on ${MARIADB_HOST}"
-          mariadb ${CONNECTION[@]} -e "DROP DATABASE IF EXISTS oxguard_1;"
-          echo "[mysql] [${ENV_DATABASE}] DROP PRIMARYDB_9 on ${MARIADB_HOST}"
-          mariadb ${CONNECTION[@]} -e "DROP DATABASE IF EXISTS PRIMARYDB_9;"
-        else
-          mariadb ${CONNECTION[@]} -e "CREATE DATABASE ${MARIADB_DATABASE};"
-          mariadb ${CONNECTION[@]} -e "GRANT ALL PRIVILEGES ON ${MARIADB_DATABASE}.* TO ${MARIADB_USERNAME}@\"%\";"
-          mariadb ${CONNECTION[@]} -e "FLUSH PRIVILEGES;"
         fi;
       done;
+
+    - |
+      export CONNECTION=(
+        "--host=${MARIADB_HOST}"
+        "--port=${MARIADB_PORT}"
+        "--user=${MARIADB_USERNAME}"
+        "--password=${MARIADB_PASSWORD}"
+        "--skip-ssl"
+      )
+
+    - "echo \"[mysql] [${ENV_DATABASE}] DROP ${MARIADB_DATABASE} on ${MARIADB_HOST}\""
+    - "mariadb ${CONNECTION[@]} -e \"DROP DATABASE IF EXISTS ${MARIADB_DATABASE};\""
+
+    - |
+      if [ "${ENV_DATABASE}" = "oxAppSuite" ]; then
+        echo "[mysql] [${ENV_DATABASE}] DROP oxguard on ${MARIADB_HOST}"
+        mariadb ${CONNECTION[@]} -e "DROP DATABASE IF EXISTS oxguard;"
+        echo "[mysql] [${ENV_DATABASE}] DROP oxguard_1 on ${MARIADB_HOST}"
+        mariadb ${CONNECTION[@]} -e "DROP DATABASE IF EXISTS oxguard_1;"
+        echo "[mysql] [${ENV_DATABASE}] DROP PRIMARYDB_9 on ${MARIADB_HOST}"
+        mariadb ${CONNECTION[@]} -e "DROP DATABASE IF EXISTS PRIMARYDB_9;"
+      else
+        mariadb ${CONNECTION[@]} -e "CREATE DATABASE ${MARIADB_DATABASE};"
+        mariadb ${CONNECTION[@]} -e "GRANT ALL PRIVILEGES ON ${MARIADB_DATABASE}.* TO ${MARIADB_USERNAME}@\"%\";"
+        mariadb ${CONNECTION[@]} -e "FLUSH PRIVILEGES;"
+      fi;
     # Cleanup PostgreSQL
     - |
       export DATABASES="keycloak keycloakExtension nextcloud notes openproject synapse umsGuardianManagementApi \

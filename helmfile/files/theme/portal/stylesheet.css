@@ -65,13 +65,13 @@
   --font-color-warning-light: #ffeeca;
   --font-color-success: #92d625;
   --font-color-success-light: #ebffca;
-  --button-primary-bgc: #571EFA;
-  --button-primary-bgc-hover: #1b1d18;
-  --button-primary-bgc-active: rgba(79, 114, 24, 1);
+  --button-primary-bgc: var(--color-accent);
+  --button-primary-bgc-hover: var(--color-accent);
+  --button-primary-bgc-active: #000;
   --button-primary-bgc-disabled: #5f5f5c;
-  --button-bgc: var(--color-opendesk-secondary);
-  --button-bgc-hover: #575755;
-  --button-bgc-active: rgba(80, 80, 77, 1);
+  --button-bgc: var(--color-accent);
+  --button-bgc-hover: var(--color-accent);
+  --button-bgc-active: #000;
   --button-bgc-disabled: #5f5f5c;
   --button-text-bgc: transparent;
   --button-text-bgc-hover: var(--button-bgc-hover);
@@ -95,6 +95,14 @@
   --layout-height-header: 63px;
   /* Keycloak user screens logo */
   --login-logo: url("/static-files/login/logo.svg") no-repeat center;
+}
+
+button {
+  color: #fff;
+}
+
+button.button--primary {
+  color: #fff;
 }
 
 /* Speed of flyout mennu */
