@@ -309,7 +309,7 @@ db-cleanup:
     - |
       for FILE in ${FILES[@]}; do
         if [ -f ${FILE} ]; then
-          if [[ $(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
+          if [[ $(tail $FILE | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
             MARIADB_DATABASE=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].name')
             MARIADB_USERNAME=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].username')
             MARIADB_PASSWORD=$(tail -n +5 $FILE | yq '.databases.[env(ENV_DATABASE)].password')
