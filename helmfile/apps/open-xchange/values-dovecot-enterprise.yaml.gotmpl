@@ -43,5 +43,5 @@ dovecot:
     fqdn: {{ .Values.objectstores.dovecot.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
     username: {{ .Values.objectstores.dovecot.username | quote }}
     password:
-      value: {{ .Values.secrets.minio.dovecotUser | quote }}
+      value: {{ .Values.objectstores.dovecot.secretKey | default .Values.secrets.minio.dovecotUser | quote }}
 ...
