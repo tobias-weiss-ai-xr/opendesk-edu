@@ -1,8 +1,6 @@
-{{/*
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-SPDX-License-Identifier: Apache-2.0
-*/}}
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
 ---
 global:
   domain: {{ .Values.global.domain | quote }}
@@ -25,7 +23,7 @@ config:
   openproject:
     fileshareName: "Nextcloud at {{ .Values.global.domain }}"
     admin:
-      username: 
+      username:
         value: {{ .Values.secrets.openproject.apiAdminUsername | quote }}
       password:
         value: {{ .Values.secrets.openproject.apiAdminPassword | quote }}
