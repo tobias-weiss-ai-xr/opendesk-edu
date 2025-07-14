@@ -169,6 +169,7 @@ This list gives you an overview of templated security settings and if they compl
 | **jitsi**/jitsi/jitsi/web | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/patchJVB | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **nextcloud**/opendesk-nextcloud-management | :x: | no | no | no | yes | 101 | 101 | yes | yes |
+| **nextcloud**/opendesk-nextcloud-notifypush | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/aio | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/exporter | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
 | **notes**/impress/backend | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
@@ -178,10 +179,6 @@ This list gives you an overview of templated security settings and if they compl
 | **nubus**/intercom-service/provisioning | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
 | **nubus**/opendesk-keycloak-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/keycloak | :x: | no | n/a | no | yes | 1000 | 1000 | yes | yes |
-| **nubus**/ums/nubusGuardian/authorizationApi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **nubus**/ums/nubusGuardian/managementApi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **nubus**/ums/nubusGuardian/managementUi | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **nubus**/ums/nubusGuardian/openPolicyAgent | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/nubusKeycloakBootstrap | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/ums/nubusKeycloakExtensions/handler | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
 | **nubus**/ums/nubusKeycloakExtensions/proxy | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |

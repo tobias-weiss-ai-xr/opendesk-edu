@@ -1,3 +1,34 @@
+# [1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.5.0...v1.6.0) (2025-07-14)
+
+
+### Bug Fixes
+
+* **dovecot-pro:** Use of `requiredEnv` instead of `env` and update `README-EE.md` ([a79e40f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a79e40f44af68a16f0944265cc447ec9b0d84922))
+* **helmfile:** Prefix NATS passwords as workaround for upstream issue and add documentation to `gettings-started.md` [[#185](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/185), [#202](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/202)] ([7f478bf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7f478bffd60bdf3af536bc593ef397d823a22e88))
+* **helmfile:** Remove default setting from `repositories.helm.registryOpencodeDeEnterprise` for better support of `PRIVATE_HELM_REGISTRY_URL` ([c5dd881](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c5dd8814ae7576eaaf7cfcdd1cb4aa101f164c62))
+* **helmfile:** Set `nubusKeycloakBootstrap` debug mode when openDesk is running in debug mode ([4e0ffee](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4e0ffeea1f9d0420c404d78c5188ff6bdb0f81ea))
+* **helmfile:** Streamline license header comment style [[#192](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/192)] ([20cbad3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/20cbad31e75d9ae27081675072561650fa168935))
+* **nubus:** Explicitly template `nubusStackDataUms.stackDataContext.portalFqdn` to fix custom hostname support [[#193](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/193)] ([6aa6d3a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6aa6d3af2fed1be99b4f4eb5de2e2703ca00578a))
+* **nubus:** Replace openDesk portal fork with upstream `portal-frontend` image ([e4f1afc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e4f1afca0fdf4af184f4e287f1317ed57d229013))
+* **nubus:** Update from 1.11.1 to 1.11.2 ([237c9af](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/237c9af3c16885b51dcd1d7c793bf7fd23dbcefb))
+* **open-xchange:** Add missing `imagePullSecrets` for `core-imageconverter` and `core-documentconverter` ([9b7f439](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9b7f439d83c9cd5a60b70f8d3ba7d36bb35ebd5c))
+* **open-xchange:** Enable `com.openexchange.smime.test` only when openDesk is running with `debug.enabled: true` ([51ff7a5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/51ff7a5fdb7b7f3bdef02a32e44e6204df9db6ea))
+* **open-xchange:** Enable searching by LDAP `mailAlternativeAddress` when resolving global contacts. Note: OX App Suite evaluates all `mailAlternativeAddress` values of a user when searching, but only the first address is returned, which might differ from the one that matched the search criteria. ([9014324](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/90143241564d7e66bf1b864c704e13c677dcbc93))
+* **open-xchange:** Use `objectstore.dovecot.secretKey` when defined ([5c33226](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5c332264edfcbb3343bcfd39352db6ddefd0a85c))
+* **opendesk-services:** Add missing certificates ([acbabdb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/acbabdb80662bf0599a157b24d3f8461e1f98cad))
+* **openproject:** Update from 16.1.0 to 16.1.1 ([e30d4f1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e30d4f126dda29183cffc078307d41d3dce6f4fa))
+
+
+### Features
+
+* **collabora:** Update from 24.04.13 to 25.04.2 ([c56f564](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c56f564025531d25a1966792f8c161aedf644c99))
+* **element:** Update NeoBoard from 2.1.0 to 2.2.1, NeoChoice from 1.5.1. to 1.5.2, NeoDateFix from 1.7.0 to 1.7.1 widgets and NeoDateFixBot from 2.8.2 to 2.8.3 latest releases ([98d31f8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/98d31f811bdb007e40c4b3436ff65cdcf610db7e))
+* **helmfile:** Add options in `functional.yaml.gotmpl` for setting the portal's corner links, toggling the welcome message and the newsfeed ([1a6f438](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1a6f438724cc442ca7b9c423a326c67690510301))
+* **nextcloud:** Update from 30.0.10 to 31.0.6 and support for notify-push ([a4c8be6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a4c8be60f335af98270e40478e53e6fa34c23d38))
+* **nubus:** Update from 1.9.1 to 1.11.1; required minimum openDesk version for this upgrade is 1.5.0, see `migrations.md` for details ([ccd5ab8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ccd5ab84e3f5bb67eb879a3683c299d7a61ddba0))
+* **open-xchange:** Store attachments for calendar, contact and task objects in object storage; review `migrations.md` for required upgrade steps ([4eb6570](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4eb6570b0a69931f09042bdc40edfad23e6f28c1))
+* **open-xchange:** Updated OX App Suite from 8.37 to 8.38 ([2b31751](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2b317514c61eba4ebc4cc9e7041aac606d8c16b8))
+
 # [1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.4.1...v1.5.0) (2025-06-16)
 
 
