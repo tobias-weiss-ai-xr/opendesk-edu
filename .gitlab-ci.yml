@@ -84,7 +84,10 @@ variables:
     description: >
       Select the type of external services (e.g. "RUN", or "STACKIT"), as they require different
       cleanup strategies. Requires `FLUSH_EXTERNAL_SERVICES_BEFORE=yes`.
-    value: "RUN"
+    value: "STACKIT"
+    options:
+      - "RUN"
+      - "STACKIT"
   DEBUG_ENABLED:
     description: >
       Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific
@@ -292,12 +295,16 @@ db-cleanup:
           exit 1
           ;;
       esac
+    # First: Gather all files that contain the "database:" keyword in the default environment
     - |
-      export FILES=(
-        "${CI_PROJECT_DIR}/helmfile/environments/default/database.yaml.gotmpl"
-        "${CI_PROJECT_DIR}/helmfile/environments/dev/values.yaml.gotmpl"
-        "${CI_PROJECT_DIR}/helmfile/environments/dev/write-over-values-for-environment.yaml.gotmpl"
-      )
+      export FILES="$(grep -r 'databases:' "${CI_PROJECT_DIR}/helmfile/environments/default" |
+                      awk -F ':' '{print $1}')"
+    # Second: Gather all files that contain the "database:" keyword in the dev environment
+    # where the adjustments from opendesk-env are placed
+    - |
+      export FILES="${FILES} $(grep -r 'databases:' "${CI_PROJECT_DIR}/helmfile/environments/dev" |
+                               awk -F ':' '{print $1}')"
+    - "echo \"${FILES[@]}\""
     # Cleanup MariaDB
     - "export MARIADB_HOST=\"\""
     - "export MARIADB_PORT=\"\""
@@ -305,11 +312,11 @@ db-cleanup:
     - "export MARIADB_PASSWORD=\"\""
     - "export ENV_DATABASE=\"oxAppSuite\""
 
-      # Parse cluster values
+    # Parse cluster values
     - |
       for FILE in ${FILES[@]}; do
-        if [ -f ${FILE} ]; then
-          if [[ $(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
+        if [ -f "${FILE}" ]; then
+          if [[ $(tail -n +1 "${FILE}" | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
             MARIADB_DATABASE=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].name')
             MARIADB_USERNAME=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].username')
             MARIADB_PASSWORD=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].password')
