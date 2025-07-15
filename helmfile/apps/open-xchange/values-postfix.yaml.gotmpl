@@ -46,10 +46,6 @@ postfix:
   hostname: "postfix"
   inetProtocols: "ipv4"
   milterDefaultAction: "tempfail"
-  overrides:
-    - fileName: "sasl_passwd.map"
-      content:
-        - {{ printf "%s %s:%s" .Values.smtp.host .Values.smtp.username .Values.smtp.password | quote }}
   {{- if .Values.apps.dkimpy.enabled }}
   dkimpyHost: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}:8892"
   {{- end }}
@@ -58,7 +54,17 @@ postfix:
   smtpdTLSMandatoryCiphers: "high"
 
   rspamdHost: ""
-  relayHost: {{ if .Values.smtp.host }}{{ printf "[%s]:%d" .Values.smtp.host .Values.smtp.port | quote }}{{ else }}""{{ end }}
+  {{- if .Values.smtp.host }}
+  relayHost:
+    enabled: true
+    host: {{ .Values.smtp.host }}
+    port: {{ .Values.smtp.port }}
+    authentication:
+      username:
+        value: {{ .Values.smtp.username }}
+      password:
+        value: {{ .Values.smtp.password }}
+  {{- end }}
   allowRelayNets: false
   smtpSASLAuthEnable: "yes"
   smtpSASLPasswordMaps: "lmdb:/etc/postfix/sasl_passwd.map"
