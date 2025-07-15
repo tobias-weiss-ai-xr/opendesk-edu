@@ -146,7 +146,7 @@ OPENDESK_ENTERPRISE=true
 
 With openDesk EE you get access to the related artifact registry owned by ZenDiS.
 
-Three steps are required to access the registry - for step #1 and #2 you can set some variables. Below, you can define `<your_name_for_the_secret>` freely, like `enterprise-secret`, as long as it consistent in step #1 and #3.
+Three steps are required to access the registry - for step 1 and 2 you can set some variables. Below, you can define `<your_name_for_the_secret>` freely, like `enterprise-secret`, as long as it consistent in step 1 and 3.
 
 ```shell
 NAMESPACE=<your_namespace>
