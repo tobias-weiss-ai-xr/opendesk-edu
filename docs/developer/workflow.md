@@ -355,12 +355,15 @@ Example: `tmueller/fix_jitsi_theming`.
 
 Commit messages must adhere to the [Conventional Commit standard](https://www.conventionalcommits.org/en/v1.0.0/#summary). Commits that do not adhere to the standard get rejected by either [Gitlab push rules](https://docs.gitlab.com/ee/user/project/repository/push_rules.html) or the CI.
 
+> **Note**<br>
+> The first letter after the `: ` must be uppercase.
+
 ```text
-<type>(<scope>): [path/to/issue#1] <short summary>.
+<type>(<scope>): <Short summary> [path/to/issue#1]
  │       │              │                │
- │       │              |                └─> Summary in present tense, sentence case, with no period at the end
+ │       │              |                └─> Issue reference (optional)
  │       │              |
- │       │              └─> Issue reference (optional)
+ │       │              └─> Summary in present tense, sentence case, with no period at the end
  │       │
  │       └─> Commit Scope: helmfile, docs, collabora, nextcloud, open-xchange, etc.
  │
@@ -370,7 +373,7 @@ Commit messages must adhere to the [Conventional Commit standard](https://www.co
 Example: `fix(open-xchange): Bump to 8.26 to heal issue with functional mailbox provisioning.`
 
 > **Note**<br>
-> The commit messages are an essential part of the [technical releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases) as the release's notes are generated from the messages.
+> The commit messages are an essential part of the [technical releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases) as the release notes are generated from these messages.
 
 #### Verified commits
 
