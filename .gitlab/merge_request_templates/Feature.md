@@ -1,74 +1,47 @@
-## 📌 Summary
+# ⬆️ Feature
 
-Briefly describe what this feature MR does and why it’s needed.
-
-> Example:
-> Adds user profile editing capabilities to the dashboard. This enables users to update their personal information without admin intervention.*
-
----
+*Expected MR Title and git commit message*
+*`feat(<app-name>): <Short description of the new feature>`*
 
 ## ✅ Changes
 
 List the key changes made in this MR:
 
-- Added new route /profile/edit
-- Created `ProfileEditForm` component
-- Integrated with backend API for user updates
-- Added unit tests and basic form validation
-
----
+- ...
 
 ## 🧪 Tests
 
-Provide steps for QA or reviewers to test the feature.
+Provide steps for QA or reviewers to test the feature and mention anything reviewers should be aware of:
 
-1. Login as any user
-2. Navigate to `/profile/edit`
-3. Update profile info and save
-4. Verify changes are persisted and reflected in the UI
+- ...
 
----
+## 🔄 Requirements for migrations
 
-## 📚 Related Issue(s)
+- [ ] Describe manual steps required to update existing deployments. This especially applies if this MR introduces breaking changes:
+- [ ] Any other considerations in context of the update:
 
-- Closes #[issue number]
-- Depends on #[merge request or issue, if any]
+# Checklist / Sign-offs
 
----
+## 🏷️ Labels
 
-## 🕵️ Notes for Reviewer
+Set labels:
 
-Mention anything reviewers should be aware of:
+```
+/label ~"MR-Type::Feature"
+/label ~"PO::👀"
+/label ~"Tech Lead::👀"
+/label ~"QA::👀"
+/label ~"Testautomation::👀"
+```
 
-- Known issues or limitations
-- Code sections that may need special attention
-- Design considerations or edge cases handled
+# 👷 Developer Checklist
 
----
+- Does the MR include new bits and pieces (e.g. new secrets) that require documentation?
+  - [ ] No.
+  - [ ] Yes, and the documentation was updated accordingly.
 
-## Checklist / Sign-offs
+Document in an extra comment and link to that comment:
+- [ ] How you verified the feature is working as expected, also in upgrade sceanrios.
+- [ ] Any regression testing done.
 
-### 💿 CI/CD
-
-- [ ] CI pipeline passes for all jobs
-- [ ] Linting and formatting checks pass
-- [ ] Review app (if used) reflects fix correctly
-
-### 🖥 QA & Product
-
-Set related labels on the MR for
-
-- [ ] `PO::👀`
-- [ ] `Tech Lead::👀`
-- [ ] `Testautomation::👀`
-- [ ] `QA::👀`
-
----
-
-## 👷 Developer Checklist
-
-- [ ] Code builds and passes linting
-- [ ] Tests added or updated
-- [ ] Verified fix locally
-- [ ] Regression testing done for related functionality
-- [ ] No new warnings or errors in logs
+--> Link to comment:

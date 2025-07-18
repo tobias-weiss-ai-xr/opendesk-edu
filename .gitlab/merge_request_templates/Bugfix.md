@@ -1,81 +1,57 @@
-## 📌 Summary
+# 🪲 Bugfix
 
-Brief description of the issue and what this MR resolves.
+*Expected MR Title and git commit message*
+*`fix(<app-name>): <Short description of what has been fixed>`*
 
-> Example:
-> Fixes a bug where users were unable to save their profile due to a missing field validation.
-
----
 
 ## ✅ Changes
 
-Explain for the reviewer how the change addresses the issue:
+Explain for the reviewer how the change addresses the issue, providing some insights on the underlaying cause of the bug.
 
-- Fixed null check on user input
-- Added unit test for edge case
-- Updated error handling in the `ProfileService`
+- ...
 
----
+## 🧪 How to reproduce & test
 
-## 🧪 Analysis
+Provida a link to the issue or document the required details below.
+In case it is a GitLab issue, reference it at the end of the commit message in square brackets, like `[#123]`
 
-Explain the **underlying cause** of the bug:
+### Before the Fix
 
-- What was the unexpected behavior?
-- Why did it happen?
-- Where in the code or logic did it occur?
+1. ...
 
----
+### After the Fix
 
-## 📚 Related Issue(s)
+Provide steps for QA or reviewers to test the fix and mention anything reviewers should be aware of:
 
-- Should be listed as part of the commit message.
-- Fixes #[issue-number]
-- Related to #[optional additional issues]
+1. ...
 
-## 🧪 How to Reproduce & Test
+## 🔄 Requirements for migrations
 
-Link to issue or document the required details below.
+- [ ] Describe manual steps required to update existing deployments. This especially applies if this MR introduces breaking changes:
+- [ ] Any other considerations in context of the update:
 
-### Before the Fix:
+# Checklist / Sign-offs
 
-1. Go to `/profile/edit`
-2. Leave the "email" field empty
-3. Click "Save"
-4. Observe 500 server error
+## 🏷️ Labels
 
-### After the Fix:
+Set labels:
 
-1. Same steps as above
-2. Now see appropriate validation message
-3. No server error occurs
+```
+/label ~"MR-Type::Bugfix"
+/label ~"PO::👀"
+/label ~"Tech Lead::👀"
+/label ~"QA::👀"
+/label ~"Testautomation::👀"
+```
 
----
+# 👷 Developer Checklist
 
-## Checklist / Sign-offs
+- Does the MR include new bits and pieces (e.g. new secrets) that require documentation?
+  - [ ] No.
+  - [ ] Yes, and the documentation was updated accordingly.
 
-### 💿 CI/CD
+Document in an extra comment and link to that comment:
+- [ ] How you verified the fix is working as expected, also in upgrade sceanrios.
+- [ ] Any regression testing done.
 
-- [ ] CI pipeline passes for all jobs
-- [ ] Linting and formatting checks pass
-- [ ] Review app (if used) reflects fix correctly
-
-### 🖥 QA & Product
-
-Set related labels on the MR for
-
-- [ ] `PO::👀`
-- [ ] `Tech Lead::👀`
-- [ ] `Testautomation::👀`
-- [ ] `QA::👀`
-
----
-
-## 👷 Developer Checklist
-
-- [ ] Code builds and passes linting
-- [ ] Tests added or updated
-- [ ] Verified fix locally
-- [ ] Regression testing done for related functionality
-- [ ] No new warnings or errors in logs
-
+--> Link to comment:
