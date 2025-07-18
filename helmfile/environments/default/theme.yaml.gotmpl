@@ -11,6 +11,7 @@ theme:
   #
   texts:
     productName: "openDesk"
+    slogan: "Souverän gedacht. Flexibel gemacht."
 
   ## Define colors
   #
@@ -48,6 +49,9 @@ theme:
     files:
       faviconIco: {{ readFile "./../../files/theme/files/favicon.ico" | b64enc | quote }}
       faviconPng: {{ readFile "./../../files/theme/files/favicon.png" | b64enc | quote }}
+      # A base64 encoded background image that overwrites the solid color background from `theme.colors.primary`
+      # We tested the following file formats: PNG, JPEG and SVG
+      backgroudImg: ~
 
     login:
       faviconIco: {{ readFile "./../../files/theme/login/favicon.ico" | b64enc | quote }}
