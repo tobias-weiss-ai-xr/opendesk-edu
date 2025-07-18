@@ -103,12 +103,12 @@ To upgrade existing deployments, you cannot skip any version mentioned in the co
 
 | Mandatory version |
 | ----------------- |
-<!-- | 1.x.x        |  add the entry to the table as soon as we get new migration requiring that the former migration was executed -->
 | v1.5.0            |
 | v1.1.x            |
 | v1.0.0            |
 | v0.9.0            |
 | v0.8.1            |
+<!-- | 1.x.x        |  add the entry to the table as soon as we get new migration requiring that the former migration was executed -->
 
 > **Note**<br>
 > Be sure to check out the table in the release version you are going to install, and not the currently installed version.
