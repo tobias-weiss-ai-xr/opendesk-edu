@@ -1,49 +1,41 @@
-## ⬆️ Application Update
+# ⬆️ Application Update
 
-Expected MR Title and git commit message:
+*Expected MR Title and git commit message*
+*`feat/fix(<app-name>): Update from <old-version> to <new-version>`*
 
-`feat/fix(<app-name>): Update from <old-version> to <new-version>`
+## 📋 Changelog/Release Notes
 
-### 📋 Changelog/Release Notes
+- [ ] [README.md](../../README.md) component table updated including the link to the related release notes
+- [ ] Provide significant improvements you'd like to see in the openDesk release notes. If you have a lot of details to provide or someone else is providing the details, please use a comment on the MR and link the comment in here.
 
-- [ ] Upstream release notes: `[link]`
-- [ ] No breaking changes (or listed below)
-- [ ] Relevant changes communicated (if needed)
+## 🔄 Requirements for migrations
 
----
+- [ ] Minimum version of the application required in existing depoyments to update/upgrade:
+- [ ] Describe manual steps required to update existing deployments. This especially applies if the upgrade includes any breaking changes:
+- [ ] Any other considerations in context of the update:
 
-### 🔄 Migrations to Run (if any)
+# Checklist / Sign-offs
 
-Describe any migrations that need to be performed when upgrading to this application version.
+## 🏷️ Labels
 
-- [ ] Database migrations
-- [ ] Configuration changes
-- [ ] Cache clears / rebuilds
-- [ ] Other: _describe_
+Set labels:
 
-## Checklist / Sign-offs
-
-### 💿 CI/CD
-
-- [ ] CI pipeline passes for all jobs
-- [ ] Linting and formatting checks pass
-- [ ] Review app (if used) reflects fix correctly
-
-### 🖥 QA & Product
-
-Set related labels on the MR for
-
-- [ ] `PO::👀`
-- [ ] `Tech Lead::👀`
-- [ ] `Testautomation::👀`
-- [ ] `QA::👀`
-
----
+```
+/label ~"MR-Type::AppUpdate"
+/label ~"PO::👀"
+/label ~"Tech Lead::👀"
+/label ~"QA::👀"
+/label ~"Testautomation::👀"
+```
 
 ## 👷 Developer Checklist
 
-- [ ] Code builds and passes linting
-- [ ] Tests added or updated
-- [ ] Verified fix locally
-- [ ] Regression testing done for related functionality
-- [ ] No new warnings or errors in logs
+- Does the MR include new bits and pieces (e.g. new secrets) that require documentation?
+  - [ ] No.
+  - [ ] Yes, and the documentation was updated accordingly.
+
+Document in an extra comment and link to that comment:
+- [ ] How you verified the update is working as expected, also in upgrade sceanrios.
+- [ ] Any regression testing done.
+
+--> Link to comment:

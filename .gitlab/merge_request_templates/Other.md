@@ -1,33 +1,41 @@
-## 📌 Summary
+# 🎉 Other
 
-Provide a concise summary of **what** this MR does and **why**.
-
-> Example:
-> This MR updates the CI configuration to cache NPM dependencies and reduce pipeline execution time.
-
----
+*Expected MR Title and git commit message*
+*`fix(<component>): <Short description of what has been changed>`*
 
 ## ✅ Changes
 
-List the key updates made:
+Explain for the reviewer and QA the reason for the MR and what changes are included.
 
 - ...
-- ...
 
----
+## 🔄 Requirements for migrations
 
-## 🧪 Tests (if applicable)
+- [ ] Describe manual steps required to update existing deployments. This especially applies if this MR introduces breaking changes:
+- [ ] Any other considerations in context of the update:
 
-Explain how reviewers or CI can verify the change works as intended.
+# Checklist / Sign-offs
 
-> Example:
->- For CI: Check job `build:frontend` completes in <3 mins.
->- For docs: View rendered markdown locally or in GitLab.
+## 🏷️ Labels
 
----
+Set labels:
 
-## 🧾 Checks
+```
+/label ~"MR-Type::Other"
+/label ~"PO::👀"
+/label ~"Tech Lead::👀"
+/label ~"QA::👀"
+/label ~"Testautomation::👀"
+```
 
-- [ ] CI passes
-- [ ] No functional changes
-- [ ] Verified (if needed)
+# 👷 Developer Checklist
+
+- Does the MR include new bits and pieces (e.g. new secrets) that require documentation?
+  - [ ] No.
+  - [ ] Yes, and the documentation was updated accordingly.
+
+Document in an extra comment and link to that comment:
+- [ ] How you verified the change is working as expected, also in upgrade sceanrios.
+- [ ] Any regression testing done.
+
+--> Link to comment:
