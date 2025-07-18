@@ -232,6 +232,33 @@ serviceAccount:
     {{ .Values.annotations.nextcloudNextcloudMgmt.serviceAccount | toYaml | nindent 4 }}
 
 theme:
-  {{ .Values.theme | toYaml | nindent 2 }}
+  background:
+    # Static color background
+    # NOTE: Not available yet because of a bug in Nextcloud 31.X
+    # Ref: https://github.com/nextcloud/server/commit/da51459022d21a569ab8271c5456f69c9316cdad
+    color: {{ .Values.theme.colors.primary | quote }}
+    # PNG or JPEG image background. Overwrites `theme.background.color`
+    imgBase64: {{ .Values.theme.imagery.files.backgroudImg | quote }}
 
+  colors:
+    primary: {{ .Values.theme.colors.primary | quote }}
+
+  favicon:
+    pngBase64: {{ .Values.theme.imagery.files.faviconPng | quote }}
+
+  logo:
+    svgBase64: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+
+  # Overwrites the header color of Nextcloud with the value set in the `integration_swp` app
+  # This can *intentionally* only be adjusted via customizing
+  swpOverrideHeaderColor: true
+
+  texts:
+    slogan: {{ .Values.theme.texts.slogan | quote }}
+    productName: {{ .Values.theme.texts.productName | quote }}
+
+  urls:
+    imprint: {{ .Values.functional.portal.linkLegalNotice | quote }}
+    privacy: {{ .Values.functional.portal.linkPrivacyStatement | quote }}
+    main: {{ printf "%s.%s" .Values.global.hosts.nubus .Values.global.domain }}
 ...
