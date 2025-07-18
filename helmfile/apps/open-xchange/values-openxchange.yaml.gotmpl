@@ -494,6 +494,19 @@ appsuite:
       # http = (await import('./io.ox/core/http.js')).default
       # await http.POST({ module: 'oxguard/smime', params: { action: 'test' } })
       com.openexchange.smime.test: {{ .Values.debug.enabled | quote }}
+      {{- if or (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "LoadBalancer") }}
+      # Client Onboarding
+      com.openexchange.client.onboarding.mail.imap.host: {{ .Values.global.domain | quote }}
+      com.openexchange.client.onboarding.mail.imap.port: "993"
+      com.openexchange.client.onboarding.mail.imap.secure: "true"
+      com.openexchange.client.onboarding.mail.imap.requireTls: "false"
+      com.openexchange.client.onboarding.mail.smtp.host: {{ .Values.global.domain | quote }}
+      com.openexchange.client.onboarding.mail.smtp.port: "587"
+      com.openexchange.client.onboarding.mail.smtp.secure: "false"
+      com.openexchange.client.onboarding.mail.smtp.requireTls: "true"
+      {{- else }}
+      com.openexchange.client.onboarding.enabled: "false"
+      {{- end }}
       # DAV
       {{- if .Values.functional.groupware.davSupport.enabled }}
       com.openexchange.caldav.enabled: "true"
