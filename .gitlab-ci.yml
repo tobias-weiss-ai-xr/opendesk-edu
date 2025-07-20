@@ -83,11 +83,12 @@ variables:
   FLUSH_EXTERNAL_SERVICES_TYPE:
     description: >
       Select the type of external services (e.g. "RUN", or "STACKIT"), as they require different
-      cleanup strategies. Requires `FLUSH_EXTERNAL_SERVICES_BEFORE=yes`.
-    value: "STACKIT"
+      cleanup strategies. Requires `FLUSH_EXTERNAL_SERVICES_BEFORE=yes` and `ENV_STOP_BEFORE=yes`.
+    value: "CHANGE ME"
     options:
       - "RUN"
       - "STACKIT"
+      - "CHANGE ME"
   DEBUG_ENABLED:
     description: >
       Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific
@@ -386,7 +387,7 @@ db-cleanup:
             echo "[psql] [${ENV_DATABASE}] DROP OWNED BY ${PGUSER} in ${POSTGRES_DATABASE} on ${PGHOST}"
             psql -c "DROP OWNED BY ${PGUSER}" || true;
             ;;
-          *)
+          "RUN")
             # Usually, e.g. in "RUN" cluster, databases can simply be dropped and recreated
             echo "[psql] [${ENV_DATABASE}] DROP ${POSTGRES_DATABASE} on ${PGHOST}"
             psql -c "DROP DATABASE ${POSTGRES_DATABASE}" || true;
