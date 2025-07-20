@@ -38,9 +38,9 @@ The following table summarizes the differences between oD CE and oD EE.
 | -------------------------------- | --------------------------------------- | -------------------------------------------------------------------------- |
 | **Licensing of core components** | OSS (Apache‑2.0 / GPL, etc.)            | Same OSS licenses                                                          |
 | **Closed‑source modules**        | None                                    | Collabora (branding), Element (admin tools), Nextcloud (guard app), OX Pro, Dovecot Pro |
-| **Technical enablement**         | Fully public images/charts via OpenCoDE | EE‑only registry, license file (`enterprise.yaml`)                         |
-| **Support & updates**            | Community via OpenCoDE, no SLA          | SLA‑backed support, patches, 2nd/3rd level                                 |
-| **Access to source code**        | All CE code on OpenCoDE                 | Proprietary modules NOT on OpenCoDE                                        |
+| **Technical enablement**         | Fully public images/charts via openCode | EE‑only registry, license file (`enterprise.yaml`)                         |
+| **Support & updates**            | Community via openCode, no SLA          | SLA‑backed support, patches, 2nd/3rd level                                 |
+| **Access to source code**        | All CE code on openCode                 | Proprietary modules NOT on openCode                                        |
 
 
 ## CE Components
