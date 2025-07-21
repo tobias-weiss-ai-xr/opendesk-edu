@@ -93,6 +93,8 @@ Find out more about the permission system in the [roles & permissions concept](.
 
 # Releases
 
+openDesk implements a defined [release and patch management process](./docs/releases.md) to ensure stability and security.
+
 All technical releases are created using [Semantic Versioning](https://semver.org/).
 
 Gitlab provides an
