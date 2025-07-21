@@ -7,6 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <!-- TOC -->
 * [Overview](#overview)
+* [Enterprise Features](#enterprise-features)
 * [CE vs. EE](#ce-vs-ee)
   * [CE Components](#ce-components)
   * [EE Components](#ee-components)
@@ -29,6 +30,25 @@ openDesk Enterprise Edition is recommended for production use. It receives suppo
 This document refers to the openDesk Community Edition as "oD CE" and the openDesk Enterprise Edition as "oD EE".
 
 Please contact [ZenDiS](mailto:opendesk@zendis.de) to get openDesk Enterprise, either as a SaaS offering or for your on-premises installation.
+
+# Enterprise Features
+
+oD EE ships the following features for Enterprise use that are not available in oD CE.
+
+| Component            | Enterprise-only Features                                                                                          |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Collabora**        | Branding                       |
+|                      | [Automatic load scaling](https://www.collaboraonline.com/collabora-online-controller/)                       |
+| **Element**          | [AdminBot](https://ems-docs.element.io/books/element-cloud-documentation/page/admin-bot) |
+|                      | [GroupSync](https://ems-docs.element.io/books/element-server-suite-classic-documentation-lts-2504/page/setting-up-group-sync-with-the-installer#bkmrk-what-is-group-sync?) |
+|                      | [Admin Console](https://ems-docs.element.io/books/element-server-suite-classic-documentation-lts-2504/page/using-the-admin-console)                                   |
+| **Nextcloud**        | Enterprise security patches |
+|                      | [Guard app](https://nextcloud.com/features/#guard)                                           |
+| **Open‑Xchange**     | S3 storage                |
+|                      | Central orchestration of cluster topology, health checks, and configuration |
+|                      | Advanced Full-Text Search (FTS) functionality for mailboxes                |
+| **OpenProject**.     | [Enterprise addons](https://www.openproject.org/docs/enterprise-guide/) (*Corporate Plan*) |
+| **XWiki**            | [XWiki Pro apps](https://xwiki.com/en/offerings/products/xwiki-pro)                                                   |
 
 # CE vs. EE
 
