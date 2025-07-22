@@ -6,4 +6,12 @@ technical:
   collabora:
     # Defines the value for the start parameter `-o:num_prespawn_children`
     numPrespawnChildren: 4
+  # Groupware related technical settings
+  oxAppSuite:
+    provisioning:
+      # In environments with a large number of users and groups, we offer the option to enable a
+      # dedicated Pod for the OX App Suite Core Middleware, exclusively handling provisioning tasks.
+      # This approach ensures that heavy provisioning workloads do not negatively impact the user
+      # experience, such as by slowing down pods that serve end-user sessions.
+      dedicatedCoreMwPod: false
 ...
