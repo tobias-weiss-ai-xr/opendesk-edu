@@ -49,7 +49,7 @@ oxConnector:
   oxMasterAdmin: "admin"
   oxMasterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
   oxSmtpServer: "smtp://127.0.0.1:587"
-  oxSoapServer: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
+  oxSoapServer: "http://open-xchange-core-mw-admin"
 
 provisioningApi:
   connection:

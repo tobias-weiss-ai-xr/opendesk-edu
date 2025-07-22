@@ -120,6 +120,9 @@ appsuite:
         annotations:
           {{ .Values.annotations.openxchangeAppsuiteIngress.trailslash | toYaml | nindent 10 }}
       rest-routes-admin:
+        {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
+        enabled: false
+        {{- end }}
         annotations:
           {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdmin | toYaml | nindent 10 }}
       rest-routes-advertisement:
@@ -224,6 +227,34 @@ appsuite:
             - admin
             - businessmobility
             - request-analyzer
+    roles:
+      admin:
+        values:
+          features:
+            status:
+              admin: "enabled"
+          packages:
+            status:
+              open-xchange-admin-contextrestore: "enabled"
+              open-xchange-admin-oauth-provider: "enabled"
+              open-xchange-admin-soap: "enabled"
+              open-xchange-admin-soap-usercopy: "enabled"
+              open-xchange-admin-user-copy: "enabled"
+    {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
+    scaling:
+      nodes:
+        groupware:
+          replicas: {{ .Values.replicas.openxchangeCoreMW }}
+          roles:
+            - "http-api"
+            - "sync"
+            - "businessmobility"
+            - "request-analyzer"
+        admin:
+          replicas: 1
+          roles:
+            - "admin"
+    {{- end }}
     masterAdmin: "admin"
     masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     hzGroupName: "hzgroup"
@@ -245,6 +276,10 @@ appsuite:
         # admin: enabled
         documents: "disabled"
         guard: "enabled"
+        # disabling admin role breaks webmail
+        # {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
+        # admin: "disabled"
+        # {{- end }}
     gotenberg:
       enabled: true
       imagePullSecrets:
@@ -304,6 +339,14 @@ appsuite:
         open-xchange-hostname-config-cascade: "enabled"
         # Enable s3 storage
         open-xchange-filestore-s3: "enabled"
+        {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
+        # disabling admin feature breaks webmail, so only sub packages are disabled:
+        open-xchange-admin-contextrestore: "disabled"
+        open-xchange-admin-oauth-provider: "disabled"
+        open-xchange-admin-soap: "disabled"
+        open-xchange-admin-soap-usercopy: "disabled"
+        open-xchange-admin-user-copy: "disabled"
+        {{- end }}
     properties:
       com.openexchange.hostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
