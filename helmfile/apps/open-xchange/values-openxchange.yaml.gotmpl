@@ -240,9 +240,35 @@ appsuite:
               open-xchange-admin-soap: "enabled"
               open-xchange-admin-soap-usercopy: "enabled"
               open-xchange-admin-user-copy: "enabled"
-    {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
+      {{- if .Values.functional.migration.oxAppSuite.enabled }}
+      migration:
+        values:
+          packages:
+            status:
+              open-xchange-oidc: "disabled"
+              open-xchange-authentication-masterpassword: "enabled"
+          properties:
+            com.openexchange.calendar.allowOrganizerPartStatChanges: "true"
+          propertiesFiles:
+            /opt/open-xchange/etc/masterpassword-authentication.properties:
+              com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+        services:
+          - type: ClusterIP
+            ports:
+              - port: 80
+                targetPort: http
+                protocol: TCP
+                name: http
+      {{- end }}
     scaling:
       nodes:
+        {{- if .Values.functional.migration.oxAppSuite.enabled }}
+        migration:
+          replicas: 1
+          roles:
+            - "migration"
+        {{- end }}
+        {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
         groupware:
           replicas: {{ .Values.replicas.openxchangeCoreMW }}
           roles:
@@ -254,7 +280,16 @@ appsuite:
           replicas: 1
           roles:
             - "admin"
-    {{- end }}
+        {{- else }}
+        groupware:
+          replicas: {{ .Values.replicas.openxchangeCoreMW }}
+          roles:
+            - "http-api"
+            - "sync"
+            - "businessmobility"
+            - "request-analyzer"
+            - "admin"
+        {{- end }}
     masterAdmin: "admin"
     masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
     hzGroupName: "hzgroup"
@@ -319,13 +354,8 @@ appsuite:
           chown open-xchange:open-xchange /opt/open-xchange/guard-files
     packages:
       status:
-        {{- if .Values.functional.migration.oxAppSuite.enabled }}
-        open-xchange-oidc: "disabled"
-        open-xchange-authentication-masterpassword: "enabled"
-        {{- else }}
         open-xchange-oidc: "enabled"
         open-xchange-authentication-masterpassword: "disabled"
-        {{- end }}
         open-xchange-authentication-oauth: "disabled"
         open-xchange-authentication-database: "disabled"
         open-xchange-authentication-ldap: "disabled"
@@ -502,10 +532,6 @@ appsuite:
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
       com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
     propertiesFiles:
-      {{- if .Values.functional.migration.oxAppSuite.enabled }}
-      /opt/open-xchange/etc/masterpassword-authentication.properties:
-        com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
-      {{- end }}
       /opt/open-xchange/etc/AdminDaemon.properties:
         MASTER_ACCOUNT_OVERRIDE: "true"
       /opt/open-xchange/etc/AdminUser.properties:

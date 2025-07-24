@@ -77,7 +77,7 @@ With openDesk 1.0 Enterprise, you can set openDesk's email components (OX AppSui
 ```
 secrets:
   oxAppSuite:
-    adminPassword: "your_temporary_master_password"
+    migrationsMasterPassword: "your_temporary_master_password"
 functional:
   migration:
     oxAppSuite:
@@ -89,7 +89,7 @@ functional:
 
 To validate the master authentication mode please read the appendix section at the end of the document.
 
-Updating your deployment with these settings will allow you to continue with the migration scenario. Once the migration is completed, you can remove `secrets.oxAppSuite.adminPassword` and need to turn off the migration mode by setting `functional.migration.oxAppSuite.enabled` to `false` or removing that setting, as `false` is the default before you update your deployment once again.
+Updating your deployment with these settings will allow you to continue with the migration scenario. Once the migration is completed, you can remove `secrets.oxAppSuite.migrationsMasterPassword` and need to turn off the migration mode by setting `functional.migration.oxAppSuite.enabled` to `false` or removing that setting, as `false` is the default before you update your deployment once again.
 
 > **Note**<br>
 > For the changes to take effect, it is sufficient to re-deploy the `open-xchange` component alone. But you have to restart the Dovecot Pod(s) manually when switching to/from the master authentication mode for the changes to take effect.
