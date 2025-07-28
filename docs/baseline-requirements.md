@@ -66,8 +66,8 @@ All parts of openDesk Community Edition must be open source with source code (al
 
 openCode provides some boundaries when it comes to open source license compliance openDesk has to adhere to:
 
-- The components must be published under a license listed in the [openCode license allow list](https://wikijs.opencode.de/de/Hilfestellungen_und_Richtlinien/Lizenzcompliance#h-2-open-source-lizenzliste).
-- Delivered artifacts (container images) must contain only components licensed under the aforementioned allow list. A container must not contain any artifact using a license from the [openCode license block list](https://wikijs.opencode.de/de/Hilfestellungen_und_Richtlinien/Lizenzcompliance#h-3-negativliste-aller-nicht-freigegebenen-lizenzen).
+- The components must be published under a license listed in the [openCode license allow list](https://opencode.de/de/wissen/rechtssichere-nutzung/open-source-lizenzen).
+- Delivered artifacts (container images) must contain only components licensed under the aforementioned allow list. A container must not contain any artifact using a license from the [openCode license block list](https://opencode.de/de/wissen/rechtssichere-nutzung/open-source-lizenzen#3.-Negativliste-aller-nicht-freigegebenen-Lizenzen).
 
 Deviations from the above requirements must be documented in the openDesk license deviation report.
 
