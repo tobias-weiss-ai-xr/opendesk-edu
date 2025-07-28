@@ -11,6 +11,8 @@ SPDX-License-Identifier: Apache-2.0
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
   * [v1.7.0+](#v170)
+    * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
+      * [Replace Helm chart: New Notes Helm chart with support for self-signed deployments](#replace-helm-chart-new-notes-helm-chart-with-support-for-self-signed-deployments)
     * [Post-upgrade to v1.7.0+](#post-upgrade-to-v170)
       * [Upstream fix: Provisioning of functional mailboxes](#upstream-fix-provisioning-of-functional-mailboxes)
   * [v1.6.0+](#v160)
@@ -123,6 +125,27 @@ If you would like more details about the automated migrations, please read secti
 # Manual checks/actions
 
 ## v1.7.0+
+
+### Pre-upgrade to v1.7.0+
+
+#### Replace Helm chart: New Notes Helm chart with support for self-signed deployments
+
+**Target group:** All deployments that set `app.notes.enabled: true` (default is `false`).
+
+We replaced the Helm Chart used for the Notes (aka "Impress") deployment. If you have enabled Notes in your deployment, you must manually uninstall the old chart before upgrading to openDesk v1.7.0.
+
+```shell
+helm uninstall -n <your_namespace> impress
+```
+
+In case you are using `annotation.notes` they have to be moved into one of the remaining dicts, see [`annotations.yaml.gotmpl`](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/helmfile/environments/default/annotations.yaml.gotmpl) for details:
+
+```yaml
+annotation:
+  notesBackend: {}
+  notesFrontend: {}
+  notesYProvider: {}
+```
 
 ### Post-upgrade to v1.7.0+
 
