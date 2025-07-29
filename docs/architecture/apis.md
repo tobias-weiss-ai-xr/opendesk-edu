@@ -65,12 +65,12 @@ This chapter presents APIs available in openDesk, grouped by application.
 
 # IAM - Nubus
 
-![Overview of functional components in Univention Nubus for Kubernetes](./apis_images/IAM-overview_functional_components_structured.svg)  
+![Overview of functional components in Univention Nubus for Kubernetes](./apis_images/IAM-overview_functional_components_structured.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/components.html#overview-components-fig)
 
 ## UMC Python API
 
-![Composition of UMC component with APIs highlighted](./apis_images/IAM-umc-architecture.png)  
+![Composition of UMC component with APIs highlighted](./apis_images/IAM-umc-architecture.png)
 [Source](https://docs.software-univention.de/developer-reference/latest/en/umc/architecture.html#umc-api)
 
 | Name                           | UMC Python API                                                                                                                                                                                                                                 |
@@ -143,7 +143,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 ## UDM Simple API
 
-![Architecture of UDM](./apis_images/IAM-udm-architecture.svg)  
+![Architecture of UDM](./apis_images/IAM-udm-architecture.svg)
 [Source](https://docs.software-univention.de/architecture/latest/en/services/udm.html#architecture-model-udm)
 
 | Name                           | UDM Simple API                                                                                                                                    |
@@ -180,7 +180,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 ## UCR Python API
 
-![Architecture overview of UCR](./apis_images/IAM-ucr-architecture.svg)  
+![Architecture overview of UCR](./apis_images/IAM-ucr-architecture.svg)
 [Source](https://docs.software-univention.de/architecture/latest/en/services/ucr.html#services-ucr-architecture-model)
 
 | Name                           | UCR Python API                                                                                         |
@@ -200,7 +200,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 ## Identity Store and Directory Service (LDAP)
 
-![Overview of the Identity Store and Directory Service](./apis_images/IAM-functional_component_identity_store.svg)  
+![Overview of the Identity Store and Directory Service](./apis_images/IAM-functional_component_identity_store.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/identity-store.html#component-identity-store-figure)
 
 | Name                           | Identity Store and Directory Service (LDAP)                                                                                                           |
@@ -220,7 +220,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 ## Nubus Provisioning Service
 
-![Overview of the Provisioning Service and its components](./apis_images/IAM-functional_component_provisioning_service_complete.svg)  
+![Overview of the Provisioning Service and its components](./apis_images/IAM-functional_component_provisioning_service_complete.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html#component-provisioning-service-complete-figure)
 
 | Name          | Nubus Proisioning Service                                                                                        |
@@ -229,7 +229,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 ## Nubus Authorization Service
 
-![ArchiMate view of the interfaces and protocols of the Authorization Service](./apis_images/IAM-interfaces_authorization_service.svg)  
+![ArchiMate view of the interfaces and protocols of the Authorization Service](./apis_images/IAM-interfaces_authorization_service.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/interfaces-protocols.html#authorization-service)
 
 | Name          | Nubus Authorization Service                                                                                                          |
@@ -288,7 +288,7 @@ The following are the APIs used by the Groupware application:
 | In openDesk provided by        | OX AppSuite Middleware                                                                       |
 | Transport protocol             | HTTP(S)                                                                                      |
 | Usage within component         | none                                                                                         |
-| Usage within openDesk          | OX-Connector synchronizes the state of the objects (users, groups etc.) managed in the LDAP. |
+| Usage within openDesk          | OX Connector synchronizes the state of the objects (users, groups etc.) managed in the LDAP. |
 | Usage for external integration | none                                                                                         |
 | Parallel access                | Allowed                                                                                      |
 | Message protocol               | XML based, exactly following the format of Java RMI.                                         |

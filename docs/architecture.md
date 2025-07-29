@@ -77,7 +77,7 @@ configured to use the aforementioned OpenLDAP.
 
 When the user is authenticated by Keycloak, the portal shows the applications the user is permitted to access.
 
-The user can now access applications and use the corresponding functionality without the need to authenticate 
+The user can now access applications and use the corresponding functionality without the need to authenticate
 again. This is implemented using the OpenID Connect (OIDC) protocol.
 
 # Nubus (IAM)
@@ -443,7 +443,7 @@ While the IAM manages users centrally, some applications come with local account
 | Element      | `uvs`                                         | The account for the "User Verification Service". It is used by Jitsi integrated into Element.                           | `secrets.matrixUserVerificationService.password` |
 |              | `meeting-bot`                                 | Used by the Nordeck Meeting-Bot to manage meeting rooms in Synapse.                                                     | `secrets.matrixNeoDateFixBot.password`           |
 | Nextcloud    | `nextcloud`                                   | Bootstrap the Nextcloud fileshare for OpenProject with `opendesk-openproject-bootstrap` job[^1].                        | `secrets.nextcloud.adminPassword`                |
-| OX App Suite | `admin`                                       | OX-Connector to provision context, users, groups etc.                                                                   | `secrets.oxAppsuite.adminPassword`               |
+| OX App Suite | `admin`                                       | OX Connector to provision context, users, groups etc.                                                                   | `secrets.oxAppsuite.adminPassword`               |
 | OpenProject  | set in `secrets.openproject.apiAdminUsername` | Bootstrap the Nextcloud fileshare for OpenProject with `opendesk-openproject-bootstrap` job[^1].                        | `secrets.openproject.apiAdminPassword`           |
 | XWiki        | `superadmin`                                  | Only available with `debug.enabled: true`, can be used for interactive login using `/bin/view/Main/?oidc.skipped=true`. | `secrets.xwiki.superadminpassword`               |
 

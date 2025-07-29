@@ -65,7 +65,7 @@ resourcesWaitForDependency:
 
 persistence:
   size: {{ .Values.persistence.storages.oxConnector.size | quote }}
-  storageClass: {{ coalesce .Values.persistence.storages.oxConnector.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  #storageClass: {{ coalesce .Values.persistence.storages.oxConnector.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations:
   {{ .Values.annotations.nubusOxConnector.pod | toYaml | nindent 2 }}
