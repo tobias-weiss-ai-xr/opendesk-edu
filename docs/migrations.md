@@ -10,9 +10,12 @@ SPDX-License-Identifier: Apache-2.0
 * [Deprecation warnings](#deprecation-warnings)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
+  * [v1.7.0+](#v170)
+    * [Post-upgrade to v1.7.0+](#post-upgrade-to-v170)
+      * [Upstream fix: Provisioning of functional mailboxes](#upstream-fix-provisioning-of-functional-mailboxes)
   * [v1.6.0+](#v160)
     * [Pre-upgrade to v1.6.0+](#pre-upgrade-to-v160)
-      * [Upstream contraint: Nubus' external secrets](#upstream-contraint-nubus-external-secrets)
+      * [Upstream constraint: Nubus' external secrets](#upstream-constraint-nubus-external-secrets)
       * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
       * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
       * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
@@ -94,6 +97,8 @@ This section should provide you with an overview of what changes to expect in th
 
 - `functional.portal.link*` (see `functional.yaml.gotmpl` for details) are going to be moved into the `theme.*` tree, we are also going to move the icons used for the links currently found under `theme.imagery.portalEntries` in this step.
 - We will explicitly set the [database schema configuration](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/#HConfigurethenamesofdatabaseschemas) for XWiki to avoid the use of the `public` schema.
+- `persistance.storages.oxConnector.storageClassName` and `persistance.storages.nubusUdmListener.storageClassName` will be templated in Helmfile requiring you to template them explicitly if their current default values differs from the global value set in `persistence.storageClassNames.RWO`.
+- The currently used Helm chart for Notes will be replaced requiring some config updates.
 
 # Automated migrations - Overview and mandatory upgrade path
 
@@ -117,11 +122,40 @@ If you would like more details about the automated migrations, please read secti
 
 # Manual checks/actions
 
+## v1.7.0+
+
+### Post-upgrade to v1.7.0+
+
+#### Upstream fix: Provisioning of functional mailboxes
+
+**Target group:** Deployments with OX App Suite that make use of IAM maintained functional mailboxes.
+
+The update of OX Connector included in openDesk 1.7.0 fixes an issue with the provisioning of IAM maintained functional mailboxes. If your deployment makes use of these mailboxes it is recommended to trigger a full sync of the OX App Suite provisioning by recreating the OX Connector's provisioning subscription using calls to the provisioning API that is temporary port-forwarded in the example below:
+
+```shell
+export NAMESPACE=<your_namespace>
+export SUBSCRIPTION_NAME=ox-connector
+export SUBSCRIPTION_SECRET_NAME=ums-provisioning-ox-credentials
+export TEMPORARY_CONSUMER_JSON=$(mktemp)
+export PROVISIONING_API_POD_NAME=$(kubectl -n ${NAMESPACE} get pods --no-headers -o custom-columns=":metadata.name" | grep ums-provisioning-api | tr -d '\n')
+kubectl -n ${NAMESPACE} port-forward ${PROVISIONING_API_POD_NAME} 7777:7777 &
+export PROVISIONING_PORT_FORWARD_PID=$!
+sleep 10
+kubectl -n ${NAMESPACE} get secret ${SUBSCRIPTION_SECRET_NAME} -o json | jq '.data | map_values(@base64d)' | jq -r '."ox-connector.json"' > ${TEMPORARY_CONSUMER_JSON}.json
+export PROVISIONING_ADMIN_PASSWORD=$(kubectl -n ${NAMESPACE} get secret ums-provisioning-api-admin -o jsonpath='{.data.password}' | base64 --decode)
+# Delete the current subscription
+curl -o - -u "admin:${PROVISIONING_ADMIN_PASSWORD}" -X DELETE http://localhost:7777/v1/subscriptions/${SUBSCRIPTION_NAME}
+# Recreate the subscription
+curl -u "admin:${PROVISIONING_ADMIN_PASSWORD}" -H 'Content-Type: application/json' -d @${TEMPORARY_CONSUMER_JSON}.json http://localhost:7777/v1/subscriptions
+kill ${PROVISIONING_PORT_FORWARD_PID}
+rm ${TEMPORARY_CONSUMER_JSON}
+```
+
 ## v1.6.0+
 
 ### Pre-upgrade to v1.6.0+
 
-#### Upstream contraint: Nubus' external secrets
+#### Upstream constraint: Nubus' external secrets
 
 **Target group:** Operators that use external secrets for Nubus.
 

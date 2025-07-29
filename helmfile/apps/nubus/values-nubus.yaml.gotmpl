@@ -1310,6 +1310,8 @@ nubusStackDataUms:
     portalLinkFeedback: {{ .Values.functional.portal.linkFeedback | quote }}
     oxDefaultContext: "1"
     oxContextHidden: true
+    oxSystemUserPassword: {{ .Values.secrets.nubus.ldapSearch.ox }}
+    portalOxLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
       - username: {{ printf "ldapsearch_%s" $username | quote }}
