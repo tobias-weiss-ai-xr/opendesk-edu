@@ -30,7 +30,7 @@ collabora:
     {{- end }}
     {{- if .Values.apps.collaboraController.enabled }}
     --o:indirection_endpoint.url=https://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/routeToken
-    --o:monitors.monitor[0]=wss://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/ws
+    --o:monitors.monitor[0]=ws://collabora-controller-cool-controller:9000/controller/ws
     --o:monitors.monitor[0][@retryInterval]=5
     {{- end }}
   username: "collabora-internal-admin"
@@ -77,8 +77,8 @@ ingress:
     # HAProxy
     haproxy.org/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
     haproxy.org/backend-config-snippet: |
-       balance url_param WOPISrc check_post
-       hash-type consistent
+      balance url_param WOPISrc check_post
+      hash-type consistent
     # HAProxy - Community: https://haproxy-ingress.github.io/
     haproxy-ingress.github.io/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
     haproxy-ingress.github.io/balance-algorithm: "url_param WOPISrc check_post"
@@ -89,9 +89,9 @@ ingress:
       acl admin_url path_beg /cool/adminws/
       acl admin_url path_beg /browser/dist/admin/admin.html
       http-request deny if admin_url
-   {{- with .Values.annotations.collabora.ingress }}
-   {{ . | toYaml | nindent 4 }}
-   {{- end }}
+    {{- with .Values.annotations.collabora.ingress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   enabled: {{ .Values.ingress.enabled }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:
