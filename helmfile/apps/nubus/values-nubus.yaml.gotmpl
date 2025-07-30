@@ -113,6 +113,11 @@ global:
           token_validity_period: 172800
           blacklist:
             groups: __DELETE_KEY__
+          limit:
+            total:
+              day: {{ .Values.security.passwordResetLimits.day }}
+              hour: {{ .Values.security.passwordResetLimits.hour }}
+              minute: {{ .Values.security.passwordResetLimits.minute }}
 
 ingress:
   annotations:
