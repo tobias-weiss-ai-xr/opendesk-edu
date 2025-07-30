@@ -12,4 +12,11 @@ security:
       matchLabels:
         app.kubernetes.io/name: "ingress-nginx"
     namespace: "ingress-nginx"
+
+  # Global limits for how often a password reset action can be requested.
+  # Defaults are taken from the nubus stack-data-ums chart and should work with most small to medium installations
+  passwordResetLimits:
+    day: 1000
+    hour: 200
+    minute: 120
 ...
