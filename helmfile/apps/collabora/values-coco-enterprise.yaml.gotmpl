@@ -32,7 +32,9 @@ imagePullSecrets:
 ingress:
   enabled: {{ .Values.ingress.enabled }}
   annotations:
-    {{ .Values.annotations.coco.ingress | toYaml | nindent 4 }}
+    {{- with .Values.annotations.coco.ingress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:
     - host: "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
