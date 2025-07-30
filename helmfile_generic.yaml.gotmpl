@@ -10,6 +10,9 @@ helmfiles:
     values: &values
       - "helmfile/environments/default/*.yaml.gotmpl"
       - {{ toYaml .Values | nindent 8 }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+      - "helmfile/environments/default-enterprise-overrides/*.yaml.gotmpl"
+      {{- end }}
   - path: "helmfile/apps/opendesk-services/helmfile-child.yaml.gotmpl"
     values: *values
   - path: "helmfile/apps/services-external/helmfile-child.yaml.gotmpl"
