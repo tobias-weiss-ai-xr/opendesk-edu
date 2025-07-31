@@ -175,6 +175,9 @@ configuration:
     token:
       value: {{ .Values.secrets.nextcloud.metricsToken | quote }}
 
+  # A sane default for windows clients would be: `* " | & ? , ; : \ / ~ < >`
+  forbiddenChars: "* \" | & ? , ; : \\ / ~ < >"
+
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
