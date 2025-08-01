@@ -527,7 +527,10 @@ config:
         publicClient: false
         authorizationServicesEnabled: false
         attributes:
+          use.refresh.tokens: true
           backchannel.logout.session.required: true
+          standard.token.exchange.enabled: true
+          standard.token.exchange.enableRefreshRequestedTokenType: "SAME_SESSION"
           backchannel.logout.revoke.offline.tokens: true
           backchannel.logout.url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/backchannel-logout"
         protocolMappers:
