@@ -10,7 +10,7 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url:
-      "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.nubus.registry }}/{{ .Values.charts.nubus.repository }}"
+      "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default  .Values.charts.nubus.registry }}/{{ .Values.charts.nubus.repository }}"
   # Intercom Service
   # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/intercom-service
   - name: "intercom-service-repo"
