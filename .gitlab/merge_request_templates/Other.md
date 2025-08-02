@@ -35,7 +35,7 @@ Set labels:
   - [ ] Yes, and the documentation was updated accordingly.
 
 Document in an extra comment and link to that comment:
-- [ ] How you verified the change is working as expected, also in upgrade sceanrios.
+- [ ] How you verified the change is working as expected, also in upgrade scenarios.
 - [ ] Any regression testing done.
 
 --> Link to comment:
