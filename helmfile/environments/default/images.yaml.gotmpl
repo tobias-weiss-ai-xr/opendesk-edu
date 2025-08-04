@@ -10,25 +10,31 @@ images:
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry-1.docker.io"
     # upstreamRepository: "bitnami/os-shell"
-    registry: "registry-1.docker.io"
-    repository: "bitnami/os-shell"
-    tag: "12-debian-12-r44@sha256:6388c7c27a09472906e2f2094410c9ffdadf23b4b242293ce023d0314ec10920"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)-debian-(\d+)-r(\d+)$'
+    # upstreamMirrorStartFrom: ["12", "12", "44"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/community/images-mirror/os-shell"
+    tag: "12-debian-12-r44@sha256:e0eab38c4e2e2ebfc9043bc9bc482109ec5cca3123154c1af8e040ea23c5ce98"
   cassandra:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry-1.docker.io"
     # upstreamRepository: "bitnami/cassandra"
-    registry: "registry-1.docker.io"
-    repository: "bitnami/cassandra"
-    tag: "5.0.4-debian-12-r4@sha256:9d909ebe10802dae2fb99ef7c8e9e0dbc496c8d30366e2f7abbe0713b945fa7d"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)-debian-(\d+)-r(\d+)$'
+    # upstreamMirrorStartFrom: ["5", "0", "4", "12", "4"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/community/images-mirror/cassandra"
+    tag: "5.0.4-debian-12-r4@sha256:93be59e318070e5c1d515c2b5840e9e07babfbac845b2c9bcc1cdf8efda6bb18"
   cassandraExporter:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry-1.docker.io"
     # upstreamRepository: "bitnami/cassandra-exporter"
-    registry: "registry-1.docker.io"
-    repository: "bitnami/cassandra-exporter"
-    tag: "2.3.8-debian-12-r46@sha256:e44c65f08d85153041f68bcf180f948341d74018eef8b56e8869ed87fdfd34f0"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)-debian-(\d+)-r(\d+)$'
+    # upstreamMirrorStartFrom: ["2", "3", "8", "12", "46"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/community/images-mirror/cassandra-exporter"
+    tag: "2.3.8-debian-12-r46@sha256:3b460a6287f24ef96626439825c9e3fa822784d802209f38c7541d8289eb51d8"
   clamd:
     # providerCategory: "Community"
     # providerResponsible: "openDesk"
@@ -210,8 +216,10 @@ images:
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry-1.docker.io"
     # upstreamRepository: "bitnami/kubectl"
-    registry: "registry-1.docker.io"
-    repository: "bitnami/kubectl"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
+    # upstreamMirrorStartFrom: ["1", "32", "0"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/community/images-mirror/kubectl"
     tag: "1.32.0@sha256:48c81b7aaf4fabf2733a0b888960f6982181fbcd2c3f8dfcebc4a1a065631162"
   jvb:
     # providerCategory: "Supplier"
@@ -286,9 +294,11 @@ images:
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry-1.docker.io"
     # upstreamRepository: "bitnami/memcached"
-    registry: "registry-1.docker.io"
-    repository: "bitnami/memcached"
-    tag: "1.6.38-debian-12-r3@sha256:3e548fba727578be9d996262471f5f3e07726d625702d26743a5e0f34684cb21"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)-debian-(\d+)-r(\d+)$'
+    # upstreamMirrorStartFrom: ["1", "6", "38", "12", "3"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/community/images-mirror/memcached"
+    tag: "1.6.38-debian-12-r3@sha256:ea35c7d38b5e080a900991220323e31539b2877069d8aa4dc6814fe384e3c0da"
   migrations:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -310,9 +320,11 @@ images:
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry-1.docker.io"
     # upstreamRepository: "bitnami/minio"
-    registry: "registry-1.docker.io"
-    repository: "bitnami/minio"
-    tag: "2025.4.22-debian-12-r1@sha256:d7cd0e172c4cc0870f4bdc3142018e2a37be9acf04d68f386600daad427e0cab"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)-debian-(\d+)-r(\d+)$'
+    # upstreamMirrorStartFrom: ["2025", "4", "22", "12", "1"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/community/images-mirror/minio"
+    tag: "2025.4.22-debian-12-r1@sha256:b5c26fa4a2cc2abffe096a54d9e7fd3976d72e38bd2186338b1a06d66c63e651"
   nextcloud:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -936,9 +948,11 @@ images:
     # providerResponsible: "openDesk"
     # upstreamRegistry: "https://registry-1.docker.io"
     # upstreamRepository: "bitnami/redis"
-    registry: "registry-1.docker.io"
-    repository: "bitnami/redis"
-    tag: "7.4.3-debian-12-r0@sha256:a25b5d07a14ec13730022c7cd9bab6308d55ccd86b74af7315553c17be884889"
+    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)-debian-(\d+)-r(\d+)$'
+    # upstreamMirrorStartFrom: ["7", "4", "3", "12", "0"]
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/community/images-mirror/redis"
+    tag: "7.4.3-debian-12-r0@sha256:fbdf361bbb6a17be28913fb9e4a1cfe3244331d2cbf449ecfe7a1fbbab02efc4"
   synapse:
     # providerCategory: "Supplier"
     # providerResponsible: "Element"

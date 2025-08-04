@@ -322,7 +322,7 @@ patchJVB:
       {{ .Values.seLinuxOptions.jitsiPatchJVB | toYaml | nindent 6 }}
   image:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.jitsiPatchJVB.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.jitsiPatchJVB.registry | quote }}
     repository: {{ .Values.images.jitsiPatchJVB.repository | quote }}
     tag: {{ .Values.images.jitsiPatchJVB.tag | quote }}
 

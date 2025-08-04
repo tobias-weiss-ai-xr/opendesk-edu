@@ -16,7 +16,7 @@ global:
   storageClass: {{ coalesce .Values.persistence.storages.redis.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 image:
-  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.redis.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.redis.registry | quote }}
   repository: {{ .Values.images.redis.repository | quote }}
   tag: {{ .Values.images.redis.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
