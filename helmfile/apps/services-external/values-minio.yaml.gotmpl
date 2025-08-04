@@ -46,7 +46,7 @@ global:
     allowInsecureImages: true
 
 image:
-  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.minio.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.minio.registry | quote }}
   repository: {{ .Values.images.minio.repository | quote }}
   tag: {{ .Values.images.minio.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -54,7 +54,7 @@ image:
 volumePermissions:
   enabled: true
   image:
-    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.minio.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.minio.registry | quote }}
     repository: {{ .Values.images.bitnamiOSShell.repository | quote }}
     tag: {{ .Values.images.bitnamiOSShell.tag | quote }}
     pullPolicy: {{ .Values.global.imagePullPolicy | quote }}

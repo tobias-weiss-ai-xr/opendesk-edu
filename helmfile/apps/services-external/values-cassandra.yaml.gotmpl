@@ -26,7 +26,7 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.cassandra.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.cassandra.registry | quote }}
   repository: {{ .Values.images.cassandra.repository | quote }}
   tag: {{ .Values.images.cassandra.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
@@ -62,7 +62,7 @@ livenessProbe:
 metrics:
   enabled: false
   image:
-    registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.cassandraExporter.registry | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.cassandraExporter.registry | quote }}
     repository: {{ .Values.images.cassandraExporter.repository | quote }}
     tag: {{ .Values.images.cassandraExporter.tag | quote }}
     pullPolicy: {{ .Values.global.imagePullPolicy | quote }}

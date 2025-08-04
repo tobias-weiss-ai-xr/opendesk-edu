@@ -28,7 +28,7 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 image:
-  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.memcached.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.memcached.registry | quote }}
   repository: {{ .Values.images.memcached.repository | quote }}
   tag: {{ .Values.images.memcached.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}

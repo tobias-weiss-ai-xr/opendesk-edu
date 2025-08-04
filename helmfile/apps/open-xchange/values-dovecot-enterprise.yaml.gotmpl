@@ -8,7 +8,7 @@ image:
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 imageInitCassandra:
-  registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.cassandra.registry | quote }}
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.cassandra.registry | quote }}
   repository: {{ .Values.images.cassandra.repository | quote }}
   tag: {{ .Values.images.cassandra.tag | quote }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
