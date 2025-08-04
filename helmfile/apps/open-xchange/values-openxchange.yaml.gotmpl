@@ -377,6 +377,9 @@ appsuite:
         open-xchange-admin-soap-usercopy: "disabled"
         open-xchange-admin-user-copy: "disabled"
         {{- end }}
+        {{- if .Values.functional.groupware.davSupport.enabled }}
+        open-xchange-authentication-application-storage-rdb: "enabled"
+        {{- end }}
     properties:
       com.openexchange.hostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
@@ -508,6 +511,12 @@ appsuite:
       com.openexchange.net.ssl.custom.truststore.enabled: "true"
       com.openexchange.net.ssl.custom.truststore.path: "/etc/ssl/certs/truststore.jks"
       com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password | quote }}
+      {{- end }}
+      {{- if .Values.functional.groupware.davSupport.enabled }}
+      com.openexchange.authentication.application.appTypes: "caldav,carddav"
+      com.openexchange.authentication.application.enabled: "true"
+      com.openexchange.authentication.application.storage.rdb.loginNameSource: "mail"
+      com.openexchange.authentication.application.storage.rdb.contextLookupNamePart: "full"
       {{- end }}
     {{- if .Values.certificate.selfSigned }}
     extraEnv:
@@ -641,6 +650,20 @@ appsuite:
     initContainer:
       resources:
         {{ .Values.resources.openxchangeCoreMW | toYaml | nindent 8 }}
+    {{- if .Values.functional.groupware.davSupport.enabled }}
+    yamlFiles:
+      app-password-apps.yml:
+        caldav:
+          displayName_t10e: "Calendar Client (CalDAV)"
+          restrictedScopes: [dav,read_caldav,write_caldav]
+          requiredCapabilities: [caldav]
+          sortOrder: 30
+        carddav:
+          displayName_t10e: "Addressbook Client (CardDAV)"
+          restrictedScopes: [dav,read_carddav,write_carddav]
+          requiredCapabilities: [carddav]
+          sortOrder: 40
+    {{- end }}
 
   core-ui:
     enabled: true
