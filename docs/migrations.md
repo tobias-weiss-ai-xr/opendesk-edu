@@ -12,6 +12,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Manual checks/actions](#manual-checksactions)
   * [v1.7.0+](#v170)
     * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
+    * [Helmfile fix: Ensure enterprise overrides apply when deploying from project root](#helmfile-fix-ensure-enterprise-overrides-apply-when-deploying-from-project-root)
       * [Replace Helm chart: New Notes Helm chart with support for self-signed deployments](#replace-helm-chart-new-notes-helm-chart-with-support-for-self-signed-deployments)
     * [Post-upgrade to v1.7.0+](#post-upgrade-to-v170)
       * [Upstream fix: Provisioning of functional mailboxes](#upstream-fix-provisioning-of-functional-mailboxes)
@@ -127,6 +128,16 @@ If you would like more details about the automated migrations, please read secti
 ## v1.7.0+
 
 ### Pre-upgrade to v1.7.0+
+
+### Helmfile fix: Ensure enterprise overrides apply when deploying from project root
+
+**Target group:** All openDesk Enterprise deployments initiated from the project root using `helmfile_generic.yaml.gotmpl`
+
+Previously, the default values referenced in `helmfile_generic.yaml.gotmpl` did not include the necessary Enterprise overrides from `helmfile/environment/default-ee-overrides/`.
+
+As a result, when deploying openDesk Enterprise Edition from the project root, the correct Enterprise charts and images for Collabora, Nextcloud, OpenXchange, and Dovecot were not applied. This issue does not affect deployments started at the component level (e.g., `helmfile/apps/collabora`).
+
+Please verify that your deployment uses the correct Enterprise charts and images. If not, migrate to the Enterprise versions before upgrading to openDesk EE v1.7.0.
 
 #### Replace Helm chart: New Notes Helm chart with support for self-signed deployments
 
