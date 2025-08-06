@@ -385,7 +385,8 @@ db-cleanup:
           "STACKIT")
             # In case of STACKIT resources the db content should just be dropped
             echo "[psql] [${ENV_DATABASE}] DROP OWNED BY ${PGUSER} in ${POSTGRES_DATABASE} on ${PGHOST}"
-            psql -c "DROP OWNED BY ${PGUSER}" || true;
+            PGDATABASE=${POSTGRES_DATABASE} # env var PGDATABASE is interpreted by psql
+            psql -c "DROP OWNED BY ${PGUSER};" || true;
             ;;
           "RUN")
             # Usually, e.g. in "RUN" cluster, databases can simply be dropped and recreated
@@ -403,7 +404,7 @@ db-cleanup:
       done;
     # Cleanup Objectstore
     - |
-      export BUCKETS="migrations nextcloud openproject nubus notes"
+      export BUCKETS="migrations nextcloud openproject nubus notes openxchange"
       export AWS_DEFAULT_REGION=""
       export AWS_ENDPOINT=""
       export AWS_ACCESS_KEY_ID=""
