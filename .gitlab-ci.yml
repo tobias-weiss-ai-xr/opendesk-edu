@@ -404,7 +404,7 @@ db-cleanup:
       done;
     # Cleanup Objectstore
     - |
-      export BUCKETS="migrations nextcloud openproject nubus notes openxchange"
+      export BUCKETS="migrations nextcloud openproject nubus notes openxchange dovecot"
       export AWS_DEFAULT_REGION=""
       export AWS_ENDPOINT=""
       export AWS_ACCESS_KEY_ID=""
