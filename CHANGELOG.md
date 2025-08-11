@@ -1,3 +1,35 @@
+# [1.7.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.6.0...v1.7.0) (2025-08-11)
+
+
+### Bug Fixes
+
+* **collabora:** Connect to Collabora Controller websocket via service ([5d01f60](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5d01f6023d6d300e106cc86dfca09a4ae388f4ca))
+* **collabora:** Update from 25.04.2 to 25.04.3 ([3507c62](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3507c62f832556c5d76e7a5b206acbdbcaca37a8))
+* **helmfile:** Adds default-enterprise-overrides to default values in helmfile-generic ([672e649](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/672e649b608fa03f04834837f13c360a08e8eb6c))
+* **nextcloud:** Block filesystem-unsafe characters in file and folder names ([0df6212](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0df6212ca9399d39bedc30c064cbae80c2684e44))
+* **nextcloud:** Include latest Helm chart version with supports `configuration.sharing.restrictUserEnumerationToGroup` ([c3dfa2a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c3dfa2a6075ae388764acbb20bd8282a64183ed3))
+* **notes:** Set Pod Disruption Budget (PDB) labels ([e35dac0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e35dac087aac54f545d361dee881196b264af906))
+* **nubus:** Add `livenessProbe` for `nubusUdmListener` to mitigate cases where the listener becomes uninitialized and stops forwarding provisioning data to NATS. Temporary until upstream provides a probe ([ef8d67f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ef8d67f3c1525de6f958ac7a8893b4b30ea3f7dc))
+* **open-xchange:** Disable documents role ([573e11f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/573e11f5c5103ee5906b0168317054a7e5a22e87))
+* **open-xchange:** Postfix to support submissions and external secrets ([13ab665](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/13ab6659001abf5b6c683bf6a9309972ef7412b3))
+* **open-xchange:** Support application specific passwords in groupware when CalDAV/CardDAV support is enabled, see `functional.groupware.davSupport.enabled` for reference ([90b2290](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/90b22904dab0195f505021beb785317f8969ff7d))
+* **open-xchange:** Use dedicated pod for migration ([6fd52b1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6fd52b167eeed5c7e9eda2a21b209680131380ee))
+* **opendesk-certificates:** Update Helm chart to remove default host for `webmail` being set even if OX App Suite is not enabled ([09a0aac](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/09a0aace45227b60e9b39671e747958bd339c8c9))
+* **opendesk-services:** Update opendesk-alerts from 1.1.1 to 1.1.2, update opendesk-dashboards from 1.1.1 to 1.1.2 ([174d4fc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/174d4fc61cbb718818015779012fa65353987f3c))
+* **openproject:** Update from 16.2.0 to 16.2.1 ([bba9b71](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bba9b716a3fdf915bfc2925f1c27fe91494edcb0))
+* **ox-connector:** Update OX Connector and OX Extension to v0.27.2; review `migrations.md` for required upgrade steps ([9d51e40](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9d51e40063d73226fc8a25365cbfa92ff09f0910))
+
+
+### Features
+
+* **nextcloud:** Enhance theming options for Nextcloud ([bdc7331](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bdc7331cb59da96941c3250625af3cb5f9b12e15))
+* **notes:** Switch to new Helm chart with support for self-signed deployments; review `migrations.md` for required upgrade steps ([3106ca7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3106ca793ee1e0021f7c03e620873c49adb54199))
+* **nubus:** Allow configuration of limits for password reset requests via `security.passwordResetLimits` ([09f54b4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/09f54b41347ff5c90064c8d4c2c6a9db7f05d54c))
+* **nubus:** Update from 1.11.2 to 1.12.0 ([5537dbb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5537dbbd7cb93dcb2aeafe9017c68a89d2e19293))
+* **open-xchange:** Update from 8.38 to 8.39 ([489986e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/489986e906e828f3877e7a9087541f10c5bbfe8c))
+* **open-xchange:** Use internal endpoint for provisioning and support for optionally spinning up a dedicated internal Pod just for provisioning (see `technial.oxAppSuite.provisioning.dedicatedCoreMwPod` for details) ([31b7ec7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/31b7ec78274e5a901b51aaaeed01e6ac82298b73))
+* **openproject:** Update from 16.1.1 to 16.2.0 ([e273abb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e273abbecf58b098e76c49e1763b4c3074bf5cec))
+
 # [1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.5.0...v1.6.0) (2025-07-14)
 
 
