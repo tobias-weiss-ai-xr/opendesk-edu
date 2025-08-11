@@ -8,12 +8,12 @@ SPDX-License-Identifier: Apache-2.0
 This document covers the current status of security measures.
 
 <!-- TOC -->
-* [Helm Chart Trust Chain](#helm-chart-trust-chain)
-* [Kubernetes Security Enforcements](#kubernetes-security-enforcements)
-* [NetworkPolicies](#networkpolicies)
+* [Helm chart trust chain](#helm-chart-trust-chain)
+* [Kubernetes security enforcements](#kubernetes-security-enforcements)
+* [Network policies](#network-policies)
 <!-- TOC -->
 
-# Helm Chart Trust Chain
+# Helm chart trust chain
 
 Helm charts are signed and validated against GPG keys in `helmfile/files/gpg-pubkeys`.
 
@@ -25,22 +25,22 @@ All charts except the ones mentioned below are verifiable:
 |-------------------|:----------:|
 | open-xchange-repo |     no     |
 
-# Kubernetes Security Enforcements
+# Kubernetes security enforcements
 
 This list gives you an overview of default security settings and whether they comply with security standards:
 
 ⟶ Visit our generated detailed [Security Context](./docs/security-context.md) overview.
 
-# NetworkPolicies
+# Network policies
 
-Kubernetes NetworkPolicies are an essential measure to secure your Kubernetes apps and clusters.
+Kubernetes network policies are an essential measure to secure your Kubernetes apps and clusters.
 When applied, they restrict traffic to your services.
-NetworkPolicies protect other deployments in your cluster or other services in your deployment from getting compromised when another
+`NetworkPolicy` resources protect other deployments in your cluster or other services in your deployment from getting compromised when another
 component is compromised.
 
-We ship a default set of Otterize ClientIntents via
+We ship a default set of Otterize `ClientIntents` via
 [Otterize intents operator](https://github.com/otterize/intents-operator) which translates intent-based access control
-(IBAC) into Kubernetes native NetworkPolicies.
+(IBAC) into Kubernetes native network policies.
 
 This requires the Otterize intents operator to be installed.
 

@@ -3,30 +3,30 @@ SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Release Management</h1>
+<h1>Release management</h1>
 
 This document outlines the release and patch management strategy for **openDesk**, ensuring that all updates, patches, and new releases are systematically **planned, tested, documented**, and **reliably deployed** into production. The process is designed to align with operational planning requirements and maintain system stability and security.
 
 <!-- TOC -->
-* [Release Cycle](#release-cycle)
-  * [Release Types](#release-types)
-  * [Release Schedule](#release-schedule)
+* [Release cycle](#release-cycle)
+  * [Release types](#release-types)
+  * [Release schedule](#release-schedule)
   * [Upgrades](#upgrades)
-* [Patch Management Process](#application-administration)
-  * [Patch Identification & Prioritization](#patch-identification-prioritization)
-  * [Patch Workflow](#patch-workflow)
-* [Communication Plan](#communication-plan)
-  * [Announcement Channels](#announcement-channels)
-  * [Timing of Communications](#timing-of-communications)
-* [Documentation Requirements](#documentation-requirements)
-* [Compliance & Review](#compliance-review)
+* [Patch management process](#patch-management-process)
+  * [Patch identification \& prioritization](#patch-identification--prioritization)
+  * [Patch workflow](#patch-workflow)
+* [Communication plan](#communication-plan)
+  * [Announcement channels](#announcement-channels)
+  * [Timing of communications](#timing-of-communications)
+* [Documentation requirements](#documentation-requirements)
+* [Compliance \& review](#compliance--review)
 <!-- TOC -->
 
-# Release Cycle
+# Release cycle
 
 openDesk follows a structured release cycle to ensure predictability and reliability:
 
-## Release Types
+## Release types
 
 | Type           | Frequency     | Content                                                       |
 |----------------|---------------|---------------------------------------------------------------|
@@ -36,7 +36,7 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 
 > **Note:** openDesk does **not** guarantee that minor releases are 100% backward‑compatible. When a breaking change is unavoidable it is announced in the release notes under a dedicated header **“Breaking Changes”** and a migration guide is provided.
 
-## Release Schedule
+## Release schedule
 
 - **Major releases** are scheduled for **Q3 each year**, with planning beginning in Q1.
 - **Minor releases** occur **monthly on Mondays**, typically **around 10:00 AM** local time.
@@ -54,11 +54,11 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 - All breaking changes, including those in monthly minor releases, are highlighted in the release notes under Breaking Changes.
 - Additional, non‑binding migration hints are collected in `migrations.md`
 
-# Patch Management Process
+# Patch management process
 
 A standardized process ensures patches are developed, prioritized, and deployed efficiently.
 
-## Patch Identification & Prioritization
+## Patch identification & prioritization
 
 Patches are categorized by severity and urgency:
 
@@ -69,7 +69,7 @@ Patches are categorized by severity and urgency:
 | **Medium**     | Functional bugs with workarounds, minor usability issues                 |
 | **Low**        | Cosmetic issues, documentation updates                                   |
 
-## Patch Workflow
+## Patch workflow
 
 The following steps define the patch workflow from issue identification to post-deployment review. This process ensures consistent quality and minimal disruption to users:
 
@@ -83,18 +83,18 @@ The following steps define the patch workflow from issue identification to post-
 
 This workflow ensures that patches are handled with the same level of discipline as planned releases, supporting both reliability and agility.
 
-# Communication Plan
+# Communication plan
 
 A lightweight approach reduces manual effort while maintaining transparency.
 
-## Announcement Channels
+## Announcement channels
 
 | Channel | Audience | Purpose | Owner |
 |---------|----------|---------|-------|
 | **openCode Changelog** | Community & EE | Primary source of truth for every release | DevOps |
 | **Account‑Manager Mail / Ticket** | Enterprise customers | Targeted information & upgrade advice | Customer Success |
 
-## Timing of Communications
+## Timing of communications
 
 | Release Type | What | When |
 |--------------|------|------|
@@ -107,7 +107,7 @@ A lightweight approach reduces manual effort while maintaining transparency.
 
 Community users consume information via openCode; Enterprise customers get an additional nudge via their account manager – **no mass mailings are sent manually**.
 
-# Documentation Requirements
+# Documentation requirements
 
 Each release (major, minor, or patch) must include:
 
@@ -116,7 +116,7 @@ Each release (major, minor, or patch) must include:
 - **Test reports** confirming QA coverage and results
 - **Deployment checklist** reviewed and approved by the product owner
 
-# Compliance & Review
+# Compliance & review
 
 - The release process is reviewed **bi-annually** to incorporate feedback and evolving requirements
 - Emergency patches (e.g., zero-day security issues) may bypass the standard schedule but must be documented post-deployment

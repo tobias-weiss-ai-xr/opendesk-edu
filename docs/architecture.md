@@ -15,27 +15,27 @@ SPDX-License-Identifier: Apache-2.0
   * [Keycloak Extensions](#keycloak-extensions)
   * [OpenLDAP](#openldap)
 * [Authorization](#authorization)
-  * [LDAP Group Synchronization](#ldap-group-synchronization)
+  * [LDAP group synchronization](#ldap-group-synchronization)
 * [Provisioning](#provisioning)
   * [OX Connector](#ox-connector)
   * [SCIM](#scim)
 * [Component integration](#component-integration)
-  * [Intercom Service / Silent Login](#intercom-service--silent-login)
-  * [Central Contacts](#central-contacts)
-  * [Central Navigation](#central-navigation)
+  * [Intercom Service / Silent login](#intercom-service--silent-login)
+  * [Central contacts](#central-contacts)
+  * [Central navigation](#central-navigation)
   * [Filepicker](#filepicker)
   * [Newsfeed](#newsfeed)
-  * [(OpenProject) File Store](#openproject-file-store)
-* [Applications vs. Services](#applications-vs-services)
-  * [Collabora (Office)](#collabora-office)
-  * [CryptPad Online (Diagrams)](#cryptpad-online-diagrams)
-  * [Element/Synapse (Chat \& Call)](#elementsynapse-chat--call)
-  * [Jitsi (Video Conferencing)](#jitsi-video-conferencing)
-  * [Nextcloud (Files)](#nextcloud-files)
-  * [Nubus (Identity and Access Management / Portal)](#nubus-identity-and-access-management--portal)
-  * [OpenProject (Project management)](#openproject-project-management)
-  * [OX App Suite (Groupware) with OX Dovecot (Mail backend)](#ox-app-suite-groupware-with-ox-dovecot-mail-backend)
-  * [XWiki (Knowledge management)](#xwiki-knowledge-management)
+  * [(OpenProject) File store](#openproject-file-store)
+* [Applications vs. services](#applications-vs-services)
+  * [Collabora (weboffice)](#collabora-weboffice)
+  * [CryptPad Online (diagrams)](#cryptpad-online-diagrams)
+  * [Element/Synapse (chat \& call)](#elementsynapse-chat--call)
+  * [Jitsi (video conferencing)](#jitsi-video-conferencing)
+  * [Nextcloud (files)](#nextcloud-files)
+  * [Nubus (identity and access management / portal)](#nubus-identity-and-access-management--portal)
+  * [OpenProject (project management)](#openproject-project-management)
+  * [OX App Suite (groupware) with OX Dovecot (mail backend)](#ox-app-suite-groupware-with-ox-dovecot-mail-backend)
+  * [XWiki (knowledge management)](#xwiki-knowledge-management)
 * [Application specific user accounts](#application-specific-user-accounts)
 * [Footnotes](#footnotes)
 <!-- TOC -->
@@ -210,7 +210,7 @@ To address these use cases, the Keycloak Extensions act as a proxy to Keycloak.
 
 # Authorization
 
-## LDAP Group Synchronization
+## LDAP group synchronization
 
 LDAP group synchronization ensures that user group memberships are consistent across the applications in openDesk that make use of the IAM group information. Nubus uses OpenLDAP to store and manage user groups, which are synchronized with integrated applications to enforce access control policies.
 
@@ -273,7 +273,7 @@ flowchart TD
 
 Details can be found in the upstream documentation that is linked in the respective sections.
 
-## Intercom Service / Silent Login
+## Intercom Service / Silent login
 
 The Intercom Service is deployed in the context of Nubus. Its role is to enable cross-application integration
 based on the user's browser interaction, as handling authentication when the frontend of an application has to call
@@ -286,7 +286,7 @@ Currently, only OX AppSuite and Element are using the frontend-based integration
 **Links:**
 - [Intercom Service upstream documentation](https://docs.software-univention.de/intercom-service/latest/index.html).
 
-## Central Contacts
+## Central contacts
 
 OX App Suite is responsible for managing contacts in openDesk. Therefore, Nextcloud's PHP backend is using the OX AppSuite's middleware Contacts API to
 - create a new contact in the user's contacts folder when a file is shared with an unknown email address.
@@ -296,7 +296,7 @@ OX App Suite is responsible for managing contacts in openDesk. Therefore, Nextcl
 - Currently used [OX Contacts API (deprecated)](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Contacts).
 - New [OX Addressbooks API](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Addressbooks) the Central Contacts integration will switch to.
 
-## Central Navigation
+## Central navigation
 
 Central navigation is based on an API endpoint in the Nubus portal that returns a JSON containing the portal's contents for
 a given user. The response from the API endpoint is used in the openDesk applications to render the central navigation.
@@ -338,7 +338,7 @@ service through the Intercom Service's `/wiki` endpoint, in combination with the
 **Links:**
 - [XWiki Blog feature](https://extensions.xwiki.org/xwiki/bin/view/Extension/Blog%20Application)
 
-## (OpenProject) File Store
+## (OpenProject) File store
 
 While OpenProject allows you to attach files to work packages directly, it is often preferred that the files are
 stored within Nextcloud or to link an existing file from your openDesk Nextcloud to a work package.
@@ -351,7 +351,7 @@ The file store must still be enabled per project in OpenProject's project admin 
 - [OpenProject's documentation on Nextcloud integration](https://www.openproject.org/docs/system-admin-guide/integrations/nextcloud/)
 - [OpenProject Integration Nextcloud app](https://apps.nextcloud.com/apps/integration_openproject)
 
-# Applications vs. Services
+# Applications vs. services
 
 openDesk consists of a variety of open-source projects, please find an overview below:
 
@@ -366,16 +366,16 @@ openDesk consists of a variety of open-source projects, please find an overview 
 | Element               | Secure communications platform   | Application |
 | Jitsi                 | Videoconferencing                | Application |
 | MariaDB               | Database                         | Service     |
-| Memcached             | Cache Database                   | Service     |
-| MinIO                 | Object Storage                   | Service     |
+| Memcached             | Cache database                   | Service     |
+| MinIO                 | Object storage                   | Service     |
 | Nextcloud             | File share                       | Application |
-| Nubus (UMS)           | Identity Management & Portal     | Application |
+| Nubus (UMS)           | Identity management & portal     | Application |
 | OpenProject           | Project management               | Application |
 | OX Appsuite & Dovecot | Groupware with IMAP mail backend | Application |
 | Postfix               | MTA                              | Service     |
 | PostgreSQL            | Database                         | Service     |
-| Redis                 | Cache Database                   | Service     |
-| XWiki                 | Knowledge Management             | Application |
+| Redis                 | Cache database                   | Service     |
+| XWiki                 | Knowledge management             | Application |
 
 The end user focussed components are called applications and provide the functional scope of openDesk, please find separate paragraphs on each of the applications below.
 
@@ -383,25 +383,25 @@ Other components are of type "Service", these are used for development and evalu
 
 For the APIs / Protocols supported by the applications, please read the [apis.md](./docs/architecture/apis.md).
 
-## Collabora (Office)
+## Collabora (weboffice)
 
 [Collabora](https://www.collaboraonline.com) is a powerful online document editing suite.
 
 In openDesk, Collabora is used for editing Office documents such as rich texts, spreadsheets and presentations.
 
-## CryptPad Online (Diagrams)
+## CryptPad Online (diagrams)
 
 [CryptPad](https://cryptpad.org/) is a collaborative editor framework supporting end-to-end encryption.
 
 In openDesk, CryptPad is for editing diagrams.net documents.
 
-## Element/Synapse (Chat & Call)
+## Element/Synapse (chat & call)
 
 [Element Web](https://github.com/element-hq/element-web) is the web frontend for [Synapse](https://github.com/element-hq/synapse), the reference implementation of the sovereign and secure [Matrix protocol](https://matrix.org).
 
 In openDesk, Element is used for chat and direct audio & video calling.
 
-## Jitsi (Video Conferencing)
+## Jitsi (video conferencing)
 
 [Jitsi](https://jitsi.org) is an open-source video conferencing solution that allows users to hold secure video meetings.
 
@@ -409,27 +409,27 @@ In openDesk, Jitsi is used for video conferencing and online meetings. It integr
 
 [Jigasi](https://github.com/jitsi/jigasi) (Jitsi's SIP component) also allows joining the meeting via phone call if an external SIP server and SIP trunk are provided.
 
-## Nextcloud (Files)
+## Nextcloud (files)
 
 [Nextcloud](https://nextcloud.com) is a file storage and sync platform with powerful collaboration capabilities with desktop, mobile and web interfaces.
 
-## Nubus (Identity and Access Management / Portal)
+## Nubus (identity and access management / portal)
 
 [Nubus](https://www.univention.com/products/nubus/) is a unified Identity & Access Management, providing you with full control and digital sovereignty over your IAM processes and data.
 
 In openDesk, Nubus provides the management required for users, groups and other IAM objects, as well as the portal, the Identity provider for Single Sign-On and federation scenarios.
 
-## OpenProject (Project management)
+## OpenProject (project management)
 
 [OpenProject](https://www.openproject.org) is a project management tool that supports agile project management, team collaboration, issue tracking, and more.
 
-## OX App Suite (Groupware) with OX Dovecot (Mail backend)
+## OX App Suite (groupware) with OX Dovecot (mail backend)
 
 [OX App Suite](https://www.open-xchange.com/products/ox-app-suite) is a groupware application using [OX Dovecot](https://www.dovecot.org/) as its backend mail store.
 
 In openDesk, OX App Suite is used for email, calendar, address book and personal task management.
 
-## XWiki (Knowledge management)
+## XWiki (knowledge management)
 
 [XWiki](https://www.xwiki.org) is an open-source wiki platform for knowledge management and collaboration.
 

@@ -9,7 +9,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Software bill of materials (SBOMs)](#software-bill-of-materials-sboms)
   * [Artifact SBOMs](#artifact-sboms)
   * [Source code SBOMs](#source-code-sboms)
-* [License Compliance](#license-compliance)
+* [License compliance](#license-compliance)
 * [Software supply chain security](#software-supply-chain-security)
 * [Container architectural basics](#container-architectural-basics)
 * [Security](#security)
@@ -25,7 +25,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Top bar](#top-bar)
     * [Look and feel](#look-and-feel)
     * [Central navigation](#central-navigation)
-  * [Functional Administration](#functional-administration)
+  * [Functional administration](#functional-administration)
   * [Theming](#theming)
   * [Central user profile](#central-user-profile)
 * [Footnotes](#footnotes)
@@ -60,7 +60,7 @@ Today's software development platforms like GitLab or GitHub provide dependency 
 
 **Reference:** Currently we do not have source code SBOMs in place.
 
-# License Compliance
+# License compliance
 
 All parts of openDesk Community Edition must be open source with source code (also) published or at least publishable on openCode.
 
@@ -243,7 +243,7 @@ When implementing the central navigation into an application there are two optio
 
 **Reference:** This is available in current deployments in all applications except for Jitsi, Collabora, and CryptPad.
 
-## Functional Administration
+## Functional administration
 
 While applications usually support technical and functional administration the technical part should be in the responsibility of the operator and is usually done at (re)deployment time. Therefore the administrative tasks within an application should be limited to functional administration.
 
