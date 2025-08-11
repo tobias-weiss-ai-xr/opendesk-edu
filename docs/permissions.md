@@ -20,7 +20,7 @@ openDesk uses role-based access control (RBAC) to manage permissions. This syste
       * [Administrative access to applications](#administrative-access-to-applications)
     * [Custom groups](#custom-groups)
   * [Assigning roles/groups and permissions](#assigning-rolesgroups-and-permissions)
-  * [Predefined roles / user templates](#predefined-roles--user-templates)
+  * [Predefined roles/user templates](#predefined-rolesuser-templates)
     * [*openDesk User*](#opendesk-user)
     * [*openDesk Administrator*](#opendesk-administrator)
   * [Managing permissions](#managing-permissions)
@@ -30,7 +30,7 @@ openDesk uses role-based access control (RBAC) to manage permissions. This syste
   * [Delegation](#delegation)
   * [Regular review](#regular-review)
 * [Applications](#applications)
-  * [Roles/groups](#rolesgroups)
+  * [Roles/Groups](#rolesgroups)
 <!-- TOC -->
 
 # Identity and Access Management (IAM)
@@ -126,7 +126,7 @@ While openDesk ships with predefined groups, additional groups can be [created](
 
 Users get roles assigned based on their responsibilities and the tasks they need to perform. This assignment can be done by an admin through the [administration portal](https://docs.opendesk.eu/administration/).
 
-## Predefined roles / user templates
+## Predefined roles/user templates
 
 openDesk defines [templates](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-nubus/-/blob/main/udm/udm-data-loader/65-usertemplate.yaml) for the *User* and *Administrator* roles. The templates can be used by an *openDesk Administrator* to create users with these roles using the [administration portal](https://docs.opendesk.eu/administration/).
 
@@ -191,7 +191,7 @@ While the overall role and permission setup must be checked by the customer, inc
 
 Managing all application permissions within the IAM would require a superset of permissions to be available in the IAM. This would lead to a high level of administrative complexity. Instead, the application specific permissions are usually managed within an application itself and mapped to roles/groups that are managed in the IAM.
 
-## Roles/groups
+## Roles/Groups
 
 Within IAM groups, the visibility of openDesk applications can be configured. Like with users, this is done in the "openDesk" tab of the [group administration](https://docs.opendesk.eu/administration/gruppen/).
 
