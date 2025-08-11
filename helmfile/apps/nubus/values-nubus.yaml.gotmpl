@@ -1128,13 +1128,6 @@ nubusProvisioning:
 
 nubusUdmListener:
   enabled: true
-  # Temporary local liveness probe, should be removed once available in the upstream Nubus Helm chart
-  livenessProbe:
-    exec:
-      command:
-        - sh
-        - -c
-        - 'grep -E "^[13]$" /var/lib/univention-directory-listener/handlers/ldap_listener'
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
