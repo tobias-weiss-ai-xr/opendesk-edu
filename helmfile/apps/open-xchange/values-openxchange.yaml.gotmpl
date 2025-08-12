@@ -545,13 +545,6 @@ appsuite:
         MASTER_ACCOUNT_OVERRIDE: "true"
       /opt/open-xchange/etc/AdminUser.properties:
         USERNAME_CHANGEABLE: "true"
-      /opt/open-xchange/etc/system.properties:
-        SERVER_NAME: "oxserver"
-      /opt/open-xchange/etc/ldapauth.properties:
-        java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/{{ .Values.ldap.baseDn }}"
-        bindDN: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
-        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
-        bindOnly: "false"
       /opt/open-xchange/etc/antivirus.properties:
         com.openexchange.antivirus.enabled: "true"
         {{- if .Values.antivirus.icap.host }}
@@ -571,6 +564,20 @@ appsuite:
         com.openexchange.filestore.s3.ox-filestore-s3.bucketName: {{ .Values.objectstores.openxchange.bucket | quote }}
         com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
         com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | default .Values.secrets.minio.openxchangeUser | quote }}
+      /opt/open-xchange/etc/ldapauth.properties:
+        java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/{{ .Values.ldap.baseDn }}"
+        bindDN: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
+        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
+        bindOnly: "false"
+      /opt/open-xchange/etc/noreply.properties:
+        com.openexchange.noreply.address: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
+        com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+        com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+        com.openexchange.noreply.server: "postfix"
+        com.openexchange.noreply.port: "25"
+        com.openexchange.noreply.secureMode: "plain"
+      /opt/open-xchange/etc/system.properties:
+        SERVER_NAME: "oxserver"
     uiSettings:
       io.ox.nextcloud//server: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
       io.ox.public-sector//ics/url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"

@@ -47,6 +47,9 @@ dovecot:
     introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
     usernameAttribute: "opendesk_username"
   loginTrustedNetworks: {{ join " " .Values.cluster.networking.cidr | quote }}
+  sieve:
+    notify:
+      mailtoEnvelopeFrom: "orig_recipient"
   submission:
     enabled: true
     ssl: "no"
