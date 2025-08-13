@@ -129,7 +129,7 @@ def grep_yaml(file):
     with open(file, 'r') as file:
         content = ''
         for line in file.readlines():
-            if not ': {{' in line and not '- {{' in line:
+            if not '{{' in line:
                 content += line
     return yaml.safe_load(content)
 
