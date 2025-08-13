@@ -4,10 +4,12 @@
 global:
   collaborationServerSecret:
     value: {{ .Values.secrets.notes.collaborationSecret | quote }}
+  fqdn: "{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}"
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  tlsSecretName: {{ .Values.ingress.tls.secretName | quote }}
   yProviderApiKey:
     value: {{ .Values.secrets.notes.collaborationSecret | quote }}
-  fqdn: "{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}"
-  tlsSecretName: {{ .Values.ingress.tls.secretName | quote }}
 
 backend:
   image:
@@ -23,14 +25,13 @@ backend:
       {{- if .Values.annotations.notesBackend.ingress }}
       {{ .Values.annotations.notesBackend.ingress | toYaml | nindent 6 }}
       {{- end }}
+    ingressClassName: {{ .Values.ingress.ingressClassName }}
   ingressAdmin:
     enabled: true
     annotations:
       {{ .Values.annotations.notesBackend.ingressAdmin | toYaml | nindent 6 }}
+    ingressClassName: {{ .Values.ingress.ingressClassName }}
   replicaCount: {{ .Values.replicas.notesBackend }}
-  containerSecurityContext:
-    seLinuxOptions:
-      {{ .Values.seLinuxOptions.notesBackend | toYaml | nindent 6 }}
   configuration:
     ai:
       apiKey:
@@ -100,12 +101,31 @@ backend:
       value: "False"
     - name: "FRONTEND_FOOTER_FEATURE_ENABLED"
       value: "False"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    privileged: false
+    runAsUser: 1001
+    runAsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.notesBackend | toYaml | nindent 6 }}
   podAnnotations:
     {{ .Values.annotations.notesBackend.pod | toYaml | nindent 4 }}
   podAnnotationsCreateUser:
     {{ .Values.annotations.notesBackend.createUserJob | toYaml | nindent 4 }}
   podAnnotationsMigrate:
     {{ .Values.annotations.notesBackend.migrateJob | toYaml | nindent 4 }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1000
+    fsGroupChangePolicy: "Always"
   resources:
     {{ .Values.resources.notesBackend | toYaml | nindent 4 }}
   service:
@@ -131,10 +151,16 @@ frontend:
     repository: {{ .Values.images.notesFrontend.repository | quote }}
     pullPolicy: "IfNotPresent"
     tag: {{ .Values.images.notesFrontend.tag | quote }}
+  ingress:
+    enabled: true
+    annotations:
+      {{ .Values.annotations.notesFrontend.ingress | toYaml | nindent 6 }}
+    ingressClassName: {{ .Values.ingress.ingressClassName }}
   ingressMedia:
     enabled: true
     annotations:
       {{ .Values.annotations.notesFrontend.ingressMedia | toYaml | nindent 6 }}
+    ingressClassName: {{ .Values.ingress.ingressClassName }}
   extraEnvVars:
     - name: "ICS_BASE_URL"
       value: {{ printf "https://%s.%s" .Values.global.hosts.intercomService .Values.global.domain | quote }}
@@ -145,10 +171,26 @@ frontend:
   resources:
     {{ .Values.resources.notesFrontend | toYaml | nindent 4 }}
   containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    privileged: false
+    runAsUser: 1000
+    runAsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
     seLinuxOptions:
       {{ .Values.seLinuxOptions.notesFrontend | toYaml | nindent 6 }}
   podAnnotations:
     {{ .Values.annotations.notesFrontend.pod | toYaml | nindent 4 }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1000
+    fsGroupChangePolicy: "Always"
   service:
     annotations:
       {{ .Values.annotations.notesFrontend.service | toYaml | nindent 6 }}
@@ -181,16 +223,34 @@ y-provider:
       subPath: "ca-certificates.crt"
   {{- end }}
   containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    enabled: true
+    privileged: false
+    runAsUser: 1001
+    runAsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
     seLinuxOptions:
       {{ .Values.seLinuxOptions.notesBackend | toYaml | nindent 6 }}
   ingressCollaborationApi:
     annotations:
       {{ .Values.annotations.notesYProvider.ingressCollaborationAPI | toYaml | nindent 6 }}
+    ingressClassName: {{ .Values.ingress.ingressClassName }}
   ingressCollaborationWs:
     annotations:
       {{ .Values.annotations.notesYProvider.ingressCollaborationWS | toYaml | nindent 6 }}
+    ingressClassName: {{ .Values.ingress.ingressClassName }}
   podAnnotations:
     {{ .Values.annotations.notesYProvider.pod | toYaml | nindent 4 }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    fsGroupChangePolicy: "Always"
   service:
     annotations:
       {{ .Values.annotations.notesYProvider.service | toYaml | nindent 6 }}
