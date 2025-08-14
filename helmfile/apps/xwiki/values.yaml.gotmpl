@@ -16,7 +16,8 @@ image:
   {{- fail "Unsupported value for .Values.databases.xwiki.type, supported values are 'mariadb' or 'postgresql'" }}
   {{- end }}
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-imagePullSecrets: {{ .Values.global.imagePullSecrets }}
+imagePullSecrets:
+  {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
 javaOpts:
   {{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense .Values.enterpriseKeys.xwiki.proApplicationslicense }}
