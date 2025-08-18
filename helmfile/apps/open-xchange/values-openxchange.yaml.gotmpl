@@ -570,7 +570,7 @@ appsuite:
         bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
         bindOnly: "false"
       /opt/open-xchange/etc/noreply.properties:
-        com.openexchange.noreply.address: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
+        com.openexchange.noreply.address: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
         com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
         com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
         com.openexchange.noreply.server: "postfix"

@@ -161,7 +161,7 @@ configuration:
     host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     port: 587
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
-    mailDomain: "{{ .Values.global.domain }}"
+    mailDomain: "{{ .Values.global.mailDomain | default .Values.global.domain }}"
     security: "tls"
     skipVerifyPeer: true
 
