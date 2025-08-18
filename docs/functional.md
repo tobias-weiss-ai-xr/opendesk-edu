@@ -26,6 +26,7 @@ The following categories are available. Each category contains a set of options 
 * Portal options (`functional.portal.*`): Options to customize the openDesk portal, e.g. if the login dialog should be enforced.
 * Chat options (`functional.chat.*`): Configuration options for the chat component of openDesk.
 * Migration options (`functional.migration.*`): Helpful setting(s) for migration scenarios.
+* Groupware options (`functional.groupware.*`): Options to customize Open-Xchange and mail settings, e.g. mail quota.
 
 ## Customization of functional options
 

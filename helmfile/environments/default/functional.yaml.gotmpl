@@ -100,7 +100,7 @@ functional:
 
   filestore:
     quota:
-      # Set the default quota for all users in GB
+      # Set the default quota for all users in gigabyte
       default: 1
     # Options related to file sharing.
     # Changing these options might require a restart of the `opendesk-nextcloud-php` Pod(s).
@@ -152,6 +152,11 @@ functional:
       # - https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/carddav/[folderId]"
       # Can be switched off using the below feature toggle.
       enabled: true
+    quota:
+      # Set the default mail storage quota for users in gigabyte.
+      # Just provide the plain number without quoting. It will allow a quote grace of 10% and +20% in trash storage.
+      # If you need different rules you can use customizing on Dovecot's `quotaRules` and `quotaGrace` templating.
+      default: 1
 
   migration:
     oxAppSuite:
