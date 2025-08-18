@@ -37,6 +37,7 @@ dovecot:
     dn: "uid=ldapsearch_dovecot,cn=users,{{ .Values.ldap.baseDn }}"
     password:
       value: {{ .Values.secrets.nubus.ldapSearch.dovecot | quote }}
+  loginTrustedNetworks: {{ join " " .Values.cluster.networking.cidr | quote }}
   oidc:
     enabled: true
     clientID:
@@ -46,7 +47,11 @@ dovecot:
     introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
     introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
     usernameAttribute: "opendesk_username"
-  loginTrustedNetworks: {{ join " " .Values.cluster.networking.cidr | quote }}
+  quotaRules:
+    - "*:storage={{ mul .Values.functional.groupware.quota.default 1024 }}M"
+    - "Trash:storage=+{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 20) 100 }}M"
+    - "LAZY_EXPUNGE:ignore"
+  quotaGrace: "{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 10) 100 }}M"
   sieve:
     notify:
       mailtoEnvelopeFrom: "orig_recipient"
