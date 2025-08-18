@@ -132,7 +132,7 @@ configuration:
       allowUsersToUpdateDisplayname: {{ .Values.functional.chat.matrix.profile.allowUsersToUpdateDisplayname }}
 
     smtp:
-      senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.domain }}"
+      senderAddress: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
       host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       port: 25
       tls: false
