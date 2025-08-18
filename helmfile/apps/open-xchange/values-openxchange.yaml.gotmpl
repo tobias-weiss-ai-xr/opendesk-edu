@@ -617,6 +617,8 @@ appsuite:
       io.ox/dynamic-theme//folderBackground: {{ .Values.theme.colors.white | quote }}
       io.ox/dynamic-theme//folderSelected: {{ .Values.theme.colors.primary15 | quote }}
       io.ox/dynamic-theme//folderHover: {{ .Values.theme.colors.secondaryGreyLight | quote }}
+      # openDesk logo in top bar links to portal
+      io.ox/core//logoAction: {{ printf "https://%s.%s" .Values.global.hosts.nubus .Values.global.domain | quote }}
     secretETCFiles:
       # Format of the OX Guard master key:
       # MC+base64(20 random bytes)
