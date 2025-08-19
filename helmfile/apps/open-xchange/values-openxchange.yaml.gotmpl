@@ -380,6 +380,7 @@ appsuite:
         {{- if .Values.functional.groupware.davSupport.enabled }}
         open-xchange-authentication-application-storage-rdb: "enabled"
         {{- end }}
+        open-xchange-mail-categories: "enabled"
     properties:
       com.openexchange.hostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
@@ -465,6 +466,40 @@ appsuite:
       com.openexchange.capability.share_links: "false"
       com.openexchange.capability.invite_guests: "false"
       com.openexchange.capability.document_preview: "true"
+      # Mail Categories
+      # Ref.: https://documentation.open-xchange.com/8/middleware/mail/mail_categories.html
+      com.openexchange.mail.categories: "true"
+      com.openexchange.mail.categories.general.name.fallback: "General"
+      com.openexchange.mail.categories.general.name.de_DE: "Allgemein"
+      com.openexchange.mail.categories.identifiers: "newsletter,invites,socialmedia"
+      com.openexchange.mail.categories.newsletter.flag: "$newsletter"
+      com.openexchange.mail.categories.newsletter.name.fallback: "Newsletter"
+      com.openexchange.mail.categories.newsletter.name.de_DE: "Newsletter"
+      com.openexchange.mail.categories.newsletter.description: "Emails containing newsletters or promotional content"
+      com.openexchange.mail.categories.newsletter.description.de_DE: "E-Mails mit Newslettern oder Werbeinhalten"
+      com.openexchange.mail.categories.newsletter.icon: "megaphone"
+      com.openexchange.mail.categories.invites.flag: "$invites"
+      com.openexchange.mail.categories.invites.name.fallback: "Invitations"
+      com.openexchange.mail.categories.invites.name.de_DE: "Einladungen"
+      com.openexchange.mail.categories.invites.description: "Emails with event invitations and RSVPs"
+      com.openexchange.mail.categories.invites.description.de_DE: "E-Mails mit Veranstaltungseinladungen und Rückmeldungen"
+      com.openexchange.mail.categories.invites.icon: "calendar-check"
+      com.openexchange.mail.categories.socialmedia.flag: "$socialmedia"
+      com.openexchange.mail.categories.socialmedia.name.fallback: "Social Media"
+      com.openexchange.mail.categories.socialmedia.name.de_DE: "Soziale Medien"
+      com.openexchange.mail.categories.socialmedia.description: "Updates and notifications from social media platforms"
+      com.openexchange.mail.categories.socialmedia.description.de_DE: "Aktualisierungen und Benachrichtigungen von sozialen Medien"
+      com.openexchange.mail.categories.socialmedia.icon: "people"
+      com.openexchange.mail.user.categories.identifiers: "uc1,uc2,uc3"
+      com.openexchange.mail.categories.uc1.flag: "$uc1"
+      com.openexchange.mail.categories.uc1.name.fallback: "Your category 1"
+      com.openexchange.mail.categories.uc1.name.de_DE: "Eigene Kategorie 1"
+      com.openexchange.mail.categories.uc2.flag: "$uc2"
+      com.openexchange.mail.categories.uc2.name.fallback: "Your category 2"
+      com.openexchange.mail.categories.uc2.name.de_DE: "Eigene Kategorie 2"
+      com.openexchange.mail.categories.uc3.flag: "$uc3"
+      com.openexchange.mail.categories.uc3.name.fallback: "Your category 3"
+      com.openexchange.mail.categories.uc3.name.de_DE: "Eigene Kategorie 3"
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"
       com.openexchange.mail.transport.secondary.authType: "xoauth2"
