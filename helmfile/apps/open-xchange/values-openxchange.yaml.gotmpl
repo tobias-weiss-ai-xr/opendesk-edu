@@ -502,6 +502,9 @@ appsuite:
       com.openexchange.carddav.url: {{ printf "https://%s.%s/carddav/[folderId]" .Values.global.hosts.openxchangeDav .Values.global.domain }}
       com.openexchange.client.onboarding.caldav.url: {{ printf "https://%s.%s/" .Values.global.hosts.openxchangeDav .Values.global.domain }}
       com.openexchange.client.onboarding.carddav.url: {{ printf "https://%s.%s/" .Values.global.hosts.openxchangeDav .Values.global.domain }}
+      {{- else }}
+      com.openexchange.caldav.enabled: "false"
+      com.openexchange.carddav.enabled: "false"
       {{- end }}
       # Other
       com.openexchange.secret.secretSource: "\"<user-id> + '@' + <context-id> + '/' + <random>\""
