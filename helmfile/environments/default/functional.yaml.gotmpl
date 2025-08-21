@@ -25,18 +25,47 @@ functional:
       clients: ~
       # Define additional/custom OIDC client scopes to be created in the 'opendesk' realm within Keycloak.
       clientScopes: ~
-    # Configure global settings of the 'opendesk' realm within Keycloak. The values are directly
-    # passed into the `realmSettings` section of the `opendesk-keycloak-bootstrap` chart.
+    # Global settings of the 'opendesk' realm within Keycloak. The values are used to set Keycloak's realm attributes
+    # of the same name and are applied by `opendesk-keycloak-bootstrap`.
     # Ref.: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap
     # Note: Global settings can potentially be overridden on a client level.
+    # Note: All numeric "Lifespan" values are defined in seconds.
     realmSettings:
+      # The lifespan of an access token in seconds.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin > "Access Token Lifespan"
       accessTokenLifespan: 300
+      # If true, refresh tokens are revoked after use. If false, they can be reused until they expire.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin > "Revoke Refresh Token"
       revokeRefreshToken: false
+      # Maximum time of inactivity before the SSO session is invalidated.
+      # Applies to logged-in user sessions.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin > "SSO Session Idle "
       ssoSessionIdleTimeout: 14400
+      # Absolute maximum time a session can exist, regardless of activity.
+      # After this, the user is forced to re-authenticate.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/#_sso_session_max
       ssoSessionMaxLifespan: 57600
+      # Maximum time a user has to complete login related actions like update password or configure totp.
+      accessCodeLifespanUserAction: 300
+      # Maximum time a user has to complete a login.
+      accessCodeLifespanLogin: 1800
+      # How long offline sessions remain valid when idle.
+      # Offline sessions are typically used with refresh tokens for background tasks or mobile apps.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/ > "Offline Session Idle"
       offlineSessionIdleTimeout: 2592000
+      # Whether to enforce an absolute max lifespan on offline sessions.
+      # If false, only the idle timeout applies.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/ > "Offline Session Max Limited"
       offlineSessionMaxLifespanEnabled: false
+      # Max total lifespan for offline sessions.
+      # Only applies if `offlineSessionMaxLifespanEnabled` is true.
+      # Here it's set, but will not be enforced unless enabled.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/ > "Offline Session Max"
       offlineSessionMaxLifespan: 5184000
+      # The following `client*` settings are timeout settings for client sessions on a per client basis.
+      # Their logic follows the `ssoSession*` and `offlineSession*` settings.
+      # A value of 0 disables this timeout.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/ > "Client Session Idle"
       clientSessionIdleTimeout: 0
       clientSessionMaxLifespan: 0
       clientOfflineSessionIdleTimeout: 0
