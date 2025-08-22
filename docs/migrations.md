@@ -96,7 +96,7 @@ Manual checks and possible activities are also required by openDesk updates, the
 
 We cannot hold back all migrations as some are required e.g. due to a change in a specific component that we want/need to update, we try to bundle others only with major releases.
 
-This section should provide you with an overview of what changes to expect in the next major release (openDesk 2.0) expected in September 2025.
+This section provides an overview of potential changes to be part of the next major release (openDesk 2.0).
 
 - `functional.portal.link*` (see `functional.yaml.gotmpl` for details) are going to be moved into the `theme.*` tree, we are also going to move the icons used for the links currently found under `theme.imagery.portalEntries` in this step.
 - We will explicitly set the [database schema configuration](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/#HConfigurethenamesofdatabaseschemas) for XWiki to avoid the use of the `public` schema.
