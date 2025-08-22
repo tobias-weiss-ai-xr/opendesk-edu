@@ -27,7 +27,7 @@ assets:
     paths:
       - path: "/resources/...../login/UCS/img/favicon.ico"
         data: {{ .Values.theme.imagery.login.faviconIco }}
-      - path: "/static-files/login/logo.svg"
+      - path: "/opendesk-static-files/login/logo.svg"
         data: {{ .Values.theme.imagery.login.logoSvg }}
   nextcloud:
     subdomain: {{ .Values.global.hosts.nextcloud }}
@@ -36,11 +36,18 @@ assets:
         data: {{ .Values.theme.imagery.files.faviconPng }}
       - path: "/core/img/favicon.ico"
         data: {{ .Values.theme.imagery.files.faviconIco }}
+      - path: "/apps/integration_swp/logo"
+        data: {{ .Values.theme.imagery.logoHeaderSvgB64 }}
+        mimeType: "image/svg+xml"
   notes:
     subdomain: {{ .Values.global.hosts.notes }}
     paths:
       - path: "/favicon.ico"
         data: {{ .Values.theme.imagery.notes.faviconIco }}
+      - path: "/favicon.png"
+        data: {{ .Values.theme.imagery.notes.faviconPng }}
+      - path: "/favicon-dark.png"
+        data: {{ .Values.theme.imagery.notes.faviconPng }}
   openproject:
     subdomain: {{ .Values.global.hosts.openproject }}
     paths:
@@ -64,7 +71,6 @@ assets:
         data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg }}
       - path: "/static-files/login/background.jpg"
         data: {{ .Values.theme.imagery.login.backgroundJpg }}
-
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki }}
     paths:
