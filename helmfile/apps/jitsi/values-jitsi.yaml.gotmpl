@@ -302,6 +302,7 @@ jitsi:
   {{- end }}
 
 patchJVB:
+  backoffLimit: 12
   configuration:
     staticLoadbalancerIP: {{ .Values.cluster.networking.ingressGatewayIP | quote }}
     loadbalancerStatusField: {{ .Values.cluster.networking.loadBalancerStatusField | quote }}
