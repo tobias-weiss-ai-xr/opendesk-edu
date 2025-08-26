@@ -1,3 +1,25 @@
+## [1.7.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.7.0...v1.7.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* **collabora:** Update from 25.04.3 to 25.04.4 ([84d6b50](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/84d6b504d21e687de3fb4cdabafc9cff6fe1f1d7))
+* **helmfile:** When optional mail domain is set, use it as sender domain for system generated (noreply) mails ([bd4c997](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bd4c997950750e36168434e82daf48f20d0a42df))
+* **jitsi:** Increase `patchJVB` job `backoffLimit` to avoid deployment failures on infrastructure where LoadBalancer services take longer to become available ([eb2a181](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/eb2a1811fb1d11b0dd0ea0e9987f96846a855ac7))
+* **nextcloud:** Fetch central navigation from cluster internal service ([dd0e516](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/dd0e516778104c47ef990d95d01bdec6b33d9bab))
+* **nextcloud:** Stop browser from caching server-generated files ([410a1ad](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/410a1ade6907f676d3c4cbc68b33754e0e41e9fb))
+* **nextcloud:** Work around a bug that breaks the `nextcloud-management` job in case the theming `primary_color` was set in Nextcloud's web UI ([4aebe22](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4aebe22f22dc9e679563a46687ebdc8793c281e8))
+* **notes:** Explicitly template security contexts; add missing ingress classes and pull secrets ([834c847](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/834c84768a3a6537990e27377acb170b6269dfb0))
+* **nubus:** Remove temporary `nubusUdmListener` `livenessProbe` as recommended by supplier ([688a505](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/688a505ef780e7c81006a73db6465ef75dea1404))
+* **open-xchange:** Click on top bar logo to point to portal instead of mail inbox ([9f762a7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9f762a7c2ea3f8e4d3207d8d2aae44597a366ee0))
+* **open-xchange:** Configure correct autoreply addresses and enable FTS in Dovecot EE ([997c083](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/997c083335b79aa7446894b6ebbb6ed1d5950a3d))
+* **open-xchange:** Explicitly deactivate DAV support if not enabled in `functional.yaml.gotmpl` ([62ba5ab](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/62ba5aba496af40208a13abeb6c8f1de62e98e35))
+* **open-xchange:** Fix FTS bulk delete in Dovecot EE ([cd2a356](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cd2a356b89249b8a163f2becc57832164bc6c8e5))
+* **open-xchange:** Set mail quota using `functional.groupware.quota.default` ([67fe50e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/67fe50e53c7477016efe3b3d90c63214928f165c))
+* **opendesk-static-files:** Serve missing `.png` favicons for Notes and the Nextcloud topbar logo ([42b1105](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/42b11059d29d6445e1e4e3309ad7a9a026b56c92))
+* **ox-connector:** Update OX Connector and OX Extension to v0.27.7 ([57c96af](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/57c96af5a545a6a6851926b85bca0dc24263b55e))
+* **xwiki:** Templating of `imagePullSecrets` ([bbbcd68](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bbbcd6807e972c6120d90df52b8ffe9da03ebce3))
+
 # [1.7.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.6.0...v1.7.0) (2025-08-11)
 
 

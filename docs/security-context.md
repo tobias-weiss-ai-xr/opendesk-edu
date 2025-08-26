@@ -172,9 +172,9 @@ This list gives you an overview of templated security settings and if they compl
 | **nextcloud**/opendesk-nextcloud-notifypush | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/aio | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/exporter | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
-| **notes**/impress/backend | :x: | n/a | n/a | n/a | n/a | n/a | n/a | n/a | no |
-| **notes**/impress/frontend | :x: | n/a | n/a | n/a | n/a | n/a | n/a | n/a | no |
-| **notes**/impress/y-provider | :x: | n/a | n/a | n/a | n/a | n/a | n/a | n/a | no |
+| **notes**/impress/backend | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **notes**/impress/frontend | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **notes**/impress/y-provider | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **nubus**/intercom-service | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **nubus**/intercom-service/provisioning | :x: | n/a | n/a | n/a | n/a | n/a | n/a | yes | no |
 | **nubus**/opendesk-keycloak-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
