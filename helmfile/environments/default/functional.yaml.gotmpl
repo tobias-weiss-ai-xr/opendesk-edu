@@ -222,5 +222,13 @@ functional:
     # You can choose between "ODF" and "OOXML".
     # Ref.: https://en.wikipedia.org/wiki/Comparison_of_Office_Open_XML_and_OpenDocument
     defaultFormat: "ODF"
-
+    # Macro related options.
+    macros:
+      # Specifies whether the macro execution (Basic and Python scripts) is enabled in general.
+      # If set to false, the `securityLevel` is ignored.
+      enabled: false
+      # Chose from the following values:
+      # 1: Confirmation required before executing macros from untrusted sources.
+      # 0: All macros will be executed without confirmation.
+      securityLevel: 1
 ...
