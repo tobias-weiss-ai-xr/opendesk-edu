@@ -28,14 +28,16 @@ Set labels:
 /label ~"Testautomation::👀"
 ```
 
-## 👷 Developer Checklist
+# 👷 Developer Checklist
 
-- Does the MR include new bits and pieces (e.g. new secrets) that require documentation?
-  - [ ] No.
-  - [ ] Yes, and the documentation was updated accordingly.
+**Documentation:**
 
-Document in an extra comment and link to that comment:
-- [ ] How you verified the update is working as expected, also in upgrade scenarios.
-- [ ] Any regression testing done.
+Does this MR introduce changes (e.g., new secrets, configuration options) that require documentation?
+- [ ] No
+- [ ] Yes, and the documentation has been updated accordingly
 
---> Link to comment:
+**Quality Assurance:**
+- [ ] Verified that the feature works as expected, including upgrade scenarios
+- [ ] Performed regression testing
+- Link to internal comment(s) with detailed QA results (to avoid exposing infrastructure details):
+  - ...
