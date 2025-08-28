@@ -30,11 +30,11 @@ functional:
         - "Domain Admins"
     oidc:
       # Define additional/custom OIDC clients to be created in the 'opendesk' realm within Keycloak.
-      clients: ~
+      clients: {}
       # Define additional/custom OIDC client scopes to be created in the 'opendesk' realm within Keycloak.
-      clientScopes: ~
-    # Global settings of the 'opendesk' realm within Keycloak. The values are used to set Keycloak's realm attributes
-    # of the same name and are applied by `opendesk-keycloak-bootstrap`.
+      clientScopes: {}
+    # Configure global settings of the 'opendesk' realm within Keycloak. The values are directly
+    # passed into the `realmSettings` section of the `opendesk-keycloak-bootstrap` chart.
     # Ref.: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-keycloak-bootstrap
     # Note: Global settings can potentially be overridden on a client level.
     # Note: All numeric "Lifespan" values are defined in seconds.
@@ -83,22 +83,74 @@ functional:
       # Enabling SSO federation requires an upstream IdP specific configuration in `idpDetails` below.
       enabled: false
       # When enforcing the federated login all users are immediately redirected to the federated IdP when a login
-      # is requested or required.
-      enforceFederatedLogin: false
-      # Name of the SSO federation, if you do not enforce the login the name is shown as a login option the user can select
-      # within the openDesk login dialog.
-      name: "My upstream IdP"
-      # Configuration details for your upstream IdP, when you configured them manually in the Keycloak UI e.g. for
-      # testing the setup, you can get them from a Keycloak realm export in the `identityProviders` list.
-      # Notes:
-      # - You have to convert the configuration into YAML to apply it below.
-      # - You have to omit the following attributes as they are either defined explicitly above or implicitly by
-      #   the openDesk configuration
-      #  - `displayName`
-      #  - `alias`
-      #  - `firstBrokerLoginFlowAlias`
-      #  - `internalId`
-      idpDetails: {}
+      # is requested or required. Provide the root dict key of the IdP configuration in `idps` to enforce the login for that specific IdP.
+      enforceFederatedLogin: ""
+      # A dictionary for each IdP with a 'name' and a 'idpDetails' like seen in the following example.
+      # A subkey in the dictionary can contain a dictionary itself defining an existing secret with name and key or a plain value.
+      # The value of an existing secret supersedes a plain value. Both will replace the dictionary underneath the the subkey as its value.
+      # ```
+      # dictkey:
+      #   idpDetails:
+      #     subkey:
+      #       existingSecret:
+      #         name:
+      #          key:
+      # ```
+      # Example for an upstream IdP configuration:
+      # ```
+      # myUpstreamIdP:
+      #   name: "My upstream IdP"
+      #   idpDetails:
+      #     providerId: "oidc"
+      #     enabled: true
+      #     updateProfileFirstLoginMode: 'on'
+      #     trustEmail: true
+      #     storeToken: true
+      #     addReadTokenRoleOnCreate: false
+      #     authenticateByDefault: false
+      #     linkOnly: false
+      #     config:
+      #       userInfoUrl: https://id.domain.tld/realms/opendesk/protocol/openid-connect/userinfo
+      #       validateSignature: 'true'
+      #       clientId:
+      #         value: "yourSecretValueHere"
+      #       clientSecret:
+      #         value: "yourSecretValueHere"
+      #         existingSecret:
+      #           name: ~
+      #           key: ~
+      #       tokenUrl: https://id.domain.tld/realms/opendesk/protocol/openid-connect/token
+      #       jwksUrl: https://id.domain.tld/realms/opendesk/protocol/openid-connect/certs
+      #       issuer: https://id.domain.tld/realms/opendesk
+      #       useJwksUrl: 'true'
+      #       metadataDescriptorUrl: https://id.domain.tld/realms/opendesk/.well-known/openid-configuration
+      #       pkceEnabled: 'false'
+      #       authorizationUrl: https://id.domain.tld/realms/opendesk/protocol/openid-connect/auth
+      #       clientAuthMethod: client_secret_post
+      #       logoutUrl: https://id.domain.tld/realms/opendesk/protocol/openid-connect/logout
+      #       syncMode: LEGACY
+      #       guiOrder: ''
+      #       clientAssertionSigningAlg: ''
+      #       loginHint: 'false'
+      #       passMaxAge: 'false'
+      #       uiLocales: 'false'
+      #       backchannelSupported: 'true'
+      #       sendIdTokenOnLogout: 'true'
+      #       sendClientIdOnLogout: 'false'
+      #       disableUserInfo: 'false'
+      #       disableNonce: 'false'
+      #       defaultScope: ''
+      #       prompt: ''
+      #       acceptsPromptNoneForwardFromClient: 'false'
+      #       allowedClockSkew: 0
+      #       forwardParameters: ''
+      #       isAccessTokenJWT: 'false'
+      #       hideOnLoginPage: 'false'
+      #       filteredByClaim: 'false'
+      #       caseSensitiveOriginalUsername: 'true'
+      #     postBrokerLoginFlowAlias: ''
+      # ```
+      idps: {}
 
   chat:
     matrix:

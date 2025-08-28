@@ -133,7 +133,7 @@ button.button--primary {
   color: var(--color-opendesk-white) !important;
 }
 
-#social-sso-federation-idp {
+.pf-c-button.pf-m-control[id^="social-sso-federation-idp"] {
     margin: 0;
     color: var(--color-opendesk-white);
     background-color: var(--pf-c-button--m-primary--BackgroundColor);

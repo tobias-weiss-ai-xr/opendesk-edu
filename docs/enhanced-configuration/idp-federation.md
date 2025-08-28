@@ -232,50 +232,52 @@ functional:
   authentication:
     ssoFederation:
       enabled: true
-      enforceFederatedLogin: false
-      name: "Login with my upstream IdP"
-      idpDetails:
-        providerId: "oidc"
-        enabled: true
-        updateProfileFirstLoginMode: "on"
-        trustEmail: true
-        storeToken: true
-        addReadTokenRoleOnCreate: false
-        authenticateByDefault: false
-        linkOnly: false
-        config:
-          userInfoUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/userinfo"
-          validateSignature: "true"
-          clientId: "my-client-id"
-          clientSecret: my-client-secret"
-          tokenUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/token"
-          jwksUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/certs"
-          issuer: "https://id.<domain>/realms/opendesk"
-          useJwksUrl: "true"
-          metadataDescriptorUrl: "https://id.<domain>/realms/opendesk/.well-known/openid-configuration"
-          pkceEnabled: "false"
-          authorizationUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/auth"
-          clientAuthMethod: "client_secret_post"
-          logoutUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/logout"
-          syncMode: "LEGACY"
-          guiOrder: ""
-          clientAssertionSigningAlg: ""
-          loginHint: "false"
-          passMaxAge: "false"
-          uiLocales: "false"
-          backchannelSupported: "true"
-          sendIdTokenOnLogout: "true"
-          sendClientIdOnLogout: "false"
-          disableUserInfo: "false"
-          disableNonce: "false"
-          defaultScope: ""
-          prompt: ""
-          acceptsPromptNoneForwardFromClient: "false"
-          allowedClockSkew: 0
-          forwardParameters: ""
-          isAccessTokenJWT: "false"
-          hideOnLoginPage: "false"
-          filteredByClaim: "false"
-          caseSensitiveOriginalUsername: "true"
-        postBrokerLoginFlowAlias: ""
+      enforceFederatedLogin: ""
+      idps:
+        myIdpIdentifier:
+          name: "Login with my upstream IdP"
+          idpDetails:
+            providerId: "oidc"
+            enabled: true
+            updateProfileFirstLoginMode: "on"
+            trustEmail: true
+            storeToken: true
+            addReadTokenRoleOnCreate: false
+            authenticateByDefault: false
+            linkOnly: false
+            config:
+              userInfoUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/userinfo"
+              validateSignature: "true"
+              clientId: "my-client-id"
+              clientSecret: my-client-secret"
+              tokenUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/token"
+              jwksUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/certs"
+              issuer: "https://id.<domain>/realms/opendesk"
+              useJwksUrl: "true"
+              metadataDescriptorUrl: "https://id.<domain>/realms/opendesk/.well-known/openid-configuration"
+              pkceEnabled: "false"
+              authorizationUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/auth"
+              clientAuthMethod: "client_secret_post"
+              logoutUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/logout"
+              syncMode: "LEGACY"
+              guiOrder: ""
+              clientAssertionSigningAlg: ""
+              loginHint: "false"
+              passMaxAge: "false"
+              uiLocales: "false"
+              backchannelSupported: "true"
+              sendIdTokenOnLogout: "true"
+              sendClientIdOnLogout: "false"
+              disableUserInfo: "false"
+              disableNonce: "false"
+              defaultScope: ""
+              prompt: ""
+              acceptsPromptNoneForwardFromClient: "false"
+              allowedClockSkew: 0
+              forwardParameters: ""
+              isAccessTokenJWT: "false"
+              hideOnLoginPage: "false"
+              filteredByClaim: "false"
+              caseSensitiveOriginalUsername: "true"
+            postBrokerLoginFlowAlias: ""
 ```

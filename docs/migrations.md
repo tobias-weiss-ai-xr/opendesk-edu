@@ -13,7 +13,9 @@ SPDX-License-Identifier: Apache-2.0
   * [Manual checks/actions](#manual-checksactions)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
-        * [Updated helmfile behaviour: Remove default MASTER_PASSWORD](update-helmfile-behaviour-remove-default-master-password)
+        * [Updated helmfile behaviour: Remove default MASTER\_PASSWORD](#updated-helmfile-behaviour-remove-default-master_password)
+        * [Helmfile changed structure: Custom OIDC clients and client scopes](#helmfile-changed-structure-custom-oidc-clients-and-client-scopes)
+        * [Helmfile changed structure: Single-sign on federation with upstream IdPs](#helmfile-changed-structure-single-sign-on-federation-with-upstream-idps)
     * [Versions ≥ v1.13.0](#versions--v1130)
       * [Pre-upgrade to versions ≥ v1.13.0](#pre-upgrade-to-versions--v1130)
         * [New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
@@ -178,7 +180,8 @@ matching that constraint, though our links always point to the newest patch rele
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
 | Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                      |
 | ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------ |
-| [v1.13.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.13.1) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | [⚠ Install v1.12.x first](#versions--v1120-automated) |
+| [v1.14.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.14.0) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | ⬇ Install ≥ v1.12.x first                              |
+| [v1.13.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.13.2) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | [⚠ Install v1.12.x first](#versions--v1120-automated) |
 | [v1.12.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.2) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.8.0 first                              |
 | [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                              |
 | [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.8.0 first                              |
@@ -231,6 +234,87 @@ If you have been relying on the default master password, set a master password.
 Note that due to limitations of helm, the `MASTER_PASSWORD` environment
 variable has to be an non-empty value, even if all secrets have been replaced
 by custom values.
+##### Helmfile changed structure: Custom OIDC clients and client scopes
+
+**Target group:** Existing openDesk deployments OIDC client and/or client scope configurations in (at least) one of the following sections:
+- `functional.authentication.oidc.clients`
+- `functional.authentication.oidc.clientScopes`
+
+The configuration is now using dicts instead of lists requiring to set an unique key for each entry, while the key itself can be freely chosen, it is best practise to have the key in line with the attribute values for `name` and `clientId` like in the following example:
+
+The previous version:
+```yaml
+functional:
+  authentication:
+    oidc:
+      clients:
+        - name: "my-custom-oidc-client"
+          clientId: "my-custom-oidc-client"
+          protocol: "openid-connect"
+          [..]
+```
+
+```yaml
+functional:
+  authentication:
+    oidc:
+      clients:
+        opendesk-intercom:
+          name: "my-custom-oidc-client"
+          clientId: "my-custom-oidc-client"
+          protocol: "openid-connect"
+          [..]
+```
+
+##### Helmfile changed structure: Single-sign on federation with upstream IdPs
+
+**Target group:** Existing openDesk deployments with configured IdP federation under `functional.authentication.ssoFederation`.
+
+**Context**
+
+In response to customer demand for configuring more than one upstream IdP for SSO federation, the configuration under `functional.authentication.ssoFederation` has been restructured to support multiple IdP definitions.
+
+**Required action**
+
+Overview:
+
+1. IdP configurations must now be defined as entries in the dict under `functional.authentication.ssoFederation.idps`.
+2. Enforcing login via an upstream IdP is no longer a boolean toggle — you must explicitly reference the dict key of the IdP to enforce login with.
+
+To minimize the impact of this change on existing deployments, use `legacy-single-idp-config` as the dict key for your existing IdP. This preserves the IdP's internal identifier, keeping the OIDC URLs configured in the upstream IdP stable.
+
+If you currently enforce login via the upstream IdP (so that the openDesk login dialog is skipped and users are redirected directly to the federated IdP), also set `enforceFederatedLogin` to `legacy-single-idp-config`.
+
+The previous version:
+```yaml
+functional:
+  authentication:
+    ssoFederation:
+      enabled: true
+      enforceFederatedLogin: false
+      name: "My upstream IdP"
+      idpDetails:
+        providerId: "oidc"
+        [..]
+```
+
+Becomes:
+
+```yaml
+functional:
+  authentication:
+    ssoFederation:
+      enabled: true
+      # When you enforce you SSO federation, otherwise keep it empty to `~`
+      enforceFederatedLogin: "legacy-single-idp-config"
+      idps:
+        # The dict key identifying the IdP, set it to `legacy-single-idp-config` to avoid changes of OIDC URLs
+        legacy-single-idp-config:
+          name: "My upstream IdP"
+          idpDetails:
+            providerId: "oidc"
+            [..]
+```
 
 ### Versions ≥ v1.13.0
 
