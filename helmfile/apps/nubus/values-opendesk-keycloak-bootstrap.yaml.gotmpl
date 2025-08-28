@@ -117,9 +117,8 @@ config:
     clientOfflineSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.clientOfflineSessionMaxLifespan }}
   ssoFederation:
     enabled: {{ .Values.functional.authentication.ssoFederation.enabled }}
-    enforceFederatedLogin: {{ .Values.functional.authentication.ssoFederation.enforceFederatedLogin }}
-    name: {{ .Values.functional.authentication.ssoFederation.name | quote }}
-    idpDetails: {{ .Values.functional.authentication.ssoFederation.idpDetails | toYaml | nindent 6 }}
+    enforceFederatedLogin: {{ .Values.functional.authentication.ssoFederation.enforceFederatedLogin | quote }}
+    idps: {{ .Values.functional.authentication.ssoFederation.idps | toYaml | nindent 6 }}
   twoFactorSettings:
     additionalGroups: {{ .Values.functional.authentication.twoFactor.groups | toYaml | nindent 6 }}
   precreateGroups: [ 'Domain Admins', 'Domain Users', 'IAM API - Full Access',
@@ -137,12 +136,15 @@ config:
     # to LDAP group membership to ensure a user cannot access an application without the required
     # group membership.
     clientScopes:
-      - name: "read_contacts"
+      read_contacts:
+        name: "read_contacts"
         protocol: "openid-connect"
-      - name: "write_contacts"
+      write_contacts:
+        name: "write_contacts"
         protocol: "openid-connect"
       {{ if .Values.apps.openproject.enabled }}
-      - name: "opendesk-openproject-scope"
+      opendesk-openproject-scope:
+        name: "opendesk-openproject-scope"
         description: "Scope for the claims required by openDesk's OpenProject instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -217,7 +219,8 @@ config:
               jsonType.label: "String"
       {{ end }}
       {{ if .Values.apps.jitsi.enabled }}
-      - name: "opendesk-jitsi-scope"
+      opendesk-jitsi-scope:
+        name: "opendesk-jitsi-scope"
         description: "Scope for the claims required by openDesk's Jitsi instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -266,7 +269,8 @@ config:
               jsonType.label: "String"
       {{ end }}
       {{ if .Values.apps.nextcloud.enabled }}
-      - name: "opendesk-nextcloud-scope"
+      opendesk-nextcloud-scope:
+        name: "opendesk-nextcloud-scope"
         description: "Scope for the claims required by openDesk's Nextcloud instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -317,7 +321,8 @@ config:
               jsonType.label: "String"
       {{ end }}
       {{ if .Values.apps.element.enabled }}
-      - name: "opendesk-matrix-scope"
+      opendesk-matrix-scope:
+        name: "opendesk-matrix-scope"
         description: "Scope for the claims required by openDesk's Matrix instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -366,7 +371,8 @@ config:
               jsonType.label: "String"
       {{ end }}
       {{ if .Values.apps.xwiki.enabled }}
-      - name: "opendesk-xwiki-scope"
+      opendesk-xwiki-scope:
+        name: "opendesk-xwiki-scope"
         description: "Scope for the claims required by openDesk's XWiki instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -415,7 +421,8 @@ config:
               jsonType.label: "String"
       {{ end }}
       {{ if .Values.apps.oxAppSuite.enabled }}
-      - name: "opendesk-dovecot-scope"
+      opendesk-dovecot-scope:
+        name: "opendesk-dovecot-scope"
         description: "Scope for the claims required by openDesk's Dovecot instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -441,7 +448,8 @@ config:
               access.token.claim: true
               claim.name: "opendesk_username"
               jsonType.label: "String"
-      - name: "opendesk-oxappsuite-scope"
+      opendesk-oxappsuite-scope:
+        name: "opendesk-oxappsuite-scope"
         description: "Scope for the claims required by openDesk's OX Appuite instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -480,7 +488,8 @@ config:
               jsonType.label: "String"
       {{ end }}
       {{ if .Values.apps.notes.enabled }}
-      - name: "opendesk-notes-scope"
+      opendesk-notes-scope:
+        name: "opendesk-notes-scope"
         description: "Scope for the claims required by openDesk's Notes instance."
         protocol: "openid-connect"
         protocolMappers:
@@ -522,7 +531,8 @@ config:
               jsonType.label: "String"
       {{ end }}
     clients:
-      - name: "opendesk-intercom"
+      opendesk-intercom:
+        name: "opendesk-intercom"
         clientId: "opendesk-intercom"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -574,7 +584,8 @@ config:
         defaultClientScopes:
           - "offline_access"
       {{ if .Values.apps.notes.enabled }}
-      - name: "opendesk-notes"
+      opendesk-notes:
+        name: "opendesk-notes"
         clientId: "opendesk-notes"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -613,7 +624,8 @@ config:
           - "opendesk-notes-scope"
       {{ end }}
       {{ if .Values.apps.oxAppSuite.enabled }}
-      - name: "opendesk-dovecot"
+      opendesk-dovecot:
+        name: "opendesk-dovecot"
         clientId: "opendesk-dovecot"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -626,7 +638,8 @@ config:
           backchannel.logout.session.required: false
         defaultClientScopes:
           - "opendesk-dovecot-scope"
-      - name: "opendesk-oxappsuite"
+      opendesk-oxappsuite:
+        name: "opendesk-oxappsuite"
         clientId: "opendesk-oxappsuite"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -648,7 +661,8 @@ config:
           - "write_contacts"
       {{ end }}
       {{ if .Values.apps.jitsi.enabled }}
-      - name: "opendesk-jitsi"
+      opendesk-jitsi:
+        name: "opendesk-jitsi"
         clientId: "opendesk-jitsi"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -663,7 +677,8 @@ config:
           - "opendesk-jitsi-scope"
       {{ end }}
       {{ if .Values.apps.element.enabled }}
-      - name: "opendesk-matrix"
+      opendesk-matrix:
+        name: "opendesk-matrix"
         clientId: "opendesk-matrix"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -687,7 +702,8 @@ config:
           - "opendesk-matrix-scope"
       {{ end }}
       {{ if .Values.apps.nextcloud.enabled }}
-      - name: "opendesk-nextcloud"
+      opendesk-nextcloud:
+        name: "opendesk-nextcloud"
         clientId: "opendesk-nextcloud"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -709,7 +725,8 @@ config:
           - "write_contacts"
       {{ end }}
       {{ if .Values.apps.openproject.enabled }}
-      - name: "opendesk-openproject"
+      opendesk-openproject:
+        name: "opendesk-openproject"
         clientId: "opendesk-openproject"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
@@ -730,7 +747,8 @@ config:
           - "opendesk-openproject-scope"
       {{ end }}
       {{ if .Values.apps.xwiki.enabled }}
-      - name: "opendesk-xwiki"
+      opendesk-xwiki:
+        name: "opendesk-xwiki"
         clientId: "opendesk-xwiki"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
