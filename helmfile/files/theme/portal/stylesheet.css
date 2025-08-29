@@ -95,6 +95,16 @@
   --layout-height-header: 63px;
   /* Keycloak user screens logo */
   --login-logo: url("/opendesk-static-files/login/logo.svg") no-repeat center;
+  /* Unified topbar feature */
+  /**
+  --left-sidenav-close-button-border-radius: 100%;
+  --waffle-icon-height: 4rem;
+  --left-sidenavigation-border-radius: 0 1rem 1rem 0;
+  --left-sidenavigation-close-button-radius: 1rem;
+  --left-sidenavigation-hover-bg-color: var(--bgc-underlay);
+  --left-sidenavigation-active-bg-color: #D3D7DE;
+  --waffle-icon-background-color: #EEEFF2;
+  */
 }
 
 button {

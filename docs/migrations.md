@@ -100,8 +100,10 @@ This section provides an overview of potential changes to be part of the next ma
 
 - `functional.portal.link*` (see `functional.yaml.gotmpl` for details) are going to be moved into the `theme.*` tree, we are also going to move the icons used for the links currently found under `theme.imagery.portalEntries` in this step.
 - We will explicitly set the [database schema configuration](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/#HConfigurethenamesofdatabaseschemas) for XWiki to avoid the use of the `public` schema.
-- `persistance.storages.oxConnector.storageClassName` and `persistance.storages.nubusUdmListener.storageClassName` will be templated in Helmfile requiring you to template them explicitly if their current default values differs from the global value set in `persistence.storageClassNames.RWO`.
-- The currently used Helm chart for Notes will be replaced requiring some config updates.
+- Adding support for `storageClassName` templating of various components requiring upgrading of the existing PVCs:
+  - `persistence.storages.oxConnector.storageClassName`
+  - `persistence.storages.nubusUdmListener.storageClassName`
+  - `persistence.storages.nubusProvisioningNats.storageClassName`
 
 # Automated migrations - Overview and mandatory upgrade path
 
