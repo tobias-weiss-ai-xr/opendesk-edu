@@ -595,6 +595,7 @@ nubusPortalConsumer:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
       secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
     endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   persistence:
@@ -699,6 +700,7 @@ nubusPortalServer:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
       secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
     endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
   persistence:
@@ -714,6 +716,8 @@ nubusPortalServer:
     featureToggles:
       notifications_api: false
       centered_layout: true
+      # Also enable adjustments in helmfile/files/theme/portal/stylesheet.css when enabling left_sidebar
+      left_sidebar: false
       newsfeed: {{ and .Values.apps.xwiki.enabled .Values.functional.portal.newsfeed.enabled }}
       umc_session_refresh: true
       welcome_message: {{ .Values.functional.portal.welcomeMessage.enabled }}
@@ -1037,7 +1041,7 @@ nubusProvisioning:
         imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     persistence:
       size: {{ .Values.persistence.storages.nubusProvisioningNats.size }}
-      storageClass: {{ coalesce .Values.persistence.storages.nubusProvisioningNats.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+#      storageClassName: -- coalesce .Values.persistence.storages.nubusProvisioningNats.storageClassName .Values.persistence.storageClassNames.RWO | quote --
     reloader:
       image:
         registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsReloader.registry | quote }}
@@ -1451,6 +1455,8 @@ nubusUmcServer:
       password: ""
   podAnnotations:
     {{ .Values.annotations.nubusUmcServer.pod | toYaml | nindent 4 }}
+  # Ref.: https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/reference.html#envvar-nubusUmcServer.podManagementPolicy
+  podManagementPolicy: "{{ if gt .Values.replicas.umsUmcServer 4 }}Parallel{{ else }}OrderedReady{{ end }}"
   postgresql:
     bundled: false
     connection:
