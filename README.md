@@ -16,7 +16,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Testing](#testing)
 * [Permissions](#permissions)
 * [Releases](#releases)
-* [Data Storage](#data-storage)
+* [Data storage](#data-storage)
 * [Feedback](#feedback)
 * [Development](#development)
 * [License](#license)
@@ -32,7 +32,7 @@ For production use, the [openDesk Enterprise Edition](./README-EE.md) is recomme
 
 openDesk currently features the following functional main components:
 
-| Function             | Functional Component        | License                                                                                | Component<br/>Version                                                                                                        | Upstream Documentation                                                                                                                |
+| Function             | Functional component        | License                                                                                | Component<br/>version                                                                                                        | Upstream documentation                                                                                                                |
 |----------------------|-----------------------------|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
 | Chat & collaboration | Element ft. Nordeck widgets | AGPL-3.0-or-later (Element Web), AGPL-3.0-only (Synapse), Apache-2.0 (Nordeck widgets) | [1.11.89](https://github.com/element-hq/element-web/releases/tag/v1.11.89)                                                   | [For the most recent release](https://element.io/user-guide)                                                                          |
 | Collaborative notes  | Notes (aka Docs)            | MIT                                                                                    | [3.2.1](https://github.com/suitenumerique/docs/releases/tag/v3.2.1)                                                          | Online documentation/welcome document available in installed application                                                              |
@@ -108,7 +108,7 @@ in the files from the release's git-tag:
 
 Find more information in our [Workflow documentation](./docs/developer/workflow.md).
 
-# Data Storage
+# Data storage
 
 More information about different data storages used within openDesk are described in the
 [Data Storage documentation](./docs/data-storage.md).
