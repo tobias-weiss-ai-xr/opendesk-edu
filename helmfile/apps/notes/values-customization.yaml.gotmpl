@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+frontend:
+  runtimeEnvs:
+    ICS_BASE_URL: {{ printf "https://%s.%s" .Values.global.hosts.intercomService .Values.global.domain | quote }}
+    PORTAL_BASE_URL: {{ printf "https://%s.%s" .Values.global.hosts.nubus .Values.global.domain | quote }}
+...
