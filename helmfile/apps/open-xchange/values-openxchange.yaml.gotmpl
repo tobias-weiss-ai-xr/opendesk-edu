@@ -152,6 +152,7 @@ appsuite:
       drive-client-windows-ox-route:
         annotations:
           {{ .Values.annotations.openxchangeAppsuiteIngress.driveClientWindowsOxRoute | toYaml | nindent 10 }}
+      {{ if .Values.functional.groupware.mail.encryption.enabled }}
       guard-api-route:
         annotations:
           {{ .Values.annotations.openxchangeAppsuiteIngress.guardApiRoute | toYaml | nindent 10 }}
@@ -161,6 +162,7 @@ appsuite:
       guard-pgp-route:
         annotations:
           {{ .Values.annotations.openxchangeAppsuiteIngress.guardPgpRoute | toYaml | nindent 10 }}
+      {{ end }}
       http-api-routes-api:
         annotations:
           {{ .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesApi | toYaml | nindent 10 }}
@@ -310,7 +312,7 @@ appsuite:
         # enable admin pack
         # admin: enabled
         documents: "disabled"
-        guard: "enabled"
+        guard: {{ ternary "enabled" "disabled" .Values.functional.groupware.mail.encryption.enabled }}
         # disabling admin role breaks webmail
         # {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
         # admin: "disabled"
@@ -347,11 +349,13 @@ appsuite:
           {{ .Values.seLinuxOptions.openxchangeGotenberg | toYaml | nindent 10 }}
       serviceAccount:
         create: false
+    {{ if .Values.functional.groupware.mail.encryption.enabled }}
     hooks:
       beforeAppsuiteStart:
         create-guard-dir.sh: |
           mkdir -p /opt/open-xchange/guard-files
           chown open-xchange:open-xchange /opt/open-xchange/guard-files
+    {{ end }}
     packages:
       status:
         open-xchange-oidc: "enabled"
@@ -377,12 +381,11 @@ appsuite:
         open-xchange-admin-soap-usercopy: "disabled"
         open-xchange-admin-user-copy: "disabled"
         {{- end }}
-        {{- if .Values.functional.groupware.davSupport.enabled }}
-        open-xchange-authentication-application-storage-rdb: "enabled"
-        {{- end }}
-        open-xchange-mail-categories: "enabled"
+        open-xchange-authentication-application-storage-rdb: {{ ternary "enabled" "disabled" .Values.functional.groupware.davSupport.enabled }}
+        open-xchange-mail-categories: {{ ternary "enabled" "disabled" .Values.functional.groupware.mail.categories.enabled }}
     properties:
       com.openexchange.hostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
+      com.openexchange.share.guestHostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
       # PDF Export
@@ -431,6 +434,7 @@ appsuite:
       com.openexchange.mail.transport.authType: "xoauth2"
       com.openexchange.mail.transportServer: "postfix-ox"
       com.openexchange.mail.transportServerSource: "global"
+      com.openexchange.mail.maxMailSize: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
       # Mail Login Resolver
       com.openexchange.mail.login.resolver.enabled: "true"
       com.openexchange.mail.login.resolver.ldap.enabled: "true"
@@ -460,15 +464,13 @@ appsuite:
       com.openexchange.capability.dynamic-theme: "true"
       com.openexchange.capability.filestorage_nextcloud: "true"
       com.openexchange.capability.filestorage_nextcloud_oauth: "true"
-      com.openexchange.capability.guard: "true"
-      com.openexchange.capability.guard-mail: "true"
-      com.openexchange.capability.smime: "true"
-      com.openexchange.capability.share_links: "false"
-      com.openexchange.capability.invite_guests: "false"
+      com.openexchange.capability.guard: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
+      com.openexchange.capability.guard-mail: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
+      com.openexchange.capability.smime: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
       com.openexchange.capability.document_preview: "true"
       # Mail Categories
-      # Ref.: https://documentation.open-xchange.com/8/middleware/mail/mail_categories.html
-      com.openexchange.mail.categories: "true"
+      com.openexchange.mail.categories: {{ .Values.functional.groupware.mail.categories.enabled | quote }}
+      {{ if .Values.functional.groupware.mail.categories.enabled }}
       com.openexchange.mail.categories.general.name.fallback: "General"
       com.openexchange.mail.categories.general.name.de_DE: "Allgemein"
       com.openexchange.mail.categories.identifiers: "newsletter,invites,socialmedia"
@@ -500,6 +502,16 @@ appsuite:
       com.openexchange.mail.categories.uc3.flag: "$uc3"
       com.openexchange.mail.categories.uc3.name.fallback: "Your category 3"
       com.openexchange.mail.categories.uc3.name.de_DE: "Eigene Kategorie 3"
+      {{- end }}
+      # functional.groupware.mail.inbound.*
+      com.openexchange.capability.public-sector-autonotify: {{ .Values.functional.groupware.mail.inbound.notify.enabled | quote }}
+      {{- if not .Values.functional.groupware.mail.inbound.forward.enabled }}
+      com.openexchange.mail.filter.blacklist.actions: "redirect"
+      {{- end }}
+      com.openexchange.mail.filter.options.apply.blockedActions: "redirect,notify"
+      # functional.groupware.externalSharing.*
+      com.openexchange.capability.share_links: {{ .Values.functional.groupware.externalSharing.shareLinks.enabled | quote }}
+      com.openexchange.capability.invite_guests: {{ .Values.functional.groupware.externalSharing.inviteGuests.enabled | quote }}
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"
       com.openexchange.mail.transport.secondary.authType: "xoauth2"
@@ -511,11 +523,12 @@ appsuite:
       com.openexchange.conference.element.enabled: "true"
       com.openexchange.conference.element.meetingHostUrl: http://matrix-neodatefix-bot
       com.openexchange.conference.element.matrixLoginUrl: http://opendesk-synapse-web:8008/_matrix/client/v3/login
-      com.openexchange.conference.element.matrixUuidClaimName: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"opendesk_useruuid"{{ else }}"opendesk_username"{{ end }}
+      com.openexchange.conference.element.matrixUuidClaimName: {{ ternary "opendesk_useruuid" "opendesk_username" .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}
       # GDPR
       com.openexchange.gdpr.dataexport.enabled: "false"
       com.openexchange.gdpr.dataexport.active: "false"
       # Guard
+      {{- if .Values.functional.groupware.mail.encryption.enabled }}
       com.openexchange.guard.storage.file.fileStorageType: "file"
       com.openexchange.guard.storage.file.uploadDirectory: "/opt/open-xchange/guard-files/"
       com.openexchange.guard.guestSMTPMailFrom: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
@@ -529,6 +542,7 @@ appsuite:
       # http = (await import('./io.ox/core/http.js')).default
       # await http.POST({ module: 'oxguard/smime', params: { action: 'test' } })
       com.openexchange.smime.test: {{ .Values.debug.enabled | quote }}
+      {{- end }}
       {{- if or (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "LoadBalancer") }}
       # Client Onboarding
       com.openexchange.client.onboarding.mail.imap.host: {{ .Values.global.domain | quote }}
@@ -632,6 +646,8 @@ appsuite:
     uiSettings:
       io.ox.nextcloud//server: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
       io.ox.public-sector//ics/url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
+      # Is user allowed to edit own display name
+      io.ox/mail//editRealName: {{ .Values.functional.groupware.userProfile.editRealName | quote }}
       # Show the Enterprise Picker in the top right corner instead of the launcher drop-down
       io.ox/core//features/enterprisePicker/showLauncher: "false"
       io.ox/core//features/enterprisePicker/showTopRightLauncher: "true"
@@ -644,7 +660,7 @@ appsuite:
       io.ox/core//features/managedResources: "true"
       # Features
       io.ox/core//features/signatureDesigner: "true"
-      io.ox/core//features/categories: "true"
+      io.ox/core//features/categories: {{ .Values.functional.groupware.mail.categories.enabled | quote }}
       io.ox/core//categories/predefined: >
         [{ "name": "Predefined", "color": "orange", "icon": "bi/exclamation-circle.svg" }]
       # Nextcloud integration
@@ -671,6 +687,7 @@ appsuite:
       io.ox/dynamic-theme//folderHover: {{ .Values.theme.colors.secondaryGreyLight | quote }}
       # openDesk logo in top bar links to portal
       io.ox/core//logoAction: {{ printf "https://%s.%s" .Values.global.hosts.nubus .Values.global.domain | quote }}
+    {{ if .Values.functional.groupware.mail.encryption.enabled }}
     secretETCFiles:
       # Format of the OX Guard master key:
       # MC+base64(20 random bytes)
@@ -678,6 +695,7 @@ appsuite:
       oxguardpass: |
         {{ .Values.secrets.oxAppSuite.oxguardMC }}
         {{ .Values.secrets.oxAppSuite.oxguardRC }}
+    {{ end }}
     redis: &redisConfiguration
       enabled: true
       mode: "standalone"
@@ -947,7 +965,7 @@ appsuite:
       create: false
 
   guard-ui:
-    enabled: true
+    enabled: {{ .Values.functional.groupware.mail.encryption.enabled }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
@@ -977,6 +995,7 @@ appsuite:
         {{ .Values.seLinuxOptions.openxchangeGuardUI | toYaml | nindent 8 }}
     serviceAccount:
       create: false
+
   core-spellcheck:
     enabled: false
 

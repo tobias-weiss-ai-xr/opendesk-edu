@@ -15,6 +15,7 @@ SPDX-License-Identifier: Apache-2.0
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
       * [New database and secrets: Portal now uses OIDC](#new-database-and-secrets-portal-now-uses-oidc)
       * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
+      * [Helmfile new default: New groupware settings changing current behaviour](#helmfile-new-default-new-groupware-settings-changing-current-behaviour)
   * [v1.7.0+](#v170)
     * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
       * [Helmfile fix: Ensure enterprise overrides apply when deploying from project root](#helmfile-fix-ensure-enterprise-overrides-apply-when-deploying-from-project-root)
@@ -193,6 +194,24 @@ functional:
         - '<'
         - '>'
 ```
+#### Helmfile new default: New groupware settings changing current behaviour
+
+**Target group:** All openDesk deployments using OX App Suite
+
+The following options, newly introduced in `functional.yaml.gotmpl`, modify the previous default behavior of openDesk. Please review whether the new defaults are appropriate for your deployment:
+
+* `functional.groupware.mail.inbound.forward.enabled: false`
+  This setting prevents users from forwarding all incoming emails to external accounts.
+  Instead, the new option `functional.groupware.mail.inbound.notify.enabled: true` enables notifications to user-defined email addresses when new messages arrive.
+  To keep the previous behavior, set `forward` to `true` and `notify` to `false`.
+
+* `functional.groupware.userProfile.editRealName: false`
+  This setting prevents users from editing their display name in OX App Suite (e.g. the name shown when sending emails, in addition to the sender address).
+  The display name is centrally managed by the openDesk IAM.
+  To allow users to change it within OX App Suite, set this option to `true`.
+
+> **Note**<br>
+> openDesk v1.8.0 adds even more options under `functional.groupware.*` while retaining the current default behaviour.
 
 ## v1.7.0+
 
