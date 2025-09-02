@@ -199,16 +199,57 @@ functional:
   groupware:
     # Related settings for the CalDAV and CardCAV support of the groupware module.
     davSupport:
-      # Enabled by default it is available at:
+      # Enabled by default CalDAV and CardDAV support is available at:
       # - https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/caldav/[folderId]"
       # - https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/carddav/[folderId]"
       # Can be switched off using the below feature toggle.
       enabled: true
+    # Control access for external users to groupware data
+    # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html
+    externalSharing:
+      # Allow anonymous guest users to access resources via share links.
+      # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html#share-links
+      shareLinks:
+        enabled: false
+      # Allow sharing of resources with guest users created on demand by App Suite.
+      # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html#invite-guests
+      inviteGuests:
+        enabled: false
+    # Mail related settings
+    mail:
+      # Mail categories related settings
+      # Ref.: https://documentation.open-xchange.com/8/middleware/mail/mail_categories.html
+      categories:
+        # Toggle the availability of the mail categories feature.
+        # Ref.:
+        enabled: true
+      # Control options for handling incoming emails
+      inbound:
+        # Allow users to configure a notification address that receives a notification whenever a new email arrives
+        # in their inbox.
+        # Ref.: https://gitlab.open-xchange.com/extensions/public-sector/-/blob/main/documentation/ui/030_autonotify.md
+        notify:
+          enabled: true
+        # Allow users to automatically forward all incoming emails to an email address of their choice.
+        forward:
+          enabled: false
+      # Email encryption related settings.
+      encryption:
+        # Toggle the availability of OX Guard
+        # Ref.: https://www.open-xchange.com/products/ox-guard/
+        enabled: true
+      # Define the maximum size for emails (including their attachments) in Megabyte
+      maxSize: 25
     quota:
       # Set the default mail storage quota for users in gigabyte.
       # Just provide the plain number without quoting. It will allow a quota grace of 10% and +20% in trash storage.
       # If you need different rules you can use customizing on Dovecot's `quotaRules` and `quotaGrace` templating.
       default: 1
+    # User profile related control options
+    userProfile:
+      # The user's display name is managed by openDesk IAM and should not be manually changed by the user.
+      # Ref.: https://documentation.open-xchange.com/8/ui/configuration/settings-list-of.html#mail-misc
+      editRealName: false
 
   migration:
     oxAppSuite:

@@ -45,6 +45,7 @@ postfix:
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   hostname: "postfix"
   inetProtocols: "ipv4"
+  messageSizeLimit: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
   milterDefaultAction: "tempfail"
   {{- if .Values.apps.dkimpy.enabled }}
   dkimpyHost: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}:8892"
