@@ -42,11 +42,11 @@ assets:
   notes:
     subdomain: {{ .Values.global.hosts.notes }}
     paths:
-      - path: "/favicon.ico"
+      - path: "/assets/favicon-light.ico"
         data: {{ .Values.theme.imagery.notes.faviconIco }}
-      - path: "/favicon.png"
+      - path: "/assets/favicon-dark.png"
         data: {{ .Values.theme.imagery.notes.faviconPng }}
-      - path: "/favicon-dark.png"
+      - path: "/assets/favicon-light.png"
         data: {{ .Values.theme.imagery.notes.faviconPng }}
   openproject:
     subdomain: {{ .Values.global.hosts.openproject }}

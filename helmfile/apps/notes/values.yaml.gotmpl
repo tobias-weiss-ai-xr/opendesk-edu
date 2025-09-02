@@ -27,7 +27,7 @@ backend:
       {{- end }}
     ingressClassName: {{ .Values.ingress.ingressClassName }}
   ingressAdmin:
-    enabled: true
+    enabled: false
     annotations:
       {{ .Values.annotations.notesBackend.ingressAdmin | toYaml | nindent 6 }}
     ingressClassName: {{ .Values.ingress.ingressClassName }}
@@ -131,19 +131,27 @@ backend:
   service:
     annotations:
       {{ .Values.annotations.notesBackend.service | toYaml | nindent 6 }}
-  {{- if .Values.certificate.selfSigned }}
   extraVolumes:
+    - name: "customization-volume"
+      configMap:
+        name: "impress-customization"
+    {{- if .Values.certificate.selfSigned }}
     - name: "trusted-cert-secret-volume"
       secret:
         secretName: "opendesk-certificates-ca-tls"
         items:
           - key: "ca.crt"
             path: "ca-certificates.crt"
+    {{- end }}
   extraVolumeMounts:
+    - name: "customization-volume"
+      mountPath: "/app/impress/configuration/theme/default.json"
+      subPath: "theme.json"
+    {{- if .Values.certificate.selfSigned }}
     - name: "trusted-cert-secret-volume"
       mountPath: "/usr/local/lib/python3.12/site-packages/certifi/cacert.pem"
       subPath: "ca-certificates.crt"
-  {{- end }}
+    {{- end }}
 
 frontend:
   image:
@@ -161,11 +169,6 @@ frontend:
     annotations:
       {{ .Values.annotations.notesFrontend.ingressMedia | toYaml | nindent 6 }}
     ingressClassName: {{ .Values.ingress.ingressClassName }}
-  extraEnvVars:
-    - name: "ICS_BASE_URL"
-      value: {{ printf "https://%s.%s" .Values.global.hosts.intercomService .Values.global.domain | quote }}
-    - name: "PORTAL_BASE_URL"
-      value: {{ printf "https://%s.%s" .Values.global.hosts.nubus .Values.global.domain | quote }}
   configuration:
     objectStoreHost: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
   resources:
@@ -197,6 +200,14 @@ frontend:
   serviceMedia:
     annotations:
       {{ .Values.annotations.notesFrontend.service | toYaml | nindent 6 }}
+  extraVolumes:
+    - name: "customization-volume"
+      configMap:
+        name: "impress-customization"
+  extraVolumeMounts:
+    - name: "customization-volume"
+      mountPath: "/usr/share/nginx/html/runtime-env.js"
+      subPath: "runtime-env.js"
 
 y-provider:
   image:
