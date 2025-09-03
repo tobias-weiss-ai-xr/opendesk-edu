@@ -14,16 +14,19 @@ Explain for the reviewer how the change addresses the issue, providing some insi
 
 Provida a link to the issue or document the required details below.
 In case it is a GitLab issue, reference it at the end of the commit message in square brackets, like `[#123]`
+Provide steps for QA or reviewers to test the fix and mention anything reviewers should be aware of.
 
-### Before the Fix
-
-1. ...
-
-### After the Fix
-
-Provide steps for QA or reviewers to test the fix and mention anything reviewers should be aware of:
+### Steps to reproduce
 
 1. ...
+
+### Actual behaviour
+
+*Based on the "Steps to reproduce" explain what the user sees while the bug isn't fixed.*
+
+### Expected behaviour
+
+*Based on the "Steps to reproduce" explain what the user gets to see with the bug fix merged.*
 
 ## 🔄 Requirements for migrations
 
