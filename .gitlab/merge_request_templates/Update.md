@@ -5,8 +5,8 @@
 
 ## 📋 Changelog/Release Notes
 
-- [ ] [README.md](../../README.md) component table updated including the link to the related release notes
-- [ ] Provide significant improvements you'd like to see in the openDesk release notes. If you have a lot of details to provide or someone else is providing the details, please use a comment on the MR and link the comment in here.
+- [ ] [README.md](../../README.md) component table updated including the link to the related release notes of the updated application.
+- [ ] Provide significant improvements you would like to see in the [openDesk release notes](https://www.opendesk.eu/en/blog/opendesk-1-6). If you have a lot of details to provide or someone else is providing the details, you can use a comment on this MR and provide a link here.
 
 ## 🔄 Requirements for migrations
 
