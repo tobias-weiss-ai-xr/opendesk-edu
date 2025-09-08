@@ -305,18 +305,8 @@ To connect with mail clients like [Thunderbird](https://www.thunderbird.net/), t
 
 ### Mail/SMTP configuration
 
-To use the full potential of the openDesk, you need to set up an SMTP relay that allows sending emails from
-the whole subdomain. The following attribute can be set:
-
-```yaml
-smtp:
-  host: "mail.open.desk"
-  username: "openDesk"
-  password: "secret"
-```
-
-Enabling DKIM signing of emails helps to reduce spam and increases trust.
-openDesk ships dkimpy-milter as Postfix milter for signing emails. The following attributes can be set:
+Enabling DKIM signing for outgoing emails helps reduce the risk of messages being marked as spam and improves recipient trust.
+openDesk includes `dkimpy-milter` as a Postfix milter for signing emails. You can configure the following attributes:
 
 ```yaml
 apps:
@@ -330,6 +320,17 @@ smtp:
     useED25519: true # when false, RSA is used
 ```
 
+A common scenario for outgoing mail is to send it through a smarthost or mail relay, which often handles DKIM signing as well.
+
+If you prefer to use a smarthost, you can configure it as follows:
+
+```yaml
+smtp:
+  host: "smarthost.domain.tld"
+  username: "smarthost-auth-username"
+  password: "secret"
+```
+
 ### TURN configuration
 
 Some components (Jitsi, Element) use a TURN server for direct communication. You can configure your own TURN server with
@@ -340,10 +341,10 @@ turn:
   transport: "udp" # or tcp
   credentials: "secret"
   server:
-    host: "turn.open.desk"
+    host: "turn.domain.tld"
     port: "3478"
   tls:
-    host: "turns.open.desk"
+    host: "turns.domain.tld"
     port: "5349"
 ```
 
