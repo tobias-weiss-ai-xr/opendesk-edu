@@ -176,8 +176,7 @@ configuration:
     token:
       value: {{ .Values.secrets.nextcloud.metricsToken | quote }}
 
-  # A sane default for windows clients would be: `* " | & ? , ; : \ / ~ < >`
-  forbiddenChars: "* \" | & ? , ; : \\ / ~ < >"
+  forbiddenChars: {{ join " " .Values.functional.filestore.naming.forbiddenChars | quote }}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
