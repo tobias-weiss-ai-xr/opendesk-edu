@@ -128,6 +128,25 @@ functional:
       enabled: true
 
   filestore:
+    # Settings related to directory and filenames
+    naming:
+      # Disallowed characters for directory and file names.
+      # Some operating systems do not support these characters, preventing affected clients from syncing files.
+      #
+      # Note: After changing the settings below and redeploying Nextcloud, restart the `aio` Pod(s) to
+      # apply the changes.
+      forbiddenChars:
+        - '*'
+        - '"'
+        - '|'
+        - '?'
+        - ';'
+        - ':'
+        - '\'
+        - '/'
+        - '~'
+        - '<'
+        - '>'
     quota:
       # Set the default quota for all users in gigabyte
       default: 1

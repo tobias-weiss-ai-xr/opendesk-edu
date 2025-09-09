@@ -7,7 +7,6 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 exporter:
-
   additionalAnnotations:
     intents.otterize.com/service-name: "opendesk-nextcloud-exporter"
     {{- with .Values.annotations.nextcloudExporter.additional }}
@@ -59,6 +58,23 @@ exporter:
       {{ .Values.annotations.nextcloudExporter.serviceAccount | toYaml | nindent 6 }}
 
 aio:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: "app.kubernetes.io/name"
+                  operator: "In"
+                  values:
+                    - "aio"
+                - key: "app.kubernetes.io/instance"
+                  operator: "In"
+                  values:
+                    - "opendesk-nextcloud"
+            topologyKey: "kubernetes.io/hostname"
+
   additionalAnnotations:
     intents.otterize.com/service-name: "opendesk-nextcloud-aio"
     {{- with .Values.annotations.nextcloudAio.additional }}

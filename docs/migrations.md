@@ -10,9 +10,12 @@ SPDX-License-Identifier: Apache-2.0
 * [Deprecation warnings](#deprecation-warnings)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
+  * [v1.7.1+](#v171)
+    * [Pre-upgrade to v1.7.1+](#pre-upgrade-to-v171)
+      * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
   * [v1.7.0+](#v170)
     * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
-    * [Helmfile fix: Ensure enterprise overrides apply when deploying from project root](#helmfile-fix-ensure-enterprise-overrides-apply-when-deploying-from-project-root)
+      * [Helmfile fix: Ensure enterprise overrides apply when deploying from project root](#helmfile-fix-ensure-enterprise-overrides-apply-when-deploying-from-project-root)
       * [Replace Helm chart: New Notes Helm chart with support for self-signed deployments](#replace-helm-chart-new-notes-helm-chart-with-support-for-self-signed-deployments)
     * [Post-upgrade to v1.7.0+](#post-upgrade-to-v170)
       * [Upstream fix: Provisioning of functional mailboxes](#upstream-fix-provisioning-of-functional-mailboxes)
@@ -127,11 +130,49 @@ If you would like more details about the automated migrations, please read secti
 
 # Manual checks/actions
 
+## v1.7.1+
+
+### Pre-upgrade to v1.7.1+
+
+#### New Helmfile default: Restricting characters for directory and filenames in fileshare module
+
+**Target group:** All openDesk deployments using the fileshare module, as they may already contain files or directories with characters that are now restricted.
+
+openDesk now enforces restrictions on the characters allowed in directory and filenames by explicitly disallowing the following set: `* " | ? ; : \ / ~ < >`
+
+The reason is that desktop clients can not handle all characters due to restrictions in the underlying operating system and therefor syncing these directories and/or files will fail.
+
+This change was introduced because desktop clients cannot reliably handle certain characters due to operating system limitations, causing file synchronization to fail when these characters are present.
+
+For existing deployments, any files or directories containing restricted characters must be renamed before updates within the file or (sub)directory can succeed.
+
+Nextcloud provides tooling for renaming affected files using an [`occ command`](https://docs.nextcloud.com/server/latest/admin_manual/occ_command.html#sanitize-filenames) that can be executed by the operator, the command also supports a dry-run mode.
+
+You can customize the default restriction settings in `functional.yaml.gotmpl`:
+
+```
+functional:
+  filestore:
+    naming:
+      forbiddenChars:
+        - '*'
+        - '"'
+        - '|'
+        - '?'
+        - ';'
+        - ':'
+        - '\'
+        - '/'
+        - '~'
+        - '<'
+        - '>'
+```
+
 ## v1.7.0+
 
 ### Pre-upgrade to v1.7.0+
 
-### Helmfile fix: Ensure enterprise overrides apply when deploying from project root
+#### Helmfile fix: Ensure enterprise overrides apply when deploying from project root
 
 **Target group:** All openDesk Enterprise deployments initiated from the project root using `helmfile_generic.yaml.gotmpl`
 
