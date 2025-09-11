@@ -209,8 +209,10 @@ functional:
   migration:
     oxAppSuite:
       # Note: Only available in openDesk Enterprise.
-      # Turn on temporary for migration purposes only. Will enable master password auth in OX AppSuite and Dovecot using
-      # `secrets.oxAppSuite.migrationsMasterPassword`.
+      # Note: Turn on temporary for migration purposes only.
+      # Will enable master password auth in Dovecot and add an additional OX App Suite Core Middelware Pod in the
+      # role `migration` that is master password enabled. The Pod is accessible through a ClusterIP.
+      # Master password is defined in `secrets.oxAppSuite.migrationsMasterPassword`.
       enabled: false
 
   portal:
