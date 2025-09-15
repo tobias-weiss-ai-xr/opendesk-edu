@@ -22,7 +22,7 @@ migrations:
   loglevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   failOnUnexpectedState: true
   environmentDetails:
-    {{ ( omit .Values "theme" ) | toYaml | nindent 4 }}
+    {{ ( omit .Values "theme" "functional" ) | toYaml | nindent 4 }}
   cleanup: false
 
 containerSecurityContext:
