@@ -218,6 +218,9 @@ kubectl patch -n ${NAMESPACE} configmap ${CONFIGMAP_NAME} --type merge -p '{"dat
 > **Note**<br>
 > Because the `ums-keycloak-extensions-handler` is sending frequent requests (one per second) to Keycloak for retrieval of the Keycloak event history, you might want to stop/remove the deployment while debugging/analysing Keycloak to not get your debug output spammed by these requests.
 
+> **Note**<br>
+> While you can set the standard log levels like `INFO`, `DEBUG`, `TRACE` etc. you can also set class specific logs by comma separating the details in the `KC_LOG_LEVEL` environment variable like e.g. `INFO,org.keycloak.protocol.oidc.endpoints:TRACE`. The example sets the overall loglevel to `INFO` but provides trace logs for `org.keycloak.protocol.oidc.endpoints`.
+
 ### Accessing the Keycloak admin console
 
 Deployments set to `debug.enable: true` expose the Keycloak admin console at `http://id.<your_opendesk_domain>/admin/`. This can also be achieved by updating the Ingress `ums-keycloak-extensions-proxy` with an additional path that allows access to `/admin/`.
