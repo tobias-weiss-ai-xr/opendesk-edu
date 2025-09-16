@@ -38,6 +38,8 @@ access openDesk.
     ```yaml
     certificate:
       selfSigned: true
+      caCertificate:
+        create: false
     ```
 
 3. Create a Kubernetes secret named `opendesk-certificates-tls` of type `kubernetes.io/tls` containing either a valid
