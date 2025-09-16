@@ -29,7 +29,6 @@ Set labels:
 ```
 /label ~"MR-Type::Feature"
 /label ~"PO::👀"
-/label ~"Tech Lead::👀"
 /label ~"QA::👀"
 /label ~"Testautomation::👀"
 ```
