@@ -155,8 +155,12 @@ functional:
     sharing:
       # External shares
       external:
-        # Enables sharing of files with external participants (create external links, send links by mail and allow external upload in shared folders).
-        # If you disable this option existing external shares stop working, when re-enabling it the old shares are available again.
+        # Enables sharing of files with external participants (create external links, send links by mail and allow
+        # external upload in shared folders).
+        # When you enable external sharing it is still possible to use the groupfolder feature and block external
+        # sharing for defined groupfolder(s).
+        # Note: If you disable this option existing external shares stop working, when re-enabling it the old
+        # shares are available again.
         enabled: false
         # Enforces passwords to be used on external shares.
         enforcePasswords: false
