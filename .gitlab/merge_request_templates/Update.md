@@ -10,7 +10,7 @@
 
 ## 🔄 Requirements for migrations
 
-- [ ] Minimum version of the application required in existing depoyments to update/upgrade:
+- [ ] Minimum version of the application required in existing deployments to update/upgrade:
 - [ ] Describe manual steps required to update existing deployments. This especially applies if the upgrade includes any breaking changes:
 - [ ] Any other considerations in context of the update:
 
@@ -23,7 +23,6 @@ Set labels:
 ```
 /label ~"MR-Type::AppUpdate"
 /label ~"PO::👀"
-/label ~"Tech Lead::👀"
 /label ~"QA::👀"
 /label ~"Testautomation::👀"
 ```

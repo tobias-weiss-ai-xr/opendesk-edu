@@ -42,7 +42,6 @@ Set labels:
 ```
 /label ~"MR-Type::Bugfix"
 /label ~"PO::👀"
-/label ~"Tech Lead::👀"
 /label ~"QA::👀"
 /label ~"Testautomation::👀"
 ```
