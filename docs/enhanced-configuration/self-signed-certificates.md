@@ -50,6 +50,10 @@ CA certificate as X.509 encoded (`ca.crt`) and as jks trust store (`truststore.j
 5. Create a Kubernetes secret with name `opendesk-certificates-keystore-jks` with key `password` and as value the jks
 trust store password.
 
+> **Note**<br>
+> XWiki does not support the use of an existing secret to access the keystore. Therefore you have to set the password
+> from step 5 also as `secrets.certificates.password`.
+
 ## Option 2a: Use cert-manager.io with auto-generated namespace based root-certificate
 
 This option is useful when you do not have a trusted certificate available and can't fetch a certificate from
