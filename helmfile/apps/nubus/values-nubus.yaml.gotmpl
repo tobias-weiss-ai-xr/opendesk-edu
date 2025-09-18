@@ -86,12 +86,16 @@ global:
                       visible: "False"
             wizard:
               disabled: "No"
-
     ucs:
       web:
         theme: "light"
 
     umc:
+      # Configures that login redirects point to OIDC and not SAML. Does not disable the saml endpoint.
+      web:
+        sso:
+          enabled: false
+
       cookie-banner:
         show: "false"
       login:
@@ -1458,19 +1462,32 @@ nubusUmcServer:
   # Ref.: https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/reference.html#envvar-nubusUmcServer.podManagementPolicy
   podManagementPolicy: "{{ if gt .Values.replicas.umsUmcServer 4 }}Parallel{{ else }}OrderedReady{{ end }}"
   postgresql:
-    bundled: false
-    connection:
-      host: {{ .Values.databases.umsSelfservice.host | quote }}
-      port: {{ .Values.databases.umsSelfservice.port | quote }}
-    auth:
-      username: {{ .Values.databases.umsSelfservice.username | quote }}
-      database: {{ .Values.databases.umsSelfservice.name | quote }}
-      password: {{ .Values.databases.umsSelfservice.password | default .Values.secrets.postgresql.umsSelfserviceUser | quote }}
-      # NOTE: Nubus has still an existing secret configured for legacy reasons.
-      # This disables the existing secret and ensures that the value from above
-      # is used.
-      existingSecret:
-        name: null
+    selfservice:
+      connection:
+        host: {{ .Values.databases.umsSelfservice.host | quote }}
+        port: {{ .Values.databases.umsSelfservice.port | quote }}
+      auth:
+        username: {{ .Values.databases.umsSelfservice.username | quote }}
+        database: {{ .Values.databases.umsSelfservice.name | quote }}
+        password: {{ .Values.databases.umsSelfservice.password | default .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+        # NOTE: Nubus has still an existing secret configured for legacy reasons.
+        # This disables the existing secret and ensures that the value from above
+        # is used.
+        existingSecret:
+          name: null
+    authSession:
+      connection:
+        host: {{ .Values.databases.umsAuthSession.host | quote }}
+        port: {{ .Values.databases.umsAuthSession.port | quote }}
+      auth:
+        username: {{ .Values.databases.umsAuthSession.username | quote }}
+        database: {{ .Values.databases.umsAuthSession.name | quote }}
+        password: {{ .Values.databases.umsAuthSession.password | default .Values.secrets.postgresql.umsAuthSessionUser | quote }}
+        # NOTE: Nubus has still an existing secret configured for legacy reasons.
+        # This disables the existing secret and ensures that the value from above
+        # is used.
+        existingSecret:
+          name: null
   proxy:
     image:
       registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusUmcServerProxy.registry | quote }}
@@ -1558,7 +1575,6 @@ nubusKeycloakBootstrap:
       - ldapAndUserModelAttributeName: "oxContextIDNum"
     twoFactorAuthentication:
       enabled: true
-      group: "2fa-users"
   config:
     debug:
       enabled: {{ .Values.debug.enabled }}
@@ -1594,6 +1610,10 @@ nubusKeycloakBootstrap:
       bindDn: {{ printf "uid=ldapsearch_keycloak,cn=users,%s" .Values.ldap.baseDn }}
       existingSecret:
         name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
+  oidc:
+    rp:
+      umcServer:
+        password: {{ .Values.secrets.keycloak.clientSecret.portal | quote }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak-bootstrap"
     {{- with .Values.annotations.nubusKeycloakBootstrapNubus.pod }}

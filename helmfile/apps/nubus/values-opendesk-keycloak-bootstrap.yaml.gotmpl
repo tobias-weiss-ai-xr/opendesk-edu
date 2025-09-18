@@ -84,7 +84,7 @@ config:
   managed:
     clientScopes: [ 'acr', 'web-origins', 'email', 'profile', 'microprofile-jwt', 'role_list',
                     'offline_access', 'roles', 'address', 'phone' ]
-    clients: [ 'guardian-management-api', 'guardian-scripts', 'guardian-ui', 'UMC', '${client_account}',
+    clients: [ 'guardian-management-api', 'guardian-scripts', 'guardian-ui', 'UMC', 'UMC OIDC', '${client_account}',
                '${client_account-console}', '${client_admin-cli}', '${client_broker}', '${client_realm-management}',
                '${client_security-admin-console}' ]
   keycloak:
@@ -117,7 +117,7 @@ config:
     idpDetails: {{ .Values.functional.authentication.ssoFederation.idpDetails | toYaml | nindent 6 }}
   twoFactorSettings:
     additionalGroups: {{ .Values.functional.authentication.twoFactor.groups | toYaml | nindent 6 }}
-  precreateGroups: [ 'Domain Admins', 'Domain Users', '2fa-users', 'IAM API - Full Access',
+  precreateGroups: [ 'Domain Admins', 'Domain Users', 'IAM API - Full Access',
                      {{ if .Values.apps.nextcloud.enabled }}'managed-by-attribute-Fileshare', 'managed-by-attribute-FileshareAdmin',{{ end }}
                      {{ if .Values.apps.xwiki.enabled }}'managed-by-attribute-Knowledgemanagement', 'managed-by-attribute-KnowledgemanagementAdmin',{{ end }}
                      {{ if .Values.apps.element.enabled }}'managed-by-attribute-Livecollaboration', 'managed-by-attribute-LivecollaborationAdmin',{{ end }}
