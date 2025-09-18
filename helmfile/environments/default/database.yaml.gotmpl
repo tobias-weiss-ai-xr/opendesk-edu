@@ -99,6 +99,14 @@ databases:
     connectionPoolMin: "3"
     connectionPoolMax: "5"
     connectionLimit: ~
+  umsAuthSession:
+    type: "postgresql"
+    name: "nubus_authsession"
+    host: "postgresql"
+    port: 5432
+    username: "authsession_user"
+    password: ""
+    connectionLimit: 10
   umsGuardianManagementApi:
     type: "postgresql"
     name: "guardianmanagementapi"

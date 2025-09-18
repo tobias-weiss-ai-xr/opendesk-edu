@@ -84,7 +84,7 @@ openDesk includes predefined groups. Please see below.
 
 - **Domain Users**: Members of this group are *openDesk Users*.
 - **Domain Admins**: Members of this group are *openDesk IAM Administrators*. By default, this group has two-factor authentication (2FA) enabled.
-- **2fa-users**: Members of this group that are forced to use two-factor authentication (2FA).
+- **2FA Users**: Members of this group that are forced to use two-factor authentication (2FA).
 - **IAM API - Full Access**: Members of this group have full (read and write) access to the IAM's REST API.
 
 ### Application groups

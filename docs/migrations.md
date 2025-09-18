@@ -12,6 +12,8 @@ SPDX-License-Identifier: Apache-2.0
 * [Manual checks/actions](#manual-checksactions)
   * [v1.7.1+](#v171)
     * [Pre-upgrade to v1.7.1+](#pre-upgrade-to-v171)
+      * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
+      * [New database and secrets: Portal now uses OIDC](#new-database-and-secrets-portal-now-uses-oidc)
       * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
   * [v1.7.0+](#v170)
     * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
@@ -133,6 +135,30 @@ If you would like more details about the automated migrations, please read secti
 ## v1.7.1+
 
 ### Pre-upgrade to v1.7.1+
+
+#### New application default: Default group for two-factor authentication is now "2FA Users"
+
+**Target group:** All upgrade deployments.
+
+In previous openDesk versions, the default group for enforcing two-factor authentication (2FA) was `2fa-users`. Accounts in this group were required to set up and use time-based one-time passwords (TOTP) for 2FA during login.
+
+With the release v1.8.0 of openDesk, the openDesk IAM Nubus introduces a new default group named `2FA Users` serving the same purpose. Existing deployments will retain the old group, which will continue to enforce 2FA as before.
+
+However, for consistency and easier maintenance, we recommend migrating users from the old group to the new one and removing the old group afterward.
+
+#### New database and secrets: Portal now uses OIDC
+
+**Target group:** All upgrade deployments.
+
+The portal has been migrated to use OIDC for single sign-on by default. This introduces the following requirements for existing deployments:
+
+- New database: Deployments using external databases must provide a new PostgreSQL database. See `databases.umsAuthSession` in `databases.yaml.gotmpl` for configuration details.
+- New secrets: Deployments managing secrets manually must add:
+  - `secrets.keycloak.clientSecret.portal`: The OIDC client secret for the portal.
+  - `secrets.postgresql.umsAuthSessionUser`: For internal databases, set the secret for the database user here. If you are using an external database, you already provide these credentials in the New database step above.
+
+> **Note**<br>
+> The SAML Client for the Nubus portal is still preserved in Keycloak and will be removed in one of the next openDesk releases.
 
 #### New Helmfile default: Restricting characters for directory and filenames in fileshare module
 
