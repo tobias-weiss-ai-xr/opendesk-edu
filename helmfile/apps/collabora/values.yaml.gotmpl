@@ -143,6 +143,22 @@ securityContext:
     drop:
       - "ALL"
     add:
+      # For secuity reasons, esp. when macros are enabled, Collabora isolates all documents workspaces
+      # from each other. This isolation can work in three different ways. Collabora will automatically
+      # select the best option.
+      # - Using linux user namespaces is the most efficient one. You can test if user namespaces are
+      #   available by running `unshare -Ur bash` in the Collabora Pod. If it returns
+      #   `unshare: unshare failed: Operation not permitted`
+      #   user namespaces are not available.
+      #   Capabilities required: none
+      #   Note: A container runtime still could gate syscalls like `unshare` with `CAP_SYSADMIN`. You could
+      #         try using a custom seccompProfile in that case.
+      #         Ref.: https://github.com/CollaboraOnline/online/blob/master/docker/cool-seccomp-profile.json
+      # - Linking the documents and runtime environment into their own context.
+      #   Capabilities required: `CAP_SYSADMIN`, `CAP_SYSCHROOT`, `CHOWN`, `FOWNER`
+      # - Copying the documents and runtime environment into their own context,
+      #   having impact on the performance.
+      #   Capabilities required: `CAP_SYSCHROOT`, `CHOWN`, `FOWNER`
       - "CHOWN"
       - "FOWNER"
       - "SYS_CHROOT"
