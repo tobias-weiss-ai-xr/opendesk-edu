@@ -15,6 +15,7 @@ SPDX-License-Identifier: Apache-2.0
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
       * [New database and secrets: Portal now uses OIDC](#new-database-and-secrets-portal-now-uses-oidc)
       * [New application default: XWiki blocks self-registration of user accounts](#new-application-default-xwiki-blocks-self-registration-of-user-accounts)
+      * [New application default: Synapse rooms `v12`](#new-application-default-synapse-rooms-v12)
       * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
       * [Helmfile new default: New groupware settings changing current behaviour](#helmfile-new-default-new-groupware-settings-changing-current-behaviour)
       * [New application default: Fileshare module apps "Spreed" and "Comments" no longer enabled by default](#new-application-default-fileshare-module-apps-spreed-and-comments-no-longer-enabled-by-default)
@@ -162,7 +163,7 @@ The portal has been migrated to use OIDC for single sign-on by default. This int
 
 > **Note**<br>
 > The SAML Client for the Nubus portal is still preserved in Keycloak and will be removed in one of the next openDesk releases.
->
+
 #### New application default: XWiki blocks self-registration of user accounts
 
 **Target group:** All openDesk deployments using XWiki.
@@ -178,6 +179,27 @@ With the new default, self-registration is switched off for new deployments. Exi
    - URL: `https://wiki.<YOURDOMAIN>/bin/admin/XWiki/XWikiPreferences?editor=globaladmin&section=Rights#|t=usersandgroupstable&p=1&l=10&uorg=users&wiki=local&clsname=XWiki.XWikiGlobalRights`
    - Manual navigation: Burger menu → *Administer Wiki* (repeat for each subwiki, if applicable) → *Users & Groups* → *Rights* → *Users* (table header)
 3. In the first row labeled "Unregistered Users", ensure the box in the "Register" column shows a ❌ (disabled) by clicking it if necessary.
+
+#### New application default: Synapse rooms `v12`
+
+**Target group:** All deployments using Element/Synapse with unrestricted federation and public, federation-enabled rooms.
+
+Following the [security bulletin from matrix.org](https://matrix.org/blog/2025/08/security-release/), openDesk now sets the default room version for new Matrix rooms to v12.
+
+This change does not affect existing rooms. There is no immediate action required. However, if your setup allows unrestricted Matrix federation and you operate public, federation-enabled rooms, you should consider upgrading those rooms to v12 for improved security and compatibility.
+
+For instructions on upgrading rooms, refer to the [official upstream documentation](https://docs.element.io/latest/element-server-suite-pro/administration/upgrading-local-rooms/).
+
+OpenDesk includes several bundled widgets. When upgrading a room, a new room is created to replace the old one — widget data will not be automatically transferred to the new room.
+
+To preserve as much data as possible, dedicated upgrade guidelines for each of these widgets are available:
+
+- Matrix NeoBoard widget: https://github.com/nordeck/matrix-neoboard?tab=readme-ov-file#matrix-room-upgrades
+- Matrix Meetings widget: https://github.com/nordeck/matrix-meetings?tab=readme-ov-file#matrix-room-upgrades
+- Matrix Poll widget: https://github.com/nordeck/matrix-poll?tab=readme-ov-file#matrix-room-upgrades
+
+> **Note**<br>
+> These instructions apply to any room upgrades, not just upgrade to `v12`.
 
 #### New Helmfile default: Restricting characters for directory and filenames in fileshare module
 

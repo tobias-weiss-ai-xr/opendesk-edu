@@ -51,6 +51,7 @@ configuration:
 
   homeserver:
     serverName: {{ .Values.global.matrixDomain | default .Values.global.domain }}
+    defaultRoomVersion: 12
     appServiceConfigs:
       - as_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}
         hs_token: {{ .Values.secrets.intercom.synapseAsToken | quote }}
