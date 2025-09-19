@@ -14,6 +14,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Pre-upgrade to v1.7.1+](#pre-upgrade-to-v171)
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
       * [New database and secrets: Portal now uses OIDC](#new-database-and-secrets-portal-now-uses-oidc)
+      * [New application default: XWiki blocks self-registration of user accounts](#new-application-default-xwiki-blocks-self-registration-of-user-accounts)
       * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
       * [Helmfile new default: New groupware settings changing current behaviour](#helmfile-new-default-new-groupware-settings-changing-current-behaviour)
   * [v1.7.0+](#v170)
@@ -160,6 +161,22 @@ The portal has been migrated to use OIDC for single sign-on by default. This int
 
 > **Note**<br>
 > The SAML Client for the Nubus portal is still preserved in Keycloak and will be removed in one of the next openDesk releases.
+>
+#### New application default: XWiki blocks self-registration of user accounts
+
+**Target group:** All openDesk deployments using XWiki.
+
+The upgrade itself requires no manual intervention. However, the previous default (self-registration enabled) may be unexpected in many deployments.
+
+XWiki supports self-registration for creating local, application-specific accounts. Before this upgrade, the feature was enabled by default. It can not be disabled at the deployment level due to limitations in the XWiki package.
+
+With the new default, self-registration is switched off for new deployments. Existing deployments must apply the change manually:
+
+1. Log in with an XWiki admin account.
+2. Open the URL below (replace `<YOURDOMAIN>` with your domain), or navigate manually:
+   - URL: `https://wiki.<YOURDOMAIN>/bin/admin/XWiki/XWikiPreferences?editor=globaladmin&section=Rights#|t=usersandgroupstable&p=1&l=10&uorg=users&wiki=local&clsname=XWiki.XWikiGlobalRights`
+   - Manual navigation: Burger menu → *Administer Wiki* (repeat for each subwiki, if applicable) → *Users & Groups* → *Rights* → *Users* (table header)
+3. In the first row labeled "Unregistered Users", ensure the box in the "Register" column shows a ❌ (disabled) by clicking it if necessary.
 
 #### New Helmfile default: Restricting characters for directory and filenames in fileshare module
 
