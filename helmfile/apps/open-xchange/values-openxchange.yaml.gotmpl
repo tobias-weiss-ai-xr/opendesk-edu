@@ -463,7 +463,7 @@ appsuite:
       # Old capability can be used to toggle all integrations with a single switch
       com.openexchange.capability.public-sector: "true"
       # New capabilities in 2.0
-      com.openexchange.capability.public-sector-element: "true"
+      com.openexchange.capability.public-sector-element: {{ .Values.apps.element.enabled | quote }}
       com.openexchange.capability.public-sector-navigation: "true"
       com.openexchange.capability.client-onboarding: "true"
       com.openexchange.capability.dynamic-theme: "true"
@@ -526,7 +526,7 @@ appsuite:
       com.openexchange.file.storage.nextcloud.oauth.webdav.username.strategy: "user"
       com.openexchange.nextcloud.filepicker.includeAccessToken: "false"
       # Element integration
-      com.openexchange.conference.element.enabled: "true"
+      com.openexchange.conference.element.enabled: {{ .Values.apps.element.enabled | quote }}
       com.openexchange.conference.element.meetingHostUrl: http://matrix-neodatefix-bot
       com.openexchange.conference.element.matrixLoginUrl: http://opendesk-synapse-web:8008/_matrix/client/v3/login
       com.openexchange.conference.element.matrixUuidClaimName: {{ ternary "opendesk_useruuid" "opendesk_username" .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}
