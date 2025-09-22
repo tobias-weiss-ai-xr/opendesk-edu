@@ -220,6 +220,11 @@ appsuite:
         productName: {{ .Values.theme.texts.productName | quote }}
         oidcLogin: true
         oidcPath: "/oidc/"
+        notificationMails:
+          button:
+            textColor: {{ .Values.theme.colors.white | quote }}
+            backgroundColor: {{ .Values.theme.colors.primary | quote }}
+            borderColor: {{ .Values.theme.colors.primary | quote }}
     defaultScaling:
       nodes:
         default:
@@ -512,6 +517,7 @@ appsuite:
       # functional.groupware.externalSharing.*
       com.openexchange.capability.share_links: {{ .Values.functional.groupware.externalSharing.shareLinks.enabled | quote }}
       com.openexchange.capability.invite_guests: {{ .Values.functional.groupware.externalSharing.inviteGuests.enabled | quote }}
+      com.openexchange.share.guestCapabilityMode: "inherit"
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"
       com.openexchange.mail.transport.secondary.authType: "xoauth2"
