@@ -68,7 +68,9 @@ configuration:
       notifyPush:
         enabled: {{ gt .Values.replicas.nextcloudNotifyPush 0 }}
       spreed:
-        enabled: true
+        enabled: false
+    comments:
+      enabled: false
     circles:
       enabled: false
 
