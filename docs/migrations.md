@@ -17,6 +17,7 @@ SPDX-License-Identifier: Apache-2.0
       * [New application default: XWiki blocks self-registration of user accounts](#new-application-default-xwiki-blocks-self-registration-of-user-accounts)
       * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
       * [Helmfile new default: New groupware settings changing current behaviour](#helmfile-new-default-new-groupware-settings-changing-current-behaviour)
+      * [New application default: Fileshare module apps "Spreed" and "Comments" no longer enabled by default](#new-application-default-fileshare-module-apps-spreed-and-comments-no-longer-enabled-by-default)
   * [v1.7.0+](#v170)
     * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
       * [Helmfile fix: Ensure enterprise overrides apply when deploying from project root](#helmfile-fix-ensure-enterprise-overrides-apply-when-deploying-from-project-root)
@@ -229,6 +230,26 @@ The following options, newly introduced in `functional.yaml.gotmpl`, modify the 
 
 > **Note**<br>
 > openDesk v1.8.0 adds even more options under `functional.groupware.*` while retaining the current default behaviour.
+
+#### New application default: Fileshare module apps "Spreed" and "Comments" no longer enabled by default
+
+**Target group:** All openDesk deployments using the fileshare module.
+
+The following fileshare module apps/functions are no longer enabled by default. Please check if they are required in your deployment, i.e. are used by the user:
+
+* [Spreed](https://apps.nextcloud.com/apps/spreed): Used in openDesk to provide a chat tab to the file/directory details pane in the fileshare application.
+* Comments: Core app that lets users leave comments in the activity tab of the file/directory details pane.
+
+If required the apps can be enabled using the openDesk customization options for `opendeskNextcloudManagement`, see `customizations.yaml.gotmpl` for details, with the following settings:
+```
+configuration:
+  feature:
+    comments:
+      enabled: true
+    apps:
+      spreed:
+        enabled: true
+```
 
 ## v1.7.0+
 

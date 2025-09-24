@@ -39,6 +39,9 @@ assets:
       - path: "/apps/integration_swp/logo"
         data: {{ .Values.theme.imagery.logoHeaderSvgB64 }}
         mimeType: "image/svg+xml"
+      - path: "/apps/theming/img/background/jenna-kim-the-globe-dark.webp"
+        data: {{ .Values.theme.imagery.login.backgroundJpg }}
+        mimeType: "image/jpeg"
   notes:
     subdomain: {{ .Values.global.hosts.notes }}
     paths:
