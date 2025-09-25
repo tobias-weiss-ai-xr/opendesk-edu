@@ -94,6 +94,7 @@ jitsi:
             - "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
     extraConfig:
       doNotStoreRoom: {{ not .Values.functional.dataProtection.jitsiRoomHistory.enabled }}
+      disableThirdPartyRequests: true
     extraEnvs:
       TURN_ENABLE: "1"
     resources:

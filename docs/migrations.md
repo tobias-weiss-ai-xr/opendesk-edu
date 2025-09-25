@@ -18,7 +18,8 @@ SPDX-License-Identifier: Apache-2.0
       * [New application default: Synapse rooms `v12`](#new-application-default-synapse-rooms-v12)
       * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
       * [Helmfile new default: New groupware settings changing current behaviour](#helmfile-new-default-new-groupware-settings-changing-current-behaviour)
-      * [New application default: Fileshare module apps "Spreed" and "Comments" no longer enabled by default](#new-application-default-fileshare-module-apps-spreed-and-comments-no-longer-enabled-by-default)
+      * [New application default: Nextcloud apps "Spreed" and "Comments" no longer enabled by default](#new-application-default-nextcloud-apps-spreed-and-comments-no-longer-enabled-by-default)
+      * [New application default: Gravatar is switched off for Jitsi and OpenProject](#new-application-default-gravatar-is-switched-off-for-jitsi-and-openproject)
   * [v1.7.0+](#v170)
     * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
       * [Helmfile fix: Ensure enterprise overrides apply when deploying from project root](#helmfile-fix-ensure-enterprise-overrides-apply-when-deploying-from-project-root)
@@ -234,6 +235,7 @@ functional:
         - '<'
         - '>'
 ```
+
 #### Helmfile new default: New groupware settings changing current behaviour
 
 **Target group:** All openDesk deployments using OX App Suite
@@ -253,11 +255,11 @@ The following options, newly introduced in `functional.yaml.gotmpl`, modify the 
 > **Note**<br>
 > openDesk v1.8.0 adds even more options under `functional.groupware.*` while retaining the current default behaviour.
 
-#### New application default: Fileshare module apps "Spreed" and "Comments" no longer enabled by default
+#### New application default: Nextcloud apps "Spreed" and "Comments" no longer enabled by default
 
 **Target group:** All openDesk deployments using the fileshare module.
 
-The following fileshare module apps/functions are no longer enabled by default. Please check if they are required in your deployment, i.e. are used by the user:
+The following Nextcloud apps/functions are no longer enabled by default. Please check if they are required in your deployment, i.e. are used by the user:
 
 * [Spreed](https://apps.nextcloud.com/apps/spreed): Used in openDesk to provide a chat tab to the file/directory details pane in the fileshare application.
 * Comments: Core app that lets users leave comments in the activity tab of the file/directory details pane.
@@ -272,6 +274,25 @@ configuration:
       spreed:
         enabled: true
 ```
+
+#### New application default: Gravatar is switched off for Jitsi and OpenProject
+
+**Target group:** All openDesk deployments using the video conference and project module that explicitly want Gravatar support.
+
+Gravatar support is no longer enabled by default in Jitsi and OpenProject. In case it is required openDesk's customization options can be used to enabled it, see `customizations.yaml.gotmpl` for details.
+
+- Jitsi: `customization.release.jitsi` with
+  ```
+  jitsi:
+    web:
+      extraConfig:
+        disableThirdPartyRequests: false
+  ```
+- Open Project: `customization.release.openproject` with
+  ```
+  environment:
+    OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: true, enable_local_avatars: true}'
+  ```
 
 ## v1.7.0+
 
