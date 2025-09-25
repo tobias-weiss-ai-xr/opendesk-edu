@@ -218,7 +218,7 @@ Nextcloud provides tooling for renaming affected files using an [`occ command`](
 
 You can customize the default restriction settings in `functional.yaml.gotmpl`:
 
-```
+```yaml
 functional:
   filestore:
     naming:
@@ -265,7 +265,7 @@ The following Nextcloud apps/functions are no longer enabled by default. Please 
 * Comments: Core app that lets users leave comments in the activity tab of the file/directory details pane.
 
 If required the apps can be enabled using the openDesk customization options for `opendeskNextcloudManagement`, see `customizations.yaml.gotmpl` for details, with the following settings:
-```
+```yaml
 configuration:
   feature:
     comments:
@@ -282,14 +282,14 @@ configuration:
 Gravatar support is no longer enabled by default in Jitsi and OpenProject. In case it is required openDesk's customization options can be used to enabled it, see `customizations.yaml.gotmpl` for details.
 
 - Jitsi: `customization.release.jitsi` with
-  ```
+  ```yaml
   jitsi:
     web:
       extraConfig:
         disableThirdPartyRequests: false
   ```
 - Open Project: `customization.release.openproject` with
-  ```
+  ```yaml
   environment:
     OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: true, enable_local_avatars: true}'
   ```
