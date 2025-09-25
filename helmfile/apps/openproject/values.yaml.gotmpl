@@ -95,6 +95,7 @@ environment:
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__HOVER__BACKGROUND: {{ .Values.theme.colors.secondaryGreyLight | quote }}
   OPENPROJECT_SEED_DESIGN_LOGO: "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvgB64 }}"
   OPENPROJECT_SEED_DESIGN_FAVICON: "data:image/svg+xml;base64,{{ .Values.theme.imagery.projects.faviconSvg }}"
+  OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: false, enable_local_avatars: true}'
 
   {{- if .Values.certificate.selfSigned }}
   SSL_CERT_FILE: "/etc/ssl/certs/ca-certificates.crt"
