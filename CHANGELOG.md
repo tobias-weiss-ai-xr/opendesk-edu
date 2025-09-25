@@ -1,3 +1,46 @@
+# [1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.7.1...v1.8.0) (2025-09-25)
+
+
+### Bug Fixes
+
+* **clamav:** [bmi/opendesk/deployment/opendesk[#234](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/234)] Update Helm chart to support conditional proxy credentials ([dee7525](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/dee75256492577c7b2ab6bafd741e06f98acfccd))
+* **element:** Let Synapse create room `v12` by default; review `migrations.md` for details ([af9d4cd](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/af9d4cda6cf641e65fe49054e1397159272f3bd1))
+* **helmfile:** Add more detailed descriptions on `functional.authentication.realmSettings` and provide two `accessCodeLifespan*` options ([0314a70](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0314a7076ae7d377d86c3ff3acda691966a36635))
+* **helmfile:** Do not set portal "Support" link by default ([776fe92](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/776fe92ae18963b11503d4d7e20bbf298902ad9b))
+* **intercom-service:** Update from v2.19.0 to v2.19.5 ([3305dfa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3305dfa5fb4a22bd5354dec1f65eb0e95eed678d))
+* **jitsi:** [bmi/opendesk/deployment/opendesk[#228](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/228)] Turn off Gravatar option, by default this still keeps the input field in the Jitsi UI, but does not longer issue requests to gravatar.com; check `migrations.md` in case the option should be enabled ([083fa98](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/083fa9842d6bd9c27eabac28f49668e5bee02a42))
+* **nextcloud:** App "Spreed" and core app "Comments" not enabled by default; review `migrations.md` for potential upgrade steps ([31d35b2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/31d35b25c6cf0e4a18cf6f33b01a6dd0fd10545e))
+* **nextcloud:** Update from 31.0.6 to 31.0.7 including the latest app versions ([f848b9a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f848b9a0f4d6f65babb983b6527bfc63776b455a))
+* **open-xchange:** Add client onboarding for mail ([d8fc3e0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d8fc3e04f584da23bfd0590676f26cbac65bf4cf))
+* **open-xchange:** Set guest mode to inherit theming and set theme for notification mail button ([f2ce251](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f2ce25193a78eee3f103aabb368bf8457900fa1c))
+* **open-xchange:** Switch off Element integration when `apps.element.enabled: [secure]` ([7a2dbc5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7a2dbc5f8cca5981ffc171f2be1b72c40877ac2c))
+* **open-xchange:** Update Dovecot charts with improved auth cache defaults ([836d8a4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/836d8a494dcd2e8ab8ea95684742cd143cac6074))
+* **opendesk-certificates:** [bmi/opendesk/deployment/opendesk[#236](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/236)] Update Helm chart to add `commonName` to certificate ([2e708a7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2e708a75b6abdb987925333714c99d1e09bbc5a2))
+* **openproject:** [bmi/opendesk/deployment/opendesk[#228](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/228)] Turn off Gravatar option by default; check `migrations.md` in case the option should be enabled ([628e914](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/628e91435c37a615a421a48c2a9a0639840d9a78))
+* **ox-connector:** Update from v0.27.7 to v0.27.9 ([ba77f2b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ba77f2b11c0eb649891a5375258e6649686333fb))
+* **postfix:** Relax TLS settings to `TLSv1.2`/`medium` for broader SMTP relay compatibility ([31cbd9a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/31cbd9af1a9afb177b70bccd329829f75bceab03))
+* **xwiki:** Update image to set new default for user self-registration; review migrations.md for required actions on existing deployments ([c75abaf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c75abaf1e660fe8daeeb09ee3d41e14ea67e9a25))
+
+
+### Features
+
+* **collabora:** Support for macro execution controlled by `functional.weboffice.macros.enabled` (default: `[secure]`) ([38f2bdd](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/38f2bdd2b98e4248972363db73c03373db71f433))
+* **cryptpad:** Update from 2024.6.1 to 2025.6.0 ([23dfe0a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/23dfe0aaa6012f5695fc026d06920bd4b0a63f66))
+* **element:** Update Element-Web from 1.11.89 or 1.12.0 and Synapse from 1.129.0 to 1.137.0 ([f895bcc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f895bcc2b8a7d4010b19c7ffb6712c4813231f9d))
+* **element:** Update NeoBoard widget to v2.3.1, NeoChoice widget to v1.6.0, NeoDateFix widget to v1.7.2 and NeoDateFix bot to 2.8.5 ([b377a5e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b377a5e0e25e317c64c2d30b44370beb211e23fd))
+* **jitsi:** Upgrade from stable-9955 to stable-10431 ([e138610](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e138610d2941f6c3a93eef3764f252bd4eab9987))
+* **nextcloud:** Expose `forbiddenChars` in `functional.yaml.gotmpl`; review `migrations.md` for required upgrade steps ([5a2c1fc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5a2c1fcf98d3773deef8292773962d5f70832a0f))
+* **notes:** Update from 3.2.1 to 3.4.0 ([c636650](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c63665040cf3c985dc9878992785a893d261c420))
+* **nubus:** Update from 1.12.0 to 1.13.1 ([35424b8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/35424b88d652a1e8a4c37fee4355636badba22b6))
+* **nubus:** Update from v1.13.1 to v1.14.0 using OIDC instead of SAML for portal SSO; review `migrations.md` for required upgrade steps ([d3b1f57](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d3b1f575cc2deab70ca262ab301c6b67f9c1b393))
+* **open-xchange:** Add options to `functional.groupware`; review `migrations.md` for details on new defaults/required upgrade steps ([8a7cc3b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8a7cc3b8c7199f8c15f01e1b2d55d630431ddf9c))
+* **open-xchange:** Enable mail categories ([4da1c5d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4da1c5d9e3b1f66419a5e19ba683cff5681315bd))
+* **open-xchange:** Update from 8.39 to 8.40 ([c70a0bd](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c70a0bdc4c1564032982a2967788e0b78db74c00))
+* **open-xchange:** Update from 8.40 to 8.41 ([c50b817](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c50b81779539186f3885d6bdb64d348fbe7bda67))
+* **openproject:** Update OpenProject from 16.2.1 to 16.3.2 ([f77f329](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f77f3291caf778274c23f89bde3661e586447f5a))
+* **openproject:** Update OpenProject from 16.3.2 to 16.4.1 ([f5483d1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f5483d1a3b4cb8fddff38bb9fc29439cd6c4fc40))
+* **xwiki:** Update from 16.10.5 to 17.4.4 and configure openDesk's Collabora for `.odt`, `.rtf` and `.docx` export of wiki pages ([813e92c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/813e92c1b05f806bff8022d71d8cd25f475b0b8f))
+
 ## [1.7.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.7.0...v1.7.1) (2025-08-26)
 
 
