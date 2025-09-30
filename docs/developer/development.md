@@ -108,9 +108,9 @@ If you follow the "push early, push often" paradigm to save your work to the cen
 existing documentation, you can avoid the CI and its linting being executed, as it might not offer additional value.
 
 GitLab offers two options to skip the CI on a commit/push:
-- Add `[ci skip]` to your commit message ([details](https://docs.gitlab.com/ee/ci/pipelines/#skip-a-pipeline)).
+1. Add `[ci skip]` to your commit message ([details](https://docs.gitlab.com/ee/ci/pipelines/#skip-a-pipeline)).
 **Note:** The string has to be removed before merging your feature branch into `develop`.
-- Use the related git push option `git push -o ci.skip` ([details](https://docs.gitlab.com/ee/user/project/push_options.html#push-options-for-gitlab-cicd)).
+2. Use the related git push option `git push -o ci.skip` ([details](https://docs.gitlab.com/topics/git/commit/#push-options)).
 
 ## Renovate
 
