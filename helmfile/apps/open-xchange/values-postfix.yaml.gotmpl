@@ -63,10 +63,9 @@ postfix:
         value: {{ .Values.smtp.username }}
       password:
         value: {{ .Values.smtp.password }}
+  smtpSASLAuthEnable: "yes"
   {{- end }}
   allowRelayNets: false
-  smtpSASLAuthEnable: "yes"
-  smtpSASLPasswordMaps: "lmdb:/etc/postfix/sasl_passwd.map"
   smtpTLSSecurityLevel: "encrypt"
   smtpdSASLAuthEnable: "yes"
   smtpdSASLSecurityOptions: "noanonymous"

@@ -68,14 +68,13 @@ postfix:
         value: {{ .Values.smtp.username }}
       password:
         value: {{ .Values.smtp.password }}
+  smtpSASLAuthEnable: "yes"
   {{- end }}
   # Warning: This setting allows unauthenticated mail relay from relayNets!
   allowRelayNets: true
   relayNets: {{ join " " .Values.cluster.networking.cidr | quote }}
   minTLSVersion: "TLSv1.2"
   smtpdTLSMandatoryCiphers: "medium"
-  smtpSASLAuthEnable: "yes"
-  smtpSASLPasswordMaps: "lmdb:/etc/postfix/sasl_passwd.map"
   smtpTLSSecurityLevel: "encrypt"
   smtpdSASLAuthEnable: "yes"
   smtpdSASLSecurityOptions: "noanonymous"
