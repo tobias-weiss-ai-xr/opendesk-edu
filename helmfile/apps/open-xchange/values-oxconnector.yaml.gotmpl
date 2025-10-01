@@ -49,11 +49,11 @@ oxConnector:
   oxMasterAdmin: "admin"
   oxMasterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
   oxSmtpServer: "smtp://127.0.0.1:587"
-  oxSoapServer: "http://open-xchange-core-mw-admin"
+  oxSoapServer: {{ printf "http://%s.%s.svc.%s" "open-xchange-core-mw-admin" (.Values.apps.oxAppSuite.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
 
 provisioningApi:
   connection:
-    baseUrl: "http://ums-provisioning-api"
+    baseUrl: {{ printf "http://%s.%s.svc.%s" "ums-provisioning-api" (.Values.apps.nubus.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
   auth:
     username: "ox-connector"
     password: {{ .Values.secrets.oxConnector.provisioningApiPassword | quote }}
