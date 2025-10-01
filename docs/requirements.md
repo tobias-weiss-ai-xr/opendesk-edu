@@ -139,6 +139,6 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 
 [^1]: Due to a [Helm bug](https://github.com/helm/helm/issues/30890) Helm 3.18.0 is not supported.
 
-[^2]: Due to [restrictions on Kubernetes `emptyDir`](https://github.com/kubernetes/kubernetes/pull/130277) you need a volume provisioner that has sticky bit support, otherwise the OpenProject seeder job will fail.
+[^2]: Due to [restrictions on Kubernetes `emptyDir`](https://github.com/kubernetes/kubernetes/pull/130277) you need a volume provisioner that has sticky bit support, otherwise the OpenProject seeder job will fail. E.g. the `local-path-provisioner` does not have sticky bit support.
 
 [^3]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
