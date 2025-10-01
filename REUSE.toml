@@ -37,3 +37,8 @@ SPDX-License-Identifier = "CC-BY-SA-4.0"
 path = ".gitlab/merge_request_templates/*.md"
 SPDX-FileCopyrightText = "2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH"
 SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = ".gitlab/issue_templates/*.md"
+SPDX-FileCopyrightText = "2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH"
+SPDX-License-Identifier = "Apache-2.0"
