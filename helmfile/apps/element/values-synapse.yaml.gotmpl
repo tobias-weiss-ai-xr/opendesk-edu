@@ -25,6 +25,14 @@ configuration:
       address:
         per_second: 2
         burst_count: 12
+    # Set higher limits for messages and media due to non-chat Matrix apps and widgets (such as NeoBoard)
+    # https://github.com/nordeck/matrix-neoboard/blob/main/docs/configuration.md#rate-limiting-settings
+    rc_message:
+      per_second: 5
+      burst_count: 25
+    rc_media_create:
+      per_second: 20
+      burst_count: 100
 
   database:
     host: {{ .Values.databases.synapse.host | quote }}
