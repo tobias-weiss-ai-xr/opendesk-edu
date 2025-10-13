@@ -256,6 +256,10 @@ appsuite:
               open-xchange-authentication-masterpassword: "enabled"
           properties:
             com.openexchange.calendar.allowOrganizerPartStatChanges: "true"
+            # Mailfilter
+            com.openexchange.mail.filter.passwordSource: global
+            com.openexchange.mail.filter.masterPassword:  {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+            com.openexchange.mail.filter.preferredSaslMech: ""
           propertiesFiles:
             /opt/open-xchange/etc/masterpassword-authentication.properties:
               com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
