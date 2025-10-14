@@ -44,7 +44,10 @@ image:
   tag: {{ .Values.images.matrixUserVerificationService.tag | quote }}
 
 podAnnotations:
-  {{ .Values.annotations.elementMatrixUserVerificationService.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-matrix-user-verification-service"
+  {{- with .Values.annotations.elementMatrixUserVerificationService.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

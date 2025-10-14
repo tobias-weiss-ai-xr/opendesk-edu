@@ -74,7 +74,10 @@ job:
   enabled: true
 
 podAnnotations:
-  {{ .Values.annotations.openprojectBootstrap.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-openproject-bootstrap"
+  {{- with .Values.annotations.openprojectBootstrap.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

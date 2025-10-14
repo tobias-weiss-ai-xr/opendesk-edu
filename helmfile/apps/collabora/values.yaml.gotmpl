@@ -110,7 +110,10 @@ ingress:
         - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
 podAnnotations:
-  {{ .Values.annotations.collabora.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "collabora"
+  {{- with .Values.annotations.collabora.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   fsGroup: 1001

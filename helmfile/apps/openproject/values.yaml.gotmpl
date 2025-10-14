@@ -131,7 +131,10 @@ persistence:
   enabled: false
 
 podAnnotations:
-  {{ .Values.annotations.openproject.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "openproject"
+  {{- with .Values.annotations.openproject.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 postgresql:
   bundled: false

@@ -56,7 +56,12 @@ cron:
     repository: {{ .Values.images.elementSyncAdmins.repository | quote }}
     tag: {{ .Values.images.elementSyncAdmins.tag | quote }}
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  podAnnotations:
+    intents.otterize.com/service-name: "opendesk-synapse-admin-cron"
 #fullnameOverride: "opendesk-synapse-admin"
+
+podAnnotations:
+  intents.otterize.com/service-name: "opendesk-synapse-admin"
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDeEnterprise .Values.global.imageRegistry .Values.images.elementSynapseAdmin.registry | quote }}
   repository: {{ .Values.images.elementSynapseAdmin.repository | quote }}

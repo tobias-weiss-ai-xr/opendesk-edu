@@ -126,7 +126,10 @@ persistence:
     {{ .Values.annotations.openxchangeDovecot.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.openxchangeDovecot.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "open-xchange-dovecot"
+  {{- with .Values.annotations.openxchangeDovecot.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}

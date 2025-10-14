@@ -90,7 +90,10 @@ persistence:
     {{ .Values.annotations.elementMatrixNeodatefixBot.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.elementMatrixNeodatefixBot.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "matrix-neodatefix-bot"
+  {{- with .Values.annotations.elementMatrixNeodatefixBot.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

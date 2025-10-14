@@ -51,4 +51,6 @@ image:
   url: {{ .Values.images.elementGroupsync.repository | quote }}
   tag: {{ .Values.images.elementGroupsync.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+podAnnotations:
+  intents.otterize.com/service-name: "opendesk-synapse-groupsync"
 ...

@@ -10,7 +10,6 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 additionalAnnotations:
-  intents.otterize.com/service-name: "opendesk-nextcloud-notifypush"
   {{- with .Values.annotations.nextcloudNotifyPush.additional }}
   {{ . | toYaml | nindent 4 }}
   {{- end }}
@@ -114,7 +113,10 @@ metrics:
       {{ .Values.annotations.nextcloudNotifyPush.serviceMetrics | toYaml | nindent 6 }}
 
 podAnnotations:
-  {{ .Values.annotations.nextcloudNotifyPush.pod | toYaml | nindent 4 }}
+  intents.otterize.com/service-name: "opendesk-nextcloud-notifypush"
+  {{- with .Values.annotations.nextcloudNotifyPush.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 podSecurityContext:
   fsGroup: 101
 # prometheus:

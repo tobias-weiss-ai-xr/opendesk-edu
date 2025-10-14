@@ -109,7 +109,10 @@ ingress:
     {{ .Values.annotations.nubusIntercomService.ingress | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.nubusIntercomService.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "intercom-service"
+  {{- with .Values.annotations.nubusIntercomService.pod }}
+  {{ . | toYaml | nindent 2}}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

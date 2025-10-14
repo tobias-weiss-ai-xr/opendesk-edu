@@ -47,7 +47,10 @@ ingress:
         - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
 
 podAnnotations:
-  {{ .Values.annotations.coco.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "collabora-controller"
+  {{- with .Values.annotations.coco.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 securityContext:
   allowPrivilegeEscalation: false

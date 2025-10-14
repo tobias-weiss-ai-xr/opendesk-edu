@@ -44,7 +44,10 @@ ingress:
     {{ .Values.annotations.elementMatrixNeoboardWidget.ingress | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.elementMatrixNeoboardWidget.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "matrix-neoboard-widget"
+  {{- with .Values.annotations.elementMatrixNeoboardWidget.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

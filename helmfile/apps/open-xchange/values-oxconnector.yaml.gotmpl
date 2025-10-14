@@ -68,7 +68,10 @@ persistence:
   #storageClass: {{ coalesce .Values.persistence.storages.oxConnector.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
 
 podAnnotations:
-  {{ .Values.annotations.nubusOxConnector.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "open-xchange-connector"
+  {{- with .Values.annotations.nubusOxConnector.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 replicaCount: {{ .Values.replicas.oxConnector }}
 

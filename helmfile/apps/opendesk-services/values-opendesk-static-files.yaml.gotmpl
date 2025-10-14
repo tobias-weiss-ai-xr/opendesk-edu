@@ -116,7 +116,10 @@ image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 podAnnotations:
-  {{ .Values.annotations.opendeskServicesStaticFiles.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-static-files"
+  {{- with .Values.annotations.opendeskServicesStaticFiles.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

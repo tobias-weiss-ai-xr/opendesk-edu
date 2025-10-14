@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 additionalAnnotations:
+  intents.otterize.com/service-name: "open-xchange-bootstrap"
   argocd.argoproj.io/hook: "Sync"
   argocd.argoproj.io/hook-delete-policy: "HookSucceeded"
   {{- with .Values.annotations.openxchangeBootstrap.additional }}

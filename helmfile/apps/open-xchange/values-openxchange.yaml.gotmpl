@@ -31,7 +31,10 @@ nextcloud-integration-ui:
     - name: {{ . | quote }}
   {{- end }}
   podAnnotations:
-    {{ .Values.annotations.openxchangeNextcloudIntegrationUi.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "open-xchange-nextcloud-integration-ui"
+    {{- with .Values.annotations.openxchangeNextcloudIntegrationUi.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   replicaCount: {{ .Values.replicas.openxchangeNextcloudIntegrationUI }}
   resources:
     {{ .Values.resources.openxchangeNextcloudIntegrationUI | toYaml | nindent 4 }}
@@ -66,7 +69,10 @@ public-sector-ui:
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   replicaCount: {{ .Values.replicas.openxchangePublicSectorUI }}
   podAnnotations:
-    {{ .Values.annotations.openxchangePublicSectorUi.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "open-xchange-public-sector-ui"
+    {{- with .Values.annotations.openxchangePublicSectorUi.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   resources:
     {{ .Values.resources.openxchangePublicSectorUI | toYaml | nindent 4 }}
   securityContext:
@@ -311,7 +317,10 @@ appsuite:
     jolokiaPassword: {{ .Values.secrets.oxAppSuite.jolokiaPassword | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     podAnnotations:
-      {{ .Values.annotations.openxchangeAppsuiteCoreMw.pod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "open-xchange-core-mw"
+      {{- with .Values.annotations.openxchangeAppsuiteCoreMw.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     serviceAccount:
       annotations:
         {{ .Values.annotations.openxchangeAppsuiteCoreMw.serviceAccount | toYaml | nindent 8 }}
@@ -338,7 +347,10 @@ appsuite:
         pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
       replicaCount: {{ .Values.replicas.openxchangeGotenberg }}
       podAnnotations:
-        {{ .Values.annotations.openxchangeAppsuiteCoreMw.gotenbergPod | toYaml | nindent 8 }}
+        intents.otterize.com/service-name: "open-xchange-gotenberg"
+        {{- with .Values.annotations.openxchangeAppsuiteCoreMw.gotenbergPod }}
+        {{ . | toYaml | nindent 8 }}
+        {{- end }}
       resources:
         {{ .Values.resources.openxchangeGotenberg | toYaml | nindent 8 }}
       securityContext:
@@ -351,7 +363,6 @@ appsuite:
         runAsNonRoot: true
         runAsUser: 1001
         runAsGroup: 1001
-        privileged: false
         seccompProfile:
           type: "RuntimeDefault"
         seLinuxOptions:
@@ -769,7 +780,10 @@ appsuite:
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     replicaCount: {{ .Values.replicas.openxchangeCoreUI }}
     podAnnotations:
-      {{ .Values.annotations.openxchangeAppsuiteCoreUi.pod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "open-xchange-core-ui"
+      {{- with .Values.annotations.openxchangeAppsuiteCoreUi.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     resources:
       {{ .Values.resources.openxchangeCoreUI | toYaml | nindent 6 }}
     securityContext:
@@ -806,7 +820,10 @@ appsuite:
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     overrides: {}
     podAnnotations:
-      {{ .Values.annotations.openxchangeAppsuiteCoreUiMiddleware.pod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "open-xchange-core-ui-middleware"
+      {{- with .Values.annotations.openxchangeAppsuiteCoreUiMiddleware.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreUIMiddleware }}
     resources:
@@ -855,7 +872,10 @@ appsuite:
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     {{- if .Values.annotations.openxchangeAppsuiteCoreDocumentconverter.pod }}
     podAnnotations:
-      {{ .Values.annotations.openxchangeAppsuiteCoreDocumentconverter.pod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "open-xchange-core-documentconverter"
+      {{- with .Values.annotations.openxchangeAppsuiteCoreDocumentconverter.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     {{- end }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreDocumentConverter }}
@@ -907,7 +927,10 @@ appsuite:
       tag: {{ .Values.images.openxchangeCoreGuidedtours.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     podAnnotations:
-      {{ .Values.annotations.openxchangeAppsuiteCoreGuidedtours.pod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "open-xchange-guidedtours"
+      {{- with .Values.annotations.openxchangeAppsuiteCoreGuidedtours.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     replicaCount: {{ .Values.replicas.openxchangeCoreGuidedtours }}
     resources:
       {{- .Values.resources.openxchangeCoreGuidedtours | toYaml | nindent 6 }}
@@ -951,7 +974,10 @@ appsuite:
           secretKey: "."
     {{- if .Values.annotations.openxchangeAppsuiteCoreImageconverter.pod }}
     podAnnotations:
-      {{ .Values.annotations.openxchangeAppsuiteCoreImageconverter.pod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "open-xchange-core-imageconverter"
+      {{- with .Values.annotations.openxchangeAppsuiteCoreImageconverter.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     {{- end }}
     redis: *redisConfiguration
     replicaCount: {{ .Values.replicas.openxchangeCoreImageConverter }}
@@ -987,7 +1013,8 @@ appsuite:
       repository: {{ .Values.images.openxchangeGuardUI.repository | quote }}
       tag: {{ .Values.images.openxchangeGuardUI.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-    podAnnotations: {}
+    podAnnotations:
+      intents.otterize.com/service-name: "open-xchange-guard-ui"
     replicaCount: {{ .Values.replicas.openxchangeGuardUI }}
     resources:
       {{- .Values.resources.openxchangeGuardUI | toYaml | nindent 6 }}
@@ -1023,7 +1050,10 @@ appsuite:
       - name: {{ . | quote }}
     {{- end }}
     podAnnotations:
-      {{ .Values.annotations.openxchangeAppsuiteCoreUserGuide.pod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "open-xchange-core-user-guide"
+      {{- with .Values.annotations.openxchangeAppsuiteCoreUserGuide.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     replicaCount: {{ .Values.replicas.openxchangeCoreUserGuide }}
     resources:
       {{- .Values.resources.openxchangeCoreUserGuide | toYaml | nindent 6 }}

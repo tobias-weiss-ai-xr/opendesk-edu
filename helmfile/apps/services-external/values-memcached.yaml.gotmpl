@@ -34,8 +34,10 @@ image:
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 podAnnotations:
-  {{ .Values.annotations.servicesExternalMemcached.pod | toYaml | nindent 2 }}
-
+  intents.otterize.com/service-name: "memcached"
+  {{- with .Values.annotations.servicesExternalMemcached.pod }}
+  {{ .  | toYaml | nindent 2 }}
+  {{- end}}
 replicaCount: {{ .Values.replicas.memcached }}
 
 resources:

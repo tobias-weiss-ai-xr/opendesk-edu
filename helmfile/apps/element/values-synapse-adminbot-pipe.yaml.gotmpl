@@ -16,4 +16,6 @@ image:
   tag: {{ .Values.images.elementPipe.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 fullnameOverride: "opendesk-synapse-adminbot-pipe"
+podAnnotations:
+  intents.otterize.com/service-name: "opendesk-synapse-adminbot-pipe"
 ...

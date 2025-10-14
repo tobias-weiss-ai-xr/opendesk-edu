@@ -30,7 +30,10 @@ image:
   imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
 
 podAnnotations:
-  {{ .Values.annotations.servicesExternalDkimpy.service | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "dkimpy-milter"
+  {{- with .Values.annotations.servicesExternalDkimpy.service }}
+  {{ .  | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true
