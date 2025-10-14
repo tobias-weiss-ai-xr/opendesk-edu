@@ -20,4 +20,6 @@ ingress:
   enabled: {{ .Values.ingress.enabled }}
   tls:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
+podAnnotations:
+  intents.otterize.com/service-name: "opendesk-synapse-adminbot-web"
 ...

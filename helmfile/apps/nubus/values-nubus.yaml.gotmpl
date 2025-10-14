@@ -274,7 +274,6 @@ nubusTwofaHelpdesk:
 nubusNotificationsApi:
   enabled: false
   additionalAnnotations:
-    intents.otterize.com/service-name: "ums-notifications-api"
     {{- with .Values.annotations.nubusNotificationsApi.additional }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -312,7 +311,10 @@ nubusNotificationsApi:
     annotations:
       {{ .Values.annotations.nubusNotificationsApi.persistence | toYaml | nindent 6 }}
   podAnnotations:
-    {{ .Values.annotations.nubusNotificationsApi.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-notifications-api"
+    {{- with .Values.annotations.nubusNotificationsApi.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   postgresql:
     connection:
       host: {{ .Values.databases.umsNotificationsApi.host | quote }}
@@ -339,7 +341,6 @@ nubusNotificationsApi:
 
 nubusPortalFrontend:
   additionalAnnotations:
-    intents.otterize.com/service-name: "ums-portal-frontend"
     {{- with .Values.annotations.nubusPortalFrontend.additional }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -415,7 +416,10 @@ nubusPortalFrontend:
     annotations:
       {{ .Values.annotations.nubusPortalFrontend.persistence | toYaml | nindent 6 }}
   podAnnotations:
-    {{ .Values.annotations.nubusPortalFrontend.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-portal-frontend"
+    {{- with .Values.annotations.nubusPortalFrontend.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   portalFrontend:
     branding:
       css: {{ .Values.theme.styles.portal.main | toJson }}
@@ -666,7 +670,6 @@ nubusPortalConsumer:
 
 nubusPortalServer:
   additionalAnnotations:
-    intents.otterize.com/service-name: "ums-portal-server"
     {{- with .Values.annotations.nubusPortalServer.additional }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -711,7 +714,10 @@ nubusPortalServer:
     annotations:
       {{ .Values.annotations.nubusPortalServer.persistence | toYaml | nindent 6 }}
   podAnnotations:
-    {{ .Values.annotations.nubusPortalServer.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-portal-server"
+    {{- with .Values.annotations.nubusPortalServer.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   portalServer:
     centralNavigation:
       enabled: true
@@ -839,7 +845,10 @@ nubusUdmRestApi:
     annotations:
       {{ .Values.annotations.nubusUdmRestApi.persistence | toYaml | nindent 6 }}
   podAnnotations:
-    {{ .Values.annotations.nubusUdmRestApi.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-udm-rest-api"
+    {{- with .Values.annotations.nubusUdmRestApi.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end}}
   replicaCount: {{ .Values.replicas.umsUdmRestApi }}
   resources:
     {{ .Values.resources.umsUdmRestApi | toYaml | nindent 4 }}
@@ -898,7 +907,7 @@ nubusLdapServer:
   additionalAnnotations:
     {{ .Values.annotations.nubusLdapServer.additional | toYaml | nindent 4 }}
   additionalAnnotations:
-    intents.otterize.com/service-name: "ums-ldap-server"
+    {{ .Values.annotations.nubusLdapServer.additional | toYaml | nindent 4 }}
   dhInitcontainer:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerDhInitContainer.registry | quote }}
@@ -921,7 +930,10 @@ nubusLdapServer:
     size: {{ .Values.persistence.storages.nubusLdapServerData.size | quote }}
     storageClass: {{ coalesce .Values.persistence.storages.nubusLdapServerData.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   podAnnotations:
-    {{ .Values.annotations.nubusLdapServer.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-ldap-server"
+    {{- with .Values.annotations.nubusLdapServer.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   replicaCountPrimary: {{ .Values.replicas.umsLdapServerPrimary }}
   replicaCountSecondary: {{ .Values.replicas.umsLdapServerSecondary }}
   replicaCountProxy: {{ .Values.replicas.umsLdapServerProxy }}
@@ -947,7 +959,6 @@ nubusProvisioning:
     {{ .Values.annotations.nubusProvisioning.additional | toYaml | nindent 4 }}
   api:
     additionalAnnotations:
-      intents.otterize.com/service-name: "ums-provisioning-api"
       {{- with .Values.annotations.nubusProvisioning.apiAdditional }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
@@ -966,7 +977,10 @@ nubusProvisioning:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.api.natsPassword | quote}}
     podAnnotations:
-      {{ .Values.annotations.nubusProvisioning.apiPod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "ums-provisioning-api"
+      {{- with .Values.annotations.nubusProvisioning.apiPod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     resources:
       {{ .Values.resources.umsProvisioningApi | toYaml | nindent 6 }}
   containerSecurityContext:
@@ -985,7 +999,6 @@ nubusProvisioning:
       {{ .Values.seLinuxOptions.umsProvisioning | toYaml | nindent 6 }}
   dispatcher:
     additionalAnnotations:
-      intents.otterize.com/service-name: "ums-provisioning-dispatcher"
       {{- with .Values.annotations.nubusProvisioning.dispatcherAdditional }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
@@ -997,12 +1010,14 @@ nubusProvisioning:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.dispatcherNatsPassword | quote}}
     podAnnotations:
-      {{ .Values.annotations.nubusProvisioning.dispatcherPod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "ums-provisioning-dispatcher"
+      {{- with .Values.annotations.nubusProvisioning.dispatcherPod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     resources:
       {{ .Values.resources.umsProvisioningDispatcher | toYaml | nindent 6 }}
   nats:
     additionalAnnotations:
-      intents.otterize.com/service-name: "ums-provisioning-nats"
       {{- with .Values.annotations.nubusProvisioning.natsAdditional }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
@@ -1060,10 +1075,12 @@ nubusProvisioning:
     serviceAccount:
       create: true
   podAnnotations:
-    {{ .Values.annotations.nubusProvisioning.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-provisioning-nats"
+    {{- with .Values.annotations.nubusProvisioning.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   prefill:
     additionalAnnotations:
-      intents.otterize.com/service-name: "ums-provisioning-prefill"
       {{- with .Values.annotations.nubusProvisioning.prefillAdditional }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
@@ -1075,12 +1092,14 @@ nubusProvisioning:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.prefillNatsPassword | quote}}
     podAnnotations:
-      {{ .Values.annotations.nubusProvisioning.prefillPod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "ums-provisioning-prefill"
+      {{- with .Values.annotations.nubusProvisioning.prefillPod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     resources:
       {{ .Values.resources.umsProvisioningPrefill | toYaml | nindent 6 }}
   udmTransformer:
     additionalAnnotations:
-      intents.otterize.com/service-name: "ums-provisioning-udm-transformer"
       {{- with .Values.annotations.nubusProvisioning.udmTransformerAdditional }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
@@ -1092,7 +1111,10 @@ nubusProvisioning:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.udmTransformerNatsPassword | quote}}
     podAnnotations:
-      {{ .Values.annotations.nubusProvisioning.udmTransformerPod | toYaml | nindent 6 }}
+      intents.otterize.com/service-name: "ums-provisioning-udm-transformer"
+      {{- with .Values.annotations.nubusProvisioning.udmTransformerPod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     resources:
       {{ .Values.resources.umsProvisioningUdmTransformer | toYaml | nindent 6 }}
   replicaCount:
@@ -1163,7 +1185,10 @@ nubusUdmListener:
     size: {{ .Values.persistence.storages.nubusUdmListener.size | quote }}
 #    storageClass: -- coalesce .Values.persistence.storages.nubusUdmListener.storageClassName .Values.persistence.storageClassNames.RWO | quote --
   podAnnotations:
-    {{ .Values.annotations.nubusUdmListener.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-provisioning-udm-listener"
+    {{- with .Values.annotations.nubusUdmListener.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   replicaCount: {{ .Values.replicas.umsUdmListener }}
   resources:
     {{ .Values.resources.umsUdmListener | toYaml | nindent 4 }}
@@ -1219,9 +1244,9 @@ nubusSelfServiceConsumer:
 # Nubus services
 nubusStackDataUms:
   additionalAnnotations:
+    intents.otterize.com/service-name: "ums-stack-data-ums"
     argocd.argoproj.io/hook: "Sync"
     argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
-    intents.otterize.com/service-name: "ums-stack-data-ums"
     {{- with .Values.annotations.nubusStackDataUms.additional }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -1270,7 +1295,10 @@ nubusStackDataUms:
       connection:
         host: {{ .Values.databases.umsSelfservice.host | quote }}
   podAnnotations:
-    {{ .Values.annotations.nubusStackDataUms.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-stack-data-ums"
+    {{- with .Values.annotations.nubusStackDataUms.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   resources:
     {{ .Values.resources.umsStackDataUms | toYaml | nindent 4 }}
   stackDataContext:
@@ -1459,7 +1487,10 @@ nubusUmcServer:
     auth:
       password: ""
   podAnnotations:
-    {{ .Values.annotations.nubusUmcServer.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-umc-server"
+    {{- with .Values.annotations.nubusUmcServer.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   # Ref.: https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/reference.html#envvar-nubusUmcServer.podManagementPolicy
   podManagementPolicy: "{{ if gt .Values.replicas.umsUmcServer 4 }}Parallel{{ else }}OrderedReady{{ end }}"
   postgresql:
@@ -1555,7 +1586,10 @@ nubusUmcGateway:
   initResources:
     {{ .Values.resources.umsUmcGateway | toYaml | nindent 4 }}
   podAnnotations:
-    {{ .Values.annotations.nubusUmcGateway.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "ums-umc-gateway"
+    {{- with .Values.annotations.nubusUmcGateway.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   replicaCount: {{ .Values.replicas.umsUmcGateway }}
   serviceAccount:
     annotations:

@@ -10,12 +10,18 @@ additionalAnnotations:
   {{ .Values.annotations.opendeskServicesOtterize.additional | toYaml | nindent 2 }}
 
 apps:
+  cassandra:
+    enabled: {{ .Values.apps.cassandra.enabled }}
+  certificates:
+    enabled: {{ .Values.apps.certificates.enabled }}
   clamavDistributed:
     enabled: {{ .Values.apps.clamavDistributed.enabled }}
   clamavSimple:
     enabled: {{ .Values.apps.clamavSimple.enabled }}
   collabora:
     enabled: {{ .Values.apps.collabora.enabled }}
+  collaboraController:
+    enabled: {{ .Values.apps.collaboraController.enabled }}
   cryptpad:
     enabled: {{ .Values.apps.cryptpad.enabled }}
   dkimpy:
@@ -24,6 +30,12 @@ apps:
     enabled: {{ .Values.apps.dovecot.enabled }}
   element:
     enabled: {{ .Values.apps.element.enabled }}
+  elementAdmin:
+    enabled: {{ .Values.apps.elementAdmin.enabled }}
+  elementGroupsync:
+    enabled: {{ .Values.apps.elementGroupsync.enabled }}
+  home:
+    enabled: {{ .Values.apps.home.enabled }}
   jitsi:
     enabled: {{ .Values.apps.jitsi.enabled }}
   mariadb:
@@ -42,7 +54,7 @@ apps:
     enabled: {{ .Values.apps.nubus.enabled }}
   openproject:
     enabled: {{ .Values.apps.openproject.enabled }}
-  oxAppsuite:
+  oxAppSuite:
     enabled: {{ .Values.apps.oxAppSuite.enabled }}
   postfix:
     enabled: {{ .Values.apps.postfix.enabled }}
@@ -50,6 +62,8 @@ apps:
     enabled: {{ .Values.apps.postgresql.enabled }}
   redis:
     enabled: {{ .Values.apps.redis.enabled }}
+  staticFiles:
+    enabled: {{ .Values.apps.staticFiles.enabled }}
   xwiki:
     enabled: {{ .Values.apps.xwiki.enabled }}
 

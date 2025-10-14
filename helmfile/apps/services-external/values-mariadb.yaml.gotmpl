@@ -78,6 +78,7 @@ persistence:
     {{ .Values.annotations.servicesExternalMariadb.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
+  intents.otterize.com/service-name: "mariadb"
   argocd.argoproj.io/hook: "PostSync"
   argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
   {{- with .Values.annotations.servicesExternalMariadb.pod }}

@@ -25,7 +25,10 @@ image:
 fullnameOverride: "matrix-neodatefix-bot-bootstrap"
 
 podAnnotations:
-  {{ .Values.annotations.elementMatrixNeodatefixBotBootstrap.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "values-matrix-neodatefix-bot-bootstrap"
+  {{- with .Values.annotations.elementMatrixNeodatefixBotBootstrap.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -42,7 +45,7 @@ securityContext:
   seLinuxOptions:
     {{ .Values.seLinuxOptions.synapseCreateUser | toYaml | nindent 4 }}
 
-podAnnotations:
-  {{ .Values.annotations.elementMatrixNeodatefixBotBootstrap.serviceAccount | toYaml | nindent 2 }}
-
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.elementMatrixNeodatefixBotBootstrap.serviceAccount | toYaml | nindent 4 }}
 ...

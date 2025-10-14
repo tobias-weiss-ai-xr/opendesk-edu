@@ -55,7 +55,10 @@ persistence:
   enabled: false
 
 podAnnotations:
-  {{ .Values.annotations.cryptpad.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "cryptpad"
+  {{- with .Values.annotations.cryptpad.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   fsGroup: 4001

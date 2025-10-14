@@ -134,7 +134,10 @@ provisioning:
       withLock: false
     {{- end }}
   podAnnotations:
-    {{ .Values.annotations.servicesExternalMinio.provisioningPod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "minio-provisioning"
+    {{- with .Values.annotations.servicesExternalMinio.provisioningPod }}
+    {{ .  | toYaml | nindent 4}}
+    {{- end }}
   policies:
     - name: "migrations-bucket-policy"
       statements:
@@ -271,7 +274,10 @@ provisioning:
     {{ .Values.resources.minio | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.servicesExternalMinio.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "minio"
+  {{- with .Values.annotations.servicesExternalMinio.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 readinessProbe:
   enabled: true

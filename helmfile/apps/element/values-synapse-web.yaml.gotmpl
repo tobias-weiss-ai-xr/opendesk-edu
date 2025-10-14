@@ -56,7 +56,10 @@ ingress:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
 
 podAnnotations:
-  {{ .Values.annotations.elementSynapseWeb.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-synapse-web"
+  {{- with .Values.annotations.elementSynapseWeb.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

@@ -42,7 +42,10 @@ configuration:
       value: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
 
 podAnnotations:
-  {{ .Values.annotations.nubusNginxS3Gateway.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "nubus-nginx-s3-gateway"
+  {{- with .Values.annotations.nubusNginxS3Gateway.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 resources:
   {{ .Values.resources.nginxS3Gateway | toYaml | nindent 2 }}

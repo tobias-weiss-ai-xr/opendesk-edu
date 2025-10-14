@@ -117,11 +117,20 @@ backend:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.notesBackend | toYaml | nindent 6 }}
   podAnnotations:
-    {{ .Values.annotations.notesBackend.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "impress-backend"
+    {{- with .Values.annotations.notesBackend.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   podAnnotationsCreateUser:
-    {{ .Values.annotations.notesBackend.createUserJob | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "impress-create-user"
+    {{- with .Values.annotations.notesBackend.createUserJob }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   podAnnotationsMigrate:
-    {{ .Values.annotations.notesBackend.migrateJob | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "impress-migrate"
+    {{- with .Values.annotations.notesBackend.migrateJob }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   podSecurityContext:
     enabled: true
     fsGroup: 1000
@@ -189,7 +198,10 @@ frontend:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.notesFrontend | toYaml | nindent 6 }}
   podAnnotations:
-    {{ .Values.annotations.notesFrontend.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "impress-frontend"
+    {{- with .Values.annotations.notesFrontend.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   podSecurityContext:
     enabled: true
     fsGroup: 1000
@@ -257,7 +269,10 @@ y-provider:
       {{ .Values.annotations.notesYProvider.ingressCollaborationWS | toYaml | nindent 6 }}
     ingressClassName: {{ .Values.ingress.ingressClassName }}
   podAnnotations:
-    {{ .Values.annotations.notesYProvider.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "impress-y-provider"
+    {{- with .Values.annotations.notesYProvider.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   podSecurityContext:
     enabled: true
     fsGroup: 1001

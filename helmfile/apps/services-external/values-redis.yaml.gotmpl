@@ -44,7 +44,10 @@ master:
     annotations:
       {{ .Values.annotations.servicesExternalRedis.masterPersistence | toYaml | nindent 6 }}
   podAnnotations:
-    {{ .Values.annotations.servicesExternalRedis.masterPod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "redis"
+    {{- with .Values.annotations.servicesExternalRedis.masterPod }}
+    {{ . | toYaml | nindent 4  }}
+    {{- end }}
   resources:
     {{ .Values.resources.redis | toYaml | nindent 4 }}
   service:

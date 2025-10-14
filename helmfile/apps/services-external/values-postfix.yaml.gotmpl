@@ -41,7 +41,10 @@ persistence:
     {{ .Values.annotations.servicesExternalPostfix.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.servicesExternalPostfix.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "postfix"
+  {{- with .Values.annotations.servicesExternalPostfix.pod }}
+  {{ . | toYaml | nindent 2}}
+  {{- end}}
 
 podSecurityContext:
   enabled: true
@@ -105,8 +108,6 @@ postfix:
   virtualMailboxDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
   virtualTransport: "lmtps:dovecot:24"
   {{- end }}
-
-podAnnotations: {}
 
 replicaCount: {{ .Values.replicas.postfix }}
 

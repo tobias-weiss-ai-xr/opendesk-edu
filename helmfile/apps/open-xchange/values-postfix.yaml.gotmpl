@@ -91,7 +91,10 @@ postfix:
   virtualTransport: "lmtps:dovecot:24"
 
 podAnnotations:
-  {{ .Values.annotations.openxchangePostfix.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "open-xchange-postfix"
+  {{- with .Values.annotations.openxchangePostfix.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 replicaCount: {{ .Values.replicas.postfix }}
 

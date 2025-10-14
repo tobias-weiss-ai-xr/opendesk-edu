@@ -39,7 +39,10 @@ exporter:
     imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.nextcloudExporter.tag | quote }}
   podAnnotations:
-    {{ .Values.annotations.nextcloudExporter.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "opendesk-nextcloud-exporter"
+    {{- with .Values.annotations.nextcloudExporter.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   prometheus:
     serviceMonitor:
       enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
@@ -76,7 +79,7 @@ aio:
             topologyKey: "kubernetes.io/hostname"
 
   additionalAnnotations:
-    intents.otterize.com/service-name: "opendesk-nextcloud-aio"
+    intents.otterize.com/service-name: "opendesk-nextcloud-aio-cron"
     {{- with .Values.annotations.nextcloudAio.additional }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -177,7 +180,10 @@ aio:
     tls:
       secretName: {{ .Values.ingress.tls.secretName | quote }}
   podAnnotations:
-    {{ .Values.annotations.nextcloudAio.pod | toYaml | nindent 4 }}
+    intents.otterize.com/service-name: "opendesk-nextcloud-aio"
+    {{- with .Values.annotations.nextcloudAio.pod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
   podSecurityContext:
     fsGroup: 101
   prometheus:

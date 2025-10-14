@@ -250,7 +250,10 @@ persistence:
     {{ .Values.annotations.elementSynapse.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.elementSynapse.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-synapse"
+  {{- with .Values.annotations.elementSynapse.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

@@ -143,7 +143,10 @@ ingress:
     {{ .Values.annotations.element.ingress | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.element.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-element"
+  {{- with .Values.annotations.element.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

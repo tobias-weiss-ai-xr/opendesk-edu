@@ -49,7 +49,10 @@ ingress:
     {{ .Values.annotations.elementMatrixNeodatefixWidget.ingress | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.elementMatrixNeodatefixWidget.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "matrix-neodatefix-widget"
+  {{- with .Values.annotations.elementMatrixNeodatefixWidget.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

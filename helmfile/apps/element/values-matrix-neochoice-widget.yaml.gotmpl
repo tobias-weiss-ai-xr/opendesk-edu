@@ -44,7 +44,10 @@ ingress:
     {{ .Values.annotations.elementMatrixNeochoiceWidget.ingress | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.elementMatrixNeochoiceWidget.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "matrix-neochoice-widget"
+  {{- with .Values.annotations.elementMatrixNeochoiceWidget.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

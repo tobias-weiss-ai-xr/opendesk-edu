@@ -5,6 +5,7 @@
 appsuite:
   core-mw:
     podAnnotations:
+      intents.otterize.com/service-name: "open-xchange-core-mw"
       logging.open-xchange.com/format: "appsuite-json"
       {{- with .Values.annotations.openxchangeEnterpriseContactPicker.appsuiteCoreMwPod }}
       {{ . | toYaml | nindent 6 }}

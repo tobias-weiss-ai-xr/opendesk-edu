@@ -49,7 +49,10 @@ ingress:
     {{ .Values.annotations.elementWellKnown.ingress | toYaml | nindent 4 }}
 
 podAnnotations:
-  {{ .Values.annotations.elementWellKnown.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-well-known"
+  {{- with .Values.annotations.elementWellKnown.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 podSecurityContext:
   enabled: true

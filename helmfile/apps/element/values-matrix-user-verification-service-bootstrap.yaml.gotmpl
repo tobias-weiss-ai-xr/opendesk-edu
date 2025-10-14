@@ -25,7 +25,10 @@ image:
 fullnameOverride: "opendesk-matrix-user-verification-service-bootstrap"
 
 podAnnotations:
-  {{ .Values.annotations.elementMatrixUserVerificationServiceBootstrap.pod | toYaml | nindent 2 }}
+  intents.otterize.com/service-name: "opendesk-matrix-user-verification-service-bootstrap"
+  {{- with .Values.annotations.elementMatrixUserVerificationServiceBootstrap.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
 
 securityContext:
   allowPrivilegeEscalation: false

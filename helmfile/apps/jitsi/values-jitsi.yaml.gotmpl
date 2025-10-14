@@ -111,10 +111,11 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jitsi | toYaml | nindent 8 }}
-    {{- if .Values.annotations.jitsiWeb.pod }}
     podAnnotations:
-      {{ .Values.annotations.jitsiWeb.pod | toYaml | nindent 6 }}
-    {{- end }}
+      intents.otterize.com/service-name: "jitsi-web"
+      {{- with .Values.annotations.jitsiWeb.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
   prosody:
     image:
       repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.prosody.registry }}/{{ .Values.images.prosody.repository }}"
@@ -164,10 +165,11 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.prosody | toYaml | nindent 8 }}
-    {{- if .Values.annotations.jitsiProsody.pod }}
     podAnnotations:
-      {{ .Values.annotations.jitsiProsody.pod | toYaml | nindent 6 }}
-    {{- end }}
+      intents.otterize.com/service-name: "jitsi-prosody"
+      {{- with .Values.annotations.jitsiProsody.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
   jicofo:
     replicaCount: {{ .Values.replicas.jicofo }}
     image:
@@ -191,10 +193,11 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jicofo | toYaml | nindent 8 }}
-    {{- if .Values.annotations.jitsiJicofo.pod }}
     podAnnotations:
-      {{ .Values.annotations.jitsiJicofo.pod | toYaml | nindent 6 }}
-    {{- end }}
+      intents.otterize.com/service-name: "jitsi-jicofo"
+      {{- with .Values.annotations.jitsiJicofo.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
   jigasi:
     replicaCount: {{ .Values.replicas.jigasi }}
     enabled: {{ .Values.sip.jigasi.enabled }}
@@ -224,10 +227,11 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jigasi | toYaml | nindent 8 }}
-    {{- if .Values.annotations.jitsiJigasi.pod }}
     podAnnotations:
-      {{ .Values.annotations.jitsiJigasi.pod | toYaml | nindent 6 }}
-    {{- end }}
+      intents.otterize.com/service-name: "jitsi-jigasi"
+      {{- with .Values.annotations.jitsiJigasi.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
   jvb:
     replicaCount: {{ .Values.replicas.jvb }}
     # The `useNodeIP` option provided by the upstream charts does not support all relevant scenarios, but since
@@ -260,10 +264,11 @@ jitsi:
         type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.jvb | toYaml | nindent 8 }}
-    {{- if .Values.annotations.jitsiJvb.pod }}
     podAnnotations:
-      {{ .Values.annotations.jitsiJvb.pod | toYaml | nindent 6 }}
-    {{- end }}
+      intents.otterize.com/service-name: "jitsi-jvb"
+      {{- with .Values.annotations.jitsiJvb.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     metrics:
       prometheusAnnotations:
         {{ .Values.annotations.jitsiJvb.metricsPrometheus | toYaml | nindent 8 }}
@@ -288,10 +293,11 @@ jitsi:
       # Chart does not allow to template more
       capabilities:
         add: ["SYS_ADMIN"]
-    {{- if .Values.annotations.jitsiJibri.pod }}
     podAnnotations:
-      {{ .Values.annotations.jitsiJibri.pod | toYaml | nindent 6 }}
-    {{- end }}
+      intents.otterize.com/service-name: "jitsi-jibri"
+      {{- with .Values.annotations.jitsiJibri.pod }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
   imagePullSecrets:
   {{- range .Values.global.imagePullSecrets }}
     - name: {{ . | quote }}
