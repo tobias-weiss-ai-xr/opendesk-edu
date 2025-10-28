@@ -45,7 +45,7 @@ oxConnector:
   oxDefaultContext: "1"
   oxImapServer: "imap://127.0.0.1:143"
   oxLocalTimezone: "Europe/Berlin"
-  oxLanguage: "de_DE"
+  oxLanguage: {{ .Values.functional.internationalization.defaultLanguage | quote }}
   oxMasterAdmin: "admin"
   oxMasterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
   oxSmtpServer: "smtp://127.0.0.1:587"

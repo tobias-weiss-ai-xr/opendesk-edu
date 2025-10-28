@@ -184,9 +184,9 @@ properties:
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.colorTheme": "FlamingoThemes.Iceberg"
-  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.default_language": "de_DE"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.default_language": {{ .Values.functional.internationalization.defaultLanguage | quote }}
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.timezone": "Europe/Berlin"
-  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.languages": "de_DE"
+  "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.languages": {{ .Values.functional.internationalization.defaultLanguage | quote }}
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.link-color": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.btn-primary-bg": "@brand-primary"
   "property:xwiki:FlamingoThemes.Iceberg^FlamingoThemesCode.ThemeClass.navbar-default-color": "@brand-primary"
