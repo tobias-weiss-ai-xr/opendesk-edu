@@ -449,4 +449,4 @@ While the IAM manages users centrally, some applications come with local account
 
 # Footnotes
 
-[^1]: We are working on a new approach to provision the OpenProject filestore, therefore the accounts are planned to be deactivated/removed with openDesk 1.2.
+[^1]: We are working on a new approach to provision the OpenProject filestore, therefore the accounts are planned to be deactivated/removed in the future.
