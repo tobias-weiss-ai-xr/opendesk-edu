@@ -105,6 +105,16 @@ functional:
         # If the LDAP entryUUID should be used for the localpart of user's Matrix IDs following setting must be `true`.
         useImmutableIdentifierForLocalpart: false
 
+  dataProtection:
+    matrixPresence:
+      # Enable to allow information about the user presence status to be shared.
+      # Ref.: https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#presence
+      enabled: false
+    jitsiRoomHistory:
+      # Disable to avoid the room history to be stored in the user's browser local storage.
+      # Ref.: https://github.com/jitsi/docker-jitsi-meet/issues/898
+      enabled: true
+
   externalServices:
     nubus:
       udmRestApi:
@@ -116,16 +126,6 @@ functional:
         enabled: true
         # List of matrix homeserver domains you want to allow federation with
         domainAllowList: []
-
-  dataProtection:
-    matrixPresence:
-      # Enable to allow information about the user presence status to be shared.
-      # Ref.: https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#presence
-      enabled: false
-    jitsiRoomHistory:
-      # Disable to avoid the room history to be stored in the user's browser local storage.
-      # Ref.: https://github.com/jitsi/docker-jitsi-meet/issues/898
-      enabled: true
 
   filestore:
     # Settings related to directory and filenames
@@ -250,6 +250,18 @@ functional:
       # The user's display name is managed by openDesk IAM and should not be manually changed by the user.
       # Ref.: https://documentation.open-xchange.com/8/ui/configuration/settings-list-of.html#mail-misc
       editRealName: false
+
+  internationalization:
+    # Most openDesk applications render their user interface in the language the user's browser is set to. But there
+    # are exceptions that can be controlled by the following setting.
+    # Beside the `de_DE` default `en_GB` has been tested.
+    # - OX App Suite: Users can set their preferred language in the App Suite's UI by navigating to
+    #   "All settings" > "General" > "Language & Time zone" > "Language", though the default language for the first
+    #   login will be set globally based on the setting below.
+    # - XWiki: The UI language of XWiki is set automatically by the language the wiki content is provided in. As XWiki
+    #   does not autodetect that content language, it has to be predefined by the setting below.
+    #   Note: For multi-language XWiki setups a customization is required for now.
+    defaultLanguage: "de_DE"
 
   migration:
     oxAppSuite:
