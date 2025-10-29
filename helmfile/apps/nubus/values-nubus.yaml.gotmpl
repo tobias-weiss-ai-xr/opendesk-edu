@@ -1325,6 +1325,7 @@ nubusStackDataUms:
     portalLinkSupport: {{ .Values.functional.portal.linkSupport | quote }}
     portalLinkFeedback: {{ .Values.functional.portal.linkFeedback | quote }}
     oxDefaultContext: "1"
+    oxDefaultLanguage: {{ .Values.functional.internationalization.defaultLanguage | quote }}
     oxContextHidden: true
     oxSystemUserPassword: {{ .Values.secrets.nubus.ldapSearch.ox }}
     portalOxLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}

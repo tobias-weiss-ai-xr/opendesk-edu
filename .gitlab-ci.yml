@@ -762,7 +762,7 @@ import-default-accounts:
     - if: >
           $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/ && $CREATE_DEFAULT_ACCOUNTS == "yes"
       when: "on_success"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.3.2"
+  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.4.1"
   script:
     - "echo \"Starting default account import for ${DOMAIN}\""
     - "cd /app"
