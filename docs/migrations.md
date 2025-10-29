@@ -10,6 +10,9 @@ SPDX-License-Identifier: Apache-2.0
 * [Deprecation warnings](#deprecation-warnings)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
+  * [v1.8.0+](#v180)
+    * [Pre-upgrade to v1.8.0+](#pre-upgrade-to-v180)
+      * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
   * [v1.7.1+](#v171)
     * [Pre-upgrade to v1.7.1+](#pre-upgrade-to-v171)
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
@@ -136,6 +139,28 @@ To upgrade existing deployments, you cannot skip any version mentioned in the co
 If you would like more details about the automated migrations, please read section [Automated migrations - Details](#automated-migrations---details).
 
 # Manual checks/actions
+
+## v1.8.0+
+
+### Pre-upgrade to v1.8.0+
+
+#### Helmfile fix: Cassandra passwords read from `databases.*`
+
+**Target group:** All of the below must apply to your deployment:
+1. Enterprise Edition
+2. Using external Cassandra DB
+3. Defined the Cassandra passwords in `databases.*` (`database.yaml.gotmpl`) which got ignored until now
+4. Defined the Cassandra passwords then in `secrets.*` (`secrets.yaml.gotmpl`)
+
+The Cassandra passwords
+- `databases.dovecotDictmap.password`
+- `databases.dovecotACL.password`
+
+are no longer ignored. So please move the passwords from
+- `secrets.cassandra.dovecotDictmapUser`
+- `secrets.cassandra.dovecotACLUser`
+
+to the `databases.*` structure.
 
 ## v1.7.1+
 
