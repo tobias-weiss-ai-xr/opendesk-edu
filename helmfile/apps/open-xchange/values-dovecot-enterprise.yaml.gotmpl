@@ -23,7 +23,7 @@ dovecot:
     port: {{ .Values.databases.dovecotDictmap.port }}
     username: {{ .Values.databases.dovecotDictmap.username | quote }}
     password:
-      value: {{ .Values.secrets.cassandra.dovecotDictmapUser | quote }}
+      value: {{ .Values.databases.dovecotDictmap.password | default .Values.secrets.cassandra.dovecotDictmapUser | quote }}
     keyspace: {{ .Values.databases.dovecotDictmap.name | quote }}
   sharedMailboxes:
     enabled: true
@@ -31,7 +31,7 @@ dovecot:
     port: {{ .Values.databases.dovecotACL.port }}
     username: {{ .Values.databases.dovecotACL.username | quote }}
     password:
-      value: {{ .Values.secrets.cassandra.dovecotACLUser | quote }}
+      value: {{ .Values.databases.dovecotACL.password | default .Values.secrets.cassandra.dovecotACLUser | quote }}
     keyspace: {{ .Values.databases.dovecotACL.name | quote }}
   objectStorage:
     bucket: {{ .Values.objectstores.dovecot.bucket | quote }}

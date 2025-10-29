@@ -397,6 +397,8 @@ appsuite:
       com.openexchange.share.guestHostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
+      # Various Mail settings
+      com.openexchange.mail.deleteDraftOnTransport: "true"
       # PDF Export
       com.openexchange.capability.mail_export_pdf: "true"
       com.openexchange.mail.exportpdf.gotenberg.enabled: "true"
