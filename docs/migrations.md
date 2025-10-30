@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
   * [v1.8.0+](#v180)
     * [Pre-upgrade to v1.8.0+](#pre-upgrade-to-v180)
       * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
+      * [Helmfile new feature: `functional.groupware.externalClients.*`](#helmfile-new-feature-functionalgroupwareexternalclients)
   * [v1.7.1+](#v171)
     * [Pre-upgrade to v1.7.1+](#pre-upgrade-to-v171)
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
@@ -161,6 +162,24 @@ are no longer ignored. So please move the passwords from
 - `secrets.cassandra.dovecotACLUser`
 
 to the `databases.*` structure.
+
+#### Helmfile new feature: `functional.groupware.externalClients.*`
+
+**Target group:**
+Deployments that allow access to groupware emails via external mail clients (e.g. Thunderbird) using IMAP and SMTP.
+
+OX App Suite can display a dialog with configuration details for connecting external mail clients. In previous versions,
+this dialog was automatically enabled when Dovecot was deployed with a service type of `NodePort` or `LoadBalancer`.
+
+From now on, the dialog can be explicitly controlled via the setting
+`functional.groupware.externalClients.enabledOnboardingInfo`, which is set to `false` by default.
+If you want your users to see this dialog, set the attribute to `true`.
+
+Additionally, it is now possible to explicitly define the hostnames shown in the client onboarding dialog using the following values:
+- `functional.groupware.externalClients.fqdnImap`
+- `functional.groupware.externalClients.fqdnSmtp`
+
+If these values are not explicitly set, openDesk will use `.Values.global.domain` as in previous releases.
 
 ## v1.7.1+
 
