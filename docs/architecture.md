@@ -129,7 +129,7 @@ An overview of
 - components that consume the LDAP service.
   - The components access the LDAP using a component-specific LDAP search account.
 - components using Univention Keycloak as an identity provider (IdP).
-  - The components should use OAuth2 / OIDC flows if not otherwise denoted.
+  - All components use OAuth2 / OIDC flows.
   - All components have a client configured in Keycloak.
 
 Some components trust others to handle authentication for them.
@@ -148,7 +148,7 @@ flowchart TD
  D-->K
  O-->K
  X-->K
- P-->|SAML|K
+ P-->K
  E[Element]-->K
  J[Jitsi]-->K
  I[IntercomService]-->K
@@ -183,11 +183,6 @@ sequenceDiagram
     OpenProject-->>Browser: 302 Redirect https://projects.domain.tld
     Note over Browser: User is authenticated
 ```
-
-> [!note]
-> Nubus' Portal and UMC still use [SAML 2.0](https://www.oasis-open.org/standard/saml/) to authenticate
-> users. However, Nubus will switch to OIDC in an upcoming release, eliminating the use of SAML in openDesk
-> altogether.
 
 ## Keycloak
 
