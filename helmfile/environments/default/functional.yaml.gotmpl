@@ -200,10 +200,24 @@ functional:
     # Related settings for the CalDAV and CardCAV support of the groupware module.
     davSupport:
       # Enabled by default CalDAV and CardDAV support is available at:
-      # - https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/caldav/[folderId]"
-      # - https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/carddav/[folderId]"
+      # - `https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/caldav/[folderId]`
+      # - `https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/carddav/[folderId]`
       # Can be switched off using the below feature toggle.
       enabled: true
+    # Setting related to external clients using SMTP/IMAP protocols (like Thunderbird)
+    externalClients:
+      # To fully support external mail clients in your openDesk deployment you need to ensure they can
+      # access the IMAP and SMTP services. Either on <.Values.global.domain> or on the FQDNs defined
+      # below.
+      # How to achive this depends on what service types you are using in your deployment. These service
+      # types can be set explicitly for IMAP (Dovecot) and SMTP (Postfix) using `service.yaml.gotmpl` and
+      # how these services, especially when using type `LoadBalancer`, behave in your setup.
+      # Toggle the client onboarding info dialog in the groupware module.
+      enabledOnboardingInfo: false
+      # Set the FQDN of the IMAP endpoint if none is provided `<.Values.global.domain>` is used.
+      fqdnImap: ~
+      # Set the FQDN of the SMTP endpoint if none is provided `<.Values.global.domain>` is used.
+      fqdnSmtp: ~
     # Control access for external users to groupware data
     # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html
     externalSharing:
