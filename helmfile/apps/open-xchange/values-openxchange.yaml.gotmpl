@@ -456,6 +456,11 @@ appsuite:
       com.openexchange.mail.login.resolver.ldap.contextNameAttribute: "oxContextIDNum"
       com.openexchange.mail.login.resolver.ldap.entitySearchFilter: "(&(oxContextIDNum=[cid])(uid=[uname]))"
       com.openexchange.mail.login.resolver.ldap.mailLoginAttribute: "entryUUID"
+      # Contacts collector
+      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=contactCollect
+      com.openexchange.contactcollector.enabled: "true"
+      com.openexchange.user.contactCollectOnMailTransport: "true"
+      com.openexchange.user.contactCollectOnMailAccess: "false"
       # Requirements for OX Connector
       com.openexchange.user.enforceUniqueDisplayName: "false"
       com.openexchange.folderstorage.database.preferDisplayName: "false"
@@ -685,9 +690,6 @@ appsuite:
       io.ox/core//coloredIcons: "false"
       # Mail templates
       io.ox/core//features/templates: "true"
-      # Contact Collector
-      io.ox/mail//contactCollectOnMailTransport: "true"
-      # io.ox/mail//contactCollectOnMailAccess: "true"
       # Dynamic theme
       io.ox/dynamic-theme//mainColor: {{ .Values.theme.colors.primary | quote }}
       io.ox/dynamic-theme//logoURL: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/icons/logos/domain.svg"
