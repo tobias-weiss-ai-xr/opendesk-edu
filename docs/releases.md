@@ -52,7 +52,7 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 - openDesk does not guarantee an in‑place upgrade between two major versions. Always consult the release notes and plan appropriate migration efforts.
 - Even within the same major line, skipping multiple monthly minor versions is not guaranteed to work without intermediate upgrade steps.
 - All breaking changes, including those in monthly minor releases, are highlighted in the release notes under Breaking Changes.
-- Additional, non‑binding migration hints are collected in `migrations.md`
+- Additional, non‑binding migration hints are collected in [migrations.md](./migrations.md)
 
 # Patch management process
 

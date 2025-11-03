@@ -10,12 +10,12 @@ SPDX-License-Identifier: Apache-2.0
 * [Deprecation warnings](#deprecation-warnings)
 * [Automated migrations - Overview and mandatory upgrade path](#automated-migrations---overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
-  * [v1.8.0+](#v180)
-    * [Pre-upgrade to v1.8.0+](#pre-upgrade-to-v180)
+  * [Versions &GreaterEqual; v1.9.0](#versions--v190)
+    * [Pre-upgrade to versions &GreaterEqual; v1.9.0](#pre-upgrade-to-versions--v190)
       * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
       * [Helmfile new feature: `functional.groupware.externalClients.*`](#helmfile-new-feature-functionalgroupwareexternalclients)
-  * [v1.7.1+](#v171)
-    * [Pre-upgrade to v1.7.1+](#pre-upgrade-to-v171)
+  * [Versions &GreaterEqual; v1.8.0](#versions--v180)
+    * [Pre-upgrade to versions &GreaterEqual; v1.8.0](#pre-upgrade-to-versions--v180)
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
       * [New database and secrets: Portal now uses OIDC](#new-database-and-secrets-portal-now-uses-oidc)
       * [New application default: XWiki blocks self-registration of user accounts](#new-application-default-xwiki-blocks-self-registration-of-user-accounts)
@@ -24,37 +24,39 @@ SPDX-License-Identifier: Apache-2.0
       * [Helmfile new default: New groupware settings changing current behaviour](#helmfile-new-default-new-groupware-settings-changing-current-behaviour)
       * [New application default: Nextcloud apps "Spreed" and "Comments" no longer enabled by default](#new-application-default-nextcloud-apps-spreed-and-comments-no-longer-enabled-by-default)
       * [New application default: Gravatar is switched off for Jitsi and OpenProject](#new-application-default-gravatar-is-switched-off-for-jitsi-and-openproject)
-  * [v1.7.0+](#v170)
-    * [Pre-upgrade to v1.7.0+](#pre-upgrade-to-v170)
+  * [Versions &GreaterEqual; v1.7.0](#versions--v170)
+    * [Pre-upgrade to versions &GreaterEqual; v1.7.0](#pre-upgrade-to-versions--v170)
       * [Helmfile fix: Ensure enterprise overrides apply when deploying from project root](#helmfile-fix-ensure-enterprise-overrides-apply-when-deploying-from-project-root)
       * [Replace Helm chart: New Notes Helm chart with support for self-signed deployments](#replace-helm-chart-new-notes-helm-chart-with-support-for-self-signed-deployments)
-    * [Post-upgrade to v1.7.0+](#post-upgrade-to-v170)
+    * [Post-upgrade to versions &GreaterEqual; v1.7.0](#post-upgrade-to-versions--v170)
       * [Upstream fix: Provisioning of functional mailboxes](#upstream-fix-provisioning-of-functional-mailboxes)
-  * [v1.6.0+](#v160)
-    * [Pre-upgrade to v1.6.0+](#pre-upgrade-to-v160)
+  * [Versions &GreaterEqual; v1.6.0](#versions--v160)
+    * [Pre-upgrade to versions &GreaterEqual; v1.6.0](#pre-upgrade-to-versions--v160)
       * [Upstream constraint: Nubus' external secrets](#upstream-constraint-nubus-external-secrets)
       * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
       * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
       * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
-    * [Post-upgrade to v1.6.0+](#post-upgrade-to-v160)
+    * [Post-upgrade to versions &GreaterEqual; v1.6.0](#post-upgrade-to-versions--v160)
       * [OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
-  * [v1.4.0+](#v140)
-    * [Pre-upgrade to v1.4.0+](#pre-upgrade-to-v140)
-      * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
+  * [Versions &GreaterEqual; v1.4.0](#versions--v140)
+    * [Pre-upgrade to versions &GreaterEqual; v1.4.0](#pre-upgrade-to-versions--v140)
       * [Helmfile cleanup: `global.additionalMailDomains` as list](#helmfile-cleanup-globaladditionalmaildomains-as-list)
-  * [v1.2.0+](#v120)
-    * [Pre-upgrade to v1.2.0+](#pre-upgrade-to-v120)
+  * [Versions &GreaterEqual; v1.3.0](#versions--v130)
+    * [Pre-upgrade to versions &GreaterEqual; v1.3.0](#pre-upgrade-to-versions--v130)
+      * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
+  * [Versions &GreaterEqual; v1.2.0](#versions--v120)
+    * [Pre-upgrade to versions &GreaterEqual; v1.2.0](#pre-upgrade-to-versions--v120)
       * [Helmfile cleanup: Do not configure OX provisioning when no OX installed](#helmfile-cleanup-do-not-configure-ox-provisioning-when-no-ox-installed)
       * [Helmfile new default: PostgreSQL for XWiki and Nextcloud](#helmfile-new-default-postgresql-for-xwiki-and-nextcloud)
-  * [v1.1.2+](#v112)
-    * [Pre-upgrade to v1.1.2+](#pre-upgrade-to-v112)
+  * [Versions &GreaterEqual; v1.1.2](#versions--v112)
+    * [Pre-upgrade to versions &GreaterEqual; v1.1.2](#pre-upgrade-to-versions--v112)
       * [Helmfile feature update: App settings wrapped in `apps.` element](#helmfile-feature-update-app-settings-wrapped-in-apps-element)
-  * [v1.1.1+](#v111)
-    * [Pre-upgrade to v1.1.1](#pre-upgrade-to-v111)
+  * [Versions &GreaterEqual; v1.1.1](#versions--v111)
+    * [Pre-upgrade to versions &GreaterEqual; v1.1.1](#pre-upgrade-to-versions--v111)
       * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
       * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
-  * [v1.1.0+](#v110)
-    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110)
+  * [Versions &GreaterEqual; v1.1.0](#versions--v110)
+    * [Pre-upgrade to versions &GreaterEqual; v1.1.0](#pre-upgrade-to-versions--v110)
       * [Helmfile cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
       * [Helmfile cleanup: Consistent use of `*.yaml.gotmpl`](#helmfile-cleanup-consistent-use-of-yamlgotmpl)
       * [Helmfile cleanup: Prefixing certain app directories with `opendesk-`](#helmfile-cleanup-prefixing-certain-app-directories-with-opendesk-)
@@ -64,10 +66,10 @@ SPDX-License-Identifier: Apache-2.0
       * [openDesk defaults (new): Enforce login](#opendesk-defaults-new-enforce-login)
       * [openDesk defaults (changed): Jitsi room history enabled](#opendesk-defaults-changed-jitsi-room-history-enabled)
       * [External requirements: Redis 7.4](#external-requirements-redis-74)
-    * [Post-upgrade to v1.1.0+](#post-upgrade-to-v110)
+    * [Post-upgrade to versions &GreaterEqual; v1.1.0](#post-upgrade-to-versions--v110)
       * [XWiki fix-ups](#xwiki-fix-ups)
-  * [v1.1.0](#v110-1)
-    * [Pre-upgrade to v1.1.0](#pre-upgrade-to-v110-1)
+  * [Versions &GreaterEqual; v1.0.0](#versions--v100)
+    * [Pre-upgrade to versions &GreaterEqual; v1.0.0](#pre-upgrade-to-versions--v100)
       * [Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus](#configuration-cleanup-removal-of-unnecessary-ox-profiles-in-nubus)
       * [Configuration Cleanup: Updated `global.imagePullSecrets`](#configuration-cleanup-updated-globalimagepullsecrets)
       * [Changed openDesk defaults: Matrix presence status disabled](#changed-opendesk-defaults-matrix-presence-status-disabled)
@@ -75,17 +77,17 @@ SPDX-License-Identifier: Apache-2.0
       * [Changed openDesk defaults: File-share configurability](#changed-opendesk-defaults-file-share-configurability)
       * [Changed openDesk defaults: Updated default subdomains in `global.hosts`](#changed-opendesk-defaults-updated-default-subdomains-in-globalhosts)
       * [Changed openDesk defaults: Dedicated group for access to the UDM REST API](#changed-opendesk-defaults-dedicated-group-for-access-to-the-udm-rest-api)
-    * [Post-upgrade to v1.0.0+](#post-upgrade-to-v100)
+    * [Post-upgrade to versions &GreaterEqual; v1.0.0](#post-upgrade-to-versions--v100)
       * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
       * [Optional Cleanup](#optional-cleanup)
 * [Automated migrations - Details](#automated-migrations---details)
-  * [v1.6.0+ (automated)](#v160-automated)
-    * [v1.6.0+ migrations-post](#v160-migrations-post)
-  * [v1.2.0+ (automated)](#v120-automated)
-    * [v1.2.0+ migrations-pre](#v120-migrations-pre)
-    * [v1.2.0+ migrations-post](#v120-migrations-post)
-  * [v1.1.0+ (automated)](#v110-automated)
-  * [v1.0.0+ (automated)](#v100-automated)
+  * [Versions &GreaterEqual; v1.6.0 (automated)](#versions--v160-automated)
+    * [Versions &GreaterEqual; v1.6.0 migrations-post](#versions--v160-migrations-post)
+  * [Versions &GreaterEqual; v1.2.0 (automated)](#versions--v120-automated)
+    * [Versions &GreaterEqual; v1.2.0 migrations-pre](#versions--v120-migrations-pre)
+    * [Versions &GreaterEqual; v1.2.0 migrations-post](#versions--v120-migrations-post)
+  * [Versions &GreaterEqual; v1.1.0 (automated)](#versions--v110-automated)
+  * [Versions &GreaterEqual; v1.0.0 (automated)](#versions--v100-automated)
   * [Related components and artifacts](#related-components-and-artifacts)
   * [Development](#development)
 <!-- TOC -->
@@ -100,11 +102,13 @@ These automated migrations have limitations in the sense that they require a cer
 
 Manual checks and possible activities are also required by openDesk updates, they are described in the section [Manual update steps](#manual-update-steps).
 
-> **Note**<br>
-> Please be sure to _thoroughly_ read / follow the requirements before you update / upgrade.
+> [!important]
+> Please be sure to _thoroughly_ read / follow the requirements before you update / upgrade and assure that
+> you are reading the correct version of this document (change branch / version if necessary).
 
-> **Known limitations**<br>
+> [!warning]
 > We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC is deleted; we will not address explicit deletion for PVs.
+
 
 # Deprecation warnings
 
@@ -123,27 +127,42 @@ This section provides an overview of potential changes to be part of the next ma
 
 The following table gives an overview of the mandatory upgrade path of openDesk, required in order for the automated migrations to work as expected.
 
-To upgrade existing deployments, you cannot skip any version mentioned in the column *Mandatory version*. When a version number is not fully defined (e.g. `v1.1.x`), you can install any version matching that constraint.
+To upgrade existing deployments, you _cannot_ skip any version denoted with `yes` in the column *Mandatory*. When a
+version number is not fully defined (e.g. `v1.1.x`), you can install any version matching that constraint,
+though our links always point to the newest patch release for that minor version.
 
-| Mandatory version |
-| ----------------- |
-| v1.5.0            |
-| v1.1.x            |
-| v1.0.0            |
-| v0.9.0            |
-| v0.8.1            |
-<!-- | 1.x.x        |  add the entry to the table as soon as we get new migration requiring that the former migration was executed -->
+<!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
+| Version                                                                                 | Mandatory | Pre-Upgrade                                                                                                                                                  | Post-Upgrade                                        | Automatic Steps                                          |
+|-----------------------------------------------------------------------------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------------------------------|
+| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0) | no        | [Pre](#pre-upgrade-to-versions--v190)                                                                                                            | --                                                  | --                                                       |
+| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0) | no        | [Pre](#pre-upgrade-to-versions--v180)                                                                                                            | --                                                  | --                                                       |
+| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1) | no        | [Pre](#pre-upgrade-to-versions--v170)                                                                                                            | [Post](#post-upgrade-to-versions--v170) | --                                                       |
+| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0) | no        | [Pre](#pre-upgrade-to-versions--v160)                                                                                                            | [Post](#post-upgrade-to-versions--v160) | [Requires v1.5.0](#versions--v160-automated) |
+| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0) | **yes**   | --                                                                                                                                                           | --                                                  | --                                                       |
+| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1) | no        | [Pre](#pre-upgrade-to-versions--v140)                                                                                                            | --                                                  | --                                                       |
+| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2) | no        | [Pre](#pre-upgrade-to-versions--v130)                                                                                                            | --                                                  | --                                                       |
+| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1) | no        | [Pre](#pre-upgrade-to-versions--v120)                                                                                                            | --                                                  | [Requires v1.1.x](#versions--v120-automated) |
+| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2) | **yes**   | [Pre1](#pre-upgrade-to-versions--v110) ➡ [Pre2](#pre-upgrade-to-versions--v111) ➡ [Pre3](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110) | [Requires v1.0.0](#versions--v110-automated) |
+| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0) | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                                            | [Post](#post-upgrade-to-versions--v100) | [Requires v0.9.0](#versions--v100-automated) |
+| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0) | **yes**   | --                                                                                                                                                           | --                                                  | --                                                       |
 
-> **Note**<br>
+> [!warning]
 > Be sure to check out the table in the release version you are going to install, and not the currently installed version.
 
 If you would like more details about the automated migrations, please read section [Automated migrations - Details](#automated-migrations---details).
 
 # Manual checks/actions
 
-## v1.8.0+
+> [!note]
+> We **only** use the mathematical symbol &GreaterEqual; to denote for which versions manual steps must be
+> applied. For example, "Versions &GreaterEqual; v1.7.0" refers to all openDesk versions (major, minor and
+> patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
+> listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
+> version 1.7.0 to version 1.7.1.
 
-### Pre-upgrade to v1.8.0+
+## Versions &GreaterEqual; v1.9.0
+
+### Pre-upgrade to versions &GreaterEqual; v1.9.0
 
 #### Helmfile fix: Cassandra passwords read from `databases.*`
 
@@ -181,9 +200,9 @@ Additionally, it is now possible to explicitly define the hostnames shown in the
 
 If these values are not explicitly set, openDesk will use `.Values.global.domain` as in previous releases.
 
-## v1.7.1+
+## Versions &GreaterEqual; v1.8.0
 
-### Pre-upgrade to v1.7.1+
+### Pre-upgrade to versions &GreaterEqual; v1.8.0
 
 #### New application default: Default group for two-factor authentication is now "2FA Users"
 
@@ -206,7 +225,7 @@ The portal has been migrated to use OIDC for single sign-on by default. This int
   - `secrets.keycloak.clientSecret.portal`: The OIDC client secret for the portal.
   - `secrets.postgresql.umsAuthSessionUser`: For internal databases, set the secret for the database user here. If you are using an external database, you already provide these credentials in the New database step above.
 
-> **Note**<br>
+> [!note]
 > The SAML Client for the Nubus portal is still preserved in Keycloak and will be removed in one of the next openDesk releases.
 
 #### New application default: XWiki blocks self-registration of user accounts
@@ -243,7 +262,7 @@ To preserve as much data as possible, dedicated upgrade guidelines for each of t
 - Matrix Meetings widget: https://github.com/nordeck/matrix-meetings?tab=readme-ov-file#matrix-room-upgrades
 - Matrix Poll widget: https://github.com/nordeck/matrix-poll?tab=readme-ov-file#matrix-room-upgrades
 
-> **Note**<br>
+> [!note]
 > These instructions apply to any room upgrades, not just upgrade to `v12`.
 
 #### New Helmfile default: Restricting characters for directory and filenames in fileshare module
@@ -296,7 +315,7 @@ The following options, newly introduced in `functional.yaml.gotmpl`, modify the 
   The display name is centrally managed by the openDesk IAM.
   To allow users to change it within OX App Suite, set this option to `true`.
 
-> **Note**<br>
+> [!note]
 > openDesk v1.8.0 adds even more options under `functional.groupware.*` while retaining the current default behaviour.
 
 #### New application default: Nextcloud apps "Spreed" and "Comments" no longer enabled by default
@@ -338,9 +357,9 @@ Gravatar support is no longer enabled by default in Jitsi and OpenProject. In ca
     OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: true, enable_local_avatars: true}'
   ```
 
-## v1.7.0+
+## Versions &GreaterEqual; v1.7.0
 
-### Pre-upgrade to v1.7.0+
+### Pre-upgrade to versions &GreaterEqual; v1.7.0
 
 #### Helmfile fix: Ensure enterprise overrides apply when deploying from project root
 
@@ -371,7 +390,7 @@ annotation:
   notesYProvider: {}
 ```
 
-### Post-upgrade to v1.7.0+
+### Post-upgrade to versions &GreaterEqual; v1.7.0
 
 #### Upstream fix: Provisioning of functional mailboxes
 
@@ -398,16 +417,18 @@ kill ${PROVISIONING_PORT_FORWARD_PID}
 rm ${TEMPORARY_CONSUMER_JSON}
 ```
 
-## v1.6.0+
+## Versions &GreaterEqual; v1.6.0
 
-### Pre-upgrade to v1.6.0+
+### Pre-upgrade to versions &GreaterEqual; v1.6.0
 
 #### Upstream constraint: Nubus' external secrets
 
 **Target group:** Operators that use external secrets for Nubus.
 
-> **Note**<br>
-> External Secrets are not yet a supported feature. We are working on making it available in 2025, though it is possible to make use of the support for external secrets within single applications using the openDesk [customization](../helmfile/environments/default/customization.yaml.gotmpl) options.
+> [!note]
+> External secrets are not yet a supported feature. We are working on making it available in 2025,
+> though it is possible to make use of the support for external secrets within single applications using the
+> openDesk [customization](../helmfile/environments/default/customization.yaml.gotmpl) options.
 
 Please ensure you read the [Nubus 1.10.0 "Migration steps" section](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/changelog.html#v1-10-0-migration-steps) with focus on the paragraph "Operators that make use of the following UDM Listener secrets variables" and act accordingly.
 
@@ -453,7 +474,7 @@ kubectl cp -n ${NAMESPACE} open-xchange-core-mw-default-0:/opt/open-xchange/ox-f
 2. Run the upgrade.
 3. Continue with the [related post-upgrade steps](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
 
-### Post-upgrade to v1.6.0+
+### Post-upgrade to versions &GreaterEqual; v1.6.0
 
 #### OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)
 
@@ -494,15 +515,9 @@ ID    Type of Job                              Status     Further Information
 /opt/open-xchange/sbin/unregisterfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -i <your_old_filestore_id_from_step_3>
 ```
 
-## v1.4.0+
+## Versions &GreaterEqual; v1.4.0
 
-### Pre-upgrade to v1.4.0+
-
-#### Helmfile new feature: `functional.authentication.ssoFederation`
-
-**Target group:** Deployments that make use of IdP federation as described in [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
-
-Please ensure to configure your IdP federation config details as part of `functional.authentication.ssoFederation`. You can find more details in the "Example configuration" section of [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
+### Pre-upgrade to versions &GreaterEqual; v1.4.0
 
 #### Helmfile cleanup: `global.additionalMailDomains` as list
 
@@ -526,9 +541,19 @@ global:
     - "sub2.maildomain.de"
 ```
 
-## v1.2.0+
+## Versions &GreaterEqual; v1.3.0
 
-### Pre-upgrade to v1.2.0+
+### Pre-upgrade to versions &GreaterEqual; v1.3.0
+
+#### Helmfile new feature: `functional.authentication.ssoFederation`
+
+**Target group:** Deployments that make use of IdP federation as described in [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
+
+Please ensure to configure your IdP federation config details as part of `functional.authentication.ssoFederation`. You can find more details in the "Example configuration" section of [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
+
+## Versions &GreaterEqual; v1.2.0
+
+### Pre-upgrade to versions &GreaterEqual; v1.2.0
 
 #### Helmfile cleanup: Do not configure OX provisioning when no OX installed
 
@@ -589,9 +614,9 @@ In case you are planning to migrate an existing instance from MariaDB to Postgre
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport
 
-## v1.1.2+
+## Versions &GreaterEqual; v1.1.2
 
-### Pre-upgrade to v1.1.2+
+### Pre-upgrade to versions &GreaterEqual; v1.1.2
 
 #### Helmfile feature update: App settings wrapped in `apps.` element
 
@@ -620,9 +645,9 @@ apps:
     enabled: true
 ```
 
-## v1.1.1+
+## Versions &GreaterEqual; v1.1.1
 
-### Pre-upgrade to v1.1.1
+### Pre-upgrade to versions &GreaterEqual; v1.1.1
 
 #### Helmfile feature update: Component specific `storageClassName`
 
@@ -675,9 +700,9 @@ persistence:
 
 A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
 
-## v1.1.0+
+## Versions &GreaterEqual; v1.1.0
 
-### Pre-upgrade to v1.1.0
+### Pre-upgrade to versions &GreaterEqual; v1.1.0
 
 #### Helmfile cleanup: Restructured `/helmfile/files/theme` folder
 
@@ -840,7 +865,7 @@ The update from openDesk v1.0.0 contains Redis 7.4.1, like the other openDesk bu
 
 Please ensure the Redis you are using is updated to at least version 7.4 to support the requirement of OX App Suite.
 
-### Post-upgrade to v1.1.0+
+### Post-upgrade to versions &GreaterEqual; v1.1.0
 
 #### XWiki fix-ups
 
@@ -866,13 +891,13 @@ Unfortunately XWiki does not upgrade itself as expected. The bug has been report
 
 You should have now a fully functional XWiki instance with single sign-on and full-text search.
 
-## v1.1.0
+## Versions &GreaterEqual; v1.0.0
 
-### Pre-upgrade to v1.1.0
+### Pre-upgrade to versions &GreaterEqual; v1.0.0
 
 #### Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus
 
-> **Warning**<br>
+> [!warning]
 > The upgrade will fail if you do not address this section in your current deployment.
 
 The update will remove unnecessary OX-Profiles in Nubus, so long as these profiles are in use.
@@ -1050,7 +1075,7 @@ The IAM admin account `Administrator` is the only member of this group by defaul
 
 If you need other accounts to use the API, please assign them to the aforementioned group.
 
-### Post-upgrade to v1.0.0+
+### Post-upgrade to versions &GreaterEqual; v1.0.0
 
 #### Configuration Improvement: Separate user permission for using Video Conference component
 
@@ -1066,7 +1091,7 @@ This can be done as IAM admin:
 - Check the checkbox for *Video Conference* and the directly below check box for *Overwrite*.
 - Click on the green *Save* button at the top of the screen to apply the change.
 
-> **Hint**<br>
+> [!tip]
 > If you have a lot of users and want to update (almost) all them, you can select all users by clicking the checkbox in the user's table header and then de-selecting the users you do not want to update.
 
 #### Optional Cleanup
@@ -1082,33 +1107,33 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 # Automated migrations - Details
 
-## v1.6.0+ (automated)
+## Versions &GreaterEqual; v1.6.0 (automated)
 
-> **Note**<br>
+> [!note]
 > Details can be found in [run_5.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_5.py).
 
-### v1.6.0+ migrations-post
+### Versions &GreaterEqual; v1.6.0 migrations-post
 
-Restarting the StatefulSets `ums-provisioning-nats` and `ox-connector` due to a workaround applied on the NATS secrets, see the "Notes" segment of the ["Password seed" heading in getting-started.md](./docs/getting-started.md#password-seed)
+- Automatically restarts the StatefulSets `ums-provisioning-nats` and `ox-connector` due to a workaround applied on the NATS secrets, see the "Notes" segment of the ["Password seed" heading in getting-started.md](./docs/getting-started.md#password-seed)
 
-> **Note**<br>
+> [!note]
 > This change aims to prevent authentication failures with NATS in some Pods, which can lead to errors such as: `wait-for-nats Unavailable, waiting 2 seconds. Error: nats: 'Authorization Violation'`.
 
-## v1.2.0+ (automated)
+## Versions &GreaterEqual; v1.2.0 (automated)
 
-> **Note**<br>
+> [!note]
 > Details can be found in [run_4.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_4.py).
 
-### v1.2.0+ migrations-pre
+### Versions &GreaterEqual; v1.2.0 migrations-pre
 
-- Delete PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
-- Delete StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
+- Automatically deletes PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
+- Automatically deletes StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
 
-### v1.2.0+ migrations-post
+### Versions &GreaterEqual; v1.2.0 migrations-post
 
-- Restarting Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` as well as deleting the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
+- Automatically restarts the Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` and deletes the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
 
-## v1.1.0+ (automated)
+## Versions &GreaterEqual; v1.1.0 (automated)
 
 With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
 
@@ -1116,16 +1141,16 @@ openDesk's automated migrations takes care of this upgrade requirement described
 [Nubus 1.5.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.5.1/en/changelog.html#migrate-existing-ldap-server-to-mirror-mode-readiness),
 creating the config map with the mentioned label.
 
-> **Note**<br>
+> [!note]
 > Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
-## v1.0.0+ (automated)
+## Versions &GreaterEqual; v1.0.0 (automated)
 
 The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
 
 The permissions required to execute the migrations can be found in the migration's Helm chart [`role.yaml'](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/v1.3.5/charts/opendesk-migrations/templates/role.yaml?ref_type=tags#L29).
 
-> **Note**<br>
+> [!note]
 > Details can be found in [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
 ## Related components and artifacts
