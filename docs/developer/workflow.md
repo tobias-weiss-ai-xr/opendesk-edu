@@ -85,7 +85,7 @@ The below rendering in [class diagram](https://en.wikipedia.org/wiki/Class_diagr
 - the first section below the name of the class shows the required **characteristics** of each component of the given class
 - the second section shows the **methods** like linting that must be applied to that class's artifacts
 
-> **Note**<br>
+> [!note]
 > The methods prefixed with '-' are not yet available in `gitlab-config`. You will learn about them later.
 
 ```mermaid
@@ -148,11 +148,14 @@ openDesk uses Apache 2.0 as the license for their work. A typical reuse copyrigh
 ```
 The way to mark the license header as a comment differs between the various file types. Please find matching examples for all types across the [deployment automation repository](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk).
 
-> **Note**<br>
-> If a `SPDX-FileCopyrightText` already exists with the copyright owner described above but with a past year (e.g. 2024), please update this copyright header line to cover (up to and including) the current year, e.g. `2024-2025`.
+> [!note]
+> If a `SPDX-FileCopyrightText` already exists with the copyright owner described above but with a past year
+> (e.g. 2024), please update this copyright header line to cover (up to and including) the current year,
+> e.g. `2024-2025`.
 
-> **Note**<br>
-> If line(s) with `SPDX-FileCopyrightText` containing a different copyright owner exist in the file you are working on, do not replace existing one(s), but rather add another header above these.
+> [!note]
+> If line(s) with `SPDX-FileCopyrightText` containing a different copyright owner exist in the file you are
+> working on, do not replace existing one(s), but rather add another header above these.
 
 ## Development workflow
 
@@ -348,14 +351,14 @@ Branches created from the `develop` branch have to adhere to the following notat
 
 Example: `tmueller/fix_jitsi_theming`.
 
-> **Note**<br>
+> [!note]
 > The above naming convention has yet to be enforced, but please ensure you use it.
 
 #### Commit messages / Conventional Commits
 
 Commit messages must adhere to the [Conventional Commit standard](https://www.conventionalcommits.org/en/v1.0.0/#summary). Commits that do not adhere to the standard get rejected by either [Gitlab push rules](https://docs.gitlab.com/ee/user/project/repository/push_rules.html) or the CI.
 
-> **Note**<br>
+> [!note]
 > The first letter after the `: ` must be uppercase.
 
 ```text
@@ -372,7 +375,7 @@ Commit messages must adhere to the [Conventional Commit standard](https://www.co
 
 Example: `fix(open-xchange): Bump to 8.26 to heal issue with functional mailbox provisioning.`
 
-> **Note**<br>
+> [!note]
 > The commit messages are an essential part of the [technical releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases) as the release notes are generated from these messages.
 
 #### Verified commits

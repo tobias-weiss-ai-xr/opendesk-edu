@@ -34,7 +34,10 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 | **Minor**      | Monthly        | New features, enhancements, may contain breaking changes or refactors (clearly flagged in the notes)              |
 | **Patch**      | On demand      | Bug fixes, security updates, minor improvements, no intended breaking changes               |
 
-> **Note:** openDesk does **not** guarantee that minor releases are 100% backward‑compatible. When a breaking change is unavoidable it is announced in the release notes under a dedicated header **“Breaking Changes”** and a migration guide is provided.
+> [!note]
+> openDesk does **not** guarantee that minor releases are 100% backward‑compatible. When a breaking > change
+> is unavoidable it is announced in the release notes under a dedicated header **“Breaking Changes”** > and a
+> migration guide is provided.
 
 ## Release schedule
 

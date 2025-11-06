@@ -31,10 +31,10 @@ It will be extended over time as we deal with debugging cases.
 We for sure do not want to reinvent the wheel, so we might link to external sources that contain helpful
 information where available.
 
-> **Warning**<br>
-> You should never enable the debug option in production environments! By looking up `debug.enabled` in the deployment, you
-will find the various places changes are applied when enabling debugging. So, outside of development and test
-environments, you should use them thoughtfully and carefully if needed.
+> [!warning]
+> You should never enable the debug option in production environments! By looking up `debug.enabled` in the
+> deployment, you will find the various places changes are applied when enabling debugging. So, outside of
+> development and test environments, you should use them thoughtfully and carefully if needed.
 
 # Enable debugging
 
@@ -49,11 +49,13 @@ This will result in:
 - making the Keycloak admin console available by default at `https://id.<your_domain>/admin/`
 - ingress for `http://minio-console.<your_domain>` being configured
 
-> **Note**<br>
-> When enabling debug mode and updating your deployment, you must manually delete all jobs before updating. In debug mode, we keep the jobs, and some job fields are immutable, leading to a deployment failure.
+> [!note]
+> When enabling debug mode and updating your deployment, you must manually delete all jobs before updating. In
+> debug mode, we keep the jobs, and some job fields are immutable, leading to a deployment failure.
 
-> **Note**<br>
-> All containers should write their log output to STDOUT; if you find (valuable) logs inside a container which were not in STDOUT, please let us know!
+> [!note]
+> All containers should write their log output to STDOUT; if you find (valuable) logs inside a container which
+> were not in STDOUT, please let us know!
 
 # Adding containers to a pod for debugging purposes
 
@@ -215,11 +217,16 @@ kubectl patch -n ${NAMESPACE} configmap ${CONFIGMAP_NAME} --type merge -p '{"dat
 
 2. Restart the Keycloak Pod(s).
 
-> **Note**<br>
-> Because the `ums-keycloak-extensions-handler` is sending frequent requests (one per second) to Keycloak for retrieval of the Keycloak event history, you might want to stop/remove the deployment while debugging/analysing Keycloak to not get your debug output spammed by these requests.
+> [!note]
+> Because the `ums-keycloak-extensions-handler` is sending frequent requests (one per second) to Keycloak for
+> retrieval of the Keycloak event history, you might want to stop/remove the deployment while
+> debugging/analysing Keycloak to not get your debug output spammed by these requests.
 
-> **Note**<br>
-> While you can set the standard log levels like `INFO`, `DEBUG`, `TRACE` etc. you can also set class specific logs by comma separating the details in the `KC_LOG_LEVEL` environment variable like e.g. `INFO,org.keycloak.protocol.oidc.endpoints:TRACE`. The example sets the overall loglevel to `INFO` but provides trace logs for `org.keycloak.protocol.oidc.endpoints`.
+> [!note]
+> While you can set the standard log levels like `INFO`, `DEBUG`, `TRACE` etc. you can also set class specific
+> logs by comma separating the details in the `KC_LOG_LEVEL` environment variable like
+> e.g. `INFO,org.keycloak.protocol.oidc.endpoints:TRACE`. The example sets the overall loglevel to `INFO` but
+> provides trace logs for `org.keycloak.protocol.oidc.endpoints`.
 
 ### Accessing the Keycloak admin console
 

@@ -84,9 +84,9 @@ In the project's CI, there is a step dedicated to lint the two yaml files, as we
 In the linting step, the [openDesk CI CLI](https://gitlab.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli) is used to apply the
 aforementioned sorting, and the result is compared with the unsorted version. If there is a delta, the linting fails, and you can fix it by running the CLI tool locally, verifying and applying the result to your branch.
 
-> **Note**<br>
-> Please ensure that in component blocks, you use comments only at the beginning of the block or at its end. Ideally, you stick
-with the many available examples in the yaml files.
+> [!note]
+> Please ensure that in component blocks, you use comments only at the beginning of the block or at its
+> end. Ideally, you stick with the many available examples in the yaml files.
 
 Example:
 ```yaml
@@ -126,7 +126,7 @@ Checks for newer versions of the given artifact and creates an MR containing the
 
 - See also: https://gitlab.opencode.de/bmi/opendesk/tooling/oci-pull-mirror
 
-> **Note:**<br>
+> [!note]
 > The mirror is scheduled to run every hour at 42 minutes past the hour.
 
 openDesk strives to make all relevant artifacts available on openCode so there is a mirroring process

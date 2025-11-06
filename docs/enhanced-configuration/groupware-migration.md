@@ -41,8 +41,9 @@ You will have to select an existing user account that will be used as a service 
 
 Please note that the account that shall serve as the service account requires a Microsoft 365/Exchange online license (mailbox).
 
-> **Note**<br>
-> If you want to designate your admin account as a service account, you have to provide the admin with a license.
+> [!note]
+> If you want to designate your admin account as a service account, you have to provide the admin with a
+> license.
 
 ***2. Register the audriga app in your tenant***
 
@@ -53,7 +54,7 @@ To register the audriga app in your tenant, log into your admin account and acce
 - Accept the App "audriga CloudMovr migration"
 - You will be redirected to an audriga page, which you can close - it does not require additional interaction.
 
-> **Note**<br>
+> [!note]
 > The audriga application is created under the "Enterprise application" tab in the AzureAD console.
 
 ***3. Create a "secret" group in the M365 tenant***
@@ -91,11 +92,15 @@ To validate the master authentication mode please read the appendix section at t
 
 Updating your deployment with these settings will allow you to continue with the migration scenario. Once the migration is completed, you can remove `secrets.oxAppSuite.migrationsMasterPassword` and need to turn off the migration mode by setting `functional.migration.oxAppSuite.enabled` to `false` or removing that setting, as `false` is the default before you update your deployment once again.
 
-> **Note**<br>
-> For the changes to take effect, it is sufficient to re-deploy the `open-xchange` component alone. But you have to restart the Dovecot Pod(s) manually when switching to/from the master authentication mode for the changes to take effect.
+> [!note]
+> For the changes to take effect, it is sufficient to re-deploy the `open-xchange` component alone. But you
+> have to restart the Dovecot Pod(s) manually when switching to/from the master authentication mode for the
+> changes to take effect.
 
-> **Note**<br>
-> While in master authentication mode, regular users cannot log in to the webmail module of openDesk or access the mail using IMAP, as it is not recommended that users interact with the target mail infrastructure during the migration scenario described in this document.
+> [!note]
+> While in master authentication mode, regular users cannot log in to the webmail module of openDesk or access
+> the mail using IMAP, as it is not recommended that users interact with the target mail infrastructure during
+> the migration scenario described in this document.
 
 # Migration configuration
 
@@ -107,7 +112,7 @@ Ensure you meet the prerequisites. For example, this document does not support u
 
 Choose [Microsoft 365 / Exchange Online (Admin)](https://umzug.audriga.com/SMESwitchWebApp/?client=groupware#src=onmicrosoft.com) as your current provider.
 
-> **Note**<br>
+> [!note]
 > You may need to start typing in "Microsoft Office 365/Exchange Online" for it to appear in the list.
 
 Configure openDesk as your destination server:

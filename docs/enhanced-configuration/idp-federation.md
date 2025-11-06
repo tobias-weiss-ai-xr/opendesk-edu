@@ -152,7 +152,7 @@ If you just created the `fed-test-idp-realm`, you are already in the admin scree
 
 ## openDesk IdP
 
-> **Note**
+> [!note]
 > While manual configuration is possible, an SSO federation can also be configured as part of the deployment.
 > Check `functional.authentication.ssoFederation` section from the `functional.yaml.gotmpl` for details.
 

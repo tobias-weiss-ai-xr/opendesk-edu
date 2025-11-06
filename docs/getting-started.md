@@ -236,9 +236,9 @@ ingress:
   ingressClassName: "nginx"
 ```
 
-> **Note**<br>
-> Currently, the only supported ingress controller is `ingress-nginx`
-> (see [requirements.md](./docs/requirements.md) for reference).
+> [!note]
+> Currently, the only supported ingress controller is `ingress-nginx` (see
+> [requirements.md](./docs/requirements.md) for reference).
 
 ### Container runtime
 
@@ -279,8 +279,9 @@ While openDesk configures the applications with meaningful defaults, you can che
 
 ### Ports
 
-> **Note**<br>
-> If you use `NodePort` for service exposure, you must check your deployment for the actual ports and ensure they are opened where necessary.
+> [!note]
+> If you use `NodePort` for service exposure, you must check your deployment for the actual ports and ensure
+> they are opened where necessary.
 
 #### Web-based user interface
 
@@ -385,10 +386,15 @@ To prevent others from using your openDesk instance, you must set your individua
 export MASTER_PASSWORD="your_individual_master_password"
 ```
 
-> **Note**<br>
-> Currently a [documented](https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/configuration/nats.html#configure-the-secrets) upstream [bug](https://forge.univention.org/bugzilla/show_bug.cgi?id=58357) causes a failure when passwords/secrets beginning with certain numbers are using for the Nubus subcomponent NATS.
-> With openDesk 1.6.0 an update-aware workaround was implemented that prefixes the affected secrets in the openDesk included `secrets.yaml.gotmpl` that derives all secrets from the previously mentioned `MASTER_PASSWORD`.
-> If you are using externally provided passwords/secrets make sure that none of the ones listed below are starting with a number:
+> [!important]
+> Currently a
+> [documented](https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/configuration/nats.html#configure-the-secrets)
+> upstream [bug](https://forge.univention.org/bugzilla/show_bug.cgi?id=58357) causes a failure when
+> passwords/secrets beginning with certain numbers are using for the Nubus subcomponent NATS. With openDesk
+> 1.6.0 an update-aware workaround was implemented that prefixes the affected secrets in the openDesk included
+> `secrets.yaml.gotmpl` that derives all secrets from the previously mentioned `MASTER_PASSWORD`. If you are
+> using externally provided passwords/secrets make sure that none of the ones listed below are starting with a
+> number:
 >
 > - `secrets.nubus.provisioning.api.natsPassword`
 > - `secrets.nubus.provisioning.dispatcherNatsPassword`
@@ -497,7 +503,7 @@ You can uninstall the deployment by executing the following:
 helmfile destroy -n <NAMESPACE>
 ```
 
-> **Note**<br>
+> [!note]
 > Not all Jobs, PersistentVolumeClaims, or Certificates are deleted; you have to delete them manually
 
 **'Sledgehammer destroy'** - for fast development turn-around times (at your own risk):
@@ -516,5 +522,5 @@ kubectl delete jobs --all --namespace ${NAMESPACE};
 kubectl delete configmaps --all --namespace ${NAMESPACE};
 ```
 
-> **Warning**<br>
+> [!warning]
 > Without specifying a `--namespace` flag, or by leaving it empty, cluster-wide components will get deleted!
