@@ -52,8 +52,9 @@ Roles are defined sets of permissions that can be assigned to users. Each role c
 - **openDesk Administrator**: Manages openDesk-global settings, such as users and groups.
 - **openDesk User**: Can log in to openDesk to make use of defined openDesk applications.
 
-> **Note**<br>
-> Although it is not enforced by openDesk, it is strongly recommended that a user account is not granted both roles at the same time. This is to maintain the separation of duties.
+> [!note]
+> Although it is not enforced by openDesk, it is strongly recommended that a user account is not granted both
+> roles at the same time. This is to maintain the separation of duties.
 
 ### Application usage
 
@@ -93,15 +94,20 @@ When editing a user in the IAM, you can select if a user can access or get eleva
 
 To easily identify these groups, all of them are prefixed with `managed-by-Attribute-`.
 
-> **Note**<br>
-> The membership of these groups is automatically managed based on the user's attributes from the "openDesk" tab. Any changes directly to the groups will be overwritten, so please always use the "openDesk" tab of the respective user. The IAM supports editing user attributes across multiple accounts simultaneously.
+> [!note]
+> The membership of these groups is automatically managed based on the user's attributes from the "openDesk"
+> tab. Any changes directly to the groups will be overwritten, so please always use the "openDesk" tab of the
+> respective user. The IAM supports editing user attributes across multiple accounts simultaneously.
 
 #### Standard access to applications
 
 Unless a user is a member of a group, the respective application is not shown in the portal.
 
-> **Note**<br>
-> In openDesk's identity provider, the required OIDC claims to access an application are only granted when the respective group membership is available. This means that even if a user who is not a member of an application group knows the link to the application and calls it directly, the single sign-on will be unsuccessful.
+> [!note]
+> In openDesk's identity provider, the required OIDC claims to access an application are only granted when the
+> respective group membership is available. This means that even if a user who is not a member of an
+> application group knows the link to the application and calls it directly, the single sign-on will be
+> unsuccessful.
 
 - **managed-by-Attribute-Groupware**: Members of this group have access to the groupware applications.
 - **managed-by-Attribute-Fileshare**: Members of this group have access to the file sharing application.
@@ -130,7 +136,7 @@ Users get roles assigned based on their responsibilities and the tasks they need
 
 openDesk defines [templates](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-nubus/-/blob/main/udm/udm-data-loader/65-usertemplate.yaml) for the *User* and *Administrator* roles. The templates can be used by an *openDesk Administrator* to create users with these roles using the [administration portal](https://docs.opendesk.eu/administration/).
 
-> **Note**<br>
+> [!note]
 > Additional/custom templates can be created using the UDM REST API.
 
 ### *openDesk User*
@@ -195,8 +201,10 @@ Managing all application permissions within the IAM would require a superset of 
 
 Within IAM groups, the visibility of openDesk applications can be configured. Like with users, this is done in the "openDesk" tab of the [group administration](https://docs.opendesk.eu/administration/gruppen/).
 
-> **Note**<br>
-> Currently the openDesk applications do not support nested groups. As a result only direct group memberships of users are processed in the application.<br>
-> The plan is to enable the openDesk applications to either support nested groups or to actively provision users into an application while resolving the nested group memberships for the application.
+> [!note]
+> Currently the openDesk applications do not support nested groups. As a result only direct group memberships
+> of users are processed in the application.<br> The plan is to enable the openDesk applications to either
+> support nested groups or to actively provision users into an application while resolving the nested group
+> memberships for the application.
 
 Within an application, each available group can have a set of application specific permissions assigned.

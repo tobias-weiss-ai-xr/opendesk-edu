@@ -44,9 +44,10 @@ References:
 
 Afterwards, you can use the resulting manifests within a standard Argo CD workflow.
 
-> **Note**<br>
-> When creating the Argo CD application based on the resulting manifests, you must not use the `Automated Sync Policy`
-> offered by Argo CD, as you have to manually ensure the applications are updated in the required sequence.
+> [!note]
+> When creating the Argo CD application based on the resulting manifests, you must not use the `Automated Sync
+> Policy` offered by Argo CD, as you have to manually ensure the applications are updated in the required
+> sequence.
 
 ## Option 2: Helmfile plugin
 

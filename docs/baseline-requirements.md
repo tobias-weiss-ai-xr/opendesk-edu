@@ -38,7 +38,7 @@ As this is a comprehensive set of requirements most new components will not adhe
 
 This document can be used to assess the status and possible gaps for a component which might itself be the basis for a decision if a component should be integrated into openDesk by working on closing the identified gaps.
 
-> **Note**<br>
+> [!note]
 > Even an already integrated application might not adhere to all aspects of the documented requirements yet.
 > Closing the gaps for existing applications therefore is an openDesk priority.
 
@@ -147,8 +147,9 @@ Please find more context about the topic on the [website of the German CIO](http
 
 Each vendor must provide a certificate that their product - or the parts of the product relevant for openDesk - complies with at least WCAG 2.1 AA or [BITV 2.0](https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Informationstechnik/EU-Webseitenrichtlinie/BGG-und-BITV-2-0/Die-neue-BITV-2-0/die-neue-bitv-2-0_node.html). As the certification and related product improvements are time-consuming the focus of openDesk is that a supplier provides a plan and certification partner (contract) that shows the supplier is working towards the certification. While the aforementioned standard states the priority is the "A" level requirements, the "AA" level must be met at the end of the process.
 
-> **Note**<br>
-> Please keep in mind that WCAG 2.2 and 3.0 are work in progress. If you already work on accessibility improvements you might want to take these standards already into consideration.
+> [!note]
+> Please keep in mind that WCAG 2.2 and 3.0 are work in progress. If you already work on accessibility
+> improvements you might want to take these standards already into consideration.
 
 **Reference:** In the past the [accessibility evaluations](https://gitlab.opencode.de/bmi/opendesk/info/-/tree/main/24.03/Barrierefreiheit) have been executed by Dataport. But they do not do certifications.
 
@@ -185,7 +186,7 @@ With a central Identity- and Access Management (IAM) also the user lifecycle (UL
 
 The focus is to have all the account information in all applications including the account's state, profile picture ([reference](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues/27)) and - where required - the user's group memberships. This cannot be done purely by pushing that data through OIDC claims when a user logs in to an application therefore two ways of managing an account are applicable and described in the following subchapters.
 
-> **Note**<br>
+> [!note]
 > Allowing ad hoc updates of account data through OIDC claims during login is still encouraged.
 
 ### Pull: LDAP
@@ -194,8 +195,9 @@ Applications can access the IAM's LDAP to access all data necessary for managing
 
 **Reference:** Most applications use LDAP access as per https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/components.md?ref_type=heads#identity-data-flows
 
-> **Note**<br>
-> The direct access to LDAP is going to be deprecated for most use cases. openDesk is looking into active provisioning of the user/group data into the applications using [SCIM](https://scim.cloud/).
+> [!note]
+> The direct access to LDAP is going to be deprecated for most use cases. openDesk is looking into active
+> provisioning of the user/group data into the applications using [SCIM](https://scim.cloud/).
 
 ### Push: Provisioning
 

@@ -19,8 +19,10 @@ This document will cover the additional configuration for external services like
 When deploying this suite to production, you need to configure the applications to use your production-grade database
 service.
 
-> **Note**<br>
-> openDesk supports PostgreSQL as alternative database backend for Nextcloud and XWiki. PostgreSQL is likely to become the preferred option/default in the future should MariaDB become deprecated. This would cause migration[^1] to be necessary if you do not select PostgreSQL for new installations.
+> [!note]
+> openDesk supports PostgreSQL as alternative database backend for Nextcloud and XWiki. PostgreSQL is likely
+> to become the preferred option/default in the future should MariaDB become deprecated. This would cause
+> migration[^1] to be necessary if you do not select PostgreSQL for new installations.
 
 | Component          | Name               | Parameter | Key                                           | Default                      |
 | ------------------ | ------------------ | --------- | --------------------------------------------- | ---------------------------- |

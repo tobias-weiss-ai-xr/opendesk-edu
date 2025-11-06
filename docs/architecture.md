@@ -184,8 +184,10 @@ sequenceDiagram
     Note over Browser: User is authenticated
 ```
 
-> **Note:**<br>
-> Nubus' Portal and UMC still use [SAML 2.0](https://www.oasis-open.org/standard/saml/) to authenticate users. However, Nubus will switch to OIDC in an upcoming release, eliminating the use of SAML in openDesk altogether.
+> [!note]
+> Nubus' Portal and UMC still use [SAML 2.0](https://www.oasis-open.org/standard/saml/) to authenticate
+> users. However, Nubus will switch to OIDC in an upcoming release, eliminating the use of SAML in openDesk
+> altogether.
 
 ## Keycloak
 
@@ -245,7 +247,7 @@ To find out more, see [Roles & Permissions](./docs/permissions.md).
 
 In openDesk, SCIM will be used in the future to automate the process of creating, updating, and deactivating user accounts across the applications. This ensures that user data is consistent across all applications, reducing the administrative overhead and potential for errors.
 
-> **Note:**<br>
+> [!note]
 > SCIM support is planned in openDesk for 2025.
 
 # Component integration

@@ -295,8 +295,10 @@ The following are the APIs used by the Groupware application:
 | Supported standards            | SOAP                                                                                         |
 | Documentation                  | https://software.open-xchange.com/products/appsuite/doc/SOAP/admin/OX-Admin-SOAP.html        |
 
-> **Note**:
-> You will find a catalogue of the available services including links to the respective URLs at `/webservices/` within the AppSuite host of your openDesk installation, e.g. https://webmail.myopendesk.tld/webservices/
+> [!note]
+> You will find a catalogue of the available services including links to the respective URLs at
+> `/webservices/` within the AppSuite host of your openDesk installation,
+> e.g. https://webmail.myopendesk.tld/webservices/
 
 ## REST API
 
@@ -648,7 +650,7 @@ The following are the APIs used by the Project management application:
 
 ## Jitsi Meet React SDK
 
-> **Note**<br>
+> [!note]
 > Additional SDKs can be found at https://jitsi.github.io/handbook/docs/category/sdks/
 
 | Name                           | Meet React SDK                                                      |

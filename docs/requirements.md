@@ -55,7 +55,7 @@ Any self-hosted or managed K8s cluster >= v1.24 listed in
 
 The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/kubespray) based clusters.
 
-> **Note**<br>
+> [!note]
 > The deployment is not tested against OpenShift.
 
 # Ingress controller
@@ -67,7 +67,7 @@ configured ingress controller deployed in your cluster.
 
 - [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
 
-> **Note**<br>
+> [!note]
 > The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/).
 
 **Compatibility with Ingress NGINX >= 1.12.0**
@@ -79,8 +79,9 @@ controller.config.strict-validate-path-type=false
 ```
 See the [`annotations-risk-level` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#annotations-risk-level) and [`strict-validate-path-type` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#strict-validate-path-type) for details.
 
-> **Important Note**<br>
-> Ensure to install at least Ingress NGINX 1.11.5 or 1.12.1 due to [security issues](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
+> [!warning]
+> Ensure to install at least Ingress NGINX 1.11.5 or 1.12.1 due to [security
+> issues](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
 
 ## Minimal configuration
 
@@ -96,7 +97,7 @@ See the [`allowSnippetAnnotations` documentation](https://kubernetes.github.io/i
 Initial evaluation deployment requires a `ReadWriteOnce` volume provisioner. For local deployment, a local- or hostPath-
 provisioner is sufficient.
 
-> **Note**<br>
+> [!note]
 > Some components require a `ReadWriteMany` volume provisioner for distributed mode or horizontal scaling.
 
 # Certificate management
