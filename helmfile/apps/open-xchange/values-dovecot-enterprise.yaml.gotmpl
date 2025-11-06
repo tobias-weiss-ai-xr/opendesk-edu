@@ -37,11 +37,14 @@ dovecot:
       value: {{ .Values.secrets.dovecot.sharedMailboxesMasterPassword | quote }}
   objectStorage:
     bucket: {{ .Values.objectstores.dovecot.bucket | quote }}
+    cacheTmpfs: {{ if .Values.technical.dovecot.objectStorage.cacheTmpfs }}true{{ else }}false{{ end }}
     encryption:
       privateKey:
         value: {{ requiredEnv "DOVECOT_CRYPT_PRIVATE_KEY" | quote }}
       publicKey:
         value: {{ requiredEnv "DOVECOT_CRYPT_PUBLIC_KEY" | quote }}
+    fsCacheSize: {{ .Values.technical.dovecot.objectStorage.fsCacheSize | quote }}
+    ftsCacheSize: {{ .Values.technical.dovecot.objectStorage.ftsCacheSize | quote }}
     fqdn: {{ .Values.objectstores.dovecot.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
     username: {{ .Values.objectstores.dovecot.username | quote }}
     password:

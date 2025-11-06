@@ -8,6 +8,18 @@ technical:
     # Defines the value for the start parameter `-o:num_prespawn_children`
     numPrespawnChildren: 4
 
+  # Dovecot EE related settings
+  dovecot:
+    objectStorage:
+      # Size of objectstore fs cache
+      fsCacheSize: "2G"
+      # Size of fts cache
+      ftsCacheSize: "2G"
+      # Wether fs and fts cache should reside in RAM (tmpfs) or not
+      # If this value is true, the cache sizes of the fs cache + fts cache
+      # must be considered additionally to Dovecot's memory footprint.
+      cacheTmpfs: false
+
   # Nubus related settings
   nubus:
     # Nubus provisioning framework that is being used to actively provision data internally within

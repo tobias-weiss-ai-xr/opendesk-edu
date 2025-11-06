@@ -16,6 +16,8 @@ persistence:
       size: "1Gi"
       storageClassName: ~
     dovecot:
+      # With Dovecot CE this is used for the mail storage.
+      # Dovecot Pro (EE) uses this storage for the metacache,
       size: "1Gi"
       storageClassName: ~
     mariadb:
