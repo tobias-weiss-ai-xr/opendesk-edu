@@ -95,6 +95,25 @@ postfix:
     password:
       value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
 
+  ldapTransportMaps: []
+
+  ldapVirtualAliasMaps:
+    - host: "ums-ldap-server"
+      scheme: "ldap"
+      port: 389
+      baseDn: "{{ .Values.ldap.baseDn }}"
+      bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
+      password:
+        value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+      # ldap filter to find groups with mail address
+      queryFilter: "(&(|(objectClass=univentionMailList)(objectClass=posixGroup))(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s)))"
+      # -- use this attribute if the query already returns email addresses of members and no recursive lookup needs to be done
+      resultAttribute: ""
+      # -- do a recursive search on the specified attribute if found, should be a DN
+      specialResultAttribute: "uniqueMember"
+      # -- return the following attribute from all found leaves when a recursive search is done
+      leafResultAttribute: "mailPrimaryAddress"
+
   {{- if .Values.antivirus.milter.host }}
   smtpdMilters: "inet:{{ .Values.antivirus.milter.host }}:{{ .Values.antivirus.milter.port }}"
   {{- else }}
