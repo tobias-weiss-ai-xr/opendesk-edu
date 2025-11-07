@@ -1,3 +1,30 @@
+# [1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.8.0...v1.9.0) (2025-11-07)
+
+
+### Bug Fixes
+
+* **collabora:** Update from 25.04.4.3.1 to 25.04.5.3.1 ([e0128e6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e0128e6ccf02eaaa68fe53f5629150f0e0863ba0))
+* **element:** Increase message and media rate limits ([13968a8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/13968a8133174024dc97c5cf73e6b1e7883ce0a0))
+* **element:** Update favicon to use PNG version ([f8104f6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f8104f635862ce6c80b66c6d7fa82df7cde9d446))
+* **element:** Update Synapse from v1.137.0 to v1.141.0; fixes https://github.com/element-hq/synapse/security/advisories/GHSA-fh66-fcv5-jjfr which applies to all openDesk deployments using Element/Matrix with federation enabled ([02d3021](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/02d3021c4ba97f81165e286d1ee53b7c199f5dbb))
+* **element:** Update widgets primary color theme settings ([94394a1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/94394a1e3e3da304138263de73121a62aabbee11))
+* **gitlab:** Add issue templates ([26da7e3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/26da7e366709b3888f6786b574e3b3b11f1a6fab))
+* **helmfile:** Support setting the `defaultLanguage` - relevant for OX App Suite and XWiki - in `functional.yaml.gotmpl` ([24065db](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/24065dbc7043d09dbad0d272128cfe2f33f22e48))
+* **helmfile:** Use passwords defined in `database.yaml.gotmpl` for Cassandra when available ([0268219](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/026821996a4e42ac9ef25dd62c34d1697547962c))
+* **notes:** Fix python path for self signed certs ([c4279d1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c4279d11bb46c9fe65b2ccd54dc0789d11c0d0d8))
+* **notes:** Fix repeated redirects on expired session; Remove fetching of external assets ([c1012f4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c1012f4e656222750dda0668d8f81e5d1fbe02fd))
+* **open-xchange:** Don't enable sasl auth when no relay host is set ([ff3b221](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ff3b2218706a98b854c072de62105aa8352e3949))
+* **open-xchange:** Enable and configure defaults for ContactCollector, remove legacy config artifacts ([465f60d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/465f60d4a28ead7d7a715db71dad9d9992e8b89a))
+* **open-xchange:** Use masterpassword for mailfilter in migration Pods; use PLAIN instead of OAuth for SASL ([484dfaf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/484dfafe643e04a717e6bc3a8e6e6e6f5011c1c1))
+* **ox-connector:** Use FQDN for internal service URLs ([8593d5f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8593d5f2bdea685a836edc9d9034ce1976cf2e96))
+
+
+### Features
+
+* **helmfile:** Add toggle for external mail client onboarding and allow non-default FQDNs for IMAP and SMTP endpoints ([25a97ab](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/25a97abba69b34c6b65a08ca7af979f3897d218b))
+* **open-xchange:** Enable XRechnung in Viewer ([08e6ec5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/08e6ec59d2abac36a8f6e5ab10fec6a5643de282))
+* **openproject:** Update from 16.4.1 to 16.5.1 ([74cf2ee](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/74cf2ee0d818b5e017b3c97f6fbedb05ab764d67))
+
 # [1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.7.1...v1.8.0) (2025-09-25)
 
 
