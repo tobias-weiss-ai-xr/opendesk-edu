@@ -77,6 +77,8 @@ For your convenience, we recommend creating a `*.domain.tld` A-Record for your c
 
 ## Domain
 
+As example base domain for your deployment we use `domain.tld` in this document.
+
 A list of all subdomains can be found in `helmfile/environments/default/global.yaml.gotmpl`.
 
 All subdomains can be customized. For example, _Nextcloud_ can be changed to `files.domain.tld` in `dev` environment:
@@ -99,6 +101,11 @@ or alternatively via environment variable:
 ```shell
 export DOMAIN=domain.tld
 ```
+
+> [!warning]
+> Due to a limitation caused by a [bug in the SSSD subcomponent](https://github.com/SSSD/sssd/issues/7246), there
+> is an upper bound on the total domain length used by openDesk. To avoid issues, we recommend keeping the openDesk
+> base domain length below 94 characters.
 
 ### Apps
 
