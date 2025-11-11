@@ -60,10 +60,12 @@ For the following guide, we will use `dev` as environment where variables can be
 ## DNS
 
 The deployment is designed to deploy each application/service under a dedicated subdomain.
-For your convenience, we recommend creating a `*.domain.tld` A-Record for your cluster Ingress Controller; otherwise, you must create an A-Record for each subdomain.
+For your convenience, we recommend creating a `*.domain.tld` A/AAAA-Record for your cluster Ingress Controller; otherwise, you must create an A/AAAA-Record for each subdomain.
 
 | Record name                   | Type | Value                                              | Additional information                                            |
 |-------------------------------|------|----------------------------------------------------|-------------------------------------------------------------------|
+| domain.tld                    | A    | IPv4 address of your Ingress Controller            |                                                                   |
+| domain.tld                    | AAAA | IPv6 address of your Ingress Controller            | Optional                                                          |
 | *.domain.tld                  | A    | IPv4 address of your Ingress Controller            |                                                                   |
 | *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            | Optional                                                          |
 | mail.domain.tld               | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional, mail should directly be delivered to openDesk's Postfix |
