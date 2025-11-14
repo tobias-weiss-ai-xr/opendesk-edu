@@ -31,8 +31,6 @@ sankey-beta
 
 ClamAV,PersistentVolume,1
 
-Dovecot,PersistentVolume,1
-
 Element/Synapse,PostgreSQL,1
 Element/Synapse,PersistentVolume,1
 
@@ -54,9 +52,15 @@ OpenProject,S3,1
 OpenProject,PersistentVolume,1
 OpenProject,Memcached,1
 
-Open-Xchange,MariaDB,1
-Open-Xchange,PersistentVolume,1
-Open-Xchange,Redis,1
+OX App Suite,MariaDB,1
+OX App Suite,Redis,1
+OX App Suite,S3,1
+
+OX Connector,PersistentVolume,1
+
+OX Dovecot,Cassandra,1
+OX Dovecot,PersistentVolume,1
+OX Dovecot,S3,1
 
 Postfix,PersistentVolume,1
 
@@ -70,7 +74,7 @@ XWiki,PersistentVolume,1
 | -------------------- | ------------ | -------- | --------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | **ClamAV**           | PVC          | No       | ClamAV Database                                                                   | `clamav-database-clamav-simple-0`              | `/var/lib/clamav`                                                                                         |
 | **Dovecot**          | PVC          | Yes      | openDesk CE only: User mail directories                                           | `dovecot`                                      | `/srv/mail`                                                                                               |
-|                      | PVC          | No       | openDesk EE only: Metacache directory                                             | `var-lib-dovecot-dovecot-0`                    | `/var/lib/dovecot`                                                                                        |
+|                      | PVC          | Yes       | openDesk EE only: Metacache directory                                             | `var-lib-dovecot-dovecot-0`                    | `/var/lib/dovecot`                                                                                        |
 |                      | S3           | Yes      | openDesk EE only: User mail                                                       | `dovecot`                                      | `dovecot`                                                                                                 |
 |                      | Cassandra    | Yes      | openDesk EE only: Metadata and ACLs                                               | `dovecot_dictmap`, `dovecot_acl`               |                                                                                                           |
 | **Element/Synapse**  | PostgreSQL   | Yes      | Application's main database                                                       | `matrix`                                       |                                                                                                           |
@@ -85,8 +89,8 @@ XWiki,PersistentVolume,1
 |                      |              | Yes      | Login actions and device-fingerprints                                             | `keycloak_extensions`                          |                                                                                                           |
 |                      |              | Optional | Store of the temporary password reset token                                       | `selfservice`                                  |                                                                                                           |
 |                      |              | Optional | OIDC session storage                                                              | `umsAuthSession`                               |                                                                                                           |
-|                      |              | No       | Notification features are not used in openDesk 1.1                                | `notificationsapi`                             |                                                                                                           |
-|                      |              | No       | Guardian features are currently not used in openDesk 1.1                          | `guardianmanagementapi`                        |                                                                                                           |
+|                      |              | No       | At the moment the notification feature not enabled in openDesk                    | `notificationsapi`                             |                                                                                                           |
+|                      |              | No       | At the moment the Guardian features are currently not enabled in openDesk         | `guardianmanagementapi`                        |                                                                                                           |
 |                      | S3           | No       | Static files for Portal                                                           | `ums`                                          |                                                                                                           |
 |                      | PVC          | Yes      | openLDAP database (primary R/W Pods), when restore select the one from the leader | `shared-data-ums-ldap-server-primary-0`        | `/var/lib/univention-ldap`                                                                                |
 |                      |              | Yes      | openLDAP process data                                                             | `shared-run-ums-ldap-server-primary-0`         | `/var/run/slapd`                                                                                          |
@@ -101,13 +105,17 @@ XWiki,PersistentVolume,1
 |                      | Memcached    | No       | Cache                                                                             |                                                |                                                                                                           |
 |                      | PVC          | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs      | `openproject-<web/worker>-*-tmp`               | `/tmp`                                                                                                    |
 |                      |              | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs      | `openproject-<web/worker>-app-*-tmp`           | `/app/tmp`                                                                                                |
-| **Open-Xchange**     | MariaDB      | Yes      | Application's control database to coordiate dynamically created ones              | `configdb`                                     |                                                                                                           |
+| **OX App Suite**     | MariaDB      | Yes      | Application's control database to coordiate dynamically created ones              | `configdb`                                     |                                                                                                           |
 |                      |              | Yes      | Dynamically creates databases of schema `PRIMARYDB_n`containing multiple contexts | `PRIMARYDB_*`                                  |                                                                                                           |
 |                      |              | Yes      | OX Guard related settings                                                         | `oxguard*`                                     |                                                                                                           |
 |                      | S3           | Yes      | Attachments of meetings, contacts and tasks                                       | `openxchange`                                  |                                                                                                           |
 |                      | Redis        | Optional | Cache, session related data, distributed maps                                     |                                                |                                                                                                           |
-|                      | PVC          | Optional | OX Connector: Caching of OX object data                                           | for backup        | `/var/lib/univention-appcenter/apps/ox-connector`                                                         |
+| **OX Connector**     | PVC          | Optional | OX Connector: Caching of OX object data                                           | for backup                                     | `/var/lib/univention-appcenter/apps/ox-connector`                                                         |
 |                      |              | Yes      | OX Connector: OX SOAP API credentials                                             | `ox-connector-ox-contexts-ox-connector-0`      | `/etc/ox-secrets`                                                                                         |
+| **OX Dovecot**       | PVC          | Yes      | openDesk CE only: User mail directories                                           | `dovecot`                                      | `/srv/mail`                                                                                               |
+|                      | PVC          | Yes      | openDesk EE only: Various meta data and caches                                    | `var-lib-dovecot`                              | `/var/lib/dovecot`                                                                                        |
+|                      | S3           | Yes      | Dovecot Pro/openDesk EE only: User mail                                           | `dovecot`                                      | `dovecot`                                                                                                 |
+|                      | Cassandra    | Yes      | Dovecot Pro/openDesk EE only: Metadata and ACLs                                   | `dovecot_dictmap`, `dovecot_acl`               |                                                                                                           |
 | **Postfix**          | PVC          | Yes      | Mail spool                                                                        | `postfix`                                      | `/var/spool/postfix`                                                                                      |
 | **XWiki**            | PostgreSQL   | Yes      | Application's main database                                                       | `xwiki`                                        |                                                                                                           |
 |                      | PVC          | Yes      | Attachments                                                                       | `xwiki-data-xwiki-0`                           | `/usr/local/xwiki/data`                                                                                   |
