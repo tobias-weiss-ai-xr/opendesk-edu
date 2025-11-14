@@ -67,6 +67,9 @@ job:
     - username: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
       password: {{ .Values.secrets.postgresql.umsGuardianManagementApiUser | quote }}
       connectionLimit: {{ .Values.databases.umsGuardianManagementApi.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
+    - username: {{ .Values.databases.umsAuthSession.username | quote }}
+      password: {{ .Values.secrets.postgresql.umsAuthSessionUser | quote }}
+      connectionLimit: {{ .Values.databases.umsAuthSession.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
     - username: {{ .Values.databases.umsSelfservice.username | quote }}
       password: {{ .Values.secrets.postgresql.umsSelfserviceUser | quote }}
       connectionLimit: {{ .Values.databases.umsSelfservice.connectionLimit | default .Values.databases.defaults.userConnectionLimit }}
@@ -96,6 +99,8 @@ job:
       user: {{ .Values.databases.umsGuardianManagementApi.username | quote }}
     - name: {{ .Values.databases.umsNotificationsApi.name | quote }}
       user: {{ .Values.databases.umsNotificationsApi.username | quote }}
+    - name: {{ .Values.databases.umsAuthSession.name | quote }}
+      user: {{ .Values.databases.umsAuthSession.username | quote }}
     - name: {{ .Values.databases.umsSelfservice.name | quote }}
       user: {{ .Values.databases.umsSelfservice.username | quote }}
 {{ if or (eq .Values.databases.nextcloud.type "postgresql") (eq .Values.databases.nextcloud.type "psql") }}
