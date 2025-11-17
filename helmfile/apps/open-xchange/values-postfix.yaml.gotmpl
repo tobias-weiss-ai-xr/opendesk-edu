@@ -129,6 +129,8 @@ service:
     {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
   external:
     enabled: true
+    annotations:
+      {{ .Values.annotations.openxchangePostfix.serviceExternal | toYaml | nindent 6 }}
     type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}
 {{- end }}
 ...

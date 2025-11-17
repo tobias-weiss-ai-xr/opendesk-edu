@@ -248,9 +248,9 @@ jitsi:
       {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
       type: {{ coalesce .Values.service.type.jitsiVideoBridge .Values.cluster.service.type | quote }}
-    {{- if .Values.annotations.jitsiJvb.service }}
+    {{- if .Values.annotations.jitsiJvb.serviceExternal }}
       annotations:
-        {{ .Values.annotations.jitsiJvb.service | toYaml | nindent 8 }}
+        {{ .Values.annotations.jitsiJvb.serviceExternal | toYaml | nindent 8 }}
     {{- end }}
     securityContext:
       allowPrivilegeEscalation: false

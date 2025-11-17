@@ -140,6 +140,8 @@ service:
     {{ .Values.annotations.openxchangeDovecot.service | toYaml | nindent 4 }}
   external:
     enabled: true
+    annotations:
+      {{ .Values.annotations.openxchangeDovecot.serviceExternal | toYaml | nindent 6 }}
     type: {{ coalesce .Values.service.type.dovecot .Values.cluster.service.type | quote }}
 {{- end }}
 
