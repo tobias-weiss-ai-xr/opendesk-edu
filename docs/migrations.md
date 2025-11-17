@@ -10,6 +10,9 @@ SPDX-License-Identifier: Apache-2.0
 * [Deprecation warnings](#deprecation-warnings)
 * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
+  * [Versions ≥ v1.11.0](#versions--v1110)
+    * [Pre-upgrade to versions ≥ v1.11.0](#pre-upgrade-to-versions--v1110)
+      * [Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#helmfile-new-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
   * [Versions ≥ v1.10.0](#versions--v1100)
     * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
       * [Helmfile new secret: `secrets.nubus.ldapSearch.postfix`](#helmfile-new-secret-secretsnubusldapsearchpostfix)
@@ -180,6 +183,35 @@ If you would like more details about the automated migrations, please read secti
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
+
+## Versions ≥ v1.11.0
+
+### Pre-upgrade to versions ≥ v1.11.0
+
+#### Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
+
+**Target group:** Existing deployments using `service` annotations.
+
+The three non-HTTP external services support now explicit annotations.
+See [`annotations.yaml.gomtpl`](../helmfile/environments/default/annotations.yaml.gotmpl) for reference.
+
+**Jitsi JVB**
+
+The already existing annotation key `annotations.jitsiJVB.service` has been renamed to
+`annotations.jitsiJVB.serviceExternal` be in line with the newly added ones for Postfix and Dovecot.
+If you make use of the JVB service annotation please rename the attribute to the new `serviceExternal` standard.
+
+**Dovecot**
+
+Setting service annotation by `annotations.openxchangeDovecot.service` applied the annotations to the internal
+and external service. This key now only sets annotations for the internal service. If you want to set
+annotations for the external service use the newly introduced key `annotations.openxchangeDovecot.serviceExternal`.
+
+**Postfix**
+
+Setting service annotation by `annotations.openxchangePostfix.service` applied the annotations to the internal
+and external service. This key now only sets annotations for the internal service. If you want to set
+annotations for the external service use the newly introduced key `annotations.openxchangePostfix.serviceExternal`.
 
 ## Versions ≥ v1.10.0
 
