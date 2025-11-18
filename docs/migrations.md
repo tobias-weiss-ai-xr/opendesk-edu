@@ -175,6 +175,20 @@ If you would like more details about the automated migrations, please read secti
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
 
+## Versions &GreaterEqual; v1.10.0
+
+### Post-upgrade to versions &GreaterEqual; v1.10.0
+
+#### Fix: Optimize indexes
+
+**Target group:** All openDesk Enterprise deployments.
+
+FTS indexes need to be rebuilt. Run the following command inside the dovecot container:
+
+```shell
+set -x; for d in /var/lib/dovecot/*/*; do uuid=$(basename "$d"); [[ $uuid =~ ^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$ ]] || continue; doveadm fts rescan -u "$uuid"; doveadm index -u "$uuid" -q '*'; done
+```
+
 ## Versions &GreaterEqual; v1.9.0
 
 ### Pre-upgrade to versions &GreaterEqual; v1.9.0

@@ -33,6 +33,8 @@ dovecot:
     password:
       value: {{ .Values.databases.dovecotACL.password | default .Values.secrets.cassandra.dovecotACLUser | quote }}
     keyspace: {{ .Values.databases.dovecotACL.name | quote }}
+    masterPassword:
+      value: {{ .Values.secrets.dovecot.sharedMailboxesMasterPassword | quote }}
   objectStorage:
     bucket: {{ .Values.objectstores.dovecot.bucket | quote }}
     encryption:
