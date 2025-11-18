@@ -31,6 +31,11 @@ There are two options to deploy openDesk via Argo CD described in the following 
 
 ## Option 1: Use YAML manifests
 
+> [!warning]
+> Pre-rendering the YAML files will also embed all referenced secrets into the resulting outputs.
+> You must ensure that these files are accessible solely to individuals who are expressly authorized
+> to view the corresponding secrets, as well as the infrastructure and data protected by them.
+
 This option requires a preprocessing step before using Argo CD. This step requires you to compile the Helmfile based
 deployment into Kubernetes YAML manifest, to do so you need to execute the helmfile binary:
 
