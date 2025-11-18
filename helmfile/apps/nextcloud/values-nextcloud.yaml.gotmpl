@@ -118,6 +118,10 @@ aio:
           value: {{ .Values.databases.nextcloud.password | quote }}
           {{- end }}
     trustedProxy: {{ join " " .Values.cluster.networking.cidr | quote }}
+    status:
+      password:
+        value: {{ .Values.secrets.nextcloud.statusPassword | quote }}
+
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:

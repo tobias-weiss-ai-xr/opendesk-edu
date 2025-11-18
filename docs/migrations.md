@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Versions ≥ v1.11.0](#versions--v1110)
     * [Pre-upgrade to versions ≥ v1.11.0](#pre-upgrade-to-versions--v1110)
       * [Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#helmfile-new-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
+      * [Helmfile new secret: `secrets.nextcloud.statusPassword`](#helmfile-new-secret-secretsnextcloudstatuspassword)
   * [Versions ≥ v1.10.0](#versions--v1100)
     * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
       * [Deployment cleanup: Collabora Controller](#deployment-cleanup-collabora-controller)
@@ -213,6 +214,20 @@ annotations for the external service use the newly introduced key `annotations.o
 Setting service annotation by `annotations.openxchangePostfix.service` applied the annotations to the internal
 and external service. This key now only sets annotations for the internal service. If you want to set
 annotations for the external service use the newly introduced key `annotations.openxchangePostfix.serviceExternal`.
+
+#### Helmfile new secret: `secrets.nextcloud.statusPassword`
+
+**Target group:** All existing deployments that use self-defined secrets and have deployed Nextcloud.
+
+Access to Nextcloud's `/status.php` requires now BasicAuth. The related password is set in
+[`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key
+`secrets.nextcloud.statusPassword`.
+
+If you define your own secrets, please ensure that you provide a value for this secret, otherwise it will
+be derived from the `MASTER_PASSWORD`.
+
+> [!note]
+> The username for the BasicAuth is hardcoded to "status-access".
 
 ## Versions ≥ v1.10.0
 
