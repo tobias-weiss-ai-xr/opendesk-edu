@@ -33,6 +33,9 @@ config:
         value: "nextcloud"
       password:
         value: {{ .Values.secrets.nextcloud.adminPassword | quote }}
+    status:
+      password:
+        value: {{ .Values.secrets.nextcloud.statusPassword | quote }}
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
