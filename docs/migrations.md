@@ -10,13 +10,15 @@ SPDX-License-Identifier: Apache-2.0
 * [Deprecation warnings](#deprecation-warnings)
 * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
 * [Manual checks/actions](#manual-checksactions)
+  * [Versions ≥ v1.10.0](#versions--v1100)
+    * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
+      * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
+    * [Post-upgrade to versions ≥ v1.10.0](#post-upgrade-to-versions--v1100)
+      * [New application default: Dovecot full-text search index configuration](#new-application-default-dovecot-full-text-search-index-configuration)
   * [Versions ≥ v1.9.0](#versions--v190)
     * [Pre-upgrade to versions ≥ v1.9.0](#pre-upgrade-to-versions--v190)
       * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
       * [Helmfile new feature: `functional.groupware.externalClients.*`](#helmfile-new-feature-functionalgroupwareexternalclients)
-  * [Versions ≥ v1.10.0](#versions--v1100)
-    * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
-    * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
   * [Versions ≥ v1.8.0](#versions--v180)
     * [Pre-upgrade to versions ≥ v1.8.0](#pre-upgrade-to-versions--v180)
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
@@ -177,13 +179,32 @@ If you would like more details about the automated migrations, please read secti
 
 ## Versions &GreaterEqual; v1.10.0
 
+### Pre-upgrade to versions &GreaterEqual; v1.10.0
+
+#### New Helmfile default: Nubus provisioning debug container no longer deployed
+
+**Target group:** All deployments that make use of the debugging container for Nubus' provisioning stack called "nats-box",
+
+The [nats-box](https://github.com/nats-io/nats-box), a handy tool when it comes to debugging the Nubus provisioning stack, is no longer enabled in openDesk by default.
+
+To re-enable the nats-box for your deployment you have to set:
+```
+technical.nubus.provisioning.nats.natsBox.enabled: true
+```
+
+> [!note]
+> The nats-box also gets enabled when setting `debug.enabled: true`, but that should only be used in non-production scenarios and enabled debug
+> accross the whole deployment.
+
 ### Post-upgrade to versions &GreaterEqual; v1.10.0
 
-#### Fix: Optimize indexes
+#### New application default: Dovecot full-text search index configuration
 
-**Target group:** All openDesk Enterprise deployments.
+**Target group:** All openDesk Enterprise deployments using the groupware module.
 
-FTS indexes need to be rebuilt. Run the following command inside the dovecot container:
+Due to a configurational change the full-text search indexes of Dovecot Pro need to be rebuilt.
+
+Run the following command inside the Dovecot container:
 
 ```shell
 set -x; for d in /var/lib/dovecot/*/*; do uuid=$(basename "$d"); [[ $uuid =~ ^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$ ]] || continue; doveadm fts rescan -u "$uuid"; doveadm index -u "$uuid" -q '*'; done
@@ -228,25 +249,6 @@ Additionally, it is now possible to explicitly define the hostnames shown in the
 - `functional.groupware.externalClients.fqdnSmtp`
 
 If these values are not explicitly set, openDesk will use `.Values.global.domain` as in previous releases.
-
-## Versions &GreaterEqual; v1.10.0
-
-### Pre-upgrade to versions &GreaterEqual; v1.10.0
-
-### New Helmfile default: Nubus provisioning debug container no longer deployed
-
-**Target group:** All deployments that make use of the debugging container for Nubus' provisioning stack called "nats-box",
-
-The [nats-box](https://github.com/nats-io/nats-box), a handy tool when it comes to debugging the Nubus provisioning stack, is no longer enabled in openDesk by default.
-
-To re-enable the nats-box for your deployment you have to set:
-```
-technical.nubus.provisioning.nats.natsBox.enabled: true
-```
-
-> [!note]
-> The nats-box also gets enabled when setting `debug.enabled: true`, but that should only be used in non-production scenarios and enabled debug
-> accross the whole deployment.
 
 ## Versions &GreaterEqual; v1.8.0
 
