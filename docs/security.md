@@ -21,9 +21,10 @@ For more details on Chart validation, please visit: https://helm.sh/docs/topics/
 
 All charts except the ones mentioned below are verifiable:
 
-| Repository        | Verifiable |
-|-------------------|:----------:|
-| open-xchange-repo |     no     |
+| Repository                | Verifiable |
+| ------------------------- | :--------: |
+| collabora-controller-repo |     no     |
+| open-xchange-repo         |     no     |
 
 # Kubernetes security enforcements
 
