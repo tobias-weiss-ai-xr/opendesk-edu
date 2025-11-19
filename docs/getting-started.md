@@ -32,8 +32,10 @@ This documentation lets you create an openDesk evaluation instance on your Kuber
   * [Install](#install)
   * [Install single app](#install-single-app)
   * [Install single release/chart](#install-single-releasechart)
-* [Access deployment](#access-deployment)
   * [Using from external repository](#using-from-external-repository)
+* [Access deployment](#access-deployment)
+  * [Login](#login)
+  * [Credentials](#credentials)
 * [Uninstall](#uninstall)
 <!-- TOC -->
 
@@ -448,17 +450,37 @@ Instead of iterating through all services, you can also deploy a single release 
 helmfile apply -e dev -n <NAMESPACE> -l name=mariadb
 ```
 
+## Using from external repository
+
+Referring to `./helmfile_generic.yaml.gotmpl` from an external
+directory or repository is possible. The `helmfile.yaml.gotmpl` that refers to
+`./helmfile_generic.yaml.gotmpl` may define custom environments. These custom
+environments may overwrite specific configuration values. These
+configuration values are:
+
+* `global.domain`
+* `global.helmRegistry`
+* `global.master_password`
+
 # Access deployment
 
+## Login
+
 When all apps are successfully deployed, and their Pod status is `Running` or `Succeeded`, you can navigate to
+
+```text
+https://domain.tld
+```
+
+which will redirect you to the actual URL of the openDesk portal:
 
 ```text
 https://portal.domain.tld
 ```
 
-If you change the subdomain of `nubus`, you must replace the subdomain of `portal` with the same subdomain.
+By default the portal will send you to openDesk's login screen.
 
-**Credentials:**
+## Credentials
 
 openDesk deploys with the standard user account `Administrator`, the password for which can be retrieved as follows:
 
@@ -489,18 +511,6 @@ docker run --rm registry.opencode.de/bmi/opendesk/components/platform-developmen
     --import_filename template.ods \
     --create_admin_accounts True
 ```
-
-## Using from external repository
-
-Referring to `./helmfile_generic.yaml.gotmpl` from an external
-directory or repository is possible. The `helmfile.yaml.gotmpl` that refers to
-`./helmfile_generic.yaml.gotmpl` may define custom environments. These custom
-environments may overwrite specific configuration values. These
-configuration values are:
-
-* `global.domain`
-* `global.helmRegistry`
-* `global.master_password`
 
 # Uninstall
 
