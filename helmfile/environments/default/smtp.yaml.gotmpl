@@ -20,4 +20,15 @@ smtp:
         key: ""
     selector: "rsa"
     useED25519: false
+
+  security:
+    # Postfix defaults
+    # Ref.: https://www.postfix.org/postconf.5.html#smtpd_sasl_security_options
+    smtpdSASLSecurityOptions:
+      - "noanonymous"
+    # Postfix defaults
+    # Ref.: https://www.postfix.org/postconf.5.html#smtp_sasl_security_options
+    smtpSASLSecurityOptions:
+      - "noanonymous"
+      - "noplaintext"
 ...

@@ -80,7 +80,8 @@ postfix:
   smtpdTLSMandatoryCiphers: "medium"
   smtpTLSSecurityLevel: "encrypt"
   smtpdSASLAuthEnable: "yes"
-  smtpdSASLSecurityOptions: "noanonymous"
+  smtpdSASLSecurityOptions: {{ .Values.smtp.security.smtpdSASLSecurityOptions | join ", " | quote }}
+  smtpSASLSecurityOptions: {{ .Values.smtp.security.smtpSASLSecurityOptions | join ", " | quote }}
   smtpdSASLType: "cyrus"
   smtpdTLSSecurityLevel: "may"
   smtpdTLSCertFile: "/etc/tls/tls.crt"
