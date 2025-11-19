@@ -2,10 +2,27 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 technical:
+
   # Collabora related technical settings
   collabora:
     # Defines the value for the start parameter `-o:num_prespawn_children`
     numPrespawnChildren: 4
+
+  # Nubus related settings
+  nubus:
+    # Nubus provisioning framework that is being used to actively provision data internally within
+    # Nubus e.g. for the portal or self service as well as externally, e.g. to OX App Suite.
+    provisioning:
+      # NATS including NATS JetStream is the queueing used by Nubus' provisioning.
+      # Ref.: https://nats.io/about/
+      nats:
+        # The NATS Box is a container for debugging NATS messages using a CLI tool.
+        # Ref.: https://github.com/nats-io/nats-box
+        natsBox:
+          # Enable the NATS Box container for the deployment. Will also be enabled in case of
+          # `.Values.debug.enabled: true`
+          enabled: false
+
   # Groupware related technical settings
   oxAppSuite:
     provisioning:

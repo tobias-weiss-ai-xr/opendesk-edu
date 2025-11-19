@@ -14,6 +14,9 @@ SPDX-License-Identifier: Apache-2.0
     * [Pre-upgrade to versions ≥ v1.9.0](#pre-upgrade-to-versions--v190)
       * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
       * [Helmfile new feature: `functional.groupware.externalClients.*`](#helmfile-new-feature-functionalgroupwareexternalclients)
+  * [Versions ≥ v1.10.0](#versions--v1100)
+    * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
+    * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
   * [Versions ≥ v1.8.0](#versions--v180)
     * [Pre-upgrade to versions ≥ v1.8.0](#pre-upgrade-to-versions--v180)
       * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
@@ -143,19 +146,20 @@ matching that constraint, though our links always point to the newest patch rele
 > 1. Upgrade to v1.7.1 → post steps for v1.6.0 to v1.7.1
 
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
-| Version                                                                                 | Mandatory | Pre-Upgrade                                                                                                                 | Post-Upgrade                            | Minimum Required Previous Version            |
-|-----------------------------------------------------------------------------------------|-----------|-----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|----------------------------------------------|
-| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0) | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                       | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first                                           |
-| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0) | --        | [Pre](#pre-upgrade-to-versions--v180)                                                                                       | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first                                           |
-| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1) | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                       | [Post](#post-upgrade-to-versions--v170) | ⬇ Install &GreaterEqual; v1.5.0 first                                           |
-| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0) | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                       | [Post](#post-upgrade-to-versions--v160) | [⚠ Install v1.5.0 first](#versions--v160-automated) |
-| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0) | **yes**   | --                                                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.1.x first                                           |
-| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1) | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                       | --                                      | ⬇ Install &GreaterEqual; v1.1.x first                                           |
-| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2) | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                       | --                                      | ⬇ Install &GreaterEqual; v1.1.x first                                           |
-| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1) | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                       | --                                      | [⚠ Install v1.1.x first](#versions--v120-automated) |
-| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2) | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110) | [⚠ Install v1.0.0 first](#versions--v110-automated) |
-| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0) | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                       | [Post](#post-upgrade-to-versions--v100) | [⚠ Install v0.9.0 first](#versions--v100-automated) |
-| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0) | **yes**   | --                                                                                                                          | --                                      | --                                           |
+| Version                                                                                  | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                            | Minimum Required Previous Version                    |
+| ---------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ---------------------------------------------------- |
+| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first               |
+| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)  | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first               |
+| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)  | --        | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first               |
+| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)  | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170) | ⬇ Install &GreaterEqual; v1.5.0 first               |
+| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)  | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160) | [⚠ Install v1.5.0 first](#versions--v160-automated) |
+| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)  | **yes**   | --                                                                                                                             | --                                      | ⬇ Install &GreaterEqual; v1.1.x first               |
+| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)  | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.1.x first               |
+| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)  | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.1.x first               |
+| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)  | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                      | [⚠ Install v1.1.x first](#versions--v120-automated) |
+| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)  | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110) | [⚠ Install v1.0.0 first](#versions--v110-automated) |
+| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)  | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100) | [⚠ Install v0.9.0 first](#versions--v100-automated) |
+| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)  | **yes**   | --                                                                                                                             | --                                      | --                                                   |
 
 > [!warning]
 > Be sure to check out the table in the release version you are going to install, and not the currently installed version.
@@ -210,6 +214,25 @@ Additionally, it is now possible to explicitly define the hostnames shown in the
 - `functional.groupware.externalClients.fqdnSmtp`
 
 If these values are not explicitly set, openDesk will use `.Values.global.domain` as in previous releases.
+
+## Versions &GreaterEqual; v1.10.0
+
+### Pre-upgrade to versions &GreaterEqual; v1.10.0
+
+### New Helmfile default: Nubus provisioning debug container no longer deployed
+
+**Target group:** All deployments that make use of the debugging container for Nubus' provisioning stack called "nats-box",
+
+The [nats-box](https://github.com/nats-io/nats-box), a handy tool when it comes to debugging the Nubus provisioning stack, is no longer enabled in openDesk by default.
+
+To re-enable the nats-box for your deployment you have to set:
+```
+technical.nubus.provisioning.nats.natsBox.enabled: true
+```
+
+> [!note]
+> The nats-box also gets enabled when setting `debug.enabled: true`, but that should only be used in non-production scenarios and enabled debug
+> accross the whole deployment.
 
 ## Versions &GreaterEqual; v1.8.0
 
