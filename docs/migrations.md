@@ -148,20 +148,20 @@ matching that constraint, though our links always point to the newest patch rele
 > 1. Upgrade to v1.7.1 → post steps for v1.6.0 to v1.7.1
 
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
-| Version                                                                                  | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                            | Minimum Required Previous Version                    |
-| ---------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ---------------------------------------------------- |
-| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first               |
-| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)  | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first               |
-| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)  | --        | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.5.0 first               |
-| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)  | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170) | ⬇ Install &GreaterEqual; v1.5.0 first               |
+| Version                                                                                  | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                            | Minimum Required Previous Version                   |
+|------------------------------------------------------------------------------------------|-----------|--------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|-----------------------------------------------------|
+| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | --                                      | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)  | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                      | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)  | --        | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                      | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)  | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170) | ⬇ Install ≥ v1.5.0 first                            |
 | [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)  | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160) | [⚠ Install v1.5.0 first](#versions--v160-automated) |
-| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)  | **yes**   | --                                                                                                                             | --                                      | ⬇ Install &GreaterEqual; v1.1.x first               |
-| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)  | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.1.x first               |
-| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)  | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                      | ⬇ Install &GreaterEqual; v1.1.x first               |
+| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)  | **yes**   | --                                                                                                                             | --                                      | ⬇ Install ≥ v1.1.x first                            |
+| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)  | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                      | ⬇ Install ≥ v1.1.x first                            |
+| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)  | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                      | ⬇ Install ≥ v1.1.x first                            |
 | [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)  | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                      | [⚠ Install v1.1.x first](#versions--v120-automated) |
 | [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)  | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110) | [⚠ Install v1.0.0 first](#versions--v110-automated) |
 | [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)  | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100) | [⚠ Install v0.9.0 first](#versions--v100-automated) |
-| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)  | **yes**   | --                                                                                                                             | --                                      | --                                                   |
+| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)  | **yes**   | --                                                                                                                             | --                                      | --                                                  |
 
 > [!warning]
 > Be sure to check out the table in the release version you are going to install, and not the currently installed version.
@@ -171,15 +171,15 @@ If you would like more details about the automated migrations, please read secti
 # Manual checks/actions
 
 > [!note]
-> We **only** use the mathematical symbol &GreaterEqual; to denote for which versions manual steps must be
-> applied. For example, "Versions &GreaterEqual; v1.7.0" refers to all openDesk versions (major, minor and
+> We **only** use the mathematical symbol ≥ to denote for which versions manual steps must be
+> applied. For example, "Versions ≥ v1.7.0" refers to all openDesk versions (major, minor and
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
 
-## Versions &GreaterEqual; v1.10.0
+## Versions ≥ v1.10.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.10.0
+### Pre-upgrade to versions ≥ v1.10.0
 
 #### New Helmfile default: Nubus provisioning debug container no longer deployed
 
@@ -196,7 +196,41 @@ technical.nubus.provisioning.nats.natsBox.enabled: true
 > The nats-box also gets enabled when setting `debug.enabled: true`, but that should only be used in non-production scenarios and enabled debug
 > accross the whole deployment.
 
-### Post-upgrade to versions &GreaterEqual; v1.10.0
+#### Helmfile fix: New Postfix SMTP SASL security option defaults
+
+Starting from openDesk v1.9.0, the SMTP SALS security options set within openDesk are aligned with the
+recommended defaults. This might break currently working connections with external SMTP relays.
+
+> [!warning]
+> Please check your mail relays supported SASL security options and adjust your deployment accordingly to
+> prevent the disruption of mail delivery.
+
+To fall back to the behavior of openDesk < v1.9.0 (no security options at all) set the following in
+`smtp.yaml.gotmpl`
+
+``` yaml
+smtp:
+  security:
+    smtpdSASLSecurityOptions: ~
+    smtpSASLSecurityOptions: ~
+```
+
+To set specific options consult the official Postfix documentation for
+[smtpd](https://www.postfix.org/postconf.5.html#smtpd_sasl_security_options) or
+[smtp](https://www.postfix.org/postconf.5.html#smtp_sasl_security_options) and set the string options via the
+yaml array notation:
+
+``` yaml
+smtp:
+  security:
+    smtpdSASLSecurityOptions:
+      - "noanonymous"
+    smtpSASLSecurityOptions:
+      - "noanonymous"
+      - "noplaintext"
+```
+
+### Post-upgrade to versions ≥ v1.10.0
 
 #### New application default: Dovecot full-text search index configuration
 
@@ -210,9 +244,9 @@ Run the following command inside the Dovecot container:
 set -x; for d in /var/lib/dovecot/*/*; do uuid=$(basename "$d"); [[ $uuid =~ ^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$ ]] || continue; doveadm fts rescan -u "$uuid"; doveadm index -u "$uuid" -q '*'; done
 ```
 
-## Versions &GreaterEqual; v1.9.0
+## Versions ≥ v1.9.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.9.0
+### Pre-upgrade to versions ≥ v1.9.0
 
 #### Helmfile fix: Cassandra passwords read from `databases.*`
 
@@ -250,9 +284,9 @@ Additionally, it is now possible to explicitly define the hostnames shown in the
 
 If these values are not explicitly set, openDesk will use `.Values.global.domain` as in previous releases.
 
-## Versions &GreaterEqual; v1.8.0
+## Versions ≥ v1.8.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.8.0
+### Pre-upgrade to versions ≥ v1.8.0
 
 #### New application default: Default group for two-factor authentication is now "2FA Users"
 
@@ -407,9 +441,9 @@ Gravatar support is no longer enabled by default in Jitsi and OpenProject. In ca
     OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: true, enable_local_avatars: true}'
   ```
 
-## Versions &GreaterEqual; v1.7.0
+## Versions ≥ v1.7.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.7.0
+### Pre-upgrade to versions ≥ v1.7.0
 
 #### Helmfile fix: Ensure enterprise overrides apply when deploying from project root
 
@@ -440,7 +474,7 @@ annotation:
   notesYProvider: {}
 ```
 
-### Post-upgrade to versions &GreaterEqual; v1.7.0
+### Post-upgrade to versions ≥ v1.7.0
 
 #### Upstream fix: Provisioning of functional mailboxes
 
@@ -467,9 +501,9 @@ kill ${PROVISIONING_PORT_FORWARD_PID}
 rm ${TEMPORARY_CONSUMER_JSON}
 ```
 
-## Versions &GreaterEqual; v1.6.0
+## Versions ≥ v1.6.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.6.0
+### Pre-upgrade to versions ≥ v1.6.0
 
 #### Upstream constraint: Nubus' external secrets
 
@@ -524,7 +558,7 @@ kubectl cp -n ${NAMESPACE} open-xchange-core-mw-default-0:/opt/open-xchange/ox-f
 2. Run the upgrade.
 3. Continue with the [related post-upgrade steps](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
 
-### Post-upgrade to versions &GreaterEqual; v1.6.0
+### Post-upgrade to versions ≥ v1.6.0
 
 #### OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)
 
@@ -565,9 +599,9 @@ ID    Type of Job                              Status     Further Information
 /opt/open-xchange/sbin/unregisterfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -i <your_old_filestore_id_from_step_3>
 ```
 
-## Versions &GreaterEqual; v1.4.0
+## Versions ≥ v1.4.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.4.0
+### Pre-upgrade to versions ≥ v1.4.0
 
 #### Helmfile cleanup: `global.additionalMailDomains` as list
 
@@ -591,9 +625,9 @@ global:
     - "sub2.maildomain.de"
 ```
 
-## Versions &GreaterEqual; v1.3.0
+## Versions ≥ v1.3.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.3.0
+### Pre-upgrade to versions ≥ v1.3.0
 
 #### Helmfile new feature: `functional.authentication.ssoFederation`
 
@@ -601,9 +635,9 @@ global:
 
 Please ensure to configure your IdP federation config details as part of `functional.authentication.ssoFederation`. You can find more details in the "Example configuration" section of [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
 
-## Versions &GreaterEqual; v1.2.0
+## Versions ≥ v1.2.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.2.0
+### Pre-upgrade to versions ≥ v1.2.0
 
 #### Helmfile cleanup: Do not configure OX provisioning when no OX installed
 
@@ -664,9 +698,9 @@ In case you are planning to migrate an existing instance from MariaDB to Postgre
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport
 
-## Versions &GreaterEqual; v1.1.2
+## Versions ≥ v1.1.2
 
-### Pre-upgrade to versions &GreaterEqual; v1.1.2
+### Pre-upgrade to versions ≥ v1.1.2
 
 #### Helmfile feature update: App settings wrapped in `apps.` element
 
@@ -695,9 +729,9 @@ apps:
     enabled: true
 ```
 
-## Versions &GreaterEqual; v1.1.1
+## Versions ≥ v1.1.1
 
-### Pre-upgrade to versions &GreaterEqual; v1.1.1
+### Pre-upgrade to versions ≥ v1.1.1
 
 #### Helmfile feature update: Component specific `storageClassName`
 
@@ -750,9 +784,9 @@ persistence:
 
 A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
 
-## Versions &GreaterEqual; v1.1.0
+## Versions ≥ v1.1.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.1.0
+### Pre-upgrade to versions ≥ v1.1.0
 
 #### Helmfile cleanup: Restructured `/helmfile/files/theme` folder
 
@@ -915,7 +949,7 @@ The update from openDesk v1.0.0 contains Redis 7.4.1, like the other openDesk bu
 
 Please ensure the Redis you are using is updated to at least version 7.4 to support the requirement of OX App Suite.
 
-### Post-upgrade to versions &GreaterEqual; v1.1.0
+### Post-upgrade to versions ≥ v1.1.0
 
 #### XWiki fix-ups
 
@@ -941,9 +975,9 @@ Unfortunately XWiki does not upgrade itself as expected. The bug has been report
 
 You should have now a fully functional XWiki instance with single sign-on and full-text search.
 
-## Versions &GreaterEqual; v1.0.0
+## Versions ≥ v1.0.0
 
-### Pre-upgrade to versions &GreaterEqual; v1.0.0
+### Pre-upgrade to versions ≥ v1.0.0
 
 #### Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus
 
@@ -1125,7 +1159,7 @@ The IAM admin account `Administrator` is the only member of this group by defaul
 
 If you need other accounts to use the API, please assign them to the aforementioned group.
 
-### Post-upgrade to versions &GreaterEqual; v1.0.0
+### Post-upgrade to versions ≥ v1.0.0
 
 #### Configuration Improvement: Separate user permission for using Video Conference component
 
@@ -1157,33 +1191,33 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 # Automated migrations - Details
 
-## Versions &GreaterEqual; v1.6.0 (automated)
+## Versions ≥ v1.6.0 (automated)
 
 > [!note]
 > Details can be found in [run_5.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_5.py).
 
-### Versions &GreaterEqual; v1.6.0 migrations-post
+### Versions ≥ v1.6.0 migrations-post
 
 - Automatically restarts the StatefulSets `ums-provisioning-nats` and `ox-connector` due to a workaround applied on the NATS secrets, see the "Notes" segment of the ["Password seed" heading in getting-started.md](./docs/getting-started.md#password-seed)
 
 > [!note]
 > This change aims to prevent authentication failures with NATS in some Pods, which can lead to errors such as: `wait-for-nats Unavailable, waiting 2 seconds. Error: nats: 'Authorization Violation'`.
 
-## Versions &GreaterEqual; v1.2.0 (automated)
+## Versions ≥ v1.2.0 (automated)
 
 > [!note]
 > Details can be found in [run_4.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_4.py).
 
-### Versions &GreaterEqual; v1.2.0 migrations-pre
+### Versions ≥ v1.2.0 migrations-pre
 
 - Automatically deletes PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
 - Automatically deletes StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
 
-### Versions &GreaterEqual; v1.2.0 migrations-post
+### Versions ≥ v1.2.0 migrations-post
 
 - Automatically restarts the Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` and deletes the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
 
-## Versions &GreaterEqual; v1.1.0 (automated)
+## Versions ≥ v1.1.0 (automated)
 
 With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
 
@@ -1194,7 +1228,7 @@ creating the config map with the mentioned label.
 > [!note]
 > Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
-## Versions &GreaterEqual; v1.0.0 (automated)
+## Versions ≥ v1.0.0 (automated)
 
 The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
 
