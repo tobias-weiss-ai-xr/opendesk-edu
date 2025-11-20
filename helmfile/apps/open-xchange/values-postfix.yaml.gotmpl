@@ -64,6 +64,8 @@ postfix:
       password:
         value: {{ .Values.smtp.password }}
   smtpSASLAuthEnable: "yes"
+  {{- else }}
+  smtpSASLAuthEnable: "no"
   {{- end }}
   allowRelayNets: false
   smtpTLSSecurityLevel: "encrypt"

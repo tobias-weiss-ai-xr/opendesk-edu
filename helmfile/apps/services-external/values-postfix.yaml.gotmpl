@@ -72,6 +72,8 @@ postfix:
       password:
         value: {{ .Values.smtp.password }}
   smtpSASLAuthEnable: "yes"
+  {{- else }}
+  smtpSASLAuthEnable: "no"
   {{- end }}
   # Warning: This setting allows unauthenticated mail relay from relayNets!
   allowRelayNets: true
