@@ -201,9 +201,11 @@ be derived from the `MASTER_PASSWORD`.
 **Target group:** All existing deployments that have OX App Suite enabled and that use self-defined secrets.
 
 The revised Dovecot configuration requires a new secret that is declared in
-[`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key `secrets.doveocot.sharedMailboxesMasterPassword`.
+[`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key
+`secrets.doveocot.sharedMailboxesMasterPassword`.
 
-If you define your own secrets, please ensure that you provide a value for this secret, otherwise the aforementioned secret will be derived from the `MASTER_PASSWORD`.
+If you define your own secrets, please ensure that you provide a value for this secret, otherwise it will
+be derived from the `MASTER_PASSWORD`.
 
 #### New Helmfile default: Nubus provisioning debug container no longer deployed
 
@@ -566,7 +568,7 @@ Please ensure you read the [Nubus 1.10.0 "Migration steps" section](https://docs
 
 For OX App Suite to access the object storage a new secret has been introduced.
 
-It is declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key: `secrets.minio.openxchangeUser`. If you define your own secrets, please ensure that you provide a value for this secret as well, otherwise the aforementioned secret will be derived from the `MASTER_PASSWORD`.
+It is declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key: `secrets.minio.openxchangeUser`. If you define your own secrets, please ensure that you provide a value for this secret as well, otherwise it will be derived from the `MASTER_PASSWORD`.
 
 #### Helmfile new object storage: `objectstores.openxchange.*`
 
