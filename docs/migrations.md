@@ -12,11 +12,14 @@ SPDX-License-Identifier: Apache-2.0
 * [Manual checks/actions](#manual-checksactions)
   * [Versions ≥ v1.10.0](#versions--v1100)
     * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
+      * [Helmfile new secret: `secrets.nubus.ldapSearch.postfix`](#helmfile-new-secret-secretsnubusldapsearchpostfix)
       * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
+      * [New Helmfile default: Postfix SMTP SASL security options](#new-helmfile-default-postfix-smtp-sasl-security-options)
     * [Post-upgrade to versions ≥ v1.10.0](#post-upgrade-to-versions--v1100)
       * [New application default: Dovecot full-text search index configuration](#new-application-default-dovecot-full-text-search-index-configuration)
   * [Versions ≥ v1.9.0](#versions--v190)
     * [Pre-upgrade to versions ≥ v1.9.0](#pre-upgrade-to-versions--v190)
+      * [New application default: Postfix SMTP SASL security option](#new-application-default-postfix-smtp-sasl-security-option)
       * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
       * [Helmfile new feature: `functional.groupware.externalClients.*`](#helmfile-new-feature-functionalgroupwareexternalclients)
   * [Versions ≥ v1.8.0](#versions--v180)
@@ -181,6 +184,17 @@ If you would like more details about the automated migrations, please read secti
 
 ### Pre-upgrade to versions ≥ v1.10.0
 
+#### Helmfile new secret: `secrets.nubus.ldapSearch.postfix`
+
+**Target group:** All existing deployments that use self-defined secrets.
+
+The updated Postfix configuration supporting LDAP group based mailing list requires a new secret that is
+declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key
+`secrets.nubus.ldapSearch.postfix`.
+
+If you define your own secrets, please ensure that you provide a value for this secret, otherwise it will
+be derived from the `MASTER_PASSWORD`.
+
 #### New Helmfile default: Nubus provisioning debug container no longer deployed
 
 **Target group:** All deployments that make use of the debugging container for Nubus' provisioning stack called "nats-box",
@@ -188,17 +202,25 @@ If you would like more details about the automated migrations, please read secti
 The [nats-box](https://github.com/nats-io/nats-box), a handy tool when it comes to debugging the Nubus provisioning stack, is no longer enabled in openDesk by default.
 
 To re-enable the nats-box for your deployment you have to set:
-```
-technical.nubus.provisioning.nats.natsBox.enabled: true
+```yaml
+technical:
+  nubus:
+    provisioning:
+      nats:
+        natsBox:
+          enabled: true
 ```
 
 > [!note]
 > The nats-box also gets enabled when setting `debug.enabled: true`, but that should only be used in non-production scenarios and enabled debug
 > accross the whole deployment.
 
-#### Helmfile fix: New Postfix SMTP SASL security option defaults
+#### New Helmfile default: Postfix SMTP SASL security options
 
-Starting from openDesk v1.9.0, the SMTP SALS security options set within openDesk are aligned with the
+**Target group:** All openDesk deployments using an external SMTP relay that does not support
+[Postfix's default `smtpSASLSecurityOptions`](https://www.postfix.org/postconf.5.html#smtp_sasl_security_options).
+
+Starting from openDesk v1.9.0, the SMTP SASL security options set within openDesk are aligned with the
 recommended defaults. This might break currently working connections with external SMTP relays.
 
 > [!warning]
@@ -247,6 +269,18 @@ set -x; for d in /var/lib/dovecot/*/*; do uuid=$(basename "$d"); [[ $uuid =~ ^[0
 ## Versions ≥ v1.9.0
 
 ### Pre-upgrade to versions ≥ v1.9.0
+
+#### New application default: Postfix SMTP SASL security option
+
+**Target group:** All openDesk deployments using an external SMTP relay that does not support
+[Postfix's default `smtpSASLSecurityOptions`](https://www.postfix.org/postconf.5.html#smtp_sasl_security_options).
+
+Starting from openDesk v1.9.0, the SMTP SASL security options set within openDesk are aligned with the
+recommended defaults. This might break currently working connections with external SMTP relays. To prevent
+this you have to configure the supported options for your mail relay one of the following ways:
+
+- Recommended: Directly upgrade to v1.10.0 and set SMTP SASL options through `smtp.security.*`.
+- Configure a customization for `smtpSASLSecurityOptions`.
 
 #### Helmfile fix: Cassandra passwords read from `databases.*`
 
