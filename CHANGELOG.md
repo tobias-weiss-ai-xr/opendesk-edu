@@ -1,3 +1,30 @@
+# [1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.9.0...v1.10.0) (2025-11-24)
+
+
+### Bug Fixes
+
+* **collabora:** Update Controller to 1.1.6 incl. Helm chart update to 1.1.10 ([d25c95f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d25c95f06bc199d09aa6ea4dc09c10e95153de38))
+* **collabora:** Update from 25.04.5 to 25.04.6 ([8de0f5d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8de0f5de7277ad726588d7de2d06cb3e9376c993))
+* **external-services:** Create `nubus_authsession` database ([ec72602](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ec72602cdd3207f73ff806a26bfe7b9fd32b8634))
+* **helmfile:** Enable verification for XWiki Helm chart ([5104793](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/51047936de102c610adc00f4dff12d2eb8e945b0))
+* **helmfile:** Streamline annotations ([7aa717c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7aa717c0509a731c060c58a1b5877e1d9899406f))
+* **nubus:** Remove legacy `UMC` Keycloak client that was used for SAML connection with the Nubus portal ([152221f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/152221fa7976bfa942d5e9e9b8f78cc8e65765c0))
+* **open-xchange:** Only enable `smtpSASLAuthEnable` when `relayHost` is set ([70bbbf3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/70bbbf311fcba57c31f535be7d0d453f4a945cee))
+* **open-xchange:** Optimize Dovecot Pro full-text search caches; review `migrations.md` for required upgrade steps ([f3f707c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f3f707c9eee8edf3ad61834d87b5c059f31b0e26))
+* **open-xchange:** Template SASL security options ([684c6d4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/684c6d4f29dd447872ebe582eef43c04034896f7))
+* **open-xchange:** Update Dovecot configuration based on supplier's best practise review ([850761e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/850761e0475b2f281fb23f6972d5c74fbdaa3a61))
+* **opendesk-static-files:** [[#260](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/260)] Fix doublette creation of configmap `data` keys when the same file is referenced multiple times for a component ([b5a76be](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b5a76bea57ef7b136c54d1bc95c40f0a0c3f9716))
+* **openproject:** Update from 16.1.0 to 16.1.1 ([62fae99](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/62fae9976a731c00700d56ce8fab198bb2531d20))
+* **xwiki:** Update XWiki from 17.4.4 to 17.4.7 ([02a3b77](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/02a3b7711490394690df70ca92bab58b253e34f5))
+
+
+### Features
+
+* **jitsi:** Update from 2.0.10431 to 2.0.10590 ([f5aad1f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f5aad1fa47559f0d3941c233c7d40029a9e83281))
+* **nubus:** Update from v1.14.0 to v1.15.2 ([12379d6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/12379d67e07936496fe31276b2052406e0137db6))
+* **open-xchange:** Support for LDAP group based mailing lists ([cc94f0c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cc94f0c66df098d0a20f7f0d4a6af5e791557981))
+* **openproject:** Update OpenProject from 16.5.1 to 16.6.0 ([19438c0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/19438c02817875bd408c5d6cf423d7bfb61f907f))
+
 # [1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.8.0...v1.9.0) (2025-11-07)
 
 
