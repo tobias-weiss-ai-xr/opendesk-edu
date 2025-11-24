@@ -28,7 +28,7 @@ clamd:
   podAnnotations:
     intents.otterize.com/service-name: "clamav-distributed"
     {{- with .Values.annotations.servicesExternalClamavDistributed.clamdPod }}
-    {{ .  | toYaml | nindent 4 }}
+    {{ . | toYaml | nindent 4 }}
     {{- end }}
   podSecurityContext:
     enabled: true
