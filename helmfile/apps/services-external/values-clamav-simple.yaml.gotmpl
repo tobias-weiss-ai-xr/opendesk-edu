@@ -46,7 +46,7 @@ persistence:
 podAnnotations:
   intents.otterize.com/service-name: "clamav-simple"
   {{- with .Values.annotations.servicesExternalClamavSimple.pod }}
-  {{ .  | toYaml | nindent 2 }}
+  {{ . | toYaml | nindent 2 }}
   {{- end }}
 
 podSecurityContext:

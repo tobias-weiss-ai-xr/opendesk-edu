@@ -36,7 +36,7 @@ image:
 podAnnotations:
   intents.otterize.com/service-name: "memcached"
   {{- with .Values.annotations.servicesExternalMemcached.pod }}
-  {{ .  | toYaml | nindent 2 }}
+  {{ . | toYaml | nindent 2 }}
   {{- end}}
 replicaCount: {{ .Values.replicas.memcached }}
 

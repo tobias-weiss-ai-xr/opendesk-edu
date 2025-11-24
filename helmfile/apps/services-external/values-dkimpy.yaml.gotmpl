@@ -32,7 +32,7 @@ image:
 podAnnotations:
   intents.otterize.com/service-name: "dkimpy-milter"
   {{- with .Values.annotations.servicesExternalDkimpy.service }}
-  {{ .  | toYaml | nindent 2 }}
+  {{ . | toYaml | nindent 2 }}
   {{- end }}
 
 podSecurityContext:

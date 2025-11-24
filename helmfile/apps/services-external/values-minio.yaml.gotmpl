@@ -136,7 +136,7 @@ provisioning:
   podAnnotations:
     intents.otterize.com/service-name: "minio-provisioning"
     {{- with .Values.annotations.servicesExternalMinio.provisioningPod }}
-    {{ .  | toYaml | nindent 4}}
+    {{ . | toYaml | nindent 4}}
     {{- end }}
   policies:
     - name: "migrations-bucket-policy"
