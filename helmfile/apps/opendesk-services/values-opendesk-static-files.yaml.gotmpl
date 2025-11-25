@@ -92,12 +92,13 @@ containerSecurityContext:
     drop:
       - "ALL"
   enabled: true
-  runAsUser: 101
-  runAsGroup: 101
-  seccompProfile:
-    type: "RuntimeDefault"
+  privileged: false
   readOnlyRootFilesystem: true
   runAsNonRoot: true
+  runAsGroup: 101
+  runAsUser: 101
+  seccompProfile:
+    type: "RuntimeDefault"
   seLinuxOptions:
     {{ .Values.seLinuxOptions.opendeskStaticFiles | toYaml | nindent 4 }}
 
