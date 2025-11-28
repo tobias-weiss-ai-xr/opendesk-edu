@@ -15,6 +15,7 @@ SPDX-License-Identifier: Apache-2.0
       * [Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#helmfile-new-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
   * [Versions ≥ v1.10.0](#versions--v1100)
     * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
+      * [Deployment cleanup: Collabora Controller](#deployment-cleanup-collabora-controller)
       * [Helmfile new secret: `secrets.nubus.ldapSearch.postfix`](#helmfile-new-secret-secretsnubusldapsearchpostfix)
       * [Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`](#helmfile-new-secret-secretsdoveocotsharedmailboxesmasterpassword)
       * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
@@ -216,6 +217,25 @@ annotations for the external service use the newly introduced key `annotations.o
 ## Versions ≥ v1.10.0
 
 ### Pre-upgrade to versions ≥ v1.10.0
+
+#### Deployment cleanup: Collabora Controller
+
+**Target group:** Existing openDesk Enterprise deployments using Collabora Controller. Actually only long running
+deployments are affected, but following the instructions won't hurt.
+
+As per upstream release notes for [Collabora Online Controller 1.1.4](https://www.collaboraonline.com/cool-controller-release-notes/)
+you have to remove the existing leases of the Controller. You can do so by setting `<your_namespace>` and executing
+the commands below.
+
+```shell
+export NAMESPACE=<your_namespace>
+export COLLABORA_CONTROLLER_DEPLOYMENT_NAME=collabora-controller-cool-controller
+kubectl -n ${NAMESPACE} scale deployment/${COLLABORA_CONTROLLER_DEPLOYMENT_NAME} --replicas=0
+kubectl -n ${NAMESPACE} delete -n collabora leases.coordination.k8s.io collabora-online
+```
+
+> [!note]
+> The Collabora Online Controller is not scaled up again, as this would happen as part of the upgrade deployment.
 
 #### Helmfile new secret: `secrets.nubus.ldapSearch.postfix`
 
