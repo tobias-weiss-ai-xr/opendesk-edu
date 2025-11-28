@@ -14,7 +14,7 @@
 * **open-xchange:** Template SASL security options ([684c6d4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/684c6d4f29dd447872ebe582eef43c04034896f7))
 * **open-xchange:** Update Dovecot configuration based on supplier's best practise review ([850761e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/850761e0475b2f281fb23f6972d5c74fbdaa3a61))
 * **opendesk-static-files:** [[#260](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/260)] Fix doublette creation of configmap `data` keys when the same file is referenced multiple times for a component ([b5a76be](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b5a76bea57ef7b136c54d1bc95c40f0a0c3f9716))
-* **openproject:** Update from 16.1.0 to 16.1.1 ([62fae99](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/62fae9976a731c00700d56ce8fab198bb2531d20))
+* **openproject:** Update from 16.6.0 to 16.6.1 ([62fae99](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/62fae9976a731c00700d56ce8fab198bb2531d20))
 * **xwiki:** Update XWiki from 17.4.4 to 17.4.7 ([02a3b77](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/02a3b7711490394690df70ca92bab58b253e34f5))
 
 
