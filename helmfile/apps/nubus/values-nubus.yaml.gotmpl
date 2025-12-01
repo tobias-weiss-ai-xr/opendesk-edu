@@ -53,6 +53,8 @@ global:
   configUcr:
     directory:
       manager:
+        mail-address:
+          uniqueness: "True"
         rest:
           authorized-groups:
             domain-admins: __DELETE_KEY__
@@ -67,9 +69,9 @@ global:
                   description:
                     syntax: "TextArea"
                   firstname:
-                    required: "true"
+                    required: "True"
                   mailPrimaryAddress:
-                    required: "true"
+                    required: "True"
                   username:
                     syntax: "uid"
                 search:
