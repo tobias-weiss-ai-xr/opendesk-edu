@@ -767,17 +767,33 @@ import-default-accounts:
     - "echo \"Starting default account import for ${DOMAIN}\""
     - "cd /app"
     - |
-      ./user_import_udm_rest_api.py \
-        --import_domain ${DOMAIN} \
-        --udm_api_password ${DEFAULT_ADMINISTRATOR_PASSWORD} \
-        --set_default_password ${DEFAULT_ACCOUNTS_PASSWORD} \
-        --import_filename ./template.ods \
-        --admin_enable_fileshare True \
-        --admin_enable_knowledgemanagement True \
-        --admin_enable_projectmanagement True \
-        --create_admin_accounts True \
-        --create_maildomains True \
-        --verify_certificate False
+      set +e
+      success=0
+      for i in {1..5}; do
+        echo "Attempt $i/5..."
+        ./user_import_udm_rest_api.py \
+          --import_domain ${DOMAIN} \
+          --udm_api_password ${DEFAULT_ADMINISTRATOR_PASSWORD} \
+          --set_default_password ${DEFAULT_ACCOUNTS_PASSWORD} \
+          --import_filename ./template.ods \
+          --admin_enable_fileshare True \
+          --admin_enable_knowledgemanagement True \
+          --admin_enable_projectmanagement True \
+          --create_admin_accounts True \
+          --create_maildomains True \
+          --verify_certificate False
+        if [ $? -eq 0 ]; then
+          echo "Script succeeded on attempt $i."
+          success=1
+          break
+        fi
+        echo "Script failed. Waiting 60 seconds before retry..."
+        sleep 60
+      done
+      if [ "$success" -ne 1 ]; then
+        echo "Script failed after 5 attempts."
+        exit 1
+      fi
 
 run-tests:
   stage: "post-execute"
