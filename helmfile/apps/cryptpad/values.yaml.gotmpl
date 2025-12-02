@@ -17,7 +17,11 @@ application_config:
 #    - "diagram"
 
 autoscaling:
-  enabled: false
+  enabled: {{ .Values.technical.cryptpad.autoscaling.enabled }}
+  minReplicas: {{ .Values.technical.cryptpad.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.technical.cryptpad.autoscaling.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.technical.cryptpad.autoscaling.targetCPUUtilizationPercentage }}
+  targetMemoryUtilizationPercentage: {{ .Values.technical.cryptpad.autoscaling.targetMemoryUtilizationPercentage }}
 
 config:
   maxWorkers: {{ .Values.technical.cryptpad.maxWorkers }}
