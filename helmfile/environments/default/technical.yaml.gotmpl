@@ -3,10 +3,17 @@
 ---
 technical:
 
+  # Cryptpad related technical settings
+  cryptpad:
+    # Define how many child processes are initially spawned, even without any user accessing Cryptpad.
+    # Ref.: https://github.com/cryptpad/cryptpad/blob/0dd3c1f53d56dffb06651b86ead6b9b387920173/config/config.example.js#L111
+    maxWorkers: 4
+
   # Collabora related technical settings
   # Ref.: https://sdk.collaboraonline.com/docs/installation/Configuration.html
   collabora:
-    # Defines the value for the start parameter `--o:num_prespawn_children`
+    # Set the value for the start parameter `-o:num_prespawn_children` to define how many child processes
+    # are initially spawned, even without any user accessing Collabora.
     numPrespawnChildren: 4
     # Defines the value for the start parameter `--o:disable_server_audit`
     loggingDisableServerAudit: "true"

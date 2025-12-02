@@ -19,6 +19,9 @@ application_config:
 autoscaling:
   enabled: false
 
+config:
+  maxWorkers: {{ .Values.technical.cryptpad.maxWorkers }}
+
 enableEmbedding: true
 
 fullnameOverride: "cryptpad"
