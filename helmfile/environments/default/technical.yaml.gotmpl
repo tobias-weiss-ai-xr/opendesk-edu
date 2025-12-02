@@ -8,6 +8,18 @@ technical:
     # Define how many child processes are initially spawned, even without any user accessing Cryptpad.
     # Ref.: https://github.com/cryptpad/cryptpad/blob/0dd3c1f53d56dffb06651b86ead6b9b387920173/config/config.example.js#L111
     maxWorkers: 4
+    # Autoscaling options
+    autoscaling:
+      # Enable the Autoscaling
+      enabled: false
+      # Minimal numbers of replicas
+      minReplicas: 1
+      # Maximum numbers of replicas
+      maxReplicas: 100
+      # Percentage of the targeted CPU Utilization
+      targetCPUUtilizationPercentage: 80
+      # Percentage of the targeted Memory Utilization
+      targetMemoryUtilizationPercentage: 80
 
   # Collabora related technical settings
   # Ref.: https://sdk.collaboraonline.com/docs/installation/Configuration.html
