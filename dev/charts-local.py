@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "configargparse",
+#     "gitpython",
+#     "pyyaml",
+# ]
+# ///
 
 import os.path
 import logging
