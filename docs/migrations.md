@@ -12,11 +12,11 @@ SPDX-License-Identifier: Apache-2.0
 * [Manual checks/actions](#manual-checksactions)
   * [Versions ≥ v1.11.0](#versions--v1110)
     * [Pre-upgrade to versions ≥ v1.11.0](#pre-upgrade-to-versions--v1110)
+      * [Deployment cleanup: Collabora Controller](#deployment-cleanup-collabora-controller)
       * [Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#helmfile-new-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
       * [Helmfile new secret: `secrets.nextcloud.statusPassword`](#helmfile-new-secret-secretsnextcloudstatuspassword)
   * [Versions ≥ v1.10.0](#versions--v1100)
     * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
-      * [Deployment cleanup: Collabora Controller](#deployment-cleanup-collabora-controller)
       * [Helmfile new secret: `secrets.nubus.ldapSearch.postfix`](#helmfile-new-secret-secretsnubusldapsearchpostfix)
       * [Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`](#helmfile-new-secret-secretsdoveocotsharedmailboxesmasterpassword)
       * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
@@ -190,6 +190,25 @@ If you would like more details about the automated migrations, please read secti
 
 ### Pre-upgrade to versions ≥ v1.11.0
 
+#### Deployment cleanup: Collabora Controller
+
+**Target group:** Existing openDesk Enterprise deployments using Collabora Controller. Actually, only long-running
+deployments are affected, but following the instructions won't hurt.
+
+As per upstream release notes for [Collabora Online Controller 1.1.7](https://www.collaboraonline.com/cool-controller-release-notes/)
+you have to remove the existing leases of the Controller. You can do so by setting `<your_namespace>` and executing
+the commands below.
+
+```shell
+export NAMESPACE=<your_namespace>
+export COLLABORA_CONTROLLER_DEPLOYMENT_NAME=collabora-controller-cool-controller
+kubectl -n ${NAMESPACE} scale deployment/${COLLABORA_CONTROLLER_DEPLOYMENT_NAME} --replicas=0
+kubectl -n ${NAMESPACE} delete -n collabora leases.coordination.k8s.io collabora-online
+```
+
+> [!note]
+> The Collabora Online Controller is not scaled up again, as this would happen as part of the upgrade deployment.
+
 #### Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
 
 **Target group:** Existing deployments using `service` annotations for Dovecot, Jitsi JVB or Postfix.
@@ -232,25 +251,6 @@ be derived from the `MASTER_PASSWORD`.
 ## Versions ≥ v1.10.0
 
 ### Pre-upgrade to versions ≥ v1.10.0
-
-#### Deployment cleanup: Collabora Controller
-
-**Target group:** Existing openDesk Enterprise deployments using Collabora Controller. Actually only long running
-deployments are affected, but following the instructions won't hurt.
-
-As per upstream release notes for [Collabora Online Controller 1.1.4](https://www.collaboraonline.com/cool-controller-release-notes/)
-you have to remove the existing leases of the Controller. You can do so by setting `<your_namespace>` and executing
-the commands below.
-
-```shell
-export NAMESPACE=<your_namespace>
-export COLLABORA_CONTROLLER_DEPLOYMENT_NAME=collabora-controller-cool-controller
-kubectl -n ${NAMESPACE} scale deployment/${COLLABORA_CONTROLLER_DEPLOYMENT_NAME} --replicas=0
-kubectl -n ${NAMESPACE} delete -n collabora leases.coordination.k8s.io collabora-online
-```
-
-> [!note]
-> The Collabora Online Controller is not scaled up again, as this would happen as part of the upgrade deployment.
 
 #### Helmfile new secret: `secrets.nubus.ldapSearch.postfix`
 
