@@ -65,7 +65,7 @@ For your convenience, we recommend creating a `*.domain.tld` A-Record for your c
 | Record name                   | Type | Value                                              | Additional information                                            |
 |-------------------------------|------|----------------------------------------------------|-------------------------------------------------------------------|
 | *.domain.tld                  | A    | IPv4 address of your Ingress Controller            |                                                                   |
-| *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            |                                                                   |
+| *.domain.tld                  | AAAA | IPv6 address of your Ingress Controller            | Optional                                                          |
 | mail.domain.tld               | A    | IPv4 address of your postfix NodePort/LoadBalancer | Optional, mail should directly be delivered to openDesk's Postfix |
 | mail.domain.tld               | AAAA | IPv6 address of your postfix NodePort/LoadBalancer | Optional, mail should directly be delivered to openDesk's Postfix |
 | domain.tld                    | MX   | `10 mail.domain.tld`                               |                                                                   |
