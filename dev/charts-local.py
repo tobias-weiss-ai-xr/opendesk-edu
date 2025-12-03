@@ -21,40 +21,6 @@ import configargparse
 from pathlib import Path
 from git import Repo
 
-p = configargparse.ArgParser()
-p.add('--branch', env_var='CHART_DEV_BRANCH', help='The branch you want to work with. Will be created by the script if it does not exist yet.')
-p.add('--git_hostname', env_var='GIT_HOSTNAME', default='git@gitlab.opencode.de', help='Set the hostname for the chart git checkouts.')
-p.add('--revert', default=False, action='store_true', help='Set this parameter if you want to revert the referencing of the local helm chart checkout paths in the helmfiles.')
-p.add('--match', default='', help="Clone/pull only charts that contain the given string in their name.")
-p.add('--loglevel', env_var='LOGLEVEL', default='DEBUG', help='Set the loglevel: DEBUG, INFO, WARNING, ERROR, CRITICAL-')
-options = p.parse_args()
-
-script_path = os.path.dirname(os.path.realpath(__file__))
-# some static definitions
-log_path = script_path+'/../logs'
-charts_yaml = script_path+'/../helmfile/environments/default/charts.yaml.gotmpl'
-base_repo_path = script_path+'/..'
-base_helmfile = base_repo_path+'/helmfile_generic.yaml.gotmpl'
-helmfile_backup_extension = '.bak'
-
-Path(log_path).mkdir(parents=True, exist_ok=True)
-
-logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
-rootLogger = logging.getLogger()
-rootLogger.setLevel(options.loglevel)
-
-fileHandler = logging.FileHandler("{0}/{1}.log".format(log_path, os.path.basename(__file__)))
-fileHandler.setFormatter(logFormatter)
-rootLogger.addHandler(fileHandler)
-
-consoleHandler = logging.StreamHandler()
-consoleHandler.setFormatter(logFormatter)
-rootLogger.addHandler(consoleHandler)
-
-logging.debug(f"Working with relative paths from script location: {script_path}")
-logging.debug(f"Log directory:      {log_path}")
-logging.debug(f"charts.yaml.gotmpl: {charts_yaml}")
-
 
 def create_or_switch_branch_base_repo():
     base_repo = Repo(path=base_repo_path)
@@ -196,11 +162,50 @@ def revert_the_helmfiles():
 ##
 ## Main program
 ##
-if options.revert:
-    revert_the_helmfiles()
-else:
-    branch = create_or_switch_branch_base_repo()
-    with open(charts_yaml, 'r') as file:
-        charts = yaml.safe_load(file)
-    charts_dict = clone_charts_locally(branch, charts)
-    process_the_helmfiles(charts_dict, charts)
+if __name__ == "__main__":
+    p = configargparse.ArgParser()
+    p.add('--branch', env_var='CHART_DEV_BRANCH',
+          help='The branch you want to work with. Will be created by the script if it does not exist yet.')
+    p.add('--git_hostname', env_var='GIT_HOSTNAME', default='git@gitlab.opencode.de',
+          help='Set the hostname for the chart git checkouts.')
+    p.add('--revert', default=False, action='store_true',
+          help='Set this parameter if you want to revert the referencing of the local helm chart checkout paths in the helmfiles.')
+    p.add('--match', default='', help="Clone/pull only charts that contain the given string in their name.")
+    p.add('--loglevel', env_var='LOGLEVEL', default='DEBUG',
+          help='Set the loglevel: DEBUG, INFO, WARNING, ERROR, CRITICAL-')
+    options = p.parse_args()
+
+    script_path = os.path.dirname(os.path.realpath(__file__))
+    # some static definitions
+    log_path = script_path + '/../logs'
+    charts_yaml = script_path + '/../helmfile/environments/default/charts.yaml.gotmpl'
+    base_repo_path = script_path + '/..'
+    base_helmfile = base_repo_path + '/helmfile_generic.yaml.gotmpl'
+    helmfile_backup_extension = '.bak'
+
+    Path(log_path).mkdir(parents=True, exist_ok=True)
+
+    logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
+    rootLogger = logging.getLogger()
+    rootLogger.setLevel(options.loglevel)
+
+    fileHandler = logging.FileHandler("{0}/{1}.log".format(log_path, os.path.basename(__file__)))
+    fileHandler.setFormatter(logFormatter)
+    rootLogger.addHandler(fileHandler)
+
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setFormatter(logFormatter)
+    rootLogger.addHandler(consoleHandler)
+
+    logging.debug(f"Working with relative paths from script location: {script_path}")
+    logging.debug(f"Log directory:      {log_path}")
+    logging.debug(f"charts.yaml.gotmpl: {charts_yaml}")
+
+    if options.revert:
+        revert_the_helmfiles()
+    else:
+        branch = create_or_switch_branch_base_repo()
+        with open(charts_yaml, 'r') as file:
+            charts = yaml.safe_load(file)
+        charts_dict = clone_charts_locally(branch, charts)
+        process_the_helmfiles(charts_dict, charts)
