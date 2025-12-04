@@ -26,6 +26,9 @@ SPDX-License-Identifier: Apache-2.0
   * [Filepicker](#filepicker)
   * [Newsfeed](#newsfeed)
   * [(OpenProject) File store](#openproject-file-store)
+* [Mail setup](#mail-setup)
+  * [Overview](#overview-1)
+  * [The Postfixes](#the-postfixes)
 * [Applications vs. services](#applications-vs-services)
   * [Collabora (weboffice)](#collabora-weboffice)
   * [CryptPad Online (diagrams)](#cryptpad-online-diagrams)
@@ -347,6 +350,85 @@ The file store must still be enabled per project in OpenProject's project admin 
 **Links:**
 - [OpenProject's documentation on Nextcloud integration](https://www.openproject.org/docs/system-admin-guide/integrations/nextcloud/)
 - [OpenProject Integration Nextcloud app](https://apps.nextcloud.com/apps/integration_openproject)
+
+# Mail setup
+
+The mail setup depicted in the diagram below shows the design to support multiple application workloads inside openDesk while interoperating with external mail infrastructures and optional mail clients like Thunderbird.
+
+The system is intentionally modular: different applications (Nextcloud, OpenProject, XWiki, Synapse, Notes, etc.) may need to send emails even when no full groupware stack is deployed. In that case the following components are also not being deployed:
+
+* `Dovecot`
+* `Postfix-OX`
+
+Even without these components, the platform remains operational for outbound email because the (Base) Postfix instance provides a simple SMTP submission service using static SASL credentials. This allows all applications in *openDesk* to continue sending system notifications and user emails.
+
+## Overview
+
+```mermaid
+flowchart-elk
+
+extClient[optional Mail Clients]
+extRelay[Mailrelay/MXe]
+extMTA[MTAs]
+
+subgraph extSvc[K8s External Servies]
+    extSvcDC((dovecot-external))
+    extSvcPF((postfix-ox-external))
+end
+
+subgraph openDesk
+    subgraph Apps
+        AppsOther[Nubus<br>Nextcloud<br>OpenProject<br>Synapse<br>XWiki<br>Notes]
+        AppsOXAS[OX App Suite]
+    end
+    subgraph Postfix
+        PostfixBase[#40;Base#41; Postfix]
+        PostfixOX[Postfix-OX]
+    end
+    Dovecot[Dovecot<br>authenticates using<br>SASL using LDAP & OAuth]
+    Dovecot -->|Sieve mails<br>without no auth| PostfixBase
+    PostfixOX -->|auth|Dovecot
+end
+
+Postfix -->|lmtps| Dovecot
+Postfix -->|smtp| extRelay
+
+extSvcDC --> Dovecot
+extSvcPF --> PostfixOX
+
+AppsOther -->|auth:<br>static creds.| PostfixBase
+AppsOXAS --> Dovecot
+AppsOXAS -->|auth:<br>OAuth| PostfixOX
+
+extClient --> extSvcDC
+extMTA -->|WARNING: SPF and DKIM validation required| extSvcPF
+extClient -->|auth:<br>LDAP| extSvcPF
+
+classDef postfix fill:#85extMTA9C;
+class PostfixBase postfix;
+classDef postfix-ox fill:#F3E5Dovecot;
+class PostfixOX,extSvcPF postfix-ox;
+classDef dovecot fill:#BECBD6;
+class Dovecot,extSvcDC dovecot;
+```
+
+## The Postfixes
+
+* Common for both Postfix
+  * Deliver internal mails to Dovecot using lmtps
+  * Deliver non-internal mails directly to a configured mail relay or to the recipients MX
+
+* (Base) Postfix specific
+   * SMTP submission from applications using static credentials
+   * SMTP submission without authentication for Dovecot generated mails by Sieve filters, e.g. out-of-office replys, as Dovecot does not support authentication in this flow
+   * Available even if OX App Suite is not installed
+
+* Postfix-OX specific
+   * External mails are relayed for internal maildomains unauthenticated
+   * Requires Dovecot for SASL authentication on
+     * mails sent from OX App Suite's Web UI using OAuth
+     * mails sent from mail clients using LDAP Auth
+   * Used exclusively when OX App Suite is deployed
 
 # Applications vs. services
 

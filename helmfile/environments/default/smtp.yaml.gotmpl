@@ -7,6 +7,9 @@ smtp:
   username: ""
   password: {{ env "SMTP_PASSWORD" | quote }}
   localpartNoReply: "no-reply"
+  spamMilter:
+    host: ""
+    port: ""
 
   # For the following settings to have effect `apps.dkimpy.enabled` must be `true`.
   dkim:
