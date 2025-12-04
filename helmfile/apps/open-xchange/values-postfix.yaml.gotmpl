@@ -50,9 +50,9 @@ postfix:
   {{- if .Values.apps.dkimpy.enabled }}
   dkimpyHost: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}:8892"
   {{- end }}
+  rspamdHost: "{{ .Values.smtp.spamMilter.host }}:{{ .Values.smtp.spamMilter.port }}"
   minTLSVersion: "TLSv1.2"
   smtpdTLSMandatoryCiphers: "medium"
-  rspamdHost: ""
   {{- if .Values.smtp.host }}
   relayHost:
     enabled: true

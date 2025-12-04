@@ -343,6 +343,16 @@ smtp:
   password: "secret"
 ```
 
+It is strongly recommended to configure a milter host for spam filtering (e.g. Rspamd) to get SPF and DKIM
+validation for incoming mails in place. Otherwise external senders could spoof internal sender addresses.
+
+```yaml
+smtp:
+  spamMilter:
+    host: "rspamd.domain.internal"
+    port: "11332"
+```
+
 ### TURN configuration
 
 Some components (Jitsi, Element) use a TURN server for direct communication. You can configure your own TURN server with
