@@ -57,10 +57,27 @@ postfix:
   hostname: "postfix"
   inetProtocols: "ipv4"
   milterDefaultAction: "accept"
-  {{- if .Values.apps.dkimpy.enabled }}
-  dkimpyHost: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}:8892"
-  {{- end }}
-  rspamdHost: ""
+  smtpdMilters:
+    {{- if .Values.apps.dkimpy.enabled }}
+    10-dkimpy:
+      host: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}"
+      port: 8892
+    {{- end }}
+    {{- if .Values.antivirus.milter.host }}
+    30-antivirus:
+      host: {{ .Values.antivirus.milter.host | quote }}
+      port: {{ .Values.antivirus.milter.port }}
+    {{- else }}
+    {{- if .Values.apps.clamavDistributed.enabled }}
+    30-antivirus:
+      host: "clamav-milter"
+      port: 7357
+    {{- else if .Values.apps.clamavSimple.enabled }}
+    30-antivirus:
+      host: "clamav-simple"
+      port: 7357
+    {{- end }}
+    {{- end }}
   {{- if .Values.smtp.host }}
   relayHost:
     enabled: true
@@ -116,15 +133,6 @@ postfix:
       # -- return the following attribute from all found leaves when a recursive search is done
       leafResultAttribute: "mailPrimaryAddress"
 
-  {{- if .Values.antivirus.milter.host }}
-  smtpdMilters: "inet:{{ .Values.antivirus.milter.host }}:{{ .Values.antivirus.milter.port }}"
-  {{- else }}
-  {{- if .Values.apps.clamavDistributed.enabled }}
-  smtpdMilters: "inet:clamav-milter:7357"
-  {{- else if .Values.apps.clamavSimple.enabled }}
-  smtpdMilters: "inet:clamav-simple:7357"
-  {{- end }}
-  {{- end }}
   # Only deliver mail to Dovecot, if it is available
   {{- if .Values.apps.oxAppSuite.enabled }}
   virtualMailboxDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
