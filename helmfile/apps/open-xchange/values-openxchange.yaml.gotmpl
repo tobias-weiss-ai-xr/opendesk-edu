@@ -398,6 +398,7 @@ appsuite:
               open-xchange-admin-soap: "enabled"
               open-xchange-admin-soap-usercopy: "enabled"
               open-xchange-admin-user-copy: "enabled"
+              open-xchange-deputy: "enabled"
       {{- if .Values.functional.migration.oxAppSuite.enabled }}
       migration:
         values:
@@ -415,7 +416,7 @@ appsuite:
             com.openexchange.calendar.maxSeriesUntilForConflicts: "4"
             # Mailfilter
             com.openexchange.mail.filter.passwordSource: "global"
-            com.openexchange.mail.filter.masterPassword:  {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+            com.openexchange.mail.filter.masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
             com.openexchange.mail.filter.preferredSaslMech: ""
             # Loosen API the rate limit
             com.openexchange.servlet.maxRateTimeWindow: "60000"
@@ -563,6 +564,9 @@ appsuite:
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
       com.openexchange.quota.calendar: {{ .Values.technical.oxAppSuite.quota.calendar | quote }}
+      # Deputy feature
+      # Ref.: https://documentation.open-xchange.com/8/middleware/permissions_and_capabilities/deputy_permission.html
+      com.openexchange.deputy.enabled: "true"
       # Various Mail settings
       com.openexchange.mail.deleteDraftOnTransport: "true"
       com.openexchange.capability.document_preview_xrechnung: "true"
