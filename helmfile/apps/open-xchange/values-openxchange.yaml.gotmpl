@@ -636,6 +636,12 @@ appsuite:
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
       com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
     propertiesFiles:
+      /opt/open-xchange/etc/server.properties:
+        MAX_UPLOAD_SIZE: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
+      /opt/open-xchange/etc/infostore.properties:
+        MAX_UPLOAD_SIZE: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
+      /opt/open-xchange/etc/attachment.properties:
+        MAX_UPLOAD_SIZE: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
       /opt/open-xchange/etc/AdminDaemon.properties:
         MASTER_ACCOUNT_OVERRIDE: "true"
       /opt/open-xchange/etc/AdminUser.properties:
