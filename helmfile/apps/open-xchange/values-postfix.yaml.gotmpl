@@ -47,10 +47,32 @@ postfix:
   inetProtocols: "ipv4"
   messageSizeLimit: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
   milterDefaultAction: "tempfail"
-  {{- if .Values.apps.dkimpy.enabled }}
-  dkimpyHost: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}:8892"
-  {{- end }}
-  rspamdHost: "{{ .Values.smtp.spamMilter.host }}:{{ .Values.smtp.spamMilter.port }}"
+  smtpdMilters:
+    {{- if .Values.apps.dkimpy.enabled }}
+    10-dkimpy:
+      host: "opendesk-dkimpy-milter.{{ .Release.Namespace }}.svc.{{.Values.cluster.networking.domain }}"
+      port: 8892
+    {{- end }}
+    {{- if .Values.smtp.spamMilter.host }}
+    20-spam:
+      host: {{ .Values.smtp.spamMilter.host | quote }}
+      port: {{ .Values.smtp.spamMilter.port }}
+    {{- end }}
+    {{- if .Values.antivirus.milter.host }}
+    30-antivirus:
+      host: {{ .Values.antivirus.milter.host | quote }}
+      port: {{ .Values.antivirus.milter.port }}
+    {{- else }}
+    {{- if .Values.apps.clamavDistributed.enabled }}
+    30-antivirus:
+      host: "clamav-milter"
+      port:7357
+    {{- else if .Values.apps.clamavSimple.enabled }}
+    30-antivirus:
+      host: "clamav-simple"
+      port: 7357
+    {{- end }}
+    {{- end }}
   minTLSVersion: "TLSv1.2"
   smtpdTLSMandatoryCiphers: "medium"
   {{- if .Values.smtp.host }}
@@ -100,15 +122,6 @@ postfix:
       # -- return the following attribute from all found leaves when a recursive search is done
       leafResultAttribute: "mailPrimaryAddress"
 
-  {{- if .Values.antivirus.milter.host }}
-  smtpdMilters: "inet:{{ .Values.antivirus.milter.host }}:{{ .Values.antivirus.milter.port }}"
-  {{- else }}
-  {{- if .Values.apps.clamavDistributed.enabled }}
-  smtpdMilters: "inet:clamav-milter:7357"
-  {{- else if .Values.apps.clamavSimple.enabled }}
-  smtpdMilters: "inet:clamav-simple:7357"
-  {{- end }}
-  {{- end }}
   virtualMailboxDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
   virtualTransport: "lmtps:dovecot:24"
 
