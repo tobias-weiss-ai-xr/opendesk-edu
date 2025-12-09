@@ -192,7 +192,7 @@ If you would like more details about the automated migrations, please read secti
 
 #### Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
 
-**Target group:** Existing deployments using `service` annotations.
+**Target group:** Existing deployments using `service` annotations for Dovecot, Jitsi JVB or Postfix.
 
 The three non-HTTP external services support now explicit annotations.
 See [`annotations.yaml.gomtpl`](../helmfile/environments/default/annotations.yaml.gotmpl) for reference.
