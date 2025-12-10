@@ -67,12 +67,16 @@ configuration:
         enabled: {{ .Values.apps.openproject.enabled }}
       notifyPush:
         enabled: {{ gt .Values.replicas.nextcloudNotifyPush 0 }}
+      sharereview:
+        enabled: false
       spreed:
         enabled: false
     comments:
       enabled: false
     circles:
       enabled: false
+    systemtags:
+      enabled: true
 
   collabora:
     # internalWopiUrl: ""
@@ -101,6 +105,12 @@ configuration:
         {{- else }}
         value: {{ .Values.databases.nextcloud.password | quote }}
         {{- end }}
+
+  i18n:
+    language:
+      default: {{ .Values.functional.internationalization.defaultLanguage | quote }}
+    locale:
+      default: {{ .Values.functional.internationalization.defaultLanguage | quote }}
 
   ldap:
     base: {{ .Values.ldap.baseDn | quote }}
