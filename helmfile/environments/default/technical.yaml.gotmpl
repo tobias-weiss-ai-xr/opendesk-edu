@@ -41,6 +41,12 @@ technical:
       # If this value is true, the cache sizes of the fs cache + fts cache
       # must be considered additionally to Dovecot's memory footprint.
       cacheTmpfs: false
+    protocol:
+      imap:
+        limits:
+          # Set the `mail_max_userip_connections` in the `protocol imap` block
+          # Ref.: https://doc.dovecot.org/main/core/admin/limits.html#mail_max_userip_connections
+          maxUserIpConnections: 30
 
   # Nubus related settings
   nubus:

@@ -47,6 +47,10 @@ dovecot:
     introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
     introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
     usernameAttribute: "opendesk_username"
+  protocol:
+    imap:
+      limits:
+        maxUserIpConnections: {{ .Values.technical.dovecot.protocol.imap.limits.maxUserIpConnections }}
   quotaRules:
     - "*:storage={{ mul .Values.functional.groupware.quota.default 1024 }}M"
     - "Trash:storage=+{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 20) 100 }}M"
