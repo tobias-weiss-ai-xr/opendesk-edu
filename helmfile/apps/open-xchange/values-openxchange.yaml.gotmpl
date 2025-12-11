@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -118,63 +118,153 @@ appsuite:
     routes:
       appsuite-base:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.appsuitebase | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.appsuitebase }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       rootredirect:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.rootredirect | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.rootredirect }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       trailslash:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.trailslash | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.trailslash }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       rest-routes-admin:
         {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
         enabled: false
         {{- end }}
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdmin | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdmin }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       rest-routes-advertisement:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdvertisement | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdvertisement }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       rest-routes-chronos:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesChronos | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesChronos }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       rest-routes-preliminary:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesPreliminary | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesPreliminary }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       rest-routes-userfeedback:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.restRoutesUserfeedback | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesUserfeedback }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       static-routes-servlet:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesServlet | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesServlet }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       static-routes-realtime:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesRealtime | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesRealtime }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       static-routes-infostore:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesInfostore | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesInfostore }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       static-routes-webservices:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.staticRoutesWebservices | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesWebservices }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       drive-client-windows-ox-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.driveClientWindowsOxRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.driveClientWindowsOxRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       {{ if .Values.functional.groupware.mail.encryption.enabled }}
       guard-api-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.guardApiRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardApiRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       guard-support-api-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.guardSupportApiRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardSupportApiRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       guard-pgp-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.guardPgpRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardPgpRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       {{ end }}
       http-api-routes-api:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesApi | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesApi }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       http-api-routes-ajax:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAjax | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAjax }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       http-api-routes-appsuite-api:
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
@@ -185,37 +275,92 @@ appsuite:
           {{- end }}
       http-api-routes-app-root-api:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAppRootApi | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAppRootApi }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       rt2-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.rt2Route | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.rt2Route }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       documents-help-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.documentsHelpRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.documentsHelpRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       drive-help-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.driveHelpRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.driveHelpRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       core-help-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.coreHelpRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.coreHelpRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       office-web-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.officeWebRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.officeWebRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       caldav-well-known-redirect:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.caldavWellKnownRedirect | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.caldavWellKnownRedirect }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       carddav-well-known-redirect:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.carddavWellKnownRedirect | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.carddavWellKnownRedirect }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       dav-infostore-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.davInfostoreRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.davInfostoreRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       dav-root-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.davRootRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.davRootRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       wopi-server-route:
         annotations:
-          {{ .Values.annotations.openxchangeAppsuiteIngress.wopiServerRoute | toYaml | nindent 10 }}
+          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.wopiServerRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
       trailslash:
         enabled: false
   core-mw:
