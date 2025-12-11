@@ -4,9 +4,12 @@
 technical:
 
   # Collabora related technical settings
+  # Ref.: https://sdk.collaboraonline.com/docs/installation/Configuration.html
   collabora:
-    # Defines the value for the start parameter `-o:num_prespawn_children`
+    # Defines the value for the start parameter `--o:num_prespawn_children`
     numPrespawnChildren: 4
+    # Defines the value for the start parameter `--o:disable_server_audit`
+    loggingDisableServerAudit: "true"
 
   # Dovecot EE related settings
   dovecot:
