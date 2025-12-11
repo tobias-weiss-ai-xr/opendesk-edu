@@ -5,6 +5,8 @@ image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDeEnterprise .Values.global.imageRegistry .Values.images.nextcloud.registry | quote }}
 configuration:
   enterprise:
-    subscriptionKey: {{ if .Values.enterpriseKeys.nextcloud.subscriptionKey }}{{ .Values.enterpriseKeys.nextcloud.subscriptionKey | quote }}{{ end }}
-    subscriptionData: {{ if .Values.enterpriseKeys.nextcloud.subscriptionData}}{{ .Values.enterpriseKeys.nextcloud.subscriptionData | quote }}{{ end }}
+    subscriptionKey:
+      value: {{ if .Values.enterpriseKeys.nextcloud.subscriptionKey }}{{ .Values.enterpriseKeys.nextcloud.subscriptionKey | quote }}{{ end }}
+    subscriptionData:
+      value: {{ if .Values.enterpriseKeys.nextcloud.subscriptionData}}{{ .Values.enterpriseKeys.nextcloud.subscriptionData | quote }}{{ end }}
 ...
