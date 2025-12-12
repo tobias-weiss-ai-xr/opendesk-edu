@@ -1359,7 +1359,7 @@ nubusStackDataUms:
     portaltileGroupNotes:
       - "cn=managed-by-attribute-Notes,cn=groups,{{ .Values.ldap.baseDn }}"
     systemInformation:
-      releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}{{ if eq (env "OPENDESK_ENTERPRISE") "true" }}-ee{{ end }}"
+      releaseVersion: "Release: {{ .Values.global.systemInformation.releaseVersion }}-{{ if eq (env "OPENDESK_ENTERPRISE") "true" }}ee{{ else }}ce{{ end }}"
       {{- if .Values.functional.admin.portal.deploymentTimestamp.enabled }}
       deployDate: "Deployed: {{ now | date "2006-01-02T15:04:05-0700" }}"
       {{- else }}
