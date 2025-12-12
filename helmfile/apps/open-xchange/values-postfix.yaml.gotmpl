@@ -106,6 +106,7 @@ postfix:
   ldapTransportMaps: []
 
   ldapVirtualAliasMaps:
+    # Support email address definition on ldap groups
     - host: "ums-ldap-server"
       scheme: "ldap"
       port: 389
@@ -114,13 +115,29 @@ postfix:
       password:
         value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
       # ldap filter to find groups with mail address
-      queryFilter: "(&(|(objectClass=univentionMailList)(objectClass=posixGroup))(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s)))"
+      queryFilter: "(&(objectClass=univentionGroup)(mailPrimaryAddress=%s))"
       # -- use this attribute if the query already returns email addresses of members and no recursive lookup needs to be done
       resultAttribute: ""
       # -- do a recursive search on the specified attribute if found, should be a DN
       specialResultAttribute: "uniqueMember"
       # -- return the following attribute from all found leaves when a recursive search is done
       leafResultAttribute: "mailPrimaryAddress"
+    # Support for objects of type "mail/lists"
+    - host: "ums-ldap-server"
+      scheme: "ldap"
+      port: 389
+      baseDn: "{{ .Values.ldap.baseDn }}"
+      bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
+      password:
+        value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+      # ldap filter to find groups with mail address
+      queryFilter: "(&(objectClass=univentionMailList)(mailPrimaryAddress=%s))"
+      # -- use this attribute if the query already returns email addresses of members and no recursive lookup needs to be done
+      resultAttribute: "univentionMailMember"
+      # -- do a recursive search on the specified attribute if found, should be a DN
+      specialResultAttribute: ""
+      # -- return the following attribute from all found leaves when a recursive search is done
+      leafResultAttribute: ""
 
   virtualMailboxDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
   virtualTransport: "lmtps:dovecot:24"
