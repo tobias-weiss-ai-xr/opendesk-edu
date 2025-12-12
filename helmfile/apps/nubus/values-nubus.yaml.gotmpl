@@ -1101,9 +1101,9 @@ nubusProvisioning:
     createUsers:
       oxConsumer:
         existingSecret:
-          name: ums-provisioning-ox-credentials
+          name: "ox-connector-provisioning-api"
           keyMapping:
-            registration: "ox-connector.json"
+            registration: "registration"
     {{- end }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
@@ -1655,6 +1655,3 @@ extraSecrets:
   - name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
     stringData:
       password: {{ .Values.secrets.nubus.ldapSearch.keycloak | quote }}
-  - name: "ums-provisioning-ox-credentials"
-    stringData:
-      ox-connector.json: "{ \"name\": \"ox-connector\", \"realms_topics\": [{\"realm\": \"udm\", \"topic\": \"oxmail/oxcontext\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/accessprofile\"}, {\"realm\": \"udm\", \"topic\": \"users/user\"}, {\"realm\": \"udm\", \"topic\": \"oxresources/oxresources\"}, {\"realm\": \"udm\", \"topic\": \"groups/group\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/functional_account\"}], \"request_prefill\": true, \"password\": \"{{ .Values.secrets.oxConnector.provisioningApiPassword }}\" }"
