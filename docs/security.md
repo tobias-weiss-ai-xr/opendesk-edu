@@ -19,12 +19,12 @@ Helm charts are signed and validated against GPG keys in `helmfile/files/gpg-pub
 
 For more details on Chart validation, please visit: https://helm.sh/docs/topics/provenance/
 
-All charts except the ones mentioned below are verifiable:
+All charts except the ones mentioned below are verified by Helmfile.
 
 | Repository                | Verifiable |
 | ------------------------- | :--------: |
 | collabora-controller-repo |     no     |
-| open-xchange-repo         |     no     |
+| open-xchange-repo         | cosign[^1] |
 
 # Kubernetes security enforcements
 
@@ -50,3 +50,5 @@ security:
   otterizeIntents:
     enabled: true
 ```
+
+[^1]: Helmfile does not support cosign chart verification yet, though the chart can be [externally verified](https://docs.sigstore.dev/cosign/verifying/verify/) using the key(s) in `helmfile/files/cosign-pubkeys`
