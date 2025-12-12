@@ -15,7 +15,7 @@ assets:
   element:
     subdomain: {{ .Values.global.hosts.element }}
     paths:
-      - path: "/vector-icons/favicon.png"
+      - path: "/vector-icons/.+.png"
         data: {{ .Values.theme.imagery.chat.faviconPng }}
   jitsi:
     subdomain: {{ .Values.global.hosts.jitsi }}
