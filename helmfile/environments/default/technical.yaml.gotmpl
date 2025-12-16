@@ -67,6 +67,11 @@ technical:
 
   # Groupware related technical settings
   oxAppSuite:
+    quota:
+      # Ensure esp. on larger deployments that the quota isn't hit.
+      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.calendar
+      calendar: 250000
+
     provisioning:
       # In environments with a large number of users and groups, we offer the option to enable a
       # dedicated Pod for the OX App Suite Core Middleware, exclusively handling provisioning tasks.
