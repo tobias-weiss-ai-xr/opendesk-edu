@@ -557,6 +557,7 @@ appsuite:
       com.openexchange.share.guestHostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
+      com.openexchange.quota.calendar: {{ .Values.technical.oxAppSuite.quota.calendar | quote }}
       # Various Mail settings
       com.openexchange.mail.deleteDraftOnTransport: "true"
       com.openexchange.capability.document_preview_xrechnung: "true"
