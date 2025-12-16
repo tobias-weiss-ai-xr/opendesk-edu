@@ -75,6 +75,8 @@ replicaCount: {{ .Values.replicas.cryptpad }}
 resources:
   {{ .Values.resources.cryptpad | toYaml | nindent 2 }}
 
+restrictRegistration: true
+
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
