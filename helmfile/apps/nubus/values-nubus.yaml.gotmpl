@@ -944,9 +944,9 @@ nubusProvisioning:
       eventsUdm:
         password: {{ .Values.secrets.nubus.provisioning.api.udmTransformerPassword | quote}}
     image:
-      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningEventsAndConsumerApi.registry | quote }}
-      repository: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.repository }}
-      tag: {{ .Values.images.nubusProvisioningEventsAndConsumerApi.tag }}
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningApi.registry | quote }}
+      repository: {{ .Values.images.nubusProvisioningApi.repository }}
+      tag: {{ .Values.images.nubusProvisioningApi.tag }}
     nats:
       auth:
         password: {{ .Values.secrets.nubus.provisioning.api.natsPassword | quote}}
