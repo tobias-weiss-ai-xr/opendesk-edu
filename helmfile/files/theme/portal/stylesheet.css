@@ -207,6 +207,11 @@ button.button--primary {
   padding: 0 10px 0 5px;
 }
 
+/* Do not show the info bubble/button on portal tiles that is used in mobile mode */
+.portal-tile__info-button {
+  display: none;
+}
+
 /*
 .portal::after {
     content: '';
