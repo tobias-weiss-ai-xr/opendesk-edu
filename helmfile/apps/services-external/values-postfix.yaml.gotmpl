@@ -56,6 +56,14 @@ postfix:
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   hostname: "postfix"
   inetProtocols: "ipv4"
+  ldap:
+    host: "ums-ldap-server"
+    scheme: "ldap"
+    port: 389
+    baseDn: "{{ .Values.ldap.baseDn }}"
+    bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
+    password:
+      value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
   milterDefaultAction: "accept"
   smtpdMilters:
     {{- if .Values.apps.dkimpy.enabled }}
@@ -114,17 +122,11 @@ postfix:
     password:
       value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
 
-  ldapTransportMaps: []
+  ldapTransportMaps: {}
 
   ldapVirtualAliasMaps:
     # Support email address definition on ldap groups
-    - host: "ums-ldap-server"
-      scheme: "ldap"
-      port: 389
-      baseDn: "{{ .Values.ldap.baseDn }}"
-      bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
-      password:
-        value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+    10-groups:
       # ldap filter to find groups with mail address
       queryFilter: "(&(objectClass=univentionGroup)(mailPrimaryAddress=%s))"
       # -- use this attribute if the query already returns email addresses of members and no recursive lookup needs to be done
@@ -134,13 +136,7 @@ postfix:
       # -- return the following attribute from all found leaves when a recursive search is done
       leafResultAttribute: "mailPrimaryAddress"
     # Support for objects of type "mail/lists"
-    - host: "ums-ldap-server"
-      scheme: "ldap"
-      port: 389
-      baseDn: "{{ .Values.ldap.baseDn }}"
-      bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
-      password:
-        value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+    20-lists:
       # ldap filter to find groups with mail address
       queryFilter: "(&(objectClass=univentionMailList)(mailPrimaryAddress=%s))"
       # -- use this attribute if the query already returns email addresses of members and no recursive lookup needs to be done
@@ -150,11 +146,21 @@ postfix:
       # -- return the following attribute from all found leaves when a recursive search is done
       leafResultAttribute: ""
 
+  ldapVirtualMailboxDomains:
+    queryFilter: "(&(objectClass=univentionMailDomainname)(cn=%s))"
+    resultAttribute: "cn"
+
   # Only deliver mail to Dovecot, if it is available
   {{- if .Values.apps.oxAppSuite.enabled }}
-  virtualMailboxDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
   virtualTransport: "lmtps:dovecot:24"
+  {{- else }}
+  virtualMailboxDomains: []
   {{- end }}
+
+  overrideMaps:
+    /etc/postfix/dovecot-ldap.conf:
+      name: "dovecot"
+      key: "oauth2-primary.conf.ext"
 
 replicaCount: {{ .Values.replicas.postfix }}
 
