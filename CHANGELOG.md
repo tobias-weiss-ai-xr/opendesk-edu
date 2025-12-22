@@ -1,3 +1,47 @@
+# [1.11.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.10.0...v1.11.0) (2025-12-22)
+
+
+### Bug Fixes
+
+* **collabora:** Add toggle for server audit in `technical.yaml.gotmpl` ([68d8fb8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/68d8fb8eb5c4842efeb1603223479f36a0217189))
+* **collabora:** Allow templating of `technical.collabora.netConnectionTimeoutSecs` and set default to 60 ([38332e0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/38332e0b2495a8a239b3368e190eceb1b90f44e1))
+* **collabora:** Update Controller to 1.1.7 incl. Helm chart update to 1.1.11 ([936d33f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/936d33fcb7a91785e6ff05a0f6db94162d30f88b))
+* **collabora:** Update from 25.04.6 to 25.04.7 ([ec7fd6f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ec7fd6f55770be793b7d507d0f92bae5ca9656c7))
+* **cryptpad:** Limit number of parallel processes using `technical.cryptpad.maxWorkers` ([a17c505](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a17c505ffea37d712869e24ec269082c6802e058))
+* **cryptpad:** Make autoscaling templatable through `technical.cryptpad.autoscaling.*` ([e56076f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e56076f648b102c7bb48590212059c65a6f3a942))
+* **cryptpad:** Update from 2025.6.0 to 2025.9.0 ([decd8b1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/decd8b1b7637e57d60e1ce0745226584b93a60dd))
+* **element:** Update Element-Web from 1.12.0 or 1.12.6 and Synapse from 1.141.0 to 1.144.0 ([ab2fcb4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ab2fcb4aa6e088497f9dd7173d4776dea7c28338))
+* **helmfile:** Basic support for Nubus `mail/lists` objects ([7817f9a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7817f9a1bf152fa5953cab138e7a18d49171f7d9))
+* **helmfile:** Explicitly template "ce" in `releaseVersion` ([45670c8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/45670c81a62209189d0d2a7ba09d2472f908da44))
+* **jitsi:** Bump chart to fix typo in Ingress annotation ([752fb0f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/752fb0fab27702987b71c55fa32d6c45557d78f2))
+* **nextcloud:** Bump image for more recent app versions and chart ([af08aec](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/af08aec550ab6fa31a8ec692f7b4c3731edaec0f))
+* **nextcloud:** Set config keys for `default_language` and `default_locale` based on `functional.internationalization.defaultLanguage` ([ab99d1a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ab99d1a1efd0bebe4c863ee287658fb001641cbe))
+* **nextcloud:** Update Helm chart and images to fix warnings in admin overview and have `/status.php` behind BasicAuth; review migrations.md for required upgrade steps ([1656318](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/16563188ffa7fa5f49220fe84b3cc7c59befd89e))
+* **nubus:** Enable email address uniqueness ([65e98b4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/65e98b49dea8f3eb3748b57ed0bdd16b2ac97e3c))
+* **nubus:** Hide info bubble on portal icons in mobile mode ([4e783a8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4e783a8e23e5ac6d5dcfe3722449f6e047726890))
+* **open-xchange:** Add proxy body-size and timeout annotations to all OX App Suite ingress objects ([2e3efc3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2e3efc3b0ab9a79844a6925694a72ca711284abb))
+* **open-xchange:** Align maximum attachment size with `functional.groupware.mail.maxSize` ([a663531](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a6635318d1ee67a772d9b32cc70370b51f7bc8a9))
+* **open-xchange:** Calendar object quota can be set using `technical.oxAppSuite.quota.calendar` ([73ac790](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/73ac790c40f6797316cdaa78ea82706d26d11e7d))
+* **open-xchange:** Raise API rate limit on migration Pod ([329da5b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/329da5b846f580470a0a9a982eceb3b96b66f5e1))
+* **open-xchange:** Set credentials source for migration Pod to ensure OX App Suite API based Sieve migrations ([019c33f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/019c33fe2af43dca5aafbe9d2d7091d23b0f3644))
+* **open-xchange:** Streamline postfix milter configuration ([b09d314](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b09d314b58c4cc857c9a7a567b5e0ed7d2ce0a6f))
+* **open-xchange:** Support templating of maximum IMAP connections per user using `technical.dovecot.protocol.imap.limits.maxUserIpConnections` ([d6c061a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d6c061a5f17d652cf1c35d5c8aae6b6caa34e66b))
+* **openproject:** Bump OpenProject from 16.6.1 to 16.6.2 ([f5970ac](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f5970acdf12bd6018fe215a7ca9ddc23ec7c0fe1))
+* **openproject:** Bump OpenProject from 16.6.2 to 16.6.3 ([e74f22f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e74f22f5e62e013b399373ccbd5042ac4a4aa7bb))
+* **static-files:** Set missing `privileged: [secure]` in `containerSecurityContext` ([b5c99b5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b5c99b5a2ecc5478489e306bec21913aa5e615f4))
+
+
+### Features
+
+* **helmfile:** [[#205](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/205), [#227](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/227)] Allow separate annotations for external Dovecot, Postfix and Jitsi JVB service; review `migrations.md` for required upgrade steps ([2ddbd91](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2ddbd91f3decf72cf595dd5dca0e19e7a994a407))
+* **helmfile:** Add templating of `smtp.spamMilter.*`; it is strongly recommended to use this feature to address spam filtering and SPF / DKIM validation of incoming mails ([67a7ff3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/67a7ff39749a7679961f36133c135e35c5ed809e))
+* **notes:** Update from 3.4.0 to 4.1.0 ([8d8e125](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8d8e125a962740cef117a61ad1d4e51f6b7f039b))
+* **nubus:** Update from v1.15.2 to v1.16.0 ([a660193](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a66019324bfd85176677e1324980690fb26d0034))
+* **open-xchange:** Allow user to access web mail while migration mode enabled ([2bf7d56](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2bf7d56f3692f76fd79ab7b526fe87348cc4edc8))
+* **open-xchange:** Update from 8.41 to 8.43 ([2a3efee](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2a3efee813c1cc70db8cc5c62e2eee2926a02c94))
+* **open-xchange:** Update from 8.43 to 8.44 ([b447b64](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b447b64c2e79eaf82ef2838e9ec3ffc9b0653584))
+* **ox-connector:** Update from v0.27.9 to v0.34.0 ([8178e01](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8178e016a053dc8b59fdc3662aff3233a18558fa))
+
 # [1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.9.0...v1.10.0) (2025-11-24)
 
 
