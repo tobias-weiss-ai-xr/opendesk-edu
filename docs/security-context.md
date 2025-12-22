@@ -207,11 +207,12 @@ This list gives you an overview of templated security settings and if they compl
 | **open-xchange**/open-xchange/nextcloud-integration-ui | :x: | no | no | no | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/open-xchange/public-sector-ui | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/opendesk-open-xchange-bootstrap | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
+| **open-xchange**/ox-connector | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/postfix-ox | :x: | yes | yes | yes | no | 0 | 0 | yes | no |
 | **opendesk-migrations-post**/opendesk-migrations-post | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **opendesk-migrations-pre**/opendesk-migrations-pre | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **opendesk-openproject-bootstrap**/opendesk-openproject-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **opendesk-services**/opendesk-static-files | :x: | no | n/a | yes | yes | 101 | 101 | yes | yes |
+| **opendesk-services**/opendesk-static-files | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **openproject**/openproject | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **services-external**/cassandra | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/clamav | :x: | no | no | yes | no | 0 | 0 | yes | no |
