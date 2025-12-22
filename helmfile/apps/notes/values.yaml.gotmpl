@@ -158,7 +158,7 @@ backend:
       subPath: "theme.json"
     {{- if .Values.certificate.selfSigned }}
     - name: "trusted-cert-secret-volume"
-      mountPath: "/usr/local/lib/python3.13/site-packages/certifi/cacert.pem"
+      mountPath: "/cert/cacert.pem"
       subPath: "ca-certificates.crt"
     {{- end }}
 
