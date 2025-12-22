@@ -66,7 +66,7 @@ postfix:
     {{- if .Values.apps.clamavDistributed.enabled }}
     30-antivirus:
       host: "clamav-milter"
-      port:7357
+      port: 7357
     {{- else if .Values.apps.clamavSimple.enabled }}
     30-antivirus:
       host: "clamav-simple"
