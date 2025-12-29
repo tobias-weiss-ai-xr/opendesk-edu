@@ -2,6 +2,8 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+.opendesk-env-ref-anchor: &opendesk_env_ref "env-v1"
+
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
     ref: "v2.4.17"
@@ -17,7 +19,7 @@ include:
   - local: "/.gitlab/lint/lint-reuse.yml"
   - project: "${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
     file: "gitlab/environments.yaml"
-    ref: "main"
+    ref: *opendesk_env_ref
   - local: "/.gitlab/lint/lint-opendesk.yml"
     rules:
       - if: >
@@ -52,6 +54,8 @@ stages:
   - ".post"
 
 variables:
+  OPENDESK_ENV_REF: *opendesk_env_ref
+  FF_SCRIPT_SECTIONS: "true"
   RELEASE_BRANCH: "main"
   NAMESPACE:
     description: "The name of namespaces to deploy to."
@@ -251,10 +255,23 @@ variables:
     - |
       if ! [ -z "${MASTER_PASSWORD_WEB_VAR}" ]; then
         export MASTER_PASSWORD="${MASTER_PASSWORD_WEB_VAR}"
-      fi;
+      fi
+    - |
+      if [[ -z "${DOMAIN:-}" ]]; then
+        echo "Error: DOMAIN is not set" >&2
+        exit 1
+      fi
     - >
-      echo "Installing ${COMPONENT} into ${NAMESPACE} namespace as ${HELMFILE_ENVIRONMENT} environment on ${CLUSTER}"
+      printf '%s\n'
+      "- Installing:"
+      "  - CLUSTER: ${CLUSTER}"
+      "  - NAMESPACE: ${NAMESPACE}"
+      "  - HELMFILE_ENVIRONMENT: ${HELMFILE_ENVIRONMENT}"
+      "  - COMPONENT: ${COMPONENT}"
+      "  - ADDITIONAL_ARGS: ${ADDITIONAL_ARGS}"
+      "  - DOMAIN: ${DOMAIN}"
     - "helmfile --namespace ${NAMESPACE} apply --suppress-diff ${ADDITIONAL_ARGS}"
+    - "echo \"- When deployment is completed access it at: https://${DOMAIN}\""
   tags:
     - "docker"
     - "kubernetes"
