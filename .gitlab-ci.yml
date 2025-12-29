@@ -191,9 +191,6 @@ variables:
     options:
       - "yes"
       - "no"
-  DIFF_ON_BRANCH:
-    description: "Provide a branch to run `helmfile diff` for the specified branch."
-    value: ""
   RUN_TESTS:
     description: "Triggers execution of E2E-tests."
     value: "no"
@@ -721,35 +718,6 @@ fetch-administrator-credentials:
   artifacts:
     reports:
       dotenv: ".env"
-
-diff-on-branch:
-  stage: "post-execute"
-  cache: {}
-  dependencies: []
-  extends: ".environments"
-  environment:
-    name: "${NAMESPACE}"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:${HELM_IMAGE_PIN}"
-  rules:
-    - if: "$DIFF_ON_BRANCH"
-  script:
-    - |
-      echo "Downloading branch ${DIFF_ON_BRANCH}"
-      SAFE_BRANCH_NAME=$(echo "$DIFF_ON_BRANCH" | tr '/' '-')
-      BASE_URL="https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/archive"
-      FILE_NAME="opendesk-${SAFE_BRANCH_NAME}.tar.gz"
-      curl -L "${BASE_URL}/${DIFF_ON_BRANCH}/${FILE_NAME}" -o branch.tar.gz
-      mkdir ${DIFF_ON_BRANCH_SUBDIRECTORY} &&
-        tar -xzf branch.tar.gz -C ${DIFF_ON_BRANCH_SUBDIRECTORY} --strip-components=1
-      cd ${DIFF_ON_BRANCH_SUBDIRECTORY}
-      helmfile --namespace ${NAMESPACE} diff | grep -v '^ ' || true
-  tags:
-    - "docker"
-    - "kubernetes"
-    - "${CLUSTER}"
-  variables:
-    HELMFILE_ENVIRONMENT: "dev"
-    DIFF_ON_BRANCH_SUBDIRECTORY: "diff-on-branch"
 
 import-default-accounts:
   stage: "post-execute"
