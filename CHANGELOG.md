@@ -1,3 +1,10 @@
+## [1.11.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.0...v1.11.1) (2026-01-02)
+
+
+### Bug Fixes
+
+* **nextcloud:** Allow `/status.php` to be publicly available controlled by `functional.filestore.nextcloud.clients.enabled` defaulting to `true` for discovery by Nextcloud clients ([dae35c1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/dae35c1a98632f26f132cc8892d7f56106ac81bc))
+
 # [1.11.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.10.0...v1.11.0) (2025-12-22)
 
 
