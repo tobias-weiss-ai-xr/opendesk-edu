@@ -30,6 +30,7 @@ configuration:
       value: {{ .Values.secrets.nextcloud.adminPassword | quote }}
 
   antivirus:
+    enabled: true
     {{- if .Values.antivirus.icap.host }}
     host: {{ .Values.antivirus.icap.host | quote }}
     port: {{ .Values.antivirus.icap.port | quote }}

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 functional:
@@ -186,6 +186,12 @@ functional:
           defaultDays: 90
     # Nextcloud specific configuration
     nextcloud:
+      # About Nextcloud's mobile and desktop clients
+      clients:
+        # Setting this to `false` enables Basic Auth on Nextcloud's `/status.php`.
+        # As a result, clients cannot detect the instance as available.
+        # Note: WebDAV is still possible.
+        enabled: true
       retentionObligation:
         # yamllint disable rule:line-length
         # Set Nextcloud's `trashbin_retention_obligation`
