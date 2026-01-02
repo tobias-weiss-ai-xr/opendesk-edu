@@ -25,12 +25,12 @@ releases:
     version: "{{ .Values.charts.nextcloudManagement.version }}"
     values:
       - "values-nextcloud-management.yaml.gotmpl"
-      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "values-nextcloud-management-ee.yaml.gotmpl"
-      {{- end }}
-      {{- range .Values.customization.release.opendeskNextcloudManagement }}
+    {{- end }}
+    {{- range .Values.customization.release.opendeskNextcloudManagement }}
       - {{ . }}
-      {{- end }}
+    {{- end }}
     waitForJobs: true
     wait: true
     installed: {{ .Values.apps.nextcloud.enabled }}
@@ -40,12 +40,12 @@ releases:
     version: "{{ .Values.charts.nextcloud.version }}"
     values:
       - "values-nextcloud.yaml.gotmpl"
-      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "values-nextcloud-ee.yaml.gotmpl"
-      {{- end }}
-      {{- range .Values.customization.release.opendeskNextcloud }}
+    {{- end }}
+    {{- range .Values.customization.release.opendeskNextcloud }}
       - {{ . }}
-      {{- end }}
+    {{- end }}
     needs:
       - "opendesk-nextcloud-management"
     installed: {{ .Values.apps.nextcloud.enabled }}
@@ -55,12 +55,12 @@ releases:
     version: "{{ .Values.charts.nextcloudNotifyPush.version }}"
     values:
       - "values-nextcloud-notifypush.yaml.gotmpl"
-      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "values-nextcloud-notifypush-ee.yaml.gotmpl"
-      {{- end }}
-      {{- range .Values.customization.release.opendeskNextcloudNotifyPush }}
+    {{- end }}
+    {{- range .Values.customization.release.opendeskNextcloudNotifyPush }}
       - {{ . }}
-      {{- end }}
+    {{- end }}
     wait: true
     needs:
       - "opendesk-nextcloud"
