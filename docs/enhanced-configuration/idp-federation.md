@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
 
@@ -7,67 +7,102 @@ SPDX-License-Identifier: Apache-2.0
 
 <!-- TOC -->
 * [Federation with external identity provider (IdP)](#federation-with-external-identity-provider-idp)
-  * [References](#references)
   * [Prerequisites](#prerequisites)
     * [User accounts](#user-accounts)
-    * [External IdP with OIDC](#external-idp-with-oidc)
+    * [Manual user management](#manual-user-management)
+    * [User import](#user-import)
+    * [Ad-hoc provisioning](#ad-hoc-provisioning)
+    * [(Automated) Pre-provisioning](#automated-pre-provisioning)
+      * [Nubus Directory Importer](#nubus-directory-importer)
+      * [UDM REST API](#udm-rest-api)
   * [Example configuration](#example-configuration)
-    * [Versions](#versions)
     * [Example values](#example-values)
     * [Keycloak admin console access](#keycloak-admin-console-access)
-    * [Your organizations IdP](#your-organizations-idp)
+    * [Upstream IdP](#upstream-idp)
       * [Separate realm](#separate-realm)
-      * [OIDC Client](#oidc-client)
+      * [OIDC Client for openDesk](#oidc-client-for-opendesk)
     * [openDesk IdP](#opendesk-idp)
 <!-- TOC -->
 
 Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on (SSO) to internal or external web applications.
 
-This document helps in setting up your organization's IdP and openDesk to enable IdP federation.
-
-## References
-
-We would like to list successful IdP federation scenarios:
-
-| External IdP                                                        | openDesk versions tested |
-|---------------------------------------------------------------------|--------------------------|
-| [EU Login](https://webgate.ec.europa.eu/cas/userdata/myAccount.cgi) | v0.9.0, v1.2.0           |
-| [ProConnect](https://www.proconnect.gouv.fr/)                       | v0.9.0                   |
-
-> If you have successfully federated using another External IdP, please let us know so we can update the list above.
+This document helps in setting up your organization's IdP ("upstream IdP") and the "openDesk IdP" to enable OIDC based IdP SSO federation.
 
 ## Prerequisites
 
 ### User accounts
 
-In addition to the configuration, it is required that user accounts with the same name exist within openDesk. While this prerequisite is outside the scope of this document, the following approaches are feasible:
+In addition to the configuration of the IdP SSO federation itself, it is a preprequisite for successful user login, that openDesk knows about the users performing the login. While this prerequisite is outside the scope of this document, please find various options on how to make user identities available for openDesk in the below section.
 
-- Manual user management
-  - A lightweight option to test your IdP federation setup or if you have only a small number of users to manage.
-  - Create and maintain your user(s) in openDesk and ensure the username in your IAM and openDesk is identical.
-- User import
-  - If you need to create more than just a couple of test accounts, you can use the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import) that utilizes the UDM REST API for user account creation.
-  - Downsides: Managing groups and deleting accounts needs to be done manually.
-- Automated Pre-provisioning:
-  - Pre-provisioning users and groups, including de-provisioning (deleting) accounts, is the best practice to ensure that openDesk is in sync with your organization's IAM.
-  - There are at least two ways of implementing the pre-provisioning:
-  - UDM REST API:
-    - Build a provisioning solution using the [UDM REST API](https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html).
-    - The API gives you complete control over the contents of the IAM to create, update, or delete users and groups.
-  - Nubus Directory Importer:
-    - It is based on a Python one-way directory synchronization for users and groups.
-    - Please find more details in the [upstream product's documentation](https://docs.software-univention.de/nubus-kubernetes-operation/latest/en/howto-connect-external-iam.html).
-- Ad-hoc provisioning (AHP)
-  - This feature is currently unavailable in openDesk's Keycloak, but Univention plans to make it available in the future.
-  - Ad-hoc provisioning creates a user account on the fly during a user's first login.
-  - While ad-hoc provisioning is an excellent approach for a quick start with openDesk, it has various downsides:
-    - Users are created after their first login, so you cannot find your colleagues in the openDesk apps unless they have already logged in once.
-    - A user account would never be deactivated or deleted in openDesk.
-    - Group memberships are not transferred.
+User accounts are matched between the upstream IdP and openDesk based on their username, so you have to use the same username in openDesk as in your upstream IdP.
 
-### External IdP with OIDC
+If your upstream IdP is sending a different attribute as username or you are facing limitation in openDesk when creating a user, e.g. because your upstream IdP utilizes email addresses for usernames which is not supported by openDesk, you can update the openDesk Keycloak configuration as follows to lookup a different attribute than the username to match a logging in user. The example uses the also mandatory and unique openDesk user attribute `mailPrimaryAddress`.
 
-This document focuses on the OIDC federation between an external IdP and the openDesk IdP. It uses the OpenID Connect (OIDC) protocol, so your external IdP must support OIDC.
+The following configuration is taking place in the Keycloak realm `opendesk`.
+
+- *Configure* > *User federation* > *ldap-provider*
+  - *Username LDAP attribute*: `mailPrimaryAddress`
+  - *User LDAP filter *: `(mailPrimaryAddress=*)`
+  - *Save* changes
+
+A scriptable version of the above change looks like this:
+
+```shell
+export NAMESPACE=<YOUR_NAMESPACE>
+export CLUSTER_YAML=<PATH_TO_THE_FILE_CONTAINTING_YOUR_cluster.yaml.gotmpl_VALUES>
+
+export TEMP_WORK_DIR="$(mktemp -d)"
+export CLUSTER_NETWORKING_DOMAIN=$(yq '.cluster.networking.domain' ${CLUSTER_YAML})
+kubectl -n ${NAMESPACE} exec ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh config credentials --server http://ums-keycloak.${NAMESPACE}.svc.${CLUSTER_NETWORKING_DOMAIN}:8080 --realm master --user kcadmin --password ${KEYCLOAK_ADMIN_PASSWORD}
+export LDAP_PROVIDER_ID=$(kubectl -n ${NAMESPACE} exec ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh get components -r opendesk -q parentId=opendesk -q type=org.keycloak.storage.UserStorageProvider | jq -r '.[0].id')
+
+kubectl -n ${NAMESPACE} exec ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh get components/${LDAP_PROVIDER_ID} -r opendesk > ${TEMP_WORK_DIR}/ldap-provider.json
+cat ${TEMP_WORK_DIR}/ldap-provider.json |
+  jq '.config.usernameLDAPAttribute = ["mailPrimaryAddress"]' | \
+  jq '.config.customUserSearchFilter = ["(mailPrimaryAddress=*)"]' | \
+  kubectl -n ${NAMESPACE} exec -i ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh update components/${LDAP_PROVIDER_ID} -r opendesk -f -
+
+# You likely want to remove the temporary work dir afterwards
+# rm -rf ${TEMP_WORK_DIR}
+```
+
+> [!note]
+> The configuration change described above is a global one. In case you keep a local login to openDesk beside the SSO federated one the users also have to use their newly configured username attribute for login. But note: On openDesk's local login it is always possible to also make use of the `mailPrimaryAddress` when logging in.
+
+### Manual user management
+
+A lightweight option to test your IdP federation setup or if you have only a small number of users to manage.
+Create and maintain your user(s) in openDesk and ensure the username in your IAM and openDesk is identical.
+
+### User import
+
+If you need to create more than just a couple of test accounts, you can use the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import) that utilizes the UDM REST API for user account creation.
+
+You have to maintain the accounts after creation manually (e.g. deletion, modifying group memberships).
+
+### Ad-hoc provisioning
+
+Ad-hoc provisioning creates user accounts on the fly during a user's first login. The feature is part of Nubus and the details on its configuration can be found in [the upstream documentation](https://docs.software-univention.de/keycloak-app/latest/ad-hoc-provisioning.html#ad-hoc-provisioning-adfs-configuration).
+
+While ad-hoc provisioning is an excellent approach for a quick start with openDesk, it has some downsides:
+- Users are created on their first login, so you cannot find your colleagues in the openDesk apps unless they have already logged in once.
+- A user account would never be deactivated or deleted in openDesk.
+- Group memberships are not transferred/updated at the moment.
+
+### (Automated) Pre-provisioning
+
+Pre-provisioning users and groups, including de-provisioning (deleting) accounts, is the best practice to ensure that openDesk is in sync with your organization's IAM.
+
+#### Nubus Directory Importer
+
+The recommended way is to use the [Nubus Directory Importer](https://github.com/univention/nubus-directory-importer). It is a Python-based one-way (LDAP/Active Directory -> openDesk) synchronization tool for users and groups. Please find more details in the [upstream documentation](https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/connect-external-iam/directory-importer.html).
+
+> [!note]
+> If you are using Microsoft Entra ID, you need Azure AD Domain Services to use the Nubus Directory Importer, because Entra ID does not expose LDAP. There is no supported direct synchronization from Entra ID (via Microsoft Graph) into openDesk’s LDAP-based user backend.
+
+#### UDM REST API
+
+In case the Nubus Directory Importer is not flexible enough for your use cases, you can make direct use of the [UDM REST API](https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html) to build a custom solution. The API gives you full control over the contents of the IAM to create, update, or delete users and groups.
 
 ## Example configuration
 
@@ -87,10 +122,6 @@ export CLUSTER_NETWORKING_DOMAIN=svc.cluster.local
 # Request details of IdP configuration
 /opt/keycloak/bin/kcadm.sh get identity-provider/instances/${FEDERATION_IDP_ALIAS} -r opendesk
 ```
-
-### Versions
-
-The example was tested with openDesk v0.7.0 using its integrated Keycloak v24.0.3. As external IdP, we also used an openDesk deployment of the same version, but created a separate realm for proper configuration separation.
 
 ### Example values
 
@@ -113,7 +144,7 @@ The admin console will be available at:
 
 For the following configuration steps, log in with user `kcadmin` and grab the password from the `ums-keycloak` pod's `KEYCLOAK_ADMIN_PASSWORD` variable.
 
-### Your organizations IdP
+### Upstream IdP
 
 In this example, we use the Keycloak of another openDesk instance to simulate your organization's IdP. However, URL paths differ if you use another product.
 
@@ -127,7 +158,7 @@ To not interfere with an existing configuration for our test scenario, we create
 - *Realm name*: `fed-test-idp-realm`
 - `Create`
 
-#### OIDC Client
+#### OIDC Client for openDesk
 
 If you just created the `fed-test-idp-realm`, you are already in the admin screen for the realm; if not, use the realm selection drop-down menu in the upper left corner to switch to the realm.
 
