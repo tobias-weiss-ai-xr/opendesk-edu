@@ -170,9 +170,11 @@ properties:
   ## This option overwrites the LDAP group mappings including all dynamically created mappings,
   # therefore on XWiki restart an LDAP sync is triggered to load the dynamic mapping.
   "property:xwiki:XWiki.XWikiPreferences^XWiki.XWikiPreferences.ldap_group_mapping": "xwiki:XWiki.XWikiAdminGroup=cn=managed-by-attribute-KnowledgemanagementAdmin,cn=groups,{{ .Values.ldap.baseDn }}"
-  ## Collabora ODT / DOCX export
+  ## Collabora based ODT / DOCX export is EE only
+  {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
   "property:xwiki:Collabora.Code.Configuration^Collabora.Code.ConfigurationClass.isEnabled": 1
   "property:xwiki:Collabora.Code.Configuration^Collabora.Code.ConfigurationClass.server": "http://collabora:9980"
+  {{- end }}
   ## SMTP settings
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.host": {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
