@@ -293,14 +293,14 @@ resources:
   openproject:
     limits:
       cpu: 99
-      memory: "3Gi"
+      memory: "4Gi"
     requests:
-      cpu: 0.1
-      memory: "768Mi"
+      cpu: 0.25
+      memory: "512Mi"
   openprojectDbInit:
     limits:
       cpu: 99
-      memory: "768Mi"
+      memory: "256Mi"
     requests:
       cpu: 0.1
       memory: "256Mi"
@@ -310,14 +310,14 @@ resources:
       memory: "768Mi"
     requests:
       cpu: 0.1
-      memory: "256Mi"
+      memory: "512Mi"
   openprojectSeederJob:
     limits:
       cpu: 99
       memory: "768Mi"
     requests:
       cpu: 0.1
-      memory: "256Mi"
+      memory: "512Mi"
   openprojectWorkers:
     limits:
       cpu: 99
