@@ -33,11 +33,11 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 - [Helm](https://helm.sh/) >= v3.17.3 (but not v3.18.0[^1]) and < v4[^2],
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
 - [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
-- Volume provisioner supporting RWO (read-write-once)[^3]
+- Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
 
 **Additional openDesk Enterprise requirements**
-- [OpenKruise](https://openkruise.io/)[^4] >= v1.6
+- [OpenKruise](https://openkruise.io/)[^3] >= v1.6
 
 ## Hardware
 
@@ -95,11 +95,12 @@ See the [`allowSnippetAnnotations` documentation](https://kubernetes.github.io/i
 
 ## Volume provisioner
 
-Initial evaluation deployment requires a `ReadWriteOnce` volume provisioner. For local deployment, a local- or hostPath-
-provisioner is sufficient.
+Initial evaluation deployments requires a `ReadWriteOnce` volume provisioner.
 
-> [!note]
-> Some components require a `ReadWriteMany` volume provisioner for distributed mode or horizontal scaling.
+Some components require a `ReadWriteMany` volume provisioner for distributed mode or horizontal scaling.
+
+> [!warning]
+> Due to [restrictions on Kubernetes `emptyDir`](https://github.com/kubernetes/kubernetes/pull/130277) you need a volume provisioner that has sticky bit support, otherwise the OpenProject seeder job will fail. The `local-path-provisioner` does not have sticky bit support.
 
 ## Certificate management
 
@@ -143,7 +144,4 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 
 [^2]: Helm v4 introduced stricter flag grouping that is not yet supported by the helmdiff plugin.
 
-[^3]: Due to [restrictions on Kubernetes `emptyDir`](https://github.com/kubernetes/kubernetes/pull/130277) you need a volume provisioner that has sticky bit support, otherwise the OpenProject seeder job will fail. E.g. the `local-path-provisioner` does not have sticky bit support.
-
-[^4]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
-
+[^3]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
