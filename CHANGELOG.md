@@ -1,3 +1,11 @@
+## [1.11.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.1...v1.11.2) (2026-01-09)
+
+
+### Bug Fixes
+
+* **helmfile:** Streamline OpenProject resources and raise memory limit to 4GB ([e4000ba](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e4000bae8e0de70f0efd73addec14554a330da31))
+* **openproject:** Update from 16.6.3 to 16.6.4; strongly recommended update to address a vulnerability, find details and possible workaround in upstream release notes https://www.openproject.org/docs/release-notes/16-6-4/ ([f480574](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f48057420b263767363a5c21a7247c4165935fbb))
+
 ## [1.11.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.0...v1.11.1) (2026-01-02)
 
 
