@@ -36,6 +36,13 @@ If you have a feature request, please select the "Feature Request" template.
     - [ ] Option 2a
     - [ ] Option 2b
 
+### 📅 Data persistence
+
+Are you using your own services for data persistence (required for production) or the openDesk bundles ones (development, test and evaluation only)?
+
+- [ ] Separate services configured via `databases.*` and `objectstore.*`
+- [ ] openDesk bundled "external services"
+
 ### 🔧 Tooling Versions
 - **Helm version (`helm version`)**: ___________
 - **Helmfile version (`helmfile --version`)**: ___________
