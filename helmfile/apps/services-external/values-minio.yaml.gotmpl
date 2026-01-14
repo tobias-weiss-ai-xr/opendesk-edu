@@ -11,8 +11,8 @@ apiIngress:
       - "{{ .Values.global.hosts.minioApi }}.{{ .Values.global.domain }}"
       secretName: "{{ .Values.ingress.tls.secretName }}"
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "4G"
-    nginx.org/client-max-body-size: "4G"
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.objectstorage | quote }}
+    haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.objectstorage | quote }}
     {{- with .Values.annotations.servicesExternalMinio.apiIngress }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}

@@ -116,27 +116,41 @@ appsuite:
       hosts:
         - "{{ .Values.global.hosts.openxchangeDav }}.{{ .Values.global.domain }}"
     routes:
+      trailslash:
+        enabled: false
       appsuite-base:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.appsuitebase }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       rootredirect:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/path-type: "exact"
+          haproxy-ingress.github.io/redirect-to: "/appsuite/"
+          haproxy-ingress.github.io/redirect-code: "301"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.rootredirect }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       trailslash:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.trailslash }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
@@ -145,224 +159,407 @@ appsuite:
         enabled: false
         {{- end }}
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdmin }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       rest-routes-advertisement:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesAdvertisement }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       rest-routes-chronos:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesChronos }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       rest-routes-preliminary:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesPreliminary }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       rest-routes-userfeedback:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.restRoutesUserfeedback }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       static-routes-servlet:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesServlet }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       static-routes-realtime:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesRealtime }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       static-routes-infostore:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesInfostore }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       static-routes-webservices:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "appsuite-core-mw-http-api-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.staticRoutesWebservices }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       drive-client-windows-ox-route:
+        enabled: false
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/api/drive/client/windows/ox/install(.*)$ /\1
+          haproxy-ingress.github.io/session-cookie-name: "drive-client-windows-ox-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.driveClientWindowsOxRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
-      {{ if .Values.functional.groupware.mail.encryption.enabled }}
-      guard-api-route:
+      core-ui-api-route:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardApiRoute }}
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/ui(.*)$ /ui\1
+          haproxy-ingress.github.io/session-cookie-name: "core-ui-api-route"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.coreUiApiRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
-      guard-support-api-route:
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardSupportApiRoute }}
-          {{ . | toYaml | nindent 10 }}
-          {{- end }}
-      guard-pgp-route:
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardPgpRoute }}
-          {{ . | toYaml | nindent 10 }}
-          {{- end }}
-      {{ end }}
       http-api-routes-api:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/api(.*)$ /appsuite/api\1
+          haproxy-ingress.github.io/session-cookie-name: "http-api-routes-api"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesApi }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       http-api-routes-ajax:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/ajax(.*)$ /appsuite/api\1
+          haproxy-ingress.github.io/session-cookie-name: "http-api-routes-ajax"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAjax }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       http-api-routes-appsuite-api:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "prefix"
+          haproxy-ingress.github.io/session-cookie-name: "http-api-routes-appsuite-api"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAppsuiteApi }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       http-api-routes-app-root-api:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.httpApiRoutesAppRootApi }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       rt2-route:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/rt2(.*)$ /rt2\1
+          haproxy-ingress.github.io/session-cookie-name: "rt2-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.rt2Route }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       documents-help-route:
+        enabled: false
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/help-documents(.*)$ /help-documents\1
+          haproxy-ingress.github.io/session-cookie-name: "documents-help-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.documentsHelpRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       drive-help-route:
+        enabled: false
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/help-drive(.*)$ /help\1
+          haproxy-ingress.github.io/session-cookie-name: "drive-help-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.driveHelpRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       core-help-route:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/help(.*)$ /help\1
+          haproxy-ingress.github.io/session-cookie-name: "core-help-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.coreHelpRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       office-web-route:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/office(.*)$ /appsuite\1
+          haproxy-ingress.github.io/session-cookie-name: "office-web-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.officeWebRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       caldav-well-known-redirect:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/redirect-to: "/caldav/"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.caldavWellKnownRedirect }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       carddav-well-known-redirect:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/redirect-to: "/carddav/"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.carddavWellKnownRedirect }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       dav-infostore-route:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/session-cookie-name: "authorization"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.davInfostoreRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       dav-root-route:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/(.*)$ /servlet/dav/\1
+          haproxy-ingress.github.io/session-cookie-name: "dav-root-route"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.davRootRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       wopi-server-route:
         annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}"
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.wopiServerRoute }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
-      trailslash:
-        enabled: false
+      {{ if .Values.functional.groupware.mail.encryption.enabled }}
+      guard-api-route:
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/api/oxguard(.*)$ /oxguard\1
+          haproxy-ingress.github.io/session-cookie-name: "guard-api-route"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardApiRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
+      guard-support-api-route:
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/appsuite/api/guardsupport(.*)$ /guardsupport\1
+          haproxy-ingress.github.io/session-cookie-name: "guard-support-api-route"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardSupportApiRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
+      guard-pgp-route:
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/affinity: "cookie"
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/path-type: "regex"
+          haproxy-ingress.github.io/config-backend: |
+            http-request replace-path ^/pks(.*)$ /pgp\1
+          haproxy-ingress.github.io/session-cookie-name: "guard-pgp-route"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.guardPgpRoute }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
+      {{ end }}
   core-mw:
     enabled: true
     asConfig:

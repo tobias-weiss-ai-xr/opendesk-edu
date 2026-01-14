@@ -104,6 +104,9 @@ releases:
       {{- end }}
     installed: {{ .Values.apps.oxAppSuite.enabled }}
     timeout: 900
+    {{- if eq .Values.ingress.controller "haproxy" }}
+    postRenderer: "./post-renderer-openxchange-HAPROXY.sh"
+    {{- end }}
 
   - name: "opendesk-open-xchange-bootstrap"
     chart: "open-xchange-bootstrap-repo/{{ .Values.charts.oxAppSuiteBootstrap.name }}"
@@ -128,7 +131,7 @@ releases:
     needs:
       - "open-xchange"
     {{- if ne (env "OPENDESK_1_12_0_SKIP_PVC_MIGRATION") "" }}
-    postRenderer: "./OPENDESK_1_12_0_SKIP_PVC_MIGRATION-post-renderer-ox-connector.sh"
+    postRenderer: "./post-renderer-oxconnector-OPENDESK_1_12_0_SKIP_PVC_MIGRATION.sh"
     {{- end }}
 
 commonLabels:

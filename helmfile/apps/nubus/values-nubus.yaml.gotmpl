@@ -144,13 +144,6 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
     nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "128k"
-    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
-    nginx.ingress.kubernetes.io/proxy-set-headers: |
-      Host $http_host;
-      X-Forwarded-For $proxy_add_x_forwarded_for;
-      X-Forwarded-Host $http_x_forwarded_host;
-      X-Forwarded-Port $http_x_forwarded_port;
-      X-Forwarded-Proto $http_x_forwarded_proto;
     {{- with .Values.annotations.nubus.ingress }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -310,9 +303,7 @@ nubusNotificationsApi:
     tag: {{ .Values.images.nubusNotificationsApi.tag }}
   ingress:
     annotations:
-      {{- with .Values.annotations.nubusNotificationsApi.ingress }}
-      {{. | toYaml | nindent 6 }}
-      {{- end }}
+      {{ .Values.annotations.nubusNotificationsApi.ingress | toYaml | nindent 6 }}
     certManager:
       enabled: false
     tls:
@@ -383,14 +374,10 @@ nubusPortalFrontend:
       tag: {{ .Values.images.nubusPortalAssetLoader.tag }}
   ingress:
     annotations:
-      {{ .Values.annotations.nubusPortalFrontend.ingressIngress | toYaml | nindent 6 }}
+      {{ .Values.annotations.nubusPortalFrontend.ingress | toYaml | nindent 6 }}
     certManager:
       enabled: false
     ingressClassName: ""
-    {{- with .Values.annotations.nubusPortalFrontend.ingressRedirects }}
-    annotations:
-      {{ . | toYaml | nindent 10 }}
-    {{- end }}
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName }}
@@ -439,11 +426,7 @@ nubusKeycloakExtensions:
       tag: {{ .Values.images.nubusKeycloakExtensionProxy.tag }}
     ingress:
       annotations:
-        nginx.org/proxy-buffer-size: "8k"
-        nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
-        {{- with .Values.annotations.nubusKeycloakExtensions.proxyIngress }}
-        {{ . | toYaml | nindent 8 }}
-        {{- end }}
+        {{ .Values.annotations.nubusKeycloakExtensions.proxyIngress | toYaml | nindent 8 }}
       paths:
         {{- if .Values.debug.enabled }}
         - pathType: "Prefix"
@@ -451,8 +434,6 @@ nubusKeycloakExtensions:
         {{- end }}
         - pathType: "Prefix"
           path: "/realms/"
-        - pathType: "Prefix"
-          path: "/js/"
         - pathType: "Prefix"
           path: "/resources/"
         - pathType: "Prefix"
@@ -666,9 +647,7 @@ nubusPortalServer:
     tag: {{ .Values.images.nubusPortalServer.tag }}
   ingress:
     annotations:
-        {{- with .Values.annotations.nubusPortalServer.ingress }}
-        {{ . | toYaml | nindent 8 }}
-        {{- end }}
+      {{ .Values.annotations.nubusPortalServer.ingress | toYaml | nindent 6 }}
     certManager:
       enabled: false
     tls:
@@ -779,13 +758,7 @@ nubusUdmRestApi:
   ingress:
     enabled: {{ .Values.functional.externalServices.nubus.udmRestApi.enabled }}
     annotations:
-      nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
-      nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "128k"
-      nginx.ingress.kubernetes.io/configuration-snippet-disabled: |
-        rewrite ^/univention(/udm/.*)$ $1 break;
-      {{- with .Values.annotations.nubusUdmRestApi.ingress }}
-      {{ . | toYaml | nindent 6 }}
-      {{- end }}
+      {{ .Values.annotations.nubusUdmRestApi.ingress | toYaml | nindent 6 }}
     certManager:
       enabled: false
     tls:
@@ -873,8 +846,6 @@ serviceAccount:
       {{ .Values.annotations.nubusLdapNotifier.serviceAccount | toYaml | nindent 6 }}
 
 nubusLdapServer:
-  additionalAnnotations:
-    {{ .Values.annotations.nubusLdapServer.additional | toYaml | nindent 4 }}
   additionalAnnotations:
     {{ .Values.annotations.nubusLdapServer.additional | toYaml | nindent 4 }}
   dhInitcontainer:
@@ -1439,11 +1410,7 @@ nubusUmcServer:
     tag: {{ .Values.images.nubusUmcServer.tag }}
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/configuration-snippet: |
-          proxy_set_header X-UMC-HTTPS 'on';
-      {{- with .Values.annotations.nubusUmcServer.ingress }}
-      {{ . | toYaml | nindent 6 }}
-      {{- end }}
+      {{ .Values.annotations.nubusUmcServer.ingress | toYaml | nindent 6 }}
     certManager:
       enabled: false
     tls:
@@ -1543,9 +1510,7 @@ nubusUmcGateway:
     tag: {{ .Values.images.nubusUmcGateway.tag }}
   ingress:
     annotations:
-      {{- with .Values.annotations.nubusUmcGateway.ingress }}
-      {{ . | toYaml | nindent 6 }}
-      {{- end }}
+      {{ .Values.annotations.nubusUmcGateway.ingress | toYaml | nindent 6 }}
     certManager:
       enabled: false
     tls:

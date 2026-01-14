@@ -14,5 +14,13 @@ ingress:
   tls:
     secretName: {{ .Values.ingress.tls.secretName | quote }}
   annotations:
-    {{ .Values.annotations.opendeskServicesHome.ingress | toYaml | nindent 4 }}
+    {{- with .Values.annotations.opendeskServicesHome.ingress }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
+
+service:
+  enabled: true
+  annotations:
+    {{ .Values.annotations.opendeskServicesHome.service | toYaml | nindent 4 }}
+
 ...

@@ -11,6 +11,10 @@ SPDX-License-Identifier: Apache-2.0
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Versions ≥ v1.13.0](#versions--v1130)
+      * [Pre-upgrade to versions ≥ v1.13.0](#pre-upgrade-to-versions--v1130)
+        * [New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
+        * [Updated helmfile options: New ingress additional annotations](#updated-helmfile-options-new-ingress-additional-annotations)
     * [Versions ≥ v1.12.0](#versions--v1120)
       * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
         * [New application default: Keycloak imports users to its own database](#new-application-default-keycloak-imports-users-to-its-own-database)
@@ -45,7 +49,7 @@ SPDX-License-Identifier: Apache-2.0
         * [New application default: XWiki blocks self-registration of user accounts](#new-application-default-xwiki-blocks-self-registration-of-user-accounts)
         * [New application default: Synapse rooms `v12`](#new-application-default-synapse-rooms-v12)
         * [New Helmfile default: Restricting characters for directory and filenames in fileshare module](#new-helmfile-default-restricting-characters-for-directory-and-filenames-in-fileshare-module)
-        * [Helmfile new default: New groupware settings changing current behaviour](#helmfile-new-default-new-groupware-settings-changing-current-behaviour)
+        * [New Helmfile default: New groupware settings changing current behaviour](#new-helmfile-default-new-groupware-settings-changing-current-behaviour)
         * [New application default: Nextcloud apps "Spreed" and "Comments" no longer enabled by default](#new-application-default-nextcloud-apps-spreed-and-comments-no-longer-enabled-by-default)
         * [New application default: Gravatar is switched off for Jitsi and OpenProject](#new-application-default-gravatar-is-switched-off-for-jitsi-and-openproject)
     * [Versions ≥ v1.7.0](#versions--v170)
@@ -71,7 +75,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Versions ≥ v1.2.0](#versions--v120)
       * [Pre-upgrade to versions ≥ v1.2.0](#pre-upgrade-to-versions--v120)
         * [Helmfile cleanup: Do not configure OX provisioning when no OX installed](#helmfile-cleanup-do-not-configure-ox-provisioning-when-no-ox-installed)
-        * [Helmfile new default: PostgreSQL for XWiki and Nextcloud](#helmfile-new-default-postgresql-for-xwiki-and-nextcloud)
+        * [New Helmfile default: PostgreSQL for XWiki and Nextcloud](#new-helmfile-default-postgresql-for-xwiki-and-nextcloud)
     * [Versions ≥ v1.1.2](#versions--v112)
       * [Pre-upgrade to versions ≥ v1.1.2](#pre-upgrade-to-versions--v112)
         * [Helmfile feature update: App settings wrapped in `apps.` element](#helmfile-feature-update-app-settings-wrapped-in-apps-element)
@@ -169,22 +173,23 @@ matching that constraint, though our links always point to the newest patch rele
 > 1. Upgrade to v1.7.1 → post steps for v1.6.0 to v1.7.1
 
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
-| Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                    |
-| ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ---------------------------------------------------- |
-| [v1.12.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.1) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.8.0 first                            |
-| [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                            |
-| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.8.0 first                            |
-| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | [⚠ Install v1.8.0 first](#versions--v180-automated) |
-| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                            |
-| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)   | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170)  | ⬇ Install ≥ v1.5.0 first                            |
-| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)   | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160)  | [⚠ Install v1.5.0 first](#versions--v160-automated) |
-| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)   | **yes**   | --                                                                                                                             | --                                       | ⬇ Install ≥ v1.1.x first                            |
-| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)   | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                            |
-| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)   | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                            |
-| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)   | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                       | [⚠ Install v1.1.x first](#versions--v120-automated) |
-| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)   | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110)  | [⚠ Install v1.0.0 first](#versions--v110-automated) |
-| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100)  | [⚠ Install v0.9.0 first](#versions--v100-automated) |
-| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)   | **yes**   | --                                                                                                                             | --                                       | --                                                   |
+| Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                      |
+| ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------ |
+| [v1.13.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.1) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                              |
+| [v1.12.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.1) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | [⚠ Install v1.12.x first](#versions--v1120-automated) |
+| [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                              |
+| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.8.0 first                              |
+| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | [⚠ Install v1.8.0 first](#versions--v180-automated)   |
+| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                              |
+| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)   | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170)  | ⬇ Install ≥ v1.5.0 first                              |
+| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)   | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160)  | [⚠ Install v1.5.0 first](#versions--v160-automated)   |
+| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)   | **yes**   | --                                                                                                                             | --                                       | ⬇ Install ≥ v1.1.x first                              |
+| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)   | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                              |
+| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)   | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                              |
+| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)   | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                       | [⚠ Install v1.1.x first](#versions--v120-automated)   |
+| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)   | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110)  | [⚠ Install v1.0.0 first](#versions--v110-automated)   |
+| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100)  | [⚠ Install v0.9.0 first](#versions--v100-automated)   |
+| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)   | **yes**   | --                                                                                                                             | --                                       | --                                                     |
 
 > [!warning]
 > Be sure to check out the table in the release version you are going to install, and not the currently installed version.
@@ -199,6 +204,79 @@ If you would like more details about the automated migrations, please read secti
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
+
+### Versions ≥ v1.13.0
+
+#### Pre-upgrade to versions ≥ v1.13.0
+
+##### New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`
+
+**Target group:** All deployments
+
+**Context**
+
+Due to the widely recognized [discontinuation of `ingress-nginx`](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/) - the former only Ingress controller supported by openDesk - openDesk now also supports [`haproxy-ingress.github.io`](https://haproxy-ingress.github.io/).
+
+While you can decide which of these two Ingress controllers you want to operate openDesk with, we encourage the move to the new HA-Proxy controller, therefore we changed some defaults.
+
+The `ingress.yaml.gotmpl` before was:
+
+```yaml
+ingress:
+  ingressClassName: "nginx"
+```
+
+and now its
+
+```yaml
+ingress:
+  ingressClassName: "haproxy"
+  controller: "haproxy"
+```
+
+**Required action**
+
+When you stay with nginx you need to set
+
+```yaml
+ingress:
+  ingressClassName: "nginx" # or an alternative value you already have set here for you existing deployment
+  controller: "nginx"
+```
+
+When going with `haproxy-ingress.github.io` and the `ingressClassName` within your deployment is not `haproxy` please ensure you modify the setting accordingly. Use `kubectl get ingressclass` to check the names of your Ingress controller(s).
+
+##### Updated helmfile options: New ingress additional annotations
+
+**Target group:** Deployments using additional annotations for Nubus or OX App Suite Ingress resources.
+
+**Required action**
+
+**For Nubus**, the following Ingress annotations options have been removed:
+
+```yaml
+annotations:
+  nubusPortalFrontend:
+    ingressIngress: ~
+    ingressRewrites: ~
+    ingressRedirects: ~
+```
+
+They have been replaced with a single annotation option:
+
+```yaml
+annotations:
+  nubusPortalFrontend:
+    ingress: ~
+```
+
+**For OX App Suite**, a new Ingress resource is now available that supports additional annotations:
+
+```yaml
+annotations:
+  openxchangeAppsuiteIngress:
+    coreUiApiRoute: ~
+```
 
 ### Versions ≥ v1.12.0
 
@@ -250,7 +328,7 @@ technical:
 
 **Target group:** All deployments that have Jitsi installed.
 
-The new upstream Jitsi Helm chart requires manual uninstall before upgrading to openDesk v1.12.0.
+The new upstream Jitsi Helm chart requires manual uninstall before upgrading to openDesk v1.12.x.
 
 ```shell
 helm uninstall -n <your_namespace> jitsi
@@ -419,7 +497,7 @@ kubectl -n ${NAMESPACE} delete leases.coordination.k8s.io collabora-online
 **Target group:** Existing deployments using `service` annotations for Dovecot, Jitsi JVB or Postfix.
 
 The three non-HTTP external services support now explicit annotations.
-See [`annotations.yaml.gomtpl`](../helmfile/environments/default/annotations.yaml.gotmpl) for reference.
+See [`annotations_all.yaml.gomtpl`](../helmfile/environments/default/annotations_all.yaml.gomtpl) for reference.
 
 **Jitsi JVB**
 
@@ -701,7 +779,7 @@ functional:
         - '>'
 ```
 
-##### Helmfile new default: New groupware settings changing current behaviour
+##### New Helmfile default: New groupware settings changing current behaviour
 
 **Target group:** All openDesk deployments using OX App Suite
 
@@ -783,7 +861,7 @@ We replaced the Helm Chart used for the Notes (aka "Impress") deployment. If you
 helm uninstall -n <your_namespace> impress
 ```
 
-In case you are using `annotation.notes` they have to be moved into one of the remaining dicts, see [`annotations.yaml.gotmpl`](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/helmfile/environments/default/annotations.yaml.gotmpl) for details:
+In case you are using `annotation.notes` they have to be moved into one of the remaining dicts, see [`annotations_all.yaml.gomtpl`](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/helmfile/environments/default/annotations_all.yaml.gomtpl) for details:
 
 ```yaml
 annotation:
@@ -972,7 +1050,7 @@ kubectl -n ${NAMESPACE} exec -it ums-provisioning-nats-0 -c nats-box -- sh -c 'n
 kubectl -n ${NAMESPACE} delete secret ums-provisioning-ox-credentials-test
 ```
 
-##### Helmfile new default: PostgreSQL for XWiki and Nextcloud
+##### New Helmfile default: PostgreSQL for XWiki and Nextcloud
 
 **Target group:** All upgrade installations that do not already use the previous optional PostgreSQL database backend for Nextcloud and XWiki.
 

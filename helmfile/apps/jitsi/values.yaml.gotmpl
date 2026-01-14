@@ -79,12 +79,12 @@ jitsi:
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     ingress:
       enabled: {{ .Values.ingress.enabled }}
-      {{- if .Values.annotations.jitsiWeb.ingress }}
       annotations:
+        haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.jitsi }}s"
+        haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.jitsi }}s"
         {{- with .Values.annotations.jitsiWeb.ingress }}
         {{ . | toYaml | nindent 8 }}
         {{- end }}
-      {{- end }}
       ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
       hosts:
         - host: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"

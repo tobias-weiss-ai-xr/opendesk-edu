@@ -1,9 +1,11 @@
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
 ingress:
   enabled: true
-  ingressClassName: "nginx"
+  ingressClassName: "haproxy"
+  controller: "haproxy"
   tls:
     enabled: true
     secretName: "opendesk-certificates-tls"
@@ -12,17 +14,18 @@ ingress:
       collabora: "100M"
       element: "100M"
       nextcloud: "100M"
-      nextcloudNotifyPush: "100M"
       notes: "100M"
+      objectstorage: "4G"
       openproject: "100M"
       oxAppSuite: "100M"
       xwiki: "100M"
     bodyTimeout:
       collabora: 600
       element: 60
+      jitsi: 3600
       nextcloud: 600
-      nextcloudNotifyPush: 600
       notes: 60
+      notesYprovider: 86400
       openproject: 60
       oxAppSuite: 60
       xwiki: 60

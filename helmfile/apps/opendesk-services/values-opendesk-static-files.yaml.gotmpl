@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 global:
@@ -14,23 +14,35 @@ additionalAnnotations:
 assets:
   element:
     subdomain: {{ .Values.global.hosts.element }}
+    pathType: "exact"
     paths:
-      - path: "/vector-icons/.+.png"
+      - path: "/vector-icons/24.97ab000.png"
+        data: {{ .Values.theme.imagery.chat.faviconPng }}
+      - path: "/vector-icons/120.570a7f9.png"
+        data: {{ .Values.theme.imagery.chat.faviconPng }}
+      - path: "/vector-icons/144.5a63bf2.png"
+        data: {{ .Values.theme.imagery.chat.faviconPng }}
+      - path: "/vector-icons/152.1ccdc8a.png"
+        data: {{ .Values.theme.imagery.chat.faviconPng }}
+      - path: "/vector-icons/180.30b915f.png"
+        data: {{ .Values.theme.imagery.chat.faviconPng }}
+      - path: "/vector-icons/512.7ce350d.png"
         data: {{ .Values.theme.imagery.chat.faviconPng }}
   jitsi:
     subdomain: {{ .Values.global.hosts.jitsi }}
+    pathType: "exact"
     paths:
       - path: "/images/favicon.svg"
         data: {{ .Values.theme.imagery.videoconference.faviconSvg }}
   keycloak:
     subdomain: {{ .Values.global.hosts.keycloak }}
+    pathType: "exact"
     paths:
-      - path: "/resources/...../login/UCS/img/favicon.ico"
-        data: {{ .Values.theme.imagery.login.faviconIco }}
       - path: "/opendesk-static-files/login/logo.svg"
         data: {{ .Values.theme.imagery.login.logoSvg }}
   nextcloud:
     subdomain: {{ .Values.global.hosts.nextcloud }}
+    pathType: "exact"
     paths:
       - path: "/core/img/favicon-touch.png"
         data: {{ .Values.theme.imagery.files.faviconPng }}
@@ -44,6 +56,7 @@ assets:
         mimeType: "image/jpeg"
   notes:
     subdomain: {{ .Values.global.hosts.notes }}
+    pathType: "exact"
     paths:
       - path: "/assets/favicon-light.ico"
         data: {{ .Values.theme.imagery.notes.faviconIco }}
@@ -51,13 +64,9 @@ assets:
         data: {{ .Values.theme.imagery.notes.faviconPng }}
       - path: "/assets/favicon-light.png"
         data: {{ .Values.theme.imagery.notes.faviconPng }}
-  openproject:
-    subdomain: {{ .Values.global.hosts.openproject }}
-    paths:
-      - path: "/custom_style/........../favicon/favicon.svg"
-        data: {{ .Values.theme.imagery.projects.faviconSvg }}
   openxchange:
     subdomain: {{ .Values.global.hosts.openxchange }}
+    pathType: "exact"
     paths:
       - path: "/appsuite/favicon.ico"
         data: {{ .Values.theme.imagery.groupware.faviconIco }}
@@ -65,6 +74,7 @@ assets:
         data: {{ .Values.theme.imagery.groupware.faviconSvg }}
   portal:
     subdomain: {{ .Values.global.hosts.nubus }}
+    pathType: "exact"
     paths:
       - path: "/favicon.ico"
         data: {{ .Values.theme.imagery.portal.faviconIco }}
@@ -78,6 +88,7 @@ assets:
         data: {{ .Values.theme.imagery.login.backgroundJpg }}
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki }}
+    pathType: "exact"
     paths:
       - path: "/resources/icons/xwiki/favicon.svg"
         data: {{ .Values.theme.imagery.knowledge.faviconSvg }}
@@ -105,6 +116,7 @@ containerSecurityContext:
     {{ .Values.seLinuxOptions.opendeskStaticFiles | toYaml | nindent 4 }}
 
 ingress:
+  enabled: true
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   host: "{{ .Values.global.hosts.static }}.{{ .Values.global.domain }}"
   tls:
