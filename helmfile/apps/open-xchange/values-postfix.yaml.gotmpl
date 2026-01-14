@@ -101,7 +101,9 @@ postfix:
   smtpTLSSecurityLevel: "encrypt"
   smtpdSASLAuthEnable: "yes"
   smtpdSASLSecurityOptions: {{ .Values.smtp.security.smtpdSASLSecurityOptions | join ", " | quote }}
+  smtpdSASLTLSSecurityOptions: {{ .Values.smtp.security.smtpdSASLTLSSecurityOptions | join ", " | quote }}
   smtpSASLSecurityOptions: {{ .Values.smtp.security.smtpSASLSecurityOptions | join ", " | quote }}
+  smtpSASLTLSSecurityOptions: {{ .Values.smtp.security.smtpSASLTLSSecurityOptions | join ", " | quote }}
   smtpdSASLType: "dovecot"
   smtpdTLSSecurityLevel: "encrypt"
   smtpdTLSCertFile: "/etc/tls/tls.crt"

@@ -29,9 +29,15 @@ smtp:
     # Ref.: https://www.postfix.org/postconf.5.html#smtpd_sasl_security_options
     smtpdSASLSecurityOptions:
       - "noanonymous"
+    # Ref.: https://www.postfix.org/postconf.5.html#smtpd_sasl_tls_security_options
+    smtpdSASLTLSSecurityOptions:
+      - "noanonymous"
     # Postfix defaults
     # Ref.: https://www.postfix.org/postconf.5.html#smtp_sasl_security_options
     smtpSASLSecurityOptions:
       - "noanonymous"
       - "noplaintext"
+    # Ref.: https://www.postfix.org/postconf.5.html#smtp_sasl_tls_security_options
+    smtpSASLTLSSecurityOptions:
+      - "noanonymous"
 ...

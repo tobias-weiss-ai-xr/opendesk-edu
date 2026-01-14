@@ -12,6 +12,8 @@ SPDX-License-Identifier: Apache-2.0
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
     * [Versions ≥ v1.12.0](#versions--v1120)
+      * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
+        * [New Helmfile default: Postfix SMTP(D) SASL TLS security options](#new-helmfile-default-postfix-smtpd-sasl-tls-security-options)
       * [Post-upgrade to versions ≥ v1.12.0](#post-upgrade-to-versions--v1120)
         * [IAM new feature: External routing for mail domains](#iam-new-feature-external-routing-for-mail-domains)
     * [Versions ≥ v1.11.0](#versions--v1110)
@@ -191,6 +193,47 @@ If you would like more details about the automated migrations, please read secti
 > version 1.7.0 to version 1.7.1.
 
 ### Versions ≥ v1.12.0
+
+#### Pre-upgrade to versions ≥ v1.12.0
+
+##### New Helmfile default: Postfix SMTP(D) SASL TLS security options
+
+**Target group:** All openDesk deployments using an external SMTP relay that does not support
+[Postfix's default `smtp_sasl_tls_security_options`](https://www.postfix.org/postconf.5.html#smtp_sasl_tls_security_options)
+or deployments using external mail clients in case the offered security options should be limited.
+
+Before 1.12.0, the SMTP(D) SASL TLS security options were defaulting to the non TLS options (Postfix's default behavior).
+In some cases, users need a more fine grained approach, e.g. allowing plaintext authentication over a TLS connection.
+
+> [!warning]
+> Please check the supported SASL security options of your mail relay and adjust your deployment accordingly to
+> prevent the disruption of mail delivery.
+
+To fall back to the behavior of openDesk < v1.12.0 (non TLS option are used), set the following in
+`smtp.yaml.gotmpl`
+
+``` yaml
+smtp:
+  security:
+    smtpdSASLTLSSecurityOptions:
+      - "$smtpd_sasl_security_options"
+    smtpSASLTLSSecurityOptions:
+      - "$smtp_sasl_security_options"
+```
+
+To set specific options consult the official Postfix documentation for
+[smtpd](https://www.postfix.org/postconf.5.html#smtpd_sasl_tls_security_options) or
+[smtp](https://www.postfix.org/postconf.5.html#smtp_sasl_tls_security_options)
+and set the string options via the yaml array notation like this:
+
+``` yaml
+smtp:
+  security:
+    smtpdSASLTLSSecurityOptions:
+      - "noanonymous"
+    smtpSASLTLSSecurityOptions:
+      - "noanonymous"
+```
 
 #### Post-upgrade to versions ≥ v1.12.0
 
