@@ -17,7 +17,7 @@ releases:
     chart: "jitsi-repo/{{ .Values.charts.jitsi.name }}"
     version: "{{ .Values.charts.jitsi.version }}"
     values:
-      - "values-jitsi.yaml.gotmpl"
+      - "values.yaml.gotmpl"
       {{- range .Values.customization.release.jitsi }}
       - {{ . }}
       {{- end }}

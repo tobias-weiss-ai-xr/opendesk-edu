@@ -57,38 +57,21 @@ imagePullSecrets:
 
 ingress:
   annotations:
-    {{- if .Values.apps.collaboraController.enabled }}
-    nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_RouteToken"
-    {{- else }}
-    nginx.ingress.kubernetes.io/upstream-hash-by: "$arg_WOPISrc"
-    {{- end }}
+  {{- if eq .Values.ingress.controller "nginx" }}
     nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "{{ if .Values.apps.collaboraController.enabled }}$arg_RouteToken{{ else }}$arg_WOPISrc{{ end }}"
     nginx.ingress.kubernetes.io/server-snippet: |
-      # block admin and metrics endpoint from outside by default
       location /cool/getMetrics { deny all; return 403; }
       location /cool/adminws/ { deny all; return 403; }
       location /browser/dist/admin/admin.html { deny all; return 403; }
-    # NGINX
-    nginx.org/websocket-services: "collabora"
-    nginx.org/lb-method: "hash $arg_WOPISrc consistent"
-    nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
-    nginx.org/server-snippets: |
-      # block admin and metrics endpoint from outside by default
-      location /cool/getMetrics { deny all; return 403; }
-      location /cool/adminws/ { deny all; return 403; }
-      location /browser/dist/admin/admin.html { deny all; return 403; }
-    # HAProxy
-    haproxy.org/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    haproxy.org/backend-config-snippet: |
-      balance url_param WOPISrc check_post
-      hash-type consistent
-    # HAProxy - Community: https://haproxy-ingress.github.io/
+  {{- else }}
+    haproxy-ingress.github.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
+    haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
     haproxy-ingress.github.io/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
-    haproxy-ingress.github.io/balance-algorithm: "url_param WOPISrc check_post"
+    haproxy-ingress.github.io/balance-algorithm: "url_param {{ if .Values.apps.collaboraController.enabled }}RouteToken{{ else }}WOPISrc{{ end }} check_post"
     haproxy-ingress.github.io/config-backend: |
       hash-type consistent
       # block admin urls from outside
@@ -96,9 +79,10 @@ ingress:
       acl admin_url path_beg /cool/adminws/
       acl admin_url path_beg /browser/dist/admin/admin.html
       http-request deny if admin_url
-    {{- with .Values.annotations.collabora.ingress }}
+  {{- end }}
+  {{- with .Values.annotations.collabora.ingress }}
     {{ . | toYaml | nindent 4 }}
-    {{- end }}
+  {{- end }}
   enabled: {{ .Values.ingress.enabled }}
   className: {{ .Values.ingress.ingressClassName | quote }}
   hosts:

@@ -1,5 +1,12 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
+#
+# This file provides you with an overview of all available annotation options for the different components.
+# You can use it as a template for your own annotations file, or as a reference for the available annotations.
+# The values are set to null (~) by default, which means that they will not be applied.
+#
+# For haproxy-ingress.github.io support openDesk makes use of some Ingress annotations via the file
+# `annotations_haproxy.yaml.gotmpl`.
 ---
 annotations:
   cassandra:
@@ -211,9 +218,7 @@ annotations:
     pod: ~
   nubusPortalFrontend:
     additional: ~
-    ingressIngress: ~
-    ingressRewrites: ~
-    ingressRedirects: ~
+    ingress: ~
     persistence: ~
     pod: ~
     service: ~
@@ -285,6 +290,7 @@ annotations:
   opendeskServicesHome:
     additional: ~
     ingress: ~
+    service: ~
   opendeskServicesOtterize:
     additional: ~
   opendeskServicesStaticFiles:
@@ -322,35 +328,36 @@ annotations:
     pod: ~
   openxchangeAppsuiteIngress:
     appsuitebase: ~
+    caldavWellKnownRedirect: ~
+    carddavWellKnownRedirect: ~
+    coreHelpRoute: ~
+    coreUiApiRoute: ~
+    davInfostoreRoute: ~
+    davRootRoute: ~
+    documentsHelpRoute: ~
+    driveClientWindowsOxRoute: ~
+    driveHelpRoute: ~
+    guardApiRoute: ~
+    guardPgpRoute: ~
+    guardSupportApiRoute: ~
+    httpApiRoutesAjax: ~
+    httpApiRoutesApi: ~
+    httpApiRoutesAppRootApi: ~
+    httpApiRoutesAppsuiteApi: ~
     ingress: ~
-    rootredirect: ~
-    trailslash: ~
+    officeWebRoute: ~
     restRoutesAdmin: ~
     restRoutesAdvertisement: ~
     restRoutesChronos: ~
     restRoutesPreliminary: ~
     restRoutesUserfeedback: ~
-    staticRoutesServlet: ~
-    staticRoutesRealtime: ~
-    staticRoutesInfostore: ~
-    staticRoutesWebservices: ~
-    driveClientWindowsOxRoute: ~
-    guardApiRoute: ~
-    guardSupportApiRoute: ~
-    guardPgpRoute: ~
-    httpApiRoutesApi: ~
-    httpApiRoutesAjax: ~
-    httpApiRoutesAppsuiteApi: ~
-    httpApiRoutesAppRootApi: ~
+    rootredirect: ~
     rt2Route: ~
-    documentsHelpRoute: ~
-    driveHelpRoute: ~
-    coreHelpRoute: ~
-    officeWebRoute: ~
-    caldavWellKnownRedirect: ~
-    carddavWellKnownRedirect: ~
-    davInfostoreRoute: ~
-    davRootRoute: ~
+    staticRoutesInfostore: ~
+    staticRoutesRealtime: ~
+    staticRoutesServlet: ~
+    staticRoutesWebservices: ~
+    trailslash: ~
     wopiServerRoute: ~
   openxchangeBootstrap:
     additional: ~

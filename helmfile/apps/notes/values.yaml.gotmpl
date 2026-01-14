@@ -15,13 +15,16 @@ backend:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.notesBackend.registry | quote }}
     repository: {{ .Values.images.notesBackend.repository | quote }}
-    pullPolicy: "IfNotPresent"
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.notesBackend.tag | quote }}
   ingress:
     annotations:
-      "nginx.ingress.kubernetes.io/proxy-body-size": "{{ .Values.ingress.parameters.bodySize.notes }}"
-      "nginx.ingress.kubernetes.io/proxy-read-timeout": "{{ .Values.ingress.parameters.bodyTimeout.notes }}"
-      "nginx.ingress.kubernetes.io/proxy-send-timeout": "{{ .Values.ingress.parameters.bodyTimeout.notes }}"
+      nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.notes | quote }}
+      nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.notes | quote }}
+      nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.notes | quote }}
+      haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.notes | quote }}
+      haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.notes}}s"
+      haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.notes}}s"
       {{- if .Values.annotations.notesBackend.ingress }}
       {{ .Values.annotations.notesBackend.ingress | toYaml | nindent 6 }}
       {{- end }}
@@ -144,39 +147,34 @@ backend:
     - name: "customization-volume"
       configMap:
         name: "impress-customization"
-    {{- if .Values.certificate.selfSigned }}
+  {{- if .Values.certificate.selfSigned }}
     - name: "trusted-cert-secret-volume"
       secret:
         secretName: "opendesk-certificates-ca-tls"
         items:
           - key: "ca.crt"
             path: "ca-certificates.crt"
-    {{- end }}
+  {{- end }}
   extraVolumeMounts:
     - name: "customization-volume"
       mountPath: "/app/impress/configuration/theme/default.json"
       subPath: "theme.json"
-    {{- if .Values.certificate.selfSigned }}
+  {{- if .Values.certificate.selfSigned }}
     - name: "trusted-cert-secret-volume"
       mountPath: "/cert/cacert.pem"
       subPath: "ca-certificates.crt"
-    {{- end }}
+  {{- end }}
 
 frontend:
   image:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.notesFrontend.registry | quote }}
     repository: {{ .Values.images.notesFrontend.repository | quote }}
-    pullPolicy: "IfNotPresent"
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.notesFrontend.tag | quote }}
   ingress:
     enabled: true
     annotations:
       {{ .Values.annotations.notesFrontend.ingress | toYaml | nindent 6 }}
-    ingressClassName: {{ .Values.ingress.ingressClassName }}
-  ingressMedia:
-    enabled: true
-    annotations:
-      {{ .Values.annotations.notesFrontend.ingressMedia | toYaml | nindent 6 }}
     ingressClassName: {{ .Values.ingress.ingressClassName }}
   configuration:
     objectStoreHost: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
@@ -209,9 +207,6 @@ frontend:
   service:
     annotations:
       {{ .Values.annotations.notesFrontend.service | toYaml | nindent 6 }}
-  serviceMedia:
-    annotations:
-      {{ .Values.annotations.notesFrontend.service | toYaml | nindent 6 }}
   extraVolumes:
     - name: "customization-volume"
       configMap:
@@ -225,7 +220,7 @@ y-provider:
   image:
     registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.notesYProvider.registry | quote }}
     repository: {{ .Values.images.notesYProvider.repository | quote }}
-    pullPolicy: "IfNotPresent"
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.notesYProvider.tag }}
   replicaCount: 1
   debug: true
@@ -266,7 +261,12 @@ y-provider:
     ingressClassName: {{ .Values.ingress.ingressClassName }}
   ingressCollaborationWs:
     annotations:
-      {{ .Values.annotations.notesYProvider.ingressCollaborationWS | toYaml | nindent 6 }}
+      haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.notesYprovider }}s"
+      haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.notesYprovider }}s"
+      haproxy-ingress.github.io/upstream-hash-by: "$arg_room"
+      {{- with .Values.annotations.notesYProvider.ingressCollaborationWS }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     ingressClassName: {{ .Values.ingress.ingressClassName }}
   podAnnotations:
     intents.otterize.com/service-name: "impress-y-provider"

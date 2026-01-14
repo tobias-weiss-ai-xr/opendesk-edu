@@ -171,12 +171,12 @@ aio:
   ingress:
     enabled: {{ .Values.ingress.enabled }}
     annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.nextcloud }}"
-      nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}"
-      nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}"
-      nginx.org/client-max-body-size: "{{ .Values.ingress.parameters.bodySize.nextcloud }}"
-      nginx.org/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}s"
-      nginx.org/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud }}s"
+      nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.nextcloud | quote }}
+      nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.nextcloud | quote }}
+      nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.nextcloud | quote }}
+      haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.nextcloud | quote }}
+      haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud}}s"
+      haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud}}s"
       {{- with .Values.annotations.nextcloudAio.ingress }}
         {{ . | toYaml | nindent 6 }}
       {{- end }}

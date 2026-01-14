@@ -15,6 +15,8 @@ This section covers the internal system requirements and external service requir
   * [Kubernetes](#kubernetes)
   * [Ingress controller](#ingress-controller)
     * [Supported controllers](#supported-controllers)
+      * [haproxy-ingress.github.io](#haproxy-ingressgithubio)
+      * [Ingress nginx](#ingress-nginx)
     * [Minimal configuration](#minimal-configuration)
   * [Volume provisioner](#volume-provisioner)
   * [Certificate management](#certificate-management)
@@ -29,7 +31,10 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 
 - K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
 - Domain and DNS Service
-- Ingress controller (Ingress NGINX) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases)
+- Ingress controller
+  - [haproxy-ingress.github.io](https://haproxy-ingress.github.io)
+  - [Ingress nginx](https://github.com/kubernetes/ingress-nginx/) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
+  - See section [Ingress controller](#ingress-controller) for more details.
 - [Helm](https://helm.sh/) >= v3.17.3 but not
   - v3.18.0[^1]
   - v4.x[^2]
@@ -68,22 +73,43 @@ configured ingress controller deployed in your cluster.
 
 ### Supported controllers
 
-- [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
+- [haproxy-ingress.github.io](https://haproxy-ingress.github.io) - since openDesk 1.13
+- [Ingress nginx Controller](https://github.com/kubernetes/ingress-nginx) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
 
 > [!note]
-> The platform development team is evaluating the use of [Gateway API](https://gateway-api.sigs.k8s.io/).
+> We plan to move to [Gateway API](https://gateway-api.sigs.k8s.io/) ideally by end of 2026. The objective is to achive
+> an implementation that is as controller agnostic as possible to give you the choice when it comes to selecting the
+> actual implementation for your infrastructure.
 
-**Compatibility with Ingress NGINX >= 1.12.0**
+#### haproxy-ingress.github.io
 
-With the release 1.12.0 Ingress NGINX introduced new security default settings, which are incompatible with current openDesk releases. If you want to use Ingress-NGINX >= 1.12.0 the following settings have to be set:
+Some openDesk components, e.g. the optional UDM REST API (see functional.externalServices.nubus.udmRestApi), can hit some default global limits of the controller. Tweaking the controller deployment as shown below is best practise to avoid running into issues.
+
+```yaml
+controller:
+  config:
+    config-global: |
+      tune.bufsize 65536
+      tune.http.maxhdr 256
+```
+
+#### Ingress nginx
+
+> [!warning]
+> [Ingress nginx is no longer maintained](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/) by
+> upstream and its use is therefore
+
+With the release 1.12.0 Ingress nginx introduced new security default settings, which are incompatible with current openDesk releases. If you want to use Ingress-nginx >= 1.12.0 the following settings have to be set:
+
 ```
 controller.config.annotations-risk-level=Critical
 controller.config.strict-validate-path-type=false
 ```
+
 See the [`annotations-risk-level` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#annotations-risk-level) and [`strict-validate-path-type` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#strict-validate-path-type) for details.
 
 > [!warning]
-> Ensure to install at least Ingress NGINX 1.11.5 or 1.12.1 due to [security
+> Ensure to install at least Ingress nginx 1.11.5 or 1.12.1 due to [security
 > issues](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
 
 ### Minimal configuration
