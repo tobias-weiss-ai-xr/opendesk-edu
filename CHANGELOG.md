@@ -1,3 +1,12 @@
+## [1.11.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.2...v1.11.3) (2026-01-16)
+
+
+### Bug Fixes
+
+* **notes:** Ensure Notes migrations are executed on updates ([907113f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/907113fbc402b5547afe481ed6a1f7f6c5d5a425))
+* **notes:** Update Docs from v4.1.0 to v4.4.0; update recommended due to included security hardening ([d69ffde](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d69ffdee9c9900a37f0fe40f1a782fd4849a47db))
+* **open-xchange:** Read mail domains from LDAP and verify sender mail address in Postfix ([35c96c4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/35c96c44c2db64c2c91892c9a4dcc8a0b2904ed2))
+
 ## [1.11.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.1...v1.11.2) (2026-01-09)
 
 
