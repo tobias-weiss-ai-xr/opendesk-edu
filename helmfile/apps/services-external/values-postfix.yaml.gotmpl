@@ -159,11 +159,6 @@ postfix:
   virtualMailboxDomains: []
   {{- end }}
 
-  overrideMaps:
-    /etc/postfix/dovecot-ldap.conf:
-      name: "dovecot"
-      key: "oauth2-primary.conf.ext"
-
 replicaCount: {{ .Values.replicas.postfix }}
 
 resources:
