@@ -235,7 +235,7 @@
 * **open-xchange:** Enable searching by LDAP `mailAlternativeAddress` when resolving global contacts. Note: OX App Suite evaluates all `mailAlternativeAddress` values of a user when searching, but only the first address is returned, which might differ from the one that matched the search criteria. ([9014324](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/90143241564d7e66bf1b864c704e13c677dcbc93))
 * **open-xchange:** Use `objectstore.dovecot.secretKey` when defined ([5c33226](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5c332264edfcbb3343bcfd39352db6ddefd0a85c))
 * **opendesk-services:** Add missing certificates ([acbabdb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/acbabdb80662bf0599a157b24d3f8461e1f98cad))
-* **openproject:** Update from 16.1.0 to 16.1.1 ([e30d4f1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e30d4f126dda29183cffc078307d41d3dce6f4fa))
+* **openproject:** Update from 16.0.1 to 16.1.1 ([e30d4f1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e30d4f126dda29183cffc078307d41d3dce6f4fa))
 
 
 ### Features
