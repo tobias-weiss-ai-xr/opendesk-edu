@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Release management</h1>
+# Release management
 
 This document outlines the release and patch management strategy for **openDesk**, ensuring that all updates, patches, and new releases are systematically **planned, tested, documented**, and **reliably deployed** into production. The process is designed to align with operational planning requirements and maintain system stability and security.
 
@@ -22,11 +22,11 @@ This document outlines the release and patch management strategy for **openDesk*
 * [Compliance \& review](#compliance--review)
 <!-- TOC -->
 
-# Release cycle
+## Release cycle
 
 openDesk follows a structured release cycle to ensure predictability and reliability:
 
-## Release types
+### Release types
 
 | Type           | Frequency     | Content                                                       |
 |----------------|---------------|---------------------------------------------------------------|
@@ -39,7 +39,7 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 > is unavoidable it is announced in the release notes under a dedicated header **“Breaking Changes”** > and a
 > migration guide is provided.
 
-## Release schedule
+### Release schedule
 
 - **Major releases** are scheduled for **Q3 each year**, with planning beginning in Q1.
 - **Minor releases** occur **monthly on Mondays**, typically **around 10:00 AM** local time.
@@ -50,18 +50,18 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
   - At the **end of Week 4**, a new minor version is released, and a new cycle begins.
 - **Patch releases** are created **on demand**, based on criticality and urgency.
 
-## Upgrades
+### Upgrades
 
 - openDesk does not guarantee an in‑place upgrade between two major versions. Always consult the release notes and plan appropriate migration efforts.
 - Even within the same major line, skipping multiple monthly minor versions is not guaranteed to work without intermediate upgrade steps.
 - All breaking changes, including those in monthly minor releases, are highlighted in the release notes under Breaking Changes.
 - Additional, non‑binding migration hints are collected in [migrations.md](./migrations.md)
 
-# Patch management process
+## Patch management process
 
 A standardized process ensures patches are developed, prioritized, and deployed efficiently.
 
-## Patch identification & prioritization
+### Patch identification & prioritization
 
 Patches are categorized by severity and urgency:
 
@@ -72,7 +72,7 @@ Patches are categorized by severity and urgency:
 | **Medium**     | Functional bugs with workarounds, minor usability issues                 |
 | **Low**        | Cosmetic issues, documentation updates                                   |
 
-## Patch workflow
+### Patch workflow
 
 The following steps define the patch workflow from issue identification to post-deployment review. This process ensures consistent quality and minimal disruption to users:
 
@@ -86,18 +86,18 @@ The following steps define the patch workflow from issue identification to post-
 
 This workflow ensures that patches are handled with the same level of discipline as planned releases, supporting both reliability and agility.
 
-# Communication plan
+## Communication plan
 
 A lightweight approach reduces manual effort while maintaining transparency.
 
-## Announcement channels
+### Announcement channels
 
 | Channel | Audience | Purpose | Owner |
 |---------|----------|---------|-------|
 | **openCode Changelog** | Community & EE | Primary source of truth for every release | DevOps |
 | **Account‑Manager Mail / Ticket** | Enterprise customers | Targeted information & upgrade advice | Customer Success |
 
-## Timing of communications
+### Timing of communications
 
 | Release Type | What | When |
 |--------------|------|------|
@@ -110,7 +110,7 @@ A lightweight approach reduces manual effort while maintaining transparency.
 
 Community users consume information via openCode; Enterprise customers get an additional nudge via their account manager – **no mass mailings are sent manually**.
 
-# Documentation requirements
+## Documentation requirements
 
 Each release (major, minor, or patch) must include:
 
@@ -119,7 +119,7 @@ Each release (major, minor, or patch) must include:
 - **Test reports** confirming QA coverage and results
 - **Deployment checklist** reviewed and approved by the product owner
 
-# Compliance & review
+## Compliance & review
 
 - The release process is reviewed **bi-annually** to incorporate feedback and evolving requirements
 - Emergency patches (e.g., zero-day security issues) may bypass the standard schedule but must be documented post-deployment

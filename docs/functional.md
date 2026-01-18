@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Functional configuration</h1>
+# Functional configuration
 
 This document addresses the available functional configuration options of an openDesk deployment.
 

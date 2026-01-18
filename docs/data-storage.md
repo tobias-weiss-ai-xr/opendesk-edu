@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Application Data Storages</h1>
+# Application Data Storages
 
 To provide a feasible backup and restore concept, a thorough overview of all openDesk
 applications and their related data storages (ephemeral & persistent) is provided in the
@@ -14,7 +14,7 @@ following subsection.
 * [Details](#details)
 <!-- TOC -->
 
-# Overview
+## Overview
 
 The provided diagram shows all relevant openDesk applications on the left and
 their utilized data storages on the right. For more detailed information about each
@@ -68,7 +68,7 @@ XWiki,PostgreSQL,1
 XWiki,PersistentVolume,1
 ```
 
-# Details
+## Details
 
 | Application          | Data Storage | Backup   | Content                                                                           | (Default) Identifier                           | Details                                                                                                   |
 | -------------------- | ------------ | -------- | --------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- |

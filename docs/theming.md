@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Theming</h1>
+# Theming
 
 This document covers the theming options for an openDesk deployment.
 
@@ -12,7 +12,7 @@ This document covers the theming options for an openDesk deployment.
 * [Known limitations](#known-limitations)
 <!-- TOC -->
 
-# Settings
+## Settings
 
 All default settings can be found in [`theme.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl). Most of the components adhere to these settings.
 
@@ -25,6 +25,6 @@ You can just update the files in [helmfile/files/theme](../helmfile/files/theme)
 > pointing to external resources (like "Support", "Legal Notice") please check the `functional.portal` section
 > in [`functional.yaml.gotmpl`](../helmfile/environments/default/functional.yaml.gotmpl)
 
-# Known limitations
+## Known limitations
 
 - Portal and Keycloak screen styles, especially colors, must be applied in the [`portalStylesheets.css`](../helmfile/files/theme/portalStylesheet.css),

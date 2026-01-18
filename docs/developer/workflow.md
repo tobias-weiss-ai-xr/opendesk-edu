@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Technical development and release workflow</h1>
+# Technical development and release workflow
 
 <!-- TOC -->
 * [Scope](#scope)
@@ -32,7 +32,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Footnotes](#footnotes)
 <!-- TOC -->
 
-# Scope
+## Scope
 
 This document covers the development of a technical release, thereby addressing:
 - the development and branching concept for the openDesk deployment automation
@@ -41,7 +41,7 @@ This document covers the development of a technical release, thereby addressing:
 
 It does not cover additional artifacts that might be related to a functional release.
 
-# Roles and responsibilities
+## Roles and responsibilities
 
 The following section provides a high-level view of the involved parties in the openDesk context and their responsibilities:
 
@@ -69,7 +69,7 @@ The following section provides a high-level view of the involved parties in the 
     - Further develop the deployment automation to meet extended operational requirements, ideally providing these developments upstream to the openDesk platform development in order to have them included as standard in the future.
   - The operator can either use a self-operated Kubernetes cluster to deploy openDesk or make use of a managed Kubernetes offering from a **Cloud Provider**
 
-# Deployment automation
+## Deployment automation
 
 The openDesk deployment automation is the core outcome of the platform development process.
 
@@ -79,7 +79,7 @@ Please find the deployment automation, including its documentation, in the follo
 
 The automation supports Gitlab CI/CD, local execution, and triggering the Helmfile deployment for the whole platform or single applications.
 
-## openDesk technical component classes
+### openDesk technical component classes
 
 The below rendering in [class diagram](https://en.wikipedia.org/wiki/Class_diagram) notation shows the three component classes openDesk consists of. In each of these:
 - the first section below the name of the class shows the required **characteristics** of each component of the given class
@@ -117,13 +117,13 @@ classDiagram
  }
 ```
 
-## Functional vs. service components
+### Functional vs. service components
 
 The focus of openDesk is to provide an integrated and functional productivity platform based on the involved suppliers' functional components (products). These functional components usually rely on specific service components, e.g. database services for persistence. When running openDesk in production, the operator is responsible for providing these production-grade services. For evaluation and development purposes, the openDesk deployment automation includes these services.
 
 Find the list of functional and service components in the [archictecture documentation](./docs/architecture.md).
 
-## Origins
+### Origins
 
 The openDesk platform consolidates the technical components from various origins:
 
@@ -131,13 +131,13 @@ The openDesk platform consolidates the technical components from various origins
 2) *Third-party upstream* for service components: The platform development team tries to use as many community upstream components as possible for the services they have to provide within openDesk.
 3) *Platform development* filling the gap: Some suppliers might not provide Helm charts or images for their products that fit the needs of openDesk, and some third-party upstream components are not built to fit into openDesk. In such cases, the platform development team creates its own Helm charts and images.
 
-## Reference CI for creating Images and Helm charts (gitlab-config)
+### Reference CI for creating Images and Helm charts (gitlab-config)
 
 As mentioned in the chapter "Origins" above, the openDesk platform development also creates images and Helm charts when needed.
 
 For that purpose openDesk provides a [GitLab CI-based reference implementation](https://gitlab.opencode.de/bmi/souveraener_arbeitsplatz/tooling/gitlab-config) called `gitlab-config` to achieve the required characteristics and apply the necessary methods including releasing the artifacts based on [Semantic Release](https://github.com/semantic-release/semantic-release#readme) into the GitLab container registry.
 
-## Licensing
+### Licensing
 
 As a standard, the openDesk platform development team uses [reuse.software](https://reuse.software/) wherever possible to annotate license and copyright information.
 
@@ -157,19 +157,19 @@ The way to mark the license header as a comment differs between the various file
 > If line(s) with `SPDX-FileCopyrightText` containing a different copyright owner exist in the file you are
 > working on, do not replace existing one(s), but rather add another header above these.
 
-## Development workflow
+### Development workflow
 
-### Disclaimer
+#### Disclaimer
 
 openDesk consists only of community products, so there is no SLA related to service updates or backport of critical security fixes. This has two consequences:
 - In production scenarios, you should replace the community versions of the functional components with supported, SLA-backed paid versions.
 - openDesk aims to update to the community components' latest available releases continually; therefore, we have rolling technical releases.
 
-### Workflow
+#### Workflow
 
 This chapter describes the deployment automation's development workflow. The suppliers have their own development processes and workflows. While we aim to always update to the most recent community version(s) available, openDesk also sponsors the development done by the suppliers. As the openDesk team has to take a closer look at these sponsored features, they are referred to as *supplier deliverables* within the platform development workflow.
 
-#### Branching concept
+##### Branching concept
 
 The picture below uses Gitflow notation to give an overview of the different types of development flows.
 
@@ -234,7 +234,7 @@ gitGraph
  commit id: "      "
 ```
 
-#### Standard Quality Gate (SQG)
+##### Standard Quality Gate (SQG)
 
 The Standard Quality Gate addresses quality assurance steps that should be executed within each of the mentioned quality gates in the workflow.
 
@@ -279,11 +279,11 @@ flowchart TD
  ]
 ```
 
-#### Branch workflows
+##### Branch workflows
 
 This section will explain the workflow for each branch type based on the Gitflow picture from above.
 
-##### `main`
+###### `main`
 
 - `QA 'nightly main'`: Execute the SQG based on the most recent release. The upgrade test environment should be a long-standing environment that only gets built from scratch with the previous technical release when something breaks the environment.
 Merge points: We are using the [Semantic Release convention](https://github.com/semantic-release/semantic-release), which is based on the [Semantic Versioning (SemVer) notation](https://semver.org), to automatically create technical releases on the merge points.
@@ -294,7 +294,7 @@ Merge points: We are using the [Semantic Release convention](https://github.com/
   - Conduct additional manual explorative and regression tests.
   - Perform checks like IT Grundschutz, Accessibility, or Data Protection.
 
-##### `develop`
+###### `develop`
 
 - `QA 'nightly develop'`: Follows the same approach as `QA 'nightly main'` - execute the SQG based on the head revision of the `develop` branch.
 - `QA 'release merge'`: The Merge Request for this merge has to be created manually by members of the platform development team. It should document:
@@ -303,16 +303,16 @@ Merge points: We are using the [Semantic Release convention](https://github.com/
   - That the changes have been reviewed by at least two members of the platform development team, giving their approval on the Merge Request.
 - Merge points (from `docs`, `fix`, and `feat` branches): No additional activity on these merge points as the QA is ensured before the merge in the aforementioned branch types.
 
-##### `docs`
+###### `docs`
 
 Branches of type `docs` only contain the commits themselves and have to adhere to the workflow basic fact that: All merges into `develop` or `main` require two approvals from the platform development team.
 
-##### `fix`
+###### `fix`
 
 Besides the actual changes being committed in an `fix` branch, there is only the:
 - `QG 'fix'`: Besides validating the actual change, the branch's owner has to ensure the successful execution of the SQG.
 
-##### `feat`
+###### `feat`
 
 This branch type requires the most activities on top of the actual development:
 - `QG 'feat'`: The branch owner has to validate the implemented functionality and ensure the SQG is passed successfully.
@@ -325,7 +325,7 @@ This branch type requires the most activities on top of the actual development:
 - `Develop Test`: The test cases are implemented by the openDesk platform development and added to the openDesk end-to-end test suite.
 - `Documentation`: When required, the documentation team has to update the end-user documentation.
 
-#### Branch names
+##### Branch names
 
 Branches created from the `develop` branch have to adhere to the following notation: `<responsible_developer>/<type>_<details>`:
 
@@ -354,7 +354,7 @@ Example: `tmueller/fix_jitsi_theming`.
 > [!note]
 > The above naming convention has yet to be enforced, but please ensure you use it.
 
-#### Commit messages / Conventional Commits
+##### Commit messages / Conventional Commits
 
 Commit messages must adhere to the [Conventional Commit standard](https://www.conventionalcommits.org/en/v1.0.0/#summary). Commits that do not adhere to the standard get rejected by either [Gitlab push rules](https://docs.gitlab.com/ee/user/project/repository/push_rules.html) or the CI.
 
@@ -378,14 +378,14 @@ Example: `fix(open-xchange): Bump to 8.26 to heal issue with functional mailbox 
 > [!note]
 > The commit messages are an essential part of the [technical releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases) as the release notes are generated from these messages.
 
-#### Verified commits
+##### Verified commits
 
 We only allow verified commits; please read on about the options you have to make your commits verified:
 - https://docs.gitlab.com/user/project/repository/signed_commits/ssh/
 - https://docs.gitlab.com/user/project/repository/signed_commits/gpg/
 - https://docs.gitlab.com/user/project/repository/signed_commits/x509/
 
-# Footnotes
+## Footnotes
 
 [^1]: These approval rules are not available in the GitLab Free Tier, which is one of the main reasons why deployment automation is not developed on openCode.
 

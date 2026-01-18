@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>GitOps Deployment</h1>
+# GitOps Deployment
 
 <!-- TOC -->
 * [Considerations](#considerations)
@@ -17,19 +17,19 @@ the [GitOps](https://about.gitlab.com/topics/gitops/) approach with tools like [
 
 This documentation will use Argo CD to explain how to deploy openDesk GitOps-style.
 
-# Considerations
+## Considerations
 
 - openDesk consists of multiple applications which have to be deployed in order.
 - During upgrades, migrations have to run before and after applications.
 
-# ArgoCD
+## ArgoCD
 
 We are continuously improving our Argo CD support, please share you experience with Argo CD deployments e.g. by [creating
 a ticket](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues).
 
 There are two options to deploy openDesk via Argo CD described in the following sections.
 
-## Option 1: Use YAML manifests
+### Option 1: Use YAML manifests
 
 > [!warning]
 > Pre-rendering the YAML files will also embed all referenced secrets into the resulting outputs.
@@ -54,7 +54,7 @@ Afterwards, you can use the resulting manifests within a standard Argo CD workfl
 > Policy` offered by Argo CD, as you have to manually ensure the applications are updated in the required
 > sequence.
 
-## Option 2: Helmfile plugin
+### Option 2: Helmfile plugin
 
 It is possible to deploy openDesk via Argo CD with the community developed
 [Helmfile plugin](https://github.com/travisghansen/argo-cd-helmfile).

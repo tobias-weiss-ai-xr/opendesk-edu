@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Getting started</h1>
+# Getting started
 
 This documentation lets you create an openDesk evaluation instance on your Kubernetes cluster.
 
@@ -42,11 +42,11 @@ This documentation lets you create an openDesk evaluation instance on your Kuber
 Thanks for looking into the openDesk Getting Started guide. This document covers essential configuration steps to
 deploy openDesk onto your Kubernetes infrastructure.
 
-# Requirements
+## Requirements
 
 Detailed system requirements are covered on the [requirements](./docs/requirements.md) page.
 
-# Customize environment
+## Customize environment
 
 Before deploying openDesk, you must configure the deployment to fit your environment.
 To keep your deployment up to date, we recommend customizing in `dev`, `test`, or `prod` and not in `default` environment
@@ -474,9 +474,9 @@ configuration values are:
 * `global.helmRegistry`
 * `global.master_password`
 
-# Access deployment
+## Access deployment
 
-## Login
+### Login
 
 When all apps are successfully deployed, and their Pod status is `Running` or `Succeeded`, you can navigate to
 
@@ -492,7 +492,7 @@ https://portal.domain.tld
 
 By default the portal will send you to openDesk's login screen.
 
-## Credentials
+### Credentials
 
 openDesk deploys with the standard user account `Administrator`, the password for which can be retrieved as follows:
 
@@ -524,7 +524,7 @@ docker run --rm registry.opencode.de/bmi/opendesk/components/platform-developmen
     --create_admin_accounts True
 ```
 
-# Uninstall
+## Uninstall
 
 You can uninstall the deployment by executing the following:
 

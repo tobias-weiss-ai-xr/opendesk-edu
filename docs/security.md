@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Security</h1>
+# Security
 
 This document covers the current status of security measures.
 
@@ -13,7 +13,7 @@ This document covers the current status of security measures.
 * [Network policies](#network-policies)
 <!-- TOC -->
 
-# Helm chart trust chain
+## Helm chart trust chain
 
 Helm charts are signed and validated against GPG keys in `helmfile/files/gpg-pubkeys`.
 
@@ -26,13 +26,13 @@ All charts except the ones mentioned below are verified by Helmfile.
 | collabora-controller-repo |     no     |
 | open-xchange-repo         | cosign[^1] |
 
-# Kubernetes security enforcements
+## Kubernetes security enforcements
 
 This list gives you an overview of default security settings and whether they comply with security standards:
 
 ⟶ Visit our generated detailed [Security Context](./docs/security-context.md) overview.
 
-# Network policies
+## Network policies
 
 Kubernetes network policies are an essential measure to secure your Kubernetes apps and clusters.
 When applied, they restrict traffic to your services.

@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>openDesk APIs</h1>
+# openDesk APIs
 
 This chapter presents APIs available in openDesk, grouped by application.
 
@@ -63,12 +63,12 @@ This chapter presents APIs available in openDesk, grouped by application.
   * [JavaScript API](#javascript-api)
 <!-- TOC -->
 
-# IAM - Nubus
+## IAM - Nubus
 
 ![Overview of functional components in Univention Nubus for Kubernetes](./apis_images/IAM-overview_functional_components_structured.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/components.html#overview-components-fig)
 
-## UMC Python API
+### UMC Python API
 
 ![Composition of UMC component with APIs highlighted](./apis_images/IAM-umc-architecture.png)
 [Source](https://docs.software-univention.de/developer-reference/latest/en/umc/architecture.html#umc-api)
@@ -88,7 +88,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Supported standards            |                                                                                                                                                                                                                                                |
 | Documentation                  | https://docs.software-univention.de/ucs-python-api/modules.html                                                                                                                                                                                |
 
-## UMC store API
+### UMC store API
 
 | Name                           | UMC store API (also named UMC JavaScript API or Dojo/UMC JavaScript API)                                     |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------   |
@@ -105,7 +105,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Supported standards            |                                                                                                              |
 | Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/umc/local-system-module.html#umc-store-api |
 
-## IntercomService (ICS) API
+### IntercomService (ICS) API
 
 | Name                           | IntercomService API                                                                                                                                                                                                                 |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -122,7 +122,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Supported standards            |                                                                                                                                                                                                                                     |
 | Documentation                  | https://docs.software-univention.de/intercom-service/latest/architecture.html                                                                                                                                                       |
 
-## High-level Listener modules API
+### High-level Listener modules API
 
 | Name                           | High-level Listener modules API                                                                                                                                                                                                     |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -141,7 +141,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 
 More details on the Nubus provisioning service can be found here: https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html
 
-## UDM Simple API
+### UDM Simple API
 
 ![Architecture of UDM](./apis_images/IAM-udm-architecture.svg)
 [Source](https://docs.software-univention.de/architecture/latest/en/services/udm.html#architecture-model-udm)
@@ -161,7 +161,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Supported standards            |                                                                                                                                                   |
 | Documentation                  | https://docs.software-univention.de/ucs-python-api/univention.udm.html#module-univention.udm.                                                     |
 
-## UDM REST API
+### UDM REST API
 
 | Name                           | UDM REST API                                                                                                                               |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -178,7 +178,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Supported standards            |                                                                                                                                            |
 | Documentation                  | https://docs.software-univention.de/nubus-kubernetes-customization/latest/en/api/udm-rest.html                                             |
 
-## UCR Python API
+### UCR Python API
 
 ![Architecture overview of UCR](./apis_images/IAM-ucr-architecture.svg)
 [Source](https://docs.software-univention.de/architecture/latest/en/services/ucr.html#services-ucr-architecture-model)
@@ -198,7 +198,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Supported standards            |                                                                                                        |
 | Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/ucr/usage.html#using-ucr-from-python |
 
-## Identity Store and Directory Service (LDAP)
+### Identity Store and Directory Service (LDAP)
 
 ![Overview of the Identity Store and Directory Service](./apis_images/IAM-functional_component_identity_store.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/identity-store.html#component-identity-store-figure)
@@ -218,7 +218,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Supported standards            | LDAP                                                                                                                                                  |
 | Documentation                  | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/identity-store.html#component-identity-store-directory-service |
 
-## Nubus Provisioning Service
+### Nubus Provisioning Service
 
 ![Overview of the Provisioning Service and its components](./apis_images/IAM-functional_component_provisioning_service_complete.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html#component-provisioning-service-complete-figure)
@@ -227,7 +227,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | ------------- | ---------------------------------------------------------------------------------------------------              |
 | Documentation | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html |
 
-## Nubus Authorization Service
+### Nubus Authorization Service
 
 ![ArchiMate view of the interfaces and protocols of the Authorization Service](./apis_images/IAM-interfaces_authorization_service.svg)
 [Source](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/interfaces-protocols.html#authorization-service)
@@ -236,13 +236,13 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | ------------- | ---------------------------------------------------------------------------------------------------                                  |
 | Documentation | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/interfaces-protocols.html#authorization-service |
 
-# Groupware - OX AppSuite / OX Dovecot
+## Groupware - OX AppSuite / OX Dovecot
 
 ![OX AppSuite APIs overview](./apis_images/Groupware-api.png)
 
 ![Use of OX AppSuite APIs by other components](./apis_images/Groupware-api-usage.png)
 
-## Usage of APIs within openDesk
+### Usage of APIs within openDesk
 
 The following are the APIs used by the Groupware application:
 
@@ -259,7 +259,7 @@ The following are the APIs used by the Groupware application:
 | AppSuite Middleware            | LDAP               | Address book       | Search for global contacts and retrieve contact details     | LDAP                             |
 | Dovecot                        | LDAP               | Data retrieval     | Retrieve necessary user details to handle mailboxes         | LDAP                             |
 
-## HTTP API
+### HTTP API
 
 ![Use of HTTP API in openDesk](./apis_images/Groupware-api-http-usage.png)
 
@@ -278,7 +278,7 @@ The following are the APIs used by the Groupware application:
 | Supported standards            | iCal, defined by RFC, fully implemented                                                                                                                                                                         |
 | Documentation                  | https://documentation.open-xchange.com/components/middleware/http/8/index.html                                                                                                                                  |
 
-## SOAP API
+### SOAP API
 
 | Name                           | SOAP API                                                                                  |
 | ------------------------------ | -------------------------------------------------------------------------------------------- |
@@ -300,7 +300,7 @@ The following are the APIs used by the Groupware application:
 > `/webservices/` within the AppSuite host of your openDesk installation,
 > e.g. https://webmail.myopendesk.tld/webservices/
 
-## REST API
+### REST API
 
 | Name                           | REST API                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | ------------------------------ |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -316,7 +316,7 @@ The following are the APIs used by the Groupware application:
 | Message protocol               | - Email Body RFC 822 is used by Push<br>- Prometheus format is used by Metrics API<br>- API iCal format is used by InternetFreeBusy                                                                                                                                                                                                                                                                                                                                                                 |
 | Supported standards            | SOAP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | Documentation                  | https://documentation.open-xchange.com/components/middleware/rest/8/index.html                                                                                                                                                                                                                                                                                                                                                                                                                      |
-## CardDAV
+### CardDAV
 
 | Name                           | CardDAV                                                                                                                                                                 |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -333,7 +333,7 @@ The following are the APIs used by the Groupware application:
 | Supported standards            |                                                                                                                                                                            |
 | Documentation                  | https://documentation.open-xchange.com/8/middleware/miscellaneous/caldav_carddav.html                                                                                      |
 
-## CalDAV
+### CalDAV
 
 | Name                           | CalDAV                                                                                                                                                                  |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -350,7 +350,7 @@ The following are the APIs used by the Groupware application:
 | Supported standards            | iTIP, iMIP                                                                                                                                                                 |
 | Documentation                  | https://documentation.open-xchange.com/8/middleware/miscellaneous/caldav_carddav.html                                                                                      |
 
-## IMAP
+### IMAP
 
 | Name                           | IMAP                                                                                 |
 | ------------------------------ |--------------------------------------------------------------------------------------|
@@ -367,7 +367,7 @@ The following are the APIs used by the Groupware application:
 | Supported standards            | IMAP                                                                                 |
 | Documentation                  | https://www.rfc-editor.org/rfc/rfc9051                                               |
 
-## POP3
+### POP3
 
 | Name                           | POP3                                                                   |
 | ------------------------------ |------------------------------------------------------------------------|
@@ -384,11 +384,11 @@ The following are the APIs used by the Groupware application:
 | Supported standards            | IMAP                                                                   |
 | Documentation                  | https://www.rfc-editor.org/rfc/rfc1939                                 |
 
-# Files - Nextcloud
+## Files - Nextcloud
 
 ![Nextcloud APIs](./apis_images/Files-api.png)
 
-## Usage of APIs within openDesk
+### Usage of APIs within openDesk
 
 The following are the APIs used by the Files application:
 
@@ -399,7 +399,7 @@ The following are the APIs used by the Files application:
 | Nextcloud Server | OX AppSuite Middleware | OX HTTP API (Contacts) | Reading/writing personal contacts                  | JSON           |
 | Nextcloud Server | Nubus                  | LDAP                   | Read users and groups data                         | LDAP           |
 
-## OCS API
+### OCS API
 
 | Name                           | OCS API                                                                                                                                                                                                                                |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -416,7 +416,7 @@ The following are the APIs used by the Files application:
 | Supported standards            |                                                                                                                                                                                                                                        |
 | Documentation                  | https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/index.html                                                                                                                                                   |
 
-## Notifications API
+### Notifications API
 
 | Name                           | Notifications API                                                                                                           |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
@@ -434,7 +434,7 @@ The following are the APIs used by the Files application:
 | Documentation                  | https://github.com/nextcloud/notifications/blob/master/docs/ocs-endpoint-v2.md                                              |
 |                                |                                                                                                                             |
 
-## Activity API
+### Activity API
 
 | Name                           | Activity API                                                                                                                                       |
 | ------------------------------ |----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -451,7 +451,7 @@ The following are the APIs used by the Files application:
 | Supported standards            |                                                                                                                                                    |
 | Documentation                  | https://github.com/nextcloud/activity/blob/master/docs/endpoint-v2.md                                                                              |
 
-## Remote wipe API
+### Remote wipe API
 
 | Name                           | Remote wipe API                                                                            |
 | ------------------------------ |--------------------------------------------------------------------------------------------|
@@ -468,7 +468,7 @@ The following are the APIs used by the Files application:
 | Supported standards            |                                                                                            |
 | Documentation                  | https://docs.nextcloud.com/server/latest/developer_manual/client_apis/RemoteWipe/index.html |
 
-## WebDAV
+### WebDAV
 
 | Name                           | WebDAV                                                                                  |
 | ------------------------------ |-----------------------------------------------------------------------------------------|
@@ -485,11 +485,11 @@ The following are the APIs used by the Files application:
 | Supported standards            | RFC4918                                                                                 |
 | Documentation                  | https://docs.nextcloud.com/server/latest/developer_manual/client_apis/WebDAV/index.html |
 
-## CalDAV / CardDAV
+### CalDAV / CardDAV
 
 CalDAV and CardDAV APIs are available in Nextcloud, but as openDesk uses OX AppSuite for Calendar and Contacts these Nextcloud APIs do not provide relevant data in openDesk.
 
-# Weboffice - Collabora
+## Weboffice - Collabora
 
 The following are the APIs used by the Weboffice application:
 
@@ -513,7 +513,7 @@ sequenceDiagram
 ```
 
 
-## PostMessage API
+### PostMessage API
 
 | Name                           | PostMessage API                                                                                                                                   |
 | ------------------------------ |---------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -530,7 +530,7 @@ sequenceDiagram
 | Supported standards            | [WOPI](https://learn.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/6a8bb410-68ad-47e4-9dc3-6cf29c6b046b)                                 |
 | Documentation                  | https://sdk.collaboraonline.com/docs/postmessage_api.html                                                                                         |
 
-## Conversion API
+### Conversion API
 
 | Name                           | Conversion API                                                                                          |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------- |
@@ -547,7 +547,7 @@ sequenceDiagram
 | Supported standards            | N/A                                                                                                     |
 | Documentation                  | https://sdk.collaboraonline.com/docs/conversion_api.html                                                |
 
-# Project management - OpenProject
+## Project management - OpenProject
 
 The following are the APIs used by the Project management application:
 
@@ -558,7 +558,7 @@ The following are the APIs used by the Project management application:
 | OpenProject-web | Nextcloud          | Various            | Integration of Nextcloud as OpenProject filestore  | JSON           |
 | OpenProject-web | Nubus              | LDAP               | Read users and groups data                         | LDAP           |
 
-## HATEOAS API
+### HATEOAS API
 
 | Name                           | HATEOAS (Hyperimages as the Engine of Application State) API                                                                                                                                                                                                                                                                                      |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -595,7 +595,7 @@ The following are the APIs used by the Project management application:
 *Are there any extensions or APIs in (or planned for) development that users should know about?*
 - Signaling to receive only selected attributes/nested resources from the API for performance improvements
 
-## BCF API
+### BCF API
 
 | Name                           | BCF API                                                                                                                                                                              |
 | ------------------------------ |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -612,9 +612,9 @@ The following are the APIs used by the Project management application:
 | Supported standards            | [BCF 2.1](https://github.com/buildingSMART/BCF-API/blob/release_2_1/README.md)                                                                                                       |
 | Documentation                  | https://www.openproject.org/docs/api/bcf-rest-api/                                                                                                                                   |
 
-# Video Conferencing - Jitsi
+## Video Conferencing - Jitsi
 
-## IFrame API
+### IFrame API
 
 | Name                           | IFrame API                                                               |
 | ------------------------------ |--------------------------------------------------------------------------|
@@ -631,7 +631,7 @@ The following are the APIs used by the Project management application:
 | Supported standards            |                                                                          |
 | Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe/        |
 
-## lib-jitsi-meet API
+### lib-jitsi-meet API
 
 | Name                           | lib-jitsi-meet API                                                     |
 | ------------------------------ | ---------------------------------------------------------------------- |
@@ -648,7 +648,7 @@ The following are the APIs used by the Project management application:
 | Supported standards            |                                                                        |
 | Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ljm-api/     |
 
-## Jitsi Meet React SDK
+### Jitsi Meet React SDK
 
 > [!note]
 > Additional SDKs can be found at https://jitsi.github.io/handbook/docs/category/sdks/
@@ -668,7 +668,7 @@ The following are the APIs used by the Project management application:
 | Supported standards            |                                                                     |
 | Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-react-sdk |
 
-# Chat - Element
+## Chat - Element
 
 While Jitsi is available as standalone videoconferencing in openDesk, it is also used in [Element as videoconferencing backend](https://github.com/element-hq/element-web/blob/develop/docs/jitsi.md).
 
@@ -730,7 +730,7 @@ The following are the APIs used by the Chat application:
 | Element/Synapse | Keycloak           | Authentication     | Single sign-on / sign-out                          | OIDC           |
 | OpenProject-web | Intercom Service   | Central Navigation | Retrieve content for openDesk Navigation drop-down | JSON           |
 
-## Matrix Application Service API
+### Matrix Application Service API
 
 | Name                           | Matrix Application Service API                                                                                                               |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -747,7 +747,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | [Matrix](https://spec.matrix.org/latest/application-service-api/)                                                                            |
 | Documentation                  | [Synapse](https://element-hq.github.io/synapse/latest/) is the reference implementation of the Matrix protocol, see standard for API details |
 
-## Matrix Client-Server API
+### Matrix Client-Server API
 
 | Name                           | Matrix Client-Server API                                                                                                                     |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -764,7 +764,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | [Matrix](https://spec.matrix.org/latest/client-server-api/)                                                                                  |
 | Documentation                  | [Synapse](https://element-hq.github.io/synapse/latest/) is the reference implementation of the Matrix protocol, see standard for API details |
 
-## Matrix Server-Server API
+### Matrix Server-Server API
 
 | Name                           | Matrix Server-Server API                                                                                                                     |
 | ------------------------------ |----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -781,7 +781,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | [Matrix](https://spec.matrix.org/latest/client-server-api/)                                                                                  |
 | Documentation                  | [Synapse](https://element-hq.github.io/synapse/latest/) is the reference implementation of the Matrix protocol, see standard for API details |
 
-## Matrix Push Gateway API
+### Matrix Push Gateway API
 
 | Name                           | Matrix Push Gateway API                                                                                                                      |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -798,7 +798,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | [Matrix](https://spec.matrix.org/latest/push-gateway-api/)                                                                                   |
 | Documentation                  | [Synapse](https://element-hq.github.io/synapse/latest/) is the reference implementation of the Matrix protocol, see standard for API details |
 
-## Matrix Identity Service API
+### Matrix Identity Service API
 
 | Name                           | Matrix Identity Service API                                                                                                                  |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -815,7 +815,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | [Matrix](https://spec.matrix.org/latest/identity-service-api/)                                                                               |
 | Documentation                  | [Synapse](https://element-hq.github.io/synapse/latest/) is the reference implementation of the Matrix protocol, see standard for API details |
 
-## Matrix React SDK Module API
+### Matrix React SDK Module API
 
 | Name                           | Matrix React SDK Module API                                                                                                                                                                                                        |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -832,7 +832,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | n/a - Element (Chat Web-UI) specific                                                                                                                                                                                               |
 | Documentation                  | [Element (Chat Web-UI) Documentation](https://github.com/element-hq/element-web/blob/develop/docs/modules.md); [matrix-react-sdk-module-api Git repository](https://github.com/matrix-org/matrix-react-sdk-module-api)             |
 
-## Matrix Widget API
+### Matrix Widget API
 
 | Name                           | Matrix Widget API                                                                                                                                                                                                    |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -849,7 +849,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | [Matrix - MSC2764](https://github.com/matrix-org/matrix-spec-proposals/pull/2764)                                                                                                                                    |
 | Documentation                  | [Matrix - MSC2764](https://github.com/matrix-org/matrix-spec-proposals/pull/2764)                                                                                                                                    |
 
-## NeoBoard Data Model API
+### NeoBoard Data Model API
 
 | Name                           | NeoBoard Data Model API                                                                                                               |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -866,7 +866,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | n/a                                                                                                                                   |
 | Documentation                  | [NeoBoard data model](https://github.com/nordeck/matrix-neoboard/tree/main/docs/model)                                                |
 
-## NeoDateFix REST API
+### NeoDateFix REST API
 
 | Name                           | NeoDateFix REST API                                                                                                                                |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -883,7 +883,7 @@ The following are the APIs used by the Chat application:
 | Supported standards            | n/a                                                                                                                                                |
 | Documentation                  | [NeoDateFix ADR001](https://github.com/nordeck/matrix-meetings/blob/main/docs/adrs/adr001-use-the-widget-api-to-interact-with-the-meetings-bot.md) |
 
-# Knowledge management - XWiki
+## Knowledge management - XWiki
 
 The following are the APIs used by the Knowledge management application:
 
@@ -893,7 +893,7 @@ The following are the APIs used by the Knowledge management application:
 | Xwiki   | Nubus Portal       | Central Navigation | Retrieve content for openDesk Navigation drop-down | JSON           |
 | Xwiki   | Nubus              | LDAP               | Read users and groups data                         | LDAP           |
 
-## REST API
+### REST API
 
 | Name                           | REST API                                                                                                                                                                                                                                                   |
 | ------------------------------ |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -910,7 +910,7 @@ The following are the APIs used by the Knowledge management application:
 | Supported standards            |                                                                                                                                                                                                                                                            |
 | Documentation                  | - https://www.xwiki.org/xwiki/bin/view/Documentation/UserGuide/Features/XWikiRESTfulAPI<br>- https://github.com/xwiki/xwiki-platform/blob/master/xwiki-platform-core/xwiki-platform-rest/xwiki-platform-rest-model/src/main/resources/xwiki.rest.model.xsd |
 
-## Scripting API
+### Scripting API
 
 | Name                           | Scripting API                                                                                                                                                                 |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -927,7 +927,7 @@ The following are the APIs used by the Knowledge management application:
 | Supported standards            |                                                                                                                                                                               |
 | Documentation                  | https://extensions.xwiki.org/xwiki/bin/view/Extension/Scripting%20Documentation%20Application                                                                                 |
 
-## Java API
+### Java API
 
 | Name                           | Java API                                                                                                                                                                           |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -944,7 +944,7 @@ The following are the APIs used by the Knowledge management application:
 | Supported standards            |                                                                                                                                                                                    |
 | Documentation                  | https://www.xwiki.org/xwiki/bin/view/Documentation/DevGuide/API/                                                                                                                   |
 
-## JavaScript API
+### JavaScript API
 
 | Name                           | JavaScript API                                                                               |
 | ------------------------------ | -------------------------------------------------------------------------------------------- |

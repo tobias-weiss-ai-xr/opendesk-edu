@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffe
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Updates & Upgrades</h1>
+# Updates & Upgrades
 
 <!-- TOC -->
 * [Disclaimer](#disclaimer)
@@ -106,7 +106,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Development](#development)
 <!-- TOC -->
 
-# Disclaimer
+## Disclaimer
 
 Starting with openDesk 1.0, we aim to offer hassle-free updates/upgrades.
 
@@ -124,7 +124,7 @@ Manual checks and possible activities are also required by openDesk updates, the
 > We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC is deleted; we will not address explicit deletion for PVs.
 
 
-# Deprecation warnings
+## Deprecation warnings
 
 We cannot hold back all migrations as some are required e.g. due to a change in a specific component that we want/need to update, we try to bundle others only with major releases.
 
@@ -137,7 +137,7 @@ This section provides an overview of potential changes to be part of the next ma
   - `persistence.storages.nubusUdmListener.storageClassName`
   - `persistence.storages.nubusProvisioningNats.storageClassName`
 
-# Overview and mandatory upgrade path
+## Overview and mandatory upgrade path
 
 The following table gives an overview of the mandatory upgrade path of openDesk, required in order for the automated migrations to work as expected.
 
@@ -177,7 +177,7 @@ matching that constraint, though our links always point to the newest patch rele
 
 If you would like more details about the automated migrations, please read section [Automated migrations - Details](#automated-migrations---details).
 
-# Manual checks/actions
+## Manual checks/actions
 
 > [!note]
 > We **only** use the mathematical symbol ≥ to denote for which versions manual steps must be
@@ -186,11 +186,11 @@ If you would like more details about the automated migrations, please read secti
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
 
-## Versions ≥ v1.11.0
+### Versions ≥ v1.11.0
 
-### Pre-upgrade to versions ≥ v1.11.0
+#### Pre-upgrade to versions ≥ v1.11.0
 
-#### Deployment cleanup: Collabora Controller
+##### Deployment cleanup: Collabora Controller
 
 **Target group:** Existing openDesk Enterprise deployments using Collabora Controller. Actually, only long-running
 deployments are affected, but following the instructions won't hurt.
@@ -209,7 +209,7 @@ kubectl -n ${NAMESPACE} delete -n collabora leases.coordination.k8s.io collabora
 > [!note]
 > The Collabora Online Controller is not scaled up again, as this would happen as part of the upgrade deployment.
 
-#### Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
+##### Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
 
 **Target group:** Existing deployments using `service` annotations for Dovecot, Jitsi JVB or Postfix.
 
@@ -234,7 +234,7 @@ Setting service annotation by `annotations.openxchangePostfix.service` applied t
 and external service. This key now only sets annotations for the internal service. If you want to set
 annotations for the external service use the newly introduced key `annotations.openxchangePostfix.serviceExternal`.
 
-#### Helmfile new secret: `secrets.nextcloud.statusPassword`
+##### Helmfile new secret: `secrets.nextcloud.statusPassword`
 
 **Target group:** All existing deployments that use self-defined secrets and have deployed Nextcloud.
 
@@ -248,11 +248,11 @@ be derived from the `MASTER_PASSWORD`.
 > [!note]
 > The username for the BasicAuth is hardcoded to "status-access".
 
-## Versions ≥ v1.10.0
+### Versions ≥ v1.10.0
 
-### Pre-upgrade to versions ≥ v1.10.0
+#### Pre-upgrade to versions ≥ v1.10.0
 
-#### Helmfile new secret: `secrets.nubus.ldapSearch.postfix`
+##### Helmfile new secret: `secrets.nubus.ldapSearch.postfix`
 
 **Target group:** All existing deployments that use self-defined secrets.
 
@@ -263,7 +263,7 @@ declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yam
 If you define your own secrets, please ensure that you provide a value for this secret, otherwise it will
 be derived from the `MASTER_PASSWORD`.
 
-#### Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`
+##### Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`
 
 **Target group:** All existing deployments that have OX App Suite enabled and that use self-defined secrets.
 
@@ -274,7 +274,7 @@ The revised Dovecot configuration requires a new secret that is declared in
 If you define your own secrets, please ensure that you provide a value for this secret, otherwise it will
 be derived from the `MASTER_PASSWORD`.
 
-#### New Helmfile default: Nubus provisioning debug container no longer deployed
+##### New Helmfile default: Nubus provisioning debug container no longer deployed
 
 **Target group:** All deployments that make use of the debugging container for Nubus' provisioning stack called "nats-box",
 
@@ -294,7 +294,7 @@ technical:
 > The nats-box also gets enabled when setting `debug.enabled: true`, but that should only be used in non-production scenarios and enabled debug
 > accross the whole deployment.
 
-#### New Helmfile default: Postfix SMTP SASL security options
+##### New Helmfile default: Postfix SMTP SASL security options
 
 **Target group:** All openDesk deployments using an external SMTP relay that does not support
 [Postfix's default `smtpSASLSecurityOptions`](https://www.postfix.org/postconf.5.html#smtp_sasl_security_options).
@@ -331,9 +331,9 @@ smtp:
       - "noplaintext"
 ```
 
-### Post-upgrade to versions ≥ v1.10.0
+#### Post-upgrade to versions ≥ v1.10.0
 
-#### New application default: Dovecot full-text search index configuration
+##### New application default: Dovecot full-text search index configuration
 
 **Target group:** All openDesk Enterprise deployments using the groupware module.
 
@@ -345,11 +345,11 @@ Run the following command inside the Dovecot container:
 set -x; for d in /var/lib/dovecot/*/*; do uuid=$(basename "$d"); [[ $uuid =~ ^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$ ]] || continue; doveadm fts rescan -u "$uuid"; doveadm index -u "$uuid" -q '*'; done
 ```
 
-## Versions ≥ v1.9.0
+### Versions ≥ v1.9.0
 
-### Pre-upgrade to versions ≥ v1.9.0
+#### Pre-upgrade to versions ≥ v1.9.0
 
-#### New application default: Postfix SMTP SASL security option
+##### New application default: Postfix SMTP SASL security option
 
 **Target group:** All openDesk deployments using an external SMTP relay that does not support
 [Postfix's default `smtpSASLSecurityOptions`](https://www.postfix.org/postconf.5.html#smtp_sasl_security_options).
@@ -361,7 +361,7 @@ this you have to configure the supported options for your mail relay one of the 
 - Recommended: Directly upgrade to v1.10.0 and set SMTP SASL options through `smtp.security.*`.
 - Configure a customization for `smtpSASLSecurityOptions`.
 
-#### Helmfile fix: Cassandra passwords read from `databases.*`
+##### Helmfile fix: Cassandra passwords read from `databases.*`
 
 **Target group:** All of the below must apply to your deployment:
 1. Enterprise Edition
@@ -379,7 +379,7 @@ are no longer ignored. So please move the passwords from
 
 to the `databases.*` structure.
 
-#### Helmfile new feature: `functional.groupware.externalClients.*`
+##### Helmfile new feature: `functional.groupware.externalClients.*`
 
 **Target group:**
 Deployments that allow access to groupware emails via external mail clients (e.g. Thunderbird) using IMAP and SMTP.
@@ -397,11 +397,11 @@ Additionally, it is now possible to explicitly define the hostnames shown in the
 
 If these values are not explicitly set, openDesk will use `.Values.global.domain` as in previous releases.
 
-## Versions ≥ v1.8.0
+### Versions ≥ v1.8.0
 
-### Pre-upgrade to versions ≥ v1.8.0
+#### Pre-upgrade to versions ≥ v1.8.0
 
-#### New application default: Default group for two-factor authentication is now "2FA Users"
+##### New application default: Default group for two-factor authentication is now "2FA Users"
 
 **Target group:** All upgrade deployments.
 
@@ -411,7 +411,7 @@ With the release v1.8.0 of openDesk, the openDesk IAM Nubus introduces a new def
 
 However, for consistency and easier maintenance, we recommend migrating users from the old group to the new one and removing the old group afterward.
 
-#### New database and secrets: Portal now uses OIDC
+##### New database and secrets: Portal now uses OIDC
 
 **Target group:** All upgrade deployments.
 
@@ -425,7 +425,7 @@ The portal has been migrated to use OIDC for single sign-on by default. This int
 > [!note]
 > The SAML Client for the Nubus portal is still preserved in Keycloak and is going to be removed with openDesk 1.10.0.
 
-#### New application default: XWiki blocks self-registration of user accounts
+##### New application default: XWiki blocks self-registration of user accounts
 
 **Target group:** All openDesk deployments using XWiki.
 
@@ -441,7 +441,7 @@ With the new default, self-registration is switched off for new deployments. Exi
    - Manual navigation: Burger menu → *Administer Wiki* (repeat for each subwiki, if applicable) → *Users & Groups* → *Rights* → *Users* (table header)
 3. In the first row labeled "Unregistered Users", ensure the box in the "Register" column shows a ❌ (disabled) by clicking it if necessary.
 
-#### New application default: Synapse rooms `v12`
+##### New application default: Synapse rooms `v12`
 
 **Target group:** All deployments using Element/Synapse with unrestricted federation and public, federation-enabled rooms.
 
@@ -462,7 +462,7 @@ To preserve as much data as possible, dedicated upgrade guidelines for each of t
 > [!note]
 > These instructions apply to any room upgrades, not just upgrade to `v12`.
 
-#### New Helmfile default: Restricting characters for directory and filenames in fileshare module
+##### New Helmfile default: Restricting characters for directory and filenames in fileshare module
 
 **Target group:** All openDesk deployments using the fileshare module, as they may already contain files or directories with characters that are now restricted.
 
@@ -496,7 +496,7 @@ functional:
         - '>'
 ```
 
-#### Helmfile new default: New groupware settings changing current behaviour
+##### Helmfile new default: New groupware settings changing current behaviour
 
 **Target group:** All openDesk deployments using OX App Suite
 
@@ -515,7 +515,7 @@ The following options, newly introduced in `functional.yaml.gotmpl`, modify the 
 > [!note]
 > openDesk v1.8.0 adds even more options under `functional.groupware.*` while retaining the current default behaviour.
 
-#### New application default: Nextcloud apps "Spreed" and "Comments" no longer enabled by default
+##### New application default: Nextcloud apps "Spreed" and "Comments" no longer enabled by default
 
 **Target group:** All openDesk deployments using the fileshare module.
 
@@ -535,7 +535,7 @@ configuration:
         enabled: true
 ```
 
-#### New application default: Gravatar is switched off for Jitsi and OpenProject
+##### New application default: Gravatar is switched off for Jitsi and OpenProject
 
 **Target group:** All openDesk deployments using the video conference and project module that explicitly want Gravatar support.
 
@@ -554,11 +554,11 @@ Gravatar support is no longer enabled by default in Jitsi and OpenProject. In ca
     OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: true, enable_local_avatars: true}'
   ```
 
-## Versions ≥ v1.7.0
+### Versions ≥ v1.7.0
 
-### Pre-upgrade to versions ≥ v1.7.0
+#### Pre-upgrade to versions ≥ v1.7.0
 
-#### Helmfile fix: Ensure enterprise overrides apply when deploying from project root
+##### Helmfile fix: Ensure enterprise overrides apply when deploying from project root
 
 **Target group:** All openDesk Enterprise deployments initiated from the project root using `helmfile_generic.yaml.gotmpl`
 
@@ -568,7 +568,7 @@ As a result, when deploying openDesk Enterprise Edition from the project root, t
 
 Please verify that your deployment uses the correct Enterprise charts and images. If not, migrate to the Enterprise versions before upgrading to openDesk EE v1.7.0.
 
-#### Replace Helm chart: New Notes Helm chart with support for self-signed deployments
+##### Replace Helm chart: New Notes Helm chart with support for self-signed deployments
 
 **Target group:** All deployments that set `app.notes.enabled: true` (default is `false`).
 
@@ -587,9 +587,9 @@ annotation:
   notesYProvider: {}
 ```
 
-### Post-upgrade to versions ≥ v1.7.0
+#### Post-upgrade to versions ≥ v1.7.0
 
-#### Upstream fix: Provisioning of functional mailboxes
+##### Upstream fix: Provisioning of functional mailboxes
 
 **Target group:** Deployments with OX App Suite that make use of IAM maintained functional mailboxes.
 
@@ -614,11 +614,11 @@ kill ${PROVISIONING_PORT_FORWARD_PID}
 rm ${TEMPORARY_CONSUMER_JSON}
 ```
 
-## Versions ≥ v1.6.0
+### Versions ≥ v1.6.0
 
-### Pre-upgrade to versions ≥ v1.6.0
+#### Pre-upgrade to versions ≥ v1.6.0
 
-#### Upstream constraint: Nubus' external secrets
+##### Upstream constraint: Nubus' external secrets
 
 **Target group:** Operators that use external secrets for Nubus.
 
@@ -629,7 +629,7 @@ rm ${TEMPORARY_CONSUMER_JSON}
 
 Please ensure you read the [Nubus 1.10.0 "Migration steps" section](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/changelog.html#v1-10-0-migration-steps) with focus on the paragraph "Operators that make use of the following UDM Listener secrets variables" and act accordingly.
 
-#### Helmfile new secret: `secrets.minio.openxchangeUser`
+##### Helmfile new secret: `secrets.minio.openxchangeUser`
 
 **Target group:** All existing deployments that have OX App Suite enabled and that use externally defined secrets in combination with openDesk provided MinIO object storage.
 
@@ -637,7 +637,7 @@ For OX App Suite to access the object storage a new secret has been introduced.
 
 It is declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) by the key: `secrets.minio.openxchangeUser`. If you define your own secrets, please ensure that you provide a value for this secret as well, otherwise it will be derived from the `MASTER_PASSWORD`.
 
-#### Helmfile new object storage: `objectstores.openxchange.*`
+##### Helmfile new object storage: `objectstores.openxchange.*`
 
 **Target group:** All deployments that use an external object storage.
 
@@ -646,7 +646,7 @@ an external object storage you did this already for all the entries in
 [`objectstores.yaml.gotmpl`](../helmfile/environments/default/objectstores.yaml.gotmpl). Where we now introduced
 `objectstores.openxchange` section that you also need to provide you external configuration for.
 
-#### OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)
+##### OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)
 
 **Target group:** All existing deployments that have OX App Suite enabled.
 
@@ -671,9 +671,9 @@ kubectl cp -n ${NAMESPACE} open-xchange-core-mw-default-0:/opt/open-xchange/ox-f
 2. Run the upgrade.
 3. Continue with the [related post-upgrade steps](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
 
-### Post-upgrade to versions ≥ v1.6.0
+#### Post-upgrade to versions ≥ v1.6.0
 
-#### OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)
+##### OX App Suite fix-up: Using S3 as storage for non mail attachments (post-upgrade)
 
 **Target group:** All existing deployments having OX App Suite enabled.
 
@@ -712,11 +712,11 @@ ID    Type of Job                              Status     Further Information
 /opt/open-xchange/sbin/unregisterfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -i <your_old_filestore_id_from_step_3>
 ```
 
-## Versions ≥ v1.4.0
+### Versions ≥ v1.4.0
 
-### Pre-upgrade to versions ≥ v1.4.0
+#### Pre-upgrade to versions ≥ v1.4.0
 
-#### Helmfile cleanup: `global.additionalMailDomains` as list
+##### Helmfile cleanup: `global.additionalMailDomains` as list
 
 **Target group:** Installations that have set `global.additionalMailDomains`.
 
@@ -738,21 +738,21 @@ global:
     - "sub2.maildomain.de"
 ```
 
-## Versions ≥ v1.3.0
+### Versions ≥ v1.3.0
 
-### Pre-upgrade to versions ≥ v1.3.0
+#### Pre-upgrade to versions ≥ v1.3.0
 
-#### Helmfile new feature: `functional.authentication.ssoFederation`
+##### Helmfile new feature: `functional.authentication.ssoFederation`
 
 **Target group:** Deployments that make use of IdP federation as described in [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
 
 Please ensure to configure your IdP federation config details as part of `functional.authentication.ssoFederation`. You can find more details in the "Example configuration" section of [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
 
-## Versions ≥ v1.2.0
+### Versions ≥ v1.2.0
 
-### Pre-upgrade to versions ≥ v1.2.0
+#### Pre-upgrade to versions ≥ v1.2.0
 
-#### Helmfile cleanup: Do not configure OX provisioning when no OX installed
+##### Helmfile cleanup: Do not configure OX provisioning when no OX installed
 
 **Target group:** Installations that have no OX App Suite installed.
 
@@ -767,7 +767,7 @@ kubectl -n ${NAMESPACE} exec -it ums-provisioning-nats-0 -c nats-box -- sh -c 'n
 kubectl -n ${NAMESPACE} delete secret ums-provisioning-ox-credentials-test
 ```
 
-#### Helmfile new default: PostgreSQL for XWiki and Nextcloud
+##### Helmfile new default: PostgreSQL for XWiki and Nextcloud
 
 **Target group:** All upgrade installations that do not already use the previous optional PostgreSQL database backend for Nextcloud and XWiki.
 
@@ -811,11 +811,11 @@ In case you are planning to migrate an existing instance from MariaDB to Postgre
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
   - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport
 
-## Versions ≥ v1.1.2
+### Versions ≥ v1.1.2
 
-### Pre-upgrade to versions ≥ v1.1.2
+#### Pre-upgrade to versions ≥ v1.1.2
 
-#### Helmfile feature update: App settings wrapped in `apps.` element
+##### Helmfile feature update: App settings wrapped in `apps.` element
 
 We now require [Helmfile v1.0.0-rc.8](https://github.com/helmfile/helmfile/releases/tag/v1.0.0-rc.8) for the deployment. This enables openDesk to lay the foundation for some significant cleanups where the information from the different apps, especially their `enabled` state, is needed.
 
@@ -842,11 +842,11 @@ apps:
     enabled: true
 ```
 
-## Versions ≥ v1.1.1
+### Versions ≥ v1.1.1
 
-### Pre-upgrade to versions ≥ v1.1.1
+#### Pre-upgrade to versions ≥ v1.1.1
 
-#### Helmfile feature update: Component specific `storageClassName`
+##### Helmfile feature update: Component specific `storageClassName`
 
 With openDesk 1.1.1 we support component specific `storageClassName` definitions beside the global ones. For this, we had to adapt the structure found in `persistence.yaml.gotmpl` to achieve this in a clean manner.
 
@@ -893,19 +893,19 @@ persistence:
       size: "1Gi"
 ```
 
-#### Helmfile new secret: `secrets.nubus.masterpassword`
+##### Helmfile new secret: `secrets.nubus.masterpassword`
 
 A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
 
-## Versions ≥ v1.1.0
+### Versions ≥ v1.1.0
 
-### Pre-upgrade to versions ≥ v1.1.0
+#### Pre-upgrade to versions ≥ v1.1.0
 
-#### Helmfile cleanup: Restructured `/helmfile/files/theme` folder
+##### Helmfile cleanup: Restructured `/helmfile/files/theme` folder
 
 If you make use of the [theme folder](../helmfile/files/theme/) or the [`theme.yaml.gotmpl`](../helmfile/environments/default/theme.yaml.gotmpl), e.g. to apply your own imagery, please ensure you adhere to the new structure of the folder and the yaml-file.
 
-#### Helmfile cleanup: Consistent use of `*.yaml.gotmpl`
+##### Helmfile cleanup: Consistent use of `*.yaml.gotmpl`
 
 In v1.0.0 the files in [`/helmfile/environments/default`](../helmfile/environments/default/) had mixed file extensions.
 Now we have streamlined this and consistently use the `*.yaml.gotmpl` file extension.
@@ -915,7 +915,7 @@ This change likely requires manual action in two situations:
 1. You are referencing our upstream files from the aforementioned directory, e.g. in your Argo CD deployment. If so, please update your references to use the filenames with the new extension.
 2. You have custom files containing configuration information that are simply named `*.yaml`. If so, please rename them to `*.yaml.gotmpl`.
 
-#### Helmfile cleanup: Prefixing certain app directories with `opendesk-`
+##### Helmfile cleanup: Prefixing certain app directories with `opendesk-`
 
 To make it more obvious that some elements from within the [`apps`](../helmfile/apps/) directory are solely
 provided by openDesk, we have prefixed these app directories with `opendesk-`.
@@ -930,7 +930,7 @@ The described changes most likely require manual action in the following situati
 
 - You are referencing our upstream files e.g. in your Argo CD deployment. If so, please update your references to use the new directory names.
 
-#### Helmfile cleanup: Splitting external services and openDesk services
+##### Helmfile cleanup: Splitting external services and openDesk services
 
 In v1.0.0 there was a directory `/helmfile/apps/services` that was intended to contain all the services an operator had to provide externally for production deployments.
 
@@ -943,7 +943,7 @@ The described changes most likely require manual action in the following situati
 
 - You are referencing our upstream files e.g. in your Argo CD deployment. If so, please update your references to use the new directory names.
 
-#### Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names
+##### Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names
 
 We have updated some attribute names within the Open-Xchange / OX App Suite to be consistent within our Helmfile
 deployment. This change also aligns us with the actual brand names, as well as our rule of thumb for brand based
@@ -1006,7 +1006,7 @@ WAS: secrets.oxAppsuite: ...
 NOW: secrets.oxAppSuite: ...
 ```
 
-#### Helmfile feature update: Dicts to define `customization.release`
+##### Helmfile feature update: Dicts to define `customization.release`
 
 If you make use of the `customization.release` option, you have to switch to a dictionary based definition of customization files, for example:
 
@@ -1029,7 +1029,7 @@ customization:
 
 You can freely choose the `file1` dictionary key used in the example above, but it should start with a letter.
 
-#### openDesk defaults (new): Enforce login
+##### openDesk defaults (new): Enforce login
 
 Users accessing the openDesk portal are now automatically redirected to the login screen per default.
 
@@ -1041,7 +1041,7 @@ functional:
     enforceLogin: false
 ```
 
-#### openDesk defaults (changed): Jitsi room history enabled
+##### openDesk defaults (changed): Jitsi room history enabled
 
 The default to store the Jitsi room history in the local storage of a user's browser has changed.
 
@@ -1056,15 +1056,15 @@ functional:
       enabled: false
 ```
 
-#### External requirements: Redis 7.4
+##### External requirements: Redis 7.4
 
 The update from openDesk v1.0.0 contains Redis 7.4.1, like the other openDesk bundled services, the bundled Redis is not meant to be used in production.
 
 Please ensure the Redis you are using is updated to at least version 7.4 to support the requirement of OX App Suite.
 
-### Post-upgrade to versions ≥ v1.1.0
+#### Post-upgrade to versions ≥ v1.1.0
 
-#### XWiki fix-ups
+##### XWiki fix-ups
 
 Unfortunately XWiki does not upgrade itself as expected. The bug has been reported and the supplier is aware. The following additional steps are required:
 
@@ -1088,11 +1088,11 @@ Unfortunately XWiki does not upgrade itself as expected. The bug has been report
 
 You should have now a fully functional XWiki instance with single sign-on and full-text search.
 
-## Versions ≥ v1.0.0
+### Versions ≥ v1.0.0
 
-### Pre-upgrade to versions ≥ v1.0.0
+#### Pre-upgrade to versions ≥ v1.0.0
 
-#### Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus
+##### Configuration Cleanup: Removal of unnecessary OX-Profiles in Nubus
 
 > [!warning]
 > The upgrade will fail if you do not address this section in your current deployment.
@@ -1119,7 +1119,7 @@ You can review and update other accounts as follows:
     - "Login disabled" if the user should not use the Groupware module.
   - Update the user account with the green "SAVE" button at the top of the page.
 
-#### Configuration Cleanup: Updated `global.imagePullSecrets`
+##### Configuration Cleanup: Updated `global.imagePullSecrets`
 
 Without using a custom container image registry, you can pull all the openDesk images without authentication.
 Thus defining non-existent imagePullSecrets creates unnecessary errors, so we removed them.
@@ -1132,7 +1132,7 @@ global:
     - "external-registry"
 ```
 
-#### Changed openDesk defaults: Matrix presence status disabled
+##### Changed openDesk defaults: Matrix presence status disabled
 
 Show other user's Matrix presence status is now disabled by default to comply with data protection requirements.
 
@@ -1145,7 +1145,7 @@ functional:
       enabled: true
 ```
 
-#### Changed openDesk defaults: Matrix ID
+##### Changed openDesk defaults: Matrix ID
 
 Until v0.9.0 openDesk used the LDAP entryUUID of a user to generate the user's Matrix ID. Due to restrictions of the
 Matrix protocol, an update to a Matrix ID is not possible. Therefore, it was technically convenient to use the UUID
@@ -1177,7 +1177,7 @@ functional:
        useImmutableIdentifierForLocalpart: true
 ```
 
-#### Changed openDesk defaults: File-share configurability
+##### Changed openDesk defaults: File-share configurability
 
 We now provide some configurability regarding the sharing capabilities of the Nextcloud component.
 
@@ -1196,7 +1196,7 @@ functional:
          activeByDefault: false
 ```
 
-#### Changed openDesk defaults: Updated default subdomains in `global.hosts`
+##### Changed openDesk defaults: Updated default subdomains in `global.hosts`
 
 We have streamlined the subdomain names in openDesk to be more user-friendly and to avoid the use of specific
 product names.
@@ -1251,7 +1251,7 @@ In case you would like to update an existing deployment to use the new hostnames
   - In OpenProject: *Administration* > *OpenProject* > *OpenProject server*
     - Update the *OpenProject host* to `projects.<your_domain>`
 
-#### Changed openDesk defaults: Dedicated group for access to the UDM REST API
+##### Changed openDesk defaults: Dedicated group for access to the UDM REST API
 
 Prerequisite: You allow the use of the [IAM's API](https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html)
 with the following setting:
@@ -1272,9 +1272,9 @@ The IAM admin account `Administrator` is the only member of this group by defaul
 
 If you need other accounts to use the API, please assign them to the aforementioned group.
 
-### Post-upgrade to versions ≥ v1.0.0
+#### Post-upgrade to versions ≥ v1.0.0
 
-#### Configuration Improvement: Separate user permission for using Video Conference component
+##### Configuration Improvement: Separate user permission for using Video Conference component
 
 With openDesk 1.0 the user permission for authenticated access to the Chat and Video Conference components was split into two separate permissions.
 
@@ -1291,7 +1291,7 @@ This can be done as IAM admin:
 > [!tip]
 > If you have a lot of users and want to update (almost) all them, you can select all users by clicking the checkbox in the user's table header and then de-selecting the users you do not want to update.
 
-#### Optional Cleanup
+##### Optional Cleanup
 
 We do not execute possible cleanup steps as part of the migrations POST stage. So you might want to remove the unclaimed PVCs after a successful upgrade:
 
@@ -1302,35 +1302,35 @@ kubectl -n ${NAMESPACE} delete pvc shared-run-ums-ldap-server-0
 kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 ```
 
-# Automated migrations - Details
+## Automated migrations - Details
 
-## Versions ≥ v1.6.0 (automated)
+### Versions ≥ v1.6.0 (automated)
 
 > [!note]
 > Details can be found in [run_5.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_5.py).
 
-### Versions ≥ v1.6.0 migrations-post
+#### Versions ≥ v1.6.0 migrations-post
 
 - Automatically restarts the StatefulSets `ums-provisioning-nats` and `ox-connector` due to a workaround applied on the NATS secrets, see the "Notes" segment of the ["Password seed" heading in getting-started.md](./docs/getting-started.md#password-seed)
 
 > [!note]
 > This change aims to prevent authentication failures with NATS in some Pods, which can lead to errors such as: `wait-for-nats Unavailable, waiting 2 seconds. Error: nats: 'Authorization Violation'`.
 
-## Versions ≥ v1.2.0 (automated)
+### Versions ≥ v1.2.0 (automated)
 
 > [!note]
 > Details can be found in [run_4.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_4.py).
 
-### Versions ≥ v1.2.0 migrations-pre
+#### Versions ≥ v1.2.0 migrations-pre
 
 - Automatically deletes PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
 - Automatically deletes StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
 
-### Versions ≥ v1.2.0 migrations-post
+#### Versions ≥ v1.2.0 migrations-post
 
 - Automatically restarts the Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` and deletes the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
 
-## Versions ≥ v1.1.0 (automated)
+### Versions ≥ v1.1.0 (automated)
 
 With openDesk v1.1.0 the IAM stack supports HA LDAP primary as well as scalable LDAP secondary pods.
 
@@ -1341,7 +1341,7 @@ creating the config map with the mentioned label.
 > [!note]
 > Details can be found in [run_3.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
-## Versions ≥ v1.0.0 (automated)
+### Versions ≥ v1.0.0 (automated)
 
 The `migrations-pre` and `migrations-post` jobs in the openDesk deployment address the automated migration tasks.
 
@@ -1350,7 +1350,7 @@ The permissions required to execute the migrations can be found in the migration
 > [!note]
 > Details can be found in [run_2.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_3.py).
 
-## Related components and artifacts
+### Related components and artifacts
 
 openDesk comes with two upgrade steps as part of the deployment; they can be found in the folder [/helmfile/apps](../helmfile/apps/) along with all other components:
 
@@ -1361,7 +1361,7 @@ Both migrations must be deployed exclusively at their first/last position and no
 
 The status of the upgrade migrations is tracked in the ConfigMap `migrations-status`, more details can be found in the [README.md of the related container image](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/README.md).
 
-## Development
+### Development
 
 When a new upgrade migration is required, ensure to address the following list:
 

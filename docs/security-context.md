@@ -2,7 +2,7 @@
 SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
-<h1>Kubernetes Security Context</h1>
+# Kubernetes Security Context
 
 <!-- TOC -->
 * [Container Security Context](#container-security-context)
@@ -17,12 +17,12 @@ SPDX-License-Identifier: Apache-2.0
 * [Status quo](#status-quo)
 <!-- TOC -->
 
-# Container Security Context
+## Container Security Context
 
 
 The containerSecurityContext is the most important security-related section because it has the highest precedence and restricts the container to its minimal privileges.
 
-## allowPrivilegeEscalation
+### allowPrivilegeEscalation
 
 
 Privilege escalation (such as via set-user-ID or set-group-ID file mode) should not be allowed (Linux only) at any time.
@@ -32,7 +32,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
 ```
 
-## capabilities
+### capabilities
 
 
 Containers must drop ALL capabilities, and are only permitted to add back the `NET_BIND_SERVICE` capability (Linux only).
@@ -59,7 +59,7 @@ containerSecurityContext:
       - "NET_BIND_SERVICE"
 ```
 
-## privileged
+### privileged
 
 
 Privileged Pods eliminate most security mechanisms and must be disallowed.
@@ -69,7 +69,7 @@ containerSecurityContext:
   privileged: false
 ```
 
-## runAsUser
+### runAsUser
 
 
 Containers should set a user id >= 1000 and never use 0 (root) as user.
@@ -79,7 +79,7 @@ containerSecurityContext:
   runAsUser: 1000
 ```
 
-## runAsGroup
+### runAsGroup
 
 
 Containers should set a group id >= 1000 and never use 0 (root) as user.
@@ -89,7 +89,7 @@ containerSecurityContext:
   runAsGroup: 1000
 ```
 
-## seccompProfile
+### seccompProfile
 
 
 The seccompProfile must be explicitly set to one of the allowed values. An unconfined profile and the complete absence of the profile are prohibited.
@@ -109,7 +109,7 @@ containerSecurityContext:
     type: "Localhost"
 ```
 
-## readOnlyRootFilesystem
+### readOnlyRootFilesystem
 
 
 Containers should have an immutable file systems, so that attackers can not modify application code or download malicious code.
@@ -119,7 +119,7 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
 ```
 
-## runAsNonRoot
+### runAsNonRoot
 
 
 Containers must be required to run as non-root users.
@@ -129,7 +129,7 @@ containerSecurityContext:
   runAsNonRoot: true
 ```
 
-# Status quo
+## Status quo
 
 
 openDesk aims to ensure that all security relevant settings are explicitly templated and comply with security recommendations.

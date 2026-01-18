@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Architecture</h1>
+# Architecture
 
 <!-- TOC -->
 * [Overview](#overview)
@@ -51,7 +51,7 @@ openDesk includes functional applications, like file management, chat, and email
 as databases and object storage are included for evaluation purposes only. In production, you must provide
 these services yourself.
 
-# Overview
+## Overview
 
 The following diagram shows a high-level overview of openDesk.
 
@@ -83,7 +83,7 @@ When the user is authenticated by Keycloak, the portal shows the applications th
 The user can now access applications and use the corresponding functionality without the need to authenticate
 again. This is implemented using the OpenID Connect (OIDC) protocol.
 
-# Nubus (IAM)
+## Nubus (IAM)
 
 [Nubus](https://www.univention.de/products/nubus/) is a specialized IAM platform developed by Univention GmbH
 to centralize and simplify identity management in IT environments. It is typically used in contexts where
@@ -122,11 +122,11 @@ In openDesk, Nubus serves the following purposes:
 
 For additional information, refer to the [Nubus for Kubernetes Architecture Manual](https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/index.html).
 
-# Authentication
+## Authentication
 
 openDesk uses the OpenID Connect (OIDC) protocol for authentication and authorization.
 
-## Identity data flows
+### Identity data flows
 
 An overview of
 - components that consume the LDAP service.
@@ -160,7 +160,7 @@ flowchart TD
  F[Postfix]-->D
 ```
 
-## OpenID Connect (OIDC)
+### OpenID Connect (OIDC)
 
 [OIDC](https://openid.net/developers/how-connect-works/) is an identity layer on top of the OAuth 2.0 protocol, allowing clients (Relying Party (RP)) to verify the identity of end-users based on the authentication performed by an authorization server (OpenID Provider (OP)). In openDesk, Keycloak serves as the OIDC provider, managing user authentication and issuing tokens for secure access to applications.
 
@@ -187,7 +187,7 @@ sequenceDiagram
     Note over Browser: User is authenticated
 ```
 
-## Keycloak
+### Keycloak
 
 [Keycloak](https://www.keycloak.org/) is an open-source identity and access management solution for web based applications and services. It provides features such as single sign-on, multi-factor authentication, user federation, and centralized user management.
 
@@ -195,7 +195,7 @@ In openDesk, Keycloak serves as the [OIDC provider](#openid-connect-oidc), handl
 
 For more information, see the [Keycloak Documentation](https://www.keycloak.org/documentation).
 
-## Keycloak Extensions
+### Keycloak Extensions
 
 Part of Nubus are the [Keycloak Extensions](https://docs.software-univention.de/nubus-kubernetes-operation/1.0/en/configuration/keycloak-extensions.html) which are used for:
 
@@ -204,13 +204,13 @@ Part of Nubus are the [Keycloak Extensions](https://docs.software-univention.de/
 
 To address these use cases, the Keycloak Extensions act as a proxy to Keycloak.
 
-## OpenLDAP
+### OpenLDAP
 
 [OpenLDAP](https://www.openldap.org) is an open-source implementation of the Lightweight Directory Access Protocol (LDAP) that provides a central repository for user and group information. In openDesk, OpenLDAP is used as the user directory to store user and group data, and also manages access control policies across the applications.
 
-# Authorization
+## Authorization
 
-## LDAP group synchronization
+### LDAP group synchronization
 
 LDAP group synchronization ensures that user group memberships are consistent across the applications in openDesk that make use of the IAM group information. Nubus uses OpenLDAP to store and manage user groups, which are synchronized with integrated applications to enforce access control policies.
 
@@ -220,13 +220,13 @@ Keycloak LDAP groups are available to the following applications, however, none 
 - Project Management / OpenProject: Reads all groups that are enabled for OpenProject, [hourly](https://www.openproject.org/docs/system-admin-guide/authentication/ldap-connections/ldap-group-synchronization/#create-a-synchronized-group).
 - Webmail / OX AppSuite: Requires a webmail user to be a part of a group before the group is actively provisioned to OX AppSuite.
 
-# Provisioning
+## Provisioning
 
 Part of the already mentioned Nubus IAM is a [provisioning service](https://docs.software-univention.de/nubus-kubernetes-architecture/0.5/en/components/provisioning-service.html).
 
 Besides the Nubus internal user of the provisioning service, the OX AppSuite is currently the only openDesk application that is getting data actively provisioned to it. This is in contrast to the norm, where applications fetch the required information from the LDAP themselves.
 
-## OX Connector
+### OX Connector
 
 As the OX AppSuite is using an application specific format to get e.g. users provisioned, there is also a specific connector component that links the provisioning service to the OX AppSuite, it is called the [OX Connector](https://docs.software-univention.de/manual/5.0/de/mail/ox-connector.html).
 
@@ -239,7 +239,7 @@ The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisio
 
 To find out more, see [Roles & Permissions](./docs/permissions.md).
 
-## SCIM
+### SCIM
 
 [System for Cross-domain Identity Management](https://scim.cloud) (SCIM) is an open standard for automating the exchange of user identity information between identity domains or IT systems. SCIM is designed to make user provisioning and management easier by providing a standardized way to manage user identities in cloud-based applications and services.
 
@@ -248,7 +248,7 @@ In openDesk, SCIM will be used in the future to automate the process of creating
 > [!note]
 > SCIM support is planned in openDesk for 2025.
 
-# Component integration
+## Component integration
 
 Important, especially from the end user perspective, are the functional integrations between the different openDesk applications.
 
@@ -273,7 +273,7 @@ flowchart TD
 
 Details can be found in the upstream documentation that is linked in the respective sections.
 
-## Intercom Service / Silent login
+### Intercom Service / Silent login
 
 The Intercom Service is deployed in the context of Nubus. Its role is to enable cross-application integration
 based on the user's browser interaction, as handling authentication when the frontend of an application has to call
@@ -286,7 +286,7 @@ Currently, only OX AppSuite and Element are using the frontend-based integration
 **Links:**
 - [Intercom Service upstream documentation](https://docs.software-univention.de/intercom-service/latest/index.html).
 
-## Central contacts
+### Central contacts
 
 OX App Suite is responsible for managing contacts in openDesk. Therefore, Nextcloud's PHP backend is using the OX AppSuite's middleware Contacts API to
 - create a new contact in the user's contacts folder when a file is shared with an unknown email address.
@@ -296,7 +296,7 @@ OX App Suite is responsible for managing contacts in openDesk. Therefore, Nextcl
 - Currently used [OX Contacts API (deprecated)](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Contacts).
 - New [OX Addressbooks API](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Addressbooks) the Central Contacts integration will switch to.
 
-## Central navigation
+### Central navigation
 
 Central navigation is based on an API endpoint in the Nubus portal that returns a JSON containing the portal's contents for
 a given user. The response from the API endpoint is used in the openDesk applications to render the central navigation.
@@ -314,7 +314,7 @@ A `curl` based request returning the navigation contents looks like this:
 curl 'https://portal.<DOMAIN>/univention/portal/navigation.json?base=https%3A//portal.<DOMAIN>&language=de-DE' -u "<USERNAME>:<SHARED_SECRET>"
 ```
 
-## Filepicker
+### Filepicker
 
 The Nextcloud Filepicker is integrated into the OX AppSuite, supporting the following use cases within the respective openDesk instance's Nextcloud:
 - Attach files from Nextcloud to emails.
@@ -330,7 +330,7 @@ when attaching a file to an email or storing a file in Nextcloud to avoid passin
 **Links:**
 - [OX AppSuite Nextcloud Integration upstream documentation](https://gitlab.open-xchange.com/extensions/nextcloud-integration/-/tree/main/documentation).
 
-## Newsfeed
+### Newsfeed
 
 The portal renders a newsfeed based on entries of a predefined openDesk blog in XWiki. It accesses the required XWiki
 service through the Intercom Service's `/wiki` endpoint, in combination with the previously described silent login.
@@ -338,7 +338,7 @@ service through the Intercom Service's `/wiki` endpoint, in combination with the
 **Links:**
 - [XWiki Blog feature](https://extensions.xwiki.org/xwiki/bin/view/Extension/Blog%20Application)
 
-## (OpenProject) File store
+### (OpenProject) File store
 
 While OpenProject allows you to attach files to work packages directly, it is often preferred that the files are
 stored within Nextcloud or to link an existing file from your openDesk Nextcloud to a work package.
@@ -351,7 +351,7 @@ The file store must still be enabled per project in OpenProject's project admin 
 - [OpenProject's documentation on Nextcloud integration](https://www.openproject.org/docs/system-admin-guide/integrations/nextcloud/)
 - [OpenProject Integration Nextcloud app](https://apps.nextcloud.com/apps/integration_openproject)
 
-# Mail setup
+## Mail setup
 
 The mail setup depicted in the diagram below shows the design to support multiple application workloads inside openDesk while interoperating with external mail infrastructures and optional mail clients like Thunderbird.
 
@@ -362,7 +362,7 @@ The system is intentionally modular: different applications (Nextcloud, OpenProj
 
 Even without these components, the platform remains operational for outbound email because the (Base) Postfix instance provides a simple SMTP submission service using static SASL credentials. This allows all applications in *openDesk* to continue sending system notifications and user emails.
 
-## Overview
+### Overview
 
 ```mermaid
 flowchart-elk
@@ -412,7 +412,7 @@ classDef dovecot fill:#BECBD6;
 class Dovecot,extSvcDC dovecot;
 ```
 
-## The Postfixes
+### The Postfixes
 
 * Common for both Postfix
   * Deliver internal mails to Dovecot using lmtps
@@ -430,7 +430,7 @@ class Dovecot,extSvcDC dovecot;
      * mails sent from mail clients using LDAP Auth
    * Used exclusively when OX App Suite is deployed
 
-# Applications vs. services
+## Applications vs. services
 
 openDesk consists of a variety of open-source projects, please find an overview below:
 
@@ -462,25 +462,25 @@ Other components are of type "Service", these are used for development and evalu
 
 For the APIs / Protocols supported by the applications, please read the [apis.md](./docs/architecture/apis.md).
 
-## Collabora (weboffice)
+### Collabora (weboffice)
 
 [Collabora](https://www.collaboraonline.com) is a powerful online document editing suite.
 
 In openDesk, Collabora is used for editing Office documents such as rich texts, spreadsheets and presentations.
 
-## CryptPad Online (diagrams)
+### CryptPad Online (diagrams)
 
 [CryptPad](https://cryptpad.org/) is a collaborative editor framework supporting end-to-end encryption.
 
 In openDesk, CryptPad is for editing diagrams.net documents.
 
-## Element/Synapse (chat & call)
+### Element/Synapse (chat & call)
 
 [Element Web](https://github.com/element-hq/element-web) is the web frontend for [Synapse](https://github.com/element-hq/synapse), the reference implementation of the sovereign and secure [Matrix protocol](https://matrix.org).
 
 In openDesk, Element is used for chat and direct audio & video calling.
 
-## Jitsi (video conferencing)
+### Jitsi (video conferencing)
 
 [Jitsi](https://jitsi.org) is an open-source video conferencing solution that allows users to hold secure video meetings.
 
@@ -488,31 +488,31 @@ In openDesk, Jitsi is used for video conferencing and online meetings. It integr
 
 [Jigasi](https://github.com/jitsi/jigasi) (Jitsi's SIP component) also allows joining the meeting via phone call if an external SIP server and SIP trunk are provided.
 
-## Nextcloud (files)
+### Nextcloud (files)
 
 [Nextcloud](https://nextcloud.com) is a file storage and sync platform with powerful collaboration capabilities with desktop, mobile and web interfaces.
 
-## Nubus (identity and access management / portal)
+### Nubus (identity and access management / portal)
 
 [Nubus](https://www.univention.com/products/nubus/) is a unified Identity & Access Management, providing you with full control and digital sovereignty over your IAM processes and data.
 
 In openDesk, Nubus provides the management required for users, groups and other IAM objects, as well as the portal, the Identity provider for Single Sign-On and federation scenarios.
 
-## OpenProject (project management)
+### OpenProject (project management)
 
 [OpenProject](https://www.openproject.org) is a project management tool that supports agile project management, team collaboration, issue tracking, and more.
 
-## OX App Suite (groupware) with OX Dovecot (mail backend)
+### OX App Suite (groupware) with OX Dovecot (mail backend)
 
 [OX App Suite](https://www.open-xchange.com/products/ox-app-suite) is a groupware application using [OX Dovecot](https://www.dovecot.org/) as its backend mail store.
 
 In openDesk, OX App Suite is used for email, calendar, address book and personal task management.
 
-## XWiki (knowledge management)
+### XWiki (knowledge management)
 
 [XWiki](https://www.xwiki.org) is an open-source wiki platform for knowledge management and collaboration.
 
-# Application specific user accounts
+## Application specific user accounts
 
 While the IAM manages users centrally, some applications come with local accounts for administrative purposes:
 
@@ -526,6 +526,6 @@ While the IAM manages users centrally, some applications come with local account
 | OpenProject  | set in `secrets.openproject.apiAdminUsername` | Bootstrap the Nextcloud fileshare for OpenProject with `opendesk-openproject-bootstrap` job[^1].                        | `secrets.openproject.apiAdminPassword`           |
 | XWiki        | `superadmin`                                  | Only available with `debug.enabled: true`, can be used for interactive login using `/bin/view/Main/?oidc.skipped=true`. | `secrets.xwiki.superadminpassword`               |
 
-# Footnotes
+## Footnotes
 
 [^1]: We are working on a new approach to provision the OpenProject filestore, therefore the accounts are planned to be deactivated/removed in the future.

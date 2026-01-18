@@ -3,9 +3,9 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Enhanced configuration use cases for openDesk</h1>
+# Enhanced configuration use cases for openDesk
 
-# Overview
+## Overview
 
 The following enhanced configuration use cases are described in their respective documents:
 
