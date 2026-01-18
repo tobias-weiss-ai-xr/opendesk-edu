@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Testing</h1>
+# Testing
 
 <!-- TOC -->
 * [Overview](#overview)
@@ -19,7 +19,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Overload/recovery tests](#overloadrecovery-tests)
 <!-- TOC -->
 
-# Overview
+## Overview
 
 The following section provides an overview of the testing approach adopted to ensure the quality and reliability of openDesk. This concept balances leveraging existing quality assurance (QA) processes with targeted testing efforts tailored to the specific needs of openDesk. The outlined strategy focuses on three key areas:
 
@@ -29,9 +29,9 @@ The following section provides an overview of the testing approach adopted to en
 
 These efforts are designed to complement each other, minimizing redundancy while ensuring robust testing coverage.
 
-# Test concept
+## Test concept
 
-## Rely on upstream applications QA
+### Rely on upstream applications QA
 
 openDesk contains applications from different suppliers. As a general approach, we rely on the testing
 conducted by these suppliers for their respective applications.
@@ -42,7 +42,7 @@ We receive the release notes early before a new application release is integrate
 we are able to check for the existence of a sufficient set of test cases.
 The suppliers create a set of test cases for each new function.
 
-## Functional QA (end-to-end tests)
+### Functional QA (end-to-end tests)
 
 We develop and maintain a [set of end-to-end tests](https://gitlab.opencode.de/bmi/opendesk/deployment/e2e-tests) focussing on:
 
@@ -60,7 +60,7 @@ We execute the tests using English and German as language profile.
 
 The development team utilizes the test automation described above for QA'ing their feature branches.
 
-### Nightly testing
+#### Nightly testing
 
 We use the functional e2e-tests in nightly testruns on a matrix of deployments addressing different application profiles to ensure the quality of the development branch's current state.
 
@@ -90,13 +90,13 @@ The following naming scheme is applied for the deployment matrix:
 - `extsrv`: External services (where possible).
 - `gitops`: Argo CD based deployment.
 
-### Reporting test results
+#### Reporting test results
 
 All executions of the end-to-end tests are tracked in a central platform running [Allure TestOps](https://docs.qameta.io/allure-testops/).
 
 As the TestOps tool contains infrastructure details of our development and test clusters it is currently only accessible for to project members.
 
-## Load- and performance testing
+### Load- and performance testing
 
 Our goal is to deliver openDesk as application-grade software with the ability to serve large user bases.
 
@@ -104,7 +104,7 @@ We create and perform [load- and performance tests](https://gitlab.opencode.de/b
 
 Our approach consists of different layers of load testing.
 
-### Base performance testing
+#### Base performance testing
 
 For these tests we define a set of "normal", uncomplicated user-interactions with openDesk.
 
@@ -120,7 +120,7 @@ be an environment in a mostly idle state.
 The results can be compared with the results of the previous release, so we can see if changes
 in software components improve or decrease the performance of a testcase.
 
-### Load testing to saturation point
+#### Load testing to saturation point
 
 These tests are performed to ensure the correct processing and user interaction, even under
 high-load scenarios.
@@ -137,14 +137,14 @@ At a certain point, increasing the number of users does not lead to higher overa
 This point, the saturation point, is the load limit of the environment. Up to this point, the
 environment and the installed software packages can handle the load. Beyond this point, response times increase and error rates rise.
 
-### Load testing up to a defined user count
+#### Load testing up to a defined user count
 
 For partners interested in large scale openDesk deployments,
 we offer a tailored workshop in which we define scenarios and perform load testing analysis.
 
 This way, we can help you decide on the appropriate sizing for the planned openDesk deployment.
 
-### Overload/recovery tests
+#### Overload/recovery tests
 
 If necessary, we perform overload tests, which will saturate the system with multiple
 test cases until no further increase in throughput is visible. Then we add even more load

@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>CI/CD</h1>
+# CI/CD
 
 This page covers openDesk deployment automation via Gitlab CI.
 
@@ -12,7 +12,7 @@ This page covers openDesk deployment automation via Gitlab CI.
 * [Tests](#tests)
 <!-- TOC -->
 
-# Deployment
+## Deployment
 
 The project includes a `.gitlab-ci.yml` that allows you to execute the deployment from a GitLab instance of your choice.
 
@@ -26,7 +26,7 @@ When starting the pipeline through the GitLab UI, you will be queried for some v
 
 You might want to set credential variables in the GitLab project at `Settings` > `CI/CD` > `Variables`, the values of which can then be hidden from output logs.
 
-# Tests
+## Tests
 
 The GitLab CI pipeline contains a job named `run-tests` that can trigger a test suite pipeline on another GitLab project.
 For the trigger to work, the variable `TESTS_PROJECT_URL` has to be set on this GitLab project's CI variables,

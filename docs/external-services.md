@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>External services</h1>
+# External services
 
 This document will cover the additional configuration for external services like databases, caches, or buckets.
 
@@ -14,7 +14,7 @@ This document will cover the additional configuration for external services like
 * [Footnotes](#footnotes)
 <!-- TOC -->
 
-# Database
+## Database
 
 When deploying this suite to production, you need to configure the applications to use your production-grade database
 service.
@@ -118,7 +118,7 @@ service.
 |                    |                    | Username  | `databases.xwiki.username`                    | `xwiki_user`                 |
 |                    |                    | Password  | `databases.xwiki.password`                    |                              |
 
-# Object storage
+## Object storage
 
 When deploying this suite to production, you need to configure the applications to use your production-grade object
 storage service.
@@ -135,7 +135,7 @@ storage service.
 |             |             | Username        | `objectstores.openproject.username`      | `openproject_user` |
 |             |             | Use IAM profile | `objectstores.openproject.useIAMProfile` |                    |
 
-# Cache
+## Cache
 
 When deploying this suite to production, you need to configure the applications to use your production-grade cache
 service.
@@ -155,7 +155,7 @@ service.
 |                  |                  |           | Host      | `cache.umsSelfservice.host`  | `memcached`      |
 |                  |                  |           | Port      | `cache.umsSelfservice.port`  | `11211`          |
 
-# Footnotes
+## Footnotes
 
 [^1] The upstream product documentation provides some valuable information regarding database migrations:
 - Nextcloud: https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html

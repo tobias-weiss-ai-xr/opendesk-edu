@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Federation with external identity provider (IdP)</h1>
+# Federation with external identity provider (IdP)
 
 <!-- TOC -->
 * [References](#references)
@@ -24,7 +24,7 @@ Most organizations already have an Identity and Access Management (IAM) system w
 
 This document helps in setting up your organization's IdP and openDesk to enable IdP federation.
 
-# References
+## References
 
 We would like to list successful IdP federation scenarios:
 
@@ -35,9 +35,9 @@ We would like to list successful IdP federation scenarios:
 
 > If you have successfully federated using another External IdP, please let us know so we can update the list above.
 
-# Prerequisites
+## Prerequisites
 
-## User accounts
+### User accounts
 
 In addition to the configuration, it is required that user accounts with the same name exist within openDesk. While this prerequisite is outside the scope of this document, the following approaches are feasible:
 
@@ -64,11 +64,11 @@ In addition to the configuration, it is required that user accounts with the sam
     - A user account would never be deactivated or deleted in openDesk.
     - Group memberships are not transferred.
 
-## External IdP with OIDC
+### External IdP with OIDC
 
 This document focuses on the OIDC federation between an external IdP and the openDesk IdP. It uses the OpenID Connect (OIDC) protocol, so your external IdP must support OIDC.
 
-# Example configuration
+## Example configuration
 
 The following section explains how to configure the IdP federation manually in an example upstream IdP and in openDesk.
 
@@ -87,11 +87,11 @@ export CLUSTER_NETWORKING_DOMAIN=svc.cluster.local
 /opt/keycloak/bin/kcadm.sh get identity-provider/instances/${FEDERATION_IDP_ALIAS} -r opendesk
 ```
 
-## Versions
+### Versions
 
 The example was tested with openDesk v0.7.0 using its integrated Keycloak v24.0.3. As external IdP, we also used an openDesk deployment of the same version, but created a separate realm for proper configuration separation.
 
-## Example values
+### Example values
 
 The following values are used in this example documentation. Please ensure when you come across such a value, even if it is part of a URL hostname or path, that you adapt it where needed to your setup:
 
@@ -102,7 +102,7 @@ The following values are used in this example documentation. Please ensure when 
 - `sso-federation-idp`: Identifier of your organization IdP's configuration within the openDesk Keycloak.
 - `sso-federation-flow`: Identifier of the required additional login flow to be created and referenced in the openDesk Keycloak.
 
-## Keycloak admin console access
+### Keycloak admin console access
 
 To access the Keycloak admin console in an openDesk deployment, you must add a route for `/admin` to the Keycloak ingress. This is done automatically if you deploy openDesk with `debug.enabled: true`, but beware that this will also cause a lot of log output across all openDesk pods.
 
@@ -112,13 +112,13 @@ The admin console will be available at:
 
 For the following configuration steps, log in with user `kcadmin` and grab the password from the `ums-keycloak` pod's `KEYCLOAK_ADMIN_PASSWORD` variable.
 
-## Your organizations IdP
+### Your organizations IdP
 
 In this example, we use the Keycloak of another openDesk instance to simulate your organization's IdP. However, URL paths differ if you use another product.
 
 Please let us know about your experiences or any differences you encountered.
 
-### Separate realm
+#### Separate realm
 
 To not interfere with an existing configuration for our test scenario, we create a separate realm:
 
@@ -126,7 +126,7 @@ To not interfere with an existing configuration for our test scenario, we create
 - *Realm name*: `fed-test-idp-realm`
 - `Create`
 
-### OIDC Client
+#### OIDC Client
 
 If you just created the `fed-test-idp-realm`, you are already in the admin screen for the realm; if not, use the realm selection drop-down menu in the upper left corner to switch to the realm.
 
@@ -150,7 +150,7 @@ If you just created the `fed-test-idp-realm`, you are already in the admin scree
     - Tab *Credentials*
       - Copy the *Client Secret* and the *Client-ID* as we need them to configure the openDesk IdP.
 
-## openDesk IdP
+### openDesk IdP
 
 > [!note]
 > While manual configuration is possible, an SSO federation can also be configured as part of the deployment.

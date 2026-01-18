@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Scaling</h1>
+# Scaling
 
 This document covers the possibilities to scale the applications in openDesk.
 
@@ -25,7 +25,7 @@ Consequently, we strongly recommend implementing monitoring and logging solution
 
 [^1]: Nextcloud is configured for attachment storage as well.
 
-# Upstream information
+## Upstream information
 
 While scaling services horizontally is the ideal solution, information about vertical scaling is helpful
 when defining the application's resources, see [`resources.yaml.gotmpl`](../helmfile/environments/default/resources.yaml.gotmpl) for references.

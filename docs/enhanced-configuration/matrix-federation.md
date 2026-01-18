@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Matrix federation</h1>
+# Matrix federation
 
 <!-- TOC -->
 * [Example configuration](#example-configuration)
@@ -18,7 +18,7 @@ By default, you can chat with users who have an account within your openDesk ins
 matrix-based servers.
 Federation support can be turned off.
 
-# Example configuration
+## Example configuration
 
 The following values are used in this example documentation.
 Please ensure when you come across such a value,
@@ -41,7 +41,7 @@ functional:
         enabled: false
 ```
 
-## Separate Matrix domain
+### Separate Matrix domain
 
 If you want to federate with other Matrix instances and use a separate Matrix domain, you need to provide a JSON file for
 the Matrix domain to use delegation. It is not part of your openDesk deployment.

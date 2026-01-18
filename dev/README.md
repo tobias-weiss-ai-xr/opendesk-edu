@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Tools for local development</h1>
+# Tools for local development
 
 * [charts-local.py](#charts-localpy)
   * [Commandline parameter](#commandline-parameter)
@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0
     * [`--revert`](#--revert)
     * [`--branch` (deprecated)](#--branch-deprecated)
 
-# charts-local.py
+## charts-local.py
 
 This script helps you with cloning/pulling Helm charts and referencing them directly in the openDesk
 Helmfile deployment for comfortable local test and development. The charts will be cloned/pulled into a directory
@@ -25,18 +25,18 @@ using the `--revert` option.
 
 Run the script with `-h` to get information about the script's parameter on commandline.
 
-## Commandline parameter
+### Commandline parameter
 
-### `--match <your_string>`
+#### `--match <your_string>`
 
 Will only fetch repos or pull images for charts which name matches `<your_string>`.
 
-### `--revert`
+#### `--revert`
 
 Reverts the changes in the helmfiles pointing to the local Helm charts by copying the backup files created by the
 scripts itself back to their original location.
 
-### `--branch` (deprecated)
+#### `--branch` (deprecated)
 
 Optional parameter: Defines a branch for the `opendesk` repo to work with. The script will create the branch if it
 does not exist yet. Otherwise it will switch to defined branch.

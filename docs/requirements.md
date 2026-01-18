@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Requirements</h1>
+# Requirements
 
 This section covers the internal system requirements and external service requirements for productive use.
 
@@ -22,7 +22,7 @@ This section covers the internal system requirements and external service requir
 * [Footnotes](#footnotes)
 <!-- TOC -->
 
-# tl;dr
+## tl;dr
 
 openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s) cluster.
 
@@ -38,7 +38,7 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
 **Additional openDesk Enterprise requirements**
 - [OpenKruise](https://openkruise.io/)[^4] >= v1.6
 
-# Hardware
+## Hardware
 
 The following minimum requirements are intended for initial evaluation deployment:
 
@@ -48,7 +48,7 @@ The following minimum requirements are intended for initial evaluation deploymen
 | RAM  | 32 GB, more recommended                               |
 | Disk | HDD or SSD, >10 GB                                    |
 
-# Kubernetes
+## Kubernetes
 
 Any self-hosted or managed K8s cluster >= v1.24 listed in
 [CNCF Certified Kubernetes distributions](https://www.cncf.io/certification/software-conformance/) should be supported.
@@ -58,12 +58,12 @@ The deployment is tested against [kubespray](https://github.com/kubernetes-sigs/
 > [!note]
 > The deployment is not tested against OpenShift.
 
-# Ingress controller
+## Ingress controller
 
 The deployment is intended to be used only over HTTPS via a configured FQDN, therefore it is required to have a properly
 configured ingress controller deployed in your cluster.
 
-## Supported controllers
+### Supported controllers
 
 - [Ingress NGINX Controller](https://github.com/kubernetes/ingress-nginx)
 
@@ -83,7 +83,7 @@ See the [`annotations-risk-level` documentation](https://kubernetes.github.io/in
 > Ensure to install at least Ingress NGINX 1.11.5 or 1.12.1 due to [security
 > issues](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
 
-## Minimal configuration
+### Minimal configuration
 
 Several components in openDesk make use of snippet annotations, which are disabled by default. Please enable them using the following configuration:
 ```
@@ -92,7 +92,7 @@ controller.admissionWebhooks.allowSnippetAnnotations=true
 ```
 See the [`allowSnippetAnnotations` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#allow-snippet-annotations) for context.
 
-# Volume provisioner
+## Volume provisioner
 
 Initial evaluation deployment requires a `ReadWriteOnce` volume provisioner. For local deployment, a local- or hostPath-
 provisioner is sufficient.
@@ -100,7 +100,7 @@ provisioner is sufficient.
 > [!note]
 > Some components require a `ReadWriteMany` volume provisioner for distributed mode or horizontal scaling.
 
-# Certificate management
+## Certificate management
 
 This deployment leverages [cert-manager](https://cert-manager.io/) to generate valid certificates. This is **optional**,
 but a secret containing a valid TLS certificate is required.
@@ -108,7 +108,7 @@ but a secret containing a valid TLS certificate is required.
 Only `Certificate` resources will be deployed; the `cert-manager`, including its CRD must be installed before this or
 openDesk certificate management is switched off.
 
-# External services
+## External services
 
 For the development and evaluation of openDesk, we bundle some services. Be aware that for production
 deployments, you need to make use of your own production-grade services; see the
@@ -129,14 +129,14 @@ deployments, you need to make use of your own production-grade services; see the
 |          | Object Storage      |         | MinIO                 |
 | Voice    | TURN                |         | Coturn                |
 
-# Deployment
+## Deployment
 
 The deployment of each component is [Helm](https://helm.sh/) based. The 35+ Helm charts are configured and
 templated via [Helmfile](https://helmfile.readthedocs.io/en/latest/) to provide a streamlined deployment experience.
 
 Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare the desired state against the deployed state.
 
-# Footnotes
+## Footnotes
 
 [^1]: Due to a [Helm bug](https://github.com/helm/helm/issues/30890) Helm v3.18.0 is not supported.
 

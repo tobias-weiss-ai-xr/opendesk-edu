@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Separate domains for mail and or Matrix </h1>
+# Separate domains for mail and or Matrix
 
 <!-- TOC -->
 * [Example configuration](#example-configuration)
@@ -17,14 +17,14 @@ SPDX-License-Identifier: Apache-2.0
 
 As communication over mail and chat can go beyond the borders of your openDesk installation, you may want to use different domains for the mail and/or Matrix.
 
-# Example configuration
+## Example configuration
 
 The following values are used in this example documentation. Please ensure when you come across such a value, even if it is part of a URL hostname or path, that you adapt it where needed to your setup:
 
 - `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in `https://mail.opendesk.domain.tld` to access emails and `https://chat.opendesk.domain.tld` to access the Element chat that is based on the Matrix protocol.
 - `my_organization.tld`: the alternative domain used for mail and/or Matrix.
 
-## Mail domain
+### Mail domain
 
 By default, all email addresses in openDesk are created based on the `DOMAIN` you specified for your deployment. In our example, the users have `<username>@opendesk.domain.tld` as their mail addresses. In case you prefer the users to send and receive emails with another domain, you can set that one using the optional `MAIL_DOMAIN` in the deployment:
 

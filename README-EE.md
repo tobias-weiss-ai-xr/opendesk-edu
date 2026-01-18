@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffe
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>openDesk Enterprise Edition</h1>
+# openDesk Enterprise Edition
 
 <!-- TOC -->
 * [Overview](#overview)
@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
   * [License keys](#license-keys)
 <!-- TOC -->
 
-# Overview
+## Overview
 
 openDesk Enterprise Edition is recommended for production use. It receives support and patches from ZenDiS and the suppliers of the components due to the product subscriptions included.
 
@@ -31,7 +31,7 @@ This document refers to the openDesk Community Edition as "oD CE" and the openDe
 
 Please contact [ZenDiS](mailto:opendesk@zendis.de) to get openDesk Enterprise, either as a SaaS offering or for your on-premises installation.
 
-# Enterprise Features
+## Enterprise Features
 
 oD EE ships the following features for Enterprise use that are not available in oD CE.
 
@@ -50,7 +50,7 @@ oD EE ships the following features for Enterprise use that are not available in 
 | **OpenProject**.     | [Enterprise addons](https://www.openproject.org/docs/enterprise-guide/) (*Corporate Plan*) |
 | **XWiki**            | [XWiki Pro apps](https://xwiki.com/en/offerings/products/xwiki-pro)                                                   |
 
-# CE vs. EE
+## CE vs. EE
 
 The following table summarizes the differences between oD CE and oD EE.
 
@@ -63,7 +63,7 @@ The following table summarizes the differences between oD CE and oD EE.
 | **Access to source code**        | All CE code on openCode                 | Proprietary modules NOT on openCode                                        |
 
 
-## CE Components
+### CE Components
 
 The following components are using the same codebase and artifacts for their Community and Enterprise offering:
 
@@ -74,7 +74,7 @@ The following components are using the same codebase and artifacts for their Com
 - OpenProject
 - XWiki
 
-## EE Components
+### EE Components
 
 This section provides information about the components that have - at least partially - Enterprise-specific artifacts.
 
@@ -83,34 +83,34 @@ values in the image ([1](./helmfile/environments/default/images.yaml.gotmpl) / [
 and chart ([1](./helmfile/environments/default/charts.yaml.gotmpl) / [2](./helmfile/environments/default-enterprise-overrides/charts.yaml.gotmpl)) definitions.
 When a repository path starts with `/zendis`, the artifact is only available in an openDesk Enterprise deployment.
 
-###  Collabora
+#### Collabora
 
 - Collabora Online (COOL) container image: Is build from the same public source code as Collabora Development Edition (CODE), only the build configurations might differ. COOL includes a brand package that is not public and its license is not open source.
 - [COOL Controller](https://www.collaboraonline.com/cool-controller-release-notes/) container image and Helm chart: Source code and chart are using Mozilla Public License Version 2.0, but the source code is not public. It is provided to customers upon request.
 
 openDesk updates Collabora once a COOL image based on the version pattern `<major>.<minor>.<patch>.3+.<build>` was made available. This happens usually at the same time the CODE image with `<major>.<minor>.<patch>.2+.<build>` is made available.
 
-### Element
+#### Element
 
 - AdminBot and GroupSync container image: 100% closed source
 - Admin Console container image: 100% closed source, though ~65% of the total runtime code is from the [matrix-bot-sdk](https://github.com/turt2live/matrix-bot-sdk/)
 
-### Nextcloud
+#### Nextcloud
 
 - Nextcloud Enterprise: openDesk uses the Nextcloud Enterprise to the build Nextcloud container image for oD EE. The Nextcloud EE codebase might contain EE exclusive (longterm support) security patches, plus the Guard app, that is not publicly available, while it is AGPL-3.0 licensed.
 
 openDesk updates the Nextcloud images for openDesk CE and EE in parallel, therefore we will not upgrade to a new major Nextcloud release before the related Nextcloud Enterprise release is available. When patches are released exclusively for Nextcloud Enterprise, they are made available also exclusively in oD EE.
 
-### Open-Xchange
+#### Open-Xchange
 
-#### OX App Suite
+##### OX App Suite
 
 - OX App Suite Core Middleware container image: The amount of code, that is not open source and has a proprietary license, is <10%.
 - OX App Suite Pro Helm chart: It is not publicly available, though it is "just" an umbrella chart re-using the publicly available charts referencing the EE images, so it has <10% prorietary content.
 
 openDesk updates OX App Suite in oD CE and EE always to the same release version. Only the App Suíte Pro Helm chart has the same versioning as the actual App Suite release, the chart used in oD CE has a different versioning scheme.
 
-#### OX Dovecot
+##### OX Dovecot
 
 - Dovecot Pro container image: Dovecot Pro is based on the open source components Dovecot and Pigeonhole but extended by modules providing additional functionality like obox2, cluster, cluster controller and dovecot fts. The additional modules make up about 15% of the overall Dovecot Pro code and are subject to a closed source license.
 
@@ -128,7 +128,7 @@ key. These keys can be generated with the following commands:
 - Public Key: `openssl pkey -in private.pem -out public.pem -pubout && cat public.pem | base64 -w0`
 
 
-# Enabling the Enterprise deployment
+## Enabling the Enterprise deployment
 
 To enable the oD EE deployment you must set the environment variable `OPENDESK_ENTERPRISE` to any value that does not evaluate to boolean *false* for [Helm flow control](https://helm.sh/docs/chart_template_guide/control_structures/#ifelse), e.g. `"true"`, `"yes"` or `"1"`:
 
@@ -140,9 +140,9 @@ OPENDESK_ENTERPRISE=true
 > Upgrading from oD CE to EE is currently not supported, especially due to the fact it requires a migration
 > from Dovecot 2.x (standard storage) to Dovecot Pro 3.x (S3).
 
-# Configuring the oD EE deployment for self-hosted installations
+## Configuring the oD EE deployment for self-hosted installations
 
-## Registry access
+### Registry access
 
 With openDesk EE you get access to the related artifact registry owned by ZenDiS.
 
@@ -185,7 +185,7 @@ repositories:
     registryOpencodeDeEnterprise: "registry.opencode.de"
 ```
 
-## License keys
+### License keys
 
 Some applications require license information for their Enterprise features to be enabled. With the aforementioned registry credentials you will also receive a file called [`enterprise.yaml`](./helmfile/environments/default/enterprise_keys.yaml.gotmpl) containing the relevant license keys.
 

@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Self-signed certificates and custom Certificate Authority (CA)</h1>
+# Self-signed certificates and custom Certificate Authority (CA)
 
 <!-- TOC -->
 * [Configuration](#configuration)
@@ -17,11 +17,11 @@ This document covers:
 public certificate authority chains
 * deploying openDesk into a local cluster without ACME challenge
 
-# Configuration
+## Configuration
 
 There are two options to address these use case:
 
-## Option 1: Bring Your Own Certificate
+### Option 1: Bring Your Own Certificate
 
 This option is useful when you have your own PKI in your environment which is also trusted by all clients that should
 access openDesk.
@@ -56,7 +56,7 @@ trust store password.
 > XWiki does not support the use of an existing secret to access the keystore. Therefore you have to set the
 > password from step 5 also as `secrets.certificates.password`.
 
-## Option 2a: Use cert-manager.io with auto-generated namespace based root-certificate
+### Option 2a: Use cert-manager.io with auto-generated namespace based root-certificate
 
 This option is useful when you do not have a trusted certificate available and can't fetch a certificate from
 Let’s Encrypt. It will result in a cert-manager managed root certificate in the namespace you deploy openDesk into.
@@ -79,7 +79,7 @@ Let’s Encrypt. It will result in a cert-manager managed root certificate in th
       selfSigned: true
     ```
 
-## Option 2b: Use cert-manager.io with a pre-defined or shared root-certificate
+### Option 2b: Use cert-manager.io with a pre-defined or shared root-certificate
 
 Use this approach if you like to use a pre-created CA root certificate that can be "shared" (as copy) between
 multiple namespaces in a cluster.

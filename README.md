@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>openDesk Deployment Automation</h1>
+# openDesk Deployment Automation
 
 <!-- TOC -->
 * [Overview](#overview)
@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
 * [Copyright](#copyright)
 <!-- TOC -->
 
-# Overview
+## Overview
 
 openDesk is a Kubernetes-based, open-source and cloud-native digital workplace suite provided by the
 *Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH*.
@@ -52,25 +52,25 @@ This documentation aims to give you all that is needed to set up your own instan
 
 Basic knowledge of Kubernetes and DevOps processes is required though.
 
-# Upgrades
+## Upgrades
 
 You want to upgrade an existing openDesk installation?
 
 ⟶ Visit our detailed documentation about [Updates & Upgrades](./docs/migrations.md).
 
-# Requirements
+## Requirements
 
 You want to understand what is required to install openDesk yourself?
 
 ⟶ Visit our [Requirements](./docs/requirements.md) overview.
 
-# Getting started
+## Getting started
 
 You would like to install openDesk in your own infrastructure?
 
 ⟶ Visit our detailed [Getting started guide](./docs/getting-started.md).
 
-# Advanced customization
+## Advanced customization
 
 - [Enhanced Configuration](./docs/enhanced-configuration.md)
 - [External services](./docs/external-services.md)
@@ -79,19 +79,19 @@ You would like to install openDesk in your own infrastructure?
 - [Monitoring](./docs/monitoring.md)
 - [Theming](./docs/theming.md)
 
-# Architecture
+## Architecture
 
 More information on openDesk's architecture can be found in our [architecture documentation](./docs/architecture.md).
 
-# Testing
+## Testing
 
 openDesk is continuously tested to ensure it meets high quality standards. Read how we test in openDesk in our [testing concept](./docs/testing.md).
 
-# Permissions
+## Permissions
 
 Find out more about the permission system in the [roles & permissions concept](./docs/permissions.md)
 
-# Releases
+## Releases
 
 openDesk implements a defined [release and patch management process](./docs/releases.md) to ensure stability and security.
 
@@ -108,12 +108,12 @@ in the files from the release's git-tag:
 
 Find more information in our [Workflow documentation](./docs/developer/workflow.md).
 
-# Data storage
+## Data storage
 
 More information about different data storages used within openDesk are described in the
 [Data Storage documentation](./docs/data-storage.md).
 
-# Feedback
+## Feedback
 
 We love to get feedback from you!
 
@@ -123,14 +123,14 @@ please use the [issues within this project](https://gitlab.opencode.de/bmi/opend
 If you want to address other topics, please check the section
 ["Rückmeldungen und Beteiligung" in the OVERVIEW.md](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung) of the [openDesk Info Repository](https://gitlab.opencode.de/bmi/opendesk/info).
 
-# Development
+## Development
 
 If you want to join or contribute to the development of openDesk please read the [Development guide](./docs/developer/development.md).
 
-# License
+## License
 
 This project uses the following license: Apache-2.0
 
-# Copyright
+## Copyright
 
 Copyright (C) 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH

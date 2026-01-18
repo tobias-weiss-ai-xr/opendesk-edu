@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Monitoring</h1>
+# Monitoring
 
 This document will cover how you can enable observability with Prometheus-based monitoring and Grafana dashboards as
 well as the overall status of the monitoring integration.
@@ -17,7 +17,7 @@ well as the overall status of the monitoring integration.
 * [Component overview](#component-overview)
 <!-- TOC -->
 
-# Technology
+## Technology
 
 openDesk includes integration with Prometheus-based monitoring.
 
@@ -25,12 +25,12 @@ Together with [kube-prometheus-stack](https://github.com/prometheus-community/he
 
 Before enabling the following options, you need to install the respective custom resource definitions (CRDs) from the kube-prometheus-stack repository which should at least include the Prometheus Operator.
 
-# Defaults
+## Defaults
 
 All configurable options and their defaults can be found in
 [`monitoring.yaml.gotmpl`](../helmfile/environments/default/monitoring.yaml.gotmpl).
 
-# Metrics
+## Metrics
 
 To deploy `podMonitor` and `serviceMonitor` custom resources, enable them by:
 
@@ -44,7 +44,7 @@ monitoring:
 ```
 ```
 
-# Alerts
+## Alerts
 
 openDesk ships with a set of Prometheus alerting rules that are specific to the operation of openDesk.
 Some of these are created by our partners while others are defined in [opendesk-alerts](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-alerts).
@@ -58,7 +58,7 @@ monitoring:
       enabled: true
 ```
 
-# Dashboards for Grafana
+## Dashboards for Grafana
 
 If your Grafana instance is deployed via kube-prometheus-stack, or you have deployed the [Sidecar for datasources](https://github.com/grafana/helm-charts/blob/main/charts/grafana/README.md#sidecar-for-datasources), openDesk can make dashboards available via ConfigMap resources. 
 
@@ -73,7 +73,7 @@ monitoring:
 
 Please find further details in the [related Helm chart](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-dashboards).
 
-# Component overview
+## Component overview
 
 | Component | Metrics (pod- or serviceMonitor) | Alerts (prometheusRule) | Dashboard (Grafana) |
 |:----------|----------------------------------|-------------------------|---------------------|

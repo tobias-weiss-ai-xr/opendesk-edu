@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlic
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Migration from M365 with audriga migration service and master authentication</h1>
+# Migration from M365 with audriga migration service and master authentication
 
 <!-- TOC -->
 * [Prerequisites](#prerequisites)
@@ -29,9 +29,9 @@ The data in the source mailbox will not be deleted or altered. To configure a mi
 
 It may not be possible to complete especially large or complex migrations with only this guide. If you identify issues related to I/O, bandwidth, time constraints, or anything else that makes the migration more complicated than you are comfortable handling on your own using the self-service, please contact [audriga's support](mailto:support@audriga.com).
 
-# Prerequisites
+## Prerequisites
 
-## Prepare M365 tenant for access
+### Prepare M365 tenant for access
 
 The following instructions provide information on how to authenticate Microsoft 365 / Exchange Online accounts in the audriga migration service with "modern authentication" using a service account without the need to provide a username and password for each mailbox that will be migrated.
 
@@ -67,11 +67,11 @@ Create a "secret" group in the customer tenant.
 - Appoint your service account (see 1.) as the owner of this group
 
 
-## Provisioning user accounts in openDesk
+### Provisioning user accounts in openDesk
 
 In openDesk, you have to have all user accounts with mailboxes pre-defined before running the migration. You can either manually create your accounts using an IAM administrator or use the [user import tool](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import) to batch import user accounts to your openDesk deployment.
 
-## Deploy openDesk with master authentication
+### Deploy openDesk with master authentication
 
 With openDesk 1.0 Enterprise, you can set openDesk's email components (OX AppSuite and OX Dovecot) to master authentication mode to run the migration as described in this document using the following two settings for your deployment. This is NOT available in openDesk Community deployments:
 
@@ -102,13 +102,13 @@ Updating your deployment with these settings will allow you to continue with the
 > the mail using IMAP, as it is not recommended that users interact with the target mail infrastructure during
 > the migration scenario described in this document.
 
-# Migration configuration
+## Migration configuration
 
 The migration is configured in 3 steps using the [audriga migration self-service](https://umzug.audriga.com/SMESwitchWebApp/?client=groupware).
 
 Ensure you meet the prerequisites. For example, this document does not support using the standard username/password-based authentication option for M365.
 
-## Select the source provider and configure your openDesk instance
+### Select the source provider and configure your openDesk instance
 
 Choose [Microsoft 365 / Exchange Online (Admin)](https://umzug.audriga.com/SMESwitchWebApp/?client=groupware#src=onmicrosoft.com) as your current provider.
 
@@ -127,11 +127,11 @@ Configure openDesk as your destination server:
   - Press check.
 - If you receive a green checkmark on both tabs, click "Save". Otherwise, check your settings until you get the green checkmark.
 
-## Adding accounts
+### Adding accounts
 
 You can add accounts one by one, which seems only feasible for test scenarios, or when you migrate a handful of mailboxes, or you can add accounts using CSV upload. Both options are described in the following subsections.
 
-### Add user accounts individually
+#### Add user accounts individually
 
 By default, you will enter the "Add Mailbox" tab where you can add individual accounts for M365:
 
@@ -153,7 +153,7 @@ After checking and confirming, you can use the same procedure to add further mai
 
 Alternatively, you can add multiple accounts via CSV upload. More info on that below.
 
-### Add multiple user accounts via CSV file
+#### Add multiple user accounts via CSV file
 
 Prepare a CSV file with all necessary information. Unsurprisingly, this is the same information as described in the "Add User Accounts Individually" section above.
 
@@ -174,7 +174,7 @@ Select the "Add multiple accounts" tab to configure up to 50 user accounts by up
 
 Click "Check" and save afterwards.
 
-## Start the migration
+### Start the migration
 
 You will see a summary of the migration, including the number of accounts and the amount of data. Even if the analysis of the source accounts has not yet been completed, you can proceed.
 
@@ -182,7 +182,7 @@ Ensure you have a valid voucher; otherwise, you must complete the payment proces
 
 Press "Start Migration" to proceed.
 
-## Monitor migration status
+### Monitor migration status
 
 The migration process may take some time to start. For large amounts of data, it may take a couple of hours.
 
@@ -192,9 +192,9 @@ You can access a detailed log for each account by clicking "Protocol" on the rig
 
 You will receive status emails for the migration job's submission and start, as well as when the migration job is finished. The emails are sent to the email address you have entered during the configuration. Those emails include a link to the status website so you can easily track and monitor your migration. Once the migration has been started, you can safely close the status website and shut down your computer; the migration will continue. You can re-open the status website anytime.
 
-# Appendix
+## Appendix
 
-## Validating master authentication
+### Validating master authentication
 
 Below are details in case you want to verify master authentication for Dovecot and OX AppSuite.
 

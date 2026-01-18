@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG Ze
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Debugging</h1>
+# Debugging
 
 <!-- TOC -->
 * [Disclaimer](#disclaimer)
@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
 <!-- TOC -->
 
-# Disclaimer
+## Disclaimer
 
 This document collects information on how to go about debugging an openDesk deployment.
 
@@ -36,7 +36,7 @@ information where available.
 > deployment, you will find the various places changes are applied when enabling debugging. So, outside of
 > development and test environments, you should use them thoughtfully and carefully if needed.
 
-# Enable debugging
+## Enable debugging
 
 Check the openDesk [`debug.yaml.gotmpl`](../helmfile/environments/default/debug.yaml.gotmpl) and configure it for your deployment
 ```
@@ -57,7 +57,7 @@ This will result in:
 > All containers should write their log output to STDOUT; if you find (valuable) logs inside a container which
 > were not in STDOUT, please let us know!
 
-# Adding containers to a pod for debugging purposes
+## Adding containers to a pod for debugging purposes
 
 During testing or development, you may need to execute tools, browse, or even change things in the filesystem of another container.
 
@@ -103,7 +103,7 @@ The following example can be used to debug the `openDesk-Nextcloud-PHP` containe
 - When you've succeeded, you will see the processes of both/all containers in the Pod when executing `ps aux`.
 - To access other containers' filesystems, select the PID of a process from the other container and do a `cd /proc/<selected_process_id>/root`.
 
-## Temporary/ephemeral containers
+### Temporary/ephemeral containers
 
 An interesting read from which we picked most of the details below from: https://iximiuz.com/en/posts/kubernetes-ephemeral-containers/
 
@@ -145,9 +145,9 @@ and open its interactive terminal with
 kubectl -n ${NAMESPACE} attach -it -c ${EPH_CONTAINER_NAME} ${POD_NAME}
 ```
 
-# Components
+## Components
 
-## Helmfile
+### Helmfile
 
 When refactoring the Helmfile structure, you want to ensure that there are no unintended edits by executing e.g. `diff` and
 comparing the output of Helmfile from before and after the change by calling:
@@ -156,7 +156,7 @@ comparing the output of Helmfile from before and after the change by calling:
 helmfile template -e dev >output_to_compare.yaml
 ```
 
-## MariaDB
+### MariaDB
 
 When using the openDesk bundled MariaDB, you can explore the database(s) using the MariaDB interactive terminal from the Pod's command line: `mariadb -u root -p`. On the password prompt, provide the value for `MARIADB_ROOT_PASSWORD` which can be found in the Pod's environment.
 
@@ -168,13 +168,13 @@ While you will find all the details for the CLI tool in the [MariaDB documentati
 - `show tables`: Lists tables within the currently connected database
 - `quit`: Quit the client
 
-## Nextcloud
+### Nextcloud
 
 `occ` is the CLI for Nextcloud; all the details can be found in the [upstream documentation](https://docs.nextcloud.com/server/stable/admin_manual/occ_command.html).
 
 You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php /var/www/html/occ config:list`
 
-## OpenProject
+### OpenProject
 
 OpenProject is a Ruby on Rails application. Therefore, you can make use of the Rails console from the Pod's command line `bundle exec rails console`
 and run debug code like this:
@@ -188,7 +188,7 @@ Net::HTTP.start(uri.host, uri.port,
 end
 ```
 
-## PostgreSQL
+### PostgreSQL
 
 Using the openDesk bundled PostgreSQL, you can explore database(s) using the PostgreSQL interactive terminal from the Pod's command line: `psql -U postgres`.
 
@@ -200,9 +200,9 @@ While you will find all details about the cli tool `psql` in the [PostgreSQL doc
 - `\dt`: List (describe) tables within the currently connected database
 - `\q`: Quit the client
 
-## Keycloak
+### Keycloak
 
-### Setting the log level
+#### Setting the log level
 
 Keycloak is the gateway to integrate other authentication management systems or applications. It is undesirable to enable debug mode for the whole platform if you just need to look into Keycloak.
 
