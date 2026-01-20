@@ -1,3 +1,10 @@
+## [1.11.4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.3...v1.11.4) (2026-01-20)
+
+
+### Bug Fixes
+
+* **openproject:** Update from 16.6.4 to 16.6.5; strongly recommended update to address a vulnerability, find details and possible workaround in upstream release notes https://www.openproject.org/docs/release-notes/16-6-5/ ([bc082bf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bc082bf8bcb6e2211760abe05f415c47a3e2e6e4))
+
 ## [1.11.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.2...v1.11.3) (2026-01-16)
 
 
