@@ -297,13 +297,6 @@ resources:
     requests:
       cpu: 0.25
       memory: "512Mi"
-  openprojectDbInit:
-    limits:
-      cpu: 99
-      memory: "256Mi"
-    requests:
-      cpu: 0.1
-      memory: "256Mi"
   openprojectAppInit:
     limits:
       cpu: 99
@@ -311,6 +304,20 @@ resources:
     requests:
       cpu: 0.1
       memory: "512Mi"
+  openprojectDbInit:
+    limits:
+      cpu: 99
+      memory: "256Mi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  openprojectHocuspocus:
+    limits:
+      cpu: 99
+      memory: "1Gi"
+    requests:
+      memory: "256Mi"
+      cpu: 0.25
   openprojectSeederJob:
     limits:
       cpu: 99

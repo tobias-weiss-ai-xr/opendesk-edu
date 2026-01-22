@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -114,6 +114,35 @@ extraVolumeMounts:
     mountPath: "/etc/ssl/certs/ca-certificates.crt"
     subPath: "ca-certificates.crt"
 {{- end }}
+
+hocuspocus:
+  enabled: true
+  ingress:
+    path: /hocuspocus
+    pathType: "Prefix"
+  auth:
+    existingSecret:
+    secretKey: secret
+  networkPolicy:
+    enabled: false
+  image:
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openprojectHocuspocus.registry | quote }}
+    repository: {{ .Values.images.openprojectHocuspocus.repository | quote }}
+    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    tag: {{ index (splitList "@" .Values.images.openprojectHocuspocus.tag) 0 | quote }}
+    sha256: {{ index (splitList ":" (index (splitList "@" .Values.images.openprojectHocuspocus.tag) 1)) 1 | quote }}
+  strategy:
+    type: "Recreate"
+  podAnnotations:
+    intents.otterize.com/service-name: "openproject-hocuspocus"
+    {{- with .Values.annotations.openproject.hocuspocusPod }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
+  service:
+    port: 1234
+  resourcesPreset: ~
+  resources:
+    {{ .Values.resources.openproject | toYaml | nindent 4 }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openproject.registry | quote }}
