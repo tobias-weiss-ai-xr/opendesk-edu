@@ -1565,9 +1565,9 @@ nubusUmcGateway:
     annotations:
       nginx.ingress.kubernetes.io/use-regex: "true"
       nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
-    {{- with .Values.annotations.nubusUmcGateway.ingress }}
-    {{ . | toYaml | nindent 4 }}
-    {{- end }}
+      {{- with .Values.annotations.nubusUmcGateway.ingress }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     certManager:
       enabled: false
     tls:
