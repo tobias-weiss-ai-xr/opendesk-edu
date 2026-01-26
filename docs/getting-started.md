@@ -8,8 +8,9 @@ SPDX-License-Identifier: Apache-2.0
 This documentation lets you create an openDesk evaluation instance on your Kubernetes cluster.
 
 <!-- TOC -->
-* [Requirements](#requirements)
-* [Customize environment](#customize-environment)
+* [Getting started](#getting-started)
+  * [Requirements](#requirements)
+  * [Customize environment](#customize-environment)
   * [DNS](#dns)
   * [Domain](#domain)
     * [Apps](#apps)
@@ -33,10 +34,10 @@ This documentation lets you create an openDesk evaluation instance on your Kuber
   * [Install single app](#install-single-app)
   * [Install single release/chart](#install-single-releasechart)
   * [Using from external repository](#using-from-external-repository)
-* [Access deployment](#access-deployment)
-  * [Login](#login)
-  * [Credentials](#credentials)
-* [Uninstall](#uninstall)
+  * [Access deployment](#access-deployment)
+    * [Login](#login)
+    * [Credentials](#credentials)
+  * [Uninstall](#uninstall)
 <!-- TOC -->
 
 Thanks for looking into the openDesk Getting Started guide. This document covers essential configuration steps to

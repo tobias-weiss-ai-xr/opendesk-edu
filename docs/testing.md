@@ -6,17 +6,18 @@ SPDX-License-Identifier: Apache-2.0
 # Testing
 
 <!-- TOC -->
-* [Overview](#overview)
-* [Test concept](#test-concept)
-  * [Rely on upstream applications QA](#rely-on-upstream-applications-qa)
-  * [Functional QA (end-to-end tests)](#functional-qa-end-to-end-tests)
-    * [Nightly testing](#nightly-testing)
-    * [Reporting test results](#reporting-test-results)
-  * [Load- and performance testing](#load--and-performance-testing)
-    * [Base performance testing](#base-performance-testing)
-    * [Load testing to saturation point](#load-testing-to-saturation-point)
-    * [Load testing up to a defined user count](#load-testing-up-to-a-defined-user-count)
-    * [Overload/recovery tests](#overloadrecovery-tests)
+* [Testing](#testing)
+  * [Overview](#overview)
+  * [Test concept](#test-concept)
+    * [Rely on upstream applications QA](#rely-on-upstream-applications-qa)
+    * [Functional QA (end-to-end tests)](#functional-qa-end-to-end-tests)
+      * [Nightly testing](#nightly-testing)
+      * [Reporting test results](#reporting-test-results)
+    * [Load- and performance testing](#load--and-performance-testing)
+      * [Base performance testing](#base-performance-testing)
+      * [Load testing to saturation point](#load-testing-to-saturation-point)
+      * [Load testing up to a defined user count](#load-testing-up-to-a-defined-user-count)
+      * [Overload/recovery tests](#overloadrecovery-tests)
 <!-- TOC -->
 
 ## Overview

@@ -6,10 +6,11 @@ SPDX-License-Identifier: Apache-2.0
 # Self-signed certificates and custom Certificate Authority (CA)
 
 <!-- TOC -->
-* [Configuration](#configuration)
-  * [Option 1: Bring Your Own Certificate](#option-1-bring-your-own-certificate)
-  * [Option 2a: Use cert-manager.io with auto-generated namespace based root-certificate](#option-2a-use-cert-managerio-with-auto-generated-namespace-based-root-certificate)
-  * [Option 2b: Use cert-manager.io with a pre-defined or shared root-certificate](#option-2b-use-cert-managerio-with-a-pre-defined-or-shared-root-certificate)
+* [Self-signed certificates and custom Certificate Authority (CA)](#self-signed-certificates-and-custom-certificate-authority-ca)
+  * [Configuration](#configuration)
+    * [Option 1: Bring Your Own Certificate](#option-1-bring-your-own-certificate)
+    * [Option 2a: Use cert-manager.io with auto-generated namespace based root-certificate](#option-2a-use-cert-managerio-with-auto-generated-namespace-based-root-certificate)
+    * [Option 2b: Use cert-manager.io with a pre-defined or shared root-certificate](#option-2b-use-cert-managerio-with-a-pre-defined-or-shared-root-certificate)
 <!-- TOC -->
 
 This document covers:

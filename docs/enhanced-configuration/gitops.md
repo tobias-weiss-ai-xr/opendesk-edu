@@ -6,10 +6,11 @@ SPDX-License-Identifier: Apache-2.0
 # GitOps Deployment
 
 <!-- TOC -->
-* [Considerations](#considerations)
-* [ArgoCD](#argocd)
-  * [Option 1: Use YAML manifests](#option-1-use-yaml-manifests)
-  * [Option 2: Helmfile plugin](#option-2-helmfile-plugin)
+* [GitOps Deployment](#gitops-deployment)
+  * [Considerations](#considerations)
+  * [ArgoCD](#argocd)
+    * [Option 1: Use YAML manifests](#option-1-use-yaml-manifests)
+    * [Option 2: Helmfile plugin](#option-2-helmfile-plugin)
 <!-- TOC -->
 
 The recommended deployment method for openDesk is via Helmfile. This can be done "by hand", via CI/CD (Gitlab) or using

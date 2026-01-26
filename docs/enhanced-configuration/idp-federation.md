@@ -6,18 +6,19 @@ SPDX-License-Identifier: Apache-2.0
 # Federation with external identity provider (IdP)
 
 <!-- TOC -->
-* [References](#references)
-* [Prerequisites](#prerequisites)
-  * [User accounts](#user-accounts)
-  * [External IdP with OIDC](#external-idp-with-oidc)
-* [Example configuration](#example-configuration)
-  * [Versions](#versions)
-  * [Example values](#example-values)
-  * [Keycloak admin console access](#keycloak-admin-console-access)
-  * [Your organizations IdP](#your-organizations-idp)
-    * [Separate realm](#separate-realm)
-    * [OIDC Client](#oidc-client)
-  * [openDesk IdP](#opendesk-idp)
+* [Federation with external identity provider (IdP)](#federation-with-external-identity-provider-idp)
+  * [References](#references)
+  * [Prerequisites](#prerequisites)
+    * [User accounts](#user-accounts)
+    * [External IdP with OIDC](#external-idp-with-oidc)
+  * [Example configuration](#example-configuration)
+    * [Versions](#versions)
+    * [Example values](#example-values)
+    * [Keycloak admin console access](#keycloak-admin-console-access)
+    * [Your organizations IdP](#your-organizations-idp)
+      * [Separate realm](#separate-realm)
+      * [OIDC Client](#oidc-client)
+    * [openDesk IdP](#opendesk-idp)
 <!-- TOC -->
 
 Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on (SSO) to internal or external web applications.

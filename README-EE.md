@@ -6,21 +6,22 @@ SPDX-License-Identifier: Apache-2.0
 # openDesk Enterprise Edition
 
 <!-- TOC -->
-* [Overview](#overview)
-* [Enterprise Features](#enterprise-features)
-* [CE vs. EE](#ce-vs-ee)
-  * [CE Components](#ce-components)
-  * [EE Components](#ee-components)
-    * [Collabora](#collabora)
-    * [Element](#element)
-    * [Nextcloud](#nextcloud)
-    * [Open-Xchange](#open-xchange)
-      * [OX App Suite](#ox-app-suite)
-      * [OX Dovecot](#ox-dovecot)
-* [Enabling the Enterprise deployment](#enabling-the-enterprise-deployment)
-* [Configuring the oD EE deployment for self-hosted installations](#configuring-the-od-ee-deployment-for-self-hosted-installations)
-  * [Registry access](#registry-access)
-  * [License keys](#license-keys)
+* [openDesk Enterprise Edition](#opendesk-enterprise-edition)
+  * [Overview](#overview)
+  * [Enterprise Features](#enterprise-features)
+  * [CE vs. EE](#ce-vs-ee)
+    * [CE Components](#ce-components)
+    * [EE Components](#ee-components)
+      * [Collabora](#collabora)
+      * [Element](#element)
+      * [Nextcloud](#nextcloud)
+      * [Open-Xchange](#open-xchange)
+        * [OX App Suite](#ox-app-suite)
+        * [OX Dovecot](#ox-dovecot)
+  * [Enabling the Enterprise deployment](#enabling-the-enterprise-deployment)
+  * [Configuring the oD EE deployment for self-hosted installations](#configuring-the-od-ee-deployment-for-self-hosted-installations)
+    * [Registry access](#registry-access)
+    * [License keys](#license-keys)
 <!-- TOC -->
 
 ## Overview

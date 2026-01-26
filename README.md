@@ -7,20 +7,21 @@ SPDX-License-Identifier: Apache-2.0
 # openDesk Deployment Automation
 
 <!-- TOC -->
-* [Overview](#overview)
-* [Upgrades](#upgrades)
-* [Requirements](#requirements)
-* [Getting started](#getting-started)
-* [Advanced customization](#advanced-customization)
-* [Architecture](#architecture)
-* [Testing](#testing)
-* [Permissions](#permissions)
-* [Releases](#releases)
-* [Data storage](#data-storage)
-* [Feedback](#feedback)
-* [Development](#development)
-* [License](#license)
-* [Copyright](#copyright)
+* [openDesk Deployment Automation](#opendesk-deployment-automation)
+  * [Overview](#overview)
+  * [Upgrades](#upgrades)
+  * [Requirements](#requirements)
+  * [Getting started](#getting-started)
+  * [Advanced customization](#advanced-customization)
+  * [Architecture](#architecture)
+  * [Testing](#testing)
+  * [Permissions](#permissions)
+  * [Releases](#releases)
+  * [Data storage](#data-storage)
+  * [Feedback](#feedback)
+  * [Development](#development)
+  * [License](#license)
+  * [Copyright](#copyright)
 <!-- TOC -->
 
 ## Overview

@@ -9,12 +9,12 @@ This document will cover how you can enable observability with Prometheus-based 
 well as the overall status of the monitoring integration.
 
 <!-- TOC -->
-* [Technology](#technology)
-* [Defaults](#defaults)
-* [Metrics](#metrics)
-* [Alerts](#alerts)
-* [Dashboards for Grafana](#dashboards-for-grafana)
-* [Component overview](#component-overview)
+* [Monitoring](#monitoring)
+  * [Technology](#technology)
+  * [Defaults](#defaults)
+  * [Metrics](#metrics)
+  * [Dashboards for Grafana](#dashboards-for-grafana)
+  * [Component overview](#component-overview)
 <!-- TOC -->
 
 ## Technology
@@ -60,7 +60,7 @@ monitoring:
 
 ## Dashboards for Grafana
 
-If your Grafana instance is deployed via kube-prometheus-stack, or you have deployed the [Sidecar for datasources](https://github.com/grafana/helm-charts/blob/main/charts/grafana/README.md#sidecar-for-datasources), openDesk can make dashboards available via ConfigMap resources. 
+If your Grafana instance is deployed via kube-prometheus-stack, or you have deployed the [Sidecar for datasources](https://github.com/grafana/helm-charts/blob/main/charts/grafana/README.md#sidecar-for-datasources), openDesk can make dashboards available via ConfigMap resources.
 
 Enable the functionality with the following snippet:
 

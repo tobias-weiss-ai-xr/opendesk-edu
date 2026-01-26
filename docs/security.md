@@ -8,9 +8,10 @@ SPDX-License-Identifier: Apache-2.0
 This document covers the current status of security measures.
 
 <!-- TOC -->
-* [Helm chart trust chain](#helm-chart-trust-chain)
-* [Kubernetes security enforcements](#kubernetes-security-enforcements)
-* [Network policies](#network-policies)
+* [Security](#security)
+  * [Helm chart trust chain](#helm-chart-trust-chain)
+  * [Kubernetes security enforcements](#kubernetes-security-enforcements)
+  * [Network policies](#network-policies)
 <!-- TOC -->
 
 ## Helm chart trust chain

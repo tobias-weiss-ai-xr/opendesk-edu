@@ -10,8 +10,9 @@ applications and their related data storages (ephemeral & persistent) is provide
 following subsection.
 
 <!-- TOC -->
-* [Overview](#overview)
-* [Details](#details)
+* [Application Data Storages](#application-data-storages)
+  * [Overview](#overview)
+  * [Details](#details)
 <!-- TOC -->
 
 ## Overview

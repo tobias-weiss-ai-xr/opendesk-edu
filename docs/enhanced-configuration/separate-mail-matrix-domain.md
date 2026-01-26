@@ -6,8 +6,9 @@ SPDX-License-Identifier: Apache-2.0
 # Separate domains for mail and or Matrix
 
 <!-- TOC -->
-* [Example configuration](#example-configuration)
-  * [Mail domain](#mail-domain)
+* [Separate domains for mail and or Matrix](#separate-domains-for-mail-and-or-matrix)
+  * [Example configuration](#example-configuration)
+    * [Mail domain](#mail-domain)
   * [Matrix domain](#matrix-domain)
     * [DNS](#dns)
     * [Webserver](#webserver)

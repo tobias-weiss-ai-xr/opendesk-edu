@@ -9,17 +9,18 @@ SPDX-License-Identifier: Apache-2.0
 This section covers the internal system requirements and external service requirements for productive use.
 
 <!-- TOC -->
-* [tl;dr](#tldr)
-* [Hardware](#hardware)
-* [Kubernetes](#kubernetes)
-* [Ingress controller](#ingress-controller)
-  * [Supported controllers](#supported-controllers)
-  * [Minimal configuration](#minimal-configuration)
-* [Volume provisioner](#volume-provisioner)
-* [Certificate management](#certificate-management)
-* [External services](#external-services)
-* [Deployment](#deployment)
-* [Footnotes](#footnotes)
+* [Requirements](#requirements)
+  * [tl;dr](#tldr)
+  * [Hardware](#hardware)
+  * [Kubernetes](#kubernetes)
+  * [Ingress controller](#ingress-controller)
+    * [Supported controllers](#supported-controllers)
+    * [Minimal configuration](#minimal-configuration)
+  * [Volume provisioner](#volume-provisioner)
+  * [Certificate management](#certificate-management)
+  * [External services](#external-services)
+  * [Deployment](#deployment)
+  * [Footnotes](#footnotes)
 <!-- TOC -->
 
 ## tl;dr
