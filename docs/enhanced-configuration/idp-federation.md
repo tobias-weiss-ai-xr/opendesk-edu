@@ -22,6 +22,8 @@ SPDX-License-Identifier: Apache-2.0
       * [Separate realm](#separate-realm)
       * [OIDC Client for openDesk](#oidc-client-for-opendesk)
     * [openDesk IdP](#opendesk-idp)
+    * [Manual configration](#manual-configration)
+    * [Automated bootstrapping](#automated-bootstrapping)
 <!-- TOC -->
 
 Most organizations already have an Identity and Access Management (IAM) system with an identity provider (IdP) for single sign-on (SSO) to internal or external web applications.
@@ -184,11 +186,13 @@ If you just created the `fed-test-idp-realm`, you are already in the admin scree
 
 ### openDesk IdP
 
-> [!note]
-> While manual configuration is possible, an SSO federation can also be configured as part of the deployment.
-> Check `functional.authentication.ssoFederation` section from the `functional.yaml.gotmpl` for details.
+Configuring the openDesk IdP can be done manually using the Keycloak UI (see "Keycloak admin console access" above), but the preferred way to apply the configuration is using (configuration-as-code).
 
-The following configuration is taking place in the Keycloak realm `opendesk`.
+Both options are described in the following section.
+
+### Manual configration
+
+Ensure you have changed into the Keycloak realm `opendesk` before following the manual configuration steps described below:
 
 - *Authentication* > *Create flow*
   - *Name*: `sso-federation-flow`
@@ -216,3 +220,62 @@ The following configuration is taking place in the Keycloak realm `opendesk`.
     - Click on the cogwheel next to the *Identity Provider Re-director*
       - *Alias*: `sso-federation-idp`
       - *Default Identity Provider*: `sso-federation-idp`
+
+### Automated bootstrapping
+
+Below is an example structure for applying the configuration.
+
+Check `functional.authentication.ssoFederation` section from the `functional.yaml.gotmpl` for details.
+
+```
+functional:
+  authentication:
+    ssoFederation:
+      enabled: true
+      enforceFederatedLogin: false
+      name: "Login with my upstream IdP"
+      idpDetails:
+        providerId: "oidc"
+        enabled: true
+        updateProfileFirstLoginMode: "on"
+        trustEmail: true
+        storeToken: true
+        addReadTokenRoleOnCreate: false
+        authenticateByDefault: false
+        linkOnly: false
+        config:
+          userInfoUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/userinfo"
+          validateSignature: "true"
+          clientId: "my-client-id"
+          clientSecret: my-client-secret"
+          tokenUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/token"
+          jwksUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/certs"
+          issuer: "https://id.<domain>/realms/opendesk"
+          useJwksUrl: "true"
+          metadataDescriptorUrl: "https://id.<domain>/realms/opendesk/.well-known/openid-configuration"
+          pkceEnabled: "false"
+          authorizationUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/auth"
+          clientAuthMethod: "client_secret_post"
+          logoutUrl: "https://id.<domain>/realms/opendesk/protocol/openid-connect/logout"
+          syncMode: "LEGACY"
+          guiOrder: ""
+          clientAssertionSigningAlg: ""
+          loginHint: "false"
+          passMaxAge: "false"
+          uiLocales: "false"
+          backchannelSupported: "true"
+          sendIdTokenOnLogout: "true"
+          sendClientIdOnLogout: "false"
+          disableUserInfo: "false"
+          disableNonce: "false"
+          defaultScope: ""
+          prompt: ""
+          acceptsPromptNoneForwardFromClient: "false"
+          allowedClockSkew: 0
+          forwardParameters: ""
+          isAccessTokenJWT: "false"
+          hideOnLoginPage: "false"
+          filteredByClaim: "false"
+          caseSensitiveOriginalUsername: "true"
+        postBrokerLoginFlowAlias: ""
+```
