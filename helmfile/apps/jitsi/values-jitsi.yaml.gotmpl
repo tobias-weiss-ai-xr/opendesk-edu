@@ -69,6 +69,8 @@ theme:
 
 jitsi:
   publicURL: "https://{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
+  global:
+    clusterDomain: {{ .Values.cluster.networking.domain | quote }}
   web:
     replicaCount: {{ .Values.replicas.jitsi }}
     image:
