@@ -8,8 +8,9 @@ SPDX-License-Identifier: Apache-2.0
 This page covers openDesk deployment automation via Gitlab CI.
 
 <!-- TOC -->
-* [Deployment](#deployment)
-* [Tests](#tests)
+* [CI/CD](#cicd)
+  * [Deployment](#deployment)
+  * [Tests](#tests)
 <!-- TOC -->
 
 ## Deployment

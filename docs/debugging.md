@@ -6,19 +6,20 @@ SPDX-License-Identifier: Apache-2.0
 # Debugging
 
 <!-- TOC -->
-* [Disclaimer](#disclaimer)
-* [Enable debugging](#enable-debugging)
-* [Adding containers to a pod for debugging purposes](#adding-containers-to-a-pod-for-debugging-purposes)
+* [Debugging](#debugging)
+  * [Disclaimer](#disclaimer)
+  * [Enable debugging](#enable-debugging)
+  * [Adding containers to a pod for debugging purposes](#adding-containers-to-a-pod-for-debugging-purposes)
   * [Adding a container to a pod/deployment - Dev/Test only](#adding-a-container-to-a-poddeployment---devtest-only)
-  * [Temporary/ephemeral containers](#temporaryephemeral-containers)
-* [Components](#components)
-  * [Helmfile](#helmfile)
-  * [MariaDB](#mariadb)
-  * [Nextcloud](#nextcloud)
-  * [OpenProject](#openproject)
-  * [PostgreSQL](#postgresql)
-  * [Keycloak](#keycloak)
-    * [Setting the log level](#setting-the-log-level)
+    * [Temporary/ephemeral containers](#temporaryephemeral-containers)
+  * [Components](#components)
+    * [Helmfile](#helmfile)
+    * [MariaDB](#mariadb)
+    * [Nextcloud](#nextcloud)
+    * [OpenProject](#openproject)
+    * [PostgreSQL](#postgresql)
+    * [Keycloak](#keycloak)
+      * [Setting the log level](#setting-the-log-level)
     * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
 <!-- TOC -->
 

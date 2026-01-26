@@ -8,8 +8,9 @@ SPDX-License-Identifier: Apache-2.0
 This document addresses the available functional configuration options of an openDesk deployment.
 
 <!-- TOC -->
-* [Supported functional configuration](#supported-functional-configuration)
-* [Customization of functional options](#customization-of-functional-options)
+* [Functional configuration](#functional-configuration)
+  * [Supported functional configuration](#supported-functional-configuration)
+  * [Customization of functional options](#customization-of-functional-options)
 <!-- TOC -->
 
 ## Supported functional configuration

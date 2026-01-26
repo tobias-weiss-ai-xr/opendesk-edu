@@ -8,10 +8,11 @@ SPDX-License-Identifier: Apache-2.0
 This document will cover the additional configuration for external services like databases, caches, or buckets.
 
 <!-- TOC -->
-* [Database](#database)
-* [Object storage](#object-storage)
-* [Cache](#cache)
-* [Footnotes](#footnotes)
+* [External services](#external-services)
+  * [Database](#database)
+  * [Object storage](#object-storage)
+  * [Cache](#cache)
+  * [Footnotes](#footnotes)
 <!-- TOC -->
 
 ## Database

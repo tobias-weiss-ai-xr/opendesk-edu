@@ -6,9 +6,10 @@ SPDX-License-Identifier: Apache-2.0
 # Matrix federation
 
 <!-- TOC -->
-* [Example configuration](#example-configuration)
+* [Matrix federation](#matrix-federation)
+  * [Example configuration](#example-configuration)
   * [Disable federation](#disable-federation)
-  * [Separate Matrix domain](#separate-matrix-domain)
+    * [Separate Matrix domain](#separate-matrix-domain)
 <!-- TOC -->
 
 The Element chat application and its server component Synapse are based on the Matrix protocol,

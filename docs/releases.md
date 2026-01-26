@@ -8,18 +8,19 @@ SPDX-License-Identifier: Apache-2.0
 This document outlines the release and patch management strategy for **openDesk**, ensuring that all updates, patches, and new releases are systematically **planned, tested, documented**, and **reliably deployed** into production. The process is designed to align with operational planning requirements and maintain system stability and security.
 
 <!-- TOC -->
-* [Release cycle](#release-cycle)
-  * [Release types](#release-types)
-  * [Release schedule](#release-schedule)
-  * [Upgrades](#upgrades)
-* [Patch management process](#patch-management-process)
-  * [Patch identification \& prioritization](#patch-identification--prioritization)
-  * [Patch workflow](#patch-workflow)
-* [Communication plan](#communication-plan)
-  * [Announcement channels](#announcement-channels)
-  * [Timing of communications](#timing-of-communications)
-* [Documentation requirements](#documentation-requirements)
-* [Compliance \& review](#compliance--review)
+* [Release management](#release-management)
+  * [Release cycle](#release-cycle)
+    * [Release types](#release-types)
+    * [Release schedule](#release-schedule)
+    * [Upgrades](#upgrades)
+  * [Patch management process](#patch-management-process)
+    * [Patch identification \& prioritization](#patch-identification--prioritization)
+    * [Patch workflow](#patch-workflow)
+  * [Communication plan](#communication-plan)
+    * [Announcement channels](#announcement-channels)
+    * [Timing of communications](#timing-of-communications)
+  * [Documentation requirements](#documentation-requirements)
+  * [Compliance \& review](#compliance--review)
 <!-- TOC -->
 
 ## Release cycle

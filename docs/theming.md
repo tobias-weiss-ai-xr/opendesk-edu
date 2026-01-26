@@ -8,8 +8,9 @@ SPDX-License-Identifier: Apache-2.0
 This document covers the theming options for an openDesk deployment.
 
 <!-- TOC -->
-* [Settings](#settings)
-* [Known limitations](#known-limitations)
+* [Theming](#theming)
+  * [Settings](#settings)
+  * [Known limitations](#known-limitations)
 <!-- TOC -->
 
 ## Settings

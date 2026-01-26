@@ -6,19 +6,20 @@ SPDX-License-Identifier: Apache-2.0
 # Migration from M365 with audriga migration service and master authentication
 
 <!-- TOC -->
-* [Prerequisites](#prerequisites)
-  * [Prepare M365 tenant for access](#prepare-m365-tenant-for-access)
-  * [Provisioning user accounts in openDesk](#provisioning-user-accounts-in-opendesk)
-  * [Deploy openDesk with master authentication](#deploy-opendesk-with-master-authentication)
-* [Migration configuration](#migration-configuration)
-  * [Select the source provider and configure your openDesk instance](#select-the-source-provider-and-configure-your-opendesk-instance)
-  * [Adding accounts](#adding-accounts)
-    * [Add user accounts individually](#add-user-accounts-individually)
-    * [Add multiple user accounts via CSV file](#add-multiple-user-accounts-via-csv-file)
-  * [Start the migration](#start-the-migration)
-  * [Monitor migration status](#monitor-migration-status)
-* [Appendix](#appendix)
-  * [Validating master authentication](#validating-master-authentication)
+* [Migration from M365 with audriga migration service and master authentication](#migration-from-m365-with-audriga-migration-service-and-master-authentication)
+  * [Prerequisites](#prerequisites)
+    * [Prepare M365 tenant for access](#prepare-m365-tenant-for-access)
+    * [Provisioning user accounts in openDesk](#provisioning-user-accounts-in-opendesk)
+    * [Deploy openDesk with master authentication](#deploy-opendesk-with-master-authentication)
+  * [Migration configuration](#migration-configuration)
+    * [Select the source provider and configure your openDesk instance](#select-the-source-provider-and-configure-your-opendesk-instance)
+    * [Adding accounts](#adding-accounts)
+      * [Add user accounts individually](#add-user-accounts-individually)
+      * [Add multiple user accounts via CSV file](#add-multiple-user-accounts-via-csv-file)
+    * [Start the migration](#start-the-migration)
+    * [Monitor migration status](#monitor-migration-status)
+  * [Appendix](#appendix)
+    * [Validating master authentication](#validating-master-authentication)
 <!-- TOC -->
 
 Most organizations already have email accounts on various platforms that need to be migrated to openDesk. This document describes the migration from M365 accounts to openDesk using the [audriga Migration Service](https://www.audriga.com) in combination with the master authentication option in openDesk. Other source platforms are also supported, and their migrations work in a similar manner.
