@@ -3,40 +3,41 @@ SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffe
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<h1>Baseline Requirements</h1>
+# Baseline Requirements
 
-* [Preamble / Scope](#preamble--scope)
-* [License compliance](#license-compliance)
-* [Release Management](#release-management)
-* [Container architectural basics](#container-architectural-basics)
-* [Authentication \& Authorization](#authentication--authorization)
-  * [Authentication](#authentication)
-  * [User lifecycle](#user-lifecycle)
-    * [Pull: LDAP](#pull-ldap)
-    * [Push: Provisioning](#push-provisioning)
-* [Logging \& Monitoring](#logging--monitoring)
-* [Features](#features)
-  * [Non-overlapping functionality](#non-overlapping-functionality)
-  * [Functional administration](#functional-administration)
-  * [Theming](#theming)
-  * [Central user profile](#central-user-profile)
-* [UI/UX](#uiux)
-  * [Top bar](#top-bar)
-    * [Look and feel](#look-and-feel)
-    * [Central navigation](#central-navigation)
-* [Security](#security)
-  * [Software bill of materials (SBOMs)](#software-bill-of-materials-sboms)
-    * [Artifact SBOMs](#artifact-sboms)
-    * [Source code SBOMs](#source-code-sboms)
-  * [Software supply chain security](#software-supply-chain-security)
-  * [Pod Security Standards (PSS)](#pod-security-standards-pss)
-  * [Deutsche Verwaltungscloud Strategie (DVS)](#deutsche-verwaltungscloud-strategie-dvs)
-  * [IT-Grundschutz](#it-grundschutz)
-* [Accessibility](#accessibility)
-* [Data protection](#data-protection)
-* [Footnotes](#footnotes)
+* [Baseline Requirements](#baseline-requirements)
+  * [Preamble / Scope](#preamble--scope)
+  * [License compliance](#license-compliance)
+  * [Release Management](#release-management)
+  * [Container architectural basics](#container-architectural-basics)
+  * [Authentication \& Authorization](#authentication--authorization)
+    * [Authentication](#authentication)
+    * [User lifecycle](#user-lifecycle)
+      * [Pull: LDAP](#pull-ldap)
+      * [Push: Provisioning](#push-provisioning)
+  * [Logging \& Monitoring](#logging--monitoring)
+  * [Features](#features)
+    * [Non-overlapping functionality](#non-overlapping-functionality)
+    * [Functional administration](#functional-administration)
+    * [Theming](#theming)
+    * [Central user profile](#central-user-profile)
+  * [UI/UX](#uiux)
+    * [Top bar](#top-bar)
+      * [Look and feel](#look-and-feel)
+      * [Central navigation](#central-navigation)
+  * [Security](#security)
+    * [Software bill of materials (SBOMs)](#software-bill-of-materials-sboms)
+      * [Artifact SBOMs](#artifact-sboms)
+      * [Source code SBOMs](#source-code-sboms)
+    * [Software supply chain security](#software-supply-chain-security)
+    * [Pod Security Standards (PSS)](#pod-security-standards-pss)
+    * [Deutsche Verwaltungscloud Strategie (DVS)](#deutsche-verwaltungscloud-strategie-dvs)
+    * [IT-Grundschutz](#it-grundschutz)
+  * [Accessibility](#accessibility)
+  * [Data protection](#data-protection)
+  * [Footnotes](#footnotes)
 
-# Preamble / Scope
+## Preamble / Scope
 
 This document lays out the requirements for each openDesk component referred as "component" in the following.
 
@@ -54,7 +55,7 @@ This document MAY be used to assess the status for a component and possible gaps
 > - MUST (NOT): These requirements are hard requirements and must be fulfilled. If technically possible they can be considered hard-blocking qualitygates that could prevent a new components artifact/container from being deployed.
 > - SHOULD (NOT): These requirements don't need to be fulfilled, but might be in the future. Any given MUST requirement was a SHOULD requirement for at minimum 90 days.
 
-# License compliance
+## License compliance
 
 All parts of openDesk Community Edition MUST be [open source](https://opensource.org/osd). Source code MUST be published on openCode or MUST BE publicly available to be published as a copy on openCode.
 
@@ -71,14 +72,14 @@ openDesk MUST ensure open source license compliance.
 Therefore, suppliers MUST apply the [OpenChain ISO/IEC 5230](https://openchainproject.org/license-compliance) license compliance program. Suppliers MAY use the [ISO/IEC 5230 Self-Certification
 ](https://openchainproject.org/checklist-iso-5230-2020) to state conformance.
 
-# Release Management
+## Release Management
 
 Components MUST provide [Semantic Versioning (SemVer) 2.0.0](https://semver.org/) compliant releases of the container image. Patch level-maintained releases MUST exist for all component minor versions currently used in supported openDesk releases.
 
 Caveats:
 - If a component uses non SemVer compliant versioning, it may get relabeled. This may break documentation and encourage a revision of versioning upstream.
 
-# Container architectural basics
+## Container architectural basics
 
 > [!note]
 > openDesk is operated as a Kubernetes (K8s) workload.
@@ -107,9 +108,9 @@ You will find below some of the most common best practice requirements, some of 
 - CI executed Kyverno tests: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/tree/main/.kyverno/policies
 - Generated documentation regarding security contexts: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/security-context.md
 
-# Authentication & Authorization
+## Authentication & Authorization
 
-## Authentication
+### Authentication
 
 The central IdP ensures the single sign-on and logout workflows. openDesk consistently uses [Open ID Connect](https://openid.net/). It can be configured to provide additional user information from the IAM if required by a component.
 
@@ -120,7 +121,7 @@ Components MUST support OIDC. The following configuration is REQUIRED regarding 
 
 **Reference:** Most components are directly connected to the IdP and are using OIDC: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/architecture.md#identity-data-flows
 
-## User lifecycle
+### User lifecycle
 
 With a central Identity- and Access Management (IAM) also the user lifecycle (ULC) that addresses account create-update-delete actions with support for "inactive" accounts must be harmonized within the platform.
 
@@ -129,7 +130,7 @@ The objective is to have all components using the IAM managed account details in
 > [!note]
 > Allowing ad hoc updates of account data through OIDC claims during login is still encouraged.
 
-### Pull: LDAP
+#### Pull: LDAP
 
 Components can access the IAM's LDAP to access all data necessary for managing their part of the ULC.
 
@@ -139,13 +140,13 @@ Components can access the IAM's LDAP to access all data necessary for managing t
 > The direct access to LDAP is going to be deprecated for most use cases. openDesk plans to introduce active
 > provisioning of the user/group data into the applications using [SCIM](https://scim.cloud/).
 
-### Push: Provisioning
+#### Push: Provisioning
 
 Some components require active provisioning of the centrally maintained IAM data. As the actual provisioning is part of the openDesk provisioning framework, it is necessary to define the ULC flow regarding its different states to get a matching provisioning connector implemented. This is done collaboratively between the supplier and openDesk product management.
 
 **Reference:** New components will make use of the [provisioning framework](https://gitlab.opencode.de/bmi/opendesk/component-code/crossfunctional/univention/ums-provisioning-api). At the moment to only active (push) provisioned component is OX AppSuite fed by the [OX-connector](https://github.com/univention/ox-connector/tree/ucs5.0).
 
-# Logging & Monitoring
+## Logging & Monitoring
 
 Components MUST provide a [Prometheus](https://prometheus.io/) monitoring endpoint following the [OpenMetrics 1.0](https://prometheus.io/docs/specs/om/open_metrics_spec/) specification.
 
@@ -155,15 +156,15 @@ Components MUST log only to stderr/stdout or MUST provide documentation which ad
 
 Components MUST NOT log to a local file system inside a container.
 
-# Features
+## Features
 
-## Non-overlapping functionality
+### Non-overlapping functionality
 
 openDesk aims to provide components that are excellent in *their main domain*. To avoid offering the same functionality multiple times in openDesk, components MUST support to disable certain functionality. There needs to be an assessment for each new component if it has overlapping functionality and how to deal with that.
 
 **Reference:** Nextcloud’s internal contact management and Nextcloud Talk features are deactivated, as contact management is handled through OX App Suite, and chat, audio, and video conferencing are provided by Element and Jitsi.
 
-## Functional administration
+### Functional administration
 
 While components usually support technical and functional administration, the technical part SHOULD be in the responsibility of the operator and is usually done at (re)deployment time. Therefore, the administrative tasks within a component should be limited to functional administration.
 
@@ -175,13 +176,13 @@ Example of "functional administration":
 
 **Reference:** OpenProject took the approach that all settings pre-defined in the deployment are still rendered in the admin section of OpenProject, but can not be changed.
 
-## Theming
+### Theming
 
 Theming MUST be controlled with the deployment and affect all components that support branding options.
 
 **Reference:** https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/helmfile/environments/default/theme.yaml.gotmpl
 
-## Central user profile
+### Central user profile
 
 The user profile is maintained centrally, therefore the components SHOULD make use of that central data and not allow local editing of the data within the application, except for data that is required by the component and that cannot be provided by the central IAM.
 
@@ -191,13 +192,13 @@ The user's preferred language and theme (light/dark) are also selected in the IA
 
 **Reference:** No reference yet.
 
-# UI/UX
+## UI/UX
 
-## Top bar
+### Top bar
 
 Components MUST provide a top bar for navigation. The top bar SHOULD provide a common UI and UX.
 
-### Look and feel
+#### Look and feel
 
 Components MUST provide a top bar that can be customized (or adheres to a given openDesk standard) in various settings:
 
@@ -211,7 +212,7 @@ Components MUST provide a top bar that can be customized (or adheres to a given 
 
 **Reference:** This is available in current deployments, see e.g. Nextcloud, Open-Xchange, and XWiki.
 
-### Central navigation
+#### Central navigation
 
 Within the top bar, users MUST be able to access the central navigation: A menu that gets its content from the portal component, rendering the available applications to the logged-in user for direct access.
 
@@ -222,9 +223,9 @@ When implementing the central navigation into a component, there are two options
 
 **Reference:** This is available in current deployments in all applications except for Jitsi, Collabora, and CryptPad.
 
-# Security
+## Security
 
-## Software bill of materials (SBOMs)
+### Software bill of materials (SBOMs)
 
 openDesk provides in-depth SBOM for container images. Those SBOMs are scoped on a per-container basis. SBOMs SHOULD contain all software components present in the final image, even when obfuscated through static linking. False positives are expected.
 
@@ -232,19 +233,19 @@ Components MUST provide artifact and source code SBOMs in a standardized manner.
 
 The SBOMs SHOULD use a current version - 1.7 at the time of writing - of the [CycloneDX](https://cyclonedx.org/tool-center/) format. CycloneDX is explicitly supported by openCode's [DevGuard](https://devguard.opencode.de/) toolchain.
 
-### Artifact SBOMs
+#### Artifact SBOMs
 
 There are various free tools like [syft](https://github.com/anchore/syft) available to generate SBOMs for container images. Components MUST provide cryptographically signed artifact SBOMs for all container images delivered to be integrated into openDesk.
 
 **Reference:** As part of [openDesk's standard CI](https://gitlab.opencode.de/bmi/opendesk/tooling/gitlab-config) a container image SBOM is derived from the container's content and gets signed. Both artifacts (SBOM and signature) are placed next to the image in the related registry ([example](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release/container_registry/827)).
 
-### Source code SBOMs
+#### Source code SBOMs
 
 Today's software development platforms like GitLab or GitHub provide dependency list/graph features that are the basis for your source code SBOMs. These features are usually based on analysis of language-specific package manager dependency definition files. As part of a component supplier's software development process, source code SBOMs SHOULD at least be created on the level of the already defined software dependencies within the source code tree of the component.
 
 **Reference:** Currently we do not have source code SBOMs in place.
 
-## Software supply chain security
+### Software supply chain security
 
 openDesk is going to implement [SLSA v1.2](https://slsa.dev/spec/v1.2/).
 
@@ -252,17 +253,17 @@ All component artifacts (i.e. container images, Helm charts, SBOM and VeX) MUST 
 
 **Reference:** The [openDesk standard CI](https://gitlab.opencode.de/bmi/opendesk/tooling/gitlab-config) ensures that each container image being built and each Helm chart being released is signed. In the case of container images, the related SBOMs are signed as well.
 
-## Pod Security Standards (PSS)
+### Pod Security Standards (PSS)
 
 [Pod Security Standards (PSS)](https://kubernetes.io/docs/concepts/security/pod-security-standards) MUST be supported. openDesk MUST support the operation of pods even when using Policy Level ["Restricted"](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted) & [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/).
 
-## Deutsche Verwaltungscloud Strategie (DVS)
+### Deutsche Verwaltungscloud Strategie (DVS)
 
 openDesk SHOULD be compliant with the "Deutsche Verwaltungscloud Strategie" (DVS) (German public authority cloud strategy). While this is a moving target it references some already established standards like the BSI's [IT-Grundschutz](https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/IT-Grundschutz-Kompendium/it-grundschutz-kompendium_node.html) and [C5](https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Informationen-und-Empfehlungen/Empfehlungen-nach-Angriffszielen/Cloud-Computing/Kriterienkatalog-C5/C5_AktuelleVersion/C5_AktuelleVersion_node.html). These standards address hundreds of requirements which are published at the given links. So here's just a summary to understand the approach of the broadest requirements from IT-Grundschutz.
 
 **Reference:** [DVS Rahmenwerk 3.0](https://www.cio.bund.de/SharedDocs/downloads/Webs/CIO/DE/cio-bund/steuerung-it-bund/beschluesse_cio-board/2025_01_CIO_Board_Anlagen.html)
 
-## IT-Grundschutz
+### IT-Grundschutz
 
 openDesk MUST be operatable conforming to the BSI IT-Grundschutz (IT baseline protection).
 
@@ -286,7 +287,7 @@ We are aware that IT-Grundschutz is a complex topic and are working towards a st
 
 **Reference:** https://gitlab.opencode.de/bmi/opendesk/documentation/it-grundschutz
 
-# Accessibility
+## Accessibility
 
 Accessibility is a key requirement for software that is being used in the public sector. Therefore the products of the suppliers MUST adhere to the relevant standards.
 
@@ -301,7 +302,7 @@ Each vendor MUST provide a certificate that their component - or the parts of th
 
 **Reference:** In the past the [accessibility evaluations](https://gitlab.opencode.de/bmi/opendesk/info/-/tree/main/24.03/Barrierefreiheit) have been executed by Dataport. But they do not do certifications.
 
-# Data protection
+## Data protection
 
 Each component MUST be able to operate according to the [EU's General Data Protection Regulation (GDPR)](https://gdpr.eu/). This requires some key messages to be answered when it comes to personal data[^1]:
 
@@ -320,6 +321,6 @@ Note: The topics of availability, integrity, and confidentiality of personal dat
 
 **Reference:** https://gitlab.opencode.de/bmi/opendesk/documentation/datenschutz
 
-# Footnotes
+## Footnotes
 
 ^1: For definitions see [GDPR Article 4](https://gdpr.eu/article-4-definitions/).
