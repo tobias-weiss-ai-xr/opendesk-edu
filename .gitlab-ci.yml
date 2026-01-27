@@ -809,8 +809,8 @@ run-tests:
   parallel:
     matrix:
       - LANGUAGE:
-          - "de"
           - "en"
+          - "de"
   script:
     - |
       if [ "${LANGUAGE}" = "en" ]; then

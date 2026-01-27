@@ -147,7 +147,7 @@ postfix:
       leafResultAttribute: ""
 
   ldapVirtualMailboxDomains:
-    queryFilter: "(&(objectClass=univentionMailDomainname)(cn=%s))"
+    queryFilter: "(&(objectClass=univentionMailDomainname)(cn=%s)(!(univentionFreeAttribute1=TRUE)))"
     resultAttribute: "cn"
 
   # Only deliver mail to Dovecot, if it is available

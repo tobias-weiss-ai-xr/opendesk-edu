@@ -11,6 +11,9 @@ SPDX-License-Identifier: Apache-2.0
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Versions ≥ v1.12.0](#versions--v1120)
+      * [Post-upgrade to versions ≥ v1.12.0](#post-upgrade-to-versions--v1120)
+        * [IAM new feature: External routing for mail domains](#iam-new-feature-external-routing-for-mail-domains)
     * [Versions ≥ v1.11.0](#versions--v1110)
       * [Pre-upgrade to versions ≥ v1.11.0](#pre-upgrade-to-versions--v1110)
         * [Deployment cleanup: Collabora Controller](#deployment-cleanup-collabora-controller)
@@ -186,6 +189,39 @@ If you would like more details about the automated migrations, please read secti
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
+
+### Versions ≥ v1.12.0
+
+#### Post-upgrade to versions ≥ v1.12.0
+
+##### IAM new feature: External routing for mail domains
+
+**Target group:** Deployments with groupware enabled that also manage user accounts in openDesk with primary mail addresses set that should not be delivered locally (aka "guest users").
+
+**Context**
+
+All domains used in a user's primary email address must be configured in the IAM. This can be done at deployment level, for example:
+
+```yaml
+global:
+  ## Define host
+  domain: {{ env "DOMAIN" | default "opendesk.internal" | quote }}
+  ## Define mail host
+  ## If this is unset the "domain" value above should be used in all references
+  mailDomain: {{ env "MAIL_DOMAIN" | quote }}
+  ## Optional list of additional mail domains
+  additionalMailDomains: []
+```
+
+Mail domains can also be created via the UDM REST API. This API is used by the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import), which automatically creates mail domain objects when required, for example, when a user’s primary email address references a domain that has not yet been configured.
+
+When creating accounts for external or guest users in the IAM, email addressed to their domains must not be routed internally if openDesk groupware is enabled. To support this, mail domains now provide the option `opendeskMailDomainRelayExternal`. When enabled, email for these domains is relayed externally instead of being delivered to the openDesk groupware.
+
+The user importer has been extended accordingly and now supports the option `--create_maildomains_external True`.
+
+**Required action**
+
+If you have configured mail domains in the openDesk IAM that should be routed or relayed externally while openDesk groupware is enabled, ensure that `opendeskMailDomainRelayExternal` is set to `true` for all affected domains.
 
 ### Versions ≥ v1.11.0
 

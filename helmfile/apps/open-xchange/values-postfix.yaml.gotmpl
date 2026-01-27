@@ -141,7 +141,7 @@ postfix:
       leafResultAttribute: ""
 
   ldapVirtualMailboxDomains:
-    queryFilter: "(&(objectClass=univentionMailDomainname)(cn=%s))"
+    queryFilter: "(&(objectClass=univentionMailDomainname)(cn=%s)(!(univentionFreeAttribute1=TRUE)))"
     resultAttribute: "cn"
 
   virtualTransport: "lmtps:dovecot:24"
