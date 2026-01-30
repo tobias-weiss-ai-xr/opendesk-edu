@@ -408,8 +408,13 @@ appsuite:
           properties:
             com.openexchange.mail.filter.credentialSource: "session"
             com.openexchange.calendar.allowOrganizerPartStatChanges: "true"
+            com.openexchange.calendar.skipExternalAttendeeURIChecks: "true"
+            com.openexchange.calendar.enableCrossContextConflicts: "false"
+            com.openexchange.calendar.maxAttendeesPerConflictCheck: "25"
+            com.openexchange.calendar.externalConflictChecksTimeout: "0"
+            com.openexchange.calendar.maxSeriesUntilForConflicts: "4"
             # Mailfilter
-            com.openexchange.mail.filter.passwordSource: global
+            com.openexchange.mail.filter.passwordSource: "global"
             com.openexchange.mail.filter.masterPassword:  {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
             com.openexchange.mail.filter.preferredSaslMech: ""
             # Loosen API the rate limit
