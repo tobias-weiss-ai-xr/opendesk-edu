@@ -813,7 +813,7 @@ run-tests:
           - "de"
   script:
     - |
-      if [ "${LANGUAGE}" = "en" ]; then
+      if [ "${LANGUAGE}" = "de" ]; then
         sleep 30
       fi
     - |
