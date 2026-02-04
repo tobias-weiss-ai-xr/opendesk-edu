@@ -614,6 +614,9 @@ nubusPortalConsumer:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
+    extraEnvVars:
+      - name: AWS_DEFAULT_REGION
+        value: {{ .Values.objectstores.nubus.region | quote }}
     {{- if .Values.certificate.selfSigned }}
     extraVolumeMounts:
       - name: "trusted-cert-secret-volume"
@@ -632,6 +635,9 @@ nubusPortalConsumer:
       - name: "SSL_CERT_FILE"
         value: "/etc/ssl/certs/ca-certificates.crt"
     {{- end }}
+  extraEnvVars:
+    - name: AWS_DEFAULT_REGION
+      value: {{ .Values.objectstores.nubus.region | quote }}
   {{- if .Values.certificate.selfSigned }}
   extraVolumes:
     - name: "trusted-cert-secret-volume"
@@ -649,6 +655,9 @@ nubusPortalConsumer:
   {{- end }}
 
 nubusPortalServer:
+  extraEnvVars:
+    - name: AWS_DEFAULT_REGION
+      value: {{ .Values.objectstores.nubus.region | quote }}
   additionalAnnotations:
     {{- with .Values.annotations.nubusPortalServer.additional }}
     {{ . | toYaml | nindent 4 }}
@@ -935,6 +944,9 @@ nubusLdapServer:
 
 nubusProvisioning:
   enabled: true
+  extraEnvVars:
+    - name: AWS_DEFAULT_REGION
+      value: {{ .Values.objectstores.nubus.region | quote }}
   additionalAnnotations:
     {{ .Values.annotations.nubusProvisioning.additional | toYaml | nindent 4 }}
   api:
