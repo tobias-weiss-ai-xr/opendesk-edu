@@ -102,7 +102,7 @@ customConfigs:
     oidc.secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
     oidc.skipped: false
     oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
-    oidc.user.subjectFormater: "${oidc.user.opendesk_username._lowerCase}"
+    oidc.user.subjectFormater: "${oidc.user.opendesk_username}"
     # Using the claims below some user based information can be passed through OIDC to XWiki that partitially has an
     # impact on the user experience. E.g. you can define the default editor for the user `xwiki_user_editor` or if
     # the `xwiki_user_usertype` is advanced or simple.

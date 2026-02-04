@@ -15,6 +15,7 @@ SPDX-License-Identifier: Apache-2.0
       * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
         * [New Helmfile default: Postfix SMTP(D) SASL TLS security options](#new-helmfile-default-postfix-smtpd-sasl-tls-security-options)
       * [Post-upgrade to versions ≥ v1.12.0](#post-upgrade-to-versions--v1120)
+        * [Wiki bug fix: User account merge for uppercase usernames](#wiki-bug-fix-user-account-merge-for-uppercase-usernames)
         * [IAM new feature: External routing for mail domains](#iam-new-feature-external-routing-for-mail-domains)
     * [Versions ≥ v1.11.0](#versions--v1110)
       * [Pre-upgrade to versions ≥ v1.11.0](#pre-upgrade-to-versions--v1110)
@@ -236,6 +237,44 @@ smtp:
 ```
 
 #### Post-upgrade to versions ≥ v1.12.0
+
+##### Wiki bug fix: User account merge for uppercase usernames
+
+**Target audience:** Deployments where user accounts contain uppercase characters in usernames (login names) and XWiki is enabled.
+
+**Context**
+
+XWiki receives user and account identity information via two mechanisms:
+- **OIDC** – during a user’s SSO-based login to XWiki
+- **LDAP** – during nightly synchronization jobs
+
+In earlier releases, usernames provided via OIDC were automatically normalized to lowercase, while usernames synchronized from LDAP were not. This mismatch could result in duplicate user accounts in XWiki that differ only by letter case.
+
+**Required action**
+
+To identify and merge duplicate user accounts, run the following script:
+[`./migrations-helper/1.12.0-Xwiki-usermerge.java`](./migrations-helper/1.12.0-Xwiki-usermerge.java)
+
+*Prerequisites*
+
+- You need a user account with XWiki administrator permissions.
+- These permissions can be granted via IAM administration in the user's "openDesk" tab.
+- Note that permissions are currently synchronized to XWiki nightly.
+- Verify that the permissions are active by opening the waffle menu in XWiki and checking for the "Wiki administration" option.
+- In XWiki, click your avatar to open your user profile:
+  - Navigate to "Settings"
+  - Set "User type" to "Advanced" (required to execute scripts)
+  - Save the change
+
+*Running the script*
+
+- Create a new XWiki page (it can be deleted after the cleanup is complete).
+- Use the "Edit" dropdown and switch to the "Wiki" editor (not the default WYSIWYG editor).
+- Paste the script into the editor and save the page.
+- On the newly created page, click "Show duplicate user accounts" to start the analysis.
+- A list of "Duplicate user accounts" will be displayed.
+- If duplicates are found, click "Replace and disable duplicate accounts" to merge them.
+- For each merged account, the script outputs a message similar to: `Duplicate user account [XWiki.uppercase1] has been replaced by account [XWiki.UpperCase1] and disabled.`
 
 ##### IAM new feature: External routing for mail domains
 
