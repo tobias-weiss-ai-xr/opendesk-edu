@@ -182,6 +182,8 @@ openproject:
       login: "opendesk_username"
       admin: "openproject_admin"
   useTmpVolumes: true
+  tmpVolumesStorage: {{ .Values.persistence.storages.openprojectTmp.size | quote }}
+  tmpVolumesStorageClassName: {{ coalesce .Values.persistence.storages.openprojectTmp.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   tmpVolumesAnnotations:
     {{ .Values.annotations.openproject.openprojectTempVolumes | toYaml | nindent 4 }}
 

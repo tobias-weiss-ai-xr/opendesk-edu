@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Manual checks/actions](#manual-checksactions)
     * [Versions ≥ v1.12.0](#versions--v1120)
       * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
+        * [Fixed Helmfile templating: StorageClassNames for Nubus, OpenProject and OX-Connector](#fixed-helmfile-templating-storageclassnames-for-nubus-openproject-and-ox-connector)
         * [New Helmfile default: Postfix SMTP(D) SASL TLS security options](#new-helmfile-default-postfix-smtpd-sasl-tls-security-options)
       * [Post-upgrade to versions ≥ v1.12.0](#post-upgrade-to-versions--v1120)
         * [Wiki bug fix: User account merge for uppercase usernames](#wiki-bug-fix-user-account-merge-for-uppercase-usernames)
@@ -130,7 +131,6 @@ Manual checks and possible activities are also required by openDesk updates, the
 > [!warning]
 > We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC is deleted; we will not address explicit deletion for PVs.
 
-
 ## Deprecation warnings
 
 We cannot hold back all migrations as some are required e.g. due to a change in a specific component that we want/need to update, we try to bundle others only with major releases.
@@ -139,10 +139,10 @@ This section provides an overview of potential changes to be part of the next ma
 
 - `functional.portal.link*` (see `functional.yaml.gotmpl` for details) are going to be moved into the `theme.*` tree, we are also going to move the icons used for the links currently found under `theme.imagery.portalEntries` in this step.
 - We will explicitly set the [database schema configuration](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/#HConfigurethenamesofdatabaseschemas) for XWiki to avoid the use of the `public` schema.
-- Adding support for `storageClassName` templating of various components requiring upgrading of the existing PVCs:
-  - `persistence.storages.oxConnector.storageClassName`
-  - `persistence.storages.nubusUdmListener.storageClassName`
-  - `persistence.storages.nubusProvisioningNats.storageClassName`
+- Removal of the `OPENDESK_1_12_0_SKIP_PVC_MIGRATION` option that was [introduced with openDesk 1.12.0](#fixed-helmfile-templating-storageclassnames-for-nubus-openproject-and-ox-connector).
+- Focussing on PostgreSQL all components except OX App Suite components:
+  - Removal of the XWiki MariaDB support.
+  - Removal of the Nextcloud MariaDB support.
 
 ## Overview and mandatory upgrade path
 
@@ -164,20 +164,22 @@ matching that constraint, though our links always point to the newest patch rele
 > 1. Upgrade to v1.7.1 → post steps for v1.6.0 to v1.7.1
 
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
-| Version                                                                                  | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                    |
-| ---------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ---------------------------------------------------- |
-| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.5.0 first                            |
-| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)  | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                            |
-| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)  | --        | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                            |
-| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)  | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170)  | ⬇ Install ≥ v1.5.0 first                            |
-| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)  | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160)  | [⚠ Install v1.5.0 first](#versions--v160-automated) |
-| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)  | **yes**   | --                                                                                                                             | --                                       | ⬇ Install ≥ v1.1.x first                            |
-| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)  | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                            |
-| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)  | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                            |
-| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)  | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                       | [⚠ Install v1.1.x first](#versions--v120-automated) |
-| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)  | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110)  | [⚠ Install v1.0.0 first](#versions--v110-automated) |
-| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)  | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100)  | [⚠ Install v0.9.0 first](#versions--v100-automated) |
-| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)  | **yes**   | --                                                                                                                             | --                                       | --                                                   |
+| Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                    |
+| ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ---------------------------------------------------- |
+| [v1.12.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.0) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)   | --        | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)   | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170)  | ⬇ Install ≥ v1.5.0 first                            |
+| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)   | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160)  | [⚠ Install v1.5.0 first](#versions--v160-automated) |
+| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)   | **yes**   | --                                                                                                                             | --                                       | ⬇ Install ≥ v1.1.x first                            |
+| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)   | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                            |
+| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)   | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                            |
+| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)   | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                       | [⚠ Install v1.1.x first](#versions--v120-automated) |
+| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)   | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110)  | [⚠ Install v1.0.0 first](#versions--v110-automated) |
+| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100)  | [⚠ Install v0.9.0 first](#versions--v100-automated) |
+| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)   | **yes**   | --                                                                                                                             | --                                       | --                                                   |
 
 > [!warning]
 > Be sure to check out the table in the release version you are going to install, and not the currently installed version.
@@ -196,6 +198,33 @@ If you would like more details about the automated migrations, please read secti
 ### Versions ≥ v1.12.0
 
 #### Pre-upgrade to versions ≥ v1.12.0
+
+##### Fixed Helmfile templating: StorageClassNames for Nubus, OpenProject and OX-Connector
+
+**Target group:** All openDesk deployments.
+
+**Context**
+
+The for following Persistant Volumes Claims the storage class attributes were not templated causing the related PVCs to fall back to the Helm Chart's default for size and to the cluster's default for the name:
+
+| Component    | PVC name                                  | storageClassName | size | With 1.12.0 set in                           | Migration required    |
+| ------------ | ----------------------------------------- | ---------------- | ---- | -------------------------------------------- | --------------------- |
+| Nubus        | `data-ums-provisioning-udm-listener-0`    | yes              | -    | `persistence.storages.nubusUdmListener.*`      | yes                   |
+|              | `nats-data-ums-provisioning-nats-0`       | yes              | -    | `persistence.storages.nubusProvisioningNats.*` | yes                   |
+|              | `shared-run-ums-ldap-server-primary-0`    | -                | yes  | `persistence.storages.nubusLdapServerRun.*`    | no (with 1Gi default) |
+| OX-Connector | `ox-connector-appcenter-ox-connector-0`   | yes              |      | `persistence.storages.oxConnector.*`           | yes                   |
+|              | `ox-connector-ox-contexts-ox-connector-0` | yes              |      | same values as above                         | yes                   |
+| OpenProject  | `openproject-*-tmp`                       | yes              | yes  | `persistence.storages.openprojectTmp.*`        | no (ephemeral)        |
+
+While the OpenProject ones are ephemeral temporary volumes, only used because [K8s does not support the sticky-bit option on emptyDirs](https://github.com/kubernetes/kubernetes/issues/110835) yet, the other PVCs will not accept patching of the newly templated attributes and require migration.
+
+**Required action**
+
+As an operator you will know how to run an update migration for existing PVCs to change e.g. its storageClassName
+or size[^1]. As this still might not come handy during an upgrade and to allow independend scheduling of the task,
+there is an alternative at least until openDesk 2.0:
+Setting the environment variable `OPENDESK_1_12_0_SKIP_PVC_MIGRATION` to any non empty value
+will trigger Helm post renderer scripts that remove the newly added attributes again.
 
 ##### New Helmfile default: Postfix SMTP(D) SASL TLS security options
 
@@ -1066,7 +1095,7 @@ The described changes most likely require manual action in the following situati
 
 We have updated some attribute names within the Open-Xchange / OX App Suite to be consistent within our Helmfile
 deployment. This change also aligns us with the actual brand names, as well as our rule of thumb for brand based
-attribute names[^1].
+attribute names.
 
 In case you are using any of the customizations below, the (`WAS`) values, please update to the (`NOW`) values:
 
@@ -1490,5 +1519,4 @@ When a new upgrade migration is required, ensure to address the following list:
 - You must set the runner's ID you want to execute in the [migrations.yaml.gotmpl](../helmfile/shared/migrations.yaml.gotmpl). See also the `migrations.*` section of [the Helm chart's README.md](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/README.md).
 - Update the [`charts.yaml.gotmpl`](../helmfile/environments/default/charts.yaml.gotmpl) and [`images.yaml.gotmpl`](../helmfile/environments/default/images.yaml.gotmpl) to reflect the newer releases of the `opendesk-migrations` Helm chart and container image.
 
-[^1]: We do not follow a brand name's specific spelling when it comes to upper and lower case and only use new word
-uppercase when names consist of multiple, space divided words.
+[^1]: For PVC migrations in development we use the the [`migrate_pvc.py`](./migrations-helper/migrate_pvc.py) script. It comes without any warranty.

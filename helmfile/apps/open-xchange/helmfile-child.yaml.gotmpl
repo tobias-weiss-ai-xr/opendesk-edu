@@ -124,6 +124,9 @@ releases:
     installed: {{ .Values.apps.oxAppSuite.enabled }}
     needs:
       - "open-xchange"
+    {{- if ne (env "OPENDESK_1_12_0_SKIP_PVC_MIGRATION") "" }}
+    postRenderer: "./OPENDESK_1_12_0_SKIP_PVC_MIGRATION-post-renderer-ox-connector.sh"
+    {{- end }}
 
 commonLabels:
   deployStage: "050-components"
