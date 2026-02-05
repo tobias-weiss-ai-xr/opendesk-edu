@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
       * [Separate realm](#separate-realm)
       * [OIDC Client for openDesk](#oidc-client-for-opendesk)
     * [openDesk IdP](#opendesk-idp)
-    * [Manual configration](#manual-configration)
+    * [Manual configuration](#manual-configuration)
     * [Automated bootstrapping](#automated-bootstrapping)
 <!-- TOC -->
 
@@ -190,7 +190,7 @@ Configuring the openDesk IdP can be done manually using the Keycloak UI (see "Ke
 
 Both options are described in the following section.
 
-### Manual configration
+### Manual configuration
 
 Ensure you have changed into the Keycloak realm `opendesk` before following the manual configuration steps described below:
 

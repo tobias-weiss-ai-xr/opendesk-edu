@@ -38,7 +38,7 @@ If you have a feature request, please select the "Feature Request" template.
 
 ### 📅 Data persistence
 
-Are you using your own services for data persistence (required for production) or the openDesk bundles ones (development, test and evaluation only)?
+Are you using your own services for data persistence (required for production) or the openDesk bundled ones (development, test and evaluation only)?
 
 - [ ] Separate services configured via `databases.*` and `objectstore.*`
 - [ ] openDesk bundled "external services"
