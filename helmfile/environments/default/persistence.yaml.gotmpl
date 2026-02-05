@@ -32,6 +32,9 @@ persistence:
     nubusLdapServerData:
       size: "1Gi"
       storageClassName: ~
+    nubusLdapServerRun:
+      size: "1Gi"
+      storageClassName: ~
     nubusPortalConsumer:
       size: "1Gi"
       storageClassName: ~
@@ -39,17 +42,14 @@ persistence:
       # For production and load test environments "10Gi" is recommended.
       size: "1Gi"
       storageClassName: ~
-    # This option was introduced with openDesk 1.6. For now we want to use the Helm charts default empty string
-    # to avoid issues during the upgrade modifying an existing PV, as the migrations in 1.6 required a smooth
-    # Nubus deployment.
-    # In a later openDesk release we will advise in the migrations.md to explicitly set this on existing deployments
-    # to the default storage class.
     nubusUdmListener:
       size: "1Gi"
-      #storageClassName: ""
+      storageClassName: ~
+    openprojectTmp:
+      size: "5Gi"
+      storageClassName: ~
     oxConnector:
       size: "1Gi"
-      # This value is not passed on to the related Helm chart yet, but required for linting purposes.
       storageClassName: ~
     postfix:
       size: "1Gi"

@@ -49,6 +49,10 @@ releases:
       {{- end }}
     installed: {{ .Values.apps.nubus.enabled }}
     timeout: 900
+    {{- if ne (env "OPENDESK_1_12_0_SKIP_PVC_MIGRATION") "" }}
+    postRenderer: "./OPENDESK_1_12_0_SKIP_PVC_MIGRATION-post-renderer-nubus.sh"
+    {{- end }}
+
   # Intercom-Service
   - name: "intercom-service"
     chart: "intercom-service-repo/{{ .Values.charts.intercomService.name }}"

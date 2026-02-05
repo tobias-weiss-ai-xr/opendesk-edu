@@ -915,6 +915,8 @@ nubusLdapServer:
         registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerLeaderElector.registry | quote }}
         repository: {{ .Values.images.nubusLdapServerLeaderElector.repository }}
         tag: {{ .Values.images.nubusLdapServerLeaderElector.tag }}
+    legacy:
+      sharedRunSize: {{ .Values.persistence.storages.nubusLdapServerRun.size | quote }}
   persistence:
     size: {{ .Values.persistence.storages.nubusLdapServerData.size | quote }}
     storageClass: {{ coalesce .Values.persistence.storages.nubusLdapServerData.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
@@ -1047,7 +1049,7 @@ nubusProvisioning:
         tag: {{ .Values.images.nubusNatsBox.tag }}
     persistence:
       size: {{ .Values.persistence.storages.nubusProvisioningNats.size }}
-#      storageClassName: -- coalesce .Values.persistence.storages.nubusProvisioningNats.storageClassName .Values.persistence.storageClassNames.RWO | quote --
+      storageClassName: {{ coalesce .Values.persistence.storages.nubusProvisioningNats.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
     reloader:
       image:
         registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.nubusNatsReloader.registry | quote }}
@@ -1170,7 +1172,7 @@ nubusUdmListener:
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
   persistence:
     size: {{ .Values.persistence.storages.nubusUdmListener.size | quote }}
-#    storageClass: -- coalesce .Values.persistence.storages.nubusUdmListener.storageClassName .Values.persistence.storageClassNames.RWO | quote --
+    storageClass: {{ coalesce .Values.persistence.storages.nubusUdmListener.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-provisioning-udm-listener"
     {{- with .Values.annotations.nubusUdmListener.pod }}
