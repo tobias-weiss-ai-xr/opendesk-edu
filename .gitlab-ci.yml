@@ -253,7 +253,7 @@ variables:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
     - |
-      if ! [ -z "${MASTER_PASSWORD_WEB_VAR}" ]; then
+      if [[ -n "${MASTER_PASSWORD_WEB_VAR:-}" ]]; then
         export MASTER_PASSWORD="${MASTER_PASSWORD_WEB_VAR}"
       fi
     - |
