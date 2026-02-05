@@ -58,20 +58,21 @@ The following diagram shows a high-level overview of openDesk.
 
 ```mermaid
 flowchart TD
-    A(User) -->|Log In| B[Keycloak]
+    A(User) -->|Log In| B[[Keycloak]]
     subgraph Nubus
         B -->C[Portal]
-        B -->|User Directory| OpenLDAP
+        B -->|User Directory| OpenLDAP[[OpenLDAP]]
     end
-    C -->|Manage Files| NC[fa:fa-file Nextcloud]
-    C -->|Chat & Call| EL[fa:fa-comments Element]
-    C -->|Send/Receive E-Mails| OXE[fa:fa-envelope OX App Suite]
-    C -->|Manage Appointments| OXC[fa:fa-calendar OX App Suite]
-    NC -->|Edit Office Documents| CO[fa:fa-file-word Collabora Online]
-    NC -->|Edit diagram.net Documents| CP[fa:fa-chart-diagram CryptPad]
-    C -->|Manage Tasks| OP[fa:fa-diagram-project OpenProject]
-    C -->|Store Knowledge| XW[fa:fa-book XWiki]
-    C -->|Meet People| JI[fa:fa-video Jitsi]
+    C -->|Manage Files| NC[Nextcloud]
+    C -->|Chat & Call| EL[Element]
+    C -->|Send/Receive E-Mails| OXE[OX App Suite]
+    C -->|Manage Appointments| OXC[OX App Suite]
+    NC -->|Edit Office Documents| CO[Collabora Online]
+    NC -->|Edit diagram.net Documents| CP[CryptPad]
+    C -->|Manage Tasks| OP[OpenProject]
+    C -->|Store Knowledge| XW[XWiki]
+    C -->|Meet People| JI[Jitsi]
+    C -->|Manage Notes| NO[fa:fa-note Notes]
 ```
 
 openDesk includes a portal that allows navigation to the respective application. The portal is part of the
