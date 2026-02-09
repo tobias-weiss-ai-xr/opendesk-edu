@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Manual checks/actions](#manual-checksactions)
     * [Versions ≥ v1.12.0](#versions--v1120)
       * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
+        * [Replace Helm chart: Upgrade to upstream Jitsi 2.x Helm chart](#replace-helm-chart-upgrade-to-upstream-jitsi-2x-helm-chart)
         * [Fixed Helmfile templating: StorageClassNames for Nubus, OpenProject and OX-Connector](#fixed-helmfile-templating-storageclassnames-for-nubus-openproject-and-ox-connector)
         * [New Helmfile default: Postfix SMTP(D) SASL TLS security options](#new-helmfile-default-postfix-smtpd-sasl-tls-security-options)
       * [Post-upgrade to versions ≥ v1.12.0](#post-upgrade-to-versions--v1120)
@@ -200,6 +201,16 @@ If you would like more details about the automated migrations, please read secti
 ### Versions ≥ v1.12.0
 
 #### Pre-upgrade to versions ≥ v1.12.0
+
+##### Replace Helm chart: Upgrade to upstream Jitsi 2.x Helm chart
+
+**Target group:** All deployments that have Jitsi installed.
+
+The new upstream Jitsi Helm chart requires manual uninstall before upgrading to openDesk v1.12.0.
+
+```shell
+helm uninstall -n <your_namespace> jitsi
+```
 
 ##### Fixed Helmfile templating: StorageClassNames for Nubus, OpenProject and OX-Connector
 
