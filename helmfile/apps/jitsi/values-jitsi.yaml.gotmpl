@@ -128,33 +128,19 @@ jitsi:
       - name: {{ . | quote }}
     {{- end }}
     extraEnvs:
-      - name: "AUTH_TYPE"
-        value: "hybrid_matrix_token"
-      - name: "JWT_APP_ID"
-        value: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
-      - name: "JWT_APP_SECRET"
-        value: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
-      - name: "MATRIX_UVS_SYNC_POWER_LEVELS"
-        value: "true"
-      - name: "MATRIX_UVS_URL"
-        value: "http://opendesk-matrix-user-verification-service.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
-      - name: TURNS_HOST
-        value: {{ .Values.turn.tls.host | quote }}
-      - name: TURNS_PORT
-        value: {{ .Values.turn.tls.port | quote }}
-      - name: TURN_HOST
-        value: {{ .Values.turn.server.host | quote }}
-      - name: TURN_PORT
-        value: {{ .Values.turn.server.port | quote }}
-      - name: TURN_TRANSPORT
-        value: {{ .Values.turn.transport | quote }}
-      - name: TURN_CREDENTIALS
-        value: {{ .Values.turn.credentials | quote }}
+      AUTH_TYPE: "hybrid_matrix_token"
+      JWT_APP_ID: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
+      JWT_APP_SECRET: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
+      MATRIX_UVS_SYNC_POWER_LEVELS: "true"
+      MATRIX_UVS_URL: "http://opendesk-matrix-user-verification-service.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
+      TURNS_HOST: {{ .Values.turn.tls.host | quote }}
+      TURNS_PORT: {{ .Values.turn.tls.port | quote }}
+      TURN_HOST: {{ .Values.turn.server.host | quote }}
+      TURN_PORT: {{ .Values.turn.server.port | quote }}
+      TURN_TRANSPORT: {{ .Values.turn.transport | quote }}
+      TURN_CREDENTIALS: {{ .Values.turn.credentials | quote }}
     resources:
       {{ .Values.resources.prosody | toYaml | nindent 6 }}
-    persistence:
-      size: {{ .Values.persistence.storages.prosody.size | quote }}
-      storageClassName: {{ coalesce .Values.persistence.storages.prosody.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
     securityContext:
       allowPrivilegeEscalation: false
       capabilities: {}

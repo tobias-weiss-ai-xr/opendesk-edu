@@ -37,8 +37,6 @@ Element/Synapse,PersistentVolume,1
 
 Intercom-Service,Redis,1
 
-Jitsi,PersistentVolume,1
-
 Nextcloud,PostgreSQL,1
 Nextcloud,S3,1
 Nextcloud,Redis,1
@@ -75,14 +73,13 @@ XWiki,PersistentVolume,1
 | -------------------- | ------------ | -------- | --------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | **ClamAV**           | PVC          | No       | ClamAV Database                                                                   | `clamav-database-clamav-simple-0`              | `/var/lib/clamav`                                                                                         |
 | **Dovecot**          | PVC          | Yes      | openDesk CE only: User mail directories                                           | `dovecot`                                      | `/srv/mail`                                                                                               |
-|                      | PVC          | Yes       | openDesk EE only: Metacache directory                                             | `var-lib-dovecot-dovecot-0`                    | `/var/lib/dovecot`                                                                                        |
+|                      | PVC          | Yes      | openDesk EE only: Metacache directory                                             | `var-lib-dovecot-dovecot-0`                    | `/var/lib/dovecot`                                                                                        |
 |                      | S3           | Yes      | openDesk EE only: User mail                                                       | `dovecot`                                      | `dovecot`                                                                                                 |
 |                      | Cassandra    | Yes      | openDesk EE only: Metadata and ACLs                                               | `dovecot_dictmap`, `dovecot_acl`               |                                                                                                           |
 | **Element/Synapse**  | PostgreSQL   | Yes      | Application's main database                                                       | `matrix`                                       |                                                                                                           |
 |                      | PVC          | Yes      | Attachments                                                                       | `media-opendesk-synapse-0`                     | `/media`                                                                                                  |
 |                      |              | Yes      | Sync and state data                                                               | `matrix-neodatefix-bot`                        | `/app/storage`                                                                                            |
 | **Intercom-Service** | Redis        | No       | Shared session data                                                               |                                                |                                                                                                           |
-| **Jitsi**            | PVC          | Optional | Meeting recordings (feature not enabled in openDesk)                              | `prosody-data-jitsi-prosody-0`                 | `/config/data`                                                                                            |
 | **Nextcloud**        | PostgreSQL   | Yes      | Application's main database Meta-Data                                             | `nextcloud`                                    |                                                                                                           |
 |                      | S3           | Yes      | The Nextcloud managed user files                                                  | `nextcloud`                                    |                                                                                                           |
 |                      | Redis        | No       | Distributed caching, as well as transactional file locking                        |                                                |                                                                                                           |
