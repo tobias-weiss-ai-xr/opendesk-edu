@@ -351,7 +351,7 @@ the commands below.
 export NAMESPACE=<your_namespace>
 export COLLABORA_CONTROLLER_DEPLOYMENT_NAME=collabora-controller-cool-controller
 kubectl -n ${NAMESPACE} scale deployment/${COLLABORA_CONTROLLER_DEPLOYMENT_NAME} --replicas=0
-kubectl -n ${NAMESPACE} delete -n collabora leases.coordination.k8s.io collabora-online
+kubectl -n ${NAMESPACE} delete leases.coordination.k8s.io collabora-online
 ```
 
 > [!note]
