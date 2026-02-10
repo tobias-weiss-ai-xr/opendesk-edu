@@ -12,7 +12,6 @@ repositories:
     url:
       "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default  .Values.charts.nubus.registry }}/{{ .Values.charts.nubus.repository }}"
   # Intercom Service
-  # Source: https://gitlab.souvap-univention.de/souvap/tooling/charts/intercom-service
   - name: "intercom-service-repo"
     keyring: "../../files/gpg-pubkeys/univention-de.gpg"
     verify: {{ .Values.charts.intercomService.verify }}
