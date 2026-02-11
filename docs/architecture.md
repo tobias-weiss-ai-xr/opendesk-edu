@@ -384,11 +384,11 @@ subgraph openDesk
         AppsOXAS[OX App Suite]
     end
     subgraph Postfix
-        PostfixBase[#40;Base#41; Postfix]
+        PostfixOutbound[Postfix-Outbound]
         PostfixOX[Postfix-OX]
     end
     Dovecot[Dovecot<br>authenticates using<br>SASL using LDAP & OAuth]
-    Dovecot -->|Sieve mails<br>without no auth| PostfixBase
+    Dovecot -->|Sieve mails<br>without no auth| PostfixOutbound
     PostfixOX -->|auth|Dovecot
 end
 
@@ -398,7 +398,7 @@ Postfix -->|smtp| extRelay
 extSvcDC --> Dovecot
 extSvcPF --> PostfixOX
 
-AppsOther -->|auth:<br>static creds.| PostfixBase
+AppsOther -->|auth:<br>static creds.| PostfixOutbound
 AppsOXAS --> Dovecot
 AppsOXAS -->|auth:<br>OAuth| PostfixOX
 
@@ -407,7 +407,7 @@ extMTA -->|WARNING: SPF and DKIM validation required| extSvcPF
 extClient -->|auth:<br>LDAP| extSvcPF
 
 classDef postfix fill:#85extMTA9C;
-class PostfixBase postfix;
+class PostfixOutbound postfix;
 classDef postfix-ox fill:#F3E5Dovecot;
 class PostfixOX,extSvcPF postfix-ox;
 classDef dovecot fill:#BECBD6;

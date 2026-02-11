@@ -16,15 +16,24 @@ SPDX-License-Identifier: Apache-2.0
     * [Helmfile](#helmfile)
     * [MariaDB](#mariadb)
     * [Nextcloud](#nextcloud)
-    * [OpenProject](#openproject)
-    * [PostgreSQL](#postgresql)
+      * [Running occ commands](#running-occ-commands)
     * [Open-Xchange](#open-xchange)
+    * [OpenProject](#openproject)
+    * [Postfix](#postfix)
+    * [PostgreSQL](#postgresql)
+    * [Redis](#redis)
+    * [Cassandra](#cassandra)
+    * [Open-Xchange](#open-xchange-1)
       * [OX App Suite](#ox-app-suite)
         * [Applying global config changes for debugging](#applying-global-config-changes-for-debugging)
         * [Using config cascade](#using-config-cascade)
       * [OX Dovecot](#ox-dovecot)
     * [Nubus](#nubus)
+      * [LDAP](#ldap)
       * [Provisioning](#provisioning)
+        * [Overview](#overview)
+        * [Looking into NATS](#looking-into-nats)
+        * [Re-running provisioning events, e.g. OX Connector](#re-running-provisioning-events-eg-ox-connector)
       * [Keycloak](#keycloak)
         * [Setting the log level](#setting-the-log-level)
         * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
@@ -85,7 +94,7 @@ You can add a container by editing and updating an existing deployment, which is
 - If you want to access another container's filesystem, ensure both containers' user/group settings match.
 - Save & update the deployment.
 
-The following example can be used to debug the `openDesk-Nextcloud-PHP` container; if you want to modify files, remember to set `readOnlyRootFilesystem` to `true` on the PHP container.
+The following example can be used to debug the `opendesk-nextcloud-aio` container; if you want to modify files, remember to set `readOnlyRootFilesystem` to `true` on the PHP container.
 
 ```yaml
       shareProcessNamespace: true
@@ -178,9 +187,15 @@ While you will find all the details for the CLI tool in the [MariaDB documentati
 
 ### Nextcloud
 
+#### Running occ commands
+
 `occ` is the CLI for Nextcloud; all the details can be found in the [upstream documentation](https://docs.nextcloud.com/server/stable/admin_manual/occ_command.html).
 
-You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php /var/www/html/occ config:list`
+You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php occ config:list`
+
+### Open-Xchange
+
+To retrieve more details about the OX App Suite components in use just through the user accessible UI, open the `(?)` drop down menu in the top navigation bar and hold the *Ctrl* key when clicking the "About" menu entry.
 
 ### OpenProject
 
@@ -196,6 +211,19 @@ Net::HTTP.start(uri.host, uri.port,
 end
 ```
 
+### Postfix
+
+When debugging mail related issues you may want to configure Postfix for debug output.
+The settings below enable maximum verbosity for all SMTP connections originating from or going to hosts in the `10.0.0.0/8` private IP range (i.e. internal cluster traffic), while leaving log verbosity for external connections unchanged.
+
+- **`debug_peer_list`**: Comma-separated list of hostnames, IP addresses, or CIDR ranges that trigger extra logging. Matches both inbound and outbound connections.
+- **`debug_peer_level`**: Number of extra verbosity levels added for matching peers on top of the base log level. The maximum useful value is `10`, which produces the most detailed output including full SMTP dialogues, TLS negotiation, DNS lookups, and queue manager activity. The settings can manually be set into the `main.cf` key of the Postfix's ConfigMap, afterwards restart the Postfix Pod.
+
+```
+debug_peer_level = 10
+debug_peer_list = 10.0.0.0/8
+```
+
 ### PostgreSQL
 
 Using the openDesk bundled PostgreSQL, you can explore database(s) using the PostgreSQL interactive terminal from the Pod's command line: `psql -U postgres`.
@@ -207,6 +235,68 @@ While you will find all details about the cli tool `psql` in the [PostgreSQL doc
 - `\c <databasename>`: Connect to `<databasename>`
 - `\dt`: List (describe) tables within the currently connected database
 - `\q`: Quit the client
+
+### Redis
+
+Redis is used as a cache by several openDesk components e.g. Nextcloud, OX App Suite, Intercom Service, and Notes.
+
+Connect to the bundled Redis CLI from the Pod's command line:
+
+```shell
+redis-cli -a ${REDIS_PASSWORD}
+```
+
+Redis organises data into numbered keyspaces (databases 0–15). Switch between them with `SELECT`:
+
+```
+SELECT 0   # default keyspace, used by most components
+SELECT 1   # switch to keyspace 1
+```
+
+Useful commands for exploring keys:
+
+```
+DBSIZE                          # number of keys in the current keyspace
+SCAN 0 MATCH * COUNT 100        # iterate keys without blocking (preferred over KEYS in production)
+KEYS <pattern>                  # list keys matching a pattern (e.g. KEYS "oc_*" for Nextcloud)
+TYPE <key>                      # show the data type of a key
+TTL <key>                       # remaining time-to-live in seconds (-1 = no expiry, -2 = not found)
+GET <key>                       # retrieve a string value
+HGETALL <key>                   # retrieve all fields of a hash
+```
+
+> [!warning]
+> Avoid `KEYS *` on a large keyspace as it blocks the server for the duration of the scan. Use `SCAN` instead.
+
+### Cassandra
+
+Cassandra is used by OX Dovecot Pro (openDesk EE only) for storing dictionary mappings and ACL data. The two keyspaces provisioned by openDesk are:
+
+| Keyspace | Consumer | User |
+|---|---|---|
+| `dovecot_dictmap` | OX Dovecot – dictionary mappings | `dovecot_dictmap_user` |
+| `dovecot_acl` | OX Dovecot – ACL data | `dovecot_acl_user` |
+
+Connect to the CQL shell from the Pod's command line using the root credentials:
+
+```shell
+cqlsh -u root -p ${CASSANDRA_PASSWORD}
+```
+
+Useful CQL commands for exploring data:
+
+```sql
+DESCRIBE KEYSPACES;                        -- list all keyspaces
+USE dovecot_dictmap;                       -- switch to a keyspace
+DESCRIBE TABLES;                           -- list tables in the current keyspace
+SELECT * FROM <table> LIMIT 20;           -- inspect table contents (always use LIMIT)
+DESCRIBE TABLE <table>;                   -- show schema of a table
+SELECT COUNT(*) FROM <table>;             -- count rows (can be slow on large tables)
+```
+
+> [!note]
+> Cassandra queries without a `WHERE` clause on the partition key require `ALLOW FILTERING` and can be very
+> slow on large tables. Use targeted queries with known partition keys where possible.
 
 ### Open-Xchange
 
@@ -279,13 +369,27 @@ metric imap_command_unsubscribe {
 
 ### Nubus
 
+#### LDAP
+
+To verify an LDAP filter, you can run `ldapsearch` from inside the LDAP container. Adapt [the filter](https://ldapwiki.com/wiki/Wiki.jsp?page=LDAP%20filters%20Syntax%20and%20Choices) on the last line to match your needs:
+
+```bash
+ldapsearch -x \
+  -D "${ADMIN_DN}" \
+  -w "${LDAP_CN_ADMIN_PW}" \
+  -b "${LDAP_BASE_DN}" \
+  '(|(univentionObjectType=oxmail/functional_account)(univentionObjectType=oxresources/oxresources))'
+```
+
 #### Provisioning
 
-This section should provide an overview on the Nubus Provisioning API in addition to the [available upstream documentation](https://docs.software-univention.de/nubus-customization/1.x/en/api/provisioning.html).
+This section provides additional information on the Nubus Provisioning API, complementing the [upstream documentation](https://docs.software-univention.de/nubus-customization/1.x/en/api/provisioning.html).
 
-As of openDesk 1.13 the provisioning is used for Nubus internal use cases e.g. the self-service except for OX App Suite provisioning of objects like users and groups.
+As of openDesk 1.13, provisioning is used for Nubus-internal use cases (such as self-service) as well as for provisioning OX App Suite objects like users and groups.
 
-A core element of Nubus Provisioning is the messagaging system [NATS](https://nats.io/).
+A core element of Nubus Provisioning is the messaging system [NATS](https://nats.io/).
+
+##### Overview
 
 Below is a [simplified](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#component-provisioning-service) representation of the end-to-end flow for an data object starting from the creation of using the UDM REST API until the object is getting persisted in the OX App Suite.
 
@@ -305,6 +409,8 @@ Below is a [simplified](https://docs.software-univention.de/nubus-kubernetes-arc
 11. *OX App Suite MariaDB schema(s)*: Persistent storage for all received objects.
 
 The Pod [`provisioning-prefill-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#prefill-service): Provides the consumer with information about directory objects that already exist in the directory at the time of registration.
+
+##### Looking into NATS
 
 For interaction with NATS it is convenient to have the NATS Box container available in the `provisioning-nats` Pod to execute `nats` CLI commands.
 Check `technical.yaml.gotmpl` for details of the following setting:
@@ -326,7 +432,27 @@ nats kv ls --user=admin --password=${NATS_PASSWORD} SUBSCRIPTIONS
 nats kv get --user=admin --password=${NATS_PASSWORD} SUBSCRIPTIONS ox-connector
 ```
 
+##### Re-running provisioning events, e.g. OX Connector
+
+Some situations require a re-run of all events for a provisioning consumer. You can use the shell commands shown below as an example for the OX Connector. Adapting it for other provisioning consumers will require the related values to be set for the `SUBSCRIPTION_*` environment variables:
+
+```shell
+export NAMESPACE=<your_namespace>
+export SUBSCRIPTION_NAME=ox-connector
+export SUBSCRIPTION_SECRET_NAME=ox-connector-provisioning-api
+export TEMPORARY_CONSUMER_JSON=$(mktemp)
+export PROVISIONING_API_POD_NAME=$(kubectl -n ${NAMESPACE} get pods --no-headers -o custom-columns=":metadata.name" | grep ums-provisioning-api | tr -d '\n')
+kubectl -n ${NAMESPACE} port-forward ${PROVISIONING_API_POD_NAME} 7777:7777 &
+export PROVISIONING_PORT_FORWARD_PID=$!
+sleep 10
+kubectl -n ${NAMESPACE} get secret ${SUBSCRIPTION_SECRET_NAME} -o json | jq '.data | map_values(@base64d)' | jq -r '."registration"' > ${TEMPORARY_CONSUMER_JSON}.json
+export PROVISIONING_ADMIN_PASSWORD=$(kubectl -n ${NAMESPACE} get secret ums-provisioning-api-admin -o jsonpath='{.data.password}' | base64 --decode)
+curl -o - -u "admin:${PROVISIONING_ADMIN_PASSWORD}" -X DELETE http://localhost:7777/v1/subscriptions/${SUBSCRIPTION_NAME}
+```
+
 #### Keycloak
+
+To check which Keycloak version is deployed you can run `/opt/keycloak/bin/kc.sh --version`.
 
 ##### Setting the log level
 
