@@ -264,12 +264,11 @@ variables:
     - >
       printf '%s\n'
       "- Installing:"
-      "  - CLUSTER: ${CLUSTER}"
-      "  - NAMESPACE: ${NAMESPACE}"
+      "  - DOMAIN: '${DOMAIN}'"
+      "  - COMPONENT: '${COMPONENT}'"
+      "  - OPENDESK_ENTERPRISE: '${OPENDESK_ENTERPRISE}'"
+      "  - ADDITIONAL_ARGS: '${ADDITIONAL_ARGS}' (only used when deploying otterize policies)"
       "  - HELMFILE_ENVIRONMENT: ${HELMFILE_ENVIRONMENT}"
-      "  - COMPONENT: ${COMPONENT}"
-      "  - ADDITIONAL_ARGS: ${ADDITIONAL_ARGS}"
-      "  - DOMAIN: ${DOMAIN}"
     - "helmfile --namespace ${NAMESPACE} apply --suppress-diff ${ADDITIONAL_ARGS}"
     - "echo \"- When deployment is completed access it at: https://${DOMAIN}\""
   tags:
