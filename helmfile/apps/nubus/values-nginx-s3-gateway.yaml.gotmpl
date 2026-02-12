@@ -32,7 +32,7 @@ ingress:
 configuration:
   bucket: {{ .Values.objectstores.nubus.bucket | quote }}
   endpoint: {{ .Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
-  port: 443
+  port: {{ .Values.objectstores.nubus.port | quote }}
   region: {{ .Values.objectstores.nubus.region | quote }}
   style: "path"
   credentials:
