@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
 
@@ -103,6 +103,8 @@ SPDX-License-Identifier: Apache-2.0
         * [Configuration Improvement: Separate user permission for using Video Conference component](#configuration-improvement-separate-user-permission-for-using-video-conference-component)
         * [Optional Cleanup](#optional-cleanup)
   * [Automated migrations - Details](#automated-migrations---details)
+    * [Versions ≥ v1.8.0 (automated)](#versions--v180-automated)
+      * [Versions ≥ v1.8.0 migrations-post](#versions--v180-migrations-post)
     * [Versions ≥ v1.6.0 (automated)](#versions--v160-automated)
       * [Versions ≥ v1.6.0 migrations-post](#versions--v160-migrations-post)
     * [Versions ≥ v1.2.0 (automated)](#versions--v120-automated)
@@ -169,7 +171,7 @@ matching that constraint, though our links always point to the newest patch rele
 | [v1.12.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.0) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.8.0 first                            |
 | [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                            |
 | [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.8.0 first                            |
-| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | ⚠ Install v1.8.0 first                            |
+| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | [⚠ Install v1.8.0 first](#versions--v180-automated) |
 | [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                            |
 | [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)   | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170)  | ⬇ Install ≥ v1.5.0 first                            |
 | [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)   | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160)  | [⚠ Install v1.5.0 first](#versions--v160-automated) |
@@ -1451,6 +1453,15 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 ```
 
 ## Automated migrations - Details
+
+### Versions ≥ v1.8.0 (automated)
+
+> [!note]
+> Details can be found in [run_6.py](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations/-/blob/main/odmigs-python/odmigs_runs/run_6.py).
+
+#### Versions ≥ v1.8.0 migrations-post
+
+- Automatically restarts the StatefulSet `ox-connector` due to updated handling of the Connector's provisioning secret.
 
 ### Versions ≥ v1.6.0 (automated)
 

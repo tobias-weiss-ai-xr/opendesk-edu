@@ -17,7 +17,7 @@ cleanup:
   deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
 
 migrations:
-  runId: 5
+  runId: 6
   namespace: {{ .Values.apps.migrations.namespace | default .Release.Namespace | quote }}
   loglevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   failOnUnexpectedState: true
