@@ -1,3 +1,42 @@
+# [1.12.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.4...v1.12.0) (2026-02-16)
+
+
+### Bug Fixes
+
+* **helmfile:** [[#294](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/294)] Template port for Nubus objectstorage via 'objectstores.nubus.port' ([8eee4b0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8eee4b0a842cf382391c8cb933391d2bd2300699))
+* **helmfile:** Streamline templating of PVCs; see `migrations.md` for required upgrade steps ([763d359](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/763d3593cf2eb851cd987d735a907aff10483d45))
+* **jitsi:** [[#285](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/285)] Set Jitsi's `global.clusterDomain` ([a503945](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a50394500371fd4dc99433e7cec8d1257c651cc9))
+* **jitsi:** No persistence storage anymore and extraEnvs as table for Prosody ([cb42d45](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cb42d45825345cd42c359fb9653f9d436e04ecc5))
+* **migrations:** Add automated post deploy restart of OX Connector ([ad340f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ad340f31a4d44e5297fc82eb7083522783be2f46))
+* **nextcloud:** Bump chart avoiding probe script from inside the image ([63accd1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/63accd1caa6fb5b62542fbcae6bf9ec36ac10fb2))
+* **nextcloud:** Raise memory limit to 1.5Gi as we saw OOM kills even with during (intense) e2e testing ([0e21ba1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0e21ba1a65b216c2f34020f49c36e1718a84793c))
+* **nubus:** [[#279](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/279)] Make stack-data compatible with `null` value handling as seen in Helm v3.19+ ([f6dd5cc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f6dd5cc18d485f7a57f96732159fafc4de614a2a))
+* **nubus:** Avoid misleading warning about SSL certificate expiry in admin UI ([2b5ccfc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2b5ccfc034fc7c2350a94f78fede1216ed0a684d))
+* **nubus:** Enable user import to Keycloak on existing deployments and set `always.read.value.from.ldap` for all `user-attribute-ldap-mapper` ([d9402f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d9402f3aa04b7e51e510637fa71a0b83a871f648))
+* **nubus:** Fix indentation for nubusUmcGateway ingress config ([5e5f147](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5e5f147249cce4f6826c5c103770c9d5df657e61))
+* **nubus:** Remove doublette entry in user selfservice sub-menu ([74451ab](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/74451abd7b0a5e4e7bfe2fbaa5a778694cb219a4))
+* **open-xchange:** Improve settings for migration Pod (EE only) for better throughput ([f64c79c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f64c79c136393bf3a415ecd8430e85084c9204bf))
+* **open-xchange:** Make `smtp*_sasl_tls_security_options` configurable in Postfix; see `migrations.md` for required upgrade steps ([c7355b7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c7355b7fa20b905dee6b63764f19f39aee90d360))
+* **open-xchange:** Update Dovecot Pro (EE only) from 3.0.2-rev7 to 3.0.3-rev6 ([6e63d7b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6e63d7b306223de99d5f66c19703d2fe65314122))
+* **open-xchange:** Update from 8.45.1 to 8.45.3 ([7c5609c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7c5609cedea4f9b557153c054ba0c81ff8f6eb9b))
+* **ox-connector:** Update from v0.34.0 to v0.34.2 ([a9089ab](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a9089abf7f3c3a85b8b2c29618ef104e336cafa7))
+* **services-external:** Remove incorrect override ([273cf79](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/273cf7965cd2e5dcb0094201ba8fbdce0f0a4343))
+* **xwiki:** Configure the Collabora export in EE only as it is non-functional in CE ([23ad20f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/23ad20f58bc4c3f43b31f93b9531e98202f39226))
+* **xwiki:** Fix username normalization (lowercase) on OIDC login causing doublette accounts in XWiki when username has uppercase characters; see `migrations.md` for required upgrade steps ([ca51d11](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ca51d11caf559f547e4b61bbd6177e9f444b719c))
+* **xwiki:** Update from 17.4.7 to 17.4.8 ([1facc08](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1facc08da3a5a9384ea0a4d60795312f236d5347))
+
+
+### Features
+
+* **element:** Update NeoBoard widget from 2.3.1 to 2.4.0, NeoChoice widget from 1.6.0 to 1.6.1, NeoDateFix widget from 1.7.2 to 1.7.3 and NeoDateFix bot from 2.8.5 to 2.8.6 ([ef2297e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ef2297e935c39ff9d55f7f98a3e22a60bf26a5da))
+* **jitsi:** Update from 2.0.10590 to 2.0.10741 including upgrade to upstream 2.x Helm chart; see `migrations.md` for required upgrade steps ([69a66c6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/69a66c69ae03d7744e100a42c3cbeaa52325067b))
+* **nubus:** Update from v1.16.0 to v1.17.0 ([0137ad7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0137ad72bd5069c5bc461b50f1570a5e2dcb64fb))
+* **open-xchange:** Add option to IAM managed mail domains for configuration of internal (default) and external routing per domain; review migrations.md for required upgrade steps ([1c47531](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1c47531b113fa4530c222c2d107d9f267a30f7e6))
+* **open-xchange:** Enable deputy feature ([1bbe6b3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1bbe6b3bd1079875f5e717e04ff41d9e153edd56))
+* **open-xchange:** Update from 8.44 to 8.45 ([43b3445](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/43b3445c3b74cf72c1060532fded8b6edc0110f9))
+* **openproject:** Update from 16.6.5 to 17.0.3 ([44a56d2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/44a56d20dddbf67de18be468fa4872fbf1e48554))
+* **openproject:** Update from 17.0.3 to 17.1.0 ([8ffbd2f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8ffbd2febee7b43cb05cbff566f9013dd9d9461c))
+
 ## [1.11.4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.3...v1.11.4) (2026-01-20)
 
 
