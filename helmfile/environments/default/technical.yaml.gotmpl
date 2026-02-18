@@ -52,6 +52,17 @@ technical:
 
   # Nubus related settings
   nubus:
+    # Keycloak acts as the identity provider in Nubus.
+    keycloak:
+      # Settings related to the LDAP user backend configured for Keycloak.
+      ldapFederation:
+        # With openDesk 1.8.0 the setting "import users from LDAP" in the Keycloak ldap
+        # federation was enabled for new installations as a new out-of-the-box default within
+        # the Nubus stack.
+        # To align older installations with this setting, you can set the below option to `true`,
+        # Leaving it with the null value below will not change the setting at all.
+        # See also section for openDesk Release ≥ v1.12.0 in `migrations.md`.
+        importUsers: ~
     # Nubus provisioning framework that is being used to actively provision data internally within
     # Nubus e.g. for the portal or self service as well as externally, e.g. to OX App Suite.
     provisioning:
