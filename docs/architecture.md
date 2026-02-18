@@ -232,7 +232,7 @@ Besides the Nubus internal user of the provisioning service, the OX AppSuite is 
 
 As the OX AppSuite is using an application specific format to get e.g. users provisioned, there is also a specific connector component that links the provisioning service to the OX AppSuite, it is called the [OX Connector](https://docs.software-univention.de/manual/5.0/de/mail/ox-connector.html).
 
-The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisioning_using_SOAP) is used by the OX Connector to synchronize information about the follow OX AppSuite objects:
+The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisioning_using_SOAP) is used by the OX Connector to synchronize information about the following OX AppSuite objects:
 - Contexts
 - Functional Mailboxes
 - Groups
@@ -422,7 +422,7 @@ class Dovecot,extSvcDC dovecot;
 
 * (Base) Postfix specific
    * SMTP submission from applications using static credentials
-   * SMTP submission without authentication for Dovecot generated mails by Sieve filters, e.g. out-of-office replys, as Dovecot does not support authentication in this flow
+   * SMTP submission without authentication for Dovecot generated mails by Sieve filters, e.g. out-of-office replies, as Dovecot does not support authentication in this flow
    * Available even if OX App Suite is not installed
 
 * Postfix-OX specific

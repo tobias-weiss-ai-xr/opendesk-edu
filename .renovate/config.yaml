@@ -80,7 +80,7 @@ repositories:
         matchDepTypes: [ "Open-Xchange" ]
         groupName: "Open-Xchange"
         groupSlug: "openxchange"
-        branchTopic: "openxchang"
+        branchTopic: "openxchange"
       - matchDatasources: [ "docker" ]
         matchDepTypes: [ "OpenProject" ]
         groupName: "OpenProject"
