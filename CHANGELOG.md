@@ -1,3 +1,10 @@
+## [1.12.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.12.0...v1.12.1) (2026-02-18)
+
+
+### Bug Fixes
+
+* **nubus:** [[#300](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/300)] Allow active decision to enable LDAP user import to Keycloak for pre 1.8.0 deployments; see `migrations.md` for required upgrade steps ([6d8994c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6d8994c44fdc83245c1cb718ded96f59688040ee))
+
 # [1.12.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.11.4...v1.12.0) (2026-02-16)
 
 
