@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 global:
@@ -75,7 +75,6 @@ config:
       role: "opendesk-notes-access-control"
       group: "managed-by-attribute-Notes"
     {{- end }}
-
   custom:
     clientScopes:
       {{ .Values.functional.authentication.oidc.clientScopes | toYaml | nindent 6 }}
@@ -96,6 +95,8 @@ config:
     intraCluster:
       enabled: true
       internalBaseUrl: "http://ums-keycloak.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:8080"
+  ldapFederation:
+    importUsers: {{ .Values.technical.nubus.keycloak.ldapFederation.importUsers }}
   realmSettings:
     accessTokenLifespan: {{ .Values.functional.authentication.realmSettings.accessTokenLifespan }}
     revokeRefreshToken: {{ .Values.functional.authentication.realmSettings.revokeRefreshToken }}

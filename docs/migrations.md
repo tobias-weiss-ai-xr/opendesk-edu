@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Manual checks/actions](#manual-checksactions)
     * [Versions ≥ v1.12.0](#versions--v1120)
       * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
+        * [New application default: Keycloak imports users to its own database](#new-application-default-keycloak-imports-users-to-its-own-database)
         * [Replace Helm chart: Upgrade to upstream Jitsi 2.x Helm chart](#replace-helm-chart-upgrade-to-upstream-jitsi-2x-helm-chart)
         * [Fixed Helmfile templating: StorageClassNames for Nubus, OpenProject and OX-Connector](#fixed-helmfile-templating-storageclassnames-for-nubus-openproject-and-ox-connector)
         * [New Helmfile default: Postfix SMTP(D) SASL TLS security options](#new-helmfile-default-postfix-smtpd-sasl-tls-security-options)
@@ -146,6 +147,7 @@ This section provides an overview of potential changes to be part of the next ma
 - Focussing on PostgreSQL all components except OX App Suite components:
   - Removal of the XWiki MariaDB support.
   - Removal of the Nextcloud MariaDB support.
+- The option `technical.nubus.keycloak.ldapFederation.importUsers` described in the [≥ 1.12.0 migrations](#new-application-default-keycloak-imports-users-to-its-own-database) is likely to be removed by enforcing the documented change of the user import setting.
 
 ## Overview and mandatory upgrade path
 
@@ -169,7 +171,7 @@ matching that constraint, though our links always point to the newest patch rele
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
 | Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                    |
 | ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ---------------------------------------------------- |
-| [v1.12.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.0) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.8.0 first                            |
+| [v1.12.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.1) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.8.0 first                            |
 | [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                            |
 | [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.8.0 first                            |
 | [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | [⚠ Install v1.8.0 first](#versions--v180-automated) |
@@ -201,6 +203,48 @@ If you would like more details about the automated migrations, please read secti
 ### Versions ≥ v1.12.0
 
 #### Pre-upgrade to versions ≥ v1.12.0
+
+##### New application default: Keycloak imports users to its own database
+
+**Target group:** All deployments that were initially installed with a release **earlier than openDesk 1.8.0**.
+
+**Context**
+
+Starting with openDesk 1.8.0, the IAM's handling of users in the identity provider component Keycloak was changed to the suppliers upstream default for new installations.
+
+Now the users are imported from the LDAP into the Keycloak database (and kept in sync) instead of just creating shadow user accounts in Keycloak. This is especially important when IdP federation is configured, and it is expected that backchannel logout from the upstream IdP to be propagated correctly into openDesk.
+
+With openDesk 1.12.0, this import behavior became the default also for existing installations. However, enabling user import on systems that were initially installed before 1.8.0 will lead to the following side effects:
+
+- 2FA reset required: All users with two-factor authentication enabled must reconfigure their second factor.
+- OIDC user duplication risk: Externally integrated OIDC clients may detect duplicate users if they rely on Keycloak’s default internal user identifiers.
+To avoid this issue, clients should use the `opendesk_useruuid` OIDC claim as the stable user identifier.
+
+This behavior has been corrected in openDesk 1.12.1 by introducing the following configuration option in `technical.yaml.gotmpl` which keeps the existing default instead of enforcing the import to be enabled.
+
+Please refer to the YAML file for detailed documentation of this setting:
+
+```yaml
+technical:
+  nubus:
+    keycloak:
+      ldapFederation:
+        importUsers: ~
+```
+
+**Required action**
+
+To avoid the aforementioned issues, directly upgrade to openDesk v1.12.1.
+
+If you are not affected by those issues or know how to handle them, you should set the `importUsers` option to `true` to align with the openDesk standard configuration that is based from the Supplier supported standard for Nubus.
+
+```yaml
+technical:
+  nubus:
+    keycloak:
+      ldapFederation:
+        importUsers: true
+```
 
 ##### Replace Helm chart: Upgrade to upstream Jitsi 2.x Helm chart
 
