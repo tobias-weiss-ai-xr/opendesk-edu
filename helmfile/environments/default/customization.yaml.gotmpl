@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 # The following structure allows customization of Helmfile releases by loading custom value files.
@@ -80,7 +80,12 @@ customization:
     memcached: {}
     postgresql: {}
     mariadb: {}
+    # For both Postfix instances, the specific ones below have a higher precedence
     postfix: {}
+    # For the Postfix available when Groupware / OX App Suite is enabled that is also exposed externally for incoming mails (as postfix-ox-external)
+    postfixOx: {}
+    # For the interal Postfix that sends out component generated emails (except for OX App Suite) incl. unauthenticated OOO replys from Dovecot
+    postfixOutbound: {}
     opendeskDkimpyMilter: {}
     clamav: {}
     clamavSimple: {}
