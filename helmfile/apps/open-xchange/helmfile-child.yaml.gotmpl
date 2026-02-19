@@ -84,6 +84,9 @@ releases:
       {{- range .Values.customization.release.postfix }}
       - {{ . }}
       {{- end }}
+      {{- range .Values.customization.release.postfixOx }}
+      - {{ . }}
+      {{- end }}
     installed: {{ .Values.apps.postfix.enabled }}
     timeout: 900
 
