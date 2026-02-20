@@ -375,8 +375,8 @@ nubusPortalFrontend:
     tag: {{ .Values.images.nubusPortalFrontend.tag }}
   assetLoader:
     config:
-      # Poll UDM once per minute
-      pollInterval: 60
+      # Poll UDM every x seconds (chart's default is also 10 at the moment)
+      pollInterval: 10
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalAssetLoader.registry | quote }}
       repository: {{ .Values.images.nubusPortalAssetLoader.repository }}
