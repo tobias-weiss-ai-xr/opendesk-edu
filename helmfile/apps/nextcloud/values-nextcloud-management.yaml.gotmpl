@@ -72,6 +72,8 @@ configuration:
         enabled: false
       spreed:
         enabled: false
+    adminAudit:
+      enabled: {{ .Values.functional.admin.logging.auditLogs.enabled }}
     comments:
       enabled: false
     circles:

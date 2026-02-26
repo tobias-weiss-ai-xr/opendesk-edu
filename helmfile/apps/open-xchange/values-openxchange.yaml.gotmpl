@@ -564,6 +564,13 @@ appsuite:
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
       com.openexchange.quota.calendar: {{ .Values.technical.oxAppSuite.quota.calendar | quote }}
+      # Audit logs
+      {{- if .Values.functional.admin.logging.auditLogs.enabled }}
+      com.openexchange.log.audit.slf4j.enabled: "true"
+      com.openexchange.log.audit.slf4j.level: "info"
+      com.openexchange.log.audit.slf4j.delimiter: ","
+      com.openexchange.log.audit.slf4j.includeAttributeNames: "true"
+      {{- end }}
       # Deputy feature
       # Ref.: https://documentation.open-xchange.com/8/middleware/permissions_and_capabilities/deputy_permission.html
       com.openexchange.deputy.enabled: "true"

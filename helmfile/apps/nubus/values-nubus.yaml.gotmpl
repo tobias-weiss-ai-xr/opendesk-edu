@@ -261,7 +261,14 @@ keycloak:
     - name: "trusted-cert-jks-secret-volume"
       mountPath: "/etc/ssl/certs/truststore.jks"
       subPath: "truststore.jks"
+  {{- end }}
+
   extraEnvVars:
+  {{- if .Values.functional.admin.logging.auditLogs.enabled }}
+    - name: "KC_SPI_EVENTS_LISTENER_JBOSS_LOGGING_SUCCESS_LEVEL"
+      value: "info"
+  {{- end }}
+  {{- if .Values.certificate.selfSigned }}
     - name: "KC_HTTPS_TRUST_STORE_FILE"
       value: "/etc/ssl/certs/truststore.jks"
     - name: "KC_TRUSTSTORE_PATHS"

@@ -9,6 +9,14 @@ functional:
         # Set to `false` to disable to not provide and update openDesk deployment timestamp for admins in the portal.
         # This is helpful in GitOps deployments as with the timestamp there will always be a change detected.
         enabled: true
+    logging:
+      auditLogs:
+        # Some components offer the option to generate specific audit logs. Enable these logs with the toggle below:
+        # - Open-Xchange App Suite: https://documentation.open-xchange.com/8/middleware/monitoring/04_feature_monitoring/05_audit_logging.html
+        # - Nextcloud: https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/logging_configuration.html#admin-audit-log-optional
+        # - Keycloak: https://www.keycloak.org/server/all-provider-config#_jboss_logging
+        #   SPI Event logging for success events will be issued at log level "info"
+        enabled: false
 
   authentication:
     newDeviceLoginNotification:
