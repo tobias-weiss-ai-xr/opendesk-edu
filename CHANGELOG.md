@@ -1,3 +1,13 @@
+## [1.12.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.12.1...v1.12.2) (2026-03-02)
+
+
+### Bug Fixes
+
+* **helmfile:** Audit log toggle ([e551d59](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e551d59fb488b40ad5ad92fadf0fb28809b80d67))
+* **nextcloud:** Bump `openwithcryptpad` app due to diagrams not being saved to Nextcloud under certain circumstances. ([43116bf](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/43116bff9b3e00e84d380b818e7c5829011f9697))
+* **nubus:** [[#312](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/312)] Add mitigation for upstream bug https://forge.univention.org/bugzilla/show_bug.cgi?id=59094 ([f00fa09](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f00fa09e58bee6d68fbb066c4da0745520d273a8))
+* **openproject:** Update from 17.1.0 to 17.1.2; strongly recommended update to address CVEs, find details in upstream release notes https://www.openproject.org/docs/release-notes/17-1-1/ and https://www.openproject.org/docs/release-notes/17-1-2/ ([8ba052d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8ba052d2d5a58006670a2e5548f4d1e88b03d5e3))
+
 ## [1.12.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.12.0...v1.12.1) (2026-02-18)
 
 
