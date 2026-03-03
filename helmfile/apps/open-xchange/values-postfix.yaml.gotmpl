@@ -55,6 +55,9 @@ postfix:
       value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
   messageSizeLimit: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
   milterDefaultAction: "tempfail"
+  listfilter:
+    enabled: true
+    debug: {{ .Values.debug.enabled }}
   smtpdMilters:
     {{- if .Values.apps.dkimpy.enabled }}
     10-dkimpy:
