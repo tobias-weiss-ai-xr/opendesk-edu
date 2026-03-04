@@ -139,7 +139,7 @@ aio:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.nextcloud | toYaml | nindent 6 }}
   cron:
-    successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"0"{{ end }}
+    successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"1"{{ end }}
     resources:
       {{ .Values.resources.nextcloudCron | toYaml | nindent 6 }}
 
