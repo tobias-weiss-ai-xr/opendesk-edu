@@ -798,6 +798,8 @@ appsuite:
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
       com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
     propertiesFiles:
+      /opt/open-xchange/etc/Group.properties:
+        CHECK_GROUP_UID_FOR_NOT_ALLOWED_CHARS: "false"
       /opt/open-xchange/etc/server.properties:
         MAX_UPLOAD_SIZE: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
       /opt/open-xchange/etc/infostore.properties:
