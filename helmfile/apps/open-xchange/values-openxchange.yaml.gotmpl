@@ -414,6 +414,11 @@ appsuite:
             com.openexchange.calendar.maxAttendeesPerConflictCheck: "25"
             com.openexchange.calendar.externalConflictChecksTimeout: "0"
             com.openexchange.calendar.maxSeriesUntilForConflicts: "4"
+            # Switch off quota checks improves migration performance
+            com.openexchange.quota.calendar: "-1"
+            com.openexchange.quota.task: "-1"
+            com.openexchange.quota.contact: "-1"
+            com.openexchange.quota.attachment: "-1"
             # Mailfilter
             com.openexchange.mail.filter.passwordSource: "global"
             com.openexchange.mail.filter.masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
