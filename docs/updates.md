@@ -13,6 +13,8 @@ While [migrations.md](./migrations.md) provides information about required actio
 <!-- TOC -->
 * [Updates and features](#updates-and-features)
   * [1.16.0](#1160)
+    * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
+      * [OpenProject PDF export theming](#openproject-pdf-export-theming)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
     * [`service.yaml.gotmpl`](#serviceyamlgotmpl)
@@ -29,6 +31,24 @@ While [migrations.md](./migrations.md) provides information about required actio
 <!-- TOC -->
 
 ## 1.16.0
+
+### `theme.yaml.gotmpl`
+
+#### OpenProject PDF export theming
+
+It is possible to customize the theming for OpenProject's PDF exports now:
+
+```yaml
+theme:
+  imagery:
+    projects:
+      pdfExportLogoPath: "./../../files/theme/logoHeader.jpg"
+      pdfExportCoverPath: "./../../files/theme/login/background.jpg"
+      pdfExportFooterPath: "./../../files/theme/login/favicon.png"
+```
+
+> [!warning]
+> PDF theming is overwritten on every deployment. Changes made in OpenProject's admin UI are lost and must be set using the above options instead.
 
 ### `technical.yaml.gotmpl`
 

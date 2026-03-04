@@ -88,6 +88,8 @@ environment:
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.nubus .Values.global.domain | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_POST__LOGOUT__REDIRECT__URI: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/"
+  OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: "{enable_gravatars: false, enable_local_avatars: true}"
+
   OPENPROJECT_SEED_DESIGN_PRIMARY__BUTTON__COLOR: {{ .Values.theme.colors.primary | quote }}
   OPENPROJECT_SEED_DESIGN_ACCENT__COLOR: {{ .Values.theme.colors.primary | quote }}
   OPENPROJECT_SEED_DESIGN_HEADER__BG__COLOR: {{ .Values.theme.colors.white | quote }}
@@ -95,9 +97,16 @@ environment:
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__COLOR: {{ .Values.theme.colors.white | quote }}
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__SELECTED__BACKGROUND: {{ .Values.theme.colors.primary | quote }}
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__HOVER__BACKGROUND: {{ .Values.theme.colors.secondaryGreyLight | quote }}
-  OPENPROJECT_SEED_DESIGN_LOGO: "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvgB64 }}"
-  OPENPROJECT_SEED_DESIGN_FAVICON: "data:image/svg+xml;base64,{{ .Values.theme.imagery.projects.faviconSvg }}"
-  OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: false, enable_local_avatars: true}'
+  OPENPROJECT_SEED_DESIGN_LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/logo.svg"
+  OPENPROJECT_SEED_DESIGN_FAVICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
+  OPENPROJECT_SEED_DESIGN_TOUCH__ICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
+  OPENPROJECT_SEED_DESIGN_EXPORT__LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportLogoPath | lower }}"
+  OPENPROJECT_SEED_DESIGN_EXPORT__COVER: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportCoverPath | lower }}"
+  OPENPROJECT_SEED_DESIGN_EXPORT__FOOTER: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportFooterPath | lower }}"
+  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__REGULAR: TBD
+  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__BOLD: TBD
+  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__ITALIC: TBD
+  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__BOLD__ITALIC: TBD
 
   {{- if .Values.certificate.selfSigned }}
   SSL_CERT_FILE: "/etc/ssl/certs/ca-certificates.crt"
