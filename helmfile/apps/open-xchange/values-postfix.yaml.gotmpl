@@ -43,7 +43,7 @@ postfix:
   amavisHost: ""
   amavisPortIn: ""
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
-  hostname: "postfix"
+  hostname: {{ .Values.functional.groupware.externalClients.fqdnSmtp | default .Values.global.domain | quote }}
   inetProtocols: "ipv4"
   ldap:
     host: "ums-ldap-server"
