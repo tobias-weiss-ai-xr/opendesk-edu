@@ -27,11 +27,11 @@ assets:
     paths:
       - path: "/univention/portal/icons/logos/domain.svg"
         data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
-      - path: "/static-files/portal/background.svg"
+      - path: "/opendesk-static-files/portal/background.svg"
         data: {{ .Values.theme.imagery.portal.backgroundSvg | quote }}
-      - path: "/static-files/portal/waiting-spinner.svg"
+      - path: "/opendesk-static-files/portal/waiting-spinner.svg"
         data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
-      - path: "/static-files/login/background.jpg"
+      - path: "/opendesk-static-files/login/background.jpg"
         data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
@@ -124,6 +124,16 @@ assets:
     subdomain: {{ .Values.global.hosts.openproject | quote }}
     pathType: "ImplementationSpecific"
     paths:
+      - path: "/opendesk-static-files/favicon.svg"
+        data: {{ .Values.theme.imagery.projects.faviconSvg | quote }}
+      - path: "/opendesk-static-files/logo.svg"
+        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+      - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportLogoPath | lower }}"
+        data: {{ readFile .Values.theme.imagery.projects.pdfExportLogoPath | b64enc | quote }}
+      - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportCoverPath | lower }}"
+        data: {{ readFile .Values.theme.imagery.projects.pdfExportCoverPath | b64enc | quote }}
+      - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportFooterPath | lower }}"
+        data: {{ readFile .Values.theme.imagery.projects.pdfExportFooterPath | b64enc | quote }}
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
   {{- end }}
