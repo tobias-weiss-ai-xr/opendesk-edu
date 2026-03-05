@@ -151,7 +151,6 @@ ingress:
       X-Forwarded-Host $http_x_forwarded_host;
       X-Forwarded-Port $http_x_forwarded_port;
       X-Forwarded-Proto $http_x_forwarded_proto;
-    nginx.ingress.kubernetes.io/use-regex: "true"
     {{- with .Values.annotations.nubus.ingress }}
     {{ . | toYaml | nindent 4 }}
     {{- end }}
@@ -311,8 +310,6 @@ nubusNotificationsApi:
     tag: {{ .Values.images.nubusNotificationsApi.tag }}
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
-      nginx.ingress.kubernetes.io/use-regex: "true"
       {{- with .Values.annotations.nubusNotificationsApi.ingress }}
       {{. | toYaml | nindent 6 }}
       {{- end }}
@@ -376,53 +373,24 @@ nubusPortalFrontend:
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalFrontend.registry | quote }}
     repository: {{ .Values.images.nubusPortalFrontend.repository }}
     tag: {{ .Values.images.nubusPortalFrontend.tag }}
+  assetLoader:
+    config:
+      # Poll UDM once per minute
+      pollInterval: 60
+    image:
+      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalAssetLoader.registry | quote }}
+      repository: {{ .Values.images.nubusPortalAssetLoader.repository }}
+      tag: {{ .Values.images.nubusPortalAssetLoader.tag }}
   ingress:
     annotations:
       {{ .Values.annotations.nubusPortalFrontend.ingressIngress | toYaml | nindent 6 }}
     certManager:
       enabled: false
-    items:
-      - name: rewrites
-        host: ""
-        paths:
-          - path: /univention/(portal|selfservice)/$
-            pathType: ImplementationSpecific
-          - path: /univention/(portal|selfservice)/index.html$
-            pathType: ImplementationSpecific
-          - path: /univention/(portal|selfservice)/(css|fonts|i18n|media|js|oidc|custom)(/.*)$
-            pathType: ImplementationSpecific
-          - path: /univention/(portal)/(icons)(/.*)$
-            pathType: ImplementationSpecific
-        ingressClassName: ""
-        annotations:
-          nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
-          nginx.ingress.kubernetes.io/use-regex: "true"
-          {{- with .Values.annotations.nubusPortalFrontend.ingressRewrites }}
-          {{ . | toYaml | nindent 10 }}
-          {{- end }}
-        tls:
-          secretName: ""
-      - name: redirects
-        host: ""
-        paths:
-          - pathType: ImplementationSpecific
-            path: /$
-          - pathType: ImplementationSpecific
-            path: /univention$
-          - pathType: ImplementationSpecific
-            path: /univention/$
-          - pathType: ImplementationSpecific
-            path: /univention/portal$
-          - pathType: ImplementationSpecific
-            path: /univention/selfservice$
-        ingressClassName: ""
-        annotations:
-          nginx.ingress.kubernetes.io/permanent-redirect: "/univention/portal/"
-          {{- with .Values.annotations.nubusPortalFrontend.ingressRedirects }}
-          {{ . | toYaml | nindent 10 }}
-          {{- end }}
-        tls:
-          secretName: ""
+    ingressClassName: ""
+    {{- with .Values.annotations.nubusPortalFrontend.ingressRedirects }}
+    annotations:
+      {{ . | toYaml | nindent 10 }}
+    {{- end }}
     tls:
       enabled: {{ .Values.ingress.tls.enabled }}
       secretName: {{ .Values.ingress.tls.secretName }}
@@ -698,8 +666,6 @@ nubusPortalServer:
     tag: {{ .Values.images.nubusPortalServer.tag }}
   ingress:
     annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
-        nginx.ingress.kubernetes.io/use-regex: "true"
         {{- with .Values.annotations.nubusPortalServer.ingress }}
         {{ . | toYaml | nindent 8 }}
         {{- end }}
@@ -817,8 +783,6 @@ nubusUdmRestApi:
       nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "128k"
       nginx.ingress.kubernetes.io/configuration-snippet-disabled: |
         rewrite ^/univention(/udm/.*)$ $1 break;
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
       {{- with .Values.annotations.nubusUdmRestApi.ingress }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
@@ -1475,8 +1439,6 @@ nubusUmcServer:
     tag: {{ .Values.images.nubusUmcServer.tag }}
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
       nginx.ingress.kubernetes.io/configuration-snippet: |
           proxy_set_header X-UMC-HTTPS 'on';
       {{- with .Values.annotations.nubusUmcServer.ingress }}
@@ -1581,8 +1543,6 @@ nubusUmcGateway:
     tag: {{ .Values.images.nubusUmcGateway.tag }}
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
       {{- with .Values.annotations.nubusUmcGateway.ingress }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
@@ -1614,8 +1574,10 @@ nubusKeycloakBootstrap:
     {{- end }}
   bootstrap:
     ldapMappers:
-      - ldapAndUserModelAttributeName: "opendeskProjectmanagementAdmin"
-      - ldapAndUserModelAttributeName: "oxContextIDNum"
+      opendeskProjectmanagementAdmin:
+        alwaysReadFromLdap: true
+      oxContextIDNum:
+        alwaysReadFromLdap: true
     twoFactorAuthentication:
       enabled: true
   config:
