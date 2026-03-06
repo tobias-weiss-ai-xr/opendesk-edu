@@ -55,7 +55,7 @@ export CLUSTER_YAML=<PATH_TO_THE_FILE_CONTAINTING_YOUR_cluster.yaml.gotmpl_VALUE
 
 export TEMP_WORK_DIR="$(mktemp -d)"
 export CLUSTER_NETWORKING_DOMAIN=$(yq '.cluster.networking.domain' ${CLUSTER_YAML})
-kubectl -n ${NAMESPACE} exec ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh config credentials --server http://ums-keycloak.${NAMESPACE}.svc.${CLUSTER_NETWORKING_DOMAIN}:8080 --realm master --user kcadmin --password ${KEYCLOAK_ADMIN_PASSWORD}
+kubectl -n ${NAMESPACE} exec ums-keycloak-0 -- sh -c '/opt/keycloak/bin/kcadm.sh config credentials --server http://ums-keycloak.'${NAMESPACE}'.svc.'${CLUSTER_NETWORKING_DOMAIN}':8080 --realm master --user kcadmin --password ${KEYCLOAK_ADMIN_PASSWORD}'
 export LDAP_PROVIDER_ID=$(kubectl -n ${NAMESPACE} exec ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh get components -r opendesk -q parentId=opendesk -q type=org.keycloak.storage.UserStorageProvider | jq -r '.[0].id')
 
 kubectl -n ${NAMESPACE} exec ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh get components/${LDAP_PROVIDER_ID} -r opendesk > ${TEMP_WORK_DIR}/ldap-provider.json
