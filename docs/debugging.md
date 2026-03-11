@@ -18,6 +18,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Nextcloud](#nextcloud)
     * [OpenProject](#openproject)
     * [PostgreSQL](#postgresql)
+    * [Dovecot](#dovecot)
     * [Keycloak](#keycloak)
       * [Setting the log level](#setting-the-log-level)
     * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
@@ -200,6 +201,31 @@ While you will find all details about the cli tool `psql` in the [PostgreSQL doc
 - `\c <databasename>`: Connect to `<databasename>`
 - `\dt`: List (describe) tables within the currently connected database
 - `\q`: Quit the client
+
+### Dovecot
+
+When it comes to debugging Dovecot some commands come in handy:
+
+- Get the configuration in a standard (comparable) format and secrets removed: `doveconf -n`
+- Get the log output with focus on errors only: `doveadm log errors`
+- Looking into specific user mailbox activities: `doveadm dump /var/lib/dovecot/<UUID_2CHARS>/<UUID>/mdbox/dovecot.mailbox.log`
+  - When running openDesk CE the use `/srv/mail/` instead of `/var/lib/dovecot`
+- Listing a users mailbox: `doveadm mailbox list -u <EMAIL_ADDRESS>`
+
+Example for getting log output for specific events:
+
+```
+event_exporter log {
+  format = json
+  format_args = time-rfc3339
+  transport = log
+}
+
+metric imap_command_unsubscribe {
+  exporter = log
+  filter = event=imap_command_finished AND cmd_name=UNSUBSCRIBE
+}
+```
 
 ### Keycloak
 
