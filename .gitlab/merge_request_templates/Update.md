@@ -14,19 +14,6 @@
 - [ ] Describe manual steps required to update existing deployments. This especially applies if the upgrade includes any breaking changes:
 - [ ] Any other considerations in context of the update:
 
-# Checklist / Sign-offs
-
-## 🏷️ Labels
-
-Set labels:
-
-```
-/label ~"MR-Type::AppUpdate"
-/label ~"PO::👀"
-/label ~"QA::👀"
-/label ~"Testautomation::👀"
-```
-
 # 👷 Developer Checklist
 
 **Documentation:**
@@ -36,7 +23,14 @@ Does this MR introduce changes (e.g., new secrets, configuration options) that r
 - [ ] Yes, and the documentation has been updated accordingly
 
 **Quality Assurance:**
-- [ ] Verified that the feature works as expected, including upgrade scenarios
+- [ ] Verified that the update works as expected, including upgrade scenarios
 - [ ] Performed regression testing
-- Link to internal comment(s) with detailed QA results (to avoid exposing infrastructure details):
-  - ...
+
+## Set labels
+
+```
+/label ~"MR-Type::AppUpdate"
+/label ~"PO::👀"
+/label ~"QA::👀"
+/label ~"Testautomation::👀"
+```
