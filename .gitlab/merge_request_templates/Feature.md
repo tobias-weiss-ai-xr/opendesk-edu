@@ -20,19 +20,6 @@ Provide steps for QA or reviewers to test the feature and mention anything revie
 - [ ] Describe manual steps required to update existing deployments. This especially applies if this MR introduces breaking changes:
 - [ ] Any other considerations in context of the update:
 
-# Checklist / Sign-offs
-
-## 🏷️ Labels
-
-Set labels:
-
-```
-/label ~"MR-Type::Feature"
-/label ~"PO::👀"
-/label ~"QA::👀"
-/label ~"Testautomation::👀"
-```
-
 # 👷 Developer Checklist
 
 **Documentation:**
@@ -44,5 +31,12 @@ Does this MR introduce changes (e.g., new secrets, configuration options) that r
 **Quality Assurance:**
 - [ ] Verified that the feature works as expected, including upgrade scenarios
 - [ ] Performed regression testing
-- Link to internal comment(s) with detailed QA results (to avoid exposing infrastructure details):
-  - ...
+
+## Set labels
+
+```
+/label ~"MR-Type::Feature"
+/label ~"PO::👀"
+/label ~"QA::👀"
+/label ~"Testautomation::👀"
+```
