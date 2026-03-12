@@ -226,7 +226,11 @@ variables:
     description: >
       A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail. Here you
       can set the time in seconds that should be waited before running the tests.
-    value: "0"
+    value: "180"
+  TESTS_USER_IMPORT_GRACE_PERIOD:
+    description: >
+      Wait given amount in seconds after users have been imported before starting tests.
+    value: "180"
   TESTS_NUMBER_OF_THREADS:
     description: "How many threads are used for executing the tests in parallel?"
     value: "8"
@@ -823,6 +827,7 @@ run-tests:
           \"testprofile\": \"Namespace\", \
           \"OPENDESK_ENTERPRISE\": \"${OPENDESK_ENTERPRISE}\", \
           \"GRACE_PERIOD\": \"${TESTS_GRACE_PERIOD}\", \
+          \"USER_IMPORT_GRACE_PERIOD\": \"${TESTS_USER_IMPORT_GRACE_PERIOD}\", \
           \"NUMBER_OF_THREADS\": \"${TESTS_NUMBER_OF_THREADS}\" \
         } \
       }" \
