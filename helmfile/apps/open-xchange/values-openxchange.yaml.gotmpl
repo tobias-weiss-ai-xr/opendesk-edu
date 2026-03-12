@@ -1040,10 +1040,24 @@ appsuite:
         {{- end }}
         com.openexchange.antivirus.maxFileSize: "1024"
       /opt/open-xchange/etc/filestore-s3.properties:
-        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ .Values.objectstores.openxchange.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+        {{- if .Values.objectstores.openxchange.endpoint }}
+        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ .Values.objectstores.openxchange.endpoint | quote }}
+        {{- else if .Values.apps.minio.enabled }}
+        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+        {{- else if .Values.apps.seaweedfs.enabled }}
+        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ printf "%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+        {{- else }}
+        {{- fail "No objectstorage endpoint for openxchange found!" }}
+        {{- end }}
         com.openexchange.filestore.s3.ox-filestore-s3.bucketName: {{ .Values.objectstores.openxchange.bucket | quote }}
         com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
-        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | default .Values.secrets.minio.openxchangeUser | quote }}
+        {{- if .Values.objectstores.openxchange.secretKey }}
+        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | quote }}
+        {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.secrets.minio.openxchangeUser | quote }}
+        {{- else }}
+        {{- fail "No objectstorage secretKey for openxchange found!" }}
+        {{- end }}
       /opt/open-xchange/etc/ldapauth.properties:
         java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/{{ .Values.ldap.baseDn }}"
         bindDN: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"

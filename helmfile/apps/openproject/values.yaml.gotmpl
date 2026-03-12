@@ -251,15 +251,31 @@ s3:
   enabled: true
   directUploads: {{ .Values.objectstores.openproject.directUploads }}
   enableSignatureV4Streaming: {{ .Values.objectstores.openproject.enableSignatureV4Streaming }}
-  endpoint: {{ printf "https://%s" (.Values.objectstores.openproject.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
-  host: {{ printf "https://%s" (.Values.objectstores.openproject.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+  {{- if .Values.objectstores.openproject.endpoint }}
+  endpoint: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  host: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  {{- else if .Values.apps.minio.enabled }}
+  endpoint: {{ printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+  host: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  {{- else if .Values.apps.seaweedfs.enabled }}
+  endpoint: {{ printf "https://%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+  host: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  {{- else }}
+  {{- fail "No objectstorage endpoint for openproject found!" }}
+  {{- end }}
   pathStyle: {{ .Values.objectstores.openproject.pathStyle }}
   region: {{ .Values.objectstores.openproject.region | quote }}
   bucketName: {{ .Values.objectstores.openproject.bucket | quote }}
   useIamProfile: {{ .Values.objectstores.openproject.useIamProfile }}
   auth:
     accessKeyId: {{ .Values.objectstores.openproject.username | quote }}
-    secretAccessKey: {{ .Values.objectstores.openproject.secretKey | default .Values.secrets.minio.openprojectUser | quote }}
+    {{- if .Values.objectstores.openproject.secretKey }}
+    secretAccessKey: {{ .Values.objectstores.openproject.secretKey | quote }}
+    {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+    secretAccessKey: {{ .Values.secrets.minio.openprojectUser | quote }}
+    {{- else }}
+    {{- fail "No objectstorage secretKey for openproject found!" }}
+    {{- end }}
 
 seederJob:
   annotations:

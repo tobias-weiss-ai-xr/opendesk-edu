@@ -83,6 +83,23 @@ repositories:
     oci: true
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.minio.registry }}/{{ .Values.charts.minio.repository }}"
 
+  # SeaweedFS
+  # Source: https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-seaweedfs-config
+  - name: "seaweedfs-config-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.seaweedfsConfig.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.seaweedfsConfig.registry }}/{{ .Values.charts.seaweedfsConfig.repository }}"
+  # Source: https://seaweedfs.github.io/seaweedfs/helm
+  - name: "seaweedfs-repo"
+    verify: {{ .Values.charts.seaweedfs.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.seaweedfs.registry }}/{{ .Values.charts.seaweedfs.repository }}"
+
   # openDesk Enterprise
   # Cassandra
   # Source: https://github.com/bitnami/charts/
@@ -196,6 +213,27 @@ releases:
       {{- end }}
     installed: {{ .Values.apps.minio.enabled }}
     timeout: 900
+
+  - name: "seaweedfs-config"
+    chart: "seaweedfs-config-repo/{{ .Values.charts.seaweedfsConfig.name }}"
+    version: "{{ .Values.charts.seaweedfsConfig.version }}"
+    values:
+      - "values-seaweedfs-config.yaml.gotmpl"
+      {{- range .Values.customization.release.seaweedfsConfig }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.seaweedfs.enabled }}
+    timeout: 60
+  - name: "seaweedfs"
+    chart: "seaweedfs-repo/{{ .Values.charts.seaweedfs.name }}"
+    version: "{{ .Values.charts.seaweedfs.version }}"
+    values:
+      - "values-seaweedfs.yaml.gotmpl"
+      {{- range .Values.customization.release.seaweedfs }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.seaweedfs.enabled }}
+    timeout: 300
 
   # openDesk Enterprise Releases
   - name: "cassandra"

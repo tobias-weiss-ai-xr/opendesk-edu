@@ -11,6 +11,9 @@ SPDX-License-Identifier: Apache-2.0
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Versions ≥ v1.15.0](#versions--v1150)
+      * [Pre-upgrade to versions ≥ v1.15.0](#pre-upgrade-to-versions--v1150)
+        * [New helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
         * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
@@ -158,6 +161,7 @@ This section provides an overview of potential changes to be part of the next ma
   - Removal of the XWiki MariaDB support.
   - Removal of the Nextcloud MariaDB support.
 - The option `technical.nubus.keycloak.ldapFederation.importUsers` described in the [≥ 1.12.0 migrations](#new-application-default-keycloak-imports-users-to-its-own-database) is likely to be removed by enforcing the documented change of the user import setting.
+- Removal of MinIO as S3 storage backend for non-production installations (see [≥ 1.15.0 migrations](#new-helmfile-default-support-for-seaweedfs-as-s3-backend))
 
 ## Overview and mandatory upgrade path
 
@@ -211,6 +215,73 @@ If you would like more details about the automated migrations, please read secti
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
+
+### Versions ≥ v1.15.0
+
+#### Pre-upgrade to versions ≥ v1.15.0
+
+##### New helmfile default: Support for SeaweedFS as S3 backend
+
+**Target group:** Deployments using the bundled service MinIO
+
+**Context**
+
+Since the maintenance for MinIO - the former only S3 storage backend supported
+by openDesk - [has been discontinued](https://github.com/minio/minio),
+openDesk now also supports and enables [SeaweedFS](https://seaweedfs.com/) for
+its non-production installations per default (for production scenarios use an
+externally managed S3 storage backend).
+
+Starting from version v2.0.0 openDesk will not include MinIO in the Helmfile
+deployment anymore. If you have been a user of the included MinIO S3 backend,
+we encourage you to move to the new SeaweedFS S3 backend before the 2.0.0
+release.
+
+The enabled apps in `opendesk_main.yaml.gotmpl` before was:
+
+```yaml
+apps:
+  minio:
+    enabled: true
+```
+
+And now is:
+
+```yaml
+apps:
+  minio:
+    enabled: false
+  seaweedfs:
+    enabled: true
+```
+
+Furthermore, SeaweedFS's uses `objectstorage` as default hostname in oposition
+to MinIO which is using `objectstore`:
+
+```yaml
+global:
+  hosts:
+    minioApi: "objectstore"
+    minioConsole: "objectstore-ui"
+    seaweedfs: "objectstorage"
+    seaweedfsAdmin: "objectstorage-ui"
+```
+
+**Required action: Keeping MinIO as S3 storage backend**
+
+If you want to keep MinIO, you need to set:
+
+```yaml
+apps:
+  minio:
+    enabled: true
+  seaweedfs:
+    enabled: false
+```
+
+**Optional action: Migrating to SeaweedFS as S3 storage backend**
+
+See [Migrate from MinTO to SeaweedFS](./migrations-instructions/1.15.0-migrate-from-minio-to-seaweedfs.md)
 
 ### Versions ≥ v1.14.0
 

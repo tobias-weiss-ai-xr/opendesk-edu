@@ -45,8 +45,22 @@ dovecot:
         value: {{ requiredEnv "DOVECOT_CRYPT_PUBLIC_KEY" | quote }}
     fsCacheSize: {{ .Values.technical.dovecot.objectStorage.fsCacheSize | quote }}
     ftsCacheSize: {{ .Values.technical.dovecot.objectStorage.ftsCacheSize | quote }}
-    fqdn: {{ .Values.objectstores.dovecot.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    {{- if .Values.objectstores.dovecot.endpoint }}
+    fqdn: {{ .Values.objectstores.dovecot.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    fqdn: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    fqdn: {{ printf "%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for dovecot found!" }}
+    {{- end }}
     username: {{ .Values.objectstores.dovecot.username | quote }}
     password:
-      value: {{ .Values.objectstores.dovecot.secretKey | default .Values.secrets.minio.dovecotUser | quote }}
+      {{- if .Values.objectstores.dovecot.secretKey }}
+      value: {{ .Values.objectstores.dovecot.secretKey | quote }}
+      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+      value: {{ .Values.secrets.minio.dovecotUser | quote }}
+      {{- else }}
+      {{- fail "No objectstorage secretKey for dovecot found!" }}
+      {{- end }}
 ...
