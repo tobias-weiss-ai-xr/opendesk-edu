@@ -18,7 +18,11 @@ SPDX-License-Identifier: Apache-2.0
     * [Nextcloud](#nextcloud)
     * [OpenProject](#openproject)
     * [PostgreSQL](#postgresql)
-    * [Dovecot](#dovecot)
+    * [Open-Xchange](#open-xchange)
+      * [OX App Suite](#ox-app-suite)
+        * [Applying global config changes for debugging](#applying-global-config-changes-for-debugging)
+        * [Using config cascade](#using-config-cascade)
+      * [OX Dovecot](#ox-dovecot)
     * [Keycloak](#keycloak)
       * [Setting the log level](#setting-the-log-level)
     * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
@@ -202,7 +206,51 @@ While you will find all details about the cli tool `psql` in the [PostgreSQL doc
 - `\dt`: List (describe) tables within the currently connected database
 - `\q`: Quit the client
 
-### Dovecot
+### Open-Xchange
+
+#### OX App Suite
+
+##### Applying global config changes for debugging
+
+You have two ways of applying config changes e.g. to enable debug relevant settings. In the examples below we will enable [`com.openexchange.imap.debugLog.enabled`](https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.imap.debugLog.enabled) assuming the given property is not set anywhere else yet.
+
+1. Especially in environments where the core-mw Pods are scaled it is recommended to use customizatzions (see `customizations.yaml.gotmpl` for reference) and to redeploy the OX App Suite component. Due to the rolling upgrade feature this should not cause downtime for users.
+
+```yaml
+core-mw:
+  properties:
+    com.openexchange.imap.debugLog.enabled: "true"
+```
+
+2. When just dealing with a single core-mw Pod:
+
+```shell
+echo com.openexchange.imap.debugLog.enabled=true >> /opt/open-xchange/etc/additional.properties
+/opt/open-xchange/sbin/reloadconfiguration
+```
+
+##### Using config cascade
+
+OX App Suite allows some settings that can set globally also to be defined using a finer granularity down to the user level using the so call config cascade.
+
+> [!note]
+> The example below requires the related setting to be available on the global level e.g. with value `"false"` to
+> be able to set in on a "lower" level, like the user.
+> Find more details in the [upstream documentation](https://documentation.open-xchange.com/8/middleware/miscellaneous/config_cascade.html).
+
+Using the same setting from the previous section but now setting it just for a specific user:
+
+```shell
+/opt/open-xchange/sbin/changeuser -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -c <contextId> -i <userId> --config/com.openexchange.imap.debugLog.enabled=true
+```
+
+For deactivation on the given user run:
+
+```shell
+/opt/open-xchange/sbin/changeuser -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -c <contextId> -i <userId> --remove-config/com.openexchange.imap.debugLog.enabled
+```
+
+#### OX Dovecot
 
 When it comes to debugging Dovecot some commands come in handy:
 
@@ -214,7 +262,7 @@ When it comes to debugging Dovecot some commands come in handy:
 
 Example for getting log output for specific events:
 
-```
+```shell
 event_exporter log {
   format = json
   format_args = time-rfc3339
