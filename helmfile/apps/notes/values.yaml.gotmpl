@@ -11,13 +11,27 @@ global:
   yProviderApiKey:
     value: {{ .Values.secrets.notes.collaborationSecret | quote }}
   s3:
-    host: {{ .Values.objectstores.notes.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    {{- if .Values.objectstores.notes.endpoint }}
+    host: {{ printf "%s" .Values.objectstores.notes.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    host: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    host: {{ printf "%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for notes found!" }}
+    {{- end }}
     port: {{ .Values.objectstores.notes.port }}
     bucketName: {{ .Values.objectstores.notes.bucket | quote }}
     accessKeyId:
       value: {{ .Values.objectstores.notes.username | quote }}
     secretAccessKey:
-      value: {{ .Values.objectstores.notes.secretKey | default .Values.secrets.minio.notesUser | quote }}
+      {{- if .Values.objectstores.notes.secretKey }}
+      value: {{ .Values.objectstores.notes.secretKey | quote }}
+      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+      value: {{ .Values.secrets.minio.notesUser | quote }}
+      {{- else }}
+      {{- fail "No objectstorage secretkey for notes found!" }}
+      {{- end }}
 
 backend:
   image:

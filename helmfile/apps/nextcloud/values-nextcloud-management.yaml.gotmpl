@@ -130,9 +130,23 @@ configuration:
       accessKey:
         value: {{ .Values.objectstores.nextcloud.username | quote }}
       secretKey:
-        value: {{ .Values.objectstores.nextcloud.secretKey | default .Values.secrets.minio.nextcloudUser | quote }}
+        {{- if .Values.objectstores.nextcloud.secretKey }}
+        value: {{ .Values.objectstores.nextcloud.secretKey | quote }}
+        {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+        value: {{ .Values.secrets.minio.nextcloudUser | quote }}
+        {{- else }}
+        {{- fail "No objectstorage secretKey for nextcloud found!" }}
+        {{- end }}
     bucket: {{ .Values.objectstores.nextcloud.bucket | quote }}
-    host: {{ .Values.objectstores.nextcloud.endpoint | quote }}
+    {{- if .Values.objectstores.nextcloud.endpoint }}
+    host: {{ printf "%s" .Values.objectstores.nextcloud.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    host: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    host: {{ printf "%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for host found!" }}
+    {{- end }}
     region: {{ .Values.objectstores.nextcloud.region | quote }}
     storageClass: {{ .Values.objectstores.nextcloud.storageClass | quote }}
     port: {{ .Values.objectstores.nextcloud.port | quote }}
