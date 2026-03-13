@@ -23,9 +23,11 @@ SPDX-License-Identifier: Apache-2.0
         * [Applying global config changes for debugging](#applying-global-config-changes-for-debugging)
         * [Using config cascade](#using-config-cascade)
       * [OX Dovecot](#ox-dovecot)
-    * [Keycloak](#keycloak)
-      * [Setting the log level](#setting-the-log-level)
-    * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
+    * [Nubus](#nubus)
+      * [Provisioning](#provisioning)
+      * [Keycloak](#keycloak)
+        * [Setting the log level](#setting-the-log-level)
+        * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
 <!-- TOC -->
 
 ## Disclaimer
@@ -198,7 +200,7 @@ end
 
 Using the openDesk bundled PostgreSQL, you can explore database(s) using the PostgreSQL interactive terminal from the Pod's command line: `psql -U postgres`.
 
-While you will find all details about the cli tool `psql` in the [PostgreSQL documentation](https://www.postgresql.org/docs/current/app-psql.html)), some commonly used commands are:
+While you will find all details about the cli tool `psql` in the [PostgreSQL documentation](https://www.postgresql.org/docs/current/app-psql.html), some commonly used commands are:
 
 - `\?`: Get help on the psql command set
 - `\l`: Lists all databases
@@ -275,9 +277,58 @@ metric imap_command_unsubscribe {
 }
 ```
 
-### Keycloak
+### Nubus
 
-#### Setting the log level
+#### Provisioning
+
+This section should provide an overview on the Nubus Provisioning API in addition to the [available upstream documentation](https://docs.software-univention.de/nubus-customization/1.x/en/api/provisioning.html).
+
+As of openDesk 1.13 the provisioning is used for Nubus internal use cases e.g. the self-service except for OX App Suite provisioning of objects like users and groups.
+
+A core element of Nubus Provisioning is the messagaging system [NATS](https://nats.io/).
+
+Below is a [simplified](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#component-provisioning-service) representation of the end-to-end flow for an data object starting from the creation of using the UDM REST API until the object is getting persisted in the OX App Suite.
+
+1. *HTTP Client*: Send UDM API Request.
+2. [`udm-rest-api-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/directory-manager.html#directory-manager): Processes the request writing the resulting object into the LDAP.
+3. [`ldap-server-primary-0`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/identity-store.html): LDAP as the actual identity data store.
+4. [`ldap-notifier-0`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/identity-store.html#notify-about-changes-to-directory-objects): Monitors changes to LDAP objects and makes them available to other components that implement a so-called listener.
+5. [`provisioning-udm-listener-0`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#udm-listener): Receives the events from the notifier and generates NATS stream entries containting directory objects.
+   - `provisioning-nats-0`: `stream:ldap-producer`
+6. [`provisioning-udm-transformer-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#udm-transformer): Processes the directory objects and transforms them into UDM objects.
+   - `provisioning-nats-0`: `stream:incoming`
+7. [`provisioning-dispatcher-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#dispatcher): Dispatches all objects into all registered consumer streams. The consumer filters for its relevant events.
+   - `provisioning-nats-0`: `stream:ox-connector`
+8. [`provisioning-api-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#consumer-messages-http-rest-api): The service for consumers to retrieve their stream messages through.
+9. [`ox-connector-0`](https://docs.software-univention.de/ox-connector-app/latest/index.html): The consumer retrieves the objects from its own stream through the Provisioning API, filters for the relevant ones and sends API requests to OX App Suite SOAP API.
+10. [`open-xchange-core-mw-groupware-*`](https://documentation.open-xchange.com/components/middleware/http/8/index.html): OX App Suite Pod receiving the API calls. When `technical.oxAppSuite.provisioning.dedicatedCoreMwPod` is set to `true` the Pod name is `open-xchange-core-mw-admin-*`.
+11. *OX App Suite MariaDB schema(s)*: Persistent storage for all received objects.
+
+The Pod [`provisioning-prefill-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#prefill-service): Provides the consumer with information about directory objects that already exist in the directory at the time of registration.
+
+For interaction with NATS it is convenient to have the NATS Box container available in the `provisioning-nats` Pod to execute `nats` CLI commands.
+Check `technical.yaml.gotmpl` for details of the following setting:
+
+```yaml
+technical:
+  nubus:
+    provisioning:
+      nats:
+        natsBox:
+          enabled: true
+```
+
+At good start is to check the NATS stream status using the following command, followed by more detailed looks at the key-value store:
+```shell
+nats stream ls --user=admin --password=${NATS_PASSWORD}
+nats kv ls --user=admin --password=${NATS_PASSWORD}
+nats kv ls --user=admin --password=${NATS_PASSWORD} SUBSCRIPTIONS
+nats kv get --user=admin --password=${NATS_PASSWORD} SUBSCRIPTIONS ox-connector
+```
+
+#### Keycloak
+
+##### Setting the log level
 
 Keycloak is the gateway to integrate other authentication management systems or applications. It is undesirable to enable debug mode for the whole platform if you just need to look into Keycloak.
 
@@ -303,7 +354,7 @@ kubectl patch -n ${NAMESPACE} configmap ${CONFIGMAP_NAME} --type merge -p '{"dat
 > e.g. `INFO,org.keycloak.protocol.oidc.endpoints:TRACE`. The example sets the overall loglevel to `INFO` but
 > provides trace logs for `org.keycloak.protocol.oidc.endpoints`.
 
-### Accessing the Keycloak admin console
+##### Accessing the Keycloak admin console
 
 Deployments set to `debug.enable: true` expose the Keycloak admin console at `http://id.<your_opendesk_domain>/admin/`. This can also be achieved by updating the Ingress `ums-keycloak-extensions-proxy` with an additional path that allows access to `/admin/`.
 
