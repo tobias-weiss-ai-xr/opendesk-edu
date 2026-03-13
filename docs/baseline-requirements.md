@@ -10,6 +10,8 @@ SPDX-License-Identifier: Apache-2.0
   * [License compliance](#license-compliance)
   * [Release Management](#release-management)
   * [Container architectural basics](#container-architectural-basics)
+  * [Kubernetes APIs](#kubernetes-apis)
+    * [Gateway API](#gateway-api)
   * [Authentication \& Authorization](#authentication--authorization)
     * [Authentication](#authentication)
     * [User lifecycle](#user-lifecycle)
@@ -107,6 +109,14 @@ You will find below some of the most common best practice requirements, some of 
 **Reference:** Some of these requirements are tested and/or documented within the deployment automation:
 - CI executed Kyverno tests: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/tree/main/.kyverno/policies
 - Generated documentation regarding security contexts: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/security-context.md
+
+## Kubernetes APIs
+
+### Gateway API
+
+Components MUST support the [Kubernetes Gateway API](https://kubernetes.io/docs/concepts/services-networking/gateway/) in a controller-agnostic manner. This means that functionality defined by the Kubernetes Gateway API must be implemented using the standard Gateway API resources (e.g., Gateway, HTTPRoute, TCPRoute, TLSRoute) rather than relying on controller-specific annotations or proprietary configuration. The product MUST therefore expose and manage these capabilities through the standard API objects so that operators are free to choose and replace the underlying Gateway controller (e.g., NGINX Gateway Fabric, Istio, or Envoy Gateway) without requiring changes to the product configuration.
+
+Some configuration parameters may remain controller-specific where no standardized Gateway API field exists. In such cases, implementations must clearly isolate and document these settings. Examples include request/response timeouts, maximum request body size, connection limits, buffer sizes, and certain advanced load-balancing behaviors. These settings may require controller-specific configuration mechanisms but must not affect the portability of the core Gateway API configuration.
 
 ## Authentication & Authorization
 
