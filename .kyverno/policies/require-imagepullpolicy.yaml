@@ -40,12 +40,12 @@ spec:
           - spec:
               =(ephemeralContainers):
                 - (image): "!*:latest"
-                  imagePullPolicy: "kyverno"
+                  imagePullPolicy: "Never"
               =(initContainers):
                 - (image): "!*:latest"
-                  imagePullPolicy: "kyverno"
+                  imagePullPolicy: "Never"
               containers:
                 - (image): "!*:latest"
-                  imagePullPolicy: "kyverno"
+                  imagePullPolicy: "Never"
   validationFailureAction: "audit"
 ...
