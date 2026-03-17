@@ -82,6 +82,7 @@ environment:
   OPENPROJECT_SMTP__AUTHENTICATION: "cram_md5"
   OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
   OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "none"
+  OPENPROJECT_SSRF__PROTECTION__IP__ALLOWLIST: {{ join " " .Values.cluster.networking.cidr | quote }}
   OPENPROJECT_MAIL__FROM: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
   OPENPROJECT_HOME__URL: {{ printf "https://%s.%s/" .Values.global.hosts.nubus .Values.global.domain | quote }}
   OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
