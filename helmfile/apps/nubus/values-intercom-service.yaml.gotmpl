@@ -93,7 +93,7 @@ ics:
     subdomain: {{ .Values.global.hosts.nextcloud | quote }}
     audience: "opendesk-nextcloud"
 image:
-  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.intercom.registry | quote }}
   repository: {{ .Values.images.intercom.repository | quote }}
   tag: {{ .Values.images.intercom.tag | quote }}
@@ -139,12 +139,12 @@ provisioning:
             password: "admin_password"
         key: "admin_password"
   image:
-    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
     repository: {{ .Values.images.nubusWaitForDependency.repository | quote }}
     tag: {{ .Values.images.nubusWaitForDependency.tag | quote }}
   provisioningImage:
-    imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusKeycloakBootstrap.registry | quote }}
     repository: {{ .Values.images.nubusKeycloakBootstrap.repository | quote }}
     tag: {{ .Values.images.nubusKeycloakBootstrap.tag | quote }}
