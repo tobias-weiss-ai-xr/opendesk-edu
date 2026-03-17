@@ -23,7 +23,7 @@ releases:
       {{- range .Values.customization.release.opendeskOpenprojectBootstrap }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.apps.openproject.enabled }}
+    installed: {{ and .Values.apps.openproject.enabled .Values.apps.nextcloud.enabled }}
     timeout: 900
 
 commonLabels:
