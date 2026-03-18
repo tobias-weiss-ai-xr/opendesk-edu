@@ -22,8 +22,8 @@ name: "openDesk"
 platforms:
   - "web"
 developmentStatus: "stable"
-softwareVersion: "1.12.2"
-releaseDate: "2026-03-02"
+softwareVersion: "1.13.0"
+releaseDate: "2026-03-18"
 softwareType: "standalone/web"
 url: "https://gitlab.opencode.de/bmi/opendesk/"
 logo: ".opencode/openDesk-logo-rgb-color.svg"
@@ -46,7 +46,7 @@ maintenance:
 legal:
   license: "Apache-2.0"
   mainCopyrightOwner: >-
-    2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung
+    2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung
     (ZenDiS) GmbH
 intendedAudience:
   countries:
