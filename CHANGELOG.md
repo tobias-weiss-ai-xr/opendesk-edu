@@ -1,3 +1,37 @@
+# [1.13.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.12.2...v1.13.0) (2026-03-18)
+
+
+### Bug Fixes
+
+* **collabora:** Update from 25.04.7 to 25.04.8 ([1474131](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1474131b04cb041f641f1aa31934d566a3aa4b4e))
+* **element:** Enable advanced settings in Element UI ([a6eecad](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a6eecadf53a7903ac563e55772d924350870fa25))
+* **element:** Support for English welcome message ([25a62ba](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/25a62ba359799993c1715936c8968e493508d968))
+* **helmfile:** [[#264](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/264)] Run `opendesk-openproject-bootstrap` only when both OpenProject and Nextcloud are installed ([a974c78](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a974c78a962390093eb86b89b311516d8734bc39))
+* **helmfile:** Raise memory limit for `openxchangeCoreUI` from 96Mi to 128Mi ([6931537](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6931537d591249cc47936a577f3dbfa9de42a765))
+* **intercom-service:** Update from v2.19.5 to v2.23.7 ([5c29b0d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5c29b0d433aa95f1389cf56bf2ced2f76e4a3b85))
+* **nextcloud:** Keep cron job after successful completion for 180sec ([c2d54d7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c2d54d7015c055c58cd61e78954bf2deb6b6cb57))
+* **nubus:** Add listfilter option to Postfix to prepare mailinglist feature ([3315c42](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3315c42fb22d1d9b857c34499bdec58dc7dcadbd))
+* **nubus:** Update from v1.18.0 to v1.18.1 ([f2fefaa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f2fefaaf9f70ac3da51bc7001505cea2469e25f5))
+* **open-xchange:** [[#302](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/302)] Set hostname for postfix-ox to FQDN ([b40c609](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b40c609fb3c0fcdf3c09c775da5aa5a0e74aa57e))
+* **open-xchange:** [[#308](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/308)] Fix Dovecot file mode and OX App Suite bootstrap job ([c47cdb0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c47cdb04ccbf86d6da4b008d9d79722f734196ea))
+* **open-xchange:** [[#315](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/315)] Remove the character restriction on group names ([91bf9f0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/91bf9f06ac8e4daecb554182d0ec445ce93e3f1e))
+* **open-xchange:** [[#316](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/316)] Allow Sieve filter on accounts where username is not the same as the email's localpart ([6acad6e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6acad6eebe8297a245ade7cb3addd86f5ecdfe22))
+* **open-xchange:** Switch off quota when in EE only migration mode ([74fdd39](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/74fdd3989063dba32c37f3e6d58f4dea9287a1c0))
+* **openproject:** Set `cluster.networking.cidr` for SSRF allow list ([e6df699](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e6df699b84be1270daa8589b59b540114debf880))
+* **openproject:** Update from 17.2.0 to 17.2.1 ([40e7682](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/40e76825978f34192cf4a0054ded07680a847de7))
+* **ox-connector:** [[#310](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/310)] Update from v0.34.2 to v0.35.1 ([8193973](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8193973a673c1a385daf0f86ff1b05c01825bb91))
+
+
+### Features
+
+* **helmfile:** Optional separate Postfix customizations ([96f9a6a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/96f9a6aeafbda8bf179ffd8023bd5032a286d11b))
+* **helmfile:** Support for haproxy-ingress.github.io; see `migrations.md` for required upgrade steps ([2af3e25](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2af3e25049dc5cbd561da8bd37ae4a9458d2322a))
+* **nextcloud:** Update from 31.0.7 to 32.0.6 ([ee7d186](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ee7d1866e12c3ec791f63df80e196f3f12c33ae0))
+* **nubus:** Update from v1.17.0 to v1.18.0 ([4d43ce7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4d43ce7ebf56ac99e9692425b57e2e60550bab06))
+* **open-xchange:** Update from 8.45 to 8.46 ([595f748](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/595f748c9894887563038693bf91fd5c3e91cf03))
+* **openproject:** Update from 17.1.2 to 17.2.0 ([614c5be](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/614c5bebf1c66ed39521a71b1383e069dbec299f))
+* **xwiki:** Update from 17.4.8 to 17.10.4 ([289b195](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/289b19546bd99244c6693f06d4eae81e3a65805e))
+
 ## [1.12.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.12.1...v1.12.2) (2026-03-02)
 
 
