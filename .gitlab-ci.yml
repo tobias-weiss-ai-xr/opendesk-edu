@@ -93,6 +93,13 @@ variables:
       - "RUN"
       - "STACKIT"
       - "CHANGE ME"
+  INGRESS:
+    description: >
+      Set ingress to "haproxy" to get deployments with haproxy, when you have already configured your `ingress.*` vars accordingly.
+    value: "nginx"
+    options:
+      - "haproxy"
+      - "nginx"
   DEBUG_ENABLED:
     description: >
       Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific
