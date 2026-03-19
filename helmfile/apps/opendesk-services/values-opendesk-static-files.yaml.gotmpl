@@ -76,8 +76,6 @@ assets:
     subdomain: {{ .Values.global.hosts.nubus }}
     pathType: "exact"
     paths:
-      - path: "/favicon.ico"
-        data: {{ .Values.theme.imagery.portal.faviconIco }}
       - path: "/univention/portal/icons/logos/domain.svg"
         data: {{ .Values.theme.imagery.logoHeaderSvgB64 }}
       - path: "/static-files/portal/background.svg"
