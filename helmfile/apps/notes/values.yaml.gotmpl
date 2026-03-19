@@ -10,6 +10,14 @@ global:
   tlsSecretName: {{ .Values.ingress.tls.secretName | quote }}
   yProviderApiKey:
     value: {{ .Values.secrets.notes.collaborationSecret | quote }}
+  s3:
+    host: {{ .Values.objectstores.notes.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    port: {{ .Values.objectstores.notes.port }}
+    bucketName: {{ .Values.objectstores.notes.bucket | quote }}
+    accessKeyId:
+      value: {{ .Values.objectstores.notes.username | quote }}
+    secretAccessKey:
+      value: {{ .Values.objectstores.notes.secretKey | default .Values.secrets.minio.notesUser | quote }}
 
 backend:
   image:
@@ -41,13 +49,6 @@ backend:
         value: {{ .Values.ai.apiKey }}
       baseUrl: {{ .Values.ai.endpoint }}
       model: {{ .Values.ai.model | quote }}
-    aws:
-      endpointUrl: {{ printf "https://%s" (.Values.objectstores.notes.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
-      s3AccessKeyId:
-        value: {{ .Values.objectstores.notes.username }}
-      s3SecretAccessKey:
-        value: {{ .Values.objectstores.notes.secretKey | default .Values.secrets.minio.notesUser | quote }}
-      storageBucketName: {{ .Values.objectstores.notes.bucket }}
     collaboration:
       apiUrl: {{ printf "https://%s.%s/collaboration/api/" .Values.global.hosts.notes .Values.global.domain | quote }}
       wsUrl: {{ printf "wss://%s.%s/collaboration/ws/" .Values.global.hosts.notes .Values.global.domain | quote }}
@@ -176,8 +177,6 @@ frontend:
     annotations:
       {{ .Values.annotations.notesFrontend.ingress | toYaml | nindent 6 }}
     ingressClassName: {{ .Values.ingress.ingressClassName }}
-  configuration:
-    objectStoreHost: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
   resources:
     {{ .Values.resources.notesFrontend | toYaml | nindent 4 }}
   containerSecurityContext:
