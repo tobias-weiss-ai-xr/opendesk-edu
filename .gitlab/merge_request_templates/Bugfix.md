@@ -12,7 +12,7 @@ Explain for the reviewer how the change addresses the issue, providing some insi
 
 ## 🧪 How to reproduce & test
 
-Provida a link to the issue or document the required details below.
+Provide a link to the issue or document the required details below.
 In case it is a GitLab issue, reference it at the end of the commit message in square brackets, like `[#123]`
 Provide steps for QA or reviewers to test the fix and mention anything reviewers should be aware of.
 
