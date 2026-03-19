@@ -130,7 +130,7 @@ Therefore, openDesk contains automated migrations between versions which reduces
 
 These automated migrations have limitations in the sense that they require a certain openDesk version to be installed, effectively resulting in a forced upgrade path. This is highlighted in the section [Automated migrations](#automated-migrations).
 
-Manual checks and possible activities are also required by openDesk updates, they are described in the section [Manual checks/actions](#manual-checksactions).
+Manual checks and possible actions are also required by openDesk updates, they are described in the section [Manual checks/actions](#manual-checksactions).
 
 > [!important]
 > Please be sure to _thoroughly_ read / follow the requirements before you update / upgrade and assure that
