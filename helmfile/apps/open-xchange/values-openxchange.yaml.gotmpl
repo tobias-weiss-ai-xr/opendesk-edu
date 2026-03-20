@@ -48,7 +48,6 @@ nextcloud-integration-ui:
     runAsGroup: 1000
     runAsNonRoot: true
     runAsUser: 1000
-    privileged: false
     seccompProfile:
       type: "RuntimeDefault"
     seLinuxOptions:
@@ -85,7 +84,6 @@ public-sector-ui:
     runAsGroup: 1000
     runAsNonRoot: true
     runAsUser: 1000
-    privileged: false
     seccompProfile:
       type: "RuntimeDefault"
     seLinuxOptions:
@@ -116,8 +114,6 @@ appsuite:
       hosts:
         - "{{ .Values.global.hosts.openxchangeDav }}.{{ .Values.global.domain }}"
     routes:
-      trailslash:
-        enabled: false
       appsuite-base:
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
@@ -1054,7 +1050,6 @@ appsuite:
       io.ox/core//features/enterprisePicker/showLauncher: "false"
       io.ox/core//features/enterprisePicker/showTopRightLauncher: "true"
       # Text and icon color in the topbar
-      io.ox/dynamic-theme//topbarColor: "#000"
       io.ox/dynamic-theme//logoWidth: "82"
       io.ox/dynamic-theme//topbarHover: "rgba(0, 0, 0, 0.1)"
       # Resources
@@ -1269,8 +1264,6 @@ appsuite:
       capabilities:
         drop:
           - "ALL"
-      seccompProfile:
-        type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeDocumentConverter | toYaml | nindent 8 }}
     serviceAccount:
@@ -1371,8 +1364,6 @@ appsuite:
       capabilities:
         drop:
           - "ALL"
-      seccompProfile:
-        type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.openxchangeImageConverter | toYaml | nindent 8 }}
     serviceAccount:
