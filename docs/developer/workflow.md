@@ -363,15 +363,15 @@ Commit messages must adhere to the [Conventional Commit standard](https://www.co
 > The first letter after the `: ` must be uppercase.
 
 ```text
-<type>(<scope>): <Short summary> [path/to/issue#1]
- │       │              │                │
- │       │              |                └─> Issue reference (optional)
- │       │              |
- │       │              └─> Summary in present tense, sentence case, with no period at the end
- │       │
- │       └─> Commit Scope: helmfile, docs, collabora, nextcloud, open-xchange, etc.
- │
- └─> Commit Type: chore, ci, docs, feat, fix
+<type>(<scope>): [path/to/issue#1] <Short summary>
+  │       │              │                │
+  │       │              |                └─> Summary in present tense, sentence case, with no period at the end
+  │       │              |
+  │       │              └─> Issue reference (optional)
+  │       │
+  │       └─> Commit Scope: helmfile, docs, collabora, nextcloud, open-xchange, etc.
+  │
+  └─> Commit Type: chore, ci, docs, feat, fix
 ```
 
 Example: `fix(open-xchange): Bump to 8.26 to heal issue with functional mailbox provisioning.`
