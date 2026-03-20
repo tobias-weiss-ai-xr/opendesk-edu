@@ -465,8 +465,6 @@ nubusKeycloakExtensions:
         type: "RuntimeDefault"
       readOnlyRootFilesystem: true
       runAsNonRoot: true
-      seccompProfile:
-        type: "RuntimeDefault"
       seLinuxOptions:
         {{ .Values.seLinuxOptions.umsKeycloakExtensionHandler | toYaml | nindent 8 }}
     service:
