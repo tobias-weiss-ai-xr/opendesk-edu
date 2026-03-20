@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -6,7 +6,7 @@
 
 include:
   - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
-    ref: "v2.5.1"
+    ref: "v2.6.7"
     file:
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"
@@ -24,14 +24,14 @@ include:
     rules:
       - if: >
             $JOB_OPENDESK_LINTER_ENABLED == 'false' ||
-            $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'
+            $CI_PIPELINE_SOURCE =~ /^tags|merge_request_event|web|trigger|api$/
         when: "never"
       - when: "always"
   - local: "/.gitlab/lint/lint-kyverno.yml"
     rules:
       - if: >
             $JOB_OPENDESK_LINTER_ENABLED == 'false' ||
-            $CI_PIPELINE_SOURCE =~ 'tags|merge_request_event|web|trigger|api'
+            $CI_PIPELINE_SOURCE =~ /^tags|merge_request_event|web|trigger|api$/
         when: "never"
       - when: "always"
 
@@ -239,7 +239,7 @@ variables:
     value: "gitlab.opencode.de/api/v4/projects/1506"
   HELM_IMAGE_PIN:
     description: "The Helm image tag/checksum."
-    value: "1.3.3@sha256:3e195942e6988b8b93c62349700c0ed8428e3a8fbe2655bd7f5378dc88bc8ccb"
+    value: "1.4.0@sha256:300e345cf6b0ca0909e55ba62e15028d85b06d4e02f907e04b01747512e74f36"
 
 # Declare .environments which is in `opendesk-env` repository. In case it is not available
 # 'cache' is used because job as a dummy key, as the job is not allowed to be empty.
@@ -252,7 +252,7 @@ variables:
   extends: ".environments"
   environment:
     name: "${NAMESPACE}"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:${HELM_IMAGE_PIN}"
+  image: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:${HELM_IMAGE_PIN}"
   script:
     - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
@@ -284,14 +284,14 @@ variables:
 
 db-cleanup:
   extends: ".deploy-common"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-ci-toolbox:1.0.0\
-          @sha256:8c00f96cbfca32e4a724c552143c7172980dd03c573fb097e57a2351db6421ab"
+  image: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-ci-toolbox:1.0.1\
+          @sha256:b80a477d6c9a2034b9d622895dead26b7714b4a4f021cf7dbd9d03adf463a5d7"
   needs:
     - job: "env-cleanup"
       optional: true
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           $ENV_STOP_BEFORE != "no" &&
           $FLUSH_EXTERNAL_SERVICES_BEFORE != "no"
@@ -451,7 +451,7 @@ env-cleanup:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           $ENV_STOP_BEFORE != "no"
       when: "on_success"
@@ -473,10 +473,10 @@ env-cleanup:
 
 env-start:
   extends: ".deploy-common"
-  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/k8s:1.25.6"
+  image: "registry.open-de.sk/docker.io/alpine/k8s:1.35.2@sha256:9a87b09e1b6d887fa52c2dea1611d112d9e7d3d0271708588711a2fb2016e82c"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/
       when: "on_success"
   script:
@@ -529,7 +529,7 @@ policies-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
       when: "on_success"
@@ -542,7 +542,7 @@ migrations-pre:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_MIGRATIONS != "no")
       when: "on_success"
@@ -554,7 +554,7 @@ migrations-post:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_MIGRATIONS != "no")
       when: "on_success"
@@ -566,7 +566,7 @@ services-external-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
       when: "on_success"
@@ -578,7 +578,7 @@ opendesk-services-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_SERVICES != "no")
       when: "on_success"
@@ -590,7 +590,7 @@ nubus-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_UMS != "no")
       when: "on_success"
@@ -603,7 +603,7 @@ ox-deploy:
   timeout: "30m"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OX != "no")
       when: "on_success"
@@ -615,7 +615,7 @@ xwiki-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_XWIKI != "no")
       when: "on_success"
@@ -627,7 +627,7 @@ collabora-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_COLLABORA != "no")
       when: "on_success"
@@ -639,7 +639,7 @@ cryptpad-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no" || $DEPLOY_CRYPTPAD != "no")
       when: "on_success"
@@ -651,7 +651,7 @@ nextcloud-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NEXTCLOUD != "no")
       when: "on_success"
@@ -663,7 +663,7 @@ openproject-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_OPENPROJECT != "no")
       when: "on_success"
@@ -675,7 +675,7 @@ openproject-bootstrap-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || ($DEPLOY_OPENPROJECT != "no" && $DEPLOY_NEXTCLOUD != "no"))
       when: "on_success"
@@ -687,7 +687,7 @@ jitsi-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_JITSI != "no")
       when: "on_success"
@@ -699,7 +699,7 @@ notes-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_NOTES != "no")
       when: "on_success"
@@ -711,7 +711,7 @@ element-deploy:
   extends: ".deploy-common"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" &&
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ &&
           $NAMESPACE =~ /.+/ &&
           ($DEPLOY_ALL_COMPONENTS != "no" || $DEPLOY_ELEMENT != "no")
       when: "on_success"
@@ -723,7 +723,7 @@ fetch-administrator-credentials:
   stage: "post-prepare"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api"
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/
           && $NAMESPACE =~ /.+/
           && ($CREATE_DEFAULT_ACCOUNTS == "yes" || $RUN_TESTS == "yes")
       when: "on_success"
@@ -748,9 +748,9 @@ import-default-accounts:
     name: "${NAMESPACE}"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/ && $CREATE_DEFAULT_ACCOUNTS == "yes"
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ && $NAMESPACE =~ /.+/ && $CREATE_DEFAULT_ACCOUNTS == "yes"
       when: "on_success"
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.4.1"
+  image: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.8.1"
   script:
     - "echo \"Starting default account import for ${DOMAIN}\""
     - "cd /app"
@@ -792,7 +792,7 @@ run-tests:
     name: "${NAMESPACE}"
   rules:
     - if: >
-          $CI_PIPELINE_SOURCE =~ "web|schedules|trigger|api" && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
+          $CI_PIPELINE_SOURCE =~ /^web|schedules|trigger|api$/ && $NAMESPACE =~ /.+/ && $RUN_TESTS == "yes"
       when: "on_success"
   parallel:
     matrix:
@@ -840,10 +840,10 @@ avscan-prepare:
     - if: >
           $JOB_AVSCAN_ENABLED != 'false' &&
           $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
-          $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
+          $CI_PIPELINE_SOURCE =~ /^push|merge_request_event$/
       when: "always"
     - when: "never"
-  image: "${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/mikefarah/yq"
+  image: "registry.open-de.sk/docker.io/mikefarah/yq:4.52.4@sha256:a4c2cafdf4674b2dc3c6ac457fe1486d55d7d93edb3ed4459637afda3c286af6"
   script:
     - |
       cat << 'EOF' > dynamic-scans.yml
@@ -901,7 +901,7 @@ avscan-start:
     - if: >
         $JOB_AVSCAN_ENABLED != 'false' &&
         $CI_COMMIT_BRANCH == $RELEASE_BRANCH &&
-        $CI_PIPELINE_SOURCE =~ "push|merge_request_event"
+        $CI_PIPELINE_SOURCE =~ /^push|merge_request_event$/
       when: "always"
     - when: "never"
   trigger:

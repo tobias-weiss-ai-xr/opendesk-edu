@@ -3,6 +3,6 @@
 ---
 # Overwrite shared settings
 .common-semantic-release:
-  image: "registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release:1.1.0"
+  image: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/components/platform-development/images/semantic-release:1.2.0"
   tags: []
 ...
