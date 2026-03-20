@@ -756,7 +756,11 @@ nubusUdmRestApi:
   ingress:
     enabled: {{ .Values.functional.externalServices.nubus.udmRestApi.enabled }}
     annotations:
-      {{ .Values.annotations.nubusUdmRestApi.ingress | toYaml | nindent 6 }}
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
+      nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "128k"
+      {{- with .Values.annotations.nubusUdmRestApi.ingress }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
     certManager:
       enabled: false
     tls:
