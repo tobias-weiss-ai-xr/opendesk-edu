@@ -1,3 +1,14 @@
+## [1.13.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.0...v1.13.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* **notes:** Implement a global S3 config section to fix buckets with non default bucket names on external S3 services ([8577c6b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8577c6b196d6d7b7fef0c7873d3c0d2860637bff))
+* **nubus:** Set nginx proxy buffer sizes for UDM REST API Ingress ([5ed154f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5ed154fac85e07a3e01311160fca841da847f0db))
+* **opendesk-static-files:** [[#321](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/321)] Use pathtype "prefix" instead of "exact" to avoid issues with nginx's validating admission webhook ([1a029e2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1a029e2c783754d9be5de69272c1b409a22255c1))
+* **opendesk-static-files:** Remove already define Ingress route for Nubus' favicon causing errors in strict nginx configurations ([1617177](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1617177c09f649f555160cea6707a13bf651b3c7))
+* **xwiki:** Add old favicon path to opendesk-static-files to cover upgrade deployments ([690c5fa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/690c5fa1fc84029d0ce5900527d92bcfae091866))
+
 # [1.13.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.12.2...v1.13.0) (2026-03-18)
 
 
