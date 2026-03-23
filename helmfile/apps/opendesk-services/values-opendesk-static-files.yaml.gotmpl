@@ -13,89 +13,89 @@ additionalAnnotations:
 
 assets:
   element:
-    subdomain: {{ .Values.global.hosts.element }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.element | quote }}
+    pathType: "prefix"
     paths:
       - path: "/vector-icons/24.97ab000.png"
-        data: {{ .Values.theme.imagery.chat.faviconPng }}
+        data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
       - path: "/vector-icons/120.570a7f9.png"
-        data: {{ .Values.theme.imagery.chat.faviconPng }}
+        data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
       - path: "/vector-icons/144.5a63bf2.png"
-        data: {{ .Values.theme.imagery.chat.faviconPng }}
+        data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
       - path: "/vector-icons/152.1ccdc8a.png"
-        data: {{ .Values.theme.imagery.chat.faviconPng }}
+        data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
       - path: "/vector-icons/180.30b915f.png"
-        data: {{ .Values.theme.imagery.chat.faviconPng }}
+        data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
       - path: "/vector-icons/512.7ce350d.png"
-        data: {{ .Values.theme.imagery.chat.faviconPng }}
+        data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
   jitsi:
-    subdomain: {{ .Values.global.hosts.jitsi }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.jitsi | quote }}
+    pathType: "prefix"
     paths:
       - path: "/images/favicon.svg"
-        data: {{ .Values.theme.imagery.videoconference.faviconSvg }}
+        data: {{ .Values.theme.imagery.videoconference.faviconSvg | quote }}
   keycloak:
-    subdomain: {{ .Values.global.hosts.keycloak }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.keycloak | quote }}
+    pathType: "prefix"
     paths:
       - path: "/opendesk-static-files/login/logo.svg"
-        data: {{ .Values.theme.imagery.login.logoSvg }}
+        data: {{ .Values.theme.imagery.login.logoSvg | quote }}
   nextcloud:
-    subdomain: {{ .Values.global.hosts.nextcloud }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.nextcloud | quote }}
+    pathType: "prefix"
     paths:
       - path: "/core/img/favicon-touch.png"
-        data: {{ .Values.theme.imagery.files.faviconPng }}
+        data: {{ .Values.theme.imagery.files.faviconPng | quote }}
       - path: "/core/img/favicon.ico"
-        data: {{ .Values.theme.imagery.files.faviconIco }}
+        data: {{ .Values.theme.imagery.files.faviconIco | quote }}
       - path: "/apps/integration_swp/logo"
-        data: {{ .Values.theme.imagery.logoHeaderSvgB64 }}
+        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
         mimeType: "image/svg+xml"
       - path: "/apps/theming/img/background/jenna-kim-the-globe-dark.webp"
-        data: {{ .Values.theme.imagery.login.backgroundJpg }}
+        data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
         mimeType: "image/jpeg"
   notes:
-    subdomain: {{ .Values.global.hosts.notes }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.notes | quote }}
+    pathType: "prefix"
     paths:
       - path: "/assets/favicon-light.ico"
-        data: {{ .Values.theme.imagery.notes.faviconIco }}
+        data: {{ .Values.theme.imagery.notes.faviconIco | quote }}
       - path: "/assets/favicon-dark.png"
-        data: {{ .Values.theme.imagery.notes.faviconPng }}
+        data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
       - path: "/assets/favicon-light.png"
-        data: {{ .Values.theme.imagery.notes.faviconPng }}
+        data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
   openxchange:
-    subdomain: {{ .Values.global.hosts.openxchange }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.openxchange | quote }}
+    pathType: "prefix"
     paths:
       - path: "/appsuite/favicon.ico"
-        data: {{ .Values.theme.imagery.groupware.faviconIco }}
+        data: {{ .Values.theme.imagery.groupware.faviconIco | quote }}
       - path: "/appsuite/favicon.svg"
-        data: {{ .Values.theme.imagery.groupware.faviconSvg }}
+        data: {{ .Values.theme.imagery.groupware.faviconSvg | quote }}
   portal:
-    subdomain: {{ .Values.global.hosts.nubus }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.nubus | quote }}
+    pathType: "prefix"
     paths:
       - path: "/univention/portal/icons/logos/domain.svg"
-        data: {{ .Values.theme.imagery.logoHeaderSvgB64 }}
+        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
       - path: "/static-files/portal/background.svg"
-        data: {{ .Values.theme.imagery.portal.backgroundSvg }}
+        data: {{ .Values.theme.imagery.portal.backgroundSvg | quote }}
       - path: "/static-files/portal/waiting-spinner.svg"
-        data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg }}
+        data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
       - path: "/static-files/login/background.jpg"
-        data: {{ .Values.theme.imagery.login.backgroundJpg }}
+        data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
   xwiki:
-    subdomain: {{ .Values.global.hosts.xwiki }}
-    pathType: "exact"
+    subdomain: {{ .Values.global.hosts.xwiki | quote }}
+    pathType: "prefix"
     paths:
       - path: "/resources/icons/xwiki/favicon.svg"
-        data: {{ .Values.theme.imagery.knowledge.faviconSvg }}
+        data: {{ .Values.theme.imagery.knowledge.faviconSvg | quote }}
       - path: "/resources/icons/xwiki/favicon16.png"
-        data: {{ .Values.theme.imagery.knowledge.faviconPng }}
+        data: {{ .Values.theme.imagery.knowledge.faviconPng | quote }}
       - path: "/bin/skin/XWiki/DefaultSkin/icons.xwiki.favicon.svg"
-        data: {{ .Values.theme.imagery.knowledge.faviconSvg }}
+        data: {{ .Values.theme.imagery.knowledge.faviconSvg | quote }}
       - path: "/bin/skin/XWiki/DefaultSkin/icons.xwiki.favicon16.png"
-        data: {{ .Values.theme.imagery.knowledge.faviconPng }}
+        data: {{ .Values.theme.imagery.knowledge.faviconPng | quote }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
