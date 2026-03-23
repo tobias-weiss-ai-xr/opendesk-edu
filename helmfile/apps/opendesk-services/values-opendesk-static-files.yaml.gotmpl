@@ -92,6 +92,10 @@ assets:
         data: {{ .Values.theme.imagery.knowledge.faviconSvg }}
       - path: "/resources/icons/xwiki/favicon16.png"
         data: {{ .Values.theme.imagery.knowledge.faviconPng }}
+      - path: "/bin/skin/XWiki/DefaultSkin/icons.xwiki.favicon.svg"
+        data: {{ .Values.theme.imagery.knowledge.faviconSvg }}
+      - path: "/bin/skin/XWiki/DefaultSkin/icons.xwiki.favicon16.png"
+        data: {{ .Values.theme.imagery.knowledge.faviconPng }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
