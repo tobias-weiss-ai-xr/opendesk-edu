@@ -141,8 +141,8 @@ functional:
       # Disallowed characters for directory and file names.
       # Some operating systems do not support these characters, preventing affected clients from syncing files.
       #
-      # Note: After changing the settings below and redeploying Nextcloud, restart the `aio` Pod(s) to
-      # apply the changes.
+      # Note: After changing the settings below and redeploying Nextcloud, restart the `opendesk-nextcloud-aio` Pod(s)
+      # to apply the changes.
       forbiddenChars:
         - '*'
         - '"'
@@ -159,7 +159,7 @@ functional:
       # Set the default quota for all users in gigabyte
       default: 1
     # Options related to file sharing.
-    # Changing these options might require a restart of the `opendesk-nextcloud-php` Pod(s).
+    # Changing these options might require a restart of the `opendesk-nextcloud-aio` Pod(s).
     sharing:
       # External shares
       external:
