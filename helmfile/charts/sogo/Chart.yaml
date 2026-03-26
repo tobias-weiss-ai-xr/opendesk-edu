@@ -1,0 +1,23 @@
+apiVersion: v2
+name: sogo
+description: SOGo groupware server (alternative to OX App Suite) with Keycloak SSO
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide utilities or functions for the chart developer. They're included via YAML
+# dependencies and don't deploy any templates.
+type: application
+
+# This is the chart version. This increments when you make changes to your chart and its templates.
+version: 0.1.0
+
+# This is the version number of the application being deployed. 
+appVersion: "5.11.0"
+
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: 2.x.x

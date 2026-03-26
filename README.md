@@ -86,10 +86,11 @@ core services universities need — all integrated with openDesk's existing Keyc
 
 ### Alt Components (Choose One) 🔄
 
-Configure **either** the standard openDesk CE component **or** its enabling-focused alternative — not both.
+Configure **either** the standard openDesk CE component **or** its education-focused alternative — not both.
 
 | Standard | Alternative | Status | Key Benefits |
 |:---------|:------------|:------:|:-------------|
+| 📧 [OX App Suite](https://www.open-xchange.com/) | [SOGo](https://www.sogo.nu/) ![SOGo](docs/assets/icons/sogo-icon.svg?raw=true&width=20) | 🔧 Planning | Email-focused, modern UI, better student experience, tight LDAP integration |
 | 📹 [Jitsi](https://jitsi.github.io/) | [BigBlueButton](https://bigbluebutton.org/) ![BBB](docs/assets/icons/bigbluebutton-icon.svg?raw=true&width=20) | 🔄 Beta | Built for teaching: recording, whiteboard, breakout rooms, session timers |
 | 📁 [Nextcloud](https://nextcloud.com/) | [OpenCloud](https://opencloud.eu/) ![OpenCloud](docs/assets/icons/opencloud-icon.svg?raw=true&width=20) | 🔄 Beta | Lightweight for education: per-course shares, CS3-based sync |
 
@@ -118,7 +119,8 @@ drop-in alternatives, not replacements. This is a **superset** of openDesk CE, n
 | 📝 Notes | Notes (aka Docs) | MIT | [4.4.0](https://github.com/suitenumerique/docs/releases/tag/v4.4.0) | In-app |
 | 📊 Diagrams | CryptPad ft. diagrams.net | AGPL-3.0 | [2025.9.0](https://github.com/cryptpad/cryptpad/releases/tag/2025.9.0) | [Docs](https://docs.cryptpad.org/en/) |
 | 📁 Files | Nextcloud | AGPL-3.0 | [32.0.6](https://nextcloud.com/de/changelog/#32-0-6) | [Docs](https://docs.nextcloud.com/) |
-| 📧 Groupware | OX App Suite | GPL-2.0 / AGPL-3.0 | [8.46](https://documentation.open-xchange.com/appsuite/releases/8.46/) | [Docs](https://documentation.open-xchange.com/) |
+| 📧 **Groupware** | **OX App Suite** | GPL-2.0 / AGPL-3.0 | [8.46](https://documentation.open-xchange.com/appsuite/releases/8.46/) | [Docs](https://documentation.open-xchange.com/) |
+| 💌 **Alt Webmail** | **SOGo** (↔ OX App Suite) | LGPL-2.1 | [5.11](https://github.com/Alinto/sogo/releases) | [Docs](https://www.sogo.nu/support/documentation.html) |
 | 📚 Wiki | XWiki | LGPL-2.1 | [17.10.4](https://www.xwiki.org/xwiki/bin/view/ReleaseNotes/Data/XWiki/17.10.4/) | [Docs](https://www.xwiki.org/xwiki/bin/view/Documentation) |
 | 🔑 Portal & IAM | Nubus | AGPL-3.0 | [1.18.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/1.18.html) | [Docs](https://docs.software-univention.de/n/en/nubus.html) |
 | 📋 Projects | OpenProject | GPL-3.0 | [17.2.1](https://www.openproject.org/docs/release-notes/17-2-1/) | [Docs](https://www.openproject.org/docs/user-guide/) |

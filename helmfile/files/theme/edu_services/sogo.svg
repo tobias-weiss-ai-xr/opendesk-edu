@@ -1,0 +1,15 @@
+<svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
+  <g>
+    <!-- Envelope base - groupware/email concept -->
+    <path d="M30 40L55.5 53L81 40V75H30V40Z" fill="#571EFA"/>
+    <!-- Envelope flap -->
+    <path d="M30 40L55.5 25L81 40L55.5 53L30 40Z" fill="#927AFA"/>
+    <!-- SOGo logo lettering -->
+    <text x="55.5" y="68" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#341291" text-anchor="middle">S</text>
+    <circle cx="60" cy="68" r="10" stroke="#341291" stroke-width="2" fill="none"/>
+    <text x="67" y="68" font-family="Arial, sans-serif" font-size="14" fill="#341291" text-anchor="middle">oGo</text>
+    <!-- Integration highlight -->
+    <path d="M70 30L75 25L80 30" stroke="#341291" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
