@@ -71,7 +71,7 @@ core services universities need — all integrated with openDesk's existing Keyc
 
 | Service | Component | Status | Description |
 |:--------|:----------|:------:|:------------|
-| 📖 **Learning Management** | [ILIAS](https://www.ilias.de/) | ✅ Stable | Full-featured LMS with SAML SSO — courses, SCORM, assessments, forums |
+| 📖 **Learning Management** | [ILIAS](https://www.ilias.de/) | 🔄 Beta | Full-featured LMS with SAML SSO — courses, SCORM, assessments, forums |
 | 📖 **Learning Management** | [Moodle](https://moodle.org/) | 🔄 Beta | LMS with Shibboleth auth — plugins, gradebook, workshops |
 
 ### Additional education tools 🎓
