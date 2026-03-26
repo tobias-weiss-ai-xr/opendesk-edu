@@ -186,6 +186,44 @@ Configuration follows the same pattern as the upstream services above.
 |                  |         | Port                             | `databases.bbb.port`                          | `5432`         |
 |                  |         | Username                         | `databases.bbb.username`                      | `bbb_user`     |
 |                  |         | Password                         | `databases.bbb.password`                      |                |
+| Etherpad         | Etherpad|                                  |                                               |                |
+|                  |         | Type                             | `databases.etherpad.type`                     | `postgresql`   |
+|                  |         | Name                             | `databases.etherpad.name`                     | `etherpad`     |
+|                  |         | Host                             | `databases.etherpad.host`                     | `postgresql`   |
+|                  |         | Port                             | `databases.etherpad.port`                     | `5432`         |
+|                  |         | Username                         | `databases.etherpad.username`                 | `etherpad_user`|
+|                  |         | Password                         | `databases.etherpad.password`                 |                |
+| BookStack        | BookStack|                                 |                                               |                |
+|                  |         | Type                             | `databases.bookstack.type`                    | `mariadb`      |
+|                  |         | Name                             | `databases.bookstack.name`                    | `bookstack`    |
+|                  |         | Host                             | `databases.bookstack.host`                    | `mariadb`      |
+|                  |         | Port                             | `databases.bookstack.port`                    | `3306`         |
+|                  |         | Username                         | `databases.bookstack.username`                | `bookstack_user`|
+|                  |         | Password                         | `databases.bookstack.password`                |                |
+| Planka           | Planka   |                                  |                                               |                |
+|                  |         | Type                             | `databases.planka.type`                       | `postgresql`   |
+|                  |         | Name                             | `databases.planka.name`                       | `planka`       |
+|                  |         | Host                             | `databases.planka.host`                       | `postgresql`   |
+|                  |         | Port                             | `databases.planka.port`                       | `5432`         |
+|                  |         | Username                         | `databases.planka.username`                   | `planka_user`  |
+|                  |         | Password                         | `databases.planka.password`                   |                |
+| Zammad           | Zammad   |                                  |                                               |                |
+|                  |         | Type                             | `databases.zammad.type`                       | `postgresql`   |
+|                  |         | Name                             | `databases.zammad.name`                       | `zammad`       |
+|                  |         | Host                             | `databases.zammad.host`                       | `postgresql`   |
+|                  |         | Port                             | `databases.zammad.port`                       | `5432`         |
+|                  |         | Username                         | `databases.zammad.username`                   | `zammad_user`  |
+|                  |         | Password                         | `databases.zammad.password`                   |                |
+| LimeSurvey       | LimeSurvey|                                 |                                               |                |
+|                  |         | Type                             | `databases.limesurvey.type`                   | `mariadb`      |
+|                  |         | Name                             | `databases.limesurvey.name`                   | `limesurvey`   |
+|                  |         | Host                             | `databases.limesurvey.host`                   | `mariadb`      |
+|                  |         | Port                             | `databases.limesurvey.port`                   | `3306`         |
+|                  |         | Username                         | `databases.limesurvey.username`               | `limesurvey_user`|
+|                  |         | Password                         | `databases.limesurvey.password`               |                |
+
+> [!note]
+> Draw.io, Excalidraw, and Self-Service Password are stateless applications and do not require a database.
 
 ### Object storage
 
@@ -206,6 +244,9 @@ Configuration follows the same pattern as the upstream services above.
 | BigBlueButton | BBB     | Redis |                              |                            |                  |
 |               |         |       | Host                         | `cache.bbb.host`           | `redis-headless` |
 |               |         |       | Port                         | `cache.bbb.port`           | `6379`           |
+| Zammad        | Zammad  | Redis |                              |                            |                  |
+|               |         |       | Host                         | `cache.zammad.host`        | `redis-headless` |
+|               |         |       | Port                         | `cache.zammad.port`        | `6379`           |
 
 ## Footnotes
 

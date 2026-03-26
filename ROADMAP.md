@@ -22,6 +22,14 @@
 | OpenCloud ↔ Nextcloud (alternative) | ✅ |
 | Unified Keycloak SSO | ✅ |
 | Portal integration (tiles, icons) | ✅ |
+| Etherpad collaborative editor (OIDC) | ✅ |
+| BookStack knowledge base (SAML) | ✅ |
+| Planka project boards (OIDC) | ✅ |
+| Zammad helpdesk (SAML) | ✅ |
+| LimeSurvey course evaluation (LDAP) | ✅ |
+| Draw.io diagramming (stateless) | ✅ |
+| Excalidraw whiteboard (stateless) | ✅ |
+| Self-Service Password (LDAP) | ✅ |
 
 ---
 
@@ -435,7 +443,7 @@ Growing EU requirement via European Open Science Cloud (EOSC).
 ## Timeline
 
 ```
-2026 Q2   v1.0  Current state (ILIAS, Moodle, BBB, OpenCloud)
+2026 Q2   v1.0  Core platform + 12 education services (ILIAS, Moodle, BBB, OpenCloud, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, SSP)
           v1.1  DFN-AAI federation + semester lifecycle + logout
 2026 Q3   v1.2  Opencast + Tobira lecture recording
 2026 Q4   v1.5  HISinOne/Marvin campus management integration (phase 1: identity)

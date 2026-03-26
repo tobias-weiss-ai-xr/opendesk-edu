@@ -165,6 +165,14 @@ drop-in alternatives, not replacements. This is a **superset** of openDesk CE, n
 
 ---
 
+## 🎤 Presentations
+
+| Event | Topic | Format |
+|:------|:------|:-------|
+| [LinuxTag 2026](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk.md) | openDesk at University of Marburg — Deployment & openDesk Edu | Marp (HTML/PDF) |
+
+---
+
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
