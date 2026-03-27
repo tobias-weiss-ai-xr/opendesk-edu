@@ -1,10 +1,6 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Open book -->
-  <path d="M35 60L50 45L65 60H35Z" fill="#571EFA"/>
-  <path d="M50 45L65 30L80 45V60H50V45Z" fill="#341291"/>
-  <!-- Mortar board (graduation square) -->
-  <rect x="55" y="25" width="15" height="15" rx="2" fill="#571EFA"/>
-  <!-- Tassel -->
-  <path d="M62 20L62 15L65 15L65 20" fill="#927AFA"/>
+  <path d="M20 52 L55 32 L90 52 L55 42Z" fill="#341291"/>
+  <path d="M20 52 L55 62 L90 52 L55 42Z" fill="#571EFA"/>
+  <path d="M54 42 V82 H63 V74 H56 V42Z" fill="#341291"/>
 </svg>

@@ -40,8 +40,8 @@
   <!-- OpenCloud -->
   <g transform="translate(500, 50)">
     <rect width="111" height="111" rx="20" fill="white"/>
-    <path d="M55.5 30C65 30 72 37 72 45C72 46 71 47 71 48C78 48 83 53 83 60C83 67 77 72 70 72H35C28 72 23 67 23 60C23 53 30 48 35 48C35 40 42 35 50 35C52 35 54 36 55 37" fill="#571EFA"/>
-    <path d="M40 50H65C68 50 70 52 70 55V63C70 66 68 68 65 68H40C37 68 35 66 35 63V50C35 47 37 45 40 45H45L50 50H65" fill="#341291"/>
+    <path d="M20 46L55.5 22L91 46L91 65L55.5 89L20 65Z" fill="#341291"/>
+    <path d="M48 48L55.5 27L63 48L83 55.5L63 63L55.5 84L48 63L28 55.5Z" fill="#571EFA"/>
     <text x="55.5" y="135" text-anchor="middle" font-family="Arial" font-size="14" fill="#341291">OpenCloud</text>
   </g>
 </svg>

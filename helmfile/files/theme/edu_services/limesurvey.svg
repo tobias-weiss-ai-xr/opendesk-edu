@@ -1,24 +1,7 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Clipboard body -->
-  <path d="M35 32L55 22L75 22L75 80L35 80L35 32Z" fill="#571EFA"/>
-  <!-- Clipboard top fold -->
-  <path d="M35 32L75 32L70 27L40 27L35 32Z" fill="#341291"/>
-  <!-- Clipboard clip -->
-  <rect x="48" y="20" width="14" height="8" rx="2" fill="#341291"/>
-  <!-- Checkbox row 1 -->
-  <rect x="42" y="38" width="10" height="10" rx="2" fill="#341291"/>
-  <path d="M44 43L46 45.5L51 41" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <rect x="57" y="40" width="12" height="3" rx="1.5" fill="white"/>
-  <rect x="57" y="46" width="9" height="3" rx="1.5" fill="#927AFA"/>
-  <!-- Checkbox row 2 -->
-  <rect x="42" y="52" width="10" height="10" rx="2" fill="#341291"/>
-  <path d="M44 57L46 59.5L51 55" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <rect x="57" y="54" width="12" height="3" rx="1.5" fill="white"/>
-  <rect x="57" y="60" width="9" height="3" rx="1.5" fill="#927AFA"/>
-  <!-- Checkbox row 3 -->
-  <rect x="42" y="66" width="10" height="10" rx="2" fill="#341291"/>
-  <path d="M44 71L46 73.5L51 69" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <rect x="57" y="68" width="12" height="3" rx="1.5" fill="white"/>
-  <rect x="57" y="74" width="9" height="3" rx="1.5" fill="#927AFA"/>
+  <path d="M30 35 H80 V85 H30 Z" fill="#341291"/>
+  <path d="M43 28 H67 V40 H43 Z" fill="#571EFA"/>
+  <path d="M38 47 H50 V59 H38 Z M38 63 H50 V75 H38 Z" fill="#571EFA"/>
+  <path d="M55 49 H72 V52 H55 Z M55 55 H66 V58 H55 Z M55 65 H72 V68 H55 Z M55 71 H66 V74 H55 Z" fill="#571EFA"/>
 </svg>

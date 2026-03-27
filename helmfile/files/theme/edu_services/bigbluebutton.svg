@@ -1,12 +1,7 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Monitor frame -->
-  <rect x="25" y="25" width="60" height="40" rx="3" fill="#341291"/>
-  <!-- Screen -->
-  <rect x="30" y="30" width="50" height="30" rx="2" fill="#571EFA"/>
-  <!-- Play triangle -->
-  <path d="M50 40L60 48L50 56Z" fill="white"/>
-  <!-- Person silhouette -->
-  <circle cx="45" cy="38" r="3" fill="#927AFA"/>
-  <path d="M42 43L48 43L45 48L42 43Z" fill="#927AFA"/>
+  <path d="M22 28 H88 V68 H22 Z" fill="#341291"/>
+  <path d="M28 34 H82 V62 H28 Z" fill="#571EFA"/>
+  <path d="M48 42 L68 48 L48 54 Z" fill="white"/>
+  <path d="M45 68 H65 V72 H75 V78 H35 V72 H45 Z" fill="#341291"/>
 </svg>

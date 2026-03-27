@@ -1,10 +1,6 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Open book -->
-  <path d="M35 60L50 45L65 60H35Z" fill="#571EFA"/>
-  <path d="M50 45L65 30L80 45V60H50V45Z" fill="#341291"/>
-  <!-- Graduation cap (diamond shape) -->
-  <path d="M50 30L55 25L65 30L60 35L55 40L50 35L50 30Z" fill="#571EFA"/>
-  <!-- Tassel -->
-  <path d="M55 25L55 20L60 20L60 25" fill="#927AFA"/>
+  <path d="M55 28 L18 42 V80 L55 68 Z" fill="#571EFA"/>
+  <path d="M55 28 L92 42 V80 L55 68 Z" fill="#341291"/>
+  <path d="M55 28 L92 42 V55 L55 45 Z" fill="#571EFA"/>
 </svg>

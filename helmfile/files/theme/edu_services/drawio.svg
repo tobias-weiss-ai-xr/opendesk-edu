@@ -1,12 +1,8 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Connected shapes -->
-  <rect x="30" y="40" width="20" height="15" rx="2" fill="#571EFA"/>
-  <circle cx="75" cy="50" r="10" fill="#341291"/>
-  <!-- Connection lines -->
-  <path d="M50 48L65 48" stroke="#927AFA" stroke-width="2" stroke-linecap="round"/>
-  <path d="M65 52L50 52" stroke="#927AFA" stroke-width="2" stroke-linecap="round"/>
-  <!-- Arrow indicators -->
-  <path d="M45 42L50 48L45 54" stroke="#341291" stroke-width="1" stroke-linecap="round"/>
-  <path d="M70 45L75 50L70 55" stroke="#341291" stroke-width="1" stroke-linecap="round"/>
+  <path d="M22 38 H48 V58 H22 Z" fill="#571EFA"/>
+  <path d="M80 30 L92 48 L80 66 L68 48 Z" fill="#571EFA"/>
+  <path d="M40 78 C40 71 46 65 53 65 C60 65 66 71 66 78 C66 85 60 91 53 91 C46 91 40 85 40 78 Z" fill="#341291"/>
+  <path d="M48 46 H68 V50 H48 Z" fill="#341291"/>
+  <path d="M52 58 V65 H54 V58 Z" fill="#341291"/>
 </svg>

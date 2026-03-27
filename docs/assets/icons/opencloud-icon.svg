@@ -1,15 +1,5 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <g>
-    <!-- Cloud base -->
-    <path d="M35 65C28 65 23 60 23 53C23 45 30 40 35 40C37 40 39 41 40 42C42 35 48 30 55 30C65 30 72 37 72 45C72 46 71 47 71 48C78 48 83 53 83 60C83 67 77 72 70 72H35Z" fill="#571EFA"/>
-    <!-- File/folder icon in cloud -->
-    <path d="M40 55H65C68 55 70 57 70 60V68C70 71 68 73 65 73H40C37 73 35 71 35 68V55C35 52 37 50 40 50H45L50 55H65" fill="#341291"/>
-    <path d="M40 55V50L45 55H65C68 55 70 57 70 60" fill="#927AFA"/>
-    <!-- Sync arrows -->
-    <path d="M75 45L78 48L75 51" stroke="#927AFA" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M78 48L81 45" stroke="#927AFA" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <path d="M75 51L78 54L75 57" stroke="#927AFA" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M78 54L81 51" stroke="#927AFA" stroke-width="2" fill="none" stroke-linecap="round"/>
-  </g>
+  <path d="M20 46L55.5 22L91 46L91 65L55.5 89L20 65Z" fill="#341291"/>
+  <path d="M48 48L55.5 27L63 48L83 55.5L63 63L55.5 84L48 63L28 55.5Z" fill="#571EFA"/>
 </svg>

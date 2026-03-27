@@ -1,10 +1,6 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Headset arc -->
-  <path d="M35 55C35 45 45 35 55 35C65 35 75 45 75 55C75 65 65 75 55 75C45 75 35 65 35 55Z" fill="#341291"/>
-  <!-- Earpieces -->
-  <circle cx="35" cy="55" r="8" fill="#571EFA"/>
-  <circle cx="75" cy="55" r="8" fill="#571EFA"/>
-  <circle cx="35" cy="55" r="5" fill="white"/>
-  <circle cx="75" cy="55" r="5" fill="white"/>
+  <path d="M30 60 C30 40 41 28 55 28 C69 28 80 40 80 60 V65 C80 68 78 70 75 70 H72 V60 C72 48 65 38 55 38 C45 38 38 48 38 60 V70 H35 C32 70 30 68 30 65 Z" fill="#341291"/>
+  <path d="M26 58 H36 V76 H26 Z" fill="#571EFA"/>
+  <path d="M74 58 H84 V76 H74 Z" fill="#571EFA"/>
 </svg>

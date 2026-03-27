@@ -1,7 +1,7 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Stacked books -->
-  <path d="M30 45L45 30L75 30L60 45H30Z" fill="#341291"/>
-  <path d="M35 50L50 35L80 35L65 50H35Z" fill="#571EFA"/>
-  <path d="M40 55L55 40L85 40L70 55H40Z" fill="#927AFA"/>
+  <path d="M25 65 H85 V82 H25 Z" fill="#341291"/>
+  <path d="M22 48 H82 V65 H22 Z" fill="#571EFA"/>
+  <path d="M28 31 H88 V48 H28 Z" fill="#341291"/>
+  <path d="M28 31 H40 V48 H28 Z" fill="#571EFA"/>
 </svg>

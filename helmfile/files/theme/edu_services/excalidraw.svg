@@ -1,8 +1,7 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Canvas rectangle -->
-  <rect x="30" y="30" width="50" height="40" rx="2" fill="#571EFA"/>
-  <!-- Diagonal pencil -->
-  <path d="M40 60L60 40L70 50L50 70L40 60Z" fill="#341291"/>
-  <path d="M55 45L60 40L65 45L55 45Z" fill="#927AFA"/>
+  <path d="M22 25 H82 V78 H22 Z" fill="#341291"/>
+  <path d="M32 42 H55 V45 H32 Z M32 52 H65 V55 H32 Z M32 62 H50 V65 H32 Z" fill="#571EFA"/>
+  <path d="M65 18 L82 35 L55 62 L38 45 Z" fill="#571EFA"/>
+  <path d="M38 45 L55 62 L50 67 L33 50 Z" fill="#341291"/>
 </svg>

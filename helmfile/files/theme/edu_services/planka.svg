@@ -1,13 +1,7 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Kanban columns -->
-  <rect x="25" y="35" width="15" height="40" rx="2" fill="#341291"/>
-  <rect x="45" y="35" width="15" height="40" rx="2" fill="#571EFA"/>
-  <rect x="65" y="35" width="15" height="40" rx="2" fill="#341291"/>
-  <!-- Cards -->
-  <rect x="27" y="40" width="11" height="8" rx="1" fill="white"/>
-  <rect x="47" y="45" width="11" height="8" rx="1" fill="white"/>
-  <rect x="67" y="38" width="11" height="8" rx="1" fill="white"/>
-  <rect x="27" y="55" width="11" height="8" rx="1" fill="white"/>
-  <rect x="47" y="60" width="11" height="8" rx="1" fill="white"/>
+  <path d="M22 28 H40 V82 H22 Z" fill="#341291"/>
+  <path d="M45 28 H63 V82 H45 Z" fill="#571EFA"/>
+  <path d="M68 28 H86 V82 H68 Z" fill="#341291"/>
+  <path d="M48 34 H60 V46 H48 Z M48 50 H60 V62 H48 Z" fill="#341291"/>
 </svg>

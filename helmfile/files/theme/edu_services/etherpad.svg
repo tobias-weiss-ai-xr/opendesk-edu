@@ -1,9 +1,8 @@
 <svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white"/>
-  <!-- Document pages -->
-  <path d="M35 35L60 20L80 35V75L35 75V35Z" fill="#571EFA"/>
-  <path d="M40 30L65 15L85 30V70L40 70V30Z" fill="#341291"/>
-  <!-- Pencil -->
-  <path d="M50 25L60 15L75 30L65 40L50 25Z" fill="#927AFA"/>
-  <path d="M60 15L65 10L70 15L60 15Z" fill="#927AFA"/>
+  <path d="M25 28 H75 V82 H25 Z" fill="#341291"/>
+  <path d="M60 28 H75 V43 H60 Z" fill="#571EFA"/>
+  <path d="M32 50 H68 V53 H32 Z M32 58 H60 V61 H32 Z M32 66 H65 V69 H32 Z" fill="#571EFA"/>
+  <path d="M68 22 L82 36 L62 56 L48 42 Z" fill="#571EFA"/>
+  <path d="M48 42 L62 56 L58 60 L44 46 Z" fill="#341291"/>
 </svg>
