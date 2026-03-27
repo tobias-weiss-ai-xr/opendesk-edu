@@ -722,6 +722,10 @@ appsuite:
           {{ .Values.seLinuxOptions.openxchangeGotenberg | toYaml | nindent 10 }}
       serviceAccount:
         create: false
+    documentConverterClient:
+      cache:
+        remoteCache:
+          url: ""
     {{ if .Values.functional.groupware.mail.encryption.enabled }}
     hooks:
       beforeAppsuiteStart:
@@ -772,6 +776,17 @@ appsuite:
       # Deputy feature
       # Ref.: https://documentation.open-xchange.com/8/middleware/permissions_and_capabilities/deputy_permission.html
       com.openexchange.deputy.enabled: "true"
+      com.openexchange.deputy.provider.imap.doveadm.personalNamespace: "/"
+      com.openexchange.deputy.provider.imap.doveadm.sharedNamespace: "shared/"
+      com.openexchange.deputy.provider.imap.doveadm.publicNamespace: "public/"
+      # Doveadm required for deputy feature
+      com.openexchange.dovecot.doveadm.enabled: "true"
+      com.openexchange.dovecot.doveadm.endpoints: {{ printf "http://%s.%s.svc.%s:8080/doveadm/v1" "dovecot" (.Values.apps.dovecot.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+      com.openexchange.dovecot.doveadm.endpoints.totalConnections: "100"
+      com.openexchange.dovecot.doveadm.endpoints.maxConnectionsPerRoute: "0"
+      com.openexchange.dovecot.doveadm.endpoints.readTimeout: "20000"
+      com.openexchange.dovecot.doveadm.endpoints.connectTimeout: "5000"
+      com.openexchange.dovecot.doveadm.apiSecret: {{ .Values.secrets.dovecot.doveadm | quote }}
       # Various Mail settings
       com.openexchange.mail.maxToCcBcc: "500"
       com.openexchange.mail.deleteDraftOnTransport: "true"
@@ -818,7 +833,7 @@ appsuite:
       # MAIL
       com.openexchange.mail.authType: "xoauth2"
       com.openexchange.mail.loginSource: "name"
-      com.openexchange.mail.mailServer: "dovecot"
+      com.openexchange.mail.mailServer: {{ printf "%s.%s.svc.%s" "dovecot" (.Values.apps.dovecot.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       com.openexchange.mail.mailServerSource: "global"
       com.openexchange.mail.transport.authType: "xoauth2"
       com.openexchange.mail.transportServer: "postfix-ox"
@@ -843,8 +858,8 @@ appsuite:
       com.openexchange.folderstorage.database.preferDisplayName: "false"
       # Mailfilter
       com.openexchange.mail.filter.loginType: "global"
-      com.openexchange.mail.filter.credentialSource: "imapLogin"
-      com.openexchange.mail.filter.server: "dovecot"
+      com.openexchange.mail.filter.credentialSource: "session"
+      com.openexchange.mail.filter.server: {{ printf "%s.%s.svc.%s" "dovecot" (.Values.apps.dovecot.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       com.openexchange.mail.filter.preferredSaslMech: "XOAUTH2"
       # Dovecot
       com.openexchange.imap.attachmentMarker.enabled: "true"
@@ -1234,6 +1249,7 @@ appsuite:
       cache:
         remoteCache:
           enabled: false
+          url: ""
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}

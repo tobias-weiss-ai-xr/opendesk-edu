@@ -77,7 +77,7 @@ dovecot:
   submission:
     enabled: true
     ssl: "no"
-    host: "{{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain }}:25"
+    host: {{ printf "%s.%s.svc.%s:25" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
 
 certificate:
   secretName: {{ .Values.ingress.tls.secretName | quote }}
