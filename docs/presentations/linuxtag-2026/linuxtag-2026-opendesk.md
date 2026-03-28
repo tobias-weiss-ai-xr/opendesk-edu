@@ -29,10 +29,10 @@ Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg · @graphwiz_ai@mas
 
 📊 **Was nutzen Ihre Studierenden & Mitarbeiter?**
 
-- ⏱️ 85% — Cloud-Speicher (Google Drive, Dropbox, OneDrive)
-- 💬 72% — Kollaborationstools (Slack, Teams, Asana)
-- 📧 95% — Webmail-Dienste (Outlook.com, Gmail, GMX)
-- 📱 68% — Chat & Social (WhatsApp, Discord, LinkedIn)
+- ⏱️ Cloud-Speicher (Google Drive, Dropbox, OneDrive)
+- 💬 Kollaborationstools (Slack, Teams, Asana)
+- 📧 Webmail-Dienste (Outlook.com, Gmail, GMX)
+- 📱 Chat & Social (WhatsApp, Discord, LinkedIn)
 
 **Problem:** Outsourced Daten, unflexible Lizenzen, Vendor Lock-in 🔒
 
