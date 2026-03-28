@@ -1,29 +1,143 @@
 <svg width="1200" height="400" viewBox="0 0 1200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background - fragmented cubist composition -->
   <rect width="1200" height="400" fill="#341291"/>
-  <rect x="80" y="80" width="80" height="80" rx="16" fill="#571EFA"/>
-  <path d="M120 100 L80 118 L120 136 L160 118Z" fill="#341291"/>
-  <path d="M80 118 L120 136 V160 H80Z" fill="white" opacity="0.3"/>
-  <text x="260" y="130" fill="white" font-family="system-ui,sans-serif" font-size="56" font-weight="bold">openDesk Edu</text>
-  <text x="260" y="170" fill="#DDD6FE" font-family="system-ui,sans-serif" font-size="22">Educational Services for Universities</text>
-  <rect x="260" y="210" width="80" height="80" rx="14" fill="white"/>
-  <path d="M300 230 L270 244 L300 258 L330 244Z" fill="#341291"/>
-  <path d="M270 248 L300 262 L300 290 L270 276Z" fill="#571EFA"/>
-  <rect x="380" y="210" width="80" height="80" rx="14" fill="white"/>
-  <path d="M400 230 H440 V270 H400Z" fill="#341291"/>
-  <path d="M400 230 H440 L420 246Z" fill="#571EFA"/>
-  <rect x="500" y="210" width="80" height="80" rx="14" fill="white"/>
-  <path d="M510 224 H570 V264 H510Z" fill="#341291"/>
-  <path d="M516 230 H564 V258 H516Z" fill="#571EFA"/>
-  <path d="M536 244 L556 252 L536 260Z" fill="white"/>
-  <rect x="620" y="210" width="80" height="80" rx="14" fill="white"/>
-  <path d="M640 230 H680 V270 H640Z" fill="#341291"/>
-  <path d="M640 230 H680 L660 246Z" fill="#571EFA"/>
-  <rect x="260" y="330" width="110" height="30" rx="15" fill="#571EFA"/>
-  <text x="315" y="350" fill="white" font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">Keycloak SSO</text>
-  <rect x="390" y="330" width="110" height="30" rx="15" fill="#571EFA"/>
-  <text x="445" y="350" fill="white" font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">13 Services</text>
-  <rect x="520" y="330" width="110" height="30" rx="15" fill="#571EFA"/>
-  <text x="575" y="350" fill="white" font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">Kubernetes</text>
-  <rect x="650" y="330" width="130" height="30" rx="15" fill="#571EFA"/>
-  <text x="715" y="350" fill="white" font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">One-Click Deploy</text>
+  <polygon points="0,0 400,0 500,200 0,400" fill="#3F1AAA" opacity="0.7"/>
+  <polygon points="400,0 800,0 700,200 500,200" fill="#571EFA" opacity="0.3"/>
+  <polygon points="800,0 1200,0 1200,400 700,200" fill="#3F1AAA" opacity="0.6"/>
+  <polygon points="0,400 500,200 700,200 1200,400" fill="#571EFA" opacity="0.2"/>
+
+  <!-- Cubist openDesk logo - fragmented geometric composition -->
+  <g transform="translate(60, 40)">
+    <!-- Base shape - split into angular fragments -->
+    <polygon points="0,0 40,15 80,0 80,80 40,95 0,80" fill="#571EFA"/>
+    <polygon points="40,15 90,20 120,40 80,80" fill="#3F1AAA"/>
+    <polygon points="0,0 40,15 20,40 0,80" fill="#341291"/>
+
+    <!-- Cross shape - fragmented diagonally -->
+    <polygon points="30,40 70,40 90,60 50,60" fill="#3F1AAA"/>
+    <polygon points="40,30 60,30 50,90" fill="#571EFA"/>
+    <polygon points="60,30 80,40 60,50" fill="#341291"/>
+    <polygon points="40,30 20,40 40,50" fill="#DDD6FE" opacity="0.3"/>
+
+    <!-- Cubist accent triangles -->
+    <polygon points="80,0 120,0 100,30" fill="#DDD6FE" opacity="0.4"/>
+    <polygon points="100,30 120,40 120,80" fill="#571EFA" opacity="0.6"/>
+  </g>
+
+  <!-- Typography - fragmented geometric approach -->
+  <!-- Title "openDesk Edu" - constructed from geometric shapes -->
+  <g transform="translate(260, 60)">
+    <!-- "open" in fragmented blocks -->
+    <rect x="0" y="10" width="20" height="12" fill="white"/>
+    <polygon points="25,10 45,10 45,22" fill="white"/>
+    <rect x="55" y="10" width="20" height="12" fill="white"/>
+    <polygon points="85,10 105,10 95,22 85,22" fill="white"/>
+
+    <!-- "Desk" - different perspective, rotated -->
+    <g transform="rotate(15, 120, 20)">
+      <rect x="115" y="10" width="18" height="12" fill="white"/>
+      <polygon points="140,10 160,8 160,20" fill="white"/>
+      <rect x="165" y="10" width="15" height="12" fill="white"/>
+      <polygon points="185,10 200,15 185,22" fill="white"/>
+      <rect x="205" y="10" width="18" height="12" fill="white"/>
+    </g>
+
+    <!-- "Edu" - fragmented -->
+    <polygon points="260,10 280,8 280,22 260,20" fill="white"/>
+    <rect x="290" y="10" width="20" height="12" fill="white"/>
+    <polygon points="320,8 340,10 340,22 320,20" fill="white"/>
+    <rect x="345" y="10" width="18" height="12" fill="white"/>
+  </g>
+
+  <!-- Subtitle "Educational Services for Universities" - geometric blocks -->
+  <g transform="translate(260, 110)">
+    <rect x="0" y="0" width="380" height="4" fill="#DDD6FE" opacity="0.8"/>
+    <rect x="0" y="8" width="350" height="3" fill="#DDD6FE" opacity="0.6"/>
+    <rect x="0" y="15" width="320" height="3" fill="#DDD6FE" opacity="0.5"/>
+  </g>
+
+  <!-- Service icons - cubist fragmented compositions -->
+  <g transform="translate(260, 160)">
+    <!-- Icon 1 - OpenCloud (folder-chevron) - cubist version -->
+    <g transform="translate(0, 0)">
+      <polygon points="0,10 18,0 36,10 36,50 18,60 0,50" fill="white"/>
+      <polygon points="18,20 32,25 18,30 4,25" fill="#341291"/>
+      <polygon points="18,30 26,40 18,50 10,40" fill="#571EFA"/>
+      <polygon points="32,25 40,30 40,50 32,55" fill="#3F1AAA" opacity="0.7"/>
+    </g>
+
+    <!-- Icon 2 - ILIAS (book/cap) - cubist version -->
+    <g transform="translate(50, 0)">
+      <polygon points="0,0 36,5 36,60 0,55" fill="white"/>
+      <polygon points="36,5 65,0 65,55 36,60" fill="#DDD6FE" opacity="0.3"/>
+      <polygon points="10,30 36,35 36,45 10,40" fill="#341291"/>
+      <polygon points="36,35 56,30 50,40" fill="#571EFA"/>
+      <!-- Cap shape - fragmented -->
+      <polygon points="18,-5 42,0 35,10 8,5" fill="#571EFA"/>
+      <polygon points="42,0 50,5 35,12" fill="#3F1AAA"/>
+    </g>
+
+    <!-- Icon 3 - Moodle (LMS badge) - cubist version -->
+    <g transform="translate(120, 0)">
+      <polygon points="0,0 60,0 60,50 40,60 0,50" fill="white"/>
+      <rect x="10" y="10" width="40" height="30" fill="#341291"/>
+      <polygon points="20,15 40,15 35,25 25,25" fill="white"/>
+      <polygon points="20,30 40,30 36,38 24,38" fill="#571EFA"/>
+      <polygon points="5,30 15,40 0,50" fill="#3F1AAA" opacity="0.6"/>
+    </g>
+
+    <!-- Icon 4 - BigBlueButton (video) - cubist version -->
+    <g transform="translate(180, 0)">
+      <polygon points="0,0 60,0 60,50 40,60 0,50" fill="white"/>
+      <rect x="10" y="10" width="40" height="25" fill="#341291"/>
+      <polygon points="35,20 55,22 35,24" fill="white"/>
+      <polygon points="0,35 20,40 10,50 0,60" fill="#571EFA"/>
+      <polygon points="30,40 60,35 60,50 30,55" fill="#3F1AAA" opacity="0.5"/>
+    </g>
+
+    <!-- Icon 5 - SOGo (mail) - cubist version -->
+    <g transform="translate(240, 0)">
+      <polygon points="0,0 60,0 60,50 40,60 0,50" fill="white"/>
+      <polygon points="0,0 30,25 60,0" fill="#341291"/>
+      <polygon points="0,0 30,25 0,40" fill="#3F1AAA"/>
+      <polygon points="60,0 30,25 60,40" fill="#571EFA"/>
+      <polygon points="10,50 30,40 50,50" fill="#571EFA" opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- Feature badges - cubist fragmented shapes -->
+  <g transform="translate(260, 280)">
+    <!-- Badge 1 - Keycloak SSO -->
+    <polygon points="0,0 100,5 110,30 100,55 0,50 -10,30" fill="#571EFA"/>
+    <polygon points="15,15 95,20 90,40" fill="white" opacity="0.2"/>
+    <text x="55" y="32" fill="white" font-family="system-ui,sans-serif" font-size="14" font-weight="bold" text-anchor="middle">SSO</text>
+
+    <!-- Badge 2 - 13 Services -->
+    <polygon points="120,5 220,0 230,25 220,50 120,55 110,25" fill="#3F1AAA"/>
+    <polygon points="135,15 205,20 200,40" fill="white" opacity="0.15"/>
+    <text x="175" y="32" fill="white" font-family="system-ui,sans-serif" font-size="14" font-weight="bold" text-anchor="middle">13</text>
+
+    <!-- Badge 3 - Kubernetes -->
+    <polygon points="240,5 340,0 350,25 340,50 240,55 230,25" fill="#571EFA"/>
+    <polygon points="255,15 325,20 320,40" fill="white" opacity="0.2"/>
+    <text x="295" y="32" fill="white" font-family="system-ui,sans-serif" font-size="14" font-weight="bold" text-anchor="middle">K8s</text>
+
+    <!-- Badge 4 - One-Click Deploy -->
+    <polygon points="360,5 460,0 480,25 460,50 360,55 340,25" fill="#3F1AAA"/>
+    <polygon points="375,15 445,20 440,40" fill="white" opacity="0.15"/>
+    <text x="415" y="32" fill="white" font-family="system-ui,sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Deploy</text>
+  </g>
+
+  <!-- Cubist decorative elements - fragmented geometric accents -->
+  <polygon points="800,50 900,30 920,80 820,100" fill="#571EFA" opacity="0.3"/>
+  <polygon points="920,30 1000,50 980,120 900,100" fill="#3F1AAA" opacity="0.4"/>
+  <polygon points="850,200 950,180 970,230 870,250" fill="#DDD6FE" opacity="0.2"/>
+  <polygon points="1000,200 1100,180 1120,230 1020,250" fill="#571EFA" opacity="0.25"/>
+  <polygon points="900,320 1000,300 1020,350 920,370" fill="#3F1AAA" opacity="0.3"/>
+
+  <!-- Accent lines - cubist composition -->
+  <line x1="1050" y1="20" x2="1150" y2="80" stroke="white" stroke-width="2" opacity="0.4"/>
+  <line x1="1060" y1="80" x2="1150" y2="150" stroke="white" stroke-width="3" opacity="0.3"/>
+  <line x1="1020" y1="280" x2="1120" y2="340" stroke="white" stroke-width="2" opacity="0.35"/>
+  <line x1="1040" y1="150" x2="1140" y2="200" stroke="#DDD6FE" stroke-width="4" opacity="0.25"/>
 </svg>
