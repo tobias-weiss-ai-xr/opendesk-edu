@@ -12,7 +12,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg · @graphwiz_ai@mastodon.social
 
 ---
 
@@ -332,15 +332,16 @@ helmfile rollback -e hrz
 
 # Technische Ressourcen
 
-- **openDesk:** [docs.opendesk.eu](https://docs.opendesk.eu) ·
-  [Deployment-Guide](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/getting-started.md) ·
-  [User-Import](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import)
-- **openDesk Edu:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu) · Educational extension for universities
-- **DFN-AAI:** [dfn.de/dienste/dfnaai/](https://www.dfn.de/dienste/dfnaai/)
-- **K3s:** [docs.k3s.io](https://docs.k3s.io/)
-- **Helmfile:** [helmfile.readthedocs.io](https://helmfile.readthedocs.io/)
-- **Cluster-Automation:** [Kubespray](https://github.com/kubernetes-sigs/kubespray) ·
-  [k3s-ansible](https://github.com/timothystewart6/k3s-ansible)
+- **openDesk:** [docs.opendesk.eu](https://docs.opendesk.eu) — Offizielle Dokumentation des Projekts
+  - [Deployment-Guide](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/getting-started.md) — Erste Schritte auf K8s
+  - [User-Import](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import) — Automatisierte User-Provisioning über UDM REST API
+- **openDesk Edu:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu) — Educational extension for universities
+- **DFN-AAI:** [dfn.de/dienste/dfnaai/](https://www.dfn.de/dienste/dfnaai/) — Deutsches Forschungsnetz Authentifizierungs- und Autorisierungs-Infrastruktur für Hochschulen
+- **K3s:** [docs.k3s.io](https://docs.k3s.io/) — Leichtgewichtiger Kubernetes-Distribution ideal für Edge-Computing
+- **Helmfile:** [helmfile.readthedocs.io](https://helmfile.readthedocs.io/) — Deklarative Helm Release-Orchestrierung
+- **Cluster-Automation:**
+  - [Kubespray](https://github.com/kubernetes-sigs/kubespray) — Ansible-basierte K8s-Installation
+  - [k3s-ansible](https://github.com/timothystewart6/k3s-ansible) — Alternative Automatisierung für K3s
 
 ---
 
@@ -348,13 +349,19 @@ helmfile rollback -e hrz
 
 - **HBDI-Empfehlung (M365-Bewertung):**
   [PDF](https://datenschutz.hessen.de/sites/datenschutz.hessen.de/files/2025-11/hbdi_bericht_m365_2025_11_15.pdf)
+  — Hessischer Beauftragte für Datenschutz und Informationsfreiheit: Risikoanalyse zu Microsoft 365
 - **Hessischer Digitalpakt Hochschulen:**
   [PDF](https://wissenschaft.hessen.de/sites/wissenschaft.hessen.de/files/2025-12/hessischer_digitalpakt_hochschulen_2026-2031.pdf)
+  — Förderprogramm 2026–2031 für digitale Hochschulentwicklung
 - **EVB-IT Open Source (ZenDiS):**
   [zendis.de](https://www.zendis.de/newsroom/presse/evb-it-open-source)
+  — Herstellervereinbarung für Open-Source-Software im öffentlichen Sektor
 - **EVB-IT & BVB (digitale-verwaltung.de):**
   [digitale-verwaltung.de](https://www.digitale-verwaltung.de/Webs/DV/DE/aktuelles-service/it-einkauf/evb-it-und-bvb/aktuelle_evb-it-node.html)
+  — IT-Einkaufsleitfaden der öffentlichen Verwaltung
 - **Digitale Souveränität an Hochschulen:**
   [PDF](https://tobias-weiss.org/downloads/digitale_souveraenitaet_an_hochschulen.pdf)
+  — Positionspapier zur Daten-Infrastruktur-Autonomie im Hochschulbereich
 - **CoCreate-Werkstattgespräch:**
   [PDF](https://tobias-weiss.org/downloads/CoCreate-Werkstattgespraech-Digitale-Souveraenitaet_75dpi.pdf)
+  — Dokumentation des Workshops zu digitaler Souveränität und datenschutzkonformen Cloud-Lösungen
