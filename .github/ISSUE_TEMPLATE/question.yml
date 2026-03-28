@@ -1,0 +1,110 @@
+# SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+name: ❓ Question / Support / Frage / Unterstützung
+description: Ask a question about using or configuring openDesk Edu / Eine Frage zur Nutzung oder Konfiguration von openDesk Edu stellen
+title: "[Question]: "
+labels: ["question"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Have a question? / Haben Sie eine Frage?
+        
+        Before asking, please check our resources:
+        Bevor Sie fragen, überprü Sie bitte unsere Ressourcen:
+        
+        📖 [Documentation](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/docs)
+        📋 [Getting Started](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/getting-started.md)
+        🔧 [Configuration Guide](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/enhanced-configuration.md)
+        💬 [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions)
+        
+        ---
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component / Komponente
+      description: Which component is your question about? / Um welche Komponente geht es?
+      multiple: false
+      options:
+        - General / Allgemein
+        - ILIAS
+        - Moodle
+        - BigBlueButton
+        - OpenCloud
+        - Etherpad
+        - BookStack
+        - Planka
+        - Zammad
+        - LimeSurvey
+        - LTB Self-Service Password
+        - Draw.io
+        - Excalidraw
+        - Keycloak / SSO
+        - Portal / Nubus
+        - Helmfile (deployment)
+        - Documentation
+        - Other / Andere
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question / Ihre Frage
+      description: |
+        What would you like to know? Please be as specific as possible.
+        Was möchten Sie wissen? Bitte seien Sie so spezifisch wie möglich.
+      placeholder: |
+        **Example / Beispiel:**
+        How do I configure Moodle to use an external Shibboleth IdP instead of Keycloak?
+        Wie konfiguriere ich Moodle so, dass es einen externen Shibboleth IdP anstelle von Keycloak verwendet?
+      value: |
+        I would like to know...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / Kontext
+      description: |
+        What are you trying to achieve? What have you tried so far?
+        Was versuchen Sie zu erreichen? Was haben Sie bisher versucht?
+      placeholder: |
+        **Example / Beispiel:**
+        - I'm setting up openDesk Edu for a university with 15,000 students
+        - We already have a Shibboleth IdP and want to integrate it
+        - I tried setting `saml.idp.entityId` in values.yaml but it doesn't seem to work
+      value: |
+        I am trying to...
+
+  - type: textarea
+    id: what-tried
+    attributes:
+      label: What have you tried? / Was haben Sie versucht?
+      description: |
+        List any documentation you've read, commands you've run, or configurations you've tried.
+        Listen Sie alle Dokumentationen auf, die Sie gelesen haben, Befehle, die Sie ausgeführt haben, oder Konfigurationen, die Sie versucht haben.
+      placeholder: |
+        - Read docs/getting-started.md
+        - Ran `helmfile -e dev template`
+        - Checked docs/external-services.md
+        - Searched existing issues
+
+  - type: input
+    id: opendesk-version
+    attributes:
+      label: openDesk Edu version (if applicable) / openDesk Edu Version (falls zutreffend)
+      placeholder: "main, v1.0.0, commit hash"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        💡 **Tip:** For general discussions, consider using [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) instead.
+        
+        💡 **Tipp:** Für allgemeine Diskussionen erwägen Sie bitte [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) stattdessen.

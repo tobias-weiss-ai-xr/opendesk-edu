@@ -1,0 +1,138 @@
+# SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+name: 📚 Documentation / Dokumentation
+description: Report an issue or suggest improvements for documentation / Ein Dokumentationsproblem melden oder Verbesserungen vorschlagen
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Documentation Issue / Dokumentationsproblem
+        
+        Help us improve openDesk Edu documentation!
+        Helfen Sie uns, die openDesk Edu Dokumentation zu verbessern!
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation type / Dokumentationstyp
+      multiple: false
+      options:
+        - Getting Started Guide
+        - Installation/Deployment Guide
+        - Configuration Reference
+        - Architecture Overview
+        - API/Integration Docs
+        - Troubleshooting Guide
+        - Contributing Guide
+        - README/README.md
+        - Code comments
+        - Translations / Übersetzungen
+        - Other / Andere
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue type / Art des Problems
+      multiple: false
+      options:
+        - Missing documentation / Fehlende Dokumentation
+        - Incorrect/outdated info / Falsche/veraltete Informationen
+        - Unclear/confusing / Unklar/verwirrend
+        - Typo/minor fix / Tippfehler/kleine Korrektur
+        - Translation needed / Übersetzung erforderlich
+        - Enhancement suggestion / Verbesserungsvorschlag
+    validations:
+      required: true
+
+  - type: input
+    id: doc-location
+    attributes:
+      label: Documentation location / Ort der Dokumentation
+      description: |
+        Link to the documentation file or section.
+        Link zur Dokumentationsdatei oder zum Abschnitt.
+      placeholder: "docs/getting-started.md or https://opendesk-edu.org/docs/..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-state
+    attributes:
+      label: Current state / Aktueller Stand
+      description: |
+        What does the documentation currently say (if anything)?
+        Was sagt die Dokumentation aktuell (falls überhaupt)?
+      placeholder: |
+        The current documentation says:
+        "Run helmfile apply to deploy"
+        
+        But it doesn't explain the prerequisites.
+      value: |
+        Currently, the documentation states...
+    validations:
+      required: false
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Proposed change / Vorgeschlagene Änderung
+      description: |
+        What should the documentation say instead? Or what should be added?
+        Was sollte die Dokumentation stattdessen sagen? Oder was sollte hinzugefügt werden?
+      placeholder: |
+        The documentation should include:
+        
+        1. Prerequisites (Kubernetes version, Helm version, storage class)
+        2. Step-by-step deployment process
+        3. Post-deployment verification steps
+        4. Common troubleshooting tips
+      value: |
+        The documentation should...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context / Zusätzlicher Kontext
+      description: |
+        Any other context, screenshots, or references to similar documentation.
+        Irgendwelche anderen Kontexte, Screenshots oder Verweise auf ähnliche Dokumentation.
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language / Sprache
+      description: Which language(s) should be affected? / Welche Sprache(n) sollen betroffen sein?
+      multiple: true
+      options:
+        - English
+        - German / Deutsch
+        - Both / Beide
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: willing-to-contribute
+    attributes:
+      label: Would you be willing to submit a PR? / Würden Sie einen PR einreichen?
+      options:
+        - label: "Yes, I can submit a PR / Ja, ich kann einen PR einreichen"
+        - label: "Yes, but I need guidance / Ja, aber ich brauche Anleitung"
+        - label: "No / Nein"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        📖 **Documentation files:** / **Dokumentationsdateien:**
+        - Main docs: `docs/` directory
+        - Contributing: [CONTRIBUTING.md](../CONTRIBUTING.md)
+        - Code comments: In source files

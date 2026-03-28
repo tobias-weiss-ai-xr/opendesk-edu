@@ -1,0 +1,232 @@
+# SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+name: 🐛 Bug Report / Fehlerbericht
+description: Report something that isn't working correctly / Etwas melden, das nicht richtig funktioniert
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thank you for reporting a bug!
+        ## Vielen Dank für Ihre Fehlermeldung!
+        
+        Please fill out the sections below to help us diagnose and fix the issue.
+        Bitte füllen Sie die folgenden Abschnitte aus, damit wir das Problem diagnostizieren und beheben können.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component affected / Betroffene Komponente
+      description: Which part of openDesk Edu is affected? / Welcher Teil von openDesk Edu ist betroffen?
+      multiple: false
+      options:
+        - ILIAS
+        - Moodle
+        - BigBlueButton
+        - OpenCloud
+        - Etherpad
+        - BookStack
+        - Planka
+        - Zammad
+        - LimeSurvey
+        - LTB Self-Service Password
+        - Draw.io
+        - Excalidraw
+        - Keycloak / SSO
+        - Portal / Nubus
+        - Helmfile (core deployment)
+        - Documentation
+        - Other / Andere
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description / Fehlerbeschreibung
+      description: |
+        A clear and concise description of what the bug is.
+        Eine klare und präzise Beschreibung des Fehlers.
+      placeholder: |
+        Example / Beispiel:
+        When logging out from the portal, my Moodle session is not terminated.
+        Beim Abmelden vom Portal wird meine Moodle-Sitzung nicht beendet.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce / Schritte zur Reproduktion
+      description: |
+        Detailed steps to reproduce the behavior.
+        Detaillierte Schritte zum Reproduzieren des Verhaltens.
+      placeholder: |
+        1. Deploy openDesk Edu with backchannel logout enabled
+        2. Log in via the portal
+        3. Open Moodle in a new tab (auto-logged in via SSO)
+        4. Log out from the portal
+        5. Refresh Moodle tab - still logged in (expected: logged out)
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior / Erwartetes Verhalten
+      description: |
+        What did you expect to happen?
+        Was haben Sie erwartet, dass passiert?
+      placeholder: |
+        After logging out from the portal, all service sessions should be terminated.
+        Nach dem Abmelden vom Portal sollten alle Dienstsitzungen beendet werden.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior / Tatsächliches Verhalten
+      description: |
+        What actually happened? Include error messages, unexpected redirects, etc.
+        Was ist tatsächlich passiert? Fügen Sie Fehlermeldungen, unerwartete Weiterleitungen usw. hinzu.
+      placeholder: |
+        Moodle session remained active. No backchannel logout request was received.
+        Die Moodle-Sitzung blieb aktiv. Es wurde keine Backchannel-Logout-Anfrage empfangen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and error messages / Protokolle und Fehlermeldungen
+      description: |
+        Paste relevant logs. For Kubernetes pods, use `kubectl logs <pod-name> -n <namespace>`.
+        Fügen Sie relevante Protokolle ein. Verwenden Sie für Kubernetes-Pods `kubectl logs <pod-name> -n <namespace>`.
+      render: shell
+      placeholder: |
+        # Example: Moodle pod logs
+        kubectl logs moodle-abc123 -n opendesk
+        
+        [2026-03-28 10:15:30] WARNING: SAML logout request not received
+        [2026-03-28 10:15:31] INFO: Session still active for user@example.com
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Environment Information / Umgebungsinformationen
+        ---
+
+  - type: input
+    id: opendesk-version
+    attributes:
+      label: openDesk Edu version / openDesk Edu Version
+      description: |
+        Which version/branch are you using?
+        Welche Version/ welchen Branch verwenden Sie?
+      placeholder: "main (commit abc123) or v1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: kubernetes-version
+    attributes:
+      label: Kubernetes version / Kubernetes-Version
+      description: |
+        Distribution and version (e.g., RKE2 1.28, K3s 1.29, kubeadm 1.30)
+        Distribution und Version (z.B. RKE2 1.28, K3s 1.29, kubeadm 1.30)
+      placeholder: "RKE2 v1.28.4"
+    validations:
+      required: true
+
+  - type: input
+    id: helm-version
+    attributes:
+      label: Helm version / Helm-Version
+      placeholder: "3.13.0"
+    validations:
+      required: true
+
+  - type: input
+    id: helmfile-version
+    attributes:
+      label: helmfile version / helmfile-Version
+      placeholder: "0.158.0"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: ingress
+    attributes:
+      label: Ingress controller / Ingress-Controller
+      options:
+        - HAProxy
+        - NGINX
+        - Traefik
+        - Istio Gateway
+        - Other / Andere
+    validations:
+      required: false
+
+  - type: dropdown
+    id: storage
+    attributes:
+      label: Storage class / Speicherklasse
+      options:
+        - Ceph RBD
+        - CephFS
+        - local-path
+        - NFS
+        - Longhorn
+        - Other / Andere
+    validations:
+      required: false
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant configuration / Relevante Konfiguration
+      description: |
+        Share the relevant sections of your environment configuration. **REDACT SECRETS!**
+        Teilen Sie die relevanten Abschnitte Ihrer Umgebungskonfiguration. **ENTFERNEN SIE GEHEIMNISSE!**
+      render: yaml
+      placeholder: |
+        # helmfile/environments/default/backchannel-logout.yaml.gotmpl
+        backchannelLogout:
+          enabled: true
+          saml:
+            moodle:
+              enabled: true
+              backchannelLogoutUrl: "https://moodle.example.com/Shibboleth.sso/Logout"
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Bildschirmfotos
+      description: |
+        If applicable, add screenshots to help explain the problem.
+        Falls zutreffend, fügen Sie Bildschirmfotos hinzu, um das Problem zu erklären.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context / Zusätzlicher Kontext
+      description: |
+        Any other context about the problem, workarounds you've tried, etc.
+        Jeglicher andere Kontext zum Problem, Workarounds, die Sie ausprobiert haben, usw.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission checklist / Vorlage-Checkliste
+      options:
+        - label: I have searched existing issues to avoid duplicates / Ich habe vorhandene Issues durchsucht, um Duplikate zu vermeiden
+          required: true
+        - label: I have read the relevant documentation / Ich habe die relevante Dokumentation gelesen
+          required: true
+        - label: I have redacted any secrets or credentials / Ich habe alle Geheimnisse oder Anmeldedaten entfernt
+          required: true

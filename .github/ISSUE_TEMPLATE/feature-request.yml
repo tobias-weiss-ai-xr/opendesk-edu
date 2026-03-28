@@ -1,0 +1,162 @@
+# SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+name: 💡 Feature Request / Feature-Anfrage
+description: Suggest a new feature or enhancement / Eine neue Funktion oder Verbesserung vorschlagen
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thank you for your feature request!
+        ## Vielen Dank für Ihre Feature-Anfrage!
+        
+        Please describe the feature you'd like to see in openDesk Edu.
+        Bitte beschreiben Sie die Funktion, die Sie in openDesk Edu sehen möchten.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component / Komponente
+      description: Which component should be enhanced? / Welche Komponente soll verbess werden?
+      multiple: false
+      options:
+        - ILIAS
+        - Moodle
+        - BigBlueButton
+        - OpenCloud
+        - Etherpad
+        - BookStack
+        - Planka
+        - Zammad
+        - LimeSurvey
+        - LTB Self-Service Password
+        - Draw.io
+        - Excalidraw
+        - Keycloak / SSO
+        - Portal / Nubus
+        - Helmfile (core deployment)
+        - Documentation
+        - New Service / Neuer Service
+        - Other / Andere
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement / Problembeschreibung
+      description: |
+        A clear description of what problem this feature would solve.
+        Why do you need this feature?
+        
+        Eine klare Beschreibung, welches Problem diese Funktion lösen würde.
+        Warum brauchen Sie diese Funktion?
+      placeholder: |
+        **Example / Beispiel:**
+        As a university administrator, I need to be able to configure different session timeout values for different user groups (students, staff, admins). Currently, all users have the same timeout.
+      value: |
+        As a university administrator, I need to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution / Vorgeschlagene Lösung
+      description: |
+        Describe what you'd like to happen.
+        If you have technical ideas (Helm chart structure, integration approach), share them.
+        
+        Beschreiben Sie, was passieren soll.
+        Wenn Sie technische Ideen haben (Helm-Chart-Struktur, Integrationsansatz), teilen Sie diese mit.
+      placeholder: |
+        **Example / Beispiel:**
+        Add a new values.yaml section that allows configuring session timeouts per user group:
+        
+        ```yaml
+        sessions:
+          timeouts:
+            students: 3600    # 1 hour
+            staff: 28800      # 8 hours  
+            admins: 86400      # 24 hours
+        ```
+      value: |
+        I would like to see...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered / Alternative Lösungen
+      description: |
+        Any alternative solutions or workarounds you've tried or considered.
+        Irgendwelche alternativen Lösungen oder Workarounds, die Sie ausprobiert oder in Betracht gezogen haben.
+      placeholder: |
+        **Example / Beispiel:**
+        - We considered using Keycloak token lifetimes, but this affects all services equally
+        - We tried setting different cookie timeouts, but this causes inconsistent behavior
+
+  - type: checkboxes
+    id: use-cases
+    attributes:
+      label: Use cases / Anwendungsfälle
+      description: Who would benefit from this feature? / Wer würde von dieser Funktion profitieren?
+      options:
+        - label: "🎓 Students / Studierende"
+        - label: "👨‍🏫 Teachers / Lehrende"
+        - label: "🏛️ University IT Admin / Universitäts-IT-Admin"
+        - label: "🏢 Public Sector / Öffentlicher Sektor"
+        - label: "🌍 International Users / Internationale Benutzer"
+        - label: "♿ Accessibility / Barrierefreiheit"
+
+  - type: dropdown
+    id: institution-size
+    attributes:
+      label: Institution size / Institutionsgröße
+      description: What size institution would use this? / Welche Größe hat die Institution?
+      options:
+        - Small (< 5,000 users)
+        - Medium (5,000 - 25,000 users)
+        - Large (25,000 - 50,000 users)
+        - Very Large (> 50,000 users)
+        - Not applicable / Nicht zutreffend
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context / Zusätzlicher Kontext
+      description: |
+        Any other context, references to similar features in other projects, or mockups.
+        Irgendwelche anderen Kontexte, Verweise auf ähnliche Funktionen in anderen Projekten oder Mockups.
+      placeholder: |
+        - This feature exists in stock Moodle but requires manual configuration
+        - Similar implementation in [Other Project]: https://example.com
+        - Mockup / Screenshot: [drag and drop image here]
+
+  - type: checkboxes
+    id: willing-to-contribute
+    attributes:
+      label: Would you be willing to contribute this feature? / Würden Sie diese Funktion beisteuern?
+      description: |
+        We welcome contributions! Check if you you'd be willing to submit a PR.
+        Wir freuen uns über Beiträge! Kreuzen Sie an, ob Sie einen PR einreichen würden.
+      options:
+        - label: "Yes, I can submit a PR / Ja, ich kann einen PR einreichen"
+        - label: "Yes, but I need guidance / Ja, aber ich brauche Anleitung"
+        - label: "No / Nein"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        📖 **Resources / Ressourcen:**
+        - [Contributing Guide](../CONTRIBUTING.md)
+        - [Documentation](../docs/)
+        - [Architecture Overview](../docs/architecture.md)
