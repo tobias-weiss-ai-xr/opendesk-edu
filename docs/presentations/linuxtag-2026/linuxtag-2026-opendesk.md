@@ -44,7 +44,7 @@ Wir diskutieren nicht Tools — wir diskutieren **Souveränität**:
 
 | Aspekt | Status heute | Ziel |
 |--------|--------------|------|
-| **Datenwohntort** | USA (AWS, Azure, GCP) | 🇩🇪 Deutschland |
+| **Datenwohntort** | USA (AWS, Azure, GCP) | Europa |
 | **Software-Lizenz** | Proprietär | Open Source |
 | **Updates** | Vendor bestimmt | Campus-Team kontrolliert |
 | **Funktionserweiterung** | Ticket abwarten | Template erstellen |
