@@ -25,7 +25,10 @@ backchannelLogout:
 
   ## Enable backchannel logout for educational services
   ##
-  enabled: {{ env "BACKCHANNEL_LOGOUT_ENABLED" | default "false" | quote }}
+  enabled: {{ env "BACKCHANNEL_LOGOUT_ENABLED" | default "true" | quote }}
+
+  # NOTE: Defaults for backchannel logout can be overridden via environment variables
+  # e.g. BACKCHANNEL_LOGOUT_ENABLED, BACKCHANNEL_LOGOUT_MOODLE_ENABLED, etc.
 
   ## SAML Backchannel Logout Configuration
   ##
@@ -42,7 +45,7 @@ backchannelLogout:
     moodle:
       ## Enable SAML backchannel logout for Moodle
       ##
-      enabled: {{ env "BACKCHANNEL_LOGOUT_MOODLE_ENABLED" | default "false" | quote }}
+      enabled: {{ env "BACKCHANNEL_LOGOUT_MOODLE_ENABLED" | default "true" | quote }}
 
       ## Backchannel logout listener endpoint
       ## Keycloak sends logout requests to this endpoint
@@ -103,7 +106,7 @@ backchannelLogout:
     bigbluebutton:
       ## Enable SAML backchannel logout for BBB
       ##
-      enabled: {{ env "BACKCHANNEL_LOGOUT_BBB_ENABLED" | default "false" | quote }}
+      enabled: {{ env "BACKCHANNEL_LOGOUT_BBB_ENABLED" | default "true" | quote }}
 
       ## Backchannel logout listener endpoint
       ##
@@ -149,7 +152,7 @@ backchannelLogout:
     opencloud:
       ## Enable OIDC backchannel logout for OpenCloud
       ##
-      enabled: {{ env "BACKCHANNEL_LOGOUT_OPENCLOUD_ENABLED" | default "false" | quote }}
+      enabled: {{ env "BACKCHANNEL_LOGOUT_OPENCLOUD_ENABLED" | default "true" | quote }}
 
       ## Backchannel logout listener endpoint
       ## OpenCloud receives logout POST requests from Keycloak
@@ -183,7 +186,7 @@ backchannelLogout:
     nextcloud:
       ## Enable OIDC backchannel logout for Nextcloud
       ##
-      enabled: {{ env "BACKCHANNEL_LOGOUT_NEXTCLOUD_ENABLED" | default "false" | quote }}
+      enabled: {{ env "BACKCHANNEL_LOGOUT_NEXTCLOUD_ENABLED" | default "true" | quote }}
 
       ## Backchannel logout listener endpoint
       ##

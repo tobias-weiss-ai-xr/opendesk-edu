@@ -1,0 +1,115 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moodle-apache-backchannel-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: moodle
+    app.kubernetes.io/component: backchannel-logout
+    app.kubernetes.io/part-of: opendesk
+data:
+  backchannel.conf: |
+    {{ if and .Values.backchannelLogout.enabled .Values.backchannelLogout.saml.moodle.enabled }}
+
+    LoadModule php_module modules/mod_php.so
+    LoadModule shib_module modules/mod_shib.so
+    LoadModule headers_module modules/mod_headers.so
+
+    <Location /Shibboleth.sso/Logout>
+        <If "%{REQUEST_METHOD} == 'POST'">
+            SetHandler application/x-httpd-php
+            Action application/x-httpd-php /files/backchannel-handler.php virtual
+            
+            Header always set X-Content-Type-Options "nosniff"
+            Header always set X-Frame-Options "DENY"
+            Header always set X-XSS-Protection "1; mode=block"
+            
+            {{ if .Values.backchannelLogout.saml.moodle.signature.requireSignedRequests }}
+            {{ end }}
+            
+            Require all granted
+        </If>
+        <Else>
+            SetHandler shib
+            AuthType None
+            Require all granted
+        </Else>
+    </Location>
+
+    Alias /files/backchannel-handler.php /var/www/moodle/auth/shibboleth/backchannel-handler.php
+
+    <Directory /var/www/moodle/auth/shibboleth>
+        Options None
+        AllowOverride None
+        Require all granted
+        
+        <Files "backchannel-handler.php">
+            Require all granted
+        </Files>
+        
+        <FilesMatch "^.*\.(php|inc|cfg|txt)$">
+            Require all denied
+        </FilesMatch>
+    </Directory>
+
+    {{ if .Values.backchannelLogout.saml.moodle.verbose }}
+    LogLevel php:debug authz_core:debug
+    CustomLog /var/log/apache2/backchannel_logout_access.log combined
+    ErrorLog /var/log/apache2/backchannel_logout_error.log
+    {{ else }}
+    LogLevel php:warn authz_core:warn
+    {{ end }}
+
+    AddType application/samlxml .saml
+    AddType application/soap+xml .soap
+
+    {{ else }}
+
+    <Location /Shibboleth.sso/Logout>
+        SetHandler shib
+        AuthType None
+        Require all granted
+    </Location>
+
+    {{ end }}
+
+  php-fpm-backchannel.conf: |
+    {{ if and .Values.backchannelLogout.enabled .Values.backchannelLogout.saml.moodle.enabled }}
+
+    <Location /Shibboleth.sso/Logout>
+        <If "%{REQUEST_METHOD} == 'POST'">
+            SetHandler "proxy:unix:/run/php/php-fpm.sock|fcgi://localhost"
+            
+            ProxyFCGISetEnvIf "true" SCRIPT_FILENAME "/var/www/moodle/auth/shibboleth/backchannel-handler.php"
+            
+            Header always set X-Content-Type-Options "nosniff"
+            Header always set X-Frame-Options "DENY"
+            Header always set X-XSS-Protection "1; mode=block"
+            
+            Require all granted
+        </If>
+        <Else>
+            SetHandler shib
+            AuthType None
+            Require all granted
+        </Else>
+    </Location>
+
+    {{ end }}
+
+  backchannel-env.conf: |
+    {{ if and .Values.backchannelLogout.enabled .Values.backchannelLogout.saml.moodle.enabled }}
+
+    SetEnv BACKCHANNEL_LOGOUT_ENABLED "true"
+    SetEnv BACKCHANNEL_LOGOUT_MOODLE_ENABLED "{{ .Values.backchannelLogout.saml.moodle.enabled }}"
+    SetEnv BACKCHANNEL_LOGOUT_MOODLE_TIMEOUT "{{ .Values.backchannelLogout.saml.moodle.sessionTerminationTimeout | default "30" }}"
+    SetEnv BACKCHANNEL_LOGOUT_MOODLE_VERBOSE "{{ .Values.backchannelLogout.saml.moodle.verbose | default "false" }}"
+    SetEnv BACKCHANNEL_LOGOUT_MOODLE_REQUIRE_SIGNED "{{ .Values.backchannelLogout.saml.moodle.signature.requireSignedRequests | default "true" }}"
+    SetEnv BACKCHANNEL_LOGOUT_MOODLE_SIGN_RESPONSES "{{ .Values.backchannelLogout.saml.moodle.signature.signResponses | default "true" }}"
+    SetEnv IDP_CERT_PATH "/etc/shibboleth/idp-cert.pem"
+    SetEnv MOODLE_ROOT "/var/www/moodle"
+
+    {{ end }}
