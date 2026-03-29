@@ -1,0 +1,14 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the service:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:80
+
+Next steps:
+  1. Complete the Moodle installation wizard
+  2. Configure Shibboleth SSO integration with Keycloak
+  3. Set up persistent storage for moodledata
+
+Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu

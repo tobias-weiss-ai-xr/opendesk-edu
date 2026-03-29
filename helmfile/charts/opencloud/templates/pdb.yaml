@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "opencloud.fullname" . }}-pdb
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+spec:
+  minAvailable: {{ if .Values.pdb }}{{ .Values.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
+  selector:
+    matchLabels:
+      {{- include "opencloud.selectorLabels" . | nindent 6 }}

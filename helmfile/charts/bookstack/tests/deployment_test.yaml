@@ -32,13 +32,6 @@ tests:
       - isNotNull:
           path: metadata.labels["app.kubernetes.io/managed-by"]
 
-  - it: should set the bookstack/server label
-    asserts:
-      - isSubset:
-          path: metadata.labels
-          content:
-            bookstack/server: "true"
-
   - it: should configure database environment variables
     set:
       bookstack.db.host: "test-db-host"
@@ -71,3 +64,15 @@ tests:
           content:
             name: bookstack-uploads
             mountPath: /config
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

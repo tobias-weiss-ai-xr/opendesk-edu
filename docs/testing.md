@@ -13,11 +13,12 @@ SPDX-License-Identifier: Apache-2.0
     * [Functional QA (end-to-end tests)](#functional-qa-end-to-end-tests)
       * [Nightly testing](#nightly-testing)
       * [Reporting test results](#reporting-test-results)
-    * [Load- and performance testing](#load--and-performance-testing)
-      * [Base performance testing](#base-performance-testing)
-      * [Load testing to saturation point](#load-testing-to-saturation-point)
-      * [Load testing up to a defined user count](#load-testing-up-to-a-defined-user-count)
-      * [Overload/recovery tests](#overloadrecovery-tests)
+* [Load- and performance testing](#load--and-performance-testing)
+  * [Base performance testing](#base-performance-testing)
+  * [Load testing to saturation point](#load-testing-to-saturation-point)
+  * [Load testing up to a defined user count](#load-testing-up-to-a-defined-user-count)
+  * [Overload/recovery tests](#overloadrecovery-tests)
+* [Helm Chart Unit Tests](#helm-chart-unit-tests)
 <!-- TOC -->
 
 ## Overview
@@ -152,3 +153,154 @@ test cases until no further increase in throughput is visible. Then we add even 
 until the first HTTP requests run into timeouts or errors.
 After a few minutes, we reduce the load below the saturation point.
 Now we can check if the system is able to recover from the overload status.
+
+## Helm Chart Unit Tests
+
+We use [helm-unittest](https://github.com/helm-unittest/helm-unittest) to validate Helm chart templates and ensure chart changes don't break existing functionality. These tests run in CI and can be executed locally during development.
+
+### Installing helm-unittest
+
+```bash
+go install github.com/helm-unittest/helm-unittest/cmd/helm-unittest@latest
+```
+
+Make sure `$GOPATH/bin` is in your `$PATH`.
+
+### Running Tests
+
+Test a single chart:
+
+```bash
+helm-unittest helmfile/charts/{chart}
+```
+
+Test all charts:
+
+```bash
+for chart in $(ls helmfile/charts/); do helm-unittest helmfile/charts/$chart; done
+```
+
+### Test File Structure
+
+A test file contains one or more suites. Each suite targets specific templates and defines assertions to verify the rendered manifests:
+
+```yaml
+suite: Deployment
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: linuxserver/bookstack:.+
+```
+
+### CI Values Pattern
+
+Most tests load CI-specific values using a relative path:
+
+```yaml
+values:
+  - ../ci/ci-values.yaml
+```
+
+This ensures tests run with minimal, predictable configuration independent of production settings.
+
+### Common Assertions
+
+- `isKind`: Verify the Kubernetes resource kind
+- `equal`: Check exact value match
+- `contains`: Verify a value exists in a list
+- `isNotNull`: Ensure a path exists and is not null
+- `matchRegex`: Match a path value against a regex pattern
+- `hasDocuments`: Verify the expected number of manifests are generated
+
+### Using documentIndex
+
+When a template renders multiple manifests (e.g., a ConfigMap and a CronJob in the same file), use `documentIndex` to target specific manifests:
+
+```yaml
+suite: SSO Check CronJob
+templates:
+  - sso-check-cronjob.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a CronJob with correct kind
+    documentIndex: 1  # Second manifest (0-based)
+    asserts:
+      - isKind:
+          of: CronJob
+```
+
+### Using set for Test-Specific Overrides
+
+Override values for individual tests without modifying the base values file:
+
+```yaml
+suite: SSO Check CronJob (enabled)
+templates:
+  - sso-check-cronjob.yaml
+values:
+  - ../ci/ci-values.yaml
+set:
+  ssoCheck.enabled: true
+tests:
+  - it: should not be suspended when ssoCheck.enabled is true
+    documentIndex: 1
+    asserts:
+      - equal:
+          path: spec.suspend
+          value: false
+
+  - it: should use custom schedule when provided
+    documentIndex: 1
+    set:
+      ssoCheck.schedule: "*/5 * * * *"
+    asserts:
+      - equal:
+          path: spec.schedule
+          value: "*/5 * * * *"
+```
+
+### Using template to Target Specific Templates
+
+When testing multiple templates in one suite, scope assertions to a specific template:
+
+```yaml
+suite: Deployment
+templates:
+  - deployment-chat.yaml
+  - deployment-core.yaml
+  - deployment-frontend.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create all deployments with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should create core Deployment with correct name
+    template: deployment-core.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-core
+```
+
+### Real Examples
+
+See existing tests for reference:
+
+- [ILIAS SSO checks](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/helmfile/charts/ilias/tests/sso_test.yaml)
+- [BookStack deployment](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/helmfile/charts/bookstack/tests/deployment_test.yaml)
+- [F13 multi-deployment tests](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/helmfile/charts/f13/tests/deployment_test.yaml)

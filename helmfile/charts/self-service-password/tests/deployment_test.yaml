@@ -65,3 +65,15 @@ tests:
           content:
             name: LDAP_BASE_DN
             value: "dc=example,dc=com"
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 33
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 33
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true

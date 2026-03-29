@@ -1,0 +1,258 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+suite: ConfigMap
+templates:
+  - configmap-general.yaml
+  - configmap-llm.yaml
+  - configmap-rag.yaml
+  - configmap-transcription.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create all configmaps with correct kind
+    asserts:
+      - isKind:
+          of: ConfigMap
+
+  # ===========================================================================
+  # General ConfigMap
+  # ===========================================================================
+  - it: should create general configmap with correct name and data key
+    template: configmap-general.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-general
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: core
+      - isNotNull:
+          path: data["general.yml"]
+
+  - it: should contain authentication config in general configmap
+    template: configmap-general.yaml
+    asserts:
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "authentication:"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "guest_mode: true"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "keycloak_base_url: https://keycloak\\.example\\.com"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "keycloak_realm: opendesk"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "audience: \"f13-api\""
+
+  - it: should contain services config in general configmap
+    template: configmap-general.yaml
+    asserts:
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "services:"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "chat:\\s*\\n\\s+enabled: true"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "summary:\\s*\\n\\s+enabled: true"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "parser:\\s*\\n\\s+enabled: true"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "rag:\\s*\\n\\s+enabled: true"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "transcription:\\s*\\n\\s+enabled: true"
+
+  - it: should contain elasticsearch config in general configmap
+    template: configmap-general.yaml
+    asserts:
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "elasticsearch:\\s*\\n\\s+host: RELEASE-NAME-f13-elasticsearch"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "port: 9200"
+
+  - it: should contain database config in general configmap
+    template: configmap-general.yaml
+    asserts:
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "feedback_db:\\s*\\n\\s+host:"
+      - matchRegex:
+          path: data["general.yml"]
+          pattern: "transcription_db:\\s*\\n\\s+host:"
+
+  # ===========================================================================
+  # LLM ConfigMap
+  # ===========================================================================
+  - it: should create LLM configmap with correct name and data key
+    template: configmap-llm.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-llm
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: core
+      - isNotNull:
+          path: data["llm_models.yml"]
+
+  - it: should contain LLM provider and API URL config
+    template: configmap-llm.yaml
+    asserts:
+      - matchRegex:
+          path: data["llm_models.yml"]
+          pattern: "provider: \"openai\""
+      - matchRegex:
+          path: data["llm_models.yml"]
+          pattern: "api_url: \"https://llm\\.example\\.com/v1\""
+
+  - it: should contain LLM model names
+    template: configmap-llm.yaml
+    asserts:
+      - matchRegex:
+          path: data["llm_models.yml"]
+          pattern: "chat: \"gpt-4o-mini\""
+      - matchRegex:
+          path: data["llm_models.yml"]
+          pattern: "summary: \"gpt-4o-mini\""
+      - matchRegex:
+          path: data["llm_models.yml"]
+          pattern: "parser: \"gpt-4o-mini\""
+
+  # ===========================================================================
+  # RAG ConfigMap
+  # ===========================================================================
+  - it: should create RAG configmap with correct name and data key
+    template: configmap-rag.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-rag
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: rag
+      - isNotNull:
+          path: data["rag_pipeline_config.yml"]
+
+  - it: should contain RAG elasticsearch config
+    template: configmap-rag.yaml
+    asserts:
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "elasticsearch:\\s*\\n\\s+host: RELEASE-NAME-f13-elasticsearch"
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "port: 9200"
+
+  - it: should contain RAG chunking config
+    template: configmap-rag.yaml
+    asserts:
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "chunking:\\s*\\n\\s+strategy: sentence"
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "chunk_size: 512"
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "chunk_overlap: 50"
+
+  - it: should contain RAG embedding and retrieval config
+    template: configmap-rag.yaml
+    asserts:
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "embedding:\\s*\\n\\s+model: \"all-MiniLM-L6-v2\""
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "top_k: 5"
+      - matchRegex:
+          path: data["rag_pipeline_config.yml"]
+          pattern: "score_threshold: 0\\.7"
+
+  - it: should NOT render RAG configmap when service is disabled
+    template: configmap-rag.yaml
+    set:
+      services.rag.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  # ===========================================================================
+  # Transcription ConfigMap
+  # ===========================================================================
+  - it: should create transcription configmap with correct name and data key
+    template: configmap-transcription.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-transcription
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: transcription
+      - isNotNull:
+          path: data["transcription.yml"]
+
+  - it: should contain transcription RabbitMQ config
+    template: configmap-transcription.yaml
+    asserts:
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "rabbitmq:\\s*\\n\\s+host: RELEASE-NAME-f13-rabbitmq"
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "port: 5672"
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "queue: f13_transcription"
+
+  - it: should contain transcription database config
+    template: configmap-transcription.yaml
+    asserts:
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "transcription_db:\\s*\\n\\s+host: RELEASE-NAME-f13-transcription-db"
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "name: \"f13_transcription\""
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "user: \"f13_transcription\""
+
+  - it: should contain transcription inference config
+    template: configmap-transcription.yaml
+    asserts:
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "inference:\\s*\\n\\s+url: http://RELEASE-NAME-f13-transcription-inference:8000"
+
+  - it: should contain whisper model and language config
+    template: configmap-transcription.yaml
+    asserts:
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "model:.*tiny"
+      - matchRegex:
+          path: data["transcription.yml"]
+          pattern: "language:.*en"
+
+  - it: should NOT render transcription configmap when service is disabled
+    template: configmap-transcription.yaml
+    set:
+      services.transcription.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

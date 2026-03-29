@@ -49,3 +49,12 @@ tests:
           path: spec.template.spec.containers[0].resources.requests
       - isNotNull:
           path: spec.template.spec.containers[0].resources.limits
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 0
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 0

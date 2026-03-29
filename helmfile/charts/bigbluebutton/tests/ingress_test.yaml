@@ -1,6 +1,8 @@
 suite: Ingress
 templates:
   - ingress.yaml
+values:
+  - ../ci/ci-values.yaml
 tests:
   - it: should create an Ingress
     asserts:
@@ -26,12 +28,4 @@ tests:
           path: spec.rules[0].host
           value: "bbb.opendesk.example.com"
 
-  - it: should have SSL redirect annotation
-    asserts:
-      - isNotNull:
-          path: metadata.annotations["haproxy-ingress.github.io/ssl-redirect"]
 
-  - it: should have cert-manager annotation
-    asserts:
-      - isNotNull:
-          path: metadata.annotations["cert-manager.io/cluster-issuer"]

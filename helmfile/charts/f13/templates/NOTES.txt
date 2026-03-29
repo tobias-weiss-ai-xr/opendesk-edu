@@ -1,0 +1,14 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the F13 frontend:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=frontend" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 9999:9999
+
+Next steps:
+  1. Configure the LLM provider API key and model names
+  2. Enable Keycloak authentication via global.keycloakUrl
+  3. Review values.yaml to enable/disable individual AI services
+
+Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu

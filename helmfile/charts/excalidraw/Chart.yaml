@@ -6,3 +6,10 @@ description: A Helm chart for Excalidraw (virtual whiteboard)
 name: excalidraw
 type: application
 version: 0.1.0
+annotations:
+  artifacthub.io/changes: |
+    - Add comprehensive helm-unittest test coverage
+    - Add CI values for template rendering validation
+  artifacthub.io/links: |
+    - name: Source
+      url: https://github.com/tobias-weiss-ai-xr/opendesk-edu

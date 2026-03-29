@@ -1,0 +1,790 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+suite: Deployment
+templates:
+  - deployment-chat.yaml
+  - deployment-core.yaml
+  - deployment-frontend.yaml
+  - deployment-parser.yaml
+  - deployment-rag.yaml
+  - deployment-rabbitmq.yaml
+  - deployment-summary.yaml
+  - deployment-transcription-inference.yaml
+  - deployment-transcription.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create all deployments with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  # ===========================================================================
+  # Core
+  # ===========================================================================
+  - it: should create core Deployment with correct name and image
+    template: deployment-core.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-core
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/core/main:.+
+
+  - it: should set core component label
+    template: deployment-core.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: core
+
+  - it: should configure core environment variables
+    template: deployment-core.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: CONFIG_DIR
+            value: /app/configs
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KEYCLOAK_CLIENT_ID
+            value: f13-api
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: llm-api-key
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FEEDBACK_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: feedback-db-password
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HUGGINGFACE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: huggingface-token
+
+  - it: should expose core HTTP port
+    template: deployment-core.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 8000
+            protocol: TCP
+
+  - it: should set core resource requests and limits
+    template: deployment-core.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  - it: should mount config volumes in core
+    template: deployment-core.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config-general
+            mountPath: /app/configs/general.yml
+            subPath: general.yml
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config-llm
+            mountPath: /app/configs/llm_models.yml
+            subPath: llm_models.yml
+
+  # ===========================================================================
+  # Frontend
+  # ===========================================================================
+  - it: should create frontend Deployment with correct name and image
+    template: deployment-frontend.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-frontend
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/frontend/main:.+
+
+  - it: should set frontend component label
+    template: deployment-frontend.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: frontend
+
+  - it: should configure frontend environment variables
+    template: deployment-frontend.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: KEYCLOAK_CLIENT_ID
+            value: f13-api
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: API_URL
+            value: "http://RELEASE-NAME-f13-core:8000"
+
+  - it: should expose frontend HTTP port on 9999
+    template: deployment-frontend.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 9999
+            protocol: TCP
+
+  - it: should set frontend resource requests and limits
+    template: deployment-frontend.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  # ===========================================================================
+  # Chat
+  # ===========================================================================
+  - it: should create chat Deployment with correct name and image
+    template: deployment-chat.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-chat
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/chat:.+
+
+  - it: should set chat component label
+    template: deployment-chat.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: chat
+
+  - it: should configure chat LLM environment variables
+    template: deployment-chat.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_MODEL
+            value: "gpt-4o-mini"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_API_URL
+            value: "https://llm.example.com/v1"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_PROVIDER
+            value: "openai"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: llm-api-key
+
+  - it: should expose chat HTTP port
+    template: deployment-chat.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 8000
+            protocol: TCP
+
+  - it: should set chat resource requests and limits
+    template: deployment-chat.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  # ===========================================================================
+  # Parser
+  # ===========================================================================
+  - it: should create parser Deployment with correct name and image
+    template: deployment-parser.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-parser
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/parser:.+
+
+  - it: should set parser component label
+    template: deployment-parser.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: parser
+
+  - it: should configure parser environment variables
+    template: deployment-parser.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_MODEL
+            value: "gpt-4o-mini"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_PROVIDER
+            value: "openai"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: llm-api-key
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HUGGINGFACE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: huggingface-token
+
+  - it: should expose parser HTTP port
+    template: deployment-parser.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 8000
+            protocol: TCP
+
+  - it: should set parser resource requests and limits
+    template: deployment-parser.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  - it: should mount docling-models volume in parser
+    template: deployment-parser.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: docling-models
+            mountPath: /app/models
+
+  # ===========================================================================
+  # Summary
+  # ===========================================================================
+  - it: should create summary Deployment with correct name and image
+    template: deployment-summary.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-summary
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/summary/main:.+
+
+  - it: should set summary component label
+    template: deployment-summary.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: summary
+
+  - it: should configure summary LLM environment variables
+    template: deployment-summary.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_MODEL
+            value: "gpt-4o-mini"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_API_URL
+            value: "https://llm.example.com/v1"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_PROVIDER
+            value: "openai"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LLM_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: llm-api-key
+
+  - it: should expose summary HTTP port
+    template: deployment-summary.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 8000
+            protocol: TCP
+
+  - it: should set summary resource requests and limits
+    template: deployment-summary.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  # ===========================================================================
+  # RAG
+  # ===========================================================================
+  - it: should create rag Deployment with correct name and image
+    template: deployment-rag.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-rag
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/rag:.+
+
+  - it: should set rag component label
+    template: deployment-rag.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: rag
+
+  - it: should configure rag environment variables
+    template: deployment-rag.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ELASTICSEARCH_HOST
+            value: RELEASE-NAME-f13-elasticsearch
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ELASTICSEARCH_PORT
+            value: "9200"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HUGGINGFACE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: huggingface-token
+
+  - it: should expose rag HTTP port
+    template: deployment-rag.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 8000
+            protocol: TCP
+
+  - it: should set rag resource requests and limits
+    template: deployment-rag.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  - it: should mount config-rag volume in rag
+    template: deployment-rag.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config-rag
+            mountPath: /app/configs/rag_pipeline_config.yml
+            subPath: rag_pipeline_config.yml
+
+  # ===========================================================================
+  # Transcription
+  # ===========================================================================
+  - it: should create transcription Deployment with correct name and image
+    template: deployment-transcription.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-transcription
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/transcription/transcription/main:.+
+
+  - it: should set transcription component label
+    template: deployment-transcription.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: transcription
+
+  - it: should configure transcription RabbitMQ environment variables
+    template: deployment-transcription.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_HOST
+            value: RELEASE-NAME-f13-rabbitmq
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_PORT
+            value: "5672"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_USER
+            value: "f13"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: rabbitmq-password
+
+  - it: should configure transcription database environment variables
+    template: deployment-transcription.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: TRANSCRIPTION_DB_HOST
+            value: RELEASE-NAME-f13-transcription-db
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: TRANSCRIPTION_DB_NAME
+            value: f13_transcription
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: TRANSCRIPTION_DB_USER
+            value: f13_transcription
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: TRANSCRIPTION_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: transcription-db-password
+
+  - it: should expose transcription HTTP port
+    template: deployment-transcription.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 8000
+            protocol: TCP
+
+  - it: should set transcription resource requests and limits
+    template: deployment-transcription.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  - it: should mount transcription volumes
+    template: deployment-transcription.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config-transcription
+            mountPath: /app/configs/transcription.yml
+            subPath: transcription.yml
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: transcription-data
+            mountPath: /app/data
+
+  # ===========================================================================
+  # Transcription-Inference
+  # ===========================================================================
+  - it: should create transcription-inference Deployment with correct name and image
+    template: deployment-transcription-inference.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-transcription-inference
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: registry\.opencode\.de/f13/microservices/transcription/inference/main:.+
+
+  - it: should set transcription-inference component label
+    template: deployment-transcription-inference.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: transcription-inference
+
+  - it: should configure transcription-inference environment variables
+    template: deployment-transcription-inference.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: WHISPER_MODEL
+            value: "tiny"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HUGGINGFACE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: huggingface-token
+
+  - it: should expose transcription-inference HTTP port
+    template: deployment-transcription-inference.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 8000
+            protocol: TCP
+
+  - it: should set transcription-inference resource requests and limits
+    template: deployment-transcription-inference.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 128Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 200m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 256Mi
+
+  - it: should mount transcription-models volume in inference
+    template: deployment-transcription-inference.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: transcription-models
+            mountPath: /app/models
+
+  - it: should set GPU nodeSelector for transcription-inference
+    template: deployment-transcription-inference.yaml
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.nodeSelector
+      - equal:
+          path: spec.template.spec.nodeSelector["nvidia.com/gpu.present"]
+          value: "true"
+
+  # ===========================================================================
+  # RabbitMQ
+  # ===========================================================================
+  - it: should create rabbitmq Deployment with correct name and image
+    template: deployment-rabbitmq.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-rabbitmq
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: rabbitmq:3.13-management
+
+  - it: should set rabbitmq component label
+    template: deployment-rabbitmq.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: rabbitmq
+
+  - it: should configure rabbitmq environment variables
+    template: deployment-rabbitmq.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_DEFAULT_USER
+            value: f13
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: rabbitmq-password
+
+  - it: should expose rabbitmq AMQP and management ports
+    template: deployment-rabbitmq.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: amqp
+            containerPort: 5672
+            protocol: TCP
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: management
+            containerPort: 15672
+            protocol: TCP
+
+  - it: should set rabbitmq resource requests and limits
+    template: deployment-rabbitmq.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  - it: should use exec-based probes for rabbitmq
+    template: deployment-rabbitmq.yaml
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].livenessProbe.exec
+      - isNotNull:
+          path: spec.template.spec.containers[0].readinessProbe.exec
+      - contains:
+          path: spec.template.spec.containers[0].livenessProbe.exec.command
+          content: rabbitmq-diagnostics
+
+  # ===========================================================================
+  # Security Context
+  # ===========================================================================
+  - it: should set core container security context
+    template: deployment-core.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

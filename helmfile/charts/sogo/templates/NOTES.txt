@@ -1,15 +1,14 @@
-# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
-1. Get the application URL by running these commands:
-{{- if .Values.ingress.enabled }}
-{{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
-  {{- end }}
-{{- end }}
-{{- else }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "sogo.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:80 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 80:$CONTAINER_PORT
-{{- end }}
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the service:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:80
+
+Next steps:
+  1. Configure LDAP and database connections
+  2. Enable OIDC/SSO integration with Keycloak
+  3. Set up IMAP/SMTP server settings
+
+Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu

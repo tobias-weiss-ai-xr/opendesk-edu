@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: LDAP Configuration - ConfigMap
+templates:
+  - configmap.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should render LDAP type in user sources
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "type = ldap;"
+
+  - it: should render LDAP baseDN from values
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: 'baseDN = "ou=users,dc=opendesk,dc=edu";'
+
+  - it: should render LDAP bindDN from values
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: 'bindDN = "uid=sogo,ou=services,dc=opendesk,dc=edu";'
+
+  - it: should render LDAP bindPassword from CI values
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: 'bindPassword = "test";'
+
+  - it: should render LDAP hostname via ldapUrl helper
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: 'hostname = ".*openldap.*";'
+
+  - it: should enable LDAP authentication
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "canAuthenticate = YES;"
+
+  - it: should set correct bind fields for LDAP
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "bindFields = \\(uid, mail\\);"
+
+---
+suite: LDAP Configuration - Secret
+templates:
+  - secret.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create secret with ldap-bind-password key
+    asserts:
+      - isNotNull:
+          path: stringData["ldap-bind-password"]
+
+  - it: should set ldap-bind-password from CI values
+    asserts:
+      - equal:
+          path: stringData["ldap-bind-password"]
+          value: "test"

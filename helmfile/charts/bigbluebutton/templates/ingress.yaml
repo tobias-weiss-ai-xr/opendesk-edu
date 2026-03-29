@@ -7,10 +7,6 @@ metadata:
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-    haproxy-ingress.github.io/ssl-redirect: "true"
-    haproxy-ingress.github.io/timeout-server: "120000ms"
-    haproxy-ingress.github.io/timeout-client: "120000ms"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: {{ .Values.ingress.className | quote }}
   rules:

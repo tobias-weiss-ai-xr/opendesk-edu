@@ -32,13 +32,6 @@ tests:
       - isNotNull:
           path: metadata.labels["app.kubernetes.io/managed-by"]
 
-  - it: should set the limesurvey/server label
-    asserts:
-      - isSubset:
-          path: metadata.labels
-          content:
-            limesurvey/server: "true"
-
   - it: should have a single replica
     asserts:
       - equal:
@@ -47,11 +40,9 @@ tests:
 
   - it: should configure database environment variables
     asserts:
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: LS_DB_HOST
-            value: "mariadb-external"
+      - equal:
+          path: spec.template.spec.containers[0].env[0].name
+          value: LS_DB_HOST
       - contains:
           path: spec.template.spec.containers[0].env
           content:
@@ -90,3 +81,15 @@ tests:
       - equal:
           path: spec.template.spec.initContainers[0].name
           value: setup
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

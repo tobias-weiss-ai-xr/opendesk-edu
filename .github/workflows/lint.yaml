@@ -57,7 +57,7 @@ jobs:
         run: |
           for chart in ${{ steps.list-changed.outputs.changed_charts }}; do
             echo "Testing ${chart}..."
-            helm unittest --helm3 "${chart}"
+            helm unittest "${chart}"
           done
 
   template-render:
@@ -108,10 +108,10 @@ jobs:
 
       - name: Install kubeconform
         run: |
-          wget -qO- https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz -C /usr/local/bin kubeconform
+          wget -qO- https://github.com/yannh/kubeconform/releases/download/v0.7.0/kubeconform-linux-amd64.tar.gz | tar xz -C /usr/local/bin kubeconform
 
       - name: Validate with kubeconform
-        run: kubeconform -summary -ignore-missing-schemas /tmp/rendered.yaml
+        run: kubeconform -summary -ignore-missing-schemas -kubernetes-version 1.29.0 /tmp/rendered.yaml
 
   yaml-lint:
     name: YAML Lint
@@ -147,6 +147,27 @@ jobs:
             "docs/getting-started.md" \
             ".github/" \
             --no-progress
+
+  helm-unittest:
+    name: Helm Unittest (all charts)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "v3.17.0"
+
+      - name: Install helm-unittest plugin
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest.git --version v0.7.2
+
+      - name: Run helm-unittest on all charts
+        run: |
+          for chart in helmfile/charts/*/; do
+            echo "Testing ${chart}..."
+            helm unittest "${chart}"
+          done
 
   check-secrets:
     name: Secret Leak Check

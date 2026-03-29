@@ -1,0 +1,99 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+suite: Ingress
+templates:
+  - ingress.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should not create an Ingress when disabled
+    set:
+      ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should create an Ingress when enabled
+    asserts:
+      - isKind:
+          of: Ingress
+      - isNotNull:
+          path: spec.rules
+
+  - it: should configure the host from CI values
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: f13.ci.example.com
+
+  - it: should set ingressClassName from global defaults
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: nginx
+
+  - it: should configure /api path to core service
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /api
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: RELEASE-NAME-f13-core
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 8000
+
+  - it: should configure / path to frontend service
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[1].path
+          value: /
+      - equal:
+          path: spec.rules[0].http.paths[1].backend.service.name
+          value: RELEASE-NAME-f13-frontend
+      - equal:
+          path: spec.rules[0].http.paths[1].backend.service.port.number
+          value: 9999
+
+  - it: should not configure TLS when disabled
+    asserts:
+      - isNull:
+          path: spec.tls
+
+  - it: should configure TLS when enabled
+    set:
+      ingress.tls.enabled: true
+      ingress.tls.secretName: f13-tls
+    asserts:
+      - isNotNull:
+          path: spec.tls
+      - equal:
+          path: spec.tls[0].secretName
+          value: f13-tls
+      - contains:
+          path: spec.tls[0].hosts
+          content: f13.ci.example.com
+
+  - it: should set default haproxy annotations
+    asserts:
+      - isNotNull:
+          path: metadata.annotations["haproxy-ingress.github.io/ssl-redirect"]
+      - equal:
+          path: metadata.annotations["haproxy-ingress.github.io/ssl-redirect"]
+          value: "true"
+      - isNotNull:
+          path: metadata.annotations["haproxy-ingress.github.io/proxy-body-size"]
+      - isNotNull:
+          path: metadata.annotations["haproxy-ingress.github.io/timeout-server"]
+
+  - it: should merge custom annotations
+    set:
+      ingress.annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+    asserts:
+      - isNotNull:
+          path: metadata.annotations["nginx.ingress.kubernetes.io/rewrite-target"]
+      - equal:
+          path: metadata.annotations["nginx.ingress.kubernetes.io/rewrite-target"]
+          value: /

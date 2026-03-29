@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+suite: LDAP Configuration
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should render all LDAP environment variables with configured values
+    set:
+      selfServicePassword.ldap.host: "ldap.example.com"
+      selfServicePassword.ldap.port: "636"
+      selfServicePassword.ldap.baseDn: "dc=example,dc=com"
+      selfServicePassword.ldap.bindDn: "cn=admin,dc=example,dc=com"
+      selfServicePassword.ldap.startTls: "true"
+      selfServicePassword.ldap.networkTimeout: "5"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LDAP_HOST
+            value: "ldap.example.com"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LDAP_PORT
+            value: "636"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LDAP_BASE_DN
+            value: "dc=example,dc=com"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LDAP_BIND_DN
+            value: "cn=admin,dc=example,dc=com"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LDAP_STARTTLS
+            value: "true"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LDAP_NETWORK_TIMEOUT
+            value: "5"

@@ -1,0 +1,107 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+suite: Service
+templates:
+  - service-core.yaml
+  - service-frontend.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create Services with correct kind
+    asserts:
+      - isKind:
+          of: Service
+
+  - it: should create core Service with correct name
+    template: service-core.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-core
+
+  - it: should expose core port 8000
+    template: service-core.yaml
+    asserts:
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[0].port
+          value: 8000
+      - equal:
+          path: spec.ports[0].targetPort
+          value: http
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+
+  - it: should set core component label
+    template: service-core.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: core
+
+  - it: should set core Service type to ClusterIP
+    template: service-core.yaml
+    asserts:
+      - equal:
+          path: spec.type
+          value: ClusterIP
+
+  - it: should set core Service selector
+    template: service-core.yaml
+    asserts:
+      - isSubset:
+          path: spec.selector
+          content:
+            app.kubernetes.io/component: core
+            app.kubernetes.io/instance: RELEASE-NAME
+
+  - it: should create frontend Service with correct name
+    template: service-frontend.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-frontend
+
+  - it: should expose frontend port 9999
+    template: service-frontend.yaml
+    asserts:
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[0].port
+          value: 9999
+      - equal:
+          path: spec.ports[0].targetPort
+          value: http
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+
+  - it: should set frontend component label
+    template: service-frontend.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: frontend
+
+  - it: should set frontend Service type to ClusterIP
+    template: service-frontend.yaml
+    asserts:
+      - equal:
+          path: spec.type
+          value: ClusterIP
+
+  - it: should set frontend Service selector
+    template: service-frontend.yaml
+    asserts:
+      - isSubset:
+          path: spec.selector
+          content:
+            app.kubernetes.io/component: frontend
+            app.kubernetes.io/instance: RELEASE-NAME

@@ -1,6 +1,8 @@
 suite: Persistence
 templates:
   - pvc.yaml
+values:
+  - ../ci/ci-values.yaml
 tests:
   - it: should create a PersistentVolumeClaim
     asserts:

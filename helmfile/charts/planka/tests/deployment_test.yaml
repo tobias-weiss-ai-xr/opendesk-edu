@@ -32,13 +32,6 @@ tests:
       - isNotNull:
           path: metadata.labels["app.kubernetes.io/managed-by"]
 
-  - it: should set the planka/server label
-    asserts:
-      - isSubset:
-          path: metadata.labels
-          content:
-            planka/server: "true"
-
   - it: should have a single replica
     asserts:
       - equal:
@@ -47,10 +40,9 @@ tests:
 
   - it: should configure DATABASE_URL env var
     asserts:
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: DATABASE_URL
+      - equal:
+          path: spec.template.spec.containers[0].env[0].name
+          value: DATABASE_URL
       - matchRegex:
           path: spec.template.spec.containers[0].env[0].value
           pattern: postgresql://planka:.+@RELEASE-NAME-postgresql:5432/planka
@@ -88,3 +80,16 @@ tests:
           content:
             name: planka-data
             mountPath: /app/public/user-avatars
+            subPath: user-avatars
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

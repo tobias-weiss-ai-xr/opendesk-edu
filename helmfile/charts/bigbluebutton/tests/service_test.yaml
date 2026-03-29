@@ -1,6 +1,8 @@
 suite: Service
 templates:
   - service.yaml
+values:
+  - ../ci/ci-values.yaml
 tests:
   - it: should create a Service
     asserts:

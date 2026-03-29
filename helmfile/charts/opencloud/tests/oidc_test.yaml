@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+suite: OIDC ConfigMap
+templates:
+  - configmap.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a ConfigMap with correct kind
+    asserts:
+      - isKind:
+          of: ConfigMap
+
+  - it: should render proxy OIDC insecure flag
+    asserts:
+      - matchRegex:
+          path: data["opencloud.yaml"]
+          pattern: "(?s)proxy:.*oidc:.*insecure: true"
+
+  - it: should render auth_bearer OIDC insecure flag
+    asserts:
+      - matchRegex:
+          path: data["opencloud.yaml"]
+          pattern: "(?s)auth_bearer:.*auth_providers:.*oidc:.*insecure: true"
+
+  - it: should disable users LDAP bind_password
+    asserts:
+      - matchRegex:
+          path: data["opencloud.yaml"]
+          pattern: "(?s)users:.*drivers:.*ldap:.*bind_password: \"disabled\""
+
+  - it: should disable groups LDAP bind_password
+    asserts:
+      - matchRegex:
+          path: data["opencloud.yaml"]
+          pattern: "(?s)groups:.*drivers:.*ldap:.*bind_password: \"disabled\""
+
+  - it: should disable graph identity LDAP bind_password
+    asserts:
+      - matchRegex:
+          path: data["opencloud.yaml"]
+          pattern: "(?s)identity:.*ldap:.*bind_password: \"disabled\""
+
+  - it: should set proxy insecure_backends to true
+    asserts:
+      - matchRegex:
+          path: data["opencloud.yaml"]
+          pattern: "insecure_backends: true"
+
+  - it: should disable LDAP write
+    asserts:
+      - matchRegex:
+          path: data["opencloud.yaml"]
+          pattern: "write_disabled: true"
+
+  - it: should render opencloud.yaml data
+    set:
+      oidc.roleAssignmentDriver: "oidc"
+    asserts:
+      - isNotNull:
+          path: data["opencloud.yaml"]

@@ -1,2 +1,5 @@
-# CI values for BigBlueButton — no external dependencies
-# Uses chart defaults for rendering
+# CI values for BigBlueButton — minimal set for template rendering
+bigbluebutton:
+  greenlight:
+    databaseUrl: "postgres://test:test@db:5432/greenlight"
+    secretKeyBase: "test-secret-key-for-ci"

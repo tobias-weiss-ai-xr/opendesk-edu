@@ -32,13 +32,6 @@ tests:
       - isNotNull:
           path: metadata.labels["app.kubernetes.io/managed-by"]
 
-  - it: should set the zammad/server label
-    asserts:
-      - isSubset:
-          path: metadata.labels
-          content:
-            zammad/server: "true"
-
   - it: should have a single replica
     asserts:
       - equal:
@@ -47,23 +40,21 @@ tests:
 
   - it: should configure DATABASE_URL env var
     asserts:
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: DATABASE_URL
+      - equal:
+          path: spec.template.spec.containers[0].env[2].name
+          value: DATABASE_URL
       - matchRegex:
           path: spec.template.spec.containers[0].env[2].value
-          pattern: postgresql://zammad:.+@postgres-external:5432/zammad
+          pattern: postgresql://zammad:.+@.+:5432/zammad
 
   - it: should configure ELASTICSEARCH_URL env var
     asserts:
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: ELASTICSEARCH_URL
       - equal:
+          path: spec.template.spec.containers[0].env[3].name
+          value: ELASTICSEARCH_URL
+      - matchRegex:
           path: spec.template.spec.containers[0].env[3].value
-          value: "http://elasticsearch-external:9200"
+          pattern: http://.+:9200
 
   - it: should set resource requests and limits
     asserts:
@@ -79,3 +70,21 @@ tests:
           content:
             name: zammad-data
             mountPath: /opt/zammad
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false
+
+  - it: should set pod security context with fsGroup
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1000

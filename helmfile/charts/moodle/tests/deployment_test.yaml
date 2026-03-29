@@ -63,3 +63,21 @@ tests:
           content:
             name: moodle-data
             mountPath: /bitnami/moodle
+
+  - it: should set pod security context with fsGroup from defaults
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1001
+
+  - it: should render container security context when values are set
+    set:
+      containerSecurityContext.runAsNonRoot: true
+      containerSecurityContext.runAsUser: 1001
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 1001

@@ -1,0 +1,232 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+#
+# CI values for f13 — exercises ALL 23 templates with minimal resources.
+# NO real passwords, secrets, or API endpoints.
+
+global:
+  imageRegistry: registry.opencode.de/f13/microservices
+  imagePullPolicy: IfNotPresent
+  keycloakUrl: "https://keycloak.example.com"
+  keycloakRealm: opendesk
+  ingressClassName: nginx
+
+services:
+  chat:
+    enabled: true
+  summary:
+    enabled: true
+  parser:
+    enabled: true
+  rag:
+    enabled: true
+  transcription:
+    enabled: true
+
+authentication:
+  guestMode: true
+  keycloakBaseUrl: "https://keycloak.example.com"
+  keycloakRealm: opendesk
+  audience: f13-api
+
+llm:
+  provider: openai
+  apiUrl: "https://llm.example.com/v1"
+  authSecretRef: llm-api
+  models:
+    chat: "gpt-4o-mini"
+    summary: "gpt-4o-mini"
+    parser: "gpt-4o-mini"
+
+elasticsearch:
+  deploy: true
+  existingHost: ""
+  memory: 512Mi
+  replicas: 1
+
+transcription:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+  transcriptionDb:
+    image: postgres:16-alpine
+    user: f13_transcription
+    name: f13_transcription
+  whisperModel: "tiny"
+  language: "en"
+
+gpu:
+  nodeSelector: {}
+  tolerations: []
+  resources:
+    limits: {}
+
+rag:
+  embeddingModel: "all-MiniLM-L6-v2"
+
+secrets:
+  llmApi: "ci-test-llm-key"
+  feedbackDb: "ci-test-feedback-db"
+  transcriptionDb: "ci-test-transcription-db"
+  rabbitmq: "ci-test-rabbitmq"
+  huggingfaceToken: ""
+
+ingress:
+  enabled: true
+  hostname: f13.ci.example.com
+  className: ""
+  annotations: {}
+  tls:
+    enabled: false
+    secretName: ""
+
+persistence:
+  feedbackDb:
+    size: 1Gi
+    accessMode: ReadWriteOnce
+  doclingModels:
+    size: 1Gi
+    accessMode: ReadWriteOnce
+  transcriptionData:
+    size: 1Gi
+    accessMode: ReadWriteOnce
+  transcriptionModels:
+    size: 1Gi
+    accessMode: ReadWriteOnce
+  elasticsearchData:
+    size: 1Gi
+    accessMode: ReadWriteOnce
+
+images:
+  frontend:
+    repository: frontend/main
+    tag: latest
+    pullPolicy: IfNotPresent
+  core:
+    repository: core/main
+    tag: latest
+    pullPolicy: IfNotPresent
+  chat:
+    repository: chat
+    tag: v1.1.0
+    pullPolicy: IfNotPresent
+  summary:
+    repository: summary/main
+    tag: latest
+    pullPolicy: IfNotPresent
+  parser:
+    repository: parser
+    tag: v1.1.0
+    pullPolicy: IfNotPresent
+  rag:
+    repository: rag
+    tag: v1.1.0
+    pullPolicy: IfNotPresent
+  transcription:
+    repository: transcription/transcription/main
+    tag: latest
+    pullPolicy: IfNotPresent
+  transcriptionInference:
+    repository: transcription/inference/main
+    tag: latest
+    pullPolicy: IfNotPresent
+
+resources:
+  core:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  frontend:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  chat:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  summary:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  parser:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  rag:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  transcription:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  transcriptionInference:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  rabbitmq:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  feedbackDb:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  transcriptionDb:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  elasticsearch:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+networkPolicy:
+  enabled: true
+
+pdb:
+  core:
+    minAvailable: 1
+  frontend:
+    minAvailable: 1

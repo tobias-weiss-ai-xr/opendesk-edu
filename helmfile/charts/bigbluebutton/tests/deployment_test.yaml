@@ -1,6 +1,8 @@
 suite: Deployment
 templates:
   - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
 tests:
   - it: should create a Deployment with correct kind
     asserts:

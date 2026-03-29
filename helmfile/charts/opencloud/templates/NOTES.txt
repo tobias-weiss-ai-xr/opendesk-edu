@@ -1,0 +1,14 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the service:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:8080
+
+Next steps:
+  1. Configure OIDC integration with Keycloak
+  2. Set up persistent storage for user files
+  3. Review values.yaml for CS3 and transfer secrets
+
+Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu
