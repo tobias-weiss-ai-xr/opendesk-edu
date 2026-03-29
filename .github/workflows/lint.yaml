@@ -159,11 +159,12 @@ jobs:
           fetch-depth: 0
 
       - name: Install trufflehog
-        run: pip install trufflehog3
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
 
       - name: Scan for secrets
         run: |
-          trufflehog3 --regex --no-update filesystem . \
+          trufflehog filesystem . \
             --include "helmfile/apps/ilias/" \
             --include "helmfile/apps/moodle/" \
             --include "helmfile/apps/bigbluebutton/" \
@@ -178,13 +179,5 @@ jobs:
             --include "helmfile/apps/self-service-password/" \
             --include "helmfile/apps/sogo/" \
             --include "docs/external-services/ilias-deployment-guide.md" \
-            --ignore "opendesk.example.com" \
-            --ignore "example.com" \
-            --ignore "s3.example.com" \
-            --ignore "admin@example.com" \
-            --ignore "admin@opendesk.example.com" \
-            --ignore "localhost" \
-            --ignore "127.0.0.1" \
-            --ignore "your-org" \
-            --ignore "ghcr.io" \
+            --filter "opendesk.example.com|example.com|s3.example.com|admin@example.com|admin@opendesk.example.com|localhost|127.0.0.1|your-org|ghcr.io" \
             --exclude-paths "helmfile/charts/*/charts/*"

@@ -462,3 +462,7 @@ cronjob:
   image: srsolutions/ilias
   tag: 9-php8.2-apache # or specify a tag
   schedule: "0 2 * * *" # Daily at 2 AM
+
+ssoCheck:
+  enabled: false
+  schedule: "*/15 * * * *"

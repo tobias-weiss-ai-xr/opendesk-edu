@@ -1,6 +1,10 @@
 {
     "version": "0.2",
-    "ignorePaths": [],
+    "ignorePaths": [
+        ".github/ISSUE_TEMPLATE/",
+        ".github/SECURITY.md",
+        "CONTRIBUTING.md"
+    ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
@@ -170,7 +174,10 @@
         "Planka",
         "Helpdesk",
         "self-service-password",
-        "ssp"
+        "ssp",
+        "Bitnami",
+        "bitnami",
+        "kubeconform"
     ],
     "ignoreWords": [],
     "import": []
