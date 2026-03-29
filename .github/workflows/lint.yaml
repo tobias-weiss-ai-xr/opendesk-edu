@@ -179,5 +179,4 @@ jobs:
             helmfile/apps/self-service-password/ \
             helmfile/apps/sogo/ \
             docs/external-services/ilias-deployment-guide.md \
-            --filter "opendesk.example.com|example.com|s3.example.com|admin@example.com|admin@opendesk.example.com|localhost|127.0.0.1|your-org|ghcr.io" \
             --exclude-paths "helmfile/charts/*/charts/*"

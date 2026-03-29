@@ -3,13 +3,18 @@ extends: default
 rules:
   line-length:
     max: 200
+  braces:
+    max-spaces-inside: 0
+    forbid: false
   trailing-spaces: enable
   indentation:
     spaces: 2
     indent-sequences: true
   comments:
     min-spaces-from-content: 1
+  document-start: disable
 
 ignore: |
   helmfile/charts/*/charts/
   helmfile/charts/*/templates/
+  helmfile/charts/*/*values*.yaml

@@ -178,7 +178,15 @@
         "ssp",
         "Bitnami",
         "bitnami",
-        "kubeconform"
+        "kubeconform",
+        "Collab",
+        "Deutsch",
+        "Español",
+        "Français",
+        "SATOSA",
+        "Webmail",
+        "Whiteboarding",
+        "Württemberg"
     ],
     "ignoreWords": [],
     "import": []
