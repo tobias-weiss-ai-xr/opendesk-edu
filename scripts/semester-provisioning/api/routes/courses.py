@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Query, status
@@ -46,7 +46,7 @@ async def _get_lms_client(lms: LMSPlatform):
 )
 async def create_course(course: CourseCreate) -> Course:
     course_id = f"crs_{uuid4().hex[:12]}"
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     lms_course_id = None
     async with await _get_lms_client(course.lms) as client:
@@ -167,7 +167,7 @@ async def update_course(course_id: str, course_update: CourseUpdate) -> Course:
     for field, value in update_data.items():
         setattr(existing, field, value)
 
-    existing.updated_at = datetime.utcnow()
+    existing.updated_at = datetime.now(timezone.utc)
     _courses_db[course_id] = existing
     return existing
 
@@ -188,7 +188,7 @@ async def delete_course(course_id: str) -> None:
         )
 
     _courses_db[course_id].status = CourseStatus.DELETED
-    _courses_db[course_id].updated_at = datetime.utcnow()
+    _courses_db[course_id].updated_at = datetime.now(timezone.utc)
 
 
 @router.post(
@@ -222,7 +222,7 @@ async def bulk_enroll_users(
 
     course = _courses_db[course_id]
     created_enrollments = []
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     async with await _get_lms_client(course.lms) as client:
         for enrollment_data in request.enrollments:

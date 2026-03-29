@@ -9,7 +9,7 @@ This module provides REST API endpoints for managing course enrollments
 including adding, removing, and listing enrollments.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Query, status
@@ -124,7 +124,7 @@ async def add_enrollment(course_id: str, enrollment: EnrollmentCreate) -> Enroll
             )
 
     enrollment_id = f"enr_{uuid4().hex[:12]}"
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     # Enroll in LMS
     async with await _get_lms_client(course.lms) as client:
@@ -288,7 +288,7 @@ async def remove_enrollment(course_id: str, removal: EnrollmentRemove) -> None:
 
     # Update enrollment status
     enrollment.status = EnrollmentStatus.WITHDRAWN
-    enrollment.updated_at = datetime.utcnow()
+    enrollment.updated_at = datetime.now(timezone.utc)
     _enrollments_db[enrollment_id] = enrollment
 
 

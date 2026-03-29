@@ -9,7 +9,7 @@ This module provides REST API endpoints for archiving and restoring courses
 including single and bulk operations.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Query, status, BackgroundTasks
@@ -108,7 +108,7 @@ async def _archive_single_course(
         return ArchiveResult(
             course_id=course_id,
             status=ArchiveStatus.COMPLETED,
-            archived_at=datetime.utcnow(),
+            archived_at=datetime.now(timezone.utc),
         )
 
     try:
@@ -127,7 +127,7 @@ async def _archive_single_course(
                 and enrollment.status == EnrollmentStatus.ACTIVE
             ):
                 enrollment.status = EnrollmentStatus.ARCHIVED
-                enrollment.updated_at = datetime.utcnow()
+                enrollment.updated_at = datetime.now(timezone.utc)
 
         # Update Keycloak groups
         async with KeycloakClient() as kc:
@@ -139,14 +139,14 @@ async def _archive_single_course(
 
         # Update course status
         course.status = CourseStatus.ARCHIVED
-        course.updated_at = datetime.utcnow()
+        course.updated_at = datetime.now(timezone.utc)
 
         # Store archive info
         archive_info = ArchiveInfo(
             archive_id=archive_id,
             course_id=course_id,
             semester_id=course.semester_id,
-            archived_at=datetime.utcnow(),
+            archived_at=datetime.now(timezone.utc),
             snapshot_id=snapshot_id,
             enrollment_count=len(
                 [e for e in enrollments_db.values() if e.course_id == course_id]
@@ -159,7 +159,7 @@ async def _archive_single_course(
             status=ArchiveStatus.COMPLETED,
             archive_id=archive_id,
             snapshot_id=snapshot_id,
-            archived_at=datetime.utcnow(),
+            archived_at=datetime.now(timezone.utc),
         )
 
     except Exception as e:
@@ -269,7 +269,7 @@ async def bulk_archive_courses(request: BulkArchiveRequest) -> BulkArchiveResult
         completed=0,
         failed=0,
         results=[],
-        started_at=datetime.utcnow(),
+        started_at=datetime.now(timezone.utc),
         completed_at=None,
     )
     _archive_jobs[job_id] = result
@@ -355,13 +355,13 @@ async def restore_course(
             archive_id=archive_id,
             course_id=archive_info.course_id,
             status=ArchiveStatus.COMPLETED,
-            restored_at=datetime.utcnow(),
+            restored_at=datetime.now(timezone.utc),
         )
 
     try:
         # Restore course status
         course.status = CourseStatus.ACTIVE
-        course.updated_at = datetime.utcnow()
+        course.updated_at = datetime.now(timezone.utc)
 
         # Restore enrollments if requested
         if request.restore_enrollments:
@@ -372,7 +372,7 @@ async def restore_course(
                     and enrollment.status == EnrollmentStatus.ARCHIVED
                 ):
                     enrollment.status = EnrollmentStatus.ACTIVE
-                    enrollment.updated_at = datetime.utcnow()
+                    enrollment.updated_at = datetime.now(timezone.utc)
 
         # Restore Keycloak groups
         async with KeycloakClient() as kc:
@@ -382,7 +382,7 @@ async def restore_course(
             archive_id=archive_id,
             course_id=archive_info.course_id,
             status=ArchiveStatus.COMPLETED,
-            restored_at=datetime.utcnow(),
+            restored_at=datetime.now(timezone.utc),
         )
 
     except Exception as e:

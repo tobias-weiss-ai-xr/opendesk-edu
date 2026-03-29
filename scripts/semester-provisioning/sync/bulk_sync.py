@@ -12,7 +12,7 @@ import csv
 import json
 import argparse
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import httpx
@@ -79,7 +79,10 @@ def main(export_path: Path) -> None:
     total = len(courses)
     success = 0
     failures = 0
-    log_file = LOG_DIR / f"bulk_sync_{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}.log"
+    log_file = (
+        LOG_DIR
+        / f"bulk_sync_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.log"
+    )
     with log_file.open("w", encoding="utf-8") as lf:
         lf.write(f"Total records: {total}\n")
         for idx, course in enumerate(courses, start=1):

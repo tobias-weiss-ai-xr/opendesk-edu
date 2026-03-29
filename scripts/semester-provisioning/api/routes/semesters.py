@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Query, status
@@ -46,7 +46,7 @@ async def create_semester(semester: SemesterCreate) -> Semester:
             detail=f"Semester {semester.semester_id} already exists",
         )
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     determined_status = _determine_status(semester.start_date, semester.end_date)
 
     new_semester = Semester(
@@ -129,7 +129,7 @@ async def update_semester(
     if "start_date" in update_data or "end_date" in update_data:
         existing.status = _determine_status(existing.start_date, existing.end_date)
 
-    existing.updated_at = datetime.utcnow()
+    existing.updated_at = datetime.now(timezone.utc)
     _semesters_db[semester_id] = existing
     return existing
 
@@ -150,4 +150,4 @@ async def archive_semester(semester_id: str) -> None:
         )
 
     _semesters_db[semester_id].status = SemesterStatus.ARCHIVED
-    _semesters_db[semester_id].updated_at = datetime.utcnow()
+    _semesters_db[semester_id].updated_at = datetime.now(timezone.utc)
