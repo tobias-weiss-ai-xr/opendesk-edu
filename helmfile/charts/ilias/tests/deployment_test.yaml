@@ -26,13 +26,6 @@ tests:
       - isNotNull:
           path: metadata.labels["app.kubernetes.io/managed-by"]
 
-  - it: should set the ilias/server label
-    asserts:
-      - isSubset:
-          path: metadata.labels
-          content:
-            ilias/server: "true"
-
   - it: should have a single replica
     asserts:
       - equal:

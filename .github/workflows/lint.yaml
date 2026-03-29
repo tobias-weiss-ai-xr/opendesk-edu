@@ -57,7 +57,7 @@ jobs:
         run: |
           for chart in ${{ steps.list-changed.outputs.changed_charts }}; do
             echo "Testing ${chart}..."
-            helm unittest --helm3 "${chart}"
+            helm unittest "${chart}"
           done
 
   template-render:
@@ -166,7 +166,7 @@ jobs:
         run: |
           for chart in helmfile/charts/*/; do
             echo "Testing ${chart}..."
-            helm unittest --helm3 "${chart}"
+            helm unittest "${chart}"
           done
 
   check-secrets:

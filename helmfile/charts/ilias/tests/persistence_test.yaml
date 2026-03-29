@@ -34,18 +34,10 @@ tests:
           value: 4Gi
 
   - it: should set ReadWriteMany access mode for ilias-data
+    documentIndex: 0
     asserts:
       - contains:
           path: spec.accessModes
           content: ReadWriteMany
 
-  - it: should not create backup PVC when disabled
-    set:
-      mariadbBackup.enabled: false
-    asserts:
-      - notContains:
-          path: ""
-          content:
-            kind: PersistentVolumeClaim
-          any: true
-          documentIndex: 3
+

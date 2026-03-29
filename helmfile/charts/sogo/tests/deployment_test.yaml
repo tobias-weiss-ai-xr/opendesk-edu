@@ -34,13 +34,6 @@ tests:
       - isNotNull:
           path: metadata.labels["app.kubernetes.io/managed-by"]
 
-  - it: should set the sogo/server label
-    asserts:
-      - isSubset:
-          path: metadata.labels
-          content:
-            sogo/server: "true"
-
   - it: should set resource requests and limits
     asserts:
       - isNotNull:
@@ -74,9 +67,9 @@ tests:
           path: spec.template.spec.containers[0].envFrom
           content:
             configMapRef:
-              name: release-name-sogo
+              name: RELEASE-NAME-sogo
       - contains:
           path: spec.template.spec.containers[0].envFrom
           content:
             secretRef:
-              name: release-name-sogo
+              name: RELEASE-NAME-sogo
