@@ -1,0 +1,122 @@
+# SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- if .Values.federation.enabled -}}
+{{- if .Values.federation.dfnAai.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-saml-attribute-mappers
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: saml-mappers
+    app.kubernetes.io/part-of: opendesk
+data:
+  saml-attribute-mappers.json: |
+    {
+      "mappers": [
+        {
+          "name": "email-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:mail",
+            "user.attribute": "email"
+          }
+        },
+        {
+          "name": "username-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+            "user.attribute": "username"
+          }
+        },
+        {
+          "name": "displayname-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:displayName",
+            "user.attribute": "displayName"
+          }
+        },
+        {
+          "name": "affiliation-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+            "user.attribute": "affiliation"
+          }
+        },
+        {
+          "name": "persistent-id-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:eduPersonTargetedID",
+            "user.attribute": "persistentId"
+          }
+        },
+        {
+          "name": "firstname-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:givenName",
+            "user.attribute": "firstName"
+          }
+        },
+        {
+          "name": "lastname-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:sn",
+            "user.attribute": "lastName"
+          }
+        },
+        {
+          "name": "scoped-affiliation-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
+            "user.attribute": "scopedAffiliation"
+          }
+        },
+        {
+          "name": "home-organization-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:oid:1.3.6.1.4.1.25178.1.2.9",
+            "user.attribute": "homeOrganization"
+          }
+        },
+        {
+          "name": "unique-id-mapper",
+          "identityProviderMapper": "saml-user-attribute-idp-mapper",
+          "identityProviderAlias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+          "config": {
+            "syncMode": "INHERIT",
+            "attribute": "urn:mace:dir:attribute-def:eduPersonUniqueID",
+            "user.attribute": "uniqueId"
+          }
+        }
+      ]
+    }
+{{- end }}
+{{- end }}

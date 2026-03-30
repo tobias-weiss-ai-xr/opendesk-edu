@@ -1,0 +1,98 @@
+# SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- if .Values.federation.enabled -}}
+{{- if .Values.federation.dfnAai.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-saml-role-mapper
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: saml-role-mapper
+    app.kubernetes.io/part-of: opendesk
+data:
+  saml-role-mapper.js: |
+    /**
+     * DFN-AAI / eduGAIN Role Assignment Mapper
+     * Maps eduPersonAffiliation values to Keycloak realm roles
+     *
+     * Affiliation Mapping (per DFN-AAI spec):
+     *   faculty, teacher → instructor
+     *   staff, employee  → staff
+     *   student          → student
+     *   member           → member
+     *   affiliate        → affiliate
+     *   alum             → alumni
+     */
+
+    var affiliation = user.getAttribute('affiliation');
+    if (!affiliation) {
+        affiliation = [];
+    }
+
+    // Parse display name into first/last name if not provided separately
+    var displayName = user.getSingleAttribute('displayName');
+    var givenName = user.getSingleAttribute('firstName');
+    var sn = user.getSingleAttribute('lastName');
+
+    if (displayName && !givenName && !sn) {
+        var parts = displayName.trim().split(/\s+/);
+        if (parts.length >= 2) {
+            user.setFirstName(parts[0]);
+            user.setLastName(parts.slice(1).join(' '));
+        } else {
+            user.setLastName(parts[0]);
+        }
+    }
+
+    // Grant roles based on affiliation
+    var rolesToGrant = [];
+    for each (var aff in affiliation) {
+        switch (aff.toLowerCase()) {
+            case 'faculty':
+            case 'teacher':
+                rolesToGrant.push('instructor');
+                break;
+            case 'staff':
+            case 'employee':
+                rolesToGrant.push('staff');
+                break;
+            case 'student':
+                rolesToGrant.push('student');
+                break;
+            case 'member':
+                rolesToGrant.push('member');
+                break;
+            case 'affiliate':
+                rolesToGrant.push('affiliate');
+                break;
+            case 'alum':
+                rolesToGrant.push('alumni');
+                break;
+        }
+    }
+
+    // Remove duplicates
+    var uniqueRoles = [];
+    for each (var role in rolesToGrant) {
+        if (uniqueRoles.indexOf(role) === -1) {
+            uniqueRoles.push(role);
+        }
+    }
+
+    // Grant realm roles
+    for each (var role in uniqueRoles) {
+        try {
+            user.grantRole(role);
+        } catch (e) {
+            // Role may not exist, log warning
+            logger.warn('Could not grant role ' + role + ': ' + e.message);
+        }
+    }
+
+    // Set email as verified (trust from federation)
+    user.setEmailVerified(true);
+{{- end }}
+{{- end }}
