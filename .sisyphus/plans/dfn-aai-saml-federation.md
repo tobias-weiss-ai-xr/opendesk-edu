@@ -2,39 +2,36 @@
 
 ## 1. TASK OVERVIEW
 
-Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Edu to function as a SAML Service Provider within the German academic identity federation. This allows users from 200+ German universities and eduGAIN-connected institutions worldwide to authenticate using their institutional credentials.
+Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Edu to operate as a SAML 2.0 Service Provider within the German research and education federation (DFN-AAI) and the international eduGAIN interfederation. This allows users from 200+ German universities and 80+ countries to authenticate using their home institution credentials.
 
-**Source**: `ROADMAP.md` lines 41-50 (v1.1 — Foundation)
+**Source**: \`ROADMAP.md\` lines 41-50 (v1.1 — Foundation)
 
 ### Requirements (from ROADMAP.md)
 - [ ] Register openDesk Edu as a SAML SP in DFN-AAI
-- [ ] Support standard eduGAIN attributes (`eduPersonAffiliation`, `mail`, `displayName`, `persistentId`)
+- [ ] Support standard eduGAIN attributes (\`eduPersonAffiliation\`, \`mail\`, \`displayName\`, \`persistentId\`)
 - [ ] Document federation metadata generation for deployers
-- [ ] Support Shibboleth IdP as external identity provider
-- [ ] Test with DFN-AAI test federation (`https://www.aai.dfn.de/`)
+- [ ] Support Shibboleth IdP as external identity provider (for universities that already run one)
+- [ ] Test with DFN-AAI test federation (\`https://www.aai.dfn.de/\`)
 
 ---
 
 ## 2. SCOPE & DELIMITATIONS
 
 ### In Scope
-- SAML 2.0 Service Provider configuration in Keycloak
-- DFN-AAI test and production federation registration workflow
-- eduGAIN/eduPerson attribute mapping to Keycloak user attributes
-- Shibboleth IdP integration (Keycloak as SAML SP)
-- Metadata generation scripts and automation
-- Role-based access control from `eduPersonAffiliation`
-- Just-in-Time (JIT) user provisioning
-- Single Logout (SLO) with backchannel support
-- Comprehensive documentation (bilingual: German/English)
-- Test suite with DFN-AAI test federation
+- Keycloak SAML identity broker configuration for DFN-AAI/eduGAIN
+- SAML SP metadata generation script (enhance existing \`scripts/saml-metadata-generator/\`)
+- eduGAIN attribute mapping to Keycloak user attributes
+- Federation discovery service integration
+- DFN-AAI test federation registration workflow
+- Documentation for deployers (bilingual: German/English)
+- Shibboleth IdP integration pattern (consume external IdPs)
+- GDPR/data sovereignty considerations
 
 ### Out of Scope
-- Deploying Shibboleth IdP (universities already run their own)
-- Keycloak as eduGAIN IdP (SAML federation support incomplete)
-- Direct LDAP integration with university directories (use federation instead)
-- Multi-tenant federation (deferred to v5.0)
+- Becoming an Identity Provider (universities run their own IdPs)
+- Direct LDAP integration with university directories (deferred to v1.5)
 - SATOSA proxy deployment (deferred to v5.0)
+- Multi-tenant federation configuration (deferred to v5.0)
 
 ---
 
@@ -42,711 +39,618 @@ Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Ed
 
 ### 3.1 Component Diagram
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           DFN-AAI / eduGAIN Federation                           │
-│  ┌───────────────────────────────────────────────────────────────────────────┐  │
-│  │                    Federation Metadata Aggregate                           │  │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │  │
-│  │  │  TU Berlin   │  │  LMU Munich  │  │ FU Berlin    │  │  200+ more   │   │  │
-│  │  │  Shib IdP    │  │  Shib IdP    │  │  Shib IdP    │  │  IdPs        │   │  │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘   │  │
-│  └───────────────────────────────────────────────────────────────────────────┘  │
-│                              │                                                   │
-│                    Federation Metadata URL                                      │
-│                    (DFN-AAI-Test / DFN-AAI-Basic / eduGAIN)                     │
-└─────────────────────────────────────────────────────────────────────────────────┘
-                               │
-                               ▼
+│                              eduGAIN / DFN-AAI Federation                       │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐│
+│  │   IdP: TUM   │  │  IdP: LMU    │  │ IdP: FU Berlin│  │  200+ more IdPs     ││
+│  │  (Shibboleth)│  │  (Shibboleth)│  │ (Shibboleth)  │  │  (eduGAIN)          ││
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────────────┘│
+│         │                 │                  │                    │             │
+│         └─────────────────┴──────────────────┴────────────────────┘             │
+│                                    │                                             │
+│                           Federation Metadata                                   │
+│                           (aggregated XML)                                      │
+└────────────────────────────────────┬────────────────────────────────────────────┘
+                                     │
+                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           openDesk Edu Platform                                  │
-│  ┌───────────────────────────────────────────────────────────────────────────┐  │
-│  │                        Keycloak (SAML SP)                                  │  │
-│  │  ┌─────────────────────────────────────────────────────────────────────┐  │  │
-│  │  │  Identity Provider: DFN-AAI                                          │  │  │
-│  │  │  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐   │  │  │
-│  │  │  │  Attribute       │  │  Role Mapper     │  │  JIT Provisioner │   │  │  │
-│  │  │  │  Mappers         │  │  (affiliation    │  │  (first broker   │   │  │  │
-│  │  │  │  (eduPerson →    │  │   → role)        │  │   login flow)    │   │  │  │
-│  │  │  │   Keycloak)      │  │                  │  │                  │   │  │  │
-│  │  │  └──────────────────┘  └──────────────────┘  └──────────────────┘   │  │  │
-│  │  └─────────────────────────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────────────────────────┘  │
-│                              │                                                   │
-│  ┌───────────────────────────────────────────────────────────────────────────┐  │
-│  │                        Downstream Services                                 │  │
-│  │   ┌─────────┐  ┌─────────┐  ┌──────────────┐  ┌───────────┐  ┌────────┐  │  │
-│  │   │ ILIAS   │  │ Moodle  │  │ BigBlueButton│  │ Nextcloud │  │ Portal │  │  │
-│  │   │(Shib SP)│  │(Shib SP)│  │ (SAML/OIDC)  │  │  (OIDC)   │  │ (OIDC) │  │  │
-│  │   └─────────┘  └─────────┘  └──────────────┘  └───────────┘  └────────┘  │  │
-│  └───────────────────────────────────────────────────────────────────────────┘  │
+│                           openDesk Edu Platform                                 │
+│                                                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │                    Keycloak (SAML SP / Identity Broker)                  │   │
+│  │                                                                          │   │
+│  │  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────────┐  │   │
+│  │  │ DFN-AAI Test    │    │ DFN-AAI Prod    │    │ eduGAIN Aggregated  │  │   │
+│  │  │ Metadata URL    │    │ Metadata URL    │    │ Metadata URL        │  │   │
+│  │  └────────┬────────┘    └────────┬────────┘    └──────────┬──────────┘  │   │
+│  │           │                      │                        │             │   │
+│  │           └──────────────────────┴────────────────────────┘             │   │
+│  │                                  │                                      │   │
+│  │  ┌───────────────────────────────┴───────────────────────────────────┐  │   │
+│  │  │               SAML Identity Provider Configurations               │  │   │
+│  │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                │  │   │
+│  │  │  │ Attribute   │  │ Role        │  │ User        │                │  │   │
+│  │  │  │ Mappers     │  │ Mappers     │  │ Provisioning│                │  │   │
+│  │  │  └─────────────┘  └─────────────┘  └─────────────┘                │  │   │
+│  │  └───────────────────────────────────────────────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                     │                                           │
+│  ┌───────────────────────────────────────────────────────────────────────────┐ │
+│  │                          Protected Services                                │ │
+│  │   ILIAS  │  Moodle  │  BigBlueButton  │  Nextcloud  │  Portal  │  ...    │ │
+│  └───────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                 │
+│  ┌───────────────────────────────────────────────────────────────────────────┐ │
+│  │                    Shibboleth SP (per-service)                            │ │
+│  │   ILIAS: shibboleth-config.yaml  │  Moodle: shibboleth-sp-config.yaml    │ │
+│  └───────────────────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 ### 3.2 Authentication Flow
 
-**Federated Login (User from DFN-AAI Institution)**:
-```
-1. User accesses portal.education.example.org
-2. User clicks "Login with institutional account (DFN-AAI)"
-3. Keycloak redirects to DFN-AAI Discovery Service
-4. User selects their home institution (e.g., "TU Berlin")
-5. User authenticates at institutional Shibboleth IdP
-6. IdP sends SAML assertion to Keycloak with eduGAIN attributes
-7. Keycloak validates assertion, extracts attributes
-8. JIT provisioning creates/updates user account
-9. Role mapper assigns Keycloak roles based on eduPersonAffiliation
-10. User redirected to portal, authenticated
-11. SSO propagates to ILIAS, Moodle, other services
-```
+**Federated Login (DFN-AAI/eduGAIN User)**:
+\`\`\`
+1. User accesses openDesk Edu portal
+2. User clicks "Sign in with your institution"
+3. Federation Discovery Service shows institution selector
+4. User selects their home institution (e.g., "TU München")
+5. Redirect to institution's Shibboleth IdP
+6. User authenticates with university credentials
+7. IdP sends SAML assertion with eduGAIN attributes
+8. Keycloak consumes assertion, creates/links user account
+9. Attribute mappers extract: mail, displayName, eduPersonAffiliation, persistentId
+10. Role mapper assigns roles based on affiliation (student/staff/faculty)
+11. User redirected to portal with active session
+12. SSO propagates to all openDesk services
+\`\`\`
 
-**Metadata Exchange**:
-```
-┌─────────────────┐                      ┌─────────────────┐
-│  openDesk Edu   │                      │    DFN-AAI      │
-│    (SP)         │                      │   Federation    │
-├─────────────────┤                      ├─────────────────┤
-│                 │  1. Submit SP        │                 │
-│                 │     Metadata         │                 │
-│                 │ ─────────────────────►                 │
-│                 │                      │                 │
-│                 │  2. Federation       │                 │
-│                 │     Validates        │                 │
-│                 │ ◄─────────────────────                 │
-│                 │                      │                 │
-│                 │  3. Import DFN-AAI   │                 │
-│                 │     Metadata         │                 │
-│                 │ ◄─────────────────────                 │
-│                 │                      │                 │
-│                 │  4. Periodic Refresh │                 │
-│                 │ ◄─────────────────────                 │
-└─────────────────┘                      └─────────────────┘
-```
+**Attribute Consumption Flow**:
+\`\`\`
+┌─────────────────┐     SAML Assertion      ┌─────────────────┐
+│  Shibboleth IdP │ ──────────────────────► │    Keycloak     │
+│  (University)   │                         │  (SAML Broker)  │
+└─────────────────┘                         └────────┬────────┘
+                                                     │
+                    ┌────────────────────────────────┴────────────────────────────────┐
+                    │                        Attribute Mappers                         │
+                    ├─────────────────────┬──────────────────────┬────────────────────┤
+                    │   eduPersonPrincipal│   eduPersonAffiliation│   displayName      │
+                    │   Name → username   │   → affiliation      │   → firstName      │
+                    │   mail → email      │   (student/staff/    │   sn → lastName    │
+                    │                     │    faculty/member)   │                    │
+                    └─────────────────────┴──────────────────────┴────────────────────┘
+                                                     │
+                                                     ▼
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │                    Keycloak User Attributes                      │
+                    │  username  │  email  │  firstName  │  lastName  │  affiliation  │
+                    └─────────────────────────────────────────────────────────────────┘
+                                                     │
+                                                     ▼
+                    ┌─────────────────────────────────────────────────────────────────┐
+                    │                    Role Assignment (Script Mapper)               │
+                    │  affiliation="student" → realm role: student                     │
+                    │  affiliation="faculty" → realm role: instructor                  │
+                    │  affiliation="staff"   → realm role: staff                       │
+                    │  affiliation="member"  → realm role: member                      │
+                    └─────────────────────────────────────────────────────────────────┘
+\`\`\`
 
 ---
 
 ## 4. IMPLEMENTATION DETAILS
 
-### 4.1 DFN-AAI Federation Endpoints
+### 4.1 eduGAIN Attribute Mapping
 
-| Environment | Purpose | URL |
-|-------------|---------|-----|
-| Test Federation | Metadata | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` |
-| Test Federation | Discovery Service | `https://discovery.aai.dfn.de/` |
-| Test Federation | Test IdP | `https://idp.test.aai.dfn.de/` |
-| Production | Metadata (Basic) | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
-| Production | Metadata (eduGAIN) | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-eduGAIN-metadata.xml` |
-| Production | Discovery Service | `https://discovery.aai.dfn.de/` |
-| Both | Support | `support@aai.dfn.de` |
+#### Required Attributes (DFN-AAI minimum)
 
-### 4.2 eduGAIN Attribute Mapping
+| eduGAIN Attribute | URN | Keycloak Target | Required | Description |
+|-------------------|-----|-----------------|----------|-------------|
+| \`mail\` | \`urn:mace:dir:attribute-def:mail\` | \`email\` | ✅ | User's email address |
+| \`displayName\` | \`urn:mace:dir:attribute-def:displayName\` | \`firstName\`/\`lastName\` | ✅ | Full display name |
+| \`eduPersonPrincipalName\` | \`urn:mace:dir:attribute-def:eduPersonPrincipalName\` | \`username\` | ✅ | Scoped username (user@university.de) |
+| \`eduPersonAffiliation\` | \`urn:mace:dir:attribute-def:eduPersonAffiliation\` | \`affiliation\` | ✅ | Role (student/faculty/staff/member) |
+| \`eduPersonTargetedID\` | \`urn:mace:dir:attribute-def:eduPersonTargetedID\` | \`persistentId\` | ✅ | Privacy-preserving unique ID |
 
-#### Required Attributes
+#### Optional Attributes (enhanced experience)
 
-| eduGAIN Attribute | SAML Name | Keycloak Attribute | Purpose |
-|-------------------|-----------|-------------------|---------|
-| `mail` | `urn:mace:dir:attribute-def:mail` | `email` | Primary email address |
-| `displayName` | `urn:mace:dir:attribute-def:displayName` | `firstName` | User display name |
-| `eduPersonPrincipalName` | `urn:mace:dir:attribute-def:eduPersonPrincipalName` | `username` | Persistent unique identifier |
-| `eduPersonAffiliation` | `urn:mace:dir:attribute-def:eduPersonAffiliation` | `affiliation` | Role at institution |
+| eduGAIN Attribute | URN | Keycloak Target | Description |
+|-------------------|-----|-----------------|-------------|
+| \`givenName\` | \`urn:mace:dir:attribute-def:givenName\` | \`firstName\` | First name |
+| \`sn\` | \`urn:mace:dir:attribute-def:sn\` | \`lastName\` | Surname |
+| \`eduPersonScopedAffiliation\` | \`urn:mace:dir:attribute-def:eduPersonScopedAffiliation\` | \`scopedAffiliation\` | Affiliation with scope |
+| \`eduPersonUniqueID\` | \`urn:mace:dir:attribute-def:eduPersonUniqueID\` | \`uniqueId\` | Globally unique identifier |
+| \`o\` | \`urn:mace:dir:attribute-def:o\` | \`organization\` | Organization name |
+| \`schacHomeOrganization\` | \`urn:oid:1.3.6.1.4.1.25178.1.2.9\` | \`homeOrganization\` | Home institution domain |
 
-#### Optional Attributes
+#### Attribute Mapper Configuration (Keycloak Admin CLI)
 
-| eduGAIN Attribute | SAML Name | Keycloak Attribute | Purpose |
-|-------------------|-----------|-------------------|---------|
-| `givenName` | `urn:mace:dir:attribute-def:givenName` | `firstName` | First name |
-| `sn` | `urn:mace:dir:attribute-def:sn` | `lastName` | Last name |
-| `eduPersonScopedAffiliation` | `urn:mace:dir:attribute-def:eduPersonScopedAffiliation` | `scopedAffiliation` | Affiliation with scope |
-| `eduPersonEntitlement` | `urn:mace:dir:attribute-def:eduPersonEntitlement` | `entitlement` | Service entitlements |
-| `eduPersonTargetedID` | `urn:mace:dir:attribute-def:eduPersonTargetedID` | `fedid` | Privacy-preserving ID |
+\`\`\`bash
+# Email Mapper
+kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
+  -r opendesk \\
+  -s name=email-mapper \\
+  -s identityProviderMapper=saml-user-attribute-idp-mapper \\
+  -s identityProviderAlias=dfn-aai \\
+  -s 'config.syncMode=INHERIT' \\
+  -s 'config.attribute=urn:mace:dir:attribute-def:mail' \\
+  -s 'config.user.attribute=email'
 
-#### Affiliation to Role Mapping
+# Username Mapper (eduPersonPrincipalName)
+kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
+  -r opendesk \\
+  -s name=username-mapper \\
+  -s identityProviderMapper=saml-user-attribute-idp-mapper \\
+  -s identityProviderAlias=dfn-aai \\
+  -s 'config.syncMode=INHERIT' \\
+  -s 'config.attribute=urn:mace:dir:attribute-def:eduPersonPrincipalName' \\
+  -s 'config.user.attribute=username'
 
-| eduPersonAffiliation | Keycloak Role | Access Level |
-|---------------------|---------------|--------------|
-| `faculty` | `instructor` | Full teaching access, course management |
-| `staff` | `staff` | Administrative access |
-| `student` | `student` | Student access, course enrollment |
-| `employee` | `employee` | Employee access |
-| `member` | `member` | Basic member access |
-| `affiliate` | `affiliate` | External affiliate access |
-| `alum` | `alumni` | Alumni access |
-| `library-walk-in` | `library` | Library-only access |
+# Display Name Mapper
+kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
+  -r opendesk \\
+  -s name=displayname-mapper \\
+  -s identityProviderMapper=saml-user-attribute-idp-mapper \\
+  -s identityProviderAlias=dfn-aai \\
+  -s 'config.syncMode=INHERIT' \\
+  -s 'config.attribute=urn:mace:dir:attribute-def:displayName' \\
+  -s 'config.user.attribute=displayName'
 
-### 4.3 Keycloak Identity Provider Configuration
+# Affiliation Mapper
+kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
+  -r opendesk \\
+  -s name=affiliation-mapper \\
+  -s identityProviderMapper=saml-user-attribute-idp-mapper \\
+  -s identityProviderAlias=dfn-aai \\
+  -s 'config.syncMode=INHERIT' \\
+  -s 'config.attribute=urn:mace:dir:attribute-def:eduPersonAffiliation' \\
+  -s 'config.user.attribute=affiliation'
 
-#### SAML IdP Settings (Admin Console)
+# Persistent ID Mapper
+kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
+  -r opendesk \\
+  -s name=persistent-id-mapper \\
+  -s identityProviderMapper=saml-user-attribute-idp-mapper \\
+  -s identityProviderAlias=dfn-aai \\
+  -s 'config.syncMode=INHERIT' \\
+  -s 'config.attribute=urn:mace:dir:attribute-def:eduPersonTargetedID' \\
+  -s 'config.user.attribute=persistentId'
+\`\`\`
 
-```yaml
-# Navigate to: Realm Settings → Identity Providers → Add provider → SAML v2.0
+### 4.2 Role Assignment Script Mapper
 
-# Test Federation Configuration
-alias: dfn-aai-test
-displayName: "DFN-AAI (Test)"
-enabled: true
-trustEmail: true
-storeToken: false
-linkOnly: false
-firstBrokerLoginFlowAlias: "first broker login"
-
-# SAML Configuration
-metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml"
-entityId: "https://www.aai.dfn.de/idp/shibboleth"
-singleSignOnServiceUrl: "https://idp.test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"
-singleLogoutServiceUrl: "https://idp.test.aai.dfn.de/idp/profile/SAML2/Redirect/SLO"
-nameIDPolicyFormat: "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
-principalType: "ATTRIBUTE"
-principalAttribute: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
-
-# Signature Settings
-wantAuthnRequestsSigned: true
-validateSignature: true
-signatureAlgorithm: "RSA_SHA256"
-```
-
-#### Production Federation Configuration
-
-```yaml
-alias: dfn-aai
-displayName: "DFN-AAI"
-metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml"
-# For eduGAIN-wide access, use:
-# metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-eduGAIN-metadata.xml"
-```
-
-### 4.4 Attribute Mapper Configuration
-
-#### Email Mapper
-
-```json
-{
-  "name": "email-mapper",
-  "identityProviderMapper": "saml-user-attribute-idp-mapper",
-  "identityProviderAlias": "dfn-aai-test",
-  "config": {
-    "syncMode": "INHERIT",
-    "attribute": "urn:mace:dir:attribute-def:mail",
-    "user.attribute": "email"
-  }
-}
-```
-
-#### Username Mapper
-
-```json
-{
-  "name": "username-mapper",
-  "identityProviderMapper": "saml-user-attribute-idp-mapper",
-  "identityProviderAlias": "dfn-aai-test",
-  "config": {
-    "syncMode": "INHERIT",
-    "attribute": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
-    "user.attribute": "username"
-  }
-}
-```
-
-#### Affiliation Mapper
-
-```json
-{
-  "name": "affiliation-mapper",
-  "identityProviderMapper": "saml-user-attribute-idp-mapper",
-  "identityProviderAlias": "dfn-aai-test",
-  "config": {
-    "syncMode": "INHERIT",
-    "attribute": "urn:mace:dir:attribute-def:eduPersonAffiliation",
-    "user.attribute": "affiliation"
-  }
-}
-```
-
-#### Display Name Mapper (with name parsing)
-
-```json
-{
-  "name": "displayname-mapper",
-  "identityProviderMapper": "saml-user-attribute-idp-mapper",
-  "identityProviderAlias": "dfn-aai-test",
-  "config": {
-    "syncMode": "INHERIT",
-    "attribute": "urn:mace:dir:attribute-def:displayName",
-    "user.attribute": "displayName"
-  }
-}
-```
-
-### 4.5 Role Mapping Script (Advanced)
-
-For complex role mapping based on affiliation:
-
-```javascript
+\`\`\`javascript
 // Script Mapper: affiliation-to-role-mapper
-// Place in Keycloak → Identity Providers → dfn-aai-test → Mappers → Add mapper → Advanced
+// Maps eduPersonAffiliation values to Keycloak realm roles
 
-var affiliations = user.getAttribute('affiliation');
-if (!affiliations) {
-    affiliations = [];
+var affiliation = user.getAttribute('affiliation');
+if (!affiliation) {
+    affiliation = [];
 }
 
-// Parse display name into first/last name
+// Parse display name into first/last name if not provided separately
 var displayName = user.getSingleAttribute('displayName');
-if (displayName && !user.getFirstName()) {
-    var parts = displayName.trim().split(/\s+/);
-    // Filter out titles (Dr., Prof., etc.)
-    var titles = ['dr.', 'dr', 'prof.', 'prof', 'mag.', 'mag', 'dipl.-ing.', 'dipl.'];
-    var nameParts = [];
-    for each (var part in parts) {
-        var isTitle = false;
-        for each (var title in titles) {
-            if (part.toLowerCase().startsWith(title.toLowerCase())) {
-                isTitle = true;
-                break;
-            }
-        }
-        if (!isTitle) {
-            nameParts.push(part);
-        }
-    }
-    
-    if (nameParts.length >= 2) {
-        user.setFirstName(nameParts[0]);
-        user.setLastName(nameParts.slice(1).join(' '));
-    } else if (nameParts.length === 1) {
-        user.setLastName(nameParts[0]);
+var givenName = user.getSingleAttribute('firstName');
+var sn = user.getSingleAttribute('lastName');
+
+if (displayName && !givenName && !sn) {
+    var parts = displayName.trim().split(/\\s+/);
+    if (parts.length >= 2) {
+        user.setFirstName(parts[0]);
+        user.setLastName(parts.slice(1).join(' '));
+    } else {
+        user.setLastName(parts[0]);
     }
 }
 
-// Role mapping based on affiliation
-var roles = [];
-for each (var aff in affiliations) {
+// Grant roles based on affiliation
+var rolesToGrant = [];
+for each (var aff in affiliation) {
     switch (aff.toLowerCase()) {
         case 'faculty':
-            roles.push('instructor');
-            roles.push('teacher');
+        case 'teacher':
+            rolesToGrant.push('instructor');
             break;
         case 'staff':
-            roles.push('staff');
+        case 'employee':
+            rolesToGrant.push('staff');
             break;
         case 'student':
-            roles.push('student');
-            roles.push('learner');
-            break;
-        case 'employee':
-            roles.push('employee');
+            rolesToGrant.push('student');
             break;
         case 'member':
-            roles.push('member');
+            rolesToGrant.push('member');
             break;
         case 'affiliate':
-            roles.push('affiliate');
-            roles.push('external');
+            rolesToGrant.push('affiliate');
             break;
         case 'alum':
-            roles.push('alumni');
-            break;
-        case 'library-walk-in':
-            roles.push('library');
+            rolesToGrant.push('alumni');
             break;
     }
 }
 
-// Grant roles
-for each (var role in roles) {
-    user.grantRole(role);
+// Remove duplicates
+var uniqueRoles = [];
+for each (var role in rolesToGrant) {
+    if (uniqueRoles.indexOf(role) === -1) {
+        uniqueRoles.push(role);
+    }
 }
 
-// Set email verified (IdP provides verified emails)
+// Grant realm roles
+for each (var role in uniqueRoles) {
+    try {
+        user.grantRole(role);
+    } catch (e) {
+        // Role may not exist, log warning
+        logger.warn('Could not grant role ' + role + ': ' + e.message);
+    }
+}
+
+// Set email as verified (trust from federation)
 user.setEmailVerified(true);
-```
+\`\`\`
 
-### 4.6 Service Provider Metadata Generation
+### 4.3 SAML SP Metadata Generation
 
-Use the existing script at `scripts/federation/generate-metadata.sh`:
+The existing \`scripts/saml-metadata-generator/\` provides the foundation. Enhance with DFN-AAI-specific requirements.
 
-```bash
-# Generate metadata with self-signed certificate (for test federation)
-./scripts/federation/generate-metadata.sh \
-    -d education.example.org \
-    -e "https://idp.education.example.org/realms/opendesk" \
-    --generate-cert \
-    --org-name "Example University" \
-    --org-display "Example University Education Platform" \
-    --tech-email edu-support@example.org \
-    -o /tmp/dfn-aai-sp-metadata.xml
+#### Enhanced Configuration (\`saml-metadata-generator-config.yaml\`)
 
-# Generate metadata with CA-signed certificate (for production)
-./scripts/federation/generate-metadata.sh \
-    -d education.example.org \
-    -e "https://idp.education.example.org/realms/opendesk" \
-    -c /etc/pki/tls/certs/keycloak-sp.crt \
-    -k /etc/pki/tls/private/keycloak-sp.key \
-    --org-name "Example University" \
-    --org-display "Example University Education Platform" \
-    --tech-email edu-support@example.org \
-    -o /tmp/dfn-aai-sp-metadata.xml
-```
+\`\`\`yaml
+organization:
+  name: "Example University"
+  display_name: "Example University - openDesk Edu"
+  url: "https://www.example.edu"
+  lang: "de"  # German for DFN-AAI
 
-### 4.7 Generated SP Metadata Template
+contacts:
+  - type: "technical"
+    given_name: "IT"
+    surname: "Support"
+    email: "it-support@example.edu"
+    company: "Example University"
+  - type: "administrative"
+    given_name: "Admin"
+    surname: "Team"
+    email: "admin@example.edu"
+    company: "Example University"
+  - type: "support"
+    given_name: "Helpdesk"
+    surname: "Team"
+    email: "helpdesk@example.edu"
+    company: "Example University"
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-                     entityID="https://idp.education.example.org/realms/opendesk">
+# DFN-AAI required attributes for SP registration
+requested_attributes:
+  # Required
+  - name: mail
+    required: true
+    friendly_name: "E-Mail"
+  - name: displayName
+    required: true
+    friendly_name: "Display Name"
+  - name: eduPersonPrincipalName
+    required: true
+    friendly_name: "Principal Name"
+  - name: eduPersonAffiliation
+    required: true
+    friendly_name: "Affiliation"
+  - name: eduPersonTargetedID
+    required: true
+    friendly_name: "Persistent ID"
+  # Optional but recommended
+  - name: givenName
+    required: false
+    friendly_name: "Given Name"
+  - name: sn
+    required: false
+    friendly_name: "Surname"
+  - name: eduPersonScopedAffiliation
+    required: false
+    friendly_name: "Scoped Affiliation"
+  - name: eduPersonUniqueID
+    required: false
+    friendly_name: "Unique ID"
+  - name: schacHomeOrganization
+    required: false
+    friendly_name: "Home Organization"
 
-  <md:SPSSODescriptor AuthnRequestsSigned="true"
-                      WantAssertionsSigned="true"
-                      protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+environments:
+  dev:
+    base_url: "https://id.dev.opendesk.example.edu"
+    realm: "opendesk"
+    entity_id: "https://dev.opendesk.example.edu/saml-sp"
+    acs_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    slo_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    cache_duration: "PT24H"
+    valid_until_days: 30
+    certificates:
+      signing: "/etc/certs/saml-sp-signing.crt"
 
-    <!-- Assertion Consumer Service -->
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                                  Location="https://idp.education.example.org/realms/opendesk/protocol/saml"
-                                  index="0" isDefault="true"/>
+  staging:
+    base_url: "https://id.staging.opendesk.example.edu"
+    realm: "opendesk"
+    entity_id: "https://staging.opendesk.example.edu/saml-sp"
+    acs_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    slo_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    cache_duration: "PT24H"
+    valid_until_days: 90
+    certificates:
+      signing: "/etc/certs/saml-sp-signing.crt"
 
-    <!-- Single Logout Service -->
-    <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-                            Location="https://idp.education.example.org/realms/opendesk/protocol/saml"/>
-    <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                            Location="https://idp.education.example.org/realms/opendesk/protocol/saml"/>
+  production:
+    base_url: "https://id.opendesk.example.edu"
+    realm: "opendesk"
+    entity_id: "https://opendesk.example.edu/saml-sp"
+    acs_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    slo_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    cache_duration: "PT24H"
+    valid_until_days: 365
+    certificates:
+      signing: "/etc/certs/saml-sp-signing.crt"
 
-    <!-- Signing Certificate -->
-    <md:KeyDescriptor use="signing">
-      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-        <ds:X509Data>
-          <ds:X509Certificate>
-            <!-- Certificate data here -->
-          </ds:X509Certificate>
-        </ds:X509Data>
-      </ds:KeyInfo>
-    </md:KeyDescriptor>
+# DFN-AAI specific configuration
+dfn_aai:
+  test:
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
+    registration_url: "https://test.aai.dfn.de/metadata/"
+    discovery_url: "https://test.discovery.aai.dfn.de/"
+    support_email: "support@aai.dfn.de"
+  
+  production:
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
+    registration_url: "https://www.aai.dfn.de/en/service/metadata/"
+    discovery_url: "https://discovery.aai.dfn.de/"
+    support_email: "support@aai.dfn.de"
+  
+  edugain:
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+\`\`\`
 
-    <!-- Required Attributes -->
-    <md:AttributeConsumingService index="0">
-      <md:ServiceName xml:lang="en">openDesk Edu Platform</md:ServiceName>
-      <md:ServiceDescription xml:lang="en">Digital workplace for education</md:ServiceDescription>
+### 4.4 Keycloak SAML Identity Provider Configuration
 
-      <md:RequestedAttribute FriendlyName="affiliation"
-                              Name="urn:mace:dir:attribute-def:eduPersonAffiliation"
-                              isRequired="true"/>
-      <md:RequestedAttribute FriendlyName="mail"
-                              Name="urn:mace:dir:attribute-def:mail"
-                              isRequired="true"/>
-      <md:RequestedAttribute FriendlyName="displayName"
-                              Name="urn:mace:dir:attribute-def:displayName"
-                              isRequired="true"/>
-      <md:RequestedAttribute FriendlyName="persistentID"
-                              Name="urn:mace:dir:attribute-def:eduPersonPrincipalName"
-                              isRequired="true"/>
-    </md:AttributeConsumingService>
+#### Via Admin CLI (Automation)
 
-  </md:SPSSODescriptor>
+\`\`\`bash
+# Create DFN-AAI test federation identity provider
+kcadm.sh create identity-provider/instances -r opendesk \\
+  -s alias=dfn-aai-test \\
+  -s providerId=saml \\
+  -s enabled=true \\
+  -s trustEmail=true \\
+  -s firstBrokerLoginFlowAlias="first broker login" \\
+  -s displayName="Sign in with your institution (Test)" \\
+  -s 'config.entityId=https://test.aai.dfn.de/idp/shibboleth' \\
+  -s 'config.singleSignOnServiceUrl=https://test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO' \\
+  -s 'config.nameIDPolicyFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:persistent' \\
+  -s 'config.principalType=ATTRIBUTE' \\
+  -s 'config.principalAttribute=urn:mace:dir:attribute-def:eduPersonTargetedID' \\
+  -s 'config.signatureAlgorithm=RSA_SHA256' \\
+  -s 'config.wantAuthnRequestsSigned=true' \\
+  -s 'config.validateSignature=true' \\
+  -s 'config.metadataDescriptorUrl=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml'
 
-  <md:Organization>
-    <md:OrganizationName xml:lang="en">Example University</md:OrganizationName>
-    <md:OrganizationDisplayName xml:lang="en">Example University Education Platform</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">https://www.example-university.edu</md:OrganizationURL>
-  </md:Organization>
+# Create DFN-AAI production federation identity provider
+kcadm.sh create identity-provider/instances -r opendesk \\
+  -s alias=dfn-aai \\
+  -s providerId=saml \\
+  -s enabled=true \\
+  -s trustEmail=true \\
+  -s firstBrokerLoginFlowAlias="first broker login" \\
+  -s displayName="Sign in with your institution" \\
+  -s 'config.metadataDescriptorUrl=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml'
 
-  <md:ContactPerson contactType="technical">
-    <md:GivenName>IT Support</md:GivenName>
-    <md:EmailAddress>edu-support@example.org</md:EmailAddress>
-  </md:ContactPerson>
+# Create eduGAIN identity provider (includes DFN-AAI + international)
+kcadm.sh create identity-provider/instances -r opendesk \\
+  -s alias=edugain \\
+  -s providerId=saml \\
+  -s enabled=true \\
+  -s trustEmail=true \\
+  -s firstBrokerLoginFlowAlias="first broker login" \\
+  -s displayName="Sign in with your institution (eduGAIN)" \\
+  -s 'config.metadataDescriptorUrl=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml'
+\`\`\`
 
-</md:EntityDescriptor>
-```
+### 4.5 DFN-AAI Registration Process
 
-### 4.8 DFN-AAI Registration Process
+#### Step-by-Step Registration Workflow
 
-#### Step-by-Step Registration
+\`\`\`
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        DFN-AAI Registration Process                              │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  Phase 1: Preparation                                                           │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ 1. Generate SP keypair (signing certificate)                            │   │
+│  │ 2. Configure Keycloak SAML endpoints                                    │   │
+│  │ 3. Generate SP metadata XML                                             │   │
+│  │ 4. Validate metadata with xmllint + SAML schema                         │   │
+│  │ 5. Test metadata URL is publicly accessible                             │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                     │                                           │
+│                                     ▼                                           │
+│  Phase 2: Test Federation (REQUIRED FIRST)                                     │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ 1. Contact DFN-AAI support (support@aai.dfn.de)                         │   │
+│  │ 2. Request test federation membership                                   │   │
+│  │ 3. Submit SP metadata URL to test.aai.dfn.de                            │   │
+│  │ 4. Wait for metadata approval (typically 1-2 days)                      │   │
+│  │ 5. Configure Keycloak to use test federation metadata                   │   │
+│  │ 6. Test login with test IdP (test.aai.dfn.de)                           │   │
+│  │ 7. Verify attribute reception with SAML Tracer                          │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                     │                                           │
+│                                     ▼                                           │
+│  Phase 3: Production Federation                                                │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ 1. Document successful test federation results                          │   │
+│  │ 2. Submit production SP metadata to www.aai.dfn.de                      │   │
+│  │ 3. Sign DFN-AAI participation agreement (if not already done)           │   │
+│  │ 4. Wait for production metadata approval                                │   │
+│  │ 5. Configure Keycloak with production federation metadata               │   │
+│  │ 6. Enable production IdP in Keycloak                                    │   │
+│  │ 7. Monitor logs for federation issues                                   │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                     │                                           │
+│                                     ▼                                           │
+│  Phase 4: eduGAIN Interfederation (Optional)                                   │
+│  ┌─────────────────────────────────────────────────────────────────────────┐   │
+│  │ 1. Ensure production DFN-AAI membership is stable                       │   │
+│  │ 2. Request eduGAIN flag in metadata                                     │   │
+│  │ 3. Configure Keycloak with eduGAIN aggregated metadata                  │   │
+│  │ 4. Test with international IdPs (e.g., SURFconext, SWAMID)              │   │
+│  │ 5. Document international user support process                          │   │
+│  └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+\`\`\`
 
-1. **Generate SP Metadata** (see 4.6)
-2. **Validate Metadata**
-   ```bash
-   xmllint --noout /tmp/dfn-aai-sp-metadata.xml
-   openssl x509 -in sp-cert.pem -noout -dates
-   ```
-3. **Access DFN-AAI Portal**
-   - URL: https://www.aai.dfn.de/en/service/metadata/
-   - Login with DFN-AAI account (contact support@aai.dfn.de)
-4. **Complete Registration Form**
-   - Entity ID: `https://idp.<domain>/realms/opendesk`
-   - Service Name: `<Institution> Education Platform`
-   - Upload SP metadata file
-   - Select federation: **Test** first, then **Production**
-   - Provide technical and administrative contacts
-5. **Await Approval**
-   - Test federation: 1-2 business days
-   - Production federation: 3-5 business days
-6. **Configure Keycloak** (after approval)
-   - Import DFN-AAI metadata
-   - Add attribute mappers
-   - Enable identity provider
+#### Registration Checklist
+
+\`\`\`markdown
+## DFN-AAI Test Federation Registration Checklist
+
+### Prerequisites
+- [ ] DFN association membership (via university)
+- [ ] Publicly accessible HTTPS endpoint for Keycloak
+- [ ] Valid TLS certificate (not self-signed)
+- [ ] SP signing certificate generated
+- [ ] SP metadata generated and validated
+
+### Metadata Requirements
+- [ ] entityID is unique and stable (will not change)
+- [ ] ValidUntil date is reasonable (≤ 1 year)
+- [ ] Organization information is complete
+- [ ] Contact persons are listed (technical, administrative, support)
+- [ ] AttributeConsumingService lists all required attributes
+- [ ] AssertionConsumerService URL is correct
+- [ ] X509Certificate is valid and not expired
+
+### Technical Requirements
+- [ ] HTTPS endpoint uses TLS 1.2 or higher
+- [ ] SAML messages are signed (AuthnRequestsSigned="true")
+- [ ] Signature algorithm is RSA-SHA256 or stronger
+- [ ] NameID format is persistent
+- [ ] ACS binding is HTTP-POST
+
+### Submission
+- [ ] Metadata URL submitted to test.aai.dfn.de
+- [ ] Confirmation email received from DFN-AAI
+- [ ] Metadata appears in aggregated test metadata
+- [ ] Test login successful with test IdP
+\`\`\`
 
 ---
 
 ## 5. FILE STRUCTURE
 
-```
-helmfile/apps/nubus/
-├── templates/
-│   └── idp-federation-config.yaml        # Federation-specific ConfigMap
-├── values-nubus.yaml.gotmpl              # Keycloak configuration updates
-└── values-idp-federation.yaml.gotmpl     # Federation environment values
+\`\`\`
+scripts/
+├── saml-metadata-generator/
+│   ├── saml-metadata-generator.py          # Main script (existing)
+│   ├── saml-metadata-generator-config.yaml.example  # Template (enhance)
+│   ├── saml-metadata-generator-config.yaml # Actual config (gitignored)
+│   ├── requirements.txt                    # Python deps
+│   └── README.md                           # Usage docs
+│
+├── dfn-aai-setup/
+│   ├── setup-keycloak-idp.sh               # Keycloak IdP configuration script
+│   ├── setup-attribute-mappers.sh          # Create attribute mappers
+│   ├── setup-role-mapper.sh                # Create role assignment mapper
+│   ├── validate-metadata.sh                # Metadata validation helper
+│   ├── test-federation-login.sh            # Test login with test IdP
+│   └── README.md                           # Setup instructions
 
-scripts/federation/
-├── generate-metadata.sh                  # SP metadata generator (existing)
-├── validate-metadata.sh                  # Metadata validation script (new)
-├── test-federation-login.sh              # Federation login test script (new)
-└── README.md                             # Documentation (existing)
+helmfile/
+├── apps/
+│   ├── keycloak/
+│   │   └── templates/
+│   │       ├── dfn-aai-idp-config.yaml     # DFN-AAI IdP configuration
+│   │       ├── saml-attribute-mappers.yaml # Attribute mapper definitions
+│   │       └── saml-role-mapper.yaml       # Role mapper configuration
+│   │
+│   ├── ilias/
+│   │   └── templates/
+│   │       └── shibboleth-config.yaml      # (existing) Shibboleth SP config
+│   │
+│   └── moodle/
+│       └── templates/
+│           └── shibboleth-sp-config.yaml   # (existing) Shibboleth SP config
+│
+└── environments/
+    └── default/
+        └── federation.yaml.gotmpl          # Federation-specific config
 
 docs/
-├── dfn-aai-registration.md               # Registration guide (existing)
-├── dfn-aai-testing-guide.md              # Testing guide (existing)
-├── shibboleth-idp-integration.md         # Shibboleth IdP integration (existing)
-├── keycloak-edugain-attributes.md        # Attribute mapping (existing)
-├── federation/
-│   ├── dfn-aai-enrollment.md             # Enrollment guide (existing)
-│   ├── testing-guide.md                  # Federation testing (existing)
-│   └── production-migration.md           # Test → Production migration (new)
-└── integration/
-    └── federation-sso.md                 # Federation SSO overview (new)
+├── dfn-aai-registration.md                 # DFN-AAI registration guide
+├── edugain-attribute-mapping.md            # Attribute mapping reference
+├── federation-troubleshooting.md           # Common issues and solutions
+└── shibboleth-idp-integration.md           # (existing) Shibboleth integration
 
 tests/
-├── federation/
-│   ├── conftest.py                       # Test fixtures
-│   ├── test_metadata_generation.py       # Metadata generation tests
-│   ├── test_attribute_mapping.py         # Attribute mapping tests
-│   ├── test_role_mapping.py              # Role mapping tests
-│   └── test_jit_provisioning.py          # JIT provisioning tests
-└── playwright/
-    └── federation-e2e.spec.js            # E2E federation login tests
-
-helmfile/environments/default/
-├── federation.yaml.gotmpl                # Federation configuration (existing)
-└── idp-federation-secrets.yaml.gotmpl    # Federation secrets (new)
-```
+├── integration/
+│   ├── test_saml_metadata_generation.py    # Metadata generation tests
+│   ├── test_attribute_mapping.py           # Attribute mapper tests
+│   └── test_federation_login.py            # End-to-end federation tests
+│
+└── fixtures/
+    ├── sample-idp-metadata.xml             # Sample IdP metadata
+    ├── sample-saml-assertion.xml           # Sample SAML assertion
+    └── test-attributes.yaml                # Test attribute values
+\`\`\`
 
 ---
 
 ## 6. TEST STRATEGY
 
-### 6.1 DFN-AAI Test Federation
+### 6.1 Unit Tests
 
-Use DFN-AAI test federation for all integration testing before production.
+- Test metadata generation with various configurations
+- Test attribute mapper logic (attribute name mapping)
+- Test role assignment script (affiliation → role mapping)
+- Test metadata XML validation
 
-#### Test IdP Information
+### 6.2 Integration Tests
 
-| Environment | URL | Purpose |
-|-------------|-----|---------|
-| Test IdP | `https://idp.test.aai.dfn.de/` | Primary test identity provider |
-| Test Federation Metadata | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` | Federation metadata |
-| Discovery Service | `https://discovery.aai.dfn.de/` | IdP selection |
+- Test Keycloak IdP configuration import
+- Test attribute mapper creation via Admin API
+- Test SAML assertion parsing with sample assertions
+- Test federation metadata parsing
 
-#### Test User Accounts
+### 6.3 End-to-End Tests
 
-Contact DFN-AAI support (`support@aai.dfn.de`) for test credentials.
+**Test with DFN-AAI Test Federation**:
+1. Configure Keycloak with test federation metadata
+2. Initiate login from openDesk portal
+3. Redirect to DFN-AAI discovery service
+4. Select test IdP
+5. Authenticate with test credentials
+6. Verify attribute reception in Keycloak
+7. Verify user account creation/lookup
+8. Verify role assignment based on affiliation
+9. Verify SSO to downstream services (ILIAS, Moodle)
 
-| Test User | eduPersonAffiliation | Expected Role |
-|-----------|---------------------|---------------|
-| `testuser1` | `faculty` | `instructor` |
-| `testuser2` | `staff` | `staff` |
-| `testuser3` | `student` | `student` |
-| `testuser4` | `member` | `member` |
-| `testuser5` | `affiliate` | `affiliate` |
+### 6.4 Test Users (DFN-AAI Test IdP)
 
-### 6.2 Unit Tests
+| User | Affiliation | Expected Roles | Purpose |
+|------|-------------|----------------|---------|
+| \`teststudent\` | student | \`student\` | Test student access |
+| \`teststaff\` | staff | \`staff\` | Test staff access |
+| \`testfaculty\` | faculty | \`instructor\` | Test instructor access |
+| \`testmember\` | member | \`member\` | Test generic member |
+| \`testmulti\` | student, staff | \`student\`, \`staff\` | Test multi-affiliation |
 
-```python
-# tests/federation/test_attribute_mapping.py
+### 6.5 Test Coverage Goals
 
-import pytest
-from keycloak_admin import KeycloakAdmin
-
-class TestAttributeMapping:
-    """Test eduGAIN attribute mapping to Keycloak attributes."""
-    
-    def test_email_mapper(self, keycloak_admin):
-        """Test mail attribute maps to email."""
-        mapper = keycloak_admin.get_idp_mapper("dfn-aai-test", "email-mapper")
-        assert mapper["config"]["attribute"] == "urn:mace:dir:attribute-def:mail"
-        assert mapper["config"]["user.attribute"] == "email"
-    
-    def test_username_mapper(self, keycloak_admin):
-        """Test eduPersonPrincipalName maps to username."""
-        mapper = keycloak_admin.get_idp_mapper("dfn-aai-test", "username-mapper")
-        assert mapper["config"]["attribute"] == "urn:mace:dir:attribute-def:eduPersonPrincipalName"
-        assert mapper["config"]["user.attribute"] == "username"
-    
-    def test_affiliation_mapper(self, keycloak_admin):
-        """Test eduPersonAffiliation maps to affiliation."""
-        mapper = keycloak_admin.get_idp_mapper("dfn-aai-test", "affiliation-mapper")
-        assert mapper["config"]["attribute"] == "urn:mace:dir:attribute-def:eduPersonAffiliation"
-        assert mapper["config"]["user.attribute"] == "affiliation"
-```
-
-```python
-# tests/federation/test_role_mapping.py
-
-import pytest
-
-class TestRoleMapping:
-    """Test eduPersonAffiliation to Keycloak role mapping."""
-    
-    @pytest.mark.parametrize("affiliation,expected_roles", [
-        ("faculty", ["instructor", "teacher"]),
-        ("staff", ["staff"]),
-        ("student", ["student", "learner"]),
-        ("member", ["member"]),
-        ("affiliate", ["affiliate", "external"]),
-    ])
-    def test_affiliation_to_role_mapping(self, affiliation, expected_roles):
-        """Test affiliation values map to correct roles."""
-        # This would test the role mapping script
-        roles = map_affiliation_to_roles([affiliation])
-        assert set(expected_roles).issubset(set(roles))
-```
-
-### 6.3 Integration Tests
-
-```python
-# tests/federation/test_jit_provisioning.py
-
-import pytest
-from keycloak_admin import KeycloakAdmin
-
-class TestJITProvisioning:
-    """Test Just-in-Time user provisioning from federation login."""
-    
-    def test_user_created_on_first_login(self, keycloak_admin, federation_user):
-        """Test user is created on first federated login."""
-        # Simulate SAML assertion with test attributes
-        saml_assertion = {
-            "mail": "testuser@test.aai.dfn.de",
-            "displayName": "Test User",
-            "eduPersonPrincipalName": "testuser@test.aai.dfn.de",
-            "eduPersonAffiliation": "student"
-        }
-        
-        # Process assertion (would be done by Keycloak broker)
-        user = keycloak_admin.process_federated_login("dfn-aai-test", saml_assertion)
-        
-        assert user is not None
-        assert user["username"] == "testuser@test.aai.dfn.de"
-        assert user["email"] == "testuser@test.aai.dfn.de"
-        assert "student" in user["roles"]
-    
-    def test_existing_user_updated(self, keycloak_admin, existing_federated_user):
-        """Test existing user attributes are updated on subsequent login."""
-        # User already exists with old attributes
-        # Simulate login with updated attributes
-        # Verify attributes are updated
-        pass
-```
-
-### 6.4 End-to-End Tests
-
-```javascript
-// tests/playwright/federation-e2e.spec.js
-
-const { test, expect } = require('@playwright/test');
-
-test.describe('DFN-AAI Federation Login', () => {
-  
-  test('should display DFN-AAI login option', async ({ page }) => {
-    await page.goto('https://portal.education.example.org');
-    
-    // Check for DFN-AAI login button
-    await expect(page.locator('text=Login with institutional account')).toBeVisible();
-    await expect(page.locator('text=DFN-AAI')).toBeVisible();
-  });
-  
-  test('should redirect to discovery service', async ({ page }) => {
-    await page.goto('https://portal.education.example.org');
-    await page.click('text=Login with institutional account');
-    
-    // Should redirect to DFN-AAI discovery service
-    await expect(page).toHaveURL(/discovery\.aai\.dfn\.de/);
-  });
-  
-  test('should complete login flow with test IdP', async ({ page }) => {
-    // This test requires test federation access
-    test.skip();
-    
-    await page.goto('https://portal.education.example.org');
-    await page.click('text=Login with institutional account');
-    
-    // Select test IdP
-    await page.fill('input[name="search]', 'DFN-AAI Test');
-    await page.click('text=DFN-AAI Test IdP');
-    
-    // Login at test IdP
-    await page.fill('input[name="j_username"]', 'testuser3');
-    await page.fill('input[name="j_password"]', process.env.DFN_TEST_PASSWORD);
-    await page.click('button[type="submit"]');
-    
-    // Should be redirected back and logged in
-    await expect(page).toHaveURL(/portal\.education\.example\.org/);
-    await expect(page.locator('.user-menu')).toBeVisible();
-  });
-  
-  test('should propagate logout to all services', async ({ page }) => {
-    // Login first
-    // Access ILIAS and verify authenticated
-    // Access Moodle and verify authenticated
-    // Logout from portal
-    // Verify logged out from all services
-  });
-});
-```
-
-### 6.5 Test Checklist
-
-#### Authentication Tests
-
-| Test | Description | Status |
-|------|-------------|--------|
-| AUTH-01 | Basic login via test IdP | ☐ |
-| AUTH-02 | Login with faculty account | ☐ |
-| AUTH-03 | Login with staff account | ☐ |
-| AUTH-04 | Login with student account | ☐ |
-| AUTH-05 | Login with member account | ☐ |
-| AUTH-06 | Login with affiliate account | ☐ |
-| AUTH-07 | Failed login handling | ☐ |
-| AUTH-08 | Session timeout handling | ☐ |
-
-#### Attribute Tests
-
-| Test | Description | Status |
-|------|-------------|--------|
-| ATTR-01 | Mail attribute received | ☐ |
-| ATTR-02 | DisplayName attribute received | ☐ |
-| ATTR-03 | eduPersonPrincipalName received | ☐ |
-| ATTR-04 | eduPersonAffiliation received | ☐ |
-| ATTR-05 | eduPersonScopedAffiliation received | ☐ |
-| ATTR-06 | Multi-valued affiliations | ☐ |
-| ATTR-07 | Attribute mapping to Keycloak | ☐ |
-
-#### Role Mapping Tests
-
-| Test | Description | Status |
-|------|-------------|--------|
-| ROLE-01 | Faculty → instructor mapping | ☐ |
-| ROLE-02 | Staff → staff mapping | ☐ |
-| ROLE-03 | Student → student mapping | ☐ |
-| ROLE-04 | Member → member mapping | ☐ |
-| ROLE-05 | Affiliate → affiliate mapping | ☐ |
-| ROLE-06 | Multi-role assignment | ☐ |
-| ROLE-07 | Role-based access control | ☐ |
-
-#### Provisioning Tests
-
-| Test | Description | Status |
-|------|-------------|--------|
-| PROV-01 | First-time user creation | ☐ |
-| PROV-02 | User profile population | ☐ |
-| PROV-03 | Federation link creation | ☐ |
-| PROV-04 | Subsequent login recognition | ☐ |
-| PROV-05 | Attribute sync on login | ☐ |
+- **Metadata generation**: 100% coverage
+- **Attribute mappers**: 100% coverage
+- **Role assignment**: 100% coverage
+- **Integration**: 80%+ coverage
 
 ---
 
@@ -754,140 +658,75 @@ test.describe('DFN-AAI Federation Login', () => {
 
 ### 7.1 Configuration via Helm Values
 
-```yaml
+\`\`\`yaml
 # helmfile/environments/default/federation.yaml.gotmpl
 
 federation:
   enabled: true
   
-  # DFN-AAI Test Federation
-  dfnAaiTest:
+  # DFN-AAI configuration
+  dfnAai:
     enabled: true
-    metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml"
-    alias: "dfn-aai-test"
-    displayName: "DFN-AAI (Test)"
+    testMode: true  # Start with test federation
+    metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
+    discoveryUrl: "https://test.discovery.aai.dfn.de/"
     
-  # DFN-AAI Production Federation
-  dfnAaiProduction:
-    enabled: false  # Enable after test federation validation
-    metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml"
-    alias: "dfn-aai"
-    displayName: "DFN-AAI"
+    # SP configuration
+    entityId: "https://{{ .Values.global.domain }}/saml-sp"
+    acsUrl: "https://id.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/broker/saml/endpoint"
+    sloUrl: "https://id.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/broker/saml/endpoint"
     
-  # eduGAIN (international)
+    # Attribute requirements
+    requestedAttributes:
+      - mail
+      - displayName
+      - eduPersonPrincipalName
+      - eduPersonAffiliation
+      - eduPersonTargetedID
+      - givenName
+      - sn
+      - eduPersonScopedAffiliation
+  
+  # eduGAIN interfederation (optional)
   eduGAIN:
-    enabled: false  # Enable for international access
-    metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-eduGAIN-metadata.xml"
-    alias: "edugain"
-    displayName: "eduGAIN"
-    
-  # Attribute mapping configuration
-  attributeMapping:
-    email:
-      samlAttribute: "urn:mace:dir:attribute-def:mail"
-      keycloakAttribute: "email"
-    username:
-      samlAttribute: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
-      keycloakAttribute: "username"
-    affiliation:
-      samlAttribute: "urn:mace:dir:attribute-def:eduPersonAffiliation"
-      keycloakAttribute: "affiliation"
-    displayName:
-      samlAttribute: "urn:mace:dir:attribute-def:displayName"
-      keycloakAttribute: "displayName"
-      
+    enabled: false
+    metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+  
   # Role mapping configuration
   roleMapping:
-    faculty: ["instructor", "teacher"]
-    staff: ["staff"]
-    student: ["student", "learner"]
-    employee: ["employee"]
-    member: ["member"]
-    affiliate: ["affiliate", "external"]
-    alum: ["alumni"]
-    library-walk-in: ["library"]
-```
+    student:
+      affiliation: ["student"]
+      roles: ["student"]
+    instructor:
+      affiliation: ["faculty", "teacher"]
+      roles: ["instructor"]
+    staff:
+      affiliation: ["staff", "employee"]
+      roles: ["staff"]
+    member:
+      affiliation: ["member"]
+      roles: ["member"]
+\`\`\`
 
-### 7.2 Keycloak Realm Configuration
+### 7.2 Environment Variables
 
-```json
-{
-  "realm": "opendesk",
-  "identityProviders": [
-    {
-      "alias": "dfn-aai-test",
-      "displayName": "DFN-AAI (Test)",
-      "providerId": "saml",
-      "enabled": true,
-      "trustEmail": true,
-      "storeToken": false,
-      "linkOnly": false,
-      "firstBrokerLoginFlowAlias": "first broker login",
-      "config": {
-        "metadataDescriptorUrl": "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml",
-        "nameIDPolicyFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
-        "principalType": "ATTRIBUTE",
-        "principalAttribute": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
-        "wantAuthnRequestsSigned": "true",
-        "validateSignature": "true",
-        "signatureAlgorithm": "RSA_SHA256"
-      }
-    }
-  ],
-  "identityProviderMappers": [
-    {
-      "name": "email-mapper",
-      "identityProviderAlias": "dfn-aai-test",
-      "identityProviderMapper": "saml-user-attribute-idp-mapper",
-      "config": {
-        "syncMode": "INHERIT",
-        "attribute": "urn:mace:dir:attribute-def:mail",
-        "user.attribute": "email"
-      }
-    },
-    {
-      "name": "username-mapper",
-      "identityProviderAlias": "dfn-aai-test",
-      "identityProviderMapper": "saml-user-attribute-idp-mapper",
-      "config": {
-        "syncMode": "INHERIT",
-        "attribute": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
-        "user.attribute": "username"
-      }
-    },
-    {
-      "name": "affiliation-mapper",
-      "identityProviderAlias": "dfn-aai-test",
-      "identityProviderMapper": "saml-user-attribute-idp-mapper",
-      "config": {
-        "syncMode": "INHERIT",
-        "attribute": "urn:mace:dir:attribute-def:eduPersonAffiliation",
-        "user.attribute": "affiliation"
-      }
-    }
-  ]
-}
-```
-
-### 7.3 Environment Variables
-
-```bash
+\`\`\`bash
 # Federation Configuration
 FEDERATION_ENABLED=true
-DFN_AAI_TEST_ENABLED=true
-DFN_AAI_TEST_METADATA_URL=https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml
-DFN_AAI_PRODUCTION_ENABLED=false
+FEDERATION_DFN_AAI_ENABLED=true
+FEDERATION_DFN_AAI_TEST_MODE=true
+FEDERATION_DFN_AAI_METADATA_URL=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml
+FEDERATION_DFN_AAI_DISCOVERY_URL=https://test.discovery.aai.dfn.de/
 
-# SP Certificate (for production)
-SP_CERT_PATH=/etc/pki/tls/certs/keycloak-sp.crt
-SP_KEY_PATH=/etc/pki/tls/private/keycloak-sp.key
+# SP Configuration
+FEDERATION_SP_ENTITY_ID=https://opendesk.example.edu/saml-sp
+FEDERATION_SP_ACS_URL=https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint
+FEDERATION_SP_SLO_URL=https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint
 
-# Keycloak Admin
-KEYCLOAK_URL=https://idp.education.example.org
-KEYCLOAK_REALM=opendesk
-KEYCLOAK_ADMIN_USER=admin
-KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
-```
+# Certificates
+FEDERATION_SP_SIGNING_CERT=/etc/certs/saml-sp-signing.crt
+FEDERATION_SP_SIGNING_KEY=/etc/certs/saml-sp-signing.key
+\`\`\`
 
 ---
 
@@ -895,32 +734,33 @@ KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
 
 ### 8.1 Functional Requirements
 
-- [ ] Keycloak configured as SAML Service Provider for DFN-AAI
-- [ ] SP metadata generated and validated
-- [ ] SP registered in DFN-AAI test federation
-- [ ] Users can authenticate via DFN-AAI test federation
-- [ ] All eduGAIN attributes correctly mapped to Keycloak
-- [ ] Role mapping based on eduPersonAffiliation works correctly
-- [ ] JIT provisioning creates users with correct profiles
-- [ ] Single Logout propagates to all services
-- [ ] Existing Shibboleth SP services (ILIAS, Moodle) work with federated users
+- [ ] Keycloak can import DFN-AAI test federation metadata
+- [ ] Keycloak can import DFN-AAI production federation metadata
+- [ ] Keycloak can import eduGAIN aggregated metadata
+- [ ] Federation login redirects to correct IdP
+- [ ] Attributes are correctly mapped from SAML assertion
+- [ ] User accounts are created on first login (JIT provisioning)
+- [ ] Existing accounts are linked correctly
+- [ ] Role assignment works based on eduPersonAffiliation
+- [ ] SSO propagates to all openDesk services
+- [ ] Logout terminates all sessions
 
 ### 8.2 Non-Functional Requirements
 
+- [ ] Metadata generation completes in <5 seconds
+- [ ] Federation login completes in <10 seconds
+- [ ] Attribute mapping accuracy is 100%
 - [ ] All tests pass (unit + integration + e2e)
 - [ ] Documentation is bilingual (German/English)
-- [ ] Code follows existing project patterns
-- [ ] No breaking changes to existing SSO functionality
-- [ ] Metadata refresh works correctly (automatic updates)
-- [ ] Error handling provides useful messages to users
+- [ ] No breaking changes to existing functionality
 
 ### 8.3 Documentation Requirements
 
-- [ ] Update existing `docs/dfn-aai-registration.md` with new workflow
-- [ ] Update existing `docs/dfn-aai-testing-guide.md` with test procedures
-- [ ] Create `docs/federation/production-migration.md` for test → production
-- [ ] Update `docs/keycloak-edugain-attributes.md` with role mapping
-- [ ] Create deployer quick-start guide
+- [ ] DFN-AAI registration guide complete
+- [ ] eduGAIN attribute mapping reference complete
+- [ ] Federation troubleshooting guide complete
+- [ ] Deployer metadata generation guide complete
+- [ ] README in \`scripts/saml-metadata-generator/\` updated
 
 ---
 
@@ -928,75 +768,110 @@ KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
 
 | Risk | Impact | Mitigation |
 |:-----|:-------|:----------|
-| DFN-AAI registration delayed | Blocks testing | Start with test federation early; have fallback plan |
-| Attribute release varies by IdP | Inconsistent user experience | Document required attributes; provide IdP admin contact template |
-| Certificate expiration | Login failures | Implement monitoring; automate renewal workflow |
-| Metadata refresh failures | New IdPs not available | Implement retry logic; alert on metadata age |
-| Multi-valued affiliations | Role mapping complexity | Use script mapper for flexible processing |
-| NameID format incompatibility | Login failures | Support multiple NameID formats; test with multiple IdPs |
-| GDPR/data sovereignty | Legal/compliance risk | Document data flows; minimize stored attributes |
-| Backchannel logout not supported by some IdPs | Incomplete logout | Implement frontchannel fallback; document limitations |
-
-### GDPR Considerations
-
-1. **Data Minimization**: Only request required attributes
-2. **Purpose Limitation**: Use attributes only for authentication/authorization
-3. **Storage Limitation**: Don't store unnecessary SAML assertion data
-4. **User Rights**: Provide mechanism for users to view/delete their federated identity data
-5. **Documentation**: Maintain Data Protection Impact Assessment (DPIA)
+| DFN-AAI metadata changes format | Login failures | Use official metadata URL with automatic refresh; monitor metadata updates |
+| IdP releases insufficient attributes | User creation fails | Document minimum attributes; provide error messages; contact IdP admin |
+| Certificate expiration | All federation logins fail | Monitor cert expiry; automate renewal; set up alerts at 30/14/7 days |
+| Network connectivity to IdP | Login unavailable | Fallback to local authentication; cache federation metadata |
+| eduPersonAffiliation values vary by IdP | Role mapping inconsistent | Map all known variants; provide custom mapping configuration |
+| User has multiple affiliations | Role assignment ambiguous | Grant all matching roles; use primary affiliation if available |
+| GDPR: Personal data crosses borders (eduGAIN) | Legal/compliance | Document data flows; allow deployers to disable eduGAIN; provide data processing agreement |
+| Federation metadata is large (eduGAIN ~10MB) | Keycloak memory usage | Use metadata filtering; only load required IdPs; increase heap size |
+| SAML signature validation fails | Login rejected | Validate time synchronization (NTP); check certificate chain; use same algorithm |
+| Home organization leaves federation | Existing users cannot login | Link accounts to local identity; preserve user data; notify affected users |
 
 ---
 
-## 10. TIMELINE
+## 10. GDPR / DATA SOVEREIGNTY CONSIDERATIONS
+
+### 10.1 Data Minimization
+
+- Only request attributes that are strictly necessary
+- Do not store raw SAML assertions (set \`Store Token = OFF\`)
+- Log only essential information for troubleshooting
+
+### 10.2 Data Processing Documentation
+
+**Data Controller**: The university deploying openDesk Edu
+
+**Data Processors**: 
+- DFN-AAI (federation operator) - transmits authentication data
+- Home institution IdP - provides identity attributes
+
+**Data Elements Received**:
+| Attribute | Purpose | Retention |
+|-----------|---------|-----------|
+| mail | User communication | Duration of account |
+| displayName | User interface display | Duration of account |
+| eduPersonPrincipalName | Unique identification | Duration of account |
+| eduPersonAffiliation | Role assignment | Duration of account |
+| eduPersonTargetedID | Persistent identification | Duration of account |
+
+### 10.3 User Rights
+
+- **Right to information**: Users must be informed about federated login
+- **Right to access**: Users can view their stored attributes in Keycloak
+- **Right to erasure**: Users can request account deletion
+- **Right to portability**: Users can export their data
+
+### 10.4 International Data Transfers (eduGAIN)
+
+When eduGAIN is enabled:
+- User data may be transmitted from IdPs outside the EU
+- Deployers must assess legal basis for each interfederation
+- Provide option to disable eduGAIN while keeping DFN-AAI
+
+---
+
+## 11. TIMELINE
 
 | Task | Estimated Duration | Priority |
 |:-----|:-------------------|:---------|
-| Create federation configuration templates | 2 hours | High |
-| Update metadata generation script | 1 hour | High |
-| Create Keycloak IdP configuration | 2 hours | High |
-| Implement attribute mappers | 3 hours | High |
-| Implement role mapping script | 2 hours | High |
-| Configure JIT provisioning flow | 2 hours | High |
-| Create validation scripts | 2 hours | Medium |
+| Enhance SAML metadata generator script | 2 hours | High |
+| Create Keycloak IdP configuration templates | 2 hours | High |
+| Implement attribute mappers (5 mappers) | 3 hours | High |
+| Implement role assignment script mapper | 2 hours | High |
+| Create federation discovery UI integration | 3 hours | Medium |
+| Write DFN-AAI registration documentation | 3 hours | High |
+| Write eduGAIN attribute mapping reference | 2 hours | Medium |
+| Write troubleshooting guide | 2 hours | Medium |
+| Create setup automation scripts | 3 hours | Medium |
 | Write unit tests | 3 hours | High |
-| Write integration tests | 4 hours | High |
+| Write integration tests | 3 hours | High |
 | Test with DFN-AAI test federation | 4 hours | High |
-| Write documentation | 4 hours | High |
-| Create production migration guide | 2 hours | Medium |
-| **Total** | **~31 hours** | |
+| **Total** | **~32 hours** | |
 
 ---
 
-## 11. SUCCESS METRICS
+## 12. SUCCESS METRICS
 
-- **Authentication success rate**: 99.9% for valid credentials
-- **Attribute mapping accuracy**: 100% of required attributes mapped
-- **JIT provisioning time**: <2 seconds for new users
-- **Logout propagation time**: <5 seconds across all services
-- **Test coverage**: 90%+ for federation-related code
-- **Documentation completeness**: All procedures documented in German and English
+- **Federation login success rate**: 99%+
+- **Attribute mapping accuracy**: 100%
+- **User provisioning latency**: <5 seconds
+- **Test coverage**: 90%+ code coverage
+- **Documentation completeness**: All sections filled
 
 ---
 
-## 12. APPROVAL
+## 13. APPROVAL
 
 **Plan Reviewed By**: [Pending]
 **Plan Approved**: [Pending]
-**Implementation Start**: 2026-04-01
-**Target Completion**: 2026-04-05
+**Implementation Start**: [Date]
+**Target Completion**: [Date]
 
 ---
 
 ## TODOs
 
 - [x] Create detailed plan for DFN-AAI / eduGAIN SAML Federation Support
-- [ ] Generate and validate SP metadata
-- [ ] Register SP in DFN-AAI test federation
-- [ ] Configure Keycloak as SAML SP
-- [ ] Implement attribute mappers
-- [ ] Implement role mapping
-- [ ] Configure JIT provisioning
-- [ ] Write tests and documentation
+- [ ] Enhance SAML metadata generator script
+- [ ] Create Keycloak SAML IdP configuration
+- [ ] Implement eduGAIN attribute mappers
+- [ ] Implement role assignment script mapper
+- [ ] Create federation discovery integration
+- [ ] Write documentation (bilingual)
+- [ ] Write tests (unit + integration)
+- [ ] Test with DFN-AAI test federation
 - [ ] Pass Final Verification Wave
 
 ---
@@ -1004,29 +879,22 @@ KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
 ## Final Verification Wave
 
 - [ ] F1: Code Review — All code reviewed, follows patterns, no security issues
-- [ ] F2: Test Verification — All tests pass with DFN-AAI test federation
+- [ ] F2: Test Verification — All tests pass, coverage >90%
 - [ ] F3: Documentation Review — All docs complete, bilingual, accurate
-- [ ] F4: Integration Verification — Federation login works end-to-end, logout propagates
+- [ ] F4: Integration Verification — Federation login works with test IdP, attributes mapped correctly
 
 ---
 
 ## References
 
-### Existing Documentation
-- [DFN-AAI Service Provider Registration Guide](../docs/dfn-aai-registration.md)
-- [DFN-AAI Testing Guide](../docs/dfn-aai-testing-guide.md)
-- [Shibboleth IdP Integration](../docs/shibboleth-idp-integration.md)
-- [eduGAIN Attribute Mapping for Keycloak](../docs/keycloak-edugain-attributes.md)
-- [DFN-AAI Enrollment Guide](../docs/federation/dfn-aai-enrollment.md)
-
-### External Resources
-- **DFN-AAI Documentation**: https://www.aai.dfn.de/en/documentation/
-- **DFN-AAI Test Federation**: https://www.aai.dfn.de/testumgebung/
-- **eduGAIN Technical Profile**: https://technical.edugain.org/
-- **eduPerson Schema**: https://www.educause.edu/research-and-technical/educause-identity-and-access-management/eduPerson
-- **Keycloak SAML Documentation**: https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers
-- **SAML Tracer**: https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/
+- [DFN-AAI Website](https://www.aai.dfn.de/)
+- [eduGAIN Website](https://edugain.org/)
+- [eduPerson Schema](https://www.educause.edu/fidm/eduperson)
+- [SAML 2.0 Metadata Specification](http://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf)
+- [Keycloak SAML Identity Broker Documentation](https://www.keycloak.org/docs/latest/server_admin/#saml-v2-0-identity-providers)
+- [Existing Shibboleth IdP Integration](../docs/shibboleth-idp-integration.md)
+- [Existing SAML Metadata Generator](../scripts/saml-metadata-generator/)
 
 ---
 
-*This plan is subject to change based on implementation findings and user feedback.*
+*This plan is subject to change based on implementation findings and DFN-AAI feedback.*
