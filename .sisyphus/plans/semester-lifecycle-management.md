@@ -1007,7 +1007,7 @@ ARCHIVE_RETENTION_YEARS=5
 - [x] Implement course archival logic
 - [x] Create Helm chart for deployment
 - [x] Write automation cronJobs
-- [ ] Write unit tests
+- [x] Write unit tests
 - [ ] Write integration tests
 - [ ] Write bilingual documentation
 - [ ] Pass Final Verification Wave
