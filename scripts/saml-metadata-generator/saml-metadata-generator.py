@@ -45,11 +45,29 @@ NS_MAP = {
 }
 
 # DFN-AAI specific attribute requirements
+# eduGAIN attribute URNs ( official format)
+# Reference: https://technical.edugain.org/2021/07/edugain-attribute-naming.html
+EDUGAIN_ATTRIBUTE_URNS = {
+    "mail": "urn:mace:dir:attribute-def:mail",
+    "displayName": "urn:mace:dir:attribute-def:displayName",
+    "givenName": "urn:mace:dir:attribute-def:givenName",
+    "sn": "urn:mace:dir:attribute-def:sn",
+    "eduPersonPrincipalName": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+    "eduPersonAffiliation": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+    "eduPersonScopedAffiliation": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
+    "eduPersonTargetedID": "urn:mace:dir:attribute-def:eduPersonTargetedID",
+    "eduPersonUniqueID": "urn:mace:dir:attribute-def:eduPersonUniqueID",
+    "schacHomeOrganization": "urn:oid:1.3.6.1.4.1.25178.1.2.9",
+    "o": "urn:mace:dir:attribute-def:o",
+}
+
+# DFN-AAI required attributes (5 mandatory)
 DFN_AAI_REQUIRED_ATTRIBUTES = [
     "mail",
     "displayName",
-    "eduPersonAffiliation",
     "eduPersonPrincipalName",
+    "eduPersonAffiliation",
+    "eduPersonTargetedID",
 ]
 
 DFN_AAI_OPTIONAL_ATTRIBUTES = [
@@ -57,6 +75,7 @@ DFN_AAI_OPTIONAL_ATTRIBUTES = [
     "sn",
     "eduPersonScopedAffiliation",
     "eduPersonUniqueID",
+    "schacHomeOrganization",
 ]
 
 
@@ -139,27 +158,67 @@ def create_key_descriptor(
 
 def create_attribute_consuming_service(
     requested_attributes: list,
+    service_config: Optional[dict] = None,
 ) -> ET.Element:
-    """Create AttributeConsumingService element for requested attributes."""
+    """Create AttributeConsumingService element for requested attributes.
+
+    Supports bilingual (German/English) service names and descriptions.
+    DFN-AAI requires German as primary language.
+
+    Args:
+        requested_attributes: List of attribute dicts with 'name', 'urn', 'required',
+                            'friendly_name_de', 'friendly_name_en'
+        service_config: Optional dict with 'name_de', 'name_en', 'description_de', 'description_en'
+    """
     acs = ET.Element(f"{{{SAML_METADATA_NS}}}AttributeConsumingService")
     acs.set("index", "0")
 
-    service_name = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}ServiceName")
-    service_name.set("xml:lang", "en")
-    service_name.text = "openDesk Edu Services"
+    service_config = service_config or {}
 
-    service_desc = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}ServiceDescription")
-    service_desc.set("xml:lang", "en")
-    service_desc.text = "Digital workplace services for universities"
+    service_name_de = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}ServiceName")
+    service_name_de.set("xml:lang", "de")
+    service_name_de.text = service_config.get("name_de", "openDesk Edu Dienste")
+
+    service_name_en = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}ServiceName")
+    service_name_en.set("xml:lang", "en")
+    service_name_en.text = service_config.get("name_en", "openDesk Edu Services")
+
+    service_desc_de = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}ServiceDescription")
+    service_desc_de.set("xml:lang", "de")
+    service_desc_de.text = service_config.get(
+        "description_de", "Digitale Arbeitsplatzdienste für Universitäten"
+    )
+
+    service_desc_en = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}ServiceDescription")
+    service_desc_en.set("xml:lang", "en")
+    service_desc_en.text = service_config.get(
+        "description_en", "Digital workplace services for universities"
+    )
 
     for attr in requested_attributes:
-        requested_attr = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}RequestedAttribute")
-        requested_attr.set("Name", attr)
-        requested_attr.set("NameFormat", SAML_ASSERTION_NS + ":attr-format-uri")
-        if attr in DFN_AAI_REQUIRED_ATTRIBUTES:
-            requested_attr.set("isRequired", "true")
+        if isinstance(attr, dict):
+            attr_name = attr.get("urn") or attr.get("name", "")
+            attr_required = attr.get("required", False)
+            friendly_name_de = attr.get("friendly_name_de", attr.get("name", ""))
+            friendly_name_en = attr.get("friendly_name_en", attr.get("name", ""))
         else:
-            requested_attr.set("isRequired", "false")
+            attr_name = attr
+            attr_required = attr in DFN_AAI_REQUIRED_ATTRIBUTES
+            friendly_name_de = attr
+            friendly_name_en = attr
+
+        requested_attr = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}RequestedAttribute")
+
+        if attr_name.startswith("urn:"):
+            requested_attr.set("Name", attr_name)
+        else:
+            requested_attr.set("Name", EDUGAIN_ATTRIBUTE_URNS.get(attr_name, attr_name))
+
+        requested_attr.set("NameFormat", SAML_ASSERTION_NS + ":attr-format-uri")
+        requested_attr.set("isRequired", str(attr_required).lower())
+
+        if friendly_name_de:
+            requested_attr.set("FriendlyName", friendly_name_de)
 
     return acs
 
@@ -237,21 +296,44 @@ def create_organization(
     org_display_name: str,
     org_url: str,
     lang: str = "en",
+    org_display_name_de: Optional[str] = None,
+    org_display_name_en: Optional[str] = None,
 ) -> ET.Element:
-    """Create Organization element for metadata."""
+    """Create Organization element for metadata with bilingual support."""
     org = ET.Element(f"{{{SAML_METADATA_NS}}}Organization")
 
-    name = ET.SubElement(org, f"{{{SAML_METADATA_NS}}}OrganizationName")
-    name.set("xml:lang", lang)
-    name.text = org_name
+    name_de = ET.SubElement(org, f"{{{SAML_METADATA_NS}}}OrganizationName")
+    name_de.set("xml:lang", "de")
+    name_de.text = org_name
 
-    display_name = ET.SubElement(org, f"{{{SAML_METADATA_NS}}}OrganizationDisplayName")
-    display_name.set("xml:lang", lang)
-    display_name.text = org_display_name
+    name_en = ET.SubElement(org, f"{{{SAML_METADATA_NS}}}OrganizationName")
+    name_en.set("xml:lang", "en")
+    name_en.text = org_name
 
-    url_elem = ET.SubElement(org, f"{{{SAML_METADATA_NS}}}OrganizationURL")
-    url_elem.set("xml:lang", lang)
-    url_elem.text = org_url
+    primary_display = (
+        org_display_name_de or org_display_name_en or org_display_name or org_name
+    )
+    secondary_display = org_display_name_en or org_display_name or org_name
+
+    display_name_de = ET.SubElement(
+        org, f"{{{SAML_METADATA_NS}}}OrganizationDisplayName"
+    )
+    display_name_de.set("xml:lang", "de")
+    display_name_de.text = primary_display
+
+    display_name_en = ET.SubElement(
+        org, f"{{{SAML_METADATA_NS}}}OrganizationDisplayName"
+    )
+    display_name_en.set("xml:lang", "en")
+    display_name_en.text = secondary_display
+
+    url_de = ET.SubElement(org, f"{{{SAML_METADATA_NS}}}OrganizationURL")
+    url_de.set("xml:lang", "de")
+    url_de.text = org_url
+
+    url_en = ET.SubElement(org, f"{{{SAML_METADATA_NS}}}OrganizationURL")
+    url_en.set("xml:lang", "en")
+    url_en.text = org_url
 
     return org
 

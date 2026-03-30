@@ -6,13 +6,27 @@
 #
 # This configuration defines the settings for generating SAML 2.0 SP metadata
 # for DFN-AAI/eduGAIN federation registration.
+#
+# For DFN-AAI registration, German is the primary language (lang: "de").
+# DFN-AAI requires specific attributes and uses official eduGAIN URN format.
 
+# =============================================================================
+# Organization Configuration
+# =============================================================================
+# German is primary for DFN-AAI compliance. English is secondary.
 organization:
   name: "Example University"
   display_name: "Example University - openDesk Edu"
   url: "https://www.example.edu"
-  lang: "en"
+  lang: "de"  # German primary for DFN-AAI
+  # Bilingual support (optional - for international eduGAIN visibility)
+  display_name_en: "Example University - openDesk Edu"
+  display_name_de: "Beispiel-Universität - openDesk Edu"
 
+# =============================================================================
+# Contact Persons
+# =============================================================================
+# DFN-AAI requires at minimum: technical, administrative, and support contacts
 contacts:
   - type: "technical"
     given_name: "IT"
@@ -30,57 +44,202 @@ contacts:
     email: "helpdesk@example.edu"
     company: "Example University"
 
+# =============================================================================
+# Requested Attributes (DFN-AAI / eduGAIN)
+# =============================================================================
+# All attributes use official eduGAIN URN format: urn:mace:dir:attribute-def:<name>
+# DFN-AAI requires 5 mandatory attributes for production registration
 requested_attributes:
-  - mail
-  - displayName
-  - eduPersonAffiliation
-  - eduPersonPrincipalName
-  - givenName
-  - sn
-  - eduPersonScopedAffiliation
-  - eduPersonUniqueID
+  # Required Attributes (DFN-AAI minimum)
+  - name: mail
+    urn: "urn:mace:dir:attribute-def:mail"
+    required: true
+    friendly_name_en: "E-Mail"
+    friendly_name_de: "E-Mail"
+    description_en: "User's email address"
+    description_de: "E-Mail-Adresse des Benutzers"
+    
+  - name: displayName
+    urn: "urn:mace:dir:attribute-def:displayName"
+    required: true
+    friendly_name_en: "Display Name"
+    friendly_name_de: "Anzeigename"
+    description_en: "User's full display name"
+    description_de: "Vollständiger Anzeigename des Benutzers"
+    
+  - name: eduPersonPrincipalName
+    urn: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
+    required: true
+    friendly_name_en: "Principal Name"
+    friendly_name_de: "Principal-Name"
+    description_en: "Scoped unique identifier (user@institution)"
+    description_de: "Bereichsspezifische eindeutige Kennung (benutzer@institution)"
+    
+  - name: eduPersonAffiliation
+    urn: "urn:mace:dir:attribute-def:eduPersonAffiliation"
+    required: true
+    friendly_name_en: "Affiliation"
+    friendly_name_de: "Zugehörigkeit"
+    description_en: "User's role (student/faculty/staff/member)"
+    description_de: "Benutzerrolle (student/faculty/staff/member)"
+    
+  - name: eduPersonTargetedID
+    urn: "urn:mace:dir:attribute-def:eduPersonTargetedID"
+    required: true
+    friendly_name_en: "Persistent ID"
+    friendly_name_de: "Persistente ID"
+    description_en: "Privacy-preserving persistent unique identifier"
+    description_de: "Datenschutzfreundliche persistente eindeutige Kennung"
+  
+  # Optional but Recommended Attributes
+  - name: givenName
+    urn: "urn:mace:dir:attribute-def:givenName"
+    required: false
+    friendly_name_en: "Given Name"
+    friendly_name_de: "Vorname"
+    description_en: "User's first/given name"
+    description_de: "Vorname des Benutzers"
+    
+  - name: sn
+    urn: "urn:mace:dir:attribute-def:sn"
+    required: false
+    friendly_name_en: "Surname"
+    friendly_name_de: "Nachname"
+    description_en: "User's surname/family name"
+    description_de: "Nachname des Benutzers"
+    
+  - name: eduPersonScopedAffiliation
+    urn: "urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
+    required: false
+    friendly_name_en: "Scoped Affiliation"
+    friendly_name_de: "Bereichsspezifische Zugehörigkeit"
+    description_en: "Affiliation with scope (e.g., student@university.edu)"
+    description_de: "Zugehörigkeit mit Bereich (z.B. student@university.edu)"
+    
+  - name: eduPersonUniqueID
+    urn: "urn:mace:dir:attribute-def:eduPersonUniqueID"
+    required: false
+    friendly_name_en: "Unique ID"
+    friendly_name_de: "Eindeutige ID"
+    description_en: "Globally unique identifier across federations"
+    description_de: "Globale eindeutige Kennung über Föderationen"
+    
+  - name: schacHomeOrganization
+    urn: "urn:oid:1.3.6.1.4.1.25178.1.2.9"
+    required: false
+    friendly_name_en: "Home Organization"
+    friendly_name_de: "Heimateinrichtung"
+    description_en: "Domain of user's home institution"
+    description_de: "Domain der Heimateinrichtung des Benutzers"
 
+# =============================================================================
+# Service Configuration
+# =============================================================================
+service:
+  name_en: "openDesk Edu Services"
+  name_de: "openDesk Edu Dienste"
+  description_en: "Digital workplace services for universities"
+  description_de: "Digitale Arbeitsplatzdienste für Universitäten"
+
+# =============================================================================
+# Environment Configurations
+# =============================================================================
 environments:
   dev:
     base_url: "https://id.dev.opendesk.example.edu"
     realm: "opendesk"
-    entity_id: null
-    acs_url: null
-    slo_url: null
+    entity_id: "https://dev.opendesk.example.edu/saml-sp"
+    acs_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    slo_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 30
     certificates:
-      signing: "/path/to/dev-signing-cert.pem"
+      signing: "/etc/certs/saml-sp-signing.crt"
       encryption: null
 
   staging:
     base_url: "https://id.staging.opendesk.example.edu"
     realm: "opendesk"
-    entity_id: null
-    acs_url: null
-    slo_url: null
+    entity_id: "https://staging.opendesk.example.edu/saml-sp"
+    acs_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    slo_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 90
     certificates:
-      signing: "/path/to/staging-signing-cert.pem"
+      signing: "/etc/certs/saml-sp-signing.crt"
       encryption: null
 
   production:
     base_url: "https://id.opendesk.example.edu"
     realm: "opendesk"
-    entity_id: null
-    acs_url: null
-    slo_url: null
+    entity_id: "https://opendesk.example.edu/saml-sp"
+    acs_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    slo_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
     cache_duration: "PT24H"
-    valid_until_days: 365
+    valid_until_days: 365  # DFN-AAI requires ≤ 1 year for production
     certificates:
-      signing: "/path/to/production-signing-cert.pem"
+      signing: "/etc/certs/saml-sp-signing.crt"
       encryption: null
 
-# DFN-AAI Federation Endpoints (for reference)
+# =============================================================================
+# DFN-AAI Federation Configuration
+# =============================================================================
+# Configuration for DFN-AAI test federation, production federation, and eduGAIN
 dfn_aai:
-  test_metadata_url: "https://test.aai.dfn.de/metadata/"
-  production_metadata_url: "https://www.aai.dfn.de/metadata/"
-  test_discovery_url: "https://test.discovery.aai.dfn.de/"
-  production_discovery_url: "https://discovery.aai.dfn.de/"
-  support_email: "support@aai.dfn.de"
+  # Test Federation - Always test here first before production!
+  test:
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
+    registration_url: "https://test.aai.dfn.de/metadata/"
+    discovery_url: "https://test.discovery.aai.dfn.de/"
+    support_email: "support@aai.dfn.de"
+    description: "DFN-AAI Test Federation - Use for development and testing"
+  
+  # Production Federation - For live deployment
+  production:
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
+    registration_url: "https://www.aai.dfn.de/en/service/metadata/"
+    discovery_url: "https://discovery.aai.dfn.de/"
+    support_email: "support@aai.dfn.de"
+    description: "DFN-AAI Production Federation - For production deployment"
+  
+  # eduGAIN Interfederation - International institutions
+  edugain:
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+    registration_url: "https://technical.edugain.org/"
+    discovery_url: "https://discovery.edugain.org/"
+    support_email: "support@aai.dfn.de"
+    description: "eduGAIN Interfederation - International research and education institutions"
+
+# =============================================================================
+# Registration Workflow Settings
+# =============================================================================
+registration:
+  # Contact DFN-AAI before submitting metadata
+  pre_contact_email: "support@aai.dfn.de"
+  
+  # Test federation approval time (typical)
+  test_approval_days: "1-2"
+  
+  # Production federation approval time (typical)
+  production_approval_days: "3-5"
+  
+  # Required for production registration
+  requirements:
+    - "Valid CA-signed TLS certificate"
+    - "Publicly accessible HTTPS endpoint"
+    - "Entity ID must be stable (will not change)"
+    - "ValidUntil date ≤ 1 year"
+    - "Signed DFN-AAI participation agreement"
+
+# =============================================================================
+# Validation Settings
+# =============================================================================
+validation:
+  # Enable SAML 2.0 schema validation
+  schema_validation: true
+  
+  # Use xmllint for external validation (if available)
+  use_xmllint: true
+  
+  # Check certificate expiration (warn if less than days)
+  cert_expiry_warn_days: 30
