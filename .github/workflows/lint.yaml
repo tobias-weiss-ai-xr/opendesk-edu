@@ -92,7 +92,12 @@ jobs:
           version: "${{ matrix.helm-version }}"
 
       - name: Helm template (default values)
-        run: helm template test "${{ matrix.chart }}" > /dev/null
+        run: |
+          if [[ ! -f "${{ matrix.chart }}/values.schema.json" ]]; then
+            helm template test "${{ matrix.chart }}" > /dev/null
+          else
+            echo "Chart has values.schema.json — skipping default values render (CI values step will validate)"
+          fi
 
       - name: Helm template (CI values)
         run: |
