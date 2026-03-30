@@ -1,5 +1,5 @@
 # CI values for BigBlueButton — minimal set for template rendering
 bigbluebutton:
   greenlight:
-    databaseUrl: "postgres://test:test@db:5432/greenlight"
+    databaseUrl: "postgresql://greenlight:test@RELEASE-NAME-postgresql:5432/greenlight"
     secretKeyBase: "test-secret-key-for-ci"

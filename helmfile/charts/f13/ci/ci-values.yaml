@@ -68,7 +68,7 @@ secrets:
   feedbackDb: "ci-test-feedback-db"
   transcriptionDb: "ci-test-transcription-db"
   rabbitmq: "ci-test-rabbitmq"
-  huggingfaceToken: ""
+  huggingfaceToken: "test-hf-token"
 
 ingress:
   enabled: true

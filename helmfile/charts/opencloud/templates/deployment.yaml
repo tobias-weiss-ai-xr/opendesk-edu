@@ -86,21 +86,39 @@ spec:
             - name: PROXY_OIDC_CLIENT_ID
               value: {{ .Values.oidc.clientId | quote }}
             - name: PROXY_OIDC_CLIENT_SECRET
-              value: {{ .Values.oidc.clientSecret | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-oidc-client-secret
             - name: OC_JWT_SECRET
-              value: {{ .Values.jwtSecret | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-jwt-secret
             - name: OC_TRANSFER_SECRET
-              value: {{ .Values.transferSecret | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-transfer-secret
             - name: OC_MACHINE_AUTH_API_KEY
-              value: {{ .Values.machineAuthApiKey | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-machine-auth-api-key
             - name: OC_SYSTEM_USER_API_KEY
-              value: {{ .Values.systemUserApiKey | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-system-user-api-key
             - name: OC_SYSTEM_USER_ID
               value: {{ .Values.systemUserId | quote }}
             - name: OC_SYSTEM_USER_IDP
               value: "internal"
             - name: OC_URL_SIGNING_SECRET
-              value: {{ .Values.urlSigningSecret | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-url-signing-secret
             - name: OC_URL
               value: {{ printf "https://%s" (index .Values.ingress.hosts 0).host | quote }}
           volumeMounts:
