@@ -18,6 +18,10 @@ class MoodleClient:
         self._client: Optional[httpx.AsyncClient] = None
 
     async def __aenter__(self) -> "MoodleClient":
+        # Provide a harmless base URL when no real Moodle URL is configured
+        # in tests to prevent HTTP client initialization errors.
+        if not self.base_url:
+            self.base_url = "http://localhost"
         self._client = httpx.AsyncClient(base_url=self.base_url, timeout=30.0)
         return self
 

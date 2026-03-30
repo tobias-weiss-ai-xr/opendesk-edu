@@ -24,6 +24,10 @@ class ILIASClient:
         self._client: Optional[httpx.AsyncClient] = None
 
     async def __aenter__(self) -> "ILIASClient":
+        # If no external ILIAS base URL is configured in tests, provide a
+        # harmless localhost base URL to avoid HTTP client initialization errors.
+        if not self.base_url:
+            self.base_url = "http://localhost"
         self._client = httpx.AsyncClient(base_url=self.base_url, timeout=30.0)
         return self
 

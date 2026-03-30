@@ -27,6 +27,10 @@ class KeycloakClient:
         self._access_token: Optional[str] = None
 
     async def __aenter__(self) -> "KeycloakClient":
+        # Provide a harmless base URL when no real Keycloak URL is configured
+        # in tests to prevent HTTP client initialization errors.
+        if not self.base_url:
+            self.base_url = "http://localhost"
         self._client = httpx.AsyncClient(base_url=self.base_url, timeout=30.0)
         return self
 
