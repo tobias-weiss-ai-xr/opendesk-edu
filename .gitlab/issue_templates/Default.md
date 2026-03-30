@@ -5,6 +5,7 @@ Please provide the details below to help us investigate and resolve it efficient
 If you have a feature request, please select the "Feature Request" template.
 
 ### 📦 Deployment Details
+
 - **Release version deployed**:
   _(e.g. v1.4.2, commit hash, or branch name)_
 
@@ -13,6 +14,7 @@ If you have a feature request, please select the "Feature Request" template.
   - [ ] Upgrade (from version: ___ )
 
 ### ☸️ Kubernetes Environment
+
 - **Kubernetes distribution** (select one):
   - [ ] Rancher RKE / RKE2
   - [ ] OpenShift
@@ -24,9 +26,11 @@ If you have a feature request, please select the "Feature Request" template.
   _(e.g. v1.27.3)_
 
 ### 🌐 Ingress & Certificates
+
 - **Ingress controller in use**:
-  - [ ] Ingress NGINX Controller version: ___
-  - [ ] Other: Currently only Ingress NGINX is supported
+  - [ ] [haproxy-ingress.github.io](https://haproxy-ingress.github.io/) version: ___
+  - [ ] [Ingress NGINX](https://github.com/kubernetes/ingress-NGINX) (deprecated) version: ___
+  - [ ] Other: Currently only the above two Ingress controllers are supported
 
 - **Certificate status**:
   - [ ] Let’s Encrypt
@@ -44,10 +48,12 @@ Are you using your own services for data persistence (required for production) o
 - [ ] openDesk bundled "external services"
 
 ### 🔧 Tooling Versions
+
 - **Helm version (`helm version`)**: ___________
 - **Helmfile version (`helmfile --version`)**: ___________
 
 ### 🔍 Problem Description
+
 - **Expected behavior**:
 
 - **Observed behavior / error message**:
