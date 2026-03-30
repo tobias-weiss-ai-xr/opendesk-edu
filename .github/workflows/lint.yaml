@@ -169,6 +169,26 @@ jobs:
             helm unittest "${chart}"
           done
 
+  schema-validation:
+    name: Schema Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "v3.17.0"
+
+      - name: Run helm lint --strict on charts with values.schema.json
+        run: |
+          for chart in helmfile/charts/bigbluebutton helmfile/charts/f13; do
+            if [[ -f "${chart}/values.schema.json" ]]; then
+              echo "Linting ${chart} with schema validation..."
+              helm lint --strict -f "${chart}/ci/ci-values.yaml" "${chart}"
+            fi
+          done
+
   check-secrets:
     name: Secret Leak Check
     runs-on: ubuntu-latest
