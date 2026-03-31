@@ -80,5 +80,3 @@ jobs:
         run: |
           echo "❌ Codeberg → GitHub sync failed"
           echo "Check the above logs for details"
-
-# trigger: 1774928092
