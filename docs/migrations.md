@@ -236,7 +236,13 @@ ingress:
 
 **Required action**
 
-When you stay with nginx you need to set
+1. Remove legacy Ingress object:
+
+```shell
+kubectl -n <NAMESPACE> delete ingress opendesk-static-files
+```
+
+2. When you stay with nginx you need to set
 
 ```yaml
 ingress:
