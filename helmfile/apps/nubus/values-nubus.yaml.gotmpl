@@ -615,6 +615,10 @@ nubusPortalConsumer:
     - name: "trusted-cert-secret-volume"
       mountPath: "/etc/ssl/certs/ca-certificates.crt"
       subPath: "ca-certificates.crt"
+    - name: "trusted-cert-secret-volume"
+      readOnly: true
+      mountPath: "/usr/local/lib/python3.11/dist-packages/certifi/cacert.pem"
+      subPath: "cacert.pem"
   {{- end }}
 
 nubusPortalServer:
