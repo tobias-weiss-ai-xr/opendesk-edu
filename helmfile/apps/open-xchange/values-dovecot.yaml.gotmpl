@@ -51,12 +51,27 @@ dovecot:
     imap:
       limits:
         maxUserIpConnections: {{ .Values.technical.dovecot.protocol.imap.limits.maxUserIpConnections }}
-  quotaRules:
-    - "*:storage={{ mul .Values.functional.groupware.quota.default 1024 }}M"
-    - "Trash:storage=+{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 20) 100 }}M"
-    - "LAZY_EXPUNGE:ignore"
-  quotaGrace: "{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 10) 100 }}M"
+  mail:
+    maxSize: "{{ div (mul .Values.functional.groupware.mail.maxSize 140) 100 }}M"
+    quota:
+      grace: "{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 10) 100 }}M"
+      rules:
+        - "*:storage={{ mul .Values.functional.groupware.quota.default 1024 }}M"
+        # the below rule could be "+20%" instead, but first verify if we want to stay with relative
+        # values or need to offer an absolute value option.
+        - "Trash:storage=+{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 20) 100 }}M"
+      {{ if .Values.functional.groupware.mail.keepPurged.enabled }}
+        - "LAZY_EXPUNGE:ignore"
+      {{ end }}
+      warningMailLanguage: {{ .Values.functional.internationalization.defaultLanguage | quote }}
+    keepPurged:
+      enabled: {{ .Values.functional.groupware.mail.keepPurged.enabled }}
+      retentionTime: "14days"
+      maxMails: 100000
+      quota: "{{ div (mul (mul .Values.functional.groupware.quota.default 1024) 10) 100 }}M"
   sieve:
+    quota:
+      maxStorage: "1M"
     notify:
       mailtoEnvelopeFrom: "orig_recipient"
   submission:
