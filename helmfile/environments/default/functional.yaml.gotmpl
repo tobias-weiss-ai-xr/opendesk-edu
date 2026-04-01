@@ -266,6 +266,11 @@ functional:
         # Toggle the availability of OX Guard
         # Ref.: https://www.open-xchange.com/products/ox-guard/
         enabled: true
+      # Mail removed from the user's deleted items folder is not immediately deleted but kept for a certain time,
+      # allowing administrators to recover emails deleted by mistake.
+      keepPurged:
+        # Toggle the "keepPurged" feature.
+        enabled: false
       # Define the maximum size for emails (including their attachments) in Megabyte
       maxSize: 25
     quota:
