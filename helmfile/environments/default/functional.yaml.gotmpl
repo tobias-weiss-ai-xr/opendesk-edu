@@ -280,6 +280,14 @@ functional:
       # how these services, especially when using type `LoadBalancer`, behave in your setup.
       # Toggle the client onboarding info dialog in the groupware module.
       enabledOnboardingInfo: false
+      # Expose Imap service
+      exposeImaps: true
+      # Expose Pop3s service
+      exposePop3s: false
+      # Expose mail transmission with explicit TLS (submission)
+      exposeSubmission: true
+      # Expose mail transmission with implicit TLS (submissions)
+      exposeSubmissions: true
       # Set the FQDN of the IMAP endpoint if none is provided `<.Values.global.domain>` is used.
       fqdnImap: ~
       # Set the FQDN of the SMTP endpoint if none is provided `<.Values.global.domain>` is used.

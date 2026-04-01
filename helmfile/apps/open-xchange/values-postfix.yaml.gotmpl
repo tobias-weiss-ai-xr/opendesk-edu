@@ -110,6 +110,9 @@ postfix:
   smtpdSASLType: "dovecot"
   smtpdTLSSecurityLevel: "encrypt"
   smtpdTLSCertFile: "/etc/tls/tls.crt"
+  {{- with .Values.technical.postfix.smtpdUpstreamProxyProtocol }}
+  smtpdUpstreamProxyProtocol: {{ . | quote }}
+  {{- end }}
   smtpdKeyFile: "/etc/tls/tls.key"
   smtpdSASLPath: "inet:dovecot:3659"
 
@@ -162,14 +165,30 @@ replicaCount: {{ .Values.replicas.postfix }}
 resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
 
-{{- if or (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "LoadBalancer") }}
-service:
+serviceSmtp:
   annotations:
-    {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
+    {{ .Values.annotations.openxchangePostfix.serviceSmtp | toYaml | nindent 4 }}
+  {{- if has (coalesce .Values.service.type.postfix .Values.cluster.service.type) (list "NodePort" "LoadBalancer") }}
   external:
     enabled: true
     annotations:
-      {{ .Values.annotations.openxchangePostfix.serviceExternal | toYaml | nindent 6 }}
+      {{ .Values.annotations.openxchangePostfix.serviceSmtpExternal | toYaml | nindent 6 }}
     type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}
-{{- end }}
+  {{- end }}
+
+serviceSubmission:
+  annotations:
+    {{ .Values.annotations.openxchangePostfix.serviceSubmission | toYaml | nindent 4 }}
+  {{- if and (has (coalesce .Values.service.type.postfix .Values.cluster.service.type) (list "NodePort" "LoadBalancer"))
+             (or .Values.functional.groupware.externalClients.exposeSubmission
+                 .Values.functional.groupware.externalClients.exposeSubmissions) }}
+  external:
+    enabled: true
+    annotations:
+      {{ .Values.annotations.openxchangePostfix.serviceSubmissionExternal | toYaml | nindent 6 }}
+    type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}
+    ports:
+      submission: {{ if .Values.functional.groupware.externalClients.exposeSubmission }}{port: 587}{{ else }}~{{ end }}
+      submissions: {{ if .Values.functional.groupware.externalClients.exposeSubmissions }}{port: 465}{{ else }}~{{ end }}
+  {{- end }}
 ...

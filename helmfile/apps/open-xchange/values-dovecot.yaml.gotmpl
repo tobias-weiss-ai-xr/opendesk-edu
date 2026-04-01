@@ -77,7 +77,7 @@ dovecot:
   submission:
     enabled: true
     ssl: "no"
-    host: {{ printf "%s.%s.svc.%s:25" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    host: {{ printf "%s.%s.svc.%s:25" "postfix-smtp" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
 
 certificate:
   secretName: {{ .Values.ingress.tls.secretName | quote }}
@@ -153,16 +153,21 @@ podAnnotations:
 resources:
   {{ .Values.resources.dovecot | toYaml | nindent 2 }}
 
-{{- if or (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.dovecot .Values.cluster.service.type) "LoadBalancer") }}
 service:
   annotations:
     {{ .Values.annotations.openxchangeDovecot.service | toYaml | nindent 4 }}
+  {{- if and (has (coalesce .Values.service.type.dovecot .Values.cluster.service.type) (list "NodePort" "LoadBalancer"))
+             (or .Values.functional.groupware.externalClients.exposeImaps
+                 .Values.functional.groupware.externalClients.exposePop3s) }}
   external:
     enabled: true
     annotations:
       {{ .Values.annotations.openxchangeDovecot.serviceExternal | toYaml | nindent 6 }}
     type: {{ coalesce .Values.service.type.dovecot .Values.cluster.service.type | quote }}
-{{- end }}
+    ports:
+      imaps: {{ if .Values.functional.groupware.externalClients.exposeImaps }}{port: 993}{{ else }}~{{ end }}
+      pop3s: {{ if .Values.functional.groupware.externalClients.exposePop3s }}{port: 995}{{ else }}~{{ end }}
+  {{- end }}
 
 serviceAccount:
   annotations:

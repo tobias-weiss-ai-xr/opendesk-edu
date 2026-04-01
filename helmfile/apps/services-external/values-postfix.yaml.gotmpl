@@ -164,9 +164,15 @@ replicaCount: {{ .Values.replicas.postfix }}
 resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
 
-service:
+serviceSmtp:
   annotations:
-    {{ .Values.annotations.servicesExternalPostfix.service | toYaml | nindent 4 }}
+    {{ .Values.annotations.servicesExternalPostfix.serviceSmtp | toYaml | nindent 4 }}
+  external:
+    enabled: false
+
+serviceSubmission:
+  annotations:
+    {{ .Values.annotations.servicesExternalPostfix.serviceSubmission | toYaml | nindent 4 }}
   external:
     enabled: false
 

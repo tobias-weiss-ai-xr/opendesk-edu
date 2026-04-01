@@ -836,7 +836,9 @@ appsuite:
       com.openexchange.mail.mailServer: {{ printf "%s.%s.svc.%s" "dovecot" (.Values.apps.dovecot.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       com.openexchange.mail.mailServerSource: "global"
       com.openexchange.mail.transport.authType: "xoauth2"
-      com.openexchange.mail.transportServer: "postfix-ox"
+      # Use submission port with STARTTLS to be able to use haproxy protocol on port 25
+      com.openexchange.mail.transportServer: "postfix-ox-submission:587"
+      com.openexchange.mail.transportStartTls: "true"
       com.openexchange.mail.transportServerSource: "global"
       com.openexchange.mail.maxMailSize: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
       # Mail Login Resolver
@@ -944,7 +946,7 @@ appsuite:
       com.openexchange.guard.guestSMTPMailFrom: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
       com.openexchange.guard.guestSMTPPort: "25"
-      com.openexchange.guard.guestSMTPServer: "postfix"
+      com.openexchange.guard.guestSMTPServer: "postfix-smtp"
       com.openexchange.guard.guestSMTPUsername: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.useStartTLS: "false"
       # S/MIME
@@ -1067,7 +1069,7 @@ appsuite:
         com.openexchange.noreply.address: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
         com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
         com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
-        com.openexchange.noreply.server: "postfix"
+        com.openexchange.noreply.server: "postfix-smtp"
         com.openexchange.noreply.port: "25"
         com.openexchange.noreply.secureMode: "plain"
       /opt/open-xchange/etc/system.properties:
