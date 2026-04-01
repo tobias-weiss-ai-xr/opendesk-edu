@@ -488,7 +488,7 @@ nubusKeycloakExtensions:
           password: "umcKeycloakExtensionsDatabasePassword"
   smtp:
     connection:
-      host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+      host: {{ printf "%s.%s.svc.%s" "postfix-smtp" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       port: 25
       ssl: false
       starttls: false
@@ -1306,7 +1306,7 @@ nubusStackDataUms:
     # supported in the sub-chart.
     ldapSamlSpUrls: {{ printf "https://%s.%s/univention/saml/metadata" .Values.global.hosts.nubus .Values.global.domain | quote }}
     portalFqdn: {{ printf "%s.%s" .Values.global.hosts.nubus .Values.global.domain | quote }}
-    smtpHost: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    smtpHost: {{ printf "%s.%s.svc.%s" "postfix-smtp" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     smtpPort: 25
     smtpUser: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
     smtpStartTls: false

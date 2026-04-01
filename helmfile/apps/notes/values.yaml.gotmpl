@@ -77,7 +77,7 @@ backend:
     email:
       brandName: "openDesk"
       from: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
-      host: "postfix"
+      host: "postfix-smtp"
       port: "25"
       logoImage: {{ printf "https://%s.%s/univention/portal/icons/entries/swp.notes.svg" .Values.global.hosts.nubus .Values.global.domain | quote }}
       user:

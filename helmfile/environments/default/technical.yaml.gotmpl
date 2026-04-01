@@ -94,4 +94,12 @@ technical:
       # This approach ensures that heavy provisioning workloads do not negatively impact the user
       # experience, such as by slowing down pods that serve end-user sessions.
       dedicatedCoreMwPod: false
+
+  # Postfix related technical settings
+  postfix:
+    # Proxy protocol to use for incoming mail (if any), only haproxy is supported
+    # If you switch this to haproxy on port 25 and you already have shared mailboxes activated which still use port 25,
+    # you have to migrate them to use port 587 instead. You can use the provided migration script located in
+    # docs/migration-helper/migrate_shared_mailboxes_587.sh
+    smtpdUpstreamProxyProtocol: ~
 ...
