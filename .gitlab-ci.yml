@@ -5,8 +5,8 @@
 .opendesk-env-ref-anchor: &opendesk_env_ref "env-v1"
 
 include:
-  - project: "${PROJECT_PATH_GITLAB_CONFIG_TOOLING}"
-    ref: "v2.6.7"
+  - project: "bmi/opendesk/tooling/gitlab-config"
+    ref: "v2.6.8"
     file:
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"
@@ -20,6 +20,8 @@ include:
   - project: "${PROJECT_PATH_CUSTOM_ENVIRONMENT_CONFIG}"
     file: "gitlab/environments.yaml"
     ref: *opendesk_env_ref
+    rules:
+      - if: "$CI_PROJECT_PATH == 'bmi/opendesk/deployment/opendesk'"
   - local: "/.gitlab/lint/lint-opendesk.yml"
     rules:
       - if: >
