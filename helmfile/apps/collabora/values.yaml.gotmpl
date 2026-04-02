@@ -22,6 +22,7 @@ collabora:
     --o:remote_font_config.url=https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/apps/richdocuments/settings/fonts.json
     --o:net.proto={{ if eq .Values.cluster.networking.ipFamilies "DualStack" }}all{{ else }}{{ .Values.cluster.networking.ipFamilies }}{{ end }}
     --o:net.connection_timeout_secs={{ .Values.technical.collabora.netConnectionTimeoutSecs }}
+    --o:net.post_allow.host[0]=f[cd][0-9a-f]{2}:.*
     --o:security.enable_macros_execution={{ .Values.functional.weboffice.macros.enabled }}
     --o:security.macro_security_level={{- $val := printf "%v" .Values.functional.weboffice.macros.securityLevel -}}{{- if or (eq $val "0") (eq $val "1") -}}{{ $val }}
       {{- else -}}
