@@ -1,20 +1,26 @@
-name: Sync to Codeberg
+name: Mirror from Codeberg
 
 on:
-  push:
-    branches: [main, develop]
+  schedule:
+    - cron: '*/15 * * * *'  # Every 15 minutes
   workflow_dispatch:
 
 jobs:
-  sync:
+  mirror:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Sync to Codeberg
-        uses: fork-sync/github-sync@v1
+      - name: Mirror from Codeberg
+        uses: actions/checkout@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          target_token: ${{ secrets.CODEBERG_TOKEN }}
-          target_repo: opendesk-edu/deployment
-          target_branch: ${{ github.ref_name }}
-          sync_tags: true
+          repository: opendesk-edu/deployment
+          url: https://oauth2:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/opendesk-edu/deployment.git
+          fetch-depth: 0
+          path: opendesk-edu
+
+      - name: Push to GitHub
+        run: |
+          cd opendesk-edu
+          git config user.name "Mirror Bot"
+          git config user.email "mirror@opendesk-edu.org"
+          git push --mirror https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com/tobias-weiss-ai-xr/opendesk-edu.git
