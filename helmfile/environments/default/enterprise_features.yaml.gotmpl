@@ -1,15 +1,14 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 enterpriseFeatures:
   collabora:
-    # Collabora autoscaling can be configured here. To enable autoscaling enable the Collabora
-    # Controller, see `opendesk_main.yaml.gotmpl` for reference.
+    # Collabora Controller featured autoscaling can be configured here, ensure you have enabled the Collabora
+    # Controller in `opendesk_main.yaml.gotmpl`.
     autoscaling:
-      minReplicas: 1
-      maxReplicas: 4
+      minReplicas: ~
+      maxReplicas: ~
       scaleDownDisabled: false
       targetMemoryUtilizationPercentage: 99
       targetCPUUtilizationPercentage: 99
-
 ...

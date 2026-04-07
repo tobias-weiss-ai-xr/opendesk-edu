@@ -4,9 +4,10 @@
 image:
   repository: "{{ coalesce .Values.repositories.image.registryOpencodeDeEnterprise .Values.global.imageRegistry .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
 autoscaling:
-  enabled: {{ .Values.apps.collaboraController.enabled }}
-  minReplicas: {{ .Values.enterpriseFeatures.collabora.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.enterpriseFeatures.collabora.autoscaling.maxReplicas }}
+  # enable if Controller is enabled and minReplicas / maxReplicas are set
+  enabled: {{ and .Values.apps.collaboraController.enabled .Values.enterpriseFeatures.collabora.autoscaling.minReplicas .Values.enterpriseFeatures.collabora.autoscaling.maxReplicas }}
+  minReplicas: {{ coalesce .Values.enterpriseFeatures.collabora.autoscaling.minReplicas .Values.replicas.collabora }}
+  maxReplicas: {{ coalesce .Values.enterpriseFeatures.collabora.autoscaling.maxReplicas .Values.replicas.collabora }}
   targetMemoryUtilizationPercentage: {{ .Values.enterpriseFeatures.collabora.autoscaling.targetMemoryUtilizationPercentage }}
   targetCPUUtilizationPercentage: {{ .Values.enterpriseFeatures.collabora.autoscaling.targetCPUUtilizationPercentage }}
   scaleDownDisabled: {{ .Values.enterpriseFeatures.collabora.autoscaling.scaleDownDisabled }}
