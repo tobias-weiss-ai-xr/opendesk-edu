@@ -24,13 +24,18 @@ technical:
   # Collabora related technical settings
   # Ref.: https://sdk.collaboraonline.com/docs/installation/Configuration.html
   collabora:
-    # Set the value for the start parameter `-o:num_prespawn_children` to define how many child processes
-    # are initially spawned, even without any user accessing Collabora.
-    numPrespawnChildren: 4
+    # Allow to set additional parameters in the section `collabora.extra_params` of Collabora chart. As this
+    # section is a single string with multiple settings it cannot be customized except with overriding
+    # the complete string. See `helmfile/apps/collabora/values.yaml.gotmpl` for reference on current options
+    # and format.
+    additionalExtraParams: ~
     # Defines the value for the start parameter `--o:disable_server_audit`
     loggingDisableServerAudit: "true"
     # Defines the value for the start parameter `--o:net.connection_timeout_secs`
     netConnectionTimeoutSecs: 60
+    # Set the value for the start parameter `-o:num_prespawn_children` to define how many child processes
+    # are initially spawned, even without any user accessing Collabora.
+    numPrespawnChildren: 4
 
   # Dovecot EE related settings
   dovecot:
