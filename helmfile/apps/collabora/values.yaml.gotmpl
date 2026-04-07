@@ -40,6 +40,9 @@ collabora:
     --o:monitors.monitor[0]=ws://collabora-controller-cool-controller.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:9000/controller/ws
     --o:monitors.monitor[0][@retryInterval]=5
     {{- end }}
+    {{- if .Values.technical.collabora.additionalExtraParams }}
+    {{ .Values.technical.collabora.additionalExtraParams }}
+    {{- end }}
   username: "collabora-internal-admin"
   password: {{ .Values.secrets.collabora.adminPassword | quote }}
 
