@@ -37,7 +37,8 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
   - See section [Ingress controller](#ingress-controller) for more details.
 - [Helm](https://helm.sh/) >= v3.17.3 but not
   - v3.18.0[^1]
-  - v4.x[^2]
+  - v3.20.1[^2]
+  - v4.x[^3]
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
 - [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
 - Volume provisioner supporting RWO (read-write-once)
@@ -148,7 +149,7 @@ deployments, you need to make use of your own production-grade services; see the
 |----------|---------------------|---------|-----------------------|
 | Cache    | Memcached           | `1.6.x` | Memcached             |
 |          | Redis               | `7.x.x` | Redis                 |
-| Database | Cassandra[^3]       | `5.0.x` | Cassandra             |
+| Database | Cassandra[^4]       | `5.0.x` | Cassandra             |
 |          | MariaDB             | `10.x`  | MariaDB               |
 |          | PostgreSQL          | `15.x`  | PostgreSQL            |
 | Mail     | Mail Transfer Agent |         | Postfix               |
@@ -168,8 +169,10 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 
 ## Footnotes
 
-[^1]: Due to a [Helm bug](https://github.com/helm/helm/issues/30890) Helm v3.18.0 is not supported.
+[^1]: Due to a [Helm bug](https://github.com/helm/helm/issues/30890) v3.18.0 is not supported.
 
-[^2]: Helm v4 introduced stricter flag grouping that is not yet supported by the helmdiff plugin.
+[^2]: Due to Helm bugs [[1](https://github.com/helm/helm/issues/31919), [2](https://github.com/helm/helm/issues/31971)] v3.20.1 is not supported.
 
-[^3]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
+[^3]: Helm v4 introduced stricter flag grouping that is not yet supported by the helmdiff plugin.
+
+[^4]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
