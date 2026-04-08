@@ -12,6 +12,25 @@ additionalAnnotations:
   {{ .Values.annotations.opendeskServicesStaticFiles.additional | toYaml | nindent 2 }}
 
 assets:
+  # all keys must be lowercase
+  adminbot:
+    subdomain: {{ .Values.global.hosts.adminBot | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  collabora:
+    subdomain: {{ .Values.global.hosts.collabora | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  cryptpad:
+    subdomain: {{ .Values.global.hosts.cryptpad | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   element:
     subdomain: {{ .Values.global.hosts.element | quote }}
     pathType: "ImplementationSpecific"
@@ -28,18 +47,24 @@ assets:
         data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
       - path: "/vector-icons/512.7ce350d.png"
         data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   jitsi:
     subdomain: {{ .Values.global.hosts.jitsi | quote }}
     pathType: "ImplementationSpecific"
     paths:
       - path: "/images/favicon.svg"
         data: {{ .Values.theme.imagery.videoconference.faviconSvg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   keycloak:
     subdomain: {{ .Values.global.hosts.keycloak | quote }}
     pathType: "ImplementationSpecific"
     paths:
       - path: "/opendesk-static-files/login/logo.svg"
         data: {{ .Values.theme.imagery.login.logoSvg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   nextcloud:
     subdomain: {{ .Values.global.hosts.nextcloud | quote }}
     pathType: "ImplementationSpecific"
@@ -54,6 +79,8 @@ assets:
       - path: "/apps/theming/img/background/jenna-kim-the-globe-dark.webp"
         data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
         mimeType: "image/jpeg"
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   notes:
     subdomain: {{ .Values.global.hosts.notes | quote }}
     pathType: "ImplementationSpecific"
@@ -64,6 +91,14 @@ assets:
         data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
       - path: "/assets/favicon-light.png"
         data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  openproject:
+    subdomain: {{ .Values.global.hosts.openproject | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   openxchange:
     subdomain: {{ .Values.global.hosts.openxchange | quote }}
     pathType: "ImplementationSpecific"
@@ -72,6 +107,8 @@ assets:
         data: {{ .Values.theme.imagery.groupware.faviconIco | quote }}
       - path: "/appsuite/favicon.svg"
         data: {{ .Values.theme.imagery.groupware.faviconSvg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   portal:
     subdomain: {{ .Values.global.hosts.nubus | quote }}
     pathType: "ImplementationSpecific"
@@ -84,6 +121,8 @@ assets:
         data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
       - path: "/static-files/login/background.jpg"
         data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki | quote }}
     pathType: "ImplementationSpecific"
@@ -96,6 +135,8 @@ assets:
         data: {{ .Values.theme.imagery.knowledge.faviconSvg | quote }}
       - path: "/bin/skin/XWiki/DefaultSkin/icons.xwiki.favicon16.png"
         data: {{ .Values.theme.imagery.knowledge.faviconPng | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}

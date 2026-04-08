@@ -13,6 +13,11 @@ theme:
     productName: "openDesk"
     slogan: "Souverän gedacht. Flexibel gemacht."
 
+  ## Define other file references
+  #
+  other:
+    robotsTxt: {{ readFile "./../../files/theme/robots.txt" | b64enc | quote }}
+
   ## Define colors
   #
   colors:
