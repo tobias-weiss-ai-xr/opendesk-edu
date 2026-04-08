@@ -80,6 +80,10 @@ config:
       {{ .Values.functional.authentication.oidc.clientScopes | toYaml | nindent 6 }}
     clients:
       {{ .Values.functional.authentication.oidc.clients | toYaml | nindent 6 }}
+  debug:
+    enabled: {{ .Values.debug.enabled }}
+    # The pause is to avoid the Nubus Keylcoak bootstrapping and the openDesk one are running in parallel.
+    pauseBeforeScriptStart: 180
   managed:
     clientScopes: [ 'acr', 'web-origins', 'email', 'profile', 'microprofile-jwt', 'role_list',
                     'offline_access', 'roles', 'address', 'phone' ]
