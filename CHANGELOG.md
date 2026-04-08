@@ -1,3 +1,19 @@
+## [1.13.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.1...v1.13.2) (2026-04-08)
+
+
+### Bug Fixes
+
+* **collabora:** Add `technical.collabora.additionalExtraParams` to support custom parameters without overriding the whole `extra_params` string ([3ce8d21](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3ce8d219e8f1c0ccadd361225234fa0f8990ee48))
+* **collabora:** Add IPv6 ULA to `post_allow.hosts` ([8486ef0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8486ef0057e6e314dbbd1285fdc4b17ea7c1b379))
+* **collabora:** Streamline replica configuration ([07de7e6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/07de7e66c8f70cd2016e2732246fffa8a99b4386))
+* **helmfile:** Add IPv6 ULA to `cluster.cidr` ([0d9a4bc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0d9a4bc5d2b490d10831e7a7809bcc4b6f290046))
+* **nubus:** Wait 180sec before running `opendesk-keycloak-bootstrap` to ensure Nubus' bootstrapping is done ([b4029f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b4029f3a4a51f7e20556e8bca301678f2b271e75))
+* **open-xchange:** Add distribution lists to contact picker and provide translation for folder names ([b9d0b10](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b9d0b10bfeb363f07ef5eef06d061fcb8fb67f20))
+* **open-xchange:** Allow lazy_expunge toggle ([e32eb88](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e32eb880389a972af1eaba1dad5dd9d70974b5f2))
+* **open-xchange:** Update Dovecot Helm chart to fix deputy function ([8283b38](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8283b38c6cff694aba1b844a5a7c7cd739c62063))
+* **openproject:** Update OpenProject from 17.2.1 to 17.2.3; strongly recommended update to address CVE, find details in upstream release notes https://www.openproject.org/docs/release-notes/17-2-3/ ([e3a4878](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e3a48788d8c236191ca8aeeb420c175a1b5af5c0))
+* **services-external:** Update ClamAV to v1.5.2 ([1fb87b6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1fb87b6a4d9c87bc86518db1d8d13cef445c91f1))
+
 ## [1.13.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.0...v1.13.1) (2026-03-23)
 
 
