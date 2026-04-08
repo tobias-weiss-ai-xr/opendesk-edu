@@ -11,8 +11,7 @@ appsuite:
       {{ . | toYaml | nindent 6 }}
       {{- end }}
     properties:
-      # Enterprise contact picker
-      com.openexchange.contacts.ldap.accounts: "opendesk,other,functional"
+      com.openexchange.contacts.ldap.accounts: "sharedMailboxes,distributionLists,opendesk,noOrganization"
       com.openexchange.admin.bypassAccessCombinationChecks: "true"
       ENABLE_INTERNAL_USER_EDIT: "false"
 
@@ -140,17 +139,17 @@ appsuite:
               commonContactFilter: "(|(objectClass=person)(objectClass=groupOfNames))"
               commonContactSearchScope: "sub"
               folders:
-                - name: "Cupertino"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Cupertino))"
+                - name: "Berlin"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Berlin))"
                   contactSearchScope: "sub"
-                - name: "San Mateo"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=San Mateo))"
+                - name: "Den Haag"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Den Haag))"
                   contactSearchScope: "sub"
-                - name: "Redwood Shores"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Redwood Shores))"
+                - name: "Paris"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Paris))"
                   contactSearchScope: "sub"
-                - name: "Armonk"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Armonk))"
+                - name: "Zurich"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Zurich))"
                   contactSearchScope: "sub"
 
             # With mode "dynamic attributes", all possible values for one attribute are fetched periodically and
@@ -186,8 +185,8 @@ appsuite:
                 - "Management"
                 - "Human Resources"
 
-        other:
-          name: "Other contacts"
+        noOrganization:
+          name: "No Organization"
           ldapClientId: "contactsLdapClient"
           mappings: "ucs"
           folders:
@@ -204,13 +203,13 @@ appsuite:
             static:
               commonContactFilter: "(&(univentionObjectType=users/user)(isOxUser=OK)(!(o=*)))"
               folders:
-                - name: "Ohne Organisation"
+                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Ohne Organisation{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Sans Organisation{{ else }}Without Organisation{{ end }}
                   contactFilter: "(&(univentionObjectType=users/user)(isOxUser=OK)(!(o=*)))"
 
-        functional:
-          name: "Functional mailboxes"
+        sharedMailboxes:
+          name: "Shared Mailboxes"
           ldapClientId: "contactsLdapClient"
-          mappings: "functional"
+          mappings: "sharedMailboxes"
           folders:
             mode: "static"
             usedForSync:
@@ -225,8 +224,29 @@ appsuite:
             static:
               commonContactFilter: "(univentionObjectType=oxmail/functional_account)"
               folders:
-                - name: "Funktionale Postfächer"
+                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Funktionspostfächer{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Boîtes aux lettres partagées{{ else }}Shared Mailboxes{{ end }}
                   contactFilter: "(univentionObjectType=oxmail/functional_account)"
+
+        distributionLists:
+          name: "Distribution Lists"
+          ldapClientId: "contactsLdapClient"
+          mappings: "distributionLists"
+          folders:
+            mode: "static"
+            usedForSync:
+              protected: true
+              defaultValue: false
+            usedInPicker:
+              protected: false
+              defaultValue: true
+            shownInTree:
+              protected: false
+              defaultValue: true
+            static:
+              commonContactFilter: "(univentionObjectType=mail/lists)"
+              folders:
+                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Verteilerlisten{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Listes de distribution{{ else }}Distribution Lists{{ end }}
+                  contactFilter: "(univentionObjectType=mail/lists)"
 
       contacts-provider-ldap-mappings.yml:
         # Example definitions of contact property <-> LDAP attribute mappings.
@@ -405,8 +425,14 @@ appsuite:
           # Will be set automatically to "image/jpeg" if not defined.
           # image1_content_type   :
 
-        functional:
+        sharedMailboxes:
           objectid: "mailPrimaryAddress"
           displayname: "oxPersonal,cn,mailPrimaryAddress"
           file_as: "oxPersonal,cn,mailPrimaryAddress"
+          email1: "mailPrimaryAddress"
+
+        distributionLists:
+          objectid: "mailPrimaryAddress"
+          displayname: "cn,description"
+          file_as: "cn,description"
           email1: "mailPrimaryAddress"
