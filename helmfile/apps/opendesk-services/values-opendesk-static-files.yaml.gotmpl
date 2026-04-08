@@ -14,7 +14,7 @@ additionalAnnotations:
 assets:
   element:
     subdomain: {{ .Values.global.hosts.element | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/vector-icons/24.97ab000.png"
         data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
@@ -30,19 +30,19 @@ assets:
         data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
   jitsi:
     subdomain: {{ .Values.global.hosts.jitsi | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/images/favicon.svg"
         data: {{ .Values.theme.imagery.videoconference.faviconSvg | quote }}
   keycloak:
     subdomain: {{ .Values.global.hosts.keycloak | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/opendesk-static-files/login/logo.svg"
         data: {{ .Values.theme.imagery.login.logoSvg | quote }}
   nextcloud:
     subdomain: {{ .Values.global.hosts.nextcloud | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/core/img/favicon-touch.png"
         data: {{ .Values.theme.imagery.files.faviconPng | quote }}
@@ -56,7 +56,7 @@ assets:
         mimeType: "image/jpeg"
   notes:
     subdomain: {{ .Values.global.hosts.notes | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/assets/favicon-light.ico"
         data: {{ .Values.theme.imagery.notes.faviconIco | quote }}
@@ -66,7 +66,7 @@ assets:
         data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
   openxchange:
     subdomain: {{ .Values.global.hosts.openxchange | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/appsuite/favicon.ico"
         data: {{ .Values.theme.imagery.groupware.faviconIco | quote }}
@@ -74,7 +74,7 @@ assets:
         data: {{ .Values.theme.imagery.groupware.faviconSvg | quote }}
   portal:
     subdomain: {{ .Values.global.hosts.nubus | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/univention/portal/icons/logos/domain.svg"
         data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
@@ -86,7 +86,7 @@ assets:
         data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki | quote }}
-    pathType: "prefix"
+    pathType: "ImplementationSpecific"
     paths:
       - path: "/resources/icons/xwiki/favicon.svg"
         data: {{ .Values.theme.imagery.knowledge.faviconSvg | quote }}
