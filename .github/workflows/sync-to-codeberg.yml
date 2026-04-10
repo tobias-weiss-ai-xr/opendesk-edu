@@ -29,4 +29,8 @@ jobs:
           git config user.name "Mirror Bot"
           git config user.email "mirror@opendesk-edu.org"
           git remote add github "https://x-access-token:${GH_TOKEN}@github.com/tobias-weiss-ai-xr/opendesk-edu.git"
+          # GitHub Actions cannot push workflow file changes from within a workflow run.
+          # Remove workflow files from the index before pushing to avoid the restriction.
+          git rm -r --cached .github/workflows/ 2>/dev/null || true
+          git commit -m "mirror: sync from Codeberg (workflow files excluded)" --allow-empty 2>/dev/null || true
           git push github main --force
