@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test horizontal pod autoscaler
+templates:
+  - hpa.yaml
+tests:
+  - it: should create an HPA when enabled
+    set:
+      grommunio.hpa.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: HorizontalPodAutoscaler
+      - equal:
+          path: spec.minReplicas
+          value: 1
+      - equal:
+          path: spec.maxReplicas
+          value: 5
+      - equal:
+          path: spec.metrics[0].type
+          value: Resource
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: cpu
+      - equal:
+          path: spec.metrics[0].resource.target.averageUtilization
+          value: 70
+      - equal:
+          path: spec.metrics[1].resource.name
+          value: memory
+      - equal:
+          path: spec.metrics[1].resource.target.averageUtilization
+          value: 80
+  - it: should not create an HPA when disabled
+    set:
+      grommunio.hpa.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should use custom replica limits
+    set:
+      grommunio.hpa.enabled: true
+      grommunio.hpa.minReplicas: 2
+      grommunio.hpa.maxReplicas: 10
+      grommunio.hpa.targetCPUUtilizationPercentage: 80
+    asserts:
+      - equal:
+          path: spec.minReplicas
+          value: 2
+      - equal:
+          path: spec.maxReplicas
+          value: 10
+      - equal:
+          path: spec.metrics[0].resource.target.averageUtilization
+          value: 80

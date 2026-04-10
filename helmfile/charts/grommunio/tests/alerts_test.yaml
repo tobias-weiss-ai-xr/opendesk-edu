@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test alerts
+templates:
+  - alerts.yaml
+tests:
+  - it: should create PrometheusRule alerts when monitoring is enabled
+    set:
+      grommunio.monitoring.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: PrometheusRule
+      - equal:
+          path: spec.groups[0].name
+          value: RELEASE-NAME-grommunio-alerts
+      - equal:
+          path: spec.groups[0].rules[0].alert
+          value: GrommunioPodNotReady
+      - equal:
+          path: spec.groups[0].rules[0].labels.severity
+          value: warning
+      - equal:
+          path: spec.groups[0].rules[1].alert
+          value: GrommunioPodCrashLooping
+      - equal:
+          path: spec.groups[0].rules[1].labels.severity
+          value: critical
+      - equal:
+          path: spec.groups[0].rules[2].alert
+          value: GrommunioHighErrorRate
+      - equal:
+          path: spec.groups[0].rules[3].alert
+          value: GrommunioDatabaseConnectionExhausted
+  - it: should not create alerts when monitoring is disabled
+    set:
+      grommunio.monitoring.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
