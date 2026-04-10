@@ -27,7 +27,7 @@ jobs:
 
       - name: Add Codeberg remote
         run: |
-          git remote add codeberg https://oauth2:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/opendesk-edu/opendesk-edu.git
+          git remote add codeberg https://oauth2:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/opendesk-edu/deployment.git
 
       - name: Sync to Codeberg (with retry)
         run: |
