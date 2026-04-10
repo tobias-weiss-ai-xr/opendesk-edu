@@ -23,7 +23,7 @@ jobs:
 
       - name: Push to GitHub
         env:
-          GH_TOKEN: ${{ secrets.MIRROR_PAT || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MIRROR_PAT }}
         run: |
           cd opendesk-edu
           git config user.name "Mirror Bot"
