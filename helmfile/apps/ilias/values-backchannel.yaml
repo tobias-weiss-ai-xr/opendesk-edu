@@ -1,0 +1,85 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+#
+# ILIAS backchannel logout configuration
+# This file configures SAML backchannel logout for ILIAS
+#
+
+ilias:
+  # Enable SAML authentication with backchannel logout
+  saml:
+    enabled: true
+
+    # Backchannel logout configuration
+    backchannelLogout:
+      enabled: {{ .Values.backchannelLogout.saml.ilias.enabled | default "false" | quote }}
+
+    # SAML SP (Service Provider) configuration
+    sp:
+      entityId: "{{ printf "https://lms.%s/shibboleth" .Values.global.domain | quote }}"
+      assertionConsumerService: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/SAML2/POST"
+      singleLogoutService: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+
+    # SAML IdP (Identity Provider) configuration
+    idp:
+      entityId: "{{ printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm | quote }}"
+      singleSignOnService: "{{ printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm | quote }}/protocol/saml"
+      singleLogoutService: "{{ printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm | quote }}/protocol/saml"
+
+  # Apache Shibboleth integration
+  shibboleth:
+    enabled: true
+
+    # Backchannel logout settings
+    backchannelLogout:
+      enabled: {{ .Values.backchannelLogout.saml.ilias.enabled | default "false" | quote }}
+
+      # SOAP binding (backchannel)
+      soapBinding: {{ .Values.backchannelLogout.saml.ilias.bindings.soap | default "true" | quote }}
+
+      # HTTP-Redirect binding (frontchannel)
+      redirectBinding: {{ .Values.backchannelLogout.saml.ilias.bindings.httpRedirect | default "true" | quote }}
+
+      # HTTP-POST binding (frontchannel)
+      postBinding: {{ .Values.backchannelLogout.saml.ilias.bindings.httpPost | default "true" | quote }}
+
+      # Signature requirements
+      signature:
+        requireSignedRequests: {{ .Values.backchannelLogout.saml.ilias.signature.requireSignedRequests | default "true" | quote }}
+        signResponses: {{ .Values.backchannelLogout.saml.ilias.signature.signResponses | default "true" | quote }}
+
+      # Session termination timeout
+      sessionTerminationTimeout: {{ .Values.backchannelLogout.saml.ilias.sessionTerminationTimeout | default "30" | quote }}
+
+      # Verbose logging
+      verbose: {{ .Values.backchannelLogout.saml.ilias.verbose | default "false" | quote }}
+
+  # ILIAS authentication plugin configuration
+  auth:
+    shibboleth:
+      enabled: true
+
+      # Map SAML attributes to ILIAS user fields
+      attributeMapping:
+        username: "uid"
+        email: "mail"
+        firstname: "displayName"
+        lastname: "sn"
+        idp: "idp-entity-id"
+
+      # Backchannel logout behavior
+      logout:
+        enabled: {{ .Values.backchannelLogout.saml.ilias.enabled | default "false" | quote }}
+        revokeSession: true
+        redirectAfterLogout: "https://portal.{{ .Values.global.domain }}"
+
+  # Dependency: Shibboleth SP configuration
+  dependencies:
+    shibboleth-sp:
+      enabled: true
+
+      # ConfigMap with Shibboleth SP configuration
+      configMap: ilias-shibboleth-config
+
+      # SP metadata URL
+      metadataUrl: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/Metadata"
