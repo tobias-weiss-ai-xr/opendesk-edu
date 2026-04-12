@@ -14,10 +14,14 @@ import ldap3
 from keycloak import KeycloakAdmin
 
 # Configure logging
+_log_handlers = [logging.StreamHandler()]
+_log_file = os.getenv("LOG_FILE", "/var/log/opendesk-user-sync.log")
+if os.path.exists(os.path.dirname(_log_file)):
+    _log_handlers.append(logging.FileHandler(_log_file))
 logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("/var/log/opendesk-user-sync.log"), logging.StreamHandler()],
+    handlers=_log_handlers,
 )
 logger = logging.getLogger(__name__)
 
