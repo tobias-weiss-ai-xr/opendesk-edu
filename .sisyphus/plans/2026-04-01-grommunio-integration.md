@@ -5,8 +5,8 @@ SPDX-License-Identifier: Apache-2.0
 
 # Grommunio Integration Plan
 
-**Created:** 2026-04-01  
-**Status:** Draft - Awaiting Research  
+**Created:** 2026-04-01
+**Status:** Draft - Awaiting Research
 **Related:** [Integration Analysis](../../.sisyphus/plans/integration-analysis.md)
 
 ---
@@ -16,6 +16,7 @@ SPDX-License-Identifier: Apache-2.0
 This plan outlines the integration of **Grommunio** as a third webmailer alternative in openDesk Edu, joining OX App Suite (default) and SOGo (alternative).
 
 **Target:** Provide users with a choice of groupware solutions based on their needs:
+
 - **OX App Suite** → Full-featured, enterprise-grade
 - **SOGo** → Lightweight, simple deployment
 - **Grommunio** → ActiveSync support, modern API, mobile-first
@@ -96,6 +97,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 **Objective:** Confirm technical feasibility and requirements
 
 **Tasks:**
+
 1. ✅ Analyze openDesk Edu architecture
 2. ✅ Research Grommunio capabilities
 3. ✅ Validate authentication integration (Keycloak 26.1, SAML, OIDC, LDAP)
@@ -104,12 +106,14 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 6. ✅ Evaluate resource requirements (optimized since 2025.01.1)
 
 **Deliverables:**
+
 - ✅ Technical requirements document
 - ✅ Integration architecture diagram
 - ✅ Risk assessment
 - ✅ Resource estimates
 
 **Key Findings:**
+
 - Grommunio offers **superior Outlook/mobile support** (MAPI/HTTP, EWS, EAS)
 - **Native Keycloak integration** via keycloak-provider (Java-based)
 - **MariaDB/MySQL required** (incompatible with PostgreSQL-only stacks)
@@ -121,6 +125,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 **Objective:** Create production-ready Helm chart
 
 **Tasks:**
+
 1. Create chart structure following openDesk patterns
 2. Implement configuration values
 3. Add deployment templates
@@ -131,6 +136,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 8. Write comprehensive tests
 
 **Deliverables:**
+
 - `helmfile/charts/grommunio/` directory
 - Chart.yaml, values.yaml, templates/
 - CI/CD test coverage
@@ -141,6 +147,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 **Objective:** Connect Grommunio with openDesk Edu ecosystem
 
 **Tasks:**
+
 1. Keycloak client configuration
 2. LDAP user federation setup
 3. Portal navigation integration
@@ -150,6 +157,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 7. User provisioning
 
 **Deliverables:**
+
 - Integration scripts
 - Configuration templates
 - Documentation
@@ -160,6 +168,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 **Objective:** Ensure quality and compatibility
 
 **Tasks:**
+
 1. Unit tests
 2. Integration tests
 3. Performance testing
@@ -168,6 +177,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 6. Documentation review
 
 **Deliverables:**
+
 - Test reports
 - Security assessment
 - Performance benchmarks
@@ -178,6 +188,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 **Objective:** Enable production deployment
 
 **Tasks:**
+
 1. Create deployment guide
 2. Develop migration scripts (SOGo/OX → Grommunio)
 3. Set up monitoring
@@ -185,6 +196,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 5. Training materials
 
 **Deliverables:**
+
 - Deployment documentation
 - Migration tools
 - Monitoring dashboards
@@ -201,7 +213,7 @@ This plan outlines the integration of **Grommunio** as a third webmailer alterna
 grommunio:
   enabled: false  # Set true to enable Grommunio instead of SOGo
   version: "2025.01.1"  # Latest stable
-  
+
   database:
     type: mariadb  # REQUIRED: Grommunio does NOT support PostgreSQL
     host: mariadb-headless
@@ -210,18 +222,18 @@ grommunio:
     username: grommunio_user
     password: ""
     # Note: MariaDB deployment required alongside existing PostgreSQL
-  
+
   cache:
     type: redis
     host: redis-headless
     port: 6379
-  
+
   authentication:
     method: oidc  # Preferred: OIDC via Keycloak
     keycloak_realm: openDesk
     keycloak_client: grommunio
     keycloak_provider_version: "26.1"  # Ships with Grommunio
-    
+
   resources:
     requests:
       memory: "4Gi"  # Increased from SOGo estimates
@@ -229,7 +241,7 @@ grommunio:
     limits:
       memory: "8Gi"
       cpu: "2000m"
-      
+
   features:
     email: true
     calendar: true
@@ -241,7 +253,7 @@ grommunio:
     chat: true        # Built-in chat
     meet: true        # Video conferencing
     files: true       # File integration
-    
+
   cluster:
     share_nothing: true  # Cloud-native clustering
     load_balancer: haproxy  # or nginx
@@ -278,7 +290,7 @@ grommunio:
              │    Postfix     │         │    Nextcloud   │
              │  (SMTP)        │         │  (File Picker) │
              └────────────────┘         └────────────────┘
-                     
+
 Database Layer:
 ┌──────────────────────┐    ┌──────────────────────┐
 │    PostgreSQL        │    │    MariaDB/MySQL     │

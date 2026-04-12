@@ -169,6 +169,7 @@ The proven pattern at German universities uses **three layers**:
 Automate user provisioning based on university enrollment/exmatriculation events.
 
 **Data flow:**
+
 ```
 HISinOne (immatrikulation) → LDAP/AD (existing university IdM) → Keycloak (user sync) → all services
 HISinOne (exmatrikulation) → LDAP/AD → Keycloak (user deactivation) → access revoked
@@ -193,6 +194,7 @@ HISinOne (exmatrikulation) → LDAP/AD → Keycloak (user deactivation) → acce
 Automate course creation, enrollment, and roster management in ILIAS and Moodle.
 
 **Data flow:**
+
 ```
 HISinOne (semester start) → HISinOne-Proxy → openDesk Integration Layer
   → ILIAS: create courses, assign categories, add lecturers, enroll students

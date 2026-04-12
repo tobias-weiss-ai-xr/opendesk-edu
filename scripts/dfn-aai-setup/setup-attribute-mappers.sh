@@ -111,21 +111,21 @@ EOF
 # kcadm wrapper
 run_kcadm() {
     local args=("$@")
-    
+
     if [[ "${DRY_RUN:-false}" == "true" ]]; then
         echo "[DRY-RUN] kcadm.sh ${args[*]}"
         return 0
     fi
-    
+
     kcadm.sh "${args[@]}"
 }
 
 # Login to Keycloak
 login_keycloak() {
     log_step "Logging in to Keycloak..."
-    
+
     local server_url="${KEYCLOAK_URL}/"
-    
+
     if [[ -n "${CLIENT_SECRET:-}" ]]; then
         run_kcadm config credentials \
             --server "${server_url}" \
@@ -140,27 +140,27 @@ login_keycloak() {
             --client "${CLIENT_ID}" \
             --realm master
     fi
-    
+
     log_info "Successfully logged in to Keycloak"
 }
 
 # Create attribute mapper
 create_mapper() {
     local mapper_def="$1"
-    
+
     # Parse mapper definition
     IFS='|' read -r name saml_attr user_attr sync_mode <<< "${mapper_def}"
-    
+
     log_step "Creating mapper: ${name}"
     log_info "  SAML Attribute: ${saml_attr}"
     log_info "  User Attribute: ${user_attr}"
     log_info "  Sync Mode: ${sync_mode}"
-    
+
     # Check if mapper already exists
     local existing
     existing=$(run_kcadm get identity-provider/instances/${IDP_ALIAS}/mappers -r ${REALM} 2>/dev/null | \
         grep -o "\"name\" : \"${name}\"" || true)
-    
+
     if [[ -n "${existing}" ]]; then
         if [[ "${DELETE_EXISTING:-false}" == "true" ]]; then
             log_warn "Deleting existing mapper: ${name}"
@@ -175,7 +175,7 @@ create_mapper() {
             return 0
         fi
     fi
-    
+
     # Create mapper
     run_kcadm create identity-provider/instances/${IDP_ALIAS}/mappers \
         -r ${REALM} \
@@ -185,22 +185,22 @@ create_mapper() {
         -s 'config.syncMode='"${sync_mode}" \
         -s 'config.attribute='"${saml_attr}" \
         -s 'config.user.attribute='"${user_attr}"
-    
+
     log_info "Mapper '${name}' created successfully"
 }
 
 # List existing mappers
 list_mappers() {
     log_step "Listing existing mappers for '${IDP_ALIAS}'..."
-    
+
     local mappers
     mappers=$(run_kcadm get identity-provider/instances/${IDP_ALIAS}/mappers -r ${REALM} 2>/dev/null)
-    
+
     if [[ -z "${mappers}" || "${mappers}" == "[]" ]]; then
         log_info "No mappers configured for '${IDP_ALIAS}'"
         return 0
     fi
-    
+
     echo "${mappers}" | jq -r '.[] | "  \(.name): \(.config.attribute) → \(.config.user.attribute)"'
     log_info ""
 }
@@ -208,14 +208,14 @@ list_mappers() {
 # Verify mappers
 verify_mappers() {
     log_step "Verifying attribute mappers..."
-    
+
     local mappers
     mappers=$(run_kcadm get identity-provider/instances/${IDP_ALIAS}/mappers -r ${REALM} 2>/dev/null)
     local count
     count=$(echo "${mappers}" | jq -r 'length' 2>/dev/null || echo "0")
-    
+
     log_info "Total mappers configured: ${count}"
-    
+
     # Verify required mappers
     local missing=0
     for mapper_def in "${REQUIRED_MAPPERS[@]}"; do
@@ -225,14 +225,14 @@ verify_mappers() {
             missing=$((missing + 1))
         fi
     done
-    
+
     if [[ ${missing} -gt 0 ]]; then
         log_warn "${missing} required mappers are missing"
         return 1
     fi
-    
+
     log_info "All required mappers are configured"
-    
+
     log_info ""
     log_info "Next steps:"
     log_info "  1. Run setup-role-mapper.sh to configure role assignment"
@@ -244,7 +244,7 @@ verify_mappers() {
 main() {
     # Initialize variables
     local list_only="false"
-    
+
     # Parse command line arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -307,50 +307,50 @@ main() {
                 ;;
         esac
     done
-    
+
     # Validate required parameters
     if [[ -z "${IDP_ALIAS:-}" ]]; then
         log_error "IdP alias is required (use -p or --idp-alias)"
         show_usage
         exit 1
     fi
-    
+
     if [[ -z "${KEYCLOAK_URL:-}" ]]; then
         log_error "Keycloak URL is required (use -u or --keycloak-url)"
         show_usage
         exit 1
     fi
-    
+
     # Set defaults
     ADMIN_USER="${ADMIN_USER:-${DEFAULT_ADMIN_USER}}"
     ADMIN_PASSWORD="${ADMIN_PASSWORD:-${KC_ADMIN_PASSWORD:-${DEFAULT_ADMIN_PASSWORD}}}"
     CLIENT_ID="${CLIENT_ID:-admin-cli}"
     REALM="${REALM:-${DEFAULT_REALM}}"
-    
+
     # Login to Keycloak
     login_keycloak
-    
+
     # List only mode
     if [[ "${list_only}" == "true" ]]; then
         list_mappers
         exit 0
     fi
-    
+
     # Create required mappers
     for mapper_def in "${REQUIRED_MAPPERS[@]}"; do
         create_mapper "${mapper_def}"
     done
-    
+
     # Create optional mappers if requested
     if [[ "${INCLUDE_OPTIONAL:-false}" == "true" ]]; then
         for mapper_def in "${OPTIONAL_MAPPERS[@]}"; do
             create_mapper "${mapper_def}"
         done
     fi
-    
+
     # Verify configuration
     verify_mappers
-    
+
     log_info ""
     log_info "Attribute mappers setup complete!"
 }

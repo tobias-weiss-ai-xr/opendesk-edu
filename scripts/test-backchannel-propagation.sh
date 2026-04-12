@@ -96,7 +96,7 @@ check_logged_out() {
     local service="$1"
     local url="$2"
     local http_code
-    
+
     case "$service" in
         moodle)
             # Check Moodle session - redirect to login means logged out
@@ -154,7 +154,7 @@ send_backchannel_logout() {
     local service="$1"
     local url="$2"
     local http_code
-    
+
     case "${SERVICE_TYPES[$service]}" in
         SAML)
             # SAML backchannel logout - POST SAML request
@@ -179,7 +179,7 @@ send_backchannel_logout() {
                 "$url" 2>/dev/null || echo "000")
             ;;
     esac
-    
+
     echo "$http_code"
 }
 
@@ -203,11 +203,11 @@ log_info "Sending backchannel logout requests to all services..."
 for service in "${!SERVICES[@]}"; do
     url="${SERVICES[$service]}"
     type="${SERVICE_TYPES[$service]}"
-    
+
     log_info "Sending to $service ($type): $url"
     http_code=$(send_backchannel_logout "$service" "$url")
     HTTP_CODES["$service"]="$http_code"
-    
+
     if [[ "$http_code" == "200" ]]; then
         log_success "$service: HTTP 200 - logout request accepted"
     else
@@ -222,11 +222,11 @@ log_info "Waiting for session termination in all services..."
 ALL_TERMINATED=true
 for service in "${!SERVICES[@]}"; do
     log_info "Polling $service for session termination..."
-    
+
     service_start=$(date +%s.%N)
     terminated=false
     elapsed=0
-    
+
     while [[ "$terminated" == "false" ]] && [[ $(echo "$elapsed < $PROPAGATION_TIMEOUT" | bc -l) -eq 1 ]]; do
         if [[ "$(check_logged_out "$service")" == "true" ]]; then
             terminated=true
@@ -239,13 +239,13 @@ for service in "${!SERVICES[@]}"; do
             elapsed=$(echo "$(date +%s.%N) - $service_start" | bc -l)
         fi
     done
-    
+
     if [[ "$terminated" == "false" ]]; then
         log_error "$service: Timeout - session not terminated within ${PROPAGATION_TIMEOUT}s"
         TIMINGS["$service"]="TIMEOUT"
         ALL_TERMINATED=false
     fi
-    
+
     RESULTS["$service"]="$terminated"
 done
 

@@ -6,27 +6,27 @@ contact_links:
   - name: 📖 openDesk Edu Documentation
     url: https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/docs
     about: Check the documentation in the docs/ directory for setup guides, configuration references, and troubleshooting tips. / Überprüfen Sie die Dokumentation im docs/ Verzeichnis für Einrichtungsleitfäden, Konfigurationsreferenzen und Tipps zur Fehlerbehebung.
-  
+
   - name: 🚀 Getting Started Guide
     url: https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/getting-started.md
     about: New to openDesk Edu? Start here for step-by-step deployment instructions. / Neu bei openDesk Edu? Beginnen Sie hier mit Schritt-für-Schritt-Bereitstellungsanweisungen.
-  
+
   - name: 🏗️ Architecture Overview
     url: https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/architecture.md
     about: Understand how openDesk Edu components interact and integrate. / Verstehen Sie, wie openDesk Edu-Komponenten interagieren und integriert werden.
-  
+
   - name: 💬 GitHub Discussions
     url: https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions
     about: Ask questions, share ideas, and connect with the community. / Stellen Sie Fragen, teilen Sie Ideen und verbinden Sie sich mit der Community.
-  
+
   - name: 🔐 Security Issues
     url: https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/SECURITY.md
     about: Found a security vulnerability? Please read our security policy before reporting. / Haben Sie eine Sicherheitslücke gefunden? Bitte lesen Sie vor dem Melden unsere Sicherheitsrichtlinie.
-  
+
   - name: 🤝 Contributing Guide
     url: https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/CONTRIBUTING.md
     about: Want to contribute? Read our contributing guidelines first. / Möchten Sie einen Beitrag leisten? Lesen Sie zuerst unsere Beitragungsrichtlinien.
-  
+
   - name: 🏛️ Upstream openDesk CE Issues
     url: https://github.com/Bundesdruckerei/opendesk/issues
     about: For issues with core openDesk components (Element, Nextcloud, OpenProject, etc.), please check the upstream repository first. / Bei Problemen mit openDesk-Kernkomponenten (Element, Nextcloud, OpenProject usw.) überprüfen Sie bitte zuerst das Upstream-Repository.

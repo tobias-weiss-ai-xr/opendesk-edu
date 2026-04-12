@@ -7,17 +7,19 @@ Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Ed
 **Source**: \`ROADMAP.md\` lines 41-50 (v1.1 — Foundation)
 
 ### Requirements (from ROADMAP.md)
+
 - [ ] Register openDesk Edu as a SAML SP in DFN-AAI
 - [ ] Support standard eduGAIN attributes (\`eduPersonAffiliation\`, \`mail\`, \`displayName\`, \`persistentId\`)
 - [ ] Document federation metadata generation for deployers
 - [ ] Support Shibboleth IdP as external identity provider (for universities that already run one)
-- [ ] Test with DFN-AAI test federation (\`https://www.aai.dfn.de/\`)
+- [ ] Test with DFN-AAI test federation (\`<https://www.aai.dfn.de/\`>)
 
 ---
 
 ## 2. SCOPE & DELIMITATIONS
 
 ### In Scope
+
 - Keycloak SAML identity broker configuration for DFN-AAI/eduGAIN
 - SAML SP metadata generation script (enhance existing \`scripts/saml-metadata-generator/\`)
 - eduGAIN attribute mapping to Keycloak user attributes
@@ -28,6 +30,7 @@ Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Ed
 - GDPR/data sovereignty considerations
 
 ### Out of Scope
+
 - Becoming an Identity Provider (universities run their own IdPs)
 - Direct LDAP integration with university directories (deferred to v1.5)
 - SATOSA proxy deployment (deferred to v5.0)
@@ -92,6 +95,7 @@ Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Ed
 
 **Federated Login (DFN-AAI/eduGAIN User)**:
 \`\`\`
+
 1. User accesses openDesk Edu portal
 2. User clicks "Sign in with your institution"
 3. Federation Discovery Service shows institution selector
@@ -150,7 +154,7 @@ Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Ed
 |-------------------|-----|-----------------|----------|-------------|
 | \`mail\` | \`urn:mace:dir:attribute-def:mail\` | \`email\` | ✅ | User's email address |
 | \`displayName\` | \`urn:mace:dir:attribute-def:displayName\` | \`firstName\`/\`lastName\` | ✅ | Full display name |
-| \`eduPersonPrincipalName\` | \`urn:mace:dir:attribute-def:eduPersonPrincipalName\` | \`username\` | ✅ | Scoped username (user@university.de) |
+| \`eduPersonPrincipalName\` | \`urn:mace:dir:attribute-def:eduPersonPrincipalName\` | \`username\` | ✅ | Scoped username (<user@university.de>) |
 | \`eduPersonAffiliation\` | \`urn:mace:dir:attribute-def:eduPersonAffiliation\` | \`affiliation\` | ✅ | Role (student/faculty/staff/member) |
 | \`eduPersonTargetedID\` | \`urn:mace:dir:attribute-def:eduPersonTargetedID\` | \`persistentId\` | ✅ | Privacy-preserving unique ID |
 
@@ -168,7 +172,9 @@ Implement **DFN-AAI / eduGAIN SAML Federation Support** — enabling openDesk Ed
 #### Attribute Mapper Configuration (Keycloak Admin CLI)
 
 \`\`\`bash
+
 # Email Mapper
+
 kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -r opendesk \\
   -s name=email-mapper \\
@@ -179,6 +185,7 @@ kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -s 'config.user.attribute=email'
 
 # Username Mapper (eduPersonPrincipalName)
+
 kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -r opendesk \\
   -s name=username-mapper \\
@@ -189,6 +196,7 @@ kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -s 'config.user.attribute=username'
 
 # Display Name Mapper
+
 kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -r opendesk \\
   -s name=displayname-mapper \\
@@ -199,6 +207,7 @@ kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -s 'config.user.attribute=displayName'
 
 # Affiliation Mapper
+
 kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -r opendesk \\
   -s name=affiliation-mapper \\
@@ -209,6 +218,7 @@ kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -s 'config.user.attribute=affiliation'
 
 # Persistent ID Mapper
+
 kcadm.sh create identity-provider/instances/dfn-aai/mappers \\
   -r opendesk \\
   -s name=persistent-id-mapper \\
@@ -304,111 +314,118 @@ The existing \`scripts/saml-metadata-generator/\` provides the foundation. Enhan
 organization:
   name: "Example University"
   display_name: "Example University - openDesk Edu"
-  url: "https://www.example.edu"
+  url: "<https://www.example.edu>"
   lang: "de"  # German for DFN-AAI
 
 contacts:
-  - type: "technical"
+
+- type: "technical"
     given_name: "IT"
     surname: "Support"
-    email: "it-support@example.edu"
+    email: "<it-support@example.edu>"
     company: "Example University"
-  - type: "administrative"
+- type: "administrative"
     given_name: "Admin"
     surname: "Team"
-    email: "admin@example.edu"
+    email: "<admin@example.edu>"
     company: "Example University"
-  - type: "support"
+- type: "support"
     given_name: "Helpdesk"
     surname: "Team"
-    email: "helpdesk@example.edu"
+    email: "<helpdesk@example.edu>"
     company: "Example University"
 
 # DFN-AAI required attributes for SP registration
+
 requested_attributes:
-  # Required
-  - name: mail
+
+# Required
+
+- name: mail
     required: true
     friendly_name: "E-Mail"
-  - name: displayName
+- name: displayName
     required: true
     friendly_name: "Display Name"
-  - name: eduPersonPrincipalName
+- name: eduPersonPrincipalName
     required: true
     friendly_name: "Principal Name"
-  - name: eduPersonAffiliation
+- name: eduPersonAffiliation
     required: true
     friendly_name: "Affiliation"
-  - name: eduPersonTargetedID
+- name: eduPersonTargetedID
     required: true
     friendly_name: "Persistent ID"
-  # Optional but recommended
-  - name: givenName
+
+# Optional but recommended
+
+- name: givenName
     required: false
     friendly_name: "Given Name"
-  - name: sn
+- name: sn
     required: false
     friendly_name: "Surname"
-  - name: eduPersonScopedAffiliation
+- name: eduPersonScopedAffiliation
     required: false
     friendly_name: "Scoped Affiliation"
-  - name: eduPersonUniqueID
+- name: eduPersonUniqueID
     required: false
     friendly_name: "Unique ID"
-  - name: schacHomeOrganization
+- name: schacHomeOrganization
     required: false
     friendly_name: "Home Organization"
 
 environments:
   dev:
-    base_url: "https://id.dev.opendesk.example.edu"
+    base_url: "<https://id.dev.opendesk.example.edu>"
     realm: "opendesk"
-    entity_id: "https://dev.opendesk.example.edu/saml-sp"
-    acs_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    entity_id: "<https://dev.opendesk.example.edu/saml-sp>"
+    acs_url: "<https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>"
+    slo_url: "<https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>"
     cache_duration: "PT24H"
     valid_until_days: 30
     certificates:
       signing: "/etc/certs/saml-sp-signing.crt"
 
   staging:
-    base_url: "https://id.staging.opendesk.example.edu"
+    base_url: "<https://id.staging.opendesk.example.edu>"
     realm: "opendesk"
-    entity_id: "https://staging.opendesk.example.edu/saml-sp"
-    acs_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    entity_id: "<https://staging.opendesk.example.edu/saml-sp>"
+    acs_url: "<https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>"
+    slo_url: "<https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>"
     cache_duration: "PT24H"
     valid_until_days: 90
     certificates:
       signing: "/etc/certs/saml-sp-signing.crt"
 
   production:
-    base_url: "https://id.opendesk.example.edu"
+    base_url: "<https://id.opendesk.example.edu>"
     realm: "opendesk"
-    entity_id: "https://opendesk.example.edu/saml-sp"
-    acs_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    entity_id: "<https://opendesk.example.edu/saml-sp>"
+    acs_url: "<https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>"
+    slo_url: "<https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>"
     cache_duration: "PT24H"
     valid_until_days: 365
     certificates:
       signing: "/etc/certs/saml-sp-signing.crt"
 
 # DFN-AAI specific configuration
+
 dfn_aai:
   test:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
-    registration_url: "https://test.aai.dfn.de/metadata/"
-    discovery_url: "https://test.discovery.aai.dfn.de/"
-    support_email: "support@aai.dfn.de"
-  
+    metadata_url: "<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml>"
+    registration_url: "<https://test.aai.dfn.de/metadata/>"
+    discovery_url: "<https://test.discovery.aai.dfn.de/>"
+    support_email: "<support@aai.dfn.de>"
+
   production:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
-    registration_url: "https://www.aai.dfn.de/en/service/metadata/"
-    discovery_url: "https://discovery.aai.dfn.de/"
-    support_email: "support@aai.dfn.de"
-  
+    metadata_url: "<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml>"
+    registration_url: "<https://www.aai.dfn.de/en/service/metadata/>"
+    discovery_url: "<https://discovery.aai.dfn.de/>"
+    support_email: "<support@aai.dfn.de>"
+
   edugain:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+    metadata_url: "<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml>"
 \`\`\`
 
 ### 4.4 Keycloak SAML Identity Provider Configuration
@@ -416,7 +433,9 @@ dfn_aai:
 #### Via Admin CLI (Automation)
 
 \`\`\`bash
+
 # Create DFN-AAI test federation identity provider
+
 kcadm.sh create identity-provider/instances -r opendesk \\
   -s alias=dfn-aai-test \\
   -s providerId=saml \\
@@ -424,17 +443,18 @@ kcadm.sh create identity-provider/instances -r opendesk \\
   -s trustEmail=true \\
   -s firstBrokerLoginFlowAlias="first broker login" \\
   -s displayName="Sign in with your institution (Test)" \\
-  -s 'config.entityId=https://test.aai.dfn.de/idp/shibboleth' \\
-  -s 'config.singleSignOnServiceUrl=https://test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO' \\
+  -s 'config.entityId=<https://test.aai.dfn.de/idp/shibboleth>' \\
+  -s 'config.singleSignOnServiceUrl=<https://test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO>' \\
   -s 'config.nameIDPolicyFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:persistent' \\
   -s 'config.principalType=ATTRIBUTE' \\
   -s 'config.principalAttribute=urn:mace:dir:attribute-def:eduPersonTargetedID' \\
   -s 'config.signatureAlgorithm=RSA_SHA256' \\
   -s 'config.wantAuthnRequestsSigned=true' \\
   -s 'config.validateSignature=true' \\
-  -s 'config.metadataDescriptorUrl=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml'
+  -s 'config.metadataDescriptorUrl=<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml>'
 
 # Create DFN-AAI production federation identity provider
+
 kcadm.sh create identity-provider/instances -r opendesk \\
   -s alias=dfn-aai \\
   -s providerId=saml \\
@@ -442,9 +462,10 @@ kcadm.sh create identity-provider/instances -r opendesk \\
   -s trustEmail=true \\
   -s firstBrokerLoginFlowAlias="first broker login" \\
   -s displayName="Sign in with your institution" \\
-  -s 'config.metadataDescriptorUrl=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml'
+  -s 'config.metadataDescriptorUrl=<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml>'
 
 # Create eduGAIN identity provider (includes DFN-AAI + international)
+
 kcadm.sh create identity-provider/instances -r opendesk \\
   -s alias=edugain \\
   -s providerId=saml \\
@@ -452,7 +473,7 @@ kcadm.sh create identity-provider/instances -r opendesk \\
   -s trustEmail=true \\
   -s firstBrokerLoginFlowAlias="first broker login" \\
   -s displayName="Sign in with your institution (eduGAIN)" \\
-  -s 'config.metadataDescriptorUrl=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml'
+  -s 'config.metadataDescriptorUrl=<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml>'
 \`\`\`
 
 ### 4.5 DFN-AAI Registration Process
@@ -476,7 +497,7 @@ kcadm.sh create identity-provider/instances -r opendesk \\
 │                                     ▼                                           │
 │  Phase 2: Test Federation (REQUIRED FIRST)                                     │
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
-│  │ 1. Contact DFN-AAI support (support@aai.dfn.de)                         │   │
+│  │ 1. Contact DFN-AAI support (<support@aai.dfn.de>)                         │   │
 │  │ 2. Request test federation membership                                   │   │
 │  │ 3. Submit SP metadata URL to test.aai.dfn.de                            │   │
 │  │ 4. Wait for metadata approval (typically 1-2 days)                      │   │
@@ -489,7 +510,7 @@ kcadm.sh create identity-provider/instances -r opendesk \\
 │  Phase 3: Production Federation                                                │
 │  ┌─────────────────────────────────────────────────────────────────────────┐   │
 │  │ 1. Document successful test federation results                          │   │
-│  │ 2. Submit production SP metadata to www.aai.dfn.de                      │   │
+│  │ 2. Submit production SP metadata to <www.aai.dfn.de>                      │   │
 │  │ 3. Sign DFN-AAI participation agreement (if not already done)           │   │
 │  │ 4. Wait for production metadata approval                                │   │
 │  │ 5. Configure Keycloak with production federation metadata               │   │
@@ -513,9 +534,11 @@ kcadm.sh create identity-provider/instances -r opendesk \\
 #### Registration Checklist
 
 \`\`\`markdown
+
 ## DFN-AAI Test Federation Registration Checklist
 
 ### Prerequisites
+
 - [ ] DFN association membership (via university)
 - [ ] Publicly accessible HTTPS endpoint for Keycloak
 - [ ] Valid TLS certificate (not self-signed)
@@ -523,6 +546,7 @@ kcadm.sh create identity-provider/instances -r opendesk \\
 - [ ] SP metadata generated and validated
 
 ### Metadata Requirements
+
 - [ ] entityID is unique and stable (will not change)
 - [ ] ValidUntil date is reasonable (≤ 1 year)
 - [ ] Organization information is complete
@@ -532,6 +556,7 @@ kcadm.sh create identity-provider/instances -r opendesk \\
 - [ ] X509Certificate is valid and not expired
 
 ### Technical Requirements
+
 - [ ] HTTPS endpoint uses TLS 1.2 or higher
 - [ ] SAML messages are signed (AuthnRequestsSigned="true")
 - [ ] Signature algorithm is RSA-SHA256 or stronger
@@ -539,6 +564,7 @@ kcadm.sh create identity-provider/instances -r opendesk \\
 - [ ] ACS binding is HTTP-POST
 
 ### Submission
+
 - [ ] Metadata URL submitted to test.aai.dfn.de
 - [ ] Confirmation email received from DFN-AAI
 - [ ] Metadata appears in aggregated test metadata
@@ -625,6 +651,7 @@ tests/
 ### 6.3 End-to-End Tests
 
 **Test with DFN-AAI Test Federation**:
+
 1. Configure Keycloak with test federation metadata
 2. Initiate login from openDesk portal
 3. Redirect to DFN-AAI discovery service
@@ -659,23 +686,25 @@ tests/
 ### 7.1 Configuration via Helm Values
 
 \`\`\`yaml
+
 # helmfile/environments/default/federation.yaml.gotmpl
 
 federation:
   enabled: true
-  
-  # DFN-AAI configuration
+
+# DFN-AAI configuration
+
   dfnAai:
     enabled: true
     testMode: true  # Start with test federation
-    metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
-    discoveryUrl: "https://test.discovery.aai.dfn.de/"
-    
+    metadataUrl: "<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml>"
+    discoveryUrl: "<https://test.discovery.aai.dfn.de/>"
+
     # SP configuration
     entityId: "https://{{ .Values.global.domain }}/saml-sp"
     acsUrl: "https://id.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/broker/saml/endpoint"
     sloUrl: "https://id.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/broker/saml/endpoint"
-    
+
     # Attribute requirements
     requestedAttributes:
       - mail
@@ -686,13 +715,15 @@ federation:
       - givenName
       - sn
       - eduPersonScopedAffiliation
-  
-  # eduGAIN interfederation (optional)
+
+# eduGAIN interfederation (optional)
+
   eduGAIN:
     enabled: false
-    metadataUrl: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
-  
-  # Role mapping configuration
+    metadataUrl: "<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml>"
+
+# Role mapping configuration
+
   roleMapping:
     student:
       affiliation: ["student"]
@@ -711,19 +742,23 @@ federation:
 ### 7.2 Environment Variables
 
 \`\`\`bash
+
 # Federation Configuration
+
 FEDERATION_ENABLED=true
 FEDERATION_DFN_AAI_ENABLED=true
 FEDERATION_DFN_AAI_TEST_MODE=true
-FEDERATION_DFN_AAI_METADATA_URL=https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml
-FEDERATION_DFN_AAI_DISCOVERY_URL=https://test.discovery.aai.dfn.de/
+FEDERATION_DFN_AAI_METADATA_URL=<https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml>
+FEDERATION_DFN_AAI_DISCOVERY_URL=<https://test.discovery.aai.dfn.de/>
 
 # SP Configuration
-FEDERATION_SP_ENTITY_ID=https://opendesk.example.edu/saml-sp
-FEDERATION_SP_ACS_URL=https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint
-FEDERATION_SP_SLO_URL=https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint
+
+FEDERATION_SP_ENTITY_ID=<https://opendesk.example.edu/saml-sp>
+FEDERATION_SP_ACS_URL=<https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>
+FEDERATION_SP_SLO_URL=<https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint>
 
 # Certificates
+
 FEDERATION_SP_SIGNING_CERT=/etc/certs/saml-sp-signing.crt
 FEDERATION_SP_SIGNING_KEY=/etc/certs/saml-sp-signing.key
 \`\`\`
@@ -793,7 +828,8 @@ FEDERATION_SP_SIGNING_KEY=/etc/certs/saml-sp-signing.key
 
 **Data Controller**: The university deploying openDesk Edu
 
-**Data Processors**: 
+**Data Processors**:
+
 - DFN-AAI (federation operator) - transmits authentication data
 - Home institution IdP - provides identity attributes
 
@@ -816,6 +852,7 @@ FEDERATION_SP_SIGNING_KEY=/etc/certs/saml-sp-signing.key
 ### 10.4 International Data Transfers (eduGAIN)
 
 When eduGAIN is enabled:
+
 - User data may be transmitted from IdPs outside the EU
 - Deployers must assess legal basis for each interfederation
 - Provide option to disable eduGAIN while keeping DFN-AAI

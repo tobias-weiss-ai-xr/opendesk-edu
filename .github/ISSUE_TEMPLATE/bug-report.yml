@@ -12,7 +12,7 @@ body:
       value: |
         ## Thank you for reporting a bug!
         ## Vielen Dank für Ihre Fehlermeldung!
-        
+
         Please fill out the sections below to help us diagnose and fix the issue.
         Bitte füllen Sie die folgenden Abschnitte aus, damit wir das Problem diagnostizieren und beheben können.
 
@@ -110,7 +110,7 @@ body:
       placeholder: |
         # Example: Moodle pod logs
         kubectl logs moodle-abc123 -n opendesk
-        
+
         [2026-03-28 10:15:30] WARNING: SAML logout request not received
         [2026-03-28 10:15:31] INFO: Session still active for user@example.com
 

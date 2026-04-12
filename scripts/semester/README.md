@@ -222,6 +222,7 @@ Archive the fall semester with defaults:
 ```
 
 **Output**:
+
 ```
 [INFO] Course archival workflow initialized
 [INFO]   Semester: WS2026
@@ -269,6 +270,7 @@ Preview archival before execution:
 ```
 
 **Output**:
+
 ```
 [WARN] Running in DRY-RUN mode - no changes will be made
 [DEBUG] Semester code validated: WS2026
@@ -295,6 +297,7 @@ Extend assessment data retention to 10 years for specific legal requirements:
 **Error**: `Invalid semester code: WS20226`
 
 **Solution**:
+
 - Ensure semester code format is correct: `WSYYYY` or `SSYYYY`
 - Example: `WS2026` (Winter 2025/26), `SS2026` (Summer 2026)
 
@@ -303,6 +306,7 @@ Extend assessment data retention to 10 years for specific legal requirements:
 **Warning**: `yq not installed, using default retention values`
 
 **Solution**:
+
 - Install `yq` to load retention config from yaml: `sudo apt install yq` (Debian) or `brew install yq` (macOS)
 - Or override retention values via command-line arguments
 
@@ -311,6 +315,7 @@ Extend assessment data retention to 10 years for specific legal requirements:
 **Warning**: `No courses found for semester WS2026`
 
 **Solution**:
+
 - Verify semester code matches courses in the system
 - Check API endpoint is accessible: `curl http://localhost:8080/courses?semester=WS2026`
 - Ensure courses have been provisioned for the semester (via campus management integration)
@@ -320,6 +325,7 @@ Extend assessment data retention to 10 years for specific legal requirements:
 **Error**: `Unauthorized: Invalid API token`
 
 **Solution**:
+
 - Set API token: `export API_TOKEN=your-token-here`
 - Ensure token has `courses:write` scope
 - Verify token is not expired

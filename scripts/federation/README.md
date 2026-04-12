@@ -28,6 +28,7 @@ This script generates SAML 2.0 metadata XML files required for registering openD
 ```
 
 This creates:
+
 - `sp-cert.pem`: Self-signed certificate (365 days valid)
 - `sp-key.pem`: Private key
 - `sp-metadata.xml`: SAML 2.0 metadata
@@ -136,6 +137,7 @@ cat sp-metadata.xml
 ```
 
 Verify:
+
 - Correct `entityID`
 - Valid certificate chain
 - Complete endpoint URLs
@@ -157,6 +159,7 @@ Wait for DFN-AAI approval, then configure Keycloak:
    - Import DFN-AAI metadata from: `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` (test) or `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` (production)
 
 2. Configure attribute mapping in Keycloak:
+
    ```json
    {
      "urn:mace:dir:attribute-def:eduPersonAffiliation": "user.attributes.affiliation",
@@ -187,6 +190,7 @@ In the realm SSO settings (Keycloak 26+), import the generated metadata:
 ### 5. Test Federation Access
 
 1. Access Keycloak via Discovery Service:
+
    ```
    https://discovery.aai.dfn.de/
    ```
@@ -200,25 +204,30 @@ In the realm SSO settings (Keycloak 26+), import the generated metadata:
 ### Certificate Issues
 
 **Error**: `Certificate file not found`
+
 - **Solution**: Ensure certificate path is correct, or use `--generate-cert` for testing
 
 **Error**: `Invalid certificate format`
+
 - **Solution**: Certificate must be in PEM format with `BEGIN CERTIFICATE` header
 
 ### DFN-AAI Registration Fails
 
 **Issue**: Metadata validation error
+
 - **Solution**:
   - Validate XML syntax: `xmllint --noout sp-metadata.xml`
   - Check certificate validity: `openssl x509 -in sp-cert.pem -noout -dates`
   - Verify all required attributes are present
 
 **Issue**: Domain mismatch
+
 - **Solution**: Ensure `entityID` matches your actual domain and is registered in DNS
 
 ### Attribute Mapping Issues
 
 **Issue**: User attributes not populated
+
 - **Solution**: Check Keycloak mappers for the SAML identity provider:
   - Navigate to: Identity Providers → DFN-AAI → Mappers
   - Ensure all required attributes have mappers configured

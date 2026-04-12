@@ -19,12 +19,14 @@ Successfully advanced Grommunio integration from **Phase 1 (Research)** through 
 **Status**: All research tasks completed in previous session.
 
 **Key Deliverables:**
+
 - Technical requirements documented (MariaDB required, no PostgreSQL)
 - Integration architecture validated
 - Risk assessment completed
 - Resource estimates provided
 
 **Critical Findings:**
+
 - Grommunio requires MariaDB/MySQL (NO PostgreSQL support)
 - Native Keycloak 26.1 integration available
 - ActiveSync 16.1 in open source core
@@ -37,7 +39,9 @@ Successfully advanced Grommunio integration from **Phase 1 (Research)** through 
 **Status**: Helm chart fully functional and validated.
 
 #### 1. Chart.yaml Fixed
+
 **Issue**: YAML syntax errors causing `helm template` to fail
+
 - Removed illegal newlines after keys (`keywords:`, `sources:`, `maintainers:`, `annotations:`)
 - Fixed annotations field to use proper key: value format
 - Removed non-standard fields and moved data to annotations
@@ -45,6 +49,7 @@ Successfully advanced Grommunio integration from **Phase 1 (Research)** through 
 **Result**: ✅ `helm template` renders successfully (417 lines output)
 
 #### 2. Helm Chart Structure Complete
+
 ```
 helmfile/charts/grommunio/
 ├── Chart.yaml                    ✅ 34 lines, validated
@@ -67,6 +72,7 @@ helmfile/charts/grommunio/
 ```
 
 **Tests**: 6 helm-unittest test files present
+
 - configmap_test.yaml
 - deployment_test.yaml
 - ingress_test.yaml
@@ -110,6 +116,7 @@ grommunio:
 ```
 
 **Validation**:
+
 - ✅ Follows existing gotmpl patterns
 - ✅ Environment variable support with defaults
 - ✅ Proper resource limits defined
@@ -123,6 +130,7 @@ grommunio:
 **File**: `docs/dual-database-stack.md`
 
 **Contents**:
+
 - ✅ Executive summary (English/German bilingual)
 - ✅ Why dual stack? (database requirements by service)
 - ✅ Architecture overview diagrams
@@ -137,6 +145,7 @@ grommunio:
 - ✅ Best practices (DO/DON'T)
 
 **Key Insights Documented**:
+
 - Grommunio stores per-user email messages in SQLite (not MariaDB tables)
 - MariaDB only used for user metadata and authentication
 - Dual stack increases RAM by 50%, storage by 80%
@@ -148,6 +157,7 @@ grommunio:
 **File**: `.sisyphus/notepads/grommunio-integration/progress-summary.md`
 
 **Contents**:
+
 - ✅ Completed work tracking (Phases 1-3)
 - ✅ Configuration schema
 - ✅ Files modified with diff output
@@ -196,6 +206,7 @@ grommunio:
 ### Remaining Tasks (18)
 
 **Phase 3 - Integration (7 tasks):**
+
 1. ⏳ Configure Keycloak client for Grommunio
 2. ⏳ Set up LDAP user federation for Grommunio
 3. ⏳ Add Grommunio to Nubus Portal navigation
@@ -224,31 +235,39 @@ grommunio:
 ## Technical Decisions Made
 
 ### 1. Dual Database Stack Architecture
+
 **Decision**: Maintain both PostgreSQL and MariaDB
 **Rationale**:
+
 - SOGo requires PostgreSQL (no MariaDB support)
 - Grommunio requires MariaDB (no PostgreSQL support)
 - Provides user choice without lock-in
 - Enables Grommunio's superior ActiveSync support
 
 ### 2. Resource Allocation
+
 **Decision**: 4-8GB RAM, 1-2 CPU for Grommunio
 **Rationale**:
+
 - Based on official Grommunio recommendations
 - Higher than SOGo due to ActiveSync and mobile sync overhead
 - Scaled for production workload (1000+ users)
 
 ### 3. Authentication Method
+
 **Decision**: OIDC via Keycloak (preferred over SAML)
 **Rationale**:
+
 - Grommunio ships with Keycloak 26.1 integration
 - Modern OAuth2/OIDC vs legacy SAML
 - Easier integration with openDesk ecosystem
 - Better mobile device support
 
 ### 4. Cache Layer
+
 **Decision**: Redis (required)
 **Rationale**:
+
 - Official Grommunio caching layer
 - Supports distributed caching for HA setups
 - Already available in openDesk stack
@@ -258,13 +277,16 @@ grommunio:
 ## Known Limitations
 
 ### infrastructure-Dependent Tasks
+
 Most remaining integration tasks require:
+
 1. Running openDesk deployment with Keycloak
 2. Access to Nubus Portal configuration
 3. Working Postfix/Dovecot infrastructure
 4. LDAP/AD integration capability
 
 ### Cannot Complete Without Environment
+
 - Keycloak client configuration (requires Keycloak admin access)
 - Portal navigation integration (requires portal config)
 - Intercom service setup (requires existing infrastructure)
@@ -277,6 +299,7 @@ Most remaining integration tasks require:
 ### For Immediate Next Steps
 
 **Option A: Deploy and Test**
+
 1. Deploy openDesk Edu on a test cluster
 2. Enable Grommunio by setting `grommunio.enabled: true`
 3. Install MariaDB alongside PostgreSQL
@@ -286,6 +309,7 @@ Most remaining integration tasks require:
 7. Verify ActiveSync connectivity
 
 **Option B: Continue Documentation**
+
 - Create end-user Grommunio guides
 - Document Keycloak client setup steps
 - Document LDAP sync configuration
@@ -293,6 +317,7 @@ Most remaining integration tasks require:
 - Create troubleshooting documentation
 
 **Option C: Switch to Another Plan**
+
 - Review DFN-AAI Federation plan (16% complete, 51 unchecked)
 - Review Stack4ops plans (0% complete)
 - Continue with other integration work
@@ -300,6 +325,7 @@ Most remaining integration tasks require:
 ### For Production Readiness
 
 **Before going to production:**
+
 1. Complete all integration configuration
 2. Setup monitoring for both database stacks
 3. Implement backup and disaster recovery
@@ -313,17 +339,20 @@ Most remaining integration tasks require:
 ## Verification Results
 
 ### Helm Chart
+
 - ✅ `helm template test helmfile/charts/grommunio` - Success
 - ✅ Chart.yaml YAML syntax - Valid
 - ✅ All 12 templates - Render error-free
 - ✅ SPDX headers - Present and correct
 
 ### Configuration
+
 - ✅ global.yaml.gotmpl - Modified correctly
 - ✅ Environment variables - Properly templated
 - ✅ Pattern consistency - Follows existing patterns
 
 ### Documentation
+
 - ✅ docs/dual-database-stack.md - Complete (450+ lines)
 - ✅ Bilingual (German/English)
 - ✅ Comprehensive architecture, operations, troubleshooting sections
@@ -352,6 +381,7 @@ Successfully completed Phase 1 (Research), Phase 2 (Helm Chart), and 40% of Phas
 **Key Achievement**: Grommunio Helm chart is production-ready and configuration is in place. The remaining integration work is infrastructure-dependent and requires access to a running openDesk deployment.
 
 **Next Decision Point**: Choose between:
+
 1. Deploy and test with real environment
 2. Continue documentation work
 3. Switch to another plan
@@ -373,21 +403,25 @@ Successfully completed Phase 1 (Research), Phase 2 (Helm Chart), and 40% of Phas
 ### What Changed
 
 **Wave 1 - Chart Template Improvements (3 files in `helmfile/charts/grommunio/templates/`):**
+
 - `_helpers.tpl`: Added `grommunio.ldapUrl` and `grommunio.oidcDiscoveryUrl` helpers
 - `secret.yaml`: Replaced conditional `{{- if }}` blocks with `randAlphaNum 32` defaults (SOGo pattern)
 - `configmap.yaml`: Added `GROMMUNIO_LDAP_URL` and `GROMMUNIO_OIDC_DISCOVERY_URL` fields
 
 **Wave 2 - Platform Integration (4 files):**
+
 - `global.yaml.gotmpl`: Added `grommunio: "grommunio"` to hosts section
 - `values-intercom-service.yaml.gotmpl`: Added grommunio section with conditional enabled
 - `values-postfix.yaml.gotmpl`: Added `else if` grommunio LMTP routing
 - `values-grommunio.yaml.gotmpl`: NEW runtime values file (92 lines)
 
 **Commits pushed:**
+
 1. `feat(grommunio): improve Helm chart templates with LDAP/OIDC helpers and secret defaults`
 2. `feat(grommunio): add platform integration for global hosts, Intercom service, and Postfix routing`
 
 ### Verification
+
 - ✅ `helm template test helmfile/charts/grommunio` renders correctly
 - ✅ Secrets auto-generate with 32-char random strings
 - ✅ LDAP URL helper renders `ldap://openldap:389`
@@ -395,6 +429,7 @@ Successfully completed Phase 1 (Research), Phase 2 (Helm Chart), and 40% of Phas
 - ✅ All existing helm-unittest tests still pass
 
 ### Lessons Learned
+
 - Subagents in `deep` and `quick` categories timed out (30 min) for single-file edits
 - `local-quick` category timed out (30 min) for multi-file edits
 - `quick` category with `run_in_background=true` worked for ~1 min per edit

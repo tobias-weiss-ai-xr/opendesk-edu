@@ -7,6 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <div align="center">
 
 ### TL;DR 🚀
+
 openDesk CE + 13 education services (ILIAS, Moodle, BigBlueButton, OpenCloud, …)<br/>
 one-command Kubernetes deploy with unified Keycloak SSO
 
@@ -63,6 +64,7 @@ helmfile -e default apply
 ```
 
 📖 **Prerequisites & Setup Guide:**
+
 - Kubernetes 1.28+, Helm 3, [helmfile](https://helmfile.readthedocs.io/)
 - Edit config: `helmfile/environments/default/global.yaml.gotmpl`
 - [Detailed guide →](./docs/getting-started.md)  |  [Requirements →](./docs/requirements.md)
@@ -210,8 +212,8 @@ Found a bug or have a feature request? Please [open an issue](https://github.com
 
 This repository is automatically synchronized between GitHub and Codeberg:
 
-- **GitHub:** https://github.com/opendesk-edu/opendesk-edu
-- **Codeberg:** https://codeberg.org/opendesk-edu/opendesk-edu
+- **GitHub:** <https://github.com/opendesk-edu/opendesk-edu>
+- **Codeberg:** <https://codeberg.org/opendesk-edu/opendesk-edu>
 
 Both repositories are kept in sync via automated CI/CD workflows. Pushes to either platform sync to the other within 1-2 minutes. See [sync documentation](./docs/maintenance/github-codeberg-sync.md) for details.
 

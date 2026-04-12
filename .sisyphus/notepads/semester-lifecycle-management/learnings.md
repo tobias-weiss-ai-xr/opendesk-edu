@@ -6,10 +6,13 @@
 - Wrote unit tests to verify cross-platform role mapping and group-based enrollment triggers.
 
 ## Next steps
+
 - Integrate with real Keycloak/ILIAS/Moodle endpoints in staging.
 - Expand audit logs to JSONL output and add schema validations.
 - Add integration tests for end-to-end flow with mocked services.
+
 ## Learnings: Role Synchronization Engine (Semester Lifecycle Management)
+
 - Implemented a Role Synchronization Engine to align Keycloak and LMS roles.
 - Patterned after bulk_sync, using Pydantic models and SPDX headers.
 - Mapped roles: student -> student, tutor -> tutor, lecturer -> instructor.
@@ -17,6 +20,7 @@
 - Appended this note to the learnings file for traceability.
 
 ## Learnings: Helm Chart for Semester Provisioning Deployment
+
 - Created Helm chart at `helmfile/apps/semester-provisioning/` with 8 files.
 - Followed `helmfile/charts/sogo/` and `helmfile/charts/ilias/` patterns for structure and naming.
 - Chart includes: Chart.yaml, values.yaml, _helpers.tpl, rbac.yaml, configmap.yaml, deployment.yaml, service.yaml, cronjobs.yaml.
@@ -29,6 +33,7 @@
 - RBAC Role grants read access to configmaps/secrets/pods and CRUD on cronjobs/jobs.
 
 ## Learnings: Course Archival Implementation
+
 - Created three archival modules: `archive_course.py`, `bulk_archive.py`, `restore_course.py`.
 - Archival flow: freeze enrollments (active→frozen) → revoke LMS write access → create snapshot → update status to archived.
 - Restoration reverses: unfreeze enrollments (frozen→active) → restore LMS write access → update status to active.

@@ -12,7 +12,7 @@ body:
       value: |
         ## Thank you for your feature request!
         ## Vielen Dank für Ihre Feature-Anfrage!
-        
+
         Please describe the feature you'd like to see in openDesk Edu.
         Bitte beschreiben Sie die Funktion, die Sie in openDesk Edu sehen möchten.
 
@@ -51,7 +51,7 @@ body:
       description: |
         A clear description of what problem this feature would solve.
         Why do you need this feature?
-        
+
         Eine klare Beschreibung, welches Problem diese Funktion lösen würde.
         Warum brauchen Sie diese Funktion?
       placeholder: |
@@ -69,18 +69,18 @@ body:
       description: |
         Describe what you'd like to happen.
         If you have technical ideas (Helm chart structure, integration approach), share them.
-        
+
         Beschreiben Sie, was passieren soll.
         Wenn Sie technische Ideen haben (Helm-Chart-Struktur, Integrationsansatz), teilen Sie diese mit.
       placeholder: |
         **Example / Beispiel:**
         Add a new values.yaml section that allows configuring session timeouts per user group:
-        
+
         ```yaml
         sessions:
           timeouts:
             students: 3600    # 1 hour
-            staff: 28800      # 8 hours  
+            staff: 28800      # 8 hours
             admins: 86400      # 24 hours
         ```
       value: |
@@ -155,7 +155,7 @@ body:
     attributes:
       value: |
         ---
-        
+
         📖 **Resources / Ressourcen:**
         - [Contributing Guide](../CONTRIBUTING.md)
         - [Documentation](../docs/)
