@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
@@ -21,7 +21,7 @@ Deutsch: Wie man Sicherheitslücken in openDesk Edu verantwortungsvoll meldet.
 
 | Method / Methode | Details |
 |------------------|---------|
-| **GitHub Security Advisory** (preferred) | [Create private advisory](https://github.com/tobias-weiss-ai-xr/opendesk-edu/security/advisories/new) |
+| **GitHub Security Advisory** (preferred) | [Create private advisory](https://github.com/opendesk-edu/deployment/security/advisories/new) |
 | **Email** | security@opendesk-edu.org |
 
 ### What to Include / Was Sie einschließen sollten
@@ -155,8 +155,8 @@ Wir werden keine rechtlichen Schritte gegen Forscher einleiten, die:
 | Purpose / Zweck | Contact / Kontakt |
 |-----------------|-------------------|
 | **Security issues** | security@opendesk-edu.org |
-| **General questions** | [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) |
-| **Bug reports** | [GitHub Issues](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues) |
+| **General questions** | [GitHub Discussions](https://github.com/opendesk-edu/deployment/discussions) |
+| **Bug reports** | [GitHub Issues](https://github.com/opendesk-edu/deployment/issues) |
 
 ---
 

@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -62,7 +62,7 @@ annotations:
     - Add CI values for template rendering validation
   artifacthub.io/links: |
     - name: Source
-      url: https://github.com/tobias-weiss-ai-xr/opendesk-edu
+      url: https://github.com/opendesk-edu/deployment
 ```
 
 ### Example: F13 (with keywords and maintainers)
@@ -91,7 +91,7 @@ annotations:
     - Add CI values for template rendering validation
   artifacthub.io/links: |
     - name: Source
-      url: https://github.com/tobias-weiss-ai-xr/opendesk-edu
+      url: https://github.com/opendesk-edu/deployment
 ```
 
 ### Required Fields
@@ -114,7 +114,7 @@ annotations:
     - Change 2
   artifacthub.io/links: |
     - name: Source
-      url: https://github.com/tobias-weiss-ai-xr/opendesk-edu
+      url: https://github.com/opendesk-edu/deployment
     - name: Documentation
       url: https://docs.example.com
 ```
@@ -576,7 +576,7 @@ Next steps:
   2. Configure SAML/SSO integration with Keycloak
   3. Set up persistent storage for course data and uploads
 
-Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu
+Documentation: https://github.com/opendesk-edu/deployment
 ```
 
 ### Example: BookStack
@@ -595,7 +595,7 @@ Next steps:
   2. Configure SSO/SSO integration if needed
   3. Set up persistent storage for uploads
 
-Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu
+Documentation: https://github.com/opendesk-edu/deployment
 ```
 
 ### Example: F13 (Multi-component)
@@ -614,7 +614,7 @@ Next steps:
   2. Enable Keycloak authentication via global.keycloakUrl
   3. Review values.yaml to enable/disable individual AI services
 
-Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu
+Documentation: https://github.com/opendesk-edu/deployment
 ```
 
 ### NOTES.txt Guidelines

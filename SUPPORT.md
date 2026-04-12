@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -18,9 +18,9 @@ Deutsch: Dieser Leitfaden hilft Ihnen, die richtigen Ressourcen für Ihre Fragen
 | **System requirements** | [Requirements](./docs/requirements.md) |
 | **Configuration help** | [Enhanced Configuration](./docs/enhanced-configuration.md) |
 | **Architecture info** | [Architecture Overview](./docs/architecture.md) |
-| **Report a bug** | [Create Bug Report](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues/new?template=bug-report.yml) |
-| **Request a feature** | [Create Feature Request](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues/new?template=feature-request.yml) |
-| **Ask a question** | [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) |
+| **Report a bug** | [Create Bug Report](https://github.com/opendesk-edu/deployment/issues/new?template=bug-report.yml) |
+| **Request a feature** | [Create Feature Request](https://github.com/opendesk-edu/deployment/issues/new?template=feature-request.yml) |
+| **Ask a question** | [GitHub Discussions](https://github.com/opendesk-edu/deployment/discussions) |
 
 ---
 
@@ -53,7 +53,7 @@ Deutsch: Dieser Leitfaden hilft Ihnen, die richtigen Ressourcen für Ihre Fragen
 
 ### GitHub Discussions / GitHub-Diskussionen
 
-[![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-blue?logo=github)](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions)
+[![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-blue?logo=github)](https://github.com/opendesk-edu/deployment/discussions)
 
 **Best for:** General questions, ideas, announcements, community discussion
 
@@ -94,7 +94,7 @@ Deutsch: Dieser Leitfaden hilft Ihnen, die richtigen Ressourcen für Ihre Fragen
 
 **How to report / Wie man meldet:**
 
-1. Go to [Issues](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues)
+1. Go to [Issues](https://github.com/opendesk-edu/deployment/issues)
 2. Click "New Issue"
 3. Choose "Bug Report"
 4. Fill in the template completely
@@ -115,7 +115,7 @@ Deutsch: Dieser Leitfaden hilft Ihnen, die richtigen Ressourcen für Ihre Fragen
 
 **How to request / Wie man anfragt:**
 
-1. Go to [Issues](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues)
+1. Go to [Issues](https://github.com/opendesk-edu/deployment/issues)
 2. Click "New Issue"
 3. Choose "Feature Request"
 4. Describe the problem and proposed solution
@@ -163,7 +163,7 @@ For issues specific to individual components, check their upstream support chann
 
 | Method / Methode | Details |
 |------------------|---------|
-| **GitHub Security Advisory** | [Create private advisory](https://github.com/tobias-weiss-ai-xr/opendesk-edu/security/advisories/new) |
+| **GitHub Security Advisory** | [Create private advisory](https://github.com/opendesk-edu/deployment/security/advisories/new) |
 | **Email** | security@opendesk-edu.org |
 
 See [SECURITY.md](./.github/SECURITY.md) for full details.
@@ -182,7 +182,7 @@ Siehe [SECURITY.md](./.github/SECURITY.md) für vollständige Details.
 2. Check your values files for syntax errors
 3. Run `helmfile -e dev template` to see rendered output
 4. Check the [Troubleshooting Guide](./docs/troubleshooting.md) if available
-5. Search [existing issues](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues)
+5. Search [existing issues](https://github.com/opendesk-edu/deployment/issues)
 
 </details>
 
@@ -251,13 +251,13 @@ Want to contribute? See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
 | Situation | Contact |
 |-----------|---------|
 | **Security vulnerability** | security@opendesk-edu.org |
-| **Critical production issue** | [GitHub Issue](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues/new?labels=critical) with `critical` label |
-| **General support** | [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) |
+| **Critical production issue** | [GitHub Issue](https://github.com/opendesk-edu/deployment/issues/new?labels=critical) with `critical` label |
+| **General support** | [GitHub Discussions](https://github.com/opendesk-edu/deployment/discussions) |
 
 ---
 
 _Happy to help! / Gerne behilflich!_
 
-_This support guide is maintained by the openDesk Edu community. Found an error? [Let us know!](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues/new?template=documentation.yml)_
+_This support guide is maintained by the openDesk Edu community. Found an error? [Let us know!](https://github.com/opendesk-edu/deployment/issues/new?template=documentation.yml)_
 
-_Dieser Support-Leitfaden wird von der openDesk Edu-Community gepflegt. Einen Fehler gefunden? [Lassen Sie es uns wissen!](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues/new?template=documentation.yml)_
+_Dieser Support-Leitfaden wird von der openDesk Edu-Community gepflegt. Einen Fehler gefunden? [Lassen Sie es uns wissen!](https://github.com/opendesk-edu/deployment/issues/new?template=documentation.yml)_

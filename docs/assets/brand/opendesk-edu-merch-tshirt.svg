@@ -1,0 +1,228 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <defs>
+    <!-- D-icon gradient (primary to secondary purple) -->
+    <linearGradient id="dIconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#927AFA"/>
+    </linearGradient>
+
+    <!-- Horizontal accent gradient for decorative lines -->
+    <linearGradient id="accentLineGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#571EFA" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#927AFA" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#571EFA" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Wordmark gradient -->
+    <linearGradient id="wordmarkGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#DDD6FE"/>
+    </linearGradient>
+
+    <!-- Ambient radial glow behind D-icon -->
+    <radialGradient id="ambientGlow" cx="50%" cy="35%" r="35%">
+      <stop offset="0%" stop-color="#571EFA" stop-opacity="0.12"/>
+      <stop offset="60%" stop-color="#341291" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#0a0014" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Grid pattern for background -->
+    <pattern id="gridPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#927AFA" stroke-width="0.3" opacity="0.08"/>
+    </pattern>
+
+    <!-- D-icon glow filter -->
+    <filter id="dIconGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="18" result="blur1"/>
+      <feGaussianBlur stdDeviation="6" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Text glow filter -->
+    <filter id="textGlow" x="-10%" y="-20%" width="120%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle glow for small elements -->
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Node glow filter -->
+    <filter id="nodeGlow" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Large ambient filter for background glow -->
+    <filter id="bgGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="30" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ==================== BACKGROUND ==================== -->
+  <rect width="800" height="1000" fill="#0a0014"/>
+
+  <!-- Subtle grid overlay -->
+  <rect width="800" height="1000" fill="url(#gridPattern)"/>
+
+  <!-- Ambient glow -->
+  <rect width="800" height="1000" fill="url(#ambientGlow)"/>
+
+  <!-- ==================== BACKGROUND NETWORK PATTERN ==================== -->
+  <g opacity="0.07">
+    <!-- Scattered connection nodes (education/knowledge network) -->
+    <!-- Top area -->
+    <circle cx="120" cy="150" r="2.5" fill="#927AFA"/>
+    <circle cx="680" cy="170" r="2" fill="#571EFA"/>
+    <circle cx="95" cy="320" r="1.8" fill="#DDD6FE"/>
+    <circle cx="710" cy="290" r="2.2" fill="#927AFA"/>
+    <circle cx="160" cy="480" r="2" fill="#571EFA"/>
+    <circle cx="640" cy="460" r="1.5" fill="#DDD6FE"/>
+
+    <!-- Bottom area -->
+    <circle cx="130" cy="700" r="2" fill="#927AFA"/>
+    <circle cx="670" cy="680" r="2.5" fill="#571EFA"/>
+    <circle cx="100" cy="820" r="1.5" fill="#DDD6FE"/>
+    <circle cx="700" cy="850" r="2" fill="#927AFA"/>
+    <circle cx="180" cy="900" r="1.8" fill="#571EFA"/>
+    <circle cx="620" cy="920" r="2.2" fill="#927AFA"/>
+    <circle cx="350" cy="930" r="1.5" fill="#DDD6FE"/>
+    <circle cx="450" cy="140" r="1.5" fill="#927AFA"/>
+
+    <!-- Connection lines -->
+    <line x1="120" y1="150" x2="680" y2="170" stroke="#927AFA" stroke-width="0.4"/>
+    <line x1="95" y1="320" x2="710" y2="290" stroke="#571EFA" stroke-width="0.3"/>
+    <line x1="160" y1="480" x2="640" y2="460" stroke="#927AFA" stroke-width="0.3"/>
+    <line x1="130" y1="700" x2="670" y2="680" stroke="#571EFA" stroke-width="0.4"/>
+    <line x1="100" y1="820" x2="700" y2="850" stroke="#927AFA" stroke-width="0.3"/>
+    <line x1="120" y1="150" x2="95" y2="320" stroke="#927AFA" stroke-width="0.3"/>
+    <line x1="680" y1="170" x2="710" y2="290" stroke="#571EFA" stroke-width="0.3"/>
+    <line x1="130" y1="700" x2="100" y2="820" stroke="#927AFA" stroke-width="0.3"/>
+    <line x1="670" y1="680" x2="700" y2="850" stroke="#571EFA" stroke-width="0.3"/>
+    <line x1="180" y1="900" x2="350" y2="930" stroke="#927AFA" stroke-width="0.3"/>
+    <line x1="620" y1="920" x2="350" y2="930" stroke="#571EFA" stroke-width="0.3"/>
+    <line x1="450" y1="140" x2="680" y2="170" stroke="#927AFA" stroke-width="0.3"/>
+  </g>
+
+  <!-- ==================== EDUCATION-THEMED ELEMENTS (subtle) ==================== -->
+
+  <!-- Abstract open book shape (low opacity, behind D-icon) -->
+  <g transform="translate(400, 310)" opacity="0.06">
+    <!-- Left page -->
+    <path d="M-10,0 Q-60,-30 -110,-15 L-110,50 Q-60,35 -10,60 Z" fill="#927AFA"/>
+    <!-- Right page -->
+    <path d="M10,0 Q60,-30 110,-15 L110,50 Q60,35 10,60 Z" fill="#927AFA"/>
+    <!-- Spine -->
+    <line x1="0" y1="-5" x2="0" y2="65" stroke="#DDD6FE" stroke-width="2"/>
+  </g>
+
+  <!-- Abstract graduation cap (subtle, above D-icon) -->
+  <g transform="translate(400, 150)" opacity="0.04">
+    <!-- Cap top (diamond shape) -->
+    <polygon points="0,-20 50,0 0,20 -50,0" fill="#927AFA"/>
+    <!-- Tassel line -->
+    <line x1="50" y1="0" x2="55" y2="30" stroke="#DDD6FE" stroke-width="2"/>
+    <circle cx="55" cy="33" r="4" fill="#DDD6FE"/>
+  </g>
+
+  <!-- ==================== CENTRAL D-ICON ==================== -->
+  <g transform="translate(400, 320)">
+    <!-- Outer glow rings -->
+    <circle r="110" fill="none" stroke="#571EFA" stroke-width="0.5" opacity="0.15"/>
+    <circle r="95" fill="none" stroke="#927AFA" stroke-width="0.3" opacity="0.1"/>
+
+    <!-- D-icon: rounded rectangle with glow -->
+    <rect x="-65" y="-65" width="130" height="130" rx="28" fill="url(#dIconGrad)" filter="url(#dIconGlow)"/>
+
+    <!-- Inner highlight (subtle) -->
+    <rect x="-58" y="-62" width="116" height="60" rx="20" fill="#ffffff" opacity="0.06"/>
+
+    <!-- Stylized "D" letter -->
+    <path d="M-25,-35 L-25,35 L10,35 C35,35 45,18 45,0 C45,-18 35,-35 10,-35 Z M-10,-20 L8,-20 C22,-20 28,-10 28,0 C28,10 22,20 8,20 L-10,20 Z" fill="#ffffff" opacity="0.95"/>
+  </g>
+
+  <!-- ==================== SMALL ACCENT NODES (education network) ==================== -->
+  <g filter="url(#nodeGlow)">
+    <!-- Connected nodes suggesting knowledge sharing -->
+    <circle cx="280" cy="260" r="5" fill="#927AFA" opacity="0.5"/>
+    <circle cx="520" cy="260" r="5" fill="#571EFA" opacity="0.5"/>
+    <circle cx="270" cy="380" r="4" fill="#571EFA" opacity="0.4"/>
+    <circle cx="530" cy="380" r="4" fill="#927AFA" opacity="0.4"/>
+  </g>
+
+  <!-- Connection lines from nodes to D-icon center -->
+  <g opacity="0.15" filter="url(#softGlow)">
+    <line x1="280" y1="260" x2="345" y2="300" stroke="#927AFA" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="520" y1="260" x2="455" y2="300" stroke="#571EFA" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="270" y1="380" x2="345" y2="345" stroke="#571EFA" stroke-width="0.8" stroke-dasharray="4,4"/>
+    <line x1="530" y1="380" x2="455" y2="345" stroke="#927AFA" stroke-width="0.8" stroke-dasharray="4,4"/>
+  </g>
+
+  <!-- ==================== TYPOGRAPHY ==================== -->
+
+  <!-- "openDesk" wordmark -->
+  <text x="400" y="510" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" fill="url(#wordmarkGrad)" text-anchor="middle" letter-spacing="2" filter="url(#textGlow)">
+    open<tspan fill="#DDD6FE">Desk</tspan>
+  </text>
+
+  <!-- "EDUCATION" subtitle -->
+  <text x="400" y="560" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" fill="#DDD6FE" text-anchor="middle" letter-spacing="10" opacity="0.85">
+    EDUCATION
+  </text>
+
+  <!-- Decorative accent line -->
+  <line x1="280" y1="585" x2="520" y2="585" stroke="url(#accentLineGrad)" stroke-width="1" opacity="0.4"/>
+
+  <!-- Tagline -->
+  <text x="400" y="625" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="300" fill="#927AFA" text-anchor="middle" letter-spacing="4" opacity="0.55">
+    LEARN. CONNECT. GROW.
+  </text>
+
+  <!-- ==================== BOTTOM DECORATIVE ELEMENTS ==================== -->
+
+  <!-- Abstract geometric education motif (hexagonal nodes) -->
+  <g transform="translate(400, 760)" opacity="0.08">
+    <!-- Central hexagon -->
+    <polygon points="0,-25 22,-12.5 22,12.5 0,25 -22,12.5 -22,-12.5" fill="none" stroke="#927AFA" stroke-width="1"/>
+
+    <!-- Surrounding hexagons (smaller) -->
+    <polygon points="0,-60 15,-52.5 15,-37.5 0,-30 -15,-37.5 -15,-52.5" fill="none" stroke="#571EFA" stroke-width="0.8" transform="translate(0,0)"/>
+    <polygon points="38,-5 53,5 53,20 38,30 23,20 23,5" fill="none" stroke="#571EFA" stroke-width="0.8" transform="translate(0,-10)"/>
+    <polygon points="-38,-5 -23,5 -23,20 -38,30 -53,20 -53,5" fill="none" stroke="#571EFA" stroke-width="0.8" transform="translate(0,-10)"/>
+
+    <!-- Connection lines between hexagons -->
+    <line x1="0" y1="-25" x2="0" y2="-30" stroke="#927AFA" stroke-width="0.6"/>
+    <line x1="22" y1="0" x2="38" y2="0" stroke="#927AFA" stroke-width="0.6" transform="translate(0,-10)"/>
+    <line x1="-22" y1="0" x2="-38" y2="0" stroke="#927AFA" stroke-width="0.6" transform="translate(0,-10)"/>
+  </g>
+
+  <!-- Subtle bottom accent bar -->
+  <rect x="340" y="830" width="120" height="2" rx="1" fill="#571EFA" opacity="0.2"/>
+
+  <!-- Small decorative dots at bottom -->
+  <circle cx="370" cy="860" r="2" fill="#571EFA" opacity="0.15"/>
+  <circle cx="400" cy="860" r="2.5" fill="#927AFA" opacity="0.2"/>
+  <circle cx="430" cy="860" r="2" fill="#571EFA" opacity="0.15"/>
+
+</svg>

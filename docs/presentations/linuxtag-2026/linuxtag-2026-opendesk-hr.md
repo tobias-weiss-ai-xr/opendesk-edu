@@ -1,4 +1,4 @@
----
+﻿---
 marp: true
 theme: default
 paginate: true
@@ -160,7 +160,7 @@ python3 dev/charts-local.py --revert
 - **Sve integrirano s Keycloak SSO** 🔐
 - **Implementacija svega s `helmfile apply`** ⚡
 
-**GitHub:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+**GitHub:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 
 ---
 
@@ -222,7 +222,7 @@ python3 dev/charts-local.py --revert
 
 ```bash
 # 1. Klonirajte repozitorij
-git clone https://github.com/tobias-weiss-ai-xr/opendesk-edu.git
+git clone https://github.com/opendesk-edu/deployment.git
 cd opendesk-edu
 
 # 2. Konfigurirajte svoje okruženje
@@ -233,7 +233,7 @@ cd opendesk-edu
 helmfile -e default apply
 ```
 
-📖 Potpuna dokumentacija: [docs/getting-started.md](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/getting-started.md)
+📖 Potpuna dokumentacija: [docs/getting-started.md](https://github.com/opendesk-edu/deployment/blob/main/docs/getting-started.md)
 
 ---
 
@@ -326,7 +326,7 @@ helmfile rollback -e hrz
 
 **Pomozite nam izgraditi openDesk Edu za sveučilišta!**
 
-- ⭐ **Starajte repo:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+- ⭐ **Starajte repo:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 - 🧪 **Testirajte lokalno:** Implementirajte s Helmfile i dajte povratne informacije
 - 🐛 **Prijavite probleme:** Issues za greške ili zahtjeve za značajkama
 - 💻 **Doprinesite:** PR-ovi su dobrodošli — pogledajte CONTRIBUTING.md
@@ -340,7 +340,7 @@ helmfile rollback -e hrz
 - **openDesk:** [docs.opendesk.eu](https://docs.opendesk.eu) ·
   [Deployment-Guide](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/getting-started.md) ·
   [User-Import](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import)
-- **openDesk Edu:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu) · Obrazovno proširenje za sveučilišta
+- **openDesk Edu:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment) · Obrazovno proširenje za sveučilišta
 - **DFN-AAI:** [dfn.de/dienste/dfnaai/](https://www.dfn.de/dienste/dfnaai/)
 - **K3s:** [docs.k3s.io](https://docs.k3s.io/)
 - **Helmfile:** [helmfile.readthedocs.io](https://helmfile.readthedocs.io/)

@@ -1,4 +1,4 @@
----
+﻿---
 marp: true
 theme: default
 paginate: true
@@ -160,7 +160,7 @@ python3 dev/charts-local.py --revert
 - **Wszystko zintegrowane z Keycloak SSO** 🔐
 - **Wdrażaj wszystko za pomocą `helmfile apply`** ⚡
 
-**GitHub:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+**GitHub:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 
 ---
 
@@ -222,7 +222,7 @@ python3 dev/charts-local.py --revert
 
 ```bash
 # 1. Klonuj repozytorium
-git clone https://github.com/tobias-weiss-ai-xr/opendesk-edu.git
+git clone https://github.com/opendesk-edu/deployment.git
 cd opendesk-edu
 
 # 2. Skonfiguruj swoje środowisko
@@ -233,7 +233,7 @@ cd opendesk-edu
 helmfile -e default apply
 ```
 
-📖 Pełna dokumentacja: [docs/getting-started.md](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/getting-started.md)
+📖 Pełna dokumentacja: [docs/getting-started.md](https://github.com/opendesk-edu/deployment/blob/main/docs/getting-started.md)
 
 ---
 
@@ -326,7 +326,7 @@ helmfile rollback -e hrz
 
 **Pomóż nam budować openDesk Edu dla uniwersytetów!**
 
-- ⭐ **Oznacz repo gwiazdką:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+- ⭐ **Oznacz repo gwiazdką:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 - 🧪 **Testuj lokalnie:** Wdróż za pomocą Helmfile i wyślij opinię
 - 🐛 **Zgłaszaj problemy:** Issue dla błędów lub propozycji funkcji
 - 💻 **Kontrybuuj:** PR mile widziane — zobacz CONTRIBUTING.md
@@ -340,7 +340,7 @@ helmfile rollback -e hrz
 - **openDesk:** [docs.opendesk.eu](https://docs.opendesk.eu) ·
   [Deployment-Guide](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/getting-started.md) ·
   [User-Import](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import)
-- **openDesk Edu:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu) · Rozszerzenie edukacyjne dla uniwersytetów
+- **openDesk Edu:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment) · Rozszerzenie edukacyjne dla uniwersytetów
 - **DFN-AAI:** [dfn.de/dienste/dfnaai/](https://www.dfn.de/dienste/dfnaai/)
 - **K3s:** [docs.k3s.io](https://docs.k3s.io/)
 - **Helmfile:** [helmfile.readthedocs.io](https://helmfile.readthedocs.io/)

@@ -1,4 +1,4 @@
----
+﻿---
 marp: true
 theme: default
 paginate: true
@@ -160,7 +160,7 @@ python3 dev/charts-local.py --revert
 - **Vše integrováno s Keycloak SSO** 🔐
 - **Nasaďte vše pomocí `helmfile apply`** ⚡
 
-**GitHub:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+**GitHub:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 
 ---
 
@@ -222,7 +222,7 @@ python3 dev/charts-local.py --revert
 
 ```bash
 # 1. Naklonuj repozitář
-git clone https://github.com/tobias-weiss-ai-xr/opendesk-edu.git
+git clone https://github.com/opendesk-edu/deployment.git
 cd opendesk-edu
 
 # 2. Nakonfigurujte své prostředí
@@ -233,7 +233,7 @@ cd opendesk-edu
 helmfile -e default apply
 ```
 
-📖 Plná dokumentace: [docs/getting-started.md](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/getting-started.md)
+📖 Plná dokumentace: [docs/getting-started.md](https://github.com/opendesk-edu/deployment/blob/main/docs/getting-started.md)
 
 ---
 
@@ -326,7 +326,7 @@ helmfile rollback -e hrz
 
 **Pomozte nám stavět openDesk Edu pro univerzity!**
 
-- ⭐ **Dejte hvězdičku repozitáři:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+- ⭐ **Dejte hvězdičku repozitáři:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 - 🧪 **Testujte lokálně:** Nasaďte pomocí Helmfile a poskytněte zpětnou vazbu
 - 🐛 **Hlaste problémy:** Issue pro chyby nebo požadavky na funkce
 - 💻 **Přispívejte:** PR jsou vítány — viz CONTRIBUTING.md
@@ -340,7 +340,7 @@ helmfile rollback -e hrz
 - **openDesk:** [docs.opendesk.eu](https://docs.opendesk.eu) ·
   [Deployment-Guide](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/getting-started.md) ·
   [User-Import](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import)
-- **openDesk Edu:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu) · Vzdělávací rozšíření pro univerzity
+- **openDesk Edu:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment) · Vzdělávací rozšíření pro univerzity
 - **DFN-AAI:** [dfn.de/dienste/dfnaai/](https://www.dfn.de/dienste/dfnaai/)
 - **K3s:** [docs.k3s.io](https://docs.k3s.io/)
 - **Helmfile:** [helmfile.readthedocs.io](https://helmfile.readthedocs.io/)

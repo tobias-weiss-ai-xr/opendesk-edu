@@ -1,4 +1,4 @@
-# 🗺️ Roadmap
+﻿# 🗺️ Roadmap
 
 > openDesk Edu — from current state to a complete digital workplace for universities.
 
@@ -532,4 +532,4 @@ Growing EU requirement via European Open Science Cloud (EOSC).
 
 ## Contributing
 
-Have an idea for the roadmap? [Open an issue](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues) — we'd love to hear what your university needs.
+Have an idea for the roadmap? [Open an issue](https://github.com/opendesk-edu/deployment/issues) — we'd love to hear what your university needs.

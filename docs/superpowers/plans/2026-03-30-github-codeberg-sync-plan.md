@@ -1,4 +1,4 @@
-# GitHub-Codeberg Bidirectional Sync Implementation Plan
+﻿# GitHub-Codeberg Bidirectional Sync Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -178,7 +178,7 @@ jobs:
 
       - name: Add GitHub remote
         run: |
-          git remote add github https://oauth2:${{ secrets.GH_TOKEN }}@github.com/tobias-weiss-ai-xr/opendesk-edu.git
+          git remote add github https://oauth2:${{ secrets.GH_TOKEN }}@github.com/opendesk-edu/deployment.git
 
       - name: Sync to GitHub (with retry)
         run: |
@@ -817,7 +817,7 @@ Add this content to README.md after the "💬 Feedback & Issues" section:
 
 This repository is automatically synchronized between GitHub and Codeberg:
 
-- **GitHub:** https://github.com/tobias-weiss-ai-xr/opendesk-edu
+- **GitHub:** https://github.com/opendesk-edu/deployment
 - **Codeberg:** https://codeberg.org/opendesk-edu/opendesk-edu
 
 Both repositories are kept in sync via automated CI/CD workflows. Pushes to either platform sync to the other within 1-2 minutes. See [sync documentation](./docs/maintenance/github-codeberg-sync.md) for details.

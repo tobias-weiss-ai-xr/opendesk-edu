@@ -1,4 +1,4 @@
----
+﻿---
 marp: true
 theme: default
 paginate: true
@@ -160,7 +160,7 @@ python3 dev/charts-local.py --revert
 - **Todo integrado con Keycloak SSO** 🔐
 - **Desplegar todo con `helmfile apply`** ⚡
 
-**GitHub:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+**GitHub:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 
 ---
 
@@ -222,7 +222,7 @@ python3 dev/charts-local.py --revert
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tobias-weiss-ai-xr/opendesk-edu.git
+git clone https://github.com/opendesk-edu/deployment.git
 cd opendesk-edu
 
 # 2. Configura tu entorno
@@ -233,7 +233,7 @@ cd opendesk-edu
 helmfile -e default apply
 ```
 
-📖 Documentación completa: [docs/getting-started.md](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/getting-started.md)
+📖 Documentación completa: [docs/getting-started.md](https://github.com/opendesk-edu/deployment/blob/main/docs/getting-started.md)
 
 ---
 
@@ -326,7 +326,7 @@ helmfile rollback -e hrz
 
 **¡Ayúdanos a construir openDesk Edu para las universidades!**
 
-- ⭐ **Dale una estrella al repo:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+- ⭐ **Dale una estrella al repo:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 - 🧪 **Prueba localmente:** Despliega con Helmfile y proporciona retroalimentación
 - 🐛 **Reporta problemas:** Issues para errores o solicitudes de funcionalidades
 - 💻 **Contribuye:** PRs bienvenidos — consulta CONTRIBUTING.md
@@ -340,7 +340,7 @@ helmfile rollback -e hrz
 - **openDesk:** [docs.opendesk.eu](https://docs.opendesk.eu) ·
   [Guía de Despliegue](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/getting-started.md) ·
   [Importación de Usuarios](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import)
-- **openDesk Edu:** [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu) · Extensión educativa para universidades
+- **openDesk Edu:** [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment) · Extensión educativa para universidades
 - **DFN-AAI:** [dfn.de/dienste/dfnaai/](https://www.dfn.de/dienste/dfnaai/)
 - **K3s:** [docs.k3s.io](https://docs.k3s.io/)
 - **Helmfile:** [helmfile.readthedocs.io](https://helmfile.readthedocs.io/)

@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -660,4 +660,4 @@ DFN-AAI requires separate registrations for test and production federations. Con
 - **eduGAIN Technical Profile:** https://technical.edugain.org/
 - **Keycloak SAML Documentation:** https://www.keycloak.org/docs/latest/server_admin/#identity-broker-saml
 - **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
-- **OpenDesk Edu GitHub:** https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues
+- **OpenDesk Edu GitHub:** https://github.com/opendesk-edu/deployment/issues

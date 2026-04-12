@@ -1,4 +1,4 @@
----
+﻿---
 marp: true
 theme: default
 paginate: true
@@ -80,7 +80,7 @@ Die offizielle Open-Source-Alternative zu Microsoft 365 und Google Workspace —
 - **Kosteneffizient** — Open Source statt proprietärer Lizenzen
 - **Lehr- und Forschungsfreiheit** — keine Abhängigkeit von US-Tech-Giganten
 
-Weitere Informationen: [github.com/tobias-weiss-ai-xr/opendesk-edu](https://github.com/tobias-weiss-ai-xr/opendesk-edu)
+Weitere Informationen: [github.com/opendesk-edu/deployment](https://github.com/opendesk-edu/deployment)
 
 </div>
 

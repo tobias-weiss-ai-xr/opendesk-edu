@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -1337,7 +1337,7 @@ test('federation login with discovery service', async ({ page }) => {
 - **Keycloak SAML Documentation:** https://www.keycloak.org/docs/latest/server_admin/#identity-broker-saml
 - **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
 - **Shibboleth Documentation:** https://wiki.shibboleth.net/confluence/display/CONCEPT/Home
-- **OpenDesk Edu GitHub:** https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues
+- **OpenDesk Edu GitHub:** https://github.com/opendesk-edu/deployment/issues
 
 ---
 

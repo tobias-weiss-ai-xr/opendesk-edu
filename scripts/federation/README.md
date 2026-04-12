@@ -1,4 +1,4 @@
-# Federation Metadata Generation
+﻿# Federation Metadata Generation
 
 Generate SAML 2.0 Service Provider metadata for Keycloak integration with DFN-AAI / eduGAIN federation.
 
@@ -269,7 +269,7 @@ In the realm SSO settings (Keycloak 26+), import the generated metadata:
 ## Help and Support
 
 - Script help: `./scripts/federation/generate-metadata.sh --help`
-- Issue tracking: [opendesk-edu GitHub Issues](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues)
+- Issue tracking: [opendesk-edu GitHub Issues](https://github.com/opendesk-edu/deployment/issues)
 - DFN-AAI support: [support@aai.dfn.de](mailto:support@aai.dfn.de)
 
 ## License

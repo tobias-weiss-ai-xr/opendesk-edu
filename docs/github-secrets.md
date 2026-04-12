@@ -1,4 +1,4 @@
-# GitHub Actions Secrets Configuration
+﻿# GitHub Actions Secrets Configuration
 
 This guide explains how to configure GitHub Actions secrets for openDesk Edu workflows.
 
@@ -28,7 +28,7 @@ This guide explains how to configure GitHub Actions secrets for openDesk Edu wor
 
 ### 2. Add Secret to GitHub Repository
 
-1. Go to your GitHub repository: https://github.com/tobias-weiss-ai-xr/opendesk-edu/settings/secrets/actions
+1. Go to your GitHub repository: https://github.com/opendesk-edu/deployment/settings/secrets/actions
 2. Click "New repository secret"
 3. Configure:
    - **Name**: `CODEBERG_TOKEN`

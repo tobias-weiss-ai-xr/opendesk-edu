@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
@@ -175,14 +175,14 @@ helmfile -e dev template
 
 ```bash
 # 1. Fork the repository on GitHub
-#    Go to https://github.com/tobias-weiss-ai-xr/opendesk-edu and click "Fork"
+#    Go to https://github.com/opendesk-edu/deployment and click "Fork"
 
 # 2. Clone your fork
 git clone https://github.com/YOUR_USERNAME/opendesk-edu.git
 cd opendesk-edu
 
 # 3. Add upstream remote
-git remote add upstream https://github.com/tobias-weiss-ai-xr/opendesk-edu.git
+git remote add upstream https://github.com/opendesk-edu/deployment.git
 
 # 4. Keep your fork updated
 git fetch upstream
@@ -326,7 +326,7 @@ maintainers:
   - name: openDesk Edu Team
     email: maintainers@opendesk-edu.org
 sources:
-  - https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/helmfile/charts/my-service
+  - https://github.com/opendesk-edu/deployment/tree/main/helmfile/charts/my-service
 keywords:
   - opendesk
   - education
@@ -1255,7 +1255,7 @@ Any other context, screenshots, or mockups.
 
 Instead:
 
-1. **Open a private security advisory**: [GitHub Security Advisories](https://github.com/tobias-weiss-ai-xr/opendesk-edu/security/advisories/new)
+1. **Open a private security advisory**: [GitHub Security Advisories](https://github.com/opendesk-edu/deployment/security/advisories/new)
 2. **Or email**: security@opendesk-edu.org
 
 ### What to Include
@@ -1415,8 +1415,8 @@ By contributing, you agree that your contributions will be licensed under the Ap
 
 | Channel | Purpose |
 |---------|---------|
-| [GitHub Issues](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues) | Bug reports, feature requests |
-| [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) | Questions, ideas |
+| [GitHub Issues](https://github.com/opendesk-edu/deployment/issues) | Bug reports, feature requests |
+| [GitHub Discussions](https://github.com/opendesk-edu/deployment/discussions) | Questions, ideas |
 | [Matrix/Element](https://matrix.to/#/#opendesk-edu:matrix.org) | Real-time chat |
 
 ### Documentation
@@ -1481,7 +1481,7 @@ Thank you for contributing to openDesk Edu! 🎉
 
 ```bash
 # Clone and setup
-git clone https://github.com/tobias-weiss-ai-xr/opendesk-edu.git
+git clone https://github.com/opendesk-edu/deployment.git
 cd opendesk-edu
 pre-commit install
 

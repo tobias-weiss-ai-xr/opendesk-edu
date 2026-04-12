@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -301,6 +301,6 @@ tests:
 
 See existing tests for reference:
 
-- [ILIAS SSO checks](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/helmfile/charts/ilias/tests/sso_test.yaml)
-- [BookStack deployment](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/helmfile/charts/bookstack/tests/deployment_test.yaml)
-- [F13 multi-deployment tests](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/helmfile/charts/f13/tests/deployment_test.yaml)
+- [ILIAS SSO checks](https://github.com/opendesk-edu/deployment/tree/main/helmfile/charts/ilias/tests/sso_test.yaml)
+- [BookStack deployment](https://github.com/opendesk-edu/deployment/tree/main/helmfile/charts/bookstack/tests/deployment_test.yaml)
+- [F13 multi-deployment tests](https://github.com/opendesk-edu/deployment/tree/main/helmfile/charts/f13/tests/deployment_test.yaml)

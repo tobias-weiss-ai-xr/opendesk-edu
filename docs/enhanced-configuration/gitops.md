@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -26,7 +26,7 @@ This documentation will use Argo CD to explain how to deploy openDesk GitOps-sty
 ## ArgoCD
 
 We are continuously improving our Argo CD support, please share your experience with Argo CD deployments e.g. by [creating
-an issue](https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues).
+an issue](https://github.com/opendesk-edu/deployment/issues).
 
 There are two options to deploy openDesk via Argo CD described in the following sections.
 
