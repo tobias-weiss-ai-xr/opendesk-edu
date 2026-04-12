@@ -176,6 +176,7 @@ python sync_users.py --source ldap --auto-sync
 ### Two-Phase Deprovisioning
 
 Phase 1 (Disable):
+
 ```bash
 # Disable user access (grace period)
 python deprovision_user.py \
@@ -191,6 +192,7 @@ python deprovision_user.py \
 ```
 
 Phase 2 (Permanent Delete):
+
 ```bash
 # Permanent delete after grace period
 python deprovision_user.py \

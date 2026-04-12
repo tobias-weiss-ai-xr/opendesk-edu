@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Komfortabel und Souverän?
 
 🎓 openDesk Edu — Digitale Souveränität an Hochschulen
@@ -62,16 +59,19 @@ Wir diskutieren nicht Tools — wir diskutieren **Souveränität**:
 Als openDesk für Universities beginnen, gibt es **3 Gründe**:
 
 ### 1️⃣ Datenschutz & Compliance
+
 - 🇩🇪 DSGVO-konforme Speicherung
 - 🏛️ Datenschutzbeauftragte-zertifiziert
 - ✅ Antragsverfahren rechtskonform
 
 ### 2️⃣ Pädagogische Freiheit
+
 - 🛠️ Funktionen nach Campus-Anforderung erweitern
 - 📚 LMS-Integration über einfachste APIs (SAML/OIDC)
 - 🎓 IT-security-Training für alle Studierenden
 
 ### 3️⃣ Kostenstabilität & Community
+
 - 💰 Keine plötzlichen Preissteigerungen (User-Lizenzen)
 - 🌍 Offene Source-Community ohne Blackbox
 - ⚡ Freiheit: Features selbst implementieren
@@ -368,7 +368,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Mitmachen!
+# 🤝 Mitmachen
 
 **Helft uns, openDesk Edu für Hochschulen aufzubauen!**
 

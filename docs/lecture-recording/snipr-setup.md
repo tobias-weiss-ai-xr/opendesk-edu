@@ -1,7 +1,7 @@
 # SNIpR Lecture Recording Setup Guide
 
-> **Version:** v1.2  
-> **Last Updated:** March 31, 2026  
+> **Version:** v1.2
+> **Last Updated:** March 31, 2026
 > **Status:** Production Ready
 
 ## Overview
@@ -268,6 +268,7 @@ kubectl top pods -l component=snipr
 **Symptom:** 500 error when uploading recordings
 
 **Check:**
+
 ```bash
 kubectl logs -l component=snipr -c snipr-api | grep -i "storage"
 ```
@@ -279,6 +280,7 @@ kubectl logs -l component=snipr -c snipr-api | grep -i "storage"
 **Symptom:** Recordings show "pending transcription"
 
 **Check:**
+
 ```bash
 kubectl logs -l component=snipr -c snipr-api | grep -i "f13"
 ```
@@ -290,6 +292,7 @@ kubectl logs -l component=snipr -c snipr-api | grep -i "f13"
 **Symptom:** Redirect loop or "invalid client" error
 
 **Check:**
+
 ```bash
 kubectl logs -l component=snipr -c snipr-api | grep -i "oidc"
 ```
@@ -305,6 +308,7 @@ kubectl logs -l component=snipr -c snipr-api | grep -i "oidc"
 ---
 
 **Related Documentation:**
+
 - [F13 Transcription Setup](../ai/f13-setup.md)
 - [Keycloak SSO Configuration](../federation/keycloak-setup.md)
 - [MinIO Storage Setup](../storage/minio-setup.md)

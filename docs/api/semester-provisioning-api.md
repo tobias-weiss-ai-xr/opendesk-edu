@@ -1,5 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+
 # SPDX-License-Identifier: Apache-2.0
 
 # Semester Provisioning API – API Reference / API-Schnittstelle zur Kursprovisionierung
@@ -7,6 +9,7 @@
 This document provides a bilingual reference for the Semester Provisioning API used by openDesk Edu.
 
 ## Endpoints / Endpunkte
+
 - POST /api/v1/courses – Create a new course
 - POST /api/v1/courses/bulk-create – Bulk create courses
 - GET /api/v1/courses/{course_id} – Retrieve a course
@@ -21,11 +24,13 @@ This document provides a bilingual reference for the Semester Provisioning API u
 - POST /api/v1/webhooks/hisinone – HISinOne webhook (example integration)
 
 ## Key Concepts / Zentrale Konzepte
+
 - Courses, Enrollments, Semesters, Archives
 - Status flows: active, archived, deleted, upcoming, ended
 - In-memory DB used in unit tests for isolation
 
 ## Example Snippet / Beispiel
+
 ```http
 POST /api/v1/courses
 Content-Type: application/json

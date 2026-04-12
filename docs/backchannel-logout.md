@@ -68,9 +68,9 @@ across **all** connected services without requiring the user's browser to visit 
     │   Logout        │      │   Logout         │      │   Logout         │
     │                │      │                  │      │                  │
     └──────────────────┘      └──────────────────┘      └──────────────────┘
-         │                                                                                                
-         │    Backchannel Logout Requests (Server-to-Server)                                       
-         │                                                                                                
+         │
+         │    Backchannel Logout Requests (Server-to-Server)
+         │
     ┌──────────────────────────────────────────────────────────────────────────────┐
     │                                                                             │
     │    ┌──────────────┐    ┌──────────────┐    ┌──────────────────┐    ┌──────────────┐    │
@@ -141,6 +141,7 @@ across **all** connected services without requiring the user's browser to visit 
 | `BACKCHANNEL_LOGOUT_BBB_URL` | `https://bbb.{domain}/saml/logout` | BBB logout endpoint |
 
 #### OIDC Services (OpenCloud, Nextcloud)
+
 | Variable | Default | Description |
 |:--------|:---------|:-------------|
 | `BACKCHANNEL_LOGOUT_OPENCLOUD_ENABLED` | `false` | Enable OpenCloud backchannel logout |
@@ -160,7 +161,7 @@ global:
 
 backchannelLogout:
   enabled: "true"
-  
+
   saml:
     moodle:
       enabled: "true"
@@ -170,21 +171,21 @@ backchannelLogout:
       signature:
         requireSignedRequests: "true"
         signResponses: "true"
-  
+
     bigbluebutton:
       enabled: "true"
       bindings:
         soap: "true"
-  
+
   oidc:
     opencloud:
       enabled: "true"
       requirePkce: "true"
       maxTokenAge: "300"
-    
+
     nextcloud:
       enabled: "true"
-  
+
   global:
     propagationTimeout: "60"
     retry:
@@ -249,11 +250,14 @@ In Keycloak admin console:
 4. Save changes
 
 ### Step 4: Deploy Configuration
+
 ```bash
 # Apply the helmfile configuration
 helmfile -e default apply
 ```
+
 ### Step 5: Verify Configuration
+
 ```bash
 # Check backchannel endpoints are accessible
 curl -k -I -X POST https://moodle.example.org/Shibboleth.sso/Logout
@@ -275,28 +279,37 @@ curl -k -I -X POST https://nc.example.org/apps/user_oidc/backchannel_logout
 5. Verify all services show logged out state
 
 ### Automated Testing
+
 Run the E2E test suite:
+
 ```bash
 # Run backchannel logout E2E tests
 npx playwright test tests/playwright/backchannel-e2e.spec.js
 ```
+
 ### Timing Test
+
 Measure propagation timing:
+
 ```bash
 # Run propagation timing test
 ./scripts/test-backchannel-propagation.sh <logout_token>
 ```
+
 Expected Results:
+
 - All services should terminate within 60 seconds
 - Moodle and BBB typically respond within 5-10 seconds
 - OpenCloud and Nextcloud typically respond within 2-5 seconds
 
 ### Test Evidence
+
 Test results are saved in:
 .sisyphus/evidence/
 ├── task-6-propagation-times.json
 ├── task-6-termination-results.json
 └── task-6-*.png (screenshots)
+
 ```
 ---
 ## Troubleshooting
@@ -319,10 +332,13 @@ kubectl logs -l moodle | grep -i backchannel
 # Check BBB logs
 kubectl logs -l bbb | grep -i backchannel
 ```
+
 #### 2. Signature Verification Failed
+
 **Symptoms**: HTTP 403 errors in logs
 
 **Solutions**:
+
 - Verify IdP certificate is correctly mounted
 - Check certificate expiration
 - Ensure correct certificate path in configuration
@@ -331,18 +347,23 @@ kubectl logs -l bbb | grep -i backchannel
 # Check IdP certificate
 kubectl exec -it moodle -- cat /etc/shibboleth/idp-cert.pem
 ```
+
 #### 3. Timeout Errors
+
 **Symptoms**: Logout requests timing out
 
 **Solutions**:
+
 - Increase `sessionTerminationTimeout` value
 - Check for slow database queries
 - Verify adequate resources (CPU/memory)
 
 #### 4. Network Connectivity Issues
+
 **Symptoms**: Connection refused or timeout errors
 
 **Solutions**:
+
 - Verify network policies allow traffic
 - Check DNS resolution
 - Verify services are running and accessible
@@ -351,8 +372,11 @@ kubectl exec -it moodle -- cat /etc/shibboleth/idp-cert.pem
 # Test connectivity from Keycloak to services
 kubectl exec -it keycloak -- curl -v https://moodle.example.org/Shibboleth.sso/Logout
 ```
+
 ### Debug Mode
+
 Enable verbose logging for debugging:
+
 ```yaml
 backchannelLogout:
   saml:
@@ -366,32 +390,42 @@ backchannelLogout:
     nextcloud:
       verbose: "true"
 ```
+
 Check logs:
+
 ```bash
 # View detailed backchannel logs
 kubectl logs -l moodle | grep backchannel
 kubectl logs -l bbb | grep backchannel
 ```
+
 ---
+
 ## Security Considerations
 
 ### Request Validation
+
 All backchannel logout requests must validated:
+
 - **SAML**: XML signature verification using IdP certificate
 - **OIDC**: JWT token validation with shared secret
 
 ### Certificate Management
+
 - IdP certificates should be rotated before expiration
 - Store certificates in Kubernetes secrets
 - Use certificate monitoring tools
 
 ### Network Security
+
 - Backchannel endpoints should not be publicly accessible
 - Use Kubernetes network policies to restrict access
 - Only Keycloak should be able to call backchannel endpoints
 
 ### Audit Logging
+
 All logout events are logged:
+
 ```json
 {
   "timestamp": "2026-03-28T10:30:00Z",
@@ -403,7 +437,9 @@ All logout events are logged:
   "duration_ms": 45.2
 }
 ```
+
 ### Rate Limiting
+
 Implement rate limiting for backchannel endpoints to prevent:
 DoS attacks.
 

@@ -6,11 +6,13 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 # Semester Automation Guide / Semester-Automatisierungsleitfaden
+
 [English](#english) | [Deutsch](#deutsch)
 
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### Overview
@@ -18,6 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 This guide explains how to set up automated semester lifecycle management in openDesk Edu. The automation system uses Kubernetes CronJobs to handle semester transitions, role synchronization, and archival cleanup.
 
 ### Prerequisites
+
 - Kubernetes cluster with openDesk Edu deployed
 - Helm 3.x installed
 - kubectl configured with cluster access
@@ -40,6 +43,7 @@ helmfile -e dev apply
 ---
 
 ## Configuration / Konfiguration
+
 ### Helm Values Configuration
 
 Configure automation in `helmfile/apps/semester-provisioning/values.yaml`:
@@ -48,10 +52,10 @@ Configure automation in `helmfile/apps/semester-provisioning/values.yaml`:
 automation:
   # Enable automation / Automatisierung aktivieren
   enabled: true
-  
+
   # Timezone for cron jobs / Zeitzone für Cron-Jobs
   timezone: "Europe/Berlin"
-  
+
   # Cron schedules / Cron-Zeitpläne
   cron:
     semester_start: "0 6 1 10 *"      # Oct 1st, 6 AM
@@ -59,7 +63,7 @@ automation:
     semester_end: "0 6 1 4 *"         # April 1st, 6 AM
     archival_cleanup: "0 2 1 4 *"     # April 1st, 2 AM
     role_sync: "*/15 * * * *"         # Every 15 minutes
-  
+
   # Job history / Job-Verlauf
   jobs:
     successfulJobsHistoryLimit: 3
@@ -73,13 +77,13 @@ Define your semester calendar:
 ```yaml
 semester:
   enabled: true
-  
+
   current:
     name: "WS25/26"
     type: "wintersemester"
     start_date: "2025-10-01"
     end_date: "2026-03-31"
-    
+
     phases:
       enrollment:
         start: "2025-07-01"
@@ -99,6 +103,7 @@ semester:
 ## CronJobs / CronJobs
 
 ### Semester Start Job
+
 **Purpose:** Activates new semester courses and triggers initial enrollment sync.
 
 ```yaml
@@ -107,12 +112,14 @@ schedule: "0 6 1 10 *"
 ```
 
 **Actions:**
+
 1. Update semester status to `active`
 2. Activate all draft courses for the new semester
 3. Trigger initial Keycloak group synchronization
 4. Send notification to administrators
 
 ### Role Sync Job
+
 **Purpose:** Synchronizes user roles between Keycloak and LMS platforms.
 
 ```yaml
@@ -121,12 +128,14 @@ schedule: "*/15 * * * *"
 ```
 
 **Actions:**
+
 1. Fetch current enrollments from database
 2. Sync roles to Keycloak groups
 3. Update ILIAS/Moodle role assignments
 4. Log any sync errors
 
 ### Semester End Job
+
 **Purpose:** Triggers archival preparation for ended semester.
 
 ```yaml
@@ -135,12 +144,14 @@ schedule: "0 6 1 4 *"
 ```
 
 **Actions:**
+
 1. Mark semester as `ended`
 2. Send archival reminders to course instructors
 3. Prepare archival job queue
 4. Generate semester statistics report
 
 ### Archival Cleanup Job
+
 **Purpose:** Archives old courses and cleans up expired data.
 
 ```yaml
@@ -149,6 +160,7 @@ schedule: "0 2 1 4 *"
 ```
 
 **Actions:**
+
 1. Archive all courses past archival deadline
 2. Remove expired temporary enrollments
 3. Clean up old Keycloak groups
@@ -157,6 +169,7 @@ schedule: "0 2 1 4 *"
 ---
 
 ## Role Mappings / Rollenzuordnungen
+
 Configure role mappings between campus management and LMS:
 
 ```yaml
@@ -164,7 +177,7 @@ roles:
   enabled: true
   sync_interval_minutes: 15
   sync_on_enrollment_change: true
-  
+
   mappings:
     - campus_role: "student"
       keycloak_role: "student"
@@ -186,7 +199,9 @@ roles:
 ---
 
 ## LMS Integration / LMS-Integration
+
 ### ILIAS Configuration
+
 ```yaml
 ilias:
   enabled: true
@@ -196,6 +211,7 @@ ilias:
 ```
 
 ### Moodle Configuration
+
 ```yaml
 moodle:
   enabled: true
@@ -206,7 +222,9 @@ moodle:
 ---
 
 ## Monitoring / Überwachung
+
 ### Job Status
+
 ```bash
 # List all CronJobs
 kubectl get cronjobs -n opendesk
@@ -219,6 +237,7 @@ kubectl describe cronjob semester-start -n opendesk
 ```
 
 ### Health Checks
+
 ```bash
 # API health
 curl https://semester.example.com/health
@@ -228,7 +247,9 @@ curl https://semester.example.com/ready
 ```
 
 ### Alerting Rules
+
 Set up alerts for:
+
 - Failed CronJob executions (> 1 failure)
 - API health check failures
 - Database connection errors
@@ -237,7 +258,9 @@ Set up alerts for:
 ---
 
 ## Troubleshooting / Fehlerbehebung
+
 ### CronJob Not Running
+
 ```bash
 # Check CronJob status
 kubectl get cronjob semester-start -n opendesk
@@ -250,6 +273,7 @@ kubectl create job --from=cronjob/semester-start manual-trigger -n opendesk
 ```
 
 ### Sync Failures
+
 ```bash
 # Check role sync logs
 kubectl logs -l app=semester-provisioning,component=role-sync -n opendesk
@@ -259,6 +283,7 @@ kubectl exec -it deployment/semester-provisioning -- curl -v http://keycloak:808
 ```
 
 ### Archive Issues
+
 ```bash
 # Check archival job status
 kubectl get jobs -l app=semester-provisioning,job-type=archival -n opendesk
@@ -272,6 +297,7 @@ curl -X POST "https://semester.example.com/api/v1/archival/bulk-archive" \
 ---
 
 ## Best Practices / Best Practices
+
 1. **Test First**: Always use `dry_run: true` for new configurations
 2. **Monitor Jobs**: Set up alerts for failed CronJob executions
 3. **Backup Data**: Ensure database backups before major transitions
@@ -281,6 +307,7 @@ curl -X POST "https://semester.example.com/api/v1/archival/bulk-archive" \
 ---
 
 ## Related Documentation / Verwandte Dokumentation
+
 - [Semester Lifecycle](./semester-lifecycle.md) - User guide
 - [Course Provisioning API](./course-provisioning-api.md) - API reference
 - [External Services](./external-services.md) - LMS integration

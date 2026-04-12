@@ -42,6 +42,7 @@ monitoring:
     podMonitors:
       enabled: true
 ```
+
 ```
 
 ## Alerts

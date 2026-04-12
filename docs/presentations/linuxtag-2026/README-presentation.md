@@ -47,16 +47,19 @@ Präsentation über die openDesk-Erfahrung an der Philipps-Universität Marburg.
 ## Erstellen
 
 ### HTML (empfohlen für interaktive Präsentation)
+
 ```bash
 marp --no-config-file --allow-local-files linuxtag-2026-opendesk.md -o presentation.html
 ```
 
 ### PDF
+
 ```bash
 marp --pdf --allow-local-files linuxtag-2026-opendesk.md -o presentation.pdf
 ```
 
 ### Backup-Folien
+
 ```bash
 marp --pdf --allow-local-files linuxtag-2026-opendesk-backup.md -o backup.pdf
 ```

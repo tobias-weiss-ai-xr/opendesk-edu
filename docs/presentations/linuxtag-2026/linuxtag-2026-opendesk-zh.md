@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: 舒适与主权兼得？
 
 🎓 openDesk Edu — 高校数字主权
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 欢迎参与贡献！
+# 🤝 欢迎参与贡献
 
 **帮助我们为高校构建 openDesk Edu！**
 

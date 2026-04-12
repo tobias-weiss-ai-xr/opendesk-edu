@@ -91,8 +91,9 @@ Weitere Informationen: [github.com/opendesk-edu/opendesk-edu](https://github.com
 <div style="font-size: 0.85em;">
 
 **Tobias Weiß**
+
 - HRZ Zentrale Systeme · Universität Marburg
-- @graphwiz_ai@mastodon.social
+- @<graphwiz_ai@mastodon.social>
 - LinuxTag 2026 · 28.03.2026
 
 </div>

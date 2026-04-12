@@ -114,8 +114,8 @@ gh workflow run codeberg-sync.yml --repo tobias-weiss-ai-xr/opendesk-edu
 
 ### Codeberg side
 
-- **CI dashboard**: https://ci.codeberg.org/opendesk-edu/opendesk-edu
-- **Actions tab**: https://codeberg.org/opendesk-edu/opendesk-edu/actions
+- **CI dashboard**: <https://ci.codeberg.org/opendesk-edu/opendesk-edu>
+- **Actions tab**: <https://codeberg.org/opendesk-edu/opendesk-edu/actions>
 
 ### Manual sync from the UI
 

@@ -6,7 +6,7 @@ ILIAS (Integrated Learning, Information and Work Cooperation System) is a powerf
 
 ## Deployment Summary
 
-- **URL:** https://lms.opendesk.example.com
+- **URL:** <https://lms.opendesk.example.com>
 - **Namespace:** `opendesk`
 - **Helm Chart:** `helmfile/charts/ilias` (included in this repository)
 - **Ingress:** haproxy (LoadBalancer IP assigned by your cloud/provider)
@@ -40,7 +40,7 @@ ILIAS (Integrated Learning, Information and Work Cooperation System) is a powerf
 - **Realm:** `opendesk`
 - **Protocol:** OpenID Connect (OIDC)
 - **Client ID:** `ilias`
-- **Discovery URL:** https://id.opendesk.example.com/realms/opendesk/.well-known/openid-configuration
+- **Discovery URL:** <https://id.opendesk.example.com/realms/opendesk/.well-known/openid-configuration>
 
 ## Access Credentials
 
@@ -48,7 +48,7 @@ ILIAS (Integrated Learning, Information and Work Cooperation System) is a powerf
 
 - **Username:** `root`
 - **Password:** `<YOUR_ILIAS_ADMIN_PASSWORD>`
-- **Login:** https://lms.opendesk.example.com/login.php
+- **Login:** <https://lms.opendesk.example.com/login.php>
 
 ### Database
 
@@ -101,7 +101,7 @@ oidc_debug_mode = "1"
 
 1. **k8up Backups** (Daily at 00:42)
    - Backs up all PVCs in `opendesk` namespace
-   - Storage: S3 (https://s3.example.com)
+   - Storage: S3 (<https://s3.example.com>)
    - Retention: 14 daily, 5 most recent
    - Check: Weekly (Mondays at 02:00)
    - Prune: Weekly (Sundays at 03:00)
@@ -127,11 +127,13 @@ kubectl get pods -n opendesk | grep backup
 ### Restore Procedure
 
 1. Restore PVCs from k8up backup:
+
    ```bash
    kubectl apply -f <backup-restoration-manifest>.yaml
    ```
 
 2. Restore MariaDB from backup PVC:
+
    ```bash
    kubectl cp ilias-mariadb-backup-pvc:/path/to/dump.sql /tmp/dump.sql
    kubectl exec -n opendesk mariadb-0 -- mysql -u root -p ilias < /tmp/dump.sql
@@ -142,11 +144,13 @@ kubectl get pods -n opendesk | grep backup
 ### Current Status
 
 ✅ **Technically Complete:**
+
 - Keycloak OIDC client created
 - ILIAS OIDC configuration persistent
 - Discovery endpoint accessible
 
 ⚠️ **Manual Step Required:**
+
 - Enable OIDC in ILIAS admin panel
 
 ### Steps to Enable SSO
@@ -184,16 +188,19 @@ kubectl exec -n opendesk deploy/ilias-ilias -- cat /var/www/html/data/default/cl
 ### Update ILIAS
 
 1. Update Helm chart:
+
    ```bash
    helmfile -e default sync
    ```
 
 2. Verify release:
+
    ```bash
    helm status ilias -n opendesk
    ```
 
 3. Run database migrations (if needed):
+
    ```bash
    kubectl exec -n opendesk deploy/ilias-ilias -- php setup/cli.php update
    ```
@@ -252,6 +259,7 @@ kubectl logs -n opendesk -l app.kubernetes.io/name=ilias --tail=50
 ### Metrics
 
 ILIAS does not expose Prometheus metrics by default. Monitor via:
+
 - Pod resource usage: `kubectl top pods -n opendesk`
 - Ingress metrics: haproxy dashboard
 - Storage: Kubernetes PVC metrics
@@ -259,16 +267,19 @@ ILIAS does not expose Prometheus metrics by default. Monitor via:
 ### Health Checks
 
 1. Check if ILIAS is responding:
+
    ```bash
    curl -k https://lms.opendesk.example.com/login.php
    ```
 
 2. Check database connectivity:
+
    ```bash
    kubectl exec -n opendesk deploy/ilias-ilias -- php -r "new mysqli('mariadb.opendesk.svc.cluster.local', 'ilias', '<YOUR_ILIAS_DB_PASSWORD>', 'ilias'); echo 'OK';"
    ```
 
 3. Check OIDC discovery:
+
    ```bash
    curl -k "https://id.opendesk.example.com/realms/opendesk/.well-known/openid-configuration"
    ```
@@ -327,13 +338,14 @@ helm list -n opendesk | grep ilias
 
 ### Documentation
 
-- ILIAS Official: https://www.ilias.de/docu/
-- ILIAS Installation Guide: https://docu.ilias.de/goto.php?target=cat_27252_2&client_id=docu
-- OpenID Connect in ILIAS: https://docu.ilias.de/goto.php?target=cat_298543_2&client_id=docu
+- ILIAS Official: <https://www.ilias.de/docu/>
+- ILIAS Installation Guide: <https://docu.ilias.de/goto.php?target=cat_27252_2&client_id=docu>
+- OpenID Connect in ILIAS: <https://docu.ilias.de/goto.php?target=cat_298543_2&client_id=docu>
 
 ### Contact
 
 For issues with:
+
 - **ILIAS Configuration:** System administrator
 - **Keycloak SSO:** System administrator
 - **Kubernetes Infrastructure:** Platform team

@@ -14,6 +14,7 @@ SPDX-License-Identifier: Apache-2.0
 <!-- TOC -->
 
 This document covers:
+
 * Deploying openDesk into an environment with custom public key infrastructure (PKI) that is usually not part of
 public certificate authority chains
 * deploying openDesk into a local cluster without ACME challenge
@@ -63,6 +64,7 @@ This option is useful when you do not have a trusted certificate available and c
 Let’s Encrypt. It will result in a cert-manager managed root certificate in the namespace you deploy openDesk into.
 
 1. Create self-signed cert-manager.io Cluster Issuer:
+
     ```yaml
     apiVersion: "cert-manager.io/v1"
     kind: "ClusterIssuer"
@@ -73,6 +75,7 @@ Let’s Encrypt. It will result in a cert-manager managed root certificate in th
     ```
 
 2. Enable mount and creation of self-signed certificates:
+
     ```yaml
     certificate:
       issuerRef:
@@ -88,6 +91,7 @@ multiple namespaces in a cluster.
 1. Create self-signed cert-manager.io Cluster Issuer root certificate the same way as in *Option 2a*.
 
 2. Create the root certificate for the previously created CA, in the example it is placed into the namespace `cert-manager`.
+
     ```yaml
     apiVersion: cert-manager.io/v1
     kind: Certificate

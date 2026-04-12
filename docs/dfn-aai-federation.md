@@ -45,6 +45,7 @@ DFN-AAI (Deutsche Forschungsnetz Authentication and Authorization Infrastructure
 Contact your institution's DFN-AAI administrator to register openDesk Edu as a Service Provider.
 
 **Required Information:**
+
 - Metadata URL: `https://yourdomain.de/saml/sp/metadata`
 - Entity ID: `urn:auth:opendesk:edu:yourdomain`
 - SSO URL: `https://yourdomain.de/saml/sp/sso`
@@ -166,6 +167,7 @@ curl -X GET https://yourdomain.de/saml/sp/metadata
 ```
 
 Verify:
+
 - Entity ID matches what you registered with DFN-AAI
 - SSO and SLO URLs are correct
 - Certificates are valid
@@ -187,6 +189,7 @@ kubectl logs -n keycloak deployment/keycloak -f
 ```
 
 Look for:
+
 - `eduPersonPrincipalName` - Your institutional username
 - `mail` - Your institutional email
 - `displayName` - Your display name
@@ -198,29 +201,37 @@ Look for:
 ### Common Issues
 
 #### 1. Invalid Metadata URL
+
 **Problem**: DFN-AAI cannot retrieve your metadata
 **Solution**:
+
 - Check metadata URL is publicly accessible
 - Verify SSL certificate is valid
 - Ensure firewall allows access to your metadata URL
 
 #### 2. Attribute Release Refused
+
 **Problem**: User cannot login - attributes not released
 **Solution**:
+
 - Contact your DFN-AAI administrator
 - Request attribute release for required attributes
 - Verify attribute mapping in the IdP configuration
 
 #### 3. Role Mismatch
+
 **Problem**: User has wrong roles/permissions
 **Solution**:
+
 - Check `eduPersonAffiliation` value returned by IdP
 - Verify role mapping configuration in Keycloak
 - Ensure user has correct affiliation in your institutional directory
 
 #### 4. Logout Not Propagating
+
 **Problem**: Logging out of openDesk Edu doesn't logout from IdP
 **Solution**:
+
 - Verify backchannel logout is enabled
 - Check SLO URL is correct
 - Test with DFN-AAI test federation

@@ -40,10 +40,10 @@ DFN-AAI enables single sign-on access to research and education services across 
 
 This guide covers:
 
-- Generating SAML service provider metadata
-- Registering with DFN-AAI test and production federations
-- Configuring Keycloak for SAML federation
-- Testing federation access with institutional identities
+* Generating SAML service provider metadata
+* Registering with DFN-AAI test and production federations
+* Configuring Keycloak for SAML federation
+* Testing federation access with institutional identities
 
 > [!important]
 > This guide assumes you have access to a DFN-AAI registration account. Contact your institution's IT department or DFN-AAI support at [support@aai.dfn.de](mailto:support@aai.dfn.de) if you need federation enrollment.
@@ -66,20 +66,22 @@ Before starting the enrollment process, ensure you have the following prerequisi
 You need an X.509 certificate for signing SAML requests and encrypting assertions.
 
 **For Testing:**
-- Self-signed certificates are acceptable for DFN-AAI test federation
-- Use the `--generate-cert` option with the metadata generation script
+
+* Self-signed certificates are acceptable for DFN-AAI test federation
+* Use the `--generate-cert` option with the metadata generation script
 
 **For Production:**
-- CA-signed certificates from your institution's PKI are required
-- Certificate validity should be at least 1 year
-- Private keys must be stored securely
+
+* CA-signed certificates from your institution's PKI are required
+* Certificate validity should be at least 1 year
+* Private keys must be stored securely
 
 ### Network Requirements
 
-- All SAML endpoints must be accessible via HTTPS
-- TLS certificates must be valid and not expired
-- Firewall rules must allow inbound HTTPS traffic to Keycloak endpoints
-- Outbound HTTPS access to DFN-AAI services is required
+* All SAML endpoints must be accessible via HTTPS
+* TLS certificates must be valid and not expired
+* Firewall rules must allow inbound HTTPS traffic to Keycloak endpoints
+* Outbound HTTPS access to DFN-AAI services is required
 
 ## Step-by-Step Enrollment
 
@@ -103,9 +105,10 @@ cd /opt/git/opendesk-edu
 ```
 
 This generates:
-- `sp-cert.pem`: Self-signed certificate (default 365 days valid)
-- `sp-key.pem`: Private key
-- `/tmp/dfn-aai-metadata.xml`: SAML 2.0 metadata for DFN-AAI registration
+
+* `sp-cert.pem`: Self-signed certificate (default 365 days valid)
+* `sp-key.pem`: Private key
+* `/tmp/dfn-aai-metadata.xml`: SAML 2.0 metadata for DFN-AAI registration
 
 #### Generate with CA-Signed Certificates (Production)
 
@@ -151,11 +154,11 @@ cat /tmp/dfn-aai-metadata.xml
 
 Verify the following:
 
-- `entityID` matches your intended SAML entity identifier
-- Organization name and contact information are correct
-- All endpoints reference your domain with HTTPS
-- Certificate is properly embedded in the metadata
-- Required attributes are listed in `AttributeConsumingService`
+* `entityID` matches your intended SAML entity identifier
+* Organization name and contact information are correct
+* All endpoints reference your domain with HTTPS
+* Certificate is properly embedded in the metadata
+* Required attributes are listed in `AttributeConsumingService`
 
 ### Step 3: Register with DFN-AAI
 
@@ -168,40 +171,41 @@ Navigate to the [DFN-AAI metadata registration portal](https://www.aai.dfn.de/en
 #### Complete Registration Form
 
 1. **Service Information**
-   - EntityID (from your metadata)
-   - Service name (Organization display name)
-   - Service description (Brief description of your education platform)
+   * EntityID (from your metadata)
+   * Service name (Organization display name)
+   * Service description (Brief description of your education platform)
 
 2. **Technical Details**
-   - Upload the `dfn-aai-metadata.xml` file
-   - Provide contact information for federation administrators
-   - Specify whether registering for test or production federation
+   * Upload the `dfn-aai-metadata.xml` file
+   * Provide contact information for federation administrators
+   * Specify whether registering for test or production federation
 
 3. **Attribute Requirements**
-   - Confirm required attributes are included:
-     - `eduPersonAffiliation`
-     - `mail`
-     - `displayName`
-     - `eduPersonPrincipalName`
+   * Confirm required attributes are included:
+     * `eduPersonAffiliation`
+     * `mail`
+     * `displayName`
+     * `eduPersonPrincipalName`
 
 4. **Support Contact**
-   - Technical contact email
-   - Administrative contact email
+   * Technical contact email
+   * Administrative contact email
 
 #### Submit for Approval
 
 After completing the form, submit your registration request. DFN-AAI will:
 
-- Validate your metadata format
-- Verify endpoint accessibility
-- Review certificate validity
-- Approve or request corrections
+* Validate your metadata format
+* Verify endpoint accessibility
+* Review certificate validity
+* Approve or request corrections
 
 Approval typically takes 1-3 business days. You will receive an email notification when your registration is approved.
 
 > [!important]
-- Start with the test federation to validate your configuration
-- Move to production federation only after successful testing
+
+* Start with the test federation to validate your configuration
+* Move to production federation only after successful testing
 
 ### Step 4: Configure Keycloak as Identity Provider
 
@@ -218,8 +222,9 @@ kubectl -n opendesk exec -it ums-keycloak-0 -- bash
 ```
 
 Default admin credentials:
-- Username: `kcadmin`
-- Password: Check `KEYCLOAK_ADMIN_PASSWORD` environment variable in the Keycloak pod
+
+* Username: `kcadmin`
+* Password: Check `KEYCLOAK_ADMIN_PASSWORD` environment variable in the Keycloak pod
 
 #### Import DFN-AAI Metadata
 
@@ -238,11 +243,13 @@ Default admin credentials:
 3. **Import Metadata**:
 
    For test federation:
+
    ```url
    https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml
    ```
 
    For production federation:
+
    ```url
    https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml
    ```
@@ -264,9 +271,9 @@ Navigate to **Identity Providers** > **DFN-AAI** > **Add mapper** > **User Attri
 
 #### Enable Identity Provider
 
-- Set **First Login Flow** to `first broker login` (or custom flow)
-- Check **Enabled** to activate the identity provider
-- Click **Save**
+* Set **First Login Flow** to `first broker login` (or custom flow)
+* Check **Enabled** to activate the identity provider
+* Click **Save**
 
 ### Step 5: Configure Keycloak as Service Provider
 
@@ -314,11 +321,13 @@ Validate that users can authenticate through the DFN-AAI federation.
 #### Access via Discovery Service
 
 1. Navigate to the DFN-AAI discovery service:
+
    ```
    https://discovery.aai.dfn.de/
    ```
 
 2. In the **Return to** field, enter your Keycloak SAML endpoint:
+
    ```
    https://idp.education.example.org/realms/opendesk/protocol/saml
    ```
@@ -335,10 +344,10 @@ After successful login, verify that attributes are correctly mapped:
 2. Locate the federated user
 3. View user attributes
 4. Confirm:
-   - `firstName` contains display name value
-   - `email` contains mail attribute
-   - `username` contains persistent ID
-   - `affiliation` contains affiliation value
+   * `firstName` contains display name value
+   * `email` contains mail attribute
+   * `username` contains persistent ID
+   * `affiliation` contains affiliation value
 
 #### Test Application Access
 
@@ -347,9 +356,10 @@ After successful login, verify that attributes are correctly mapped:
 3. Verify successful authentication and attribute mapping
 
 > [!tip]
-- Use browser developer tools to inspect SAML responses if troubleshooting
-- Check Keycloak logs for federation authentication events
-- Verify attribute mapper configuration if attributes are missing
+
+* Use browser developer tools to inspect SAML responses if troubleshooting
+* Check Keycloak logs for federation authentication events
+* Verify attribute mapper configuration if attributes are missing
 
 ## Required Certificates and Endpoints
 
@@ -361,16 +371,18 @@ After successful login, verify that attributes are correctly mapped:
 | SP Encryption Certificate | Encrypts SAML assertions from IdP | Secure attribute transfer (optional) |
 
 **Certificate Requirements:**
-- X.509 format in PEM encoding
-- RSA key size: 2048 bits or greater
-- Validity period: At least 365 days for production
-- Subject Alternative Name: Not required for SAML SP certificates
-- Key usage: Digital signature, non-repudiation
+
+* X.509 format in PEM encoding
+* RSA key size: 2048 bits or greater
+* Validity period: At least 365 days for production
+* Subject Alternative Name: Not required for SAML SP certificates
+* Key usage: Digital signature, non-repudiation
 
 **Key Management:**
-- Store private keys with restricted access (`chmod 600`)
-- Never commit private keys to version control
-- Rotate certificates before expiration (DFN-AAI requires 30-day notice)
+
+* Store private keys with restricted access (`chmod 600`)
+* Never commit private keys to version control
+* Rotate certificates before expiration (DFN-AAI requires 30-day notice)
 
 ### SAML Endpoints
 
@@ -422,11 +434,11 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 1. Navigate to **Identity Providers** > **DFN-AAI** > **Mappers**
 2. Click **Add mapper** > **User Attribute**
 3. Configure:
-   - **Name**: Descriptive mapper name (e.g., "Email Mapper")
-   - **User Attribute**: Target Keycloak attribute (e.g., `email`)
-   - **SAML Attribute Name**: Source federation attribute (e.g., `urn:mace:dir:attribute-def:mail`)
-   - **Friendly Name**: Human-readable name (e.g., `mail`)
-   - **SAML Attribute NameFormat**: `urn:oasis:names:tc:SAML:2.0:attrname-format:uri`
+   * **Name**: Descriptive mapper name (e.g., "Email Mapper")
+   * **User Attribute**: Target Keycloak attribute (e.g., `email`)
+   * **SAML Attribute Name**: Source federation attribute (e.g., `urn:mace:dir:attribute-def:mail`)
+   * **Friendly Name**: Human-readable name (e.g., `mail`)
+   * **SAML Attribute NameFormat**: `urn:oasis:names:tc:SAML:2.0:attrname-format:uri`
 4. Click **Save**
 
 ## Troubleshooting
@@ -440,25 +452,27 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 **Solutions:**
 
 1. **Check XML Syntax**
+
    ```bash
    xmllint --noout /tmp/dfn-aai-metadata.xml
    ```
 
 2. **Verify Certificate Format**
+
    ```bash
    openssl x509 -in sp-cert.pem -noout -text
    # Verify certificate is valid and not expired
    ```
 
 3. **Check EntityID Format**
-   - Must be a valid HTTPS URL
-   - Must use your actual domain
-   - DNS must resolve to your institution's IP
+   * Must be a valid HTTPS URL
+   * Must use your actual domain
+   * DNS must resolve to your institution's IP
 
 4. **Verify All Required Attributes**
-   - Ensure all four required attributes are present
-   - Check attribute names use correct URI format
-   - Confirm friendly names match DFN-AAI specifications
+   * Ensure all four required attributes are present
+   * Check attribute names use correct URI format
+   * Confirm friendly names match DFN-AAI specifications
 
 #### Registration Pending Approval
 
@@ -466,11 +480,11 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 
 **Checklist:**
 
-- [ ] Verify email contact information is correct
-- [ ] Check spam folder for DFN-AAI communications
-- [ ] Confirm metadata file was successfully uploaded
-- [ ] Double-check institution has valid DFN-AAI subscription
-- [ ] Contact DFN-AAI support: [support@aai.dfn.de](mailto:support@aai.dfn.de)
+* [ ] Verify email contact information is correct
+* [ ] Check spam folder for DFN-AAI communications
+* [ ] Confirm metadata file was successfully uploaded
+* [ ] Double-check institution has valid DFN-AAI subscription
+* [ ] Contact DFN-AAI support: [support@aai.dfn.de](mailto:support@aai.dfn.de)
 
 ### Attribute Mapping Problems
 
@@ -481,21 +495,22 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 **Solutions:**
 
 1. **Verify Attribute Release at IdP**
-   - Contact institutional IdP administrator
-   - Confirm required attributes are released to this SP
-   - Check IdP logs for attribute release denials
+   * Contact institutional IdP administrator
+   * Confirm required attributes are released to this SP
+   * Check IdP logs for attribute release denials
 
 2. **Check Keycloak Mapper Configuration**
-   - Navigate to **Identity Providers** > **DFN-AAI** > **Mappers**
-   - Verify all required attributes have mappers
-   - Check mapper target attributes match Keycloak user profile
+   * Navigate to **Identity Providers** > **DFN-AAI** > **Mappers**
+   * Verify all required attributes have mappers
+   * Check mapper target attributes match Keycloak user profile
 
 3. **Inspect SAML Response**
-   - Use browser developer tools (Network tab)
-   - Examine SAML assertion from DFN-AAI IdP
-   - Confirm attributes are present in the assertion
+   * Use browser developer tools (Network tab)
+   * Examine SAML assertion from DFN-AAI IdP
+   * Confirm attributes are present in the assertion
 
 4. **Review Keycloak Logs**
+
    ```bash
    # Check Keycloak authentication logs
    kubectl -n opendesk logs deployment/ums-keycloak --tail=100
@@ -508,16 +523,16 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 **Diagnosis:**
 
 1. Review DFN-AAI attribute specifications:
-   - Valid values: `faculty`, `student`, `staff`, `member`, `alum`, `affiliate`, `library-walk-in`
+   * Valid values: `faculty`, `student`, `staff`, `member`, `alum`, `affiliate`, `library-walk-in`
 
 2. Check institutional IdP configuration:
-   - IdP may return multiple affiliation values
-   - First value is typically the primary affiliation
-   - Contact IdP administrator for attribute mapping explanation
+   * IdP may return multiple affiliation values
+   * First value is typically the primary affiliation
+   * Contact IdP administrator for attribute mapping explanation
 
 3. Configure Keycloak mapper logic:
-   - Use **Script Mapper** for custom attribute processing
-   - Extract specific affiliation from multi-valued attributes
+   * Use **Script Mapper** for custom attribute processing
+   * Extract specific affiliation from multi-valued attributes
 
 ### Login Failures
 
@@ -528,15 +543,16 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 **Solutions:**
 
 1. **Verify Certificate Synchronization**
-   - Ensure SP signing certificate matches what DFN-AAI has on record
-   - Re-submit updated metadata if certificate was rotated
+   * Ensure SP signing certificate matches what DFN-AAI has on record
+   * Re-submit updated metadata if certificate was rotated
 
 2. **Check Keycloak Signature Validation**
-   - Navigate to **Identity Providers** > **DFN-AAI**
-   - Verify signature validation is enabled
-   - Check if DFN-AAI IdP certificate was imported correctly
+   * Navigate to **Identity Providers** > **DFN-AAI**
+   * Verify signature validation is enabled
+   * Check if DFN-AAI IdP certificate was imported correctly
 
 3. **Validate Time Synchronization**
+
    ```bash
    # Ensure Keycloak system clock is synchronized
    timedatectl status
@@ -549,17 +565,18 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 **Solutions:**
 
 1. **Verify Endpoint Accessibility**
+
    ```bash
    curl -I https://idp.education.example.org/realms/opendesk/protocol/saml
    ```
 
 2. **Check Federation Metadata**
-   - Confirm ACS URL in metadata matches expected endpoint
-   - Verify binding type is supported by Keycloak
+   * Confirm ACS URL in metadata matches expected endpoint
+   * Verify binding type is supported by Keycloak
 
 3. **Review Ingress Configuration**
-   - Ensure Kubernetes ingress routes traffic to Keycloak
-   - Check TLS certificate is valid for the endpoint
+   * Ensure Kubernetes ingress routes traffic to Keycloak
+   * Check TLS certificate is valid for the endpoint
 
 ### Certificate Problems
 
@@ -570,6 +587,7 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 **Recovery Process:**
 
 1. **Generate New Certificate**
+
    ```bash
    ./scripts/federation/generate-metadata.sh \
        -d education.example.org \
@@ -578,16 +596,16 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
    ```
 
 2. **Update Keycloak Configuration**
-   - Import new certificate in Keycloak SAML settings
-   - Download updated metadata from Keycloak
+   * Import new certificate in Keycloak SAML settings
+   * Download updated metadata from Keycloak
 
 3. **Re-submit to DFN-AAI**
-   - Update metadata in DFN-AAI registration portal
-   - Provide 30-day notice for certificate changes
+   * Update metadata in DFN-AAI registration portal
+   * Provide 30-day notice for certificate changes
 
 4. **Notify Users**
-   - Communicate certificate rotation to federation partners
-   - Monitor for login failures during transition
+   * Communicate certificate rotation to federation partners
+   * Monitor for login failures during transition
 
 #### Self-Signed Certificate Rejected
 
@@ -595,9 +613,9 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 
 **Solution:**
 
-- Use CA-signed certificates from your institution's PKI
-- Contact your IT security team for certificate issuance
-- Export certificate in PEM format for metadata generation
+* Use CA-signed certificates from your institution's PKI
+* Contact your IT security team for certificate issuance
+* Export certificate in PEM format for metadata generation
 
 ## Test vs Production Federation
 
@@ -606,48 +624,53 @@ Configure attribute mappers in Keycloak to translate federation attributes to us
 **Purpose:** Validate configuration without risk of production disruption
 
 **Characteristics:**
-- Contains test institutional identity providers
-- Lower security requirements (self-signed TLS allowed)
-- Faster approval process
-- Suitable for development and testing
+
+* Contains test institutional identity providers
+* Lower security requirements (self-signed TLS allowed)
+* Faster approval process
+* Suitable for development and testing
 
 **When to Use:**
-- Initial configuration testing
-- Attribute mapping validation
-- Integration development
-- Training and demonstrations
+
+* Initial configuration testing
+* Attribute mapping validation
+* Integration development
+* Training and demonstrations
 
 **Migration Path:**
-- Configurations from test federation can be adapted for production
-- Re-register SP metadata with production federation URL
-- Update Keycloak IdP configuration to production endpoints
+
+* Configurations from test federation can be adapted for production
+* Re-register SP metadata with production federation URL
+* Update Keycloak IdP configuration to production endpoints
 
 ### Production Federation
 
 **Purpose:** Provide production SSO access for real users
 
 **Characteristics:**
-- Contains institutional identity providers from DFN-AAI and eduGAIN
-- Strict security requirements (CA-signed TLS required)
-- Formal approval process
-- Supports production workloads
+
+* Contains institutional identity providers from DFN-AAI and eduGAIN
+* Strict security requirements (CA-signed TLS required)
+* Formal approval process
+* Supports production workloads
 
 **When to Use:**
-- Production deployments
-- Federation with institutional IdPs
-- User-facing authentication
-- Academic term start (semester onboarding)
+
+* Production deployments
+* Federation with institutional IdPs
+* User-facing authentication
+* Academic term start (semester onboarding)
 
 **Migration Checklist:**
 
-- [ ] Complete successful testing with test federation
-- [ ] Obtain CA-signed certificates from institution PKI
-- [ ] Re-generate metadata with production certificates
-- [ ] Register with production DFN-AAI federation
-- [ ] Update Keycloak IdP configuration to production endpoints
-- [ ] Update attribute mappers if required
-- [ ] Perform end-to-end testing with production credentials
-- [ ] Communicate availability to users and support teams
+* [ ] Complete successful testing with test federation
+* [ ] Obtain CA-signed certificates from institution PKI
+* [ ] Re-generate metadata with production certificates
+* [ ] Register with production DFN-AAI federation
+* [ ] Update Keycloak IdP configuration to production endpoints
+* [ ] Update attribute mappers if required
+* [ ] Perform end-to-end testing with production credentials
+* [ ] Communicate availability to users and support teams
 
 > [!important]
 DFN-AAI requires separate registrations for test and production federations. Configure your deployment to support both environments by maintaining separate Keycloak realms or identity provider configurations.
@@ -656,8 +679,8 @@ DFN-AAI requires separate registrations for test and production federations. Con
 
 ## Additional Resources
 
-- **DFN-AAI Documentation:** https://www.aai.dfn.de/en/documentation/
-- **eduGAIN Technical Profile:** https://technical.edugain.org/
-- **Keycloak SAML Documentation:** https://www.keycloak.org/docs/latest/server_admin/#identity-broker-saml
-- **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
-- **OpenDesk Edu GitHub:** https://github.com/opendesk-edu/opendesk-edu/issues
+* **DFN-AAI Documentation:** <https://www.aai.dfn.de/en/documentation/>
+* **eduGAIN Technical Profile:** <https://technical.edugain.org/>
+* **Keycloak SAML Documentation:** <https://www.keycloak.org/docs/latest/server_admin/#identity-broker-saml>
+* **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
+* **OpenDesk Edu GitHub:** <https://github.com/opendesk-edu/opendesk-edu/issues>

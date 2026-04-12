@@ -57,18 +57,21 @@ Production deployments require careful planning, security hardening, and operati
 ### Security Requirements
 
 **TLS Certificates:**
+
 - Valid certificates for all domains
 - Minimum 2048-bit RSA or 256-bit ECC
 - Certificate Authority: Let's Encrypt (production) or enterprise CA
 - Certificate renewal automation
 
 **Secrets Management:**
+
 - Kubernetes secrets for all credentials
 - RBAC enabled on cluster
 - Regular secret rotation (90 days)
 - Secrets stored in encrypted volume
 
 **Network Policies:**
+
 - Default deny all ingress/egress
 - Explicit allow for required services
 - Namespace isolation
@@ -77,6 +80,7 @@ Production deployments require careful planning, security hardening, and operati
 ### Data Protection
 
 **GDPR Compliance:**
+
 - Data encryption at rest (disk encryption)
 - Data encryption in transit (TLS 1.3+)
 - Data backup and retention policy
@@ -84,6 +88,7 @@ Production deployments require careful planning, security hardening, and operati
 - Data breach notification procedures
 
 **Backup Requirements:**
+
 - Automated daily backups
 - Offsite backup replication
 - Backup verification (daily)
@@ -228,12 +233,14 @@ resources:
 **Steps:**
 
 1. **Create Kubernetes cluster**
+
    ```bash
    # Using managed service (e.g., GKE, EKS)
    # Or self-hosted with kubeadm
    ```
 
 2. **Configure storage classes**
+
    ```bash
    kubectl create storageclass fast-ssd \
      --reclaim-policy=Delete \
@@ -242,6 +249,7 @@ resources:
    ```
 
 3. **Create namespaces**
+
    ```bash
    kubectl create namespace production
    kubectl create namespace monitoring
@@ -249,6 +257,7 @@ resources:
    ```
 
 4. **Install cert-manager** (for Let's Encrypt)
+
    ```bash
    helm install cert-manager jetstack/cert-manager \
      --namespace cert-manager \
@@ -257,6 +266,7 @@ resources:
    ```
 
 5. **Install ingress controller**
+
    ```bash
    helm install ingress-nginx ingress-nginx/ingress-nginx \
      --namespace ingress-nginx \
@@ -270,6 +280,7 @@ resources:
 **Steps:**
 
 1. **Deploy MariaDB**
+
    ```bash
    cd helmfile/charts/
    helm install mariadb ./mariadb \
@@ -279,12 +290,14 @@ resources:
    ```
 
 2. **Verify database health**
+
    ```bash
    kubectl get pods -n production -l app=mariadb
    kubectl logs -f production/mariadb-0
    ```
 
 3. **Initialize databases**
+
    ```bash
    kubectl exec -n production mariadb-0 -- \
      mysql -u root -p$MYSQL_ROOT_PASSWORD -e "
@@ -301,6 +314,7 @@ resources:
 **Steps:**
 
 1. **Deploy Keycloak**
+
    ```bash
    helmfile -e production apply --diff
 
@@ -310,6 +324,7 @@ resources:
    ```
 
 2. **Verify Keycloak**
+
    ```bash
    # Check admin console
    kubectl port-forward -n production svc/keycloak 8080:80
@@ -323,6 +338,7 @@ resources:
    - Import required clients
 
 4. **Deploy ILIAS**
+
    ```bash
    helm install ilias ./ilias \
      --namespace production \
@@ -330,6 +346,7 @@ resources:
    ```
 
 5. **Deploy Moodle**
+
    ```bash
    helm install moodle ./moodle \
      --namespace production \
@@ -337,6 +354,7 @@ resources:
    ```
 
 6. **Deploy other services**
+
    ```bash
    helm install nextcloud ./nextcloud --namespace production
    helm install bbb ./bigbluebutton --namespace production
@@ -349,6 +367,7 @@ resources:
 **Steps:**
 
 1. **Deploy monitoring stack**
+
    ```bash
    helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
      --namespace monitoring \
@@ -356,11 +375,13 @@ resources:
    ```
 
 2. **Import Grafana dashboards**
+
    ```bash
    kubectl apply -f ./grafana-dashboards/
    ```
 
 3. **Configure Alertmanager**
+
    ```bash
    # Update secret with notification channels
    kubectl create secret generic alertmanager-secrets \
@@ -370,6 +391,7 @@ resources:
    ```
 
 4. **Verify monitoring**
+
    ```bash
    # Access Grafana
    kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
@@ -386,6 +408,7 @@ resources:
 **Steps:**
 
 1. **Install provisioning scripts**
+
    ```bash
    # Copy scripts to production server
    scp -r scripts/user_import/* production@production-server:/opt/opendesk-edu/scripts/user_import/
@@ -396,6 +419,7 @@ resources:
    ```
 
 2. **Configure environment**
+
    ```bash
    cp .env.example .env
    nano .env
@@ -411,6 +435,7 @@ resources:
    ```
 
 3. **Test provisioning scripts**
+
    ```bash
    # Test LDAP connection
    python sync_users.py --source ldap --dry-run
@@ -426,11 +451,13 @@ resources:
 **Steps:**
 
 1. **Create backup namespace**
+
    ```bash
    kubectl create namespace backups
    ```
 
 2. **Install Velero (backup tool)**
+
    ```bash
    helm install velero vmware-tanzu/velero \
      --namespace backups \
@@ -440,6 +467,7 @@ resources:
    ```
 
 3. **Configure backup schedule**
+
    ```yaml
    # backup-schedule.yaml
    apiVersion: velero.io/v1
@@ -459,6 +487,7 @@ resources:
    ```
 
 4. **Test backup**
+
    ```bash
    # Create on-demand backup
    velero backup create opendesk-test \
@@ -476,6 +505,7 @@ resources:
 **Steps:**
 
 1. **Configure network policies**
+
    ```yaml
    apiVersion: networking.k8s.io/v1
    kind: NetworkPolicy
@@ -490,6 +520,7 @@ resources:
    ```
 
 2. **Enable pod security policies**
+
    ```bash
    # Install PSP (if using older K8s)
    kubectl apply -f ./pod-security-policies/
@@ -500,6 +531,7 @@ resources:
    ```
 
 3. **Configure RBAC**
+
    ```yaml
    # service-account-roles.yaml
    apiVersion: rbac.authorization.k8s.io/v1
@@ -513,6 +545,7 @@ resources:
    ```
 
 4. **Secret encryption at rest**
+
    ```bash
    # Enable encryption on storage class
    kubectl annotate storageclass standard-ssd \
@@ -542,12 +575,14 @@ resources:
 ### Staged Rollout
 
 **Day 1: Infrastructure + Keycloak**
+
 - Deploy Kubernetes cluster
 - Deploy database
 - Deploy Keycloak
 - Verify Keycloak SSO
 
 **Day 2: Core Services**
+
 - Deploy ILIAS (read-only mode)
 - Deploy Moodle (read-only mode)
 - Deploy Nextcloud (read-only mode)
@@ -555,12 +590,14 @@ resources:
 - Verify all services accessible via SSO
 
 **Day 3: Monitoring + Backup**
+
 - Deploy monitoring stack
 - Configure backups
 - Test backup/restore
 - Enable monitoring alerts
 
 **Day 4: Full Read-Write**
+
 - Switch all services to read-write mode
 - Start user provisioning sync
 - Enable backup schedule
@@ -581,6 +618,7 @@ If deployment fails, use this procedure:
    - Fix forward: Fix issue and continue
 
 3. **Execute rollback**
+
    ```bash
    # Rollback to previous version
    helm rollback <release-name> -n production
@@ -601,6 +639,7 @@ If deployment fails, use this procedure:
 ### Monitoring
 
 **Critical Metrics:**
+
 - Service availability (target: 99.9%)
 - Response time (target: < 2s for 95th percentile)
 - Error rate (target: < 0.1%)
@@ -609,6 +648,7 @@ If deployment fails, use this procedure:
 - Memory usage (alert at 85%, scale at 95%)
 
 **Daily Checks:**
+
 - Morning: Review overnight alerts and logs
 - Mid-day: Check service health dashboard
 - Evening: Review daily backup status
@@ -616,12 +656,14 @@ If deployment fails, use this procedure:
 ### Maintenance Windows
 
 **Schedule:**
+
 - Database maintenance: Monthly, Sunday 2 AM UTC
 - Security updates: Weekly, Sunday 3 AM UTC
 - Backup verification: Weekly, Sunday 1 AM UTC
 - Capacity planning: Quarterly
 
 **Maintenance Procedure:**
+
 1. Notify users 7 days in advance
 2. Set maintenance mode in Keycloak
 3. Scale down services
@@ -642,6 +684,7 @@ If deployment fails, use this procedure:
 | Low | 24 hours | 72 hours | Email |
 
 **Incident Procedure:**
+
 1. Detect incident (alert or user report)
 2. Assess severity and impact
 3. Notify appropriate team
@@ -678,17 +721,20 @@ If deployment fails, use this procedure:
 ### Regular Security Tasks
 
 **Weekly:**
+
 - Review security alerts
 - Check for failed login attempts
 - Review access logs
 
 **Monthly:**
+
 - Review and rotate secrets
 - Update TLS certificates
 - Security patch review
 - Vulnerability scan review
 
 **Quarterly:**
+
 - Security audit
 - Penetration test
 - Incident response drill
@@ -697,12 +743,14 @@ If deployment fails, use this procedure:
 ### GDPR Compliance
 
 **Data Subject Rights:**
+
 - Right to access: Provide copy of all personal data
 - Right to rectification: Correct inaccurate data
 - Right to erasure: Delete personal data (with legal exceptions)
 - Right to data portability: Export in machine-readable format
 
 **Data Breach Response:**
+
 1. Assess breach scope
 2. Notify supervisory authority (within 72 hours)
 3. Notify affected individuals (without undue delay)
@@ -713,12 +761,14 @@ If deployment fails, use this procedure:
 ## Support and Documentation
 
 **Support Contact:**
-- **Primary IT:** it-support@university.de
-- **Emergency:** oncall@university.de (24/7)
-- **System:** sysadmin@university.de
-- **Security:** security@university.de
+
+- **Primary IT:** <it-support@university.de>
+- **Emergency:** <oncall@university.de> (24/7)
+- **System:** <sysadmin@university.de>
+- **Security:** <security@university.de>
 
 **Documentation:**
+
 - Deployment procedures (this guide)
 - Service documentation (docs/)
 - Disaster recovery (docs/disaster-recovery.md)
@@ -726,6 +776,7 @@ If deployment fails, use this procedure:
 - Runbooks: Troubleshooting procedures per service
 
 **Knowledge Base:**
+
 - Common issues and solutions
 - Change history
 - Incident log
@@ -811,6 +862,7 @@ cache:
 ### Common Production Issues
 
 **1. High Memory Usage**
+
 ```bash
 # Identify memory-intensive pods
 kubectl top pods -n production
@@ -825,6 +877,7 @@ kubectl logs -n production <pod-name> --previous
 ```
 
 **2. Database Connection Pool Exhausted**
+
 ```bash
 # Check database connections
 kubectl exec -n production mariadb-0 -- \
@@ -837,6 +890,7 @@ kubectl exec -n production mariadb-0 -- \
 ```
 
 **3. Certificate Renewal Failure**
+
 ```bash
 # Check cert-manager status
 kubectl describe certificate -n production desk-university-de
@@ -852,6 +906,7 @@ kubectl annotate certificate desk-university-de \
 ```
 
 **4. High CPU Usage**
+
 ```bash
 # Identify CPU-intensive pods
 kubectl top pods -n production --sort-by=cpu
@@ -884,22 +939,26 @@ kubectl logs -n production <pod-name> | grep "slow query"
 ### Training Schedule
 
 **Week 1:**
+
 - Architecture overview
 - Service overview
 - Monitoring tools
 - Incident response procedures
 
 **Week 2:**
+
 - Daily operations
 - Backup/restore procedures
 - Troubleshooting common issues
 
 **Week 3:**
+
 - Security procedures
 - GDPR compliance
 - Data protection
 
 **Week 4:**
+
 - Advanced troubleshooting
 - Performance optimization
 - Capacity planning

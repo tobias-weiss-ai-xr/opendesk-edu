@@ -37,6 +37,7 @@ opendesk-edu/scripts/user_import/
 ```
 
 **Source files (read-only references):**
+
 - `user_import/lib/ucs.py` — 627 lines, the UDM REST API client
 - `user_import/lib/keycloak.py` — 160 lines, SAML identity removal
 - `user_import/lib/import_user.py` — 161 lines, user import with inline SAML linking
@@ -50,6 +51,7 @@ opendesk-edu/scripts/user_import/
 - `user_import/tests/test_ucs.py` — 98 lines, UDM tests (mostly stubs)
 
 **DO NOT move (sensitive/generated data):**
+
 - `user_import/template.csv`, `user_import/template.ods` — real user data
 - `user_import/all-hrz-users-*` — real LDAP data
 - `user_import/users-*.txt` — generated credentials
@@ -66,6 +68,7 @@ opendesk-edu/scripts/user_import/
 ### Task 1: Create package structure and shared constants
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/lib/__init__.py`
 - Create: `opendesk-edu/scripts/user_import/lib/constants.py`
 
@@ -124,6 +127,7 @@ git commit -m "feat(user-import): create package structure and shared constants"
 ### Task 2: Create cleaned `lib/keycloak.py` with SAML link + remove
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/lib/keycloak.py`
 - Test: `opendesk-edu/scripts/user_import/tests/test_keycloak.py`
 
@@ -653,12 +657,14 @@ git commit -m "feat(user-import): add Keycloak SAML identity management module w
 ### Task 3: Copy and clean `lib/ucs.py`
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/lib/ucs.py`
 - Reference: `user_import/lib/ucs.py` (627 lines, copy source)
 
 - [ ] **Step 1: Copy ucs.py from user_import**
 
 Copy `user_import/lib/ucs.py` to `opendesk-edu/scripts/user_import/lib/ucs.py` with these changes:
+
 1. Update SPDX headers (keep dual copyright)
 2. Import `NON_RECONCILE_GROUPS` from `lib.constants` instead of defining locally (it's not defined there currently but the import scripts reference it — verify this)
 3. Ensure no hardcoded URLs or credentials remain
@@ -681,12 +687,14 @@ git commit -m "feat(user-import): add UDM REST API client library"
 ### Task 4: Copy and clean `lib/import_user.py`
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/lib/import_user.py`
 - Reference: `user_import/lib/import_user.py` (161 lines)
 
 - [ ] **Step 1: Rewrite `lib/import_user.py`**
 
 The original has hardcoded IAM API URL and inline SAML linking with hardcoded Keycloak URL. Rewrite to:
+
 1. Accept `iam_api_url` as constructor parameter (no hardcoded URL)
 2. Accept `keycloak_url`, `keycloak_username`, `keycloak_password`, `identity_provider` as constructor parameters
 3. Use `lib.keycloak.link_saml_identity()` instead of inline `requests.post` calls
@@ -924,6 +932,7 @@ git commit -m "feat(user-import): add user import class with configurable SAML l
 ### Task 5: Copy remaining lib files
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/lib/argparse_types.py`
 - Create: `opendesk-edu/scripts/user_import/lib/random_user.py`
 
@@ -952,12 +961,14 @@ git commit -m "feat(user-import): add argparse utility and random user generator
 ### Task 6: Create `provision.py` (main entry point)
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/provision.py`
 - Reference: `user_import/user_import_udm_rest_api.py` (349 lines)
 
 - [ ] **Step 1: Rewrite `provision.py`**
 
 Based on `user_import_udm_rest_api.py` with these changes:
+
 1. Import `NON_RECONCILE_GROUPS` from `lib.constants` (deduplicate)
 2. Add `--iam_api_url` / `IAM_API_URL` argument (no hardcoded URL)
 3. Add `--keycloak_url` / `KEYCLOAK_URL`, `--keycloak_api_username` / `KEYCLOAK_API_USERNAME`, `--keycloak_api_password` / `KEYCLOAK_API_PASSWORD` arguments
@@ -967,6 +978,7 @@ Based on `user_import_udm_rest_api.py` with these changes:
 7. Keep all existing UDM/provisioning arguments intact
 
 Key changes from original:
+
 - `ImportUser` constructor now receives `keycloak_url`, `keycloak_username`, `keycloak_password`, `identity_provider`
 - `NON_RECONCILE_GROUPS` imported from `lib.constants` instead of defined inline
 - `iam_api_url` is a CLI argument, not hardcoded
@@ -986,12 +998,14 @@ git commit -m "feat(user-import): add provisioning entry point with SAML linking
 ### Task 7: Create cleaned `deprovision_disable.py`
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/deprovision_disable.py`
 - Reference: `user_import/deprovision_disable.py` (440 lines)
 
 - [ ] **Step 1: Copy and clean `deprovision_disable.py`**
 
 Changes from original:
+
 1. Import `NON_RECONCILE_GROUPS` from `lib.constants` instead of defining inline (remove the duplicate at lines 37-48)
 2. Add `--identity_provider` / `IDENTITY_PROVIDER` argument (pass to `remove_saml_identity_with_credentials`)
 3. Keep `--iam_api_url` / `IAM_API_URL` as configurable (already present, good)
@@ -1013,12 +1027,14 @@ git commit -m "feat(user-import): add phase 1 deprovision script (disable + unli
 ### Task 8: Create cleaned `deprovision_delete.py`
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/deprovision_delete.py`
 - Reference: `user_import/deprovision_delete.py` (385 lines)
 
 - [ ] **Step 1: Copy and clean `deprovision_delete.py`**
 
 Changes from original:
+
 1. Update imports to use `lib.ucs` (already correct structure)
 2. Add `--identity_provider` / `IDENTITY_PROVIDER` argument even though phase 2 doesn't use SAML (consistency)
 3. Update SPDX headers
@@ -1043,6 +1059,7 @@ git commit -m "feat(user-import): add phase 2 deprovision script (permanent dele
 ### Task 9: Create `pyproject.toml` and `requirements.txt`
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/pyproject.toml`
 - Create: `opendesk-edu/scripts/user_import/requirements.txt`
 
@@ -1100,12 +1117,14 @@ git commit -m "feat(user-import): add project configuration and dependency decla
 ### Task 10: Create `Dockerfile`
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/Dockerfile`
 - Reference: `user_import/Dockerfile`
 
 - [ ] **Step 1: Create Dockerfile**
 
 Based on original but:
+
 1. Copy only the necessary files (lib/, provision.py, deprovision_*.py, requirements.txt)
 2. Do NOT copy data/, tests/, or any sensitive files
 3. Add SPDX headers
@@ -1120,6 +1139,7 @@ git commit -m "feat(user-import): add Dockerfile for containerized deployment"
 ### Task 11: Create test fixtures and UDM tests
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/tests/__init__.py`
 - Create: `opendesk-edu/scripts/user_import/tests/conftest.py`
 - Create: `opendesk-edu/scripts/user_import/tests/test_ucs.py`
@@ -1145,11 +1165,13 @@ git commit -m "feat(user-import): add test infrastructure and fixtures"
 ### Task 12: Create README.md
 
 **Files:**
+
 - Create: `opendesk-edu/scripts/user_import/README.md`
 
 - [ ] **Step 1: Write README**
 
 Document:
+
 1. Overview (what the tool does)
 2. Prerequisites (Python 3.12+, UCS access, Keycloak admin, IAM API)
 3. Configuration reference (all env vars / CLI args)
@@ -1176,6 +1198,7 @@ git commit -m "docs(user-import): add usage and deployment documentation"
 ### Task 13: Update ROADMAP.md — add provisioning/deprovisioning + SATOSA
 
 **Files:**
+
 - Modify: `opendesk-edu/ROADMAP.md:37-51` (v1.1 DFN-AAI section)
 
 - [ ] **Step 1: Add User Provisioning & Lifecycle section to v1.1**
@@ -1233,12 +1256,14 @@ attribute filtering, and consent management.
 Update the entry about Shibboleth IdP to reflect SATOSA:
 
 Change:
+
 ```
 | **Shibboleth IdP deployment** | Universities already run their own IdP. openDesk Edu integrates as a SAML SP, not an IdP provider. |
 | **Keycloak as eduGAIN IdP** | SAML federation support is incomplete. Use Shibboleth IdP for federation, Keycloak for internal IAM. |
 ```
 
 To:
+
 ```
 | **Shibboleth IdP deployment** | Universities already run their own IdP. openDesk Edu integrates as a SAML SP via SATOSA proxy. |
 | **Keycloak as eduGAIN IdP** | SAML federation support is incomplete. Use SATOSA + Shibboleth IdP for federation, Keycloak for internal IAM. |
@@ -1249,12 +1274,14 @@ To:
 Add SATOSA and user provisioning to the v1.1 timeline entry:
 
 Change:
+
 ```
 2026 Q2   v1.0  Core platform + 13 education services (ILIAS, Moodle, BBB, OpenCloud, SOGo, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, SSP)
           v1.1  DFN-AAI federation + semester lifecycle + logout
 ```
 
 To:
+
 ```
 2026 Q2   v1.0  Core platform + 13 education services (ILIAS, Moodle, BBB, OpenCloud, SOGo, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, SSP)
           v1.1  DFN-AAI federation + SATOSA proxy + user provisioning/deprovisioning + semester lifecycle + logout
@@ -1274,12 +1301,14 @@ git commit -m "docs(roadmap): add user provisioning lifecycle and SATOSA proxy t
 ### Task 14: Create Helm chart for F13 AI Assistant
 
 **Files:**
+
 - Create: `opendesk-edu/helmfile/charts/f13/Chart.yaml`
 - Create: `opendesk-edu/helmfile/charts/f13/values.yaml`
 - Create: `opendesk-edu/helmfile/charts/f13/templates/` (deployment, service, configmap, secret, ingress, etc.)
 - Reference: F13 source at `/home/weissto_local/git/f13/core/` (Docker Compose configs)
 
 **F13 source (read-only):**
+
 - `/home/weissto_local/git/f13/core/docker-compose.yml` — Full service topology (11 containers)
 - `/home/weissto_local/git/f13/core/configs/general.yml` — Central config (auth, endpoints, CORS, DB)
 - `/home/weissto_local/git/f13/core/configs/llm_models.yml` — LLM model definitions
@@ -1289,6 +1318,7 @@ git commit -m "docs(roadmap): add user provisioning lifecycle and SATOSA proxy t
 - `/home/weissto_local/git/f13/frontend/nginx/f13-frontend.conf.template` — Nginx reverse proxy
 
 **F13 service topology:**
+
 ```
 frontend (nginx:9999) → core (FastAPI:8000) → chat:8000, summary:8000, parser:8000, rag:8000, transcription:8000
                                                    → elasticsearch:9200, feedback-db (postgres), transcription-db (postgres)
@@ -1308,6 +1338,7 @@ frontend (nginx:9999) → core (FastAPI:8000) → chat:8000, summary:8000, parse
 | transcription-inference | `transcription/inference/main:latest` | Yes (Whisper) |
 
 **Keycloak integration points:**
+
 - Frontend env vars: `KEYCLOAK_URL`, `KEYCLOAK_REALM`, `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_DISABLED`
 - Core config (`general.yml`): `authentication.guest_mode`, `authentication.keycloak_base_url`, `authentication.keycloak_realm`, `authentication.audience`
 - Auth flow: Frontend OIDC → JWT access token → Core validates via Keycloak JWKS
@@ -1315,6 +1346,7 @@ frontend (nginx:9999) → core (FastAPI:8000) → chat:8000, summary:8000, parse
 - Required JWT claims: `sub`, `sid`, `aud` (audience = `f13-api`)
 
 **Secrets (5 files):**
+
 - `llm_api.secret` — API key for LLM provider (Bearer/Basic auth)
 - `feedback_db.secret` — PostgreSQL password for feedback DB
 - `transcription_db.secret` — PostgreSQL password for transcription DB
@@ -1347,6 +1379,7 @@ maintainers:
 - [ ] **Step 2: Create values.yaml with full configuration surface**
 
 The values.yaml must expose:
+
 - `global` block for shared config (image registry, Keycloak URL, ingress)
 - `f13.enabled` toggle per microservice (chat, summary, parser, rag, transcription)
 - `f13.authentication.guestMode` (default: false for production)
@@ -1360,6 +1393,7 @@ The values.yaml must expose:
 - `f13.imagePullSecrets` — for `registry.opencode.de` if private
 
 Key values structure:
+
 ```yaml
 global:
   keycloakUrl: ""
@@ -1416,6 +1450,7 @@ f13:
 - [ ] **Step 3: Create Kubernetes templates**
 
 Required templates:
+
 1. `_helpers.tpl` — common labels, image helpers, Keycloak URL derivation
 2. `configmap-general.yaml` — `configs/general.yml` from values (service endpoints, auth, CORS, DB, logging)
 3. `configmap-llm.yaml` — `configs/llm_models.yml` from values (model definitions)
@@ -1447,6 +1482,7 @@ Create `opendesk-edu/helmfile/apps/f13/values.yaml.gotmpl` following existing pa
 - [ ] **Step 5: Create Keycloak bootstrap config**
 
 Bootstrap the F13 OIDC client and roles in the existing opendesk Keycloak realm:
+
 - Create client `f13-api` (public, standard flow, redirect URIs for F13 frontend)
 - Create roles `f13-user` and `f13-admin`
 - Configure UMA authorization resources (chat, summary, rag-file, rag-database, transcription, feedback)
@@ -1469,6 +1505,7 @@ git commit -m "feat(f13): add Helm chart for F13 AI Assistant integration"
 ### Task 15: Update ROADMAP.md — replace generic LLM section with F13
 
 **Files:**
+
 - Modify: `opendesk-edu/ROADMAP.md:383-405` (v4.0 AI & Analytics section)
 
 - [ ] **Step 1: Replace "Local LLM Integration" with F13**
@@ -1502,10 +1539,12 @@ summarization, research (RAG), and transcription — all on-premise, no data lea
 
 **Integration Architecture:**
 ```
+
 openDesk Portal → F13 Frontend (Svelte/nginx)
                     → F13 Core (FastAPI) — validates JWT via Keycloak JWKS
                     → Chat / Summary / RAG / Transcription microservices
                     → LLM Inference (vLLM/Ollama or cloud API)
+
 ```
 
 - [ ] Helm chart for F13 (all microservices + dependencies)
@@ -1523,10 +1562,13 @@ openDesk Portal → F13 Frontend (Svelte/nginx)
 - [ ] **Step 2: Update the v4.0 header**
 
 Change:
+
 ```
 ## v4.0 — AI & Analytics
 ```
+
 To:
+
 ```
 ## v4.0 — AI & Analytics (F13)
 ```
@@ -1534,10 +1576,13 @@ To:
 - [ ] **Step 3: Update the Timeline**
 
 Change:
+
 ```
 2028 Q2   v4.0  Local LLM + xAPI analytics
 ```
+
 To:
+
 ```
 2028 Q1   v4.0  F13 AI Assistant (chat, summary, RAG, transcription)
 2028 Q2   v4.1  xAPI learning analytics
@@ -1563,6 +1608,7 @@ git commit -m "docs(roadmap): add F13 AI Assistant integration to v4.0"
 | 5 | 14-15 | F13 AI Assistant: Helm chart + Keycloak bootstrap + roadmap update |
 
 **Key cleaning decisions:**
+
 - `NON_RECONCILE_GROUPS` → `lib/constants.py` (single source of truth)
 - Hardcoded IAM API URL → `--iam_api_url` CLI/env var
 - Hardcoded Keycloak URL/creds → `--keycloak_url`, `--keycloak_api_username`, `--keycloak_api_password`

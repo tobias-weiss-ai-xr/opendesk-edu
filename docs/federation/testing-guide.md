@@ -84,11 +84,11 @@ This guide provides comprehensive testing procedures for validating your openDes
 
 This testing guide validates that your openDesk Edu deployment can successfully authenticate users through the DFN-AAI identity federation. The tests verify:
 
-- SAML protocol compliance between Keycloak and DFN-AAI
-- Attribute mapping from federation to Keycloak user profiles
-- Application-level single sign-on with educational services
-- Logout and session management
-- Error handling and recovery
+* SAML protocol compliance between Keycloak and DFN-AAI
+* Attribute mapping from federation to Keycloak user profiles
+* Application-level single sign-on with educational services
+* Logout and session management
+* Error handling and recovery
 
 **Prerequisite Reading:** Complete the [DFN-AAI Federation Enrollment Guide](./dfn-aai-enrollment.md) before performing these tests.
 
@@ -101,43 +101,45 @@ Before running federation tests, ensure the following prerequisites are met.
 
 ### Completed Enrollment
 
-- [ ] DFN-AAI registration approved (test federation) - **[DFN-AAI Enrollment Guide](./dfn-aai-enrollment.md)**
-- [ ] SAML metadata submitted and accepted
-- [ ] Keycloak configured as SAML service provider
-- [ ] DFN-AAI configured as identity provider in Keycloak
-- [ ] Attribute mappers created for required attributes
-- [ ] DNS configured for federation endpoints
+* [ ] DFN-AAI registration approved (test federation) - **[DFN-AAI Enrollment Guide](./dfn-aai-enrollment.md)**
+* [ ] SAML metadata submitted and accepted
+* [ ] Keycloak configured as SAML service provider
+* [ ] DFN-AAI configured as identity provider in Keycloak
+* [ ] Attribute mappers created for required attributes
+* [ ] DNS configured for federation endpoints
 
 ### Keycloak Configuration
 
-- [ ] Realm: `opendesk` (or your custom realm)
-- [ ] Identity Provider: `dfn-aai-test` (test) or `dfn-aai` (production)
-- [ ] SAML endpoints accessible via HTTPS
-- [ ] First login flow configured (typically `first broker login`)
-- [ ] Attribute mappers: `affiliation`, `email`, `firstName`, `username`
+* [ ] Realm: `opendesk` (or your custom realm)
+* [ ] Identity Provider: `dfn-aai-test` (test) or `dfn-aai` (production)
+* [ ] SAML endpoints accessible via HTTPS
+* [ ] First login flow configured (typically `first broker login`)
+* [ ] Attribute mappers: `affiliation`, `email`, `firstName`, `username`
 
 ### Test Credentials
 
 For the DFN-AAI test federation, use the official test identity providers:
 
 **DFN-AAI Test IdP:**
-- Entity ID: `https://idp.test.aai.dfn.de/idp/shibboleth`
-- Test accounts available via the discovery service
-- Attribute values are predictable and documented below
+
+* Entity ID: `https://idp.test.aai.dfn.de/idp/shibboleth`
+* Test accounts available via the discovery service
+* Attribute values are predictable and documented below
 
 **Institutional Test IdPs:**
-- Select any test institution from the discovery service
-- Each test IdP provides predefined attributes
-- Some test IdPs may require self-registration
+
+* Select any test institution from the discovery service
+* Each test IdP provides predefined attributes
+* Some test IdPs may require self-registration
 
 ### Test Tools
 
 Recommended tools for federation testing:
 
-- **Browser:** Chrome/Firefox with SAML trace add-on
-- **Network Tools:** `curl` for endpoint validation
-- **Keycloak Admin Console:** User and session inspection
-- **SAML Tracer:** Browser extension for SAML message inspection (optional)
+* **Browser:** Chrome/Firefox with SAML trace add-on
+* **Network Tools:** `curl` for endpoint validation
+* **Keycloak Admin Console:** User and session inspection
+* **SAML Tracer:** Browser extension for SAML message inspection (optional)
 
 ## Test 1: Discovery Service Access
 
@@ -160,11 +162,13 @@ https://discovery.aai.dfn.de/
 In the discovery service form:
 
 1. **Return to (ACS URL):** Enter your Keycloak SAML endpoint
+
    ```
    https://idp.education.example.org/realms/opendesk/protocol/saml
    ```
 
 2. **Entity ID (optional):** Verify it matches your registered entity ID
+
    ```
    https://idp.education.example.org/realms/opendesk
    ```
@@ -173,8 +177,8 @@ In the discovery service form:
 
 1. Click **Choose your institution**
 2. Search for or select a test institution:
-   - **Test IdP: "DFN-AAI Test IdP"** (recommended)
-   - Any institution with (Test) in the name
+   * **Test IdP: "DFN-AAI Test IdP"** (recommended)
+   * Any institution with (Test) in the name
 3. Click **Continue** or the institution name
 
 #### 1.4 Observe Redirect
@@ -187,21 +191,21 @@ Watch the browser address bar to confirm:
 
 ### Expected Results
 
-- Discovery service loads without errors
-- Return URL field accepts your Keycloak SAML endpoint
-- Test institutions list is visible and accessible
-- Browser redirects to Keycloak `/protocol/saml` endpoint
-- No certificate errors or mixed content warnings
-- Redirect contains SAML request (`SAMLRequest` parameter)
+* Discovery service loads without errors
+* Return URL field accepts your Keycloak SAML endpoint
+* Test institutions list is visible and accessible
+* Browser redirects to Keycloak `/protocol/saml` endpoint
+* No certificate errors or mixed content warnings
+* Redirect contains SAML request (`SAMLRequest` parameter)
 
 ### Validation Checklist
 
-- [ ] Discovery service accessible via HTTPS
-- [ ] Return URL field accepts your Keycloak endpoint
-- [ ] Test institutions appear in the dropdown list
-- [ ] Redirect to Keycloak SAML endpoint succeeds
-- [ ] No browser console errors
-- [ ] SAML request parameter present in URL
+* [ ] Discovery service accessible via HTTPS
+* [ ] Return URL field accepts your Keycloak endpoint
+* [ ] Test institutions appear in the dropdown list
+* [ ] Redirect to Keycloak SAML endpoint succeeds
+* [ ] No browser console errors
+* [ ] SAML request parameter present in URL
 
 ### Troubleshooting
 
@@ -212,19 +216,21 @@ Watch the browser address bar to confirm:
 **Solutions:**
 
 1. **Check Network Connectivity**
+
    ```bash
    curl -I https://discovery.aai.dfn.de/
    # Should return HTTP 200
    ```
 
 2. **Verify DNS Resolution**
+
    ```bash
    nslookup discovery.aai.dfn.de
    ```
 
 3. **Check Proxy Settings**
-   - Ensure outbound HTTPS access is allowed
-   - Verify no corporate proxy blocks DFN-AAI domains
+   * Ensure outbound HTTPS access is allowed
+   * Verify no corporate proxy blocks DFN-AAI domains
 
 #### Return URL Rejected
 
@@ -233,15 +239,16 @@ Watch the browser address bar to confirm:
 **Solutions:**
 
 1. **Verify Endpoint Format**
-   - Must be HTTPS (no HTTP)
-   - Must include `/protocol/saml` path
-   - Must match registered entity ID domain
+   * Must be HTTPS (no HTTP)
+   * Must include `/protocol/saml` path
+   * Must match registered entity ID domain
 
 2. **Check DFN-AAI Registration**
-   - Verify your metadata is approved in DFN-AAI portal
-   - Confirm entity ID matches registration exactly
+   * Verify your metadata is approved in DFN-AAI portal
+   * Confirm entity ID matches registration exactly
 
 3. **Test with Official Example**
+
    ```
    https://idp.test.aai.dfn.edu/idp/shibboleth
    ```
@@ -253,16 +260,16 @@ Watch the browser address bar to confirm:
 **Solutions:**
 
 1. **Verify Test Federation Access**
-   - Ensure using test federation (`https://discovery.aai.dfn.de/`)
-   - Confirm SP is registered with test federation (not production)
+   * Ensure using test federation (`https://discovery.aai.dfn.de/`)
+   * Confirm SP is registered with test federation (not production)
 
 2. **Check Discovery Service Configuration**
-   - Some test IdPs require registration
-   - DFN-AAI Test IdP should always be available
+   * Some test IdPs require registration
+   * DFN-AAI Test IdP should always be available
 
 3. **Browser Selection**
-   - Try different browser or incognito mode
-   - Check if session cookies are blocked
+   * Try different browser or incognito mode
+   * Check if session cookies are blocked
 
 ## Test 2: Direct IdP Authentication
 
@@ -298,12 +305,12 @@ If prompted:
 When redirected to the test identity provider:
 
 1. **DFN-AAI Test IdP:**
-   - Username: `testuser1` (or `test1`, `testuser`)
-   - Password: Check test IdP documentation or use provided test credentials
+   * Username: `testuser1` (or `test1`, `testuser`)
+   * Password: Check test IdP documentation or use provided test credentials
 
 2. **Institutional Test IdP:**
-   - Use credentials provided by the test institution
-   - Some test IdPs allow self-registration
+   * Use credentials provided by the test institution
+   * Some test IdPs allow self-registration
 
 #### 2.4 Confirm SAML Flow
 
@@ -316,22 +323,22 @@ Observe the authentication flow in the browser:
 
 ### Expected Results
 
-- User successfully authenticates with test credentials
-- Browser redirects through SAML protocol (3-4 redirects)
-- Keycloak creates or updates federated user account
-- User is logged into Keycloak (`/realms/opendesk/account`)
-- No SAML validation errors or signature failures
-- User session established in Keycloak
+* User successfully authenticates with test credentials
+* Browser redirects through SAML protocol (3-4 redirects)
+* Keycloak creates or updates federated user account
+* User is logged into Keycloak (`/realms/opendesk/account`)
+* No SAML validation errors or signature failures
+* User session established in Keycloak
 
 ### Validation Checklist
 
-- [ ] SAML request generated by Keycloak
-- [ ] Test IdP login page loads
-- [ ] Authentication with test credentials succeeds
-- [ ] SAML assertion returned to Keycloak
-- [ ] Keycloak accepts assertion without errors
-- [ ] User logged into Keycloak with federated identity
-- [ ] Session created in Keycloak sessions list
+* [ ] SAML request generated by Keycloak
+* [ ] Test IdP login page loads
+* [ ] Authentication with test credentials succeeds
+* [ ] SAML assertion returned to Keycloak
+* [ ] Keycloak accepts assertion without errors
+* [ ] User logged into Keycloak with federated identity
+* [ ] Session created in Keycloak sessions list
 
 ### Troubleshooting
 
@@ -342,11 +349,12 @@ Observe the authentication flow in the browser:
 **Solutions:**
 
 1. **Check IdP Certificate**
-   - Verify DFN-AAI test IdP certificate imported in Keycloak
-   - Navigate to **Identity Providers** > **DFN-AAI** > **Import Metadata**
-   - Re-import test metadata if certificate changed
+   * Verify DFN-AAI test IdP certificate imported in Keycloak
+   * Navigate to **Identity Providers** > **DFN-AAI** > **Import Metadata**
+   * Re-import test metadata if certificate changed
 
 2. **Time Synchronization**
+
    ```bash
    # Ensure system time is synchronized
    timedatectl status
@@ -354,8 +362,8 @@ Observe the authentication flow in the browser:
    ```
 
 3. **Attribute Mapper Configuration**
-   - Verify required attribute mappers are configured
-   - Check SAML attribute names match federation format
+   * Verify required attribute mappers are configured
+   * Check SAML attribute names match federation format
 
 #### "No Endpoint Available" Error
 
@@ -364,19 +372,20 @@ Observe the authentication flow in the browser:
 **Solutions:**
 
 1. **Verify Endpoint Configuration**
-   - Check IdP SSO endpoint in Keycloak configuration
-   - Test federation: `https://idp.test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO`
-   - Production federation: `https://idp.aai.dfn.de/idp/profile/SAML2/Redirect/SSO`
+   * Check IdP SSO endpoint in Keycloak configuration
+   * Test federation: `https://idp.test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO`
+   * Production federation: `https://idp.aai.dfn.de/idp/profile/SAML2/Redirect/SSO`
 
 2. **Test Endpoint Accessibility**
+
    ```bash
    curl -I https://idp.test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO
    # Should return HTTP 200
    ```
 
 3. **Check Metadata Import**
-   - Verify DFN-AAI metadata imported successfully
-   - Confirm ACS URL matches Keycloak endpoint
+   * Verify DFN-AAI metadata imported successfully
+   * Confirm ACS URL matches Keycloak endpoint
 
 #### User Not Created in Keycloak
 
@@ -385,18 +394,19 @@ Observe the authentication flow in the browser:
 **Solutions:**
 
 1. **Check First Login Flow**
-   - Navigate to **Identity Providers** > **DFN-AAI**
-   - Verify **First Login Flow** is set to `first broker login`
-   - Confirm flow creates users (not just links accounts)
+   * Navigate to **Identity Providers** > **DFN-AAI**
+   * Verify **First Login Flow** is set to `first broker login`
+   * Confirm flow creates users (not just links accounts)
 
 2. **Review Keycloak Logs**
+
    ```bash
    kubectl -n opendesk logs deployment/ums-keycloak --tail=100 | grep -i federation
    ```
 
 3. **Attribute Mapping Issues**
-   - Verify `username` mapper is configured (required for user creation)
-   - Check `username` attribute is provided by test IdP
+   * Verify `username` mapper is configured (required for user creation)
+   * Check `username` attribute is provided by test IdP
 
 ## Test 3: Attribute Mapping Validation
 
@@ -459,25 +469,25 @@ In the SAML tracer:
 
 ### Expected Results
 
-- SAML assertion includes all required attributes
-- Attribute names match DFN-AAI/eduGAIN specification (URN format)
-- Attribute values match test IdP expectations
-- Keycloak user account created with correct attribute mappings
-- Federated identity linked to user
-- No attribute processing errors in Keycloak logs
+* SAML assertion includes all required attributes
+* Attribute names match DFN-AAI/eduGAIN specification (URN format)
+* Attribute values match test IdP expectations
+* Keycloak user account created with correct attribute mappings
+* Federated identity linked to user
+* No attribute processing errors in Keycloak logs
 
 ### Validation Checklist
 
-- [ ] SAML assertion contains `mail` attribute
-- [ ] SAML assertion contains `displayName` attribute
-- [ ] SAML assertion contains `eduPersonAffiliation` attribute
-- [ ] SAML assertion contains `eduPersonPrincipalName` attribute
-- [ ] Keycloak `firstName` attribute populated correctly
-- [ ] Keycloak `email` attribute populated correctly
-- [ ] Keycloak `username` attribute populated correctly
-- [ ] Keycloak `affiliation` attribute populated correctly
-- [ ] Federated identity linked to user account
-- [ ] No attribute mapping errors in logs
+* [ ] SAML assertion contains `mail` attribute
+* [ ] SAML assertion contains `displayName` attribute
+* [ ] SAML assertion contains `eduPersonAffiliation` attribute
+* [ ] SAML assertion contains `eduPersonPrincipalName` attribute
+* [ ] Keycloak `firstName` attribute populated correctly
+* [ ] Keycloak `email` attribute populated correctly
+* [ ] Keycloak `username` attribute populated correctly
+* [ ] Keycloak `affiliation` attribute populated correctly
+* [ ] Federated identity linked to user account
+* [ ] No attribute mapping errors in logs
 
 ### Troubleshooting
 
@@ -488,18 +498,18 @@ In the SAML tracer:
 **Solutions:**
 
 1. **Check IdP Attribute Release**
-   - Contact test IdP administrator
-   - Verify SP is authorized to receive attributes
-   - Confirm attribute filtering is not blocking release
+   * Contact test IdP administrator
+   * Verify SP is authorized to receive attributes
+   * Confirm attribute filtering is not blocking release
 
 2. **Verify Attribute Request**
-   - Check Keycloak attribute consumers service is requesting attributes
-   - Review `<AttributeConsumingService>` in Keycloak SP metadata
-   - Ensure required attributes are marked as `isRequired="true"`
+   * Check Keycloak attribute consumers service is requesting attributes
+   * Review `<AttributeConsumingService>` in Keycloak SP metadata
+   * Ensure required attributes are marked as `isRequired="true"`
 
 3. **Test with Different Test IdP**
-   - Some test IdPs release different attributes
-   - Switch to DFN-AAI Test IdP for complete attribute set
+   * Some test IdPs release different attributes
+   * Switch to DFN-AAI Test IdP for complete attribute set
 
 #### Attributes Not Mapped in Keycloak
 
@@ -508,19 +518,19 @@ In the SAML tracer:
 **Solutions:**
 
 1. **Verify Attribute Mapper Configuration**
-   - Navigate to **Identity Providers** > **DFN-AAI** > **Mappers**
-   - Confirm all required mappers exist
-   - Check mapper SAML attribute names match assertion exactly
+   * Navigate to **Identity Providers** > **DFN-AAI** > **Mappers**
+   * Confirm all required mappers exist
+   * Check mapper SAML attribute names match assertion exactly
 
 2. **Check Attribute Name Formats**
-   - Federation attributes: `urn:mace:dir:attribute-def:<attribute>`
-   - Friendly names: `mail`, `displayName`, etc.
-   - Mapper must match one format or the other
+   * Federation attributes: `urn:mace:dir:attribute-def:<attribute>`
+   * Friendly names: `mail`, `displayName`, etc.
+   * Mapper must match one format or the other
 
 3. **Review Mapper Target Attributes**
-   - **User Attribute** must match Keycloak user schema
-   - Common targets: `firstName`, `email`, `username`, `affiliation`
-   - Verify spelling matches exactly (case-sensitive)
+   * **User Attribute** must match Keycloak user schema
+   * Common targets: `firstName`, `email`, `username`, `affiliation`
+   * Verify spelling matches exactly (case-sensitive)
 
 #### Incorrect Attribute Values
 
@@ -529,19 +539,19 @@ In the SAML tracer:
 **Solutions:**
 
 1. **Validate Attribute Formats**
-   - `eduPersonAffiliation`: Should be one of `faculty`, `student`, `staff`, `member`
-   - `mail`: Should be valid email address format
-   - `eduPersonPrincipalName`: Should be scoped identifier (`user@domain`)
+   * `eduPersonAffiliation`: Should be one of `faculty`, `student`, `staff`, `member`
+   * `mail`: Should be valid email address format
+   * `eduPersonPrincipalName`: Should be scoped identifier (`user@domain`)
 
 2. **Check IdP Configuration**
-   - Review test IdP attribute generation logic
-   - Compare with DFN-AAI attribute specification
-   - Some test IdPs use predictable patterns for testing
+   * Review test IdP attribute generation logic
+   * Compare with DFN-AAI attribute specification
+   * Some test IdPs use predictable patterns for testing
 
 3. **Use Script Mapper for Transformation**
-   - If attributes need transformation, use **Script Mapper**
-   - Example: Extract primary value from multi-valued attributes
-   - Normalize attribute formats before mapping to Keycloak
+   * If attributes need transformation, use **Script Mapper**
+   * Example: Extract primary value from multi-valued attributes
+   * Normalize attribute formats before mapping to Keycloak
 
 ## Test 4: Application-Level SSO
 
@@ -554,8 +564,8 @@ Validate that users can log into openDesk Edu applications (ILIAS, Moodle, etc.)
 #### 4.1 Access Application
 
 1. Open an openDesk Edu application in the browser
-   - ILIAS: `https://ilias.education.example.org`
-   - Moodle: `https://moodle.education.example.org`
+   * ILIAS: `https://ilias.education.example.org`
+   * Moodle: `https://moodle.education.example.org`
 
 2. Click **Login** or sign into the application
 
@@ -589,25 +599,25 @@ When prompted for identity provider:
 
 ### Expected Results
 
-- Application login page loads
-- Federation login option is available
-- User selects DFN-AAI or uses discovery service
-- Authentication completes through Keycloak
-- Application accepts Keycloak session
-- User logged into application with correct identity
-- User profile populated with federation attributes
+* Application login page loads
+* Federation login option is available
+* User selects DFN-AAI or uses discovery service
+* Authentication completes through Keycloak
+* Application accepts Keycloak session
+* User logged into application with correct identity
+* User profile populated with federation attributes
 
 ### Validation Checklist
 
-- [ ] Application accessible via HTTPS
-- [ ] Federation login option visible
-- [ ] User can select DFN-AAI identity provider
-- [ ] Discovery service option available
-- [ ] SAML authentication completes
-- [ ] Application receives session from Keycloak
-- [ ] User logged into application
-- [ ] User profile shows correct attributes
-- [ ] Application functionality works
+* [ ] Application accessible via HTTPS
+* [ ] Federation login option visible
+* [ ] User can select DFN-AAI identity provider
+* [ ] Discovery service option available
+* [ ] SAML authentication completes
+* [ ] Application receives session from Keycloak
+* [ ] User logged into application
+* [ ] User profile shows correct attributes
+* [ ] Application functionality works
 
 ### Troubleshooting
 
@@ -618,19 +628,19 @@ When prompted for identity provider:
 **Solutions:**
 
 1. **Verify Application SAML Configuration**
-   - Check application SP metadata points to Keycloak
-   - Confirm ACS URL matches Keycloak endpoint
-   - Review SAML atlas integration for specific application
+   * Check application SP metadata points to Keycloak
+   * Confirm ACS URL matches Keycloak endpoint
+   * Review SAML atlas integration for specific application
 
 2. **Check Keycloak Client Scope**
-   - Navigate to **Clients** > [Application Client] > **Client Scopes**
-   - Verify `email`, `profile`, `roles` scopes are assigned
-   - Check protocol mappers export required attributes
+   * Navigate to **Clients** > [Application Client] > **Client Scopes**
+   * Verify `email`, `profile`, `roles` scopes are assigned
+   * Check protocol mappers export required attributes
 
 3. **Test with Direct Keycloak Login**
-   - Login directly to Keycloak account console
-   - Then access application using "Already logged in" flow
-   - Isolates issue to federation vs application integration
+   * Login directly to Keycloak account console
+   * Then access application using "Already logged in" flow
+   * Isolates issue to federation vs application integration
 
 #### User Attributes Not Visible in Application
 
@@ -639,19 +649,19 @@ When prompted for identity provider:
 **Solutions:**
 
 1. **Check Application Attribute Request**
-   - Verify application requests attributes from Keycloak
-   - Review SAML assertion sent from Keycloak to application
-   - Application may need updated SAML SP configuration
+   * Verify application requests attributes from Keycloak
+   * Review SAML assertion sent from Keycloak to application
+   * Application may need updated SAML SP configuration
 
 2. **Verify Client Protocol Mappers**
-   - Navigate to **Clients** > [Application Client] > **Client Scopes** > **Dedicated scopes**
-   - Configure protocol mappers to export federation attributes
-   - Example: Export `affiliation` as custom claim or SAML attribute
+   * Navigate to **Clients** > [Application Client] > **Client Scopes** > **Dedicated scopes**
+   * Configure protocol mappers to export federation attributes
+   * Example: Export `affiliation` as custom claim or SAML attribute
 
 3. **Test Attribute Flow Separately**
-   - Check Keycloak user attributes are populated (Test 3)
-   - Verify Keycloak sends attributes in SAML response to application
-   - Use SAML tracer to inspect assertion from Keycloak to application
+   * Check Keycloak user attributes are populated (Test 3)
+   * Verify Keycloak sends attributes in SAML response to application
+   * Use SAML tracer to inspect assertion from Keycloak to application
 
 #### Session Not Maintained Across Applications
 
@@ -660,20 +670,20 @@ When prompted for identity provider:
 **Solutions:**
 
 1. **Verify Single Sign-On Configuration**
-   - Check Keycloak session is active across realm
-   - Applications should share Keycloak session cookies
-   - Verify SSO cookie domain includes all application subdomains
+   * Check Keycloak session is active across realm
+   * Applications should share Keycloak session cookies
+   * Verify SSO cookie domain includes all application subdomains
 
 2. **Check Application Session Management**
-   - Review application session cookies and expiry
-   - Some applications may have separate session logic
-   - Verify application trusts Keycloak session token
+   * Review application session cookies and expiry
+   * Some applications may have separate session logic
+   * Verify application trusts Keycloak session token
 
 3. **Test with Fresh Browser Session**
-   - Clear all cookies and cache
-   - Login to one application
-   - Access second application without re-authenticating
-   - Confirms SSO is working correctly
+   * Clear all cookies and cache
+   * Login to one application
+   * Access second application without re-authenticating
+   * Confirms SSO is working correctly
 
 ## Test 5: Single Logout
 
@@ -718,21 +728,21 @@ If supported:
 
 ### Expected Results
 
-- Logout from Keycloak terminates all sessions
-- Applications redirect to login on access attempt
-- Logout from application terminates Keycloak session
-- Federation logout (if supported) terminates all sessions
-- No orphaned sessions remain
+* Logout from Keycloak terminates all sessions
+* Applications redirect to login on access attempt
+* Logout from application terminates Keycloak session
+* Federation logout (if supported) terminates all sessions
+* No orphaned sessions remain
 
 ### Validation Checklist
 
-- [ ] Logout from Keycloak succeeds
-- [ ] Keycloak redirects to login page after logout
-- [ ] Applications redirect to login after Keycloak logout
-- [ ] Application logout terminates Keycloak session
-- [ ] No orphaned sessions in Keycloak
-- [ ] SAML logout requests processed correctly
-- [ ] Federation logout (if tested) terminates all sessions
+* [ ] Logout from Keycloak succeeds
+* [ ] Keycloak redirects to login page after logout
+* [ ] Applications redirect to login after Keycloak logout
+* [ ] Application logout terminates Keycloak session
+* [ ] No orphaned sessions in Keycloak
+* [ ] SAML logout requests processed correctly
+* [ ] Federation logout (if tested) terminates all sessions
 
 ### Troubleshooting
 
@@ -743,19 +753,19 @@ If supported:
 **Solutions:**
 
 1. **Verify Application Logout Configuration**
-   - Check application SP metadata includes logout endpoint
-   - Review SAML logout request/response configuration
-   - Some applications may not implement SAML logout
+   * Check application SP metadata includes logout endpoint
+   * Review SAML logout request/response configuration
+   * Some applications may not implement SAML logout
 
 2. **Check Keycloak Logout Settings**
-   - Navigate to **Realm Settings** > **SSO**
-   - Verify **Frontchannel Logout** is enabled
-   - Check post logout redirect URLs are configured
+   * Navigate to **Realm Settings** > **SSO**
+   * Verify **Frontchannel Logout** is enabled
+   * Check post logout redirect URLs are configured
 
 3. **Test Independently**
-   - Log out from application directly
-   - Verify Keycloak session is terminated
-   - Isolates issue to Keycloak-to-application logout propagation
+   * Log out from application directly
+   * Verify Keycloak session is terminated
+   * Isolates issue to Keycloak-to-application logout propagation
 
 #### Logout Redirect Fails
 
@@ -764,22 +774,23 @@ If supported:
 **Solutions:**
 
 1. **Check Logout Endpoint Configuration**
-   - Verify SLO endpoints are configured in SP metadata
-   - Confirm logout endpoints are accessible via HTTPS
-   - Test logout endpoint directly:
+   * Verify SLO endpoints are configured in SP metadata
+   * Confirm logout endpoints are accessible via HTTPS
+   * Test logout endpoint directly:
+
      ```bash
      curl -I https://ilias.education.example.org/logout.php?return_to=...
      ```
 
 2. **Review Browser Network Activity**
-   - Use browser developer tools to monitor logout redirects
-   - Identify which request fails
-   - Check for CORS or cross-site request issues
+   * Use browser developer tools to monitor logout redirects
+   * Identify which request fails
+   * Check for CORS or cross-site request issues
 
 3. **Verify Logout Binding Configuration**
-   - Check logout binding matches what applications support
-   - Some apps only support HTTP-POST logout, not HTTP-Redirect
-   - Configure Keycloak logout mechanism accordingly
+   * Check logout binding matches what applications support
+   * Some apps only support HTTP-POST logout, not HTTP-Redirect
+   * Configure Keycloak logout mechanism accordingly
 
 ## Test 6: Error Handling
 
@@ -821,23 +832,23 @@ Validate that the federation integration handles errors gracefully and provides 
 
 ### Expected Results
 
-- Invalid credentials: clear authentication error
-- Attribute denial: user informed or login fails gracefully
-- Expired certificate: clear certificate error or validation message
-- Network timeout: timeout or connection error message
-- IdP unavailable: service unavailable or federation error message
-- No confusing technical errors shown to end users
-- Admin logs contain detailed error information
+* Invalid credentials: clear authentication error
+* Attribute denial: user informed or login fails gracefully
+* Expired certificate: clear certificate error or validation message
+* Network timeout: timeout or connection error message
+* IdP unavailable: service unavailable or federation error message
+* No confusing technical errors shown to end users
+* Admin logs contain detailed error information
 
 ### Validation Checklist
 
-- [ ] Invalid credentials produce clear errors
-- [ ] Attribute denial handled gracefully
-- [ ] Certificate errors show helpful information
-- [ ] Network errors provide clear feedback
-- [ ] IdP unavailable displays appropriate message
-- [ ] Admin logs contain relevant error details
-- [ ] No exception stacks or technical errors to users
+* [ ] Invalid credentials produce clear errors
+* [ ] Attribute denial handled gracefully
+* [ ] Certificate errors show helpful information
+* [ ] Network errors provide clear feedback
+* [ ] IdP unavailable displays appropriate message
+* [ ] Admin logs contain relevant error details
+* [ ] No exception stacks or technical errors to users
 
 ### Troubleshooting
 
@@ -848,11 +859,12 @@ Validate that the federation integration handles errors gracefully and provides 
 **Solutions:**
 
 1. **Check Keycloak Error Handling**
-   - Review Keycloak event log for detailed error types
-   - Configure keycloak themes to display specific errors
-   - Update login flow error handling if needed
+   * Review Keycloak event log for detailed error types
+   * Configure keycloak themes to display specific errors
+   * Update login flow error handling if needed
 
 2. **Enable Detailed Logging**
+
    ```bash
    # Set Keycloak debug logging for federation
    kubectl -n opendesk exec -it ums-keycloak-0 -- bash
@@ -861,9 +873,9 @@ Validate that the federation integration handles errors gracefully and provides 
    ```
 
 3. **Review Error Mappers**
-   - Check if any custom error mappers are masking errors
-   - Verify error message localization is working
-   - Update error message templates for clarity
+   * Check if any custom error mappers are masking errors
+   * Verify error message localization is working
+   * Update error message templates for clarity
 
 #### Admin Logs Missing Error Details
 
@@ -872,19 +884,19 @@ Validate that the federation integration handles errors gracefully and provides 
 **Solutions:**
 
 1. **Verify Logging Configuration**
-   - Check Keycloak logging settings (console or config)
-   - Ensure DEBUG logging enabled for SAML and federation
-   - Review Keycloak server log file location
+   * Check Keycloak logging settings (console or config)
+   * Ensure DEBUG logging enabled for SAML and federation
+   * Review Keycloak server log file location
 
 2. **Check Application Logs**
-   - Some errors may only appear in application logs
-   - Review ILIAS/Moodle error logs for SAML-related errors
-   - Check Kubernetes pod logs for all relevant services
+   * Some errors may only appear in application logs
+   * Review ILIAS/Moodle error logs for SAML-related errors
+   * Check Kubernetes pod logs for all relevant services
 
 3. **Enable Federation-Specific Logging**
-   - Configure Keycloak to log SAML protocol events
-   - Enable audit logging for authentication events
-   - Review Keycloak events tab for federation authentication events
+   * Configure Keycloak to log SAML protocol events
+   * Enable audit logging for authentication events
+   * Review Keycloak events tab for federation authentication events
 
 ## Test Environment Configuration
 
@@ -905,55 +917,60 @@ The DFN-AAI test federation provides predictable attribute values for testing. U
 ### Test Identity Providers
 
 **DFN-AAI Test IdP (Recommended):**
-- Entity ID: `https://idp.test.aai.dfn.de/idp/shibboleth`
-- Provides all required attributes
-- No registration required
-- Predictable attribute values
+
+* Entity ID: `https://idp.test.aai.dfn.de/idp/shibboleth`
+* Provides all required attributes
+* No registration required
+* Predictable attribute values
 
 **Institutional Test IdPs:**
-- Various universities provide test IdPs via discovery service
-- May require registration with the institution
-- Attribute patterns vary by institution
-- Useful for testing eduGAIN federation
+
+* Various universities provide test IdPs via discovery service
+* May require registration with the institution
+* Attribute patterns vary by institution
+* Useful for testing eduGAIN federation
 
 ### Test Account Examples
 
 **DFN-AAI Test IdP Credentials:**
-- Username: `testuser1`, `testuser2`, `testuser3`
-- Password: Check test IdP documentation (often same as username or provided)
-- Alternative: `test1`, `test2`, `test3`
+
+* Username: `testuser1`, `testuser2`, `testuser3`
+* Password: Check test IdP documentation (often same as username or provided)
+* Alternative: `test1`, `test2`, `test3`
 
 **Institutional Test IdP:**
-- Follow registration process at the test institution
-- Credentials provided after registration
-- May require VPN or network access from specific IP ranges
+
+* Follow registration process at the test institution
+* Credentials provided after registration
+* May require VPN or network access from specific IP ranges
 
 ## Production Testing Checklist
 
 After successful testing with the test federation, complete these steps before moving to production:
 
-- [ ] All tests (1-6) pass with test federation
-- [ ] Attribute mapping validated with test credentials
-- [ ] Application-level SSO working for all services
-- [ ] Logout functionality verified
-- [ ] Error handling and user feedback acceptable
-- [ ] CA-signed certificates obtained from institution PKI
-- [ ] SP metadata regenerated with production certificates
-- [ ] DFN-AAI production registration approved
-- [ ] Keycloak IdP configuration updated to production endpoints
-- [ ] Attribute mappers verified with production expectations
-- [ ] Test with a small pilot group of users
-- [ ] Monitor authentication logs for errors
-- [ ] Verify session behavior under load
-- [ ] Document any production-specific issues
-- [ ] Create user support documentation
-- [ ] Train helpdesk staff on federation authentication
+* [ ] All tests (1-6) pass with test federation
+* [ ] Attribute mapping validated with test credentials
+* [ ] Application-level SSO working for all services
+* [ ] Logout functionality verified
+* [ ] Error handling and user feedback acceptable
+* [ ] CA-signed certificates obtained from institution PKI
+* [ ] SP metadata regenerated with production certificates
+* [ ] DFN-AAI production registration approved
+* [ ] Keycloak IdP configuration updated to production endpoints
+* [ ] Attribute mappers verified with production expectations
+* [ ] Test with a small pilot group of users
+* [ ] Monitor authentication logs for errors
+* [ ] Verify session behavior under load
+* [ ] Document any production-specific issues
+* [ ] Create user support documentation
+* [ ] Train helpdesk staff on federation authentication
 
 > [!important]
-- Test federation allows self-signed certificates
-- Production federation requires CA-signed certificates
-- Separate registrations required for test and production
-- Production endpoints: `https://idp.aai.dfn.de/idp/profile/SAML2/Redirect/SSO`
+
+* Test federation allows self-signed certificates
+* Production federation requires CA-signed certificates
+* Separate registrations required for test and production
+* Production endpoints: `https://idp.aai.dfn.de/idp/profile/SAML2/Redirect/SSO`
 
 ## Common Test Failures
 
@@ -1009,10 +1026,11 @@ After successful testing with the test federation, complete these steps before m
 5. Monitor Keycloak response times and error rates
 
 **Key Metrics:**
-- Average login time: < 5 seconds
-- Error rate: < 1%
-- Keycloak CPU/memory utilization within limits
-- No database connection pool exhaustion
+
+* Average login time: < 5 seconds
+* Error rate: < 1%
+* Keycloak CPU/memory utilization within limits
+* No database connection pool exhaustion
 
 ### Response Time Validation
 
@@ -1038,20 +1056,20 @@ After successful testing with the test federation, complete these steps before m
 **Monitor During Load Test:**
 
 1. **Keycloak Resources:**
-   - CPU utilization
-   - Memory usage
-   - Database connection pool usage
-   - Active session count
+   * CPU utilization
+   * Memory usage
+   * Database connection pool usage
+   * Active session count
 
 2. **Application Resources:**
-   - ILIAS/Moodle HTTP response times
-   - Database query performance
-   - Application server load
+   * ILIAS/Moodle HTTP response times
+   * Database query performance
+   * Application server load
 
 3. **Network Metrics:**
-   - Bandwidth usage
-   - Request rate to DFN-AAI endpoints
-   - Latency to external IdPs
+   * Bandwidth usage
+   * Request rate to DFN-AAI endpoints
+   * Latency to external IdPs
 
 **Commands:**
 
@@ -1082,10 +1100,10 @@ kubectl -n opendesk exec -it ums-keycloak-0 -- bash
 
 **Validation:**
 
-- Use SAML tracer to inspect signature
-- Verify signature covers Assertion element
-- Check Keycloak logs for signature validation errors
-- Test with unsigned assertion (should fail)
+* Use SAML tracer to inspect signature
+* Verify signature covers Assertion element
+* Check Keycloak logs for signature validation errors
+* Test with unsigned assertion (should fail)
 
 ### Attribute Encryption
 
@@ -1113,10 +1131,10 @@ kubectl -n opendesk exec -it ums-keycloak-0 -- bash
 
 **Validation:**
 
-- SAML assertions include `IssueInstant` timestamp
-- Keycloak validates timestamp within valid window
-- Assertion ID tracked and reused assertions rejected
-- No session fixation vulnerabilities
+* SAML assertions include `IssueInstant` timestamp
+* Keycloak validates timestamp within valid window
+* Assertion ID tracked and reused assertions rejected
+* No session fixation vulnerabilities
 
 ## Test Result Documentation
 
@@ -1146,22 +1164,22 @@ Notes: ...
 ## Issues Found
 1. Issue description
    - Severity: Critical/High/Medium/Low
-   - Affected tests: 
-   - Resolution: 
+   - Affected tests:
+   - Resolution:
 
 ## Recommendations
 - Production ready: Yes/No
-- Outstanding items: 
+- Outstanding items:
 ```
 
 **Test Artifacts:**
 
-- SAML tracer exports (captured assertions)
-- Keycloak event logs snippets
-- Browser network traces
-- Load test results
-- Error screenshot files
-- Configuration snapshots
+* SAML tracer exports (captured assertions)
+* Keycloak event logs snippets
+* Browser network traces
+* Load test results
+* Error screenshot files
+* Configuration snapshots
 
 ## Integration Testing
 
@@ -1178,10 +1196,10 @@ For services using Shibboleth SP configuration (ILIAS, Moodle):
 
 **Validation:**
 
-- Shibboleth SP accepts SAML assertions from Keycloak
-- Attributes correctly mapped in `attribute-map.xml`
-- Apache/Shibd service restarts without errors
-- Application recognizes federated user identity
+* Shibboleth SP accepts SAML assertions from Keycloak
+* Attributes correctly mapped in `attribute-map.xml`
+* Apache/Shibd service restarts without errors
+* Application recognizes federated user identity
 
 ### ILIAS Federation Testing
 
@@ -1194,10 +1212,10 @@ For services using Shibboleth SP configuration (ILIAS, Moodle):
 
 **Validation:**
 
-- ILIAS login page shows SSO option
-- User profile populated with Keycloak attributes
-- Course enrollment works with federated user
-- ILIAS local role assignment matches federation affiliation
+* ILIAS login page shows SSO option
+* User profile populated with Keycloak attributes
+* Course enrollment works with federated user
+* ILIAS local role assignment matches federation affiliation
 
 ### Moodle Federation Testing
 
@@ -1210,10 +1228,10 @@ For services using Shibboleth SP configuration (ILIAS, Moodle):
 
 **Validation:**
 
-- Moodle login page shows SSO option
-- User created in `mdl_user` table with correct fields
-- Course assignment works with federated user
-- Moodle role assignment matches federation affiliation
+* Moodle login page shows SSO option
+* User created in `mdl_user` table with correct fields
+* Course assignment works with federated user
+* Moodle role assignment matches federation affiliation
 
 ## Automated Testing
 
@@ -1222,19 +1240,19 @@ For services using Shibboleth SP configuration (ILIAS, Moodle):
 **Recommended Tools:**
 
 1. **SAML-tracer (Browser Extension)**
-   - Captures SAML requests and responses
-   - Visual inspection of assertion content
-   - Export for documentation and debugging
+   * Captures SAML requests and responses
+   * Visual inspection of assertion content
+   * Export for documentation and debugging
 
 2. **saml2-js (Node.js)**
-   - Programmatic SAML request/response generation
-   - Validation of SAML signatures
-   - Test automation scripts
+   * Programmatic SAML request/response generation
+   * Validation of SAML signatures
+   * Test automation scripts
 
 3. **PySAML2 (Python)**
-   - SAML client and server implementation
-   - Assertion generation and validation
-   - Test harness development
+   * SAML client and server implementation
+   * Assertion generation and validation
+   * Test harness development
 
 **Example Automation:**
 
@@ -1257,10 +1275,10 @@ curl -v -X GET \
 
 1. Obtain Keycloak admin access token
 2. Create test script to:
-   - List federated identities
-   - Query user attributes
-   - Validate identity provider configuration
-   - Check authentication events
+   * List federated identities
+   * Query user attributes
+   * Validate identity provider configuration
+   * Check authentication events
 
 **Example:**
 
@@ -1290,9 +1308,9 @@ curl -X GET \
 
 **Tools:**
 
-- **Playwright/Cypress:** Browser-based E2E testing
-- **TestCafe:** Cross-browser testing framework
-- **Selenium:** WebDriver automation
+* **Playwright/Cypress:** Browser-based E2E testing
+* **TestCafe:** Cross-browser testing framework
+* **Selenium:** WebDriver automation
 
 **Test Scenarios:**
 
@@ -1332,16 +1350,17 @@ test('federation login with discovery service', async ({ page }) => {
 
 ## Additional Resources
 
-- **DFN-AAI Documentation:** https://www.aai.dfn.de/en/documentation/
-- **eduGAIN Technical Profile:** https://technical.edugain.org/
-- **Keycloak SAML Documentation:** https://www.keycloak.org/docs/latest/server_admin/#identity-broker-saml
-- **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
-- **Shibboleth Documentation:** https://wiki.shibboleth.net/confluence/display/CONCEPT/Home
-- **OpenDesk Edu GitHub:** https://github.com/opendesk-edu/opendesk-edu/issues
+* **DFN-AAI Documentation:** <https://www.aai.dfn.de/en/documentation/>
+* **eduGAIN Technical Profile:** <https://technical.edugain.org/>
+* **Keycloak SAML Documentation:** <https://www.keycloak.org/docs/latest/server_admin/#identity-broker-saml>
+* **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
+* **Shibboleth Documentation:** <https://wiki.shibboleth.net/confluence/display/CONCEPT/Home>
+* **OpenDesk Edu GitHub:** <https://github.com/opendesk-edu/opendesk-edu/issues>
 
 ---
 
 **Related Documentation:**
-- [DFN-AAI Enrollment Guide](./dfn-aai-enrollment.md)
-- [Federation Metadata Generation Script](../../scripts/federation/README.md)
-- [Keycloak Configuration Guide](../../docs/enhanced-configuration/idp-federation.md)
+
+* [DFN-AAI Enrollment Guide](./dfn-aai-enrollment.md)
+* [Federation Metadata Generation Script](../../scripts/federation/README.md)
+* [Keycloak Configuration Guide](../../docs/enhanced-configuration/idp-federation.md)

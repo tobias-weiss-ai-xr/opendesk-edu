@@ -44,6 +44,7 @@ Nextcloud and OpenCloud run in parallel within the same `opendesk` Kubernetes na
 ```
 
 ### Key Components
+
 - **Namespace**: `opendesk` (shared by both solutions)
 - **Authentication**: Keycloak OIDC (both solutions)
 - **Portal Access**: Nubus portal tiles controlled by Keycloak group memberships
@@ -259,6 +260,7 @@ Both solutions support WebDAV for programmatic file access:
 ### Open Cloud Mesh (OCM)
 
 For future cross-instance sharing, consider Open Cloud Mesh (OCM):
+
 - Enables sharing between OpenCloud instances across organizations
 - Supports ScienceMesh federation for research collaboration
 - Requires additional configuration of CS3 APIs
@@ -278,11 +280,13 @@ For future cross-instance sharing, consider Open Cloud Mesh (OCM):
 ### Pod Status and Logs
 
 Check OpenCloud pod status:
+
 ```bash
 kubectl -n opendesk get pods -l app.kubernetes.io/name=opencloud
 ```
 
 View OpenCloud logs:
+
 ```bash
 kubectl -n opendesk logs -l app.kubernetes.io/name=opencloud --tail=50
 ```
@@ -290,6 +294,7 @@ kubectl -n opendesk logs -l app.kubernetes.io/name=opencloud --tail=50
 ### PVC Binding Issues
 
 Verify PVC binding:
+
 ```bash
 kubectl -n opendesk get pvc -l app.kubernetes.io/name=opencloud
 ```
@@ -297,16 +302,19 @@ kubectl -n opendesk get pvc -l app.kubernetes.io/name=opencloud
 ### Keycloak Authentication Issues
 
 1. Verify Keycloak client exists:
+
    ```bash
    kubectl -n opendesk exec -it ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh get clients -r opendesk | grep opendesk-opencloud
    ```
 
 2. Check client secret matches:
+
    ```bash
    kubectl -n opendesk get secret opendesk-keycloak -o jsonpath='{.data.opencloud-client-secret}' | base64 -d
    ```
 
 3. Verify user group membership:
+
    ```bash
    kubectl -n opendesk exec -it ums-keycloak-0 -- /opt/keycloak/bin/kcadm.sh get users -r opendesk -q username=<USERNAME> --fields groups
    ```
@@ -314,16 +322,19 @@ kubectl -n opendesk get pvc -l app.kubernetes.io/name=opencloud
 ### OX Integration Failures
 
 1. Verify capability is enabled:
+
    ```bash
    kubectl -n opendesk exec -it ox-core-mw-0 -- grep filestorage_owncloud_oauth /opt/open-xchange/etc/Capabilities.properties
    ```
 
 2. Check OX server URL:
+
    ```bash
    kubectl -n opendesk exec -it ox-core-mw-0 -- grep owncloud.server /opt/open-xchange/etc/UiSettings.properties
    ```
 
 3. Test OAuth2 flow:
+
    ```bash
    curl -v "https://opencloud.opendesk.example.com/.well-known/openid-configuration"
    ```

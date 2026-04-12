@@ -8,10 +8,7 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
-# 🏛️ openDesk: Άνετα και Κυρίαρχο;
+# 🏛️ openDesk: Άνετα και Κυρίαρχο
 
 🎓 openDesk Edu — Ψηφιακή Κυριαρχία στα Πανεπιστήμια
 
@@ -34,7 +31,7 @@ Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
 
 ---
 
-# Τι είναι το openDesk;
+# Τι είναι το openDesk
 
 - **Εναλλακτική ανοιχτού κώδικα** στο M365 & Google Workspace 🐧
 - **Από την Κυβέρνηση για την Κυβέρνηση** (BMI / ZenDiS) 🏛️
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Συμμετέχετε!
+# 🤝 Συμμετέχετε
 
 **Βοηθήστε μας να χτίσουμε το openDesk Edu για τα πανεπιστήμια!**
 

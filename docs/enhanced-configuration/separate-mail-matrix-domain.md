@@ -22,8 +22,8 @@ As communication over mail and chat can go beyond the borders of your openDesk i
 
 The following values are used in this example documentation. Please ensure when you come across such a value, even if it is part of a URL hostname or path, that you adapt it where needed to your setup:
 
-- `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in `https://mail.opendesk.domain.tld` to access emails and `https://chat.opendesk.domain.tld` to access the Element chat that is based on the Matrix protocol.
-- `my_organization.tld`: the alternative domain used for mail and/or Matrix.
+* `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in `https://mail.opendesk.domain.tld` to access emails and `https://chat.opendesk.domain.tld` to access the Element chat that is based on the Matrix protocol.
+* `my_organization.tld`: the alternative domain used for mail and/or Matrix.
 
 ### Mail domain
 

@@ -25,9 +25,9 @@ The following values are used in this example documentation.
 Please ensure when you come across such a value,
 even if it is part of a URL hostname or path, that you adapt it where needed to your setup:
 
-- `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in
+* `opendesk.domain.tld`: the mandatory `DOMAIN` setting for your deployment resulting in
 `https://chat.opendesk.domain.tld` for access to the Element chat.
-- `my_organization.tld`: an optional alternative domain used for mail and/or Matrix.
+* `my_organization.tld`: an optional alternative domain used for mail and/or Matrix.
 It is also set to `opendesk.domain.tld` if not used.
 
 ## Disable federation
@@ -50,6 +50,7 @@ the Matrix domain to use delegation. It is not part of your openDesk deployment.
 Domain path: `https://my_organization.tld/.well-known/matrix/server`
 
 Content:
+
 ```JSON
 {
     "m.server": "matrix-federation.opendesk.domain.tld:443"

@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Patogus ir Suverenas?
 
 🎓 openDesk Edu — Skaitmeninė Suvereneta Universitetuose
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Prisijunkite!
+# 🤝 Prisijunkite
 
 **Padėkite mums kurti openDesk Edu universitetams!**
 

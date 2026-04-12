@@ -50,6 +50,7 @@ This document presents a comprehensive WCAG 2.1 AA compliance audit of the openD
 **Impact**: Critical (WCAG 2.1 AA)
 
 All major services include alt text for images:
+
 - Portal: All SVG icons use `aria-label` attributes
 - ILIAS: Course thumbnails have alt text
 - Moodle: Image uploads require alt text
@@ -72,6 +73,7 @@ Decorative images (backgrounds, dividers) lack explicit empty `alt` attribute or
 ```
 
 **Recommendation**:
+
 1. Identify decorative images via automated scan
 2. Add `alt=""` to all decorative images
 3. Use CSS background images where appropriate
@@ -90,11 +92,13 @@ Decorative images (backgrounds, dividers) lack explicit empty `alt` attribute or
 Charts, diagrams, and complex information graphics lack extended descriptions.
 
 **Examples**:
+
 - Moodle: Gradebook visualization without description
 - ILIAS: Statistics charts missing data table alternative
 - OpenCloud: Folder structure diagrams lack ARIA description
 
 **Recommendation**:
+
 ```html
 <img src="/gradeprogress.png" alt="Grade progress chart"
      longdesc="#chart-desc">
@@ -122,17 +126,20 @@ Charts, diagrams, and complex information graphics lack extended descriptions.
 Only 40% of recorded lectures have captions. Platform does not enforce caption requirement.
 
 **Current Status**:
+
 - BigBlueButton: Captions optional, manual upload required
 - Nextcloud: Video player displays captions if present
 - ILIAS: No caption enforcement for uploaded videos
 
 **Recommendation**:
+
 1. Require captions for all uploaded content (admin setting)
 2. Integrate automatic speech-to-text service (e.g., OpenAI Whisper)
 3. Provide caption editor for manual corrections
 4. Show "CC" badge on content with captions
 
 **Configuration**:
+
 ```yaml
 # helmfile configuration
 bigbluebutton:
@@ -155,6 +162,7 @@ bigbluebutton:
 No audio description support for video content that conveys information visually.
 
 **Recommendation**:
+
 1. Add audio description track support to video player
 2. Provide guidance for content creators on when audio descriptions are needed
 3. Allow interactive transcripts as alternative to audio descriptions
@@ -174,6 +182,7 @@ No audio description support for video content that conveys information visually
 Inconsistent use of semantic HTML elements. Some sections use `<div>` instead of proper headings and landmarks.
 
 **Problems**:
+
 ```html
 <!-- Current (WRONG) -->
 <div class="sidebar-title">Navigation</div>
@@ -198,6 +207,7 @@ Inconsistent use of semantic HTML elements. Some sections use `<div>` instead of
 | Nextcloud | 14 | 7 | ⚠️ Improper ordering |
 
 **Recommendation**:
+
 1. Audit all templates for semantic HTML violations
 2. Use Lighthouse accessibility audit in CI/CD
 3. Establish heading hierarchy patterns:
@@ -206,6 +216,7 @@ Inconsistent use of semantic HTML elements. Some sections use `<div>` instead of
    - H3: Subsections (Course List, Contact Form)
    - H4-H6: Component-level headings
 4. Implement ARIA landmarks:
+
    ```html
    <header aria-label="Site Header">...</header>
    <nav aria-label="Primary Navigation">...</nav>
@@ -227,6 +238,7 @@ Inconsistent use of semantic HTML elements. Some sections use `<div>` instead of
 
 **Issue**:
 Multiple UI components fail WCAG 2.1 AA color contrast requirements:
+
 - **Normal text**: 4.5:1 minimum
 - **Large text (18pt+ or bold 14pt+)**: 3:1 minimum
 - **UI components**: 3:1 minimum
@@ -244,15 +256,17 @@ Multiple UI components fail WCAG 2.1 AA color contrast requirements:
 **Specific Issues**:
 
 1. **Portal Navigation** (Critical):
+
    ```css
    /* Current (FAIL) */
    .nav-item { color: #adb3bc; }  /* 1.5:1 ratio */
-   
+
    /* Recommended (PASS) */
    .nav-item { color: #5a5a5a; }  /* 4.6:1 ratio */
    ```
 
 2. **ILIAS Course List** (High):
+
    ```css
    Badge text on #571EFA background fails 4.5:1
    Current: #ffffff on #571EFA = 4.3:1 (FAIL)
@@ -260,21 +274,24 @@ Multiple UI components fail WCAG 2.1 AA color contrast requirements:
    ```
 
 3. **Moodle Action Buttons** (Critical):
+
    ```css
    Disabled state: #e7dffa on #ffffff = 1.4:1 (CRITICAL)
    Recommended: #999999 on #ffffff = 2.8:1 (still fails at small size)
-   
+
    Correct approach: Add strikethrough and reduce opacity (not just color)
    ```
 
 4. **Nextcloud File Browser** (Medium):
+
    ```css
    Selected row text fails contrast
    ```
-   
+
 **Color Palette Recommendations**:
 
 **Primary Colors** (Updated for AA compliance):
+
 ```yaml
 # Recommended theme.yaml.gotmpl updates
 colors:
@@ -284,7 +301,7 @@ colors:
   textSecondary: "#5a5a5a"  # Was #adb3bc (failed)
   textDisabled: "#9a9a9a"  # Was #e7dffa (critical)
   textOnPrimary: "#fcfcfc"  # Was #ffffff (slightly better)
-  
+
   # Status colors with verified contrast
   success: "#00a651"  # Green: 4.5:1+ on white
   warning: "#ff8c00"  # Orange: 4.5:1+ on white
@@ -293,26 +310,31 @@ colors:
 ```
 
 **Large Text Contrast** (3:1 minimum):
+
 - All heading colors meet requirement when 18pt or larger
 - Need to verify font size for highlighted text
 
 **Implementation Plan**:
 
 **Phase 1 (Immediate - 2 weeks)**:
+
 1. Update theme colors in `theme.yaml.gotmpl`
 2. Fix critical color contrast issues (disabled text, secondary text)
 3. Add automated contrast check to CI/CD pipeline using axe-core
 
 **Phase 2 (2-4 weeks)**:
+
 1. Update service-specific stylesheets (ILIAS, Moodle, Nextcloud)
 2. Test with color blindness simulation (protanopia, deuteranopia, tritanopia)
 3. Document color usage guidelines
 
 **Phase 3 (1-2 months)**:
+
 1. Implement user-customizable themes (light/dark/colored text)
 2. Add high-contrast mode support
 
 **Automated Testing**:
+
 ```bash
 # Add to CI/CD
 npm install -g @axe-core/cli
@@ -336,6 +358,7 @@ axe http://moodle.opendesk.example.com/ --tags wcag2aa
 Several interactive components are not keyboard-accessible:
 
 **Problems**:
+
 1. **Portal Tiles** (Critical):
    - Custom tile component lacks `tabindex="0"`
    - No keyboard click handler (`onkeypress`)
@@ -364,11 +387,12 @@ Several interactive components are not keyboard-accessible:
 **Recommendation**:
 
 **1. Ensure All Interactive Elements are Focusable**:
+
 ```html
 <!-- Portal tiles (fix) -->
-<div class="tile" 
-     role="button" 
-     tabindex="0" 
+<div class="tile"
+     role="button"
+     tabindex="0"
      aria-label="Access ILIAS"
      onkeypress="if(event.key==='Enter') this.click()">
   <img src="/ilias-icon.svg" alt="">
@@ -383,6 +407,7 @@ Several interactive components are not keyboard-accessible:
 ```
 
 **2. Complete Keyboard Navigation Order**:
+
 ```html
 <!-- Fix Moodle dropdowns -->
 <div class="dropdown">
@@ -397,6 +422,7 @@ Several interactive components are not keyboard-accessible:
 ```
 
 **3. Fix Drag-and-Drop**:
+
 ```javascript
 // Provide keyboard alternative to drag-and-drop
 // Example: File reordering in Nextcloud
@@ -417,6 +443,7 @@ id = 'file-order-1';
 ```
 
 **4. Implement Skip Links**:
+
 ```html
 <!-- Add to all pages -->
 <a href="#main-content" class="skip-link">
@@ -450,6 +477,7 @@ id = 'file-order-1';
 ```
 
 **Implementation Timeline**:
+
 - Phase 1 (1 week): Add keyboard access to portal tiles
 - Phase 2 (2 weeks): Fix Moodle dropdowns and ILIAS tree view
 - Phase 3 (2 weeks): Implement skip links and focus management
@@ -470,12 +498,14 @@ Focus indicators are either invisible (browser default) or don't meet 3:1 contra
 **Examples**:
 
 1. **Browser Default Focus** (Common):
+
    ```css
    /* Most elements use browser default outline */
    /* This is often too thin or not visible against certain backgrounds */
    ```
 
 2. **Custom Focus Without Contrast Check**:
+
    ```css
    /* ILIAS theme (FAIL) */
    a:focus {
@@ -484,6 +514,7 @@ Focus indicators are either invisible (browser default) or don't meet 3:1 contra
    ```
 
 3. **Focus Lost on Interactive Elements**:
+
    ```html
    <!-- Dropdown closes on item focus (can't navigate) -->
    <ul class="dropdown-menu">
@@ -498,6 +529,7 @@ WCAG 2.1 AA 2.4.7: "keyboard focus indicator is visible with at least a 3:1 cont
 **Recommendation**:
 
 **1. Implement High-Contrast Focus Indicators**:
+
 ```css
 /* Global focus styles (recommended) */
 :global *:focus,
@@ -515,6 +547,7 @@ WCAG 2.1 AA 2.4.7: "keyboard focus indicator is visible with at least a 3:1 cont
 ```
 
 **2. Verify Focus Transfer**:
+
 ```javascript
 // Ensure focus moves correctly between components
 // Example: Modal dialog opening
@@ -523,7 +556,7 @@ function openModal() {
   modal.showModal();
   const firstFocusable = modal.querySelector('button, [href], input');
   firstFocusable.focus();
-  
+
   // Trap focus within modal
   modal.addEventListener('keydown', trapFocus);
 }
@@ -534,7 +567,7 @@ function trapFocus(e) {
   );
   const firstElement = focusableElements[0];
   const lastElement = focusableElements[focusableElements.length - 1];
-  
+
   if (e.key === 'Tab') {
     if (e.shiftKey) {
       if (document.activeElement === firstElement) {
@@ -554,6 +587,7 @@ function trapFocus(e) {
 **3. Component-Specific Fixes**:
 
 **Portal Tiles**:
+
 ```css
 .tile:focus {
   transform: scale(1.05);
@@ -563,6 +597,7 @@ function trapFocus(e) {
 ```
 
 **Moodle Action Menus**:
+
 ```css
 .menu-item:focus {
   background-color: #f5f5f5;
@@ -572,6 +607,7 @@ function trapFocus(e) {
 ```
 
 **ILIAS Tree View**:
+
 ```css
 .tree-node:focus {
   background-color: #e7dffa;
@@ -581,6 +617,7 @@ function trapFocus(e) {
 ```
 
 **Automated Focus Testing**:
+
 ```bash
 # Using axe-core
 axe http://portal.opendesk.example.com --tags wcag2aa --rules "focusstyle-semantics"
@@ -595,6 +632,7 @@ axe http://portal.opendesk.example.com --tags wcag2aa --rules "focusstyle-semant
 ```
 
 **Implementation Timeline**:
+
 - Week 1: Implement global focus CSS
 - Week 2: Fix portal tile focus
 - Week 3: Fix Moodle/ILIAS focus issues
@@ -628,6 +666,7 @@ Automated tests to ensure no keyboard traps using axe-core.
 **Impact**: Low
 
 All services provide user control over time-based content:
+
 - Auto-hiding notifications can be dismissed
 - Carousels can be paused/stopped
 - No auto-refresh on critical pages
@@ -700,6 +739,7 @@ Some pages have generic titles like "Dashboard" or "File Browser" without contex
 
 **Recommendation**:
 Update titles to include context:
+
 ```html
 <!-- Current (FAIL) -->
 <title>Dashboard</title>
@@ -722,6 +762,7 @@ Focus order doesn't match visual layout on some pages.
 
 **Recommendation**:
 Use `tabindex` to correct focus order:
+
 ```html
 <!-- Visual order (left to right): Sidebar, Main Content -->
 <div class="layout">
@@ -744,6 +785,7 @@ Use `tabindex` to correct focus order:
 **Impact**: Low
 
 Language is correctly declared on all pages:
+
 ```html
 <html lang="de">
 ```
@@ -760,6 +802,7 @@ Technical abbreviations (e.g., "API", "REST", "SAML") lack expansion or pronunci
 
 **Recommendation**:
 Add `aria-label` or `title`:
+
 ```html
 <span aria-label="Services Architectural Interfaces">API</span>
 <abbr title="Simple Object Access Protocol">SOAP</abbr>
@@ -790,6 +833,7 @@ Some actions (auto-save, upload completion) don't notify user when context chang
 
 **Recommendation**:
 Add `aria-live` regions:
+
 ```html
 <div id="notification-area" aria-live="polite"></div>
 
@@ -816,6 +860,7 @@ function notifyUser(message) {
 Some form fields lack clear labels or instructions.
 
 **Examples**:
+
 ```html
 <!-- Current (FAIL) -->
 <input type="text" id="username" placeholder="Username">
@@ -841,10 +886,11 @@ Error messages don't clearly identify which fields caused the error.
 
 **Recommendation**:
 Associate errors with form fields:
+
 ```html
 <form>
   <label for="email">Email</label>
-  <input type="email" id="email" name="email" 
+  <input type="email" id="email" name="email"
          aria-invalid="true" aria-describedby="email-error">
   <span id="email-error" class="error" role="alert">
     Invalid email address. Please enter a valid institutional email.
@@ -871,15 +917,16 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Examples**:
 
 1. **Custom Tab Component** (ILIAS):
+
    ```html
    <!-- Current (WRONG) -->
    <div role="tab" tabindex="0">Tab 1</div>
    <div role="tab" tabindex="-1">Tab 2</div>
-   
+
    <!-- Required (CORRECT) -->
    <div role="tablist" aria-label="Course Sections">
-     <button role="tab" 
-             aria-selected="true" 
+     <button role="tab"
+             aria-selected="true"
              aria-controls="panel-1"
              id="tab-1">
        Section 1
@@ -891,10 +938,11 @@ Some components use custom ARIA attributes incorrectly or incompletely.
    ```
 
 2. **Live Region Not Properly Used**:
+
    ```html
    <!-- Current (WRONG) -->
    <div id="status-message">Status updated</div>
-   
+
    <!-- Required (CORRECT) -->
    <div id="status-message" aria-live="polite" role="status">
      Status updated
@@ -915,6 +963,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Recommendation**:
 
 1. **Add Missing Search Landmarks**:
+
    ```html
    <section aria-label="Search" role="search">
      <input type="search" aria-label="Search courses">
@@ -928,11 +977,12 @@ Some components use custom ARIA attributes incorrectly or incompletely.
    - Test with screen readers (NVDA, JAWS, VoiceOver)
 
 3. **Implement Progress Indicators**:
+
    ```html
    <!-- File upload progress -->
-   <div role="progressbar" 
-        aria-valuenow="45" 
-        aria-valuemin="0" 
+   <div role="progressbar"
+        aria-valuenow="45"
+        aria-valuemin="0"
         aria-valuemax="100"
         aria-label="File upload progress">
      45%
@@ -940,6 +990,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
    ```
 
 4. **Modal Dialogs**:
+
    ```html
    <dialog id="confirmation-dialog" aria-labelledby="dialog-title" role="dialog">
      <h2 id="dialog-title">Confirm Deletion</h2>
@@ -950,6 +1001,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
    ```
 
 **Screen Reader Testing**:
+
 ```bash
 # Test with NVDA (Windows) or VoiceOver (Mac)
 # Checklist:
@@ -961,6 +1013,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 ```
 
 **Implementation Timeline**:
+
 - Week 1: Audit and document ARIA violations
 - Week 2: Fix modal dialogs and landmarks
 - Week 3: Fix custom components (tabs, dropdowns)
@@ -977,6 +1030,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Compliance Score**: 78% (PASS)
 
 **Strengths**:
+
 - Semantic HTML structure
 - Skip links present
 - Good heading hierarchy
@@ -986,10 +1040,12 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 14 issues found (2 Critical, 4 High, 5 Medium, 3 Low)
 
 **Critical**:
+
 1. Navigation text color fails contrast (1.5:1)
 2. Some interactive elements lack keyboard support
 
 **Recommendations**:
+
 1. Update nav-item color to `#5a5a5a`
 2. Add `tabindex="0"` to portal tiles
 3. Implement focus trap for modals
@@ -1001,6 +1057,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Compliance Score**: 92% (PASS)
 
 **Strengths**:
+
 - Excellent keyboard navigation
 - Clear form labels
 - Good error messaging
@@ -1010,9 +1067,11 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 3 issues found (1 High, 1 Medium, 1 Low)
 
 **High**:
+
 1. Some button labels in login form need improvement
 
 **Recommendations**:
+
 1. Add `aria-label` to icon-only buttons
 2. Improve error message specificity
 
@@ -1023,6 +1082,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Compliance Score**: 63% (FAIL)
 
 **Strengths**:
+
 - Alt text present for images
 - Some ARIA landmarks
 
@@ -1030,12 +1090,14 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 38 issues found (4 Critical, 7 High, 15 Medium, 12 Low)
 
 **Critical**:
+
 1. Tree view not keyboard-accessible
 2. Color contrast in course list fails AA
 3. Multiple semantic HTML violations
 4. Search feature lacks accessible input
 
 **Recommendations**:
+
 1. Implement keyboard tree navigation
 2. Update course list colors
 3. Audit and fix semantic HTML (23 warnings)
@@ -1048,6 +1110,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Compliance Score**: 65% (FAIL)
 
 **Strengths**:
+
 - Comprehensive plugin ecosystem (some accessibility plugins available)
 - Multi-language support
 
@@ -1055,12 +1118,14 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 35 issues found (4 Critical, 7 High, 14 Medium, 10 Low)
 
 **Critical**:
+
 1. Dropdowns not keyboard-accessible
 2. Drag-and-drop lacks keyboard alternative
 3. Color contrast in activity icons fails
 4. Error messages not associated with fields
 
 **Recommendations**:
+
 1. Fix dropdown keyboard navigation
 2. Add keyboard reorder for lists
 3. Update activity icon colors
@@ -1074,6 +1139,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Compliance Score**: 93% (PASS)
 
 **Strengths**:
+
 - Excellent keyboard shortcuts
 - Good audio/video controls
 - Proper aria-live for chat
@@ -1082,9 +1148,11 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 2 issues found (1 Medium, 1 Low)
 
 **Medium**:
+
 1. Captions optional (should be required for recorded lectures)
 
 **Recommendations**:
+
 1. Enable automatic caption generation
 2. Add audio description support
 
@@ -1095,6 +1163,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Compliance Score**: 75% (PASS)
 
 **Strengths**:
+
 - Skip links present
 - Good ARIA labels
 
@@ -1102,9 +1171,11 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 14 issues found (1 Critical, 2 High, 5 Medium, 6 Low)
 
 **Critical**:
+
 1. File selection checkbox keyboard navigation issue
 
 **Recommendations**:
+
 1. Fix checkbox keyboard access
 2. Improve file upload status announcements
 
@@ -1115,6 +1186,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Compliance Score**: 78% (PASS)
 
 **Strengths**:
+
 - Comprehensive accessibility documentation
 - Accessibility audit mode available
 
@@ -1122,9 +1194,11 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 22 issues found (2 Critical, 4 High, 8 Medium, 8 Low)
 
 **Critical**:
+
 1. Shared folder notifications need better ARIA live region
 
 **Recommendations**:
+
 1. Fix notification ARIA regions
 2. Enable Nextcloud accessibility mode by default
 3. Improve file list keyboard navigation
@@ -1138,6 +1212,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Priority**: Critical compliance blockers
 
 **Timeline**:
+
 - **Month 1, Week 1-2**: Color Contrast Fixes
   - Update theme colors in `theme.yaml.gotmpl`
   - Fix critical contrast issues (disabled text, secondary text)
@@ -1154,12 +1229,14 @@ Some components use custom ARIA attributes incorrectly or incompletely.
   - Add focus trap JavaScript
 
 **Deliverables**:
+
 - Updated theme.yaml.gotmpl
 - Keyboard navigation fixes (27 issues)
 - Focus indicator implementation (8 issues)
 - CI/CD accessibility checks
 
 **Success Criteria**:
+
 - All critical issues resolved (14 → 0)
 - Critical color contrast meeting 4.5:1
 - All interactive elements keyboard-accessible
@@ -1171,6 +1248,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Priority**: Important but not blocking
 
 **Timeline**:
+
 - **Month 2, Week 3-4**: Semantic HTML & ARIA
   - Fix semantic HTML violations (71 warnings)
   - Add missing ARIA landmarks
@@ -1187,12 +1265,14 @@ Some components use custom ARIA attributes incorrectly or incompletely.
   - Improve error specificity
 
 **Deliverables**:
+
 - Semantic HTML fixes
 - ARIA landmarks properly implemented
 - Screen reader compatibility verified
 - Form error handling improved
 
 **Success Criteria**:
+
 - All high-priority issues resolved (21 → 0)
 - Semantic HTML warnings reduced by 80%
 - Screen reader compatibility verified
@@ -1204,6 +1284,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 **Priority**: Nice-to-have improvements
 
 **Timeline**:
+
 - **Month 4, Week 1-2**: Multimedia Accessibility
   - Implement caption generation workflow
   - Add audio description support
@@ -1225,12 +1306,14 @@ Some components use custom ARIA attributes incorrectly or incompletely.
   - User testing with assistive technology
 
 **Deliverables**:
+
 - Caption workflow implemented
 - Motion preferences respected
 - Notification system accessible
 - Testing documentation complete
 
 **Success Criteria**:
+
 - Medium-priority issues reduced from 28 to 5
 - Automated testing coverage >80%
 - Manual verification complete
@@ -1242,6 +1325,7 @@ Some components use custom ARIA attributes incorrectly or incompletely.
 ### Automated Testing
 
 **Tools**:
+
 - **axe-core**: JavaScript-based accessibility testing
 - **Pa11y**: Command-line accessibility testing
 - **Lighthouse**: Chrome DevTools audit
@@ -1260,17 +1344,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Run axe-core
         run: |
           npm install -g @axe-core/cli
           axe https://portal.opendesk.example.com --tags wcag2aa
-      
+
       - name: Run Lighthouse
         run: |
           npm install -g lighthouse
           lighthouse https://portal.opendesk.example.com --only-categories=accessibility
-      
+
       - name: Pa11y CMS
         run: |
           npm install -g pa11y-ci
@@ -1278,6 +1362,7 @@ jobs:
 ```
 
 **Test Coverage**:
+
 - Homepage (all services)
 - Login flow (Keycloak, all services)
 - Course listing (ILIAS, Moodle)
@@ -1289,6 +1374,7 @@ jobs:
 ### Manual Testing Checklist
 
 **Keyboard Navigation**:
+
 - [ ] Tab through all interactive elements
 - [ ] Focus indicator visible on all elements
 - [ ] Focus order follows visual layout
@@ -1297,6 +1383,7 @@ jobs:
 - [ ] Focus returns after modal close
 
 **Screen Reader Testing** (NVDA/Windows, VoiceOver/Mac):
+
 - [ ] Page structure announced (headings, landmarks)
 - [ ] Interactive elements announced correctly
 - [ ] Focus position announced when moved
@@ -1304,12 +1391,14 @@ jobs:
 - [ ] Dynamic content changes announced (aria-live)
 
 **Color Contrast** (axe-core or Contrast Checker):
+
 - [ ] All text meets 4.5:1 (normal) or 3:1 (large)
 - [ ] UI components meet 3:1
 - [ ] Focus indicators meet 3:1
 - [ ] Test with color blindness simulation
 
 **Forms**:
+
 - [ ] All inputs have labels
 - [ ] Required fields indicated
 - [ ] Error messages associated with fields
@@ -1317,6 +1406,7 @@ jobs:
 - [ ] Instructions provided (if complex)
 
 **Multimedia**:
+
 - [ ] Captions available for all video
 - [ ] Audio options available
 - [ ] Controls accessible and understandable
@@ -1326,12 +1416,14 @@ jobs:
 ### User Testing
 
 **Participants**:
+
 - 5-10 users with disabilities
 - Screen reader users (at least 3)
 - Keyboard-only users (at least 2)
 - Low-vision users (at least 2)
 
 **Tasks**:
+
 - Login to platform
 - Navigate to course (ILIAS/Moodle)
 - Upload file (OpenCloud/Nextcloud)
@@ -1339,6 +1431,7 @@ jobs:
 - Log out
 
 **Metrics**:
+
 - Task completion rate (target: 100%)
 - Time to complete (target: <2× normative time)
 - User satisfaction (target: 4/5)
@@ -1351,17 +1444,20 @@ jobs:
 ### Accessibility Governance
 
 **Accessibility Team**:
+
 - Lead: Accessibility Engineer
 - Members: Frontend developers, QA engineers, UX designers
 - Review frequency: Bi-weekly
 
 **Review Process**:
+
 1. New features require accessibility review before merge
 2. All PRs tested with axe-core
 3. Manual review for complex components
 4. Screen reader testing quarterly
 
 **Documentation**:
+
 - Accessibility guidelines in developer handbook
 - Component accessibility documentation
 - Monthly accessibility newsletter
@@ -1373,6 +1469,7 @@ jobs:
 ### Developer Training
 
 **Topics**:
+
 1. WCAG 2.1 AA requirements
 2. Semantic HTML & ARIA
 3. Keyboard accessibility
@@ -1380,6 +1477,7 @@ jobs:
 5. Color contrast checking
 
 **Resources**:
+
 - [WCAG 2.1 Understanding](https://www.w3.org/WAI/WCAG21/quickref/)
 - [MDN Accessibility Guide](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
 - [A11Y Project Checklist](https://www.a11yproject.com/checklist/)
@@ -1392,11 +1490,13 @@ jobs:
 ### German Legal Requirements
 
 **BGG (Behindertengleichstellungsgesetz)**:
+
 - Public institutions must ensure accessibility
 - BITV 2.0 (Barrierefreie-Informationstechnik-Verordnung)
 - Based on EN 301 549 (European standard)
 
 **Obligations**:
+
 - Accessibility statement required
 - Contact for accessibility feedback
 - Continuous improvement plan
@@ -1466,12 +1566,14 @@ jobs:
 ### C. Testing Tools
 
 **Automated Tools**:
+
 - [axe-core](https://www.deque.com/axe/) - JavaScript accessibility library
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse/) - Chrome DevTools audit
 - [Pa11y](https://pa11y.org/) - Command-line accessibility testing
 - [WAVE](https://wave.webaim.org/) - Web accessibility evaluation tool
 
 **Manual Tools**:
+
 - NVDA (Windows screen reader)
 - JAWS (Windows screen reader)
 - VoiceOver (Mac screen reader)
@@ -1490,6 +1592,7 @@ The openDesk Edu platform requires significant accessibility improvements to ach
 With the implementation plan outlined in this document, the platform can achieve full WCAG 2.1 AA compliance within 6 months, meeting German legal requirements (BGG, BITV 2.0).
 
 **Next Steps**:
+
 1. Prioritize critical color contrast fixes (Month 1)
 2. Implement global focus indicators (Month 2)
 3. Fix keyboard navigation (Month 2-3)
@@ -1500,4 +1603,4 @@ With the implementation plan outlined in this document, the platform can achieve
 
 **Report Version**: 1.0
 **Last Updated**: 2026-03-27
-**Contact**: accessibility@opendesk.example.org
+**Contact**: <accessibility@opendesk.example.org>

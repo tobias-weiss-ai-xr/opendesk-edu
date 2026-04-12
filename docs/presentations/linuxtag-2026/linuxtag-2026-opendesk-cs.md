@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Pohodlný a Suverénní?
 
 🎓 openDesk Edu — Digitální Suverenita na Univerzitách
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Zapojte se!
+# 🤝 Zapojte se
 
 **Pomozte nám stavět openDesk Edu pro univerzity!**
 

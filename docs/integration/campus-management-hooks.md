@@ -85,11 +85,11 @@ Campus management systems (CMS) serve as the authoritative source for course dat
 
 **Core Capabilities:**
 
-- **Automated Student Provisioning:** Automatic user creation and group assignment from enrollment data
-- **Course Synchronization:** Keep course metadata in sync with campus management system
-- **Semester Lifecycle:** Activate, archive, and manage semesters based on academic calendar
-- **Event-Driven Architecture:** Respond to real-time enrollment changes
-- **Bidirectional Sync (Read-Only):** One-way data flow from campus management, never writing back
+* **Automated Student Provisioning:** Automatic user creation and group assignment from enrollment data
+* **Course Synchronization:** Keep course metadata in sync with campus management system
+* **Semester Lifecycle:** Activate, archive, and manage semesters based on academic calendar
+* **Event-Driven Architecture:** Respond to real-time enrollment changes
+* **Bidirectional Sync (Read-Only):** One-way data flow from campus management, never writing back
 
 **Data Flow Principle:**
 
@@ -153,10 +153,10 @@ The campus management integration architecture follows an event-driven pattern w
 
 **Data Read-Only Principle:**
 
-- Campus management → openDesk Edu: Data synchronization (allowed)
-- openDesk Edu → Campus Management: Data writes (forbidden)
-- Learning platforms → Campus Management: Grade submissions (via separate integration)
-  - This is a different integration pattern not covered in this document
+* Campus management → openDesk Edu: Data synchronization (allowed)
+* openDesk Edu → Campus Management: Data writes (forbidden)
+* Learning platforms → Campus Management: Grade submissions (via separate integration)
+  * This is a different integration pattern not covered in this document
 
 ## Supported Campus Management Systems
 
@@ -166,18 +166,18 @@ The campus management integration architecture follows an event-driven pattern w
 
 HISinOne is a comprehensive campus management system (PCA) developed by HIS GmbH, widely used in German universities. It manages:
 
-- Course catalog and semester planning
-- Student enrollment and registration
-- Academic records and grades
-- Room and resource scheduling
+* Course catalog and semester planning
+* Student enrollment and registration
+* Academic records and grades
+* Room and resource scheduling
 
 **Integration Characteristics:**
 
-- **Authentication:** SAML 2.0 / OIDC
-- **API:** SOAP-based web services (`qisserver/services2/`)
-- **Data Format:** XML-based
-- **Event System:** Webhooks for enrollment changes
-- **Availability:** Production deployment required
+* **Authentication:** SAML 2.0 / OIDC
+* **API:** SOAP-based web services (`qisserver/services2/`)
+* **Data Format:** XML-based
+* **Event System:** Webhooks for enrollment changes
+* **Availability:** Production deployment required
 
 **Supported Features:**
 
@@ -190,10 +190,10 @@ HISinOne is a comprehensive campus management system (PCA) developed by HIS GmbH
 
 **Integration Preconditions:**
 
-- HISinOne instance with SAML/SSO enabled
-- OAuth 2.0 client credentials for API access
-- Webhook endpoint configured in HISinOne
-- Network connectivity between HISinOne and openDesk Edu
+* HISinOne instance with SAML/SSO enabled
+* OAuth 2.0 client credentials for API access
+* Webhook endpoint configured in HISinOne
+* Network connectivity between HISinOne and openDesk Edu
 
 ### HISinOne-Proxy
 
@@ -203,11 +203,11 @@ HISinOne-Proxy is a community-maintained middleware that provides a simplified R
 
 **Proxy Benefits:**
 
-- **Simplified API:** RESTful JSON interface (no complex SOAP handling)
-- **Caching Layer:** Reduces load on underlying HISinOne system
-- **Data Transformation:** Converts HISinOne XML to JSON
-- **Authentication Proxy:** Handles SAML/OIDC authentication
-- **Rate Limiting:** Protects HISinOne from API abuse
+* **Simplified API:** RESTful JSON interface (no complex SOAP handling)
+* **Caching Layer:** Reduces load on underlying HISinOne system
+* **Data Transformation:** Converts HISinOne XML to JSON
+* **Authentication Proxy:** Handles SAML/OIDC authentication
+* **Rate Limiting:** Protects HISinOne from API abuse
 
 **Supported Features:**
 
@@ -260,10 +260,10 @@ Marvin is an alternative campus management system used in some higher education 
 
 **Integration Parameters:**
 
-- **Authentication:** OAuth 2.0 client credentials
-- **API:** RESTful JSON API
-- **Data Format:** JSON
-- **Event System:** Webhooks for enrollment updates
+* **Authentication:** OAuth 2.0 client credentials
+* **API:** RESTful JSON API
+* **Data Format:** JSON
+* **Event System:** Webhooks for enrollment updates
 
 **API Endpoints:**
 
@@ -364,23 +364,23 @@ deltaQuery:
 
 **Advantages:**
 
-- Simple to implement
-- No webhook infrastructure required
-- Works with any REST/SOAP API
-- Predictable load patterns
+* Simple to implement
+* No webhook infrastructure required
+* Works with any REST/SOAP API
+* Predictable load patterns
 
 **Disadvantages:**
 
-- Event latency (up to sync interval)
-- May synchronize stale data if campus management changes quickly
-- Periodic load spikes on integration systems
+* Event latency (up to sync interval)
+* May synchronize stale data if campus management changes quickly
+* Periodic load spikes on integration systems
 
 **When to Use:**
 
-- Campus management system without webhook support
-- Stable environments with infrequent changes
-- Initial data migration
-- Recovery from sync failures
+* Campus management system without webhook support
+* Stable environments with infrequent changes
+* Initial data migration
+* Recovery from sync failures
 
 ### Pattern 2: Event-Driven Synchronization
 
@@ -439,23 +439,23 @@ webhooks:
 
 **Advantages:**
 
-- Near real-time updates
-- Reduced bandwidth (only delta changes)
-- Lower load on integration systems
-- Event traceability and audit
+* Near real-time updates
+* Reduced bandwidth (only delta changes)
+* Lower load on integration systems
+* Event traceability and audit
 
 **Disadvantages:**
 
-- Requires webhook support in campus management system
-- More complex infrastructure (event queue, workers)
-- Webhook reliability concerns (missed events)
+* Requires webhook support in campus management system
+* More complex infrastructure (event queue, workers)
+* Webhook reliability concerns (missed events)
 
 **When to Use:**
 
-- Campus management system with webhook support
-- Environments requiring near real-time updates
-- High-volume changes (large enrollment batches)
-- Event auditing requirements
+* Campus management system with webhook support
+* Environments requiring near real-time updates
+* High-volume changes (large enrollment batches)
+* Event auditing requirements
 
 ### Pattern 3: Hybrid Synchronization
 
@@ -498,23 +498,23 @@ hybridSchedule:
 
 **Advantages:**
 
-- Best of both worlds: real-time + reliability
-- Graceful degradation (events fail, periodic sync catches up)
-- Data consistency verification
-- Audit logs of event vs sync differences
+* Best of both worlds: real-time + reliability
+* Graceful degradation (events fail, periodic sync catches up)
+* Data consistency verification
+* Audit logs of event vs sync differences
 
 **Disadvantages:**
 
-- Most complex pattern to implement
-- Requires two sync mechanisms
-- Resolving conflicting updates (event vs sync)
+* Most complex pattern to implement
+* Requires two sync mechanisms
+* Resolving conflicting updates (event vs sync)
 
 **When to Use:**
 
-- Campus management system with webhook support
-- Mission-critical environments requiring both real-time and reliability
-- Regulatory requirements for data consistency
-- Large deployments with multiple integration points
+* Campus management system with webhook support
+* Mission-critical environments requiring both real-time and reliability
+* Regulatory requirements for data consistency
+* Large deployments with multiple integration points
 
 ## Data Flow Architecture
 
@@ -755,9 +755,9 @@ def process_enrollment_event(event: EnrollmentEvent):
 1. **Receive student data from campus management**
 2. **Check if user already exists in Keycloak** (by username or email)
 3. **If not exists, create new user:**
-   - Generate username: `student{matriculation_number}@university.edu`
-   - Generate temporary password (auto-expiring after first login)
-   - Assign default groups: `base-students`, `university-students`
+   * Generate username: `student{matriculation_number}@university.edu`
+   * Generate temporary password (auto-expiring after first login)
+   * Assign default groups: `base-students`, `university-students`
 4. **Map attributes from campus management to Keycloak user profile**
 5. **Provision user to LDAP** (if using LDAP as user directory)
 6. **Send welcome email** (optional)
@@ -950,30 +950,30 @@ https://hisinone.university.edu/qisserver/services2/
 **Synchronization Steps:**
 
 1. **Fetch courses from HISinOne:**
-   - Call `GetCourses` SOAP endpoint with semester code
-   - Retrieve course metadata (kennung, titel, dozenten, raum, termin)
-   - Parse XML response to Python objects
+   * Call `GetCourses` SOAP endpoint with semester code
+   * Retrieve course metadata (kennung, titel, dozenten, raum, termin)
+   * Parse XML response to Python objects
 
 2. **Transform course data:**
-   - Map HISinOne fields to openDesk Edu schema
-   - Format semester codes (e.g., "20262" → "WS2025/26")
-   - Validate required fields
+   * Map HISinOne fields to openDesk Edu schema
+   * Format semester codes (e.g., "20262" → "WS2025/26")
+   * Validate required fields
 
 3. **Upsert courses in Keycloak:**
-   - Check if course exists (by.course ID)
-   - Create new course if not exists
-   - Update existing course if exists
+   * Check if course exists (by.course ID)
+   * Create new course if not exists
+   * Update existing course if exists
 
 4. **Create Keycloak groups:**
-   - Course-specific groups of format: `course:{courseCode}:{semesterCode}`
-   - Lecturer groups: `course:{courseCode}:instructors`
-   - Student groups: `course:{courseCode}:students`
+   * Course-specific groups of format: `course:{courseCode}:{semesterCode}`
+   * Lecturer groups: `course:{courseCode}:instructors`
+   * Student groups: `course:{courseCode}:students`
 
 5. **Provision to learning platforms:**
-   - ILIAS: Create course via REST API
-   - Moodle: Create course via Moodle web service
-   - BBB: Create meeting room via BBB API
-   - OpenCloud: Create course share via REST API
+   * ILIAS: Create course via REST API
+   * Moodle: Create course via Moodle web service
+   * BBB: Create meeting room via BBB API
+   * OpenCloud: Create course share via REST API
 
 **Synchronization Code Example:**
 
@@ -1077,11 +1077,11 @@ def process_enrollment_event(event: HISinOneEvent):
 
 HISinOne-Proxy acts as a middleware layer between openDesk Edu and HISinOne, providing:
 
-- REST API wrapper around HISinOne SOAP services
-- Data transformation (XML → JSON)
-- Authentication proxy (handles SAML/OIDC)
-- Response caching
-- Rate limiting
+* REST API wrapper around HISinOne SOAP services
+* Data transformation (XML → JSON)
+* Authentication proxy (handles SAML/OIDC)
+* Response caching
+* Rate limiting
 
 ```
 ┌──────────────────┐     REST API (JSON)      ┌─────────────────────┐
@@ -1221,12 +1221,12 @@ hisinoneProxy:
 1. **Time-to-Live (TTL):** Items expire after configured TTL
 
 2. **Webhook-based Invalidation:**
-   - HISinOne sends webhook to proxy on data change
-   - Proxy invalidates affected cache entries
-   - Next request fetches fresh data
+   * HISinOne sends webhook to proxy on data change
+   * Proxy invalidates affected cache entries
+   * Next request fetches fresh data
 
 3. **Purge API:**
-   - Manual cache purge endpoint: `POST /api/v1/cache/purge`
+   * Manual cache purge endpoint: `POST /api/v1/cache/purge`
 
 ### Data Transformation
 
@@ -1235,19 +1235,19 @@ HISinOne-Proxy transforms HISinOne XML data to JSON format.
 **Transformation Rules:**
 
 1. **XML Tag Names to JSON Keys:**
-   - Convert PascalCase to camelCase
-   - Example: `Kennung` → `kennung`, `Dozenten` → `lecturers`
+   * Convert PascalCase to camelCase
+   * Example: `Kennung` → `kennung`, `Dozenten` → `lecturers`
 
 2. **Date Formats:**
-   - HISinOne: `YYYY-MM-DD` (XML)
-   - Proxy: ISO 8601 format (JSON)
+   * HISinOne: `YYYY-MM-DD` (XML)
+   * Proxy: ISO 8601 format (JSON)
 
 3. **Nested Structures:**
-   - Flat XML structures to nested JSON
-   - Example: `Dozent[]` → `lecturers: [{id, name}]`
+   * Flat XML structures to nested JSON
+   * Example: `Dozent[]` → `lecturers: [{id, name}]`
 
 4. **Empty Values:**
-   - Replace `null` or empty strings with `null`
+   * Replace `null` or empty strings with `null`
 
 **Example Transformation:**
 
@@ -1338,9 +1338,9 @@ Campus management systems must authenticate webhook requests.
 
 1. **HMAC Signature:**
 
-   - Compute HMAC-SHA256 of request body using shared secret
-   - Include signature in `X-Webhook-Signature` header
-   - Integration service verifies signature before processing
+   * Compute HMAC-SHA256 of request body using shared secret
+   * Include signature in `X-Webhook-Signature` header
+   * Integration service verifies signature before processing
 
    ```python
    def verify_webhook_signature(request_body: bytes, received_signature: str, secret: str) -> bool:
@@ -1358,8 +1358,8 @@ Campus management systems must authenticate webhook requests.
 
 2. **API Key:**
 
-   - Include API key in `Authorization` header
-   - Format: `Authorization: Bearer ${API_KEY}`
+   * Include API key in `Authorization` header
+   * Format: `Authorization: Bearer ${API_KEY}`
 
 **Webhook Configuration in Campus Management:**
 
@@ -1502,29 +1502,29 @@ All events follow a consistent structure.
 **Event Processing Steps:**
 
 1. **Receive Webhook:**
-   - Verify HMAC signature or API key
-   - Validate event structure
-   - Return 202 Accepted (async processing)
+   * Verify HMAC signature or API key
+   * Validate event structure
+   * Return 202 Accepted (async processing)
 
 2. **Queue Event:**
-   - Serialize event to JSON
-   - Add to message queue (Redis, RabbitMQ, etc.)
-   - Store event metadata (timestamp, source, eventId)
+   * Serialize event to JSON
+   * Add to message queue (Redis, RabbitMQ, etc.)
+   * Store event metadata (timestamp, source, eventId)
 
 3. **Process Event (Worker):**
-   - Deserialize event from queue
-   - Transform event data to Keycloak schema
-   - Execute changes in Keycloak:
-     - Update user attributes
-     - Add/remove group memberships
-     - Create/delete course groups
-   - Propagate changes to learning platforms
-   - Log results
+   * Deserialize event from queue
+   * Transform event data to Keycloak schema
+   * Execute changes in Keycloak:
+     * Update user attributes
+     * Add/remove group memberships
+     * Create/delete course groups
+   * Propagate changes to learning platforms
+   * Log results
 
 4. **Error Handling:**
-   - Retry failed events (exponential backoff)
-   - Send failed events to dead letter queue
-   - Alert administrators for critical failures
+   * Retry failed events (exponential backoff)
+   * Send failed events to dead letter queue
+   * Alert administrators for critical failures
 
 **Event Processor Code Example:**
 
@@ -1579,31 +1579,31 @@ def process_event(event_queue: EventQueue):
 **Workflow Steps:**
 
 1. **Trigger:**
-   - Event from campus management or periodic sync
-   - Student data received from HISinOne/Proxy
+   * Event from campus management or periodic sync
+   * Student data received from HISinOne/Proxy
 
 2. **User Lookup:**
-   - Check if user exists in Keycloak (by username, email)
-   - If exists, skip creation, update attributes if needed
+   * Check if user exists in Keycloak (by username, email)
+   * If exists, skip creation, update attributes if needed
 
 3. **User Creation:**
-   - Generate username: `student{matriculation_number}@university.edu`
-   - Generate temporary password (auto-expiring)
-   - Create user in Keycloak via Admin REST API
+   * Generate username: `student{matriculation_number}@university.edu`
+   * Generate temporary password (auto-expiring)
+   * Create user in Keycloak via Admin REST API
 
 4. **Attribute Mapping:**
-   - Map campus management attributes to Keycloak user profile
-   - Set required attributes: username, email, firstName, lastName
-   - Set custom attributes: currentSemester, fieldOfStudy
+   * Map campus management attributes to Keycloak user profile
+   * Set required attributes: username, email, firstName, lastName
+   * Set custom attributes: currentSemester, fieldOfStudy
 
 5. **Group Assignment:**
-   - Assign to base groups: `base-students`, `university-students`
-   - Assign to semester group: `semester:{code}:students`
-   - Assign to role-specific groups based on campus management role
+   * Assign to base groups: `base-students`, `university-students`
+   * Assign to semester group: `semester:{code}:students`
+   * Assign to role-specific groups based on campus management role
 
 6. **Platform Provisioning:**
-   - User automatically provisioned to learning platforms via SSO on first login
-   - No explicit provisioning required
+   * User automatically provisioned to learning platforms via SSO on first login
+   * No explicit provisioning required
 
 **User Creation API Call:**
 
@@ -1664,22 +1664,22 @@ base-students (all students)
 **Group Assignment Rules:**
 
 1. **New Student:**
-   - Assigned to `base-students` group
-   - Assigned to `university-students` group
-   - Assigned to current semester group: `semester:{currentSemester}:students`
+   * Assigned to `base-students` group
+   * Assigned to `university-students` group
+   * Assigned to current semester group: `semester:{currentSemester}:students`
 
 2. **Course Enrollment:**
-   - Added to course-specific student group: `course:{courseCode}:students`
-   - Not removed from semester group (may enroll in multiple courses)
+   * Added to course-specific student group: `course:{courseCode}:students`
+   * Not removed from semester group (may enroll in multiple courses)
 
 3. **Semester Transition:**
-   - Removed from previous semester group: `semester:{previousSemester}:students`
-   - Added to new semester group: `semester:{newSemester}:students`
-   - Course groups archived separately
+   * Removed from previous semester group: `semester:{previousSemester}:students`
+   * Added to new semester group: `semester:{newSemester}:students`
+   * Course groups archived separately
 
 4. **Student Graduation:**
-   - Removed from `base-students` group
-   - Added to `alumni:{graduationYear}` group (optional)
+   * Removed from `base-students` group
+   * Added to `alumni:{graduationYear}` group (optional)
 
 ### Role Mapping
 
@@ -1696,34 +1696,34 @@ base-students (all students)
 
 **Student (permissionLevel: 50):**
 
-- Access to enrolled courses
-- View course content
-- Take assessments
-- Participate in forums
-- Personal file storage (quota: 2GB per course)
+* Access to enrolled courses
+* View course content
+* Take assessments
+* Participate in forums
+* Personal file storage (quota: 2GB per course)
 
 **Tutor (permissionLevel: 75):**
 
-- All student permissions
-- Grade assessments
-- Manage forum posts
-- Moderate BBB rooms
-- Additional file storage (quota: 10GB per course)
+* All student permissions
+* Grade assessments
+* Manage forum posts
+* Moderate BBB rooms
+* Additional file storage (quota: 10GB per course)
 
 **Instructor (permissionLevel: 100):**
 
-- All tutor permissions
-- Create/edit course content
-- Manage enrollments
-- Full BBB moderator access
-- Unlimited course storage
+* All tutor permissions
+* Create/edit course content
+* Manage enrollments
+* Full BBB moderator access
+* Unlimited course storage
 
 **Guest (permissionLevel: 10):**
 
-- Read-only access to specific courses
-- No assessments
-- Limited forum participation
-- No personal file storage
+* Read-only access to specific courses
+* No assessments
+* Limited forum participation
+* No personal file storage
 
 ### Attribute Synchronization
 
@@ -1817,15 +1817,15 @@ LDAP can serve as the primary user directory for openDesk Edu, with campus manag
 
 **LDAP Integration Benefits:**
 
-- External user directory (separate from Keycloak)
-- Central identity management for multiple services
-- Existing LDAP infrastructure at many universities
+* External user directory (separate from Keycloak)
+* Central identity management for multiple services
+* Existing LDAP infrastructure at many universities
 
 **LDAP Integration Limitations:**
 
-- Cannot modify users directly in Keycloak (read-only federation)
-- Changes must be made in LDAP/AD
-- Additional synchronization layer required
+* Cannot modify users directly in Keycloak (read-only federation)
+* Changes must be made in LDAP/AD
+* Additional synchronization layer required
 
 ### Active Directory Integration
 
@@ -1916,15 +1916,15 @@ ldap:
 
 **Campus Management → LDAP Sync:**
 
-- Campus management system must synchronize user data to LDAP
-- Sync frequency determines update latency
-- Attribute changes trigger LDAP updates
+* Campus management system must synchronize user data to LDAP
+* Sync frequency determines update latency
+* Attribute changes trigger LDAP updates
 
 **LDAP → Keycloak Sync:**
 
-- Keycloak LDAP federation provider synchronizes from LDAP periodically
-- Default full sync: 24 hours
-- Default changed sync: 1 hour
+* Keycloak LDAP federation provider synchronizes from LDAP periodically
+* Default full sync: 24 hours
+* Default changed sync: 1 hour
 
 **Sync Frequency Configuration:**
 
@@ -1940,9 +1940,9 @@ ldap:
 
 If LDAP server supports it, configure event-based updates to Keycloak:
 
-- LDAP server sends LDIF change notifications
-- Keycloak receives updates and applies changes immediately
-- Reduces synchronization latency to near real-time
+* LDAP server sends LDIF change notifications
+* Keycloak receives updates and applies changes immediately
+* Reduces synchronization latency to near real-time
 
 ## Error Handling and Retry Logic
 
@@ -2124,19 +2124,19 @@ def send_to_dead_letter_queue(event: Event, failure_reason: str):
 **Notification Triggers:**
 
 1. **Critical Failures:**
-   - Dead letter queue entries
-   - Service unavailable > 5 minutes
-   - Authentication failures (potential configuration issue)
+   * Dead letter queue entries
+   * Service unavailable > 5 minutes
+   * Authentication failures (potential configuration issue)
 
 2. **Warning Notifications:**
-   - Rate limit exceeded
-   - High error rate (>10% failures in last hour)
-   - Sync latency exceeded (>1 hour for event-driven sync)
+   * Rate limit exceeded
+   * High error rate (>10% failures in last hour)
+   * Sync latency exceeded (>1 hour for event-driven sync)
 
 3. **Info Notifications:**
-   - Scheduled sync completed successfully
-   - Service configuration changes
-   - Maintenance windows
+   * Scheduled sync completed successfully
+   * Service configuration changes
+   * Maintenance windows
 
 **Email Notification Example:**
 
@@ -2325,57 +2325,57 @@ mtls:
 
 **Certificate Requirements:**
 
-- Client certificate issued by university CA
-- Server certificate from campus management system
-- Minimum RSA key size: 2048 bits
-- Certificate validity: 1-2 years
+* Client certificate issued by university CA
+* Server certificate from campus management system
+* Minimum RSA key size: 2048 bits
+* Certificate validity: 1-2 years
 
 ### Data Privacy
 
 **GDPR Compliance:**
 
 1. **Data Minimization:**
-   - Only retrieve necessary attributes from campus management
-   - Do not store sensitive data (passwords, payment info)
+   * Only retrieve necessary attributes from campus management
+   * Do not store sensitive data (passwords, payment info)
 
 2. **Right to be Forgotten:**
-   - Provide endpoint to delete user data on request
-   - Archive deleted user data for audit trail
-   - Remove user from all systems within 30 days
+   * Provide endpoint to delete user data on request
+   * Archive deleted user data for audit trail
+   * Remove user from all systems within 30 days
 
 3. **Data Retention:**
-   - Student data: Retain for duration of studies + statutory period
-   - Course data: Retain for audit period (typically 5-7 years)
-   - Archive deleted courses: Retain according to institutional policy
+   * Student data: Retain for duration of studies + statutory period
+   * Course data: Retain for audit period (typically 5-7 years)
+   * Archive deleted courses: Retain according to institutional policy
 
 4. **Data Access Logs:**
-   - Log all data access operations
-   - Include timestamp, user, operation, resource
-   - Retain logs for audit period
+   * Log all data access operations
+   * Include timestamp, user, operation, resource
+   * Retain logs for audit period
 
 **Data Encryption:**
 
-- **In Transit:** TLS 1.2 or higher for all API calls
-- **At Rest:** Database encryption, encrypted volumes
-- **Secrets Management:** Kubernetes secrets, HashiCorp Vault
+* **In Transit:** TLS 1.2 or higher for all API calls
+* **At Rest:** Database encryption, encrypted volumes
+* **Secrets Management:** Kubernetes secrets, HashiCorp Vault
 
 ### Access Control
 
 **API Access Control:**
 
 1. **OAuth 2.0 Scopes:**
-   - `integration:webhooks` - Access to webhook endpoints
-   - `integration:sync` - Trigger manual sync
-   - `integration:admin` - Administrative operations
+   * `integration:webhooks` - Access to webhook endpoints
+   * `integration:sync` - Trigger manual sync
+   * `integration:admin` - Administrative operations
 
 2. **Rate Limiting:**
-   - 100 requests per minute per IP
-   - 1000 requests per hour per client
-   - Exponentially increase on abuse
+   * 100 requests per minute per IP
+   * 1000 requests per hour per client
+   * Exponentially increase on abuse
 
 3. **IP Whitelist:**
-   - Only allow connections from campus management system IP ranges
-   - Network firewall rules
+   * Only allow connections from campus management system IP ranges
+   * Network firewall rules
 
 **Keycloak Roles for Integration Service:**
 
@@ -2430,10 +2430,10 @@ mtls:
 
 **Audit Log Storage:**
 
-- Retention: 7 years (legal requirement)
-- Format: Structured JSON
-- Storage: Elasticsearch, Splunk, or SIEM
-- Access: Restricted to security team
+* Retention: 7 years (legal requirement)
+* Format: Structured JSON
+* Storage: Elasticsearch, Splunk, or SIEM
+* Access: Restricted to security team
 
 ## Implementation Examples
 
@@ -2442,9 +2442,10 @@ mtls:
 **Scenario:** Sync courses from HISinOne to Keycloak for semester WS2025/26
 
 **Prerequisites:**
-- OAuth 2.0 client credentials configured
-- HISinOne SOAP API accessible
-- Keycloak admin API token
+
+* OAuth 2.0 client credentials configured
+* HISinOne SOAP API accessible
+* Keycloak admin API token
 
 **Synchronization Code:**
 
@@ -2788,17 +2789,17 @@ if __name__ == "__main__":
 **Test Cases:**
 
 1. **Event Parsing:**
-   - Verify webhook event structure validation
-   - Test transformation to internal event format
-   - Validate error handling for malformed events
+   * Verify webhook event structure validation
+   * Test transformation to internal event format
+   * Validate error handling for malformed events
 
 2. **User ID Mapping:**
-   - Test campus management ID to Keycloak ID mapping
-   - Validate edge cases (missing attributes, special characters)
+   * Test campus management ID to Keycloak ID mapping
+   * Validate edge cases (missing attributes, special characters)
 
 3. **Attribute Mapping:**
-   - Verify campus management attributes map to Keycloak attributes
-   - Test custom attribute handling
+   * Verify campus management attributes map to Keycloak attributes
+   * Test custom attribute handling
 
 **Unit Test Example:**
 
@@ -2843,19 +2844,19 @@ def test_event_parsing_invalid():
 **Test Scenarios:**
 
 1. **HISinOne Integration:**
-   - Test OAuth 2.0 token acquisition
-   - Verify SOAP API authentication
-   - Test course data retrieval
+   * Test OAuth 2.0 token acquisition
+   * Verify SOAP API authentication
+   * Test course data retrieval
 
 2. **Keycloak Integration:**
-   - Test user creation via Admin REST API
-   - Verify group assignment
-   - Test attribute mapping
+   * Test user creation via Admin REST API
+   * Verify group assignment
+   * Test attribute mapping
 
 3. **Event Processing:**
-   - Test webhook reception
-   - Verify event queuing
-   - Test event processing end-to-end
+   * Test webhook reception
+   * Verify event queuing
+   * Test event processing end-to-end
 
 **Integration Test Example:**
 
@@ -2910,16 +2911,16 @@ def test_user_creation(keycloak_admin_token):
 **E2E Test Scenarios:**
 
 1. **Complete Enrollment Flow:**
-   - Simulate enrollment webhook
-   - Verify user created in Keycloak
-   - Verify user added to course group
-   - Verify user can log into ILIAS
+   * Simulate enrollment webhook
+   * Verify user created in Keycloak
+   * Verify user added to course group
+   * Verify user can log into ILIAS
 
 2. **Periodic Sync:**
-   - Trigger scheduled synchronization
-   - Verify courses synced from HISinOne
-   - Verify enrollments synced
-   - Check for data inconsistencies
+   * Trigger scheduled synchronization
+   * Verify courses synced from HISinOne
+   * Verify enrollments synced
+   * Check for data inconsistencies
 
 **E2E Test Framework:**
 
@@ -2961,16 +2962,18 @@ test('student enrollment flow', async ({ page }) => {
 
 ### Common Issues
 
-**Issue 1: Webhook Signature Verification Failed**  
+**Issue 1: Webhook Signature Verification Failed**
 
 **Symptom:** Webhook requests rejected with 401 Unauthorized
 
 **Possible Causes:**
+
 1. Secret mismatch between campus management and integration service
 2. Signature calculation algorithm mismatch
 3. Request body encoding issues
 
 **Solutions:**
+
 1. Verify shared secret matches in both systems
 2. Confirm HMAC-SHA256 algorithm used
 3. Check request body encoding (UTF-8)
@@ -2985,16 +2988,18 @@ curl -X POST \
   -v
 ```
 
-**Issue 2: OAuth 2.0 Token Expired**  
+**Issue 2: OAuth 2.0 Token Expired**
 
 **Symptom:** API calls fail with 401 Unauthorized
 
 **Possible Causes:**
+
 1. Access token lifetime exceeded
 2. Refresh token not available or expired
 3. Client credentials revoked
 
 **Solutions:**
+
 1. Refresh access token using refresh token
 2. Re-authenticate using client credentials
 3. Verify client credentials are valid in Keycloak
@@ -3014,15 +3019,17 @@ def refresh_oauth_token(refresh_token):
     return response.json()["access_token"]
 ```
 
-**Issue 3: User Already Exists**  
+**Issue 3: User Already Exists**
 
 **Symptom:** User creation fails with conflict error
 
 **Possible Causes:**
+
 1. User already created in Keycloak
 2. Username or email collision
 
 **Solutions:**
+
 1. Check if user exists before creating
 2. Update existing user instead of creating new
 3. Use on_duplicate_key_update logic
@@ -3045,16 +3052,18 @@ def create_or_update_user(user_data):
         keycloak_admin.create_user(user_data)
 ```
 
-**Issue 4: Events Stuck in Queue**  
+**Issue 4: Events Stuck in Queue**
 
 **Symptom:** Events not processed from queue
 
 **Possible Causes:**
+
 1. Event processor not running
 2. Worker pool exhausted
 3. Queue connection issues
 
 **Solutions:**
+
 1. Restart event processor service
 2. Check worker pool capacity
 3. Verify Redis connection
@@ -3242,14 +3251,14 @@ watch -n 5 'curl -s -H "Authorization: Bearer ${API_TOKEN}" \
 
 ## Additional Resources
 
-- **HISinOne Documentation:** https://www.his.de/
-- **HISinOne-Proxy GitHub:** https://github.com/DatabayAG/his_in_one_proxy
-- **Keycloak Admin REST API:** https://www.keycloak.org/docs/latest/server_admin/#_rest_api
-- **OAuth 2.0 RFC:** https://tools.ietf.org/html/rfc6749
-- **SAML 2.0 Technical Overview:** https://wiki.oasis-open.org/security/
-- **GDPR Guidelines:** https://gdpr.eu/
+* **HISinOne Documentation:** <https://www.his.de/>
+* **HISinOne-Proxy GitHub:** <https://github.com/DatabayAG/his_in_one_proxy>
+* **Keycloak Admin REST API:** <https://www.keycloak.org/docs/latest/server_admin/#_rest_api>
+* **OAuth 2.0 RFC:** <https://tools.ietf.org/html/rfc6749>
+* **SAML 2.0 Technical Overview:** <https://wiki.oasis-open.org/security/>
+* **GDPR Guidelines:** <https://gdpr.eu/>
 
 ---
 
-*Last updated: 2026-03-27*  
+*Last updated: 2026-03-27*
 *Task: Document campus management system integration hooks*

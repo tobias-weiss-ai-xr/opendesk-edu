@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Udoban i Suverenan?
 
 🎓 openDesk Edu — Digitalna Suverenost na Univerzitetima
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Uključi Se!
+# 🤝 Uključi Se
 
 **Pomozite nam da izgradimo openDesk Edu za univerzitete!**
 

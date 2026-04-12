@@ -4,10 +4,12 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 # eduGAIN Attribute Mapping Reference
+
 ## Attributzuordnung für Keycloak
 
 [English](#english) | [Deutsch](#deutsch)
 <a name="english"></a>
+
 ## English
 
 This document provides a comprehensive reference for mapping eduGAIN attributes to Keycloak user attributes when using DFN-AAI / eduGAIN federation authentication.
@@ -32,13 +34,14 @@ eduGAIN (Education Gaining Authentication for INfrastructures) is an interfedera
 |-----------|-----|-----------------|-------------|
 | `givenName` | `urn:mace:dir:attribute-def:givenName` | `firstName` | User's first/given name |
 | `sn` | `urn:mace:dir:attribute-def:sn` | `lastName` | User's surname/family name |
-| `eduPersonScopedAffiliation` | `urn:mace:dir:attribute-def:eduPersonScopedAffiliation` | `scopedAffiliation` | Affiliation with scope (student@university.edu) |
+| `eduPersonScopedAffiliation` | `urn:mace:dir:attribute-def:eduPersonScopedAffiliation` | `scopedAffiliation` | Affiliation with scope (<student@university.edu>) |
 | `eduPersonUniqueID` | `urn:mace:dir:attribute-def:eduPersonUniqueID` | `uniqueId` | Globally unique identifier |
 | `schacHomeOrganization` | `urn:oid:1.3.6.1.4.1.25178.1.2.9` | `homeOrganization` | Home institution domain |
 
 ### Attribute URN Formats
 
 DFN-AAI uses two attribute URN formats:
+
 1. **MACE Format** (Preferred): `urn:mace:dir:attribute-def:attributeName`
 2. **OID Format** (Legacy): `urn:oid:x.x.x.x.x.x.x.x`
 
@@ -60,6 +63,7 @@ DFN-AAI uses two attribute URN formats:
 ```
 
 #### Username Mapper (eduPersonPrincipalName)
+
 ```json
 {
   "name": "username-mapper",
@@ -74,6 +78,7 @@ DFN-AAI uses two attribute URN formats:
 ```
 
 #### Display Name Mapper
+
 ```json
 {
   "name": "displayname-mapper",
@@ -105,6 +110,7 @@ The role assignment script mapper maps `eduPersonAffiliation` values to Keycloak
 ### Multi-Value Attributes
 
 Some attributes like `eduPersonAffiliation` can have multiple values. Example:
+
 ```xml
 <Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation">
   <AttributeValue>student</AttributeValue>
@@ -138,6 +144,7 @@ if (displayName && !givenName && !sn) {
 ### Email Verification
 
 Users authenticating via DFN-AAI/eduGAIN have their email automatically verified:
+
 ```javascript
 user.setEmailVerified(true);
 ```
@@ -155,6 +162,7 @@ user.setEmailVerified(true);
 | `testmulti` | student, staff | `student`, `staff` | Test multi-affiliation |
 
 #### Verification Steps
+
 1. **SAML Tracer**: Use browser extension to inspect SAML assertions
 2. **Keycloak Admin**: Verify user attributes in admin console
 3. **Database Query**: Check user attributes in Keycloak database
@@ -163,32 +171,39 @@ user.setEmailVerified(true);
 ### Troubleshooting
 
 #### Attributes Not Received
+
 **Symptom:** User created but attributes empty
 
 **Solutions:**
+
 1. Contact IdP admin about attribute release policy
 2. Verify attribute names match IdP configuration
 3. Check `<AttributeConsumingService>` in SP metadata
 4. Use SAML Tracer to inspect actual assertion
 
 #### Wrong Role Assignment
+
 **Symptom:** User receives incorrect roles
 
 **Solutions:**
+
 1. Verify `eduPersonAffiliation` value in SAML assertion
 2. Check role mapper script for correct mapping
 3. Ensure required roles exist in Keycloak
 4. Check Keycloak logs for role assignment errors
 
 #### Display Name Not Parsed
+
 **Symptom:** First/last name not populated
 
 **Solutions:**
+
 1. Check if `givenName`/`sn` are available from IdP
 2. Verify display name parsing logic
 3. Check for special characters in display name
 
 ### Related Documentation
+
 - [DFN-AAI Registration Guide](./dfn-aai-registration.md)
 - [Shibboleth IdP Integration](./shibboleth-idp-integration.md)
 - [SAML Metadata Generator](../scripts/saml-metadata-generator/README.md)
@@ -198,6 +213,7 @@ user.setEmailVerified(true);
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 Dieses Dokument bietet eine umfassende Referenz für die Zuordnung von eduGAIN-Attributen zu Keycloak-Benutzerattribute bei Verwendung der DFN-AAI / eduGAIN-Föderationsauthentifizierung.
@@ -217,11 +233,12 @@ eduGAIN (Education Gaining Authentication for INfrastructures) ist ein Interföd
 | `eduPersonTargetedID` | `urn:mace:dir:attribute-def:eduPersonTargetedID` | `persistentId` | Datenschutzfreundliche persistente ID |
 
 ### Optionale Attribute (Erweiterte Erfahrung)
+
 | Attribut | URN | Keycloak-Ziel | Beschreibung |
 |----------|-----|---------------|-------------|
 | `givenName` | `urn:mace:dir:attribute-def:givenName` | `firstName` | Vorname |
 | `sn` | `urn:mace:dir:attribute-def:sn` | `lastName` | Nachname |
-| `eduPersonScopedAffiliation` | `urn:mace:dir:attribute-def:eduPersonScopedAffiliation` | `scopedAffiliation` | Zugehörigkeit mit Bereich (student@university.edu) |
+| `eduPersonScopedAffiliation` | `urn:mace:dir:attribute-def:eduPersonScopedAffiliation` | `scopedAffiliation` | Zugehörigkeit mit Bereich (<student@university.edu>) |
 | `eduPersonUniqueID` | `urn:mace:dir:attribute-def:eduPersonUniqueID` | `uniqueId` | Globale eindeutige Kennung |
 | `schacHomeOrganization` | `urn:oid:1.3.6.1.4.1.25178.1.2.9` | `homeOrganization` | Domain der Heimateinrichtung |
 
@@ -241,7 +258,9 @@ Der Rollenzuweisungs-Skript-Mapper ordnet `eduPersonAffiliation`-Werte Keycloak-
 | `alum` | `alumni` | Alumni-Mitglieder |
 
 ### Mehrwertige Attribute
+
 Einige Attribute wie `eduPersonAffiliation` können mehrere Werte haben. Beispiel:
+
 ```xml
 <Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation">
   <AttributeValue>student</AttributeValue>
@@ -253,7 +272,9 @@ Einige Attribute wie `eduPersonAffiliation` können mehrere Werte haben. Beispie
 Wenn ein Benutzer mehrere Zugehörigkeiten hat, erhält er alle entsprechenden Rollen.
 
 ### Anzeigename-Parsing
+
 Wenn `givenName` und `sn` nicht verfügbar sind, parst der Rollenzuweisungs-Mapper `displayName` in Vor- und Nachnamen auf
+
 ```javascript
 var displayName = user.getSingleAttribute('displayName');
 var givenName = user.getSingleAttribute('firstName');
@@ -271,13 +292,17 @@ if (displayName && !givenName && !sn) {
 ```
 
 ### E-Mail-Verifizierung
+
 Benutzer, die sich über DFN-AAI/eduGAIN authentifizieren, haben ihre E-Mail automatisch verifiziert
+
 ```javascript
 user.setEmailVerified(true);
 ```
 
 ### Testen der Attributzuordnung
+
 #### Testbenutzer (DFN-AAI-Testföderation)
+
 | Benutzer | Zugehörigkeit | Erwartete Rollen | Zweck |
 |----------|---------------|------------------|-------|
 | `teststudent` | student | `student` | Test Student-Zugriff |
@@ -287,6 +312,7 @@ user.setEmailVerified(true);
 | `testmulti` | student, staff | `student`, `staff` | Test mehrfache Zugehörigkeit |
 
 ### Verwandte Dokumentation
+
 - [DFN-AAI-Registrierungsleitfaden](./dfn-aai-registration.md)
 - [Shibboleth-IdP-Integration](./shibboleth-idp-integration.md)
 - [SAML-Metadaten-Generator](../scripts/saml-metadata-generator/README.md)

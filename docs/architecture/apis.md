@@ -87,7 +87,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Parallel access                | Allowed                                                                                                                                                                                                                                        |
 | Message protocol               | [Univention Management Console Protocol (UMCP)](https://docs.software-univention.de/ucs-python-api/univention.management.console.protocol.html). Format consisting of a single header line, one empty line and the body. The body can be JSON. |
 | Supported standards            |                                                                                                                                                                                                                                                |
-| Documentation                  | https://docs.software-univention.de/ucs-python-api/modules.html                                                                                                                                                                                |
+| Documentation                  | <https://docs.software-univention.de/ucs-python-api/modules.html>                                                                                                                                                                                |
 
 ### UMC store API
 
@@ -104,7 +104,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Parallel access                | Allowed                                                                                                      |
 | Message protocol               |                                                                                                              |
 | Supported standards            |                                                                                                              |
-| Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/umc/local-system-module.html#umc-store-api |
+| Documentation                  | <https://docs.software-univention.de/developer-reference/latest/en/umc/local-system-module.html#umc-store-api> |
 
 ### IntercomService (ICS) API
 
@@ -121,7 +121,7 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Parallel access                | Allowed                                                                                                                                                                                                                             |
 | Message protocol               | Depends on the integration use case.                                                                                                                                                                                                |
 | Supported standards            |                                                                                                                                                                                                                                     |
-| Documentation                  | https://docs.software-univention.de/intercom-service/latest/architecture.html                                                                                                                                                       |
+| Documentation                  | <https://docs.software-univention.de/intercom-service/latest/architecture.html>                                                                                                                                                       |
 
 ### High-level Listener modules API
 
@@ -138,9 +138,9 @@ This chapter presents APIs available in openDesk, grouped by application.
 | Parallel access                | Allowed                                                                                                                                                                                                                             |
 | Message protocol               | Depends on the integration use case.                                                                                                                                                                                                |
 | Supported standards            |                                                                                                                                                                                                                                     |
-| Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/listener/api.html                                                                                                                                                 |
+| Documentation                  | <https://docs.software-univention.de/developer-reference/latest/en/listener/api.html>                                                                                                                                                 |
 
-More details on the Nubus provisioning service can be found here: https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html
+More details on the Nubus provisioning service can be found here: <https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html>
 
 ### UDM Simple API
 
@@ -160,7 +160,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Parallel access                | Allowed                                                                                                                                           |
 | Message protocol               | Depends on the integration use case.                                                                                                              |
 | Supported standards            |                                                                                                                                                   |
-| Documentation                  | https://docs.software-univention.de/ucs-python-api/univention.udm.html#module-univention.udm.                                                     |
+| Documentation                  | <https://docs.software-univention.de/ucs-python-api/univention.udm.html#module-univention.udm>.                                                     |
 
 ### UDM REST API
 
@@ -177,7 +177,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Parallel access                | Allowed                                                                                                                                    |
 | Message protocol               | Depends on the integration use case.                                                                                                       |
 | Supported standards            |                                                                                                                                            |
-| Documentation                  | https://docs.software-univention.de/nubus-kubernetes-customization/latest/en/api/udm-rest.html                                             |
+| Documentation                  | <https://docs.software-univention.de/nubus-kubernetes-customization/latest/en/api/udm-rest.html>                                             |
 
 ### UCR Python API
 
@@ -197,7 +197,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Parallel access                | Allowed                                                                                                |
 | Message protocol               |                                                                                                        |
 | Supported standards            |                                                                                                        |
-| Documentation                  | https://docs.software-univention.de/developer-reference/latest/en/ucr/usage.html#using-ucr-from-python |
+| Documentation                  | <https://docs.software-univention.de/developer-reference/latest/en/ucr/usage.html#using-ucr-from-python> |
 
 ### Identity Store and Directory Service (LDAP)
 
@@ -217,7 +217,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 | Parallel access                | Allowed                                                                                                                                               |
 | Message protocol               | LDAP                                                                                                                                                  |
 | Supported standards            | LDAP                                                                                                                                                  |
-| Documentation                  | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/identity-store.html#component-identity-store-directory-service |
+| Documentation                  | <https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/identity-store.html#component-identity-store-directory-service> |
 
 ### Nubus Provisioning Service
 
@@ -226,7 +226,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 | Name          | Nubus Proisioning Service                                                                                        |
 | ------------- | ---------------------------------------------------------------------------------------------------              |
-| Documentation | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html |
+| Documentation | <https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/components/provisioning-service.html> |
 
 ### Nubus Authorization Service
 
@@ -235,7 +235,7 @@ More details on the Nubus provisioning service can be found here: https://docs.s
 
 | Name          | Nubus Authorization Service                                                                                                          |
 | ------------- | ---------------------------------------------------------------------------------------------------                                  |
-| Documentation | https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/interfaces-protocols.html#authorization-service |
+| Documentation | <https://docs.software-univention.de/nubus-kubernetes-architecture/latest/en/overview/interfaces-protocols.html#authorization-service> |
 
 ## Groupware - OX AppSuite / OX Dovecot
 
@@ -277,7 +277,7 @@ The following are the APIs used by the Groupware application:
 | Parallel access                | Allowed                                                                                                                                                                                                         |
 | Message protocol               | JSON based, AppSuite specific format                                                                                                                                                                            |
 | Supported standards            | iCal, defined by RFC, fully implemented                                                                                                                                                                         |
-| Documentation                  | https://documentation.open-xchange.com/components/middleware/http/8/index.html                                                                                                                                  |
+| Documentation                  | <https://documentation.open-xchange.com/components/middleware/http/8/index.html>                                                                                                                                  |
 
 ### SOAP API
 
@@ -294,12 +294,12 @@ The following are the APIs used by the Groupware application:
 | Parallel access                | Allowed                                                                                      |
 | Message protocol               | XML based, exactly following the format of Java RMI.                                         |
 | Supported standards            | SOAP                                                                                         |
-| Documentation                  | https://software.open-xchange.com/products/appsuite/doc/SOAP/admin/OX-Admin-SOAP.html        |
+| Documentation                  | <https://software.open-xchange.com/products/appsuite/doc/SOAP/admin/OX-Admin-SOAP.html>        |
 
 > [!note]
 > You will find a catalogue of the available services including links to the respective URLs at
 > `/webservices/` within the AppSuite host of your openDesk installation,
-> e.g. https://webmail.myopendesk.tld/webservices/
+> e.g. <https://webmail.myopendesk.tld/webservices/>
 
 ### REST API
 
@@ -316,7 +316,8 @@ The following are the APIs used by the Groupware application:
 | Parallel access                | Allowed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Message protocol               | - Email Body RFC 822 is used by Push<br>- Prometheus format is used by Metrics API<br>- API iCal format is used by InternetFreeBusy                                                                                                                                                                                                                                                                                                                                                                 |
 | Supported standards            | SOAP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| Documentation                  | https://documentation.open-xchange.com/components/middleware/rest/8/index.html                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Documentation                  | <https://documentation.open-xchange.com/components/middleware/rest/8/index.html>                                                                                                                                                                                                                                                                                                                                                                                                                      |
+
 ### CardDAV
 
 | Name                           | CardDAV                                                                                                                                                                 |
@@ -332,7 +333,7 @@ The following are the APIs used by the Groupware application:
 | Parallel access                | Allowed                                                                                                                                                                    |
 | Message protocol               | vCard, defined by RFC, fully implemented                                                                                                                                   |
 | Supported standards            |                                                                                                                                                                            |
-| Documentation                  | https://documentation.open-xchange.com/8/middleware/miscellaneous/caldav_carddav.html                                                                                      |
+| Documentation                  | <https://documentation.open-xchange.com/8/middleware/miscellaneous/caldav_carddav.html>                                                                                      |
 
 ### CalDAV
 
@@ -349,7 +350,7 @@ The following are the APIs used by the Groupware application:
 | Parallel access                | Allowed                                                                                                                                                                    |
 | Message protocol               | iCal, defined by RFC, fully implemented                                                                                                                                    |
 | Supported standards            | iTIP, iMIP                                                                                                                                                                 |
-| Documentation                  | https://documentation.open-xchange.com/8/middleware/miscellaneous/caldav_carddav.html                                                                                      |
+| Documentation                  | <https://documentation.open-xchange.com/8/middleware/miscellaneous/caldav_carddav.html>                                                                                      |
 
 ### IMAP
 
@@ -366,7 +367,7 @@ The following are the APIs used by the Groupware application:
 | Parallel access                | Allowed                                                                              |
 | Message protocol               | RFC 9051                                                                             |
 | Supported standards            | IMAP                                                                                 |
-| Documentation                  | https://www.rfc-editor.org/rfc/rfc9051                                               |
+| Documentation                  | <https://www.rfc-editor.org/rfc/rfc9051>                                               |
 
 ### POP3
 
@@ -383,7 +384,7 @@ The following are the APIs used by the Groupware application:
 | Parallel access                | Allowed                                                                |
 | Message protocol               | RFC 1939                                                               |
 | Supported standards            | IMAP                                                                   |
-| Documentation                  | https://www.rfc-editor.org/rfc/rfc1939                                 |
+| Documentation                  | <https://www.rfc-editor.org/rfc/rfc1939>                                 |
 
 ## Files - Nextcloud
 
@@ -415,7 +416,7 @@ The following are the APIs used by the Files application:
 | Parallel access                | Allowed                                                                                                                                                                                                                                |
 | Message protocol               | Requests in JSON, responses in JSON or XML                                                                                                                                                                                             |
 | Supported standards            |                                                                                                                                                                                                                                        |
-| Documentation                  | https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/index.html                                                                                                                                                   |
+| Documentation                  | <https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/index.html>                                                                                                                                                   |
 
 ### Notifications API
 
@@ -432,7 +433,7 @@ The following are the APIs used by the Files application:
 | Parallel access                | Allowed                                                                                                                     |
 | Message protocol               | Requests in JSON, responses in JSON or XML                                                                                  |
 | Supported standards            |                                                                                                                             |
-| Documentation                  | https://github.com/nextcloud/notifications/blob/master/docs/ocs-endpoint-v2.md                                              |
+| Documentation                  | <https://github.com/nextcloud/notifications/blob/master/docs/ocs-endpoint-v2.md>                                              |
 |                                |                                                                                                                             |
 
 ### Activity API
@@ -450,7 +451,7 @@ The following are the APIs used by the Files application:
 | Parallel access                | Allowed                                                                                                                                            |
 | Message protocol               | Requests in JSON, responses in JSON or XML                                                                                                         |
 | Supported standards            |                                                                                                                                                    |
-| Documentation                  | https://github.com/nextcloud/activity/blob/master/docs/endpoint-v2.md                                                                              |
+| Documentation                  | <https://github.com/nextcloud/activity/blob/master/docs/endpoint-v2.md>                                                                              |
 
 ### Remote wipe API
 
@@ -467,7 +468,7 @@ The following are the APIs used by the Files application:
 | Parallel access                | Allowed                                                                                    |
 | Message protocol               | JSON                                                                                       |
 | Supported standards            |                                                                                            |
-| Documentation                  | https://docs.nextcloud.com/server/latest/developer_manual/client_apis/RemoteWipe/index.html |
+| Documentation                  | <https://docs.nextcloud.com/server/latest/developer_manual/client_apis/RemoteWipe/index.html> |
 
 ### WebDAV
 
@@ -484,7 +485,7 @@ The following are the APIs used by the Files application:
 | Parallel access                | Allowed                                                                                 |
 | Message protocol               | Requests in JSON, responses in JSON or XML                                              |
 | Supported standards            | RFC4918                                                                                 |
-| Documentation                  | https://docs.nextcloud.com/server/latest/developer_manual/client_apis/WebDAV/index.html |
+| Documentation                  | <https://docs.nextcloud.com/server/latest/developer_manual/client_apis/WebDAV/index.html> |
 
 ### CalDAV / CardDAV
 
@@ -513,7 +514,6 @@ sequenceDiagram
     Nextcloud-->>Browser: Edit document "digital-strategy.odt" (fileid=123456)
 ```
 
-
 ### PostMessage API
 
 | Name                           | PostMessage API                                                                                                                                   |
@@ -529,7 +529,7 @@ sequenceDiagram
 | Parallel access                | Allowed                                                                                                                                           |
 | Message protocol               | JSON                                                                                                                                              |
 | Supported standards            | [WOPI](https://learn.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/6a8bb410-68ad-47e4-9dc3-6cf29c6b046b)                                 |
-| Documentation                  | https://sdk.collaboraonline.com/docs/postmessage_api.html                                                                                         |
+| Documentation                  | <https://sdk.collaboraonline.com/docs/postmessage_api.html>                                                                                         |
 
 ### Conversion API
 
@@ -546,7 +546,7 @@ sequenceDiagram
 | Parallel access                | Allowed                                                                                                 |
 | Message protocol               | Text based, see the documentation                                                                       |
 | Supported standards            | N/A                                                                                                     |
-| Documentation                  | https://sdk.collaboraonline.com/docs/conversion_api.html                                                |
+| Documentation                  | <https://sdk.collaboraonline.com/docs/conversion_api.html>                                                |
 
 ## Project management - OpenProject
 
@@ -574,27 +574,32 @@ The following are the APIs used by the Project management application:
 | Parallel access                | Allowed                                                                                                                                                                                                                                                                                                                                           |
 | Message protocol               | [HAL](https://en.wikipedia.org/wiki/Hypertext_Application_Language) + JSON                                                                                                                                                                                                                                                                        |
 | Supported standards            | REST, [HATEOAS](https://en.wikipedia.org/wiki/HATEOAS)                                                                                                                                                                                                                                                                                            |
-| Documentation                  | https://www.openproject.org/docs/api/introduction/                                                                                                                                                                                                                                                                                                |
+| Documentation                  | <https://www.openproject.org/docs/api/introduction/>                                                                                                                                                                                                                                                                                                |
 
 **Additional Information:**
 
 *What does it not do that developers should know about?*
-- CRUD custom fields, time reports, wikis and wiki pages
-- Aggregated filterable activities/changes
+
+* CRUD custom fields, time reports, wikis and wiki pages
+* Aggregated filterable activities/changes
 
 *What are the typical use cases?*
-- It powers all angular frontend components in OpenProject, mainly the work package table/view, boards, team planner etc., and supports all common use cases
+
+* It powers all angular frontend components in OpenProject, mainly the work package table/view, boards, team planner etc., and supports all common use cases
 
 *How does it work? (What do users need to know about architecture an internal components?)*
-- HAL is a standard to define resources with embedding and links between them
-- HAL contains action links depending on the user’s permissions, allows permitted actions to be derived from object keys in json
+
+* HAL is a standard to define resources with embedding and links between them
+* HAL contains action links depending on the user’s permissions, allows permitted actions to be derived from object keys in json
 
 *What knowledge should the developer have before using the API?*
-- Knowledge of REST
-- (Optional) Knowledge of HAL standard
+
+* Knowledge of REST
+* (Optional) Knowledge of HAL standard
 
 *Are there any extensions or APIs in (or planned for) development that users should know about?*
-- Signaling to receive only selected attributes/nested resources from the API for performance improvements
+
+* Signaling to receive only selected attributes/nested resources from the API for performance improvements
 
 ### BCF API
 
@@ -611,7 +616,7 @@ The following are the APIs used by the Project management application:
 | Parallel access                | Allowed                                                                                                                                                                              |
 | Message protocol               | JSON                                                                                                                                                                                 |
 | Supported standards            | [BCF 2.1](https://github.com/buildingSMART/BCF-API/blob/release_2_1/README.md)                                                                                                       |
-| Documentation                  | https://www.openproject.org/docs/api/bcf-rest-api/                                                                                                                                   |
+| Documentation                  | <https://www.openproject.org/docs/api/bcf-rest-api/>                                                                                                                                   |
 
 ## Video Conferencing - Jitsi
 
@@ -630,7 +635,7 @@ The following are the APIs used by the Project management application:
 | Parallel access                | Allowed                                                                  |
 | Message protocol               |                                                                          |
 | Supported standards            |                                                                          |
-| Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe/        |
+| Documentation                  | <https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe/>        |
 
 ### lib-jitsi-meet API
 
@@ -647,17 +652,17 @@ The following are the APIs used by the Project management application:
 | Parallel access                | Allowed                                                                |
 | Message protocol               |                                                                        |
 | Supported standards            |                                                                        |
-| Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ljm-api/     |
+| Documentation                  | <https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ljm-api/>     |
 
 ### Jitsi Meet React SDK
 
 > [!note]
-> Additional SDKs can be found at https://jitsi.github.io/handbook/docs/category/sdks/
+> Additional SDKs can be found at <https://jitsi.github.io/handbook/docs/category/sdks/>
 
 | Name                           | Meet React SDK                                                      |
 | ------------------------------ | ------------------------------------------------------------------- |
 | Purpose                        | Embed Jitsi video conferencing into apps using React                |
-| Versioning                     | https://github.com/jitsi/jitsi-meet-react-sdk/releases              |
+| Versioning                     | <https://github.com/jitsi/jitsi-meet-react-sdk/releases>              |
 | Authentication                 | not required                                                        |
 | In openDesk provided by        | Jitsi                                                               |
 | Transport protocol             | none (it works as a module)                                         |
@@ -667,7 +672,7 @@ The following are the APIs used by the Project management application:
 | Parallel access                | Allowed                                                             |
 | Message protocol               |                                                                     |
 | Supported standards            |                                                                     |
-| Documentation                  | https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-react-sdk |
+| Documentation                  | <https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-react-sdk> |
 
 ## Chat - Element
 
@@ -909,7 +914,7 @@ The following are the APIs used by the Knowledge management application:
 | Parallel access                | Allowed                                                                                                                                                                                                                                                    |
 | Message protocol               | JSON/XML                                                                                                                                                                                                                                                   |
 | Supported standards            |                                                                                                                                                                                                                                                            |
-| Documentation                  | - https://www.xwiki.org/xwiki/bin/view/Documentation/UserGuide/Features/XWikiRESTfulAPI<br>- https://github.com/xwiki/xwiki-platform/blob/master/xwiki-platform-core/xwiki-platform-rest/xwiki-platform-rest-model/src/main/resources/xwiki.rest.model.xsd |
+| Documentation                  | - <https://www.xwiki.org/xwiki/bin/view/Documentation/UserGuide/Features/XWikiRESTfulAPI><br>- <https://github.com/xwiki/xwiki-platform/blob/master/xwiki-platform-core/xwiki-platform-rest/xwiki-platform-rest-model/src/main/resources/xwiki.rest.model.xsd> |
 
 ### Scripting API
 
@@ -926,7 +931,7 @@ The following are the APIs used by the Knowledge management application:
 | Parallel access                | Allowed                                                                                                                                                                       |
 | Message protocol               |                                                                                                                                                                               |
 | Supported standards            |                                                                                                                                                                               |
-| Documentation                  | https://extensions.xwiki.org/xwiki/bin/view/Extension/Scripting%20Documentation%20Application                                                                                 |
+| Documentation                  | <https://extensions.xwiki.org/xwiki/bin/view/Extension/Scripting%20Documentation%20Application>                                                                                 |
 
 ### Java API
 
@@ -943,7 +948,7 @@ The following are the APIs used by the Knowledge management application:
 | Parallel access                | Allowed                                                                                                                                                                            |
 | Message protocol               |                                                                                                                                                                                    |
 | Supported standards            |                                                                                                                                                                                    |
-| Documentation                  | https://www.xwiki.org/xwiki/bin/view/Documentation/DevGuide/API/                                                                                                                   |
+| Documentation                  | <https://www.xwiki.org/xwiki/bin/view/Documentation/DevGuide/API/>                                                                                                                   |
 
 ### JavaScript API
 
@@ -960,4 +965,4 @@ The following are the APIs used by the Knowledge management application:
 | Parallel access                | Allowed                                                                                      |
 | Message protocol               |                                                                                              |
 | Supported standards            |                                                                                              |
-| Documentation                  | https://www.xwiki.org/xwiki/bin/view/Documentation/DevGuide/FrontendResources/JavaScriptAPI/ |
+| Documentation                  | <https://www.xwiki.org/xwiki/bin/view/Documentation/DevGuide/FrontendResources/JavaScriptAPI/> |

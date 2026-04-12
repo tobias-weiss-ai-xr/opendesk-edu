@@ -109,18 +109,24 @@ paginate: true
 **Workflow für Account Verknüpfung:**
 
 - **IAM API** liefert aktive Accounts
+
   ```
   GET /iam-api/v1.0/openDesk_account_depro
   ```
+
 - **Keycloak User Lookup
+
   ```
   GET /admin/realms/opendesk/users?username={uid}
   ```
+
 - **Federated Identity Link**
+
   ```
   POST /users/{user_id}/federated-identity/{provider}
   Provider: saml-umr (SAML Identity Provider)
   ```
+
 - **Resultat:** Automatisches SAML SSO für verknüpfte Accounts
 
 ---

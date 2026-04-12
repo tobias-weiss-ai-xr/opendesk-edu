@@ -48,15 +48,15 @@ The suppliers create a set of test cases for each new function.
 
 We develop and maintain a [set of end-to-end tests](https://gitlab.opencode.de/bmi/opendesk/deployment/e2e-tests) focussing on:
 
-- use cases that are spanning more than a single application, e.g.
-  - the filepicker in OX App Suite for selecting files from Nextcloud or
-  - the central navigation that is part of the top bar of most applications.
-- openDesk specific configurations/supported settings that can be found in the `functional.yaml.gotmpl`, e.g.
-  - SSO federation or
-  - sharing settings for Nextcloud.
-- bugs identified in the past, e.g.
-  - creating a folder in OX or
-  - enforcement of an account's password renewal.
+* use cases that are spanning more than a single application, e.g.
+  * the filepicker in OX App Suite for selecting files from Nextcloud or
+  * the central navigation that is part of the top bar of most applications.
+* openDesk specific configurations/supported settings that can be found in the `functional.yaml.gotmpl`, e.g.
+  * SSO federation or
+  * sharing settings for Nextcloud.
+* bugs identified in the past, e.g.
+  * creating a folder in OX or
+  * enforcement of an account's password renewal.
 
 We execute the tests using English and German as language profile.
 
@@ -68,29 +68,30 @@ We use the functional e2e-tests in nightly testruns on a matrix of deployments a
 
 The following naming scheme is applied for the deployment matrix:
 
-- `<edition>-<type>-<profile>` resulting e.g. in  `ce-init-default` or `ee-upgr-extsrv`
+* `<edition>-<type>-<profile>` resulting e.g. in  `ce-init-default` or `ee-upgr-extsrv`
 
 **`<edition>`**
 
-- `ce`: openDesk Community Edition
-- `ee`: openDesk Enterprise Edition
+* `ce`: openDesk Community Edition
+* `ee`: openDesk Enterprise Edition
 
 **`<type>`**
 
-- `init`: Initial / fresh / from the scratch deployment into an empty namespace.
-- `upgr`: Deploy latest migration release into an empty namespace, afterwards run upgrade deployment with current state.
-- `upd`: Deploy latest release into an empty namespace, afterwards run upgrade deployment with current state.
+* `init`: Initial / fresh / from the scratch deployment into an empty namespace.
+* `upgr`: Deploy latest migration release into an empty namespace, afterwards run upgrade deployment with current state.
+* `upd`: Deploy latest release into an empty namespace, afterwards run upgrade deployment with current state.
 
 **`<profile>`**: The following profiles are defined
-- `default`: With
-  - *`functional.yaml`*: No changes beside specific `2FA testing` group and enabled UDM REST API (required for user import).
-  - *Services*: Internal services deployed with openDesk are used.
-  - *Secrets*: Master password based secrets based on `secrets.yaml.gotmpl`
-  - *Certificates*: Letsencrypt-prod certificates are used.
-   - *Deployment*: CI/CD based deployment.
-- `funct1`: Different configuration of `functional.yaml`, self-signed-certs [and when available external secrets].
-- `extsrv`: External services (where possible).
-- `gitops`: Argo CD based deployment.
+
+* `default`: With
+  * *`functional.yaml`*: No changes beside specific `2FA testing` group and enabled UDM REST API (required for user import).
+  * *Services*: Internal services deployed with openDesk are used.
+  * *Secrets*: Master password based secrets based on `secrets.yaml.gotmpl`
+  * *Certificates*: Letsencrypt-prod certificates are used.
+  * *Deployment*: CI/CD based deployment.
+* `funct1`: Different configuration of `functional.yaml`, self-signed-certs [and when available external secrets].
+* `extsrv`: External services (where possible).
+* `gitops`: Argo CD based deployment.
 
 #### Reporting test results
 
@@ -216,12 +217,12 @@ This ensures tests run with minimal, predictable configuration independent of pr
 
 ### Common Assertions
 
-- `isKind`: Verify the Kubernetes resource kind
-- `equal`: Check exact value match
-- `contains`: Verify a value exists in a list
-- `isNotNull`: Ensure a path exists and is not null
-- `matchRegex`: Match a path value against a regex pattern
-- `hasDocuments`: Verify the expected number of manifests are generated
+* `isKind`: Verify the Kubernetes resource kind
+* `equal`: Check exact value match
+* `contains`: Verify a value exists in a list
+* `isNotNull`: Ensure a path exists and is not null
+* `matchRegex`: Match a path value against a regex pattern
+* `hasDocuments`: Verify the expected number of manifests are generated
 
 ### Using documentIndex
 
@@ -301,6 +302,6 @@ tests:
 
 See existing tests for reference:
 
-- [ILIAS SSO checks](https://github.com/opendesk-edu/opendesk-edu/tree/main/helmfile/charts/ilias/tests/sso_test.yaml)
-- [BookStack deployment](https://github.com/opendesk-edu/opendesk-edu/tree/main/helmfile/charts/bookstack/tests/deployment_test.yaml)
-- [F13 multi-deployment tests](https://github.com/opendesk-edu/opendesk-edu/tree/main/helmfile/charts/f13/tests/deployment_test.yaml)
+* [ILIAS SSO checks](https://github.com/opendesk-edu/opendesk-edu/tree/main/helmfile/charts/ilias/tests/sso_test.yaml)
+* [BookStack deployment](https://github.com/opendesk-edu/opendesk-edu/tree/main/helmfile/charts/bookstack/tests/deployment_test.yaml)
+* [F13 multi-deployment tests](https://github.com/opendesk-edu/opendesk-edu/tree/main/helmfile/charts/f13/tests/deployment_test.yaml)

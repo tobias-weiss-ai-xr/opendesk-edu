@@ -12,14 +12,17 @@
 
 ## File Structure
 
-### Files to Create:
+### Files to Create
+
 - `.github/workflows/codeberg-sync.yml` - GitHub Actions workflow for GitHub → Codeberg sync
 - `.forgejo/workflows/github-sync.yml` - Codeberg CI workflow for Codeberg → GitHub sync
 
-### Files to Modify:
+### Files to Modify
+
 - `.gitignore` - Ensure workflow files are not gitignored (verify existing config)
 
-### Secrets Required:
+### Secrets Required
+
 - GitHub Secret: `CODEBERG_TOKEN` - OAuth2 token with write access to opendesk-edu/opendesk-edu on Codeberg
 - Codeberg Secret: `GH_TOKEN` - Personal access token with write access to tobias-weiss-ai-xr/opendesk-edu on GitHub
 
@@ -28,6 +31,7 @@
 ## Task 1: Create GitHub → Codeberg Sync Workflow
 
 **Files:**
+
 - Create: `.github/workflows/codeberg-sync.yml`
 
 - [ ] **Step 1: Create the GitHub Actions workflow file**
@@ -136,6 +140,7 @@ git commit -m "feat: add GitHub → Codeberg sync workflow"
 ## Task 2: Create Codeberg → GitHub Sync Workflow
 
 **Files:**
+
 - Create: `.forgejo/workflows/github-sync.yml`
 
 - [ ] **Step 1: Create .forgejo directory structure**
@@ -249,6 +254,7 @@ git commit -m "feat: add Codeberg → GitHub sync workflow"
 ## Task 3: Push Workflows to GitHub
 
 **Files:**
+
 - Push: `.github/workflows/codeberg-sync.yml`
 - Push: `.forgejo/workflows/github-sync.yml`
 
@@ -272,6 +278,7 @@ Expected: Your two commits are visible in the log
 ## Task 4: Configure GitHub Secret for Codeberg Token
 
 **Files:**
+
 - GitHub Secret: `CODEBERG_TOKEN` (configure in GitHub repo settings)
 
 - [ ] **Step 1: Create OAuth2 token on Codeberg**
@@ -314,16 +321,19 @@ Expected: Output shows `CODEBERG_TOKEN` in the list
 ## Task 5: Push Workflows to Codeberg
 
 **Files:**
+
 - Push: `.github/workflows/codeberg-sync.yml`
 - Push: `.forgejo/workflows/github-sync.yml`
 
 - [ ] **Step 1: Push commit to Codeberg**
 
-Run: 
+Run:
+
 ```bash
 export CODEBERG_TOKEN="2e6df2339b28910ef5951ff1adc8d9a14b4d9737"
 git push codeberg main
 ```
+
 Expected: Push succeeds, commit visible on Codeberg
 
 - [ ] **Step 2: Verify workflows are accessible on Codeberg**
@@ -341,6 +351,7 @@ Expected: Your two commits are visible in the log
 ## Task 6: Configure Codeberg Secret for GitHub Token
 
 **Files:**
+
 - Codeberg Secret: `GH_TOKEN` (configure in Codeberg repo settings)
 
 - [ ] **Step 1: Create Personal Access Token on GitHub**
@@ -378,6 +389,7 @@ Expected: No error (HTTP 200 or 204)
 - [ ] **Step 3: Verify secret is set**
 
 Run:
+
 ```bash
 curl -s "https://codeberg.org/api/v1/repos/opendesk-edu/opendesk-edu/actions/secrets" \
   -H "Authorization: token 2e6df2339b28910ef5951ff1adc8d9a14b4d9737" | jq '.[] | .name'
@@ -390,6 +402,7 @@ Expected: Output shows `GH_TOKEN` in the list
 ## Task 7: Create Documentation for Sync System
 
 **Files:**
+
 - Create: `docs/maintenance/github-codeberg-sync.md`
 
 - [ ] **Step 1: Create documentation file**
@@ -441,6 +454,7 @@ This repository is automatically synchronized between GitHub and Codeberg.
    ```
 
 2. Update GitHub secret:
+
    ```bash
    gh secret set CODEBERG_TOKEN --body "NEW_TOKEN_HERE"
    ```
@@ -448,11 +462,13 @@ This repository is automatically synchronized between GitHub and Codeberg.
 ### Replace GitHub Token (Codeberg side)
 
 1. Create new token on GitHub:
+
    ```bash
    gh auth token --scopes repo,workflow
    ```
 
 2. Update Codeberg secret (via API):
+
    ```bash
    curl -X PUT "https://codeberg.org/api/v1/repos/opendesk-edu/opendesk-edu/actions/secrets/GH_TOKEN" \
      -H "Authorization: token YOUR_CODEBERG_TOKEN" \
@@ -471,7 +487,7 @@ gh run list --workflow=codeberg-sync.yml
 
 ### Check Codeberg CI status
 
-Visit: https://ci.codeberg.org/repos/opendesk-edu/opendesk-edu
+Visit: <https://ci.codeberg.org/repos/opendesk-edu/opendesk-edu>
 
 ### Manual trigger
 
@@ -492,7 +508,7 @@ gh workflow run codeberg-sync.yml
 
 2. **Check workflow logs:**
    - GitHub: Actions tab → Find "Sync to Codeberg" → View logs
-   - Codeberg: https://ci.codeberg.org → Find "Sync to GitHub" → View logs
+   - Codeberg: <https://ci.codeberg.org> → Find "Sync to GitHub" → View logs
 
 3. **Verify token permissions:**
    - Codeberg token: Needs `write:repository`, `write:issue` scopes
@@ -510,6 +526,7 @@ gh workflow run codeberg-sync.yml
 2. Verify token hasn't expired or been revoked
 3. Check workflow logs for specific error messages
 4. Manually push to reset sync state:
+
    ```bash
    git push origin main
    git push codeberg main
@@ -521,6 +538,7 @@ gh workflow run codeberg-sync.yml
 - `.forgejo/workflows/github-sync.yml` — Codeberg → GitHub workflow
 
 Both workflows:
+
 - Mirror all refs using `git push --mirror`
 - Retry up to 3 times with exponential backoff (10s, 20s, 40s)
 - Timeout after 10 minutes
@@ -533,9 +551,11 @@ Both workflows:
 - Rotate tokens periodically (every 6-12 months recommended)
 - Never commit tokens to the repository
 - Use repository secrets, not plaintext in workflows
+
 ## Task 7: Create Documentation for Sync System
 
 **Files:**
+
 - Create: `docs/maintenance/github-codeberg-sync.md`
 
 - [ ] **Step 1: Create documentation file**
@@ -587,6 +607,7 @@ This repository is automatically synchronized between GitHub and Codeberg.
    ```
 
 2. Update GitHub secret:
+
    ```bash
    gh secret set CODEBERG_TOKEN --body "NEW_TOKEN_HERE"
    ```
@@ -594,11 +615,13 @@ This repository is automatically synchronized between GitHub and Codeberg.
 ### Replace GitHub Token (Codeberg side)
 
 1. Create new token on GitHub:
+
    ```bash
    gh auth token --scopes repo,workflow
    ```
 
 2. Update Codeberg secret (via API):
+
    ```bash
    curl -X PUT "https://codeberg.org/api/v1/repos/opendesk-edu/opendesk-edu/actions/secrets/GH_TOKEN" \
      -H "Authorization: token YOUR_CODEBERG_TOKEN" \
@@ -617,7 +640,7 @@ gh run list --workflow=codeberg-sync.yml
 
 ### Check Codeberg CI status
 
-Visit: https://ci.codeberg.org/repos/opendesk-edu/opendesk-edu
+Visit: <https://ci.codeberg.org/repos/opendesk-edu/opendesk-edu>
 
 ### Manual trigger
 
@@ -638,7 +661,7 @@ gh workflow run codeberg-sync.yml
 
 2. **Check workflow logs:**
    - GitHub: Actions tab → Find "Sync to Codeberg" → View logs
-   - Codeberg: https://ci.codeberg.org → Find "Sync to GitHub" → View logs
+   - Codeberg: <https://ci.codeberg.org> → Find "Sync to GitHub" → View logs
 
 3. **Verify token permissions:**
    - Codeberg token: Needs `write:repository`, `write:issue` scopes
@@ -656,6 +679,7 @@ gh workflow run codeberg-sync.yml
 2. Verify token hasn't expired or been revoked
 3. Check workflow logs for specific error messages
 4. Manually push to reset sync state:
+
    ```bash
    git push origin main
    git push codeberg main
@@ -667,6 +691,7 @@ gh workflow run codeberg-sync.yml
 - `.forgejo/workflows/github-sync.yml` — Codeberg → GitHub workflow
 
 Both workflows:
+
 - Mirror all refs using `git push --mirror`
 - Retry up to 3 times with exponential backoff (10s, 20s, 40s)
 - Timeout after 10 minutes
@@ -679,6 +704,7 @@ Both workflows:
 - Rotate tokens periodically (every 6-12 months recommended)
 - Never commit tokens to the repository
 - Use repository secrets, not plaintext in workflows
+
 ```
 
 - [ ] **Step 2: Verify documentation file created**
@@ -698,6 +724,7 @@ git commit -m "docs: add GitHub-Codeberg sync documentation"
 ## Task 8: Push All Workflows and Documentation
 
 **Files:**
+
 - Push: `.github/workflows/codeberg-sync.yml`
 - Push: `.forgejo/workflows/github-sync.yml`
 - Push: `docs/maintenance/github-codeberg-sync.md`
@@ -710,19 +737,23 @@ Expected: All commits pushed successfully
 - [ ] **Step 2: Push all commits to Codeberg**
 
 Run:
+
 ```bash
 export CODEBERG_TOKEN="2e6df2339b28910ef5951ff1adc8d9a14b4d9737"
 git push codeberg main
 ```
+
 Expected: All commits pushed successfully
 
 - [ ] **Step 3: Verify workflows are visible on both platforms**
 
 Run:
+
 ```bash
 gh workflow list
 git ls-remote codeberg | grep workflows
 ```
+
 Expected: Both workflows are accessible
 
 ---
@@ -730,41 +761,49 @@ Expected: Both workflows are accessible
 ## Task 9: Test Sync System
 
 **Files:**
+
 - Test: Create a test commit, verify it syncs to both repos
 
 - [ ] **Step 1: Create a test commit**
 
 Run:
+
 ```bash
 echo "test: verify bidirectional sync $(date)" > test-sync.md
 git add test-sync.md
 git commit -m "test: verify bidirectional sync"
 git push origin main
 ```
+
 Expected: Push succeeds
 
 - [ ] **Step 2: Monitor GitHub Actions workflow**
 
 Run:
+
 ```bash
 # Wait 30 seconds, then check workflow status
 sleep 30
 gh run list --workflow=codeberg-sync.yml --limit 1
 ```
+
 Expected: Workflow ran successfully
 
 - [ ] **Step 3: Verify sync reached Codeberg**
 
 Run:
+
 ```bash
 git fetch codeberg main
 git log --oneline codeberg/main -1
 ```
+
 Expected: Test commit is visible on Codeberg
 
 - [ ] **Step 4: Push test commit from Codeberg side**
 
 Run:
+
 ```bash
 # This commit will trigger the Codeberg → GitHub sync
 echo "test from codeberg $(date)" >> test-sync.md
@@ -772,28 +811,33 @@ git add test-sync.md
 git commit -m "test: push from Codeberg to verify reverse sync"
 git push codeberg main
 ```
+
 Expected: Push succeeds
 
 - [ ] **Step 5: Verify reverse sync worked**
 
 Run:
+
 ```bash
 # Wait 30 seconds, then check
 sleep 30
 git fetch origin main
 git log --oneline origin/main -2
 ```
+
 Expected: Both GitHub and Codeberg commits are visible on GitHub
 
 - [ ] **Step 6: Clean up test file**
 
 Run:
+
 ```bash
 git rm test-sync.md
 git commit -m "test: cleanup sync test file"
 git push origin main
 git push codeberg main
 ```
+
 Expected: Test file removed from both repos
 
 ---
@@ -801,6 +845,7 @@ Expected: Test file removed from both repos
 ## Task 10: Update README with Sync Notice
 
 **Files:**
+
 - Modify: `README.md`
 
 - [ ] **Step 1: Read README to find insertion point**
@@ -834,10 +879,12 @@ git commit -m "docs: add repository mirroring notice to README"
 - [ ] **Step 4: Push README update**
 
 Run:
+
 ```bash
 git push origin main
 git push codeberg main
 ```
+
 Expected: README updated on both platforms
 
 ---
@@ -845,32 +892,39 @@ Expected: README updated on both platforms
 ## Task 11: Final Verification
 
 **Files:**
+
 - Verify: All workflows running, documentation in place
 
 - [ ] **Step 1: Verify all workflows exist**
 
 Run:
+
 ```bash
 gh workflow list
 git ls-remote codeberg | grep workflows
 ```
+
 Expected: Both workflows are listed
 
 - [ ] **Step 2: Verify documentation exists**
 
 Run:
+
 ```bash
 ls -la docs/maintenance/github-codeberg-sync.md
 ls -la docs/superpowers/specs/2026-03-30-github-codeberg-sync-design.md
 ```
+
 Expected: Both documentation files exist
 
 - [ ] **Step 3: Check recent workflow runs**
 
 Run:
+
 ```bash
 gh run list --limit 5
 ```
+
 Expected: Recent sync workflows show as completed
 
 - [ ] **Step 4: Verify README contains sync notice**
@@ -881,6 +935,7 @@ Expected: Repo mirroring section is present
 - [ ] **Step 5: Create final verification commit (if needed)**
 
 If all verifications pass:
+
 ```bash
 git add .
 git commit -m "chore: verify bidirectional sync implementation complete"
@@ -889,9 +944,10 @@ git commit -m "chore: verify bidirectional sync implementation complete"
 - [ ] **Step 6: Final push to both repositories**
 
 Run:
+
 ```bash
 git push origin main
 git push codeberg main
 ```
-Expected: Final synchronization complete
 
+Expected: Final synchronization complete

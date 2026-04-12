@@ -50,10 +50,10 @@ Please note that the account that shall serve as the service account requires a 
 
 To register the audriga app in your tenant, log into your admin account and access the following URL:
 
- https://login.microsoftonline.com/organizations/v2.0/adminconsent?client_id=3cd27a72-a19e-4945-9715-fc24d940428f&redirect_uri=https://umzug.audriga.com/SMESwitchWebApp/oauth_complete.jsp&scope=https://outlook.office.com/.default
+ <https://login.microsoftonline.com/organizations/v2.0/adminconsent?client_id=3cd27a72-a19e-4945-9715-fc24d940428f&redirect_uri=https://umzug.audriga.com/SMESwitchWebApp/oauth_complete.jsp&scope=https://outlook.office.com/.default>
 
-- Accept the App "audriga CloudMovr migration"
-- You will be redirected to an audriga page, which you can close - it does not require additional interaction.
+* Accept the App "audriga CloudMovr migration"
+* You will be redirected to an audriga page, which you can close - it does not require additional interaction.
 
 > [!note]
 > The audriga application is created under the "Enterprise application" tab in the AzureAD console.
@@ -62,11 +62,10 @@ To register the audriga app in your tenant, log into your admin account and acce
 
 Create a "secret" group in the customer tenant.
 
-- Go to <https://aad.portal.azure.com> > Azure Active Directory > Groups > New Group
-- Choose a group name and group email address that includes the word "audriga" in lowercase ("Audriga" will not work), like *audriga-migration@your-maildomain.tld*
-- Choose the group type "Microsoft 365"
-- Appoint your service account (see 1.) as the owner of this group
-
+* Go to <https://aad.portal.azure.com> > Azure Active Directory > Groups > New Group
+* Choose a group name and group email address that includes the word "audriga" in lowercase ("Audriga" will not work), like *<audriga-migration@your-maildomain.tld>*
+* Choose the group type "Microsoft 365"
+* Appoint your service account (see 1.) as the owner of this group
 
 ### Provisioning user accounts in openDesk
 
@@ -117,16 +116,17 @@ Choose [Microsoft 365 / Exchange Online (Admin)](https://umzug.audriga.com/SMESw
 > You may need to start typing in "Microsoft Office 365/Exchange Online" for it to appear in the list.
 
 Configure openDesk as your destination server:
-- Select "Configure provider or server" in the provider selection box of the migration application.
-- In the following dialog, select "Open-Xchange" as protocol.
-- On the tab "IMAP"
-  - For "Mailserver (host name or IP address)" enter your IMAP host, e.g. "webmail.your-opendesk-domain.tld".
-  - If your IMAP server is not running on default port 993, enter your nonstandard IMAP port under Details -> Port.
-  - Press check.
-- On the tab "Open-Xchange"
-  - Set the hostname of your OX AppSuite installation, e.g. "webmail.your-opendesk-domain.tld".
-  - Press check.
-- If you receive a green checkmark on both tabs, click "Save". Otherwise, check your settings until you get the green checkmark.
+
+* Select "Configure provider or server" in the provider selection box of the migration application.
+* In the following dialog, select "Open-Xchange" as protocol.
+* On the tab "IMAP"
+  * For "Mailserver (host name or IP address)" enter your IMAP host, e.g. "webmail.your-opendesk-domain.tld".
+  * If your IMAP server is not running on default port 993, enter your nonstandard IMAP port under Details -> Port.
+  * Press check.
+* On the tab "Open-Xchange"
+  * Set the hostname of your OX AppSuite installation, e.g. "webmail.your-opendesk-domain.tld".
+  * Press check.
+* If you receive a green checkmark on both tabs, click "Save". Otherwise, check your settings until you get the green checkmark.
 
 ### Adding accounts
 
@@ -143,6 +143,7 @@ Details -> mailbox:   enter the user's mailbox you want to migrate, e.g. pia@yo
 ```
 
 On the openDesk site, please provide:
+
 ```
 Username:             enter the username of the mailbox you want to migrate to, e.g. pia@your-maildomain.tld
 Password:             enter the master password
@@ -159,11 +160,13 @@ Alternatively, you can add multiple accounts via CSV upload. More info on that b
 Prepare a CSV file with all necessary information. Unsurprisingly, this is the same information as described in the "Add User Accounts Individually" section above.
 
 The CSV requires the following column order with a closing semicolon after the last value - but no headline is expected; the first line must be your migration data already:
+
 ```
 M365ServiceAccount;M365GroupEmailAddress;M365Mailbox;openDeskMailbox;openDeskMasterPassword;
 ```
 
 Example CSV:
+
 ```
 eva@your-maildomain.tld;audriga-migration@your-maildomain.tld;eva@your-maildomain.tld;eva;YourMasterPassword;
 eva@your-maildomain.tld;audriga-migration@your-maildomain.tld;max@your-maildomain.tld;max;YourMasterPassword;

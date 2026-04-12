@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Ērts un Suverēns?
 
 🎓 openDesk Edu — Digitālā Suverenitāte Universitātēs
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Pievienojieties!
+# 🤝 Pievienojieties
 
 **Palīdziet mums veidot openDesk Edu universitātēm!**
 

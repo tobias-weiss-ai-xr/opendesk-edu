@@ -20,8 +20,8 @@ This documentation will use Argo CD to explain how to deploy openDesk GitOps-sty
 
 ## Considerations
 
-- openDesk consists of multiple applications which have to be deployed in order.
-- During upgrades, migrations have to run before and after applications.
+* openDesk consists of multiple applications which have to be deployed in order.
+* During upgrades, migrations have to run before and after applications.
 
 ## ArgoCD
 
@@ -45,7 +45,8 @@ helmfile template > manifests.yaml
 ```
 
 References:
-- [Helmfile CLI documentation](https://helmfile.readthedocs.io/en/latest/#cli-reference)
+
+* [Helmfile CLI documentation](https://helmfile.readthedocs.io/en/latest/#cli-reference)
 
 Afterwards, you can use the resulting manifests within a standard Argo CD workflow.
 

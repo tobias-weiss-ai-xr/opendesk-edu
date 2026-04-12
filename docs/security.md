@@ -18,7 +18,7 @@ This document covers the current status of security measures.
 
 Helm charts are signed and validated against GPG keys in `helmfile/files/gpg-pubkeys`.
 
-For more details on Chart validation, please visit: https://helm.sh/docs/topics/provenance/
+For more details on Chart validation, please visit: <https://helm.sh/docs/topics/provenance/>
 
 All charts except the ones mentioned below are verified by Helmfile.
 

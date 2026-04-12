@@ -21,6 +21,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ### Before Disaster Recovery
 
 1. **Verify Backup Availability:**
+
    ```bash
    # List available backups
    /opt/opendesk-edu/scripts/backup.sh list
@@ -30,6 +31,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 2. **Prepare Recovery Environment:**
+
    ```bash
    # Check Kubernetes cluster health
    kubectl cluster-info
@@ -41,6 +43,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 3. **Document Current State:**
+
    ```bash
    # Capture current state
    kubectl get all --all-namespaces > pre-recovery-state.txt
@@ -59,6 +62,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ### Scenario 1: Single Service Failure
 
 **Examples:**
+
 - ILIAS database corruption
 - Moodle application crash
 - Nextcloud storage failure
@@ -66,6 +70,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 **Recovery Steps:**
 
 1. **Identify Failed Service:**
+
    ```bash
    # Check pod status
    kubectl get pods -n <namespace>
@@ -78,6 +83,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 2. **Select Appropriate Backup:**
+
    ```bash
    # List backups
    /opt/opendesk-edu/scripts/backup.sh list
@@ -86,6 +92,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 3. **Restore Single Service:**
+
    ```bash
    # Restore ILIAS
    /opt/opendesk-edu/scripts/restore.sh services \
@@ -97,6 +104,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 4. **Validate Recovery:**
+
    ```bash
    # Check pod health
    kubectl get pods -n <namespace>
@@ -111,6 +119,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ### Scenario 2: Complete Cluster Failure
 
 **Examples:**
+
 - Kubernetes master node failure
 - Network partition
 - Power outage
@@ -118,6 +127,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 **Recovery Steps:**
 
 1. **Assess Cluster State:**
+
    ```bash
    # Check cluster connectivity
    kubectl cluster-info
@@ -136,6 +146,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    - Restart worker nodes
 
 3. **Restore Kubernetes Configuration:**
+
    ```bash
    # Restore PVC configurations
    kubectl apply -f /backups/opendesk/pvcs_20260406_120000.yaml
@@ -146,6 +157,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 4. **Re-deploy Services (if needed):**
+
    ```bash
    # Re-deploy using helmfile
    cd helmfile
@@ -158,6 +170,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ### Scenario 3: Data Loss / Corruption
 
 **Examples:**
+
 - Database corruption
 - Accidental data deletion
 - Ransomware attack
@@ -165,6 +178,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 **Recovery Steps:**
 
 1. **Assess Extent of Data Loss:**
+
    ```bash
    # Identify affected services
    kubectl get pods --all-namespaces | grep -i error
@@ -175,6 +189,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 2. **Stop Affected Services:**
+
    ```bash
    # Scale down to zero
    kubectl scale deployment <deployment> -n <namespace> --replicas=0
@@ -184,6 +199,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 3. **Restore Data from Backup:**
+
    ```bash
    # Full restore
    /opt/opendesk-edu/scripts/restore.sh restore \
@@ -195,6 +211,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 4. **Validate Data Integrity:**
+
    ```bash
    # Check database consistency
    kubectl exec -n <namespace> <pod> -- \
@@ -214,6 +231,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 **Recovery Steps:**
 
 1. **Immediate Containment:**
+
    ```bash
    # Shut down all services
    kubectl scale deployment --all-namespaces --all --replicas=0
@@ -223,6 +241,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 2. **Assess Damage:**
+
    ```bash
    # Check for encrypted files
    find /var/lib -name "*.enc"
@@ -235,6 +254,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 3. **Restore from Clean Backup:**
+
    ```bash
    # Ensure backup is clean (verify offline)
    # Perform clean cluster rebuild if needed
@@ -245,6 +265,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    ```
 
 4. **Post-Recovery Security:**
+
    ```bash
    # Change all admin passwords
    # Rotate all secrets
@@ -255,6 +276,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ## Recovery Order of Operations
 
 **Dependencies:**
+
 ```
 1. Keycloak (Identity Provider) - CRITICAL
 2. Databases (MariaDB, PostgreSQL) - CRITICAL
@@ -266,6 +288,7 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ```
 
 **Restore Order:**
+
 1. Restore storage/PVCs first
 2. Restore Keycloak (all services depend on SSO)
 3. Restore databases
@@ -311,17 +334,20 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ### Monthly Recovery Tests
 
 **Test Scope:**
+
 - Single service restore (ILIAS, Moodle, Nextcloud)
 - Keycloak restore
 - Provisioning data restore
 
 **Procedure:**
+
 1. Create test namespace
 2. Restore service to test namespace
 3. Validate restored data
 4. Clean up test namespace
 
 **Documentation:**
+
 ```bash
 # Record test results
 echo "$(date) | Monthly DR Test | Service: ILIAS | Success: YES" >> /var/log/dr-tests.log
@@ -330,11 +356,13 @@ echo "$(date) | Monthly DR Test | Service: ILIAS | Success: YES" >> /var/log/dr-
 ### Annual Full Disaster Recovery Exercise
 
 **Test Scope:**
+
 - Complete cluster failure simulation
 - Full restore from backups
 - Validation of all services
 
 **Procedure:**
+
 1. Schedule maintenance window (8+ hours)
 2. Create full cluster backup
 3. Simulate cluster failure (optional)
@@ -348,12 +376,14 @@ echo "$(date) | Monthly DR Test | Service: ILIAS | Success: YES" >> /var/log/dr-
 ### Pre-Recovery Notification
 
 **Stakeholders:**
+
 - IT Director
 - University leadership
 - Department heads
 - Service users (via email/notification system)
 
 **Notification Template:**
+
 ```
 Subject: Maintenance Alert - System Recovery
 
@@ -378,6 +408,7 @@ IT Support
 **Update Frequency:** Every 30 minutes during recovery
 
 **Status Levels:**
+
 - **IN PROGRESS** - Recovery operations in progress
 - **PARTIAL** - Some services restored
 - **COMPLETE** - All services restored
@@ -386,6 +417,7 @@ IT Support
 ### Post-Recovery Announcement
 
 **Template:**
+
 ```
 Subject: Recovery Complete - Services Restored
 
@@ -407,23 +439,26 @@ IT Support
 | Role | Responsibilities | Contact |
 |------|------------------|----------|
 | IT Director | Authorize recovery, communicate to leadership | phone: +49-xxx-xxx |
-| SysAdmin | Execute recovery procedures | email: it-support@university.de |
-| Database Admin | Restore databases, verify integrity | email: dba@university.de |
-| Network Admin | Ensure network connectivity during recovery | email: netadmin@university.de |
+| SysAdmin | Execute recovery procedures | email: <it-support@university.de> |
+| Database Admin | Restore databases, verify integrity | email: <dba@university.de> |
+| Network Admin | Ensure network connectivity during recovery | email: <netadmin@university.de> |
 | Service Owner | Validate service functionality after recovery | varies by service |
-| Security Officer | Monitor for security incidents during recovery | email: security@university.de |
+| Security Officer | Monitor for security incidents during recovery | email: <security@university.de> |
 
 ## Emergency Contacts
 
 **Primary:**
+
 - IT Director: +49-xxx-xxx-xxxx
 - SysAdmin On-Call: +49-xxx-xxx-xxxx
 
 **Secondary:**
+
 - Data Center: +49-xxx-xxx-xxxx
 - Vendor Support: varies by vendor
 
 **Escalation Path:**
+
 1. Local SysAdmin
 2. IT Director
 3. Vice President IT
@@ -432,6 +467,7 @@ IT Support
 ## Dependencies and Interdependencies
 
 **Service Dependencies:**
+
 ```
 Keycloak (SSO)
   ├─> ILIAS
@@ -453,6 +489,7 @@ Storage (PVCs)
 ```
 
 **Critical Path Analysis:**
+
 1. Without Keycloak → No user access to any service
 2. Without Databases → No data persistence
 3. Without Storage → No application startup
@@ -463,11 +500,13 @@ Storage (PVCs)
 ### Issue: Backup Not Found
 
 **Symptoms:**
+
 ```
 ERROR: Backup file not found: /backups/opendesk/opendesk_full_backup_20260406_120000.tar.gz
 ```
 
 **Solutions:**
+
 1. Check backup directory: `ls -la /backups/opendesk/`
 2. Verify BACKUP_DIR environment variable
 3. Check backup log: `cat /var/log/opendesk-backup.log`
@@ -476,11 +515,13 @@ ERROR: Backup file not found: /backups/opendesk/opendesk_full_backup_20260406_12
 ### Issue: Corrupted Backup
 
 **Symptoms:**
+
 ```
 ERROR: Backup file is corrupted
 ```
 
 **Solutions:**
+
 1. Verify with tar: `tar -tzf backup.tar.gz`
 2. Try previous backup
 3. Check if partial restore possible
@@ -489,11 +530,13 @@ ERROR: Backup file is corrupted
 ### Issue: Service Won't Start After Restore
 
 **Symptoms:**
+
 - Pod in CrashLoopBackOff
 - Service not accessible
 - Database connection errors
 
 **Solutions:**
+
 1. Check pod logs: `kubectl logs <pod> -n <namespace>`
 2. Check pod events: `kubectl describe pod <pod> -n <namespace>`
 3. Verify PVC mounted: `kubectl describe pod <pod> -n <namespace> | grep Mounts`
@@ -503,11 +546,13 @@ ERROR: Backup file is corrupted
 ### Issue: Keycloak SSO Not Working
 
 **Symptoms:**
+
 - Cannot login to any service
 - "Invalid Redirect URI" errors
 - SAML/OIDC errors
 
 **Solutions:**
+
 1. Check Keycloak status: `kubectl get pods -n keycloak`
 2. Check Keycloak logs: `kubectl logs -n keycloak <keycloak-pod>`
 3. Verify realm configuration in Keycloak admin UI
@@ -517,7 +562,9 @@ ERROR: Backup file is corrupted
 ## Performance Tuning for Recovery
 
 **Speed Up Restore:**
+
 1. **Parallel Restore:**
+
    ```bash
    # Restore multiple services in parallel
    /opt/opendesk-edu/scripts/restore.sh ilias backup.tar &
@@ -527,6 +574,7 @@ ERROR: Backup file is corrupted
    ```
 
 2. **Increase Database Performance:**
+
    ```bash
    # Scale up database during restore
    kubectl scale deployment mariadb -n <namespace> --replicas=1
@@ -539,12 +587,14 @@ ERROR: Backup file is corrupted
 ## Compliance and Legal Considerations
 
 **GDPR Requirements:**
+
 - Document all data recovery actions
 - Notify affected users of data loss
 - Provide data subject access requests
 - Maintain backup logs for audit trail
 
 **Academic Freedom:**
+
 - Preserve faculty research data
 - Protect course materials
 - Maintain continuity of teaching
@@ -571,20 +621,23 @@ ERROR: Backup file is corrupted
 ## Support and Resources
 
 **Documentation:**
+
 - Backup Scripts: `/opt/opendesk-edu/scripts/backup.sh`
 - Restore Scripts: `/opt/opendesk-edu/scripts/restore.sh`
 - Archive Retention: `docs/archive-retention.md`
 - Monitoring: `docs/monitoring-setup.md`
 
 **Logs:**
+
 - Backup Log: `/var/log/opendesk-backup.log`
 - Restore Log: `/var/log/opendesk-restore.log`
 - Service Logs: `kubectl logs <pod> -n <namespace>`
 
 **External Resources:**
-- Kubernetes Recovery: https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/
-- MariaDB Recovery: https://mariadb.com/kb/en/library/
-- PostgreSQL Recovery: https://www.postgresql.org/docs/current/backup.html
+
+- Kubernetes Recovery: <https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/>
+- MariaDB Recovery: <https://mariadb.com/kb/en/library/>
+- PostgreSQL Recovery: <https://www.postgresql.org/docs/current/backup.html>
 
 ---
 

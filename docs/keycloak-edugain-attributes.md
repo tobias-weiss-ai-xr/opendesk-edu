@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### Overview
@@ -45,7 +46,7 @@ The eduPerson schema defines standard attributes used in academic identity feder
 | Attribute | OID | Friendly Name | Allowed Values |
 |-----------|-----|---------------|----------------|
 | `eduPersonAffiliation` | 1.3.6.1.4.1.5923.1.1.1.1 | Affiliation | faculty, student, staff, alum, member, affiliate, employee, library-walk-in |
-| `eduPersonScopedAffiliation` | 1.3.6.1.4.1.5923.1.1.1.9 | Scoped Affiliation | affiliation@scope (e.g., student@university.edu) |
+| `eduPersonScopedAffiliation` | 1.3.6.1.4.1.5923.1.1.1.9 | Scoped Affiliation | affiliation@scope (e.g., <student@university.edu>) |
 | `eduPersonPrimaryAffiliation` | 1.3.6.1.4.1.5923.1.1.1.5 | Primary Affiliation | Single primary affiliation value |
 
 #### Extended Attributes
@@ -354,10 +355,10 @@ if (displayName.includes(',')) {
 } else {
     // Format: "First Last" or "Title First Last"
     parts = displayName.trim().split(/\s+/);
-    
+
     // Filter out common titles
     var titles = ['dr.', 'dr', 'prof.', 'prof', 'prof.', 'mag.', 'mag', ' Dipl.-Ing.', 'Dipl.-Ing.'];
-    
+
     var nameParts = [];
     for each (var part in parts) {
         var isTitle = false;
@@ -371,7 +372,7 @@ if (displayName.includes(',')) {
             nameParts.push(part);
         }
     }
-    
+
     if (nameParts.length >= 2) {
         firstName = nameParts[0];
         lastName = nameParts.slice(1).join(' ');
@@ -452,6 +453,7 @@ log-level=org.keycloak.authentication:debug
 **Symptom:** User created but attributes are empty
 
 **Checklist:**
+
 - [ ] Verify attribute names match IdP metadata (mace vs OID format)
 - [ ] Check `<AttributeConsumingService>` in SP metadata
 - [ ] Contact IdP admin about attribute release policy
@@ -462,6 +464,7 @@ log-level=org.keycloak.authentication:debug
 **Symptom:** Attributes received but roles not assigned
 
 **Checklist:**
+
 - [ ] Verify roles exist in Keycloak realm
 - [ ] Check script mapper syntax (JavaScript)
 - [ ] Enable debug logging for broker
@@ -472,6 +475,7 @@ log-level=org.keycloak.authentication:debug
 **Symptom:** "User already exists" errors
 
 **Solutions:**
+
 1. Use `eduPersonTargetedID` or `eduPersonUniqueId` for unique identification
 2. Configure `First Login Flow` to handle conflicts
 3. Implement username federation ID linking
@@ -481,6 +485,7 @@ log-level=org.keycloak.authentication:debug
 **Symptom:** Same person gets multiple accounts
 
 **Solutions:**
+
 1. Set `Link Only` mode for existing users
 2. Configure `Principal Type` to use persistent attribute
 3. Use `eduPersonTargetedID` for user linking
@@ -496,6 +501,7 @@ log-level=org.keycloak.authentication:debug
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Übersicht
@@ -530,7 +536,7 @@ Das eduPerson-Schema definiert Standardattribute, die in akademischen Identität
 | Attribut | OID | Friendly Name | Zulässige Werte |
 |-----------|-----|---------------|----------------|
 | `eduPersonAffiliation` | 1.3.6.1.4.1.5923.1.1.1.1 | Affiliation | faculty, student, staff, alum, member, affiliate, employee, library-walk-in |
-| `eduPersonScopedAffiliation` | 1.3.6.1.4.1.5923.1.1.1.9 | Scoped Affiliation | affiliation@bereich (z.B. student@university.edu) |
+| `eduPersonScopedAffiliation` | 1.3.6.1.4.1.5923.1.1.1.9 | Scoped Affiliation | affiliation@bereich (z.B. <student@university.edu>) |
 | `eduPersonPrimaryAffiliation` | 1.3.6.1.4.1.5923.1.1.1.5 | Primary Affiliation | Einzelner primärer Zugehörigkeitswert |
 
 #### Erweiterte Attribute
@@ -680,6 +686,7 @@ Nach der ersten Anmeldung in der Keycloak-Admin-Konsole prüfen:
 **Symptom:** Benutzer erstellt, aber Attribute sind leer
 
 **Checkliste:**
+
 - [ ] Prüfen, dass Attributnamen mit IdP-Metadaten übereinstimmen (mace vs OID-Format)
 - [ ] `<AttributeConsumingService>` in SP-Metadaten prüfen
 - [ ] IdP-Admin bezüglich Attributfreigaberichtlinie kontaktieren
@@ -690,6 +697,7 @@ Nach der ersten Anmeldung in der Keycloak-Admin-Konsole prüfen:
 **Symptom:** Attribute empfangen, aber Rollen nicht zugewiesen
 
 **Checkliste:**
+
 - [ ] Prüfen, dass Rollen im Keycloak-Realm existieren
 - [ ] Script-Mapper-Syntax prüfen (JavaScript)
 - [ ] Debug-Logging für Broker aktivieren
@@ -700,6 +708,7 @@ Nach der ersten Anmeldung in der Keycloak-Admin-Konsole prüfen:
 **Symptom:** "Benutzer existiert bereits"-Fehler
 
 **Lösungen:**
+
 1. `eduPersonTargetedID` oder `eduPersonUniqueId` zur eindeutigen Identifikation verwenden
 2. `First Login Flow` zur Konfliktbehandlung konfigurieren
 3. Benutzernamen-Föderations-ID-Verknüpfung implementieren
@@ -715,6 +724,7 @@ Nach der ersten Anmeldung in der Keycloak-Admin-Konsole prüfen:
 ---
 
 **Verwandte Dokumentation:**
+
 - [DFN-AAI Service Provider Registration Guide](./dfn-aai-registration.md)
 - [Federation Testing Guide](./federation/testing-guide.md)
 - [IdP Federation Configuration](./enhanced-configuration/idp-federation.md)

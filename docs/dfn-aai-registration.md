@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### What is DFN-AAI?
@@ -154,6 +155,7 @@ cat /tmp/dfn-aai-metadata.xml
 ```
 
 Verify in the output:
+
 - `entityID` matches your intended identifier
 - Organization information is correct
 - All endpoints use HTTPS
@@ -163,7 +165,7 @@ Verify in the output:
 #### Step 3: Submit Registration Request
 
 1. **Access DFN-AAI Portal**
-   - Navigate to: https://www.aai.dfn.de/en/service/metadata/
+   - Navigate to: <https://www.aai.dfn.de/en/service/metadata/>
    - Log in with your DFN-AAI account
 
 2. **Complete Registration Form**
@@ -171,18 +173,18 @@ Verify in the output:
      - Enter Entity ID (from metadata)
      - Provide service name and description
      - Specify service URL
-   
+
    - **Metadata Upload Tab**
      - Upload the generated `dfn-aai-metadata.xml` file
      - Select target federation: **Test** or **Production**
-   
+
    - **Attribute Requirements Tab**
      - Confirm required attributes:
        - ☑ `mail`
        - ☑ `displayName`
        - ☑ `eduPersonAffiliation`
        - ☑ `eduPersonPrincipalName`
-   
+
    - **Contact Information Tab**
      - Technical contact email
      - Administrative contact email
@@ -203,6 +205,7 @@ DFN-AAI will validate your submission:
 - Organizational verification
 
 **Timeline:**
+
 - Test federation: 1-2 business days
 - Production federation: 3-5 business days
 
@@ -213,6 +216,7 @@ You will receive an email notification upon approval or if corrections are neede
 After approval, configure Keycloak to use DFN-AAI:
 
 1. **Access Keycloak Admin Console**
+
    ```
    https://idp.education.example.org/admin/master/console/
    ```
@@ -220,7 +224,7 @@ After approval, configure Keycloak to use DFN-AAI:
 2. **Add DFN-AAI as Identity Provider**
    - Navigate to **Realm Settings** > **Identity Providers**
    - Click **Add provider** > **SAML v2.0**
-   
+
 3. **Configure IdP Settings**
 
    | Field | Test Federation | Production Federation |
@@ -230,7 +234,7 @@ After approval, configure Keycloak to use DFN-AAI:
    | Metadata URL | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
 
 4. **Configure Attribute Mappers**
-   
+
    Create mappers for each required attribute:
 
    | SAML Attribute | Keycloak Attribute |
@@ -254,11 +258,13 @@ Always test with the test federation before production registration.
 #### Access Test Federation
 
 1. **Navigate to Discovery Service**
+
    ```
    https://discovery.aai.dfn.de/
    ```
 
 2. **Configure Return URL**
+
    ```
    https://idp.education.example.org/realms/opendesk/protocol/saml
    ```
@@ -275,6 +281,7 @@ Always test with the test federation before production registration.
 #### Test User Credentials
 
 For DFN-AAI Test IdP:
+
 - Username: `testuser1`, `testuser2`, `testuser3`
 - Password: Check test IdP documentation
 
@@ -287,6 +294,7 @@ For DFN-AAI Test IdP:
 **Symptom:** DFN-AAI rejects metadata with validation errors
 
 **Solutions:**
+
 1. Verify XML syntax: `xmllint --noout metadata.xml`
 2. Check certificate format: `openssl x509 -in cert.pem -noout -text`
 3. Ensure Entity ID is a valid HTTPS URL
@@ -297,6 +305,7 @@ For DFN-AAI Test IdP:
 **Symptom:** No response or rejection after submission
 
 **Checklist:**
+
 - [ ] Verify email contacts are correct
 - [ ] Check spam folder for DFN-AAI communications
 - [ ] Confirm institution has valid DFN-AAI subscription
@@ -307,6 +316,7 @@ For DFN-AAI Test IdP:
 **Symptom:** Authentication fails with signature validation error
 
 **Solutions:**
+
 1. Verify SP certificate matches registration
 2. Re-import DFN-AAI metadata in Keycloak
 3. Check system time synchronization: `timedatectl status`
@@ -316,6 +326,7 @@ For DFN-AAI Test IdP:
 **Symptom:** User authenticates but attributes are missing
 
 **Solutions:**
+
 1. Contact institutional IdP administrator about attribute release
 2. Verify attribute mappers in Keycloak
 3. Use SAML tracer browser extension to inspect assertions
@@ -326,6 +337,7 @@ For DFN-AAI Test IdP:
 **Symptom:** Federation login fails due to expired certificate
 
 **Recovery:**
+
 1. Generate new certificate
 2. Update Keycloak configuration
 3. Re-submit metadata to DFN-AAI (30-day notice required for production)
@@ -362,16 +374,17 @@ Complete this checklist before moving to production:
 
 ### Additional Resources
 
-- **DFN-AAI Documentation:** https://www.aai.dfn.de/en/documentation/
-- **DFN-AAI Test Federation:** https://www.aai.dfn.de/testumgebung/
-- **eduGAIN Technical Profile:** https://technical.edugain.org/
-- **eduPerson Schema:** https://www.educause.edu/research-and-technical/educause-identity-and-access-management/eduPerson
-- **Keycloak SAML Docs:** https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers
+- **DFN-AAI Documentation:** <https://www.aai.dfn.de/en/documentation/>
+- **DFN-AAI Test Federation:** <https://www.aai.dfn.de/testumgebung/>
+- **eduGAIN Technical Profile:** <https://technical.edugain.org/>
+- **eduPerson Schema:** <https://www.educause.edu/research-and-technical/educause-identity-and-access-management/eduPerson>
+- **Keycloak SAML Docs:** <https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers>
 - **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
 
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Was ist DFN-AAI?
@@ -515,6 +528,7 @@ cat /tmp/dfn-aai-metadata.xml
 ```
 
 Überprüfen Sie in der Ausgabe:
+
 - `entityID` entspricht Ihrer beabsichtigten Kennung
 - Organisationsinformationen sind korrekt
 - Alle Endpunkte verwenden HTTPS
@@ -524,7 +538,7 @@ cat /tmp/dfn-aai-metadata.xml
 #### Schritt 3: Registrierungsantrag einreichen
 
 1. **DFN-AAI-Portal aufrufen**
-   - Navigieren Sie zu: https://www.aai.dfn.de/en/service/metadata/
+   - Navigieren Sie zu: <https://www.aai.dfn.de/en/service/metadata/>
    - Melden Sie sich mit Ihrem DFN-AAI-Konto an
 
 2. **Registrierungsformular ausfüllen**
@@ -532,18 +546,18 @@ cat /tmp/dfn-aai-metadata.xml
      - Entity ID eingeben (aus Metadaten)
      - Dienstname und -beschreibung angeben
      - Dienst-URL angeben
-   
+
    - **Registerkarte Metadaten-Upload**
      - Generierte `dfn-aai-metadata.xml` hochladen
      - Zielföderation auswählen: **Test** oder **Produktion**
-   
+
    - **Registerkarte Attributanforderungen**
      - Erforderliche Attribute bestätigen:
        - ☑ `mail`
        - ☑ `displayName`
        - ☑ `eduPersonAffiliation`
        - ☑ `eduPersonPrincipalName`
-   
+
    - **Registerkarte Kontaktinformationen**
      - Technische Kontakt-E-Mail
      - Administrative Kontakt-E-Mail
@@ -564,6 +578,7 @@ DFN-AAI validiert Ihre Einreichung:
 - Organisationale Verifizierung
 
 **Zeitrahmen:**
+
 - Test-Föderation: 1-2 Werktage
 - Produktions-Föderation: 3-5 Werktage
 
@@ -574,6 +589,7 @@ Sie erhalten eine E-Mail-Benachrichtigung bei Genehmigung oder wenn Korrekturen 
 Konfigurieren Sie nach der Genehmigung Keycloak für DFN-AAI:
 
 1. **Keycloak-Admin-Konsole aufrufen**
+
    ```
    https://idp.education.example.org/admin/master/console/
    ```
@@ -581,7 +597,7 @@ Konfigurieren Sie nach der Genehmigung Keycloak für DFN-AAI:
 2. **DFN-AAI als Identitätsanbieter hinzufügen**
    - Navigieren Sie zu **Realm-Einstellungen** > **Identitätsanbieter**
    - Klicken Sie **Anbieter hinzufügen** > **SAML v2.0**
-   
+
 3. **IdP-Einstellungen konfigurieren**
 
    | Feld | Test-Föderation | Produktions-Föderation |
@@ -591,7 +607,7 @@ Konfigurieren Sie nach der Genehmigung Keycloak für DFN-AAI:
    | Metadaten-URL | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
 
 4. **Attribut-Mapper konfigurieren**
-   
+
    Erstellen Sie Mapper für jedes erforderliche Attribut:
 
    | SAML-Attribut | Keycloak-Attribut |
@@ -615,11 +631,13 @@ Testen Sie immer mit der Test-Föderation vor der Produktionsregistrierung.
 #### Test-Föderation aufrufen
 
 1. **Discovery-Service aufrufen**
+
    ```
    https://discovery.aai.dfn.de/
    ```
 
 2. **Return-URL konfigurieren**
+
    ```
    https://idp.education.example.org/realms/opendesk/protocol/saml
    ```
@@ -636,6 +654,7 @@ Testen Sie immer mit der Test-Föderation vor der Produktionsregistrierung.
 #### Test-Benutzerzugangsdaten
 
 Für DFN-AAI Test IdP:
+
 - Benutzername: `testuser1`, `testuser2`, `testuser3`
 - Passwort: Test-IdP-Dokumentation prüfen
 
@@ -648,6 +667,7 @@ Für DFN-AAI Test IdP:
 **Symptom:** DFN-AAI lehnt Metadaten mit Validierungsfehlern ab
 
 **Lösungen:**
+
 1. XML-Syntax prüfen: `xmllint --noout metadata.xml`
 2. Zertifikatsformat prüfen: `openssl x509 -in cert.pem -noout -text`
 3. Sicherstellen, dass Entity ID eine gültige HTTPS-URL ist
@@ -658,6 +678,7 @@ Für DFN-AAI Test IdP:
 **Symptom:** Keine Antwort oder Ablehnung nach Einreichung
 
 **Checkliste:**
+
 - [ ] E-Mail-Kontakte auf Richtigkeit prüfen
 - [ ] Spam-Ordner auf DFN-AAI-Kommunikation prüfen
 - [ ] Bestätigen, dass die Einrichtung ein gültiges DFN-AAI-Abonnement hat
@@ -668,6 +689,7 @@ Für DFN-AAI Test IdP:
 **Symptom:** Authentifizierung fehlgeschlagen mit Signaturvalidierungsfehler
 
 **Lösungen:**
+
 1. SP-Zertifikat mit Registrierung abgleichen
 2. DFN-AAI-Metadaten in Keycloak neu importieren
 3. Systemzeitsynchronisation prüfen: `timedatectl status`
@@ -677,6 +699,7 @@ Für DFN-AAI Test IdP:
 **Symptom:** Benutzer authentifiziert sich, aber Attribute fehlen
 
 **Lösungen:**
+
 1. Institutionellen IdP-Administrator bezüglich Attributfreigabe kontaktieren
 2. Attribut-Mapper in Keycloak prüfen
 3. SAML-Tracer-Browsererweiterung zur Assertion-Inspektion verwenden
@@ -687,6 +710,7 @@ Für DFN-AAI Test IdP:
 **Symptom:** Föderationsanmeldung fehlgeschlagen aufgrund abgelaufenem Zertifikat
 
 **Wiederherstellung:**
+
 1. Neues Zertifikat generieren
 2. Keycloak-Konfiguration aktualisieren
 3. Metadaten erneut bei DFN-AAI einreichen (30-Tage-Frist für Produktion)
@@ -723,16 +747,17 @@ Absolvieren Sie diese Checkliste vor dem Wechsel zur Produktion:
 
 ### Zusätzliche Ressourcen
 
-- **DFN-AAI-Dokumentation:** https://www.aai.dfn.de/dokumentation/
-- **DFN-AAI Test-Föderation:** https://www.aai.dfn.de/testumgebung/
-- **eduGAIN Technisches Profil:** https://technical.edugain.org/
-- **eduPerson-Schema:** https://www.educause.edu/research-and-technical/educause-identity-and-access-management/eduPerson
-- **Keycloak SAML-Dokumentation:** https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers
+- **DFN-AAI-Dokumentation:** <https://www.aai.dfn.de/dokumentation/>
+- **DFN-AAI Test-Föderation:** <https://www.aai.dfn.de/testumgebung/>
+- **eduGAIN Technisches Profil:** <https://technical.edugain.org/>
+- **eduPerson-Schema:** <https://www.educause.edu/research-and-technical/educause-identity-and-access-management/eduPerson>
+- **Keycloak SAML-Dokumentation:** <https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers>
 - **DFN-AAI-Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
 
 ---
 
 **Verwandte Dokumentation:**
+
 - [DFN-AAI Enrollment Guide](./federation/dfn-aai-enrollment.md) - Technische Integrationsdetails
 - [Federation Testing Guide](./federation/testing-guide.md) - Umfassende Testverfahren
 - [IdP Federation Configuration](./enhanced-configuration/idp-federation.md) - Allgemeine IdP-Föderation
