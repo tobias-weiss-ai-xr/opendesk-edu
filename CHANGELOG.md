@@ -5,7 +5,39 @@ The upstream changelog follows below. For edu-specific changes, see the commit h
 
 ### Edu Additions (on top of openDesk CE v1.13.1)
 
-- **ILIAS** LMS integration with SAML SSO via Keycloak
+#### v1.14.0 (2026-04-12)
+
+- **Code Quality**
+  - Fix codespell pre-commit hook configuration (JSON→INI config)
+  - Fix 13 English typos in documentation
+  - Fix 26 ruff Python lint issues (unused vars, bare except, ambiguous names)
+  - Add type annotations to all Python source functions (33 files)
+  - Narrow broad except clauses to specific exception types
+  - Make user_import logging cross-platform (fix /var/log/ on Windows)
+  - Deduplicate user_import scripts into lib/common.py
+
+- **Helm Chart Quality**
+  - Add values.schema.json for 15 charts (JSON Schema validation)
+  - Add NetworkPolicy templates to 16 charts
+  - Add PDB templates to 6 charts (ilias, limesurvey, drawio, excalidraw, self-service-password, planka)
+  - Add HPA templates to 3 charts (ilias, moodle, bigbluebutton)
+  - Add securityContext to sogo and bigbluebutton deployments
+  - Remove deprecated PSP templates from vendored postgresql subcharts
+  - Add .helmignore to all 16 charts missing one
+  - Add README.md for all 17 charts
+  - Create missing typo3 values.yaml
+  - Make bigbluebutton resources configurable via values.yaml
+  - Fix bigbluebutton template value references (consistent bigbluebutton.* prefix)
+  - Fix values.schema.json over-validation (databaseUrl, huggingfaceToken)
+
+- **CI/CD**
+  - Fix GitHub Actions workflows (remove duplicates, fix repo names, update versions)
+  - Add Woodpecker CI pipelines for Codeberg (lint, test, security)
+  - Add ruff, shellcheck, pip-audit to pre-commit hooks
+  - Add Makefile targets for Python tests and ruff
+
+- **Original edu additions**
+  - **ILIAS** LMS integration with SAML SSO via Keycloak
 - **Moodle** LMS integration with Shibboleth authentication
 - **BigBlueButton** video conferencing with SAML SSO
 - **OpenCloud** file sharing with OIDC authentication
