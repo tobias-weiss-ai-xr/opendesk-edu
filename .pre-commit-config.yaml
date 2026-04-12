@@ -34,7 +34,7 @@ repos:
     rev: v2.2.6
     hooks:
       - id: codespell
-        args: [--config=cspell.json]
+        args: [--ignore-words-list=analysed,configurability,explorative,openDesk,opendesk,keycloak,moodle,ilias,helmfile,helmfiles,kubespray,kyverno,letsencrypt,selfsigned,containerd,clamav,coturn,cryptpad,databasename,filestore,templating,trashbin,truststore,commandline,nindent,gotmpl,pseudonymize,restic,subcomponent,webservice]
 
   - repo: local
     hooks:
