@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+when:
+  - event: [push, pull_request]
+
+steps:
+  - name: helm-lint
+    image: docker.io/alpine/helm:3.17.0
+    depends_on: []
+    commands:
+      - helm lint helmfile/charts/*/
+
+  - name: yamllint
+    image: docker.io/pipelinecomponents/yamllint:0.35.9
+    depends_on: []
+    commands:
+      - yamllint -c .yamllint helmfile/charts/ docs/ .github/ publiccode.yml
+
+  - name: ruff-python
+    image: python:3.12-slim
+    depends_on: []
+    commands:
+      - pip install ruff
+      - ruff check scripts/
+
+  - name: spellcheck
+    image: node:20-slim
+    depends_on: []
+    commands:
+      - npm install -g cspell
+      - cspell --config cspell.json README.md ROADMAP.md CONTRIBUTING.md docs/university-apps-concept.md docs/external-services.md docs/getting-started.md .github/ --no-progress

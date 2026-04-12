@@ -16,8 +16,8 @@ jobs:
       - name: Mirror from Codeberg
         uses: actions/checkout@v4
         with:
-          repository: opendesk-edu/deployment
-          url: https://oauth2:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/opendesk-edu/deployment.git
+          repository: opendesk-edu/opendesk-edu
+          url: https://oauth2:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/opendesk-edu/opendesk-edu.git
           fetch-depth: 0
           path: opendesk-edu
 
@@ -28,7 +28,7 @@ jobs:
           cd opendesk-edu
           git config user.name "Mirror Bot"
           git config user.email "mirror@opendesk-edu.org"
-          git remote add github "https://x-access-token:${GH_TOKEN}@github.com/tobias-weiss-ai-xr/opendesk-edu.git"
+          git remote add github "https://x-access-token:${GH_TOKEN}@github.com/opendesk-edu/opendesk-edu.git"
           # GitHub Actions cannot push workflow file changes from within a workflow run.
           # Remove workflow files from the index before pushing to avoid the restriction.
           git rm -r --cached .github/workflows/ 2>/dev/null || true

@@ -80,6 +80,10 @@ jobs:
           - helmfile/charts/excalidraw
           - helmfile/charts/self-service-password
           - helmfile/charts/sogo
+          - helmfile/charts/f13
+          - helmfile/charts/grommunio
+          - helmfile/charts/snipr
+          - helmfile/charts/typo3
         helm-version:
           - "v3.17.0"
       fail-fast: false
@@ -173,6 +177,52 @@ jobs:
             echo "Testing ${chart}..."
             helm unittest "${chart}"
           done
+
+  ruff-lint:
+    name: Python Ruff Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Run ruff check
+        run: ruff check scripts/
+
+  python-test:
+    name: Python Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies (semester-provisioning)
+        run: |
+          cd scripts/semester-provisioning
+          pip install pytest httpx
+
+      - name: Run semester-provisioning tests
+        run: |
+          cd scripts/semester-provisioning
+          python -m pytest tests/ -v
+
+      - name: Install dependencies (user_import)
+        run: |
+          cd scripts/user_import
+          pip install pytest -r requirements.txt
+
+      - name: Run user_import tests
+        run: |
+          cd scripts/user_import
+          python -m pytest tests/ -v
 
   schema-validation:
     name: Schema Validation

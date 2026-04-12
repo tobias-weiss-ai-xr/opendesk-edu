@@ -119,6 +119,18 @@ jobs:
             echo "| SOGo | \`${TAG}\` |" >> $GITHUB_STEP_SUMMARY
           fi
 
+          # F13
+          if grep -q "tag:" helmfile/apps/snipr/values.yaml.gotmpl 2>/dev/null; then
+            TAG=$(grep "tag:" helmfile/apps/snipr/values.yaml.gotmpl | head -1 | awk '{print $2}' | tr -d '"')
+            echo "| Snipr | \`${TAG}\` |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Grommunio
+          if grep -q "tag:" helmfile/apps/grommunio/values-grommunio.yaml.gotmpl 2>/dev/null; then
+            TAG=$(grep "tag:" helmfile/apps/grommunio/values-grommunio.yaml.gotmpl | head -1 | awk '{print $2}' | tr -d '"')
+            echo "| Grommunio | \`${TAG}\` |" >> $GITHUB_STEP_SUMMARY
+          fi
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Check latest releases:" >> $GITHUB_STEP_SUMMARY
           echo "- ILIAS: https://github.com/ILIAS-eLearning/ILIAS/releases" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+when:
+  - event: [push, pull_request]
+    branch: [main]
+  - event: cron
+
+steps:
+  - name: trivy-helm
+    image: aquasec/trivy:latest
+    depends_on: []
+    commands:
+      - trivy config --severity CRITICAL,HIGH --exit-code 1 helmfile/charts/
+    failure: ignore
+
+  - name: pip-audit
+    image: python:3.12-slim
+    depends_on: []
+    commands:
+      - pip install pip-audit
+      - pip-audit scripts/user_import/requirements.txt || true
+      - pip-audit scripts/semester-provisioning/ || true
+    failure: ignore
+
+  - name: gitleaks
+    image: zricethezav/gitleaks:latest
+    depends_on: []
+    commands:
+      - gitleaks detect --source . --verbose
+    failure: ignore

@@ -1,0 +1,79 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+depends_on:
+  - lint
+
+when:
+  - event: [push, pull_request]
+
+matrix:
+  CHART:
+    - ilias
+    - moodle
+    - bigbluebutton
+    - opencloud
+    - etherpad
+    - bookstack
+    - planka
+    - zammad
+    - limesurvey
+    - drawio
+    - excalidraw
+    - self-service-password
+    - sogo
+    - f13
+    - grommunio
+    - snipr
+    - typo3
+
+steps:
+  - name: helm-unittest
+    image: docker.io/alpine/helm:3.17.0
+    depends_on: []
+    commands:
+      - helm plugin install https://github.com/helm-unittest/helm-unittest.git --version v0.7.2
+      - |
+        if [ -d "helmfile/charts/${CHART}/tests" ]; then
+          helm unittest helmfile/charts/${CHART}
+        else
+          echo "No tests for ${CHART}, skipping."
+        fi
+    when:
+      - matrix:
+          CHART: [ilias]
+
+  - name: helm-template
+    image: docker.io/alpine/helm:3.17.0
+    depends_on: []
+    commands:
+      - |
+        if ls helmfile/charts/${CHART}/ci/*-values.yaml 1>/dev/null 2>&1; then
+          for values_file in helmfile/charts/${CHART}/ci/*-values.yaml; do
+            echo "Rendering ${CHART} with ${values_file}..."
+            helm template test helmfile/charts/${CHART} -f "${values_file}" > /tmp/rendered.yaml
+          done
+        else
+          echo "Rendering ${CHART} with defaults..."
+          helm template test helmfile/charts/${CHART} > /tmp/rendered.yaml
+        fi
+
+  - name: python-test-semester-provisioning
+    image: python:3.12-slim
+    depends_on: []
+    commands:
+      - cd scripts/semester-provisioning && pip install pytest httpx
+      - cd scripts/semester-provisioning && python -m pytest tests/ -v
+    when:
+      - matrix:
+          CHART: [ilias]
+
+  - name: python-test-user-import
+    image: python:3.12-slim
+    depends_on: []
+    commands:
+      - cd scripts/user_import && pip install pytest -r requirements.txt
+      - cd scripts/user_import && python -m pytest tests/ -v
+    when:
+      - matrix:
+          CHART: [ilias]

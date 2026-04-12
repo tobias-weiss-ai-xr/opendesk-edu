@@ -27,7 +27,7 @@ jobs:
 
       - name: Add Codeberg remote
         run: |
-          git remote add codeberg https://oauth2:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/opendesk-edu/deployment.git
+          git remote add codeberg https://oauth2:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/opendesk-edu/opendesk-edu.git
 
       - name: Sync to Codeberg (with retry)
         run: |
@@ -36,7 +36,7 @@ jobs:
           ATTEMPT=1
           while [ $ATTEMPT -le $MAX_RETRIES ]; do
             echo "Sync attempt $ATTEMPT of $MAX_RETRIES..."
-            if git push --mirror codeberg 2>&1; then
+            if git push --force codeberg main 2>&1; then
               echo "✓ Sync successful on attempt $ATTEMPT"
               exit 0
             else

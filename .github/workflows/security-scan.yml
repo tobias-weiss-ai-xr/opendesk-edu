@@ -98,7 +98,7 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v4
         with:
-          version: 'v3.16.1'
+          version: 'v3.17.0'
 
       - name: Run Trivy on Helm charts
         uses: aquasecurity/trivy-action@master
@@ -158,8 +158,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
         with:
-          config-path: .gitleaks.toml
-          output-file: gitleaks-report.json
           format: json
           verbose: true
 
@@ -169,6 +167,7 @@ jobs:
         with:
           name: gitleaks-report
           path: gitleaks-report.json
+          if-no-files-found: ignore
 
   sbom-generation:
     name: Generate SBOM
