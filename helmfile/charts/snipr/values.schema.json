@@ -1,0 +1,287 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "snipr": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "replicaCount": { "type": "integer", "minimum": 1 },
+        "api": {
+          "type": "object",
+          "properties": {
+            "port": { "type": "integer" },
+            "resources": {
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": { "type": ["string", "number"] },
+                    "memory": { "type": "string" }
+                  }
+                },
+                "limits": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": { "type": ["string", "number"] },
+                    "memory": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "web": {
+          "type": "object",
+          "properties": {
+            "port": { "type": "integer" },
+            "resources": {
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": { "type": ["string", "number"] },
+                    "memory": { "type": "string" }
+                  }
+                },
+                "limits": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": { "type": ["string", "number"] },
+                    "memory": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ffmpeg": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "resources": {
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": { "type": ["string", "number"] },
+                    "memory": { "type": "string" }
+                  }
+                },
+                "limits": {
+                  "type": "object",
+                  "properties": {
+                    "cpu": { "type": ["string", "number"] },
+                    "memory": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "storage": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "s3": {
+              "type": "object",
+              "properties": {
+                "endpoint": { "type": "string" },
+                "bucket": { "type": "string" },
+                "region": { "type": "string" },
+                "ssl": { "type": "boolean" },
+                "forcePathStyle": { "type": "boolean" }
+              }
+            },
+            "filesystem": {
+              "type": "object",
+              "properties": {
+                "path": { "type": "string" },
+                "persistence": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": { "type": "boolean" },
+                    "size": { "type": "string" },
+                    "accessMode": { "type": "string" },
+                    "storageClass": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sso": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "keycloak": {
+              "type": "object",
+              "properties": {
+                "realm": { "type": "string" },
+                "clientId": { "type": "string" },
+                "clientSecret": { "type": "string" },
+                "authUrl": { "type": "string" },
+                "tokenUrl": { "type": "string" },
+                "userInfoUrl": { "type": "string" },
+                "jwksUrl": { "type": "string" }
+              }
+            },
+            "scopes": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "lti": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "keycloak": {
+              "type": "object",
+              "properties": {
+                "clientId": { "type": "string" },
+                "clientSecret": { "type": "string" }
+              }
+            },
+            "platforms": { "type": "object" },
+            "roles": { "type": "object" }
+          }
+        },
+        "transcription": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "f13": {
+              "type": "object",
+              "properties": {
+                "endpoint": { "type": "string" },
+                "apiKey": { "type": "string" },
+                "model": { "type": "string" },
+                "language": { "type": "string" },
+                "callbackUrl": { "type": "string" }
+              }
+            },
+            "fallback": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "engine": { "type": "string" },
+                "model": { "type": "string" }
+              }
+            }
+          }
+        },
+        "backup": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "k8up": {
+              "type": "object",
+              "properties": {
+                "schedule": { "type": "string" },
+                "retention": { "type": "object" }
+              }
+            },
+            "repositories": { "type": "object" }
+          }
+        },
+        "replicas": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "className": { "type": "string" },
+        "annotations": { "type": "object" },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": { "type": "string" },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": { "type": "string" },
+                    "pathType": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "secretName": { "type": "string" },
+              "hosts": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "port": { "type": "integer" },
+        "annotations": { "type": "object" }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "type": "object",
+          "properties": {
+            "cpu": { "type": ["string", "number"] },
+            "memory": { "type": "string" }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "cpu": { "type": ["string", "number"] },
+            "memory": { "type": "string" }
+          }
+        }
+      }
+    },
+    "autoscaling": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "minReplicas": { "type": "integer" },
+        "maxReplicas": { "type": "integer" },
+        "targetCPUUtilizationPercentage": { "type": "integer" },
+        "targetMemoryUtilizationPercentage": { "type": "integer" }
+      }
+    },
+    "podDisruptionBudget": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "minAvailable": { "type": "integer" }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "create": { "type": "boolean" },
+        "annotations": { "type": "object" },
+        "name": { "type": "string" }
+      }
+    },
+    "extraVolumes": { "type": "array" },
+    "extraVolumeMounts": { "type": "array" },
+    "nodeSelector": { "type": "object" },
+    "tolerations": { "type": "array" },
+    "affinity": { "type": "object" }
+  }
+}
