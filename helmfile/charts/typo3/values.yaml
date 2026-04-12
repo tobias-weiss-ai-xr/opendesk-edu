@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+typo3:
+  enabled: true
+  image: typo3/cms-base
+  tag: latest
+  replicas: 1
+  port: 80
+  db:
+    host: ""
+    port: 3306
+    user: typo3
+    password: ""
+    name: typo3
+  installToolPassword: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  volumes:
+    fileadmin:
+      size: 1Gi
+      accessMode: ReadWriteMany
+    var:
+      size: 1Gi
+      accessMode: ReadWriteMany
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  name: ""
+
+extraVolumes: []
+extraVolumeMounts: []
+
+ingress:
+  enabled: true
+  hosts:
+    - host: typo3.opendesk.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: ""
+    username: typo3
+    password: ""
+    database: typo3
