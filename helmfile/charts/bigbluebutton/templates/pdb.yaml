@@ -7,7 +7,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}-greenlight
 spec:
-  minAvailable: {{ if .Values.pdb }}{{ .Values.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
+  minAvailable: {{ if .Values.bigbluebutton.pdb }}{{ .Values.bigbluebutton.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-greenlight
