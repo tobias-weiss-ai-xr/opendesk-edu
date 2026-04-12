@@ -219,6 +219,13 @@ iliasRPCServer:
       accessMode: ReadWriteOnce
       # storageClass: ""
 
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
 extraVolumes: []
       # - name: my-volume
       #   mountPath: /path/in/container

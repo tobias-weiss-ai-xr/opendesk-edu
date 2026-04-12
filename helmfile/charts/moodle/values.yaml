@@ -59,6 +59,13 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
 persistence:
   enabled: true
   size: "8Gi"
