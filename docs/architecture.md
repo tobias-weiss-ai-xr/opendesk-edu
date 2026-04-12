@@ -131,11 +131,12 @@ openDesk uses the OpenID Connect (OIDC) protocol for authentication and authoriz
 ### Identity data flows
 
 An overview of
-- components that consume the LDAP service.
-  - The components access the LDAP using a component-specific LDAP search account.
-- components using Univention Keycloak as an identity provider (IdP).
-  - All components use OAuth2 / OIDC flows.
-  - All components have a client configured in Keycloak.
+
+* components that consume the LDAP service.
+  * The components access the LDAP using a component-specific LDAP search account.
+* components using Univention Keycloak as an identity provider (IdP).
+  * All components use OAuth2 / OIDC flows.
+  * All components have a client configured in Keycloak.
 
 Some components trust others to handle authentication for them.
 
@@ -201,8 +202,8 @@ For more information, see the [Keycloak Documentation](https://www.keycloak.org/
 
 Part of Nubus are the [Keycloak Extensions](https://docs.software-univention.de/nubus-kubernetes-operation/1.0/en/configuration/keycloak-extensions.html) which are used for:
 
-- Login brute force protection: Blocking authentication requests upon too many failed attempts from a device or IP. _The available [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) option is deactivated in openDesk._
-- New device notification: Sending the user an email after successful login from a new device.
+* Login brute force protection: Blocking authentication requests upon too many failed attempts from a device or IP. *The available [CAPTCHA](https://en.wikipedia.org/wiki/CAPTCHA) option is deactivated in openDesk.*
+* New device notification: Sending the user an email after successful login from a new device.
 
 To address these use cases, the Keycloak Extensions act as a proxy to Keycloak.
 
@@ -217,10 +218,11 @@ To address these use cases, the Keycloak Extensions act as a proxy to Keycloak.
 LDAP group synchronization ensures that user group memberships are consistent across the applications in openDesk that make use of the IAM group information. Nubus uses OpenLDAP to store and manage user groups, which are synchronized with integrated applications to enforce access control policies.
 
 Keycloak LDAP groups are available to the following applications, however, none of the applications support nested groups. This means that users must be direct members of a group, as members of subgroups will be ignored.
-- Files / Nextcloud: Reads all groups that are enabled for Nextcloud, twice a day. Determined by the setting `background_sync_interval` in the `user_ldap` app.
-- Knowledge Management / XWiki: Reads all groups that are enabled for XWiki use, once daily during the night. Based on the jobs `LDAP Group Import Job` and `Mapped groups daily updater` that are accessible to admin users in `/bin/view/Scheduler`.
-- Project Management / OpenProject: Reads all groups that are enabled for OpenProject, [hourly](https://www.openproject.org/docs/system-admin-guide/authentication/ldap-connections/ldap-group-synchronization/#create-a-synchronized-group).
-- Webmail / OX AppSuite: Requires a webmail user to be a part of a group before the group is actively provisioned to OX AppSuite.
+
+* Files / Nextcloud: Reads all groups that are enabled for Nextcloud, twice a day. Determined by the setting `background_sync_interval` in the `user_ldap` app.
+* Knowledge Management / XWiki: Reads all groups that are enabled for XWiki use, once daily during the night. Based on the jobs `LDAP Group Import Job` and `Mapped groups daily updater` that are accessible to admin users in `/bin/view/Scheduler`.
+* Project Management / OpenProject: Reads all groups that are enabled for OpenProject, [hourly](https://www.openproject.org/docs/system-admin-guide/authentication/ldap-connections/ldap-group-synchronization/#create-a-synchronized-group).
+* Webmail / OX AppSuite: Requires a webmail user to be a part of a group before the group is actively provisioned to OX AppSuite.
 
 ## Provisioning
 
@@ -233,11 +235,12 @@ Besides the Nubus internal user of the provisioning service, the OX AppSuite is 
 As the OX AppSuite is using an application specific format to get e.g. users provisioned, there is also a specific connector component that links the provisioning service to the OX AppSuite, it is called the [OX Connector](https://docs.software-univention.de/manual/5.0/de/mail/ox-connector.html).
 
 The [OX SOAP API](https://oxpedia.org/wiki/index.php?title=Open-Xchange_Provisioning_using_SOAP) is used by the OX Connector to synchronize information about the following OX AppSuite objects:
-- Contexts
-- Functional Mailboxes
-- Groups
-- (Managed) Resources
-- Users
+
+* Contexts
+* Functional Mailboxes
+* Groups
+* (Managed) Resources
+* Users
 
 To find out more, see [Roles & Permissions](./docs/permissions.md).
 
@@ -286,17 +289,20 @@ To establish a session with the Intercom Service, applications can use the silen
 Currently, only OX AppSuite and Element are using the frontend-based integration.
 
 **Links:**
-- [Intercom Service upstream documentation](https://docs.software-univention.de/intercom-service/latest/index.html).
+
+* [Intercom Service upstream documentation](https://docs.software-univention.de/intercom-service/latest/index.html).
 
 ### Central contacts
 
 OX App Suite is responsible for managing contacts in openDesk. Therefore, Nextcloud's PHP backend is using the OX AppSuite's middleware Contacts API to
-- create a new contact in the user's contacts folder when a file is shared with an unknown email address.
-- retrieve contacts from the user's contacts folder to support search-as-you-type when starting to share a file.
+
+* create a new contact in the user's contacts folder when a file is shared with an unknown email address.
+* retrieve contacts from the user's contacts folder to support search-as-you-type when starting to share a file.
 
 **Links:**
-- Currently used [OX Contacts API (deprecated)](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Contacts).
-- New [OX Addressbooks API](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Addressbooks) the Central Contacts integration will switch to.
+
+* Currently used [OX Contacts API (deprecated)](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Contacts).
+* New [OX Addressbooks API](https://documentation.open-xchange.com/components/middleware/http/8/index.html#!Addressbooks) the Central Contacts integration will switch to.
 
 ### Central navigation
 
@@ -304,8 +310,9 @@ Central navigation is based on an API endpoint in the Nubus portal that returns 
 a given user. The response from the API endpoint is used in the openDesk applications to render the central navigation.
 
 The API can be called by
-- frontend services through the Intercom Service's `/navigation.json` endpoint.
-- backend services directly at the portal's `/univention/portal/navigation.json` endpoint.
+
+* frontend services through the Intercom Service's `/navigation.json` endpoint.
+* backend services directly at the portal's `/univention/portal/navigation.json` endpoint.
 
 The central navigation expects the API caller to present a shared secret for authentication and the username for whom the portal
 contents should be returned for.
@@ -319,18 +326,21 @@ curl 'https://portal.<DOMAIN>/univention/portal/navigation.json?base=https%3A//p
 ### Filepicker
 
 The Nextcloud Filepicker is integrated into the OX AppSuite, supporting the following use cases within the respective openDesk instance's Nextcloud:
-- Attach files from Nextcloud to emails.
-- Create and add links to Nextcloud files into emails.
-- Save attachments from emails into Nextcloud.
-- Attach files from Nextcloud to calendar entries.
+
+* Attach files from Nextcloud to emails.
+* Create and add links to Nextcloud files into emails.
+* Save attachments from emails into Nextcloud.
+* Attach files from Nextcloud to calendar entries.
 
 The Filepicker uses frontend and backend-based integration:
-- For frontend-based integration, the OX AppSuite frontend uses the Intercom Service.
-- Backend-based integration is coming from the OX AppSuite middleware. The middleware communicates directly with Nextcloud
+
+* For frontend-based integration, the OX AppSuite frontend uses the Intercom Service.
+* Backend-based integration is coming from the OX AppSuite middleware. The middleware communicates directly with Nextcloud
 when attaching a file to an email or storing a file in Nextcloud to avoid passing these files through the user's browser.
 
 **Links:**
-- [OX AppSuite Nextcloud Integration upstream documentation](https://gitlab.open-xchange.com/extensions/nextcloud-integration/-/tree/main/documentation).
+
+* [OX AppSuite Nextcloud Integration upstream documentation](https://gitlab.open-xchange.com/extensions/nextcloud-integration/-/tree/main/documentation).
 
 ### Newsfeed
 
@@ -338,7 +348,8 @@ The portal renders a newsfeed based on entries of a predefined openDesk blog in 
 service through the Intercom Service's `/wiki` endpoint, in combination with the previously described silent login.
 
 **Links:**
-- [XWiki Blog feature](https://extensions.xwiki.org/xwiki/bin/view/Extension/Blog%20Application)
+
+* [XWiki Blog feature](https://extensions.xwiki.org/xwiki/bin/view/Extension/Blog%20Application)
 
 ### (OpenProject) File store
 
@@ -350,8 +361,9 @@ Therefore, openDesk pre-configures the trust between the openDesk instance's Ope
 The file store must still be enabled per project in OpenProject's project admin section.
 
 **Links:**
-- [OpenProject's documentation on Nextcloud integration](https://www.openproject.org/docs/system-admin-guide/integrations/nextcloud/)
-- [OpenProject Integration Nextcloud app](https://apps.nextcloud.com/apps/integration_openproject)
+
+* [OpenProject's documentation on Nextcloud integration](https://www.openproject.org/docs/system-admin-guide/integrations/nextcloud/)
+* [OpenProject Integration Nextcloud app](https://apps.nextcloud.com/apps/integration_openproject)
 
 ## Mail setup
 
@@ -373,7 +385,7 @@ extClient[optional Mail Clients]
 extRelay[Mailrelay/MXe]
 extMTA[MTAs]
 
-subgraph extSvc[K8s External Servies]
+subgraph extSvc[K8s External Services]
     extSvcDC((dovecot-external))
     extSvcPF((postfix-ox-external))
 end
@@ -421,16 +433,16 @@ class Dovecot,extSvcDC dovecot;
   * Deliver non-internal mails directly to a configured mail relay or to the recipients MX
 
 * (Base) Postfix specific
-   * SMTP submission from applications using static credentials
-   * SMTP submission without authentication for Dovecot generated mails by Sieve filters, e.g. out-of-office replies, as Dovecot does not support authentication in this flow
-   * Available even if OX App Suite is not installed
+  * SMTP submission from applications using static credentials
+  * SMTP submission without authentication for Dovecot generated mails by Sieve filters, e.g. out-of-office replies, as Dovecot does not support authentication in this flow
+  * Available even if OX App Suite is not installed
 
 * Postfix-OX specific
-   * External mails are relayed for internal maildomains unauthenticated
-   * Requires Dovecot for SASL authentication on
-     * mails sent from OX App Suite's Web UI using OAuth
-     * mails sent from mail clients using LDAP Auth
-   * Used exclusively when OX App Suite is deployed
+  * External mails are relayed for internal maildomains unauthenticated
+  * Requires Dovecot for SASL authentication on
+    * mails sent from OX App Suite's Web UI using OAuth
+    * mails sent from mail clients using LDAP Auth
+  * Used exclusively when OX App Suite is deployed
 
 ## Applications vs. services
 

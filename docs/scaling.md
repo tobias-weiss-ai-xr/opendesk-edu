@@ -30,7 +30,7 @@ Consequently, we strongly recommend implementing monitoring and logging solution
 While scaling services horizontally is the ideal solution, information about vertical scaling is helpful
 when defining the application's resources, see [`resources.yaml.gotmpl`](../helmfile/environments/default/resources.yaml.gotmpl) for references.
 
-Linked below is documentation related to scaling for upstream applications, where publically available:
+Linked below is documentation related to scaling for upstream applications, where publicly available:
 
 - [Collabora Online Technical Documentation](https://mautic.collaboraoffice.com/asset/60:collabora-online-technical-information-pdf)
 - [OpenProject System Requirements](https://www.openproject.org/docs/installation-and-operations/system-requirements/)

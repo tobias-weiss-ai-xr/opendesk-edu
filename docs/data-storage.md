@@ -103,7 +103,7 @@ XWiki,PersistentVolume,1
 |                      | Memcached    | No       | Cache                                                                             |                                                |                                                                                                           |
 |                      | PVC          | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs      | `openproject-<web/worker>-*-tmp`               | `/tmp`                                                                                                    |
 |                      |              | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs      | `openproject-<web/worker>-app-*-tmp`           | `/app/tmp`                                                                                                |
-| **OX App Suite**     | MariaDB      | Yes      | Application's control database to coordiate dynamically created ones              | `configdb`                                     |                                                                                                           |
+| **OX App Suite**     | MariaDB      | Yes      | Application's control database to coordinate dynamically created ones              | `configdb`                                     |                                                                                                           |
 |                      |              | Yes      | Dynamically creates databases of schema `PRIMARYDB_n`containing multiple contexts | `PRIMARYDB_*`                                  |                                                                                                           |
 |                      |              | Yes      | OX Guard related settings                                                         | `oxguard*`                                     |                                                                                                           |
 |                      | S3           | Yes      | Attachments of meetings, contacts and tasks                                       | `openxchange`                                  |                                                                                                           |
@@ -120,7 +120,7 @@ XWiki,PersistentVolume,1
 
 Additionally, the following persistent volumes are mounted by Pods that serve as a data storage for the applications mentioned above.
 
-These services are not ment for production use, so you can ignore these as you surely backup your production services instead.
+These services are not meant for production use, so you can ignore these as you surely backup your production services instead.
 
 | Service    | Pod              | Volume Name  | PVC                         | MountPath             | Comment          |
 |------------|------------------|--------------|-----------------------------|-----------------------|------------------|

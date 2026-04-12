@@ -42,7 +42,7 @@ Within openDesk's Identity and Access Management component, Nubus, openDesk user
 
 A permission represents a specific authorization that defines an action a user is allowed to perform on a resource.
 
-As openDesk consists of multiple applications, each application may have different needs regarding its fine-grained internal permissions. Usually these permissions are manged within each component.
+As openDesk consists of multiple applications, each application may have different needs regarding its fine-grained internal permissions. Usually these permissions are managed within each component.
 
 The high-level permissions required to access the application, as well as group membership of users is managed in the IAM.
 
@@ -50,8 +50,8 @@ The high-level permissions required to access the application, as well as group 
 
 Roles are defined sets of permissions that can be assigned to users. Each role corresponds to a specific set of tasks and responsibilities within the system. In openDesk's IAM, two roles are defined by default:
 
-- **openDesk Administrator**: Manages openDesk-global settings, such as users and groups.
-- **openDesk User**: Can log in to openDesk to make use of defined openDesk applications.
+* **openDesk Administrator**: Manages openDesk-global settings, such as users and groups.
+* **openDesk User**: Can log in to openDesk to make use of defined openDesk applications.
 
 > [!note]
 > Although it is not enforced by openDesk, it is strongly recommended that a user account is not granted both
@@ -61,20 +61,20 @@ Roles are defined sets of permissions that can be assigned to users. Each role c
 
 To access and use applications in openDesk and to address [the principle of least privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege), a user needs to have the necessary permissions set. openDesk defines the following permissions to access applications:
 
-- **Groupware**: Use email, calendar, and address book applications.
-- **Chat**: Use the chat application.
-- **Knowledge Management**: Use the wiki application.
-- **Project Management**: Use the project management application.
-- **File Sharing**: Use the file sharing application.
-- **Video Conference**: Use the video conferencing application.
+* **Groupware**: Use email, calendar, and address book applications.
+* **Chat**: Use the chat application.
+* **Knowledge Management**: Use the wiki application.
+* **Project Management**: Use the project management application.
+* **File Sharing**: Use the file sharing application.
+* **Video Conference**: Use the video conferencing application.
 
 #### Application administration
 
 For applications that provide application-specific administrative settings, openDesk defines the following permissions:
 
-- **Knowledge Management Admin**: Manage the wiki application.
-- **Project Management Admin**: Manage the project management application settings.
-- **File Sharing Admin**: Manage the file sharing administrative settings.
+* **Knowledge Management Admin**: Manage the wiki application.
+* **Project Management Admin**: Manage the project management application settings.
+* **File Sharing Admin**: Manage the file sharing administrative settings.
 
 ### Groups
 
@@ -84,10 +84,10 @@ openDesk includes predefined groups. Please see below.
 
 #### Global groups
 
-- **Domain Users**: Members of this group are *openDesk Users*.
-- **Domain Admins**: Members of this group are *openDesk IAM Administrators*. By default, this group has two-factor authentication (2FA) enabled.
-- **2FA Users**: Members of this group that are forced to use two-factor authentication (2FA).
-- **IAM API - Full Access**: Members of this group have full (read and write) access to the IAM's REST API.
+* **Domain Users**: Members of this group are *openDesk Users*.
+* **Domain Admins**: Members of this group are *openDesk IAM Administrators*. By default, this group has two-factor authentication (2FA) enabled.
+* **2FA Users**: Members of this group that are forced to use two-factor authentication (2FA).
+* **IAM API - Full Access**: Members of this group have full (read and write) access to the IAM's REST API.
 
 #### Application groups
 
@@ -110,20 +110,20 @@ Unless a user is a member of a group, the respective application is not shown in
 > application group knows the link to the application and calls it directly, the single sign-on will be
 > unsuccessful.
 
-- **managed-by-Attribute-Groupware**: Members of this group have access to the groupware applications.
-- **managed-by-Attribute-Fileshare**: Members of this group have access to the file sharing application.
-- **managed-by-Attribute-Projectmanagement**: Members of this group have access to the project management application.
-- **managed-by-Attribute-Knowledgemanagement**: Members of this group have access to the wiki application.
-- **managed-by-Attribute-Livecollaboration**: Members of this group have access to the chat application.
-- **managed-by-Attribute-Videoconference**: Members of this group have access to the video conferencing application.
+* **managed-by-Attribute-Groupware**: Members of this group have access to the groupware applications.
+* **managed-by-Attribute-Fileshare**: Members of this group have access to the file sharing application.
+* **managed-by-Attribute-Projectmanagement**: Members of this group have access to the project management application.
+* **managed-by-Attribute-Knowledgemanagement**: Members of this group have access to the wiki application.
+* **managed-by-Attribute-Livecollaboration**: Members of this group have access to the chat application.
+* **managed-by-Attribute-Videoconference**: Members of this group have access to the video conferencing application.
 
 ##### Administrative access to applications
 
 Within some applications it is possible to grant users elevated permissions, these are also primarily managed by attributes from the "openDesk" tab when editing a user, but are also automatically mapped to the following groups:
 
-- **managed-by-Attribute-FileshareAdmin**: Members of this group can administrate the file sharing application.
-- **managed-by-Attribute-ProjectmanagementAdmin**: Members of this group can administrate the project management application.
-- **managed-by-Attribute-KnowledgemanagementAdmin**: Members of this group can administrate the wiki application.
+* **managed-by-Attribute-FileshareAdmin**: Members of this group can administrate the file sharing application.
+* **managed-by-Attribute-ProjectmanagementAdmin**: Members of this group can administrate the project management application.
+* **managed-by-Attribute-KnowledgemanagementAdmin**: Members of this group can administrate the wiki application.
 
 #### Custom groups
 
@@ -144,29 +144,29 @@ openDesk defines [templates](https://gitlab.opencode.de/bmi/opendesk/components/
 
 The *openDesk User* template sets the primary group to *Domain Users* and initially sets the following permissions:
 
-- **Groupware**: Enabled
-- **Chat**: Enabled
-- **Knowledge Management**: Enabled
-- **Project Management**: Enabled
-- **File Sharing**: Enabled
-- **Video Conference**: Enabled
-- **Knowledge Management Admin**: Disabled
-- **Project Management Admin**: Disabled
-- **File Sharing Admin**: Disabled
+* **Groupware**: Enabled
+* **Chat**: Enabled
+* **Knowledge Management**: Enabled
+* **Project Management**: Enabled
+* **File Sharing**: Enabled
+* **Video Conference**: Enabled
+* **Knowledge Management Admin**: Disabled
+* **Project Management Admin**: Disabled
+* **File Sharing Admin**: Disabled
 
 #### *openDesk Administrator*
 
 The *openDesk Administrator* template sets the primary group to *Domain Admins* and initially sets the following permissions:
 
-- **Groupware**: Disabled
-- **Chat**: Disabled
-- **Knowledge Management**: Disabled
-- **Project Management**: Disabled
-- **File Sharing**: Disabled
-- **Video Conference**: Disabled
-- **Knowledge Management Admin**: Disabled
-- **Project Management Admin**: Disabled
-- **File Sharing Admin**: Disabled
+* **Groupware**: Disabled
+* **Chat**: Disabled
+* **Knowledge Management**: Disabled
+* **Project Management**: Disabled
+* **File Sharing**: Disabled
+* **Video Conference**: Disabled
+* **Knowledge Management Admin**: Disabled
+* **Project Management Admin**: Disabled
+* **File Sharing Admin**: Disabled
 
 ### Managing permissions
 
