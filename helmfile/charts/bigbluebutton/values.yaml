@@ -21,26 +21,26 @@ bigbluebutton:
       cpu: "1000m"
       memory: "1Gi"
 
-service:
-  externalPort: 80
-  enabled: true
-  annotations: {}
+  service:
+    externalPort: 80
+    enabled: true
+    annotations: {}
 
-ingress:
-  enabled: true
-  className: "haproxy"
-  annotations:
-    haproxy-ingress.github.io/ssl-redirect: "true"
-    haproxy-ingress.github.io/timeout-server: "120000ms"
-    haproxy-ingress.github.io/timeout-client: "120000ms"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  hosts:
-    host: "bbb.opendesk.example.com"
-    paths:
-      path: "/"
-      pathType: "ImplementationSpecific"
-  tls:
-    secretName: "opendesk-certificates-tls"
+  ingress:
+    enabled: true
+    className: "haproxy"
+    annotations:
+      haproxy-ingress.github.io/ssl-redirect: "true"
+      haproxy-ingress.github.io/timeout-server: "120000ms"
+      haproxy-ingress.github.io/timeout-client: "120000ms"
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    hosts:
+      host: "bbb.opendesk.example.com"
+      paths:
+        path: "/"
+        pathType: "ImplementationSpecific"
+    tls:
+      secretName: "opendesk-certificates-tls"
 
   hpa:
     enabled: false

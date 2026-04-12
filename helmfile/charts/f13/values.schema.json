@@ -5,7 +5,7 @@
     "secrets": {
       "type": "object",
       "properties": {
-        "huggingfaceToken": { "type": "string", "minLength": 1 }
+        "huggingfaceToken": { "type": "string" }
       },
       "required": ["huggingfaceToken"]
     }
