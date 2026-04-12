@@ -81,7 +81,7 @@ class TestLDAPClient(unittest.TestCase):
         client = LDAPClient()
         client.conn = mock_conn
 
-        users = client.search_users()
+        client.search_users()
 
         # Verify search was called
         mock_conn.search.assert_called_once()
@@ -202,7 +202,6 @@ class TestRoleMapping(unittest.TestCase):
         """Test loading role mappings from config file"""
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump({"mappings": {"student": "student", "faculty": "faculty", "dozent": "lecturer"}}, f)
-            temp_file = f.name
 
         # Mock file read
         with patch("builtins.open", create=True) as mock_open:

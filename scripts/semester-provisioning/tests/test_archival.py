@@ -27,9 +27,8 @@ from archival.archive_course import (
     MoodleArchivalClient,
     archive_course,
 )
-from archival.bulk_archive import BulkArchiveSummary, bulk_archive_semester
+from archival.bulk_archive import bulk_archive_semester
 from archival.restore_course import (
-    RestoreResult,
     ILIASRestoreClient,
     MoodleRestoreClient,
     restore_course,
@@ -212,7 +211,7 @@ class TestBulkArchiveSemester:
         assert len(courses) == 2
 
     def test_bulk_archive_partial_failure(self, database, audit_logger):
-        course1 = database.create_course(
+        database.create_course(
             {
                 "semester_id": "2026fail",
                 "title": "Good Course",

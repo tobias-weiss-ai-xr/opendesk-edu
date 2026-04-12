@@ -87,7 +87,7 @@ class RandomUser:
         return to_split_result.split("\t")
 
     def __get_random_list_entry(self, category):
-        if not category in self.lists:
+        if category not in self.lists:
             with open(self.input_files_list[category], encoding="utf-8") as f:
                 lines_with_comments = f.read().splitlines()
             self.lists[category] = [
@@ -119,7 +119,7 @@ class RandomUser:
     def __get_image(self, gender):
         if not hasattr(self, "input_filelist_img_dict"):
             self.input_filelist_img_dict = {}
-        if not gender in self.input_filelist_img_dict:
+        if gender not in self.input_filelist_img_dict:
             self.input_filelist_img_dict[gender] = glob.glob(
                 self.input_dir_imgs_base + gender + "/*.jpg"
             )

@@ -8,7 +8,6 @@ import argparse
 import logging
 import os
 import sys
-from datetime import datetime
 from typing import Dict, List, Optional
 
 import ldap3
@@ -352,7 +351,7 @@ def main():
     for user in ldap_users:
         username = user.get("username")
         if not username:
-            logger.warning(f"User without username, skipping")
+            logger.warning("User without username, skipping")
             continue
 
         # Check if user exists

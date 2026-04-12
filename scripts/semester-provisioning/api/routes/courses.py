@@ -14,7 +14,6 @@ from api.models.course import (
     CourseStatus,
     LMSPlatform,
     Enrollment,
-    EnrollmentCreate,
     EnrollmentBulkCreate,
     ErrorResponse,
 )

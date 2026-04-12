@@ -2,10 +2,8 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
 from unittest.mock import MagicMock
 
-from lib.ucs import Ucs
 
 
 class TestGetUserDn:

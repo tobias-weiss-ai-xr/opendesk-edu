@@ -11,7 +11,6 @@ import logging
 import os
 import subprocess
 import tarfile
-import tempfile
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -501,7 +500,7 @@ class ServiceArchiver:
                 logger.warning(f"No archives found for user {username}")
                 return None
 
-            Tarball_name = f"{username}_complete_archive_{datetime.now().strftime('%Y%m%d_%H%M%S')}.tar.gz"
+            tarball_name = f"{username}_complete_archive_{datetime.now().strftime('%Y%m%d_%H%M%S')}.tar.gz"
             tarball_path = os.path.join(self.archive_dir, tarball_name)
 
             with tarfile.open(tarball_path, "w:gz") as tar:

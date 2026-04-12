@@ -17,10 +17,8 @@ For DFN-AAI registration, submit the generated metadata to:
 """
 
 import argparse
-import base64
 import datetime
 from datetime import timezone
-import hashlib
 import logging
 import os
 import sys
@@ -200,12 +198,11 @@ def create_attribute_consuming_service(
             attr_name = attr.get("urn") or attr.get("name", "")
             attr_required = attr.get("required", False)
             friendly_name_de = attr.get("friendly_name_de", attr.get("name", ""))
-            friendly_name_en = attr.get("friendly_name_en", attr.get("name", ""))
+            attr.get("friendly_name_en", attr.get("name", ""))
         else:
             attr_name = attr
             attr_required = attr in DFN_AAI_REQUIRED_ATTRIBUTES
             friendly_name_de = attr
-            friendly_name_en = attr
 
         requested_attr = ET.SubElement(acs, f"{{{SAML_METADATA_NS}}}RequestedAttribute")
 

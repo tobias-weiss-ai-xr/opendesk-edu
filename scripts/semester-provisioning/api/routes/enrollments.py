@@ -33,7 +33,7 @@ from api.utils.keycloak_client import KeycloakClient
 router = APIRouter(prefix="/api/v1/enrollments", tags=["enrollments"])
 
 # Import shared databases from courses.py to ensure consistency
-from api.routes.courses import _courses_db, _enrollments_db
+from api.routes.courses import _courses_db, _enrollments_db  # noqa: E402
 
 
 def _get_courses_db() -> dict[str, Course]:

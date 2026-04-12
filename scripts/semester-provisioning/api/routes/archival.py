@@ -12,7 +12,7 @@ including single and bulk operations.
 from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
-from fastapi import APIRouter, HTTPException, Query, status, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Query, status
 
 from api.models.archival import (
     ArchiveRequest,
@@ -350,7 +350,7 @@ async def restore_course(
 
     course = courses_db[archive_info.course_id]
 
-    if dry_run := request.dry_run:
+    if request.dry_run:
         return RestoreResult(
             archive_id=archive_id,
             course_id=archive_info.course_id,

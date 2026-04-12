@@ -18,7 +18,7 @@ import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Generator, Optional
+from typing import Generator, Optional
 from uuid import uuid4
 
 from pydantic import BaseModel
@@ -354,8 +354,8 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                UPDATE courses 
-                SET status = 'archived', archived_at = ?, updated_at = ? 
+                UPDATE courses
+                SET status = 'archived', archived_at = ?, updated_at = ?
                 WHERE course_id = ? AND status = 'active'
             """,
                 (now, now, course_id),
@@ -383,8 +383,8 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                UPDATE courses 
-                SET status = 'active', archived_at = NULL, updated_at = ? 
+                UPDATE courses
+                SET status = 'active', archived_at = NULL, updated_at = ?
                 WHERE course_id = ? AND status = 'archived'
             """,
                 (now, course_id),

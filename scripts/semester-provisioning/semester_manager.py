@@ -14,21 +14,17 @@ und automatisierte Workflows für das Semester Lifecycle Management Feature ausl
 
 from __future__ import annotations
 
-import json
 import logging
 from datetime import date, datetime, timezone
-from pathlib import Path
 from typing import Any, Optional
 
 from pydantic import BaseModel
 
+from audit import AuditAction
 from config import (
     CurrentSemesterConfig,
-    get_semester_config,
     load_semester_config,
     SemesterPhase,
-    SemesterType,
-    SemesterPhases,
 )
 
 # Configure logging

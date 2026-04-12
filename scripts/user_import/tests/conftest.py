@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pytest
-from unittest.mock import Mock, MagicMock
+from unittest.mock import MagicMock
 
 from lib.constants import NON_RECONCILE_GROUPS
 

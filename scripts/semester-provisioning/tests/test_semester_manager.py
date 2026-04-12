@@ -13,9 +13,7 @@ phase detection, transitions, and CLI commands.
 from __future__ import annotations
 
 import json
-import os
 import sys
-import tempfile
 from datetime import date
 from pathlib import Path
 from unittest import mock
@@ -27,11 +25,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import (
     ArchivalPhaseConfig,
-    CurrentSemesterConfig,
     PhaseDates,
-    SemesterLifecycleConfig,
     SemesterPhase,
-    SemesterPhases,
     SemesterType,
     create_default_semester_config,
     load_semester_config,
@@ -434,7 +429,7 @@ class TestCLI:
         args.json = False
         args.date = None
 
-        with mock.patch("builtins.print") as mock_print:
+        with mock.patch("builtins.print"):
             ret = cmd_current(args)
 
         assert ret == 1

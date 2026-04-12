@@ -17,7 +17,7 @@ from uuid import uuid4
 from pydantic import BaseModel, Field
 
 from audit import AuditAction, AuditLogger
-from database import Database, DatabaseConfig
+from database import Database
 
 logger = logging.getLogger(__name__)
 

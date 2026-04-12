@@ -16,7 +16,7 @@ from pathlib import Path
 
 from lib.constants import NON_RECONCILE_GROUPS, DEFAULT_IDENTITY_PROVIDER
 from lib.ucs import Ucs
-from lib.keycloak import remove_saml_identity_with_credentials, get_keycloak_token
+from lib.keycloak import remove_saml_identity_with_credentials
 
 
 def parse_args():

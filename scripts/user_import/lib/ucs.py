@@ -6,7 +6,7 @@ import requests
 import json
 import sys
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 import urllib.parse
 import logging
 import pandas as pd
@@ -131,7 +131,7 @@ class Ucs:
 
     def __add_property(self, obj_json, person, key, list=False):
         if key in person and not pd.isna(person[key]):
-            if list == True:
+            if list:
                 obj_json["properties"][key] = [person[key]]
             else:
                 obj_json["properties"][key] = person[key]
@@ -139,7 +139,7 @@ class Ucs:
     def __get_checked_groups(self, groups):
         user_groups = []
         if not isinstance(groups, str):
-            logging.info(f"No groups defined.")
+            logging.info("No groups defined.")
         else:
             group_names = [tmp.strip() for tmp in groups.split(";")]
             for group_name in group_names:
@@ -207,7 +207,7 @@ class Ucs:
             allowed_responses=allowed_responses,
             exit_on_bad_response=False,
         )
-        if not response.status_code in allowed_responses:
+        if response.status_code not in allowed_responses:
             logging.error(
                 f"Response code not in {allowed_responses}: HTTP/{str(response.status_code)}"
             )
@@ -218,7 +218,7 @@ class Ucs:
                     f"Tried to create an already existing group f{group_name} - probably race condition with parallel running script."
                 )
             else:
-                logging.error(f"Response code 422 with unexpected body.")
+                logging.error("Response code 422 with unexpected body.")
                 sys.exit(response.text)
         else:
             self.create_count["groups"] += 1
@@ -282,7 +282,7 @@ class Ucs:
                 "opendeskProjectmanagementAdmin": self.options_object.admin_enable_projectmanagement,
                 "opendeskKnowledgemanagementAdmin": self.options_object.admin_enable_knowledgemanagement,
                 "mailPrimaryAddress": person["username"] + "@" + self.maildomain
-                if not "mailPrimaryAddress" in person
+                if "mailPrimaryAddress" not in person
                 or not isinstance(person["mailPrimaryAddress"], str)
                 else person["mailPrimaryAddress"],
                 "PasswordRecoveryEmail": person["email"],
@@ -313,7 +313,7 @@ class Ucs:
             users_maildomain = user_json["properties"]["mailPrimaryAddress"].split("@")[
                 -1
             ]
-            if not users_maildomain in self.existing_maildomains:
+            if users_maildomain not in self.existing_maildomains:
                 logging.info(f"Creating maildomain: {users_maildomain}")
                 self.__http_request(
                     method="post",
@@ -331,7 +331,7 @@ class Ucs:
 
         if self.options_object.create_oxcontexts:
             oxcontext = user_json["properties"]["oxContext"]
-            if not str(oxcontext) in self.existing_oxcontexts:
+            if str(oxcontext) not in self.existing_oxcontexts:
                 logging.info(f"Creating OX context: {oxcontext}")
                 self.__http_request(
                     method="post",
@@ -551,7 +551,7 @@ class Ucs:
         file.close()
 
     def summary(self):
-        logging.info(f"Done processing. Create stats:")
+        logging.info("Done processing. Create stats:")
         logging.info(f"- Accounts   :\t{self.create_count['users']}")
         logging.info(f"- Groups     :\t{self.create_count['groups']}")
         logging.info(f"- Maildomains:\t{self.create_count['maildomains']}")

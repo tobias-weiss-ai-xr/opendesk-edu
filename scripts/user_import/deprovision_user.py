@@ -9,7 +9,7 @@ import logging
 import os
 import sys
 from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict
 
 from sync_users import KeycloakAdminClient
 
@@ -294,7 +294,7 @@ def create_ruckmeldung_filter(no_ruckmeldung_since: str) -> callable:
                 last_ruckmeldung = datetime.fromisoformat(user["attributes"]["last_ruckmeldung"][0])
                 return last_ruckmeldung < cutoff_date
             return False
-        except:
+        except Exception:
             return False
 
     return filter_func
@@ -357,7 +357,7 @@ def main():
 
     # Grace period expired users
     elif args.grace_expired_before and args.phase == "delete":
-        cutoff_date = datetime.strptime(args.grace_expired_before, "%Y-%m-%d")
+        datetime.strptime(args.grace_expired_before, "%Y-%m-%d")
 
         def grace_filter(user: Dict) -> bool:
             return deprovisioner._grace_period_expired(user)

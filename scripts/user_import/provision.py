@@ -304,7 +304,7 @@ rootLogger.addHandler(consoleHandler)
 
 logging.info("Running with settings:")
 for option, setting in vars(options).items():
-    logging.info(f"> {option}: {setting if not 'password' in option else '<redacted>'}")
+    logging.info(f"> {option}: {setting if 'password' not in option else '<redacted>'}")
 
 
 def import_callback(person):
@@ -338,7 +338,7 @@ ucs = Ucs(
 )
 
 if not options.import_filename and not options.iam_api_url:
-    logging.info(f"Starting random user import, as no file for import was defined.")
+    logging.info("Starting random user import, as no file for import was defined.")
     RandomUser(
         import_callback,
         create_admin_accounts=options.create_admin_accounts,

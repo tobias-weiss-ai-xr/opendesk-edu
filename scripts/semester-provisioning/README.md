@@ -14,10 +14,10 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Overview / Übersicht
 
-**English:**  
+**English:**
 🎓 openDesk Edu extension for managing the lifecycle of university courses: from creation through archival. This REST API provides endpoints for course CRUD operations, enrollment management, semester management, and integration with ILIAS, Moodle, and Keycloak.
 
-**Deutsch:**  
+**Deutsch:**
 🎓 openDesk Edu Erweiterung zur Verwaltung des Lebenszyklus von Universitätskursen: von der Erstellung bis zur Archivierung. Diese REST-API stellt Endpunkte für Kurs-CRUD-Operationen, Einschreibungsverwaltung, Semester-Verwaltung und Integration mit ILIAS, Moodle und Keycloak bereit.
 
 ---
@@ -126,6 +126,7 @@ curl -X POST "http://localhost:8000/api/v1/courses" \
 ```
 
 **Response / Antwort:**
+
 ```json
 {
   "course_id": "crs_abc123",
@@ -254,9 +255,10 @@ pytest --cov=. tests/
 ## API Documentation / API-Dokumentation
 
 Access the OpenAPI documentation at:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI JSON**: http://localhost:8000/openapi.json
+
+- **Swagger UI**: <http://localhost:8000/docs>
+- **ReDoc**: <http://localhost:8000/redoc>
+- **OpenAPI JSON**: <http://localhost:8000/openapi.json>
 
 ---
 

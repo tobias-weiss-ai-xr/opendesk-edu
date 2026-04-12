@@ -16,7 +16,7 @@ from datetime import date, datetime
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import yaml
 from pydantic import BaseModel, Field, field_validator

@@ -58,7 +58,7 @@ requested_attributes:
     friendly_name_de: "E-Mail"
     description_en: "User's email address"
     description_de: "E-Mail-Adresse des Benutzers"
-    
+
   - name: displayName
     urn: "urn:mace:dir:attribute-def:displayName"
     required: true
@@ -66,7 +66,7 @@ requested_attributes:
     friendly_name_de: "Anzeigename"
     description_en: "User's full display name"
     description_de: "Vollständiger Anzeigename des Benutzers"
-    
+
   - name: eduPersonPrincipalName
     urn: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
     required: true
@@ -74,7 +74,7 @@ requested_attributes:
     friendly_name_de: "Principal-Name"
     description_en: "Scoped unique identifier (user@institution)"
     description_de: "Bereichsspezifische eindeutige Kennung (benutzer@institution)"
-    
+
   - name: eduPersonAffiliation
     urn: "urn:mace:dir:attribute-def:eduPersonAffiliation"
     required: true
@@ -82,7 +82,7 @@ requested_attributes:
     friendly_name_de: "Zugehörigkeit"
     description_en: "User's role (student/faculty/staff/member)"
     description_de: "Benutzerrolle (student/faculty/staff/member)"
-    
+
   - name: eduPersonTargetedID
     urn: "urn:mace:dir:attribute-def:eduPersonTargetedID"
     required: true
@@ -90,7 +90,7 @@ requested_attributes:
     friendly_name_de: "Persistente ID"
     description_en: "Privacy-preserving persistent unique identifier"
     description_de: "Datenschutzfreundliche persistente eindeutige Kennung"
-  
+
   # Optional but Recommended Attributes
   - name: givenName
     urn: "urn:mace:dir:attribute-def:givenName"
@@ -99,7 +99,7 @@ requested_attributes:
     friendly_name_de: "Vorname"
     description_en: "User's first/given name"
     description_de: "Vorname des Benutzers"
-    
+
   - name: sn
     urn: "urn:mace:dir:attribute-def:sn"
     required: false
@@ -107,7 +107,7 @@ requested_attributes:
     friendly_name_de: "Nachname"
     description_en: "User's surname/family name"
     description_de: "Nachname des Benutzers"
-    
+
   - name: eduPersonScopedAffiliation
     urn: "urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
     required: false
@@ -115,7 +115,7 @@ requested_attributes:
     friendly_name_de: "Bereichsspezifische Zugehörigkeit"
     description_en: "Affiliation with scope (e.g., student@university.edu)"
     description_de: "Zugehörigkeit mit Bereich (z.B. student@university.edu)"
-    
+
   - name: eduPersonUniqueID
     urn: "urn:mace:dir:attribute-def:eduPersonUniqueID"
     required: false
@@ -123,7 +123,7 @@ requested_attributes:
     friendly_name_de: "Eindeutige ID"
     description_en: "Globally unique identifier across federations"
     description_de: "Globale eindeutige Kennung über Föderationen"
-    
+
   - name: schacHomeOrganization
     urn: "urn:oid:1.3.6.1.4.1.25178.1.2.9"
     required: false
@@ -193,7 +193,7 @@ dfn_aai:
     discovery_url: "https://test.discovery.aai.dfn.de/"
     support_email: "support@aai.dfn.de"
     description: "DFN-AAI Test Federation - Use for development and testing"
-  
+
   # Production Federation - For live deployment
   production:
     metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
@@ -201,7 +201,7 @@ dfn_aai:
     discovery_url: "https://discovery.aai.dfn.de/"
     support_email: "support@aai.dfn.de"
     description: "DFN-AAI Production Federation - For production deployment"
-  
+
   # eduGAIN Interfederation - International institutions
   edugain:
     metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
@@ -216,13 +216,13 @@ dfn_aai:
 registration:
   # Contact DFN-AAI before submitting metadata
   pre_contact_email: "support@aai.dfn.de"
-  
+
   # Test federation approval time (typical)
   test_approval_days: "1-2"
-  
+
   # Production federation approval time (typical)
   production_approval_days: "3-5"
-  
+
   # Required for production registration
   requirements:
     - "Valid CA-signed TLS certificate"
@@ -237,9 +237,9 @@ registration:
 validation:
   # Enable SAML 2.0 schema validation
   schema_validation: true
-  
+
   # Use xmllint for external validation (if available)
   use_xmllint: true
-  
+
   # Check certificate expiration (warn if less than days)
   cert_expiry_warn_days: 30

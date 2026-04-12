@@ -183,7 +183,7 @@ class MoodleClient:
         if "summary" in kwargs:
             params["courses[0][summary]"] = kwargs["summary"]
 
-        result = await self._ws_call("core_course_update_courses", params)
+        await self._ws_call("core_course_update_courses", params)
 
         return {"moodle_course_id": course_id, "status": "updated"}
 
@@ -251,7 +251,7 @@ class MoodleClient:
             "enrolments[0][courseid]": course_id,
         }
 
-        result = await self._ws_call("enrol_manual_enrol_users", params)
+        await self._ws_call("enrol_manual_enrol_users", params)
 
         return {
             "enrollment_id": f"enr_{hash(course_id + user_id) % 10000}",

@@ -15,11 +15,10 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from pathlib import Path
 
 import pytest
 
-from audit import AuditAction, AuditLog, AuditLogger, audit_logger, get_audit_logger
+from audit import AuditAction, AuditLog, AuditLogger, get_audit_logger
 
 
 # ---------------------------------------------------------------------------
@@ -316,7 +315,6 @@ class TestGetAuditLogger:
         assert isinstance(result, AuditLogger)
 
     def test_get_audit_logger_singleton(self):
-        import audit as _audit_mod
 
         # Ensure global is not None, then verify same instance
         first = get_audit_logger()

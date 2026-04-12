@@ -100,7 +100,7 @@ def main(export_path: Path) -> None:
                 continue
             # Enrollments for course, if provided
             enrollments = course.get("enrollments") or []
-            course_id = course_payload.get("code")
+            course_payload.get("code")
             for en_idx, enrollment in enumerate(enrollments, start=1):
                 enroll_payload = {
                     "course_code": course_payload.get("code"),

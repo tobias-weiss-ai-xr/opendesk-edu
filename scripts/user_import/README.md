@@ -1,5 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+
 # SPDX-License-Identifier: Apache-2.0
 
 # openDesk User Import Tools
@@ -27,7 +29,7 @@ Command-line values override environment variables which override defaults.
 | `--import_maildomain` | `IMPORT_MAILDOMAIN` | No | IMPORT_DOMAIN | Mail domain for user accounts |
 | `--udm_api_username` | `UDM_API_USERNAME` | No | Administrator | UDM REST API username |
 | `--udm_api_password` | `UDM_API_PASSWORD` | Yes | - | UDM REST API password |
-| `--keycloak_url` | `KEYCLOAK_URL` | No | https://id.{domain} | Keycloak base URL |
+| `--keycloak_url` | `KEYCLOAK_URL` | No | <https://id.{domain}> | Keycloak base URL |
 | `--keycloak_api_username` | `KEYCLOAK_API_USERNAME` | No | admin | Keycloak admin username |
 | `--keycloak_api_password` | `KEYCLOAK_API_PASSWORD` | Conditional | - | Keycloak admin password |
 | `--identity_provider` | `IDENTITY_PROVIDER` | No | saml-umr | Keycloak identity provider alias |
@@ -71,6 +73,7 @@ python provision.py \
 ```
 
 The provisioning script:
+
 1. Loads users from a file (ODS/XLSX/CSV) or the IAM API
 2. Validates and cleans user data
 3. Creates users in UCS via UDM REST API

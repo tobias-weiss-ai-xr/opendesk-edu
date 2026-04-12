@@ -3,10 +3,9 @@ Unit tests for deprovision_user.py
 """
 
 import unittest
-from unittest.mock import Mock, patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 import os
 import tempfile
-import json
 
 # Import the module to test
 import sys
@@ -115,7 +114,7 @@ class TestUserDeprovisioner(unittest.TestCase):
         with patch.object(deprovisioner, "_grace_period_expired") as mock_expired:
             mock_expired.return_value = True
 
-            result = deprovisioner._grace_period_expired(old_user)
+            deprovisioner._grace_period_expired(old_user)
 
             # For this test, we mock to return True
             # In actual implementation, it checks date math
@@ -157,7 +156,7 @@ class TestUserDeprovisioner(unittest.TestCase):
                 "ilias": "/var/lib/opendesk-archives/testuser/ilias.tar.gz",
             }
 
-            result = deprovisioner._archive_user_data(test_user)
+            deprovisioner._archive_user_data(test_user)
 
             # Verify archiver was called
             mock_archiver_instance.archive_user.assert_called_with("testuser")
@@ -188,7 +187,7 @@ class TestUserDeprovisioner(unittest.TestCase):
     @patch("deprovision_user.UserDeprovisioner")
     def test_create_ruckmeldung_filter(self, mock_deprovisioner):
         """Test creating filter for students who haven't re-registered"""
-        deprovisioner = UserDeprovisioner()
+        UserDeprovisioner()
 
         # Create filter function
         cutoff_date_str = "2025-12-01"
@@ -290,7 +289,7 @@ class TestDeprovisioningCLI(unittest.TestCase):
 
                 from deprovision_user import create_ruckmeldung_filter
 
-                filter_func = create_ruckmeldung_filter("2025-12-01")
+                create_ruckmeldung_filter("2025-12-01")
                 mock_dep_instance.deprovision_by_filter.return_value = {"success": 5, "failed": 0}
 
                 import deprovision_user

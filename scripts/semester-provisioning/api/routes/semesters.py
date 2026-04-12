@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime, timezone
 from typing import Optional
-from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Query, status
 from api.models.semester import (
     Semester,

@@ -11,7 +11,7 @@ import os.path
 import re
 import logging
 import configargparse
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from pathlib import Path
 

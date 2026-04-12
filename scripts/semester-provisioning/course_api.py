@@ -8,9 +8,8 @@ Kursverwaltungs-API - FastAPI-REST-Endpunkte mit SQLite-Speicherung.
 
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Optional
 from uuid import uuid4
 
 from fastapi import (
@@ -19,9 +18,8 @@ from fastapi import (
     HTTPException,
     Query,
     status,
-    Depends,
 )
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 from enum import Enum
 
 
@@ -611,12 +609,12 @@ async def list_audit_logs(
     filtered = _audit_logs
 
     if entity_type:
-        filtered = [l for l in filtered if l["entity_type"] == entity_type]
+        filtered = [entry for entry in filtered if entry["entity_type"] == entity_type]
     if entity_id:
-        filtered = [l for l in filtered if l["entity_id"] == entity_id]
+        filtered = [entry for entry in filtered if entry["entity_id"] == entity_id]
 
     return AuditLogListResponse(
-        logs=[AuditLogResponse(**l) for l in filtered[:limit]],
+        logs=[AuditLogResponse(**entry) for entry in filtered[:limit]],
         total=len(filtered),
     )
 
