@@ -9,13 +9,12 @@ import logging
 from typing import Any, Dict
 import configargparse
 
-from pathlib import Path
-
 from lib.argparse_types import opt2bool
 from lib.constants import NON_RECONCILE_GROUPS, DEFAULT_IDENTITY_PROVIDER
 from lib.ucs import Ucs
 from lib.random_user import RandomUser
 from lib.import_user import ImportUser
+from lib.common import setup_logging
 
 p = configargparse.ArgParser()
 p.add(
@@ -285,25 +284,9 @@ p.add(
 
 options = p.parse_args()
 
+setup_logging(options, "provision.py")
+
 new_user_password = options.set_default_password
-
-Path(options.logpath).mkdir(parents=True, exist_ok=True)
-
-logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
-rootLogger = logging.getLogger()
-rootLogger.setLevel(options.loglevel)
-
-fileHandler = logging.FileHandler("{0}/{1}.log".format(options.logpath, os.path.basename(__file__)))
-fileHandler.setFormatter(logFormatter)
-rootLogger.addHandler(fileHandler)
-
-consoleHandler = logging.StreamHandler()
-consoleHandler.setFormatter(logFormatter)
-rootLogger.addHandler(consoleHandler)
-
-logging.info("Running with settings:")
-for option, setting in vars(options).items():
-    logging.info(f"> {option}: {setting if 'password' not in option else '<redacted>'}")
 
 
 def import_callback(person: Dict[str, Any]) -> None:

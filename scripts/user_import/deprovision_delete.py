@@ -7,16 +7,15 @@
 Phase 2 Deprovisioning Script: Delete Users Past Grace Period
 """
 
-import os.path
 import re
 import logging
 from typing import Any
 import configargparse
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from pathlib import Path
 
 from lib.ucs import Ucs
+from lib.common import parse_bool_string, setup_logging, create_ucs_options, get_timestamp, get_default_output_filename
 
 
 def parse_args() -> configargparse.ArgumentParser:
@@ -76,21 +75,21 @@ def parse_args() -> configargparse.ArgumentParser:
         "--dry_run",
         env_var="DRY_RUN",
         default=False,
-        type=lambda x: x.lower() in ("true", "1", "yes"),
+        type=parse_bool_string,
         help="If True, only log what would be done without making changes.",
     )
     p.add(
         "--verify_certificate",
         env_var="VERIFY_CERTIFICATE",
         default=True,
-        type=lambda x: x.lower() in ("true", "1", "yes"),
+        type=parse_bool_string,
         help="Verify SSL certificates.",
     )
     p.add(
         "--enforce_ipv4",
         env_var="ENFORCE_IPV4",
         default=False,
-        type=lambda x: x.lower() in ("true", "1", "yes"),
+        type=parse_bool_string,
         help="Enforce IPv4 communication.",
     )
     p.add(
@@ -102,29 +101,6 @@ def parse_args() -> configargparse.ArgumentParser:
     )
 
     return p.parse_args()
-
-
-def setup_logging(options: configargparse.Namespace) -> None:
-    Path(options.logpath).mkdir(parents=True, exist_ok=True)
-
-    logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
-    rootLogger = logging.getLogger()
-    rootLogger.setLevel(options.loglevel)
-
-    fileHandler = logging.FileHandler(f"{options.logpath}/{os.path.basename(__file__)}.log")
-    fileHandler.setFormatter(logFormatter)
-    rootLogger.addHandler(fileHandler)
-
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setFormatter(logFormatter)
-    rootLogger.addHandler(consoleHandler)
-
-    logging.info("Running with settings:")
-    for option, setting in vars(options).items():
-        if "password" in option.lower():
-            logging.info(f"> {option}: <redacted>")
-        else:
-            logging.info(f"> {option}: {setting}")
 
 
 def parse_deprovision_timestamp(description: str) -> datetime | None:
@@ -204,47 +180,22 @@ def delete_user_and_admin(ucs: Ucs, username: str, dry_run: bool = False) -> boo
 
 def main() -> None:
     options = parse_args()
-    setup_logging(options)
+    setup_logging(options, "deprovision_delete.py")
 
-    timestamp = datetime.now().strftime("%Y-%m-%dT%Hh%Mm%SZ")
+    timestamp = get_timestamp()
 
     if options.output_deleted_filename:
         output_file = options.output_deleted_filename
     else:
-        output_file = f"deleted-{options.import_domain}-{timestamp}.txt"
+        output_file = get_default_output_filename("deleted", options.import_domain)
 
     maildomain = options.import_maildomain or options.import_domain
 
-    class UcsOptions:
-        pass
-
-    ucs_options = UcsOptions()
-    ucs_options.enforce_ipv4 = options.enforce_ipv4
-    ucs_options.localhost_port = options.localhost_port
-    ucs_options.verify_certificate = options.verify_certificate
-    ucs_options.output_accounts_filename = None
-    ucs_options.reconcile_groups = False
-    ucs_options.trigger_invitation_mail = False
-    ucs_options.create_maildomains = False
-    ucs_options.create_oxcontexts = False
-    ucs_options.default_oxcontext = 1
-    ucs_options.group_component_enable_groupware = True
-    ucs_options.group_component_enable_fileshare = True
-    ucs_options.group_component_enable_projectmanagement = True
-    ucs_options.group_component_enable_knowledgemanagement = True
-    ucs_options.group_component_enable_livecollaboration = True
-    ucs_options.group_component_enable_videoconference = True
-    ucs_options.group_component_enable_notes = True
-    ucs_options.component_disable_groupware = False
-    ucs_options.component_disable_fileshare = False
-    ucs_options.component_disable_projectmanagement = False
-    ucs_options.component_disable_knowledgemanagement = False
-    ucs_options.component_disable_livecollaboration = False
-    ucs_options.component_disable_videoconference = False
-    ucs_options.component_disable_notes = False
-    ucs_options.admin_enable_fileshare = False
-    ucs_options.admin_enable_projectmanagement = False
-    ucs_options.admin_enable_knowledgemanagement = False
+    ucs_options = create_ucs_options(
+        enforce_ipv4=options.enforce_ipv4,
+        localhost_port=options.localhost_port,
+        verify_certificate=options.verify_certificate,
+    )
 
     ucs = Ucs(
         adm_username=options.udm_api_username,
