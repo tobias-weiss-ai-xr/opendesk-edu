@@ -5,7 +5,7 @@ snipr:
   image: ghcr.io/tobias-weiss-ai-xr/snipr
   tag: "v1.0.0-test"
   replicaCount: 1
-  
+
   api:
     port: 8080
     resources:
@@ -15,7 +15,7 @@ snipr:
       limits:
         cpu: "200m"
         memory: "512Mi"
-  
+
   web:
     port: 3000
     resources:
@@ -25,14 +25,14 @@ snipr:
       limits:
         cpu: "100m"
         memory: "256Mi"
-  
+
   ffmpeg:
     enabled: false
     resources:
       requests:
         cpu: "100m"
         memory: "256Mi"
-  
+
   storage:
     type: filesystem
     filesystem:
@@ -42,7 +42,7 @@ snipr:
         size: 10Gi
         accessMode: ReadWriteOnce
         storageClass: standard
-  
+
   sso:
     type: oidc
     keycloak:
@@ -53,10 +53,10 @@ snipr:
       tokenUrl: https://keycloak.test/realms/test/protocol/openid-connect/token
       userInfoUrl: https://keycloak.test/realms/test/protocol/openid-connect/userinfo
       jwksUrl: https://keycloak.test/realms/test/protocol/openid-connect/certs
-  
+
   transcription:
     enabled: false
-  
+
   lti:
     enabled: false
 

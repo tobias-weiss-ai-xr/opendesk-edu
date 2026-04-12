@@ -4,7 +4,7 @@ snipr:
   image: ghcr.io/tobias-weiss-ai-xr/snipr
   tag: "v1.0.0"
   replicaCount: 2
-  
+
   # API Server configuration (Rust Actix-web)
   api:
     port: 8080
@@ -15,7 +15,7 @@ snipr:
       limits:
         cpu: "1000m"
         memory: "2Gi"
-  
+
   # Web UI configuration (Tauri)
   web:
     port: 3000
@@ -26,7 +26,7 @@ snipr:
       limits:
         cpu: "500m"
         memory: "1Gi"
-  
+
   # FFmpeg sidecar for transcoding
   ffmpeg:
     enabled: true
@@ -37,7 +37,7 @@ snipr:
       limits:
         cpu: "2000m"
         memory: "4Gi"
-  
+
   # Storage configuration (S3/MinIO primary, filesystem fallback)
   storage:
     type: s3  # or "filesystem"
@@ -54,7 +54,7 @@ snipr:
         size: 500Gi
         accessMode: ReadWriteMany
         storageClass: ceph-cephfs-hdd-ec
-  
+
   # SSO configuration (Keycloak OIDC)
   sso:
     type: oidc  # or "saml"
@@ -70,7 +70,7 @@ snipr:
       - openid
       - profile
       - email
-  
+
   # LTI 1.3 configuration
   lti:
     enabled: true
@@ -87,7 +87,7 @@ snipr:
     roles:
       instructor: https://purl.imsglobal.org/vocab/lis/v2/membership#Instructor
       student: https://purl.imsglobal.org/vocab/lis/v2/membership#Learner
-  
+
   # Transcription configuration (F13 API)
   transcription:
     enabled: true
@@ -101,7 +101,7 @@ snipr:
       enabled: false
       engine: local
       model: whisper-small
-  
+
   # k8up backup configuration
   backup:
     enabled: true

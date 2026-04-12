@@ -16,7 +16,7 @@ grommunio:
 
   # Deployment scaling
   replicaCount: 1
-  
+
   # Rolling update strategy (zero-downtime deployments)
   strategy:
     type: RollingUpdate
@@ -68,7 +68,7 @@ grommunio:
     user: "grommunio"
     password: ""
     name: "grommunio"
-    
+
     # Connection pool settings
     pool:
       maxConnections: 100
@@ -90,7 +90,7 @@ grommunio:
   # =========================================================================
   auth:
     method: oidc  # Preferred: oidc or saml
-    
+
     # Keycloak OIDC configuration (preferred)
     oidc:
       enabled: true
@@ -98,7 +98,7 @@ grommunio:
       clientId: "grommunio"
       clientSecret: ""
       scope: "openid profile email"
-    
+
     # SAML configuration (alternative)
     saml:
       enabled: false
@@ -124,15 +124,15 @@ grommunio:
   # =========================================================================
   mail:
     domain: "opendesk.example.com"
-    
+
     imap:
       server: "imaps://dovecot:993"
       ssl: true
-      
+
     smtp:
       server: "smtp://postfix:587"
       tls: true
-      
+
     sieve:
       server: "sieve://dovecot:4190"
 
@@ -205,7 +205,7 @@ grommunio:
       periodSeconds: 30
       timeoutSeconds: 10
       failureThreshold: 3
-      
+
     readiness:
       path: "/ready"
       port: 8080
@@ -213,7 +213,7 @@ grommunio:
       periodSeconds: 10
       timeoutSeconds: 5
       failureThreshold: 3
-      
+
     startup:
       path: "/healthz"
       port: 8080

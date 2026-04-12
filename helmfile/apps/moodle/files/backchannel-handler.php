@@ -46,12 +46,12 @@ function log_message(string $level, string $message, array $context = []): void
         'context' => $context,
         'source' => 'backchannel-handler'
     ];
-    
+
     $logDir = dirname(LOG_FILE);
     if (!is_dir($logDir)) {
         @mkdir($logDir, 0755, true);
     }
-    
+
     @file_put_contents(LOG_FILE, json_encode($entry) . "\n", FILE_APPEND | LOCK_EX);
 }
 
@@ -78,7 +78,7 @@ function generate_logout_response(
 ): string {
     $id = '_' . bin2hex(random_bytes(16));
     $issueInstant = gmdate('Y-m-d\TH:i:s\Z');
-    
+
     $response = <<<XML
 <samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                       xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -93,7 +93,7 @@ function generate_logout_response(
     </samlp:Status>
 </samlp:LogoutResponse>
 XML;
-    
+
     return $response;
 }
 
@@ -120,13 +120,13 @@ function decode_saml_request(string $input): string
     if (strpos($input, '<') !== false) {
         return $input;
     }
-    
+
     // Try base64 decode
     $decoded = base64_decode($input, true);
     if ($decoded !== false && strpos($decoded, '<') !== false) {
         return $decoded;
     }
-    
+
     // Try base64 + gzip decode (SAML binding)
     $decoded = base64_decode($input, true);
     if ($decoded !== false) {
@@ -135,7 +135,7 @@ function decode_saml_request(string $input): string
             return $decompressed;
         }
     }
-    
+
     return $input;
 }
 
@@ -146,7 +146,7 @@ function parse_logout_request(string $xml): array
 {
     libxml_use_internal_errors(true);
     $doc = new DOMDocument();
-    
+
     if (!$doc->loadXML($xml)) {
         $errors = libxml_get_errors();
         libxml_clear_errors();
@@ -154,33 +154,33 @@ function parse_logout_request(string $xml): array
             return $e->message;
         }, $errors)));
     }
-    
+
     $xpath = new DOMXPath($doc);
     $xpath->registerNamespace('samlp', SAML_PROTOCOL_NS);
     $xpath->registerNamespace('saml', SAML_ASSERTION_NS);
     $xpath->registerNamespace('ds', XMLDSIG_NS);
-    
+
     // Extract request ID
     $idNodes = $xpath->query('//samlp:LogoutRequest/@ID');
     $id = $idNodes->length > 0 ? $idNodes->item(0)->nodeValue : null;
-    
+
     // Extract Issuer
     $issuerNodes = $xpath->query('//saml:Issuer');
     $issuer = $issuerNodes->length > 0 ? $issuerNodes->item(0)->nodeValue : null;
-    
+
     // Extract NameID
     $nameIdNodes = $xpath->query('//saml:NameID');
     $nameId = $nameIdNodes->length > 0 ? $nameIdNodes->item(0)->nodeValue : null;
     $nameIdFormat = $nameIdNodes->length > 0 ? $nameIdNodes->item(0)->getAttribute('Format') : null;
-    
+
     // Extract SessionIndex
     $sessionIndexNodes = $xpath->query('//samlp:SessionIndex');
     $sessionIndex = $sessionIndexNodes->length > 0 ? $sessionIndexNodes->item(0)->nodeValue : null;
-    
+
     // Extract IssueInstant
     $issueInstantNodes = $xpath->query('//samlp:LogoutRequest/@IssueInstant');
     $issueInstant = $issueInstantNodes->length > 0 ? $issueInstantNodes->item(0)->nodeValue : null;
-    
+
     return [
         'id' => $id,
         'issuer' => $issuer,
@@ -204,48 +204,48 @@ function verify_signature(DOMDocument $doc, DOMXPath $xpath, string $idpCertPath
         log_message('warning', 'No signature found on logout request');
         return false;
     }
-    
+
     // Load IdP certificate
     if (!file_exists($idpCertPath)) {
         log_message('error', 'IdP certificate not found', ['path' => $idpCertPath]);
         return false;
     }
-    
+
     $idpCert = file_get_contents($idpCertPath);
     $idpCert = preg_replace('/-----BEGIN CERTIFICATE-----|-----END CERTIFICATE-----|\s+/', '', $idpCert);
-    
+
     // Create public key
-    $cert = "-----BEGIN CERTIFICATE-----\n" . 
-            chunk_split($idpCert, 64, "\n") . 
+    $cert = "-----BEGIN CERTIFICATE-----\n" .
+            chunk_split($idpCert, 64, "\n") .
             "-----END CERTIFICATE-----\n";
-    
+
     $publicKey = openssl_pkey_get_public($cert);
     if ($publicKey === false) {
         log_message('error', 'Failed to load public key', ['error' => openssl_error_string()]);
         return false;
     }
-    
+
     // Extract signature value
     $signatureValueNodes = $xpath->query('//ds:SignatureValue');
     if ($signatureValueNodes->length === 0) {
         return false;
     }
     $signatureValue = base64_decode(trim($signatureValueNodes->item(0)->nodeValue));
-    
+
     // Extract signed data (canonicalized)
     $signedInfoNodes = $xpath->query('//ds:SignedInfo');
     if ($signedInfoNodes->length === 0) {
         return false;
     }
-    
+
     // Get canonicalized SignedInfo
     $signedInfo = $signedInfoNodes->item(0);
     $canonicalSignedInfo = $signedInfo->C14N(true, false);
-    
+
     // Get signature algorithm
     $algorithmNodes = $xpath->query('//ds:SignatureMethod/@Algorithm');
     $algorithm = $algorithmNodes->length > 0 ? $algorithmNodes->item(0)->nodeValue : XMLDSIG_NS . 'rsa-sha1';
-    
+
     // Map algorithm to OpenSSL constant
     $opensslAlgorithm = OPENSSL_ALGO_SHA256;
     if (strpos($algorithm, 'rsa-sha1') !== false) {
@@ -257,10 +257,10 @@ function verify_signature(DOMDocument $doc, DOMXPath $xpath, string $idpCertPath
     } elseif (strpos($algorithm, 'rsa-sha512') !== false) {
         $opensslAlgorithm = OPENSSL_ALGO_SHA512;
     }
-    
+
     // Verify signature
     $result = openssl_verify($canonicalSignedInfo, $signatureValue, $publicKey, $opensslAlgorithm);
-    
+
     return $result === 1;
 }
 
@@ -273,16 +273,16 @@ function terminate_moodle_session(string $sessionIndex, ?string $nameId, ?string
     if (is_dir(MOODLE_ROOT) && file_exists(MOODLE_ROOT . '/config.php')) {
         define('CLI_SCRIPT', true);
         require_once MOODLE_ROOT . '/config.php';
-        
+
         try {
             global $DB, $SESSION;
-            
+
             // Method 1: Find session by SessionIndex (if stored during login)
             if ($sessionIndex) {
                 // Look up session by SAML session index
                 // Moodle's auth_shibboleth plugin may store this in user_preferences or sessions
                 $sessionRecord = $DB->get_record('sessions', ['sid' => $sessionIndex]);
-                
+
                 if ($sessionRecord) {
                     // Destroy the session
                     \core\session\manager::destroy($sessionRecord->sid);
@@ -292,12 +292,12 @@ function terminate_moodle_session(string $sessionIndex, ?string $nameId, ?string
                     return true;
                 }
             }
-            
+
             // Method 2: Find user by NameID and terminate all their sessions
             if ($nameId) {
                 // Find user by username (NameID typically maps to username)
                 $user = $DB->get_record('user', ['username' => $nameId, 'deleted' => 0]);
-                
+
                 if ($user) {
                     // Terminate all sessions for this user
                     \core\session\manager::destroy_user_sessions($user->id);
@@ -308,7 +308,7 @@ function terminate_moodle_session(string $sessionIndex, ?string $nameId, ?string
                     return true;
                 }
             }
-            
+
             // Method 3: Use Shibboleth-specific session termination
             // Check if auth_shibboleth plugin is available
             if (class_exists('auth_plugin_shibboleth')) {
@@ -319,15 +319,15 @@ function terminate_moodle_session(string $sessionIndex, ?string $nameId, ?string
                     return true;
                 }
             }
-            
+
             log_message('warning', 'No matching Moodle session found', [
                 'sessionIndex' => $sessionIndex ? substr($sessionIndex, 0, 8) . '...' : null,
                 'nameId' => $nameId
             ]);
-            
+
             // Return true anyway - session may have already expired
             return true;
-            
+
         } catch (Exception $e) {
             log_message('error', 'Failed to terminate Moodle session', [
                 'error' => $e->getMessage(),
@@ -336,7 +336,7 @@ function terminate_moodle_session(string $sessionIndex, ?string $nameId, ?string
             return false;
         }
     }
-    
+
     // Moodle not available - use direct session file cleanup
     log_message('info', 'Moodle bootstrap not available, using direct cleanup');
     return cleanup_session_files($sessionIndex, $nameId);
@@ -352,21 +352,21 @@ function cleanup_session_files(string $sessionIndex, ?string $nameId): bool
         '/var/lib/php8/sessions',
         '/tmp/sessions'
     ];
-    
+
     $cleaned = 0;
-    
+
     foreach ($sessionPaths as $path) {
         if (!is_dir($path)) {
             continue;
         }
-        
+
         $files = glob($path . '/sess_*');
         foreach ($files as $file) {
             $content = @file_get_contents($file);
             if ($content === false) {
                 continue;
             }
-            
+
             // Check if session contains our session index or name ID
             if ($sessionIndex && strpos($content, $sessionIndex) !== false) {
                 @unlink($file);
@@ -377,7 +377,7 @@ function cleanup_session_files(string $sessionIndex, ?string $nameId): bool
             }
         }
     }
-    
+
     log_message('info', 'Session file cleanup complete', ['files_cleaned' => $cleaned]);
     return $cleaned > 0;
 }
@@ -388,11 +388,11 @@ function cleanup_session_files(string $sessionIndex, ?string $nameId): bool
 function handle_logout_request(): void
 {
     $startTime = microtime(true);
-    
+
     try {
         // Read request body
         $rawInput = file_get_contents('php://input');
-        
+
         if (empty($rawInput)) {
             log_message('warning', 'Empty request body');
             send_response(400, generate_logout_response(
@@ -403,7 +403,7 @@ function handle_logout_request(): void
             ));
             return;
         }
-        
+
         // Handle SOAP envelope
         if (strpos($rawInput, 'soapenv:Envelope') !== false || strpos($rawInput, 'SOAP-ENV:Envelope') !== false) {
             // Extract SAML from SOAP body
@@ -412,28 +412,28 @@ function handle_logout_request(): void
                 $rawInput = $matches[1];
             }
         }
-        
+
         // Decode SAML request
         $samlRequest = decode_saml_request($rawInput);
-        
+
         log_message('info', 'Received logout request', [
             'raw_length' => strlen($rawInput),
             'decoded_length' => strlen($samlRequest)
         ]);
-        
+
         // Parse logout request
         $parsed = parse_logout_request($samlRequest);
-        
+
         log_message('info', 'Parsed logout request', [
             'id' => $parsed['id'],
             'issuer' => $parsed['issuer'],
             'nameId' => $parsed['nameId'],
             'sessionIndex' => $parsed['sessionIndex'] ? substr($parsed['sessionIndex'], 0, 8) . '...' : null
         ]);
-        
+
         // Verify signature
         $signatureValid = verify_signature($parsed['doc'], $parsed['xpath'], IDP_CERT_PATH);
-        
+
         if (!$signatureValid) {
             log_message('error', 'Signature verification failed', [
                 'requestId' => $parsed['id'],
@@ -447,38 +447,38 @@ function handle_logout_request(): void
             ));
             return;
         }
-        
+
         log_message('info', 'Signature verification successful');
-        
+
         // Terminate Moodle session
         $terminated = terminate_moodle_session(
             $parsed['sessionIndex'],
             $parsed['nameId'],
             $parsed['issuer']
         );
-        
+
         $duration = round((microtime(true) - $startTime) * 1000, 2);
-        
+
         log_message('info', 'Backchannel logout completed', [
             'requestId' => $parsed['id'],
             'terminated' => $terminated,
             'duration_ms' => $duration
         ]);
-        
+
         // Generate success response
         $response = generate_logout_response(
             $parsed['id'],
             $parsed['issuer'] ?? '',
             'https://' . ($_SERVER['HTTP_HOST'] ?? 'moodle.opendesk.example.com') . '/shibboleth'
         );
-        
+
         // Wrap in SOAP if request was SOAP
         if (strpos(file_get_contents('php://input'), 'soapenv:Envelope') !== false) {
             $response = wrap_in_soap($response);
         }
-        
+
         send_response(200, $response);
-        
+
     } catch (InvalidArgumentException $e) {
         log_message('error', 'Invalid request', ['error' => $e->getMessage()]);
         send_response(400, generate_logout_response(

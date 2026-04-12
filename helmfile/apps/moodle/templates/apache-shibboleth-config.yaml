@@ -45,4 +45,3 @@ data:
       ShibRequestSetting applicationId default
       require valid-user
     </Location>
-

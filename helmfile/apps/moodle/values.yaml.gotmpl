@@ -8,14 +8,14 @@ moodle:
   image: "ghcr.io/<your-org>/moodle-shib"
   tag: "v1.0.0"
   replicaCount: 2
-  
+
   # Moodle configuration
   moodleUsername: "admin"
   moodlePassword: "" # Will be set via secret
   moodleEmail: "admin@opendesk.example.com"
   moodleSiteName: "openDesk Moodle"
   moodleSkipInstall: false
-  
+
   # Database configuration (will use external database from task 6)
   externalDatabase:
     host: "moodle-mariadb"

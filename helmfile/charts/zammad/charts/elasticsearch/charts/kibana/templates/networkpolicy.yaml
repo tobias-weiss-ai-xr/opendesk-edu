@@ -26,7 +26,7 @@ spec:
   egress:
     - {}
   {{- else }}
-  egress: 
+  egress:
     - ports:
         # Allow dns resolution
         - port: 53
@@ -44,7 +44,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: elasticsearch
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
       {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}

@@ -1360,7 +1360,7 @@ nubusStackDataUms:
       03-custom-ilias-portal-entry.yaml: |-
         # SPDX-License-Identifier: AGPL-3.0-only
         # SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-        
+
         # ILIAS LMS Portal Entry
         # Creates a portal entry for ILIAS Learning Management System with SSO enabled
         # Ref: 41-selfservice-portal.yaml for correct format
@@ -1384,7 +1384,7 @@ nubusStackDataUms:
               - "https://lms.opendesk.example.com/shib_login.php"
             - - "de_DE"
               - "https://lms.opendesk.example.com/shib_login.php"
-        
+
         # Modify existing entry to set linkTarget
         # The 'create' action uses 'ensure' semantics (skip if exists),
         # so we need a separate 'modify' action for properties added later
@@ -1394,7 +1394,7 @@ nubusStackDataUms:
         position: "cn=managementLearn,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Q6: ILIAS tile must NOT appear in portal navigation (userLinks or centralNavigation)
         # The tile only appears in the "Anwendungen" category via category assignment below
         # No userLinks/centralNavigation entries added intentionally
@@ -1459,7 +1459,7 @@ nubusStackDataUms:
         position: "cn=managementElearn,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Q6: Moodle tile must NOT appear in portal navigation (userLinks or centralNavigation)
         # The tile only appears in the "Anwendungen" category via category assignment below
         # No userLinks/centralNavigation entries added intentionally
@@ -1514,7 +1514,7 @@ nubusStackDataUms:
         position: "cn=managementMeetings,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Q6: BBB tile must NOT appear in portal navigation (userLinks or centralNavigation)
         # The tile only appears in the "Anwendungen" category via category assignment below
         # No userLinks/centralNavigation entries added intentionally
@@ -1567,7 +1567,7 @@ nubusStackDataUms:
         position: "cn=managementFileshareCloud,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Add OpenCloud entry to "Anwendungen" category
         ---
         action: "ensure_list_contains"

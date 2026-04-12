@@ -5,10 +5,10 @@ snipr:
   image: ghcr.io/tobias-weiss-ai-xr/snipr
   tag: "v1.0.0"
   replicaCount: 2
-  
+
   # Enable SNIpR application
   enabled: {{ .Values.apps.snipr.enabled | default true }}
-  
+
   # Transcription configuration (F13 integration)
   transcription:
     enabled: {{ .Values.apps.snipr.transcription.enabled | default true }}
@@ -16,19 +16,19 @@ snipr:
       endpoint: {{ .Values.services.f13.endpoint | default "https://f13.opendesk.example.com" | quote }}
       model: {{ .Values.services.f13.model | default "whisper-medium" | quote }}
       language: {{ .Values.services.f13.language | default "de" | quote }}
-  
+
   # Storage configuration (MinIO S3)
   storage:
     enabled: {{ .Values.services.minio.enabled | default true }}
     endpoint: {{ .Values.services.minio.endpoint | default "https://minio.opendesk.example.com" | quote }}
     bucket: {{ .Values.services.minio.bucket | default "snipr-recordings" | quote }}
-  
+
   # SSO configuration (Keycloak OIDC)
   sso:
     keycloak:
       realm: {{ .Values.global.keycloak.realm | default "opendesk" | quote }}
       clientId: {{ .Values.apps.snipr.sso.clientId | default "snipr" | quote }}
-  
+
   # LTI 1.3 configuration
   lti:
     enabled: {{ .Values.apps.snipr.lti.enabled | default true }}

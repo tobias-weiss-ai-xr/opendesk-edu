@@ -148,7 +148,7 @@ spec:
                       echo "Copied $file to $dst_file"
                   fi
               done
-              echo "All files have been copied." 
+              echo "All files have been copied."
           volumeMounts:
             - name: elasticsearch-certificates
               mountPath: /certs

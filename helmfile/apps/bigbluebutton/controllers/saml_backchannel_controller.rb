@@ -14,7 +14,7 @@
 class SamlBackchannelController < ApplicationController
   # Skip CSRF protection for SAML POST requests (server-to-server communication)
   skip_before_action :verify_authenticity_token, only: [:logout]
-  
+
   # Skip authentication for backchannel logout endpoint
   skip_before_action :authenticate_user!, only: [:logout]
 
@@ -198,7 +198,7 @@ class SamlBackchannelController < ApplicationController
   #
   def verify_signature(doc)
     require_signed = ENV.fetch('BACKCHANNEL_LOGOUT_BBB_REQUIRE_SIGNED_REQUESTS', 'true') == 'true'
-    
+
     # If signature verification is disabled, return true
     return true unless require_signed
 
@@ -229,7 +229,7 @@ class SamlBackchannelController < ApplicationController
   def fetch_keycloak_public_key
     # Try environment variable first (preferred for production)
     cert_pem = ENV.fetch('KEYCLOAK_SIGNING_CERTIFICATE', nil)
-    
+
     if cert_pem.present?
       begin
         cert = OpenSSL::X509::Certificate.new(cert_pem)
@@ -257,17 +257,17 @@ class SamlBackchannelController < ApplicationController
       require 'net/http'
       uri = URI(metadata_url)
       response = Net::HTTP.get_response(uri)
-      
+
       return nil unless response.code == '200'
 
       metadata_doc = Nokogiri::XML(response.body)
-      
+
       # Extract X509 certificate from metadata
       cert_element = metadata_doc.at_xpath(
         '//ds:X509Certificate',
         ds: SAML_SIGNATURE_NS
       )
-      
+
       return nil unless cert_element
 
       # Decode and create certificate
@@ -462,10 +462,10 @@ class SamlBackchannelController < ApplicationController
 
     # Parse XML response
     doc = Nokogiri::XML(response.body)
-    
+
     # Convert to hash for easier handling
     response_hash = xml_to_hash(doc.root)
-    
+
     response_hash
   rescue StandardError => e
     log_event(:error, 'bbb_api_error', {
@@ -490,10 +490,10 @@ class SamlBackchannelController < ApplicationController
       result = {}
       node.children.each do |child|
         next if child.text?
-        
+
         key = child.name
         value = xml_to_hash(child)
-        
+
         if result[key]
           result[key] = [result[key]] unless result[key].is_a?(Array)
           result[key] << value
@@ -551,7 +551,7 @@ class SamlBackchannelController < ApplicationController
     begin
       # Publish warning via Redis pub/sub or ActionCable
       # This notifies all users in the meeting that it will be terminated
-      
+
       warning_message = {
         type: 'meeting_termination_warning',
         meeting_id: meeting_id,
@@ -623,13 +623,13 @@ class SamlBackchannelController < ApplicationController
     begin
       # Use the session store to find and destroy sessions
       # This depends on the session store being used (Redis, ActiveRecord, etc.)
-      
+
       case Rails.configuration.session_store
       when :active_record_store, ActiveRecord::SessionStore
         # For ActiveRecord session store
         sessions = ActiveRecord::SessionStore::Session
                     .where("data LIKE ?", "%user_id: #{user_id}%")
-        
+
         sessions.each do |session|
           session.destroy
           destroyed_count += 1
@@ -639,18 +639,18 @@ class SamlBackchannelController < ApplicationController
         # For Redis session store
         if defined?(Redis)
           redis = Redis.new(url: ENV.fetch('REDIS_URL', 'redis://localhost:6379'))
-          
+
           # Scan for session keys
           cursor = 0
           loop do
             cursor, keys = redis.scan(cursor, match: 'session:*', count: 100)
-            
+
             keys.each do |key|
               session_data = redis.get(key)
               next unless session_data
 
               # Check if session belongs to user
-              if session_data.include?(user_id) || 
+              if session_data.include?(user_id) ||
                  (session_index && session_data.include?(session_index))
                 redis.del(key)
                 destroyed_count += 1
@@ -659,7 +659,7 @@ class SamlBackchannelController < ApplicationController
 
             break if cursor == '0'
           end
-          
+
           redis.close
         end
 
@@ -736,8 +736,8 @@ class SamlBackchannelController < ApplicationController
       render plain: message, status: status_code
     else
       # For server errors, still try to return a SAML error response
-      render xml: build_error_response(message), 
-             content_type: 'application/samlxml', 
+      render xml: build_error_response(message),
+             content_type: 'application/samlxml',
              status: status_code
     end
   end
@@ -843,7 +843,7 @@ class SamlBackchannelController < ApplicationController
     }
 
     message = "[SAML-Backchannel] #{event_type}"
-    
+
     case level
     when :debug
       Rails.logger.debug { "#{message} | #{log_entry.to_json}" } if VERBOSE_LOGGING

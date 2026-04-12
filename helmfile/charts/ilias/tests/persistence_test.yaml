@@ -39,5 +39,3 @@ tests:
       - contains:
           path: spec.accessModes
           content: ReadWriteMany
-
-

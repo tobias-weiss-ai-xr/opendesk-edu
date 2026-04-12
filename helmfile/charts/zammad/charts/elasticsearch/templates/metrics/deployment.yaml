@@ -181,7 +181,7 @@ spec:
         {{- if .Values.metrics.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      volumes: 
+      volumes:
         - name: empty-dir
           emptyDir: {}
       {{- if .Values.metrics.extraVolumes }}

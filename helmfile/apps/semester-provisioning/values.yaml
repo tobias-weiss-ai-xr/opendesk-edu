@@ -24,13 +24,13 @@ semesterProvisioning:
     repository: "semester-provisioning"
     tag: "latest"
     pullPolicy: "IfNotPresent"
-  
+
   # Number of API replicas / Anzahl der API-Replikas
   replicas: 1
-  
+
   # API server port / API-Server-Port
   port: 8000
-  
+
   # Resource limits and requests / Ressourcen-Limits und -Requests
   resources:
     requests:
@@ -39,14 +39,14 @@ semesterProvisioning:
     limits:
       cpu: 500m
       memory: 512Mi
-  
+
   # Pod security context / Pod-Sicherheitskontext
   podSecurityContext:
     runAsNonRoot: true
     fsGroup: 1000
     seccompProfile:
       type: RuntimeDefault
-  
+
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -57,14 +57,14 @@ semesterProvisioning:
     runAsUser: 1000
     seccompProfile:
       type: RuntimeDefault
-  
+
   # Liveness probe settings / Liveness-Probe-Einstellungen
   livenessProbe:
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
-  
+
   # Readiness probe settings / Readiness-Probe-Einstellungen
   readinessProbe:
     initialDelaySeconds: 10
@@ -78,14 +78,14 @@ semesterProvisioning:
 semester:
   # Enable semester lifecycle management / Semester-Lebenszyklus-Management aktivieren
   enabled: true
-  
+
   # Current semester definition / Aktuelle Semester-Definition
   current:
     name: "WS25/26"
     type: "wintersemester"  # wintersemester | sommersemester
     start_date: "2025-10-01"
     end_date: "2026-03-31"
-    
+
     # Phase dates / Phasen-Daten
     phases:
       enrollment:
@@ -99,7 +99,7 @@ semester:
         end: "2026-03-31"
       archival:
         deadline: "2026-04-15"
-  
+
   # Previous semester (for transitions) / Vorheriges Semester (für Übergänge)
   previous:
     name: "SS25"
@@ -113,31 +113,31 @@ semester:
 automation:
   # Enable automation / Automatisierung aktivieren
   enabled: true
-  
+
   # Timezone for cron jobs / Zeitzone für Cron-Jobs
   timezone: "Europe/Berlin"
-  
+
   # Cron schedules for lifecycle jobs / Cron-Zeitpläne für Lebenszyklus-Jobs
   cron:
     # Semester start job: Runs on 1st day of semester at 6 AM
     # Semester-Start-Job: Läuft am 1. Tag des Semesters um 6 Uhr
     semester_start: "0 6 1 10 *"
-    
+
     # Mid-semester check: 15th of each month at 9 AM
     # Semester-Mitte-Check: 15. jedes Monats um 9 Uhr
     mid_semester_check: "0 9 15 * *"
-    
+
     # Semester end job: Runs on 1st day after semester end at 6 AM
     # Semester-Ende-Job: Läuft am 1. Tag nach Semesterende um 6 Uhr
     semester_end: "0 6 1 4 *"
-    
+
     # Archival cleanup: April 1st at 2 AM (after archival deadline)
     # Archiv-Bereinigung: 1. April um 2 Uhr (nach Archiv-Frist)
     archival_cleanup: "0 2 1 4 *"
-    
+
     # Role sync: Every 15 minutes / Rollen-Sync: Alle 15 Minuten
     role_sync: "*/15 * * * *"
-  
+
   # Job history settings / Job-Verlaufseinstellungen
   jobs:
     successfulJobsHistoryLimit: 3
@@ -149,16 +149,16 @@ automation:
 provisioning:
   # Default category for courses / Standardkategorie für Kurse
   default_category: "courses"
-  
+
   # Course title prefix / Kurstitel-Präfix
   course_prefix: ""
-  
+
   # Auto-archive courses at semester end / Kurse am Semesterende automatisch archivieren
   auto_archive: true
-  
+
   # Archive retention period in years / Archiv-Aufbewahrungszeitraum in Jahren
   archive_retention_years: 5
-  
+
   # Enable automatic course provisioning from campus management
   # Automatische Kursbereitstellung aus dem Campus-Management aktivieren
   auto_provision: false
@@ -169,13 +169,13 @@ provisioning:
 roles:
   # Enable role synchronization / Rollen-Synchronisierung aktivieren
   enabled: true
-  
+
   # Sync interval in minutes / Sync-Intervall in Minuten
   sync_interval_minutes: 15
-  
+
   # Sync on enrollment changes / Bei Einschreibungsänderungen synchronisieren
   sync_on_enrollment_change: true
-  
+
   # Role mappings: campus_role -> keycloak_role -> lms_role
   # Rollen-Mappings: campus_role -> keycloak_role -> lms_role
   mappings:
@@ -234,10 +234,10 @@ keycloak:
 database:
   # Database type: sqlite or postgresql / Datenbanktyp: sqlite oder postgresql
   type: "sqlite"
-  
+
   # SQLite path (if type is sqlite) / SQLite-Pfad (wenn Typ sqlite)
   sqlite_path: ":memory:"
-  
+
   # PostgreSQL settings (if type is postgresql) / PostgreSQL-Einstellungen (wenn Typ postgresql)
   postgresql:
     host: ""
@@ -264,22 +264,22 @@ audit:
 ingress:
   # Enable ingress / Ingress aktivieren
   enabled: true
-  
+
   # Ingress class name / Ingress-Class-Name
   className: "nginx"
-  
+
   # Ingress annotations / Ingress-Annotationen
   annotations: {}
     # cert-manager.io/cluster-issuer: "letsencrypt-prod"
     # nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  
+
   # Host configuration / Host-Konfiguration
   hosts:
     - host: semester.opendesk.example.com
       paths:
         - path: /
           pathType: Prefix
-  
+
   # TLS configuration / TLS-Konfiguration
   tls: []
     # - secretName: semester-provisioning-tls
@@ -303,13 +303,13 @@ service:
 persistence:
   # Enable persistence for data / Persistenz für Daten aktivieren
   enabled: false
-  
+
   # Storage class name / Storage-Class-Name
   storageClass: ""
-  
+
   # Access mode / Zugriffsmodus
   accessMode: ReadWriteOnce
-  
+
   # Storage size / Speichergröße
   size: 1Gi
 
