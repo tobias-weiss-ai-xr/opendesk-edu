@@ -7,7 +7,7 @@ SHELL := /bin/bash
 # All edu Helm charts
 CHARTS := $(sort $(wildcard helmfile/charts/*/Chart.yaml | xargs -I{} dirname {}))
 
-.PHONY: help lint test template unittest spellcheck update-check clean
+.PHONY: help lint test template unittest spellcheck update-check clean ruff ruff-fix python-test python-test-user-import yamllint
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -43,6 +43,27 @@ unittest: ## Run helm-unittest on all charts
 	@echo "==> All unit tests passed."
 
 test: lint template unittest ## Run all tests (lint + template + unittest)
+
+ruff: ## Run ruff lint on Python scripts
+	@echo "==> Running ruff check..."
+	@ruff check scripts/
+	@echo "==> Ruff check passed."
+
+ruff-fix: ## Auto-fix ruff lint issues
+	@echo "==> Running ruff fix..."
+	@ruff check --fix scripts/
+	@ruff format scripts/
+	@echo "==> Ruff fix complete."
+
+python-test: ## Run semester-provisioning Python tests
+	@echo "==> Running semester-provisioning tests..."
+	@cd scripts/semester-provisioning && pip install -q pytest httpx 2>/dev/null && python -m pytest tests/ -v
+	@echo "==> semester-provisioning tests passed."
+
+python-test-user-import: ## Run user_import Python tests
+	@echo "==> Running user_import tests..."
+	@cd scripts/user_import && pip install -q pytest -r requirements.txt 2>/dev/null && python -m pytest tests/ -v
+	@echo "==> user_import tests passed."
 
 spellcheck: ## Run cspell on documentation
 	@cspell --config cspell.json \
