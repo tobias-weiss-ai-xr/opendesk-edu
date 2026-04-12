@@ -15,9 +15,24 @@ spec:
       labels:
         app: {{ .Release.Name }}-greenlight
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: greenlight
           image: "{{ .Values.bigbluebutton.image }}:{{ .Values.bigbluebutton.tag }}"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - containerPort: 80
           env:
@@ -52,12 +67,7 @@ spec:
               value: {{ .Values.bigbluebutton.greenlight.defaultRegistration | quote }}
             {{- end }}
           resources:
-            requests:
-              cpu: "250m"
-              memory: "512Mi"
-            limits:
-              cpu: "1000m"
-              memory: "1Gi"
+            {{- toYaml .Values.bigbluebutton.resources | nindent 12 }}
           livenessProbe:
             tcpSocket:
               port: 80
