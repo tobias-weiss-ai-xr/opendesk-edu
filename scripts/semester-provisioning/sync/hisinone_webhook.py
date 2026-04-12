@@ -85,7 +85,7 @@ async def handle_webhook(request: Request):
     # Parse payload
     try:
         payload = json.loads(body.decode("utf-8"))
-    except Exception:
+    except json.JSONDecodeError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid JSON payload"
         )

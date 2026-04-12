@@ -18,6 +18,7 @@ wird auf ACTIVE zurückgesetzt und der Vorgang wird protokolliert.
 from __future__ import annotations
 
 import logging
+import sqlite3
 from datetime import datetime, timezone
 from typing import Any, Optional
 
@@ -308,6 +309,6 @@ def _get_snapshot_id(course_id: str, database: Database) -> Optional[str]:
             row = cursor.fetchone()
             if row:
                 return row[0]
-    except Exception:
+    except (sqlite3.OperationalError, sqlite3.DatabaseError):
         pass
     return None
