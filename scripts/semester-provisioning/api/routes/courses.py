@@ -27,7 +27,7 @@ _courses_db: dict[str, Course] = {}
 _enrollments_db: dict[str, Enrollment] = {}
 
 
-async def _get_lms_client(lms: LMSPlatform):
+async def _get_lms_client(lms: LMSPlatform) -> ILIASClient | MoodleClient:
     if lms == LMSPlatform.ILIAS:
         return ILIASClient()
     return MoodleClient()

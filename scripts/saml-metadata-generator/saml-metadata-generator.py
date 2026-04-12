@@ -596,7 +596,7 @@ def generate_metadata_file(
     return True
 
 
-def main():
+def main() -> None:
     """Main entry point for the SAML metadata generator."""
     parser = argparse.ArgumentParser(
         description="Generate SAML 2.0 SP metadata for DFN-AAI federation",

@@ -59,7 +59,7 @@ def _get_enrollments_db() -> dict[str, Enrollment]:
     return enrollments
 
 
-async def _get_lms_client(lms: LMSPlatform):
+async def _get_lms_client(lms: LMSPlatform) -> ILIASClient | MoodleClient:
     """
     Get appropriate LMS client based on platform.
     Passenden LMS-Client basierend auf der Plattform abrufen.

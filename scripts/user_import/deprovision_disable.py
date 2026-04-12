@@ -19,7 +19,7 @@ from lib.ucs import Ucs
 from lib.keycloak import remove_saml_identity_with_credentials
 
 
-def parse_args():
+def parse_args() -> configargparse.ArgumentParser:
     p = configargparse.ArgParser()
 
     p.add(
@@ -121,16 +121,14 @@ def parse_args():
     return p.parse_args()
 
 
-def setup_logging(options):
+def setup_logging(options: configargparse.Namespace) -> None:
     Path(options.logpath).mkdir(parents=True, exist_ok=True)
 
     logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
     rootLogger = logging.getLogger()
     rootLogger.setLevel(options.loglevel)
 
-    fileHandler = logging.FileHandler(
-        f"{options.logpath}/{os.path.basename(__file__)}.log"
-    )
+    fileHandler = logging.FileHandler(f"{options.logpath}/{os.path.basename(__file__)}.log")
     fileHandler.setFormatter(logFormatter)
     rootLogger.addHandler(fileHandler)
 
@@ -146,7 +144,7 @@ def setup_logging(options):
             logging.info(f"> {option}: {setting}")
 
 
-def get_iam_api_users(iam_api_url):
+def get_iam_api_users(iam_api_url: str) -> set[str]:
     try:
         response = requests.get(iam_api_url, timeout=30)
         response.raise_for_status()
@@ -166,7 +164,7 @@ def get_iam_api_users(iam_api_url):
         return set()
 
 
-def get_ucs_users(ucs):
+def get_ucs_users(ucs: Ucs) -> set[str]:
     try:
         users = ucs._Ucs__get_object_list("user", "user")
         usernames = set()
@@ -179,22 +177,21 @@ def get_ucs_users(ucs):
 
         logging.info(f"Found {len(usernames)} users in UCS")
         return usernames
-
     except Exception as e:
         logging.error(f"Failed to get UCS users: {e}")
         return set()
 
 
 def deprovision_user(
-    ucs,
-    username,
-    keycloak_url,
-    keycloak_username,
-    keycloak_password,
-    identity_provider,
-    timestamp,
-    dry_run=False,
-):
+    ucs: Ucs,
+    username: str,
+    keycloak_url: str,
+    keycloak_username: str,
+    keycloak_password: str,
+    identity_provider: str,
+    timestamp: str,
+    dry_run: bool = False,
+) -> bool:
     logging.info(f"Deprovisioning user: {username}")
 
     if dry_run:
@@ -221,9 +218,7 @@ def deprovision_user(
         ):
             logging.info(f"  Removed SAML identity for {username}")
         else:
-            logging.warning(
-                f"  Could not remove SAML identity for {username} (may not exist)"
-            )
+            logging.warning(f"  Could not remove SAML identity for {username} (may not exist)")
     except Exception as e:
         logging.error(f"  Error removing SAML identity for {username}: {e}")
 
@@ -236,7 +231,7 @@ def deprovision_user(
     return success
 
 
-def main():
+def main() -> None:
     options = parse_args()
     setup_logging(options)
 

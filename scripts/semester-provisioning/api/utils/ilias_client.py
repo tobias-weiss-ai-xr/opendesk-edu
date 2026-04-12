@@ -27,7 +27,7 @@ class ILIASClient:
         base_url: Optional[str] = None,
         api_user: Optional[str] = None,
         api_key: Optional[str] = None,
-    ):
+    ) -> None:
         settings = get_settings()
         self.base_url = base_url or settings.ilias_api_url
         self.api_user = api_user or settings.ilias_api_user
@@ -47,7 +47,12 @@ class ILIASClient:
 
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: Any,
+    ) -> None:
         if self._client:
             await self._client.aclose()
 

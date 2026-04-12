@@ -68,7 +68,7 @@ class SemesterManager:
         database: Optional[Any] = None,
         course_api: Optional[Any] = None,
         role_sync: Optional[Any] = None,
-    ):
+    ) -> None:
         """
         Initialize the SemesterManager.
         Initialisiert den SemesterManager.

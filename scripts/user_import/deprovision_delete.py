@@ -10,6 +10,7 @@ Phase 2 Deprovisioning Script: Delete Users Past Grace Period
 import os.path
 import re
 import logging
+from typing import Any
 import configargparse
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -18,7 +19,7 @@ from pathlib import Path
 from lib.ucs import Ucs
 
 
-def parse_args():
+def parse_args() -> configargparse.ArgumentParser:
     p = configargparse.ArgParser()
 
     p.add(
@@ -103,16 +104,14 @@ def parse_args():
     return p.parse_args()
 
 
-def setup_logging(options):
+def setup_logging(options: configargparse.Namespace) -> None:
     Path(options.logpath).mkdir(parents=True, exist_ok=True)
 
     logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
     rootLogger = logging.getLogger()
     rootLogger.setLevel(options.loglevel)
 
-    fileHandler = logging.FileHandler(
-        f"{options.logpath}/{os.path.basename(__file__)}.log"
-    )
+    fileHandler = logging.FileHandler(f"{options.logpath}/{os.path.basename(__file__)}.log")
     fileHandler.setFormatter(logFormatter)
     rootLogger.addHandler(fileHandler)
 
@@ -128,13 +127,11 @@ def setup_logging(options):
             logging.info(f"> {option}: {setting}")
 
 
-def parse_deprovision_timestamp(description):
+def parse_deprovision_timestamp(description: str) -> datetime | None:
     if not description:
         return None
 
-    match = re.search(
-        r"Deprovisioned on (\d{4}-\d{2}-\d{2}T\d{2}h\d{2}m\d{2}sZ)", description
-    )
+    match = re.search(r"Deprovisioned on (\d{4}-\d{2}-\d{2}T\d{2}h\d{2}m\d{2}sZ)", description)
 
     if match:
         timestamp_str = match.group(1)
@@ -147,7 +144,7 @@ def parse_deprovision_timestamp(description):
     return None
 
 
-def get_deprovisioned_users(ucs):
+def get_deprovisioned_users(ucs: Ucs) -> list[dict[str, Any]]:
     deprovisioned_users = []
 
     try:
@@ -176,12 +173,12 @@ def get_deprovisioned_users(ucs):
         return []
 
 
-def is_past_grace_period(deprovision_timestamp, grace_period_months):
+def is_past_grace_period(deprovision_timestamp: datetime, grace_period_months: int) -> bool:
     cutoff_date = datetime.now() - relativedelta(months=grace_period_months)
     return deprovision_timestamp < cutoff_date
 
 
-def delete_user_and_admin(ucs, username, dry_run=False):
+def delete_user_and_admin(ucs: Ucs, username: str, dry_run: bool = False) -> bool:
     success = True
 
     if dry_run:
@@ -205,7 +202,7 @@ def delete_user_and_admin(ucs, username, dry_run=False):
     return success
 
 
-def main():
+def main() -> None:
     options = parse_args()
     setup_logging(options)
 

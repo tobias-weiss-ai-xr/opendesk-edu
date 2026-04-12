@@ -10,7 +10,7 @@ Engine to sync user roles between Keycloak and LMS platforms.
 
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 from pydantic import BaseModel
 
 
@@ -45,10 +45,10 @@ class RoleSyncEngine:
 
     def __init__(
         self,
-        lms_client,
+        lms_client: Any,
         kc_client: Optional[object] = None,
         mapping: Optional[Dict[str, str]] = None,
-    ):
+    ) -> None:
         self.lms_client = lms_client
         self.kc_client = kc_client
         self.role_map: Dict[str, str] = mapping or {

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Query, status
 from api.models.semester import (
@@ -18,8 +18,8 @@ router = APIRouter(prefix="/api/v1/semesters", tags=["semesters"])
 _semesters_db: dict[str, Semester] = {}
 
 
-def _determine_status(start_date, end_date) -> SemesterStatus:
-    from datetime import date
+def _determine_status(start_date: date, end_date: date) -> SemesterStatus:
+    today = date.today()
 
     today = date.today()
     if today < start_date:

@@ -13,7 +13,7 @@ import json
 import hmac
 import hashlib
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 import httpx
 from fastapi import FastAPI, Request, HTTPException, status
@@ -72,7 +72,7 @@ async def _forward_to_api(
 
 
 @app.post("/api/v1/webhooks/hisinone")
-async def handle_webhook(request: Request):
+async def handle_webhook(request: Request) -> dict[str, Any]:
     body = await request.body()
     signature = request.headers.get("X-HISINONE-SIGNATURE") or request.headers.get(
         "X-HISINONE_Signature"

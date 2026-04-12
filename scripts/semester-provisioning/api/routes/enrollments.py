@@ -44,7 +44,7 @@ def _get_courses_db() -> dict[str, Course]:
     return _courses_db
 
 
-async def _get_lms_client(lms: LMSPlatform):
+async def _get_lms_client(lms: LMSPlatform) -> ILIASClient | MoodleClient:
     """
     Get appropriate LMS client based on platform.
     Passenden LMS-Client basierend auf der Plattform abrufen.

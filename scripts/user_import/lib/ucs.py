@@ -6,7 +6,7 @@ import requests
 import json
 import sys
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 import urllib.parse
 import logging
 import pandas as pd
@@ -17,13 +17,13 @@ from requests.auth import HTTPBasicAuth
 class Ucs:
     def __init__(
         self,
-        adm_username,
-        adm_password,
-        base_url,
-        maildomain,
-        options_object,
-        ldap_base="dc=swp-ldap,dc=internal",
-    ):
+        adm_username: str,
+        adm_password: str,
+        base_url: str,
+        maildomain: str,
+        options_object: Any,
+        ldap_base: str = "dc=swp-ldap,dc=internal",
+    ) -> None:
         self.user = None
         self.user_updated = False
         self.adm_username = adm_username
@@ -36,9 +36,7 @@ class Ucs:
 
         if self.options_object.localhost_port:
             self.base_url = base_url
-            self.request_url = "http://localhost:" + str(
-                self.options_object.localhost_port
-            )
+            self.request_url = "http://localhost:" + str(self.options_object.localhost_port)
             self.verify_certificate = False
             self.path_prefix = ""
             self.options_object.trigger_invitation_mail = False
@@ -58,9 +56,7 @@ class Ucs:
         if options_object.output_accounts_filename:
             self.account_output_filename = options_object.output_accounts_filename
         else:
-            self.account_output_filename = (
-                "users-" + self.base_url + "-" + self.timestamp + ".txt"
-            )
+            self.account_output_filename = "users-" + self.base_url + "-" + self.timestamp + ".txt"
 
         self.groups_available = []
         self.existing_maildomains = []
@@ -68,52 +64,37 @@ class Ucs:
         if self.options_object.create_maildomains:
             for maildomain_object in self.__get_object_list("mail", "domain"):
                 self.existing_maildomains.append(maildomain_object["id"])
-            logging.debug(
-                f"Pre-existing maildomains: {', '.join(self.existing_maildomains)}"
-            )
+            logging.debug(f"Pre-existing maildomains: {', '.join(self.existing_maildomains)}")
         if self.options_object.create_oxcontexts:
             for oxcontext_object in self.__get_object_list("oxmail", "oxcontext"):
                 self.existing_oxcontexts.append(oxcontext_object["id"])
-            logging.debug(
-                f"Pre-existing OX contexts: {', '.join(self.existing_oxcontexts)}"
-            )
+            logging.debug(f"Pre-existing OX contexts: {', '.join(self.existing_oxcontexts)}")
         self.__get_user_schema()
 
-    def __get_user_schema(self):
+    def __get_user_schema(self) -> None:
         response = self.__http_request(
             method="options",
             url_path=self.path_prefix + "/udm/users/user/",
             data=None,
             allowed_responses=[200],
         )
-        self.user_schema = response.json()["components"]["schemas"][
-            "users-user.request-patch"
-        ]["properties"]["properties"]["properties"]
+        self.user_schema = response.json()["components"]["schemas"]["users-user.request-patch"]["properties"][
+            "properties"
+        ]["properties"]
 
-    def __get_object_list(self, basetype, type):
+    def __get_object_list(self, basetype: str, type: str) -> list[dict[str, Any]]:
         response = self.__http_request(
             method="get",
-            url_path=self.path_prefix
-            + "/udm/"
-            + basetype
-            + "/"
-            + type
-            + "/?query[name]=*",
+            url_path=self.path_prefix + "/udm/" + basetype + "/" + type + "/?query[name]=*",
             data=None,
             allowed_responses=[200],
         )
         return response.json()["_embedded"]["udm:object"]
 
-    def __get_object_json(self, type, dn):
+    def __get_object_json(self, type: str, dn: str) -> dict[str, Any] | None:
         response = self.__http_request(
             method="get",
-            url_path=self.path_prefix
-            + "/udm/"
-            + type
-            + "s/"
-            + type
-            + "/"
-            + urllib.parse.quote(dn),
+            url_path=self.path_prefix + "/udm/" + type + "s/" + type + "/" + urllib.parse.quote(dn),
             data=None,
             allowed_responses=[200, 404],
         )
@@ -124,19 +105,17 @@ class Ucs:
         elif response.status_code == 404:
             return None
         else:
-            logging.error(
-                "Stopping due to response's http status " + str(response.status_code)
-            )
+            logging.error("Stopping due to response's http status " + str(response.status_code))
             sys.exit(response.text)
 
-    def __add_property(self, obj_json, person, key, list=False):
+    def __add_property(self, obj_json: dict[str, Any], person: dict[str, Any], key: str, list: bool = False) -> None:
         if key in person and not pd.isna(person[key]):
             if list:
                 obj_json["properties"][key] = [person[key]]
             else:
                 obj_json["properties"][key] = person[key]
 
-    def __get_checked_groups(self, groups):
+    def __get_checked_groups(self, groups: Any) -> list[str]:
         user_groups = []
         if not isinstance(groups, str):
             logging.info("No groups defined.")
@@ -154,14 +133,14 @@ class Ucs:
 
     def __http_request(
         self,
-        method,
-        url_path,
-        data,
-        query_param=None,
-        allowed_responses=[200],
-        http_header_additional={},
-        exit_on_bad_response=True,
-    ):
+        method: str,
+        url_path: str,
+        data: Any,
+        query_param: Any = None,
+        allowed_responses: list[int] = [200],
+        http_header_additional: dict[str, str] = {},
+        exit_on_bad_response: bool = True,
+    ) -> requests.Response:
         http_headers = {
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
@@ -185,7 +164,7 @@ class Ucs:
                 sys.exit(response.text)
         return response
 
-    def __create_group(self, group_name):
+    def __create_group(self, group_name: str) -> None:
         group_json = {
             "properties": {
                 "name": group_name,
@@ -208,9 +187,7 @@ class Ucs:
             exit_on_bad_response=False,
         )
         if response.status_code not in allowed_responses:
-            logging.error(
-                f"Response code not in {allowed_responses}: HTTP/{str(response.status_code)}"
-            )
+            logging.error(f"Response code not in {allowed_responses}: HTTP/{str(response.status_code)}")
             sys.exit(response.text)
         elif response.status_code == 422:
             if "Object exists" in response.text:
@@ -224,7 +201,7 @@ class Ucs:
             self.create_count["groups"] += 1
         logging.debug(f"{group_name}: {response}")
 
-    def update_user(self, current_json, person):
+    def update_user(self, current_json: dict[str, Any], person: dict[str, Any]) -> None:
         if "groups" in person:
             groups = self.__get_checked_groups(person["groups"])
         else:
@@ -243,47 +220,35 @@ class Ucs:
         )
         logging.debug(f"{person['username']}: has been updated.")
 
-    def create_user(self, person):
+    def create_user(self, person: dict[str, Any]) -> None:
         if "groups" in person:
             groups = self.__get_checked_groups(person["groups"])
         else:
             groups = []
         user_json = {
             "properties": {
-                "isOxUser": (
-                    not person["is_admin"]
-                    and not self.options_object.component_disable_groupware
-                ),
+                "isOxUser": (not person["is_admin"] and not self.options_object.component_disable_groupware),
                 "opendeskFileshareEnabled": (
-                    not person["is_admin"]
-                    and not self.options_object.component_disable_fileshare
+                    not person["is_admin"] and not self.options_object.component_disable_fileshare
                 ),
                 "opendeskProjectmanagementEnabled": (
-                    not person["is_admin"]
-                    and not self.options_object.component_disable_projectmanagement
+                    not person["is_admin"] and not self.options_object.component_disable_projectmanagement
                 ),
                 "opendeskKnowledgemanagementEnabled": (
-                    not person["is_admin"]
-                    and not self.options_object.component_disable_knowledgemanagement
+                    not person["is_admin"] and not self.options_object.component_disable_knowledgemanagement
                 ),
                 "opendeskLivecollaborationEnabled": (
-                    not person["is_admin"]
-                    and not self.options_object.component_disable_livecollaboration
+                    not person["is_admin"] and not self.options_object.component_disable_livecollaboration
                 ),
                 "opendeskVideoconferenceEnabled": (
-                    not person["is_admin"]
-                    and not self.options_object.component_disable_videoconference
+                    not person["is_admin"] and not self.options_object.component_disable_videoconference
                 ),
-                "opendeskNotesEnabled": (
-                    not person["is_admin"]
-                    and not self.options_object.component_disable_notes
-                ),
+                "opendeskNotesEnabled": (not person["is_admin"] and not self.options_object.component_disable_notes),
                 "opendeskFileshareAdmin": self.options_object.admin_enable_fileshare,
                 "opendeskProjectmanagementAdmin": self.options_object.admin_enable_projectmanagement,
                 "opendeskKnowledgemanagementAdmin": self.options_object.admin_enable_knowledgemanagement,
                 "mailPrimaryAddress": person["username"] + "@" + self.maildomain
-                if "mailPrimaryAddress" not in person
-                or not isinstance(person["mailPrimaryAddress"], str)
+                if "mailPrimaryAddress" not in person or not isinstance(person["mailPrimaryAddress"], str)
                 else person["mailPrimaryAddress"],
                 "PasswordRecoveryEmail": person["email"],
                 "oxContext": int(
@@ -310,9 +275,7 @@ class Ucs:
                 del user_json["properties"][key]
 
         if self.options_object.create_maildomains:
-            users_maildomain = user_json["properties"]["mailPrimaryAddress"].split("@")[
-                -1
-            ]
+            users_maildomain = user_json["properties"]["mailPrimaryAddress"].split("@")[-1]
             if users_maildomain not in self.existing_maildomains:
                 logging.info(f"Creating maildomain: {users_maildomain}")
                 self.__http_request(
@@ -351,13 +314,9 @@ class Ucs:
                 self.existing_oxcontexts.append(str(oxcontext))
 
         if "is_admin" in person and person["is_admin"] is True:
-            user_json["properties"]["primaryGroup"] = (
-                "cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal"
-            )
+            user_json["properties"]["primaryGroup"] = "cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal"
         else:
-            user_json["properties"]["primaryGroup"] = (
-                "cn=Domain Users,cn=groups,dc=swp-ldap,dc=internal"
-            )
+            user_json["properties"]["primaryGroup"] = "cn=Domain Users,cn=groups,dc=swp-ldap,dc=internal"
 
         self.__add_property(user_json, person, "title")
         self.__add_property(user_json, person, "jpegPhoto")
@@ -377,13 +336,11 @@ class Ucs:
             allowed_responses=[201],
         )
         response_json = json.loads(response.text)
-        logging.debug(
-            f"{person['username']}: {person['password']} - {response} - {response_json['uuid']}"
-        )
+        logging.debug(f"{person['username']}: {person['password']} - {response} - {response_json['uuid']}")
         self.create_count["users"] += 1
         self.__write_account_credentials(person["username"] + "\t" + person["password"])
 
-    def delete_user(self, username):
+    def delete_user(self, username: str) -> bool | None:
         dn = f"uid={username},{self.user_base}"
         current_json = self.__get_object_json("user", dn)
 
@@ -404,14 +361,10 @@ class Ucs:
                 logging.info(f"User {username} deleted successfully.")
                 return True
             elif response.status_code == 404:
-                logging.warning(
-                    f"User {username} was already deleted (race condition)."
-                )
+                logging.warning(f"User {username} was already deleted (race condition).")
                 return True
             else:
-                logging.error(
-                    f"Failed to delete user {username}. HTTP {response.status_code}"
-                )
+                logging.error(f"Failed to delete user {username}. HTTP {response.status_code}")
                 return False
 
         except Exception as e:
@@ -425,17 +378,11 @@ class Ucs:
         dn = self.get_user_dn(username)
         user_json = self.__get_object_json("user", dn)
 
-        if (
-            user_json
-            and "properties" in user_json
-            and "groups" in user_json["properties"]
-        ):
+        if user_json and "properties" in user_json and "groups" in user_json["properties"]:
             return user_json["properties"]["groups"]
         return []
 
-    def disable_user(
-        self, username: str, deprovision_timestamp: Optional[str] = None
-    ) -> bool:
+    def disable_user(self, username: str, deprovision_timestamp: Optional[str] = None) -> bool:
         dn = self.get_user_dn(username)
         current_json = self.__get_object_json("user", dn)
 
@@ -451,9 +398,7 @@ class Ucs:
         new_description = current_description
         if deprovision_timestamp:
             if current_description:
-                new_description = (
-                    f"{current_description} | Deprovisioned on {deprovision_timestamp}"
-                )
+                new_description = f"{current_description} | Deprovisioned on {deprovision_timestamp}"
             else:
                 new_description = f"Deprovisioned on {deprovision_timestamp}"
 
@@ -510,15 +455,13 @@ class Ucs:
                 data=json.dumps(user_json),
                 allowed_responses=[204],
             )
-            logging.info(
-                f"User {username} groups updated (removed {len(current_groups) - len(new_groups)} groups)"
-            )
+            logging.info(f"User {username} groups updated (removed {len(current_groups) - len(new_groups)} groups)")
             return True
         except Exception as e:
             logging.error(f"Failed to update groups for {username}: {e}")
             return False
 
-    def set_user(self, person):
+    def set_user(self, person: dict[str, Any]) -> None:
         self.user = None
         self.user_updated = False
         username = person["username"]
@@ -534,9 +477,7 @@ class Ucs:
             logging.info(f"Creating user {username}")
             self.create_user(person)
             if self.options_object.trigger_invitation_mail:
-                psw_reset_trigger_payload = {
-                    "options": {"username": username, "method": "email"}
-                }
+                psw_reset_trigger_payload = {"options": {"username": username, "method": "email"}}
                 self.__http_request(
                     method="post",
                     url_path=self.path_prefix + "/command/passwordreset/send_token",
@@ -544,18 +485,18 @@ class Ucs:
                     allowed_responses=[200],
                 )
 
-    def __write_account_credentials(self, string):
+    def __write_account_credentials(self, string: str) -> None:
         file = open(self.account_output_filename, "a", encoding="utf-8")
         file.write("%s\n" % string)
         self.credentials_created.append(string)
         file.close()
 
-    def summary(self):
+    def summary(self) -> None:
         logging.info("Done processing. Create stats:")
         logging.info(f"- Accounts   :\t{self.create_count['users']}")
         logging.info(f"- Groups     :\t{self.create_count['groups']}")
         logging.info(f"- Maildomains:\t{self.create_count['maildomains']}")
         logging.info(f"- OX Contexts:\t{self.create_count['oxcontexts']}")
 
-    def get_imported_credentials_list(self):
+    def get_imported_credentials_list(self) -> str:
         return "\n".join(self.credentials_created)

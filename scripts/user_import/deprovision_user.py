@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class UserDeprovisioner:
     """Handles user deprovisioning lifecycle"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.keycloak_client = KeycloakAdminClient()
         self.grace_period_days = int(os.getenv("GRACE_PERIOD_DAYS", "180"))
 
@@ -122,7 +122,9 @@ class UserDeprovisioner:
             logger.error(f"Failed to delete user {username}: {e}")
             return False
 
-    def _store_deprovisioning_metadata(self, user: Dict, phase: str, reason: str = None, dry_run: bool = False):
+    def _store_deprovisioning_metadata(
+        self, user: Dict, phase: str, reason: str | None = None, dry_run: bool = False
+    ) -> None:
         """Store deprovisioning audit metadata"""
         if dry_run:
             logger.info(f"[DRY RUN] Would store deprovisioning metadata for {user['username']}")
@@ -155,7 +157,7 @@ class UserDeprovisioner:
 
         logger.info(f"Stored deprovisioning metadata for {user['username']}")
 
-    def _archive_user_data(self, user: Dict):
+    def _archive_user_data(self, user: Dict) -> None:
         """Archive user data from all services before deletion"""
         username = user["username"]
 
@@ -187,7 +189,7 @@ class UserDeprovisioner:
             # Attempt fallback archive
             self._fallback_archive(user)
 
-    def _fallback_archive(self, user: Dict):
+    def _fallback_archive(self, user: Dict) -> None:
         """Fallback to simple Keycloak-only archive if service archiver fails"""
         username = user["username"]
 
@@ -300,7 +302,7 @@ def create_ruckmeldung_filter(no_ruckmeldung_since: str) -> callable:
     return filter_func
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Deprovision users from Keycloak")
     parser.add_argument("username", nargs="?", help="Username to deprovision")
     parser.add_argument(

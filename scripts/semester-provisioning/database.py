@@ -39,7 +39,7 @@ class Database:
     SQLite-Datenbankmanager mit PostgreSQL-fähigem Schema.
     """
 
-    def __init__(self, config: Optional[DatabaseConfig] = None):
+    def __init__(self, config: Optional[DatabaseConfig] = None) -> None:
         self.config = config or DatabaseConfig()
         self._connection: Optional[sqlite3.Connection] = None
 

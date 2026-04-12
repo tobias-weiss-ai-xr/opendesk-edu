@@ -8,6 +8,7 @@ import random
 import re
 import sys
 import logging
+from typing import Any, Callable
 import os.path
 import pandas as pd
 
@@ -20,20 +21,18 @@ from lib.constants import DEFAULT_IDENTITY_PROVIDER
 class ImportUser:
     def __init__(
         self,
-        callback,
-        import_filename=None,
-        iam_api_url=None,
-        create_admin_accounts=False,
-        use_images=False,
-        password_recovery_email=None,
-        keycloak_url=None,
-        keycloak_username=None,
-        keycloak_password=None,
-        identity_provider=DEFAULT_IDENTITY_PROVIDER,
-    ):
-        self.input_dir_imgs_base = os.path.join(
-            os.path.dirname(__file__), "..", "data", "images_"
-        )
+        callback: Callable[[dict[str, Any]], None],
+        import_filename: str | None = None,
+        iam_api_url: str | None = None,
+        create_admin_accounts: bool = False,
+        use_images: bool = False,
+        password_recovery_email: str | None = None,
+        keycloak_url: str | None = None,
+        keycloak_username: str | None = None,
+        keycloak_password: str | None = None,
+        identity_provider: str = DEFAULT_IDENTITY_PROVIDER,
+    ) -> None:
+        self.input_dir_imgs_base = os.path.join(os.path.dirname(__file__), "..", "data", "images_")
         self.input_file = import_filename
         self.iam_api_url = iam_api_url
         self.keycloak_url = keycloak_url
@@ -78,47 +77,29 @@ class ImportUser:
                 error_count += 1
                 continue
             if person["username"].strip() != person["username"]:
-                logging.warning(
-                    f"Leading or trailing blank(s) found in username email: '{person['username']}'"
-                )
+                logging.warning(f"Leading or trailing blank(s) found in username email: '{person['username']}'")
                 persons.at[index, "username"] = person["username"].strip()
             if person["email"].strip() != person["email"]:
-                logging.warning(
-                    f"Leading or trailing blank(s) found in external email: '{person['email']}'"
-                )
+                logging.warning(f"Leading or trailing blank(s) found in external email: '{person['email']}'")
                 persons.at[index, "email"] = person["email"].strip()
-            if "mailPrimaryAddress" in person and isinstance(
-                person["mailPrimaryAddress"], str
-            ):
+            if "mailPrimaryAddress" in person and isinstance(person["mailPrimaryAddress"], str):
                 if person["mailPrimaryAddress"].strip() != person["mailPrimaryAddress"]:
                     logging.warning(
                         f"Leading or trailing blank(s) found in internal email: '{person['mailPrimaryAddress']}'"
                     )
-                    persons.at[index, "mailPrimaryAddress"] = person[
-                        "mailPrimaryAddress"
-                    ].strip()
+                    persons.at[index, "mailPrimaryAddress"] = person["mailPrimaryAddress"].strip()
 
         logging.info(f"Processing list with {len(persons.index)} lines.")
         logging.debug(f"Going to process the following list:\n{persons.to_string()}")
 
         for index, person in persons.iterrows():
-            if not bool(
-                re.match(r"^[\w\d\.-]+$", person["username"], flags=re.IGNORECASE)
-            ):
-                logging.error(
-                    f"Found invalid characters in username: '{person['username']}'"
-                )
+            if not bool(re.match(r"^[\w\d\.-]+$", person["username"], flags=re.IGNORECASE)):
+                logging.error(f"Found invalid characters in username: '{person['username']}'")
                 error_count += 1
-            if not bool(
-                re.match(
-                    r"^[\w\d\.\-_]+@[\w\d\.\-_]+$", person["email"], flags=re.IGNORECASE
-                )
-            ):
+            if not bool(re.match(r"^[\w\d\.\-_]+@[\w\d\.\-_]+$", person["email"], flags=re.IGNORECASE)):
                 logging.error(f"Found invalid external email: '{person['email']}'")
                 error_count += 1
-            if "mailPrimaryAddress" in person and isinstance(
-                person["mailPrimaryAddress"], str
-            ):
+            if "mailPrimaryAddress" in person and isinstance(person["mailPrimaryAddress"], str):
                 if not bool(
                     re.match(
                         r"^[\w\d\.\-_]+@[\w\d\.\-_]+$",
@@ -126,9 +107,7 @@ class ImportUser:
                         flags=re.IGNORECASE,
                     )
                 ):
-                    logging.error(
-                        f"Found invalid primary email: '{person['mailPrimaryAddress']}'"
-                    )
+                    logging.error(f"Found invalid primary email: '{person['mailPrimaryAddress']}'")
                     error_count += 1
             if "oxContext" in person and not pd.isna(persons.at[index, "oxContext"]):
                 if not isinstance(person["oxContext"], (int, float)):
@@ -163,7 +142,7 @@ class ImportUser:
                     identity_provider=self.identity_provider,
                 )
 
-    def _load_users(self):
+    def _load_users(self) -> list[dict[str, Any]]:
         if self.iam_api_url:
             logging.info(f"Loading users from IAM API: {self.iam_api_url}")
             try:
@@ -180,9 +159,7 @@ class ImportUser:
             logging.info(f"Loading users from file: {self.input_file}")
             ext = os.path.splitext(self.input_file)[1].lower()
             if ext in (".ods",):
-                persons = pd.read_excel(
-                    self.input_file, engine="odf", skiprows=self.skip_rows
-                )
+                persons = pd.read_excel(self.input_file, engine="odf", skiprows=self.skip_rows)
             elif ext in (".xlsx",):
                 persons = pd.read_excel(self.input_file, engine="openpyxl")
             elif ext in (".csv",):
@@ -195,14 +172,12 @@ class ImportUser:
         logging.error("No IAM API URL or import file specified, cannot load users.")
         return None
 
-    def __get_image(self):
+    def __get_image(self) -> str | None:
         if not hasattr(self, "input_filelist_img_list"):
             self.input_filelist_img_list = []
         if len(self.input_filelist_img_list) == 0:
             for gender in ("m", "f"):
-                self.input_filelist_img_list.extend(
-                    glob.glob(self.input_dir_imgs_base + gender + "/*.jpg")
-                )
+                self.input_filelist_img_list.extend(glob.glob(self.input_dir_imgs_base + gender + "/*.jpg"))
 
         selected_image = random.choice(self.input_filelist_img_list)
         with open(selected_image, "rb") as image_file:

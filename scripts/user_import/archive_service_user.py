@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class ServiceArchiver:
     """Archives user data from individual services"""
 
-    def __init__(self, archive_dir: str = "/var/lib/opendesk-archives"):
+    def __init__(self, archive_dir: str = "/var/lib/opendesk-archives") -> None:
         self.archive_dir = archive_dir
         self.kubernetes_config = os.getenv("KUBECONFIG", "~/.kube/config")
 
@@ -514,7 +514,7 @@ class ServiceArchiver:
             return None
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Archive user data from services")
     parser.add_argument("username", help="Username to archive")
     parser.add_argument("--services", nargs="+", help="Specific services to archive (default: all available)")

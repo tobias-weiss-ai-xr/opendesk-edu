@@ -6,7 +6,7 @@ from api.main import app, create_app
 from api.config.settings import get_settings
 
 
-def main():
+def main() -> None:
     settings = get_settings()
     uvicorn.run(
         app,
