@@ -4,6 +4,11 @@
 
 FROM registry-1.docker.io/library/alpine:3.21.3
 
+LABEL maintainer="ZenDiS GmbH <opendesk@zendiS.de>" \
+      description="openDesk User Import Tools - Provision, deprovision, and sync users via UCS UDM REST API" \
+      source="https://codeberg.org/opendesk-edu/opendesk-edu" \
+      license="Apache-2.0"
+
 RUN apk add --no-cache \
     python3=3.12.9-r0 \
     py3-pip=24.3.1-r0 \
@@ -18,6 +23,7 @@ WORKDIR /app
 
 COPY ./lib/ /app/lib/
 COPY ./config/ /app/config/
+COPY ./entrypoint.sh /app/entrypoint.sh
 COPY ./provision.py /app/
 COPY ./deprovision_disable.py /app/
 COPY ./deprovision_delete.py /app/
@@ -28,6 +34,8 @@ COPY ./Makefile /app/
 COPY ./.env.example /app/.env.example
 COPY ./requirements.txt /app/
 
-RUN pip install --no-cache-dir --break-system-packages -r /app/requirements.txt
+RUN pip install --no-cache-dir --break-system-packages -r /app/requirements.txt \
+  && chmod +x /app/entrypoint.sh
 
-CMD ["/app/provision.py"]
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["provision"]
