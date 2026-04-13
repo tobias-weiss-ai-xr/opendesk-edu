@@ -102,4 +102,13 @@ global:
       limits:
         memory: "8Gi"
         cpu: "2000m"
+
+  ## =============================================================================
+  ## BACKCHANNEL LOGOUT CONFIGURATION
+  ## Enable SAML backchannel logout for specific services
+  ## =============================================================================
+  backchannelLogout:
+    saml:
+      moodle:
+        enabled: true
 ...
