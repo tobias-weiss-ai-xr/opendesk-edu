@@ -35,7 +35,7 @@ jobs:
             --output pip-audit-report.json || true
 
       - name: Upload scan results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: pip-audit-report
@@ -82,7 +82,7 @@ jobs:
             scripts/user_import/
 
       - name: Upload SAST results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: semgrep-report
@@ -137,7 +137,7 @@ jobs:
             --skip-check CKV_K8S_20  # Skip readiness probe check
 
       - name: Upload Checkov results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: checkov-report
@@ -162,7 +162,7 @@ jobs:
           verbose: true
 
       - name: Upload Gitleaks results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: gitleaks-report
@@ -192,7 +192,7 @@ jobs:
             --file sbom-python.json
 
       - name: Upload SBOMs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom
           path: |
@@ -200,7 +200,7 @@ jobs:
             sbom-python.json
 
       - name: Upload SBOM to GitHub
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: github-sbom
           path: sbom-*.json
