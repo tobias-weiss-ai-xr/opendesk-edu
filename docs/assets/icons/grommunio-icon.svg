@@ -1,0 +1,6 @@
+<svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white" stroke="#E5E7EB"/>
+  <path d="M22 40 L55 24 L88 40 L88 70 L55 86 L22 70 Z" fill="#341291"/>
+  <path d="M55 50 L55 70 M48 55 L62 65" fill="none" stroke="#571EFA" stroke-width="3"/>
+  <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Grommunio</text>
+</svg>

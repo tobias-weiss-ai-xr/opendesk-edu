@@ -1,0 +1,12 @@
+<svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white" stroke="#E5E7EB"/>
+  <path d="M30 40 H80 V60 H30Z" fill="#341291"/>
+  <path d="M32 42 H78 V58 H32Z" fill="#571EFA"/>
+  <path d="M34 44 H76 V56 H34Z" fill="white"/>
+  <path d="M35 45 H75 V55 H35Z" fill="#341291"/>
+  <path d="M40 50 H70 V65 H40Z" fill="#571EFA"/>
+  <path d="M42 52 H68 V63 H42Z" fill="white"/>
+  <path d="M45 55 H65 V70 H45Z" fill="#341291"/>
+  <path d="M47 57 H63 V68 H47Z" fill="white"/>
+  <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">BookStack</text>
+</svg>

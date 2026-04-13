@@ -1,6 +1,8 @@
-<svg width="900" height="220" viewBox="0 0 900 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="900" height="220" fill="#FAFBFC" rx="12"/>
+<svg width="900" height="380" viewBox="0 0 900 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="380" fill="#FAFBFC" rx="12"/>
   <text x="450" y="28" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#341291" font-weight="600">openDesk Edu Icon Set</text>
+  
+  <!-- Row 1 -->
   <g transform="translate(25, 45)">
     <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
     <path d="M55 24 L22 40 L55 56 L88 40Z" fill="#341291"/><path d="M22 44 L55 60 L55 88 L22 72Z" fill="#571EFA"/><path d="M88 44 L55 60 L55 88 L88 72Z" fill="#341291"/>
@@ -30,5 +32,117 @@
     <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
     <path d="M24 28 H42 V82 H24Z" fill="#341291"/><path d="M46 28 H64 V82 H46Z" fill="#571EFA"/><path d="M68 28 H86 V82 H68Z" fill="#341291"/>
     <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Planka</text>
+  </g>
+  
+  <!-- Row 2 -->
+  <g transform="translate(25, 180)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M22 40 L55 24 L88 40 L88 70 L55 86 L22 70 Z" fill="#341291"/>
+    <path d="M55 50 L55 70 M48 55 L62 65" fill="none" stroke="#571EFA" stroke-width="3"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Grommunio</text>
+  </g>
+  <g transform="translate(160, 180)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M22 30 H88 V70 H22Z" fill="#341291"/>
+    <path d="M26 34 H84 V66 H26Z" fill="#571EFA"/>
+    <path d="M30 38 H80 V62 H30Z" fill="white"/>
+    <path d="M35 42 L45 48 M45 42 L35 48 M55 42 L65 48 M65 42 L55 48 M75 42 L85 48 M85 42 L75 48" stroke="#341291" stroke-width="2"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Etherpad</text>
+  </g>
+  <g transform="translate(295, 180)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M30 40 H80 V60 H30Z" fill="#341291"/>
+    <path d="M32 42 H78 V58 H32Z" fill="#571EFA"/>
+    <path d="M34 44 H76 V56 H34Z" fill="white"/>
+    <path d="M35 45 H75 V55 H35Z" fill="#341291"/>
+    <path d="M40 50 H70 V65 H40Z" fill="#571EFA"/>
+    <path d="M42 52 H68 V63 H42Z" fill="white"/>
+    <path d="M45 55 H65 V70 H45Z" fill="#341291"/>
+    <path d="M47 57 H63 V68 H47Z" fill="white"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">BookStack</text>
+  </g>
+  <g transform="translate(430, 180)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M35 35 C35 30, 45 25, 55 25 C65 25, 75 30, 75 35" fill="none" stroke="#341291" stroke-width="4"/>
+    <path d="M35 35 L35 55 C35 65, 45 75, 55 75 C65 75, 75 65, 75 55 L75 35" fill="none" stroke="#571EFA" stroke-width="4"/>
+    <path d="M25 45 L35 45" fill="none" stroke="#341291" stroke-width="3"/>
+    <path d="M75 45 L85 45" fill="none" stroke="#341291" stroke-width="3"/>
+    <circle cx="25" cy="45" r="5" fill="#341291"/>
+    <circle cx="85" cy="45" r="5" fill="#341291"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Zammad</text>
+  </g>
+  <g transform="translate(565, 180)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M25 35 H85 V75 H25Z" fill="#341291"/>
+    <path d="M30 40 H45 V70 H30Z" fill="#571EFA"/>
+    <path d="M50 40 H65 V70 H50Z" fill="#341291"/>
+    <path d="M70 40 H80 V70 H70Z" fill="#571EFA"/>
+    <rect x="32" y="45" width="11" height="8" rx="2" fill="white"/>
+    <rect x="52" y="45" width="11" height="8" rx="2" fill="white"/>
+    <rect x="72" y="45" width="6" height="8" rx="2" fill="white"/>
+    <rect x="32" y="58" width="11" height="8" rx="2" fill="white"/>
+    <rect x="52" y="58" width="11" height="8" rx="2" fill="white"/>
+    <rect x="72" y="58" width="6" height="8" rx="2" fill="white"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">LimeSurvey</text>
+  </g>
+  <g transform="translate(700, 180)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M55 25 L85 55 L55 85 L25 55 Z" fill="#341291"/>
+    <path d="M55 25 L85 55 L55 85 L25 55 Z" fill="none" stroke="#571EFA" stroke-width="3"/>
+    <path d="M55 35 L55 45 M55 65 L55 75" stroke="#341291" stroke-width="2"/>
+    <path d="M35 55 L45 55 M65 55 L75 55" stroke="#571EFA" stroke-width="2"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Draw.io</text>
+  </g>
+  
+  <!-- Row 3 -->
+  <g transform="translate(25, 315)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M50 25 L75 35 L75 65 L50 75 L25 65 L25 35 Z" fill="#341291"/>
+    <path d="M50 30 L72 38 L72 62 L50 70 L28 62 L28 38 Z" fill="#571EFA"/>
+    <path d="M50 35 L69 41 L69 59 L50 65 L31 59 L31 41 Z" fill="white"/>
+    <path d="M50 40 L50 60" fill="none" stroke="#341291" stroke-width="2"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Excalidraw</text>
+  </g>
+  <g transform="translate(160, 315)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M35 50 C35 45, 40 40, 45 40 C50 40, 55 45, 55 50 C55 55, 50 60, 45 60 C40 60, 35 55, 35 50 Z" fill="#341291"/>
+    <path d="M45 40 C42 38, 38 40, 38 43 C38 46, 42 48, 45 46 C48 44, 48 42, 45 40 Z" fill="#571EFA"/>
+    <path d="M65 40 C62 38, 58 40, 58 43 C58 46, 62 48, 65 46 C68 44, 68 42, 65 40 Z" fill="#571EFA"/>
+    <path d="M45 60 C42 58, 38 60, 38 63 C38 66, 42 68, 45 66 C48 64, 48 62, 45 60 Z" fill="#571EFA"/>
+    <path d="M65 60 C62 58, 58 60, 58 63 C58 66, 62 68, 65 66 C68 64, 68 62, 65 60 Z" fill="#571EFA"/>
+    <path d="M55 35 L55 45 M55 55 L55 65" stroke="#341291" stroke-width="2"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">F13</text>
+  </g>
+  <g transform="translate(295, 315)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M55 25 L75 35 L75 65 L55 75 L35 65 L35 35 Z" fill="#341291"/>
+    <path d="M55 30 L72 38 L72 62 L55 70 L38 62 L38 38 Z" fill="#571EFA"/>
+    <path d="M55 35 L69 41 L69 59 L55 65 L41 59 L41 41 Z" fill="white"/>
+    <path d="M55 40 L55 60" fill="none" stroke="#341291" stroke-width="2"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">SSP</text>
+  </g>
+  <g transform="translate(430, 315)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M55 25 L85 40 L55 55 L25 40 Z" fill="#341291"/>
+    <path d="M55 30 L80 42 L55 54 L30 42 Z" fill="#571EFA"/>
+    <path d="M55 35 L75 45 L55 55 L35 45 Z" fill="white"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">TYPO3</text>
+  </g>
+  <g transform="translate(565, 315)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M30 45 L40 35 L50 45 L40 55 Z" fill="#341291"/>
+    <path d="M40 35 L40 55" fill="none" stroke="#571EFA" stroke-width="4"/>
+    <path d="M50 45 Q60 40, 70 45 T90 50" fill="none" stroke="#341291" stroke-width="3" stroke-linecap="round"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">LTB SSP</text>
+  </g>
+  <g transform="translate(700, 315)">
+    <rect width="111" height="111" rx="20" fill="white" stroke="#E5E7EB"/>
+    <path d="M35 50 C35 45, 40 40, 45 40 C50 40, 55 45, 55 50 C55 55, 50 60, 45 60 C40 60, 35 55, 35 50 Z" fill="#341291"/>
+    <path d="M45 40 C42 38, 38 40, 38 43 C38 46, 42 48, 45 46 C48 44, 48 42, 45 40 Z" fill="#571EFA"/>
+    <path d="M65 40 C62 38, 58 40, 58 43 C58 46, 62 48, 65 46 C68 44, 68 42, 65 40 Z" fill="#571EFA"/>
+    <path d="M45 60 C42 58, 38 60, 38 63 C38 66, 42 68, 45 66 C48 64, 48 62, 45 60 Z" fill="#571EFA"/>
+    <path d="M65 60 C62 58, 58 60, 58 63 C58 66, 62 68, 65 66 C68 64, 68 62, 65 60 Z" fill="#571EFA"/>
+    <path d="M55 35 L55 45 M55 55 L55 65" stroke="#341291" stroke-width="2"/>
+    <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">F13</text>
   </g>
 </svg>

@@ -1,0 +1,14 @@
+<svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white" stroke="#E5E7EB"/>
+  <path d="M25 35 H85 V75 H25Z" fill="#341291"/>
+  <path d="M30 40 H45 V70 H30Z" fill="#571EFA"/>
+  <path d="M50 40 H65 V70 H50Z" fill="#341291"/>
+  <path d="M70 40 H80 V70 H70Z" fill="#571EFA"/>
+  <rect x="32" y="45" width="11" height="8" rx="2" fill="white"/>
+  <rect x="52" y="45" width="11" height="8" rx="2" fill="white"/>
+  <rect x="72" y="45" width="6" height="8" rx="2" fill="white"/>
+  <rect x="32" y="58" width="11" height="8" rx="2" fill="white"/>
+  <rect x="52" y="58" width="11" height="8" rx="2" fill="white"/>
+  <rect x="72" y="58" width="6" height="8" rx="2" fill="white"/>
+  <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Planka</text>
+</svg>
