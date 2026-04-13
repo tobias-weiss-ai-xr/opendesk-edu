@@ -120,15 +120,73 @@ deprovisioning. The identity provider alias is configurable via
 
 ## Docker Deployment
 
+Build the image:
+
 ```bash
 docker build -t opendesk-user-import .
+```
+
+The image supports multiple operations via the `COMMAND` environment variable:
+
+| Command | Script | Description |
+|---|---|---|
+| `provision` | `provision.py` | Provision users from ODS/XLSX/CSV or IAM API |
+| `disable` | `deprovision_disable.py` | Phase 1: disable users not in IAM |
+| `delete` | `deprovision_delete.py` | Phase 2: permanently delete after grace period |
+| `deprovision` | `deprovision_user.py` | Disable or delete a single user |
+| `sync` | `sync_users.py` | Sync users from LDAP to Keycloak |
+| `archive` | `archive_service_user.py` | Archive user data from services |
+
+### Examples
+
+Provision users:
+
+```bash
 docker run --rm \
+  -e COMMAND=provision \
   -e IMPORT_DOMAIN=example.com \
   -e UDM_API_PASSWORD=secret \
   -e KEYCLOAK_URL=https://id.example.com \
   -e KEYCLOAK_API_PASSWORD=keycloak-secret \
+  -v /path/to/users.ods:/data/users.ods:ro \
+  -e IMPORT_FILENAME=/data/users.ods \
   opendesk-user-import
 ```
+
+Deprovision (disable users not in IAM):
+
+```bash
+docker run --rm \
+  -e COMMAND=disable \
+  -e IMPORT_DOMAIN=example.com \
+  -e UDM_API_PASSWORD=secret \
+  -e DRY_RUN=true \
+  opendesk-user-import
+```
+
+Sync users from LDAP:
+
+```bash
+docker run --rm \
+  -e COMMAND=sync \
+  -e LDAP_SERVER=ldap://ldap.example.de \
+  -e LDAP_BASE_DN=dc=example,dc=de \
+  -e LDAP_BIND_DN=cn=admin,dc=example,dc=de \
+  -e LDAP_BIND_PASSWORD=secret \
+  opendesk-user-import
+```
+
+Show available commands:
+
+```bash
+docker run --rm -e COMMAND=help opendesk-user-import
+```
+
+## Operational Runbook
+
+For detailed operational procedures including cron scheduling, troubleshooting,
+monitoring, backup/recovery, and rollback instructions, see the
+[Operational Runbook](docs/operational-runbook.md).
 
 ## Security Notes
 

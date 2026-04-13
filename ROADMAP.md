@@ -77,9 +77,9 @@ security patching, custom configurations, and supply-chain transparency.
 Critical for security — when a user logs out of the portal, all sessions across all services must
 be terminated.
 
-- [ ] Implement SAML backchannel logout for ILIAS, Moodle, BBB
-- [ ] Implement OIDC backchannel logout for OpenCloud, Nextcloud
-- [ ] Central logout from portal propagates to all services
+- [x] Implement SAML backchannel logout for ILIAS, Moodle, BBB
+- [x] Implement OIDC backchannel logout for OpenCloud, Nextcloud
+- [x] Central logout from portal propagates to all services
 
 ### User Provisioning & Deprovisioning
 
@@ -90,8 +90,8 @@ existing `scripts/user_import/` tooling.
 - [x] Configurable SAML account linking via Keycloak admin API (federated-identity endpoints)
 - [x] Two-phase deprovisioning: disable (6-month grace period) → permanent delete
 - [x] UCS/UDM REST API integration for provisioning (LDAP groups, CSV/ODS import)
-- [ ] Docker image for standalone execution
-- [ ] Documentation and operational runbook
+- [x] Docker image for standalone execution
+- [x] Documentation and operational runbook
 
 ---
 
