@@ -800,11 +800,11 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.iliasSaml | quote }}
         redirectUris:
-          - "https://lms.opendesk.example.com/*"
-        rootUrl: "https://lms.opendesk.example.com"
-        adminUrl: "https://lms.opendesk.example.com"
+          - "https://lms.{{ .Values.global.domain }}/*"
+        rootUrl: "https://lms.{{ .Values.global.domain }}"
+        adminUrl: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
         consentRequired: false
-        frontchannelLogout: true
+        frontchannelLogout: false
         publicClient: false
         authorizationServicesEnabled: false
         attributes:
@@ -817,7 +817,7 @@ config:
           saml.client.signature: "false"
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
-          frontchannel.logout.url: "https://lms.opendesk.example.com/Shibboleth.sso/Logout"
+          logout.service.url.binding.soap.post: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
         protocolMappers:
           - name: "email"
             protocol: "saml"
@@ -859,11 +859,11 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.moodleSaml | quote }}
         redirectUris:
-          - "https://moodle.opendesk.example.com/*"
-        rootUrl: "https://moodle.opendesk.example.com"
-        adminUrl: "https://moodle.opendesk.example.com"
+          - "https://moodle.{{ .Values.global.domain }}/*"
+        rootUrl: "https://moodle.{{ .Values.global.domain }}"
+        adminUrl: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
         consentRequired: false
-        frontchannelLogout: true
+        frontchannelLogout: false
         publicClient: false
         authorizationServicesEnabled: false
         attributes:
@@ -876,7 +876,7 @@ config:
           saml.client.signature: "false"
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
-          frontchannel.logout.url: "https://moodle.opendesk.example.com/Shibboleth.sso/Logout"
+          logout.service.url.binding.soap.post: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
         protocolMappers:
           - name: "email"
             protocol: "saml"
@@ -918,10 +918,10 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.bbbSaml | quote }}
         redirectUris:
-          - "https://bbb.opendesk.example.com/*"
-          - "https://bbb.opendesk.example.com/auth/saml2/callback"
-        rootUrl: "https://bbb.opendesk.example.com"
-        adminUrl: "https://bbb.opendesk.example.com"
+          - "https://bbb.{{ .Values.global.domain }}/*"
+          - "https://bbb.{{ .Values.global.domain }}/auth/saml2/callback"
+        rootUrl: "https://bbb.{{ .Values.global.domain }}"
+        adminUrl: "https://bbb.{{ .Values.global.domain }}/saml/logout"
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
@@ -936,7 +936,7 @@ config:
           saml.client.signature: "false"
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
-          frontchannel.logout.url: "https://bbb.opendesk.example.com/Shibboleth.sso/Logout"
+          frontchannel.logout.url: "https://bbb.{{ .Values.global.domain }}/saml/logout"
         protocolMappers:
           - name: "email"
             protocol: "saml"
