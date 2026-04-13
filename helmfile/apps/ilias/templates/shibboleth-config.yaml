@@ -32,6 +32,8 @@ data:
           <Handler type="Status" Location="/Status" acl="127.0.0.1"/>
           <Handler type="Session" Location="/Session" showAttributeValues="false"/>
           <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+          <Handler type="Logout" Location="/SLO/SOAP"
+                   Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"/>
         </Sessions>
 
         <MetadataProvider id="KeycloakMD" type="XML"
