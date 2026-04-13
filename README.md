@@ -104,30 +104,20 @@ core services universities need — all integrated with openDesk's existing Keyc
 | ✏️ **Whiteboarding** | [Excalidraw](https://excalidraw.com/) | 🔄 Beta | Hand-drawn sketches, brainstorming — lightweight and fast |
 | 📰 **CMS** | [TYPO3](https://typo3.org/) | 🔄 Beta | Enterprise CMS — university websites, department pages, research portals |
 
-### 🔄 Alternative Components by Function
+### 🔄 Alternative Components
 
-Each function has a default component and one or more education-focused alternatives. Pick one per row.
+Each function has a default component and one or more alternatives. Pick one per row.
 
-- **📧 Email & Groupware:** [OX App Suite](https://www.open-xchange.com/) ↔ [SOGo](https://www.sogo.nu/) ↔ **[Grommunio](https://grommunio.com/)** — OX is the full groupware suite; SOGo is a lightweight webmail alternative; Grommunio adds **ActiveSync 16.1** for native mobile device sync (iOS, Android)
-- **📹 Video Conferencing:** [Jitsi](https://jitsi.github.io/) ↔ [BigBlueButton](https://bigbluebutton.org/) — Jitsi for quick meetings; BBB for lectures with recording, whiteboard, breakout rooms
-- **📁 Files & Cloud Storage:** [Nextcloud](https://nextcloud.com/) ↔ [OpenCloud](https://opencloud.eu/) — Nextcloud is the full-featured cloud suite; OpenCloud is a lightweight CS3-based alternative for education
-- **✏️ Whiteboard:** [Excalidraw](https://excalidraw.com/) ↔ CryptPad diagrams — Excalidraw for freeform sketching; CryptPad for privacy-first collaborative diagrams
-
-### 🔄 Component Choices at a Glance
+| Function | Options | Key Differences |
+|:---------|:--------|:----------------|
+| 📧 **Email & Groupware** | [OX App Suite](https://www.open-xchange.com/) / [SOGo](https://www.sogo.nu/) / [Grommunio](https://grommunio.com/) | OX: full enterprise suite · SOGo: lightweight webmail · Grommunio: ActiveSync 16.1 for native mobile sync |
+| 📹 **Video Conferencing** | [Jitsi](https://jitsi.github.io/) / [BigBlueButton](https://bigbluebutton.org/) | Jitsi: quick meetings · BBB: lectures with recording, whiteboard, breakout rooms |
+| 📁 **Files & Cloud Storage** | [Nextcloud](https://nextcloud.com/) / [OpenCloud](https://opencloud.eu/) | Nextcloud: full-featured cloud suite · OpenCloud: lightweight CS3-based, per-course shares |
+| ✏️ **Whiteboard** | [Excalidraw](https://excalidraw.com/) / CryptPad diagrams | Excalidraw: freeform sketching · CryptPad: privacy-first collaborative diagrams |
 
 <p align="center">
   <img src="docs/assets/component-alternatives.svg" alt="Component alternatives" width="640"/>
 </p>
-
-### Configurable Alternatives 🔄
-
-For groupware, choose from **three** options. For video and files, pick one of two. Not both.
-
-| Standard | Alternative | Status | Key Benefits |
-|:---------|:------------|:------:|:-------------|
-| 📧 [OX App Suite](https://www.open-xchange.com/) / [SOGo](https://www.sogo.nu/) / [Grommunio](https://grommunio.com/) | Choose one | ✅ | OX: full enterprise · SOGo: lightweight · Grommunio: ActiveSync for mobile |
-| 📹 [Jitsi](https://jitsi.github.io/) | [BigBlueButton](https://bigbluebutton.org/) | 🔄 Beta | Built for teaching: recording, whiteboard, breakout rooms, session timers |
-| 📁 [Nextcloud](https://nextcloud.com/) | [OpenCloud](https://opencloud.eu/) | 🔄 Beta | Lightweight for education: per-course shares, CS3-based sync |
 
 ## ✨ How It Works
 
