@@ -24,9 +24,15 @@ tests:
           value: 8080
       - equal:
           path: spec.ports[1].name
-          value: metrics
+          value: lmtp
       - equal:
           path: spec.ports[1].port
+          value: 24
+      - equal:
+          path: spec.ports[2].name
+          value: metrics
+      - equal:
+          path: spec.ports[2].port
           value: 9090
       - equal:
           path: spec.selector["app.kubernetes.io/name"]

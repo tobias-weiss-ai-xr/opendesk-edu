@@ -29,10 +29,16 @@ tests:
           value: critical
       - equal:
           path: spec.groups[0].rules[2].alert
-          value: GrommunioHighErrorRate
+          value: GrommunioHighMemory
+      - equal:
+          path: spec.groups[0].rules[2].labels.severity
+          value: warning
       - equal:
           path: spec.groups[0].rules[3].alert
-          value: GrommunioDatabaseConnectionExhausted
+          value: GrommunioReplicaDown
+      - equal:
+          path: spec.groups[0].rules[3].labels.severity
+          value: critical
   - it: should not create alerts when monitoring is disabled
     set:
       grommunio.monitoring.enabled: false

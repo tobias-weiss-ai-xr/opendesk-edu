@@ -103,11 +103,15 @@ federation:
     ##
     attributeMapping:
 
-      ## Map eduPersonPrincipalName to Keycloak email
-      ## DFN-AAI uses eduPersonPrincipalName as the persistent identifier.
-      ## Most deployments prefer to use this as the email attribute.
+      ## Map mail to Keycloak email
+      ## DFN-AAI releases the mail attribute as the user's primary email address.
       ##
-      email: {{ env "DFN_TEST_ATTR_EMAIL" | default "eduPersonPrincipalName" | quote }}
+      email: {{ env "DFN_TEST_ATTR_EMAIL" | default "mail" | quote }}
+
+      ## Map eduPersonPrincipalName to Keycloak username
+      ## DFN-AAI uses eduPersonPrincipalName as the persistent identifier (user@institution).
+      ##
+      username: {{ env "DFN_TEST_ATTR_USERNAME" | default "eduPersonPrincipalName" | quote }}
 
       ## Map displayName to Keycloak firstName (full name split)
       ## Alternatively, map to custom attribute if preferred.
@@ -231,9 +235,13 @@ federation:
     ##
     attributeMapping:
 
-      ## Map eduPersonPrincipalName to Keycloak email
+      ## Map mail to Keycloak email
       ##
-      email: {{ env "DFN_PRODUCTION_ATTR_EMAIL" | default "eduPersonPrincipalName" | quote }}
+      email: {{ env "DFN_PRODUCTION_ATTR_EMAIL" | default "mail" | quote }}
+
+      ## Map eduPersonPrincipalName to Keycloak username
+      ##
+      username: {{ env "DFN_PRODUCTION_ATTR_USERNAME" | default "eduPersonPrincipalName" | quote }}
 
       ## Map displayName to Keycloak firstName
       ##
@@ -310,7 +318,8 @@ federation:
     #   ## Attribute mapping
     #   ##
     #   attributeMapping:
-    #     email: "eduPersonPrincipalName"
+    #     email: "mail"
+    #     username: "eduPersonPrincipalName"
     #     firstName: "displayName"
     #     lastName: "displayName"
     #     affiliation: "eduPersonAffiliation"

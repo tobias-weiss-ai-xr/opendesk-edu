@@ -58,7 +58,6 @@
         "containerSecurityContext": {
           "type": "object",
           "properties": {
-            "readOnlyRootFilesystem": { "type": "boolean" },
             "allowPrivilegeEscalation": { "type": "boolean" },
             "runAsNonRoot": { "type": "boolean" }
           }
@@ -68,7 +67,7 @@
         "affinity": { "type": "object" },
         "timezone": { "type": "string" },
         "language": { "type": "string" },
-        "pageTile": { "type": "string" },
+        "pageTitle": { "type": "string" },
         "db": {
           "type": "object",
           "properties": {
@@ -157,6 +156,10 @@
             "sieve": {
               "type": "object",
               "properties": { "server": { "type": "string" } }
+            },
+            "lmtp": {
+              "type": "object",
+              "properties": { "port": { "type": "integer" } }
             }
           }
         },
@@ -169,10 +172,7 @@
             "activesync": { "type": "boolean" },
             "ews": { "type": "boolean" },
             "mapi": { "type": "boolean" },
-            "webinterface": { "type": "boolean" },
-            "chat": { "type": "boolean" },
-            "meet": { "type": "boolean" },
-            "files": { "type": "boolean" }
+            "webinterface": { "type": "boolean" }
           }
         },
         "activesync": {
@@ -298,8 +298,7 @@
           "type": "object",
           "properties": {
             "enabled": { "type": "boolean" },
-            "minAvailable": { "type": "integer" },
-            "maxUnavailable": { "type": "integer" }
+            "minAvailable": { "type": "integer" }
           }
         },
         "hpa": {

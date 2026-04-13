@@ -1,0 +1,117 @@
+# SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Test attribute values for various affiliation combinations
+# Used by integration tests to verify attribute mapping correctness
+
+# Single affiliation scenarios
+single_affiliations:
+  student:
+    eduPersonAffiliation: ["student"]
+    eduPersonScopedAffiliation: ["student@example.edu"]
+    expected_roles: ["student"]
+  faculty:
+    eduPersonAffiliation: ["faculty"]
+    eduPersonScopedAffiliation: ["faculty@example.edu"]
+    expected_roles: ["instructor"]
+  teacher:
+    eduPersonAffiliation: ["teacher"]
+    eduPersonScopedAffiliation: ["teacher@example.edu"]
+    expected_roles: ["instructor"]
+  staff:
+    eduPersonAffiliation: ["staff"]
+    eduPersonScopedAffiliation: ["staff@example.edu"]
+    expected_roles: ["staff"]
+  employee:
+    eduPersonAffiliation: ["employee"]
+    eduPersonScopedAffiliation: ["employee@example.edu"]
+    expected_roles: ["staff"]
+  member:
+    eduPersonAffiliation: ["member"]
+    eduPersonScopedAffiliation: ["member@example.edu"]
+    expected_roles: ["member"]
+  affiliate:
+    eduPersonAffiliation: ["affiliate"]
+    eduPersonScopedAffiliation: ["affiliate@example.edu"]
+    expected_roles: ["affiliate"]
+  alum:
+    eduPersonAffiliation: ["alum"]
+    eduPersonScopedAffiliation: ["alum@example.edu"]
+    expected_roles: ["alumni"]
+  library-walk-in:
+    eduPersonAffiliation: ["library-walk-in"]
+    eduPersonScopedAffiliation: ["library-walk-in@example.edu"]
+    expected_roles: ["library"]
+
+# Multi-affiliation scenarios
+multi_affiliations:
+  student_staff:
+    eduPersonAffiliation: ["student", "staff"]
+    eduPersonScopedAffiliation: ["student@example.edu", "staff@example.edu"]
+    expected_roles: ["student", "staff"]
+  faculty_student:
+    eduPersonAffiliation: ["faculty", "student"]
+    eduPersonScopedAffiliation: ["faculty@example.edu", "student@example.edu"]
+    expected_roles: ["instructor", "student"]
+  all_affiliations:
+    eduPersonAffiliation: ["faculty", "staff", "student", "member", "affiliate", "alum"]
+    eduPersonScopedAffiliation:
+      - "faculty@example.edu"
+      - "staff@example.edu"
+      - "student@example.edu"
+      - "member@example.edu"
+      - "affiliate@example.edu"
+      - "alum@example.edu"
+    expected_roles: ["instructor", "staff", "student", "member", "affiliate", "alumni"]
+
+# Display name parsing scenarios
+display_names:
+  two_part:
+    display_name: "Max Mustermann"
+    expected_first_name: "Max"
+    expected_last_name: "Mustermann"
+  three_part:
+    display_name: "Hans Peter Schmidt"
+    expected_first_name: "Hans"
+    expected_last_name: "Peter Schmidt"
+  single_word:
+    display_name: "Madonna"
+    expected_first_name: null
+    expected_last_name: "Madonna"
+  four_part:
+    display_name: "Jean Claude van Damme"
+    expected_first_name: "Jean"
+    expected_last_name: "Claude van Damme"
+
+# Complete user profiles for end-to-end testing
+user_profiles:
+  student_user:
+    mail: "max.mustermann@example.edu"
+    displayName: "Max Mustermann"
+    givenName: "Max"
+    sn: "Mustermann"
+    eduPersonPrincipalName: "max.mustermann@example.edu"
+    eduPersonAffiliation: ["student", "member"]
+    eduPersonTargetedID: "test.aai.dfn.de!https://id.dev.opendesk-edu.local!a1b2c3d4e5f6"
+    eduPersonScopedAffiliation: ["student@example.edu", "member@example.edu"]
+    schacHomeOrganization: "example.edu"
+  faculty_user:
+    mail: "prof.schmidt@example.edu"
+    displayName: "Prof. Dr. Maria Schmidt"
+    givenName: "Maria"
+    sn: "Schmidt"
+    eduPersonPrincipalName: "maria.schmidt@example.edu"
+    eduPersonAffiliation: ["faculty", "member"]
+    eduPersonTargetedID: "test.aai.dfn.de!https://id.dev.opendesk-edu.local!f1e2d3c4b5a6"
+    eduPersonScopedAffiliation: ["faculty@example.edu", "member@example.edu"]
+    schacHomeOrganization: "example.edu"
+  staff_user:
+    mail: "admin@example.edu"
+    displayName: "IT Administrator"
+    givenName: null
+    sn: null
+    eduPersonPrincipalName: "admin@example.edu"
+    eduPersonAffiliation: ["staff", "employee", "member"]
+    eduPersonTargetedID: "test.aai.dfn.de!https://id.dev.opendesk-edu.local!x1y2z3w4v5u6"
+    eduPersonScopedAffiliation: ["staff@example.edu", "employee@example.edu", "member@example.edu"]
+    schacHomeOrganization: "example.edu"

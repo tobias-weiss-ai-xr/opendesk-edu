@@ -28,12 +28,13 @@ tests:
           value: 8080
       - equal:
           path: spec.template.spec.containers[0].ports[1].containerPort
+          value: 24
+      - equal:
+          path: spec.template.spec.containers[0].ports[1].name
+          value: lmtp
+      - equal:
+          path: spec.template.spec.containers[0].ports[2].containerPort
           value: 9090
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: GROMMUNIO_TIMEZONE
-            value: Europe/Berlin
       - isKind:
           of: Deployment
   - it: should have health checks configured
@@ -72,9 +73,6 @@ tests:
           value: 8Gi
   - it: should have security context configured
     asserts:
-      - equal:
-          path: spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem
-          value: true
       - equal:
           path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
           value: false

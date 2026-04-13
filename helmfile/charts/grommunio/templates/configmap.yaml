@@ -9,7 +9,7 @@ metadata:
 data:
   GROMMUNIO_TIMEZONE: {{ .Values.grommunio.timezone | quote }}
   GROMMUNIO_LANGUAGE: {{ .Values.grommunio.language | quote }}
-  GROMMUNIO_PAGE_TITLE: {{ .Values.grommunio.pageTile | quote }}
+  GROMMUNIO_PAGE_TITLE: {{ .Values.grommunio.pageTitle | quote }}
   GROMMUNIO_DB_TYPE: {{ .Values.grommunio.db.type | quote }}
   GROMMUNIO_DB_HOST: {{ .Values.grommunio.db.host | quote }}
   GROMMUNIO_DB_PORT: {{ .Values.grommunio.db.port | quote }}
@@ -25,6 +25,7 @@ data:
   GROMMUNIO_MAIL_IMAP_SERVER: {{ .Values.grommunio.mail.imap.server | quote }}
   GROMMUNIO_MAIL_SMTP_SERVER: {{ .Values.grommunio.mail.smtp.server | quote }}
   GROMMUNIO_MAIL_SIEVE_SERVER: {{ .Values.grommunio.mail.sieve.server | quote }}
+  GROMMUNIO_MAIL_LMTP_PORT: {{ .Values.grommunio.mail.lmtp.port | quote }}
   GROMMUNIO_FEATURES: |
     email={{ .Values.grommunio.features.email }}
     calendar={{ .Values.grommunio.features.calendar }}

@@ -1,17 +1,20 @@
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
 # SPDX-License-Identifier: Apache-2.0
 ---
-{{- if .Values.federation.enabled -}}
-{{- if .Values.federation.dfnAai.enabled -}}
+{{- if .Values.federation.enabled }}
+{{- range $envKey, $envName := dict "dfnTest" "dfn-aai-test" "dfnProduction" "dfn-aai" }}
+{{- $env := index $.Values.federation $envKey }}
+{{- if and $env $env.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: keycloak-saml-role-mapper
-  namespace: {{ .Release.Namespace }}
+  name: keycloak-saml-role-mapper-{{ $envName }}
+  namespace: {{ $.Release.Namespace }}
   labels:
     app.kubernetes.io/name: keycloak
     app.kubernetes.io/component: saml-role-mapper
     app.kubernetes.io/part-of: opendesk
+    federation.environment: {{ $envKey }}
 data:
   saml-role-mapper.js: |
     /**
@@ -25,6 +28,7 @@ data:
      *   member           → member
      *   affiliate        → affiliate
      *   alum             → alumni
+     *   library-walk-in  → library
      */
 
     var affiliation = user.getAttribute('affiliation');
@@ -71,6 +75,9 @@ data:
             case 'alum':
                 rolesToGrant.push('alumni');
                 break;
+            case 'library-walk-in':
+                rolesToGrant.push('library');
+                break;
         }
     }
 
@@ -94,5 +101,7 @@ data:
 
     // Set email as verified (trust from federation)
     user.setEmailVerified(true);
+---
+{{- end }}
 {{- end }}
 {{- end }}

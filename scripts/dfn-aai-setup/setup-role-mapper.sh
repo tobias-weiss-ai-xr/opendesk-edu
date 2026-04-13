@@ -44,6 +44,7 @@ ROLE_MAPPER_SCRIPT='
  *   member           → member
  *   affiliate        → affiliate
  *   alum             → alumni
+ *   library-walk-in  → library
  */
 
 var affiliation = user.getAttribute("affiliation");
@@ -90,6 +91,9 @@ for each (var aff in affiliation) {
         case "alum":
             rolesToGrant.push("alumni");
             break;
+        case "library-walk-in":
+            rolesToGrant.push("library");
+            break;
     }
 }
 
@@ -126,6 +130,7 @@ REQUIRED_ROLES=(
     "member"
     "affiliate"
     "alumni"
+    "library"
 )
 
 show_usage() {
@@ -164,6 +169,7 @@ Role Mapping Rules:
     member               →  member
     affiliate            →  affiliate
     alum                 →  alumni
+    library-walk-in      →  library
 
 Examples:
     # Create role mapper and required roles

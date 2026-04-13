@@ -760,4 +760,4 @@ Absolvieren Sie diese Checkliste vor dem Wechsel zur Produktion:
 
 - [DFN-AAI Enrollment Guide](./federation/dfn-aai-enrollment.md) - Technische Integrationsdetails
 - [Federation Testing Guide](./federation/testing-guide.md) - Umfassende Testverfahren
-- [IdP Federation Configuration](./enhanced-configuration/idp-federation.md) - Allgemeine IdP-Föderation
+- [DFN-AAI Federation Guide](./dfn-aai-federation.md) - Allgemeine IdP-Föderation

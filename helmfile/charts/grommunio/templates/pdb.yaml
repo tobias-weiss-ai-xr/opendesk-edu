@@ -8,12 +8,7 @@ metadata:
   labels:
 {{ include "grommunio.labels" . | nindent 4 }}
 spec:
-  {{- if .Values.grommunio.pdb.minAvailable }}
   minAvailable: {{ .Values.grommunio.pdb.minAvailable }}
-  {{- end }}
-  {{- if .Values.grommunio.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.grommunio.pdb.maxUnavailable }}
-  {{- end }}
   selector:
     matchLabels:
 {{ include "grommunio.selectorLabels" . | nindent 6 }}

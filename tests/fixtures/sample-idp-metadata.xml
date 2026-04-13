@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+                     entityID="https://test.aai.dfn.de/idp/shibboleth"
+                     ID="_dfn-aai-test-idp">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:oasis:names:tc:SAML:1.1:protocol">
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo>
+        <ds:X509Data>
+          <ds:X509Certificate>MIIDJzCCAg+gAwIBAgIJALhAeFhSxVTuMA0GCSqGSIb3DQEBCwUAMC0xKzApBgNVBAMMImRmbi1hYWktdGVzdC1pZHAuYWFpLmRmbi5kZSAxMB4XDTI1MDExNTAwMDAwMFoXDTI2MDExNTAwMDAwMFowLTErMCkGA1UEAwwiZGZuLWFhaS10ZXN0LWlkcC5hYWkuZGZuLmRlIDEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDN7v3hr2v8LFgqN3+UjHcMKY7JqHGvQXkpLSZoUZ6kG7pFhX3RMeY5v1qJmKxEQrPLn2sTTestDFNAAITestCertificateForUnitTestingPurposesOnlyDoNotUseInProduction==</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</md:NameIDFormat>
+    <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+    <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"/>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://test.aai.dfn.de/idp/profile/SAML2/POST/SSO"/>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="https://test.aai.dfn.de/idp/profile/Shibboleth/SSO"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:mail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:displayName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:givenName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:sn" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:eduPersonPrincipalName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:eduPersonAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:mace:dir:attribute-def:eduPersonScopedAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:oid:1.3.6.1.4.1.25178.1.2.9" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+  </md:IDPSSODescriptor>
+  <md:Organization>
+    <md:OrganizationName xml:lang="de">DFN-Verein</md:OrganizationName>
+    <md:OrganizationName xml:lang="en">DFN Association</md:OrganizationName>
+    <md:OrganizationDisplayName xml:lang="de">DFN-AAI Testfoederation</md:OrganizationDisplayName>
+    <md:OrganizationDisplayName xml:lang="en">DFN-AAI Test Federation</md:OrganizationDisplayName>
+    <md:OrganizationURL xml:lang="de">https://www.aai.dfn.de/</md:OrganizationURL>
+    <md:OrganizationURL xml:lang="en">https://www.aai.dfn.de/en/</md:OrganizationURL>
+  </md:Organization>
+  <md:ContactPerson contactType="technical">
+    <md:GivenName>DFN-AAI</md:GivenName>
+    <md:SurName>Support</md:SurName>
+    <md:EmailAddress>mailto:support@aai.dfn.de</md:EmailAddress>
+  </md:ContactPerson>
+</md:EntityDescriptor>

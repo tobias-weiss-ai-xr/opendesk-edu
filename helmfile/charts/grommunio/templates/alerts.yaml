@@ -32,22 +32,22 @@ spec:
           annotations:
             summary: "Grommunio pod crash looping"
             description: "Pod {{ "{{ $labels.pod }}" }} in namespace {{ "{{ $labels.namespace }}" }} is crash looping."
-        - alert: GrommunioHighErrorRate
+        - alert: GrommunioHighMemory
           expr: |
-            rate(grommunio_http_requests_total{namespace="{{ .Release.Namespace }}",status=~"5.."}[5m]) > 0.1
+            container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",container="grommunio"} > 7Gi
           for: 5m
           labels:
             severity: warning
           annotations:
-            summary: "Grommunio high error rate"
-            description: "Grommunio instance has high error rate: {{ "{{ $value }}" }} errors/s."
-        - alert: GrommunioDatabaseConnectionExhausted
+            summary: "Grommunio memory usage near limit"
+            description: "Grommunio container memory is {{ "{{ $value | humanize }}" }}, approaching the 8Gi limit."
+        - alert: GrommunioReplicaDown
           expr: |
-            grommunio_db_connections_active{namespace="{{ .Release.Namespace }}"} / grommunio_db_connections_max{namespace="{{ .Release.Namespace }}"} > 0.9
+            kube_deployment_status_replicas_available{namespace="{{ .Release.Namespace }}",deployment="{{ include "grommunio.fullname" . }}"} < 1
           for: 5m
           labels:
-            severity: warning
+            severity: critical
           annotations:
-            summary: "Grommunio database connections nearly exhausted"
-            description: "Database connection pool is {{ "{{ $value | humanizePercentage }}" }} full."
+            summary: "Grommunio has no available replicas"
+            description: "Deployment {{ "{{ $labels.deployment }}" }} has zero available replicas."
 {{- end }}

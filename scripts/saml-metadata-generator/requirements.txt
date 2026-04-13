@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: 2025 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Python dependencies for SAML Metadata Generator
+# Required for generating SAML 2.0 SP metadata for DFN-AAI/eduGAIN federation
+
+pyyaml>=6.0

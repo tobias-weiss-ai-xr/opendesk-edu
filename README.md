@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### TL;DR 🚀
 
-openDesk CE + 13 education services (ILIAS, Moodle, BigBlueButton, OpenCloud, …)<br/>
+openDesk CE + 15 education services (ILIAS, Moodle, BigBlueButton, OpenCloud, Grommunio, …)<br/>
 one-command Kubernetes deploy with unified Keycloak SSO
 
 # 🎓 openDesk Edu
@@ -35,10 +35,13 @@ one-command Kubernetes deploy with unified Keycloak SSO
 
 An extension of [openDesk Community Edition](https://www.opencode.de/en/opendesk) that adds
 **learning management systems** (ILIAS, Moodle) and provides **alternative components** for
-video conferencing (BigBlueButton ↔ Jitsi) and file sharing (OpenCloud ↔ Nextcloud) —
-all integrated with openDesk's existing Keycloak SSO and portal. Deploy everything on Kubernetes with a single `helmfile apply`.
+email/groupware (Grommunio, SOGo ↔ OX App Suite), video conferencing (BigBlueButton ↔ Jitsi),
+and file sharing (OpenCloud ↔ Nextcloud) — all integrated with openDesk's existing Keycloak SSO
+and portal. Deploy everything on Kubernetes with a single `helmfile apply`.
 
 [Getting Started →](#-quick-start) &nbsp;·&nbsp; [What's Added →](#-whats-added-on-top-of-opendesk-ce) &nbsp;·&nbsp; [Roadmap →](./ROADMAP.md) &nbsp;·&nbsp; [All Components →](#-full-component-matrix) &nbsp;·&nbsp; [Local Dev →](./docs/local-development.md)
+
+> 🏗️ **Note:** All charts currently use upstream container images. Building own images for sovereignty and security patching is on the [roadmap](./ROADMAP.md).
 
 <br/>
 
@@ -96,13 +99,30 @@ core services universities need — all integrated with openDesk's existing Keyc
 | 📐 **Diagramming** | [Draw.io](https://www.drawio.com/) | 🔄 Beta | Architecture diagrams, flowcharts, UML — export to PDF/VSDX |
 | ✏️ **Whiteboarding** | [Excalidraw](https://excalidraw.com/) | 🔄 Beta | Hand-drawn sketches, brainstorming — lightweight and fast |
 
-### Alt Components (Choose One) 🔄
+### 🔄 Alternative Components by Function
 
-Configure **either** the standard openDesk CE component **or** its education-focused alternative — not both.
+Each function has a default component and one or more education-focused alternatives. Pick one per row.
+
+- **📧 Email & Groupware:** [OX App Suite](https://www.open-xchange.com/) ↔ [SOGo](https://www.sogo.nu/) ↔ **[Grommunio](https://grommunio.com/)** — OX is the full groupware suite; SOGo is a lightweight webmail alternative; Grommunio adds **ActiveSync 16.1** for native mobile device sync (iOS, Android)
+- **📹 Video Conferencing:** [Jitsi](https://jitsi.github.io/) ↔ [BigBlueButton](https://bigbluebutton.org/) — Jitsi for quick meetings; BBB for lectures with recording, whiteboard, breakout rooms
+- **📁 Files & Cloud Storage:** [Nextcloud](https://nextcloud.com/) ↔ [OpenCloud](https://opencloud.eu/) — Nextcloud is the full-featured cloud suite; OpenCloud is a lightweight CS3-based alternative for education
+- **✏️ Whiteboard:** [Excalidraw](https://excalidraw.com/) ↔ CryptPad diagrams — Excalidraw for freeform sketching; CryptPad for privacy-first collaborative diagrams
+
+### 🔄 Component Choices at a Glance
+
+| Function | Option A | Option B | Option C |
+|:---------|:---------|:---------|:---------|
+| 📧 Groupware | [OX App Suite](https://www.open-xchange.com/) | [SOGo](https://www.sogo.nu/) | [Grommunio](https://grommunio.com/) |
+| 📹 Video Conferencing | [Jitsi](https://jitsi.github.io/) | [BigBlueButton](https://bigbluebutton.org/) | |
+| 📁 Cloud Files | [Nextcloud](https://nextcloud.com/) | [OpenCloud](https://opencloud.eu/) | |
+
+### Configurable Alternatives 🔄
+
+For groupware, choose from **three** options. For video and files, pick one of two. Not both.
 
 | Standard | Alternative | Status | Key Benefits |
 |:---------|:------------|:------:|:-------------|
-| 📧 [OX App Suite](https://www.open-xchange.com/) | [SOGo](https://www.sogo.nu/) | 🔄 Beta | Email-focused, modern UI, better student experience, tight LDAP integration |
+| 📧 [OX App Suite](https://www.open-xchange.com/) / [SOGo](https://www.sogo.nu/) / [Grommunio](https://grommunio.com/) | Choose one | ✅ | OX: full enterprise · SOGo: lightweight · Grommunio: ActiveSync for mobile |
 | 📹 [Jitsi](https://jitsi.github.io/) | [BigBlueButton](https://bigbluebutton.org/) | 🔄 Beta | Built for teaching: recording, whiteboard, breakout rooms, session timers |
 | 📁 [Nextcloud](https://nextcloud.com/) | [OpenCloud](https://opencloud.eu/) | 🔄 Beta | Lightweight for education: per-course shares, CS3-based sync |
 
@@ -111,13 +131,13 @@ Configure **either** the standard openDesk CE component **or** its education-foc
 - 🔐 **SSO** – One login (Keycloak) via SAML2/OIDC for all services
 - 🖥️ **Unified Portal** – Access educational services alongside openDesk apps
 - 📦 **Modular Charts** – Each service in its own configurable Helm chart
-- 💾 **Integrated Backups** – k8up-backed persistent data (LMS, recordings, files)
+- 💾 **Integrated Backups** – k8up-backed persistent data (LMS, recordings, files; Grommunio uses MariaDB)
 
 ### What's unchanged ✅
 
 All core openDesk CE components remain intact — Element, Nextcloud, Open-Xchange, XWiki, OpenProject,
-Jitsi, CryptPad, Notes, Collabora, and the full Nubus IAM stack. BBB and OpenCloud are optional
-drop-in alternatives, not replacements. This is a **superset** of openDesk CE, not a fork.
+Jitsi, CryptPad, Notes, Collabora, and the full Nubus IAM stack. BBB, OpenCloud, Grommunio, and SOGo are
+optional drop-in alternatives, not replacements. This is a **superset** of openDesk CE, not a fork.
 
 ---
 
@@ -133,6 +153,7 @@ drop-in alternatives, not replacements. This is a **superset** of openDesk CE, n
 | 📁 Files | Nextcloud | AGPL-3.0 | [32.0.6](https://nextcloud.com/de/changelog/#32-0-6) | [Docs](https://docs.nextcloud.com/) |
 | 📧 **Groupware** | **OX App Suite** | GPL-2.0 / AGPL-3.0 | [8.46](https://documentation.open-xchange.com/appsuite/releases/8.46/) | [Docs](https://documentation.open-xchange.com/) |
 | 💌 **Alt Webmail** | **SOGo** (↔ OX App Suite) | LGPL-2.1 | [5.11](https://github.com/Alinto/sogo/releases) | [Docs](https://www.sogo.nu/support/documentation.html) |
+| 💌 **Alt Webmail** | **Grommunio** (↔ OX/SOGo) | AGPL-3.0 | [2025.01](https://grommunio.com/) | [Docs](https://docs.grommunio.com/) |
 | 📚 Wiki | XWiki | LGPL-2.1 | [17.10.4](https://www.xwiki.org/xwiki/bin/view/ReleaseNotes/Data/XWiki/17.10.4/) | [Docs](https://www.xwiki.org/xwiki/bin/view/Documentation) |
 | 🔑 Portal & IAM | Nubus | AGPL-3.0 | [1.18.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/1.18.html) | [Docs](https://docs.software-univention.de/n/en/nubus.html) |
 | 📋 Projects | OpenProject | GPL-3.0 | [17.2.1](https://www.openproject.org/docs/release-notes/17-2-1/) | [Docs](https://www.openproject.org/docs/user-guide/) |

@@ -78,9 +78,9 @@ For DFN-AAI federation members, use the aggregated metadata:
 
 | Environment | Metadata URL |
 |-------------|--------------|
-| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml` |
-| Production Federation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml` |
-| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml` |
+| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` |
+| Production Federation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
+| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml` |
 
 #### Individual Institution Metadata Examples
 
@@ -401,7 +401,7 @@ kcadm.sh set-password -r opendesk \
   --new-password <secure-password>
 
 # Grant admin role
-kcadmin.sh add-roles -r opendesk \
+kcadm.sh add-roles -r opendesk \
   --uusername emergency-admin \
   --rolename admin
 ```
@@ -542,9 +542,9 @@ Für DFN-AAI-Föderationsmitglieder verwenden Sie die aggregierten Metadaten:
 
 | Umgebung | Metadaten-URL |
 |----------|---------------|
-| Testföderation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml` |
-| Produktivföderation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml` |
-| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml` |
+| Testföderation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` |
+| Produktivföderation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
+| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml` |
 
 ---
 

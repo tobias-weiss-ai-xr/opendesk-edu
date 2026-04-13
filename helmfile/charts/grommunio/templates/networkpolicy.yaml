@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 # SPDX-License-Identifier: Apache-2.0
 {{- if or (not .Values.networkPolicy) .Values.networkPolicy.enabled }}
 apiVersion: networking.k8s.io/v1
@@ -27,6 +27,43 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/instance: {{ .Release.Name }}
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mariadb
+      ports:
+        - protocol: TCP
+          port: 3306
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: openldap
+      ports:
+        - protocol: TCP
+          port: 389
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: keycloak
+      ports:
+        - protocol: TCP
+          port: 8080
+        - protocol: TCP
+          port: 443
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postfix
+      ports:
+        - protocol: TCP
+          port: 587
   ingress:
     - from:
         - podSelector:
@@ -40,4 +77,11 @@ spec:
       ports:
         - protocol: TCP
           port: 80
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postfix
+      ports:
+        - protocol: TCP
+          port: 24
 {{- end }}

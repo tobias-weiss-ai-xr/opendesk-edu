@@ -20,9 +20,14 @@ DEFAULT_ADMIN_USER="admin"
 DEFAULT_ADMIN_PASSWORD="admin"
 
 # DFN-AAI Metadata URLs
-DFN_AAI_TEST_METADATA="https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
-DFN_AAI_PROD_METADATA="https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
-DFN_AAI_EDUGAIN_METADATA="https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+DFN_AAI_TEST_METADATA="https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml"
+DFN_AAI_PROD_METADATA="https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml"
+DFN_AAI_EDUGAIN_METADATA="https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml"
+
+# DFN-AAI SSO Endpoint URLs (actual SAML SSO endpoints, NOT metadata URLs)
+DFN_AAI_TEST_SSO_URL="https://test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"
+DFN_AAI_PROD_SSO_URL="https://www.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"
+DFN_AAI_EDUGAIN_SSO_URL="https://www.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"
 
 # Colors for output
 RED='\033[0;31m'
@@ -185,7 +190,7 @@ create_identity_provider() {
         -s displayName="${IDP_DISPLAY_NAME}" \
         -s 'config.metadataDescriptorUrl='"${METADATA_URL}" \
         -s 'config.entityId='"${SP_ENTITY_ID}" \
-        -s 'config.singleSignOnServiceUrl='"${METADATA_URL}" \
+        -s 'config.singleSignOnServiceUrl='"${SSO_URL}" \
         -s 'config.nameIDPolicyFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:persistent' \
         -s 'config.principalType=ATTRIBUTE' \
         -s 'config.principalAttribute=urn:mace:dir:attribute-def:eduPersonTargetedID' \
@@ -345,18 +350,21 @@ main() {
     case "${environment}" in
         test)
             METADATA_URL="${DFN_AAI_TEST_METADATA}"
+            SSO_URL="${DFN_AAI_TEST_SSO_URL}"
             IDP_ALIAS="dfn-aai-test"
             IDP_DISPLAY_NAME="Mit Ihrer Einrichtung anmelden (Test)"
             DISCOVERY_URL="${DISCOVERY_URL:-https://test.discovery.aai.dfn.de/}"
             ;;
         production)
             METADATA_URL="${DFN_AAI_PROD_METADATA}"
+            SSO_URL="${DFN_AAI_PROD_SSO_URL}"
             IDP_ALIAS="dfn-aai"
             IDP_DISPLAY_NAME="Mit Ihrer Einrichtung anmelden"
             DISCOVERY_URL="${DISCOVERY_URL:-https://discovery.aai.dfn.de/}"
             ;;
         edugain)
             METADATA_URL="${DFN_AAI_EDUGAIN_METADATA}"
+            SSO_URL="${DFN_AAI_EDUGAIN_SSO_URL}"
             IDP_ALIAS="edugain"
             IDP_DISPLAY_NAME="Sign in with your institution (eduGAIN)"
             DISCOVERY_URL="${DISCOVERY_URL:-https://discovery.edugain.org/}"
@@ -376,8 +384,8 @@ main() {
     TRUST_EMAIL="${TRUST_EMAIL:-true}"
     FIRST_LOGIN_FLOW="${FIRST_LOGIN_FLOW:-first broker login}"
     SP_ENTITY_ID="${SP_ENTITY_ID:-${KEYCLOAK_URL}/realms/${REALM}}"
-    ACS_URL="${ACS_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/saml/endpoint}"
-    SLO_URL="${SLO_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/saml/endpoint}"
+    ACS_URL="${ACS_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/${IDP_ALIAS}/endpoint}"
+    SLO_URL="${SLO_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/${IDP_ALIAS}/endpoint}"
 
     # Execute setup
     check_prerequisites

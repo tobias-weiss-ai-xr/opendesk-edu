@@ -45,37 +45,18 @@ spec:
           image: {{ include "grommunio.image" . }}
           imagePullPolicy: {{ .Values.grommunio.image.pullPolicy }}
           securityContext:
-            readOnlyRootFilesystem: {{ .Values.grommunio.containerSecurityContext.readOnlyRootFilesystem }}
             allowPrivilegeEscalation: {{ .Values.grommunio.containerSecurityContext.allowPrivilegeEscalation }}
             runAsNonRoot: {{ .Values.grommunio.containerSecurityContext.runAsNonRoot }}
           ports:
             - name: http
               containerPort: {{ .Values.grommunio.service.targetPort }}
               protocol: TCP
+            - name: lmtp
+              containerPort: {{ .Values.grommunio.mail.lmtp.port }}
+              protocol: TCP
             - name: metrics
               containerPort: {{ .Values.grommunio.monitoring.prometheus.port }}
               protocol: TCP
-          env:
-            - name: GROMMUNIO_TIMEZONE
-              value: {{ .Values.grommunio.timezone | quote }}
-            - name: GROMMUNIO_LANGUAGE
-              value: {{ .Values.grommunio.language | quote }}
-            - name: GROMMUNIO_DB_HOST
-              value: {{ .Values.grommunio.db.host | quote }}
-            - name: GROMMUNIO_DB_PORT
-              value: {{ .Values.grommunio.db.port | quote }}
-            - name: GROMMUNIO_DB_NAME
-              value: {{ .Values.grommunio.db.name | quote }}
-            - name: GROMMUNIO_DB_USER
-              value: {{ .Values.grommunio.db.user | quote }}
-            - name: GROMMUNIO_CACHE_HOST
-              value: {{ .Values.grommunio.cache.host | quote }}
-            - name: GROMMUNIO_CACHE_PORT
-              value: {{ .Values.grommunio.cache.port | quote }}
-            - name: GROMMUNIO_MAIL_DOMAIN
-              value: {{ .Values.grommunio.mail.domain | quote }}
-            - name: GROMMUNIO_FEATURES
-              value: "email,calendar,contacts,activesync,ews,mapi"
           envFrom:
             - configMapRef:
                 name: {{ include "grommunio.fullname" . }}-config

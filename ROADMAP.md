@@ -32,6 +32,7 @@
 | Self-Service Password (LDAP) | ✅ |
 | SOGo groupware (alternative to OX App Suite) | ✅ |
 | TYPO3 CMS v13.4 LTS (SAML2 + OIDC SSO) | ✅ |
+| Grommunio groupware (ActiveSync, OIDC) | ✅ |
 
 ---
 
@@ -48,6 +49,7 @@ SAML Service Provider within this federation.
 - [x] Support standard eduGAIN attributes (`eduPersonAffiliation`, `mail`, `displayName`, `persistentId`)
 - [x] Document federation metadata generation for deployers
 - [x] Support Shibboleth IdP as external identity provider (for universities that already run one)
+- [x] Predictable federation metadata (SP) — scripts at `scripts/saml-metadata-generator/` and `scripts/dfn-aai-setup/`
 - [ ] Test with DFN-AAI test federation (`https://www.aai.dfn.de/`)
 
 ### Semester Lifecycle Management
@@ -59,6 +61,16 @@ need to follow this rhythm.
 - [x] Role-based access control tied to semester enrollment (instructor, student, tutor)
 - [x] Automated course archival at semester end
 - [x] Integration hook for campus management systems (HIS/LSF)
+
+### Build Pipeline — Own Container Images
+
+All charts currently use upstream container images. Building own images gives sovereignty over
+security patching, custom configurations, and supply-chain transparency.
+
+- [ ] Set up CI pipeline for building images from upstream source
+- [ ] Image registry infrastructure (Harbor or equivalent)
+- [ ] Automated base-image updates (Dependabot/Renovate for Docker)
+- [ ] Signing and attestation (cosign, SBOM generation)
 
 ### Backchannel Logout
 
@@ -512,14 +524,15 @@ Growing EU requirement via European Open Science Cloud (EOSC).
 | **Canvas LMS** | Proprietary (Instructure). Conflicts with sovereignty principle. |
 | **Shibboleth IdP deployment** | Universities already run their own IdP. openDesk Edu integrates as a SAML SP, not an IdP provider. SATOSA proxy (v5.0) handles SAML-to-OIDC translation for federated scenarios. |
 | **Keycloak as eduGAIN IdP** | SAML federation support is incomplete. Use Shibboleth IdP for federation, Keycloak for internal IAM. |
+| **Stack4Ops/public** | Evaluated and discarded — operations tooling not relevant to education integration needs |
 
 ---
 
 ## Timeline
 
 ```
-2026 Q2   v1.0  Core platform + 14 education services (ILIAS, Moodle, BBB, OpenCloud, SOGo, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, SSP, TYPO3)
-           v1.1  DFN-AAI federation + semester lifecycle + logout + user provisioning/deprovisioning
+2026 Q2   v1.0  Core platform + 15 education services (ILIAS, Moodle, BBB, OpenCloud, SOGo, Grommunio, TYPO3, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, SSP)
+            v1.1  DFN-AAI federation + semester lifecycle + logout + user provisioning/deprovisioning + own container image pipeline
 2026 Q3   v1.2  Opencast + Tobira lecture recording
 2026 Q4   v1.5  HISinOne/Marvin campus management integration (phase 1: identity)
 2027 Q1   v1.5  HISinOne integration (phase 2: courses, phase 3: schedule/exams)

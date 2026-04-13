@@ -70,9 +70,9 @@ This directory contains setup scripts for configuring Keycloak as a SAML Service
 
 | Environment | URL |
 |-------------|-----|
-| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml` |
-| Production | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml` |
-| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml` |
+| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` |
+| Production | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
+| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml` |
 
 ### Attribute Mapping
 
@@ -110,7 +110,7 @@ This directory contains setup scripts for configuring Keycloak as a SAML Service
 
 ```bash
 # Check network connectivity
-curl -I https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml
+curl -I https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml
 
 # Verify Keycloak is running
 curl -s https://id.example.edu/realms/opendesk/.well-known/openid-configuration
@@ -217,7 +217,7 @@ Dieses Verzeichnis enthält Einrichtungsskripte für die Konfiguration von Keycl
 
 ```bash
 # Netzwerkkonnektivität prüfen
-curl -I https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml
+curl -I https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml
 
 # Prüfen, ob Keycloak läuft
 curl -s https://id.beispiel-universitaet.de/realms/opendesk/.well-known/openid-configuration

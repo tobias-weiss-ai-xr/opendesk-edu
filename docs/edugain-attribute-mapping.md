@@ -106,6 +106,7 @@ The role assignment script mapper maps `eduPersonAffiliation` values to Keycloak
 | `member` | `member` | Generic institution members |
 | `affiliate` | `affiliate` | Affiliate members (external collaborators) |
 | `alum` | `alumni` | Alumni members |
+| `library-walk-in` | `library` | Walk-in library patrons |
 
 ### Multi-Value Attributes
 
@@ -256,6 +257,7 @@ Der Rollenzuweisungs-Skript-Mapper ordnet `eduPersonAffiliation`-Werte Keycloak-
 | `member` | `member` | Allgemeine Institutionsmitglieder |
 | `affiliate` | `affiliate` | Affilierte Mitglieder (externe Mitarbeiter) |
 | `alum` | `alumni` | Alumni-Mitglieder |
+| `library-walk-in` | `library` | Bibliotheks-Besucher (Walk-in) |
 
 ### Mehrwertige Attribute
 

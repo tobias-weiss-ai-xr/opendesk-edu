@@ -43,7 +43,6 @@ grommunio:
     runAsGroup: 1000
 
   containerSecurityContext:
-    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     runAsNonRoot: true
 
@@ -55,7 +54,7 @@ grommunio:
   # Localization
   timezone: "Europe/Berlin"
   language: "English"
-  pageTile: "openDesk Mail"
+  pageTitle: "openDesk Mail"
 
   # =========================================================================
   # DATABASE CONFIGURATION (CRITICAL: MariaDB/MySQL ONLY)
@@ -136,6 +135,9 @@ grommunio:
     sieve:
       server: "sieve://dovecot:4190"
 
+    lmtp:
+      port: 24
+
   # =========================================================================
   # FEATURE FLAGS
   # =========================================================================
@@ -147,9 +149,6 @@ grommunio:
     ews: true         # Exchange Web Services
     mapi: true        # MAPI/HTTP for Outlook
     webinterface: true
-    chat: true
-    meet: true
-    files: true
 
   # =========================================================================
   # ACTIVESYNC CONFIGURATION (Mobile devices)
@@ -193,6 +192,8 @@ grommunio:
       port: 9090
       path: "/metrics"
       scrapeInterval: 30s
+      alertLabels: {}
+      additionalLabels: {}
 
   # =========================================================================
   # HEALTH CHECKS (Critical for production)
@@ -255,6 +256,7 @@ grommunio:
     type: ClusterIP
     port: 80
     targetPort: 8080
+    annotations: {}
 
   # =========================================================================
   # POD DISRUPTION BUDGET
@@ -262,7 +264,6 @@ grommunio:
   pdb:
     enabled: true
     minAvailable: 1
-    maxUnavailable: 0
 
   # =========================================================================
   # HORIZONTAL POD AUTOSCALER
@@ -295,6 +296,11 @@ grommunio:
     tools:
       kdb2mt: true
       oxm2mt: true
+
+# =============================================================================
+# NETWORK POLICY
+# =============================================================================
+networkPolicy: {}
 
 # =============================================================================
 # MARIADB SUBCHART (Optional - dev/test only)

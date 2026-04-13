@@ -19,6 +19,10 @@ spec:
       targetPort: {{ .Values.grommunio.service.targetPort }}
       protocol: TCP
       name: http
+    - port: {{ .Values.grommunio.mail.lmtp.port }}
+      targetPort: lmtp
+      protocol: TCP
+      name: lmtp
     - port: {{ .Values.grommunio.monitoring.prometheus.port }}
       targetPort: metrics
       protocol: TCP

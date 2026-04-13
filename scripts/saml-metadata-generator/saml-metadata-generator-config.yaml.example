@@ -148,9 +148,10 @@ environments:
   dev:
     base_url: "https://id.dev.opendesk.example.edu"
     realm: "opendesk"
+    alias: "dfn-aai-test"
     entity_id: "https://dev.opendesk.example.edu/saml-sp"
-    acs_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    acs_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
+    slo_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 30
     certificates:
@@ -160,9 +161,10 @@ environments:
   staging:
     base_url: "https://id.staging.opendesk.example.edu"
     realm: "opendesk"
+    alias: "dfn-aai-test"
     entity_id: "https://staging.opendesk.example.edu/saml-sp"
-    acs_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    acs_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
+    slo_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 90
     certificates:
@@ -172,9 +174,10 @@ environments:
   production:
     base_url: "https://id.opendesk.example.edu"
     realm: "opendesk"
+    alias: "dfn-aai"
     entity_id: "https://opendesk.example.edu/saml-sp"
-    acs_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    acs_url: "https://id.opendesk.example.edu/realms/opendesk/broker/dfn-aai/endpoint"
+    slo_url: "https://id.opendesk.example.edu/realms/opendesk/broker/dfn-aai/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 365  # DFN-AAI requires ≤ 1 year for production
     certificates:
@@ -188,7 +191,7 @@ environments:
 dfn_aai:
   # Test Federation - Always test here first before production!
   test:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml"
     registration_url: "https://test.aai.dfn.de/metadata/"
     discovery_url: "https://test.discovery.aai.dfn.de/"
     support_email: "support@aai.dfn.de"
@@ -196,7 +199,7 @@ dfn_aai:
 
   # Production Federation - For live deployment
   production:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml"
     registration_url: "https://www.aai.dfn.de/en/service/metadata/"
     discovery_url: "https://discovery.aai.dfn.de/"
     support_email: "support@aai.dfn.de"
@@ -204,7 +207,7 @@ dfn_aai:
 
   # eduGAIN Interfederation - International institutions
   edugain:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml"
     registration_url: "https://technical.edugain.org/"
     discovery_url: "https://discovery.edugain.org/"
     support_email: "support@aai.dfn.de"

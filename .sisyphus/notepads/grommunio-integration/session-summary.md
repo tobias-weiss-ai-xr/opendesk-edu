@@ -437,3 +437,31 @@ Successfully completed Phase 1 (Research), Phase 2 (Helm Chart), and 40% of Phas
 - PowerShell `export` prefix fails on Windows — use plain git commands
 - PowerShell string replace with backtick-n doesn't handle newlines well
 *Date: 2026-04-03*
+
+---
+
+## Session 2026-04-13: README Fix + German Translation
+
+### Changes Made
+
+**File**: `helmfile/charts/grommunio/README.md`
+
+1. **Fixed parameter table typos:**
+   - `ingress.enabled` → `grommunio.ingress.enabled`
+   - `ingress.hostname` → `grommunio.ingress.hostname`
+
+2. **Added missing parameters from values.yaml:**
+   - `grommunio.pageTitle` (default: `openDesk Mail`)
+   - `grommunio.mail.lmtp.port` (default: `24`)
+   - `grommunio.service.annotations` (default: `{}`)
+   - `grommunio.pdb.enabled` (default: `true`)
+   - `grommunio.pdb.minAvailable` (default: `1`)
+
+3. **Added complete German translation** (155 lines total) with all sections:
+   - Voraussetzungen / Installation / Deinstallation / Konfiguration / Entwicklung-Test / Migration
+
+### Format Decisions
+- `<!-- German -->` comment separator with `---` horizontal rule between English and German
+- German parameter table uses "Beschreibung" and "Standardwert" as column headers
+- Code examples identical in both languages; only user-facing placeholder text translated (`<db-password>` → `<db-passwort>`)
+- No markdown LSP available for .md files; YAML template errors are pre-existing
