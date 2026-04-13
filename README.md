@@ -81,6 +81,10 @@ core services universities need — all integrated with openDesk's existing Keyc
 
 ### Educational Services Added ➕
 
+<p align="center">
+  <img src="docs/assets/icons/edu-services-icon-set.svg" alt="openDesk Edu service icons" width="720"/>
+</p>
+
 | Service | Component | Status | Description |
 |:--------|:----------|:------:|:------------|
 | 📖 **Learning Management** | [ILIAS](https://www.ilias.de/) | 🔄 Beta | Full-featured LMS with SAML SSO — courses, assessments, forums, SCORM |
@@ -98,6 +102,7 @@ core services universities need — all integrated with openDesk's existing Keyc
 | 🔑 **Password Self-Service** | [LTB SSP](https://ltb-project.org/) | 🔄 Beta | LDAP password reset — reduces helpdesk tickets |
 | 📐 **Diagramming** | [Draw.io](https://www.drawio.com/) | 🔄 Beta | Architecture diagrams, flowcharts, UML — export to PDF/VSDX |
 | ✏️ **Whiteboarding** | [Excalidraw](https://excalidraw.com/) | 🔄 Beta | Hand-drawn sketches, brainstorming — lightweight and fast |
+| 📰 **CMS** | [TYPO3](https://typo3.org/) | 🔄 Beta | Enterprise CMS — university websites, department pages, research portals |
 
 ### 🔄 Alternative Components by Function
 
@@ -110,11 +115,9 @@ Each function has a default component and one or more education-focused alternat
 
 ### 🔄 Component Choices at a Glance
 
-| Function | Option A | Option B | Option C |
-|:---------|:---------|:---------|:---------|
-| 📧 Groupware | [OX App Suite](https://www.open-xchange.com/) | [SOGo](https://www.sogo.nu/) | [Grommunio](https://grommunio.com/) |
-| 📹 Video Conferencing | [Jitsi](https://jitsi.github.io/) | [BigBlueButton](https://bigbluebutton.org/) | |
-| 📁 Cloud Files | [Nextcloud](https://nextcloud.com/) | [OpenCloud](https://opencloud.eu/) | |
+<p align="center">
+  <img src="docs/assets/component-alternatives.svg" alt="Component alternatives" width="640"/>
+</p>
 
 ### Configurable Alternatives 🔄
 
@@ -172,6 +175,15 @@ optional drop-in alternatives, not replacements. This is a **superset** of openD
 | 📐 **Diagrams** | **Draw.io** | Apache-2.0 | [29.6](https://github.com/jgraph/drawio/releases) | [Docs](https://www.drawio.com/doc/) |
 | ✏️ **Whiteboard** | **Excalidraw** | MIT | [latest](https://github.com/excalidraw/excalidraw/releases) | [Docs](https://docs.excalidraw.com/) |
 | 📰 **CMS** | **[TYPO3](https://typo3.org/)** | Apache-2.0 | [13.4](https://get.typo3.org/) | [Docs](https://docs.typo3.org/) |
+
+<details>
+<summary>🔐 DFN-AAI / eduGAIN SAML Federation — How it works</summary>
+
+<p align="center">
+  <img src="docs/assets/saml-federation-flow.svg" alt="SAML federation flow" width="640"/>
+</p>
+
+</details>
 
 ---
 
