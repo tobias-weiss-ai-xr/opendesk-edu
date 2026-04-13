@@ -11,22 +11,33 @@ global:
 additionalAnnotations:
   {{ .Values.annotations.opendeskServicesStaticFiles.additional | toYaml | nindent 2 }}
 
+# the keys below `assets` must be lowercase
 assets:
-  # all keys must be lowercase
+  keycloak:
+    subdomain: {{ .Values.global.hosts.keycloak | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/opendesk-static-files/login/logo.svg"
+        data: {{ .Values.theme.imagery.login.logoSvg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  portal:
+    subdomain: {{ .Values.global.hosts.nubus | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/univention/portal/icons/logos/domain.svg"
+        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+      - path: "/static-files/portal/background.svg"
+        data: {{ .Values.theme.imagery.portal.backgroundSvg | quote }}
+      - path: "/static-files/portal/waiting-spinner.svg"
+        data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
+      - path: "/static-files/login/background.jpg"
+        data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- if .Values.apps.element.enabled }}
   adminbot:
     subdomain: {{ .Values.global.hosts.adminBot | quote }}
-    pathType: "ImplementationSpecific"
-    paths:
-      - path: "/robots.txt"
-        data: {{ .Values.theme.other.robotsTxt | quote }}
-  collabora:
-    subdomain: {{ .Values.global.hosts.collabora | quote }}
-    pathType: "ImplementationSpecific"
-    paths:
-      - path: "/robots.txt"
-        data: {{ .Values.theme.other.robotsTxt | quote }}
-  cryptpad:
-    subdomain: {{ .Values.global.hosts.cryptpad | quote }}
     pathType: "ImplementationSpecific"
     paths:
       - path: "/robots.txt"
@@ -49,6 +60,24 @@ assets:
         data: {{ .Values.theme.imagery.chat.faviconPng | quote }}
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.collabora.enabled }}
+  collabora:
+    subdomain: {{ .Values.global.hosts.collabora | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.cryptpad.enabled }}
+  cryptpad:
+    subdomain: {{ .Values.global.hosts.cryptpad | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.jitsi.enabled }}
   jitsi:
     subdomain: {{ .Values.global.hosts.jitsi | quote }}
     pathType: "ImplementationSpecific"
@@ -57,14 +86,8 @@ assets:
         data: {{ .Values.theme.imagery.videoconference.faviconSvg | quote }}
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
-  keycloak:
-    subdomain: {{ .Values.global.hosts.keycloak | quote }}
-    pathType: "ImplementationSpecific"
-    paths:
-      - path: "/opendesk-static-files/login/logo.svg"
-        data: {{ .Values.theme.imagery.login.logoSvg | quote }}
-      - path: "/robots.txt"
-        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.nextcloud.enabled }}
   nextcloud:
     subdomain: {{ .Values.global.hosts.nextcloud | quote }}
     pathType: "ImplementationSpecific"
@@ -81,6 +104,8 @@ assets:
         mimeType: "image/jpeg"
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.notes.enabled }}
   notes:
     subdomain: {{ .Values.global.hosts.notes | quote }}
     pathType: "ImplementationSpecific"
@@ -93,12 +118,16 @@ assets:
         data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.openproject.enabled }}
   openproject:
     subdomain: {{ .Values.global.hosts.openproject | quote }}
     pathType: "ImplementationSpecific"
     paths:
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.oxAppSuite.enabled }}
   openxchange:
     subdomain: {{ .Values.global.hosts.openxchange | quote }}
     pathType: "ImplementationSpecific"
@@ -109,20 +138,8 @@ assets:
         data: {{ .Values.theme.imagery.groupware.faviconSvg | quote }}
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
-  portal:
-    subdomain: {{ .Values.global.hosts.nubus | quote }}
-    pathType: "ImplementationSpecific"
-    paths:
-      - path: "/univention/portal/icons/logos/domain.svg"
-        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
-      - path: "/static-files/portal/background.svg"
-        data: {{ .Values.theme.imagery.portal.backgroundSvg | quote }}
-      - path: "/static-files/portal/waiting-spinner.svg"
-        data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
-      - path: "/static-files/login/background.jpg"
-        data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
-      - path: "/robots.txt"
-        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.xwiki.enabled }}
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki | quote }}
     pathType: "ImplementationSpecific"
@@ -137,6 +154,7 @@ assets:
         data: {{ .Values.theme.imagery.knowledge.faviconPng | quote }}
       - path: "/robots.txt"
         data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
 
 cleanup:
   deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
