@@ -84,6 +84,153 @@ assets:
         data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
       - path: "/static-files/login/background.jpg"
         data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
+  portal-logout-confirm:
+    subdomain: {{ .Values.global.hosts.nubus | quote }}
+    pathType: "exact"
+    paths:
+      - path: "/logout-confirm.html"
+        data: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Log out of all services</title>
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                background: #f5f5f5;
+                color: #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                padding: 1rem;
+              }
+              .card {
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                max-width: 480px;
+                width: 100%;
+                padding: 2rem;
+                text-align: center;
+              }
+              h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+              p { color: #666; margin-bottom: 1.5rem; line-height: 1.5; }
+              .btn-primary {
+                background: #0066cc;
+                color: #fff;
+                border: none;
+                padding: 0.75rem 2rem;
+                border-radius: 4px;
+                font-size: 1rem;
+                cursor: pointer;
+                width: 100%;
+                margin-bottom: 0.75rem;
+              }
+              .btn-primary:hover { background: #0052a3; }
+              .btn-cancel {
+                color: #666;
+                text-decoration: none;
+                font-size: 0.9rem;
+              }
+              .btn-cancel:hover { color: #333; }
+            </style>
+          </head>
+          <body>
+            <div class="card">
+              <h1>Log out of all services</h1>
+              <p>
+                Your session will be ended on all connected services.
+                Any unsaved work may be lost.
+              </p>
+              <form method="POST"
+                    action="https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk/protocol/openid-connect/logout">
+                <input type="hidden" name="post_logout_redirect_uri"
+                       value="https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/logged-out.html" />
+                <button type="submit" class="btn-primary">Log Out All</button>
+              </form>
+              <a href="https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
+                 class="btn-cancel">Cancel</a>
+            </div>
+          </body>
+          </html>
+  portal-logged-out:
+    subdomain: {{ .Values.global.hosts.nubus | quote }}
+    pathType: "exact"
+    paths:
+      - path: "/logged-out.html"
+        data: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>You have been logged out</title>
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                background: #f5f5f5;
+                color: #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                padding: 1rem;
+              }
+              .card {
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                max-width: 520px;
+                width: 100%;
+                padding: 2rem;
+                text-align: center;
+              }
+              h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+              p { color: #666; margin-bottom: 1rem; line-height: 1.5; }
+              .disclaimer {
+                background: #fff8e1;
+                border: 1px solid #ffecb3;
+                border-radius: 4px;
+                padding: 1rem;
+                margin: 1rem 0;
+                text-align: left;
+                font-size: 0.85rem;
+                color: #795548;
+                line-height: 1.5;
+              }
+              .btn-return {
+                display: inline-block;
+                background: #0066cc;
+                color: #fff;
+                text-decoration: none;
+                padding: 0.75rem 2rem;
+                border-radius: 4px;
+                font-size: 1rem;
+                margin-top: 0.5rem;
+              }
+              .btn-return:hover { background: #0052a3; }
+            </style>
+          </head>
+          <body>
+            <div class="card">
+              <h1>You have been logged out</h1>
+              <p>Your session has been ended on most connected services.</p>
+              <div class="disclaimer">
+                Some applications (Planka, SOGo, Grommunio, Etherpad, BookStack, Zammad,
+                LimeSurvey, F13, DrawIO, Excalidraw) do not support immediate logout.
+                Sessions on these services will expire automatically within 30 minutes.
+                Closing your browser helps accelerate this process.
+              </div>
+              <a href="https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
+                 class="btn-return">Return to Portal</a>
+            </div>
+          </body>
+          </html>
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki | quote }}
     pathType: "prefix"
