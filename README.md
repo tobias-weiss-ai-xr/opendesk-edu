@@ -49,11 +49,11 @@ and portal. Deploy everything on Kubernetes with a single `helmfile apply`.
 
 | Language | Source | HTML |
 |:---------|:-------|:-----|
+| 🇨🇳 中文 | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.html) |
 | 🇩🇪 Deutsch | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk.html) |
 | 🇬🇧 English | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-en.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-en.html) |
-| 🇫🇷 Français | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.html) |
 | 🇪🇸 Español | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-es.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-es.html) |
-| 🇨🇳 中文 | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.html) |
+| 🇫🇷 Français | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.html) |
 
 </div>
 
