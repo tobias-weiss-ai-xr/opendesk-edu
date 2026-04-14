@@ -401,12 +401,17 @@ certificate:
 
 ## Password seed
 
-All secrets are generated from a master password via [Master Password (algorithm)](https://en.wikipedia.org/wiki/Master_Password_(algorithm)).
-To prevent others from using your openDesk instance, you must set your individual master password via:
+All secrets are generated from a master password via [Master Password (algorithm)](https://en.wikipedia.org/wiki/Master_Password_(algorithm)):
 
 ```shell
 export MASTER_PASSWORD="your_individual_master_password"
 ```
+
+There is no default value for the `MASTER_PASSWORD` and the deployment will fail if the environment variable is missing.
+
+> [!note]
+> Due to limitations of helm, the `MASTER_PASSWORD` environment variable has to be an non-empty value, even if all
+> secrets have been replaced by custom values.
 
 > [!important]
 > Currently a
