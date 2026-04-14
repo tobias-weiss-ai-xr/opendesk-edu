@@ -11,6 +11,9 @@ SPDX-License-Identifier: Apache-2.0
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Versions ≥ v1.14.0](#versions--v1140)
+      * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
+        * [Updated helmfile behaviour: Remove default MASTER_PASSWORD](update-helmfile-behaviour-remove-default-master-password)
     * [Versions ≥ v1.13.0](#versions--v1130)
       * [Pre-upgrade to versions ≥ v1.13.0](#pre-upgrade-to-versions--v1130)
         * [New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
@@ -204,6 +207,30 @@ If you would like more details about the automated migrations, please read secti
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
+
+### Versions ≥ v1.14.0
+
+#### Pre-upgrade to versions ≥ v1.14.0
+
+##### Updated helmfile behaviour: Remove default MASTER_PASSWORD
+
+**Target group:** All deployments that do not have set a `MASTER_PASSWORD` yet
+
+**Context**
+
+Default passwords are a common cause of security issues (see OWASP Top 10
+[A07:2017](https://owasp.org/Top10/2021/A07_2021-Identification_and_Authentication_Failures/)
+and [A02:2025](https://owasp.org/Top10/2025/A02_2025-Security_Misconfiguration/)).
+For this reason the default master password has been removed from the openDesk
+helmfile deployment. Setting the environment variable `MASTER_PASSWORD` is now
+required and the deployment will fail if it has an empty value.
+
+**Required action**
+
+If you have been relying on the default master password, set a master password.
+Note that due to limitations of helm, the `MASTER_PASSWORD` environment
+variable has to be an non-empty value, even if all secrets have been replaced
+by custom values.
 
 ### Versions ≥ v1.13.0
 
