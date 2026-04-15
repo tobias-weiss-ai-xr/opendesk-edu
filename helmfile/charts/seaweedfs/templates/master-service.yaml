@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "seaweedfs.masterFullname" . }}
+  labels:
+    {{- include "seaweedfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: master
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 9333
+      targetPort: grpc
+      protocol: TCP
+    - name: http
+      port: 9324
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "seaweedfs.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: master

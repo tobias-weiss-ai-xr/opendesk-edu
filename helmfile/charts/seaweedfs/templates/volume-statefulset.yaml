@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "seaweedfs.volumeFullname" . }}
+  labels:
+    {{- include "seaweedfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: volume
+spec:
+  serviceName: {{ include "seaweedfs.volumeFullname" . }}
+  replicas: {{ .Values.volume.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "seaweedfs.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: volume
+  template:
+    metadata:
+      labels:
+        {{- include "seaweedfs.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: volume
+    spec:
+      containers:
+        - name: volume
+          image: "{{ .Values.volume.image }}:{{ .Values.volume.tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "weed"
+            - "volume"
+            - "-port=8080"
+            - "-mserver={{ include "seaweedfs.masterFullname" . }}:9333"
+            - "-dir=/data"
+            - "-max={{ .Values.volume.maxVolumes }}"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            {{- toYaml .Values.volume.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          {{- include "seaweedfs.selectorLabels" . | nindent 10 }}
+          app.kubernetes.io/component: volume
+      spec:
+        accessModes:
+          - {{ .Values.volume.persistence.accessMode }}
+        {{- if .Values.volume.persistence.storageClass }}
+        storageClassName: {{ .Values.volume.persistence.storageClass }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.volume.persistence.size }}

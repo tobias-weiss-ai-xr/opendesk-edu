@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.backup.enabled }}
+apiVersion: k8up.io/v1
+kind: PreBackupPod
+metadata:
+  name: {{ include "seaweedfs.fullname" . }}-backup
+  labels:
+    {{- include "seaweedfs.labels" . | nindent 4 }}
+spec:
+  backupCommand: /bin/sh -c "weed backup -master={{ include "seaweedfs.masterFullname" . }}:9333 -backupDir=/backup"
+  podCommand: /bin/sh -c "while true; do sleep 3600; done"
+  podImage: "{{ .Values.volume.image }}:{{ .Values.volume.tag }}"
+  podWorkDir: "/backup"
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+{{- end }}

@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "seaweedfs.fullname" . }}
+  labels:
+    {{- include "seaweedfs.labels" . | nindent 4 }}
+data:
+  s3.json: |
+    {
+      "identities": [
+        {
+          "name": "admin",
+          "credentials": [
+            {
+              "access": "{{ .Values.auth.accessKey }}",
+              "secret": "{{ .Values.auth.secretKey }}"
+            }
+          ],
+          "actions": [
+            "admin",
+            "read",
+            "write",
+            "list",
+            "tagging"
+          ]
+        }
+      ]
+    }

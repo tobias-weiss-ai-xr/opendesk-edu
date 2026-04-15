@@ -1,0 +1,65 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "seaweedfs.masterFullname" . }}
+  labels:
+    {{- include "seaweedfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: master
+spec:
+  replicas: {{ .Values.master.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "seaweedfs.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: master
+  template:
+    metadata:
+      labels:
+        {{- include "seaweedfs.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: master
+    spec:
+      containers:
+        - name: master
+          image: "{{ .Values.master.image }}:{{ .Values.master.tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "weed"
+            - "master"
+            - "-port=9333"
+            - "-port.grpc=9324"
+            - "-mdir=/data"
+            - "-defaultReplication=000"
+            - "-volumeSizeLimitMB=30000"
+          ports:
+            - name: grpc
+              containerPort: 9333
+              protocol: TCP
+            - name: http
+              containerPort: 9324
+              protocol: TCP
+          {{- if .Values.master.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          {{- end }}
+          resources:
+            {{- toYaml .Values.master.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /cluster/status
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /cluster/status
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      {{- if .Values.master.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "seaweedfs.masterFullname" . }}
+      {{- end }}

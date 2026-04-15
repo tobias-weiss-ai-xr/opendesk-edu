@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "seaweedfs.s3Fullname" . }}
+  labels:
+    {{- include "seaweedfs.labels" . | nindent 4 }}
+    app.kubernetes.io/component: s3
+spec:
+  replicas: {{ .Values.s3.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "seaweedfs.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: s3
+  template:
+    metadata:
+      labels:
+        {{- include "seaweedfs.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: s3
+    spec:
+      containers:
+        - name: s3
+          image: "{{ .Values.s3.image }}:{{ .Values.s3.tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "weed"
+            - "s3"
+            - "-port=8333"
+            - "-filer={{ include "seaweedfs.masterFullname" . }}:9333"
+            - "-s3.config=/etc/seaweedfs/s3.json"
+          ports:
+            - name: http
+              containerPort: 8333
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/seaweedfs
+          env:
+            - name: WEED_S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seaweedfs.fullname" . }}
+                  key: accessKey
+            - name: WEED_S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seaweedfs.fullname" . }}
+                  key: secretKey
+          resources:
+            {{- toYaml .Values.s3.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "seaweedfs.fullname" . }}

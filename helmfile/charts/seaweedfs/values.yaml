@@ -1,0 +1,70 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+master:
+  replicaCount: 1
+  image: chrislusf/seaweedfs
+  tag: "3.78"
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+  persistence:
+    enabled: true
+    size: 10Gi
+    accessMode: ReadWriteOnce
+    storageClass: local-path
+
+volume:
+  replicaCount: 1
+  image: chrislusf/seaweedfs
+  tag: "3.78"
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "1000m"
+      memory: "2Gi"
+  persistence:
+    enabled: true
+    size: 500Gi
+    accessMode: ReadWriteMany
+    storageClass: ceph-cephfs-hdd-ec
+  maxVolumes: 32
+
+s3:
+  replicaCount: 1
+  image: chrislusf/seaweedfs
+  tag: "3.78"
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  config:
+    bucket: snipr-recordings
+
+ingress:
+  enabled: false
+
+auth:
+  enabled: true
+  adminUser: admin
+  adminPassword: ""  # Set via secrets
+  accessKey: ""      # Set via secrets
+  secretKey: ""      # Set via secrets
+
+backup:
+  enabled: true
+  k8up:
+    schedule: "0 2 * * *"
+    retention:
+      daily: 7
+      weekly: 4
+      monthly: 3
