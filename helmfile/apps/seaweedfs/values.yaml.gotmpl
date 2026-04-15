@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+master:
+  persistence:
+    storageClass: {{ .Values.storageclasses.cephfs | default "ceph-cephfs-hdd-ec" | quote }}
+
+volume:
+  replicaCount: {{ .Values.apps.seaweedfs.volumeReplicas | default 1 }}
+  persistence:
+    size: {{ .Values.apps.seaweedfs.volumeSize | default "500Gi" | quote }}
+    storageClass: {{ .Values.storageclasses.cephfs | default "ceph-cephfs-hdd-ec" | quote }}
+
+auth:
+  adminPassword: {{ .Values.secrets.seaweedfs.adminPassword | quote }}
+  accessKey: {{ .Values.secrets.seaweedfs.accessKey | quote }}
+  secretKey: {{ .Values.secrets.seaweedfs.secretKey | quote }}
+
+s3:
+  config:
+    bucket: {{ .Values.apps.seaweedfs.bucket | default "snipr-recordings" | quote }}
+
+backup:
+  enabled: {{ .Values.backup.seaweedfs.enabled | default true }}
+  k8up:
+    schedule: {{ .Values.backup.seaweedfs.schedule | default "0 2 * * *" | quote }}
+    retention:
+      daily: {{ .Values.backup.seaweedfs.retention.daily | default 7 }}
+      weekly: {{ .Values.backup.seaweedfs.retention.weekly | default 4 }}
+      monthly: {{ .Values.backup.seaweedfs.retention.monthly | default 3 }}
