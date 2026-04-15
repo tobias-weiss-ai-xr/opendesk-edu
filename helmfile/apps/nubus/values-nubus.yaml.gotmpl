@@ -1577,6 +1577,49 @@ nubusStackDataUms:
           entries:
             - "cn=managementFileshareCloud,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
 
+      07-custom-snipr-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+
+        # SNIpR Lecture Recording Portal Entry
+        # Creates a portal entry for SNIpR with SSO enabled
+        # Ref: 05-custom-bbb-portal-entry.yaml for correct format
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementLecturerecording"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "Vorlesungsaufzeichnung"
+            en_US: "Lecture Recording"
+          description:
+            de_DE: "Vorlesungsaufzeichnung mit automatischer Transkription"
+            en_US: "Lecture recording with automatic transcription"
+          link:
+             - - "en_US"
+               - "https://snipr.{{ .Values.global.domain }}"
+             - - "de_DE"
+               - "https://snipr.{{ .Values.global.domain }}"
+
+        ---
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementLecturerecording,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        ---
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementLecturerecording,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
         # Register extended attribute so LMS checkbox appears in user editor
         # This creates the opendeskLearnmanagementEnabledUser checkbox in the UDM
         # under the "openDesk" tab, group "Berechtigung: Login/Nutzung"
