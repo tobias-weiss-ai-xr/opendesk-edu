@@ -82,6 +82,13 @@ config:
       role: "opendesk-opencloud-access-control"
       group: "managed-by-attribute-FileshareCloud"
     {{- end }}
+    {{- if .Values.apps.snipr.enabled }}
+    snipr:
+      client: "snipr"
+      scope: "opendesk-snipr-scope"
+      role: "opendesk-snipr-access-control"
+      group: "managed-by-attribute-Lecturerecording"
+    {{- end }}
   custom:
     clientScopes:
       {{ .Values.functional.authentication.oidc.clientScopes | toYaml | nindent 6 }}
@@ -133,8 +140,9 @@ config:
                      {{ if .Values.apps.jitsi.enabled }}'managed-by-attribute-Videoconference',{{ end }}
                       {{ if .Values.apps.oxAppSuite.enabled }}'managed-by-attribute-Groupware',{{ end }}
                       {{ if .Values.apps.notes.enabled }}'managed-by-attribute-Notes',{{ end }}
-                      {{ if .Values.apps.opencloud.enabled }}'managed-by-attribute-FileshareCloud',{{ end }}
-                    ]
+                       {{ if .Values.apps.opencloud.enabled }}'managed-by-attribute-FileshareCloud',{{ end }}
+                       {{ if .Values.apps.snipr.enabled }}'managed-by-attribute-Lecturerecording',{{ end }}
+                     ]
 
   opendesk:
     # We use client specific scopes as we bind them to Keycloak role membership which itself is linked
@@ -565,6 +573,46 @@ config:
               claim.name: "email"
               jsonType.label: "String"
       {{ end }}
+      {{ if .Values.apps.snipr.enabled }}
+      - name: "opendesk-snipr-scope"
+        description: "Scope for the claims required by openDesk's SNIpR lecture recording service."
+        protocol: "openid-connect"
+        protocolMappers:
+          - name: "opendesk_useruuid"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "entryUUID"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_useruuid"
+              jsonType.label: "String"
+          - name: "opendesk_username"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "uid"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_username"
+              jsonType.label: "String"
+          - name: "email"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              introspection.token.claim: true
+              userinfo.token.claim: true
+              user.attribute: "email"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "email"
+              jsonType.label: "String"
+      {{ end }}
     clients:
       - name: "opendesk-intercom"
         clientId: "opendesk-intercom"
@@ -792,6 +840,27 @@ config:
           post.logout.redirect.uris: "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
         defaultClientScopes:
           - "opendesk-opencloud-scope"
+      {{ end }}
+      {{ if .Values.apps.snipr.enabled }}
+      - name: "snipr"
+        clientId: "snipr"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.snipr | quote }}
+        redirectUris:
+          - "https://snipr.{{ .Values.global.domain }}/*"
+        rootUrl: "https://snipr.{{ .Values.global.domain }}"
+        consentRequired: false
+        frontchannelLogout: true
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          post.logout.redirect.uris: "https://snipr.{{ .Values.global.domain }}/*"
+        defaultClientScopes:
+          - "opendesk-snipr-scope"
+          - "openid"
+          - "profile"
+          - "email"
       {{ end }}
       {{ if true }}  # ILIAS SAML client - always configure
       - name: "ilias-saml"
