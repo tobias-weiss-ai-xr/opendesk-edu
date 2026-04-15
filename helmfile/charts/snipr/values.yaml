@@ -38,15 +38,15 @@ snipr:
         cpu: "2000m"
         memory: "4Gi"
 
-  # Storage configuration (S3/MinIO primary, filesystem fallback)
+  # Storage configuration (SeaweedFS S3, cluster-internal)
   storage:
-    type: s3  # or "filesystem"
+    type: s3
     s3:
-      endpoint: https://minio.opendesk.example.com
+      endpoint: http://seaweedfs-s3:8333
       bucket: snipr-recordings
-      region: eu-central-1
-      ssl: true
-      forcePathStyle: false
+      region: ""
+      ssl: false
+      forcePathStyle: true
     filesystem:
       path: /var/snipr/recordings
       persistence:

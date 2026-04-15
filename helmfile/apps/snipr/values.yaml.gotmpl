@@ -17,11 +17,11 @@ snipr:
       model: {{ .Values.services.f13.model | default "whisper-medium" | quote }}
       language: {{ .Values.services.f13.language | default "de" | quote }}
 
-  # Storage configuration (MinIO S3)
+  # Storage configuration (SeaweedFS S3)
   storage:
-    enabled: {{ .Values.services.minio.enabled | default true }}
-    endpoint: {{ .Values.services.minio.endpoint | default "https://minio.opendesk.example.com" | quote }}
-    bucket: {{ .Values.services.minio.bucket | default "snipr-recordings" | quote }}
+    enabled: {{ .Values.apps.seaweedfs.enabled | default true }}
+    endpoint: {{ .Values.services.seaweedfs.endpoint | default "http://seaweedfs-s3:8333" | quote }}
+    bucket: {{ .Values.services.seaweedfs.bucket | default "snipr-recordings" | quote }}
 
   # SSO configuration (Keycloak OIDC)
   sso:
