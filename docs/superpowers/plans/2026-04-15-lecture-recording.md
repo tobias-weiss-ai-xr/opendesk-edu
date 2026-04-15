@@ -63,13 +63,13 @@ Task 10 (Verify) ────────────────── Depends 
 
 Follows the pattern from `helmfile/charts/snipr/Chart.yaml` (apiVersion v2, annotations, no dependencies).
 
-- [ ] **Step 1: Create directory structure**
+- [x] **Step 1: Create directory structure**
 
 ```bash
 mkdir -p helmfile/charts/seaweedfs/templates
 ```
 
-- [ ] **Step 2: Create `helmfile/charts/seaweedfs/Chart.yaml`**
+- [x] **Step 2: Create `helmfile/charts/seaweedfs/Chart.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -92,7 +92,7 @@ annotations:
 dependencies: []
 ```
 
-- [ ] **Step 3: Create `helmfile/charts/seaweedfs/values.yaml`**
+- [x] **Step 3: Create `helmfile/charts/seaweedfs/values.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -167,7 +167,7 @@ backup:
       monthly: 3
 ```
 
-- [ ] **Step 4: Create `helmfile/charts/seaweedfs/templates/_helpers.tpl`**
+- [x] **Step 4: Create `helmfile/charts/seaweedfs/templates/_helpers.tpl`**
 
 ```gotemplate
 {{/*
@@ -258,7 +258,7 @@ S3 gateway service name
 {{- end }}
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add helmfile/charts/seaweedfs/
@@ -281,7 +281,7 @@ templates for fullname, labels, and selector patterns."
 
 Master runs as a Deployment (1 replica, ports 9333 gRPC + 9324 HTTP). Volume runs as a StatefulSet with PVC for data storage.
 
-- [ ] **Step 1: Create `helmfile/charts/seaweedfs/templates/master-deployment.yaml`**
+- [x] **Step 1: Create `helmfile/charts/seaweedfs/templates/master-deployment.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -351,7 +351,7 @@ spec:
       {{- end }}
 ```
 
-- [ ] **Step 2: Create `helmfile/charts/seaweedfs/templates/master-service.yaml`**
+- [x] **Step 2: Create `helmfile/charts/seaweedfs/templates/master-service.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -379,7 +379,7 @@ spec:
     app.kubernetes.io/component: master
 ```
 
-- [ ] **Step 3: Create `helmfile/charts/seaweedfs/templates/volume-statefulset.yaml`**
+- [x] **Step 3: Create `helmfile/charts/seaweedfs/templates/volume-statefulset.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -453,7 +453,7 @@ spec:
             storage: {{ .Values.volume.persistence.size }}
 ```
 
-- [ ] **Step 4: Create `helmfile/charts/seaweedfs/templates/volume-service.yaml`**
+- [x] **Step 4: Create `helmfile/charts/seaweedfs/templates/volume-service.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -477,7 +477,7 @@ spec:
     app.kubernetes.io/component: volume
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add helmfile/charts/seaweedfs/templates/master-deployment.yaml \
@@ -503,7 +503,7 @@ PVC for recording data, connecting to master for volume assignment."
 
 The S3 gateway exposes an S3-compatible API on port 8333. It connects to the master at `seaweedfs-master:9333`. The ConfigMap holds filer/s3 configuration. The Secret holds S3 credentials.
 
-- [ ] **Step 1: Create `helmfile/charts/seaweedfs/templates/s3-deployment.yaml`**
+- [x] **Step 1: Create `helmfile/charts/seaweedfs/templates/s3-deployment.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -575,7 +575,7 @@ spec:
             name: {{ include "seaweedfs.fullname" . }}
 ```
 
-- [ ] **Step 2: Create `helmfile/charts/seaweedfs/templates/s3-service.yaml`**
+- [x] **Step 2: Create `helmfile/charts/seaweedfs/templates/s3-service.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -599,7 +599,7 @@ spec:
     app.kubernetes.io/component: s3
 ```
 
-- [ ] **Step 3: Create `helmfile/charts/seaweedfs/templates/configmap.yaml`**
+- [x] **Step 3: Create `helmfile/charts/seaweedfs/templates/configmap.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -634,7 +634,7 @@ data:
     }
 ```
 
-- [ ] **Step 4: Create `helmfile/charts/seaweedfs/templates/secret.yaml`**
+- [x] **Step 4: Create `helmfile/charts/seaweedfs/templates/secret.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -652,7 +652,7 @@ stringData:
   adminPassword: {{ .Values.auth.adminPassword | default "" | quote }}
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add helmfile/charts/seaweedfs/templates/s3-deployment.yaml \
@@ -675,7 +675,7 @@ Secret stores accessKey, secretKey, and adminPassword."
 
 Daily backup schedule, retention daily:7 weekly:4 monthly:3. Uses the SeaweedFS image to run `weed backup`.
 
-- [ ] **Step 1: Create `helmfile/charts/seaweedfs/templates/prebackuppod.yaml`**
+- [x] **Step 1: Create `helmfile/charts/seaweedfs/templates/prebackuppod.yaml`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
@@ -702,7 +702,7 @@ spec:
 {{- end }}
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add helmfile/charts/seaweedfs/templates/prebackuppod.yaml
@@ -721,13 +721,13 @@ volume data. Gated on .Values.backup.enabled."
 
 App-level values with Go templating for storageClass, PVC size, domain, and secrets. Follows the pattern from `helmfile/apps/snipr/values.yaml.gotmpl`.
 
-- [ ] **Step 1: Create directory**
+- [x] **Step 1: Create directory**
 
 ```bash
 mkdir -p helmfile/apps/seaweedfs
 ```
 
-- [ ] **Step 2: Create `helmfile/apps/seaweedfs/values.yaml.gotmpl`**
+- [x] **Step 2: Create `helmfile/apps/seaweedfs/values.yaml.gotmpl`**
 
 ```yaml
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
