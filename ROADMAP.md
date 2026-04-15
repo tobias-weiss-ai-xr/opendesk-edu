@@ -346,13 +346,13 @@ universities that want maximum control with minimal infrastructure.
 
 **Recommendation:** Use Opencast for infrastructure-rich campuses, SNIpR for focused teaching needs.
 
-- [ ] Helm chart for SNIpR recording service
-- [ ] SSO integration via Keycloak (OIDC)
-- [] Integration with F13 transcription service for auto-transcription
-- [ ] Storage backend (S3-compatible for recordings)
-- [ ] LTI 1.3 integration with ILIAS and Moodle
-- [ ] Portal tile for SNIpR
-- [ ] Backup integration with k8up
+- [x] Helm chart for SNIpR recording service
+- [x] SSO integration via Keycloak (OIDC)
+- [x] Integration with F13 transcription service for auto-transcription
+- [x] Storage backend (S3-compatible for recordings)
+- [x] LTI 1.3 integration with ILIAS and Moodle
+- [x] Portal tile for SNIpR
+- [x] Backup integration with k8up
 
 ---
 
