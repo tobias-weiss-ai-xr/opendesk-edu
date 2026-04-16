@@ -1,0 +1,30 @@
+# OX-Independent LDAP Portal Category
+# Usage: ldapadd -x -H ldap://localhost -D "cn=admin,dc=swp-ldap,dc=internal" -W -f applications-ox-independent.ldif
+#
+# This creates the applications category without the "od." prefix,
+# making the deployment independent of Open-Xchange.
+
+# CN=portals organizational unit (if not exists)
+dn: cn=portals,cn=univention,dc=swp-ldap,dc=internal
+changetype: add
+objectClass: organizationalUnit
+cn: portals
+
+# CN=category organizational unit (if not exists)
+dn: cn=category,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+changetype: add
+objectClass: organizationalUnit
+cn: category
+
+# CN=applications portal category (OX-independent)
+dn: cn=applications,cn=category,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+changetype: add
+objectClass: top
+objectClass: univentionObject
+objectClass: univentionNewPortalCategory
+cn: applications
+univentionObjectType: portals/category
+univentionObjectIdentifier: 550e8400-e29b-41d4-a716-446655440000
+description: Applications portal category (OX-independent)
+univentionNewPortalCategoryDisplayName[de_DE]: Anwendungen
+univentionNewPortalCategoryDisplayName[en_US]: Applications
