@@ -1,0 +1,73 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Capabilities.APIVersions.Has "batch/v1/Job" }}
+{{- if .Values.sogo.db.initJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "sogo.fullname" . }}-db-init
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "sogo.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: db-init
+          image: ghcr.io/zitadel/postgres:16
+          env:
+            - name: PGHOST
+              value: {{ .Values.sogo.db.host }}
+            - name: PGPORT
+              value: {{ .Values.sogo.db.port | quote }}
+            - name: PGUSER
+              value: postgres
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-credentials
+                  key: postgres-password
+            - name: SOGO_DB_USER
+              value: {{ .Values.sogo.db.user }}
+            - name: SOGO_DB_PASSWORD
+              value: {{ .Values.sogo.db.password }}
+            - name: SOGO_DB_NAME
+              value: {{ .Values.sogo.db.name }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              
+              # Check if database exists, create if not
+              psql -tc "SELECT 1 FROM pg_database WHERE datname = '${SOGO_DB_NAME}'" | grep -q 1 || \
+                psql -c "CREATE DATABASE ${SOGO_DB_NAME};"
+              
+              # Check if user exists, create if not
+              if ! psql -tc "SELECT 1 FROM pg_user WHERE usename = '${SOGO_DB_USER}'" | grep -q 1; then
+                psql -c "CREATE USER ${SOGO_DB_USER} WITH PASSWORD '${SOGO_DB_PASSWORD}';"
+                psql -c "GRANT ALL PRIVILEGES ON DATABASE ${SOGO_DB_NAME} TO ${SOGO_DB_USER};"
+                
+                # Grant schema privileges if schema exists
+                psql -d ${SOGO_DB_NAME} -c "GRANT ALL ON SCHEMA public TO ${SOGO_DB_USER};" 2>/dev/null || true
+                psql -d ${SOGO_DB_NAME} -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${SOGO_DB_USER};" 2>/dev/null || true
+              fi
+              
+              echo "Database initialization complete!"
+      {{- with .Values.sogo.db.initJob.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sogo.db.initJob.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

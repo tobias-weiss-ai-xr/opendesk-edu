@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 sogo:
   image:
-    repository: sonroyaalmerol/docker-sogo
-    tag: "5.11.0"
+    repository: codeberg.org/opendesk-edu/opendesk-edu/sogo
+    tag: "dev"
     pullPolicy: IfNotPresent
 
   replicaCount: 1
@@ -27,6 +27,10 @@ sogo:
     user: "sogo"
     password: ""
     name: "sogo"
+    initJob:
+      enabled: true
+      nodeSelector: {}
+      tolerations: []
 
   # LDAP connection
   ldap:
