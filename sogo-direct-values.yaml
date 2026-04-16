@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+sogo:
+  image:
+    repository: codeberg.org/opendesk-edu/opendesk-edu/sogo
+    tag: "dev"
+    pullPolicy: IfNotPresent
+  
+  db:
+    host: postgresql
+    port: 5432
+    user: sogo
+    password: sogo-password
+    name: sogo
+    initJob:
+      enabled: true
+  
+  ldap:
+    host: openldap
+    port: 389
+    baseDN: ou=users,dc=swp-ldap,dc=internal
+    bindDN: uid=sogo,ou=services,dc=swp-ldap,dc=internal
+    bindPassword: sogo-ldap-password
+  
+  imap:
+    server: imaps://dovecot:993
+  smtp:
+    server: smtp://postfix:587
+  sieve:
+    server: sieve://dovecot:4190
+  
+  mailDomain: opendesk-edu.org
+  timezone: "Europe/Berlin"
+  language: "English"
+  pageTile: "openDesk Mail"
+  memcachedHost: memcached:11211
+  
+  oidc:
+    enabled: true
+    configUrl: https://id.desk.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration
+    clientId: sogo
+    clientSecret: auto-generated
+    scope: "openid profile email"
+  
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: sogo.desk.opendesk-edu.org
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: tls-sogo.desk.opendesk-edu.org
+        hosts:
+          - sogo.desk.opendesk-edu.org
+  
+  persistence:
+    enabled: true
+    size: 1Gi
+    accessMode: ReadWriteOnce
+    storageClass: longhorn
+  
+  entrypoint:
+    enabled: true
+
+replicas: 1
+
+service:
+  type: ClusterIP
+  port: 80

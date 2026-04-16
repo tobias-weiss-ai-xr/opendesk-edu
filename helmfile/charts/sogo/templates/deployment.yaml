@@ -31,12 +31,9 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
-            seLinuxOptions: {}
-            seccompProfile:
-              type: RuntimeDefault
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
           ports:
             - containerPort: 80
           env:
@@ -47,11 +44,17 @@ spec:
                 name: {{ include "sogo.fullname" . }}
             - secretRef:
                 name: {{ include "sogo.fullname" . }}
+          command:
+            - /bin/bash
+            - /opt/custom-entrypoint/entrypoint.sh
           volumeMounts:
             - name: sogo-data
               mountPath: /var/lib/sogo
             - name: sogo-config
               mountPath: /etc/sogo/sogo.conf.d
+            - name: entrypoint
+              mountPath: /opt/custom-entrypoint/entrypoint.sh
+              subPath: entrypoint.sh
           readinessProbe:
             httpGet:
               path: /
@@ -72,3 +75,7 @@ spec:
         - name: sogo-config
           configMap:
             name: {{ include "sogo.fullname" . }}
+        - name: entrypoint
+          configMap:
+            name: {{ include "sogo.fullname" . }}-entrypoint
+            defaultMode: 0755
