@@ -61,7 +61,7 @@ auth:
   secretKey: ""      # Set via secrets
 
 backup:
-  enabled: true
+  enabled: false
   k8up:
     schedule: "0 2 * * *"
     retention:

@@ -2256,6 +2256,8 @@ nubusKeycloakBootstrap:
       bindDn: {{ printf "uid=ldapsearch_keycloak,cn=users,%s" .Values.ldap.baseDn }}
       existingSecret:
         name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
+        keyMapping:
+          password: "password"
   oidc:
     rp:
       umcServer:
