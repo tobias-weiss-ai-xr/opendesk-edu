@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+#
+# Advanced Configuration: Nested States
+#
+helmfiles:
+  # Path to the helmfile state file being processed BEFORE releases in this state file
+  - path: "helmfile/apps/opendesk-migrations-pre/helmfile-child.yaml.gotmpl"
+    values: &values
+      - "helmfile/environments/default/*.yaml.gotmpl"
+      - {{ toYaml .Values | nindent 8 }}
+      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+      - "helmfile/environments/default-enterprise-overrides/*.yaml.gotmpl"
+      {{- end }}
+  - path: "helmfile/apps/opendesk-services/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/services-external/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/nubus/helmfile-child.yaml.gotmpl"
+    values: *values
+  # path: "helmfile/apps/open-xchange/helmfile-child.yaml.gotmpl"  # Edu: using SOGo
+  #   values: *values
+  # path: "helmfile/apps/nextcloud/helmfile-child.yaml.gotmpl"  # Edu: using OpenCloud
+  #   values: *values
+  - path: "helmfile/apps/opencloud/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/collabora/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/cryptpad/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/jitsi/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/element/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/openproject/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/xwiki/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/notes/helmfile-child.yaml.gotmpl"
+    values: *values
+  # path: "helmfile/apps/moodle/helmfile-child.yaml.gotmpl"
+  # values: *values
+  # path: "helmfile/apps/bigbluebutton/helmfile-child.yaml.gotmpl"
+  # values: *values
+  # Education infrastructure (openDesk Edu)
+  - path: "helmfile/apps/seaweedfs/helmfile-child.yaml.gotmpl"
+    values: *values
+  - #path: "helmfile/apps/snipr/helmfile-child.yaml.gotmpl"
+    values: *values
+  # Education-specific services (openDesk Edu)
+  # - path: "helmfile/apps/etherpad/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  # - path: "helmfile/apps/bookstack/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  # - path: "helmfile/apps/planka/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  # - path: "helmfile/apps/zammad/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  # - path: "helmfile/apps/limesurvey/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  # - path: "helmfile/apps/drawio/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  # - path: "helmfile/apps/excalidraw/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  # - path: "helmfile/apps/self-service-password/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  - path: "helmfile/apps/sogo/helmfile-child.yaml.gotmpl"
+  values: *values
+  # - path: "helmfile/apps/typo3/helmfile-child.yaml.gotmpl"  # Disabled for initial deployment
+  # values: *values
+  - path: "helmfile/apps/opendesk-openproject-bootstrap/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/opendesk-migrations-post/helmfile-child.yaml.gotmpl"
+    values: *values
+missingFileHandler: "Error"
+...
