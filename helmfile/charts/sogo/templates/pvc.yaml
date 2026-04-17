@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 # SPDX-License-Identifier: Apache-2.0
+{{- if .Values.sogo.persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -8,10 +9,11 @@ metadata:
 {{ include "sogo.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - {{ .Values.persistence.accessMode }}
+    - {{ .Values.sogo.persistence.accessMode }}
   resources:
     requests:
-      storage: {{ .Values.persistence.size }}
-  {{- if .Values.persistence.storageClass }}
-  storageClassName: {{ .Values.persistence.storageClass }}
+      storage: {{ .Values.sogo.persistence.size }}
+  {{- if .Values.sogo.persistence.storageClass }}
+  storageClassName: {{ .Values.sogo.persistence.storageClass }}
   {{- end }}
+{{- end }}
