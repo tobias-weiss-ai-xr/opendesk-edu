@@ -94,9 +94,10 @@ data:
     else
       echo "Generating sogo.conf from /etc/sogo/sogo.conf.d YAML files..."
       /opt/config-generator
-      # Fix PostgreSQL SSL mode - replace all existing sslmode with disable and add it to URLs without it
-      sed -i 's|sslmode=[^&"]*|sslmode=disable|g' /etc/sogo/sogo.conf
-      sed -i 's|\(postgresql://[^"]*\)|&?sslmode=disable|g; s|&\?sslmode=disable\?sslmode=disable|\&sslmode=disable|g; s|\?sslmode=disable\?sslmode=disable|\?sslmode=disable|g' /etc/sogo/sogo.conf
+      # Fix PostgreSQL SSL mode - ensure all PostgreSQL URLs use sslmode=disable
+      sed -i 's|postgresql://\([^:\"]*\):\([^@\"\"]*\)@\([^:\"]*\):\([^/\"]*\)/\([^\"\"]*\)|postgresql://\1:\2@\3:\4/\5?sslmode=disable|g' /etc/sogo/sogo.conf
+      # Handle URLs that already have sslmode parameter - force it to disable
+      sed -i 's|sslmode=[^&;"]*|sslmode=disable|Ig' /etc/sogo/sogo.conf
     fi
 
     # Enforce mode on configuration (skip ownership changes)
