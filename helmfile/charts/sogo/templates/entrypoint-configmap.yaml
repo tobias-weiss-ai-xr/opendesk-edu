@@ -57,11 +57,12 @@ data:
     ; environment=APACHE_RUN_USER="root",APACHE_RUN_GROUP="root",APACHE_PID_FILE="/var/run/apache2/apache2.pid",APACHE_RUN_DIR="/var/run/apache2"
 
     ; SOGo Config Generator (runs once at startup)
+    ; Delay startup to allow entrypoint SSL mode fix to complete
     [program:sogo_tool_plus]
-    command=/usr/sbin/sogo-tool-plus update
+    command=sh -c 'sleep 5 && /usr/sbin/sogo-tool-plus update'
     autostart=true
     autorestart=false
-    startsecs=0
+    startsecs=5
     exitcodes=0,1
     directory=/var/lib/sogo
     stdout_logfile=/dev/stdout
