@@ -29,7 +29,7 @@ data:
     ; SOGo
     [program:sogo]
     user=root
-    command=/usr/local/sbin/sogod -WOWorkersCount 5
+    command=/usr/local/sbin/sogod -WOWorkersCount 5 -WONoDetach YES
     autostart=true
     autorestart=true
     stopasgroup=true
@@ -57,12 +57,12 @@ data:
     ; environment=APACHE_RUN_USER="root",APACHE_RUN_GROUP="root",APACHE_PID_FILE="/var/run/apache2/apache2.pid",APACHE_RUN_DIR="/var/run/apache2"
 
     ; SOGo Config Generator (runs once at startup)
-    ; Delay startup to allow entrypoint SSL mode fix to complete
+    ; Delayed startup wrapper to allow entrypoint SSL mode fix to complete
     [program:sogo_tool_plus]
-    command=sh -c 'sleep 5 && /usr/sbin/sogo-tool-plus update'
+    command=/opt/custom-entrypoint/sogo-tool-plus-wrapper.sh
     autostart=true
     autorestart=false
-    startsecs=5
+    startsecs=10
     exitcodes=0,1
     directory=/var/lib/sogo
     stdout_logfile=/dev/stdout
@@ -109,3 +109,13 @@ data:
     # Start supervisor with custom configuration (bypass privilege dropping)
     echo "Starting SOGo services..."
     exec /usr/bin/supervisord -c /opt/custom-entrypoint/supervisord.conf
+
+
+  sogo-tool-plus-wrapper.sh: |
+    #!/bin/bash
+    # Delayed startup wrapper for sogo-tool-plus
+    # Wait for entrypoint SSL mode fix to complete before running
+    echo "Waiting 10 seconds for SSL mode fix to complete..."
+    sleep 10
+    echo "Running sogo-tool-plus update..."
+    exec /usr/sbin/sogo-tool-plus update
