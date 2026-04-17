@@ -56,19 +56,19 @@ data:
     ; stderr_logfile_maxbytes=0
     ; environment=APACHE_RUN_USER="root",APACHE_RUN_GROUP="root",APACHE_PID_FILE="/var/run/apache2/apache2.pid",APACHE_RUN_DIR="/var/run/apache2"
 
-    ; SOGo Config Generator (runs once at startup)
-    ; Delayed startup wrapper to allow entrypoint SSL mode fix to complete
-    [program:sogo_tool_plus]
-    command=/opt/custom-entrypoint/sogo-tool-plus-wrapper.sh
-    autostart=true
-    autorestart=false
-    startsecs=10
-    exitcodes=0,1
-    directory=/var/lib/sogo
-    stdout_logfile=/dev/stdout
-    stdout_logfile_maxbytes=0
-    stderr_logfile=/dev/stderr
-    stderr_logfile_maxbytes=0
+    ; SOGo Tool Plus - DISABLED - SOGo auto-initializes databases on first connection
+    ; Manual update command is not needed and interferes with SOGo normal operation
+    ; [program:sogo_tool_plus]
+    ; command=/opt/custom-entrypoint/sogo-tool-plus-wrapper.sh
+    ; autostart=true
+    ; autorestart=false
+    ; startsecs=10
+    ; exitcodes=0,1
+    ; directory=/var/lib/sogo
+    ; stdout_logfile=/dev/stdout
+    ; stdout_logfile_maxbytes=0
+    ; stderr_logfile=/dev/stderr
+    ; stderr_logfile_maxbytes=0
 
   entrypoint.sh: |
     #!/bin/bash
