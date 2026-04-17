@@ -17,7 +17,6 @@ data:
     logfile=/var/log/supervisord.log
     pidfile=/var/run/supervisord.pid
     childlogdir=/var/log/supervisor
-    user=root
 
     ; the below section must remain in the config file for RPC
     ; (supervisorctl/web interface) to work.
@@ -35,7 +34,6 @@ data:
     stopasgroup=true
     killasgroup=true
     directory=/var/lib/sogo
-    user=root
     stdout_logfile=/dev/stdout
     stdout_logfile_maxbytes=0
     stderr_logfile=/dev/stderr
@@ -49,7 +47,6 @@ data:
     autorestart=true
     stopasgroup=true
     killasgroup=true
-    user=root
     stdout_logfile=/dev/stdout
     stdout_logfile_maxbytes=0
     stderr_logfile=/dev/stderr

@@ -19,6 +19,7 @@ spec:
 {{ include "sogo.labels" . | nindent 8 }}
     spec:
       securityContext:
+        runAsUser: 105
         fsGroup: 1000
       containers:
         - name: sogo
