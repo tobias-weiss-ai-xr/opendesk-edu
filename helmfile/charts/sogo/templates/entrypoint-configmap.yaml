@@ -45,7 +45,7 @@ data:
     ; Apache
     [program:apache]
     user=root
-    command=/usr/sbin/apache2 -c "ErrorLog /dev/stdout" -D FOREGROUND
+    command=/usr/sbin/apache2 -c "ErrorLog /dev/stdout" -c "DefaultRuntimeDir /var/run/apache2" -D FOREGROUND
     autostart=true
     autorestart=true
     stopasgroup=true
@@ -73,7 +73,6 @@ data:
     chmod 755 /var/run/apache2
 
     chmod +x /usr/local/sbin/sogod
-    chmod +x /usr/local/sbin/sogo-manage
 
     # Export Apache environment variables (Apache config parser reads from shell env)
     export APACHE_RUN_USER="root"
