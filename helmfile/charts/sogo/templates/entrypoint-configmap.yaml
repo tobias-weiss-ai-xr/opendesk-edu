@@ -28,6 +28,7 @@ data:
 
     ; SOGo
     [program:sogo]
+    user=root
     command=/usr/local/sbin/sogod -WOWorkersCount 5
     autostart=true
     autorestart=true
@@ -42,18 +43,7 @@ data:
 
     ; Apache
     [program:apache]
-    command=/usr/sbin/apache2ctl -D FOREGROUND
-    autostart=true
-    autorestart=true
-    stopasgroup=true
-    killasgroup=true
-    stdout_logfile=/dev/stdout
-    stdout_logfile_maxbytes=0
-    stderr_logfile=/dev/stderr
-    stderr_logfile_maxbytes=0
-
-    ; Apache
-    [program:apache]
+    user=root
     command=/usr/sbin/apache2ctl -D FOREGROUND
     autostart=true
     autorestart=true
