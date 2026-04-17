@@ -27,6 +27,15 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/instance: {{ .Release.Name }}
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+              app.kubernetes.io/instance: postgresql
+      ports:
+        - protocol: TCP
+          port: 5432
   ingress:
     - from:
         - podSelector:
