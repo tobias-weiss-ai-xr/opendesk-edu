@@ -1,0 +1,87 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "sogo.fullname" . }}-entrypoint
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+data:
+  supervisord.conf: |
+    [unix_http_server]
+    file=/var/run/supervisor.sock
+    chmod=0700
+
+    [supervisord]
+    nodaemon=true
+    logfile=/var/log/supervisord.log
+    pidfile=/var/run/supervisord.pid
+    childlogdir=/var/log/supervisor
+
+    ; the below section must remain in the config file for RPC
+    ; (supervisorctl/web interface) to work.
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+    [supervisorctl]
+    serverurl=unix:///var/run/supervisor.sock
+
+    ; SOGo
+    [program:sogo]
+    user=root
+    command=/usr/local/sbin/sogod -WOWorkersCount 5 -WONoDetach YES
+    autostart=true
+    autorestart=true
+    stopasgroup=true
+    killasgroup=true
+    stopwaitsecs=90
+    directory=/var/lib/sogo
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+    environment=HOME="/var/lib/sogo"
+
+    ; Apache
+    [program:apache]
+    user=root
+    command=/usr/sbin/apache2 -c "ErrorLog /dev/stdout" -D FOREGROUND
+    autostart=true
+    autorestart=true
+    stopasgroup=true
+    killasgroup=true
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
+    ; SOGo Tool Plus - DISABLED - SOGo auto-initializes databases on first connection
+    ; Manual update command is not needed and interferes with SOGo normal operation
+
+  entrypoint.sh: |
+    #!/bin/bash
+    echo "Starting SOGo with supervisord (Apache proxy enabled)..."
+
+    # Create mandatory dirs
+    for dir in lib log run spool; do
+      mkdir -p /var/$dir/sogo
+      chmod 755 /var/$dir/sogo
+    done
+
+    # Create Apache runtime directory
+    mkdir -p /var/run/apache2
+    chmod 755 /var/run/apache2
+
+    chmod +x /usr/local/sbin/sogod
+    chmod +x /usr/local/sbin/sogo-manage
+
+    # Export Apache environment variables (Apache config parser reads from shell env)
+    export APACHE_RUN_USER="root"
+    export APACHE_RUN_GROUP="root"
+    export APACHE_RUN_DIR="/var/run/apache2"
+    export APACHE_PID_FILE="/var/run/apache2/apache2.pid"
+    export APACHE_LOCK_DIR="/var/lock/apache2"
+    export APACHE_LOG_DIR="/var/log/apache2"
+
+    echo "Starting supervisord..."
+    exec /usr/bin/supervisord -c /opt/custom-entrypoint/supervisord.conf
