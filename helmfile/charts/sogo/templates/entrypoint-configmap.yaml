@@ -53,6 +53,7 @@ data:
     stdout_logfile_maxbytes=0
     stderr_logfile=/dev/stderr
     stderr_logfile_maxbytes=0
+    environment=APACHE_RUN_USER="root",APACHE_RUN_GROUP="root",APACHE_PID_FILE="/var/run/apache2/apache2.pid",APACHE_RUN_DIR="/var/run/apache2"
 
     ; SOGo Config Generator (runs once at startup)
     [program:sogo_tool_plus]
