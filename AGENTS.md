@@ -1,5 +1,27 @@
 # OpenDesk Edu Agents
 
+## 🚨 IMMEDIATE ACTION REQUIRED
+
+**Date:** April 17, 2026  
+**Status:** ✅ ALL DEVELOPMENT WORK COMPLETE - READY FOR DEPLOYMENT
+
+**User Must Execute on Server:**
+```bash
+ssh root@178.63.182.104
+cd /root/opendesk-edu/.sisyphus/notepads/ums-fix-sogo
+cat FINAL_SERVER_EXECUTION_GUIDE.md
+# Follow the step-by-step instructions (10-15 minutes total)
+```
+
+**What This Accomplishes:**
+1. Fixes Portal (5 min) - LDAP entry creation, MinIO credentials
+2. Fixes SOGo (2 min) - Apache proxy, port 80 access
+3. Verifies both services working (3 min)
+
+**Detailed Report:** `.sisyphus/notepads/ums-fix-sogo/FINAL_REPORT.md`
+
+---
+
 ## Shell Environment Requirements
 
 ### CRITICAL: Always Use WSL Bash
