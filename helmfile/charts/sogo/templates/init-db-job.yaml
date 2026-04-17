@@ -22,7 +22,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: db-init
-          image: ghcr.io/zitadel/postgres:16
+          image: registry-1.docker.io/library/postgres:15.13-alpine3.20
           env:
             - name: PGHOST
               value: {{ .Values.sogo.db.host }}
@@ -31,10 +31,7 @@ spec:
             - name: PGUSER
               value: postgres
             - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgresql-credentials
-                  key: postgres-password
+              value: b20a9e9dce16e5a4da2b59b6f265e9055f6bc9b9
             - name: SOGO_DB_USER
               value: {{ .Values.sogo.db.user }}
             - name: SOGO_DB_PASSWORD
@@ -70,4 +67,5 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
 {{- end }}

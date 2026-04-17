@@ -39,6 +39,8 @@ data:
     SOGoForwardEnabled: true
     SOGoSieveScriptsEnabled: true
     SOGoMemcachedHost: "{{ .Values.sogo.memcachedHost }}"
+    SOGoDaemonAddresses: "*:80"
+    SOListenPort: 80
 
   mail.yaml: |
     SOGoIMAPServer: "{{ .Values.sogo.imap.server }}"
