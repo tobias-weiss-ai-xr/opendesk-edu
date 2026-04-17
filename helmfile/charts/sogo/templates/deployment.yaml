@@ -48,8 +48,10 @@ spec:
             - /bin/bash
             - /opt/custom-entrypoint/entrypoint.sh
           volumeMounts:
+            {{- if .Values.sogo.persistence.enabled }}
             - name: sogo-data
               mountPath: /var/lib/sogo
+            {{- end }}
             - name: sogo-config
               mountPath: /etc/sogo/sogo.conf.d
             - name: sogo-entrypoint
@@ -71,9 +73,11 @@ spec:
             periodSeconds: 20
           resources: {{ .Values.sogo.resources | toYaml | nindent 12 }}
       volumes:
+        {{- if .Values.sogo.persistence.enabled }}
         - name: sogo-data
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-sogo-data
+        {{- end }}
         - name: sogo-config
           configMap:
             name: {{ include "sogo.fullname" . }}
