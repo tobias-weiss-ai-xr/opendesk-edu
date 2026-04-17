@@ -18,8 +18,6 @@ data:
     {{- if .Values.sogo.oidc.enabled }}
     OCSOpenIdURL: "{{ include "sogo.dbUrl" . }}/sogo_openid"
     {{- end }}
-    # Disable SSL for local PostgreSQL backend
-    PgsqlHost: "{{ .Values.sogo.db.host }}:{{ .Values.sogo.db.port }}?sslmode=disable"
 
   general.yaml: |
     SOGoLanguage: {{ .Values.sogo.language }}
