@@ -8,15 +8,15 @@ metadata:
     {{- include "sogo.labels" . | nindent 4 }}
 data:
   db.yaml: |
-    SOGoProfileURL: "{{ include "sogo.dbUrl" . }}/sogo_user_profile"
-    OCSFolderInfoURL: "{{ include "sogo.dbUrl" . }}/sogo_folder_info"
-    OCSSessionsFolderURL: "{{ include "sogo.dbUrl" . }}/sogo_sessions_folder"
-    OCSStoreURL: "{{ include "sogo.dbUrl" . }}/sogo_store"
-    OCSAclURL: "{{ include "sogo.dbUrl" . }}/sogo_acl"
-    OCSCacheFolderURL: "{{ include "sogo.dbUrl" . }}/sogo_cache_folder"
-    OCSEMailAlarmsFolderURL: "{{ include "sogo.dbUrl" . }}/sogo_alarms_folder"
+    SOGoProfileURL: "{{ include "sogo.dbUrl" . }}"
+    OCSFolderInfoURL: "{{ include "sogo.dbUrl" . }}"
+    OCSSessionsFolderURL: "{{ include "sogo.dbUrl" . }}"
+    OCSStoreURL: "{{ include "sogo.dbUrl" . }}"
+    OCSAclURL: "{{ include "sogo.dbUrl" . }}"
+    OCSCacheFolderURL: "{{ include "sogo.dbUrl" . }}"
+    OCSEMailAlarmsFolderURL: "{{ include "sogo.dbUrl" . }}"
     {{- if .Values.sogo.oidc.enabled }}
-    OCSOpenIdURL: "{{ include "sogo.dbUrl" . }}/sogo_openid"
+    OCSOpenIdURL: "{{ include "sogo.dbUrl" . }}"
     {{- end }}
 
   general.yaml: |
