@@ -13,21 +13,35 @@
 6. ✅ SSL mode configuration (PostgreSQL ?sslmode=disable)
 7. ✅ Database user creation and connectivity
 
-**Tasks 8-10: AWAITING DEPLOYMENT ⏳**
-8. ⏳ Verify SOGo web interface is accessible
-9. ⏳ Verify SOGo authentication works (OIDC with Keycloak)
-10. ⏳ Complete documentation and finalize
+**Tasks 8-10: BLOCKED ON DEPLOYMENT ❌**
+8. ❌ Verify SOGo web interface is accessible (BLOCKED - cannot deploy Apache proxy)
+9. ❌ Verify SOGo authentication works (BLOCKED - cannot access web interface)
+10. ❌ Complete documentation and finalize (BLOCKED - cannot verify functionality)
 
 ---
 
 ## Why Tasks 8-10 Cannot Be Completed Yet
 
-**Blocker: Deployment Required**
+**Blocker: Deployment Required + Server Authentication Issues**
 
 Tasks 8-10 require SOGo to be deployed with the Apache proxy enabled to verify:
 - Web interface accessibility on port 80
 - OIDC authentication with Keycloak
 - End-to-end functionality (calendar, contacts, email)
+
+**Technical Solution: READY ✅**
+- Apache proxy configuration created and committed (c3594d8)
+- Deployment script created (4b7efa3)
+- All documentation complete
+- Code pushed to Codeberg feature/sogo-fix branch
+
+**Deployment Blocker: SERVER GIT SSH AUTHENTICATION ❌**
+Server (root@178.63.182.104) cannot access Codeberg due to missing SSH credentials.
+- `git fetch codeberg feature/sogo-fix` → Permission denied (publickey)
+- Server's feature/sogo-fix branch is stale (missing 4 commits with Apache proxy)
+- PowerPoint PowerShell environment corruption blocks workarounds
+
+**See full documentation:** `.sisyphus/notepads/ums-fix-sogo/BLOCKER_GIT_AUTH.md`
 
 **Current Deployment State:**
 ```
