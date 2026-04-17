@@ -115,10 +115,6 @@ Each function has a default component and one or more alternatives. Pick one per
 | 📁 **Files & Cloud Storage** | [Nextcloud](https://nextcloud.com/) / [OpenCloud](https://opencloud.eu/) | Nextcloud: full-featured cloud suite · OpenCloud: lightweight CS3-based, per-course shares |
 | ✏️ **Whiteboard** | [Excalidraw](https://excalidraw.com/) / CryptPad diagrams | Excalidraw: freeform sketching · CryptPad: privacy-first collaborative diagrams |
 
-<p align="center">
-  <img src="docs/assets/component-alternatives.svg" alt="Component alternatives" width="640"/>
-</p>
-
 ## ✨ How It Works
 
 - 🔐 **SSO** – One login (Keycloak) via SAML2/OIDC for all services
@@ -200,9 +196,8 @@ optional drop-in alternatives, not replacements. This is a **superset** of openD
 
 ---
 
-## 🎤 Presentations
-
-> Available in **30 languages** — [see the full list](./docs/presentations/linuxtag-2026/README-presentation.md)
+**🎤 Presentations**
+> Available in 30 languages — [see the full list](./docs/presentations/linuxtag-2026/README-presentation.md)
 
 | Event | Language | Source | HTML |
 |:------|:--------|:-------|:-----:|
