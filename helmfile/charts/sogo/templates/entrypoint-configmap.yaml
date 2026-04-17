@@ -7,6 +7,32 @@ metadata:
   labels:
     {{- include "sogo.labels" . | nindent 4 }}
 data:
+  apache-wrapper.sh: |
+    #!/bin/bash
+    # Wrapper to disable chown for Apache socket files in containers
+    # This prevents "Operation not permitted" errors when Apache tries
+    # to change ownership of socket files in /var/run/apache2/
+
+    # Override chown command to make it a no-op for Apache sockets
+    chown() {
+      # Check if the target is an Apache socket file
+      for arg in "$@"; do
+        case "$arg" in
+          /var/run/apache2/socks*)
+            # Silently skip chown for Apache socket files
+            return 0
+            ;;
+        esac
+      done
+
+      # Call the real chown command for all other files
+      command chown "$@"
+    }
+    export -f chown
+
+    # Execute Apache with the patched environment
+    exec /usr/sbin/apache2ctl "$@"
+
   supervisord.conf: |
     [unix_http_server]
     file=/var/run/supervisor.sock
@@ -44,7 +70,7 @@ data:
     ; Apache
     [program:apache]
     user=root
-    command=/usr/sbin/apache2ctl -D FOREGROUND
+    command=/opt/custom-entrypoint/apache-wrapper.sh -D FOREGROUND
     autostart=true
     autorestart=true
     stopasgroup=true
@@ -84,6 +110,9 @@ data:
     if [ -d "/usr/share/doc/sogo" ] && [ $(ls -al /usr/share/doc/sogo/ | grep .sh |  wc -l) -gt 0 ]; then
       chmod a+x /usr/share/doc/sogo/*.sh
     fi
+
+    # Make Apache wrapper executable
+    chmod +x /opt/custom-entrypoint/apache-wrapper.sh
 
     # Create custom yaml config folder
     mkdir -p "/etc/sogo/sogo.conf.d"
