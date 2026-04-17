@@ -68,8 +68,20 @@ data:
       chmod 755 /var/$dir/sogo
     done
 
+    # Create Apache runtime directory
+    mkdir -p /var/run/apache2
+    chmod 755 /var/run/apache2
+
     chmod +x /usr/local/sbin/sogod
     chmod +x /usr/local/sbin/sogo-manage
+
+    # Export Apache environment variables (Apache config parser reads from shell env)
+    export APACHE_RUN_USER="root"
+    export APACHE_RUN_GROUP="root"
+    export APACHE_RUN_DIR="/var/run/apache2"
+    export APACHE_PID_FILE="/var/run/apache2/apache2.pid"
+    export APACHE_LOCK_DIR="/var/lock/apache2"
+    export APACHE_LOG_DIR="/var/log/apache2"
 
     echo "Starting supervisord..."
     exec /usr/bin/supervisord -c /opt/custom-entrypoint/supervisord.conf
