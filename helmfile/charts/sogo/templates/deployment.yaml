@@ -52,6 +52,8 @@ spec:
               mountPath: /var/lib/sogo
             - name: sogo-config
               mountPath: /etc/sogo/sogo.conf.d
+            - name: sogo-entrypoint
+              mountPath: /opt/custom-entrypoint
             - name: entrypoint
               mountPath: /opt/custom-entrypoint/entrypoint.sh
               subPath: entrypoint.sh
@@ -75,6 +77,10 @@ spec:
         - name: sogo-config
           configMap:
             name: {{ include "sogo.fullname" . }}
+        - name: sogo-entrypoint
+          configMap:
+            name: {{ include "sogo.fullname" . }}-entrypoint
+            defaultMode: 0755
         - name: entrypoint
           configMap:
             name: {{ include "sogo.fullname" . }}-entrypoint

@@ -7,6 +7,64 @@ metadata:
   labels:
     {{- include "sogo.labels" . | nindent 4 }}
 data:
+  supervisord.conf: |
+    [unix_http_server]
+    file=/var/run/supervisor.sock
+    chmod=0700
+
+    [supervisord]
+    nodaemon=true
+    logfile=/var/log/supervisord.log
+    pidfile=/var/run/supervisord.pid
+    childlogdir=/var/log/supervisor
+
+    ; the below section must remain in the config file for RPC
+    ; (supervisorctl/web interface) to work.
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+    [supervisorctl]
+    serverurl=unix:///var/run/supervisor.sock
+
+    ; SOGo
+    [program:sogo]
+    command=/usr/local/sbin/sogod -WOWorkersCount 5
+    autostart=true
+    autorestart=true
+    stopasgroup=true
+    killasgroup=true
+    directory=/var/lib/sogo
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+    environment=HOME="/var/lib/sogo"
+
+    ; Apache
+    [program:apache]
+    command=/usr/sbin/apache2ctl -D FOREGROUND
+    autostart=true
+    autorestart=true
+    stopasgroup=true
+    killasgroup=true
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
+    ; SOGo Config Generator (runs once at startup)
+    [program:sogo_tool_plus]
+    command=/usr/sbin/sogo-tool-plus update
+    autostart=true
+    autorestart=false
+    startsecs=0
+    exitcodes=0,1
+    directory=/var/lib/sogo
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+    stderr_logfile=/dev/stderr
+    stderr_logfile_maxbytes=0
+
   entrypoint.sh: |
     #!/bin/bash
     # Custom SOGo entrypoint that bypasses privilege dropping for Kubernetes compatibility
@@ -39,6 +97,6 @@ data:
     chmod 640 /etc/sogo/sogo.conf
     chmod +x /usr/local/sbin/sogod
 
-    # Start supervisor (bypass privilege dropping)
+    # Start supervisor with custom configuration (bypass privilege dropping)
     echo "Starting SOGo services..."
-    exec /usr/bin/supervisord -c /opt/supervisord.conf
+    exec /usr/bin/supervisord -c /opt/custom-entrypoint/supervisord.conf
