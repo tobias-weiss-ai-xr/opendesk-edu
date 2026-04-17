@@ -90,15 +90,13 @@ data:
     # Create custom yaml config folder
     mkdir -p "/etc/sogo/sogo.conf.d"
 
-    if [ -z "$(ls -A /etc/sogo/sogo.conf.d)" ]; then
+if [ -z "$(ls -A /etc/sogo/sogo.conf.d)" ]; then
       echo "/etc/sogo/sogo.conf.d is empty. Falling back to using existing /etc/sogo/sogo.conf..."
     else
       echo "Generating sogo.conf from /etc/sogo/sogo.conf.d YAML files..."
       /opt/config-generator
-      # Fix PostgreSQL SSL mode - ensure all PostgreSQL URLs use sslmode=disable
-      sed -i 's|postgresql://\([^:\"]*\):\([^@\"\"]*\)@\([^:\"]*\):\([^/\"]*\)/\([^\"\"]*\)|postgresql://\1:\2@\3:\4/\5?sslmode=disable|g' /etc/sogo/sogo.conf
-      # Handle URLs that already have sslmode parameter - force it to disable
-      sed -i 's|sslmode=[^&;"]*|sslmode=disable|Ig' /etc/sogo/sogo.conf
+      # SSL mode is already handled via PgsqlHost parameter in general.yaml
+      # No need to append ?sslmode=disable to URLs - it corrupts the URL format
     fi
 
     # Enforce mode on configuration (skip ownership changes)
