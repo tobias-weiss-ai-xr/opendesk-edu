@@ -823,7 +823,7 @@ run-tests:
           \"operator\": \"${OPERATOR}\", \
           \"cluster\": \"${CLUSTER}\", \
           \"namespace\": \"${NAMESPACE}\", \
-          \"url\": \"https://portal.${DOMAIN}/\", \
+          \"base_domain\": \"${DOMAIN}\", \
           \"language\": \"${LANGUAGE}\", \
           \"browser\": \"${TESTS_BROWSER}\", \
           \"udm_api_username\": \"Administrator\", \
