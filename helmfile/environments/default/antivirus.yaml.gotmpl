@@ -8,4 +8,11 @@ antivirus:
   milter:
     host: ~
     port: 7357
+  onInfected:
+    # Action to be performed on infected messages (ClamAV OnInfected milter settings)
+    # https://manpages.debian.org/testing/clamav-milter/clamav-milter.conf.5.en.html#ACTIONS
+    action: "Reject"
+    # The rejection reason for infected messages, only useful when action is "Reject"
+    # The string "%v", if present, will be replaced with the virus name.
+    message: "Malware scanner detected problematic content."
 ...
