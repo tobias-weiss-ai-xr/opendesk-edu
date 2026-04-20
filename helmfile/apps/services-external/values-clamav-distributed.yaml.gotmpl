@@ -192,6 +192,9 @@ milter:
   service:
     annotations:
       {{ .Values.annotations.servicesExternalClamavDistributed.milterService | toYaml | nindent 6 }}
+  settings:
+    onInfected: {{ .Values.antivirus.onInfected.action | quote }}
+    rejectMsg: {{ .Values.antivirus.onInfected.message | quote }}
 
   serviceAccount:
     annotations:
