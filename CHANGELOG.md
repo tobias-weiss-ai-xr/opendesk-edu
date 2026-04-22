@@ -1,3 +1,32 @@
+# [1.14.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.2...v1.14.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* **clamav:** Reject infected mails by default ([c4e54b9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c4e54b92e2ac04bcec5dafdde75d0048491c72c1))
+* **collabora:** Update from 25.04.8 to 25.4.9 ([5fd39a2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5fd39a2282d4de984dd0b4b7f425810f39a5544d))
+* **element:** Add support for self-signed certificates in user verification service ([49c2394](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/49c23940f1899119974728812e1ae2825c723bee))
+* **helmfile:** Require MASTER_PASSWORD; see `migrations.md` for required upgrade steps ([99ca840](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/99ca8408663e0aec51d147da0ba787b8b12b412f))
+* **nextcloud:** Allow longer running and concurrent cron jobs ([00b5aa7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/00b5aa7701bcdc97d81135002270b6fe7d8b42c3))
+* **nextcloud:** Update to PHP 8.4 and bump apps ([f241ecc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f241ecc58b1ee3ecf36c7ad28b4dd229823eb996))
+* **nubus:** [[#337](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/337)] Remove extraEnvVars from `waitForDependency` of `nubusPortalConsumer` ([c9507cc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c9507cce826fb2e568c6b8b1acd11dabfacb6c69))
+* **open-xchange:** Fix disappearing folder subscriptions when using folder share or deputy feature ([a254ac5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a254ac5500d689723ffdae55f2c773f7eef5999a))
+* **open-xchange:** Improve Listfilter option in Postfix ([48ae5e6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/48ae5e6dc518497fbf70c56e2019b2f384af3ce3))
+* **opendesk-static-files:** [[#321](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/321)] Switch to pathType `ImplementationSpecific` ([cfbafc0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cfbafc0399bce91cc75822dc2cc7e9c285f18afb))
+* **opendesk-static-files:** Create ingress resources based on available apps ([538bc34](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/538bc34b0cf7d932ed8e2b2bee66cb05c8f83c15))
+* **openproject:** [[#338](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/338)] Bump Helm chart to 13.4.3 to fix issue with port definition ([587ae6a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/587ae6ad1635f7d28f70fb9a0a8cfde2e6afc9cf))
+* **openproject:** Update from 17.3.0 to 17.3.1 ([4599311](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/45993116201623d08da7830f900452051092da4e))
+* **postfix:** Add custom transport_map ([373cbae](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/373cbae5995936adef98ac8b62f360ac4f26f688))
+
+
+### Features
+
+* **nubus:** Support multiple IdP definitions for SSO federation in `functional.authentication.ssoFederation`; see `migrations.md` for required upgrade steps ([85c9691](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/85c96917969e6041d3750587cfd326fd5f1b2741))
+* **nubus:** Update from v1.18.1 to v1.19.0 ([8073597](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/807359722f63680381d57eb325897a1e777266d0))
+* **opendesk-static-files:** Serve `robots.txt` on relevant hosts ([de6bb6a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/de6bb6a4ea3219ca87f32fd51de11b7f63e963dc))
+* **openproject:** Update from 17.2.3 to 17.3.0 ([eed365e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/eed365eefb6e6a2d5fb85a096867791f11465caf))
+* **ox-connector:** Update from v0.35.1 to v0.36.4 ([d7111d9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d7111d9f80a7ac3106f66a09a394d1c42920d33b))
+
 ## [1.13.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.1...v1.13.2) (2026-04-08)
 
 
