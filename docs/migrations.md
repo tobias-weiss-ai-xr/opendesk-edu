@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
   * [Manual checks/actions](#manual-checksactions)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
+        * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
         * [Updated helmfile behaviour: Remove default MASTER\_PASSWORD](#updated-helmfile-behaviour-remove-default-master_password)
         * [Helmfile changed structure: Custom OIDC clients and client scopes](#helmfile-changed-structure-custom-oidc-clients-and-client-scopes)
         * [Helmfile changed structure: Single-sign on federation with upstream IdPs](#helmfile-changed-structure-single-sign-on-federation-with-upstream-idps)
@@ -215,6 +216,17 @@ If you would like more details about the automated migrations, please read secti
 
 #### Pre-upgrade to versions ≥ v1.14.0
 
+##### Potential restart: OX Connector may get into crash loop
+
+**Target group:** All deployments using OX App Suite
+
+**Context:** After upgrade deployments, the OX Connector Pod may enter a CrashLoopBackOff state.
+
+**Required action**
+
+- Monitor the OX Connector Pod once the upgrade deployment has completed.
+- If the pod is stuck in CrashLoopBackOff, delete it manually to trigger a fresh restart.
+
 ##### Updated helmfile behaviour: Remove default MASTER_PASSWORD
 
 **Target group:** All deployments that do not have set a `MASTER_PASSWORD` yet
@@ -234,6 +246,7 @@ If you have been relying on the default master password, set a master password.
 Note that due to limitations of helm, the `MASTER_PASSWORD` environment
 variable has to be an non-empty value, even if all secrets have been replaced
 by custom values.
+
 ##### Helmfile changed structure: Custom OIDC clients and client scopes
 
 **Target group:** Existing openDesk deployments OIDC client and/or client scope configurations in (at least) one of the following sections:
