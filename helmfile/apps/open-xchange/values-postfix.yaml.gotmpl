@@ -119,6 +119,11 @@ postfix:
   staticAuthDB:
     enabled: false
 
+  ldapMailboxMaps:
+    010-opendesk:
+      queryFilter: "(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s))"
+      resultAttribute: "mailPrimaryAddress, mailAlternativeAddress"
+
   ldapSmtpdSenderLoginMaps:
     enabled: true
     queryFilter: "(&(objectClass=oxUserObject)(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s)))"
