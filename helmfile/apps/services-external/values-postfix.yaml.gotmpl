@@ -155,6 +155,10 @@ postfix:
   # Only deliver mail to Dovecot, if it is available
   {{- if .Values.apps.oxAppSuite.enabled }}
   virtualTransport: "lmtps:dovecot:24"
+  ldapMailboxMaps:
+    010-opendesk:
+      queryFilter: "(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s))"
+      resultAttribute: "mailPrimaryAddress, mailAlternativeAddress"
   {{- else }}
   virtualMailboxDomains: []
   {{- end }}
