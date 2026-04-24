@@ -39,8 +39,7 @@ environment:
   {{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.openproject.token }}
   OPENPROJECT_SEED__ENTERPRISE__TOKEN: {{ .Values.enterpriseKeys.openproject.token | quote }}
   {{- end }}
-# For more details and more options see
-# https://www.openproject.org/docs/installation-and-operations/configuration/environment/
+# Ref. https://www.openproject.org/docs/installation-and-operations/configuration/environment/
   OPENPROJECT_APP__TITLE: "Projekte - {{ .Values.theme.texts.productName }}"
   OPENPROJECT_LOG__LEVEL: {{ if .Values.debug.enabled }}"debug"{{ else }}"info"{{ end }}
   OPENPROJECT_LOGIN__REQUIRED: "true"
@@ -49,7 +48,9 @@ environment:
   OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER: "keycloak"
   OPENPROJECT_EMAIL__DELIVERY__METHOD: "smtp"
   OPENPROJECT_DEFAULT__COMMENT__SORT__ORDER: "desc"
-  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
+  # Ref.: https://www.openproject.org/docs/system-admin-guide/authentication/ldap-connections/#enable-status-synchronization
+  OPENPROJECT_LDAP__USERS__SYNC__STATUS: "true"
+  # Ref.: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
   OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.ldap.host | quote }}
   OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
   OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.nubus.ldapSearch.openproject | quote }}
