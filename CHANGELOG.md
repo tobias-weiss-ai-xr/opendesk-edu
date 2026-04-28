@@ -1,3 +1,14 @@
+## [1.14.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.0...v1.14.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* **intercom-service:** Update from v2.23.7 to v2.23.11; move `extraEnvVars` to correct location ([b53f20c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b53f20c98f045b7eead184598aed143b78c88cc7))
+* **nextcloud:** Update from 32.0.6 to 32.0.8 incl. most recent apps and EE patches; Upgrade is strongly recommended ([8569216](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8569216afbab0bfaa97d61e70f4948be547f393b))
+* **nubus:** Update from v1.19.0 to v1.19.1 ([0989af9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0989af94341ce3c8f78857c0ce7fc2354b03820f))
+* **openproject:** Enable automatic locking of accounts based on LDAP information ([2028913](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/202891302c587f9bed0325172669fa05c18cdc60))
+* **xwiki:** Update from 17.10.4 to 17.10.7 ([b0223c5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b0223c5e7304f8e78d521b169600684989ac8bb8))
+
 # [1.14.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.2...v1.14.0) (2026-04-22)
 
 
