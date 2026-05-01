@@ -41,6 +41,7 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
   - v4.x[^3]
 - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
 - [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
+- [yq](https://github.com/mikefarah/yq)
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
 
