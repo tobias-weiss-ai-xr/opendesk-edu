@@ -100,7 +100,10 @@ persistence:
   size: {{ .Values.persistence.storages.minio.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.minio.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   annotations:
-    {{ .Values.annotations.servicesExternalMinio.persistence | toYaml | nindent 4 }}
+    helm.sh/resource-policy: "keep"
+    {{- with .Values.annotations.servicesExternalMinio.persistence }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
 
 provisioning:
   enabled: true
