@@ -306,10 +306,14 @@ functional:
     # Mail related settings
     mail:
       # Mail categories related settings
-      # Ref.: https://documentation.open-xchange.com/8/middleware/mail/mail_categories.html
       categories:
         # Toggle the availability of the mail categories feature.
-        # Ref.:
+        # Ref.: https://documentation.open-xchange.com/8/middleware/mail/mail_categories.html
+        enabled: true
+      # Email encryption related settings.
+      encryption:
+        # Toggle the availability of OX Guard
+        # Ref.: https://www.open-xchange.com/products/ox-guard/
         enabled: true
       # Control options for handling incoming emails
       inbound:
@@ -321,16 +325,19 @@ functional:
         # Allow users to automatically forward all incoming emails to an email address of their choice.
         forward:
           enabled: false
-      # Email encryption related settings.
-      encryption:
-        # Toggle the availability of OX Guard
-        # Ref.: https://www.open-xchange.com/products/ox-guard/
-        enabled: true
       # Mail removed from the user's deleted items folder is not immediately deleted but kept for a certain time,
       # allowing administrators to recover emails deleted by mistake.
       keepPurged:
         # Toggle the "keepPurged" feature.
         enabled: false
+      # Local limits applied
+      localLimits:
+        # Maximum number of recipients a single address may expand to (e.g. members of a mailing list).
+        # Ref: https://www.postfix.org/postconf.5.html#virtual_alias_expansion_limit
+        expansion: 1000
+        # Maximum nesting depth of alias-of-alias resolution chains.
+        # Ref: https://www.postfix.org/postconf.5.html#virtual_alias_recursion_limit
+        recursion: 25
       # Define the maximum size for emails (including their attachments) in Megabyte
       maxSize: 25
     quota:
