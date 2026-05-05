@@ -127,7 +127,8 @@ postfix:
       resultAttribute: "mailPrimaryAddress, mailAlternativeAddress"
 
   ldapSmtpdSenderLoginMaps:
-    enabled: true
+    # Disabled, as it does not support deputy and shared mailbox functionality yet
+    enabled: false
     queryFilter: "(&(objectClass=oxUserObject)(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s)))"
     result_attribute: "entryUUID, mailPrimaryAddress"
 
