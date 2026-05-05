@@ -16,6 +16,7 @@ SPDX-License-Identifier: Apache-2.0
         * [New helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
       * [Post-upgrade to versions ≥ v1.15.0](#post-upgrade-to-versions--v1150)
         * [Wiki bug fix: LDAP group synchronization incomplete](#wiki-bug-fix-ldap-group-synchronization-incomplete)
+        * [Wiki bug fix: User account merge for uppercase usernames (Part 2)](#wiki-bug-fix-user-account-merge-for-uppercase-usernames-part-2)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
         * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
@@ -315,6 +316,37 @@ To repair groups whose memberships are no longer properly synchronized to XWiki,
 - Paste the script into the editor and save the page.
 - On the newly created page, click "Recreate the LDAP Groups Mapping" to start the analysis.
 - A list of all recreated mappings will be displayed once the process completes.
+
+##### Wiki bug fix: User account merge for uppercase usernames (Part 2)
+
+**Target audience:** Deployments where usernames (login names) contain uppercase characters, XWiki is enabled, and users logged into XWiki before their accounts were pre-created by the nightly LDAP synchronization.
+
+**Context**
+
+XWiki receives user and account identity information through two mechanisms:
+- **OIDC** – during a user's SSO-based login to XWiki
+- **LDAP** – during nightly synchronization jobs
+
+In earlier releases, when a username was provided via OIDC before the corresponding account had been pre-created by the nightly LDAP synchronization, duplicate accounts were created - one with mixed-case letters and one with all lowercase letters.
+
+**Required action**
+
+To identify and merge duplicate user accounts, run the following script:
+[`./migrations-helper/1.15.0-Xwiki-usermerge.java`](./migrations-helper/1.15.0-Xwiki-usermerge.java)
+
+*Prerequisites*
+
+The same prerequisites as for the XWiki fix in the section above.
+
+*Running the script*
+
+- Create a new XWiki page (it can be deleted once the cleanup is complete).
+- Open the "Edit" dropdown and switch to the "Wiki" editor (not the default WYSIWYG editor).
+- Paste the script into the editor and save the page.
+- On the newly created page, click "Show duplicate user accounts" to start the analysis.
+- A list of "Duplicate user accounts" will be displayed.
+- If duplicates are found, click "Replace and disable duplicate accounts" to merge them.
+- For each merged account, the script outputs a message similar to: `Duplicate user account [XWiki.uppercase1] has been replaced by account [XWiki.UpperCase1] and disabled.`
 
 ### Versions ≥ v1.14.0
 
@@ -643,7 +675,7 @@ smtp:
 **Context**
 
 XWiki receives user and account identity information via two mechanisms:
-- **OIDC** – during a user’s SSO-based login to XWiki
+- **OIDC** – during a user's SSO-based login to XWiki
 - **LDAP** – during nightly synchronization jobs
 
 In earlier releases, usernames provided via OIDC were automatically normalized to lowercase, while usernames synchronized from LDAP were not. This mismatch could result in duplicate user accounts in XWiki that differ only by letter case.
@@ -693,7 +725,7 @@ global:
   additionalMailDomains: []
 ```
 
-Mail domains can also be created via the UDM REST API. This API is used by the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import), which automatically creates mail domain objects when required, for example, when a user’s primary email address references a domain that has not yet been configured.
+Mail domains can also be created via the UDM REST API. This API is used by the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import), which automatically creates mail domain objects when required, for example, when a user's primary email address references a domain that has not yet been configured.
 
 When creating accounts for external or guest users in the IAM, email addressed to their domains must not be routed internally if openDesk groupware is enabled. To support this, mail domains now provide the option `opendeskMailDomainRelayExternal`. When enabled, email for these domains is relayed externally instead of being delivered to the openDesk groupware.
 
