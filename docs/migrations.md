@@ -14,6 +14,8 @@ SPDX-License-Identifier: Apache-2.0
     * [Versions ≥ v1.15.0](#versions--v1150)
       * [Pre-upgrade to versions ≥ v1.15.0](#pre-upgrade-to-versions--v1150)
         * [New helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
+      * [Post-upgrade to versions ≥ v1.15.0](#post-upgrade-to-versions--v1150)
+        * [Wiki bug fix: LDAP group synchronization incomplete](#wiki-bug-fix-ldap-group-synchronization-incomplete)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
         * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
@@ -282,6 +284,37 @@ apps:
 **Optional action: Migrating to SeaweedFS as S3 storage backend**
 
 See [Migrate from MinTO to SeaweedFS](./migrations-instructions/1.15.0-migrate-from-minio-to-seaweedfs.md)
+
+#### Post-upgrade to versions ≥ v1.15.0
+
+##### Wiki bug fix: LDAP group synchronization incomplete
+
+**Target audience:** Deployments using XWiki with LDAP groups where some group memberships are not synchronized as expected.
+
+**Required action**
+
+To repair groups whose memberships are no longer properly synchronized to XWiki, run the following script:
+[`./migrations-helper/1.15.0-xwiki-groupsync.java`](./migrations-helper/1.15.0-xwiki-groupsync.java)
+
+*Prerequisites*
+
+- Ensure your account has XWiki administrator permissions:
+  - Permissions can be granted via IAM administration in the user's "openDesk" tab.
+  - Note that permissions are synchronized to XWiki nightly, so changes may take up to 24 hours to take effect.
+  - To verify that the permissions are active, open the waffle menu in XWiki and confirm that the "Wiki administration" option is available.
+- Enable script execution for your account:
+  - In XWiki, click your avatar to open your user profile.
+  - Navigate to "Settings".
+  - Set "User type" to "Advanced" (required to execute scripts).
+  - Save the change.
+
+*Running the script*
+
+- Create a new XWiki page (it can be deleted once the cleanup is complete).
+- Open the "Edit" dropdown and switch to the "Wiki" editor (not the default WYSIWYG editor).
+- Paste the script into the editor and save the page.
+- On the newly created page, click "Recreate the LDAP Groups Mapping" to start the analysis.
+- A list of all recreated mappings will be displayed once the process completes.
 
 ### Versions ≥ v1.14.0
 
