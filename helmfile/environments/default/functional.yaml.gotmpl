@@ -299,10 +299,16 @@ functional:
       # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html#share-links
       shareLinks:
         enabled: false
+        # Limit the number of share links a single user can create.
+        # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.share_links
+        quota: 100
       # Allow sharing of resources with guest users created on demand by App Suite.
       # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html#invite-guests
       inviteGuests:
         enabled: false
+        # Limit the number of guests a single user can create.
+        # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.invite_guests
+        quota: 100
     # Mail related settings
     mail:
       # Mail categories related settings

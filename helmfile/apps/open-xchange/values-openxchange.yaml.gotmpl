@@ -765,7 +765,12 @@ appsuite:
       com.openexchange.share.guestHostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
+      # Quota related setting
+      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota
       com.openexchange.quota.calendar: {{ .Values.technical.oxAppSuite.quota.calendar | quote }}
+      com.openexchange.quota.task: {{ .Values.technical.oxAppSuite.quota.tasks | quote }}
+      com.openexchange.quota.contact: {{ .Values.technical.oxAppSuite.quota.contacts | quote }}
+      com.openexchange.quota.attachment: {{ .Values.technical.oxAppSuite.quota.attachments | quote }}
       # Audit logs
       {{- if .Values.functional.admin.logging.auditLogs.enabled }}
       com.openexchange.log.audit.slf4j.enabled: "true"
@@ -920,7 +925,9 @@ appsuite:
       com.openexchange.mail.filter.options.apply.blockedActions: "redirect,notify"
       # functional.groupware.externalSharing.*
       com.openexchange.capability.share_links: {{ .Values.functional.groupware.externalSharing.shareLinks.enabled | quote }}
+      com.openexchange.quota.share_links: {{ .Values.functional.groupware.externalSharing.shareLinks.quota | quote }}
       com.openexchange.capability.invite_guests: {{ .Values.functional.groupware.externalSharing.inviteGuests.enabled | quote }}
+      com.openexchange.quota.invite_guests: {{ .Values.functional.groupware.externalSharing.shareLinks.quota | quote }}
       com.openexchange.share.guestCapabilityMode: "inherit"
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"

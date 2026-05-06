@@ -35,13 +35,16 @@ Provide steps for QA or reviewers to test the fix and mention anything reviewers
 
 # 👷 Developer Checklist
 
-**Documentation:**
-
-Does this MR introduce changes (e.g., new secrets, configuration options) that require documentation?
+Does this MR introduce **ANY** new (non migration related) Helmfile options?
 - [ ] No
-- [ ] Yes, and the documentation has been updated accordingly
+- [ ] Yes, and the documentation (updates.md) is addressing these changes.
+
+Does this MR introduce new (migration related) Helmfile options or other changes requiring automated or manual migrations?
+- [ ] No
+- [ ] Yes -> **This should not happen on bugfix MRs**
 
 **Quality Assurance:**
+
 - [ ] Verified that the fix works as expected, including upgrade scenarios
 - [ ] Performed regression testing
 
