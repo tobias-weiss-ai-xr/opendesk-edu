@@ -19,10 +19,11 @@ SPDX-License-Identifier: Apache-2.0
         * [Wiki bug fix: User account merge for uppercase usernames (Part 2)](#wiki-bug-fix-user-account-merge-for-uppercase-usernames-part-2)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
-        * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
         * [Updated helmfile behaviour: Remove default MASTER\_PASSWORD](#updated-helmfile-behaviour-remove-default-master_password)
         * [Helmfile changed structure: Custom OIDC clients and client scopes](#helmfile-changed-structure-custom-oidc-clients-and-client-scopes)
         * [Helmfile changed structure: Single-sign on federation with upstream IdPs](#helmfile-changed-structure-single-sign-on-federation-with-upstream-idps)
+      * [Post-upgrade to versions ≥ v1.14.0](#post-upgrade-to-versions--v1140)
+        * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
     * [Versions ≥ v1.13.0](#versions--v1130)
       * [Pre-upgrade to versions ≥ v1.13.0](#pre-upgrade-to-versions--v1130)
         * [New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
@@ -348,17 +349,6 @@ The same prerequisites as for the XWiki fix in the section above.
 
 #### Pre-upgrade to versions ≥ v1.14.0
 
-##### Potential restart: OX Connector may get into crash loop
-
-**Target group:** All deployments using OX App Suite
-
-**Context:** After upgrade deployments, the OX Connector Pod may enter a CrashLoopBackOff state.
-
-**Required action**
-
-- Monitor the OX Connector Pod once the upgrade deployment has completed.
-- If the pod is stuck in CrashLoopBackOff, delete it manually to trigger a fresh restart.
-
 ##### Updated helmfile behaviour: Remove default MASTER_PASSWORD
 
 **Target group:** All deployments that do not have set a `MASTER_PASSWORD` yet
@@ -460,6 +450,19 @@ functional:
             providerId: "oidc"
             [..]
 ```
+
+#### Post-upgrade to versions ≥ v1.14.0
+
+##### Potential restart: OX Connector may get into crash loop
+
+**Target group:** All deployments using OX App Suite
+
+**Context:** After upgrade deployments, the OX Connector Pod may enter a CrashLoopBackOff state.
+
+**Required action**
+
+- Monitor the OX Connector Pod once the upgrade deployment has completed.
+- If the pod is stuck in CrashLoopBackOff, delete it manually to trigger a fresh restart.
 
 ### Versions ≥ v1.13.0
 
