@@ -786,7 +786,6 @@ appsuite:
       com.openexchange.dovecot.doveadm.endpoints.maxConnectionsPerRoute: "0"
       com.openexchange.dovecot.doveadm.endpoints.readTimeout: "20000"
       com.openexchange.dovecot.doveadm.endpoints.connectTimeout: "5000"
-      com.openexchange.dovecot.doveadm.apiSecret: {{ .Values.secrets.dovecot.doveadm | quote }}
       # Various Mail settings
       com.openexchange.mail.maxToCcBcc: "500"
       com.openexchange.mail.deleteDraftOnTransport: "true"
@@ -804,7 +803,6 @@ appsuite:
       com.openexchange.oidc.autologinCookieMode: "ox_direct"
       com.openexchange.oidc.backchannelLogoutEnabled: "true"
       com.openexchange.oidc.clientId: "opendesk-oxappsuite"
-      com.openexchange.oidc.clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
       com.openexchange.oidc.contextLookupClaim: "context"
       com.openexchange.oidc.contextLookupNamePart: "full"
       com.openexchange.oidc.opAuthorizationEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
@@ -944,10 +942,8 @@ appsuite:
       com.openexchange.guard.storage.file.fileStorageType: "file"
       com.openexchange.guard.storage.file.uploadDirectory: "/opt/open-xchange/guard-files/"
       com.openexchange.guard.guestSMTPMailFrom: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
-      com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
       com.openexchange.guard.guestSMTPPort: "25"
       com.openexchange.guard.guestSMTPServer: "postfix-smtp"
-      com.openexchange.guard.guestSMTPUsername: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.useStartTLS: "false"
       # S/MIME
       # Usage (in browser console after login):
@@ -984,7 +980,6 @@ appsuite:
       com.openexchange.net.ssl.default.truststore.enabled: "false"
       com.openexchange.net.ssl.custom.truststore.enabled: "true"
       com.openexchange.net.ssl.custom.truststore.path: "/etc/ssl/certs/truststore.jks"
-      com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password | quote }}
       {{- end }}
       {{- if .Values.functional.groupware.davSupport.enabled }}
       com.openexchange.authentication.application.appTypes: "caldav,carddav"
@@ -1014,6 +1009,30 @@ appsuite:
       com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey | quote }}
       com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
       com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
+      com.openexchange.dovecot.doveadm.apiSecret: {{ .Values.secrets.dovecot.doveadm | quote }}
+      com.openexchange.oidc.clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
+      {{- if .Values.functional.groupware.mail.encryption.enabled }}
+      com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      com.openexchange.guard.guestSMTPUsername: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+      {{- end }}
+      {{- if .Values.certificate.selfSigned }}
+      com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password | quote }}
+      {{- end }}
+    secretPropertiesFiles:
+      /opt/open-xchange/etc/filestore-s3.properties:
+        com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
+        {{- if .Values.objectstores.openxchange.secretKey }}
+        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | quote }}
+        {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.secrets.minio.openxchangeUser | quote }}
+        {{- else }}
+        {{- fail "No objectstorage secretKey for openxchange found!" }}
+        {{- end }}
+      /opt/open-xchange/etc/ldapauth.properties:
+        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
+      /opt/open-xchange/etc/noreply.properties:
+        com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+        com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
     propertiesFiles:
       /opt/open-xchange/etc/Group.properties:
         CHECK_GROUP_UID_FOR_NOT_ALLOWED_CHARS: "false"
@@ -1052,23 +1071,12 @@ appsuite:
         {{- fail "No objectstorage endpoint for openxchange found!" }}
         {{- end }}
         com.openexchange.filestore.s3.ox-filestore-s3.bucketName: {{ .Values.objectstores.openxchange.bucket | quote }}
-        com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
-        {{- if .Values.objectstores.openxchange.secretKey }}
-        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | quote }}
-        {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
-        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.secrets.minio.openxchangeUser | quote }}
-        {{- else }}
-        {{- fail "No objectstorage secretKey for openxchange found!" }}
-        {{- end }}
       /opt/open-xchange/etc/ldapauth.properties:
         java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/{{ .Values.ldap.baseDn }}"
         bindDN: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
-        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
         bindOnly: "false"
       /opt/open-xchange/etc/noreply.properties:
         com.openexchange.noreply.address: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
-        com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
-        com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
         com.openexchange.noreply.server: "postfix-smtp"
         com.openexchange.noreply.port: "25"
         com.openexchange.noreply.secureMode: "plain"
