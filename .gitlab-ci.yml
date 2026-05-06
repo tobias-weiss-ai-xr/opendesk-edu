@@ -221,9 +221,11 @@ variables:
     value: "develop"
   TESTS_TESTSET:
     description: >
-      Selects test set for E2E-tests (Regression, Smoke or Nightly), name multiple comma separated to trigger the
-      sets in one launch, use semikolon to trigger the sets in different launches.
-    value: "Smoke"
+      Define test sets: e.g. `K8s State`, `General Availability`, `Smoke`, `E2E`, `Pre-Upgrade`, `Post-Upgrade`.
+      Use commas to group tests into the same run; use semicolons to split them into separate
+      runs (still grouped under the same TestOps launch, but clearly separated in time).
+      Prefix a test set with `!` to abort execution if it fails within a run.
+    value: "!K8s State;E2E"
   TESTS_BROWSER:
     description: "Select the browser (engine) to use for the test run."
     value: "chromium"
