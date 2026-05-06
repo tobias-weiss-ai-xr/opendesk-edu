@@ -3,10 +3,10 @@ SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffe
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# Updates & Upgrades
+# Migration requirements
 
 <!-- TOC -->
-* [Updates \& Upgrades](#updates--upgrades)
+* [Migration requirements](#migration-requirements)
   * [Disclaimer](#disclaimer)
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
@@ -136,20 +136,16 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Disclaimer
 
-Starting with openDesk 1.0, we aim to offer hassle-free updates/upgrades.
+When upgrading openDesk, two types of migrations may be required:
 
-Therefore, openDesk contains automated migrations between versions which reduces the need for manual interaction.
-
-These automated migrations have limitations in the sense that they require a certain openDesk version to be installed, effectively resulting in a forced upgrade path. This is highlighted in the section [Automated migrations](#automated-migrations).
-
-Manual checks and possible actions are also required by openDesk updates, they are described in the section [Manual checks/actions](#manual-checksactions).
+- **Automated migrations between versions**, which reduce the need for manual intervention. These migrations have limitations: they require specific openDesk versions to be installed, which effectively enforces a defined upgrade path. See [Automated migrations](#automated-migrations) for details.
+- **Manual checks and actions**, which are described in [Manual checks/actions](#manual-checksactions).
 
 > [!important]
-> Please be sure to _thoroughly_ read / follow the requirements before you update / upgrade and assure that
-> you are reading the correct version of this document (change branch / version if necessary).
+> Please read and follow these requirements _thoroughly_ before starting an update or upgrade, and make sure you are viewing the correct version of this document (switch branch or version if necessary). Always run your backup procedure before beginning an upgrade, as rollbacks may require restoring from backup due to non-reversible database changes within applications.
 
 > [!warning]
-> We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC is deleted; we will not address explicit deletion for PVs.
+> Depending on your PV reclaim policy, you may need to clean up PVs manually once the related PVCs are no longer in use.
 
 ## Deprecation warnings
 

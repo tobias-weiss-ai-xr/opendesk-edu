@@ -29,11 +29,11 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 
 ### Release types
 
-| Type           | Frequency     | Content                                                       |
-|----------------|---------------|---------------------------------------------------------------|
-| **Major**      | Annually (Q3) | Large feature sets, architecture changes, breaking changes |
-| **Minor**      | Monthly        | New features, enhancements, may contain breaking changes or refactors (clearly flagged in the notes)              |
-| **Patch**      | On demand      | Bug fixes, security updates, minor improvements, no intended breaking changes               |
+| Type      | Frequency     | Content                                                                                              |
+| --------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| **Major** | Annually (Q3) | Large feature sets, architecture changes, breaking changes                                           |
+| **Minor** | Monthly       | New features, enhancements, may contain breaking changes or refactors (clearly flagged in the notes) |
+| **Patch** | On demand     | Bug fixes, security updates, minor improvements, no intended breaking changes                        |
 
 > [!note]
 > openDesk does **not** guarantee that minor releases are 100% backward‑compatible. When a breaking > change

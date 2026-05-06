@@ -18,11 +18,16 @@
 
 **Documentation:**
 
-Does this MR introduce changes (e.g., new secrets, configuration options) that require documentation?
+Does this MR introduce **ANY** new (non migration related) Helmfile options?
 - [ ] No
-- [ ] Yes, and the documentation has been updated accordingly
+- [ ] Yes, and the documentation (updates.md) is addressing these changes.
+
+Does this MR introduce new (migration related) Helmfile options or other changes requiring automated or manual migrations?
+- [ ] No
+- [ ] Yes, and the documentation (migrations.md) is addressing these changes.
 
 **Quality Assurance:**
+
 - [ ] Verified that the update works as expected, including upgrade scenarios
 - [ ] Performed regression testing
 
