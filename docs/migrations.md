@@ -18,27 +18,27 @@ When upgrading openDesk, two types of migrations may be required:
 
 <!-- TOC -->
 * [Migration requirements](#migration-requirements)
-  * [Disclaimer](#disclaimer)
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
     * [Versions ≥ v1.15.0](#versions--v1150)
       * [Pre-upgrade to versions ≥ v1.15.0](#pre-upgrade-to-versions--v1150)
-        * [New helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
+        * [New Helmfile default: external mail services are no longer enabled by default](#new-helmfile-default-external-mail-services-are-no-longer-enabled-by-default)
+        * [New Helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
       * [Post-upgrade to versions ≥ v1.15.0](#post-upgrade-to-versions--v1150)
         * [Wiki bug fix: LDAP group synchronization incomplete](#wiki-bug-fix-ldap-group-synchronization-incomplete)
         * [Wiki bug fix: User account merge for uppercase usernames (Part 2)](#wiki-bug-fix-user-account-merge-for-uppercase-usernames-part-2)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
-        * [Updated helmfile behaviour: Remove default MASTER\_PASSWORD](#updated-helmfile-behaviour-remove-default-master_password)
-        * [Helmfile changed structure: Custom OIDC clients and client scopes](#helmfile-changed-structure-custom-oidc-clients-and-client-scopes)
-        * [Helmfile changed structure: Single-sign on federation with upstream IdPs](#helmfile-changed-structure-single-sign-on-federation-with-upstream-idps)
+        * [Updated Helmfile behaviour: Remove default MASTER\_PASSWORD](#updated-helmfile-behaviour-remove-default-master_password)
+        * [Changed Helmfile structure: Custom OIDC clients and client scopes](#changed-helmfile-structure-custom-oidc-clients-and-client-scopes)
+        * [Changed Helmfile structure: Single-sign on federation with upstream IdPs](#changed-helmfile-structure-single-sign-on-federation-with-upstream-idps)
       * [Post-upgrade to versions ≥ v1.14.0](#post-upgrade-to-versions--v1140)
         * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
     * [Versions ≥ v1.13.0](#versions--v1130)
       * [Pre-upgrade to versions ≥ v1.13.0](#pre-upgrade-to-versions--v1130)
-        * [New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
-        * [Updated helmfile options: New ingress additional annotations](#updated-helmfile-options-new-ingress-additional-annotations)
+        * [New Helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
+        * [Updated Helmfile options: New ingress additional annotations](#updated-helmfile-options-new-ingress-additional-annotations)
     * [Versions ≥ v1.12.0](#versions--v1120)
       * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
         * [New application default: Keycloak imports users to its own database](#new-application-default-keycloak-imports-users-to-its-own-database)
@@ -51,12 +51,12 @@ When upgrading openDesk, two types of migrations may be required:
     * [Versions ≥ v1.11.0](#versions--v1110)
       * [Pre-upgrade to versions ≥ v1.11.0](#pre-upgrade-to-versions--v1110)
         * [Deployment cleanup: Collabora Controller](#deployment-cleanup-collabora-controller)
-        * [Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#helmfile-new-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
-        * [Helmfile new secret: `secrets.nextcloud.statusPassword`](#helmfile-new-secret-secretsnextcloudstatuspassword)
+        * [New Helmfile option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#new-helmfile-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
+        * [New Helmfile secret: `secrets.nextcloud.statusPassword`](#new-helmfile-secret-secretsnextcloudstatuspassword)
     * [Versions ≥ v1.10.0](#versions--v1100)
       * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
-        * [Helmfile new secret: `secrets.nubus.ldapSearch.postfix`](#helmfile-new-secret-secretsnubusldapsearchpostfix)
-        * [Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`](#helmfile-new-secret-secretsdoveocotsharedmailboxesmasterpassword)
+        * [New Helmfile secret: `secrets.nubus.ldapSearch.postfix`](#new-helmfile-secret-secretsnubusldapsearchpostfix)
+        * [New Helmfile secret: `secrets.doveocot.sharedMailboxesMasterPassword`](#new-helmfile-secret-secretsdoveocotsharedmailboxesmasterpassword)
         * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
         * [New Helmfile default: Postfix SMTP SASL security options](#new-helmfile-default-postfix-smtp-sasl-security-options)
       * [Post-upgrade to versions ≥ v1.10.0](#post-upgrade-to-versions--v1100)
@@ -65,7 +65,7 @@ When upgrading openDesk, two types of migrations may be required:
       * [Pre-upgrade to versions ≥ v1.9.0](#pre-upgrade-to-versions--v190)
         * [New application default: Postfix SMTP SASL security option](#new-application-default-postfix-smtp-sasl-security-option)
         * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
-        * [Helmfile new feature: `functional.groupware.externalClients.*`](#helmfile-new-feature-functionalgroupwareexternalclients)
+        * [New Helmfile option: `functional.groupware.externalClients.*`](#new-helmfile-option-functionalgroupwareexternalclients)
     * [Versions ≥ v1.8.0](#versions--v180)
       * [Pre-upgrade to versions ≥ v1.8.0](#pre-upgrade-to-versions--v180)
         * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
@@ -85,7 +85,7 @@ When upgrading openDesk, two types of migrations may be required:
     * [Versions ≥ v1.6.0](#versions--v160)
       * [Pre-upgrade to versions ≥ v1.6.0](#pre-upgrade-to-versions--v160)
         * [Upstream constraint: Nubus' external secrets](#upstream-constraint-nubus-external-secrets)
-        * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
+        * [New Helmfile secret: `secrets.minio.openxchangeUser`](#new-helmfile-secret-secretsminioopenxchangeuser)
         * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
         * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
       * [Post-upgrade to versions ≥ v1.6.0](#post-upgrade-to-versions--v160)
@@ -95,7 +95,7 @@ When upgrading openDesk, two types of migrations may be required:
         * [Helmfile cleanup: `global.additionalMailDomains` as list](#helmfile-cleanup-globaladditionalmaildomains-as-list)
     * [Versions ≥ v1.3.0](#versions--v130)
       * [Pre-upgrade to versions ≥ v1.3.0](#pre-upgrade-to-versions--v130)
-        * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
+        * [New Helmfile option: `functional.authentication.ssoFederation`](#new-helmfile-option-functionalauthenticationssofederation)
     * [Versions ≥ v1.2.0](#versions--v120)
       * [Pre-upgrade to versions ≥ v1.2.0](#pre-upgrade-to-versions--v120)
         * [Helmfile cleanup: Do not configure OX provisioning when no OX installed](#helmfile-cleanup-do-not-configure-ox-provisioning-when-no-ox-installed)
@@ -106,7 +106,7 @@ When upgrading openDesk, two types of migrations may be required:
     * [Versions ≥ v1.1.1](#versions--v111)
       * [Pre-upgrade to versions ≥ v1.1.1](#pre-upgrade-to-versions--v111)
         * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
-        * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
+        * [New Helmfile secret: `secrets.nubus.masterpassword`](#new-helmfile-secret-secretsnubusmasterpassword)
     * [Versions ≥ v1.1.0](#versions--v110)
       * [Pre-upgrade to versions ≥ v1.1.0](#pre-upgrade-to-versions--v110)
         * [Helmfile cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
@@ -183,7 +183,8 @@ matching that constraint, though our links always point to the newest patch rele
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
 | Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                      |
 | ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------ |
-| [v1.14.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.14.2) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | ⬇ Install ≥ v1.12.x first                              |
+| [v1.15.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.15.0) | --        | [Pre](#pre-upgrade-to-versions--v1150)                                                                                         | [Post](#post-upgrade-to-versions--v1150) | ⬇ Install ≥ v1.12.x first                             |
+| [v1.14.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.14.2) | --        | [Pre](#pre-upgrade-to-versions--v1140)                                                                                         | [Post](#post-upgrade-to-versions--v1140) | ⬇ Install ≥ v1.12.x first                             |
 | [v1.13.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.13.2) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | [⚠ Install v1.12.x first](#versions--v1120-automated) |
 | [v1.12.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.2) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.8.0 first                              |
 | [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                              |
@@ -218,7 +219,30 @@ If you would like more details about the automated migrations, please read secti
 
 #### Pre-upgrade to versions ≥ v1.15.0
 
-##### New helmfile default: Support for SeaweedFS as S3 backend
+##### New Helmfile default: external mail services are no longer enabled by default
+
+**Target group:** Deployments using the groupware module with support for external mail clients.
+
+**Context:**
+
+openDesk can expose several mail-related services (IMAPS and SMTP submission) for external clients. Previously
+these were created by default; especially with service type "LoadBalancer" this meant they were exposed
+automatically. They are now disabled by default and must be enabled explicitly.
+
+**Required action**
+
+If your deployment supports external mail clients, enable the services you need:
+
+```yaml
+functional:
+  groupware:
+    externalClients:
+      exposeImaps: true
+      exposeSubmission: true
+      exposeSubmissions: true
+```
+
+##### New Helmfile default: Support for SeaweedFS as S3 backend
 
 **Target group:** Deployments using the bundled service MinIO
 
@@ -347,7 +371,7 @@ The same prerequisites as for the XWiki fix in the section above.
 
 #### Pre-upgrade to versions ≥ v1.14.0
 
-##### Updated helmfile behaviour: Remove default MASTER_PASSWORD
+##### Updated Helmfile behaviour: Remove default MASTER_PASSWORD
 
 **Target group:** All deployments that do not have set a `MASTER_PASSWORD` yet
 
@@ -367,7 +391,7 @@ Note that due to limitations of helm, the `MASTER_PASSWORD` environment
 variable has to be an non-empty value, even if all secrets have been replaced
 by custom values.
 
-##### Helmfile changed structure: Custom OIDC clients and client scopes
+##### Changed Helmfile structure: Custom OIDC clients and client scopes
 
 **Target group:** Existing openDesk deployments OIDC client and/or client scope configurations in (at least) one of the following sections:
 - `functional.authentication.oidc.clients`
@@ -399,7 +423,7 @@ functional:
           [..]
 ```
 
-##### Helmfile changed structure: Single-sign on federation with upstream IdPs
+##### Changed Helmfile structure: Single-sign on federation with upstream IdPs
 
 **Target group:** Existing openDesk deployments with configured IdP federation under `functional.authentication.ssoFederation`.
 
@@ -466,7 +490,7 @@ functional:
 
 #### Pre-upgrade to versions ≥ v1.13.0
 
-##### New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`
+##### New Helmfile default: Support for Ingress controller `haproxy-ingress.github.io`
 
 **Target group:** All deployments
 
@@ -509,7 +533,7 @@ ingress:
 
 When going with `haproxy-ingress.github.io` and the `ingressClassName` within your deployment is not `haproxy` please ensure you modify the setting accordingly. Use `kubectl get ingressclass` to check the names of your Ingress controller(s).
 
-##### Updated helmfile options: New ingress additional annotations
+##### Updated Helmfile options: New ingress additional annotations
 
 **Target group:** Deployments using additional annotations for Nubus or OX App Suite Ingress resources.
 
@@ -755,7 +779,7 @@ kubectl -n ${NAMESPACE} delete leases.coordination.k8s.io collabora-online
 > [!note]
 > The Collabora Online Controller is not scaled up again, as this would happen as part of the upgrade deployment.
 
-##### Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
+##### New Helmfile option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
 
 **Target group:** Existing deployments using `service` annotations for Dovecot, Jitsi JVB or Postfix.
 
@@ -780,7 +804,7 @@ Setting service annotation by `annotations.openxchangePostfix.service` applied t
 and external service. This key now only sets annotations for the internal service. If you want to set
 annotations for the external service use the newly introduced key `annotations.openxchangePostfix.serviceExternal`.
 
-##### Helmfile new secret: `secrets.nextcloud.statusPassword`
+##### New Helmfile secret: `secrets.nextcloud.statusPassword`
 
 **Target group:** All existing deployments that use self-defined secrets and have deployed Nextcloud.
 
@@ -798,7 +822,7 @@ be derived from the `MASTER_PASSWORD`.
 
 #### Pre-upgrade to versions ≥ v1.10.0
 
-##### Helmfile new secret: `secrets.nubus.ldapSearch.postfix`
+##### New Helmfile secret: `secrets.nubus.ldapSearch.postfix`
 
 **Target group:** All existing deployments that use self-defined secrets.
 
@@ -809,7 +833,7 @@ declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yam
 If you define your own secrets, please ensure that you provide a value for this secret, otherwise it will
 be derived from the `MASTER_PASSWORD`.
 
-##### Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`
+##### New Helmfile secret: `secrets.doveocot.sharedMailboxesMasterPassword`
 
 **Target group:** All existing deployments that have OX App Suite enabled and that use self-defined secrets.
 
@@ -925,7 +949,7 @@ are no longer ignored. So please move the passwords from
 
 to the `databases.*` structure.
 
-##### Helmfile new feature: `functional.groupware.externalClients.*`
+##### New Helmfile option: `functional.groupware.externalClients.*`
 
 **Target group:**
 Deployments that allow access to groupware emails via external mail clients (e.g. Thunderbird) using IMAP and SMTP.
@@ -1175,7 +1199,7 @@ rm ${TEMPORARY_CONSUMER_JSON}
 
 Please ensure you read the [Nubus 1.10.0 "Migration steps" section](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/changelog.html#v1-10-0-migration-steps) with focus on the paragraph "Operators that make use of the following UDM Listener secrets variables" and act accordingly.
 
-##### Helmfile new secret: `secrets.minio.openxchangeUser`
+##### New Helmfile secret: `secrets.minio.openxchangeUser`
 
 **Target group:** All existing deployments that have OX App Suite enabled and that use externally defined secrets in combination with openDesk provided MinIO object storage.
 
@@ -1288,7 +1312,7 @@ global:
 
 #### Pre-upgrade to versions ≥ v1.3.0
 
-##### Helmfile new feature: `functional.authentication.ssoFederation`
+##### New Helmfile option: `functional.authentication.ssoFederation`
 
 **Target group:** Deployments that make use of IdP federation as described in [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
 
@@ -1439,7 +1463,7 @@ persistence:
       size: "1Gi"
 ```
 
-##### Helmfile new secret: `secrets.nubus.masterpassword`
+##### New Helmfile secret: `secrets.nubus.masterpassword`
 
 A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
 
