@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 technical:
@@ -37,8 +37,9 @@ technical:
     # are initially spawned, even without any user accessing Collabora.
     numPrespawnChildren: 4
 
-  # Dovecot EE related settings
+  # Dovecot related settings
   dovecot:
+    # Object storage related settings (Dovecot Pro / openDesk EE only)
     objectStorage:
       # Size of objectstore fs cache
       fsCacheSize: "2G"
@@ -48,8 +49,11 @@ technical:
       # If this value is true, the cache sizes of the fs cache + fts cache
       # must be considered additionally to Dovecot's memory footprint.
       cacheTmpfs: false
+    # Protocol related settings
     protocol:
+      # IMAP related settings
       imap:
+        # IMAP limits
         limits:
           # Set the `mail_max_userip_connections` in the `protocol imap` block
           # Ref.: https://doc.dovecot.org/main/core/admin/limits.html#mail_max_userip_connections
@@ -81,7 +85,7 @@ technical:
           # `.Values.debug.enabled: true`
           enabled: false
 
-  # Groupware related technical settings
+  # OX App Suite related technical settings
   oxAppSuite:
     # Technical quota settings
     quota:
@@ -107,9 +111,7 @@ technical:
 
   # Postfix related technical settings
   postfix:
-    # Proxy protocol to use for incoming mail (if any), only haproxy is supported
-    # If you switch this to haproxy on port 25 and you already have shared mailboxes activated which still use port 25,
-    # you have to migrate them to use port 587 instead. You can use the provided migration script located in
-    # docs/migration-helper/migrate_shared_mailboxes_587.sh
+    # Proxy protocol to use for incoming mail or externally connected mail clients (if any), only `haproxy` is supported at the moment.
+    # Ref.: https://www.postfix.org/postconf.5.html#smtpd_upstream_proxy_protocol
     smtpdUpstreamProxyProtocol: ~
 ...

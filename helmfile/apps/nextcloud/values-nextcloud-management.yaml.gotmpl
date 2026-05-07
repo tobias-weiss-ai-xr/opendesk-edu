@@ -190,7 +190,7 @@ configuration:
         value: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       password:
         value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
-    host: {{ printf "%s.%s.svc.%s" "postfix-submission" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+    host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     port: 587
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
     mailDomain: "{{ .Values.global.mailDomain | default .Values.global.domain }}"

@@ -270,27 +270,32 @@ functional:
       # - `https://<.Values.global.hosts.openxchangeDav>.<.Values.global.domain>/carddav/[folderId]`
       # Can be switched off using the below feature toggle.
       enabled: true
-    # Setting related to external clients using SMTP/IMAP protocols (like Thunderbird)
+    # Create the external SMTP service used to receive incoming mail.
+    exposeSmtp: true
+    # Settings for external mail clients (such as Thunderbird) connecting via the IMAP and SMTP protocols.
     externalClients:
-      # To fully support external mail clients in your openDesk deployment you need to ensure they can
-      # access the IMAP and SMTP services. Either on <.Values.global.domain> or on the FQDNs defined
-      # below.
-      # How to achive this depends on what service types you are using in your deployment. These service
-      # types can be set explicitly for IMAP (Dovecot) and SMTP (Postfix) using `service.yaml.gotmpl` and
-      # how these services, especially when using type `LoadBalancer`, behave in your setup.
-      # Toggle the client onboarding info dialog in the groupware module.
+      # To support external mail clients in your openDesk deployment, you must ensure they can reach
+      # openDesk's IMAP and SMTP services — either on `<.Values.global.domain>` or on the FQDNs defined
+      # below via `fqdnImap` and `fqdnSmtp`.
+      # How to achieve this depends on the service type configured in `cluster.service.type` for your
+      # deployment.
+      # Note: For IMAP (Dovecot) and SMTP (Postfix) you can override the globally configured service type
+      # via `service.type.dovecot` and `service.type.postfix`.
+      #
+      # Toggle the client onboarding info dialog in the groupware module, which gives users instructions
+      # for connecting external mail clients via IMAP and SMTP.
       enabledOnboardingInfo: false
-      # Expose Imap service
-      exposeImaps: true
-      # Expose Pop3s service
+      # Expose the IMAPS service (secure IMAP over TLS, port 993).
+      exposeImaps: false
+      # Expose the POP3S service (secure POP3 over TLS, port 995).
       exposePop3s: false
-      # Expose mail transmission with explicit TLS (submission)
-      exposeSubmission: true
-      # Expose mail transmission with implicit TLS (submissions)
-      exposeSubmissions: true
-      # Set the FQDN of the IMAP endpoint if none is provided `<.Values.global.domain>` is used.
+      # Expose mail submission with STARTTLS (port 587).
+      exposeSubmission: false
+      # Expose mail submission with implicit TLS (port 465).
+      exposeSubmissions: false
+      # FQDN of the IMAP endpoint. If unset, `<.Values.global.domain>` is used.
       fqdnImap: ~
-      # Set the FQDN of the SMTP endpoint if none is provided `<.Values.global.domain>` is used.
+      # FQDN of the SMTP endpoint. If unset, `<.Values.global.domain>` is used.
       fqdnSmtp: ~
     # Control access for external users to groupware data
     # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html

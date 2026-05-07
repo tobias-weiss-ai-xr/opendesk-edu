@@ -173,29 +173,20 @@ replicaCount: {{ .Values.replicas.postfix }}
 resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
 
-serviceSmtp:
+service:
   annotations:
-    {{ .Values.annotations.openxchangePostfix.serviceSmtp | toYaml | nindent 4 }}
-  {{- if has (coalesce .Values.service.type.postfix .Values.cluster.service.type) (list "NodePort" "LoadBalancer") }}
-  external:
-    enabled: true
-    annotations:
-      {{ .Values.annotations.openxchangePostfix.serviceSmtpExternal | toYaml | nindent 6 }}
-    type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}
-  {{- end }}
-
-serviceSubmission:
-  annotations:
-    {{ .Values.annotations.openxchangePostfix.serviceSubmission | toYaml | nindent 4 }}
+    {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
   {{- if and (has (coalesce .Values.service.type.postfix .Values.cluster.service.type) (list "NodePort" "LoadBalancer"))
-             (or .Values.functional.groupware.externalClients.exposeSubmission
+             (or .Values.functional.groupware.exposeSmtp
+                 .Values.functional.groupware.externalClients.exposeSubmission
                  .Values.functional.groupware.externalClients.exposeSubmissions) }}
   external:
     enabled: true
     annotations:
-      {{ .Values.annotations.openxchangePostfix.serviceSubmissionExternal | toYaml | nindent 6 }}
+      {{ .Values.annotations.openxchangePostfix.serviceExternal | toYaml | nindent 6 }}
     type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}
     ports:
+      smtp: {{ if .Values.functional.groupware.exposeSmtp }}{port: 25}{{ else }}~{{ end }}
       submission: {{ if .Values.functional.groupware.externalClients.exposeSubmission }}{port: 587}{{ else }}~{{ end }}
       submissions: {{ if .Values.functional.groupware.externalClients.exposeSubmissions }}{port: 465}{{ else }}~{{ end }}
   {{- end }}
