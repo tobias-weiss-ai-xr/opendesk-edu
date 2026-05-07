@@ -1,23 +1,29 @@
 <!--
-SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# Updates & features
+# Updates and features
+
+While [migrations.md](./migrations.md) provides information about required actions when updating or upgrading openDesk this document provides an overview on new (non-breaking) options made available in the Helmfile deployment.
 
 <!-- TOC -->
-* [Migration requirements](#migration-requirements)
+* [Updates and features](#updates-and-features)
+  * [1.15.0](#1150)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
+      * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
+      * [Virtual alias limits](#virtual-alias-limits)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+      * [Set limitation on maximum number of objects (for tasks, contacts, attachments)](#set-limitation-on-maximum-number-of-objects-for-tasks-contacts-attachments)
 <!-- TOC -->
 
-## Disclaimer
+## 1.15.0
 
-While [migrations.md](./migrations.md) provides information about required actions when updating or upgrading openDesk this document provides you with new (non-breaking) options made available in the Helmfile deployment.
+### `functional.yaml.gotmpl`
 
-# 1.15.0
+#### Per user-quota for external sharing
 
-## `functional.yaml.gotmpl`: Per user-quota for external sharing
-
-It is now possible to configure the per-user quota for external share links and guest invitations. Previously, only toggling these features on or off was supported.
+Configure the per-user quota for external share links and guest invitations:
 
 ```yaml
 functional:
@@ -35,10 +41,30 @@ functional:
         quota: 100
 ```
 
+Previously, only toggling these features on or off was supported.
 
-## `technical.yaml.gotmpl`: Set limitation on maximum number of objects (for tasks, contacts, attachments)
+#### Virtual alias limits
 
-It is now possible to configure OX context wide quota limits for tasks, contacts, and attachments. Previously, only the calendar quota could be configured.
+Postfix applies limits to virtual alias expansion and recursion, these limits can be modified now:
+
+```yaml
+functional:
+  groupware:
+    mail:
+      localLimits:
+        # Maximum number of recipients a single address may expand to (e.g. members of a mailing list).
+        # Ref: https://www.postfix.org/postconf.5.html#virtual_alias_expansion_limit
+        expansion: 1000
+        # Maximum nesting depth of alias-of-alias resolution chains.
+        # Ref: https://www.postfix.org/postconf.5.html#virtual_alias_recursion_limit
+        recursion: 25
+```
+
+### `technical.yaml.gotmpl`
+
+#### Set limitation on maximum number of objects (for tasks, contacts, attachments)
+
+Set OX context wide quota limits for tasks, contacts, and attachments:
 
 ```yaml
 technical:
@@ -54,3 +80,5 @@ technical:
       # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.attachments
       attachments: 250000
 ```
+
+Previously, only the calendar quota could be configured.
