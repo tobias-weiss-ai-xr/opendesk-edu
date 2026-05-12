@@ -59,10 +59,12 @@ backend:
   replicaCount: {{ .Values.replicas.notesBackend }}
   configuration:
     ai:
+      enabled: {{ if not (quote .Values.ai.endpoint | empty) }}true{{- else }}false{{- end }}
       apiKey:
         value: {{ .Values.ai.apiKey }}
       baseUrl: {{ .Values.ai.endpoint }}
       model: {{ .Values.ai.model | quote }}
+      allowReachFrom: "authenticated"
     collaboration:
       apiUrl: {{ printf "https://%s.%s/collaboration/api/" .Values.global.hosts.notes .Values.global.domain | quote }}
       wsUrl: {{ printf "wss://%s.%s/collaboration/ws/" .Values.global.hosts.notes .Values.global.domain | quote }}
