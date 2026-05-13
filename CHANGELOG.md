@@ -46,6 +46,14 @@
 * **openproject:** Update from 17.2.3 to 17.3.0 ([eed365e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/eed365eefb6e6a2d5fb85a096867791f11465caf))
 * **ox-connector:** Update from v0.35.1 to v0.36.4 ([d7111d9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d7111d9f80a7ac3106f66a09a394d1c42920d33b))
 
+## [1.13.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.2...v1.13.3) (2026-05-13)
+
+### Bug Fixes
+
+* **openproject:** Bump helm chart to 13.5.5 ([f4321f6c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/f4321f6cec9f1e0a9f14e30ef3d9426bda7495d7))
+* **openproject:** Update OpenProject to 17.2.4 ([f4321f6c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/f4321f6cec9f1e0a9f14e30ef3d9426bda7495d7))
+
+
 ## [1.13.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.1...v1.13.2) (2026-04-08)
 
 
