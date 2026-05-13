@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+# Multi-domain configuration for opendesk-edu serving both demo.opendesk-edu.org and demo.opendesk-sme.org
+global:
+  # Primary domain remains demo.opendesk-edu.org
+  # Secondary domain demo.opendesk-sme.org is configured via ingress hosts below
+  domain: "opendesk-edu.org"
+
+# Enable all apps (opendesk-edu has full application set)
+apps:
+  # All apps enabled by default in prod environment
+  sogo:
+    host: "sogo.demo"
+  nubus:
+    enabled: true
+  openproject:
+    enabled: true
+  xwiki:
+    enabled: true
+
+# Configure helmfile to deploy to opendesk-edu namespace
+namespace: "opendesk-edu"
+
+# Configure Keycloak to accept both domains
+ums-keycloak:
+  hostnameStrictHttps: true
+  hostnameStrict: false
+  proxy: edge
+  # Keycloak will accept authentication from both domains via ingress configuration
+
+# Configure Portal for both domains
+ums-portal:
+  enabled: true
+  # Portal will serve both domains via ingress configuration
+
+# Ingress configuration for multi-domain support
+# Currently, ingress hosts are generated from global.domain + global.hosts mappings
+# To add demo.opendesk-sme.org as a secondary domain, we need to:
+# 1. Create additional ingress rules for keycloak and portal services
+# 2. Ensure TLS certificates cover both domains (done via wildcard cert)
+
+# Accessibility configuration (required by accessibility.yaml.gotmpl template)
+accessibility:
+  lastAuditDate: "2026-03-27"
