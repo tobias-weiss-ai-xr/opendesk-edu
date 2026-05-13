@@ -35,14 +35,6 @@ extraVolumeMounts:
     subPath: "ca-certificates.crt"
 {{- end }}
 
-extraEnvVars:
-  - name: "REDIS_USER"
-    value: {{ .Values.cache.intercomService.username }}
-  {{- if .Values.certificate.selfSigned }}
-  - name: "NODE_EXTRA_CA_CERTS"
-    value: "/etc/ssl/certs/ca-certificates.crt"
-  {{- end }}
-
 global:
   domain: {{ .Values.global.domain | quote }}
   hosts:
@@ -149,6 +141,13 @@ provisioning:
           keyMapping:
             password: "admin_password"
         key: "admin_password"
+  extraEnvVars:
+    - name: "REDIS_USER"
+      value: {{ .Values.cache.intercomService.username }}
+    {{- if .Values.certificate.selfSigned }}
+    - name: "NODE_EXTRA_CA_CERTS"
+      value: "/etc/ssl/certs/ca-certificates.crt"
+    {{- end }}
   image:
     pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}

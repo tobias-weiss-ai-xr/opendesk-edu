@@ -577,9 +577,7 @@ nubusPortalConsumer:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
-    extraEnvVars:
-      - name: AWS_DEFAULT_REGION
-        value: {{ .Values.objectstores.nubus.region | quote }}
+    extraEnvVars: []
     {{- if .Values.certificate.selfSigned }}
     extraVolumeMounts:
       - name: "trusted-cert-secret-volume"
