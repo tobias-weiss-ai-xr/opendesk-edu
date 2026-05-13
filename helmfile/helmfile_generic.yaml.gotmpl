@@ -6,8 +6,9 @@
 #
 helmfiles:
   # Path to the helmfile state file being processed BEFORE releases in this state file
-  - path: "helmfile/apps/opendesk-migrations-pre/helmfile-child.yaml.gotmpl"
+- path: "helmfile/apps/opendesk-migrations-pre/helmfile-child.yaml.gotmpl"
     values: &values
+      # Note: backchannel-logout.yaml.gotmpl moved to default-enterprise-overrides/ (OX-only, not used in opendesk-edu)
       - "helmfile/environments/default/*.yaml.gotmpl"
       - {{ toYaml .Values | nindent 8 }}
       {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}

@@ -71,7 +71,7 @@ federation:
       ##
       ## Auto-generates: https://id.example.org/realms/opendesk/broker/dfn-aai-test/endpoint
       ##
-      acsUrl: {{ env "DFN_TEST_ACS_URL" | default (printf "https://id.%s/realms/%s/broker/dfn-aai-test/endpoint" .Values.global.domain .Values.platform.realm) | quote }}
+      acsUrl: {{ env "DFN_TEST_ACS_URL" | default "https://id.opendesk-edu.org/realms/opendesk/broker/dfn-aai-test/endpoint" | quote }}
 
       ## Require signed authentication requests
       ## When enabled, all auth requests to the IdP are signed using Keycloak's SAML signing certificate.
@@ -165,7 +165,7 @@ federation:
       ## Default: Uses JVM default trust store
       ##
       # trustStore: "/opt/keycloak/conf/truststore.jks"
-      # trustStorePassword: "{{ .Values.secrets.keycloak.truststorePassword }}"
+# trustStorePassword: "your-truststore-password"
 
   ## DFN-AAI production federation configuration
   ## Use this for production deployment with official DFN-AAI membership.
@@ -212,7 +212,7 @@ federation:
       ##
       ## Auto-generates: https://id.example.org/realms/opendesk/broker/dfn-aai/endpoint
       ##
-      acsUrl: {{ env "DFN_PRODUCTION_ACS_URL" | default (printf "https://id.%s/realms/%s/broker/dfn-aai/endpoint" .Values.global.domain .Values.platform.realm) | quote }}
+      acsUrl: {{ env "DFN_PRODUCTION_ACS_URL" | default "https://id.opendesk-edu.org/realms/opendesk/broker/dfn-aai/endpoint" | quote }}
 
       ## Require signed authentication requests (production requires this)
       ##
@@ -286,7 +286,7 @@ federation:
       ## Required if your university uses a specific PKI infrastructure.
       ##
       ## trustStore: "/opt/keycloak/conf/truststore.jks"
-      ## trustStorePassword: "{{ .Values.secrets.keycloak.truststorePassword }}"
+      ## trustStorePassword: "your-truststore-password"
 
   ## Custom Shibboleth IdP configuration
   ## Configure direct integration with a specific university Shibboleth IdP.
@@ -310,7 +310,7 @@ federation:
     #   saml:
     #     ssoBinding: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
     #     nameIdFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-    #     acsUrl: {{ printf "https://id.%s/realms/%s/broker/university-shibboleth/endpoint" .Values.global.domain .Values.platform.realm | quote }}
+    #     acsUrl: {{ printf "https://id.%s/realms/%s/broker/university-shibboleth/endpoint" "opendesk-edu.org" "opendesk" | quote }}
     #     signAssertions: true
     #     wantAssertionsSigned: true
     #     validateSignature: true
@@ -334,4 +334,3 @@ federation:
     #   trust:
     #     enabled: true
 
-...
