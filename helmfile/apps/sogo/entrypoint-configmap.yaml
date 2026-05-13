@@ -72,12 +72,18 @@ data:
     mkdir -p /var/run/apache2
     chmod 755 /var/run/apache2
 
+    # Create www-data user and group for Apache (Apache refuses to run as root)
+    if ! id www-data >/dev/null 2>&1; then
+      groupadd -g 33 www-data
+      useradd -M -u 33 -g www-data -s /usr/sbin/nologin www-data
+    fi
+
     chmod +x /usr/local/sbin/sogod
     chmod +x /usr/local/sbin/sogo-manage
 
     # Export Apache environment variables (Apache config parser reads from shell env)
-    export APACHE_RUN_USER="root"
-    export APACHE_RUN_GROUP="root"
+    export APACHE_RUN_USER="www-data"
+    export APACHE_RUN_GROUP="www-data"
     export APACHE_RUN_DIR="/var/run/apache2"
     export APACHE_PID_FILE="/var/run/apache2/apache2.pid"
     export APACHE_LOCK_DIR="/var/lock/apache2"
