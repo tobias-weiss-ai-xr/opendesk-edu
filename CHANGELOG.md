@@ -1,3 +1,11 @@
+## [1.14.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.1...v1.14.2) (2026-05-13)
+
+
+### Bug Fixes
+
+* **openproject:** Bump helm chart to 13.5.5 ([e27cfd8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e27cfd80ba2e8a83576fbc3b2f9189748fb03823))
+* **openproject:** Update OpenProject to 17.3.2 ([016c568](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/016c56883cd510d0c1e0e5a1b5402652454a4232))
+
 ## [1.14.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.0...v1.14.1) (2026-04-28)
 
 
