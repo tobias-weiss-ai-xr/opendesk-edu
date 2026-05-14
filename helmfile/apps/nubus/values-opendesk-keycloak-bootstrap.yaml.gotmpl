@@ -665,6 +665,25 @@ config:
               jsonType.label: "String"
         defaultClientScopes:
           - "offline_access"
+      - name: "opendesk-portal"
+        clientId: "https://portal.demo.opendesk-edu.org/univention/oidc/"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret: {{ .Values.secrets.keycloak.clientSecret.portal | quote }}
+        redirectUris:
+          - "https://portal.demo.opendesk-edu.org/univention/oidc/*"
+          - "https://portal.demo.opendesk-sme.org/univention/oidc/*"
+        consentRequired: false
+        frontchannelLogout: false
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          backchannel.logout.session.required: true
+          post.logout.redirect.uris: "https://portal.demo.opendesk-edu.org/*##https://portal.demo.opendesk-sme.org/*"
+        defaultClientScopes:
+          - "openid"
+          - "profile"
+          - "email"
       {{ if .Values.apps.oxAppSuite.enabled }}
       - name: "opendesk-dovecot"
         clientId: "opendesk-dovecot"
