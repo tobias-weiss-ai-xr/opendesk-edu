@@ -8,7 +8,9 @@ ADMIN_PASSWORD="${KEYCLOAK_ADMIN_PASSWORD:-}"
 
 if [ -z "$ADMIN_PASSWORD" ]; then
     echo "Error: KEYCLOAK_ADMIN_PASSWORD environment variable not set"
-    echo "Get the admin password from: kubectl get secret ums-keycloak-admin-password -n opendesk-edu -o jsonpath='{.data.password}' | base64 -d"
+    echo "Please run: export KEYCLOAK_ADMIN_PASSWORD=<your-admin-password>"
+    echo "To get the admin password, check the Keycloak admin credentials in the cluster:"
+    echo "  kubectl get secret -n opendesk-edu | grep keycloak"
     exit 1
 fi
 

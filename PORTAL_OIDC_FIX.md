@@ -14,21 +14,23 @@ Create a Keycloak OIDC client named `opendesk-portal` that supports both domains
 
 1. `helmfile/apps/nubus/create-portal-client.json` - Keycloak client configuration
 2. `scripts/create-portal-oidc-client.sh` - Script to apply the client configuration
-3. `helmfile/apps/nubus/values-opendesk-keycloak-bootstrap.yaml.gotmpl` - Updated bootstrap configuration
+3. `MANUAL_KEYCLOAK_SETUP.md` - Detailed manual setup instructions
 
 ## Applying the Fix
 
-### Option 1: Automated Script (Recommended)
+### Option 1: Manual Setup (Recommended for Production)
+
+See `MANUAL_KEYCLOAK_SETUP.md` for detailed step-by-step instructions via Keycloak Admin Console.
+
+### Option 2: Automated Script
 
 ```bash
-# Get Keycloak admin password
-export KEYCLOAK_ADMIN_PASSWORD=$(kubectl get secret ums-keycloak-admin-password -n opendesk-edu -o jsonpath='{.data.password}' | base64 -d)
+# Get Keycloak admin password (you'll need to find the correct secret)
+export KEYCLOAK_ADMIN_PASSWORD=<your-keycloak-admin-password>
 
 # Run the script
 ./scripts/create-portal-oidc-client.sh
 ```
-
-### Option 2: Manual Keycloak Admin Console
 
 1. Login to Keycloak Admin Console:
    - URL: `https://id.opendesk-edu.org/admin`
