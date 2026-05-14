@@ -1,0 +1,102 @@
+data:
+  domain-aware.js: |
+    (function() {
+        'use strict';
+
+        const currentHost = window.location.hostname;
+        const defaultDomain = 'demo.opendesk-edu.org';
+        const currentDomain = currentHost.split('.')[0] + '.opendesk-' + window.location.hostname.split('.')[2] + '.' + window.location.hostname.split('[3]') || 'org';
+
+        console.log('Domain-aware script loaded', { currentHost, currentDomain });
+
+        const urlMappings = {
+            portal: {
+                old: 'https://portal.opendesk-edu.org',
+                new: `https://portal.${currentHost}`
+            },
+            keycloak: {
+                old: 'https://id.opendesk-edu.org',
+                new: `https://id.${currentHost}`
+            }
+        };
+
+        function fixDomain(element, attribute) {
+            const url = element.getAttribute(attribute);
+            if (!url) return;
+
+            let fixed = url;
+            for (const [name, mapping] of Object.entries(urlMappings)) {
+                fixed = fixed.replace(mapping.old, mapping.new);
+            }
+
+            if (fixed !== url) {
+                console.log(`Fixed ${attribute}: ${url} -> ${fixed}`);
+                element.setAttribute(attribute, fixed);
+            }
+        }
+
+        function fixAllUrls() {
+            document.querySelectorAll('a[href]').forEach(link => {
+                fixDomain(link, 'href');
+            });
+            document.querySelectorAll('[data-href]').forEach(element => {
+                fixDomain(element, 'data-href');
+            });
+            document.querySelectorAll('[data-url]').forEach(element => {
+                fixDomain(element, 'data-url');
+            });
+        }
+
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1) {
+                        node.querySelectorAll('[href]').forEach(link => fixDomain(link, 'href'));
+                        node.querySelectorAll('[data-href]').forEach(element => fixDomain(element, 'data-href'));
+                        node.querySelectorAll('[data-url]').forEach(element => fixDomain(element, 'data-url'));
+                    }
+                });
+            });
+        });
+
+        const observerConfig = {
+            childList: true,
+            subtree: true
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                fixAllUrls();
+                observer.observe(document.body, observerConfig);
+            });
+        } else {
+            fixAllUrls();
+            observer.observe(document.body, observerConfig);
+        }
+
+        const originalOpen = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function(method, url) {
+            let fixedUrl = url;
+            for (const [name, mapping] of Object.entries(urlMappings)) {
+                fixedUrl = fixedUrl.replace(mapping.old, mapping.new);
+            }
+            return originalOpen.call(this, method, fixedUrl);
+        };
+
+        const originalFetch = window.fetch;
+        window.fetch = function(input, init) {
+            let url = input;
+            if (typeof url === 'string') {
+                for (const [name, mapping] of Object.entries(urlMappings)) {
+                    url = url.replace(mapping.old, mapping.new);
+                }
+            }
+            return originalFetch.call(this, url, init);
+        };
+
+        console.log('Domain-aware script initialized');
+    })();
+kind: ConfigMap
+metadata:
+  name: ums-portal-frontend-domain-aware
+  namespace: opendesk-edu
