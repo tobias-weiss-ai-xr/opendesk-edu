@@ -1,0 +1,23 @@
+# Multi-domain SAML Portal Authentication Configuration
+# This file configures the portal for SAML-based authentication with multi-domain support
+
+global:
+  domain: "opendesk-edu.org"  # Primary domain
+  hosts:
+    portal: "portal.demo.opendesk-edu.org"  # Portal base URL will be handled dynamically
+
+# Portal server SAML configuration
+portalServer:
+  # Ensure SAML authentication mode
+  authMode: "saml"
+
+# Override to ensure no OIDC configuration
+customization:
+  release:
+    ums:
+      # Ensure we override to SAML-based authentication
+      - "helmfile/apps/nubus/values-saml-multidomain.yaml.gotmpl"
+
+# Multi-domain ingress configuration for SAML
+# This allows both demo.opendesk-edu.org and demo.opendesk-sme.org
+# with proper SAML authentication
