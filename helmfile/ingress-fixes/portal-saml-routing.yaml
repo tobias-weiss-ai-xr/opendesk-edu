@@ -1,0 +1,50 @@
+# SAML routing ingress for portal multi-domain setup
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ums-portal-saml-routing
+  namespace: opendesk-edu
+  annotations:
+    haproxy-ingress.github.io/ssl-passthrough: "false"
+spec:
+  ingressClassName: haproxy
+  tls:
+  - hosts:
+    - portal.demo.opendesk-edu.org
+    - portal.demo.opendesk-sme.org
+    secretName: opendesk-certificates-tls
+  rules:
+  - host: portal.demo.opendesk-edu.org
+    http:
+      paths:
+      - path: /univention/saml/
+        pathType: Prefix
+        backend:
+          service:
+            name: ums-portal-server
+            port:
+              number: 80
+      - path: /univention/management/
+        pathType: Prefix
+        backend:
+          service:
+            name: ums-portal-server
+            port:
+              number: 80
+  - host: portal.demo.opendesk-sme.org
+    http:
+      paths:
+      - path: /univention/saml/
+        pathType: Prefix
+        backend:
+          service:
+            name: ums-portal-server
+            port:
+              number: 80
+      - path: /univention/management/
+        pathType: Prefix
+        backend:
+          service:
+            name: ums-portal-server
+            port:
+              number: 80
