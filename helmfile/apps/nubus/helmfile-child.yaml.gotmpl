@@ -35,7 +35,6 @@ releases:
     version: "{{ .Values.charts.nubus.version }}"
     values:
       - "values-nubus.yaml.gotmpl"
-      - "values-saml-multidomain.yaml.gotmpl"
       {{- range .Values.customization.release.ums }}
       - {{ . }}
       {{- end }}
