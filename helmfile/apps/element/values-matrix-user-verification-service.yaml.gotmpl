@@ -29,6 +29,10 @@ extraEnvVars:
         key: "access_token"
   - name: "UVS_DISABLE_IP_BLACKLIST"
     value: "true"
+{{- if .Values.debug.enabled }}
+  - name: "UVS_LOG_LEVEL"
+    value: "debug"
+{{- end }}
 {{- if .Values.certificate.selfSigned }}
   - name: "NODE_EXTRA_CA_CERTS"
     value: "/etc/ssl/certs/ca-certificates.crt"
