@@ -3,6 +3,11 @@
 *Expected MR Title and git commit message*
 *`fix(<app-name>): <Short description of what has been fixed>`*
 
+## ➡️ References
+
+Reference related issues or tickets where applicable.
+
+- *e.g. `OP#123`*
 
 ## ✅ Changes
 

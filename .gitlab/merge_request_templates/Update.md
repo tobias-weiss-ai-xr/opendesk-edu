@@ -3,6 +3,12 @@
 *Expected MR Title and git commit message*
 *`feat/fix(<app-name>): Update from <old-version> to <new-version>`*
 
+## ➡️ References
+
+Reference related issues or tickets where applicable.
+
+- *e.g. `OP#123`*
+
 ## 📋 Changelog/Release Notes
 
 - [ ] [README.md](../../README.md) component table updated including the link to the related release notes of the updated application.

@@ -3,6 +3,12 @@
 *Expected MR Title and git commit message*
 *`fix(<component>): <Short description of what has been changed>`*
 
+## ➡️ References
+
+Reference related issues or tickets where applicable.
+
+- *e.g. `OP#123`*
+
 ## ✅ Changes
 
 Explain for the reviewer and QA the reason for the MR and what changes are included.
