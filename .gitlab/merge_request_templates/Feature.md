@@ -3,6 +3,12 @@
 *Expected MR Title and git commit message*
 *`feat(<app-name>): <Short description of the new feature>`*
 
+## ➡️ References
+
+Reference related issues or tickets where applicable.
+
+- *e.g. `OP#123`*
+
 ## ✅ Changes
 
 List the key changes made in this MR:
