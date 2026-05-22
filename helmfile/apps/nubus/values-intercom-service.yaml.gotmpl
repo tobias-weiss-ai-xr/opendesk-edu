@@ -72,7 +72,10 @@ ics:
     host: {{ .Values.cache.intercomService.host | quote }}
     port: {{ .Values.cache.intercomService.port }}
     auth:
+      username: {{ .Values.cache.intercomService.username }}
       password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password | quote }}
+    ssl:
+      enabled: {{ .Values.cache.intercomService.tls }}
   openxchange:
     oci: true
     url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"

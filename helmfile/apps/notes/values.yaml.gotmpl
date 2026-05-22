@@ -115,7 +115,7 @@ backend:
         value: {{ .Values.secrets.notes.superuser }}
     frontendTheme: "openDesk"
     redisUrl:
-      value: "redis://default:{{ .Values.cache.notes.password | default .Values.secrets.redis.password }}@{{ .Values.cache.notes.host }}:{{ .Values.cache.notes.port }}/7"
+      value: "redis{{ if .Values.cache.notes.tls }}s{{ else }}{{ end }}://{{ .Values.cache.notes.username }}:{{ .Values.cache.notes.password | default .Values.secrets.redis.password }}@{{ .Values.cache.notes.host }}:{{ .Values.cache.notes.port }}/7"
   extraEnvVars:
     - name: "FRONTEND_HOMEPAGE_FEATURE_ENABLED"
       value: "False"

@@ -10,7 +10,7 @@ global:
     sessiondEncryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey }}
   mysql:
     host: {{ .Values.databases.oxAppSuite.host | quote }}
-    port: {{ .Values.databases.oxAppSuite.port | quote }}
+    port: {{ .Values.databases.oxAppSuite.port }}
     database: {{ .Values.databases.oxAppSuite.name | quote }}
     readHost: {{ .Values.databases.oxAppSuite.readHost | quote }}
     readDatabase: {{ .Values.databases.oxAppSuite.name | quote }}
@@ -1144,6 +1144,8 @@ appsuite:
     redis: &redisConfiguration
       enabled: true
       mode: "standalone"
+      tls:
+        enabled: {{ .Values.cache.oxAppSuite.tls }}
       hosts:
         - {{ printf "%s:%v" .Values.cache.oxAppSuite.host .Values.cache.oxAppSuite.port | quote }}
       auth:
