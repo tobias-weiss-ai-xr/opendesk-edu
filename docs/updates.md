@@ -21,6 +21,8 @@ While [migrations.md](./migrations.md) provides information about required actio
       * [Option to set a `loadBalancerIp` for Dovecot and Postfix](#option-to-set-a-loadbalancerip-for-dovecot-and-postfix)
     * [`database.yaml.gotmpl`](#databaseyamlgotmpl)
       * [Option to enable SSL/TLS database connection for OX App Suite](#option-to-enable-ssltls-database-connection-for-ox-app-suite)
+    * [`cache.yaml.gotmpl`](#cacheyamlgotmpl)
+      * [Options to enable SSL/TLS Redis connection for the Intercom Service, Notes, and OX App Suite](#options-to-enable-ssltls-redis-connection-for-the-intercom-service-notes-and-ox-app-suite)
   * [1.15.0](#1150)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
@@ -107,6 +109,22 @@ databases:
 ```
 
 Previously no such option was provided.
+
+### `cache.yaml.gotmpl`
+
+#### Options to enable SSL/TLS Redis connection for the Intercom Service, Notes, and OX App Suite
+
+SSL/TLS support for the Redis connection of the Intercom Service, Notes, and OX App Suite are now available:
+
+```yaml
+cache:
+  intercomService:
+    tls: true
+  notes:
+    tls: true
+  oxAppSuite:
+    tls: true
+```
 
 ## 1.15.0
 
