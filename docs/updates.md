@@ -15,6 +15,8 @@ While [migrations.md](./migrations.md) provides information about required actio
   * [1.16.0](#1160)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
+    * [`service.yaml.gotmpl`](#serviceyamlgotmpl)
+      * [Option to set a `loadBalancerIp` for Dovecot and Postfix](#option-to-set-a-loadbalancerip-for-dovecot-and-postfix)
     * [`database.yaml.gotmpl`](#databaseyamlgotmpl)
       * [Option to enable SSL/TLS database connection for OX App Suite](#option-to-enable-ssltls-database-connection-for-ox-app-suite)
   * [1.15.0](#1150)
@@ -55,6 +57,19 @@ Pinning `nginx.workers` to a fixed number is especially relevant on nodes with m
 setting is not cgroup-aware and spawns one worker per host core regardless of the pod's CPU allocation, so setting an
 explicit value bounds the number of workers.
 
+### `service.yaml.gotmpl`
+
+#### Option to set a `loadBalancerIp` for Dovecot and Postfix
+
+It is now possible to configure a fixed `loadBalancerIp` for the external services exposed by Dovecot and/or Postfix when the service type is `LoadBalancer`:
+
+```yaml
+service:
+  loadBalancerIp:
+    dovecot: ~
+    postfix: ~
+```
+
 ### `database.yaml.gotmpl`
 
 #### Option to enable SSL/TLS database connection for OX App Suite
@@ -70,6 +85,8 @@ databases:
     enabledTLSProtocols: "TLSv1.2,TLSv1.3"
     nullCatalogMeansCurrent: true
 ```
+
+Previously no such option was provided.
 
 ## 1.15.0
 
