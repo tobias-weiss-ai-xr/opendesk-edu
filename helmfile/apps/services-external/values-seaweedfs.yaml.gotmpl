@@ -45,35 +45,13 @@ allInOne:
     enableAuth: true
     existingConfigSecret: "seaweedfs-config"
     createBuckets:
-      - name: {{ .Values.objectstores.migrations.bucket | quote }}
+      {{- range $name, $store := .Values.objectstores }}
+      {{- if or (not (dig "enterprise" false $store)) (eq (env "OPENDESK_ENTERPRISE") "true") }}
+      - name: {{ $store.bucket | quote }}
         anonymousRead: false
         objectLock: false
         versioning: "Suspended"
-      - name: {{ .Values.objectstores.nextcloud.bucket | quote }}
-        anonymousRead: false
-        objectLock: false
-        versioning: "Suspended"
-      - name: {{ .Values.objectstores.notes.bucket | quote }}
-        anonymousRead: false
-        objectLock: false
-        versioning: "Suspended"
-      - name: {{ .Values.objectstores.openproject.bucket | quote }}
-        anonymousRead: false
-        objectLock: false
-        versioning: "Suspended"
-      - name: {{ .Values.objectstores.openxchange.bucket | quote }}
-        anonymousRead: false
-        objectLock: false
-        versioning: "Suspended"
-      - name: {{ .Values.objectstores.nubus.bucket | quote }}
-        anonymousRead: false
-        objectLock: false
-        versioning: "Suspended"
-      {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
-      - name: {{ .Values.objectstores.dovecot.bucket | quote }}
-        anonymousRead: false
-        objectLock: false
-        versioning: "Suspended"
+      {{- end }}
       {{- end }}
   podSecurityContext:
     enabled: true

@@ -7,69 +7,16 @@ admin:
   secretKey: "{{ .Values.secrets.minio.rootPassword }}"
 
 identities:
-  - name: "migrations"
+  {{- range $name, $store := .Values.objectstores }}
+  {{- if or (not (dig "enterprise" false $store)) (eq (env "OPENDESK_ENTERPRISE") "true") }}
+  - name: {{ $name | quote }}
     credentials:
-      - accessKey: "{{ .Values.objectstores.migrations.username }}"
-        secretKey: "{{ .Values.secrets.minio.migrationsUser }}"
+      - accessKey: "{{ $store.username }}"
+        secretKey: "{{ index $.Values.secrets.minio (dig "userSecretKey" (printf "%sUser" $name) $store) }}"
     actions:
-      - "Admin:{{ .Values.objectstores.migrations.bucket }}"
-      - "Read:{{ .Values.objectstores.migrations.bucket }}"
-      - "Write:{{ .Values.objectstores.migrations.bucket }}"
-      - "List:{{ .Values.objectstores.migrations.bucket }}"
-  - name: "nextcloud"
-    credentials:
-      - accessKey: "{{ .Values.objectstores.nextcloud.username }}"
-        secretKey: "{{ .Values.secrets.minio.nextcloudUser }}"
-    actions:
-      - "Admin:{{ .Values.objectstores.nextcloud.bucket }}"
-      - "Read:{{ .Values.objectstores.nextcloud.bucket }}"
-      - "Write:{{ .Values.objectstores.nextcloud.bucket }}"
-      - "List:{{ .Values.objectstores.nextcloud.bucket }}"
-  - name: "notes"
-    credentials:
-      - accessKey: "{{ .Values.objectstores.notes.username }}"
-        secretKey: "{{ .Values.secrets.minio.notesUser }}"
-    actions:
-      - "Admin:{{ .Values.objectstores.notes.bucket }}"
-      - "Read:{{ .Values.objectstores.notes.bucket }}"
-      - "Write:{{ .Values.objectstores.notes.bucket }}"
-      - "List:{{ .Values.objectstores.notes.bucket }}"
-  - name: "openproject"
-    credentials:
-      - accessKey: "{{ .Values.objectstores.openproject.username }}"
-        secretKey: "{{ .Values.secrets.minio.openprojectUser }}"
-    actions:
-      - "Admin:{{ .Values.objectstores.openproject.bucket }}"
-      - "Read:{{ .Values.objectstores.openproject.bucket }}"
-      - "Write:{{ .Values.objectstores.openproject.bucket }}"
-      - "List:{{ .Values.objectstores.openproject.bucket }}"
-  - name: "openxchange"
-    credentials:
-      - accessKey: "{{ .Values.objectstores.openxchange.username }}"
-        secretKey: "{{ .Values.secrets.minio.openxchangeUser }}"
-    actions:
-      - "Admin:{{ .Values.objectstores.openxchange.bucket }}"
-      - "Read:{{ .Values.objectstores.openxchange.bucket }}"
-      - "Write:{{ .Values.objectstores.openxchange.bucket }}"
-      - "List:{{ .Values.objectstores.openxchange.bucket }}"
-  - name: "nubus"
-    credentials:
-      - accessKey: "{{ .Values.objectstores.nubus.username }}"
-        secretKey: "{{ .Values.secrets.minio.umsUser }}"
-    actions:
-      - "Admin:{{ .Values.objectstores.nubus.bucket }}"
-      - "Read:{{ .Values.objectstores.nubus.bucket }}"
-      - "Write:{{ .Values.objectstores.nubus.bucket }}"
-      - "List:{{ .Values.objectstores.nubus.bucket }}"
-  {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
-  - name: "dovecot"
-    credentials:
-      - accessKey: "{{ .Values.objectstores.dovecot.username }}"
-        secretKey: "{{ .Values.secrets.minio.dovecotUser }}"
-    actions:
-      - "Admin:{{ .Values.objectstores.dovecot.bucket }}"
-      - "Read:{{ .Values.objectstores.dovecot.bucket }}"
-      - "Write:{{ .Values.objectstores.dovecot.bucket }}"
-      - "List:{{ .Values.objectstores.dovecot.bucket }}"
+      {{- range $store.actions }}
+      - "{{ . }}:{{ $store.bucket }}"
+      {{- end }}
+  {{- end }}
   {{- end }}
 ...
