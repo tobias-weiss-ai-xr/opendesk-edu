@@ -34,7 +34,7 @@ This document helps in setting up your organization's IdP ("upstream IdP") and t
 
 ### User accounts
 
-In addition to the configuration of the IdP SSO federation itself, it is a preprequisite for successful user login, that openDesk knows about the users performing the login. While this prerequisite is outside the scope of this document, please find various options on how to make user identities available for openDesk in the below section.
+In addition to the configuration of the IdP SSO federation itself, it is a prerequisite for successful user login, that openDesk knows about the users performing the login. While this prerequisite is outside the scope of this document, please find various options on how to make user identities available for openDesk in the below section.
 
 User accounts are matched between the upstream IdP and openDesk based on their username, so you have to use the same username in openDesk as in your upstream IdP.
 
