@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ttyd.fullname" . }}
+  labels:
+    {{- include "ttyd.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ttyd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ttyd.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: ttyd
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - "-p"
+            - "{{ .Values.service.port }}"
+            {{- range .Values.extraArgs }}
+            - {{ . | quote }}
+            {{- end }}
+            - /bin/bash
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              protocol: TCP
+              name: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  domain: {{ .Values.global.domain | quote }}
+ingress:
+  enabled: true
+  hosts:
+    - "latex.{{ .Values.global.domain }}"
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+    haproxy-ingress.github.io/ssl-redirect: "true"
+image:
+  registry: ghcr.io
+  repository: sharelatex/sharelatex
+  tag: "5.0.2"

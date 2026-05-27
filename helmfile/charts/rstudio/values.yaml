@@ -1,0 +1,34 @@
+---
+replicaCount: 1
+image:
+  repository: rocker/rstudio
+  tag: "4.4.2"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8787
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+  hosts:
+    - host: r.opendesk.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+persistence:
+  enabled: true
+  size: 10Gi
+  accessMode: ReadWriteOnce
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2
+    memory: 4Gi
+nodeSelector: {}
+tolerations: []
+affinity: {}

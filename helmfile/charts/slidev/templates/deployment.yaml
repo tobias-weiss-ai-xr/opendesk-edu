@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "slidev.fullname" . }}
+  labels:
+    {{- include "slidev.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "slidev.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "slidev.selectorLabels" . | nindent 8 }}
+    spec:
+      initContainers:
+        - name: build
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command:
+            - npx
+            - slidev
+            - build
+            - "--out"
+            - /slidev/dist
+          volumeMounts:
+            - name: slides
+              mountPath: /slidev
+      containers:
+        - name: slidev
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - name: slides
+              mountPath: /usr/share/nginx/html
+              subPath: dist
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: slides
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "slidev.fullname" . }}-slides
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

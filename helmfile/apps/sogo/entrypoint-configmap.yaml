@@ -45,7 +45,7 @@ data:
     ; Apache
     [program:apache]
     user=root
-    command=/usr/sbin/apache2 -c "ErrorLog /dev/stdout" -D FOREGROUND
+    command=/usr/sbin/apache2 -c "ErrorLog /dev/stdout" -c "DefaultRuntimeDir /var/run/apache2" -D FOREGROUND
     autostart=true
     autorestart=true
     stopasgroup=true

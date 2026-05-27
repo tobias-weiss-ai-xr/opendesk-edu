@@ -64,6 +64,29 @@ helmfiles:
     values: *values
   - path: "helmfile/apps/typo3/helmfile-child.yaml.gotmpl"
     values: *values
+  # Collab Services (scientific computing tools)
+  - path: "helmfile/apps/ollama/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/jupyterhub/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/overleaf/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/open-webui/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/rstudio/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/code-server/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/ttyd/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/kasmvnc/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/dask/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/slidev/helmfile-child.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/collab-dashboard/helmfile-child.yaml.gotmpl"
+    values: *values
   - path: "helmfile/apps/opendesk-openproject-bootstrap/helmfile-child.yaml.gotmpl"
     values: *values
   - path: "helmfile/apps/opendesk-migrations-post/helmfile-child.yaml.gotmpl"

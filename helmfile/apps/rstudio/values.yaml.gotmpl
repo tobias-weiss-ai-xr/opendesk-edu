@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  domain: {{ .Values.global.domain | quote }}
+ingress:
+  enabled: true
+  hosts:
+    - "r.{{ .Values.global.domain }}"
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+    haproxy-ingress.github.io/ssl-redirect: "true"
+image:
+  repository: rocker/rstudio
+  tag: "4.4.2"

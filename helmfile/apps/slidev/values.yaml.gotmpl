@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+ingress:
+  enabled: true
+  hosts:
+    - "slides.{{ .Values.global.domain }}"
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+    haproxy-ingress.github.io/ssl-redirect: "true"
+persistence:
+  enabled: true
+  size: 1Gi

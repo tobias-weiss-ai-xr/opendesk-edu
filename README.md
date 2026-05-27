@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### TL;DR 🚀
 
-openDesk CE + 15 education services (ILIAS, Moodle, BigBlueButton, OpenCloud, Grommunio, …)<br/>
+openDesk CE + 25 education & research services (ILIAS, JupyterHub, Overleaf, Moodle, BigBlueButton, …)<br/>
 one-command Kubernetes deploy with unified Keycloak SSO
 
 # 🎓 openDesk Edu
@@ -28,13 +28,18 @@ one-command Kubernetes deploy with unified Keycloak SSO
 [📖 ILIAS](https://www.ilias.de/) &nbsp;·&nbsp;
 [📚 Moodle](https://moodle.org/) &nbsp;·&nbsp;
 [🎥 BigBlueButton](https://bigbluebutton.org/) &nbsp;·&nbsp;
+[🧪 JupyterHub](https://jupyter.org/hub) &nbsp;·&nbsp;
+[✍️ Overleaf](https://github.com/overleaf/overleaf) &nbsp;·&nbsp;
+[🤖 Open WebUI](https://github.com/open-webui/open-webui) &nbsp;·&nbsp;
+[📊 RStudio](https://posit.co/) &nbsp;·&nbsp;
 [☁️ OpenCloud](https://opencloud.eu/) &nbsp;·&nbsp;
 [🔐 Keycloak SSO](https://www.keycloak.org/)
 
 <br/>
 
 An extension of [openDesk Community Edition](https://www.opencode.de/en/opendesk) that adds
-**learning management systems** (ILIAS, Moodle) and provides **alternative components** for
+**learning management systems** (ILIAS, Moodle), **scientific computing tools** (JupyterHub,
+Overleaf, RStudio, Open WebUI, code-server, Dask), and provides **alternative components** for
 email/groupware (Grommunio, SOGo ↔ OX App Suite), video conferencing (BigBlueButton ↔ Jitsi),
 and file sharing (OpenCloud ↔ Nextcloud) — all integrated with openDesk's existing Keycloak SSO
 and portal. Deploy everything on Kubernetes with a single `helmfile apply`.
@@ -104,6 +109,22 @@ core services universities need — all integrated with openDesk's existing Keyc
 | ✏️ **Whiteboarding** | [Excalidraw](https://excalidraw.com/) | 🔄 Beta | Hand-drawn sketches, brainstorming — lightweight and fast |
 | 📰 **CMS** | [TYPO3](https://typo3.org/) | 🔄 Beta | Enterprise CMS — university websites, department pages, research portals |
 
+### Scientific computing tools 🧪
+
+| Service | Component | Status | Description |
+|:--------|:----------|:------:|:------------|
+| 🧪 **Notebooks** | [JupyterHub](https://jupyter.org/hub) | 🟢 Stable | Multi-user notebooks with Python, R, Julia, SageMath, Octave kernels |
+| ✍️ **Collaborative LaTeX** | [Overleaf CE](https://github.com/overleaf/overleaf) | 🟢 Stable | Real-time LaTeX editor with version control and track changes |
+| 🤖 **AI Assistant** | [Open WebUI](https://github.com/open-webui/open-webui) | 🟡 Beta | ChatGPT-like UI for local LLMs via Ollama |
+| 🧠 **LLM Backend** | [Ollama](https://ollama.ai/) | 🟢 Stable | Local LLM runtime — llama3, mistral, embeddings |
+| 💻 **Cloud IDE** | [code-server](https://github.com/coder/code-server) | 🟢 Stable | VS Code in the browser — full IDE from any device |
+| 📊 **R Statistics** | [RStudio Server](https://posit.co/products/open-source/rstudio-server/) | 🟡 Beta | R IDE with Shiny app server integration |
+| 🖥️ **Linux Desktop** | [KasmVNC](https://kasmweb.com/) | 🟡 Beta | Full X11 desktop in the browser |
+| ⚡ **Distributed Compute** | [Dask Gateway](https://gateway.dask.org/) | 🔵 Planned | Parallel computing clusters for large-scale data |
+| 🖱️ **Web Terminal** | [ttyd](https://github.com/tsl0922/ttyd) | 🟢 Stable | Browser-based Linux terminal |
+| 📽️ **Slides** | [Slidev](https://sli.dev/) | 🟡 Beta | Markdown-to-presentations with code highlighting and diagrams |
+| 🗺️ **Feature Dashboard** | Collab Dashboard | 🟡 Beta | Single page listing all tools — maps every CoCalc feature to its open-source alternative |
+
 ### 🔄 Alternative Components
 
 Each function has a default component and one or more alternatives. Pick one per row.
@@ -118,15 +139,17 @@ Each function has a default component and one or more alternatives. Pick one per
 ## ✨ How It Works
 
 - 🔐 **SSO** – One login (Keycloak) via SAML2/OIDC for all services
-- 🖥️ **Unified Portal** – Access educational services alongside openDesk apps
+- 🖥️ **Unified Portal** – Access educational & research services alongside openDesk apps
 - 📦 **Modular Charts** – Each service in its own configurable Helm chart
 - 💾 **Integrated Backups** – k8up-backed persistent data (LMS, recordings, files; Grommunio uses MariaDB)
+- 🧪 **Collab Services** – Scientific computing tools (JupyterHub, Overleaf, RStudio, Dask) at `collab.opendesk.example.com`
 
 ### What's unchanged ✅
 
 All core openDesk CE components remain intact — Element, Nextcloud, Open-Xchange, XWiki, OpenProject,
-Jitsi, CryptPad, Notes, Collabora, and the full Nubus IAM stack. BBB, OpenCloud, Grommunio, and SOGo are
-optional drop-in alternatives, not replacements. This is a **superset** of openDesk CE, not a fork.
+Jitsi, CryptPad, Notes, Collabora, and the full Nubus IAM stack. BBB, OpenCloud, Grommunio, SOGo, and
+the collab-services (JupyterHub, Overleaf, Open WebUI, etc.) are optional add-ons, not replacements.
+This is a **superset** of openDesk CE, not a fork.
 
 ---
 
@@ -161,6 +184,16 @@ optional drop-in alternatives, not replacements. This is a **superset** of openD
 | 📐 **Diagrams** | **Draw.io** | Apache-2.0 | [29.6](https://github.com/jgraph/drawio/releases) | [Docs](https://www.drawio.com/doc/) |
 | ✏️ **Whiteboard** | **Excalidraw** | MIT | [latest](https://github.com/excalidraw/excalidraw/releases) | [Docs](https://docs.excalidraw.com/) |
 | 📰 **CMS** | **[TYPO3](https://typo3.org/)** | Apache-2.0 | [13.4](https://get.typo3.org/) | [Docs](https://docs.typo3.org/) |
+| 🧪 **Notebooks** | **JupyterHub** | BSD-3-Clause | [5.2](https://jupyter.org/hub) | [Docs](https://jupyterhub.readthedocs.io/) |
+| ✍️ **LaTeX** | **Overleaf CE** | AGPL-3.0 | [5.0](https://github.com/overleaf/overleaf) | [Docs](https://www.overleaf.com/learn) |
+| 🤖 **AI Assistant** | **Open WebUI** | MIT | [0.5.20](https://github.com/open-webui/open-webui) | [Docs](https://docs.openwebui.com/) |
+| 🧠 **LLM Backend** | **Ollama** | MIT | [0.6.0](https://ollama.ai/) | [Docs](https://github.com/ollama/ollama) |
+| 💻 **Cloud IDE** | **code-server** | MIT | [4.96](https://github.com/coder/code-server) | [Docs](https://coder.com/docs) |
+| 📊 **Statistics** | **RStudio Server** | AGPL-3.0 | [4.4](https://posit.co/products/open-source/rstudio-server/) | [Docs](https://docs.posit.co/) |
+| 🖥️ **Desktop** | **KasmVNC** | GPL-2.0 | [1.16](https://kasmweb.com/) | [Docs](https://kasmweb.com/docs/) |
+| ⚡ **Compute** | **Dask Gateway** | BSD-3-Clause | [2024.1](https://gateway.dask.org/) | [Docs](https://gateway.dask.org/) |
+| 🖱️ **Web Terminal** | **ttyd** | MIT | [1.7](https://github.com/tsl0922/ttyd) | [Docs](https://github.com/tsl0922/ttyd) |
+| 📽️ **Presentations** | **Slidev** | MIT | [0.49](https://github.com/slidevjs/slidev) | [Docs](https://sli.dev/) |
 
 <details>
 <summary>🔐 DFN-AAI / eduGAIN SAML Federation — How it works</summary>
@@ -193,6 +226,7 @@ optional drop-in alternatives, not replacements. This is a **superset** of openD
 | 🔑 Permissions | [docs/permissions.md](./docs/permissions.md) |
 | 💾 Data Storage | [docs/data-storage.md](./docs/data-storage.md) |
 | 🧪 Testing | [docs/testing.md](./docs/testing.md) |
+| 🧪 Collab Services | [docs/superpowers/specs/2026-05-27-collab-services-design.md](./docs/superpowers/specs/2026-05-27-collab-services-design.md) |
 
 ---
 

@@ -3,8 +3,8 @@
 ---
 sogo:
   image:
-    repository: codeberg.org/opendesk-edu/opendesk-edu/sogo
-    tag: "dev"
+    repository: alinto/sogo
+    tag: "5.11.0"
     pullPolicy: IfNotPresent
   
   db:
@@ -14,7 +14,7 @@ sogo:
     password: sogo-password
     name: sogo
     initJob:
-      enabled: true
+      enabled: false
   
   ldap:
     host: openldap
@@ -57,10 +57,7 @@ sogo:
           - sogo.desk.opendesk-edu.org
   
   persistence:
-    enabled: true
-    size: 1Gi
-    accessMode: ReadWriteOnce
-    storageClass: longhorn
+    enabled: false
   
   entrypoint:
     enabled: true

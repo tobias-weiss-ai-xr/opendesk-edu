@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+ingress:
+  enabled: true
+  hosts:
+    - "collab.{{ .Values.global.domain }}"
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+    haproxy-ingress.github.io/ssl-redirect: "true"
+image:
+  repository: opendesk-edu/collab-dashboard
+  tag: "latest"
