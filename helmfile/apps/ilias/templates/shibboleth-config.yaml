@@ -69,8 +69,8 @@ data:
   attribute-map.xml: |
     <Attributes xmlns="urn:mace:shibboleth:2.0:attribute-map">
       <Attribute name="email" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="USERNAME"/>
-      <Attribute name="givenname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="FIRSTNAME"/>
-      <Attribute name="surname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="LASTNAME"/>
+      <Attribute name="firstname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="FIRSTNAME"/>
+      <Attribute name="lastname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="LASTNAME"/>
     </Attributes>
 
   attribute-policy.xml: |
