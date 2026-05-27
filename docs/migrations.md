@@ -209,6 +209,11 @@ If you would like more details about the automated migrations, please read secti
 ## Manual checks/actions
 
 > [!note]
+> Starting with openDesk 1.15, we introduced [`updates.md`](./updates.md) to document newly added configuration
+> options that do not require any action during upgrades, but are still useful for getting an overview of new
+> available settings.
+
+> [!note]
 > We **only** use the mathematical symbol ≥ to denote for which versions manual steps must be
 > applied. For example, "Versions ≥ v1.7.0" refers to all openDesk versions (major, minor and
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
