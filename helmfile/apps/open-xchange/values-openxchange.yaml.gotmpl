@@ -735,6 +735,7 @@ appsuite:
     {{ end }}
     packages:
       status:
+        # Authentication related packages
         open-xchange-oidc: "enabled"
         open-xchange-authentication-masterpassword: "disabled"
         open-xchange-authentication-oauth: "disabled"
@@ -748,8 +749,10 @@ appsuite:
         open-xchange-oauth-provider: "enabled"
         # Needed to set com.openexchange.hostname
         open-xchange-hostname-config-cascade: "enabled"
-        # Enable s3 storage
+        # Enable S3 storage for calendar, contacts and tasks attachments
         open-xchange-filestore-s3: "enabled"
+        # Switch off the "Feedback" option from the "Help" menu
+        open-xchange-userfeedback: "disabled"
         {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
         # disabling admin feature breaks webmail, so only sub packages are disabled:
         open-xchange-admin-contextrestore: "disabled"
