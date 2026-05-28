@@ -228,6 +228,9 @@ This list gives you an overview of templated security settings and if they compl
 | **services-external**/postfix | :x: | yes | yes | yes | no | 0 | 0 | yes | no |
 | **services-external**/postgresql | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/redis/master | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
+| **services-external**/seaweedfs/admin | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **services-external**/seaweedfs/allInOne | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **services-external**/seaweedfs/worker | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **xwiki**/xwiki | :x: | no | no | no | yes | 100 | 101 | yes | yes |
 
 

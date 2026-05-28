@@ -1,3 +1,33 @@
+# [1.15.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.2...v1.15.0) (2026-05-28)
+
+
+### Bug Fixes
+
+* **helmfile:** Remove unused Nubus Guardian images from `images.yaml.gotmpl` ([cbad52c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cbad52ce07347c3babe78bd086e7923bd0e8b7d1))
+* **nextcloud:** [[#339](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/339)] Update from 32.0.8 to 32.0.9 including latest apps ([03d97b5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/03d97b589c8f7f2af8a68887c9c9307df669dc36))
+* **nextcloud:** Raise PHP session timeout to avoid unwanted IdP logouts ([269512f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/269512ff74647547bf023be3c992443505318919))
+* **nubus:** Fix UMC server failing to release UNIX sockets to SSSD via PAM ([af8f49b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/af8f49bd337ec16943bb81b104ea3fb1e0471d0c))
+* **open-xchange:** Add proxy protocol support ([fcb997d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fcb997d8c5d3f3aa6b8cb97e23f36bb1ddecaa06))
+* **open-xchange:** Add support for virtual_mailbox_maps in Postfix ([ef2fcfe](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ef2fcfe7b0d9390810fd5e6ced68f6749c0f1665))
+* **open-xchange:** Apply latest 8.48 patch release (26-05-2026) ([a83975d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a83975d2897dac0a418bf8ded7403c1e30a84c6e))
+* **open-xchange:** Change sequence in Postfix' filter handling ([152ecff](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/152ecff3d7db4ced7b44f50023edf79f9bdd18ad))
+* **open-xchange:** Disable LDAP SMTP Sender Login Maps ([36085ec](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/36085ecee089b1f3d6418678fce36ba7414358b8))
+* **open-xchange:** Move confidential values into secret sections ([365c65c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/365c65c4f6634357755ad3be64c4b81335f494bb))
+* **open-xchange:** Remove non-working "Feedback" option from help menu ([32bd9c1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/32bd9c1677d2ca8b5d77c1d10ab3a530b0016dd8))
+* **open-xchange:** Remove typo in user fieldnames within contact picker ([7edefc9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7edefc98b580f242d3dcb447882c77e9d58a9f2e))
+* **open-xchange:** Spawn additional Postfix services for streamlined (ha)proxy protocol support; See `updates.md` and `migrations.md` for more details ([13811d7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/13811d7c5958f8b94d45b974544ee9a13f73f3f6))
+* **open-xchange:** Support for `functional.groupware.mail.localLimits.expansion` and `.recursion` ([b5bbe3c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b5bbe3c659db55f3234b79fc46c2a4ec944d3945))
+* **xwiki:** Fix for mixed case usernames when access to XWiki happend before the nightly LDAP sync; see `migrations.md` for required upgrade steps ([ab264bb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ab264bbde76ac7b98a40669b554f11d4d889d15f))
+* **xwiki:** LDAP group re-sync script after latest XWiki update; see `migrations.md` for required upgrade steps ([e6a07cc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e6a07cca97ec294a23424e01091faf051bc75f52))
+
+
+### Features
+
+* **helmfile:** Provide various limits for groupware; see `updates.md` for more details ([1bd223e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1bd223e5e86ffb43dd027c94b03b46b1fdf47180))
+* **open-xchange:** Update from 8.46 to 8.48 ([5ff0636](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5ff0636b34a311d47889baa86cdcfc65a3d1dce0))
+* **openproject:** Update from 17.3.2 to 17.4.0 ([02f3399](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/02f33997088cd44f5299324fef4a1bffbf057e85))
+* **seaweedfs:** Introduce SeaweedFS as S3 object storage ([45fbd75](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/45fbd75bd86e7a45e9223378cbf8addc20db802b))
+
 ## [1.14.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.1...v1.14.2) (2026-05-13)
 
 
