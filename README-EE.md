@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-License-Identifier: Apache-2.0
 -->
 
@@ -190,7 +190,7 @@ repositories:
 
 Some applications require license information for their Enterprise features to be enabled. With the aforementioned registry credentials you will also receive a file called [`enterprise.yaml`](./helmfile/environments/default/enterprise_keys.yaml.gotmpl) containing the relevant license keys.
 
-Please place the file next your other `.yaml.gotmpl` file(s) that configure your deployment.
+Place the file next to your existing .yaml.gotmpl config file(s), or copy its contents into that file if you keep everything in one.
 
 Details regarding the scope/limitation of the component's licenses:
 
