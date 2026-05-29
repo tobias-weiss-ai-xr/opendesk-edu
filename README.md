@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -44,7 +44,7 @@ openDesk currently features the following functional main components:
 | Portal & IAM         | Nubus                       | AGPL-3.0-or-later                                                                      | [1.19.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/1.19.html) | [Univention's documentation website](https://docs.software-univention.de/n/en/nubus.html)                                             |
 | Project management   | OpenProject                 | GPL-3.0-only                                                                           | [17.4.0](https://www.openproject.org/docs/release-notes/17-4-0/)                              | [For the most recent release](https://www.openproject.org/docs/user-guide/)                                                           |
 | Videoconferencing    | Jitsi                       | Apache-2.0                                                                             | [2.0.10590](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_10590)       | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/)                                            |
-| Weboffice            | Collabora                   | MPL-2.0                                                                                | [25.04.9](https://www.collaboraoffice.com/code-25-04-release-notes/)                          | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)        |
+| Weboffice            | Collabora                   | MPL-2.0                                                                                | [25.04.10](https://www.collaboraoffice.com/code-25-04-release-notes/)                         | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)        |
 
 While not all components are perfectly designed for the execution inside containers, one of the project's objectives is to
 align the applications with best practices regarding container design and operations.
