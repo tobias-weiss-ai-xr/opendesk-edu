@@ -15,6 +15,8 @@ While [migrations.md](./migrations.md) provides information about required actio
   * [1.16.0](#1160)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
+    * [`database.yaml.gotmpl`](#databaseyamlgotmpl)
+      * [Option to enable SSL/TLS database connection for OX App Suite](#option-to-enable-ssltls-database-connection-for-ox-app-suite)
   * [1.15.0](#1150)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
@@ -52,6 +54,22 @@ Previously, these values were hardcoded and could not be customized from the Hel
 Pinning `nginx.workers` to a fixed number is especially relevant on nodes with many CPU cores: the `"auto"`
 setting is not cgroup-aware and spawns one worker per host core regardless of the pod's CPU allocation, so setting an
 explicit value bounds the number of workers.
+
+### `database.yaml.gotmpl`
+
+#### Option to enable SSL/TLS database connection for OX App Suite
+
+SSL/TLS support for the database connection of OX App Suite is now available:
+
+```yaml
+databases:
+  oxAppSuite:
+    useSSL: false
+    requireSSL: false
+    verifyServerCertificate: false
+    enabledTLSProtocols: "TLSv1.2,TLSv1.3"
+    nullCatalogMeansCurrent: true
+```
 
 ## 1.15.0
 

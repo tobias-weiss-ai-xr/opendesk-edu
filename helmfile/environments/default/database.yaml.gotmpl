@@ -76,6 +76,12 @@ databases:
     readUser: ~
     readPassword: ~
     connectionLimit: ~
+    # The key `useSSL` enables a SSL/TLS connection
+    useSSL: false
+    requireSSL: false
+    verifyServerCertificate: false
+    enabledTLSProtocols: "TLSv1.2,TLSv1.3"
+    nullCatalogMeansCurrent: true
   synapse:
     type: "postgresql"
     name: "matrix"
