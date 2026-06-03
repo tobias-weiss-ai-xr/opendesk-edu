@@ -35,15 +35,20 @@ openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s)
   - [haproxy-ingress.github.io](https://haproxy-ingress.github.io)
   - [Ingress nginx](https://github.com/kubernetes/ingress-nginx/) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
   - See section [Ingress controller](#ingress-controller) for more details.
-- [Helm](https://helm.sh/) >= v3.17.3 but not
-  - v3.18.0[^1]
-  - v3.20.1[^2]
-  - v4.x[^3]
-- [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
-- [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
-- [yq](https://github.com/mikefarah/yq)
+- Deployment tools
+  - [Helm](https://helm.sh/) >= v3.17.3 but not
+    - v3.18.0[^1]
+    - v3.20.1[^2]
+  - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
+  - [Helm Diff](https://github.com/databus23/helm-diff) >= v3.11.0
+  - [yq](https://github.com/mikefarah/yq) >= v4.52.4
 - Volume provisioner supporting RWO (read-write-once)
 - Certificate handling with [cert-manager](https://cert-manager.io/)
+
+> [!note]
+> You can check which versions of the deployment tools the openDesk team is using in their development pipelines by looking up the
+> default value for `HELM_IMAGE_PIN` in [`.gitlab-ci.yml`](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/.gitlab-ci.yml?ref_type=heads)
+> and checking the corresponding [release in the Helm image repository](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/helm/-/releases).
 
 **Additional openDesk Enterprise requirements**
 - [OpenKruise](https://openkruise.io/)[^3] >= v1.6
@@ -150,7 +155,7 @@ deployments, you need to make use of your own production-grade services; see the
 |----------|---------------------|---------|-----------------------|
 | Cache    | Memcached           | `1.6.x` | Memcached             |
 |          | Redis               | `7.x.x` | Redis                 |
-| Database | Cassandra[^4]       | `5.0.x` | Cassandra             |
+| Database | Cassandra[^3]       | `5.0.x` | Cassandra             |
 |          | MariaDB             | `10.x`  | MariaDB               |
 |          | PostgreSQL          | `15.x`  | PostgreSQL            |
 | Mail     | Mail Transfer Agent |         | Postfix               |
@@ -174,6 +179,4 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 
 [^2]: Due to Helm bugs [[1](https://github.com/helm/helm/issues/31919), [2](https://github.com/helm/helm/issues/31971)] v3.20.1 is not supported.
 
-[^3]: Helm v4 introduced stricter flag grouping that is not yet supported by the helmdiff plugin.
-
-[^4]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
+[^3]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
