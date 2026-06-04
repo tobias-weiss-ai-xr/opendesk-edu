@@ -89,6 +89,7 @@ databases:
     port: 5432
     username: "matrix_user"
     password: ""
+    passwordKey: "matrixUser"
     requireAuth: []
     channelBinding: "prefer"
     connectTimeout: 10
@@ -105,6 +106,8 @@ databases:
     connectionPoolMin: "3"
     connectionPoolMax: "5"
     connectionLimit: ~
+    # Passed to CREATE DATABASE in the postgres bootstrap.
+    additionalParams: "ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0"
   umsAuthSession:
     type: "postgresql"
     name: "nubus_authsession"
@@ -145,4 +148,6 @@ databases:
     username: "xwiki_user"
     password: ""
     connectionLimit: ~
+    # Passed to CREATE DATABASE in the postgres bootstrap.
+    additionalParams: "ENCODING 'UNICODE' template=template0"
 ...
