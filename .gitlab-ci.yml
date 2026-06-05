@@ -468,16 +468,21 @@ env-cleanup:
       when: "on_success"
   script:
     - |
-      echo "Cleaning up ${NAMESPACE}"
+      echo "Cleaning up ${NAMESPACE} with OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED=${OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED}..."
       if [ "${OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED}" = "yes" ]; then
         for OPENDESK_RELEASE in $(helm ls -n ${NAMESPACE} -aq); do
+          echo "Uninstalling release ${OPENDESK_RELEASE}"
           helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE};
         done
-        # if you update the section below, please also update the respective section in getting_started.md
+        # NOTE: if you update the section below, please also update the respective section in getting_started.md
+        echo "Deleting PVCs..."
         kubectl delete pvc --all --namespace ${NAMESPACE};
+        echo "Deleting Jobs..."
         kubectl delete jobs --all --namespace ${NAMESPACE};
+        echo "Deleting ConfigMaps..."
         kubectl delete configmaps --all --namespace ${NAMESPACE};
       else
+        echo "Destroying namespace..."
         helmfile destroy --namespace ${NAMESPACE};
       fi
   stage: "env-cleanup"
