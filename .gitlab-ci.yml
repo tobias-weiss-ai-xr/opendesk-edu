@@ -838,6 +838,7 @@ run-tests:
           \"screenshot_redirect_step\": \"yes\", \
           \"testset\": \"${TESTS_TESTSET}\", \
           \"testprofile\": \"Namespace\", \
+          \"OPENDESK_BRANCH\": \"${CI_COMMIT_REF_NAME}\", \
           \"OPENDESK_ENTERPRISE\": \"${OPENDESK_ENTERPRISE}\", \
           \"GRACE_PERIOD\": \"${TESTS_GRACE_PERIOD}\", \
           \"USER_IMPORT_GRACE_PERIOD\": \"${TESTS_USER_IMPORT_GRACE_PERIOD}\", \
