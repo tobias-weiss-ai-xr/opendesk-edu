@@ -468,19 +468,21 @@ env-cleanup:
       when: "on_success"
   script:
     - |
+      set -e
+      export KUBECTL_TIMEOUT="300s"
       echo "Cleaning up ${NAMESPACE} with OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED=${OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED}..."
       if [ "${OPENDESK_SLEDGEHAMMER_DESTROY_ENABLED}" = "yes" ]; then
-        for OPENDESK_RELEASE in $(helm ls -n ${NAMESPACE} -aq); do
+        for OPENDESK_RELEASE in $(helm ls -n ${NAMESPACE} -q); do
           echo "Uninstalling release ${OPENDESK_RELEASE}"
-          helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE};
+          helm uninstall -n ${NAMESPACE} ${OPENDESK_RELEASE} || true;
         done
         # NOTE: if you update the section below, please also update the respective section in getting_started.md
-        echo "Deleting PVCs..."
-        kubectl delete pvc --all --namespace ${NAMESPACE};
-        echo "Deleting Jobs..."
-        kubectl delete jobs --all --namespace ${NAMESPACE};
-        echo "Deleting ConfigMaps..."
-        kubectl delete configmaps --all --namespace ${NAMESPACE};
+        echo "Deleting PVCs (timeout: ${KUBECTL_TIMEOUT})..."
+        kubectl delete pvc --all --namespace ${NAMESPACE} --timeout=${KUBECTL_TIMEOUT};
+        echo "Deleting Jobs (timeout: ${KUBECTL_TIMEOUT})..."
+        kubectl delete jobs --all --namespace ${NAMESPACE} --timeout=${KUBECTL_TIMEOUT};
+        echo "Deleting ConfigMaps (timeout: ${KUBECTL_TIMEOUT})..."
+        kubectl delete configmaps --all --namespace ${NAMESPACE} --timeout=${KUBECTL_TIMEOUT};
       else
         echo "Destroying namespace..."
         helmfile destroy --namespace ${NAMESPACE};
