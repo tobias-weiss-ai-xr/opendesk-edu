@@ -122,7 +122,11 @@ aio:
       password:
         enabled: {{ not .Values.functional.filestore.nextcloud.clients.enabled }}
         value: {{ .Values.secrets.nextcloud.statusPassword | quote }}
-
+    php:
+      memoryLimit: {{ .Values.technical.nextcloud.aio.php.memoryLimit | quote }}
+      workers: {{ .Values.technical.nextcloud.aio.php.workers }}
+    nginx:
+      workers: {{ .Values.technical.nextcloud.aio.nginx.workers | quote }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
