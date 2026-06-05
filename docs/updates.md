@@ -7,16 +7,51 @@ SPDX-License-Identifier: Apache-2.0
 
 While [migrations.md](./migrations.md) provides information about required actions when updating or upgrading openDesk this document provides an overview on new (non-breaking) options made available in the Helmfile deployment.
 
+> [!note]
+> We only list newly introduced plain YAML structures here. For documentation of the described features, please refer to the comments in the referenced `.yaml.gotmpl` files.
+
 <!-- TOC -->
 * [Updates and features](#updates-and-features)
+  * [1.16.0](#1160)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+      * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
   * [1.15.0](#1150)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
       * [Virtual alias limits](#virtual-alias-limits)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-1)
       * [Proxy protocol support for Postfix](#proxy-protocol-support-for-postfix)
       * [Set limitation on maximum number of objects (for tasks, contacts, attachments)](#set-limitation-on-maximum-number-of-objects-for-tasks-contacts-attachments)
 <!-- TOC -->
+
+## 1.16.0
+
+### `technical.yaml.gotmpl`
+
+#### Nextcloud worker and memory tuning
+
+The number of worker processes and the PHP memory limits of the Nextcloud components can now be tuned to size the
+deployment for the expected load:
+
+```yaml
+technical:
+  nextcloud:
+    aio:
+      php:
+        memoryLimit: "768M"
+        workers: 20
+      nginx:
+        workers: "auto"
+    pushNotify:
+      nginx:
+        workers: 2
+```
+
+Previously, these values were hardcoded and could not be customized from the Helmfile deployment.
+
+Pinning `nginx.workers` to a fixed number is especially relevant on nodes with many CPU cores: the `"auto"`
+setting is not cgroup-aware and spawns one worker per host core regardless of the pod's CPU allocation, so setting an
+explicit value bounds the number of workers.
 
 ## 1.15.0
 
@@ -24,7 +59,7 @@ While [migrations.md](./migrations.md) provides information about required actio
 
 #### Per user-quota for external sharing
 
-Configure the per-user quota for external share links and guest invitations:
+Configure the per-user quota for external share links and guest invitations (when features are enabled):
 
 ```yaml
 functional:
@@ -32,13 +67,9 @@ functional:
     externalSharing:
       shareLinks:
         enabled: false
-        # Limit the number of share links a single user can create.
-        # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.share_links
         quota: 100
       inviteGuests:
         enabled: false
-        # Limit the number of guests a single user can create.
-        # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.invite_guests
         quota: 100
 ```
 
@@ -53,11 +84,7 @@ functional:
   groupware:
     mail:
       localLimits:
-        # Maximum number of recipients a single address may expand to (e.g. members of a mailing list).
-        # Ref: https://www.postfix.org/postconf.5.html#virtual_alias_expansion_limit
         expansion: 1000
-        # Maximum nesting depth of alias-of-alias resolution chains.
-        # Ref: https://www.postfix.org/postconf.5.html#virtual_alias_recursion_limit
         recursion: 25
 ```
 
@@ -101,8 +128,6 @@ Make sure to address the following steps to enable Proxy Protocol:
    ```yaml
    technical:
      postfix:
-       # Proxy protocol to use for incoming mail or externally connected mail clients (if any), only `haproxy` is supported at the moment.
-       # Ref.: https://www.postfix.org/postconf.5.html#smtpd_upstream_proxy_protocol
        smtpdUpstreamProxyProtocol: "haproxy"
    ```
 
@@ -114,14 +139,8 @@ Set OX context wide quota limits for tasks, contacts, and attachments:
 technical:
   oxAppSuite:
     quota:
-      # Maximum number of tasks within a single OX Context. Might need to be increased in larger deployments to avoid hitting the quota limit.
-      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.tasks
       tasks: 250000
-      # Maximum number of contacts within a single OX Context. Might need to be increased in larger deployments to avoid hitting the quota limit.
-      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.contacts
       contacts: 250000
-      # Maximum number of attachments within a single OX Context. Might need to be increased in larger deployments to avoid hitting the quota limit.
-      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.attachments
       attachments: 250000
 ```
 
