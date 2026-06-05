@@ -339,18 +339,23 @@ Branches created from the `develop` branch have to adhere to the following notat
   - `helmfile`
   - `ci`
   - `docs`
-  - `collabora`
-  - `cryptpad`
-  - `element`
-  - `jitsi`
-  - `nextcloud`
-  - `nubus`
-  - `open-xchange`
-  - `openproject`
+  - `collabora` -> `co`
+  - `cryptpad` -> `cr`
+  - `element` -> `el`
+  - `jitsi` -> `ji`
+  - `nextcloud` -> `nc`
+  - `notes` -> `nt` (to avoid "no" which could be a word instead of an indentifier)
+  - `nubus` -> `nu`
+  - `open-xchange` -> `ox`
+  - `openproject` -> `op`
   - `services`
-  - `xwiki`
+  - `xwiki` -> `xw`
 
 Example: `tmueller/fix_jitsi_theming`.
+
+> [!note]
+> You can use the two-letter component shortcuts to control test execution as well: if one or more of the shortcuts
+> are found in the branch name, the e2e tests will run only the tests for the given components.
 
 > [!note]
 > The above naming convention has yet to be enforced, but please ensure you use it.
