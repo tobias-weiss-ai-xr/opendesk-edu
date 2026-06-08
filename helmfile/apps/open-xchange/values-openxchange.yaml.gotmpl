@@ -879,8 +879,8 @@ appsuite:
       com.openexchange.capability.public-sector-navigation: "true"
       com.openexchange.capability.client-onboarding: "true"
       com.openexchange.capability.dynamic-theme: "true"
-      com.openexchange.capability.filestorage_nextcloud: "true"
-      com.openexchange.capability.filestorage_nextcloud_oauth: "true"
+      com.openexchange.capability.filestorage_nextcloud: {{ .Values.apps.nextcloud.enabled | quote }}
+      com.openexchange.capability.filestorage_nextcloud_oauth: {{ .Values.apps.nextcloud.enabled | quote }}
       com.openexchange.capability.guard: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
       com.openexchange.capability.guard-mail: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
       com.openexchange.capability.smime: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
