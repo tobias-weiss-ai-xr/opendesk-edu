@@ -1,3 +1,10 @@
+## [1.15.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.15.0...v1.15.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* **openproject:** Update from 17.4.0 to 17.4.1; strongly recommended update to address CVEs, find details in upstream release notes https://www.openproject.org/docs/release-notes/17-4-1/ ([953fd04](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/953fd048fc98ca31218897ef12ba00d54b81ad14))
+
 # [1.15.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.2...v1.15.0) (2026-05-28)
 
 
