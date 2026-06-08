@@ -35,6 +35,13 @@
 * **openproject:** Update from 17.3.2 to 17.4.0 ([02f3399](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/02f33997088cd44f5299324fef4a1bffbf057e85))
 * **seaweedfs:** Introduce SeaweedFS as S3 object storage ([45fbd75](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/45fbd75bd86e7a45e9223378cbf8addc20db802b))
 
+## [1.14.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.2...v1.14.3) (2026-06-08)
+
+
+### Bug Fixes
+
+* **openproject:** fix(openproject): Update from 17.3.2 to 17.3.4; strongly recommended update to address CVE, find details in upstream release notes https://www.openproject.org/docs/release-notes/17-3-4/ ([13f2449](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/13f24497218e47c289573fa4120f02d3c3b508e4))
+
 ## [1.14.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.1...v1.14.2) (2026-05-13)
 
 
