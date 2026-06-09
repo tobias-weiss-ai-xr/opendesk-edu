@@ -562,6 +562,38 @@ config:
               included.client.audience: "opendesk-intercom"
               id.token.claim: false
               access.token.claim: true
+        # The optional mappers below are required for to allow the Intercom Service to perform
+        # token exchange for the given audiences (applications).
+        {{- if .Values.apps.nextcloud.enabled }}
+          - name: "exchange-audience-nextcloud"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-audience-mapper"
+            consentRequired: false
+            config:
+              included.client.audience: "opendesk-nextcloud"
+              id.token.claim: false
+              access.token.claim: true
+        {{- end }}
+        {{- if .Values.apps.xwiki.enabled }}
+          - name: "exchange-audience-xwiki"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-audience-mapper"
+            consentRequired: false
+            config:
+              included.client.audience: "opendesk-xwiki"
+              id.token.claim: false
+              access.token.claim: true
+        {{- end }}
+        {{- if .Values.apps.oxAppSuite.enabled }}
+          - name: "exchange-audience-oxappsuite"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-audience-mapper"
+            consentRequired: false
+            config:
+              included.client.audience: "opendesk-oxappsuite"
+              id.token.claim: false
+              access.token.claim: true
+        {{- end }}
           - name: "opendesk_username"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"

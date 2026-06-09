@@ -18,8 +18,7 @@ repositories:
     username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
-    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
-  # openDesk Keycloak Bootstrap Chart
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"  # openDesk Keycloak Bootstrap Chart
   - name: "opendesk-keycloak-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
     verify: {{ .Values.charts.opendeskKeycloakBootstrap.verify }}

@@ -43,6 +43,7 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 ics:
+  tokenExchangeV2: true
   session:
     secret: {{ .Values.secrets.intercom.secret | quote }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
