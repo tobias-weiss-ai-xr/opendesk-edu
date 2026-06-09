@@ -2,6 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 ai:
+  # Providing an AI endpoint is optional. When provided the following components have have AI support enabled:
+  # - Collabora Online
+  # - Notes
   endpoint: ""
   # Value-only: operator-provided API key for an external AI endpoint. Takes `value` only and not the
   # `create`/`name`/`key` structure - it is empty by default (nothing to provision) and the Notes
@@ -9,4 +12,9 @@ ai:
   apiKey:
     value: ""
   model: ""
+  # AI enabled components might have the option to allow users configuring their own AI backends. This is disabled by default, but can be enabled here.
+  # Note that this might have privacy implications, as users could configure their own AI backends that collect data from the users.
+  # Affected by the toggle are:
+  # - Collabora Online
+  allowUserSettings: false
 ...

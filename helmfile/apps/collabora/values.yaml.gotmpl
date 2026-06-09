@@ -28,6 +28,14 @@ collabora:
       {{- else -}}
       {{ fail (printf "Invalid value for functional.weboffice.macros.securityLevel: '%s'. Allowed values: 0 or 1" $val) }}
       {{- end }}
+    {{- if .Values.ai.endpoint }}
+    --o:ai.enabled=true
+    --o:ai.allow_user_settings={{ .Values.ai.allowUserSettings }}
+    --o:ai.api_url={{ .Values.ai.endpoint | trimSuffix "/" | trimSuffix "v1" }}
+    --o:ai.model={{ .Values.ai.model }}
+    --o:ai.api_key={{ .Values.ai.apiKey.value }}
+    --o:net.lok_allow.host[0]={{ (urlParse .Values.ai.endpoint).hostname | replace "." "\\." }}
+    {{- end }}
     {{- if .Values.debug.enabled }}
     --o:logging.level=debug
     {{- else }}
