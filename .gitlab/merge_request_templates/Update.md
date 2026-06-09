@@ -5,9 +5,15 @@
 
 ## ➡️ References
 
-Reference related issues or tickets where applicable.
+*Where applicable. Remove (sub)section(s) when not needed*
+
+### Related issues or tickets
 
 - *e.g. `OP#123`*
+
+### Related MRs
+
+- *e.g. https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-nextcloud/-/merge_requests/35*
 
 ## 📋 Changelog/Release Notes
 
