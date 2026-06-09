@@ -6,7 +6,7 @@
 
 include:
   - project: "bmi/opendesk/tooling/gitlab-config"
-    ref: "v2.6.8"
+    ref: "v2.6.9"
     file:
       - "ci/common/lint.yml"
       - "ci/release-automation/semantic-release.yml"
