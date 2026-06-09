@@ -197,10 +197,6 @@ keycloak:
           loginTitle: "Anmeldung bei {{ .Values.theme.texts.productName }}"
         en:
           loginTitle: "Sign in to {{ .Values.theme.texts.productName }}"
-    features:
-      enabled:
-        - "admin-fine-grained-authz:v1"
-        - "token-exchange"
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak"
     {{- with .Values.annotations.nubusKeycloak.pod }}
