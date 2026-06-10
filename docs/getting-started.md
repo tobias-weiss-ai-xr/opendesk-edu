@@ -117,31 +117,45 @@ export DOMAIN=domain.tld
 Depending on your ideal openDesk deployment, you may wish to disable or enable certain apps.
 All available apps and their default values are located in `helmfile/environments/default/opendesk_main.yaml.gotmpl`.
 
-| Component            | Name                        | Default | Description                    |
-| -------------------- | --------------------------- | ------- | ------------------------------ |
-| Certificates         | `apps.certificates.enabled`      | `true`  | TLS certificates               |
-| ClamAV (Distributed) | `apps.clamavDistributed.enabled` | `false` | Antivirus engine               |
-| ClamAV (Simple)      | `apps.clamavSimple.enabled`      | `true`  | Antivirus engine               |
-| Collabora            | `apps.collabora.enabled`         | `true`  | Weboffice                      |
-| CryptPad             | `apps.cryptpad.enabled`          | `true`  | Weboffice                      |
-| dkimpy               | `apps.dkimpy.enabled`            | `false` | Postfix milter for DKIM        |
-| Dovecot              | `apps.dovecot.enabled`           | `true`  | Mail backend                   |
-| Element              | `apps.element.enabled`           | `true`  | Secure communications platform |
-| Home                 | `apps.home.enabled`              | `true`  | Base domain portal redirect    |
-| Jitsi                | `apps.jitsi.enabled`             | `true`  | Videoconferencing              |
-| MariaDB              | `apps.mariadb.enabled`           | `true`  | Database                       |
-| Memcached            | `apps.memcached.enabled`         | `true`  | Cache Database                 |
-| MinIO                | `apps.minio.enabled`             | `true`  | Object Storage                 |
-| Nextcloud            | `apps.nextcloud.enabled`         | `true`  | File share                     |
-| Nubus                | `apps.nubus.enabled`             | `true`  | Identity Management & Portal   |
-| OpenProject          | `apps.openproject.enabled`       | `true`  | Project management             |
-| OX App Suite         | `apps.oxAppSuite.enabled`        | `true`  | Groupware                      |
-| Postfix              | `apps.postfix.enabled`           | `true`  | MTA                            |
-| PostgreSQL           | `apps.postgresql.enabled`        | `true`  | Database                       |
-| Redis                | `apps.redis.enabled`             | `true`  | Cache Database                 |
-| XWiki                | `apps.xwiki.enabled`             | `true`  | Knowledge management           |
+| Component            | Name                               | Default  | Description                          |
+| -------------------- | ---------------------------------- | -------- | ------------------------------------ |
+| Cassandra            | `apps.cassandra.enabled`           | `false`† | NoSQL database (enterprise builds)   |
+| Certificates         | `apps.certificates.enabled`        | `true`   | TLS certificates                     |
+| ClamAV (Distributed) | `apps.clamavDistributed.enabled`   | `false`  | Antivirus engine                     |
+| ClamAV (Simple)      | `apps.clamavSimple.enabled`        | `true`   | Antivirus engine                     |
+| Collabora            | `apps.collabora.enabled`           | `true`   | Weboffice                            |
+| Collabora Controller | `apps.collaboraController.enabled` | `false`† | Collabora pod controller (enterprise)|
+| CryptPad             | `apps.cryptpad.enabled`            | `true`   | Weboffice                            |
+| dkimpy               | `apps.dkimpy.enabled`              | `false`  | Postfix milter for DKIM              |
+| Dovecot              | `apps.dovecot.enabled`             | `true`   | Mail backend                         |
+| Element              | `apps.element.enabled`             | `true`   | Secure communications platform       |
+| Element Admin        | `apps.elementAdmin.enabled`        | `false`  | Element admin console (enterprise‡)  |
+| Element Groupsync    | `apps.elementGroupsync.enabled`    | `false`  | Matrix group/space sync (enterprise‡)|
+| Home                 | `apps.home.enabled`                | `true`   | Base domain portal redirect          |
+| Jitsi                | `apps.jitsi.enabled`               | `true`   | Videoconferencing                    |
+| MariaDB              | `apps.mariadb.enabled`             | `true`   | Database                             |
+| Memcached            | `apps.memcached.enabled`           | `true`   | Cache Database                       |
+| Migrations           | `apps.migrations.enabled`          | `true`   | Version-upgrade migration runner     |
+| MinIO                | `apps.minio.enabled`               | `false`  | Object Storage (alternative backend) |
+| SeaweedFS            | `apps.seaweedfs.enabled`           | `true`   | Object Storage (default backend)     |
+| Nextcloud            | `apps.nextcloud.enabled`           | `true`   | File share                           |
+| Notes                | `apps.notes.enabled`               | `false`  | Notes app                            |
+| Nubus                | `apps.nubus.enabled`               | `true`   | Identity Management & Portal         |
+| OpenProject          | `apps.openproject.enabled`         | `true`   | Project management                   |
+| OX App Suite         | `apps.oxAppSuite.enabled`          | `true`   | Groupware                            |
+| Postfix              | `apps.postfix.enabled`             | `true`   | MTA                                  |
+| PostgreSQL           | `apps.postgresql.enabled`          | `true`   | Database                             |
+| Redis                | `apps.redis.enabled`               | `true`   | Cache Database                       |
+| Static Files         | `apps.staticFiles.enabled`         | `true`   | Static asset server                  |
+| XWiki                | `apps.xwiki.enabled`               | `true`   | Knowledge management                 |
 
-For example, Jitsi can be disabled like this:
+† Enterprise builds (`OPENDESK_ENTERPRISE=true`) default these to `true`.
+
+‡ Enterprise component: The toggle defaults `false` and is not enterprise-gated, but the image lives in the enterprise
+registry - enabling it on a openDesk CE deployment (no `OPENDESK_ENTERPRISE` / private-registry credentials) just
+`ImagePullBackOff`s.
+
+For example, Jitsi can be deactivated like this:
 
 ```yaml
 apps:
@@ -316,7 +330,8 @@ To connect with mail clients like [Thunderbird](https://www.thunderbird.net/), t
 | Dovecot            | IMAPS                   |   993 |  TCP |
 |                    | POP3S                   |   995 |  TCP |
 | Postfix            | SMTP                    |    25 |  TCP |
-|                    | SMTPS                   |   587 |  TCP |
+|                    | Submission (STARTTLS)   |   587 |  TCP |
+|                    | SMTPS (implicit TLS)    |   465 |  TCP |
 
 ### Mail/SMTP configuration
 
