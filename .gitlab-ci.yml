@@ -248,7 +248,7 @@ variables:
     value: "gitlab.opencode.de/api/v4/projects/1506"
   HELM_IMAGE_PIN:
     description: "The Helm image tag/checksum."
-    value: "1.5.0@sha256:a3ecc0ba47ec83c10c77c271c32a88eddd4251c78053f3d7d86e67aabf0ebc1e"
+    value: "1.4.0@sha256:300e345cf6b0ca0909e55ba62e15028d85b06d4e02f907e04b01747512e74f36"
 
 # Declare .environments which is in `opendesk-env` repository. In case it is not available
 # 'cache' is used because job as a dummy key, as the job is not allowed to be empty.
