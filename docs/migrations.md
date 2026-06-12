@@ -21,13 +21,16 @@ When upgrading openDesk, two types of migrations may be required:
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Versions ≥ v1.16.0](#versions--v1160)
+      * [Pre-upgrade to versions ≥ v1.16.0](#pre-upgrade-to-versions--v1160)
+        * [Nubus bug fix: LDAP storage class settings](#nubus-bug-fix-ldap-storage-class-settings)
     * [Versions ≥ v1.15.0](#versions--v1150)
       * [Pre-upgrade to versions ≥ v1.15.0](#pre-upgrade-to-versions--v1150)
         * [New Helmfile default: external mail services are no longer enabled by default](#new-helmfile-default-external-mail-services-are-no-longer-enabled-by-default)
         * [New Helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
       * [Post-upgrade to versions ≥ v1.15.0](#post-upgrade-to-versions--v1150)
-        * [Wiki bug fix: LDAP group synchronization incomplete](#wiki-bug-fix-ldap-group-synchronization-incomplete)
-        * [Wiki bug fix: User account merge for uppercase usernames (Part 2)](#wiki-bug-fix-user-account-merge-for-uppercase-usernames-part-2)
+        * [XWiki bug fix: LDAP group synchronization incomplete](#xwiki-bug-fix-ldap-group-synchronization-incomplete)
+        * [XWiki bug fix: User account merge for uppercase usernames (Part 2)](#xwiki-bug-fix-user-account-merge-for-uppercase-usernames-part-2)
     * [Versions ≥ v1.14.0](#versions--v1140)
       * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
         * [Updated Helmfile behaviour: Remove default MASTER\_PASSWORD](#updated-helmfile-behaviour-remove-default-master_password)
@@ -221,6 +224,55 @@ If you would like more details about the automated migrations, please read secti
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
 
+### Versions ≥ v1.16.0
+
+#### Pre-upgrade to versions ≥ v1.16.0
+
+##### Nubus bug fix: LDAP storage class settings
+
+**Target group:** Deployments that set explicit storage settings for `nubusLdapServerRun` which differ from those for `nubusLdapServerData`.
+
+**Context**
+
+Until now, the settings under `persistence.storages.nubusLdapServerRun` were ignored, and the settings from `persistence.storages.nubusLdapServerData` were applied instead.
+
+Because PVC settings cannot be changed after a PVC has been created, the deployment settings and the actual PVC settings must be kept consistent.
+
+There are two ways to achieve this:
+
+1. Adjust the templated storage settings to match the existing PVCs.
+2. Migrate the PVCs to match the templated storage settings.
+
+**Required action: Align storage settings with existing PVCs**
+
+Set the `size` and `storageClassName` under `nubusLdapServerRun` to the same values as those under `nubusLdapServerData`:
+
+```yaml
+persistence:
+  storages:
+    nubusLdapServerData:
+      size: "1Gi"
+      storageClassName: "myStorageClassName"
+    nubusLdapServerRun:
+      size: "1Gi"
+      storageClassName: "myStorageClassName"
+```
+
+**Required action: Migrate PVCs to match storage settings**
+
+> [!warning]
+> Every primary and secondary LDAP Pod has its own affected PVC, so this action must be performed for each of them.
+
+Migrate[^1] the `nubusLdapServerRun` PVC(s) to the currently defined storage settings, for example:
+
+```yaml
+persistence:
+  storages:
+    nubusLdapServerRun:
+      size: "0.2Gi"
+      storageClassName: "specialStorageClass"
+```
+
 ### Versions ≥ v1.15.0
 
 #### Pre-upgrade to versions ≥ v1.15.0
@@ -313,7 +365,7 @@ See [Migrate from MinTO to SeaweedFS](./migrations-instructions/1.15.0-migrate-f
 
 #### Post-upgrade to versions ≥ v1.15.0
 
-##### Wiki bug fix: LDAP group synchronization incomplete
+##### XWiki bug fix: LDAP group synchronization incomplete
 
 **Target audience:** Deployments using XWiki with LDAP groups where some group memberships are not synchronized as expected.
 
@@ -342,7 +394,7 @@ To repair groups whose memberships are no longer properly synchronized to XWiki,
 - On the newly created page, click "Recreate the LDAP Groups Mapping" to start the analysis.
 - A list of all recreated mappings will be displayed once the process completes.
 
-##### Wiki bug fix: User account merge for uppercase usernames (Part 2)
+##### XWiki bug fix: User account merge for uppercase usernames (Part 2)
 
 **Target audience:** Deployments where usernames (login names) contain uppercase characters, XWiki is enabled, and users logged into XWiki before their accounts were pre-created by the nightly LDAP synchronization.
 

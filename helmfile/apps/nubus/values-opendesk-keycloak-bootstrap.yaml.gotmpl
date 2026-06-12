@@ -655,6 +655,15 @@ config:
           backchannel.logout.session.required: true
           backchannel.logout.url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/ajax/oidc/backchannel_logout"
           post.logout.redirect.uris: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
+        protocolMappers:
+          - name: "dovecot-audience"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-audience-mapper"
+            consentRequired: false
+            config:
+              included.client.audience: "opendesk-dovecot"
+              id.token.claim: false
+              access.token.claim: true
         defaultClientScopes:
           - "opendesk-oxappsuite-scope"
           - "read_contacts"
