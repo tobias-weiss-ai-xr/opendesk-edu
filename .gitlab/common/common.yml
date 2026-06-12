@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+variables:
+  OPENDESK_CI_CLI_IMAGE: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli:2.7.4\
+    @sha256:f7609c9e2116c6dda1bfd8293570d16af467c9bacdcf7ace8612e8da000480b3"
+  OPENDESK_LINT_IMAGE: "registry.opencode.de/bmi/opendesk/components/platform-development/images/ci-lint:1.0.17\
+    @sha256:9befa755b2199e040f509babd19a74f6ed350bb29a1d92cbeafefc6c1d416405"
+
+.common:
+  cache: {}
+  needs: []
+  tags: []
+...
