@@ -545,10 +545,24 @@ nubusPortalConsumer:
   objectStorage:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
-      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      {{- if .Values.objectstores.nubus.secretKey }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | quote }}
+      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+      secretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
+      {{- else }}
+      {{- fail "No objectstorage secretKey for nubus found!" }}
+      {{- end }}
       existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
-    endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+    {{- if .Values.objectstores.nubus.endpoint }}
+    endpoint: {{ printf "https://%s" .Values.objectstores.nubus.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for nubus found!" }}
+    {{- end }}
   persistence:
     groupMembershipCache:
       size: {{ .Values.persistence.storages.nubusPortalConsumer.size | quote }}
@@ -652,10 +666,24 @@ nubusPortalServer:
   objectStorage:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
-      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      {{- if .Values.objectstores.nubus.secretKey }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | quote }}
+      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+      secretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
+      {{- else }}
+      {{- fail "No objectstorage secretKey for nubus found!" }}
+      {{- end }}
       existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
-    endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+    {{- if .Values.objectstores.nubus.endpoint }}
+    endpoint: {{ printf "https://%s" .Values.objectstores.nubus.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for nubus found!" }}
+    {{- end }}
   persistence:
     annotations:
       {{ .Values.annotations.nubusPortalServer.persistence | toYaml | nindent 6 }}
