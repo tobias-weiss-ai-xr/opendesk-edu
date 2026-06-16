@@ -154,6 +154,16 @@ provisioning:
   resources:
     {{ .Values.resources.intercomService | toYaml | nindent 4 }}
   securityContext:
+    allowPrivilegeEscalation: false
+    enabled: true
+    privileged: false
+    capabilities:
+      drop:
+        - "ALL"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
     seccompProfile:
       type: "RuntimeDefault"
     seLinuxOptions:
