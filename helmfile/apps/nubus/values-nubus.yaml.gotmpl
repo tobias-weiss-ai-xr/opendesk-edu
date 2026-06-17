@@ -935,7 +935,7 @@ nubusLdapServer:
       sharedRun:
         size: {{ .Values.persistence.storages.nubusLdapServerRun.size | quote }}
         storageClass: {{ coalesce .Values.persistence.storages.nubusLdapServerRun.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
-      
+
   podAnnotations:
     intents.otterize.com/service-name: "ums-ldap-server"
     {{- with .Values.annotations.nubusLdapServer.pod }}
@@ -959,6 +959,10 @@ nubusLdapServer:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
+
+nubusLicenseImport:
+  enabled: {{ not (empty .Values.enterpriseKeys.nubus.license) }}
+  license: {{ .Values.enterpriseKeys.nubus.license | quote }}
 
 nubusProvisioning:
   enabled: true

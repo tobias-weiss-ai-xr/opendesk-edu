@@ -3,18 +3,22 @@
 # The variables set in this file are required to upgrade components to their "Enterprise" product variant.
 ---
 enterpriseKeys:
-  openproject:
-    # Enterprise token must match the deployment's OpenProject host name.
-    token: ~
-  xwiki:
-    # Per instance their must be a unique set of keys.
-    opendeskEnterpriseLicense: ""
-    proApplicationslicense: ""
   nextcloud:
     # Subscription key can be used for all customer owned instances, the number of users
     # from all instances and is limited by the number of users the key was bought for.
     subscriptionKey: ""
     # Subscription data is required for air gapped installations.
     subscriptionData: ""
+  nubus:
+    # Instance specific license key.
+    # Ref.: https://docs.software-univention.de/nubus-kubernetes-operation/1.x/en/configuration/license.html
+    license: ~
+  openproject:
+    # Enterprise token must match the deployment's OpenProject host name.
+    token: ~
+  xwiki:
+    # Instance specific set of keys.
+    opendeskEnterpriseLicense: ""
+    proApplicationslicense: ""
 
 ...
