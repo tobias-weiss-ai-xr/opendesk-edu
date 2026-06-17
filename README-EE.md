@@ -197,3 +197,4 @@ Details regarding the scope/limitation of the component's licenses:
 - Nextcloud: Enterprise license to enable [Nextcloud Enterprise](https://nextcloud.com/de/enterprise/) specific features, can be used across multiple installations until the licensed number of users is reached.
 - OpenProject: Domain specific enterprise license to enable [OpenProject's Enterprise feature set](https://www.openproject.org/enterprise-edition/), domain matching can use regular expressions.
 - XWiki: Deployment specific enterprise license (key pair) to activate the [XWiki Pro](https://xwiki.com/en/offerings/products/xwiki-pro) apps. *Caution! XWiki needs these license keys as one-line strings. Multi-line strings result in installation failure*
+- Univention Nubus: Deployment specific enterprise token for reference in support cases.
