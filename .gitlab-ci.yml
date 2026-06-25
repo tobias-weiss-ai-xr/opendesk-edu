@@ -848,6 +848,7 @@ run-tests:
           \"GRACE_PERIOD\": \"${TESTS_GRACE_PERIOD}\", \
           \"USER_IMPORT_GRACE_PERIOD\": \"${TESTS_USER_IMPORT_GRACE_PERIOD}\", \
           \"NUMBER_OF_THREADS\": \"${TESTS_NUMBER_OF_THREADS}\" \
+          \"OPENDESK_ENV_REF\": \"${OPENDESK_ENV_REF}\" \
         } \
       }" \
       "https://${TESTS_PROJECT_URL}/trigger/pipeline"
