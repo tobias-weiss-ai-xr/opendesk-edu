@@ -8,6 +8,7 @@
 * **nextcloud:** Bump apps `files_antivirus` to 6.3.0 and `richdocuments` to 9.1.0 ([308e2c6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/308e2c61817c670c21c71b1f065a6baff7ebeb08))
 * **nextcloud:** Bump Nextcloud apps to latest state and use 32.0.9 for release ([c345339](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c34533901dc9e1a4be753618fd36df650351bf35))
 * **nextcloud:** Rollback `richdocuments` app to 9.0.6 due to broken OOXML previews in 9.1.0 ([efaa4b1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/efaa4b1664c60b5f96741a8cbcaf21d4ed8f36a2))
+* **nextcloud:** Allow templating of PHP / nginx resources; see `updates.md` for more details ([1d3874f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d3874f0b89b26f4b6c2b543526eda9eebfebc30))
 * **notes:** Enable AI feature when endpoint is set ([3293de4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3293de459fe05025dd1b73e1e5958620a72577be))
 * **notes:** Ensure DB migrations do not require superuser permission ([7403875](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/74038755625ba7c3add745f108e410db62fa6c29))
 * **nubus:** Add templating for Nubus license ([85d1f33](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/85d1f33f8d5f241eeee10858c18f53396c64bb16))
@@ -25,7 +26,6 @@
 
 ### Features
 
-* **nextcloud:** Update from 32.0.9 to 32.0.11 including latest apps and allow templating of PHP / nginx resources; see `updates.md` for more details ([1d3874f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d3874f0b89b26f4b6c2b543526eda9eebfebc30))
 * **nubus:** Update from v1.19.1 to v1.20.1 ([9db31c7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9db31c751946da280806dbcfd72c4a1f0ba4d520))
 * **open-xchange:** Add option to define `loadBalancerIp` for external services of Dovecot and/or Postfix; see `updates.md` for more details ([8d24f72](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8d24f7242045c52c652c5b200a21a6c6daef5d06))
 * **open-xchange:** Update from 8.48 to 8.49 ([c87ba4d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c87ba4d7ab3190ae19ed6cada3c4ecd53d969015))
