@@ -27,7 +27,7 @@ release:
     - |
       echo -e "\n[INFO] Writing data to helm value file..."
       cat <<EOF >helmfile/environments/default/global.generated.yaml.gotmpl
-      # SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+      # SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
       # SPDX-License-Identifier: Apache-2.0
       ---
       global:
@@ -35,6 +35,10 @@ release:
           releaseVersion: "v$(echo -E "$RELEASE_VERSION")"
       ...
       EOF
+    - |
+      echo -e "\n[INFO] Updating publiccode.yml..."
+      sed -i -E "s/^softwareVersion: \".*\"/softwareVersion: \"${RELEASE_VERSION}\"/" publiccode.yml
+      sed -i -E "s/^releaseDate: \".*\"/releaseDate: \"$(date +%F)\"/" publiccode.yml
     - |
       cat << 'EOF' > ${CI_PROJECT_DIR}/.releaserc
       {
@@ -50,6 +54,7 @@ release:
               "charts/**/README.md",
               "helmfile/environments/default/global.generated.yaml.gotmpl",
               ".kyverno/kyverno-test.yaml",
+              "publiccode.yml",
               "docs"
             ],
             "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
