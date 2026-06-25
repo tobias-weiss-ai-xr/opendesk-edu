@@ -138,7 +138,7 @@ postfix:
     # Support email address definition on ldap groups
     10-groups:
       # ldap filter to find groups with mail address
-      queryFilter: "(&(objectClass=univentionGroup)(mailPrimaryAddress=%s))"
+      queryFilter: "(&(objectClass=univentionGroup)(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s)))"
       # -- use this attribute if the query already returns email addresses of members and no recursive lookup needs to be done
       resultAttribute: ""
       # -- do a recursive search on the specified attribute if found, should be a DN
