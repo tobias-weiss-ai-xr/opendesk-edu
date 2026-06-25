@@ -1,3 +1,36 @@
+# [1.16.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.15.1...v1.16.0) (2026-06-25)
+
+
+### Bug Fixes
+
+* **collabora:** Update from 25.04.09 to 25.04.10 ([70e8870](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/70e887094d8d4af5303e3b818050bc60cdb75c2f))
+* **helmfile:** Add missing Redis TLS and username values ([47ea3d8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/47ea3d8120c65ade03a358d15051debe4ea16ead))
+* **nextcloud:** Bump apps `files_antivirus` to 6.3.0 and `richdocuments` to 9.1.0 ([308e2c6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/308e2c61817c670c21c71b1f065a6baff7ebeb08))
+* **nextcloud:** Bump Nextcloud apps to latest state and use 32.0.9 for release ([c345339](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c34533901dc9e1a4be753618fd36df650351bf35))
+* **nextcloud:** Rollback `richdocuments` app to 9.0.6 due to broken OOXML previews in 9.1.0 ([efaa4b1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/efaa4b1664c60b5f96741a8cbcaf21d4ed8f36a2))
+* **notes:** Enable AI feature when endpoint is set ([3293de4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3293de459fe05025dd1b73e1e5958620a72577be))
+* **notes:** Ensure DB migrations do not require superuser permission ([7403875](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/74038755625ba7c3add745f108e410db62fa6c29))
+* **nubus:** Add templating for Nubus license ([85d1f33](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/85d1f33f8d5f241eeee10858c18f53396c64bb16))
+* **Nubus:** Explicitly set important securityContext properties in helmfile ([d392be4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d392be49b6ad4a7e041cf0f86aebc84a5b2aefa5))
+* **open-xchange:** [[#307](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/307),[#350](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/350)] Add SSL/TLS support for database connections and fix non-standard port handling ([9880cea](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9880cea08fd6254155ad6a96acb48ab158241be8))
+* **open-xchange:** Only enable Nextcloud integration capabilities when Nextcloud is actually enabled in the deployment ([16aa286](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/16aa286cb756e971db1c8df63dbb6bdc9d4622e1))
+* **open-xchange:** Update Postfix to ensure filter options do not reject mails on infra/config problem but defer them ([c3c0c3f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c3c0c3f22cab06b52061139a5cd55f6069cba908))
+* **opendesk-certificates:** [[#365](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/365)] Bump chart to fix typo in `organizationalUnits` of the certificate's manifest ([8e6fb9f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8e6fb9f5e911214d42591dc7d7cc9e86ce419a8b))
+* **openproject:** Set imagery design settings for PDF export through deployment ([48498f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/48498f398c7be3254e7c4bf1d794f3aa0ae85308))
+* **postgresql:** Generate bootstrap users and databases from databases.* ([76758f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/76758f3152478b61b705c109bff69037c9041862))
+* **seaweedfs:** Generate buckets and identities from objectstores ([2341f4e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2341f4e00f27585032c1af4c5ce0b044c5dbaf0c))
+* **services-external:** Bump ClamAV Helm chart to ensure default `alertBrokenMedia: [secure]` is applied ([1d2ab8e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d2ab8ed367b7a9be9ab97b7b07116fb03e2649d))
+* **xwiki:** Update from 17.10.7 to 17.10.9 ([c22c745](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c22c745a6b47eb89463680b32bdc6aca4bd6c3f3))
+
+
+### Features
+
+* **nextcloud:** Update from 32.0.9 to 32.0.11 including latest apps and allow templating of PHP / nginx resources; see `updates.md` for more details ([1d3874f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d3874f0b89b26f4b6c2b543526eda9eebfebc30))
+* **nubus:** Update from v1.19.1 to v1.20.1 ([9db31c7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9db31c751946da280806dbcfd72c4a1f0ba4d520))
+* **open-xchange:** Add option to define `loadBalancerIp` for external services of Dovecot and/or Postfix; see `updates.md` for more details ([8d24f72](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8d24f7242045c52c652c5b200a21a6c6daef5d06))
+* **open-xchange:** Update from 8.48 to 8.49 ([c87ba4d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c87ba4d7ab3190ae19ed6cada3c4ecd53d969015))
+* **openproject:** Update from 17.4.1 to 17.5.0 ([61b049f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/61b049f0906a1f63dd37984c30ef2b67a22f908e))
+
 ## [1.15.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.15.0...v1.15.1) (2026-06-08)
 
 
