@@ -951,6 +951,7 @@ appsuite:
       {{- if .Values.functional.groupware.mail.encryption.enabled }}
       com.openexchange.guard.storage.file.fileStorageType: "file"
       com.openexchange.guard.storage.file.uploadDirectory: "/opt/open-xchange/guard-files/"
+      com.openexchange.guard.passwordFromAddress: {{ printf "%s@%s" .Values.smtp.localpartNoReply ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.guestSMTPMailFrom: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.guestSMTPPort: "25"
       com.openexchange.guard.guestSMTPServer: "postfix"
