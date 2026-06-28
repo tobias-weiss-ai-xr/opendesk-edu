@@ -1,16 +1,36 @@
-   Copyright (C) 2023 Bundesministerium des Innern und für Heimat,
-                       PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-    Copyright (C) 2025-2026 openDesk Edu Contributors
+# License Information for openDesk Edu
 
+openDesk Edu uses a **dual licensing model**.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+## Orchestration Layer — AGPL-3.0-or-later
 
-       http://www.apache.org/licenses/LICENSE-2.0
+The orchestration layer — including helmfiles, deployment scripts,
+automation, CI/CD pipelines, test infrastructure, and build configurations
+in `helmfile/`, `scripts/`, `dev/`, `tests/`, `.ralph/`, `.gitlab/`, `.github/`,
+`Makefile`, and `ct.yaml` — is licensed under the **GNU Affero General
+Public License v3.0 or later**. See `LICENSES/AGPL-3.0-or-later.txt`.
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+This prevents proprietary SaaS capture of the platform while allowing
+universities and public administrations to deploy, modify, and operate freely.
+
+## Specifications, Documentation, and Content — Apache-2.0
+
+The specifications, documentation, and content — including OpenSpec specs
+(`openspec/`, `opendesk-edu-spec/`), articles, papers, and documentation
+(`articles/`, `papers/`, `docs/`) — is licensed under the **Apache License,
+Version 2.0**. See `LICENSES/Apache-2.0.txt`.
+
+This ensures specifications and knowledge can be freely adopted, adapted,
+and shared without legal friction.
+
+## Upstream Components
+
+openDesk Edu integrates many independent open-source projects, each with
+its own license. Individual services carry their own licenses (AGPL-3.0
+for Nextcloud/Element, Apache-2.0 for openDesk CE, MIT for various libs).
+This file covers only the openDesk Edu orchestration and integration layer.
+
+## Contributions
+
+By contributing, you agree that orchestration contributions are
+AGPL-3.0-or-later, and spec/doc/content contributions are Apache-2.0.
