@@ -1,7 +1,7 @@
 # openDesk Network Policies
 
 SPDX-FileCopyrightText: 2024-2026 HRZ Marburg
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: AGPL-3.0-or-later
 
 Kubernetes Network Policies for openDesk HRZ deployment implementing defense-in-depth security.
 

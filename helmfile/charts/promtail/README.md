@@ -1,10 +1,10 @@
 <!--
 SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 # Promtail - Log Agent for Loki
-**SPDX-License-Identifier: Apache-2.0**
+**SPDX-License-Identifier: AGPL-3.0-or-later**
 
 ## Overview
 This chart deploys Promtail as a log collection agent that ships logs from Kubernetes pods to Loki for centralized logging.
