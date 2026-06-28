@@ -1,6 +1,6 @@
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Expand the name of the chart.
 */}}
 {{- define "snipr.name" -}}
@@ -9,7 +9,7 @@ Expand the name of the chart.
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Create a default fully qualified app name.
 */}}
 {{- define "snipr.fullname" -}}
@@ -27,7 +27,7 @@ Create a default fully qualified app name.
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Create chart name and version as used by the chart label.
 */}}
 {{- define "snipr.chart" -}}
@@ -36,7 +36,7 @@ Create chart name and version as used by the chart label.
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Common labels
 */}}
 {{- define "snipr.labels" -}}
@@ -50,7 +50,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Selector labels
 */}}
 {{- define "snipr.selectorLabels" -}}
@@ -60,7 +60,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Create the name of the service account to use
 */}}
 {{- define "snipr.serviceAccountName" -}}
@@ -73,7 +73,7 @@ Create the name of the service account to use
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Database host (for future PostgreSQL if needed)
 */}}
 {{- define "snipr.dbHost" -}}
@@ -82,7 +82,7 @@ Database host (for future PostgreSQL if needed)
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Database user
 */}}
 {{- define "snipr.dbUser" -}}
@@ -91,7 +91,7 @@ Database user
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Database password
 */}}
 {{- define "snipr.dbPassword" -}}
@@ -100,7 +100,7 @@ Database password
 
 {{/*
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 Database name
 */}}
 {{- define "snipr.dbName" -}}
