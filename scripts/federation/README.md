@@ -274,4 +274,4 @@ In the realm SSO settings (Keycloak 26+), import the generated metadata:
 
 ## License
 
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: AGPL-3.0-or-later

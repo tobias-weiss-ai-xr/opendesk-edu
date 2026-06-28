@@ -1,6 +1,6 @@
 # openDesk Edu User Provisioning Makefile
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 .PHONY: help deps install lint test clean backup restore
 

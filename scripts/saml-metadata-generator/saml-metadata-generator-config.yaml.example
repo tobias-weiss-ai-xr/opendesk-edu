@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2025 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # SAML Metadata Generator Configuration Template
 # Copy this file to: saml-metadata-generator-config.yaml

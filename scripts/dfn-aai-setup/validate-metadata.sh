@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # Validate SAML 2.0 Metadata for DFN-AAI / eduGAIN Federation
 # Validates XML structure, SAML compliance, and DFN-AAI requirements

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # Setup Role Assignment Mapper for DFN-AAI / eduGAIN Federation
 # Creates a script mapper that assigns roles based on eduPersonAffiliation

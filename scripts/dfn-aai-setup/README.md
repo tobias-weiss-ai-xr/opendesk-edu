@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # DFN-AAI Federation Setup Scripts
 
@@ -240,4 +240,4 @@ curl -s https://id.beispiel-universitaet.de/realms/opendesk/.well-known/openid-c
 
 ## License
 
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: AGPL-3.0-or-later

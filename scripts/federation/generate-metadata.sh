@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # Generate SAML 2.0 Service Provider metadata for Keycloak federation
 # Compatible with DFN-AAI / eduGAIN federation requirements
@@ -161,7 +161,7 @@ generate_metadata() {
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: AGPL-3.0-or-later
 
 SAML 2.0 Service Provider Metadata for DFN-AAI / eduGAIN Federation
 Generated: $(date -Iseconds)

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # Setup SAML Attribute Mappers for DFN-AAI / eduGAIN Federation
 # Creates attribute mappers that transform incoming SAML attributes

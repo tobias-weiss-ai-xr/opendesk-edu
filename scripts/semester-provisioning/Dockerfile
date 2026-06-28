@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Semester Provisioning API Docker Image
 # Docker-Image für die Semester-Provisioning-API
 
