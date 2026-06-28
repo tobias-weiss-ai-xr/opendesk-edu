@@ -1,10 +1,10 @@
 <!--
 SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 # Loki - Log Aggregation and Visualization
-**SPDX-License-Identifier: Apache-2.0**
+**SPDX-License-Identifier: AGPL-3.0-or-later**
 
 ## Overview
 This chart deploys Loki for centralized log aggregation and visualization as part of the openDesk Edu platform logging infrastructure.
