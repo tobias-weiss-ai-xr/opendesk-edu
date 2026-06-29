@@ -2,6 +2,14 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+# SeaweedFS derives its bucket list and S3-config identities by iterating over
+# these entries (services-external/values-seaweedfs*.yaml.gotmpl). Per entry:
+#   actions        S3 permissions granted to the identity on its bucket
+#                  (Admin/Read/Write/List today; per-entry so consumers can
+#                  scope tighter).
+#   userSecretKey  key under .Values.secrets.minio holding the identity's
+#                  secret access key (defaults to "<name>User"; nubus differs).
+#   enterprise     true -> bucket/identity only emitted in enterprise builds.
 objectstores:
   dovecot:
     bucket: "dovecot"
@@ -13,6 +21,8 @@ objectstores:
     useSSL: true
     pathStyle: true
     port: 443
+    actions: ["Admin", "Read", "Write", "List"]
+    enterprise: true
   migrations:
     bucket: "migrations"
     endpoint: ""
@@ -23,6 +33,7 @@ objectstores:
     useSSL: true
     pathStyle: true
     port: 443
+    actions: ["Admin", "Read", "Write", "List"]
   nextcloud:
     bucket: "nextcloud"
     endpoint: ""
@@ -33,12 +44,14 @@ objectstores:
     useSSL: true
     pathStyle: true
     port: 443
+    actions: ["Admin", "Read", "Write", "List"]
   notes:
     bucket: "notes"
     endpoint: ""
     secretKey: ""
     username: "notes_user"
     port: 443
+    actions: ["Admin", "Read", "Write", "List"]
   nubus:
     bucket: "ums"
     endpoint: ""
@@ -46,6 +59,8 @@ objectstores:
     secretKey: ""
     username: "ums_user"
     port: 443
+    actions: ["Admin", "Read", "Write", "List"]
+    userSecretKey: "umsUser"
   openproject:
     bucket: "openproject"
     directUploads: true
@@ -56,6 +71,7 @@ objectstores:
     username: "openproject_user"
     pathStyle: true
     useIamProfile: false
+    actions: ["Admin", "Read", "Write", "List"]
   openxchange:
     bucket: "openxchange"
     endpoint: ""
@@ -66,4 +82,5 @@ objectstores:
     storageClass: "STANDARD"
     username: "openxchange_user"
     useSSL: true
+    actions: ["Admin", "Read", "Write", "List"]
 ...
