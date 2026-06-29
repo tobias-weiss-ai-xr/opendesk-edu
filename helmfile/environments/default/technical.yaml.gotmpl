@@ -50,6 +50,33 @@ technical:
           # Ref.: https://doc.dovecot.org/main/core/admin/limits.html#mail_max_userip_connections
           maxUserIpConnections: 30
 
+  # Nextcloud related settings
+  nextcloud:
+    # Settings for the Nextcloud all-in-one (AIO) pod
+    aio:
+      # PHP-FPM (web) settings
+      # Note: The cron job's PHP memory limit is derived from the actual memory resource limit
+      # defined for the cron job.
+      php:
+        # Set the PHP memory limit for the PHP-FPM (web) workers in PHP notation, e.g. 2G.
+        # This is a per-request limit and must not exceed the AIO pod's memory limit.
+        memoryLimit: "768M"
+        # Number of PHP-FPM worker processes (`pm.max_children`). The theoretical worst-case
+        # web memory is `php.workers` x `php.memoryLimit`, but real usage is far lower.
+        workers: 20
+      # nginx (web server) settings
+      nginx:
+        # Number of nginx worker processes. Either a number, or "auto" (one worker per host
+        # CPU core). "auto" is not cgroup-aware, so pin a number to bound it on large nodes.
+        workers: "auto"
+    # Settings for the Nextcloud notify_push (push notifications) service
+    pushNotify:
+      # nginx (reverse proxy) settings
+      nginx:
+        # Number of nginx worker processes for the notify_push reverse proxy. Either a number,
+        # or "auto" (one worker per host CPU core; not cgroup-aware).
+        workers: 2
+
   # Nubus related settings
   nubus:
     # Keycloak acts as the identity provider in Nubus.

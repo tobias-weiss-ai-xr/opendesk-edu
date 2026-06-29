@@ -12,6 +12,36 @@ additionalAnnotations:
   {{ .Values.annotations.opendeskServicesStaticFiles.additional | toYaml | nindent 2 }}
 
 assets:
+  keycloak:
+    subdomain: {{ .Values.global.hosts.keycloak | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/opendesk-static-files/login/logo.svg"
+        data: {{ .Values.theme.imagery.login.logoSvg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  portal:
+    subdomain: {{ .Values.global.hosts.nubus | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/univention/portal/icons/logos/domain.svg"
+        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+      - path: "/opendesk-static-files/portal/background.svg"
+        data: {{ .Values.theme.imagery.portal.backgroundSvg | quote }}
+      - path: "/opendesk-static-files/portal/waiting-spinner.svg"
+        data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
+      - path: "/opendesk-static-files/login/background.jpg"
+        data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- if .Values.apps.element.enabled }}
+  adminbot:
+    subdomain: {{ .Values.global.hosts.adminBot | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
   element:
     subdomain: {{ .Values.global.hosts.element | quote }}
     pathType: "prefix"
@@ -34,12 +64,6 @@ assets:
     paths:
       - path: "/images/favicon.svg"
         data: {{ .Values.theme.imagery.videoconference.faviconSvg | quote }}
-  keycloak:
-    subdomain: {{ .Values.global.hosts.keycloak | quote }}
-    pathType: "prefix"
-    paths:
-      - path: "/opendesk-static-files/login/logo.svg"
-        data: {{ .Values.theme.imagery.login.logoSvg | quote }}
   nextcloud:
     subdomain: {{ .Values.global.hosts.nextcloud | quote }}
     pathType: "prefix"
@@ -54,6 +78,7 @@ assets:
       - path: "/apps/theming/img/background/jenna-kim-the-globe-dark.webp"
         data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
         mimeType: "image/jpeg"
+  {{- if .Values.apps.notes.enabled }}
   notes:
     subdomain: {{ .Values.global.hosts.notes | quote }}
     pathType: "prefix"
@@ -64,6 +89,28 @@ assets:
         data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
       - path: "/assets/favicon-light.png"
         data: {{ .Values.theme.imagery.notes.faviconPng | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.openproject.enabled }}
+  openproject:
+    subdomain: {{ .Values.global.hosts.openproject | quote }}
+    pathType: "ImplementationSpecific"
+    paths:
+      - path: "/opendesk-static-files/favicon.svg"
+        data: {{ .Values.theme.imagery.projects.faviconSvg | quote }}
+      - path: "/opendesk-static-files/logo.svg"
+        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+      - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportLogoPath | lower }}"
+        data: {{ readFile .Values.theme.imagery.projects.pdfExportLogoPath | b64enc | quote }}
+      - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportCoverPath | lower }}"
+        data: {{ readFile .Values.theme.imagery.projects.pdfExportCoverPath | b64enc | quote }}
+      - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportFooterPath | lower }}"
+        data: {{ readFile .Values.theme.imagery.projects.pdfExportFooterPath | b64enc | quote }}
+      - path: "/robots.txt"
+        data: {{ .Values.theme.other.robotsTxt | quote }}
+  {{- end }}
+  {{- if .Values.apps.oxAppSuite.enabled }}
   openxchange:
     subdomain: {{ .Values.global.hosts.openxchange | quote }}
     pathType: "prefix"
@@ -72,18 +119,6 @@ assets:
         data: {{ .Values.theme.imagery.groupware.faviconIco | quote }}
       - path: "/appsuite/favicon.svg"
         data: {{ .Values.theme.imagery.groupware.faviconSvg | quote }}
-  portal:
-    subdomain: {{ .Values.global.hosts.nubus | quote }}
-    pathType: "prefix"
-    paths:
-      - path: "/univention/portal/icons/logos/domain.svg"
-        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
-      - path: "/static-files/portal/background.svg"
-        data: {{ .Values.theme.imagery.portal.backgroundSvg | quote }}
-      - path: "/static-files/portal/waiting-spinner.svg"
-        data: {{ .Values.theme.imagery.portal.waitingSpinnerSvg | quote }}
-      - path: "/static-files/login/background.jpg"
-        data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
   xwiki:
     subdomain: {{ .Values.global.hosts.xwiki | quote }}
     pathType: "prefix"

@@ -54,6 +54,8 @@ configuration:
   # So this is controller on a more "global" level
   # TODO: Find a sensible default
   nextcloudUrl: "http://opendesk-nextcloud-aio"
+  nginx:
+    workers: {{ .Values.technical.nextcloud.pushNotify.nginx.workers | quote }}
   logging:
     # Default value for logging is "error" we bump it to "info" for better information in logs
     # NOTE: "trace", which includes "debug" might be too verbose
