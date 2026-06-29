@@ -22,8 +22,7 @@ lint-charts:
   stage: lint
   script:
     - echo "Linting local charts..."
-    - |
-      for chart in helmfile/charts/*/; do
+    - for chart in helmfile/charts/*/; do
         if [ -f "$chart/Chart.yaml" ]; then
           echo "  Linting $chart..."
           helm lint "$chart" || true
