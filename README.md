@@ -1,18 +1,16 @@
 ﻿<!--
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
-SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+SPDX-FileCopyrightText: 2026 OpenDesk Edu Contributers
+SPDX-FileCopyrightText: 2026 GraphWiz
 SPDX-License-Identifier: Apache-2.0
 -->
 
 <div align="center">
 
 ### TL;DR 🚀
-openDesk CE + 13 education services (ILIAS, Moodle, BigBlueButton, OpenCloud, …)<br/>
+Ecosystem of openDesk CE + education and reasearch services<br/>
 one-command Kubernetes deploy with unified Keycloak SSO
 
 # 🎓 openDesk Edu
-
-**openDesk + Educational Services for Universities**
 
 ![openDesk Edu](docs/assets/readme-lead-image.svg)
 
