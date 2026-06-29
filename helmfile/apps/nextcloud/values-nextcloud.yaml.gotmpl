@@ -95,6 +95,8 @@ aio:
       host: {{ .Values.cache.nextcloud.host | quote }}
       port: {{ .Values.cache.nextcloud.port | quote }}
       tls: {{ .Values.cache.nextcloud.tls }}
+    cron:
+      verbose: {{ if .Values.debug.enabled }}"true"{{ else }}"false"{{ end }}
     database:
       {{ if eq .Values.databases.nextcloud.type "mariadb" }}
       type: "mysql"
