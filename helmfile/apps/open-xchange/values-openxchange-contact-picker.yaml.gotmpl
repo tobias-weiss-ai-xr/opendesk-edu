@@ -12,6 +12,7 @@ appsuite:
       {{- end }}
     properties:
       com.openexchange.contacts.ldap.accounts: "sharedMailboxes,distributionLists,opendesk,noOrganization"
+      com.openexchange.contacts.ldap.cache.expire: {{ printf "%vs" .Values.technical.oxAppSuite.contactPicker.cacheExpirySeconds | quote }}
       com.openexchange.admin.bypassAccessCombinationChecks: "true"
       ENABLE_INTERNAL_USER_EDIT: "false"
 
@@ -37,7 +38,7 @@ appsuite:
     uiSettings:
       # Enterprise contact picker
       io.ox/core//features/enterprisePicker/enabled: "true"
-      io.ox/contacts//search/fields: 'email1,email2'
+      io.ox/contacts//search/fields: "email1,email2"
 
     yamlFiles:
       contacts-provider-ldap.yml:
@@ -87,9 +88,11 @@ appsuite:
 
           # Optionally enables a local cache that holds certain properties of all of the provider's contacts in
           # memory to speed up access. Can only be used if no individual authentication is used to access the
-          # LDAP server.
+          # LDAP server. Enabled automatically when the technical setting 'cacheExpirySeconds' is greater than 0;
+          # the expire time is then passed via the 'com.openexchange.contacts.ldap.cache.expire' property above.
           cache:
-            useCache: false
+            useCache: {{ if gt (int .Values.technical.oxAppSuite.contactPicker.cacheExpirySeconds) 0 }}true{{ else }}false{{ end }}
+            cachedFields: "anniversary,birthday,branches,cellular_telephone1,city_business,city_home,city_other,commercial_register,company,contextid,country_business,country_home,country_other,creationdate,department,displayname,distributionlist,email1,email2,employeetype,fax_business,fax_home,fax_other,file_as,givenname,image1,instant_messenger1,instant_messenger2,internal_userid,lastmodified,manager_name,marital_status,markasdistributionlist,middle_name,nickname,note,number_of_children,number_of_employee,number_of_images,objectid,position,postal_code_business,postal_code_home,postal_code_other,profession,room_number,sales_volume,spouse_name,state_business,state_home,state_other,street_business,street_home,street_other,suffix,surname,tax_id,telephone_assistant,telephone_business1,telephone_business2,telephone_car,telephone_company,telephone_home1,telephone_home2,telephone_ip,telephone_isdn,telephone_other,telephone_pager,telephone_telex,telephone_ttytdd,title,url,userfield01,userfield02,userfield03,userfield04,userfield05,userfield06,userfield07,userfield08,userfield09,userfield10,userfield11,userfield12,userfield13,userfield14,userfield15,userfield16,userfield17,userfield18,userfield19,userfield20"
 
           # Definition of addressbook folders of the contacts provider. Different folder modes are possible, each
           # one with its specific configuration settings. The template contains examples for all possible modes,
@@ -436,3 +439,4 @@ appsuite:
           displayname: "cn,description"
           file_as: "cn,description"
           email1: "mailPrimaryAddress"
+...
