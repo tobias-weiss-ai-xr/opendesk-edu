@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <div align="center">
 
 ### TL;DR 🚀
-openDesk CE + 13 education services (ILIAS, Moodle, BigBlueButton, OpenCloud, …)<br/>
+openDesk CE + education services (ILIAS, Moodle, BigBlueButton, OpenCloud, …)<br/>
 one-command Kubernetes deploy with unified Keycloak SSO
 
 # 🎓 openDesk Edu
