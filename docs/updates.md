@@ -12,10 +12,13 @@ While [migrations.md](./migrations.md) provides information about required actio
 
 <!-- TOC -->
 * [Updates and features](#updates-and-features)
+  * [1.17.0](#1170)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+      * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
   * [1.16.0](#1160)
     * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
       * [OpenProject PDF export theming](#openproject-pdf-export-theming)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-1)
       * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
     * [`service.yaml.gotmpl`](#serviceyamlgotmpl)
       * [Option to set a `loadBalancerIp` for Dovecot and Postfix](#option-to-set-a-loadbalancerip-for-dovecot-and-postfix)
@@ -27,10 +30,27 @@ While [migrations.md](./migrations.md) provides information about required actio
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
       * [Virtual alias limits](#virtual-alias-limits)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-1)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-2)
       * [Proxy protocol support for Postfix](#proxy-protocol-support-for-postfix)
       * [Set limitation on maximum number of objects (for tasks, contacts, attachments)](#set-limitation-on-maximum-number-of-objects-for-tasks-contacts-attachments)
 <!-- TOC -->
+
+## 1.17.0
+
+### `technical.yaml.gotmpl`
+
+#### OX App Suite LDAP caching for contact picker
+
+The contact picker in OX App Suite by default caches the queried LDAP contents for the time (in seconds) defined in
+
+```yaml
+technical:
+  oxAppSuite:
+    contactPicker:
+      cacheExpirySeconds: 3600
+```
+
+Setting `cacheExpirySeconds: 0` turns the cache off, resulting in the same behaviour as in openDesk 1.16.x and earlier.
 
 ## 1.16.0
 

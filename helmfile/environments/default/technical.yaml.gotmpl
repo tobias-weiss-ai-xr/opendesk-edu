@@ -136,6 +136,11 @@ technical:
       # experience, such as by slowing down pods that serve end-user sessions.
       dedicatedCoreMwPod: false
 
+    contactPicker:
+      # Define the cache expiry time in seconds for the contact picker. Setting a value of 0 will disable the cache.
+      # Ref.: https://documentation.open-xchange.com/8/middleware/contacts/contacts_provider_ldap.html#caching
+      cacheExpirySeconds: 3600
+
   # Postfix related technical settings
   postfix:
     # Proxy protocol to use for incoming mail or externally connected mail clients (if any), only `haproxy` is supported at the moment.
