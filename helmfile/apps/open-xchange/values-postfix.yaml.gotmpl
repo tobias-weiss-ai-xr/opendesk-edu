@@ -129,7 +129,7 @@ postfix:
     # Support email address definition on ldap groups
     10-groups:
       # ldap filter to find groups with mail address
-      queryFilter: "(&(objectClass=univentionGroup)(mailPrimaryAddress=%s))"
+      queryFilter: "(&(objectClass=univentionGroup)(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s)))"
       # -- use this attribute if the query already returns email addresses of members and no recursive lookup needs to be done
       resultAttribute: ""
       # -- do a recursive search on the specified attribute if found, should be a DN
@@ -173,5 +173,12 @@ service:
     annotations:
       {{ .Values.annotations.openxchangePostfix.serviceExternal | toYaml | nindent 6 }}
     type: {{ coalesce .Values.service.type.postfix .Values.cluster.service.type | quote }}
-{{- end }}
+    ports:
+      smtp: {{ if .Values.functional.groupware.exposeSmtp }}{port: 25}{{ else }}~{{ end }}
+      submission: {{ if .Values.functional.groupware.externalClients.exposeSubmission }}{port: 587}{{ else }}~{{ end }}
+      submissions: {{ if .Values.functional.groupware.externalClients.exposeSubmissions }}{port: 465}{{ else }}~{{ end }}
+    {{- if .Values.service.loadBalancerIp.postfix }}
+    loadBalancerIp: {{ .Values.service.loadBalancerIp.postfix }}
+    {{- end }}
+  {{- end }}
 ...

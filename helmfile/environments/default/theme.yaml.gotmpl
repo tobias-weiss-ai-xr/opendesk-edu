@@ -118,6 +118,13 @@ theme:
 
     projects:
       faviconSvg: {{ readFile "./../../files/theme/projects/favicon.svg" | b64enc | quote }}
+      # Images for OpenProject's PDF export. Unlike the other files here, these are not Base64-encoded
+      # up front, so you can use different formats (e.g. PNG, JPEG).
+      # Note: PDF theming is overwritten on every deployment. Changes made in OpenProject's admin UI
+      # are lost and must be persisted here instead.
+      pdfExportLogoPath: "./../../files/theme/logoHeader.jpg"
+      pdfExportCoverPath: "./../../files/theme/login/background.jpg"
+      pdfExportFooterPath: "./../../files/theme/login/favicon.png"
 
     videoconference:
       faviconSvg: {{ readFile "./../../files/theme/videoconference/favicon.svg" | b64enc | quote }}
