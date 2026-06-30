@@ -1,0 +1,30 @@
+{{/*
+SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+SPDX-License-Identifier: AGPL-3.0-or-later
+*/}}
+
+{{- if .Values.dnsPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: network-policies
+    app.kubernetes.io/component: dns
+spec:
+  podSelector:
+    {{- toYaml .Values.dnsPolicy.podSelector | nindent 4 }}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+{{- end }}

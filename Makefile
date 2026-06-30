@@ -1,11 +1,11 @@
 # openDesk Edu — Development Makefile
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 SHELL := /bin/bash
 
 # All edu Helm charts
-CHARTS := $(sort $(wildcard helmfile/charts/*/Chart.yaml | xargs -I{} dirname {}))
+CHARTS := $(sort $(patsubst %/Chart.yaml,%,$(wildcard helmfile/charts/*/Chart.yaml)))
 
 .PHONY: help lint test template unittest spellcheck update-check clean ruff ruff-fix python-test python-test-user-import yamllint
 
@@ -37,7 +37,7 @@ unittest: ## Run helm-unittest on all charts
 	@for chart in $(CHARTS); do \
 		if [ -d "$$chart/tests" ]; then \
 			echo "  $$chart"; \
-			helm unittest --helm3 $$chart || exit 1; \
+			helm unittest $$chart || exit 1; \
 		fi; \
 	done
 	@echo "==> All unit tests passed."

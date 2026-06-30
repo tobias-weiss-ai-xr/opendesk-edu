@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: AGPL-3.0-or-later
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -79,6 +79,9 @@ spec:
       backup-tier: "b"
       k8up/backup: "true"
         name: postgres-data
+        labels:
+          backup-tier: "b"
+          k8up/backup: "true"
       spec:
         accessModes:
           - {{ .Values.persistence.feedbackDb.accessMode }}

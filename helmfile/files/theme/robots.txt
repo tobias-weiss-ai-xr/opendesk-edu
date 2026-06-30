@@ -1,5 +1,0 @@
-# SPDX-FileCopyrightText: 2026 Zentrum fuer Digitale Souveraenitaet der Oeffentlichen Verwaltung (ZenDiS) GmbH
-# SPDX-License-Identifier: Apache-2.0
-
-User-agent: *
-Disallow: /
