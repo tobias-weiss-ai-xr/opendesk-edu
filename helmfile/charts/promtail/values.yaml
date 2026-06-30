@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+promtail:
+  image: grafana/promtail
+  tag: 3.5.1
+
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# Simple configuration for direct file-based log collection
+config:
+  clients:
+    - url: http://loki:3100/loki/api/v1/push
+
+# Scrape logs from all namespaces (when run on cluster level)
+snippets:
+  scrapeConfigs: |
+    - job_name: opendesk-logs
+      static_configs:
+        - targets:
+            - localhost
+          labels:
+            job: opendesk-logs
+            __path__: /var/log/pods/opendesk_*/*/*.log
+
+serviceMonitor:
+  enabled: true

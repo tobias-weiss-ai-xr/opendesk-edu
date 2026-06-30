@@ -1,0 +1,182 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+snipr:
+  image: ghcr.io/tobias-weiss-ai-xr/snipr
+  tag: "v1.0.0"
+  replicaCount: 2
+  
+  # API Server configuration (Rust Actix-web)
+  api:
+    port: 8080
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        cpu: "1000m"
+        memory: "2Gi"
+  
+  # Web UI configuration (Tauri)
+  web:
+    port: 3000
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+  
+  # FFmpeg sidecar for transcoding
+  ffmpeg:
+    enabled: true
+    resources:
+      requests:
+        cpu: "1000m"
+        memory: "2Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
+  
+  # Storage configuration (S3/MinIO primary, filesystem fallback)
+  storage:
+    type: s3  # or "filesystem"
+    s3:
+      endpoint: https://minio.opendesk.example.com
+      bucket: snipr-recordings
+      region: eu-central-1
+      ssl: true
+      forcePathStyle: false
+    filesystem:
+      path: /var/snipr/recordings
+      persistence:
+        enabled: true
+        size: 500Gi
+        accessMode: ReadWriteMany
+        storageClass: ceph-cephfs-hdd-ec
+  
+  # SSO configuration (Keycloak OIDC)
+  sso:
+    type: oidc  # or "saml"
+    keycloak:
+      realm: opendesk
+      clientId: snipr
+      clientSecret: ""  # Set via secrets
+      authUrl: https://keycloak.opendesk.example.com/realms/opendesk/protocol/openid-connect/auth
+      tokenUrl: https://keycloak.opendesk.example.com/realms/opendesk/protocol/openid-connect/token
+      userInfoUrl: https://keycloak.opendesk.example.com/realms/opendesk/protocol/openid-connect/userinfo
+      jwksUrl: https://keycloak.opendesk.example.com/realms/opendesk/protocol/openid-connect/certs
+    scopes:
+      - openid
+      - profile
+      - email
+  
+  # LTI 1.3 configuration
+  lti:
+    enabled: true
+    keycloak:
+      clientId: snipr-lti
+      clientSecret: ""  # Set via secrets
+    platforms:
+      ilias:
+        deploymentId: ilias-snipr
+        launchUrl: https://ilias.opendesk.example.com/snipr/lti/launch
+      moodle:
+        deploymentId: moodle-snipr
+        launchUrl: https://moodle.opendesk.example.com/mod/lti/launch
+    roles:
+      instructor: https://purl.imsglobal.org/vocab/lis/v2/membership#Instructor
+      student: https://purl.imsglobal.org/vocab/lis/v2/membership#Learner
+  
+  # Transcription configuration (F13 API)
+  transcription:
+    enabled: true
+    f13:
+      endpoint: https://f13.opendesk.example.com
+      apiKey: ""  # Set via secrets
+      model: whisper-medium
+      language: de
+      callbackUrl: https://snipr.opendesk.example.com/api/transcription/callback
+    fallback:
+      enabled: false
+      engine: local
+      model: whisper-small
+  
+  # k8up backup configuration
+  backup:
+    enabled: true
+    k8up:
+      schedule: "0 3 * * 0"
+      retention:
+        daily: 7
+        weekly: 4
+        monthly: 12
+    repositories:
+      recordings:
+        backend: s3
+        s3:
+          endpoint: https://s3.opendesk.example.com
+          bucket: snipr-backups
+          prefix: recordings
+
+replicas: 2
+
+ingress:
+  enabled: true
+  className: "haproxy"
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/timeout-server: "120000ms"
+    haproxy-ingress.github.io/timeout-client: "120000ms"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: snipr.opendesk.example.com
+      paths:
+        - path: "/"
+          pathType: "Prefix"
+  tls:
+    - secretName: opendesk-certificates-tls
+      hosts:
+        - snipr.opendesk.example.com
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Extra volumes and volume mounts for customization
+extraVolumes: []
+extraVolumeMounts: []
+
+# Node selector for scheduling
+nodeSelector: {}
+
+# Tolerations for scheduling
+tolerations: []
+
+# Affinity rules
+affinity: {}

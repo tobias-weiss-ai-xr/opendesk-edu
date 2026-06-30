@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+loki:
+  image: grafana/loki
+  tag: 3.6.7
+
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "2Gi"
+      cpu: "1"
+
+  # Increased ingestion limits to handle high log volume
+  ingestionLimitsConfig:
+    ingestionRateMb: 50
+    ingestionBurstSizeMb: 100
+
+persistence:
+  enabled: true
+  size: 50Gi
+  storageClassName: ceph-rbd-ssd
+
+serviceMonitor:
+  enabled: true
+
+retention:
+  enabled: true
+  days: 31
