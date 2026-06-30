@@ -3,6 +3,40 @@
 
 version = 1
 
+# Default: everything not explicitly annotated is Apache-2.0 (upstream license).
+
+# === Orchestration Layer — AGPL-3.0-or-later ===
+
+[[annotations]]
+path = ".ralph/**"
+SPDX-FileCopyrightText = "2026 openDesk Edu Contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "scripts/**"
+SPDX-FileCopyrightText = "2026 openDesk Edu Contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "dev/**"
+SPDX-FileCopyrightText = "2026 openDesk Edu Contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "tests/**"
+SPDX-FileCopyrightText = "2026 openDesk Edu Contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "Makefile"
+SPDX-FileCopyrightText = "2026 openDesk Edu Contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "ct.yaml"
+SPDX-FileCopyrightText = "2026 openDesk Edu Contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
 [[annotations]]
 path = "cspell.json"
 SPDX-FileCopyrightText = "2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH"
@@ -46,4 +80,9 @@ SPDX-License-Identifier = "Apache-2.0"
 [[annotations]]
 path = ".gitlab/issue_templates/*.md"
 SPDX-FileCopyrightText = "2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "helmfile/charts/grafana-dashboards/*.json"
+SPDX-FileCopyrightText = "2026 openDesk Edu Contributors"
 SPDX-License-Identifier = "Apache-2.0"

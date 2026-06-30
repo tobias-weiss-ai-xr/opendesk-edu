@@ -1,2 +1,5 @@
 # CI values for Excalidraw — no external dependencies, stateless
 # Uses chart defaults for rendering
+sso:
+  oidc:
+    enabled: false
