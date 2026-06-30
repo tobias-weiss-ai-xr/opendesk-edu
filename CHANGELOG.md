@@ -1,3 +1,14 @@
+## [1.16.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.0...v1.16.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* **nextcloud:** Bump Helm chart to include fix for `periodSeconds` on probes with improved defaults ([23338b8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/23338b812fd33bd5b74f8cde224013213cfa3489))
+* **nubus:** Reuse the pooled LDAP admin connection instead of re-binding per operation ([e5b0d03](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e5b0d035a9a014cf7ea48b0efed2f33cac0920bf))
+* **open-xchange:** Accept mailAlternativeAddress as delivery address for groups ([730a4c2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/730a4c2da8f028d39d3bc7351529d2dc47e1dd71))
+* **open-xchange:** Set `passwordFromAddress` for OX-Guard ([bbc156c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bbc156c59e776444e72a6a2c3205dbf23bd4c1ac))
+* **openproject:** Update from 17.5.0 to 17.5.1 ([f609e37](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f609e37aa8843cffe890e8552ac25c86b36d7a7e))
+
 # [1.16.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.15.1...v1.16.0) (2026-06-25)
 
 
