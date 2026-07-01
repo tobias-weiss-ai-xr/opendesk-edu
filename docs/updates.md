@@ -305,6 +305,10 @@ seconds. The default of `60` means the rate limits apply per minute; setting it 
 into hourly limits. It applies to both `smtpLimits` and `submissionLimits` and has no effect on
 `clientConnectionCount`, which limits simultaneous connections rather than a rate.
 
+> [!warning]
+> As the cache is enabled by default now, your core-mw Pod(s) might consume more RAM, based on the actual amount of
+> relevant LDAP objects (i.e. users, shared mailboxes, mailinglists).
+
 ## 1.16.0
 
 ### `theme.yaml.gotmpl`
