@@ -280,7 +280,7 @@ To enable `ReadWriteMany` you can use the following attribute:
 ```yaml
 cluster:
   persistence:
-    readWriteMany: 
+    readWriteMany:
       enabled: true
 ```
 
