@@ -124,7 +124,7 @@ admin:
   masters: "seaweedfs-all-in-one:9333"
   secret:
     adminUser: "admin"
-    adminPassword: {{ .Values.secrets.minio.rootPassword | quote }}
+    adminPassword: {{ .Values.secrets.minio.rootPassword.value | quote }}
   data:
     type: "persistentVolumeClaim"
     storageClass: {{ coalesce .Values.persistence.storages.seaweedfsAdmin.storageClassName .Values.persistence.storageClassNames.RWO | quote }}

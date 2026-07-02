@@ -44,7 +44,7 @@ openXchange:
   oxLanguage: {{ .Values.functional.internationalization.defaultLanguage | quote }}
   auth:
     username: "admin"
-    password: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
+    password: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
   oxSmtpServer: "smtp://127.0.0.1:587"
   oxSoapServer: {{ printf "http://%s.%s.svc.%s" "open-xchange-core-mw-admin" (.Values.apps.oxAppSuite.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
 
@@ -53,7 +53,10 @@ provisioningApi:
     baseUrl: {{ printf "http://%s.%s.svc.%s" "ums-provisioning-api" (.Values.apps.nubus.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
   auth:
     username: "ox-connector"
-    password: {{ .Values.secrets.oxConnector.provisioningApiPassword | quote }}
+    existingSecret:
+      name: {{ .Values.secrets.oxConnector.provisioningApiPassword.name | quote }}
+      keyMapping:
+        password: {{ .Values.secrets.oxConnector.provisioningApiPassword.key | quote }}
 
 resources:
   {{ .Values.resources.oxConnector | toYaml | nindent 2 }}
@@ -66,6 +69,7 @@ persistence:
 
 podAnnotations:
   intents.otterize.com/service-name: "open-xchange-connector"
+  checksum/provisioning-api-secret: {{ .Values.secrets.oxConnector.provisioningApiPassword.value | sha256sum | quote }}
   {{- with .Values.annotations.nubusOxConnector.pod }}
   {{ . | toYaml | nindent 2 }}
   {{- end }}

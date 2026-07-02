@@ -91,7 +91,7 @@ postfix:
     baseDn: "{{ .Values.ldap.baseDn }}"
     bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
     password:
-      value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+      value: {{ .Values.secrets.nubus.ldapSearch.postfix.value | quote }}
   milterDefaultAction: "accept"
   smtpdMilters:
     {{- if .Values.apps.dkimpy.enabled }}
@@ -151,7 +151,9 @@ postfix:
     username:
       value: "opendesk-system"
     password:
-      value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      existingSecret:
+        name: {{ .Values.secrets.postfix.opendeskSystemPassword.name | quote }}
+        key: {{ .Values.secrets.postfix.opendeskSystemPassword.key | quote }}
 
   ldapTransportMaps: {}
 

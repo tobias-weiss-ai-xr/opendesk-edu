@@ -29,7 +29,7 @@ appsuite:
             type: "adminDN"
             adminDN:
               dn: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
-              password: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
+              password: {{ .Values.secrets.nubus.ldapSearch.ox.value | quote }}
 
     serviceAccount:
       annotations:

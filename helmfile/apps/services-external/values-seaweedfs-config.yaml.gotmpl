@@ -4,7 +4,7 @@
 ---
 admin:
   accessKey: "admin"
-  secretKey: "{{ .Values.secrets.minio.rootPassword }}"
+  secretKey: "{{ .Values.secrets.minio.rootPassword.value }}"
 
 identities:
   {{- range $name, $store := .Values.objectstores }}
@@ -12,7 +12,7 @@ identities:
   - name: {{ $name | quote }}
     credentials:
       - accessKey: "{{ $store.username }}"
-        secretKey: "{{ index $.Values.secrets.minio (dig "userSecretKey" (printf "%sUser" $name) $store) }}"
+        secretKey: "{{ $store.secretKey.value }}"
     actions:
       {{- range $store.actions }}
       - "{{ . }}:{{ $store.bucket }}"

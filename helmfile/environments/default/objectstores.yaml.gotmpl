@@ -2,20 +2,28 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+{{- $masterPassword := required "A non-empty MASTER_PASSWORD is required!" (env "MASTER_PASSWORD") }}
 # SeaweedFS derives its bucket list and S3-config identities by iterating over
 # these entries (services-external/values-seaweedfs*.yaml.gotmpl). Per entry:
 #   actions        S3 permissions granted to the identity on its bucket
 #                  (Admin/Read/Write/List today; per-entry so consumers can
 #                  scope tighter).
-#   userSecretKey  key under .Values.secrets.minio holding the identity's
-#                  secret access key (defaults to "<name>User"; nubus differs).
+#   secretKey      the identity's S3 secret access key, co-located here as an externalized secret
+#                  ({value, create, name, key}). opendesk-secrets (which scans this file) renders it
+#                  as the managed Secret `name` for `create: true`; the SeaweedFS/MinIO provisioning
+#                  and the consuming apps read `secretKey.value` (bring-your-own: set `create: false`
+#                  and pre-create the Secret, or override `secretKey.value`).
 #   enterprise     true -> bucket/identity only emitted in enterprise builds.
 objectstores:
   dovecot:
     bucket: "dovecot"
     endpoint: ""
     region: "eu-west-1"
-    secretKey: ""
+    secretKey:
+      value: {{ derivePassword 1 "long" $masterPassword "minio" "dovecot_user" | sha1sum | quote }}
+      create: true
+      name: "objectstore-dovecot-secret-key"
+      key: "secretKey"
     username: "dovecot_user"
     storageClass: "STANDARD"
     useSSL: true
@@ -27,7 +35,11 @@ objectstores:
     bucket: "migrations"
     endpoint: ""
     region: "eu-west-1"
-    secretKey: ""
+    secretKey:
+      value: {{ derivePassword 1 "long" $masterPassword "minio" "migrations_user" | sha1sum | quote }}
+      create: true
+      name: "objectstore-migrations-secret-key"
+      key: "secretKey"
     username: "migration_user"
     storageClass: "STANDARD"
     useSSL: true
@@ -38,7 +50,11 @@ objectstores:
     bucket: "nextcloud"
     endpoint: ""
     region: "eu-west-1"
-    secretKey: ""
+    secretKey:
+      value: {{ derivePassword 1 "long" $masterPassword "minio" "nextcloud_user" | sha1sum | quote }}
+      create: true
+      name: "objectstore-nextcloud-secret-key"
+      key: "secretKey"
     username: "nextcloud_user"
     storageClass: "STANDARD"
     useSSL: true
@@ -48,7 +64,11 @@ objectstores:
   notes:
     bucket: "notes"
     endpoint: ""
-    secretKey: ""
+    secretKey:
+      value: {{ derivePassword 1 "long" $masterPassword "minio" "notes_user" | sha1sum | quote }}
+      create: true
+      name: "objectstore-notes-secret-key"
+      key: "secretKey"
     username: "notes_user"
     port: 443
     actions: ["Admin", "Read", "Write", "List"]
@@ -56,18 +76,25 @@ objectstores:
     bucket: "ums"
     endpoint: ""
     region: "eu-west-1"
-    secretKey: ""
+    secretKey:
+      value: {{ derivePassword 1 "long" $masterPassword "minio" "ums_user" | sha1sum | quote }}
+      create: true
+      name: "objectstore-nubus-secret-key"
+      key: "secretKey"
     username: "ums_user"
     port: 443
     actions: ["Admin", "Read", "Write", "List"]
-    userSecretKey: "umsUser"
   openproject:
     bucket: "openproject"
     directUploads: true
     enableSignatureV4Streaming: true
     endpoint: ""
     region: "eu-west-1"
-    secretKey: ""
+    secretKey:
+      value: {{ derivePassword 1 "long" $masterPassword "minio" "openproject_user" | sha1sum | quote }}
+      create: true
+      name: "objectstore-openproject-secret-key"
+      key: "secretKey"
     username: "openproject_user"
     pathStyle: true
     useIamProfile: false
@@ -78,7 +105,11 @@ objectstores:
     # Size in MB
     maxSize: 100000
     region: ""
-    secretKey: ""
+    secretKey:
+      value: {{ derivePassword 1 "long" $masterPassword "minio" "openxchange_user" | sha1sum | quote }}
+      create: true
+      name: "objectstore-openxchange-secret-key"
+      key: "secretKey"
     storageClass: "STANDARD"
     username: "openxchange_user"
     useSSL: true

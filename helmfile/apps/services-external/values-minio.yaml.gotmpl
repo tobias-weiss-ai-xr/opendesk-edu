@@ -18,7 +18,9 @@ apiIngress:
     {{- end }}
 
 auth:
-  rootPassword: {{ .Values.secrets.minio.rootPassword | quote }}
+  # The secret must contain both `root-user` and `root-password` keys (the
+  # opendesk-secrets chart adds `root-user` via extraData).
+  existingSecret: {{ .Values.secrets.minio.rootPassword.name | quote }}
 
 commonAnnotations:
   {{ .Values.annotations.servicesExternalMinio.common | toYaml | nindent 2 }}
@@ -230,44 +232,44 @@ provisioning:
     {{- end }}
   users:
     - username: {{ .Values.objectstores.migrations.username | quote }}
-      password: {{ .Values.secrets.minio.migrationsUser | quote }}
+      password: {{ .Values.objectstores.migrations.secretKey.value | quote }}
       disabled: false
       policies:
         - "migrations-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.nextcloud.username | quote }}
-      password: {{ .Values.secrets.minio.nextcloudUser | quote }}
+      password: {{ .Values.objectstores.nextcloud.secretKey.value | quote }}
       disabled: false
       policies:
         - "nextcloud-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.notes.username | quote }}
-      password: {{ .Values.secrets.minio.notesUser | quote }}
+      password: {{ .Values.objectstores.notes.secretKey.value | quote }}
       disabled: false
       policies:
         - "notes-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.openproject.username | quote }}
-      password: {{ .Values.secrets.minio.openprojectUser | quote }}
+      password: {{ .Values.objectstores.openproject.secretKey.value | quote }}
       disabled: false
       policies:
         - "openproject-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.openxchange.username | quote }}
-      password: {{ .Values.secrets.minio.openxchangeUser | quote }}
+      password: {{ .Values.objectstores.openxchange.secretKey.value | quote }}
       disabled: false
       policies:
         - "openxchange-bucket-policy"
       setPolicies: true
     - username: {{ .Values.objectstores.nubus.username | quote }}
-      password: {{ .Values.secrets.minio.umsUser | quote }}
+      password: {{ .Values.objectstores.nubus.secretKey.value | quote }}
       disabled: false
       policies:
         - "ums-bucket-policy"
       setPolicies: true
     {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
     - username: {{ .Values.objectstores.dovecot.username | quote }}
-      password: {{ .Values.secrets.minio.dovecotUser | quote }}
+      password: {{ .Values.objectstores.dovecot.secretKey.value | quote }}
       disabled: false
       policies:
         - "dovecot-bucket-policy"

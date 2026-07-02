@@ -18,6 +18,8 @@ While [migrations.md](./migrations.md) provides information about required actio
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`helmfile-defaults.yaml.gotmpl`](#helmfile-defaultsyamlgotmpl)
       * [Allow override of single application helmfiles](#allow-override-of-single-application-helmfiles)
+    * [`secrets.yaml.gotmpl`, `objectstores.yaml.gotmpl`, `database.yaml.gotmpl`](#secretsyamlgotmpl-objectstoresyamlgotmpl-databaseyamlgotmpl)
+      * [Provide selected secrets as pre-created Kubernetes Secrets](#provide-selected-secrets-as-pre-created-kubernetes-secrets)
     * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
       * [Postfix HELO names](#postfix-helo-names)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
@@ -103,6 +105,38 @@ helmfiles:
       - {{ toYaml .Values | nindent 6 }}
 ...
 ```
+
+### `secrets.yaml.gotmpl`, `objectstores.yaml.gotmpl`, `database.yaml.gotmpl`
+
+#### Provide selected secrets as pre-created Kubernetes Secrets
+
+Secret-bearing entries now carry a `create`/`name`/`key` structure alongside their `value`, and openDesk
+delivers them as real Kubernetes Secrets by default instead of inlining the value into the chart. This applies
+across all three files:
+- `secrets.*` in `secrets.yaml.gotmpl`
+- `objectstores.<store>.secretKey` in `objectstores.yaml.gotmpl`
+- `databases.<db>.password` in `database.yaml.gotmpl`
+
+Example:
+
+```yaml
+secrets:
+  cassandra:
+    rootPassword:
+      value: {{ ... }}
+      create: true
+      name: "cassandra-root-password"
+      key: "cassandra-password"
+```
+
+- `create: true` (default): openDesk provisions that Secret from `value`. The `opendesk-secrets` release is
+  deployed automatically whenever at least one secret is `create: true`.
+- To bring your own: set `create: false` and pre-create the Secret named `name` with key `key` in the
+  namespace beforehand, e.g. `kubectl -n <NAMESPACE> create secret generic cassandra-root-password
+  --from-literal=cassandra-password='<your-password>'`.
+
+Per-entry caveats are documented inline, e.g. some secrets need an extra key (MinIO also needs `root-user`,
+Collabora `username`), some cannot yet use `create: false` (other components still read the literal value).
 
 ### `smtp.yaml.gotmpl`
 

@@ -359,7 +359,7 @@ db-cleanup:
           if [[ $(tail -n +1 "${FILE}" | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
             MARIADB_DATABASE=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].name')
             MARIADB_USERNAME=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].username')
-            MARIADB_PASSWORD=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].password')
+            MARIADB_PASSWORD=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].password.value')
             MARIADB_HOST=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].host')
             MARIADB_PORT=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].port')
           fi;
@@ -411,7 +411,7 @@ db-cleanup:
             if [[ $(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)]') != "null" ]]; then
               POSTGRES_DATABASE=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].name')
               PGUSER=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].username')
-              PGPASSWORD=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].password')
+              PGPASSWORD=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].password.value')
               PGHOST=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].host')
               PGPORT=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].port')
               PGPARAMS=$(tail -n +1 $FILE | grep -v '{{' | yq '.databases.[env(ENV_DATABASE)].parameters')
@@ -459,7 +459,7 @@ db-cleanup:
               AWS_BUCKET=$(tail -n +1 $FILE | grep -v '{{' | yq '.objectstores.[env(ENV_BUCKET)].bucket')
               AWS_ENDPOINT=$(tail -n +1 $FILE | grep -v '{{' | yq '.objectstores.[env(ENV_BUCKET)].endpoint')
               AWS_ACCESS_KEY_ID=$(tail -n +1 $FILE | grep -v '{{' | yq '.objectstores.[env(ENV_BUCKET)].username')
-              AWS_SECRET_ACCESS_KEY=$(tail -n +1 $FILE | grep -v '{{' | yq '.objectstores.[env(ENV_BUCKET)].secretKey')
+              AWS_SECRET_ACCESS_KEY=$(tail -n +1 $FILE | grep -v '{{' | yq '.objectstores.[env(ENV_BUCKET)].secretKey.value')
               AWS_DEFAULT_REGION=$(tail -n +1 $FILE | grep -v '{{' | yq '.objectstores.[env(ENV_BUCKET)].region')
             fi;
           fi;

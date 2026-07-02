@@ -94,7 +94,7 @@ config:
     admin:
       values:
         username: "kcadmin"
-        password: {{ .Values.secrets.keycloak.adminPassword | quote }}
+        password: {{ .Values.secrets.keycloak.adminPassword.value | quote }}
     realm: {{ .Values.platform.realm | quote }}
     intraCluster:
       enabled: true
@@ -539,7 +539,10 @@ config:
         clientId: "opendesk-intercom"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.intercom.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.intercom.key | quote }}
         redirectUris:
           - "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/callback"
         consentRequired: false
@@ -624,7 +627,10 @@ config:
         clientId: "opendesk-notes"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.notes | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.notes.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.notes.key | quote }}
         redirectUris:
           - "https://{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}/api/v1.0/callback/"
         standardFlowEnabled: true
@@ -664,7 +670,10 @@ config:
         clientId: "opendesk-dovecot"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.dovecot | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.dovecot.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.dovecot.key | quote }}
         consentRequired: false
         frontchannelLogout: false
         publicClient: false
@@ -678,7 +687,10 @@ config:
         clientId: "opendesk-oxappsuite"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.as8oidc.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.as8oidc.key | quote }}
         redirectUris:
           - "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/*"
           - "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
@@ -726,7 +738,10 @@ config:
         clientId: "opendesk-matrix"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.matrix | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.matrix.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.matrix.key | quote }}
         redirectUris:
           - "https://{{ .Values.global.hosts.element }}.{{ .Values.global.domain }}/*"
           - "https://{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}/*"
@@ -751,7 +766,10 @@ config:
         clientId: "opendesk-nextcloud"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.ncoidc.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.ncoidc.key | quote }}
         redirectUris:
           - "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/*"
           - "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
@@ -774,7 +792,10 @@ config:
         clientId: "opendesk-openproject"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.openproject.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.openproject.key | quote }}
         redirectUris:
           - "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/*"
           - "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
@@ -796,7 +817,10 @@ config:
         clientId: "opendesk-xwiki"
         protocol: "openid-connect"
         clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.xwiki.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.xwiki.key | quote }}
         redirectUris:
           - "https://{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}/*"
           - "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"

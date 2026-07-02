@@ -44,8 +44,14 @@ collabora:
     {{- if .Values.technical.collabora.additionalExtraParams }}
     {{ .Values.technical.collabora.additionalExtraParams }}
     {{- end }}
-  username: "collabora-internal-admin"
-  password: {{ .Values.secrets.collabora.adminPassword | quote }}
+  username: {{ .Values.secrets.collabora.adminPassword.extraData.username | quote }}
+  # Reads username + password from the Secret: `passwordKey` maps to our `key`; the username
+  # comes from Collabora's fixed default key `username` (not overridden here), which the
+  # provisioned Secret populates from `secrets.collabora.adminPassword.extraData.username`.
+  existingSecret:
+    enabled: true
+    secretName: {{ .Values.secrets.collabora.adminPassword.name | quote }}
+    passwordKey: {{ .Values.secrets.collabora.adminPassword.key | quote }}
 
 fullnameOverride: "collabora"
 

@@ -23,7 +23,7 @@ dovecot:
     port: {{ .Values.databases.dovecotDictmap.port }}
     username: {{ .Values.databases.dovecotDictmap.username | quote }}
     password:
-      value: {{ .Values.databases.dovecotDictmap.password | default .Values.secrets.cassandra.dovecotDictmapUser | quote }}
+      value: {{ .Values.databases.dovecotDictmap.password.value | quote }}
     keyspace: {{ .Values.databases.dovecotDictmap.name | quote }}
   sharedMailboxes:
     enabled: true
@@ -31,10 +31,10 @@ dovecot:
     port: {{ .Values.databases.dovecotACL.port }}
     username: {{ .Values.databases.dovecotACL.username | quote }}
     password:
-      value: {{ .Values.databases.dovecotACL.password | default .Values.secrets.cassandra.dovecotACLUser | quote }}
+      value: {{ .Values.databases.dovecotACL.password.value | quote }}
     keyspace: {{ .Values.databases.dovecotACL.name | quote }}
     masterPassword:
-      value: {{ .Values.secrets.dovecot.sharedMailboxesMasterPassword | quote }}
+      value: {{ .Values.secrets.dovecot.sharedMailboxesMasterPassword.value | quote }}
   objectStorage:
     bucket: {{ .Values.objectstores.dovecot.bucket | quote }}
     cacheTmpfs: {{ if .Values.technical.dovecot.objectStorage.cacheTmpfs }}true{{ else }}false{{ end }}
@@ -56,11 +56,5 @@ dovecot:
     {{- end }}
     username: {{ .Values.objectstores.dovecot.username | quote }}
     password:
-      {{- if .Values.objectstores.dovecot.secretKey }}
-      value: {{ .Values.objectstores.dovecot.secretKey | quote }}
-      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
-      value: {{ .Values.secrets.minio.dovecotUser | quote }}
-      {{- else }}
-      {{- fail "No objectstorage secretKey for dovecot found!" }}
-      {{- end }}
+      value: {{ .Values.objectstores.dovecot.secretKey.value | quote }}
 ...

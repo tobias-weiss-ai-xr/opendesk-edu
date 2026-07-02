@@ -78,3 +78,4 @@ spec:
                     path: "!/var/run/cri-dockerd.sock"
           - spec:
               =(volumes):
+...

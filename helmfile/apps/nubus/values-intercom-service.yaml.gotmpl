@@ -45,7 +45,10 @@ global:
 ics:
   tokenExchangeV2: true
   session:
-    secret: {{ .Values.secrets.intercom.secret | quote }}
+    existingSecret:
+      name: {{ .Values.secrets.intercom.secret.name | quote }}
+      keyMapping:
+        secret: {{ .Values.secrets.intercom.secret.key | quote }}
   issuerBaseUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
   originRegex: "{{ .Values.global.domain }}"
   enableSessionCookie: true
@@ -58,23 +61,26 @@ ics:
     domain: {{ .Values.global.domain | quote }}
   oidc:
     id: "opendesk-intercom"
-    clientSecret: {{ .Values.secrets.keycloak.clientSecret.intercom | quote }}
+    existingSecret:
+      name: {{ .Values.secrets.keycloak.clientSecret.intercom.name | quote }}
+      keyMapping:
+        clientSecret: {{ .Values.secrets.keycloak.clientSecret.intercom.key | quote }}
   matrix:
     subdomain: {{ .Values.global.hosts.synapse | quote }}
     serverName: "{{ .Values.global.hosts.synapse }}.{{ .Values.global.domain }}"
     auth:
-      applicationServiceSecret: {{ .Values.secrets.intercom.synapseAsToken | quote }}
+      applicationServiceSecret: {{ .Values.secrets.intercom.synapseAsToken.value | quote }}
   nordeck:
     subdomain: {{ .Values.global.hosts.matrixNeoDateFixBot | quote }}
   portal:
     auth:
-      sharedSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+      sharedSecret: {{ .Values.secrets.centralnavigation.apiKey.value | quote }}
   redis:
     host: {{ .Values.cache.intercomService.host | quote }}
     port: {{ .Values.cache.intercomService.port }}
     auth:
       username: {{ .Values.cache.intercomService.username }}
-      password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password | quote }}
+      password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password.value | quote }}
     ssl:
       enabled: {{ .Values.cache.intercomService.tls }}
   openxchange:
@@ -130,10 +136,10 @@ provisioning:
       auth:
         username: "kcadmin"
         existingSecret:
-          name: "ums-opendesk-keycloak-credentials"
+          name: {{ .Values.secrets.keycloak.adminPassword.name | quote }}
           keyMapping:
-            password: "admin_password"
-        key: "admin_password"
+            password: {{ .Values.secrets.keycloak.adminPassword.key | quote }}
+        key: {{ .Values.secrets.keycloak.adminPassword.key | quote }}
   extraEnvVars:
     - name: "REDIS_USER"
       value: {{ .Values.cache.intercomService.username }}
