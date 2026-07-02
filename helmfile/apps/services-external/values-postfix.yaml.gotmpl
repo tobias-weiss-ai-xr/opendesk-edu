@@ -55,6 +55,9 @@ postfix:
   amavisPortIn: ""
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   hostname: "postfix"
+  {{- with .Values.smtp.internalHeloName }}
+  smtpHeloName: {{ . | quote }}
+  {{- end }}
   inetProtocols: "ipv4"
   ldap:
     host: "ums-ldap-server"
@@ -102,7 +105,8 @@ postfix:
   {{- end }}
   # Warning: This setting allows unauthenticated mail relay from relayNets!
   allowRelayNets: true
-  relayNets: {{ join " " .Values.cluster.networking.cidr | quote }}
+  relayNets: {{ concat (list "127.0.0.0/8" "::1/128") .Values.cluster.networking.cidr | toYaml | nindent 4 }}
+
   minTLSVersion: "TLSv1.2"
   smtpdTLSMandatoryCiphers: "medium"
   smtpTLSSecurityLevel: "encrypt"

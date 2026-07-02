@@ -146,4 +146,82 @@ technical:
     # Proxy protocol to use for incoming mail or externally connected mail clients (if any), only `haproxy` is supported at the moment.
     # Ref.: https://www.postfix.org/postconf.5.html#smtpd_upstream_proxy_protocol
     smtpdUpstreamProxyProtocol: ~
+    # SMTP (Port 25) related limits
+    smtpLimits:
+      # The maximum number of connections that an SMTP client may make simultaneously.
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_connection_count_limit
+      clientConnectionCount: 15
+      # The maximum number of connections that an SMTP client may make in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_connection_rate_limit
+      clientConnectionRate: 0
+      # The maximum number of message delivery requests that an SMTP client may make in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_message_rate_limit
+      clientMessageRate: 0
+      # The maximum number of recipient addresses that an SMTP client may specify in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_recipient_rate_limit
+      clientRecipientRate: 0
+      # The maximum number of new TLS sessions (without using the TLS session cache) that an SMTP client may negotiate in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_new_tls_session_rate_limit
+      clientNewTLSSessionRate: 0
+      # The maximum number of AUTH commands that an SMTP client may send in the time interval specified with anvil_rate_time_unit (default: 60s). Available in Postfix 3.1 and later.
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_auth_rate_limit
+      clientAuthRate: 0
+    # Submission (Port 465 & 587) related limits
+    submissionLimits:
+      # The maximum number of connections that an SMTP client may make simultaneously.
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_connection_count_limit
+      clientConnectionCount: 15
+      # The maximum number of connections that an SMTP client may make in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_connection_rate_limit
+      clientConnectionRate: 0
+      # The maximum number of message delivery requests that an SMTP client may make in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_message_rate_limit
+      clientMessageRate: 0
+      # The maximum number of recipient addresses that an SMTP client may specify in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_recipient_rate_limit
+      clientRecipientRate: 0
+      # The maximum number of new TLS sessions (without using the TLS session cache) that an SMTP client may negotiate in the time interval specified with anvil_rate_time_unit (default: 60s).
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_new_tls_session_rate_limit
+      clientNewTLSSessionRate: 0
+      # The maximum number of AUTH commands that an SMTP client may send in the time interval specified with anvil_rate_time_unit (default: 60s). Available in Postfix 3.1 and later.
+      # Ref.: https://www.postfix.org/postconf.5.html#smtpd_client_auth_rate_limit
+      clientAuthRate: 0
+    # Restrictions to activate (only affects postfix-ox)
+    restrictions:
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unknown_reverse_client_hostname
+      unknownReverseClientHostname: false
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unknown_client_hostname
+      unknownClientHostname: false
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_rbl_client
+      # e.g. - "zen.spamhaus.org=127.0.0.[2..11]"
+      rblClient: []
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_rhsbl_reverse_client
+      # e.g. - "dbl.spamhaus.org=127.0.1.[2..99]"
+      rhsblReverseClient: []
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_invalid_helo_hostname
+      invalidHeloHostname: false
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_non_fqdn_helo_hostname
+      nonFQDNHeloHostname: false
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_rhsbl_helo
+      # e.g. - "dbl.spamhaus.org=127.0.1.[2..99]"
+      rhsblHelo: []
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unknown_helo_hostname
+      unknownHeloHostname: false
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_non_fqdn_sender
+      nonFQDNSender: true
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_rhsbl_sender
+      # e.g. - "dbl.spamhaus.org=127.0.1.[2..99]"
+      rhsblSender: []
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unknown_sender_domain
+      unknownSenderDomain: true
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unlisted_sender
+      unlistedSender: true
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_non_fqdn_recipient
+      nonFQDNRecipient: true
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unlisted_recipient
+      unlistedRecipient: true
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unknown_recipient_domain
+      unknownRecipientDomain: true
+      # Ref.: https://www.postfix.org/postconf.5.html#reject_unauth_destination
+      unauthDestination: true
 ...

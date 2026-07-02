@@ -44,8 +44,9 @@ postfix:
   amavisPortIn: ""
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   hostname: {{ .Values.functional.groupware.externalClients.fqdnSmtp | default .Values.global.domain | quote }}
-  expansionLimit: {{ .Values.functional.groupware.mail.localLimits.expansion }}
-  recursionLimit: {{ .Values.functional.groupware.mail.localLimits.recursion }}
+  {{- with .Values.smtp.heloName }}
+  smtpHeloName: {{ . | quote }}
+  {{- end }}
   inetProtocols: "ipv4"
   ldap:
     host: "ums-ldap-server"
@@ -55,7 +56,6 @@ postfix:
     bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
     password:
       value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
-  messageSizeLimit: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
   milterDefaultAction: "tempfail"
   listfilter:
     enabled: true
@@ -103,6 +103,53 @@ postfix:
   smtpSASLAuthEnable: "no"
   {{- end }}
   allowRelayNets: false
+
+  limit:
+    messageSize: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
+    expansion: {{ .Values.functional.groupware.mail.localLimits.expansion }}
+    recursion: {{ .Values.functional.groupware.mail.localLimits.recursion }}
+    recipient: {{ .Values.functional.groupware.mail.localLimits.recipient }}
+    smtp:
+      clientConnectionCount: {{ .Values.technical.postfix.smtpLimits.clientConnectionCount }}
+      clientConnectionRate: {{ .Values.technical.postfix.smtpLimits.clientConnectionRate }}
+      clientMessageRate: {{ .Values.technical.postfix.smtpLimits.clientMessageRate }}
+      clientRecipientRate: {{ .Values.technical.postfix.smtpLimits.clientRecipientRate }}
+      clientNewTLSSessionRate: {{ .Values.technical.postfix.smtpLimits.clientNewTLSSessionRate }}
+      clientAuthRate: {{ .Values.technical.postfix.smtpLimits.clientAuthRate }}
+    submission:
+      clientConnectionCount: {{ .Values.technical.postfix.submissionLimits.clientConnectionCount }}
+      clientConnectionRate: {{ .Values.technical.postfix.submissionLimits.clientConnectionRate }}
+      clientMessageRate: {{ .Values.technical.postfix.submissionLimits.clientMessageRate }}
+      clientRecipientRate: {{ .Values.technical.postfix.submissionLimits.clientRecipientRate }}
+      clientNewTLSSessionRate: {{ .Values.technical.postfix.submissionLimits.clientNewTLSSessionRate }}
+      clientAuthRate: {{ .Values.technical.postfix.submissionLimits.clientAuthRate }}
+
+  reject:
+    unknownReverseClientHostname: {{ .Values.technical.postfix.restrictions.unknownReverseClientHostname }}
+    unknownClientHostname: {{ .Values.technical.postfix.restrictions.unknownClientHostname }}
+    {{- with .Values.technical.postfix.restrictions.rblClient }}
+    rblClient: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    {{- with .Values.technical.postfix.restrictions.rhsblReverseClient }}
+    rhsblReverseClient: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    invalidHeloHostname: {{ .Values.technical.postfix.restrictions.invalidHeloHostname }}
+    nonFQDNHeloHostname: {{ .Values.technical.postfix.restrictions.nonFQDNHeloHostname }}
+    {{- with .Values.technical.postfix.restrictions.rhsblHelo }}
+    rhsblHelo: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    unknownHeloHostname: {{ .Values.technical.postfix.restrictions.unknownHeloHostname }}
+    nonFQDNSender: {{ .Values.technical.postfix.restrictions.nonFQDNSender }}
+    {{- with .Values.technical.postfix.restrictions.rhsblSender }}
+    rhsblSender: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    unknownSenderDomain: {{ .Values.technical.postfix.restrictions.unknownSenderDomain }}
+    unlistedSender: {{ .Values.technical.postfix.restrictions.unlistedSender }}
+    nonFQDNRecipient: {{ .Values.technical.postfix.restrictions.nonFQDNRecipient }}
+    unlistedRecipient: {{ .Values.technical.postfix.restrictions.unlistedRecipient }}
+    unknownRecipientDomain: {{ .Values.technical.postfix.restrictions.unknownRecipientDomain }}
+    unauthDestination: {{ .Values.technical.postfix.restrictions.unauthDestination }}
+
   smtpTLSSecurityLevel: "encrypt"
   smtpdSASLAuthEnable: "yes"
   smtpdSASLSecurityOptions: {{ .Values.smtp.security.smtpdSASLSecurityOptions | join ", " | quote }}

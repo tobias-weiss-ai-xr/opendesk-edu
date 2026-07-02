@@ -360,6 +360,9 @@ functional:
         # Maximum nesting depth of alias-of-alias resolution chains.
         # Ref: https://www.postfix.org/postconf.5.html#virtual_alias_recursion_limit
         recursion: 25
+        # Maximal number of recipients that the Postfix SMTP server accepts per message delivery request.
+        # Ref: https://www.postfix.org/postconf.5.html#smtpd_recipient_limit
+        recipient: 1000
       # Define the maximum size for emails (including their attachments) in Megabyte
       maxSize: 25
       # Control options for handling outgoing emails
