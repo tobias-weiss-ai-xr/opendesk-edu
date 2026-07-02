@@ -79,6 +79,9 @@ seLinuxOptions:
   umsKeycloakBootstrap: ~
   umsKeycloakExtensionHandler: ~
   umsKeycloakExtensionProxy: ~
+  # umsLdapNotifier and umsLdapServer share a PVC (the ldap-notifier reads the transaction data the
+  # ldap-server writes). On SELinux-enforcing clusters both pods must carry the SAME MCS label, so
+  # these two options MUST be set to the same SELinux level, e.g. `{ level: "s0:c100,c200" }`.
   umsLdapNotifier: ~
   umsLdapServer: ~
   umsNotificationsApi: ~

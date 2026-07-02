@@ -885,6 +885,11 @@ nubusLdapNotifier:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+  # In this case the `seLinuxOptions` must be set at pod level (not container level) so that the
+  # MCS label is applied to the volumes shared with the ldap-server.
+  # umsLdapNotifier and umsLdapServer must resolve to the same SELinux level, otherwise the
+  # notifier cannot read the transaction data the ldap-server writes to the shared PVC.
+  podSecurityContext:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.umsLdapNotifier | toYaml | nindent 6 }}
   image:
@@ -909,6 +914,13 @@ serviceAccount:
 nubusLdapServer:
   additionalAnnotations:
     {{ .Values.annotations.nubusLdapServer.additional | toYaml | nindent 4 }}
+  # In this case the `seLinuxOptions` must be set at pod level (not container level) so that the
+  # MCS label is applied to the volumes shared with the ldap-server.
+  # umsLdapNotifier and umsLdapServer must resolve to the same SELinux level, otherwise the
+  # notifier cannot read the transaction data the ldap-server writes to the shared PVC.
+  podSecurityContext:
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsLdapServer | toYaml | nindent 6 }}
   dhInitcontainer:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerDhInitContainer.registry | quote }}
