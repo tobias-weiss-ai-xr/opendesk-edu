@@ -5,9 +5,9 @@
 global:
   hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
   appsuite:
-    cookieHashSalt: {{ .Values.secrets.oxAppSuite.cookieHashSalt }}
-    shareCryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey }}
-    sessiondEncryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey }}
+    cookieHashSalt: {{ .Values.secrets.oxAppSuite.cookieHashSalt.value }}
+    shareCryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey.value }}
+    sessiondEncryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey.value }}
   mysql:
     host: {{ .Values.databases.oxAppSuite.host | quote }}
     port: {{ .Values.databases.oxAppSuite.port }}
@@ -16,10 +16,10 @@ global:
     readDatabase: {{ .Values.databases.oxAppSuite.name | quote }}
     auth:
       user: {{ .Values.databases.oxAppSuite.username | quote }}
-      password: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
-      rootPassword: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
+      password: {{ .Values.databases.oxAppSuite.password.value | default .Values.secrets.mariadb.rootPassword.value | quote }}
+      rootPassword: {{ .Values.databases.oxAppSuite.password.value | default .Values.secrets.mariadb.rootPassword.value | quote }}
       readUser: {{ .Values.databases.oxAppSuite.readUser | default .Values.databases.oxAppSuite.username | quote }}
-      readPassword: {{ .Values.databases.oxAppSuite.readPassword | default .Values.databases.oxAppSuite.password | quote}}
+      readPassword: {{ .Values.databases.oxAppSuite.readPassword | default .Values.databases.oxAppSuite.password.value | quote}}
 
 nextcloud-integration-ui:
   image:
@@ -615,14 +615,14 @@ appsuite:
             com.openexchange.quota.attachment: "-1"
             # Mailfilter
             com.openexchange.mail.filter.passwordSource: "global"
-            com.openexchange.mail.filter.masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+            com.openexchange.mail.filter.masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword.value | quote }}
             com.openexchange.mail.filter.preferredSaslMech: ""
             # Loosen API the rate limit
             com.openexchange.servlet.maxRateTimeWindow: "60000"
             com.openexchange.servlet.maxRate: "3000"
           propertiesFiles:
             /opt/open-xchange/etc/masterpassword-authentication.properties:
-              com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+              com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword.value | quote }}
         services:
           - type: ClusterIP
             ports:
@@ -662,13 +662,13 @@ appsuite:
             - "admin"
         {{- end }}
     masterAdmin: "admin"
-    masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
+    masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
     hzGroupName: "hzgroup"
-    hzGroupPassword: {{ .Values.secrets.oxAppSuite.hzGroupPassword | quote }}
+    hzGroupPassword: {{ .Values.secrets.oxAppSuite.hzGroupPassword.value | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword.value | quote }}
     jolokiaLogin: "jolokia"
-    jolokiaPassword: {{ .Values.secrets.oxAppSuite.jolokiaPassword | quote }}
+    jolokiaPassword: {{ .Values.secrets.oxAppSuite.jolokiaPassword.value | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     podAnnotations:
       intents.otterize.com/service-name: "open-xchange-core-mw"
@@ -1005,7 +1005,7 @@ appsuite:
     {{- if .Values.certificate.selfSigned }}
     extraEnv:
     - name: "JAVA_OPTS_APPEND"
-      value: {{ printf "%s %s=%s" "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks -Djavax.net.ssl.trustStoreType=jks" "-Djavax.net.ssl.trustStorePassword" .Values.secrets.certificates.password | quote }}
+      value: {{ printf "%s %s=%s" "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks -Djavax.net.ssl.trustStoreType=jks" "-Djavax.net.ssl.trustStorePassword" .Values.secrets.certificates.password.value | quote }}
     extraVolumes:
       - name: "trusted-cert-secret-volume"
         secret:
@@ -1020,34 +1020,28 @@ appsuite:
         mountPath: "/etc/ssl/certs/"
     {{- end }}
     secretProperties:
-      com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppSuite.cookieHashSalt | quote }}
-      com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey | quote }}
-      com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
-      com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
-      com.openexchange.dovecot.doveadm.apiSecret: {{ .Values.secrets.dovecot.doveadm | quote }}
-      com.openexchange.oidc.clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
+      com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppSuite.cookieHashSalt.value | quote }}
+      com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey.value | quote }}
+      com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey.value | quote }}
+      com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken.value | quote }}
+      com.openexchange.dovecot.doveadm.apiSecret: {{ .Values.secrets.dovecot.doveadm.value | quote }}
+      com.openexchange.oidc.clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc.value | quote }}
       {{- if .Values.functional.groupware.mail.encryption.enabled }}
-      com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword.value | quote }}
       com.openexchange.guard.guestSMTPUsername: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       {{- end }}
       {{- if .Values.certificate.selfSigned }}
-      com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password | quote }}
+      com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password.value | quote }}
       {{- end }}
     secretPropertiesFiles:
       /opt/open-xchange/etc/filestore-s3.properties:
         com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
-        {{- if .Values.objectstores.openxchange.secretKey }}
-        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | quote }}
-        {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
-        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.secrets.minio.openxchangeUser | quote }}
-        {{- else }}
-        {{- fail "No objectstorage secretKey for openxchange found!" }}
-        {{- end }}
+        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey.value | quote }}
       /opt/open-xchange/etc/ldapauth.properties:
-        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
+        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox.value | quote }}
       /opt/open-xchange/etc/noreply.properties:
         com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
-        com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+        com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword.value | quote }}
     propertiesFiles:
       /opt/open-xchange/etc/Group.properties:
         CHECK_GROUP_UID_FOR_NOT_ALLOWED_CHARS: "false"
@@ -1144,8 +1138,8 @@ appsuite:
       # MC+base64(20 random bytes)
       # RC+base64(20 random bytes)
       oxguardpass: |
-        {{ .Values.secrets.oxAppSuite.oxguardMC }}
-        {{ .Values.secrets.oxAppSuite.oxguardRC }}
+        {{ .Values.secrets.oxAppSuite.oxguardMC.value }}
+        {{ .Values.secrets.oxAppSuite.oxguardRC.value }}
     {{ end }}
     redis: &redisConfiguration
       enabled: true
@@ -1157,7 +1151,7 @@ appsuite:
       auth:
         enabled: true
         username: {{ .Values.cache.oxAppSuite.username | quote }}
-        password: {{ .Values.cache.oxAppSuite.password | default .Values.secrets.redis.password | quote }}
+        password: {{ .Values.cache.oxAppSuite.password | default .Values.secrets.redis.password.value | quote }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeCoreMW.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
@@ -1302,9 +1296,9 @@ appsuite:
 
   core-documentconverter:
     adminUser: "admin"
-    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
+    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword.value | quote }}
     enabled: true
     documentConverter:
       cache:
@@ -1402,9 +1396,9 @@ appsuite:
   core-imageconverter:
     enabled: true
     adminUser: "admin"
-    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
+    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword.value | quote }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}

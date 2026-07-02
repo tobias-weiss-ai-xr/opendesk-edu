@@ -82,7 +82,8 @@ postfix:
     baseDn: "{{ .Values.ldap.baseDn }}"
     bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
     password:
-      value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+      value: {{ .Values.secrets.nubus.ldapSearch.postfix.value | quote }}
+  messageSizeLimit: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
   milterDefaultAction: "tempfail"
   listfilter:
     enabled: true

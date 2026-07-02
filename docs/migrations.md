@@ -26,6 +26,11 @@ When upgrading openDesk, two types of migrations may be required:
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
         * [Postfix: Changed network settings to list](#postfix-changed-network-settings-to-list)
         * [Changed Helmfile structure: Allow overriding app helmfiles and consolidate helmfile environment definitions](#changed-helmfile-structure-allow-overriding-app-helmfiles-and-consolidate-helmfile-environment-definitions)
+        * [Changed Helmfile structure: Limited support for existing secrets](#changed-helmfile-structure-limited-support-for-existing-secrets)
+          * [Structure of secret definitions](#structure-of-secret-definitions)
+          * [Database and object-store secrets consolidated into their domain files](#database-and-object-store-secrets-consolidated-into-their-domain-files)
+      * [Post-upgrade to versions ≥ v1.17.0](#post-upgrade-to-versions--v1170)
+        * [Potential restart: OX Connector stuck after existing-secret migration](#potential-restart-ox-connector-stuck-after-existing-secret-migration)
     * [Versions ≥ v1.16.0](#versions--v1160)
       * [Pre-upgrade to versions ≥ v1.16.0](#pre-upgrade-to-versions--v1160)
         * [Nubus bug fix: LDAP storage class settings](#nubus-bug-fix-ldap-storage-class-settings)
@@ -192,7 +197,8 @@ matching that constraint, though our links always point to the newest patch rele
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
 | Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                             |
 | ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------- |
-| [v1.16.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.16.0) | --        | --                                                                                                                             | --                                       | [⚠ Install v1.15.x first]((#pre-upgrade-to-versions--v1150)) |
+| [v1.17.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.17.0) | --        | [Pre](#pre-upgrade-to-versions--v1170)                                                                                         | --                                       | ⬇ Install v1.15.x first((#pre-upgrade-to-versions--v1170))   |
+| [v1.16.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.16.1) | --        | [Pre](#pre-upgrade-to-versions--v1160)                                                                                         | --                                       | [⚠ Install v1.15.x first]((#pre-upgrade-to-versions--v1160)) |
 | [v1.15.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.15.1) | **yes**   | [Pre](#pre-upgrade-to-versions--v1150)                                                                                         | [Post](#post-upgrade-to-versions--v1150) | ⬇ Install ≥ v1.12.x first                                    |
 | [v1.14.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.14.2) | --        | [Pre](#pre-upgrade-to-versions--v1140)                                                                                         | [Post](#post-upgrade-to-versions--v1140) | ⬇ Install ≥ v1.12.x first                                    |
 | [v1.13.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.13.2) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | [⚠ Install v1.12.x first](#versions--v1120-automated)        |
@@ -371,6 +377,170 @@ flowchart TD
     e.g. `helmfile/apps/collabora/helmfile-defaults.yaml.gotmpl`.
   - This was not easily possible before this release.
   - For an example, see [updates.md](./updates.md#helmfile-defaultsyamlgotmpl).
+
+##### Changed Helmfile structure: Limited support for existing secrets
+
+###### Structure of secret definitions
+
+**Target group**
+
+All deployments that override one or more `secrets.*` entries with custom values.
+Deployments that rely entirely on the values derived from `MASTER_PASSWORD` do not need to change
+any values, but should still be aware of the new structure.
+
+**Context**
+
+Every entry under `secrets:` in `secrets.yaml.gotmpl` changed from a bare scalar to a mapping. The actual
+secret value now lives under a `value:` key, and secrets whose chart can consume a Kubernetes Secret
+additionally carry `create`, `name` and `key` fields.
+
+The same structural change applies to the secret-bearing entries in all of the following
+environment files (see the [Database and object-store secrets](#database-and-object-store-secrets-consolidated-into-their-domain-files)
+subsection below for more details):
+
+- `helmfile/environments/default/secrets.yaml.gotmpl`: All `secrets.*` entries.
+- `helmfile/environments/default/objectstores.yaml.gotmpl`: The S3 secret key of every store
+(`objectstores.<store>.secretKey`).
+- `helmfile/environments/default/database.yaml.gotmpl`: The per-app database password
+(`databases.<db>.password`) - for Nextcloud on MariaDB (default before openDesk 1.2.0) make sure
+you check the section below.
+
+By default, openDesk now provisions those secrets as real Kubernetes Secrets instead of inlining the
+plaintext into each component's values: a new release `opendesk-secrets` creates
+one Secret per `create: true` entry, and the consuming charts read the credential from it via their
+`existingSecret` option. The values are still derived from `MASTER_PASSWORD`, so this is transparent for
+standard deployments.
+
+> [!note]
+> Be aware that a new release and new Secret objects will appear (relevant for GitOps/ArgoCD diffs).
+
+**Required action: Move custom secret values under `value:`**
+
+If you override any secret, nest your value under `.value`. A bare scalar now replaces the whole mapping and
+breaks the components that read `<secret>.value`.
+
+Before:
+
+```yaml
+secrets:
+  oxAppSuite:
+    migrationsMasterPassword: "your_custom_password"
+  keycloak:
+    clientSecret:
+      portal: "your_custom_secret"
+```
+
+After:
+
+```yaml
+secrets:
+  oxAppSuite:
+    migrationsMasterPassword:
+      value: "your_custom_password"
+  keycloak:
+    clientSecret:
+      portal:
+        value: "your_custom_secret"
+```
+
+This applies to every overridden entry, at every nesting depth, e.g.
+- `secrets.postgresql.nextcloudUser.value` or
+- `secrets.nubus.ldapSearch.dovecot.value`.
+
+It is the only change required to keep a manually-managed secrets configuration working.
+
+See [updates.md](./updates.md) for how to bring your secrets.
+
+> [!note]
+> During applying the change above we found the following secret being obsolete now:
+> `secrets.nubus.systemAccounts.sysIdpUserPassword`
+> It was removed from the `secrets` structure.
+
+###### Database and object-store secrets consolidated into their domain files
+
+**Target group**
+
+Deployments that
+- override any object-store S3 secret key (`objectstores.<store>.secretKey`) or any
+database password (`databases.<db>.password`) with a custom value or
+- use MariaDB for Nextcloud with the out-of-the-box generated password, which
+was the default before [openDesk 1.2.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.0).
+
+**Context**
+
+The object-store S3 secret keys and the per-app database passwords are no longer defined in
+`secrets.yaml.gotmpl`. They now live co-located with their configuration in
+`objectstores.yaml.gotmpl` and `database.yaml.gotmpl`, using the same externalized-secret shape
+(`{value, create, name, key}`) as the other managed secrets.
+
+The database *server* credentials stay where they were: `secrets.mariadb.rootPassword` and
+`secrets.postgresql.postgresUser` remain defined in `secrets.yaml.gotmpl`. Only the per-app
+database user passwords moved.
+
+**Required action: move custom overrides to the new paths**
+
+If you override any of these, move your value under the new `value:` key at the new location:
+
+Before:
+
+```yaml
+objectstores:
+  nextcloud:
+    secretKey: "your_custom_key"
+databases:
+  keycloak:
+    password: "your_custom_password"
+```
+
+After:
+
+```yaml
+objectstores:
+  nextcloud:
+    secretKey:
+      value: "your_custom_key"
+databases:
+  keycloak:
+    password:
+      value: "your_custom_password"
+```
+
+Special cases:
+
+- **OX App Suite / external MariaDB**: `databases.oxAppSuite.password` also moved to the new shape.
+  It is not a managed Secret (OX connects as the MariaDB `root` user and the value defaults to
+  `secrets.mariadb.rootPassword`), but if you override it - typically when using an external
+  MariaDB - the override now goes under `databases.oxAppSuite.password.value`.
+
+- **Nextcloud on MariaDB**: Nextcloud can run on either engine, but `databases.nextcloud.password`
+  is a single managed Secret shared by both, seeded from the PostgreSQL-salted default. If you still
+  run Nextcloud on MariaDB, you must set `databases.nextcloud.password.value` explicitly to the
+  password your MariaDB user actually has, which is likely the default that was used before:
+  ```
+  nextcloudUser: {{ derivePassword 1 "long" $masterPassword "mariadb" "nextcloud_user" | sha1sum | quote }}
+  ```
+
+  > [!warning]
+  > MariaDB support for Nextcloud and XWiki is deprecated in openDesk and will be removed in openDesk 2.0.
+
+#### Post-upgrade to versions ≥ v1.17.0
+
+##### Potential restart: OX Connector stuck after existing-secret migration
+
+**Target group:** All deployments using OX App Suite
+
+**Context:** Externalising the OX Connector provisioning-API password moves it into a centrally created Secret and renames it: the chart's own `ox-connector-provisioning-api` is replaced by `ox-connector-provisioning-api-password`. During the upgrade the old Secret is pruned while the still-running OX Connector Pod references it, so the Pod can fail with `CreateContainerConfigError: secret "ox-connector-provisioning-api" not found`. Because a StatefulSet rolling update will not replace a Pod that is not `Ready`, the StatefulSet can stay on the old revision and never roll onto the new one that references the new Secret - so it does not recover on its own. This is timing-dependent and does not occur on every deployment.
+
+**Required action**
+
+- Monitor the OX Connector Pod once the upgrade deployment has completed.
+- If the Pod is stuck in `CreateContainerConfigError` (or `CrashLoopBackOff`), delete it manually so the StatefulSet recreates it on the new revision:
+
+```shell
+kubectl -n <NAMESPACE> delete pod ox-connector-0
+```
+
+- Confirm the recreated Pod becomes `Running` and `Ready`; it now references the `ox-connector-provisioning-api-password` Secret.
 
 ### Versions ≥ v1.16.0
 

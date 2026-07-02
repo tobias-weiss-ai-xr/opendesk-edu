@@ -27,7 +27,9 @@ configuration:
     username:
       value: "nextcloud"
     password:
-      value: {{ .Values.secrets.nextcloud.adminPassword | quote }}
+      secret:
+        name: {{ .Values.secrets.nextcloud.adminPassword.name | quote }}
+        key: {{ .Values.secrets.nextcloud.adminPassword.key | quote }}
 
   antivirus:
     enabled: true
@@ -49,7 +51,7 @@ configuration:
       username:
         value: {{ .Values.cache.nextcloud.username }}
       password:
-        value: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
+        value: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password.value | quote }}
     host: {{ .Values.cache.nextcloud.host | quote }}
     port: {{ .Values.cache.nextcloud.port | quote }}
     tls: {{ .Values.cache.nextcloud.tls }}
@@ -103,13 +105,7 @@ configuration:
       username:
         value: {{ .Values.databases.nextcloud.username | quote }}
       password:
-        {{- if or (eq .Values.databases.nextcloud.type "mariadb") (eq .Values.databases.nextcloud.type "mysql") }}
-        value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
-        {{- else if or (eq .Values.databases.nextcloud.type "postgresql") (eq .Values.databases.nextcloud.type "psql") }}
-        value: {{ .Values.databases.nextcloud.password | default .Values.secrets.postgresql.nextcloudUser | quote }}
-        {{- else }}
-        value: {{ .Values.databases.nextcloud.password | quote }}
-        {{- end }}
+        value: {{ .Values.databases.nextcloud.password.value | quote }}
 
   i18n:
     language:
@@ -122,7 +118,7 @@ configuration:
     host: {{ .Values.ldap.host | quote }}
     dn: "uid=ldapsearch_nextcloud,cn=users,{{ .Values.ldap.baseDn }}"
     password:
-      value: {{ .Values.secrets.nubus.ldapSearch.nextcloud | quote }}
+      value: {{ .Values.secrets.nubus.ldapSearch.nextcloud.value | quote }}
     adminGroupName: "managed-by-attribute-FileshareAdmin"
 
   objectstore:
@@ -130,13 +126,7 @@ configuration:
       accessKey:
         value: {{ .Values.objectstores.nextcloud.username | quote }}
       secretKey:
-        {{- if .Values.objectstores.nextcloud.secretKey }}
-        value: {{ .Values.objectstores.nextcloud.secretKey | quote }}
-        {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
-        value: {{ .Values.secrets.minio.nextcloudUser | quote }}
-        {{- else }}
-        {{- fail "No objectstorage secretKey for nextcloud found!" }}
-        {{- end }}
+        value: {{ .Values.objectstores.nextcloud.secretKey.value | quote }}
     bucket: {{ .Values.objectstores.nextcloud.bucket | quote }}
     {{- if .Values.objectstores.nextcloud.endpoint }}
     host: {{ printf "%s" .Values.objectstores.nextcloud.endpoint | quote }}
@@ -157,7 +147,9 @@ configuration:
     username:
       value: "opendesk-nextcloud"
     password:
-      value: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
+      secret:
+        name: {{ .Values.secrets.keycloak.clientSecret.ncoidc.name | quote }}
+        key: {{ .Values.secrets.keycloak.clientSecret.ncoidc.key | quote }}
 
   opendeskIntegration:
     centralNavigation:
@@ -165,7 +157,7 @@ configuration:
       username:
         value: "opendesk_username"
       password:
-        value: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+        value: {{ .Values.secrets.centralnavigation.apiKey.value | quote }}
     oxAppSuite:
       enabled: {{ .Values.apps.oxAppSuite.enabled }}
 
@@ -189,7 +181,9 @@ configuration:
       username:
         value: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       password:
-        value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+        secret:
+          name: {{ .Values.secrets.postfix.opendeskSystemPassword.name | quote }}
+          key: {{ .Values.secrets.postfix.opendeskSystemPassword.key | quote }}
     host: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
     port: 25
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
@@ -205,7 +199,7 @@ configuration:
 
   serverinfo:
     token:
-      value: {{ .Values.secrets.nextcloud.metricsToken | quote }}
+      value: {{ .Values.secrets.nextcloud.metricsToken.value | quote }}
 
   forbiddenChars: {{ join " " .Values.functional.filestore.naming.forbiddenChars | quote }}
 

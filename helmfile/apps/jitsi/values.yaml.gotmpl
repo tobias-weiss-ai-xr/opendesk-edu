@@ -59,7 +59,9 @@ image:
 
 settings:
   jwtAppSecret:
-    value: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
+    existingSecret:
+      name: {{ .Values.secrets.jitsi.jwtAppSecret.name | quote }}
+      key: {{ .Values.secrets.jitsi.jwtAppSecret.key | quote }}
   keycloakRealm: {{ .Values.platform.realm | quote }}
   keycloakClientId: "opendesk-jitsi"
 
@@ -127,10 +129,11 @@ jitsi:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
     {{- end }}
+    jwt:
+      existingSecretName: {{ .Values.secrets.jitsi.jwtAppSecret.name | quote }}
     extraEnvs:
       AUTH_TYPE: "hybrid_matrix_token"
       JWT_APP_ID: "{{ .Values.global.hosts.jitsi }}.{{ .Values.global.domain }}"
-      JWT_APP_SECRET: {{ .Values.secrets.jitsi.jwtAppSecret | quote }}
       MATRIX_UVS_SYNC_POWER_LEVELS: "true"
       MATRIX_UVS_URL: "http://opendesk-matrix-user-verification-service.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}"
       TURNS_HOST: {{ .Values.turn.tls.host | quote }}
@@ -165,8 +168,7 @@ jitsi:
       tag: {{ .Values.images.jicofo.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     xmpp:
-      password: {{ .Values.secrets.jitsi.jicofoAuthPassword | quote }}
-      componentSecret: {{ .Values.secrets.jitsi.jicofoComponentPassword | quote }}
+      existingSecretName: {{ .Values.secrets.jitsi.jicofoAuthPassword.name | quote }}
     resources:
       {{ .Values.resources.jicofo | toYaml | nindent 6 }}
     securityContext:
@@ -200,7 +202,7 @@ jitsi:
       JIGASI_SIP_TRANSPORT: {{ .Values.sip.jigasi.transport | quote }}
       JIGASI_SIP_URI: {{ .Values.sip.jigasi.uri | quote }}
     xmpp:
-      password: {{ .Values.secrets.jitsi.jigasiXmppPassword | quote }}
+      existingSecretName: {{ .Values.secrets.jitsi.jigasiXmppPassword.name | quote }}
     resources:
       {{ .Values.resources.jigasi | toYaml | nindent 6 }}
     securityContext:
@@ -231,7 +233,7 @@ jitsi:
       tag: {{ .Values.images.jvb.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     xmpp:
-      password: {{ .Values.secrets.jitsi.jvbAuthPassword | quote }}
+      existingSecretName: {{ .Values.secrets.jitsi.jvbAuthPassword.name | quote }}
     resources:
       {{ .Values.resources.jvb | toYaml | nindent 6 }}
     service:
@@ -272,9 +274,9 @@ jitsi:
       tag: {{ .Values.images.jibri.tag | quote }}
       pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     recorder:
-      password: {{ .Values.secrets.jitsi.jibriRecorderPassword | quote }}
+      existingSecretName: {{ .Values.secrets.jitsi.jibriRecorderPassword.name | quote }}
     xmpp:
-      password: {{ .Values.secrets.jitsi.jibriXmppPassword | quote }}
+      existingSecretName: {{ .Values.secrets.jitsi.jibriXmppPassword.name | quote }}
     resources:
       {{ .Values.resources.jibri | toYaml | nindent 6 }}
     securityContext:

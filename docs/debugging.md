@@ -439,7 +439,7 @@ Some situations require a re-run of all events for a provisioning consumer. You 
 ```shell
 export NAMESPACE=<your_namespace>
 export SUBSCRIPTION_NAME=ox-connector
-export SUBSCRIPTION_SECRET_NAME=ox-connector-provisioning-api
+export SUBSCRIPTION_SECRET_NAME=ums-ox-connector-provisioning-api
 export TEMPORARY_CONSUMER_JSON=$(mktemp)
 export PROVISIONING_API_POD_NAME=$(kubectl -n ${NAMESPACE} get pods --no-headers -o custom-columns=":metadata.name" | grep ums-provisioning-api | tr -d '\n')
 kubectl -n ${NAMESPACE} port-forward ${PROVISIONING_API_POD_NAME} 7777:7777 &

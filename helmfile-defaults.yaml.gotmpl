@@ -5,7 +5,7 @@
 # Advanced Configuration: Nested States
 #
 helmfiles:
-  # Path to the helmfile state file being processed BEFORE releases in this state file
+  # Path to the helmfile state file being processed BEFORE releases in this state file.
   - path: "helmfile/apps/opendesk-migrations-pre/helmfile-defaults.yaml.gotmpl"
     values: &values
       - {{ toYaml .Values | nindent 8 }}
