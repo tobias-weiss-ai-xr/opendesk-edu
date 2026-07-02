@@ -189,8 +189,8 @@ service:
       smtp: {{ if .Values.functional.groupware.exposeSmtp }}{port: 25}{{ else }}~{{ end }}
       submission: {{ if .Values.functional.groupware.externalClients.exposeSubmission }}{port: 587}{{ else }}~{{ end }}
       submissions: {{ if .Values.functional.groupware.externalClients.exposeSubmissions }}{port: 465}{{ else }}~{{ end }}
-    {{- if .Values.service.loadBalancerIp.postfix }}
-    loadBalancerIp: {{ .Values.service.loadBalancerIp.postfix }}
+    {{- if .Values.service.loadBalancerIP.postfix }}
+    loadBalancerIP: {{ .Values.service.loadBalancerIP.postfix }}
     {{- end }}
   {{- end }}
 ...

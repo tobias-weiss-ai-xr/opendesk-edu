@@ -167,8 +167,8 @@ service:
     ports:
       imaps: {{ if .Values.functional.groupware.externalClients.exposeImaps }}{port: 993}{{ else }}~{{ end }}
       pop3s: {{ if .Values.functional.groupware.externalClients.exposePop3s }}{port: 995}{{ else }}~{{ end }}
-    {{- if .Values.service.loadBalancerIp.dovecot }}
-    loadBalancerIp: {{ .Values.service.loadBalancerIp.dovecot }}
+    {{- if .Values.service.loadBalancerIP.dovecot }}
+    loadBalancerIP: {{ .Values.service.loadBalancerIP.dovecot }}
     {{- end }}
   {{- end }}
 
