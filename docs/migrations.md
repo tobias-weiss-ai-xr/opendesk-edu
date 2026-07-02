@@ -24,6 +24,7 @@ When upgrading openDesk, two types of migrations may be required:
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
+        * [Postfix: Changed network settings to list](#postfix-change-network-settings-to-list)
     * [Versions ≥ v1.16.0](#versions--v1160)
       * [Pre-upgrade to versions ≥ v1.16.0](#pre-upgrade-to-versions--v1160)
         * [Nubus bug fix: LDAP storage class settings](#nubus-bug-fix-ldap-storage-class-settings)
@@ -255,6 +256,26 @@ service:
 > [!note]
 > The assigned load balancer IP of an existing service may change once the setting takes effect for the
 > first time.
+
+##### Postfix: Changed network settings to list
+
+**Target group:** Deployments with customized relay net or other networking related settings.
+
+**Context**
+
+All network related settings are using lists now instead of strings.
+
+**Required action: Update all network related settings to lists, including `127.0.0.1/32` and `[::1]/128` if necessary**
+
+Change the customization to something like:
+```yaml
+postfix:
+  relayNets:
+    - "127.0.0.0/8"
+    - "::1/128"
+    - "1.2.3.4/24"
+    - "2001:d35c:123:4::/64"
+```
 
 ### Versions ≥ v1.16.0
 
