@@ -21,6 +21,9 @@ When upgrading openDesk, two types of migrations may be required:
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Versions ≥ v1.17.0](#versions--v1170)
+      * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
+        * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
     * [Versions ≥ v1.16.0](#versions--v1160)
       * [Pre-upgrade to versions ≥ v1.16.0](#pre-upgrade-to-versions--v1160)
         * [Nubus bug fix: LDAP storage class settings](#nubus-bug-fix-ldap-storage-class-settings)
@@ -223,6 +226,35 @@ If you would like more details about the automated migrations, please read secti
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
+
+### Versions ≥ v1.17.0
+
+#### Pre-upgrade to versions ≥ v1.17.0
+
+##### Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services
+
+**Target group:** Deployments that set `service.loadBalancerIp.dovecot` or `service.loadBalancerIp.postfix`.
+
+**Context:**
+
+Until now, the setting `service.loadBalancerIp` was rendered into the Dovecot and Postfix service manifests with an
+incorrect field name (`loadBalancerIp` instead of `loadBalancerIP`), so it was silently ignored by Kubernetes and
+never had any effect. The templating has been fixed and the setting has been renamed accordingly.
+
+**Required action**
+
+If you configured this setting, rename the key to use an uppercase "P":
+
+```yaml
+service:
+  loadBalancerIP:
+    dovecot: "1.2.3.4"
+    postfix: "2.3.4.5"
+```
+
+> [!note]
+> The assigned load balancer IP of an existing service may change once the setting takes effect for the
+> first time.
 
 ### Versions ≥ v1.16.0
 
