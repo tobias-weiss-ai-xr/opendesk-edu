@@ -17,7 +17,7 @@ This section covers the internal system requirements and external service requir
     * [Supported controllers](#supported-controllers)
       * [haproxy-ingress.github.io](#haproxy-ingressgithubio)
       * [Ingress nginx](#ingress-nginx)
-    * [Minimal configuration](#minimal-configuration)
+        * [Minimal configuration](#minimal-configuration)
   * [Volume provisioner](#volume-provisioner)
   * [Certificate management](#certificate-management)
   * [External services](#external-services)
@@ -119,13 +119,16 @@ See the [`annotations-risk-level` documentation](https://kubernetes.github.io/in
 > Ensure to install at least Ingress nginx 1.11.5 or 1.12.1 due to [security
 > issues](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
 
-### Minimal configuration
+##### Minimal configuration
 
-Several components in openDesk make use of snippet annotations, which are disabled by default. Please enable them using the following configuration:
+Several components in openDesk make use of snippet annotations, which are disabled by default. Please enable them using the following configuration for your ingress-nginx deployment:
+```yaml
+controller:
+  allowSnippetAnnotations: true      # -> allow-snippet-annotations: "true"
+  config:
+    annotations-risk-level: Critical # required since controller 1.12 / chart 4.12
 ```
-controller.allowSnippetAnnotations=true
-controller.admissionWebhooks.allowSnippetAnnotations=true
-```
+
 See the [`allowSnippetAnnotations` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#allow-snippet-annotations) for context.
 
 ## Volume provisioner
