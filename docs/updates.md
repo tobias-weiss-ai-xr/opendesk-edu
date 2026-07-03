@@ -18,6 +18,9 @@ While [migrations.md](./migrations.md) provides information about required actio
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
+    * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
+      * [Postfix HELO names](#postfix-helo-names)
+      * [Postfix client, HELO, sender restrictions and rate limits](#postfix-client-helo-sender-restrictions-and-rate-limits)
   * [1.16.0](#1160)
     * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
       * [OpenProject PDF export theming](#openproject-pdf-export-theming)
@@ -86,6 +89,71 @@ technical:
 ```
 
 A value of `0` disables caching and is the default. Any positive value keeps LDAP results cached for that many seconds before they are refreshed.
+
+### `smtp.yaml.gotmpl`
+
+#### Postfix HELO names
+
+The HELO name announced by the OX App Suite facing Postfix (`postfix-ox`) and by the internal Postfix can now be
+overridden. Both default to `~`, which keeps the previous behaviour of letting Postfix derive the name from its
+hostname:
+
+```yaml
+smtp:
+  heloName: ~
+  internalHeloName: ~
+```
+
+#### Postfix client, HELO, sender restrictions and rate limits
+
+A set of Postfix restrictions can now be toggled to harden the configuration. These only affect `postfix-ox`.
+Boolean options default to Postfix's previous behaviour (`false`, i.e. not rejecting), except
+`reject_non_fqdn_sender`, `reject_unknown_sender_domain`, `reject_unlisted_sender` which was mistakenly not set
+but defaults now to `true`; the list options default to empty:
+
+```yaml
+technical:
+  postfix:
+    restrictions:
+      unknownReverseClientHostname: false
+      unknownClientHostname: false
+      rblClient: []
+      rhsblReverseClient: []
+      invalidHeloHostname: false
+      nonFQDNHeloHostname: false
+      rhsblHelo: []
+      unknownHeloHostname: false
+      nonFQDNSender: true
+      rhsblSender: []
+      unknownSenderDomain: true
+      unlistedSender: true
+      nonFQDNRecipient: true
+      unlistedRecipient: true
+      unknownRecipientDomain: true
+      unauthDestination: true
+```
+
+Additionally, several client connection limits can now be set for smtp (Port 25) and submission (Port 465/587):
+
+```yaml
+technical:
+  postfix:
+    smtpdUpstreamProxyProtocol: ~
+    smtpLimits:
+      clientConnectionCount: 15
+      clientConnectionRate: 0
+      clientMessageRate: 0
+      clientRecipientRate: 0
+      clientNewTLSSessionRate: 0
+      clientAuthRate: 0
+    submissionLimits:
+      clientConnectionCount: 15
+      clientConnectionRate: 0
+      clientMessageRate: 0
+      clientRecipientRate: 0
+      clientNewTLSSessionRate: 0
+      clientAuthRate: 0
+```
 
 ## 1.16.0
 
