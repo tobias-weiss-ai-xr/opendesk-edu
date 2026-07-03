@@ -97,11 +97,6 @@ variables:
       - "RUN"
       - "STACKIT"
       - "CHANGE ME"
-  INGRESS:
-    description: >
-      Select ingress type (aka subdomain) and ensure you configured your `ingress.*` vars accordingly.
-      If non is chosen, the default will be set by the `setup-environment.sh` script in `opendesk-env`.
-      The script is also the place where you will find all the available options.
   DEBUG_ENABLED:
     description: >
       Allows to set `debug.enabled` to true for a deployment, needs to be supported by stage specific
