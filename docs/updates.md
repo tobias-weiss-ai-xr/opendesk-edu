@@ -14,6 +14,7 @@ While [migrations.md](./migrations.md) provides information about required actio
 * [Updates and features](#updates-and-features)
   * [1.17.0](#1170)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
+      * [Enable the "Send later" (scheduled mail) feature for OX App Suite](#enable-the-send-later-scheduled-mail-feature-for-ox-app-suite)
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
@@ -41,6 +42,21 @@ While [migrations.md](./migrations.md) provides information about required actio
 
 ### `functional.yaml.gotmpl`
 
+#### Enable the "Send later" (scheduled mail) feature for OX App Suite
+
+The OX App Suite "Send later" feature for scheduling outgoing emails is now enabled by default.
+
+```yaml
+functional:
+  groupware:
+    mail:
+      outbound:
+        sendLater:
+          enabled: true
+```
+
+Setting `enabled: false` turns the feature off, resulting in the same behaviour as in openDesk 1.16.x and earlier.
+
 #### Configurable "Remember Me" SSO session timeouts
 
 Keycloak's "Remember Me" login option can now be toggled, and the idle and maximum lifespan of SSO sessions created with it can be configured:
@@ -60,16 +76,16 @@ Set `rememberMe: false` to disable the "Remember Me" option entirely. The two li
 
 #### OX App Suite LDAP caching for contact picker
 
-The contact picker in OX App Suite by default caches the queried LDAP contents for the time (in seconds) defined in
+The contact picker in OX App Suite can cache LDAP lookups. The cache lifetime is controlled by an expiry time in seconds:
 
 ```yaml
 technical:
   oxAppSuite:
     contactPicker:
-      cacheExpirySeconds: 3600
+      cacheExpirySeconds: 0
 ```
 
-Setting `cacheExpirySeconds: 0` turns the cache off, resulting in the same behaviour as in openDesk 1.16.x and earlier.
+A value of `0` disables caching and is the default. Any positive value keeps LDAP results cached for that many seconds before they are refreshed.
 
 ## 1.16.0
 

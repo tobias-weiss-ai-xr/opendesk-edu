@@ -362,6 +362,12 @@ functional:
         recursion: 25
       # Define the maximum size for emails (including their attachments) in Megabyte
       maxSize: 25
+      # Control options for handling outgoing emails
+      outbound:
+        # "Send later" feature allows users to schedule the sending of emails at a later time.
+        # Ref.: https://documentation.open-xchange.com/8/middleware/mail/scheduled_mail.html
+        sendLater:
+          enabled: true
     quota:
       # Set the default mail storage quota for users in gigabyte.
       # Just provide the plain number without quoting. It will allow a quota grace of 10% and +20% in trash storage.
