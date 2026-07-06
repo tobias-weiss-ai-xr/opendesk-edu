@@ -13,6 +13,8 @@ While [migrations.md](./migrations.md) provides information about required actio
 <!-- TOC -->
 * [Updates and features](#updates-and-features)
   * [1.17.0](#1170)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
+      * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
   * [1.16.0](#1160)
@@ -27,7 +29,7 @@ While [migrations.md](./migrations.md) provides information about required actio
     * [`cache.yaml.gotmpl`](#cacheyamlgotmpl)
       * [Options to enable SSL/TLS Redis connection for the Intercom Service, Notes, and OX App Suite](#options-to-enable-ssltls-redis-connection-for-the-intercom-service-notes-and-ox-app-suite)
   * [1.15.0](#1150)
-    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-1)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
       * [Virtual alias limits](#virtual-alias-limits)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-2)
@@ -36,6 +38,23 @@ While [migrations.md](./migrations.md) provides information about required actio
 <!-- TOC -->
 
 ## 1.17.0
+
+### `functional.yaml.gotmpl`
+
+#### Configurable "Remember Me" SSO session timeouts
+
+Keycloak's "Remember Me" login option can now be toggled, and the idle and maximum lifespan of SSO sessions created with it can be configured:
+
+```yaml
+functional:
+  authentication:
+    realmSettings:
+      rememberMe: true
+      ssoSessionIdleTimeoutRememberMe: 28800
+      ssoSessionMaxLifespanRememberMe: 1209600
+```
+
+Set `rememberMe: false` to disable the "Remember Me" option entirely. The two lifespan values only take effect while `rememberMe` is enabled. All lifespan values are defined in seconds.
 
 ### `technical.yaml.gotmpl`
 

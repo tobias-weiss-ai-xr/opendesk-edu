@@ -106,6 +106,9 @@ config:
     revokeRefreshToken: {{ .Values.functional.authentication.realmSettings.revokeRefreshToken }}
     ssoSessionIdleTimeout: {{ .Values.functional.authentication.realmSettings.ssoSessionIdleTimeout }}
     ssoSessionMaxLifespan: {{ .Values.functional.authentication.realmSettings.ssoSessionMaxLifespan }}
+    rememberMe: {{ .Values.functional.authentication.realmSettings.rememberMe }}
+    ssoSessionIdleTimeoutRememberMe: {{ .Values.functional.authentication.realmSettings.ssoSessionIdleTimeoutRememberMe }}
+    ssoSessionMaxLifespanRememberMe: {{ .Values.functional.authentication.realmSettings.ssoSessionMaxLifespanRememberMe }}
     accessCodeLifespanUserAction: {{ .Values.functional.authentication.realmSettings.accessCodeLifespanUserAction }}
     accessCodeLifespanLogin: {{ .Values.functional.authentication.realmSettings.accessCodeLifespanLogin }}
     offlineSessionIdleTimeout: {{ .Values.functional.authentication.realmSettings.offlineSessionIdleTimeout }}

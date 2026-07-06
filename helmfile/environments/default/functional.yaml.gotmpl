@@ -53,6 +53,17 @@ functional:
       # After this, the user is forced to re-authenticate.
       # Ref.: https://www.keycloak.org/docs/latest/server_admin/#_sso_session_max
       ssoSessionMaxLifespan: 57600
+      # Enable the "Remember Me" login option for the realm. When enabled, users can choose to keep their
+      # session persistent across browser restarts, governed by the two "RememberMe" timeouts below.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/ > "Remember Me"
+      rememberMe: true
+      # The following two "RememberMe" timeouts only take effect when `rememberMe` above is enabled.
+      # Maximum time of inactivity before an SSO session created with "Remember Me" is invalidated.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/ > "SSO Session Idle Remember Me"
+      ssoSessionIdleTimeoutRememberMe: 28800
+      # Absolute maximum time an SSO session created with "Remember Me" can exist, regardless of activity.
+      # Ref.: https://www.keycloak.org/docs/latest/server_admin/ > "SSO Session Max Remember Me"
+      ssoSessionMaxLifespanRememberMe: 1209600
       # Maximum time a user has to complete login related actions like update password or configure totp.
       accessCodeLifespanUserAction: 300
       # Maximum time a user has to complete a login.
