@@ -96,7 +96,8 @@ Find out more about the permission system in the [roles & permissions concept](.
 
 openDesk implements a defined [release and patch management process](./docs/releases.md) to ensure stability and security.
 
-All technical releases are created using [Semantic Versioning](https://semver.org/).
+All technical releases are currently created using [Pride Versioning](https://pridever.org/).
+For future releases we plan to use [Semantic Versioning 2.0.0](https://semver.org/).
 
 Gitlab provides an
 [overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases)
