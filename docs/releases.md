@@ -43,13 +43,14 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 ### Release schedule
 
 - **Major releases** are scheduled for **Q3 each year**, with planning beginning in Q1.
-- **Minor releases** occur **monthly on Mondays**, typically **around 10:00 AM** local time.
+- **Minor releases** occur **monthly on Wednesdays**, typically **around 03:00 PM** local time.
   - Each minor release follows a **4-week cycle**.
   - **Week 1–3**: Active development of new features and improvements.
   - **End of Week 3**: **Feature freeze** is enforced to allow stabilization and testing.
   - **Week 4**: Final testing, approvals, and preparation for release.
-  - At the **end of Week 4**, a new minor version is released, and a new cycle begins.
-- **Patch releases** are created **on demand**, based on criticality and urgency.
+  - At the **end of Week 4**, a new version is released, and a new cycle begins.
+    - The development cycle can be extended if necessary, or a release can be skipped if it becomes necessary to delay or postpone the release.
+- **Patch releases** are created **on demand**, based on criticality and urgency, and have no planned development cycle.
 
 ### Upgrades
 
@@ -96,6 +97,7 @@ A lightweight approach reduces manual effort while maintaining transparency.
 | Channel | Audience | Purpose | Owner |
 |---------|----------|---------|-------|
 | **openCode Changelog** | Community & EE | Primary source of truth for every release | DevOps |
+| **opendesk.eu Blog** | Community & EE | Editorially revised release information for a quick overview. | Release Management |
 | **Account‑Manager Mail / Ticket** | Enterprise customers | Targeted information & upgrade advice | Customer Success |
 
 ### Timing of communications
