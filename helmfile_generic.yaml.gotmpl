@@ -21,7 +21,6 @@ helmfiles:
   # Path to the helmfile state file being processed BEFORE releases in this state file
   - path: "helmfile/apps/opendesk-migrations-pre/helmfile-child.yaml.gotmpl"
     values: &values
-      - "helmfile/environments/default/global.yaml.gotmpl"
       - "helmfile/environments/default/*.yaml.gotmpl"
       - {{ toYaml .Values | nindent 8 }}
       {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
