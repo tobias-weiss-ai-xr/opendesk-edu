@@ -55,7 +55,7 @@ data:
     echo '    DocumentRoot /usr/share/sogo-web' >> /etc/apache2/sites-available/sogo.conf
     echo '    ServerName sogo' >> /etc/apache2/sites-available/sogo.conf
     echo '    ServerAlias *' >> /etc/apache2/sites-available/sogo.conf
-    echo '    RedirectMatch 302 ^/$ /SOGo/' >> /etc/apache2/sites-available/sogo.conf
+    echo '    RedirectMatch 302 ^/$ {{ .Values.sogo.serverURL | default "https://sogo.opendesk.hrz.uni-marburg.de" }}/SOGo/' >> /etc/apache2/sites-available/sogo.conf
     echo '' >> /etc/apache2/sites-available/sogo.conf
     echo '    ProxyPreserveHost On' >> /etc/apache2/sites-available/sogo.conf
     echo '    RequestHeader set "x-webobjects-server-port" "80"' >> /etc/apache2/sites-available/sogo.conf
