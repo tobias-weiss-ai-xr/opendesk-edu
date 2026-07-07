@@ -509,4 +509,4 @@ accessibility:
 
     ## Last audit date
     ##
-    lastAuditDate: {{ .Values.accessibility.lastAuditDate | default "2026-03-27" | quote }}
+    lastAuditDate: {{ env "ACCESSIBILITY_LAST_AUDIT_DATE" | default "2026-03-27" | quote }}
