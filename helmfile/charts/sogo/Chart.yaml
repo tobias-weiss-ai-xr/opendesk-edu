@@ -4,8 +4,8 @@ apiVersion: v2
 name: sogo
 description: SOGo groupware server (email, calendar, contacts) — alternative to OX App Suite
 type: application
-version: 0.1.0
-appVersion: "5.11.0"
+version: 0.2.0
+appVersion: "5.12.9"
 keywords:
   - groupware
   - email
