@@ -2,6 +2,10 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
+## Accessibility Configuration (parent key for accessibility.yaml.gotmpl)
+##
+accessibility:
+
 ## The global properties are used to configure multiple charts at once.
 #
 global:
@@ -75,12 +79,6 @@ global:
   ## Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
   #
   imagePullPolicy: "IfNotPresent"
-
-  ## =============================================================================
-  ## ACCESSIBILITY CONFIGURATION
-  ## Parent key for accessibility.yaml.gotmpl
-  ## =============================================================================
-  accessibility:
 
   ## =============================================================================
   ## GROMMUNIO CONFIGURATION
