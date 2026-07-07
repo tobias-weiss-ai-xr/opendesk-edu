@@ -3,10 +3,15 @@
 sogo:
   image:
     repository: weissto/sogo
-    tag: "bookworm-5.8.0"
-    pullPolicy: IfNotPresent
+    tag: "bookworm-5.12.9"
+    pullPolicy: Always
 
   replicaCount: 1
+  workers: 5
+
+  # External server URL for OIDC redirect_uri construction
+  # Falls back to ingress.hosts[0].host if not set
+  serverURL: "https://sogo.opendesk.hrz.uni-marburg.de"
 
   resources:
     requests:
@@ -27,10 +32,10 @@ sogo:
     user: "sogo"
     password: ""
     name: "sogo"
-    initJob:
-      enabled: true
-      nodeSelector: {}
-      tolerations: []
+    # Run init container to grant schema permissions on first deploy.
+    # Required because SOGo needs CREATE privilege on the public schema
+    # to create its tables (sogo_user_profile, sogo_acl, sogo_openid, etc.)
+    initSchema: true
 
   # LDAP connection
   ldap:
@@ -62,6 +67,11 @@ sogo:
   memcachedHost: "memcached:11211"
 
 replicas: 1
+
+# Node selector for SOGo deployment
+# Set to the node running haproxy-ingress to avoid cross-node networking issues
+nodeSelector:
+  kubernetes.io/hostname: "vhrz2339"
 
 ingress:
   enabled: true

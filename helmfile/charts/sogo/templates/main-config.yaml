@@ -1,0 +1,70 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.sogo.oidc.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "sogo.fullname" . }}-main-config
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+data:
+  sogo.conf: |
+    // SOGo configuration - generated from Helm values
+    {
+      SOGoProfileURL = "{{ include "sogo.dbUrl" . }}/sogo_user_profile";
+      OCSFolderInfoURL = "{{ include "sogo.dbUrl" . }}/sogo_folder_info";
+      OCSSessionsFolderURL = "{{ include "sogo.dbUrl" . }}/sogo_sessions_folder";
+      OCSStoreURL = "{{ include "sogo.dbUrl" . }}/sogo_store";
+      OCSAclURL = "{{ include "sogo.dbUrl" . }}/sogo_acl";
+      OCSCacheFolderURL = "{{ include "sogo.dbUrl" . }}/sogo_cache_folder";
+      OCSEMailAlarmsFolderURL = "{{ include "sogo.dbUrl" . }}/sogo_alarms_folder";
+      OCSOpenIdURL = "{{ include "sogo.dbUrl" . }}/sogo_openid";
+
+      SOGoLanguage = {{ .Values.sogo.language | quote }};
+      SOGoTimeZone = {{ .Values.sogo.timezone | quote }};
+      SOGoMailDomain = {{ .Values.sogo.mailDomain | quote }};
+      SOGoPageTitle = {{ .Values.sogo.pageTile | default "openDesk Mail" | quote }};
+      SOGoMemcachedHost = {{ .Values.sogo.memcachedHost | quote }};
+      WOWorkersCount = {{ .Values.sogo.workers | default 5 }};
+
+      // OIDC / SSO
+      SOGoAuthenticationType = openid;
+      SOGoXSRFValidationEnabled = NO;
+      SOGoOpenIdConfigUrl = {{ .Values.sogo.oidc.configUrl | quote }};
+      SOGoOpenIdClient = {{ .Values.sogo.oidc.clientId | quote }};
+      SOGoOpenIdClientSecret = {{ .Values.sogo.oidc.clientSecret | quote }};
+      SOGoOpenIdScope = {{ .Values.sogo.oidc.scope | quote }};
+      SOGoOpenIdEnableRefreshToken = YES;
+      SOGoOpenIdTokenCheckInterval = 3600;
+      SOGoOpenIdLogoutEnabled = YES;
+
+      // Vacation / Forward / Sieve
+      SOGoVacationEnabled = YES;
+      SOGoForwardEnabled = YES;
+      SOGoSieveScriptsEnabled = YES;
+
+      // Mail
+      SOGoIMAPServer = {{ .Values.sogo.imap.server | quote }};
+      SOGoSMTPServer = {{ .Values.sogo.smtp.server | quote }};
+      SOGoSieveServer = {{ .Values.sogo.sieve.server | quote }};
+
+      // LDAP user source
+      SOGoUserSources = (
+        {
+          type = ldap;
+          CNFieldName = cn;
+          UIDFieldName = uid;
+          IDFieldName = uid;
+          bindFields = (uid, mail);
+          baseDN = {{ .Values.sogo.ldap.baseDN | quote }};
+          bindDN = {{ .Values.sogo.ldap.bindDN | quote }};
+          bindPassword = {{ .Values.sogo.ldap.bindPassword | quote }};
+          canAuthenticate = YES;
+          displayName = "Users";
+          hostname = {{ include "sogo.ldapUrl" . | quote }};
+          id = users;
+          isAddressBook = YES;
+        }
+      );
+    }
+{{- end }}

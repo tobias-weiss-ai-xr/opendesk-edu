@@ -18,46 +18,51 @@ spec:
         sogo/server: "true"
 {{ include "sogo.labels" . | nindent 8 }}
     spec:
-      securityContext:
-        fsGroup: 1000
+      {{- if .Values.sogo.db.initSchema }}
+      initContainers:
+        - name: init-db-schema
+          image: "docker.io/bitnami/postgresql:17"
+          imagePullPolicy: {{ .Values.sogo.image.pullPolicy }}
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sogo.fullname" . }}
+                  key: db-password
+          command:
+            - sh
+            - -c
+            - |
+              echo "Granting schema permissions to sogo user..."
+              psql -U {{ .Values.sogo.db.user }} -d {{ .Values.sogo.db.name }} -h {{ .Values.sogo.db.host }} -p {{ .Values.sogo.db.port }} -c "GRANT ALL ON SCHEMA public TO {{ .Values.sogo.db.user }};" 2>&1
+              echo "Schema init complete."
+      {{- end }}
       containers:
         - name: sogo
           image: {{ .Values.sogo.image.repository }}:{{ .Values.sogo.image.tag }}
           imagePullPolicy: {{ .Values.sogo.image.pullPolicy }}
-          securityContext:
-            allowPrivilegeEscalation: true
-            privileged: false
-            readOnlyRootFilesystem: false
-            runAsGroup: 0
-            runAsNonRoot: false
-            runAsUser: 0
           ports:
             - containerPort: 80
+          command:
+            - "/bin/bash"
+            - "/opt/custom-entrypoint/entrypoint.sh"
           env:
             - name: SOGO_DEFAULT_ENCODING
               value: "UTF-8"
-            - name: HTTP_PROXY
-              value: "http://www-proxy2.uni-marburg.de:3128"
-            - name: HTTPS_PROXY
-              value: "http://www-proxy2.uni-marburg.de:3128"
-            - name: NO_PROXY
-              value: "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.opendesk.hrz.uni-marburg.de"
           envFrom:
             - configMapRef:
                 name: {{ include "sogo.fullname" . }}
             - secretRef:
                 name: {{ include "sogo.fullname" . }}
-          command:
-            - /bin/bash
-            - /opt/custom-entrypoint/entrypoint.sh
           volumeMounts:
-            {{- if .Values.sogo.persistence.enabled }}
             - name: sogo-data
               mountPath: /var/lib/sogo
-            {{- end }}
             - name: sogo-config
               mountPath: /etc/sogo/sogo.conf.d
-            - name: entrypoint
+            - name: sogo-main-config
+              mountPath: /etc/sogo/sogo.conf
+              subPath: sogo.conf
+            - name: custom-entrypoint
               mountPath: /opt/custom-entrypoint
           readinessProbe:
             httpGet:
@@ -73,15 +78,21 @@ spec:
             periodSeconds: 20
           resources: {{ .Values.sogo.resources | toYaml | nindent 12 }}
       volumes:
-        {{- if .Values.sogo.persistence.enabled }}
         - name: sogo-data
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-sogo-data
-        {{- end }}
         - name: sogo-config
           configMap:
             name: {{ include "sogo.fullname" . }}
-        - name: entrypoint
+        - name: sogo-main-config
+          configMap:
+            name: {{ include "sogo.fullname" . }}-main-config
+        {{- if .Values.sogo.oidc.enabled }}
+        - name: custom-entrypoint
           configMap:
             name: {{ include "sogo.fullname" . }}-entrypoint
-            defaultMode: 0755
+        {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
