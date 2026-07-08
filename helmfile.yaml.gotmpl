@@ -16,8 +16,7 @@ environments:
 # yamllint disable
 helmfiles:
   - path: "./helmfile_generic.yaml.gotmpl"
-    values:
-      - {{ toYaml .Values | nindent 8 }}
+
 # {{/*
 #
 #   Use this format from a remote repository
