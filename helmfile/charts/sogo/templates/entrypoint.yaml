@@ -58,13 +58,13 @@ data:
     echo '    RedirectMatch 302 ^/$ {{ .Values.sogo.serverURL | default "https://sogo.opendesk.hrz.uni-marburg.de" }}/SOGo/' >> /etc/apache2/sites-available/sogo.conf
     echo '' >> /etc/apache2/sites-available/sogo.conf
     echo '    ProxyPreserveHost On' >> /etc/apache2/sites-available/sogo.conf
-    echo '    RequestHeader set "x-webobjects-server-port" "80"' >> /etc/apache2/sites-available/sogo.conf
-    echo '    RequestHeader set "x-webobjects-server-name" "sogo"' >> /etc/apache2/sites-available/sogo.conf
+    echo '    RequestHeader set "x-webobjects-server-port" "443"' >> /etc/apache2/sites-available/sogo.conf
+    echo '    RequestHeader set "x-webobjects-server-name" "{{ .Values.sogo.host | default "sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
     echo '    RequestHeader set "x-webobjects-server-url" "{{ .Values.sogo.serverURL | default "https://sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
     echo '' >> /etc/apache2/sites-available/sogo.conf
     echo '    <Location /SOGo>' >> /etc/apache2/sites-available/sogo.conf
-    echo '        RequestHeader set "x-webobjects-server-port" "80"' >> /etc/apache2/sites-available/sogo.conf
-    echo '        RequestHeader set "x-webobjects-server-name" "sogo"' >> /etc/apache2/sites-available/sogo.conf
+    echo '        RequestHeader set "x-webobjects-server-port" "443"' >> /etc/apache2/sites-available/sogo.conf
+    echo '        RequestHeader set "x-webobjects-server-name" "{{ .Values.sogo.host | default "sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
     echo '        RequestHeader set "x-webobjects-server-url" "{{ .Values.sogo.serverURL | default "https://sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
     echo '        ProxyPass http://127.0.0.1:20000/SOGo retry=0' >> /etc/apache2/sites-available/sogo.conf
     echo '        ProxyPassReverse http://127.0.0.1:20000/SOGo' >> /etc/apache2/sites-available/sogo.conf
@@ -73,7 +73,7 @@ data:
     echo '    ErrorLog /var/log/apache2/sogo-error.log' >> /etc/apache2/sites-available/sogo.conf
     echo '    CustomLog /var/log/apache2/sogo-access.log combined' >> /etc/apache2/sites-available/sogo.conf
     echo '</VirtualHost>' >> /etc/apache2/sites-available/sogo.conf
-    ln -sf /etc/apache2/sites-available/sogo.conf /etc/apache2/conf-enabled/000-sogo.conf
+    ln -sf /etc/apache2/sites-available/sogo.conf /etc/apache2/sites-enabled/000-sogo.conf
     chmod 644 /etc/apache2/sites-available/sogo.conf
     echo 'Listen 0.0.0.0:80' > /etc/apache2/ports.conf
     echo 'Listen 443' >> /etc/apache2/ports.conf
@@ -85,6 +85,17 @@ data:
     export APACHE_PID_FILE="/var/run/apache2/apache2.pid"
     export APACHE_LOCK_DIR="/var/lock/apache2"
     export APACHE_LOG_DIR="/var/log/apache2"
+
+    # Inject OIDC client secret from environment variable into sogo.conf
+    # This allows the secret to be set via Kubernetes secret (kubectl patch or sync job)
+    # without requiring a Helm re-render / ConfigMap update.
+    if [ -n "$SOGO_OPENID_CLIENT_SECRET" ]; then
+      echo "Injecting OIDC client secret from SOGO_OPENID_CLIENT_SECRET env var..."
+      sed "s|__SOGO_OIDC_CLIENT_SECRET__|${SOGO_OPENID_CLIENT_SECRET}|g" /opt/sogo-config-template/sogo.conf > /etc/sogo/sogo.conf
+    else
+      echo "WARNING: SOGO_OPENID_CLIENT_SECRET not set, using placeholder from config template"
+      cp /opt/sogo-config-template/sogo.conf /etc/sogo/sogo.conf
+    fi
 
     echo "Starting supervisord..."
     exec /usr/bin/supervisord -c /opt/custom-entrypoint/supervisord.conf

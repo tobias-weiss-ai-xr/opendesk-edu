@@ -49,6 +49,13 @@ spec:
           env:
             - name: SOGO_DEFAULT_ENCODING
               value: "UTF-8"
+            - name: SOGO_OPENID_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sogo.fullname" . }}
+                  key: oidc-client-secret
+            - name: VIEWSO_PATH
+              value: "/var/run/sogo"
           envFrom:
             - configMapRef:
                 name: {{ include "sogo.fullname" . }}
@@ -60,8 +67,7 @@ spec:
             - name: sogo-config
               mountPath: /etc/sogo/sogo.conf.d
             - name: sogo-main-config
-              mountPath: /etc/sogo/sogo.conf
-              subPath: sogo.conf
+              mountPath: /opt/sogo-config-template
             - name: custom-entrypoint
               mountPath: /opt/custom-entrypoint
           readinessProbe:
