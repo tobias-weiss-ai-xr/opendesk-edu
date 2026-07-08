@@ -64,6 +64,7 @@ htmlcov/
 # Ignore sensitive credential files
 k8up-*.yaml
 *secrets*.yaml
+!*secrets*.enc.yaml
 *credentials*.yaml
 *.env
 *.env.*
