@@ -32,7 +32,7 @@ data:
       SOGoXSRFValidationEnabled = NO;
       SOGoOpenIdConfigUrl = {{ .Values.sogo.oidc.configUrl | quote }};
       SOGoOpenIdClient = {{ .Values.sogo.oidc.clientId | quote }};
-      SOGoOpenIdClientSecret = {{ .Values.sogo.oidc.clientSecret | quote }};
+      SOGoOpenIdClientSecret = "__SOGO_OIDC_CLIENT_SECRET__";
       SOGoOpenIdScope = {{ .Values.sogo.oidc.scope | quote }};
       SOGoOpenIdEnableRefreshToken = YES;
       SOGoOpenIdTokenCheckInterval = 3600;
