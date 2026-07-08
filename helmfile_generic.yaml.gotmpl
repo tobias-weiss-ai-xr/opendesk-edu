@@ -22,6 +22,7 @@ helmfiles:
   - path: "helmfile/apps/opendesk-migrations-pre/helmfile-child.yaml.gotmpl"
     values: &values
       - "helmfile/environments/default/*.yaml.gotmpl"
+      - "helmfile/environments/default/*.enc.yaml"
       - {{ toYaml .Values | nindent 8 }}
       {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
       - "helmfile/environments/default-enterprise-overrides/*.yaml.gotmpl"
