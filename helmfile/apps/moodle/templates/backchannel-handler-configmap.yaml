@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moodle-backchannel-handler
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: moodle
+    app.kubernetes.io/component: backchannel-logout
+    app.kubernetes.io/part-of: opendesk
+data:
+  backchannel-handler.php: |
+{{ .Files.Get "files/backchannel-handler.php" | indent 4 }}
