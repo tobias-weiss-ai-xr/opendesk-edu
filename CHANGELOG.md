@@ -1,30 +1,162 @@
-## openDesk Edu Changelog
+## [1.16.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.0...v1.16.1) (2026-06-30)
 
-This is a fork of [openDesk](https://www.opencode.de/en/opendesk) with educational services added on top.
-The upstream changelog follows below. For edu-specific changes, see the commit history.
 
-### Edu Additions (on top of openDesk CE v1.13.1)
+### Bug Fixes
 
-- **ILIAS** LMS integration with SAML SSO via Keycloak
-- **Moodle** LMS integration with Shibboleth authentication
-- **BigBlueButton** video conferencing with SAML SSO
-- **OpenCloud** file sharing with OIDC authentication
-- **SOGo** groupware (email, calendar, contacts) with native OIDC SSO
-- **Etherpad** collaborative real-time editor with OIDC
-- **BookStack** knowledge base with SAML
-- **Planka** Kanban-style project boards with OIDC
-- **Zammad** helpdesk/ticket system with SAML
-- **LimeSurvey** course evaluation surveys with LDAP
-- **Draw.io** stateless diagramming
-- **Excalidraw** stateless whiteboarding
-- **Self-Service Password** LDAP password management
-- Portal tiles and SVG icons for all 13 education services
-- Helm charts for all 13 education services with CI (lint, template, kubeconform, helm-unittest)
-- Comprehensive GitHub Actions CI with kind cluster install tests
-- Dependabot for automated dependency updates
-- Makefile with lint, test, template, and spellcheck targets
+* **nextcloud:** Bump Helm chart to include fix for `periodSeconds` on probes with improved defaults ([23338b8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/23338b812fd33bd5b74f8cde224013213cfa3489))
+* **nubus:** Reuse the pooled LDAP admin connection instead of re-binding per operation ([e5b0d03](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e5b0d035a9a014cf7ea48b0efed2f33cac0920bf))
+* **open-xchange:** Accept mailAlternativeAddress as delivery address for groups ([730a4c2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/730a4c2da8f028d39d3bc7351529d2dc47e1dd71))
+* **open-xchange:** Set `passwordFromAddress` for OX-Guard ([bbc156c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bbc156c59e776444e72a6a2c3205dbf23bd4c1ac))
+* **openproject:** Update from 17.5.0 to 17.5.1 ([f609e37](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f609e37aa8843cffe890e8552ac25c86b36d7a7e))
 
----
+# [1.16.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.15.1...v1.16.0) (2026-06-25)
+
+
+### Bug Fixes
+
+* **collabora:** Update from 25.04.09 to 25.04.10 ([70e8870](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/70e887094d8d4af5303e3b818050bc60cdb75c2f))
+* **helmfile:** Add missing Redis TLS and username values ([47ea3d8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/47ea3d8120c65ade03a358d15051debe4ea16ead))
+* **nextcloud:** Bump apps `files_antivirus` to 6.3.0 and `richdocuments` to 9.1.0 ([308e2c6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/308e2c61817c670c21c71b1f065a6baff7ebeb08))
+* **nextcloud:** Bump Nextcloud apps to latest state and use 32.0.9 for release ([c345339](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c34533901dc9e1a4be753618fd36df650351bf35))
+* **nextcloud:** Rollback `richdocuments` app to 9.0.6 due to broken OOXML previews in 9.1.0 ([efaa4b1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/efaa4b1664c60b5f96741a8cbcaf21d4ed8f36a2))
+* **nextcloud:** Allow templating of PHP / nginx resources; see `updates.md` for more details ([1d3874f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d3874f0b89b26f4b6c2b543526eda9eebfebc30))
+* **notes:** Enable AI feature when endpoint is set ([3293de4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3293de459fe05025dd1b73e1e5958620a72577be))
+* **notes:** Ensure DB migrations do not require superuser permission ([7403875](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/74038755625ba7c3add745f108e410db62fa6c29))
+* **nubus:** Add templating for Nubus license ([85d1f33](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/85d1f33f8d5f241eeee10858c18f53396c64bb16))
+* **Nubus:** Explicitly set important securityContext properties in helmfile ([d392be4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d392be49b6ad4a7e041cf0f86aebc84a5b2aefa5))
+* **open-xchange:** [[#307](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/307),[#350](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/350)] Add SSL/TLS support for database connections and fix non-standard port handling ([9880cea](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9880cea08fd6254155ad6a96acb48ab158241be8))
+* **open-xchange:** Only enable Nextcloud integration capabilities when Nextcloud is actually enabled in the deployment ([16aa286](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/16aa286cb756e971db1c8df63dbb6bdc9d4622e1))
+* **open-xchange:** Update Postfix to ensure filter options do not reject mails on infra/config problem but defer them ([c3c0c3f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c3c0c3f22cab06b52061139a5cd55f6069cba908))
+* **opendesk-certificates:** [[#365](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/365)] Bump chart to fix typo in `organizationalUnits` of the certificate's manifest ([8e6fb9f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8e6fb9f5e911214d42591dc7d7cc9e86ce419a8b))
+* **openproject:** Set imagery design settings for PDF export through deployment ([48498f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/48498f398c7be3254e7c4bf1d794f3aa0ae85308))
+* **postgresql:** Generate bootstrap users and databases from databases.* ([76758f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/76758f3152478b61b705c109bff69037c9041862))
+* **seaweedfs:** Generate buckets and identities from objectstores ([2341f4e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2341f4e00f27585032c1af4c5ce0b044c5dbaf0c))
+* **services-external:** Bump ClamAV Helm chart to ensure default `alertBrokenMedia: [secure]` is applied ([1d2ab8e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d2ab8ed367b7a9be9ab97b7b07116fb03e2649d))
+* **xwiki:** Update from 17.10.7 to 17.10.9 ([c22c745](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c22c745a6b47eb89463680b32bdc6aca4bd6c3f3))
+
+
+### Features
+
+* **nubus:** Update from v1.19.1 to v1.20.1 ([9db31c7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9db31c751946da280806dbcfd72c4a1f0ba4d520))
+* **open-xchange:** Add option to define `loadBalancerIp` for external services of Dovecot and/or Postfix; see `updates.md` for more details ([8d24f72](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8d24f7242045c52c652c5b200a21a6c6daef5d06))
+* **open-xchange:** Update from 8.48 to 8.49 ([c87ba4d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c87ba4d7ab3190ae19ed6cada3c4ecd53d969015))
+* **openproject:** Update from 17.4.1 to 17.5.0 ([61b049f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/61b049f0906a1f63dd37984c30ef2b67a22f908e))
+
+## [1.15.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.15.0...v1.15.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* **openproject:** Update from 17.4.0 to 17.4.1; strongly recommended update to address CVEs, find details in upstream release notes https://www.openproject.org/docs/release-notes/17-4-1/ ([953fd04](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/953fd048fc98ca31218897ef12ba00d54b81ad14))
+
+# [1.15.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.2...v1.15.0) (2026-05-28)
+
+
+### Bug Fixes
+
+* **helmfile:** Remove unused Nubus Guardian images from `images.yaml.gotmpl` ([cbad52c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cbad52ce07347c3babe78bd086e7923bd0e8b7d1))
+* **nextcloud:** [[#339](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/339)] Update from 32.0.8 to 32.0.9 including latest apps ([03d97b5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/03d97b589c8f7f2af8a68887c9c9307df669dc36))
+* **nextcloud:** Raise PHP session timeout to avoid unwanted IdP logouts ([269512f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/269512ff74647547bf023be3c992443505318919))
+* **nubus:** Fix UMC server failing to release UNIX sockets to SSSD via PAM ([af8f49b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/af8f49bd337ec16943bb81b104ea3fb1e0471d0c))
+* **open-xchange:** Add proxy protocol support ([fcb997d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/fcb997d8c5d3f3aa6b8cb97e23f36bb1ddecaa06))
+* **open-xchange:** Add support for virtual_mailbox_maps in Postfix ([ef2fcfe](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ef2fcfe7b0d9390810fd5e6ced68f6749c0f1665))
+* **open-xchange:** Apply latest 8.48 patch release (26-05-2026) ([a83975d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a83975d2897dac0a418bf8ded7403c1e30a84c6e))
+* **open-xchange:** Change sequence in Postfix' filter handling ([152ecff](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/152ecff3d7db4ced7b44f50023edf79f9bdd18ad))
+* **open-xchange:** Disable LDAP SMTP Sender Login Maps ([36085ec](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/36085ecee089b1f3d6418678fce36ba7414358b8))
+* **open-xchange:** Move confidential values into secret sections ([365c65c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/365c65c4f6634357755ad3be64c4b81335f494bb))
+* **open-xchange:** Remove non-working "Feedback" option from help menu ([32bd9c1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/32bd9c1677d2ca8b5d77c1d10ab3a530b0016dd8))
+* **open-xchange:** Remove typo in user fieldnames within contact picker ([7edefc9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7edefc98b580f242d3dcb447882c77e9d58a9f2e))
+* **open-xchange:** Spawn additional Postfix services for streamlined (ha)proxy protocol support; See `updates.md` and `migrations.md` for more details ([13811d7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/13811d7c5958f8b94d45b974544ee9a13f73f3f6))
+* **open-xchange:** Support for `functional.groupware.mail.localLimits.expansion` and `.recursion` ([b5bbe3c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b5bbe3c659db55f3234b79fc46c2a4ec944d3945))
+* **xwiki:** Fix for mixed case usernames when access to XWiki happend before the nightly LDAP sync; see `migrations.md` for required upgrade steps ([ab264bb](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ab264bbde76ac7b98a40669b554f11d4d889d15f))
+* **xwiki:** LDAP group re-sync script after latest XWiki update; see `migrations.md` for required upgrade steps ([e6a07cc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e6a07cca97ec294a23424e01091faf051bc75f52))
+
+
+### Features
+
+* **helmfile:** Provide various limits for groupware; see `updates.md` for more details ([1bd223e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1bd223e5e86ffb43dd027c94b03b46b1fdf47180))
+* **open-xchange:** Update from 8.46 to 8.48 ([5ff0636](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5ff0636b34a311d47889baa86cdcfc65a3d1dce0))
+* **openproject:** Update from 17.3.2 to 17.4.0 ([02f3399](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/02f33997088cd44f5299324fef4a1bffbf057e85))
+* **seaweedfs:** Introduce SeaweedFS as S3 object storage ([45fbd75](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/45fbd75bd86e7a45e9223378cbf8addc20db802b))
+
+## [1.14.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.2...v1.14.3) (2026-06-08)
+
+
+### Bug Fixes
+
+* **openproject:** fix(openproject): Update from 17.3.2 to 17.3.4; strongly recommended update to address CVE, find details in upstream release notes https://www.openproject.org/docs/release-notes/17-3-4/ ([13f2449](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/13f24497218e47c289573fa4120f02d3c3b508e4))
+
+## [1.14.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.1...v1.14.2) (2026-05-13)
+
+
+### Bug Fixes
+
+* **openproject:** Bump helm chart to 13.5.5 ([e27cfd8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e27cfd80ba2e8a83576fbc3b2f9189748fb03823))
+* **openproject:** Update OpenProject to 17.3.2 ([016c568](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/016c56883cd510d0c1e0e5a1b5402652454a4232))
+
+## [1.14.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.14.0...v1.14.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* **intercom-service:** Update from v2.23.7 to v2.23.11; move `extraEnvVars` to correct location ([b53f20c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b53f20c98f045b7eead184598aed143b78c88cc7))
+* **nextcloud:** Update from 32.0.6 to 32.0.8 incl. most recent apps and EE patches; Upgrade is strongly recommended ([8569216](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8569216afbab0bfaa97d61e70f4948be547f393b))
+* **nubus:** Update from v1.19.0 to v1.19.1 ([0989af9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0989af94341ce3c8f78857c0ce7fc2354b03820f))
+* **openproject:** Enable automatic locking of accounts based on LDAP information ([2028913](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/202891302c587f9bed0325172669fa05c18cdc60))
+* **xwiki:** Update from 17.10.4 to 17.10.7 ([b0223c5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b0223c5e7304f8e78d521b169600684989ac8bb8))
+
+# [1.14.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.2...v1.14.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* **clamav:** Reject infected mails by default ([c4e54b9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c4e54b92e2ac04bcec5dafdde75d0048491c72c1))
+* **collabora:** Update from 25.04.8 to 25.4.9 ([5fd39a2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/5fd39a2282d4de984dd0b4b7f425810f39a5544d))
+* **element:** Add support for self-signed certificates in user verification service ([49c2394](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/49c23940f1899119974728812e1ae2825c723bee))
+* **helmfile:** Require MASTER_PASSWORD; see `migrations.md` for required upgrade steps ([99ca840](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/99ca8408663e0aec51d147da0ba787b8b12b412f))
+* **nextcloud:** Allow longer running and concurrent cron jobs ([00b5aa7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/00b5aa7701bcdc97d81135002270b6fe7d8b42c3))
+* **nextcloud:** Update to PHP 8.4 and bump apps ([f241ecc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f241ecc58b1ee3ecf36c7ad28b4dd229823eb996))
+* **nubus:** [[#337](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/337)] Remove extraEnvVars from `waitForDependency` of `nubusPortalConsumer` ([c9507cc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c9507cce826fb2e568c6b8b1acd11dabfacb6c69))
+* **open-xchange:** Fix disappearing folder subscriptions when using folder share or deputy feature ([a254ac5](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a254ac5500d689723ffdae55f2c773f7eef5999a))
+* **open-xchange:** Improve Listfilter option in Postfix ([48ae5e6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/48ae5e6dc518497fbf70c56e2019b2f384af3ce3))
+* **opendesk-static-files:** [[#321](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/321)] Switch to pathType `ImplementationSpecific` ([cfbafc0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cfbafc0399bce91cc75822dc2cc7e9c285f18afb))
+* **opendesk-static-files:** Create ingress resources based on available apps ([538bc34](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/538bc34b0cf7d932ed8e2b2bee66cb05c8f83c15))
+* **openproject:** [[#338](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/338)] Bump Helm chart to 13.4.3 to fix issue with port definition ([587ae6a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/587ae6ad1635f7d28f70fb9a0a8cfde2e6afc9cf))
+* **openproject:** Update from 17.3.0 to 17.3.1 ([4599311](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/45993116201623d08da7830f900452051092da4e))
+* **postfix:** Add custom transport_map ([373cbae](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/373cbae5995936adef98ac8b62f360ac4f26f688))
+
+
+### Features
+
+* **nubus:** Support multiple IdP definitions for SSO federation in `functional.authentication.ssoFederation`; see `migrations.md` for required upgrade steps ([85c9691](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/85c96917969e6041d3750587cfd326fd5f1b2741))
+* **nubus:** Update from v1.18.1 to v1.19.0 ([8073597](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/807359722f63680381d57eb325897a1e777266d0))
+* **opendesk-static-files:** Serve `robots.txt` on relevant hosts ([de6bb6a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/de6bb6a4ea3219ca87f32fd51de11b7f63e963dc))
+* **openproject:** Update from 17.2.3 to 17.3.0 ([eed365e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/eed365eefb6e6a2d5fb85a096867791f11465caf))
+* **ox-connector:** Update from v0.35.1 to v0.36.4 ([d7111d9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/d7111d9f80a7ac3106f66a09a394d1c42920d33b))
+
+## [1.13.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.2...v1.13.3) (2026-05-13)
+
+### Bug Fixes
+
+* **openproject:** Bump helm chart to 13.5.5 ([f4321f6c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/f4321f6cec9f1e0a9f14e30ef3d9426bda7495d7))
+* **openproject:** Update OpenProject to 17.2.4 ([f4321f6c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/f4321f6cec9f1e0a9f14e30ef3d9426bda7495d7))
+
+
+## [1.13.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.1...v1.13.2) (2026-04-08)
+
+
+### Bug Fixes
+
+* **collabora:** Add `technical.collabora.additionalExtraParams` to support custom parameters without overriding the whole `extra_params` string ([3ce8d21](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3ce8d219e8f1c0ccadd361225234fa0f8990ee48))
+* **collabora:** Add IPv6 ULA to `post_allow.hosts` ([8486ef0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8486ef0057e6e314dbbd1285fdc4b17ea7c1b379))
+* **collabora:** Streamline replica configuration ([07de7e6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/07de7e66c8f70cd2016e2732246fffa8a99b4386))
+* **helmfile:** Add IPv6 ULA to `cluster.cidr` ([0d9a4bc](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0d9a4bc5d2b490d10831e7a7809bcc4b6f290046))
+* **nubus:** Wait 180sec before running `opendesk-keycloak-bootstrap` to ensure Nubus' bootstrapping is done ([b4029f3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b4029f3a4a51f7e20556e8bca301678f2b271e75))
+* **open-xchange:** Add distribution lists to contact picker and provide translation for folder names ([b9d0b10](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b9d0b10bfeb363f07ef5eef06d061fcb8fb67f20))
+* **open-xchange:** Allow lazy_expunge toggle ([e32eb88](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e32eb880389a972af1eaba1dad5dd9d70974b5f2))
+* **open-xchange:** Update Dovecot Helm chart to fix deputy function ([8283b38](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8283b38c6cff694aba1b844a5a7c7cd739c62063))
+* **openproject:** Update OpenProject from 17.2.1 to 17.2.3; strongly recommended update to address CVE, find details in upstream release notes https://www.openproject.org/docs/release-notes/17-2-3/ ([e3a4878](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e3a48788d8c236191ca8aeeb420c175a1b5af5c0))
+* **services-external:** Update ClamAV to v1.5.2 ([1fb87b6](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1fb87b6a4d9c87bc86518db1d8d13cef445c91f1))
 
 ## [1.13.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.13.0...v1.13.1) (2026-03-23)
 

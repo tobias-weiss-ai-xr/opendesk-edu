@@ -316,7 +316,8 @@ To enable `ReadWriteMany` you can use the following attribute:
 ```yaml
 cluster:
   persistence:
-    readWriteMany: true
+    readWriteMany:
+      enabled: true
 ```
 
 ## Customize deployment

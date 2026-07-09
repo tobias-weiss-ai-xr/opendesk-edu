@@ -3,18 +3,49 @@ SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffe
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# Updates & Upgrades
+# Migration requirements
+
+When upgrading openDesk, two types of migrations may be required:
+
+- **Automated migrations between versions**, which reduce the need for manual intervention. These migrations have limitations: they require specific openDesk versions to be installed, which effectively enforces a defined upgrade path. See [Automated migrations](#automated-migrations) for details.
+- **Manual checks and actions**, which are described in [Manual checks/actions](#manual-checksactions).
+
+> [!important]
+> Please read and follow these requirements _thoroughly_ before starting an update or upgrade, and make sure you are viewing the correct version of this document (switch branch or version if necessary). Always run your backup procedure before beginning an upgrade, as rollbacks may require restoring from backup due to non-reversible database changes within applications.
+
+> [!warning]
+> Depending on your PV reclaim policy, you may need to clean up PVs manually once the related PVCs are no longer in use.
 
 <!-- TOC -->
-* [Updates \& Upgrades](#updates--upgrades)
-  * [Disclaimer](#disclaimer)
+* [Migration requirements](#migration-requirements)
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Versions ≥ v1.17.0](#versions--v1170)
+      * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
+        * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
+        * [Postfix: Changed network settings to list](#postfix-changed-network-settings-to-list)
+    * [Versions ≥ v1.16.0](#versions--v1160)
+      * [Pre-upgrade to versions ≥ v1.16.0](#pre-upgrade-to-versions--v1160)
+        * [Nubus bug fix: LDAP storage class settings](#nubus-bug-fix-ldap-storage-class-settings)
+    * [Versions ≥ v1.15.0](#versions--v1150)
+      * [Pre-upgrade to versions ≥ v1.15.0](#pre-upgrade-to-versions--v1150)
+        * [New Helmfile default: external mail services are no longer enabled by default](#new-helmfile-default-external-mail-services-are-no-longer-enabled-by-default)
+        * [New Helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
+      * [Post-upgrade to versions ≥ v1.15.0](#post-upgrade-to-versions--v1150)
+        * [XWiki bug fix: LDAP group synchronization incomplete](#xwiki-bug-fix-ldap-group-synchronization-incomplete)
+        * [XWiki bug fix: User account merge for uppercase usernames (Part 2)](#xwiki-bug-fix-user-account-merge-for-uppercase-usernames-part-2)
+    * [Versions ≥ v1.14.0](#versions--v1140)
+      * [Pre-upgrade to versions ≥ v1.14.0](#pre-upgrade-to-versions--v1140)
+        * [Updated Helmfile behaviour: Remove default MASTER\_PASSWORD](#updated-helmfile-behaviour-remove-default-master_password)
+        * [Changed Helmfile structure: Custom OIDC clients and client scopes](#changed-helmfile-structure-custom-oidc-clients-and-client-scopes)
+        * [Changed Helmfile structure: Single-sign on federation with upstream IdPs](#changed-helmfile-structure-single-sign-on-federation-with-upstream-idps)
+      * [Post-upgrade to versions ≥ v1.14.0](#post-upgrade-to-versions--v1140)
+        * [Potential restart: OX Connector may get into crash loop](#potential-restart-ox-connector-may-get-into-crash-loop)
     * [Versions ≥ v1.13.0](#versions--v1130)
       * [Pre-upgrade to versions ≥ v1.13.0](#pre-upgrade-to-versions--v1130)
-        * [New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
-        * [Updated helmfile options: New ingress additional annotations](#updated-helmfile-options-new-ingress-additional-annotations)
+        * [New Helmfile default: Support for Ingress controller `haproxy-ingress.github.io`](#new-helmfile-default-support-for-ingress-controller-haproxy-ingressgithubio)
+        * [Updated Helmfile options: New ingress additional annotations](#updated-helmfile-options-new-ingress-additional-annotations)
     * [Versions ≥ v1.12.0](#versions--v1120)
       * [Pre-upgrade to versions ≥ v1.12.0](#pre-upgrade-to-versions--v1120)
         * [New application default: Keycloak imports users to its own database](#new-application-default-keycloak-imports-users-to-its-own-database)
@@ -27,12 +58,12 @@ SPDX-License-Identifier: Apache-2.0
     * [Versions ≥ v1.11.0](#versions--v1110)
       * [Pre-upgrade to versions ≥ v1.11.0](#pre-upgrade-to-versions--v1110)
         * [Deployment cleanup: Collabora Controller](#deployment-cleanup-collabora-controller)
-        * [Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#helmfile-new-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
-        * [Helmfile new secret: `secrets.nextcloud.statusPassword`](#helmfile-new-secret-secretsnextcloudstatuspassword)
+        * [New Helmfile option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)](#new-helmfile-option-annotations-for-external-services-dovecot-jitsi-jvb-postfix)
+        * [New Helmfile secret: `secrets.nextcloud.statusPassword`](#new-helmfile-secret-secretsnextcloudstatuspassword)
     * [Versions ≥ v1.10.0](#versions--v1100)
       * [Pre-upgrade to versions ≥ v1.10.0](#pre-upgrade-to-versions--v1100)
-        * [Helmfile new secret: `secrets.nubus.ldapSearch.postfix`](#helmfile-new-secret-secretsnubusldapsearchpostfix)
-        * [Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`](#helmfile-new-secret-secretsdoveocotsharedmailboxesmasterpassword)
+        * [New Helmfile secret: `secrets.nubus.ldapSearch.postfix`](#new-helmfile-secret-secretsnubusldapsearchpostfix)
+        * [New Helmfile secret: `secrets.doveocot.sharedMailboxesMasterPassword`](#new-helmfile-secret-secretsdoveocotsharedmailboxesmasterpassword)
         * [New Helmfile default: Nubus provisioning debug container no longer deployed](#new-helmfile-default-nubus-provisioning-debug-container-no-longer-deployed)
         * [New Helmfile default: Postfix SMTP SASL security options](#new-helmfile-default-postfix-smtp-sasl-security-options)
       * [Post-upgrade to versions ≥ v1.10.0](#post-upgrade-to-versions--v1100)
@@ -41,7 +72,7 @@ SPDX-License-Identifier: Apache-2.0
       * [Pre-upgrade to versions ≥ v1.9.0](#pre-upgrade-to-versions--v190)
         * [New application default: Postfix SMTP SASL security option](#new-application-default-postfix-smtp-sasl-security-option)
         * [Helmfile fix: Cassandra passwords read from `databases.*`](#helmfile-fix-cassandra-passwords-read-from-databases)
-        * [Helmfile new feature: `functional.groupware.externalClients.*`](#helmfile-new-feature-functionalgroupwareexternalclients)
+        * [New Helmfile option: `functional.groupware.externalClients.*`](#new-helmfile-option-functionalgroupwareexternalclients)
     * [Versions ≥ v1.8.0](#versions--v180)
       * [Pre-upgrade to versions ≥ v1.8.0](#pre-upgrade-to-versions--v180)
         * [New application default: Default group for two-factor authentication is now "2FA Users"](#new-application-default-default-group-for-two-factor-authentication-is-now-2fa-users)
@@ -61,7 +92,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Versions ≥ v1.6.0](#versions--v160)
       * [Pre-upgrade to versions ≥ v1.6.0](#pre-upgrade-to-versions--v160)
         * [Upstream constraint: Nubus' external secrets](#upstream-constraint-nubus-external-secrets)
-        * [Helmfile new secret: `secrets.minio.openxchangeUser`](#helmfile-new-secret-secretsminioopenxchangeuser)
+        * [New Helmfile secret: `secrets.minio.openxchangeUser`](#new-helmfile-secret-secretsminioopenxchangeuser)
         * [Helmfile new object storage: `objectstores.openxchange.*`](#helmfile-new-object-storage-objectstoresopenxchange)
         * [OX App Suite fix-up: Using S3 as storage for non mail attachments (pre-upgrade)](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade)
       * [Post-upgrade to versions ≥ v1.6.0](#post-upgrade-to-versions--v160)
@@ -71,7 +102,7 @@ SPDX-License-Identifier: Apache-2.0
         * [Helmfile cleanup: `global.additionalMailDomains` as list](#helmfile-cleanup-globaladditionalmaildomains-as-list)
     * [Versions ≥ v1.3.0](#versions--v130)
       * [Pre-upgrade to versions ≥ v1.3.0](#pre-upgrade-to-versions--v130)
-        * [Helmfile new feature: `functional.authentication.ssoFederation`](#helmfile-new-feature-functionalauthenticationssofederation)
+        * [New Helmfile option: `functional.authentication.ssoFederation`](#new-helmfile-option-functionalauthenticationssofederation)
     * [Versions ≥ v1.2.0](#versions--v120)
       * [Pre-upgrade to versions ≥ v1.2.0](#pre-upgrade-to-versions--v120)
         * [Helmfile cleanup: Do not configure OX provisioning when no OX installed](#helmfile-cleanup-do-not-configure-ox-provisioning-when-no-ox-installed)
@@ -82,7 +113,7 @@ SPDX-License-Identifier: Apache-2.0
     * [Versions ≥ v1.1.1](#versions--v111)
       * [Pre-upgrade to versions ≥ v1.1.1](#pre-upgrade-to-versions--v111)
         * [Helmfile feature update: Component specific `storageClassName`](#helmfile-feature-update-component-specific-storageclassname)
-        * [Helmfile new secret: `secrets.nubus.masterpassword`](#helmfile-new-secret-secretsnubusmasterpassword)
+        * [New Helmfile secret: `secrets.nubus.masterpassword`](#new-helmfile-secret-secretsnubusmasterpassword)
     * [Versions ≥ v1.1.0](#versions--v110)
       * [Pre-upgrade to versions ≥ v1.1.0](#pre-upgrade-to-versions--v110)
         * [Helmfile cleanup: Restructured `/helmfile/files/theme` folder](#helmfile-cleanup-restructured-helmfilefilestheme-folder)
@@ -122,23 +153,6 @@ SPDX-License-Identifier: Apache-2.0
     * [Development](#development)
 <!-- TOC -->
 
-## Disclaimer
-
-Starting with openDesk 1.0, we aim to offer hassle-free updates/upgrades.
-
-Therefore, openDesk contains automated migrations between versions which reduces the need for manual interaction.
-
-These automated migrations have limitations in the sense that they require a certain openDesk version to be installed, effectively resulting in a forced upgrade path. This is highlighted in the section [Automated migrations](#automated-migrations).
-
-Manual checks and possible actions are also required by openDesk updates, they are described in the section [Manual checks/actions](#manual-checksactions).
-
-> [!important]
-> Please be sure to _thoroughly_ read / follow the requirements before you update / upgrade and assure that
-> you are reading the correct version of this document (change branch / version if necessary).
-
-> [!warning]
-> We assume that the PV reclaim policy is set to `delete`, resulting in PVs getting deleted as soon as the related PVC is deleted; we will not address explicit deletion for PVs.
-
 ## Deprecation warnings
 
 We cannot hold back all migrations as some are required e.g. due to a change in a specific component that we want/need to update, we try to bundle others only with major releases.
@@ -152,6 +166,7 @@ This section provides an overview of potential changes to be part of the next ma
   - Removal of the XWiki MariaDB support.
   - Removal of the Nextcloud MariaDB support.
 - The option `technical.nubus.keycloak.ldapFederation.importUsers` described in the [≥ 1.12.0 migrations](#new-application-default-keycloak-imports-users-to-its-own-database) is likely to be removed by enforcing the documented change of the user import setting.
+- Removal of MinIO as S3 storage backend for non-production installations (see [≥ 1.15.0 migrations](#new-helmfile-default-support-for-seaweedfs-as-s3-backend))
 
 ## Overview and mandatory upgrade path
 
@@ -173,23 +188,26 @@ matching that constraint, though our links always point to the newest patch rele
 > 1. Upgrade to v1.7.1 → post steps for v1.6.0 to v1.7.1
 
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
-| Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                      |
-| ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------ |
-| [v1.13.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.13.1) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                              |
-| [v1.12.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.2) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | [⚠ Install v1.12.x first](#versions--v1120-automated) |
-| [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                              |
-| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.8.0 first                              |
-| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | [⚠ Install v1.8.0 first](#versions--v180-automated)   |
-| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                              |
-| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)   | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170)  | ⬇ Install ≥ v1.5.0 first                              |
-| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)   | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160)  | [⚠ Install v1.5.0 first](#versions--v160-automated)   |
-| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)   | **yes**   | --                                                                                                                             | --                                       | ⬇ Install ≥ v1.1.x first                              |
-| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)   | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                              |
-| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)   | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                              |
-| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)   | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                       | [⚠ Install v1.1.x first](#versions--v120-automated)   |
-| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)   | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110)  | [⚠ Install v1.0.0 first](#versions--v110-automated)   |
-| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100)  | [⚠ Install v0.9.0 first](#versions--v100-automated)   |
-| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)   | **yes**   | --                                                                                                                             | --                                       | --                                                     |
+| Version                                                                                   | Mandatory | Pre-Upgrade                                                                                                                    | Post-Upgrade                             | Minimum Required Previous Version                             |
+| ----------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------- |
+| [v1.16.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.16.0) | --        | --                                                                                                                             | --                                       | [⚠ Install v1.15.x first]((#pre-upgrade-to-versions--v1150)) |
+| [v1.15.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.15.1) | **yes**   | [Pre](#pre-upgrade-to-versions--v1150)                                                                                         | [Post](#post-upgrade-to-versions--v1150) | ⬇ Install ≥ v1.12.x first                                    |
+| [v1.14.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.14.2) | --        | [Pre](#pre-upgrade-to-versions--v1140)                                                                                         | [Post](#post-upgrade-to-versions--v1140) | ⬇ Install ≥ v1.12.x first                                    |
+| [v1.13.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.13.2) | --        | [Pre](#pre-upgrade-to-versions--v1130)                                                                                         | --                                       | [⚠ Install v1.12.x first](#versions--v1120-automated)        |
+| [v1.12.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.12.2) | **yes**   | [Pre](#pre-upgrade-to-versions--v1120)                                                                                         | [Post](#post-upgrade-to-versions--v1120) | ⬇ Install ≥ v1.8.0 first                                     |
+| [v1.11.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.11.4) | --        | [Pre](#pre-upgrade-to-versions--v1110)                                                                                         | --                                       | ⬇ Install ≥ v1.8.0 first                                     |
+| [v1.10.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.10.0) | --        | [Pre](#pre-upgrade-to-versions--v1100)                                                                                         | [Post](#post-upgrade-to-versions--v1100) | ⬇ Install ≥ v1.8.0 first                                     |
+| [v1.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.9.0)   | --        | [Pre](#pre-upgrade-to-versions--v190)                                                                                          | --                                       | [⚠ Install v1.8.0 first](#versions--v180-automated)          |
+| [v1.8.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.8.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v180)                                                                                          | --                                       | ⬇ Install ≥ v1.5.0 first                                     |
+| [v1.7.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.7.1)   | --        | [Pre](#pre-upgrade-to-versions--v170)                                                                                          | [Post](#post-upgrade-to-versions--v170)  | ⬇ Install ≥ v1.5.0 first                                     |
+| [v1.6.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.6.0)   | --        | [Pre](#pre-upgrade-to-versions--v160)                                                                                          | [Post](#post-upgrade-to-versions--v160)  | [⚠ Install v1.5.0 first](#versions--v160-automated)          |
+| [v1.5.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.5.0)   | **yes**   | --                                                                                                                             | --                                       | ⬇ Install ≥ v1.1.x first                                     |
+| [v1.4.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.4.1)   | --        | [Pre](#pre-upgrade-to-versions--v140)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                                     |
+| [v1.3.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.3.2)   | --        | [Pre](#pre-upgrade-to-versions--v130)                                                                                          | --                                       | ⬇ Install ≥ v1.1.x first                                     |
+| [v1.2.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.1)   | --        | [Pre](#pre-upgrade-to-versions--v120)                                                                                          | --                                       | [⚠ Install v1.1.x first](#versions--v120-automated)          |
+| [v1.1.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.1.2)   | **yes**   | [Pre .0](#pre-upgrade-to-versions--v110) → [Pre .1](#pre-upgrade-to-versions--v111) → [Pre .2](#pre-upgrade-to-versions--v112) | [Post](#post-upgrade-to-versions--v110)  | [⚠ Install v1.0.0 first](#versions--v110-automated)          |
+| [v1.0.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.0.0)   | **yes**   | [Pre](#pre-upgrade-to-versions--v100)                                                                                          | [Post](#post-upgrade-to-versions--v100)  | [⚠ Install v0.9.0 first](#versions--v100-automated)          |
+| [v0.9.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v0.9.0)   | **yes**   | --                                                                                                                             | --                                       | --                                                            |
 
 > [!warning]
 > Be sure to check out the table in the release version you are going to install, and not the currently installed version.
@@ -199,17 +217,397 @@ If you would like more details about the automated migrations, please read secti
 ## Manual checks/actions
 
 > [!note]
+> Starting with openDesk 1.15, we introduced [`updates.md`](./updates.md) to document newly added configuration
+> options that do not require any action during upgrades, but are still useful for getting an overview of new
+> available settings.
+
+> [!note]
 > We **only** use the mathematical symbol ≥ to denote for which versions manual steps must be
 > applied. For example, "Versions ≥ v1.7.0" refers to all openDesk versions (major, minor and
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
 
+### Versions ≥ v1.17.0
+
+#### Pre-upgrade to versions ≥ v1.17.0
+
+##### Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services
+
+**Target group:** Deployments that set `service.loadBalancerIp.dovecot` or `service.loadBalancerIp.postfix`.
+
+**Context:**
+
+Until now, the setting `service.loadBalancerIp` was rendered into the Dovecot and Postfix service manifests with an
+incorrect field name (`loadBalancerIp` instead of `loadBalancerIP`), so it was silently ignored by Kubernetes and
+never had any effect. The templating has been fixed and the setting has been renamed accordingly.
+
+**Required action**
+
+If you configured this setting, rename the key to use an uppercase "P":
+
+```yaml
+service:
+  loadBalancerIP:
+    dovecot: "1.2.3.4"
+    postfix: "2.3.4.5"
+```
+
+> [!note]
+> The assigned load balancer IP of an existing service may change once the setting takes effect for the
+> first time.
+
+##### Postfix: Changed network settings to list
+
+**Target group:** Deployments with customized relay net or other networking related settings.
+
+**Context**
+
+All network related settings are using lists now instead of strings.
+
+**Required action: Update all network related settings to lists, including `127.0.0.1/32` and `[::1]/128` if necessary**
+
+Example: Change the customization from a space-separated string:
+```yaml
+postfix:
+  relayNets: "127.0.0.0/8 ::1/128 1.2.3.4/24 2001:d35c:123:4::/64"
+```
+
+to a list:
+```yaml
+postfix:
+  relayNets:
+    - "127.0.0.0/8"
+    - "::1/128"
+    - "1.2.3.4/24"
+    - "2001:d35c:123:4::/64"
+```
+
+### Versions ≥ v1.16.0
+
+#### Pre-upgrade to versions ≥ v1.16.0
+
+##### Nubus bug fix: LDAP storage class settings
+
+**Target group:** Deployments that set explicit storage settings for `nubusLdapServerRun` which differ from those for `nubusLdapServerData`.
+
+**Context**
+
+Until now, the settings under `persistence.storages.nubusLdapServerRun` were ignored, and the settings from `persistence.storages.nubusLdapServerData` were applied instead.
+
+Because PVC settings cannot be changed after a PVC has been created, the deployment settings and the actual PVC settings must be kept consistent.
+
+There are two ways to achieve this:
+
+1. Adjust the templated storage settings to match the existing PVCs.
+2. Migrate the PVCs to match the templated storage settings.
+
+**Required action: Align storage settings with existing PVCs**
+
+Set the `size` and `storageClassName` under `nubusLdapServerRun` to the same values as those under `nubusLdapServerData`:
+
+```yaml
+persistence:
+  storages:
+    nubusLdapServerData:
+      size: "1Gi"
+      storageClassName: "myStorageClassName"
+    nubusLdapServerRun:
+      size: "1Gi"
+      storageClassName: "myStorageClassName"
+```
+
+**Required action: Migrate PVCs to match storage settings**
+
+> [!warning]
+> Every primary and secondary LDAP Pod has its own affected PVC, so this action must be performed for each of them.
+
+Migrate[^1] the `nubusLdapServerRun` PVC(s) to the currently defined storage settings, for example:
+
+```yaml
+persistence:
+  storages:
+    nubusLdapServerRun:
+      size: "0.2Gi"
+      storageClassName: "specialStorageClass"
+```
+
+### Versions ≥ v1.15.0
+
+#### Pre-upgrade to versions ≥ v1.15.0
+
+##### New Helmfile default: external mail services are no longer enabled by default
+
+**Target group:** Deployments using the groupware module with support for external mail clients.
+
+**Context:**
+
+openDesk can expose several mail-related services (IMAPS and SMTP submission) for external clients. Previously
+these were created by default; especially with service type "LoadBalancer" this meant they were exposed
+automatically. They are now disabled by default and must be enabled explicitly.
+
+**Required action**
+
+If your deployment supports external mail clients, enable the services you need:
+
+```yaml
+functional:
+  groupware:
+    externalClients:
+      exposeImaps: true
+      exposeSubmission: true
+      exposeSubmissions: true
+```
+
+##### New Helmfile default: Support for SeaweedFS as S3 backend
+
+**Target group:** Deployments using the bundled service MinIO
+
+**Context**
+
+Since the maintenance for MinIO - the former only S3 storage backend supported
+by openDesk - [has been discontinued](https://github.com/minio/minio),
+openDesk now also supports and enables [SeaweedFS](https://seaweedfs.com/) for
+its non-production installations per default (for production scenarios use an
+externally managed S3 storage backend).
+
+Starting from version v2.0.0 openDesk will not include MinIO in the Helmfile
+deployment anymore. If you have been a user of the included MinIO S3 backend,
+we encourage you to move to the new SeaweedFS S3 backend before the 2.0.0
+release.
+
+The enabled apps in `opendesk_main.yaml.gotmpl` before was:
+
+```yaml
+apps:
+  minio:
+    enabled: true
+```
+
+And now is:
+
+```yaml
+apps:
+  minio:
+    enabled: false
+  seaweedfs:
+    enabled: true
+```
+
+Furthermore, SeaweedFS's uses `objectstorage` as default hostname in oposition
+to MinIO which is using `objectstore`:
+
+```yaml
+global:
+  hosts:
+    minioApi: "objectstore"
+    minioConsole: "objectstore-ui"
+    seaweedfs: "objectstorage"
+    seaweedfsAdmin: "objectstorage-ui"
+```
+
+**Required action: Keeping MinIO as S3 storage backend**
+
+If you want to keep MinIO, you need to set:
+
+```yaml
+apps:
+  minio:
+    enabled: true
+  seaweedfs:
+    enabled: false
+```
+
+**Optional action: Migrating to SeaweedFS as S3 storage backend**
+
+See [Migrate from MinTO to SeaweedFS](./migrations-instructions/1.15.0-migrate-from-minio-to-seaweedfs.md)
+
+#### Post-upgrade to versions ≥ v1.15.0
+
+##### XWiki bug fix: LDAP group synchronization incomplete
+
+**Target audience:** Deployments using XWiki with LDAP groups where some group memberships are not synchronized as expected.
+
+**Required action**
+
+To repair groups whose memberships are no longer properly synchronized to XWiki, run the following script:
+[`./migrations-helper/1.15.0-xwiki-groupsync.java`](./migrations-helper/1.15.0-xwiki-groupsync.java)
+
+*Prerequisites*
+
+- Ensure your account has XWiki administrator permissions:
+  - Permissions can be granted via IAM administration in the user's "openDesk" tab.
+  - Note that permissions are synchronized to XWiki nightly, so changes may take up to 24 hours to take effect.
+  - To verify that the permissions are active, open the waffle menu in XWiki and confirm that the "Wiki administration" option is available.
+- Enable script execution for your account:
+  - In XWiki, click your avatar to open your user profile.
+  - Navigate to "Settings".
+  - Set "User type" to "Advanced" (required to execute scripts).
+  - Save the change.
+
+*Running the script*
+
+- Create a new XWiki page (it can be deleted once the cleanup is complete).
+- Open the "Edit" dropdown and switch to the "Wiki" editor (not the default WYSIWYG editor).
+- Paste the script into the editor and save the page.
+- On the newly created page, click "Recreate the LDAP Groups Mapping" to start the analysis.
+- A list of all recreated mappings will be displayed once the process completes.
+
+##### XWiki bug fix: User account merge for uppercase usernames (Part 2)
+
+**Target audience:** Deployments where usernames (login names) contain uppercase characters, XWiki is enabled, and users logged into XWiki before their accounts were pre-created by the nightly LDAP synchronization.
+
+**Context**
+
+XWiki receives user and account identity information through two mechanisms:
+- **OIDC** – during a user's SSO-based login to XWiki
+- **LDAP** – during nightly synchronization jobs
+
+In earlier releases, when a username was provided via OIDC before the corresponding account had been pre-created by the nightly LDAP synchronization, duplicate accounts were created - one with mixed-case letters and one with all lowercase letters.
+
+**Required action**
+
+To identify and merge duplicate user accounts, run the following script:
+[`./migrations-helper/1.15.0-Xwiki-usermerge.java`](./migrations-helper/1.15.0-Xwiki-usermerge.java)
+
+*Prerequisites*
+
+The same prerequisites as for the XWiki fix in the section above.
+
+*Running the script*
+
+- Create a new XWiki page (it can be deleted once the cleanup is complete).
+- Open the "Edit" dropdown and switch to the "Wiki" editor (not the default WYSIWYG editor).
+- Paste the script into the editor and save the page.
+- On the newly created page, click "Show duplicate user accounts" to start the analysis.
+- A list of "Duplicate user accounts" will be displayed.
+- If duplicates are found, click "Replace and disable duplicate accounts" to merge them.
+- For each merged account, the script outputs a message similar to: `Duplicate user account [XWiki.uppercase1] has been replaced by account [XWiki.UpperCase1] and disabled.`
+
+### Versions ≥ v1.14.0
+
+#### Pre-upgrade to versions ≥ v1.14.0
+
+##### Updated Helmfile behaviour: Remove default MASTER_PASSWORD
+
+**Target group:** All deployments that do not have set a `MASTER_PASSWORD` yet
+
+**Context**
+
+Default passwords are a common cause of security issues (see OWASP Top 10
+[A07:2017](https://owasp.org/Top10/2021/A07_2021-Identification_and_Authentication_Failures/)
+and [A02:2025](https://owasp.org/Top10/2025/A02_2025-Security_Misconfiguration/)).
+For this reason the default master password has been removed from the openDesk
+helmfile deployment. Setting the environment variable `MASTER_PASSWORD` is now
+required and the deployment will fail if it has an empty value.
+
+**Required action**
+
+If you have been relying on the default master password, set a master password.
+Note that due to limitations of helm, the `MASTER_PASSWORD` environment
+variable has to be an non-empty value, even if all secrets have been replaced
+by custom values.
+
+##### Changed Helmfile structure: Custom OIDC clients and client scopes
+
+**Target group:** Existing openDesk deployments OIDC client and/or client scope configurations in (at least) one of the following sections:
+- `functional.authentication.oidc.clients`
+- `functional.authentication.oidc.clientScopes`
+
+The configuration is now using dicts instead of lists requiring to set an unique key for each entry, while the key itself can be freely chosen, it is best practise to have the key in line with the attribute values for `name` and `clientId` like in the following example:
+
+The previous version:
+```yaml
+functional:
+  authentication:
+    oidc:
+      clients:
+        - name: "my-custom-oidc-client"
+          clientId: "my-custom-oidc-client"
+          protocol: "openid-connect"
+          [..]
+```
+
+```yaml
+functional:
+  authentication:
+    oidc:
+      clients:
+        opendesk-intercom:
+          name: "my-custom-oidc-client"
+          clientId: "my-custom-oidc-client"
+          protocol: "openid-connect"
+          [..]
+```
+
+##### Changed Helmfile structure: Single-sign on federation with upstream IdPs
+
+**Target group:** Existing openDesk deployments with configured IdP federation under `functional.authentication.ssoFederation`.
+
+**Context**
+
+In response to customer demand for configuring more than one upstream IdP for SSO federation, the configuration under `functional.authentication.ssoFederation` has been restructured to support multiple IdP definitions.
+
+**Required action**
+
+Overview:
+
+1. IdP configurations must now be defined as entries in the dict under `functional.authentication.ssoFederation.idps`.
+2. Enforcing login via an upstream IdP is no longer a boolean toggle — you must explicitly reference the dict key of the IdP to enforce login with.
+
+To minimize the impact of this change on existing deployments, use `legacy-single-idp-config` as the dict key for your existing IdP. This preserves the IdP's internal identifier, keeping the OIDC URLs configured in the upstream IdP stable.
+
+If you currently enforce login via the upstream IdP (so that the openDesk login dialog is skipped and users are redirected directly to the federated IdP), also set `enforceFederatedLogin` to `legacy-single-idp-config`.
+
+The previous version:
+```yaml
+functional:
+  authentication:
+    ssoFederation:
+      enabled: true
+      enforceFederatedLogin: false
+      name: "My upstream IdP"
+      idpDetails:
+        providerId: "oidc"
+        [..]
+```
+
+Becomes:
+
+```yaml
+functional:
+  authentication:
+    ssoFederation:
+      enabled: true
+      # When you enforce you SSO federation, otherwise keep it empty to `~`
+      enforceFederatedLogin: "legacy-single-idp-config"
+      idps:
+        # The dict key identifying the IdP, set it to `legacy-single-idp-config` to avoid changes of OIDC URLs
+        legacy-single-idp-config:
+          name: "My upstream IdP"
+          idpDetails:
+            providerId: "oidc"
+            [..]
+```
+
+#### Post-upgrade to versions ≥ v1.14.0
+
+##### Potential restart: OX Connector may get into crash loop
+
+**Target group:** All deployments using OX App Suite
+
+**Context:** After upgrade deployments, the OX Connector Pod may enter a CrashLoopBackOff state.
+
+**Required action**
+
+- Monitor the OX Connector Pod once the upgrade deployment has completed.
+- If the pod is stuck in CrashLoopBackOff, delete it manually to trigger a fresh restart.
+
 ### Versions ≥ v1.13.0
 
 #### Pre-upgrade to versions ≥ v1.13.0
 
-##### New helmfile default: Support for Ingress controller `haproxy-ingress.github.io`
+##### New Helmfile default: Support for Ingress controller `haproxy-ingress.github.io`
 
 **Target group:** All deployments
 
@@ -236,7 +634,13 @@ ingress:
 
 **Required action**
 
-When you stay with nginx you need to set
+1. Remove legacy Ingress object:
+
+```shell
+kubectl -n <NAMESPACE> delete ingress opendesk-static-files
+```
+
+2. When you stay with nginx you need to set
 
 ```yaml
 ingress:
@@ -246,7 +650,7 @@ ingress:
 
 When going with `haproxy-ingress.github.io` and the `ingressClassName` within your deployment is not `haproxy` please ensure you modify the setting accordingly. Use `kubectl get ingressclass` to check the names of your Ingress controller(s).
 
-##### Updated helmfile options: New ingress additional annotations
+##### Updated Helmfile options: New ingress additional annotations
 
 **Target group:** Deployments using additional annotations for Nubus or OX App Suite Ingress resources.
 
@@ -409,7 +813,7 @@ smtp:
 **Context**
 
 XWiki receives user and account identity information via two mechanisms:
-- **OIDC** – during a user’s SSO-based login to XWiki
+- **OIDC** – during a user's SSO-based login to XWiki
 - **LDAP** – during nightly synchronization jobs
 
 In earlier releases, usernames provided via OIDC were automatically normalized to lowercase, while usernames synchronized from LDAP were not. This mismatch could result in duplicate user accounts in XWiki that differ only by letter case.
@@ -459,7 +863,7 @@ global:
   additionalMailDomains: []
 ```
 
-Mail domains can also be created via the UDM REST API. This API is used by the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import), which automatically creates mail domain objects when required, for example, when a user’s primary email address references a domain that has not yet been configured.
+Mail domains can also be created via the UDM REST API. This API is used by the [openDesk User Importer](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/user-import), which automatically creates mail domain objects when required, for example, when a user's primary email address references a domain that has not yet been configured.
 
 When creating accounts for external or guest users in the IAM, email addressed to their domains must not be routed internally if openDesk groupware is enabled. To support this, mail domains now provide the option `opendeskMailDomainRelayExternal`. When enabled, email for these domains is relayed externally instead of being delivered to the openDesk groupware.
 
@@ -492,7 +896,7 @@ kubectl -n ${NAMESPACE} delete leases.coordination.k8s.io collabora-online
 > [!note]
 > The Collabora Online Controller is not scaled up again, as this would happen as part of the upgrade deployment.
 
-##### Helmfile new option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
+##### New Helmfile option: Annotations for external services (Dovecot, Jitsi JVB, Postfix)
 
 **Target group:** Existing deployments using `service` annotations for Dovecot, Jitsi JVB or Postfix.
 
@@ -517,7 +921,7 @@ Setting service annotation by `annotations.openxchangePostfix.service` applied t
 and external service. This key now only sets annotations for the internal service. If you want to set
 annotations for the external service use the newly introduced key `annotations.openxchangePostfix.serviceExternal`.
 
-##### Helmfile new secret: `secrets.nextcloud.statusPassword`
+##### New Helmfile secret: `secrets.nextcloud.statusPassword`
 
 **Target group:** All existing deployments that use self-defined secrets and have deployed Nextcloud.
 
@@ -535,7 +939,7 @@ be derived from the `MASTER_PASSWORD`.
 
 #### Pre-upgrade to versions ≥ v1.10.0
 
-##### Helmfile new secret: `secrets.nubus.ldapSearch.postfix`
+##### New Helmfile secret: `secrets.nubus.ldapSearch.postfix`
 
 **Target group:** All existing deployments that use self-defined secrets.
 
@@ -546,7 +950,7 @@ declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yam
 If you define your own secrets, please ensure that you provide a value for this secret, otherwise it will
 be derived from the `MASTER_PASSWORD`.
 
-##### Helmfile new secret: `secrets.doveocot.sharedMailboxesMasterPassword`
+##### New Helmfile secret: `secrets.doveocot.sharedMailboxesMasterPassword`
 
 **Target group:** All existing deployments that have OX App Suite enabled and that use self-defined secrets.
 
@@ -662,7 +1066,7 @@ are no longer ignored. So please move the passwords from
 
 to the `databases.*` structure.
 
-##### Helmfile new feature: `functional.groupware.externalClients.*`
+##### New Helmfile option: `functional.groupware.externalClients.*`
 
 **Target group:**
 Deployments that allow access to groupware emails via external mail clients (e.g. Thunderbird) using IMAP and SMTP.
@@ -912,7 +1316,7 @@ rm ${TEMPORARY_CONSUMER_JSON}
 
 Please ensure you read the [Nubus 1.10.0 "Migration steps" section](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/changelog.html#v1-10-0-migration-steps) with focus on the paragraph "Operators that make use of the following UDM Listener secrets variables" and act accordingly.
 
-##### Helmfile new secret: `secrets.minio.openxchangeUser`
+##### New Helmfile secret: `secrets.minio.openxchangeUser`
 
 **Target group:** All existing deployments that have OX App Suite enabled and that use externally defined secrets in combination with openDesk provided MinIO object storage.
 
@@ -1025,7 +1429,7 @@ global:
 
 #### Pre-upgrade to versions ≥ v1.3.0
 
-##### Helmfile new feature: `functional.authentication.ssoFederation`
+##### New Helmfile option: `functional.authentication.ssoFederation`
 
 **Target group:** Deployments that make use of IdP federation as described in [`idp-federation.md`](./enhanced-configuration/idp-federation.md).
 
@@ -1176,7 +1580,7 @@ persistence:
       size: "1Gi"
 ```
 
-##### Helmfile new secret: `secrets.nubus.masterpassword`
+##### New Helmfile secret: `secrets.nubus.masterpassword`
 
 A not yet templated secret was discovered in the Nubus deployment. It is now declared in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) and can be defined using: `secrets.nubus.masterpassword`. If you define your own secrets, please be sure this new secret is set to the same value as the `MASTER_PASSWORD` environment variable used in your deployment.
 
