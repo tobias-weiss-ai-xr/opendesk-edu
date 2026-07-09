@@ -48,6 +48,15 @@ oidc:
   usernameMatch: "none"
   excludeRunServices: "idp,idm,auth-basic"
   accountEditLink: {{ printf "https://%s.%s/realms/%s/account" .Values.global.hosts.keycloak .Values.global.domain .Values.platform.realm | quote }}
+  
+  # OIDC Backchannel Logout configuration
+  backchannelLogout:
+    enabled: {{ env "BACKCHANNEL_LOGOUT_OPENCLOUD_ENABLED" | default "true" | quote }}
+    endpoint: "/backchannel_logout"
+    backchannelLogoutUrl: {{ env "BACKCHANNEL_LOGOUT_OPENCLOUD_URL" | default (printf "https://%s.%s/backchannel_logout" .Values.global.hosts.opencloud .Values.global.domain) | quote }}
+    logoutTokenSecret: {{ .Values.secrets.opencloud.backchannelLogoutSecret | default "" | quote }}
+    requirePkce: {{ env "BACKCHANNEL_LOGOUT_OPENCLOUD_REQUIRE_PKCE" | default "true" | quote }}
+    maxTokenAge: {{ env "BACKCHANNEL_LOGOUT_OPENCLOUD_MAX_TOKEN_AGE" | default "300" | quote }}
 
 podAnnotations:
   intents.otterize.com/service-name: "opendesk-opencloud"
