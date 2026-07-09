@@ -1,0 +1,1 @@
+# sops CMP test directory
