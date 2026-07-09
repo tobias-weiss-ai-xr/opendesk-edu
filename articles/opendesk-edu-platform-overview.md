@@ -1,6 +1,7 @@
 ---
 title: "The openDesk Edu Platform: Comprehensive Open-Source Learning Management"
 description: "Discover how openDesk Edu transforms educational institutions with 25 integrated open-source services, seamless SSO, and German data protection compliance."
+image: "images/teaser-platform-overview.svg"
 date: 2026-06-27
 tags: [platform, edtech, open-source, education, german-compliance]
 ---

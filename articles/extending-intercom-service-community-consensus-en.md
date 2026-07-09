@@ -2,6 +2,7 @@
 title: "Extending the Intercom-Service: A Call for Community-ZenDiS Consensus on Common Development Patterns"
 date: "2026-06-27"
 description: "How we extended the openDesk intercom-service to support OpenCloud, SOGo, and ILIAS, and why we urge ZenDiS and the community to establish a formal consensus on common development patterns."
+image: "images/teaser-intercom-service.svg"
 categories: ["Engineering", "Community", "Open Source"]
 tags: ["intercom-service", "zendis", "opendesk", "extension", "community", "governance"]
 author: "Tobias Weiß and openDesk Edu Contributors"
