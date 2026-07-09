@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2024-2025 Univention GmbH
+---
+
+ics:
+  session:
+    secret: "stub_secret"
+
+  oidc:
+    clientSecret: "stub_oidc_client_secret"
+
+  matrix:
+    auth:
+      applicationServiceSecret: "stub_matrix_application_service_secret"
+
+  portal:
+    auth:
+      sharedSecret: "stub_portal_shared_secret"
+
+  redis:
+    auth:
+      password: "stub_redis_password"
+
+provisioning:
+  config:
+    clientBaseUrl: 'http://ics.domain.de'
+    keycloak:
+      realm: "keycloak"
+      connection:
+        baseUrl: "http://keycloak"
+        host: "keycloak"
+        port: "8080"
+      auth:
+        username: "stub_kc_user"
+        password: "stub_keycloak_password"
+...
