@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-provisioning-config
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/name: user-provisioning
+    app.kubernetes.io/part-of: opendesk
+data:
+  import-domain: "example.com"
+  import-maildomain: "example.com"
+  keycloak-url: "https://id.example.com"
+  identity-provider: "saml-umr"
+  iam-api-url: "https://iam-api.example.com/openDesk/v1.0/openDesk_account_depro"
+  loglevel: "INFO"
+  grace-period-months: "12"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: user-provisioning
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/name: user-provisioning
+    app.kubernetes.io/part-of: opendesk
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: user-provisioning
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/name: user-provisioning
+    app.kubernetes.io/part-of: opendesk
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: user-provisioning
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/name: user-provisioning
+    app.kubernetes.io/part-of: opendesk
+subjects:
+  - kind: ServiceAccount
+    name: user-provisioning
+    namespace: opendesk
+roleRef:
+  kind: Role
+  name: user-provisioning
+  apiGroup: rbac.authorization.k8s.io
