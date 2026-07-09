@@ -4,17 +4,17 @@
 commonAnnotations: {}
 
 bigbluebutton:
-  image: "172.17.209.35:5000/opendesk/greenlight"
-  tag: "latest"
+  image: "ghcr.io/<your-org>/greenlight-saml"
+  tag: "v1.3.0"
   replicaCount: 2
-
+  
   # Greenlight SAML configuration for Sharad
   greenlight:
     default_registration: "saml"
     saml:
-      idp_entityId: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
-      idp_sso_target_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml"
-      sp_entityId: "https://bbb.opendesk.hrz.uni-marburg.de/shibboleth"
+      idp_entityId: "https://id.opendesk.example.com/realms/opendesk"
+      idp_sso_target_url: "https://id.opendesk.example.com/realms/opendesk/protocol/saml"
+      sp_entityId: "https://bbb.opendesk.example.com/shibboleth"
 
 # Ingress configuration
 ingress:
@@ -24,23 +24,23 @@ ingress:
     haproxy-ingress.github.io/ssl-redirect: "true"
     haproxy-ingress.github.io/timeout-server: "120000ms"
     haproxy-ingress.github.io/timeout-client: "120000ms"
-    cert-manager.io/cluster-issuer: "opendesk-ca"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
   hosts:
-    host: "bbb.opendesk.hrz.uni-marburg.de"
+    host: "bbb.opendesk.example.com"
     paths:
       path: /
       pathType: "ImplementationSpecific"
   tls:
     secretName: "opendesk-certificates-tls"
     hosts:
-      - "bbb.opendesk.hrz.uni-marburg.de"
+      - "bbb.opendesk.example.com"
 
 # Shibboleth configuration
 shibboleth:
   enabled: true
   sp:
-    host: "bbb.opendesk.hrz.uni-marburg.de"
-    entityID: "https://bbb.opendesk.hrz.uni-marburg.de/shibboleth"
+    host: "bbb.opendesk.example.com"
+    entityID: "https://bbb.opendesk.example.com/shibboleth"
 
 # BoldChat SAML configuration
 boldchat:
@@ -49,12 +49,12 @@ boldchat:
   icon: //img.icons8.com/color/96/lock.png
   provider: :saml
   params:
-    assertion_consumer_service_url: "https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback"
-    sp_entity_id: "https://bbb.opendesk.hrz.uni-marburg.de/shibboleth"
-    idp_entity_id: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
-    idp_sso_target_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml"
-    idp_slo_target_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml"
-    idp_metadata_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
+    assertion_consumer_service_url: "https://bbb.opendesk.example.com/auth/saml2/callback"
+    sp_entity_id: "https://bbb.opendesk.example.com/shibboleth"
+    idp_entity_id: "https://id.opendesk.example.com/realms/opendesk"
+    idp_sso_target_url: "https://id.opendesk.example.com/realms/opendesk/protocol/saml"
+    idp_slo_target_url: "https://id.opendesk.example.com/realms/opendesk/protocol/saml"
+    idp_metadata_url: "https://id.opendesk.example.com/realms/opendesk/protocol/saml/descriptor"
     allowed_clock_drift: 120
   secrets:
     certificate: /etc/shibboleth/shib-cert.pem
@@ -68,3 +68,15 @@ service:
   annotations: {}
   externalPort: 80
   enabled: true
+
+# Backchannel logout configuration (SAML)
+extraVolumes:
+  - name: bbb-saml-backchannel-controller
+    configMap:
+      name: bbb-saml-backchannel-controller
+
+extraVolumeMounts:
+  - name: bbb-saml-backchannel-controller
+    mountPath: /home/app/greenlight/app/controllers/saml_backchannel_controller.rb
+    subPath: saml_backchannel_controller.rb
+    readOnly: true

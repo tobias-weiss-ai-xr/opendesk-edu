@@ -5,26 +5,25 @@ commonAnnotations:
   {{ .Values.annotations.moodle.common | default (dict) | toYaml | nindent 2 }}
 
 moodle:
-  image: "docker.io/weissto/moodle-shib"
-  tag: "v1.4.0"
+  image: "ghcr.io/<your-org>/moodle-shib"
+  tag: "v1.0.0"
   replicaCount: 2
-
+  
   # Moodle configuration
   moodleUsername: "admin"
   moodlePassword: "" # Will be set via secret
-  moodleEmail: "admin@opendesk.hrz.uni-marburg.de"
+  moodleEmail: "admin@opendesk.example.com"
   moodleSiteName: "openDesk Moodle"
-  moodleSkipInstall: true
-
-  # Database configuration
+  moodleSkipInstall: false
+  
+  # Database configuration (will use external database from task 6)
   externalDatabase:
-    type: "pgsql"
-    host: "postgresql"
-    port: 5432
-    user: "moodle_user"
-    password: "moodle_db_pass"
+    host: "moodle-mariadb"
+    port: 3306
+    user: "moodle"
+    password: "" # Will be set via secret
     database: "moodle"
-    existingSecret: ""
+    existingSecret: "moodle-database-credentials"
 
 # Security context
 securityContext:
@@ -56,14 +55,14 @@ ingress:
     haproxy-ingress.github.io/timeout-client: "300s"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
   hosts:
-    - host: "moodle.opendesk.hrz.uni-marburg.de"
+    - host: "moodle.opendesk.example.com"
       paths:
         - path: /
           pathType: "ImplementationSpecific"
   tls:
     - secretName: "opendesk-certificates-tls"
       hosts:
-        - "moodle.opendesk.hrz.uni-marburg.de"
+        - "moodle.opendesk.example.com"
 
 # Persistence configuration
 persistence:
@@ -108,12 +107,43 @@ tolerations: []
 # Affinity
 affinity: {}
 
-# SSO is handled via native Moodle OAuth2/OIDC (Keycloak)
-# SAML via Shibboleth is DISABLED because the mod_shib.so binary in the
-# moodle-shib image (Apr 2022) is incompatible with Apache 2.4.52+.
-# The image would need a full rebuild with apt-get distro matching.
-# OIDC works natively without any Apache module and is the preferred path.
-#sso: {}
-
 # PHP configuration (will be updated in task 11)
 phpConfig: {}
+
+# Apache configuration
+existingApacheConfigmap: ""
+
+# Shibboleth configuration
+shibboleth:
+  enabled: true
+  sp:
+    host: "moodle.opendesk.example.com"
+    entityID: "https://moodle.opendesk.example.com/shibboleth"
+  idp:
+    metadataProvider: "https://id.opendesk.example.com/realms/opendesk/protocol/saml/descriptor"
+
+# Apache extra configuration for Shibboleth
+existingApacheExtraConfigmap: "moodle-apache-shibboleth-config"
+
+# Backchannel logout configuration
+extraVolumes:
+  - name: moodle-apache-backchannel-config
+    configMap:
+      name: moodle-apache-backchannel-config
+  - name: moodle-backchannel-handler
+    configMap:
+      name: moodle-backchannel-handler
+
+extraVolumeMounts:
+  - name: moodle-apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel.conf
+    subPath: backchannel.conf
+    readOnly: true
+  - name: moodle-apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel-env.conf
+    subPath: backchannel-env.conf
+    readOnly: true
+  - name: moodle-backchannel-handler
+    mountPath: /var/www/moodle/auth/shibboleth/backchannel-handler.php
+    subPath: backchannel-handler.php
+    readOnly: true
