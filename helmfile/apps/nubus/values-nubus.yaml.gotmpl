@@ -1453,6 +1453,7 @@ nubusStackDataUms:
         module: "portals/entry"
         position: "cn=managementLearn,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
+          anonymous: false
           linkTarget: "newwindow"
 
         # Q6: ILIAS tile must NOT appear in portal navigation (userLinks or centralNavigation)
@@ -1620,12 +1621,13 @@ nubusStackDataUms:
             - - "de_DE"
               - "https://files.opendesk.hrz.uni-marburg.de"
 
-        # Modify existing entry to set linkTarget
+        # Modify existing entry to set linkTarget and ensure non-anonymous
         ---
         action: "modify"
         module: "portals/entry"
         position: "cn=managementFileshareCloud,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
+          anonymous: false
           linkTarget: "newwindow"
 
         # Add OpenCloud entry to "Anwendungen" category
