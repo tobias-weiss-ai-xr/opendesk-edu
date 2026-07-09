@@ -68,3 +68,15 @@ service:
   annotations: {}
   externalPort: 80
   enabled: true
+
+# Backchannel logout configuration (SAML)
+extraVolumes:
+  - name: bbb-saml-backchannel-controller
+    configMap:
+      name: bbb-saml-backchannel-controller
+
+extraVolumeMounts:
+  - name: bbb-saml-backchannel-controller
+    mountPath: /home/app/greenlight/app/controllers/saml_backchannel_controller.rb
+    subPath: saml_backchannel_controller.rb
+    readOnly: true

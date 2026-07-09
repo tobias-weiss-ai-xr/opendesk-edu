@@ -124,3 +124,26 @@ shibboleth:
 
 # Apache extra configuration for Shibboleth
 existingApacheExtraConfigmap: "moodle-apache-shibboleth-config"
+
+# Backchannel logout configuration
+extraVolumes:
+  - name: moodle-apache-backchannel-config
+    configMap:
+      name: moodle-apache-backchannel-config
+  - name: moodle-backchannel-handler
+    configMap:
+      name: moodle-backchannel-handler
+
+extraVolumeMounts:
+  - name: moodle-apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel.conf
+    subPath: backchannel.conf
+    readOnly: true
+  - name: moodle-apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel-env.conf
+    subPath: backchannel-env.conf
+    readOnly: true
+  - name: moodle-backchannel-handler
+    mountPath: /var/www/moodle/auth/shibboleth/backchannel-handler.php
+    subPath: backchannel-handler.php
+    readOnly: true
