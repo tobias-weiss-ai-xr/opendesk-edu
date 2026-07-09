@@ -98,6 +98,7 @@ environment:
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__SELECTED__BACKGROUND: {{ .Values.theme.colors.primary | quote }}
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__HOVER__BACKGROUND: {{ .Values.theme.colors.secondaryGreyLight | quote }}
   OPENPROJECT_SEED_DESIGN_LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/logo.svg"
+  OPENPROJECT_SEED_DESIGN_LOGO__MOBILE: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
   OPENPROJECT_SEED_DESIGN_FAVICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
   OPENPROJECT_SEED_DESIGN_TOUCH__ICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
   OPENPROJECT_SEED_DESIGN_EXPORT__LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportLogoPath | lower }}"
