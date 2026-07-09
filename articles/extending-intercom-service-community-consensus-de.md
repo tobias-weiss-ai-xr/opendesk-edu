@@ -2,6 +2,7 @@
 title: "Erweiterung des Intercom-Service: Ein Aufruf an ZenDiS und die Community für gemeinsame Entwicklungsmuster"
 date: "2026-06-27"
 description: "Wie wir den openDesk intercom-service erweitert haben, um OpenCloud, SOGo und ILIAS zu unterstützen, und warum wir ZenDiS und die Community dringend bitten, einen formellen Konsens über gemeinsame Entwicklungsmuster zu etablieren."
+image: "images/teaser-intercom-service-de.svg"
 categories: ["Engineering", "Community", "Open Source"]
 tags: ["intercom-service", "zendis", "opendesk", "erweiterung", "community", "governance"]
 author: "Tobias Weiß und openDesk Edu Mitwirkende"
