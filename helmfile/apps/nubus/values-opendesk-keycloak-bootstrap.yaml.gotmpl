@@ -827,6 +827,8 @@ config:
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
           frontchannel.logout.url: "https://lms.opendesk.example.com/Shibboleth.sso/Logout"
+          backchannel.logout.session.required: "true"
+          backchannel.logout.url: "https://lms.opendesk.example.com/Shibboleth.sso/Logout"
         protocolMappers:
           - name: "email"
             protocol: "saml"
