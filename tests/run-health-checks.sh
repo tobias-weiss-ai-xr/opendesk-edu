@@ -86,6 +86,43 @@ check "Storage 100Gi" \
   "kubectl get pvc -n $NAMESPACE opendesk-opencloud-data -o jsonpath='{.status.capacity.storage}' 2>/dev/null" \
   "100Gi"
 
+# --- Intercom Service (ICS Fork) ---
+echo ""
+echo "--- Intercom Service (ICS Fork) ---"
+check "Pod running" \
+  "kubectl get pods -n $NAMESPACE -l app.kubernetes.io/instance=intercom-service --no-headers -o name 2>/dev/null | wc -l" \
+  "1"
+check "Health endpoint" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- curl -s http://localhost:8080/health 2>/dev/null" \
+  '{"status":"ok"}'
+check "OC_ENABLED=true" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- sh -c 'echo \$OC_ENABLED' 2>/dev/null" \
+  "true"
+check "SOGO_ENABLED=true" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- sh -c 'echo \$SOGO_ENABLED' 2>/dev/null" \
+  "true"
+check "ILIAS_ENABLED=true" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- sh -c 'echo \$ILIAS_ENABLED' 2>/dev/null" \
+  "true"
+check "OC route (302)" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/oc/ 2>/dev/null" \
+  "302"
+check "SOGo route (302)" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/sogo/ 2>/dev/null" \
+  "302"
+check "ILIAS route (302)" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/ilias/ 2>/dev/null" \
+  "302"
+check "OC proxy URL matches domain" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- sh -c 'echo \$OC_URL' 2>/dev/null" \
+  "$DOMAIN"
+check "SOGo proxy URL matches domain" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- sh -c 'echo \$SOGO_URL' 2>/dev/null" \
+  "$DOMAIN"
+check "ILIAS proxy URL matches domain" \
+  "kubectl exec -n $NAMESPACE deploy/intercom-service -- sh -c 'echo \$ILIAS_URL' 2>/dev/null" \
+  "$DOMAIN"
+
 echo ""
 echo "=========================================="
 if [ $FAILURES -eq 0 ]; then
