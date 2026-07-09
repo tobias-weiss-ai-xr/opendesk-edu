@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2024-2025 Univention GmbH
+
+{{- if .Values.provisioning.enabled }}
+---
+
+apiVersion: "v1"
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-provisioning-init" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" ( dict "customLabels" (merge (dict) (.Values.provisioning.extraLabels | default dict) (.Values.additionalLabels | default dict)) "context" . ) | nindent 4 }}
+  {{- if or .Values.provisioning.extraAnnotations .Values.additionalAnnotations }}
+  annotations:
+    {{- if .Values.provisioning.extraAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.extraAnnotations "context" . ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.additionalAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+
+data:
+  KEYCLOAK_URL: {{ printf "http://%s:%s/realms/%s"
+    (required "keycloak.connection.host is required"  (tpl .Values.provisioning.config.keycloak.connection.host .))
+    (required "keycloak.connection.port is required"  (tpl .Values.provisioning.config.keycloak.connection.port .))
+    (required "keycloak.realm is required"            (tpl .Values.provisioning.config.keycloak.realm .)) }}
+
+...
+---
+kind: "ConfigMap"
+apiVersion: "v1"
+metadata:
+  name: {{ printf "%s-provisioning-env" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
+  {{- if or .Values.provisioning.additionalAnnotations .Values.additionalAnnotations }}
+  annotations:
+    {{- if .Values.provisioning.additionalAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.additionalAnnotations "context" . ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.additionalAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+data:
+  DEBUG: {{ .Values.provisioning.config.debug.enabled | quote }}
+  DOMAIN: {{ .Values.global.domain | quote }}
+  KEYCLOAK_USERNAME: {{ required "A Keycloak admin username must be specified" .Values.provisioning.config.keycloak.auth.username }}
+  KEYCLOAK_URL: {{ printf "http://%s:%s"
+    (required "provisioning.config.keycloak.connection.host is required" (tpl .Values.provisioning.config.keycloak.connection.host .))
+    (required "provisioning.config.keycloak.connection.port is required" (tpl .Values.provisioning.config.keycloak.connection.port .)) }}
+  KEYCLOAK_HOST: {{ required ".Values.provisioning.config.keycloak.connection.host must be defined." (tpl .Values.provisioning.config.keycloak.connection.host .) }}
+  KEYCLOAK_REALM: {{ required "A Keycloak realm must be specified to provision the intercom-service client" .Values.provisioning.config.keycloak.realm  }}
+  UNIVENTION_KEYCLOAK_BOOTSTRAP_TEMP_DIR: "/tmp"
+  UNIVENTION_KEYCLOAK_BOOTSTRAP_DEBUG_PAUSE_BEFORE_SCRIPT_START: {{ .Values.provisioning.config.debug.pauseBeforeScriptStart  | quote }}
+  CLIENT_NAME: {{ required ".Values.ics.oidc.id is required" .Values.ics.oidc.id }}
+  KEYCLOAK_APP_BASE_URL: {{ required ".Values.provisioning.config.clientBaseUrl is required" .Values.provisioning.config.clientBaseUrl }}
+...
+
+{{- end }}
