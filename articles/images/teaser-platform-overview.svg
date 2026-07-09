@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>openDesk Edu - Platform Overview</title>
+  <desc>Branded teaser image for the openDesk Edu Platform Overview article featuring a dark purple gradient background, grid pattern, D icon mark, and article title.</desc>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0014"/>
+      <stop offset="50%" stop-color="#0d0020"/>
+      <stop offset="100%" stop-color="#0a0014"/>
+    </linearGradient>
+    <linearGradient id="accentLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#571EFA" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#571EFA" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="accentRight" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#927AFA" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#927AFA" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#927AFA"/>
+    </linearGradient>
+    <filter id="glowWide" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="40"/>
+    </filter>
+    <filter id="glowPrimary" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#571EFA" stroke-width="0.5" opacity="0.06"/>
+    </pattern>
+    <pattern id="dotGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="#927AFA" opacity="0.12"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#dotGrid)"/>
+
+  <!-- Edge accents -->
+  <rect x="0" y="0" width="200" height="630" fill="url(#accentLeft)"/>
+  <rect x="1000" y="0" width="200" height="630" fill="url(#accentRight)"/>
+  <rect x="0" y="0" width="1200" height="2" fill="#571EFA" opacity="0.4"/>
+  <rect x="0" y="628" width="1200" height="2" fill="#927AFA" opacity="0.2"/>
+
+  <!-- Ambient glow -->
+  <ellipse cx="200" cy="315" rx="250" ry="250" fill="#571EFA" opacity="0.06" filter="url(#glowWide)"/>
+  <ellipse cx="1000" cy="315" rx="200" ry="200" fill="#927AFA" opacity="0.04" filter="url(#glowWide)"/>
+
+  <!-- Hexagons (ecosystem/network theme) -->
+  <polygon points="100,100 125,85 150,100 150,130 125,145 100,130" fill="none" stroke="#927AFA" stroke-width="1" opacity="0.12"/>
+  <polygon points="1050,500 1075,485 1100,500 1100,530 1075,545 1050,530" fill="none" stroke="#571EFA" stroke-width="1" opacity="0.1"/>
+
+  <!-- Network connection lines -->
+  <line x1="150" y1="115" x2="200" y2="90" stroke="#927AFA" stroke-width="0.8" opacity="0.1"/>
+  <line x1="200" y1="90" x2="220" y2="140" stroke="#927AFA" stroke-width="0.8" opacity="0.08"/>
+  <circle cx="200" cy="90" r="3" fill="#927AFA" opacity="0.2"/>
+  <circle cx="220" cy="140" r="3" fill="#927AFA" opacity="0.2"/>
+
+  <!-- Connector pattern on right -->
+  <circle cx="1080" cy="200" r="4" fill="#927AFA" opacity="0.2"/>
+  <circle cx="1140" cy="180" r="3" fill="#571EFA" opacity="0.18"/>
+  <circle cx="1050" cy="250" r="5" fill="#927AFA" opacity="0.15"/>
+  <line x1="1080" y1="200" x2="1140" y2="180" stroke="#927AFA" stroke-width="0.8" opacity="0.1"/>
+  <line x1="1080" y1="200" x2="1050" y2="250" stroke="#571EFA" stroke-width="0.8" opacity="0.08"/>
+
+  <!-- D Icon -->
+  <g transform="translate(60, 130)">
+    <rect x="0" y="0" width="110" height="110" rx="22" fill="url(#iconGrad)" opacity="0.9"/>
+    <text x="55" y="82" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="bold" fill="white" opacity="0.95">D</text>
+  </g>
+
+  <!-- Brand wordmark -->
+  <text x="200" y="194" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="bold" fill="white" letter-spacing="2">openDesk</text>
+  <text x="200" y="222" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="300" fill="#DDD6FE" letter-spacing="10">EDUCATION</text>
+  <line x1="200" y1="236" x2="380" y2="236" stroke="#571EFA" stroke-width="1" opacity="0.4"/>
+
+  <!-- Article category badge -->
+  <rect x="200" y="260" width="140" height="28" rx="14" fill="#571EFA" opacity="0.25"/>
+  <text x="270" y="279" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#927AFA" letter-spacing="1">PLATFORM OVERVIEW</text>
+
+  <!-- Decorative line -->
+  <line x1="200" y1="312" x2="950" y2="312" stroke="#571EFA" stroke-width="1.5" opacity="0.2"/>
+
+  <!-- Article title -->
+  <text x="200" y="340" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white">
+    <tspan x="200" dy="0">The openDesk Edu Platform:</tspan>
+    <tspan x="200" dy="38" fill="#DDD6FE" font-weight="400" font-size="22">Comprehensive Open-Source Learning Management</tspan>
+  </text>
+
+  <!-- Short description -->
+  <text x="200" y="420" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#927AFA" opacity="0.8">
+    <tspan x="200" dy="0">25 integrated open-source services, seamless SSO,</tspan>
+    <tspan x="200" dy="22">and German data protection compliance.</tspan>
+  </text>
+
+  <!-- Bottom accent - geometric decoration -->
+  <path d="M 200,550 L 220,520 L 240,550" fill="none" stroke="#927AFA" stroke-width="1.5" opacity="0.2"/>
+  <path d="M 280,550 L 300,520 L 320,550" fill="none" stroke="#927AFA" stroke-width="1.5" opacity="0.15"/>
+  <path d="M 360,550 L 380,520 L 400,550" fill="none" stroke="#571EFA" stroke-width="1.5" opacity="0.12"/>
+
+  <!-- Service icons decoration -->
+  <g opacity="0.08">
+    <rect x="60" y="500" width="30" height="20" rx="3" fill="#571EFA"/>
+    <rect x="100" y="505" width="30" height="15" rx="3" fill="#927AFA"/>
+    <rect x="60" y="530" width="40" height="15" rx="3" fill="#927AFA"/>
+  </g>
+
+  <!-- Corner marks -->
+  <path d="M 20,20 L 50,20 M 20,20 L 20,50" stroke="#571EFA" stroke-width="1.5" opacity="0.25" fill="none"/>
+  <path d="M 1180,20 L 1150,20 M 1180,20 L 1180,50" stroke="#927AFA" stroke-width="1.5" opacity="0.2" fill="none"/>
+  <path d="M 20,610 L 50,610 M 20,610 L 20,580" stroke="#571EFA" stroke-width="1.5" opacity="0.25" fill="none"/>
+  <path d="M 1180,610 L 1150,610 M 1180,610 L 1180,580" stroke="#927AFA" stroke-width="1.5" opacity="0.2" fill="none"/>
+</svg>
