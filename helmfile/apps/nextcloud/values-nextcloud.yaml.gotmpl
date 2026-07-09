@@ -156,6 +156,21 @@ aio:
     - name: "FS_IMPORT_CA_CERTIFICATES"
       value: "true"
   {{- end }}
+  
+  # OIDC Backchannel Logout configuration (user_oidc app)
+  extraEnvVars:
+    - name: "NEXTCLOUD_OIDC_BACKCHANNEL_LOGOUT_ENABLED"
+      value: {{ env "BACKCHANNEL_LOGOUT_NEXTCLOUD_ENABLED" | default "true" | quote }}
+    - name: "NEXTCLOUD_OIDC_BACKCHANNEL_LOGOUT_URL"
+      value: {{ env "BACKCHANNEL_LOGOUT_NEXTCLOUD_URL" | default (printf "https://%s.%s/apps/user_oidc/backchannel_logout" .Values.global.hosts.nextcloud .Values.global.domain) | quote }}
+    - name: "NEXTCLOUD_OIDC_BACKCHANNEL_LOGOUT_TOKEN_AGE"
+      value: {{ env "BACKCHANNEL_LOGOUT_NEXTCLOUD_MAX_TOKEN_AGE" | default "300" | quote }}
+    - name: "NEXTCLOUD_OIDC_BACKCHANNEL_LOGOUT_SECRET"
+      valueFrom:
+        secretKeyRef:
+          name: nextcloud-oidc-secrets
+          key: backchannel-logout-secret
+          optional: true
   {{- if .Values.certificate.selfSigned }}
   extraVolumes:
     - name: "trusted-cert-secret-volume"
