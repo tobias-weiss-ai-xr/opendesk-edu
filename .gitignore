@@ -34,3 +34,8 @@ logs
 
 # Ignore backup files, e.g. created by the script that eases the local chart development
 *.bak
+
+# Local development artifacts
+/demo-namespace/
+/scripts/
+/helmfile/charts/
