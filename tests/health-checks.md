@@ -211,7 +211,73 @@ kubectl get deploy -n "$NAMESPACE" opendesk-opencloud \
 
 ---
 
-## 4. Integration Tests
+## 4. Intercom Service (ICS) — Fork Health Check
+
+### Pod Status
+```bash
+echo "ICS Pods:"
+kubectl get pods -n "$NAMESPACE" -l app.kubernetes.io/instance=intercom-service -o wide
+```
+
+**Expected**: 1 pod running, Ready=1/1
+
+### Health Endpoint (fork-specific)
+```bash
+echo "ICS Health Endpoint:"
+kubectl exec -n "$NAMESPACE" deploy/intercom-service -- \
+  curl -s http://localhost:8080/health
+```
+
+**Expected**: `{"status":"ok"}`
+
+### Env Vars (fork-specific routes)
+```bash
+echo "ICS fork env vars (OC/SOGO/ILIAS):"
+kubectl exec -n "$NAMESPACE" deploy/intercom-service -- \
+  sh -c 'echo "OC_ENABLED=$OC_ENABLED SOGO_ENABLED=$SOGO_ENABLED ILIAS_ENABLED=$ILIAS_ENABLED"'
+```
+
+**Expected**: `OC_ENABLED=true SOGO_ENABLED=true ILIAS_ENABLED=true`
+
+### Route: OpenCloud (/oc/)
+```bash
+echo "ICS /oc/ route (expect 302 redirect to OIDC):"
+kubectl exec -n "$NAMESPACE" deploy/intercom-service -- \
+  curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/oc/
+```
+
+**Expected**: 302 (redirect to Keycloak OIDC — proves route is mounted and alive)
+
+### Route: SOGo (/sogo/)
+```bash
+echo "ICS /sogo/ route (expect 302 redirect to OIDC):"
+kubectl exec -n "$NAMESPACE" deploy/intercom-service -- \
+  curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/sogo/
+```
+
+**Expected**: 302
+
+### Route: ILIAS (/ilias/)
+```bash
+echo "ICS /ilias/ route (expect 302 redirect to OIDC):"
+kubectl exec -n "$NAMESPACE" deploy/intercom-service -- \
+  curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/ilias/
+```
+
+**Expected**: 302
+
+### Proxy Target Resolution
+```bash
+echo "ICS proxy target URLs:"
+kubectl exec -n "$NAMESPACE" deploy/intercom-service -- \
+  sh -c 'echo "OC_URL=$OC_URL SOGO_URL=$SOGO_URL ILIAS_URL=$ILIAS_URL"'
+```
+
+**Expected**: URLs matching the cluster domain (e.g., `opencloud.opendesk.internal`, `sogo.opendesk.internal`, `lms.opendesk.internal`)
+
+---
+
+## 5. Integration Tests
 
 ### ILIAS → MariaDB
 ```bash
@@ -389,3 +455,11 @@ health-check:
 | OpenCloud | Status endpoint | Smoke | Every deploy |
 | OpenCloud | Storage check | Integration | Weekly |
 | OpenCloud | Replica count | Smoke | Every deploy |
+| ICS | Pod running | Smoke | Every deploy |
+| ICS | Health endpoint | Smoke | Every deploy |
+| ICS | OC_ENABLED/SOGO_ENABLED/ILIAS_ENABLED | Smoke | Every deploy |
+| ICS | /oc/ route (302) | Smoke | Every deploy |
+| ICS | /sogo/ route (302) | Smoke | Every deploy |
+| ICS | /ilias/ route (302) | Smoke | Every deploy |
+| ICS | Proxy URL resolution | Smoke | Every deploy |
+| ICS | Authenticated routing (Playwright) | E2E | Daily |
