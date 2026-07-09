@@ -151,14 +151,12 @@ images:
     tag: "0.6.4@sha256:f891dcb44810f43205ee23956dfe83e3639e9541c089345da0e859b17630cfcf"
   intercom:
     # providerCategory: "Supplier"
-    # providerResponsible: "Univention"
-    # upstreamRegistry: "https://artifacts.software-univention.de"
-    # upstreamRepository: "nubus/images/intercom-service"
-    # upstreamMirrorTagFilterRegEx: '^(\d+)\.(\d+)\.(\d+)$'
-    # upstreamMirrorStartFrom: ["2", "1", "0"]
-    registry: "registry.opencode.de"
-    repository: "bmi/opendesk/components/supplier/univention/images-mirror/intercom-service"
-    tag: "2.23.11@sha256:8eed2e42f1588f1bb16c6d4b602c6e2f1bb3b3f1bf1f4a6b6f1f1f1f1f1f1f1f1"
+    # providerResponsible: "openDesk Edu Fork"
+    # upstreamRegistry: "https://codeberg.org"
+    # upstreamRepository: "opendesk-edu/intercom-service"
+    registry: "codeberg.org"
+    repository: "opendesk-edu/intercom-service"
+    tag: "2.24.0-opendesk.1"
   jibri:
     # providerCategory: "Supplier"
     # providerResponsible: "Nordeck"
@@ -918,7 +916,7 @@ images:
     # upstreamMirrorStartFrom: ["0", "4", "2"]
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/images-mirror/ox-connector-standalone"
-    tag: "0.36.4@sha256:f037b4d9715c46012654cc5d04fbfe69000ba7f9325177922bb2c3e3a17d8c37"
+    tag: "0.35.1@sha256:83237dc51844757f9f7b5dec10673d6fe12733004f4d27e5318ff4d2d4975622"
   postfix:
     # providerCategory: "Platform"
     # providerResponsible: "openDesk"
@@ -1029,5 +1027,6 @@ images:
     tag: "17.10.4-postgres-jetty-alpine@sha256:0a9093769de92b6f16efecdd9c0b35aff0df277a5163b9d82fd4c11b595cca8d"
   typo3:
     registry: "ghcr.io"
-    repository: "opendesk/typo3"
+    repository: "opendesk-edu/typo3"
     tag: "13.4.0"
+  ...

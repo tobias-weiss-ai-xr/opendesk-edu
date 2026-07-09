@@ -98,6 +98,16 @@ ics:
     subdomain: {{ .Values.global.hosts.opencloud | quote }}
     audience: "opendesk-opencloud"
   {{- end }}
+  {{- if .Values.apps.sogo.enabled }}
+  sogo:
+    subdomain: {{ .Values.global.hosts.sogo | quote }}
+    audience: "opendesk-sogo"
+  {{- end }}
+  {{- if .Values.apps.ilias.enabled | default true }}
+  ilias:
+    subdomain: {{ .Values.global.hosts.ilias | quote }}
+    audience: "opendesk-ilias"
+  {{- end }}
   image:
   pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.intercom.registry | quote }}

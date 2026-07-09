@@ -11,14 +11,6 @@ repositories:
     oci: true
     url:
       "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default  .Values.charts.nubus.registry }}/{{ .Values.charts.nubus.repository }}"
-  # Intercom Service
-  - name: "intercom-service-repo"
-    keyring: "../../files/gpg-pubkeys/univention-de.gpg"
-    verify: {{ .Values.charts.intercomService.verify }}
-    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
-    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
-    oci: true
-    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.intercomService.registry }}/{{ .Values.charts.intercomService.repository }}"
   # openDesk Keycloak Bootstrap Chart
   - name: "opendesk-keycloak-bootstrap-repo"
     keyring: "../../files/gpg-pubkeys/opencode.gpg"
@@ -44,10 +36,9 @@ releases:
     postRenderer: "./post-renderer-nubus-OPENDESK_1_12_0_SKIP_PVC_MIGRATION.sh"
     {{- end }}
 
-  # Intercom-Service
+  # Intercom-Service (local chart)
   - name: "intercom-service"
-    chart: "intercom-service-repo/{{ .Values.charts.intercomService.name }}"
-    version: "{{ .Values.charts.intercomService.version }}"
+    chart: "../../charts/intercom-service"
     values:
       - "values-intercom-service.yaml.gotmpl"
       {{- range .Values.customization.release.intercomService }}

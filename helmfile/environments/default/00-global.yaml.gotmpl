@@ -44,6 +44,7 @@ global:
     cryptpad: "pad"
     element: "chat"
     intercomService: "ics"
+    ilias: "lms"
     jitsi: "meet"
     keycloak: "id"
     matrixNeoBoardWidget: "matrix-neoboard-widget"
@@ -52,19 +53,21 @@ global:
     matrixNeoDateFixWidget: "matrix-neodatefix-widget"
     minioApi: "objectstore"
     minioConsole: "objectstore-ui"
-    seaweedfs: "objectstorage"
-    seaweedfsAdmin: "objectstorage-ui"
     nextcloud: "files"
     notes: "notes"
+    opencloud: "opencloud"
     nubus: "portal"
     openproject: "projects"
     openxchange: "webmail"
     openxchangeDav: "dav"
+    grommunio: "grommunio"
+    sogo: "sogo"
     static: "static"
     synapse: "matrix"
     synapseAdmin: "synapse-admin"
     synapseFederation: "matrix-federation"
     whiteboard: "whiteboard"
+    typo3: "cms"
     xwiki: "wiki"
 
   ## Define a list containing names of the secrets to use when fetching images from private registries.
@@ -76,4 +79,31 @@ global:
   ## Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
   #
   imagePullPolicy: "IfNotPresent"
+
+  ## =============================================================================
+  ## GROMMUNIO CONFIGURATION
+  ## Set enabled: true to use Grommunio instead of SOGo/oxappsuite
+  ## =============================================================================
+  grommunio:
+    enabled: false
+    version: "2025.01.1"
+    database:
+      type: mariadb
+      host: mariadb-headless
+      username: grommunio_user
+      password: {{ env "GROMMUNIO_DB_PASSWORD" | default "" | quote }}
+    cache:
+      type: redis
+      host: redis-headless
+    authentication:
+      method: oidc
+      keycloak_realm: opendesk
+      keycloak_client: grommunio
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "1000m"
+      limits:
+        memory: "8Gi"
+        cpu: "2000m"
 ...
