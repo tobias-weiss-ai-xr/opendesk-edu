@@ -23,6 +23,11 @@ ArgoCD Repo Server
 The CMP sidecar intercepts `.enc.yaml` files, decrypts them with `sops
 --decrypt`, and hands the plaintext to ArgoCD's resource detection.
 
+> **⚠️ Verified on ArgoCD v3.0.12 (2026-07-09).** The CMP sidecar was
+> successfully deployed and tested in production on the HRZ cluster
+> (K3s v1.32.3). An encrypted K8s Secret (`test-secret.enc.yaml`) was
+> decrypted end-to-end and applied by ArgoCD.
+
 ## Prerequisites
 
 1.  `sops` binary in the sidecar image
@@ -57,35 +62,65 @@ metadata:
   name: argocd-cmp-sops-plugin
   namespace: argocd
 data:
-  plugin.yaml: |-
-    ---
+  plugin.yaml: |
     apiVersion: argoproj.io/v1alpha1
     kind: ConfigManagementPlugin
     metadata:
       name: sops
     spec:
       sidecar: true
-      version: v1.0
       generate:
         command:
           - /bin/sh
           - -c
           - |
-            if echo "$ARGOCD_ENV_FILE_PATH" | grep -q "\\.enc\\.yaml$"; then
-              /custom-tools/sops --decrypt --input-type yaml --output-type yaml "$ARGOCD_ENV_FILE_PATH"
-            else
-              cat "$ARGOCD_ENV_FILE_PATH"
-            fi
+            for f in $(find . -name '*.enc.yaml' -type f); do
+              /custom-tools/sops --decrypt --input-type yaml --output-type yaml "$f" 2>/dev/null
+            done
       discover:
         find:
           glob: "**/*.enc.yaml"
 ```
 
+> **Important notes:**
+> - **`version` field omitted.** In ArgoCD v3.0.x, setting `version: v1.0`
+>   causes the plugin socket to be named `sops-v1.0.sock`, but the
+>   repo-server looks for `sops.sock`. Omitting the version avoids this
+>   mismatch.
+> - **`ARGOCD_ENV_FILE_PATH` is NOT set** in the default CMP context.
+>   The plugin command must discover files using `find` instead.
+> - **YAML block scalar (`|`) must be used** for the shell command to
+>   prevent `:` in shell strings (e.g., `echo "key: value"`) from being
+>   misinterpreted as YAML mapping separators.
+> - **Shell stderr redirected to `/dev/null`** to avoid mixing diagnostic
+>   output with decrypted manifest output on stdout.
+
 This ConfigMap was created using:
 
 ```bash
-kubectl -n argocd create configmap argocd-cmp-sops-plugin \\
-  --from-literal=plugin.yaml='<YAML above>'
+# Write plugin.yaml to a file first (avoids shell escaping issues)
+cat > /tmp/plugin.yaml << 'EOF'
+apiVersion: argoproj.io/v1alpha1
+kind: ConfigManagementPlugin
+metadata:
+  name: sops
+spec:
+  sidecar: true
+  generate:
+    command:
+      - /bin/sh
+      - -c
+      - |
+        for f in $(find . -name '*.enc.yaml' -type f); do
+          /custom-tools/sops --decrypt --input-type yaml --output-type yaml "$f" 2>/dev/null
+        done
+  discover:
+    find:
+      glob: "**/*.enc.yaml"
+EOF
+
+kubectl -n argocd create configmap argocd-cmp-sops-plugin \
+  --from-file=plugin.yaml=/tmp/plugin.yaml
 ```
 
 ### 3. Patch the `argocd-repo-server` Deployment
@@ -147,6 +182,8 @@ spec:
               mountPath: /var/run/argocd
             - name: plugins # Required existing mounts
               mountPath: /home/argocd/cmp-server/plugins
+            - name: tmp # Shared working directory for repo checkout
+              mountPath: /tmp
         - name: repo-server # Existing main container (do not remove)
           # ... (existing definition)
       volumes:
@@ -209,5 +246,9 @@ argocd app diff opendesk-edu --local
 | `can\'t decrypt without age key` | Key not mounted | Check `argocd-sops-age-key` Secret and volume mount |\
 | `invalid plugin configuration file. spec.generate command should be non-empty` | `plugin.yaml` syntax error | Ensure `generate.command` is an array of strings |\
 | `curl: (28) Connection timed out` | Proxy not configured for `install-sops` | Add `HTTP_PROXY`, `HTTPS_PROXY`, `no_proxy` to `install-sops` initContainer environment variables |\
-| ArgoCD sees ENC[...] values | CMP not intercepting | Verify plugin annotations, sidecar registration, and `discover.find.glob` in `plugin.yaml` |
+| ArgoCD sees ENC[...] values as resource kind/name | Plugin decryption runs but repo checkout inaccessible to sidecar | Add `tmp` volume mount to sops container (shared `/tmp` with repo-server) |\
+| `Manifest generation error (cached)` | Old plugin result cached in Redis | `redis-cli FLUSHALL` and update commit hash to force recache |\
+| `invalid plugin configuration file. kind should be ConfigManagementPlugin, found ConfigMap` | Shell escaping corrupted YAML in ConfigMap | Use `--from-file=plugin.yaml` instead of `--from-literal` |\
+| `yaml: mapping values are not allowed in this context` | Colon-space (`: `) in shell string interpreted as YAML mapping | Use YAML block scalar (`\|`) for the shell command |\
+| `failed to unmarshal manifest` | Plugin stdout includes non-YAML output (debug info) | Ensure only valid K8s YAML goes to stdout; use `>&2` for diagnostics |
 
