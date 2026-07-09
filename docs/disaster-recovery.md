@@ -53,6 +53,35 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 - `tar` - Archive extraction
 - `jq` - JSON processor
 - `rsync` - File synchronization
+- `sops` - Secrets encryption/decryption (v1.1+)
+- `age` or `gpg` - Key-based decryption for SOPS (v1.1+)
+
+### v1.1 Prerequisites
+
+Before restoring v1.1 services, verify the following additional assets are available:
+
+1. **SOPS Private Key Recovery:**
+   ```bash
+   # Check if age private key exists (SOPS v1.1 encryption)
+   ls -la /etc/opendesk/sops-age-key.txt
+   # Or check for GnuPG key
+   gpg --list-secret-keys
+
+   # If missing, restore from secure backup
+   # age private key stored in: /etc/opendesk/sops-age-key.txt (backup this file!)
+   ```
+
+2. **Backchannel Logout Configuration:**
+   ```bash
+   # Verify Keycloak client attributes include backchannel URLs
+   # Reference configuration: helmfile/environments/default/backchannel-logout.yaml.gotmpl
+   ```
+
+3. **User Provisioning Manifests:**
+   - CronJob definitions: `scripts/user_import/kubernetes/cronjob.yaml`
+   - RBAC configuration: `scripts/user_import/kubernetes/rbac.yaml`
+   - Secrets template: `scripts/user_import/kubernetes/secrets.yaml.template`
+   - Operations runbook: `scripts/user_import/OPERATIONS_RUNBOOK.md`
 
 ## Recovery Scenarios
 
@@ -209,7 +238,75 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
    # - File uploads
    ```
 
-### Scenario 4: Ransomware Attack
+### Scenario 4.5: Backchannel Logout / User Provisioning Failure (v1.1)
+
+**Examples:**
+- Keycloak client configurations missing backchannel.logout.url
+- User provisioning CronJobs not executing
+- SOPS-encrypted secrets corrupted or missing
+
+**Recovery Steps:**
+
+1. **Assess v1.1 Feature State:**
+   ```bash
+   # Check backchannel logout client configs
+   kubectl get configmap -n keycloak -l app.kubernetes.io/component=keycloak-config
+
+   # Check user provisioning pods
+   kubectl get cronjobs -n provisioning
+
+   # Check SOPS encrypted secrets
+   sops --decrypt helmfile/secrets/secrets.prod.enc.yaml > /dev/null 2>&1 || echo "SOPS KEY MISSING"
+   ```
+
+2. **Restore Backchannel Logout Configuration:**
+   ```bash
+   # Re-apply backchannel logout configuration
+   cd helmfile
+   helmfile -e default apply --selector app=keycloak
+
+   # Verify client attributes in Keycloak admin UI:
+   #   - ilias-saml: must have backchannel.logout.url
+   #   - opencloud: must have backchannel_logout endpoint
+   #   - nextcloud: must have user_oidc backchannel-logout endpoint
+   ```
+
+3. **Restore User Provisioning Infrastructure:**
+   ```bash
+   # Re-apply provisioning manifests
+   kubectl apply -f scripts/user_import/kubernetes/rbac.yaml
+   kubectl apply -f scripts/user_import/kubernetes/secrets.yaml
+   kubectl apply -f scripts/user_import/kubernetes/cronjob.yaml
+
+   # Verify CronJobs are running
+   kubectl get cronjobs -n provisioning
+   ```
+
+4. **Recover SOPS Private Key (if needed):**
+   ```bash
+   # Restore age key from secure backup
+   cp /backups/opendesk/sops-age-key-backup.txt /etc/opendesk/sops-age-key.txt
+   chmod 600 /etc/opendesk/sops-age-key.txt
+
+   # Verify decryption works
+   sops --decrypt helmfile/secrets/secrets.prod.enc.yaml > /dev/null && echo "SOPS OK"
+   ```
+
+5. **Validate v1.1 Features:**
+   ```bash
+   # Test backchannel logout
+   # Log in to 2+ services, perform global logout, verify all sessions terminated
+
+   # Test user provisioning dry-run
+   kubectl create job --from=cronjob/user-provisioning-sync --dry-run=client test-sync
+
+   # Verify SOPS decryption in CI/CD
+   sops --decrypt helmfile/secrets/secrets.prod.enc.yaml | grep -q "keycloak" && echo "Secrets OK"
+   ```
+
+---
+
+### Scenario 5: Ransomware Attack
 
 **Recovery Steps:**
 
@@ -266,13 +363,16 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
 ```
 
 **Restore Order:**
-1. Restore storage/PVCs first
-2. Restore Keycloak (all services depend on SSO)
-3. Restore databases
-4. Restore service applications
-5. Restore provisioning data
-6. Restart monitoring
-7. Validate all services
+1. Restore SOPS private key (age/GPG — required before secrets decryption)
+2. Restore storage/PVCs first
+3. Restore Keycloak (all services depend on SSO)
+4. Restore databases
+5. Restore service applications
+6. Restore backchannel logout configuration (Keycloak client attributes)
+7. Restore user provisioning infrastructure (CronJobs, RBAC, secrets)
+8. Restore provisioning data
+9. Restart monitoring
+10. Validate all services including v1.1 features
 
 ## Pre-Recovery Checklist
 
@@ -296,6 +396,8 @@ This guide provides step-by-step procedures for recovering openDesk Edu from var
   - [ ] Course access (ILIAS, Moodle)
   - [ ] File sharing (Nextcloud)
   - [ ] Video conferencing (BBB)
+  - [ ] Backchannel logout (v1.1) — log out from one service, verify all sessions terminated
+  - [ ] User provisioning sync (v1.1) — verify CronJobs running and executing
 - [ ] Verify data integrity:
   - [ ] Database consistency
   - [ ] User accounts
@@ -514,6 +616,81 @@ ERROR: Backup file is corrupted
 4. Check SAML/OIDC client configurations
 5. Restart Keycloak: `kubectl rollout restart deployment/keycloak -n keycloak`
 
+### Issue: Backchannel Logout Not Working (v1.1)
+
+**Symptoms:**
+- Logging out of one service does not terminate other sessions
+- Sessions remain active after global logout
+
+**Solutions:**
+1. Verify Keycloak client attributes include `backchannel.logout.url`:
+   ```bash
+   kubectl get configmap keycloak-config -n keycloak -o yaml | grep backchannel.logout.url
+   ```
+2. Check ILIAS SAML client specifically has backchannel.logout.url (Gap 4 fix)
+3. Verify backchannel handler files are mounted in pods:
+   ```bash
+   kubectl exec -it <pod> -n <namespace> -- ls -la /path/to/backchannel-handler
+   ```
+4. Check application logs for incoming SAML LogoutRequests:
+   ```bash
+   kubectl logs -n ilias <pod> | grep -i "logout\|SAMLRequest"
+   ```
+5. Redeploy backchannel configuration:
+   ```bash
+   cd helmfile && helmfile -e default apply --selector app=keycloak
+   ```
+
+### Issue: SOPS Encryption Key Missing (v1.1)
+
+**Symptoms:**
+```
+sops: could not find any age key for given fingerprints
+sops: could not find any GPG key for given fingerprints
+```
+
+**Solutions:**
+1. Verify age private key location: `ls -la /etc/opendesk/sops-age-key.txt`
+2. Verify GPG key existence: `gpg --list-secret-keys`
+3. Restore from secure backup:
+   ```bash
+   # age key
+   cp /backups/opendesk/sops-age-key-backup.txt /etc/opendesk/sops-age-key.txt
+
+   # GPG key
+   gpg --import /backups/opendesk/private-gpg-key.asc
+   ```
+4. If no backup exists, re-encrypt all secrets with a new key:
+   ```bash
+   age-keygen -o /etc/opendesk/sops-age-key.txt
+   sops --encrypt --age $(cat /etc/opendesk/sops-age-key.txt | grep public | cut -d: -f2) \
+     helmfile/secrets/secrets.prod.enc.yaml
+   ```
+
+### Issue: User Provisioning CronJobs Not Running (v1.1)
+
+**Symptoms:**
+- `kubectl get cronjobs -n provisioning` shows no resources
+- User imports/exports not executing on schedule
+
+**Solutions:**
+1. Check provisioning namespace exists: `kubectl get ns provisioning`
+2. Re-apply provisioning manifests:
+   ```bash
+   kubectl apply -f scripts/user_import/kubernetes/rbac.yaml
+   kubectl apply -f scripts/user_import/kubernetes/secrets.yaml
+   kubectl apply -f scripts/user_import/kubernetes/cronjob.yaml
+   ```
+3. Verify secrets exist:
+   ```bash
+   kubectl get secrets -n provisioning
+   ```
+4. Create test job to validate:
+   ```bash
+   kubectl create job --from=cronjob/user-provisioning-sync -n provisioning test-sync
+   kubectl logs -n provisioning job/test-sync
+   ```
+
 ## Performance Tuning for Recovery
 
 **Speed Up Restore:**
@@ -588,5 +765,16 @@ ERROR: Backup file is corrupted
 
 ---
 
-Last Updated: 2026-04-06
-Version: 1.0
+Last Updated: 2026-07-10
+Version: 1.1
+
+## v1.1 Feature Recovery Summary
+
+This section provides a quick-reference for recovering v1.1-specific features:
+
+| Feature | Key Files | Recovery Priority |
+|---------|-----------|------------------|
+| SOPS Secrets Encryption | `helmfile/secrets/*.enc.yaml`, `/etc/opendesk/sops-age-key.txt` | P0 — required before secrets decryption |
+| Backchannel Logout | `helmfile/environments/default/backchannel-logout.yaml.gotmpl`, Keycloak client attributes | P1 — must restore with Keycloak config |
+| User Provisioning | `scripts/user_import/kubernetes/cronjob.yaml`, `rbac.yaml`, `secrets.yaml.template` | P2 — restore after core services |
+| DFN-AAI Federation | `docs/dfn-aai-keycloak-integration.md`, SP metadata registration | P2 — restore IdP config with Keycloak
