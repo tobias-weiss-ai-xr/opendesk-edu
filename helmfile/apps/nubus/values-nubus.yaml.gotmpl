@@ -95,12 +95,6 @@ global:
           # Upstream indices at the time of writing start at "aRecord".
           univentionFreeAttribute1,aRecord,automountInformation,cNAMERecord,cn,description,dhcpHWAddress,displayName,entryUUID,gidNumber,givenName,homeDirectory,krb5PrincipalName,macAddress,mail,mailAlternativeAddress,mailPrimaryAddress,memberUid,objectClass,ou,pTRRecord,relativeDomainName,sambaAcctFlags,sambaDomainName,sambaGroupType,sambaPrimaryGroupSID,sambaSID,sambaSIDList,secretary,shadowExpire,sn,uid,uidNumber,uniqueMember,univentionCanonicalRecipientRewriteEnabled,univentionDataType,univentionInventoryNumber,univentionLicenseModule,univentionLicenseObject,univentionMailHomeServer,univentionNagiosHostname,univentionObjectFlag,univentionObjectType,univentionPolicyReference,univentionServerRole,univentionService,univentionShareGid,univentionShareSambaName,univentionShareWriteable,univentionUDMOptionModule,univentionUDMPropertyCLIName,univentionUDMPropertyCopyable,univentionUDMPropertyDefault,univentionUDMPropertyDeleteObjectClass,univentionUDMPropertyDoNotSearch,univentionUDMPropertyHook,univentionUDMPropertyLayoutOverwritePosition,univentionUDMPropertyLayoutOverwriteTab,univentionUDMPropertyLayoutPosition,univentionUDMPropertyLayoutTabAdvanced,univentionUDMPropertyLayoutTabName,univentionUDMPropertyLdapMapping,univentionUDMPropertyLongDescription,univentionUDMPropertyModule,univentionUDMPropertyMultivalue,univentionUDMPropertyObjectClass,univentionUDMPropertyOptions,univentionUDMPropertyShortDescription,univentionUDMPropertySyntax,univentionUDMPropertyTranslationLongDescription,univentionUDMPropertyTranslationShortDescription,univentionUDMPropertyTranslationTabName,univentionUDMPropertyValueMayChange,univentionUDMPropertyValueRequired,univentionUDMPropertyVersion,zoneName,univentionObjectIdentifier
 
-    # Can be removed once https://forge.univention.org/bugzilla/show_bug.cgi?id=59038 is fixed
-    ssl:
-      validity:
-        host: 99999
-        root: 99999
-
     ucs:
       web:
         theme: "light"
@@ -172,6 +166,7 @@ keycloak:
     logLevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
+    privileged: false
     capabilities:
       drop:
         - "ALL"
@@ -180,7 +175,7 @@ keycloak:
     runAsGroup: 1000
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     runAsNonRoot: true
     seLinuxOptions:
       {{ .Values.seLinuxOptions.umsKeycloak | toYaml | nindent 6 }}
@@ -284,6 +279,7 @@ nubusNotificationsApi:
     {{ . | toYaml | nindent 4 }}
     {{- end }}
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -347,6 +343,7 @@ nubusPortalFrontend:
     {{ . | toYaml | nindent 4 }}
     {{- end }}
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -452,6 +449,7 @@ nubusKeycloakExtensions:
     resources:
       {{ .Values.resources.umsKeycloakExtensionProxy | toYaml | nindent 6 }}
     securityContext:
+      privileged: false
       allowPrivilegeEscalation: false
       capabilities:
         drop:
@@ -522,6 +520,16 @@ nubusKeycloakExtensions:
     resources:
       {{ .Values.resources.umsKeycloakExtensionHandler | toYaml | nindent 6 }}
     securityContext:
+      enabled: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
       seccompProfile:
         type: "RuntimeDefault"
       seLinuxOptions:
@@ -582,6 +590,16 @@ nubusPortalConsumer:
   initResources:
     {{ .Values.resources.umsPortalConsumerDependencies | toYaml | nindent 4 }}
   containerSecurityContext:
+    enabled: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
     seccompProfile:
       type: "RuntimeDefault"
     seLinuxOptions:
@@ -638,6 +656,7 @@ nubusPortalServer:
     {{ . | toYaml | nindent 4 }}
     {{- end }}
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -766,6 +785,7 @@ nubusUdmRestApi:
     {{ . | toYaml | nindent 4 }}
     {{- end }}
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -841,6 +861,7 @@ nubusLdapNotifier:
   additionalAnnotations:
     {{ .Values.annotations.nubusLdapNotifier.additional | toYaml | nindent 4 }}
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -894,11 +915,15 @@ nubusLdapServer:
         registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerLeaderElector.registry | quote }}
         repository: {{ .Values.images.nubusLdapServerLeaderElector.repository }}
         tag: {{ .Values.images.nubusLdapServerLeaderElector.tag }}
-    legacy:
-      sharedRunSize: {{ .Values.persistence.storages.nubusLdapServerRun.size | quote }}
   persistence:
-    size: {{ .Values.persistence.storages.nubusLdapServerData.size | quote }}
-    storageClass: {{ coalesce .Values.persistence.storages.nubusLdapServerData.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+    volumes:
+      sharedData:
+        size: {{ .Values.persistence.storages.nubusLdapServerData.size | quote }}
+        storageClass: {{ coalesce .Values.persistence.storages.nubusLdapServerData.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+      sharedRun:
+        size: {{ .Values.persistence.storages.nubusLdapServerRun.size | quote }}
+        storageClass: {{ coalesce .Values.persistence.storages.nubusLdapServerRun.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+
   podAnnotations:
     intents.otterize.com/service-name: "ums-ldap-server"
     {{- with .Values.annotations.nubusLdapServer.pod }}
@@ -922,6 +947,10 @@ nubusLdapServer:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
+
+nubusLicenseImport:
+  enabled: {{ not (empty .Values.enterpriseKeys.nubus.license) }}
+  license: {{ .Values.enterpriseKeys.nubus.license | quote }}
 
 nubusProvisioning:
   enabled: true
@@ -957,6 +986,7 @@ nubusProvisioning:
     resources:
       {{ .Values.resources.umsProvisioningApi | toYaml | nindent 6 }}
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -1002,6 +1032,7 @@ nubusProvisioning:
           auth:
             password: {{ .Values.secrets.nats.natsAdminPassword | quote }}
     containerSecurityContext:
+      privileged: false
       allowPrivilegeEscalation: false
       capabilities:
         drop:
@@ -1127,6 +1158,7 @@ nubusProvisioning:
 nubusUdmListener:
   enabled: true
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -1170,6 +1202,7 @@ nubusUdmListener:
 nubusSelfServiceConsumer:
   enabled: true
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -1219,6 +1252,7 @@ nubusStackDataUms:
     {{ . | toYaml | nindent 4 }}
     {{- end }}
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -2059,6 +2093,7 @@ nubusUmcServer:
     {{- end }}
   containerSecurityContext:
     enabled: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -2087,7 +2122,7 @@ nubusUmcServer:
       {{ .Values.seLinuxOptions.umsUmcServer | toYaml | nindent 6 }}
   containerSecurityContextSssd:
     enabled: true
-    allowPrivilegeEscalation: true
+    allowPrivilegeEscalation: false
     capabilities:
       drop:
         - "ALL"
@@ -2199,6 +2234,7 @@ nubusUmcServer:
 
 nubusUmcGateway:
   containerSecurityContext:
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
@@ -2258,6 +2294,7 @@ nubusKeycloakBootstrap:
       enabled: {{ .Values.debug.enabled }}
   containerSecurityContext:
     enabled: true
+    privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:

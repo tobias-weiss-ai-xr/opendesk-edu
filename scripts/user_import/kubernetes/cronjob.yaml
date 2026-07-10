@@ -1,0 +1,261 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+## User Provisioning CronJob
+##
+## This CronJob runs user provisioning/deprovisioning scripts on a schedule.
+## Three separate jobs are defined:
+## 1. Deprovision disable - Daily at 02:00 (Phase 1 of deprovisioning)
+## 2. Deprovision delete - Weekly on Sunday at 03:00 (Phase 2)
+## 3. Sync users - Daily at 01:00 (Attribute synchronization)
+##
+## Provisioning (user creation) is manual-only to prevent accidental bulk imports.
+##
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: user-provisioning-deprovision-disable
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/name: user-provisioning
+    app.kubernetes.io/component: deprovision-disable
+    app.kubernetes.io/part-of: opendesk
+spec:
+  schedule: "0 2 * * *"  # Daily at 02:00
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: user-provisioning
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+            - name: user-provisioning
+              image: ghcr.io/opendesk-edu/user-import:latest
+              imagePullPolicy: Always
+              command:
+                - python
+                - /app/deprovision_disable.py
+              env:
+                - name: IMPORT_DOMAIN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: import-domain
+                - name: IMPORT_MAILDOMAIN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: import-maildomain
+                      optional: true
+                - name: UDM_API_USERNAME
+                  value: "Administrator"
+                - name: UDM_API_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: user-provisioning-secrets
+                      key: udm-api-password
+                - name: KEYCLOAK_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: keycloak-url
+                - name: KEYCLOAK_API_USERNAME
+                  value: "admin"
+                - name: KEYCLOAK_API_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: user-provisioning-secrets
+                      key: keycloak-api-password
+                - name: IDENTITY_PROVIDER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: identity-provider
+                      optional: true
+                - name: IAM_API_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: iam-api-url
+                      optional: true
+                - name: LOGLEVEL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: loglevel
+                      optional: true
+                - name: LOGPATH
+                  value: "/var/log/user-provisioning"
+                - name: DRY_RUN
+                  value: "false"
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+              volumeMounts:
+                - name: logs
+                  mountPath: /var/log/user-provisioning
+          volumes:
+            - name: logs
+              emptyDir: {}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: user-provisioning-deprovision-delete
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/name: user-provisioning
+    app.kubernetes.io/component: deprovision-delete
+    app.kubernetes.io/part-of: opendesk
+spec:
+  schedule: "0 3 * * 0"  # Weekly on Sunday at 03:00
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: user-provisioning
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+            - name: user-provisioning
+              image: ghcr.io/opendesk-edu/user-import:latest
+              imagePullPolicy: Always
+              command:
+                - python
+                - /app/deprovision_delete.py
+              env:
+                - name: IMPORT_DOMAIN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: import-domain
+                - name: UDM_API_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: user-provisioning-secrets
+                      key: udm-api-password
+                - name: GRACE_PERIOD_MONTHS
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: grace-period-months
+                      optional: true
+                - name: LOGLEVEL
+                  value: "INFO"
+                - name: LOGPATH
+                  value: "/var/log/user-provisioning"
+                - name: DRY_RUN
+                  value: "false"
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+              volumeMounts:
+                - name: logs
+                  mountPath: /var/log/user-provisioning
+          volumes:
+            - name: logs
+              emptyDir: {}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: user-provisioning-sync
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/name: user-provisioning
+    app.kubernetes.io/component: sync
+    app.kubernetes.io/part-of: opendesk
+spec:
+  schedule: "0 1 * * *"  # Daily at 01:00
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: user-provisioning
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+          containers:
+            - name: user-provisioning
+              image: ghcr.io/opendesk-edu/user-import:latest
+              imagePullPolicy: Always
+              command:
+                - python
+                - /app/sync_users.py
+              env:
+                - name: IMPORT_DOMAIN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: import-domain
+                - name: UDM_API_USERNAME
+                  value: "Administrator"
+                - name: UDM_API_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: user-provisioning-secrets
+                      key: udm-api-password
+                - name: KEYCLOAK_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: keycloak-url
+                - name: KEYCLOAK_API_USERNAME
+                  value: "admin"
+                - name: KEYCLOAK_API_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: user-provisioning-secrets
+                      key: keycloak-api-password
+                - name: IAM_API_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: user-provisioning-config
+                      key: iam-api-url
+                      optional: true
+                - name: LOGLEVEL
+                  value: "INFO"
+                - name: LOGPATH
+                  value: "/var/log/user-provisioning"
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+              volumeMounts:
+                - name: logs
+                  mountPath: /var/log/user-provisioning
+          volumes:
+            - name: logs
+              emptyDir: {}
