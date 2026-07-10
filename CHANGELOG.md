@@ -5,6 +5,63 @@ The upstream changelog follows below. For edu-specific changes, see the commit h
 
 ### Edu Additions (on top of openDesk CE v1.13.1)
 
+#### v1.1.0 (2026-07-10)
+
+**7-sprint release: Backchannel logout, user provisioning, DFN-AAI federation, SOPS secret management**
+
+- **Sprint 1 — GitOps-Native Secret Management**
+  - Integrate SOPS with age encryption for all 126 secrets across P0–P3 priorities
+  - Deploy ArgoCD CMP sidecar for transparent secret decryption during Helm rendering
+  - Generate `.sops.yaml` creation rules with age public key
+  - Document end-to-end operator workflows and disaster recovery for key rotation
+  - Blog: [GitOps-Native Secret Management with SOPS and ArgoCD CMP Sidecar](https://opendesk-edu.org/blog/sops-secret-management-argocd-cmp)
+
+- **Sprint 2 — ILIAS SAML Backchannel Logout**
+  - Implement `backchannel-handler.php` for SAML LogoutRequest processing
+  - Add Apache ConfigMap for backchannel endpoint routing to ILIAS Shibboleth module
+  - Configure `backchannel.logout.url` and `backchannel.logout.session.required` on ILIAS Keycloak SAML client
+  - Add ILIAS to E2E backchannel logout test suite
+
+- **Sprint 3 — OIDC Backchannel Logout**
+  - Add `backchannelLogout` configuration to OpenCloud with token-based session termination
+  - Configure Nextcloud user_oidc backchannel logout environment variables
+  - 6 services now support Keycloak-initiated backchannel session termination
+
+- **Sprint 4 — User Provisioning Operations**
+  - Add `OPERATIONS_RUNBOOK.md` (325 lines) — architecture, configuration, workflows, troubleshooting, DR procedures
+  - Create 3 Kubernetes CronJobs: daily sync (01:00), daily deprovision-disable (02:00), weekly deprovision-delete (Sun 03:00)
+  - Add RBAC manifests (ServiceAccount, Role, RoleBinding, namespace-scoped)
+  - Add secrets template with 4 credential definitions and security warnings
+
+- **Sprint 5 — DFN-AAI Federation**
+  - Implement Keycloak as SAML SP proxy for DFN-AAI/eduGAIN inter-federation
+  - Add 5 required + 5 recommended eduGAIN attribute mappers
+  - Create SP metadata generation workflow via `saml-metadata-generator`
+  - Document test and production federation registration procedures (bilingual EN/DE)
+  - Blog: [Federated Identity for Education — DFN-AAI & Shared Evaluation CTA](https://opendesk-edu.org/blog/dfn-aai-federation-shared-evaluation)
+
+- **Sprint 6 — Test Plan & Release Preparation**
+  - Write comprehensive integration test plan covering 7 test suites (auth, user lifecycle, backchannel logout, DFN-AAI, intercom routing, edge cases, load testing at 500 concurrent users)
+  - Create release checklist (pre-release, artifacts, post-release monitoring, rollback plan, sign-off template)
+
+- **Sprint 7 — Gap Analysis & Hardening**
+  - Fix missing backchannel handler volume mounts for Moodle and BigBlueButton containers
+  - Add missing secrets templates for provisioning CronJobs
+  - Fix ILIAS Keycloak client missing `backchannel.logout.url` attribute
+  - Update disaster recovery documentation for v1.1 features (SOPS key recovery, backchannel logout scenario, provisioning infrastructure)
+
+- **Infrastructure**
+  - Integrate upstream openDesk CE v1.16.0 changes into edu helmfile
+  - Add GitLab CI pipeline for opencode.de deployment
+  - Fix GitHub Actions workflows (lint, security scan, Codeberg sync)
+  - Fix website CI: deploy step SSH auth, gitleaks race condition, artwork auto-commit
+  - Set up Codeberg → GitHub sync via SSH deploy key (Forgejo CI)
+
+- **Blog Articles & Documentation**
+  - 9 articles published on [opendesk-edu.org](https://opendesk-edu.org) with branded SVG teaser images
+  - Updated disaster recovery guide with v1.1 coverage
+  - Updated gap analysis with 4 findings resolved and 4 remaining considerations
+
 #### v1.14.0 (2026-04-12)
 
 - **Code Quality**
