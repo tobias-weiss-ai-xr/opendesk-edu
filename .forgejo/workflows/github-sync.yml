@@ -26,13 +26,21 @@ jobs:
           git config --global user.name "Codeberg Actions Bot"
           git config --global user.email "actions@codeberg.org"
 
+      - name: Setup SSH deploy key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+
       - name: Add GitHub remote
         run: |
-          git remote add github https://oauth2:${{ secrets.GH_TOKEN }}@github.com/tobias-weiss-ai-xr/opendesk-edu.git
+          git remote add github git@github.com:tobias-weiss-ai-xr/opendesk-edu.git
 
       - name: Sync to GitHub (with retry)
+        env:
+          GIT_SSH_COMMAND: ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no
         run: |
-          # Retry logic with exponential backoff
           MAX_RETRIES=3
           RETRY_DELAY=10
           ATTEMPT=1
@@ -41,42 +49,42 @@ jobs:
             echo "Sync attempt $ATTEMPT of $MAX_RETRIES..."
 
             if git push --mirror github 2>&1; then
-              echo "✓ Sync successful on attempt $ATTEMPT"
+              echo "Sync successful on attempt $ATTEMPT"
               exit 0
             else
-              echo "✗ Sync failed on attempt $ATTEMPT"
+              echo "Sync failed on attempt $ATTEMPT"
               if [ $ATTEMPT -lt $MAX_RETRIES ]; then
                 echo "Retrying in ${RETRY_DELAY}s..."
                 sleep $RETRY_DELAY
-                RETRY_DELAY=$((RETRY_DELAY * 2))  # Exponential backoff
+                RETRY_DELAY=$((RETRY_DELAY * 2))
               fi
             fi
             ATTEMPT=$((ATTEMPT + 1))
           done
 
-          # All retries failed
-          echo "❌ Sync failed after $MAX_RETRIES attempts"
+          echo "Sync failed after $MAX_RETRIES attempts"
           exit 1
 
       - name: Verify sync
         if: success()
+        env:
+          GIT_SSH_COMMAND: ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no
         run: |
-          echo "Checking remote refs..."
           LOCAL_REFS=$(git show-ref | wc -l)
           REMOTE_REFS=$(git ls-remote github | wc -l)
           echo "Local refs: $LOCAL_REFS"
           echo "Remote refs: $REMOTE_REFS"
           if [ "$LOCAL_REFS" -ne "$REMOTE_REFS" ]; then
-            echo "⚠️ Warning: Ref count mismatch (local=$LOCAL_REFS, remote=$REMOTE_REFS)"
+            echo "Warning: Ref count mismatch (local=$LOCAL_REFS, remote=$REMOTE_REFS)"
           fi
 
       - name: Report status
         if: success()
         run: |
-          echo "✓ Codeberg → GitHub sync completed successfully"
+          echo "Codeberg -> GitHub sync completed successfully"
 
       - name: Report failure
         if: failure()
         run: |
-          echo "❌ Codeberg → GitHub sync failed"
+          echo "Codeberg -> GitHub sync failed"
           echo "Check the above logs for details"
