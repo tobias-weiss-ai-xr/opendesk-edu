@@ -15,8 +15,9 @@ USAGE:
     ./run.sh [OPTIONS]
 
 OPTIONS:
-    --layer <0|1|2|3|4|5>      Run specific layer (default: all)
+    --layer <0|1|2|3|4|5|6>    Run specific layer (default: all)
     --layers <0-2>             Run range of layers
+    --specs                    Run spec-based tests (ICS routing, backchannel)
     --service <name>           Run tests for specific service
     --format <table|json|junit> Output format (default: table)
     --ci                       CI mode: exit code 0/1, JSON output
@@ -29,6 +30,7 @@ LAYER DESCRIPTION:
     3  Integration (filepicker, mail, storage, k8up, antivirus)
     4  E2E Playwright (critical user journeys)
     5  Regression (bugfix validation)
+    6  Spec-based tests (declarative YAML specs for ICS integration)
 
 EXAMPLES:
     ./run.sh                              # Run all layers
@@ -44,6 +46,7 @@ LAYERS=""
 SERVICE=""
 FORMAT="table"
 CI_MODE=false
+RUN_SPECS=false
 
 parse_args() {
     while [ $# -gt 0 ]; do
@@ -59,6 +62,10 @@ parse_args() {
             --service)
                 SERVICE="$2"
                 shift 2
+                ;;
+            --specs)
+                RUN_SPECS=true
+                shift
                 ;;
             --format)
                 FORMAT="$2"
@@ -89,6 +96,18 @@ parse_args "${ARGS[@]}"
 total_failed=0
 layer_status=()
 
+run_specs() {
+    local format="${1:-table}"
+    print_section "Running Spec-based Tests"
+    if python3 "$SCRIPT_DIR/run-specs.py" --format "$format"; then
+        print_result PASS "Spec-based tests completed"
+        return 0
+    else
+        print_result FAIL "Spec-based tests failed"
+        return 1
+    fi
+}
+
 run_layer() {
     local layer_num="$1"
     local layer_name="$2"
@@ -115,6 +134,18 @@ run_layer() {
         return 1
     fi
 }
+
+if [ "$RUN_SPECS" = true ] && [ -z "$LAYER" ] && [ -z "$LAYERS" ]; then
+    run_specs "$FORMAT" || total_failed=$((total_failed + 1))
+    print_section "Overall Summary"
+    if [ $total_failed -eq 0 ]; then
+        print_result PASS "All spec-based tests passed"
+        exit 0
+    else
+        print_result FAIL "$total_failed test(s) failed"
+        exit 1
+    fi
+fi
 
 if [ -n "$SERVICE" ]; then
     print_section "Running tests for service: $SERVICE"
@@ -152,8 +183,15 @@ if [ -n "$LAYERS" ]; then
             5)
                 run_layer 5 "Regression Tests" "$SCRIPT_DIR/05-regression/opencloud_oidc.sh" || total_failed=$((total_failed + 1))
                 ;;
+            6)
+                run_specs "$FORMAT" || total_failed=$((total_failed + 1))
+                ;;
         esac
     done
+
+    if [ "$RUN_SPECS" = true ]; then
+        run_specs "$FORMAT" || total_failed=$((total_failed + 1))
+    fi
 elif [ -n "$LAYER" ]; then
     case $LAYER in
         0)
@@ -180,11 +218,14 @@ elif [ -n "$LAYER" ]; then
             cd "$SCRIPT_DIR"
             ;;
         5)
-            run_layer 5 "Regression Tests" "$SCRIPT_DIR/05-regression/opencloud_oidc.sh" || total_failed=$((total_failed + 1))
-            ;;
-        *)
-            error_exit "Invalid layer: $LAYER"
-            ;;
+                run_layer 5 "Regression Tests" "$SCRIPT_DIR/05-regression/opencloud_oidc.sh" || total_failed=$((total_failed + 1))
+                ;;
+            6)
+                run_specs "$FORMAT" || total_failed=$((total_failed + 1))
+                ;;
+            *)
+                error_exit "Invalid layer: $LAYER"
+                ;;
     esac
 else
     run_layer 0 "Infrastructure Validation" "$SCRIPT_DIR/00-infrastructure/run.sh" || total_failed=$((total_failed + 1))
@@ -203,6 +244,8 @@ else
     cd "$SCRIPT_DIR"
     
     run_layer 5 "Regression Tests" "$SCRIPT_DIR/05-regression/opencloud_oidc.sh" || total_failed=$((total_failed + 1))
+    
+    run_specs "$FORMAT" || total_failed=$((total_failed + 1))
 fi
 
 print_section "Overall Summary"
