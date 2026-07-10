@@ -3,6 +3,7 @@
  *
  * This test verifies that when a user logs out from the portal,
  * their sessions are terminated across all connected services:
+ * - ILIAS (SAML backchannel)
  * - Moodle (SAML backchannel)
  * - BigBlueButton (SAML backchannel)
  * - OpenCloud (OIDC backchannel)
@@ -12,6 +13,7 @@
  * - PORTAL_URL: Portal base URL (e.g., https://portal.example.org)
  * - PORTAL_USERNAME: Test user username
  * - PORTAL_PASSWORD: Test user password
+ * - ILIAS_URL: ILIAS base URL
  * - MOODLE_URL: Moodle base URL
  * - BBB_URL: BigBlueButton base URL
  * - OPENCLOUD_URL: OpenCloud base URL
@@ -44,6 +46,13 @@ const CONFIG = {
       dashboardPath: '/rooms',
       loginIndicator: 'Log in',
       authenticatedIndicator: 'Rooms',
+      type: 'SAML'
+    },
+    ilias: {
+      url: process.env.ILIAS_URL || 'https://lms.example.org',
+      dashboardPath: '/',
+      loginIndicator: 'Log in',
+      authenticatedIndicator: 'Dashboard',
       type: 'SAML'
     },
     opencloud: {

@@ -133,6 +133,12 @@ extraVolumes:
   - name: apache-shibboleth-config
     configMap:
       name: ilias-apache-shibboleth-config
+  - name: apache-backchannel-config
+    configMap:
+      name: ilias-apache-backchannel-config
+  - name: backchannel-handler
+    configMap:
+      name: ilias-backchannel-handler
 
 extraVolumeMounts:
   - name: shibboleth-config
@@ -144,6 +150,18 @@ extraVolumeMounts:
   - name: apache-shibboleth-config
     mountPath: /etc/apache2/conf-enabled/shibboleth.conf
     subPath: shibboleth.conf
+    readOnly: true
+  - name: apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel.conf
+    subPath: backchannel.conf
+    readOnly: true
+  - name: apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel-env.conf
+    subPath: backchannel-env.conf
+    readOnly: true
+  - name: backchannel-handler
+    mountPath: /var/www/html/auth/shibboleth/backchannel-handler.php
+    subPath: backchannel-handler.php
     readOnly: true
 
 # SAML SSO configuration (SimpleSAMLphp native volumes)
