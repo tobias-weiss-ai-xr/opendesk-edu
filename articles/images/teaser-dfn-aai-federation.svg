@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>openDesk Edu - DFN-AAI Federation</title>
+  <desc>Branded teaser image for the openDesk Edu DFN-AAI federation article featuring a dark purple gradient background, network/federation icon, grid pattern, and article title.</desc>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0014"/>
+      <stop offset="50%" stop-color="#0d0020"/>
+      <stop offset="100%" stop-color="#0a0014"/>
+    </linearGradient>
+    <linearGradient id="federationGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#927AFA"/>
+    </linearGradient>
+    <linearGradient id="accentLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#571EFA" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#571EFA" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="accentRight" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#927AFA" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#927AFA" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#927AFA"/>
+    </linearGradient>
+    <filter id="glowWide" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="40"/>
+    </filter>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#571EFA" stroke-width="0.5" opacity="0.06"/>
+    </pattern>
+    <pattern id="dotGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="#927AFA" opacity="0.12"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#dotGrid)"/>
+
+  <!-- Edge accents -->
+  <rect x="0" y="0" width="200" height="630" fill="url(#accentLeft)"/>
+  <rect x="1000" y="0" width="200" height="630" fill="url(#accentRight)"/>
+  <rect x="0" y="0" width="1200" height="2" fill="#571EFA" opacity="0.4"/>
+  <rect x="0" y="628" width="1200" height="2" fill="#927AFA" opacity="0.2"/>
+
+  <!-- Ambient glow -->
+  <ellipse cx="200" cy="315" rx="250" ry="250" fill="#571EFA" opacity="0.06" filter="url(#glowWide)"/>
+  <ellipse cx="1000" cy="315" rx="200" ry="200" fill="#927AFA" opacity="0.04" filter="url(#glowWide)"/>
+
+  <!-- Federation/network node background element -->
+  <g transform="translate(40, 80)" opacity="0.10">
+    <!-- Network nodes -->
+    <circle cx="80" cy="50" r="25" fill="none" stroke="#927AFA" stroke-width="2"/>
+    <circle cx="80" cy="50" r="6" fill="#927AFA"/>
+    <circle cx="20" cy="120" r="20" fill="none" stroke="#927AFA" stroke-width="1.5"/>
+    <circle cx="20" cy="120" r="5" fill="#927AFA"/>
+    <circle cx="140" cy="120" r="20" fill="none" stroke="#927AFA" stroke-width="1.5"/>
+    <circle cx="140" cy="120" r="5" fill="#927AFA"/>
+    <circle cx="20" cy="190" r="18" fill="none" stroke="#927AFA" stroke-width="1.5"/>
+    <circle cx="20" cy="190" r="4" fill="#927AFA"/>
+    <circle cx="140" cy="190" r="18" fill="none" stroke="#927AFA" stroke-width="1.5"/>
+    <circle cx="140" cy="190" r="4" fill="#927AFA"/>
+    <!-- Connections -->
+    <line x1="80" y1="75" x2="20" y2="100" stroke="#927AFA" stroke-width="1"/>
+    <line x1="80" y1="75" x2="140" y2="100" stroke="#927AFA" stroke-width="1"/>
+    <line x1="20" y1="140" x2="20" y2="172" stroke="#927AFA" stroke-width="1"/>
+    <line x1="140" y1="140" x2="140" y2="172" stroke="#927AFA" stroke-width="1"/>
+    <line x1="80" y1="50" x2="20" y2="120" stroke="#927AFA" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <line x1="80" y1="50" x2="140" y2="120" stroke="#927AFA" stroke-width="0.5" stroke-dasharray="3,3"/>
+  </g>
+
+  <!-- D Icon -->
+  <g transform="translate(60, 130)">
+    <rect x="0" y="0" width="110" height="110" rx="22" fill="url(#iconGrad)" opacity="0.9"/>
+    <text x="55" y="82" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="bold" fill="white" opacity="0.95">D</text>
+  </g>
+
+  <!-- Brand wordmark -->
+  <text x="200" y="194" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="bold" fill="white" letter-spacing="2">openDesk</text>
+  <text x="200" y="222" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="300" fill="#DDD6FE" letter-spacing="10">EDUCATION</text>
+  <line x1="200" y1="236" x2="380" y2="236" stroke="#571EFA" stroke-width="1" opacity="0.4"/>
+
+  <!-- Article category badge -->
+  <rect x="200" y="260" width="140" height="28" rx="14" fill="#571EFA" opacity="0.25"/>
+  <text x="270" y="279" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#927AFA" letter-spacing="1">FEDERATION</text>
+
+  <!-- Decorative line -->
+  <line x1="200" y1="312" x2="950" y2="312" stroke="#571EFA" stroke-width="1.5" opacity="0.2"/>
+
+  <!-- Article title -->
+  <text x="200" y="345" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="white">
+    <tspan x="200" dy="0">Federated Identity for Education</tspan>
+    <tspan x="200" dy="38" fill="#DDD6FE" font-weight="400" font-size="22">openDesk Edu and the DFN-AAI Federation</tspan>
+  </text>
+
+  <!-- Short description -->
+  <text x="200" y="425" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#927AFA" opacity="0.8">
+    <tspan x="200" dy="0">Join the shared evaluation — one federation setup, tested by many.</tspan>
+    <tspan x="200" dy="22">Lower the barrier for every institution in the community.</tspan>
+  </text>
+
+  <!-- CTA badge -->
+  <g transform="translate(200, 480)">
+    <rect x="0" y="0" width="220" height="32" rx="16" fill="#571EFA" opacity="0.35"/>
+    <rect x="0" y="0" width="220" height="32" rx="16" fill="url(#federationGrad)" opacity="0.15"/>
+    <text x="110" y="21" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#DDD6FE" letter-spacing="1">SHARED EVALUATION INSTANCE</text>
+  </g>
+
+  <!-- Bottom decoration - federation ring nodes -->
+  <g opacity="0.07">
+    <circle cx="300" cy="555" r="8" fill="none" stroke="#927AFA" stroke-width="1"/>
+    <circle cx="300" cy="555" r="3" fill="#927AFA"/>
+    <circle cx="400" cy="555" r="8" fill="none" stroke="#927AFA" stroke-width="1"/>
+    <circle cx="400" cy="555" r="3" fill="#927AFA"/>
+    <circle cx="500" cy="555" r="8" fill="none" stroke="#927AFA" stroke-width="1"/>
+    <circle cx="500" cy="555" r="3" fill="#927AFA"/>
+    <circle cx="350" cy="540" r="6" fill="none" stroke="#571EFA" stroke-width="1"/>
+    <circle cx="450" cy="540" r="6" fill="none" stroke="#571EFA" stroke-width="1"/>
+    <line x1="308" y1="555" x2="392" y2="555" stroke="#927AFA" stroke-width="0.8"/>
+    <line x1="408" y1="555" x2="492" y2="555" stroke="#927AFA" stroke-width="0.8"/>
+    <line x1="300" y1="547" x2="345" y2="540" stroke="#571EFA" stroke-width="0.5"/>
+    <line x1="400" y1="547" x2="445" y2="540" stroke="#571EFA" stroke-width="0.5"/>
+  </g>
+
+  <!-- Decorative vertical lines -->
+  <line x1="1000" y1="100" x2="1000" y2="530" stroke="#571EFA" stroke-width="0.5" opacity="0.06"/>
+  <line x1="1050" y1="150" x2="1050" y2="500" stroke="#927AFA" stroke-width="0.5" opacity="0.05"/>
+  <line x1="1100" y1="120" x2="1100" y2="480" stroke="#571EFA" stroke-width="0.5" opacity="0.04"/>
+
+  <!-- Corner marks -->
+  <path d="M 20,20 L 50,20 M 20,20 L 20,50" stroke="#571EFA" stroke-width="1.5" opacity="0.25" fill="none"/>
+  <path d="M 1180,20 L 1150,20 M 1180,20 L 1180,50" stroke="#927AFA" stroke-width="1.5" opacity="0.2" fill="none"/>
+  <path d="M 20,610 L 50,610 M 20,610 L 20,580" stroke="#571EFA" stroke-width="1.5" opacity="0.25" fill="none"/>
+  <path d="M 1180,610 L 1150,610 M 1180,610 L 1180,580" stroke="#927AFA" stroke-width="1.5" opacity="0.2" fill="none"/>
+</svg>

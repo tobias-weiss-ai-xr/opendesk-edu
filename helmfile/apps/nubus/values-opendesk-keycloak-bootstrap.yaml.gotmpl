@@ -82,13 +82,6 @@ config:
       role: "opendesk-opencloud-access-control"
       group: "managed-by-attribute-FileshareCloud"
     {{- end }}
-    {{- if .Values.apps.snipr.enabled }}
-    snipr:
-      client: "snipr"
-      scope: "opendesk-snipr-scope"
-      role: "opendesk-snipr-access-control"
-      group: "managed-by-attribute-Lecturerecording"
-    {{- end }}
   custom:
     clientScopes:
       {{ .Values.functional.authentication.oidc.clientScopes | toYaml | nindent 6 }}
@@ -140,9 +133,8 @@ config:
                      {{ if .Values.apps.jitsi.enabled }}'managed-by-attribute-Videoconference',{{ end }}
                       {{ if .Values.apps.oxAppSuite.enabled }}'managed-by-attribute-Groupware',{{ end }}
                       {{ if .Values.apps.notes.enabled }}'managed-by-attribute-Notes',{{ end }}
-                       {{ if .Values.apps.opencloud.enabled }}'managed-by-attribute-FileshareCloud',{{ end }}
-                       {{ if .Values.apps.snipr.enabled }}'managed-by-attribute-Lecturerecording',{{ end }}
-                     ]
+                      {{ if .Values.apps.opencloud.enabled }}'managed-by-attribute-FileshareCloud',{{ end }}
+                    ]
 
   opendesk:
     # We use client specific scopes as we bind them to Keycloak role membership which itself is linked
@@ -573,46 +565,6 @@ config:
               claim.name: "email"
               jsonType.label: "String"
       {{ end }}
-      {{ if .Values.apps.snipr.enabled }}
-      - name: "opendesk-snipr-scope"
-        description: "Scope for the claims required by openDesk's SNIpR lecture recording service."
-        protocol: "openid-connect"
-        protocolMappers:
-          - name: "opendesk_useruuid"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "entryUUID"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "opendesk_useruuid"
-              jsonType.label: "String"
-          - name: "opendesk_username"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "uid"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "opendesk_username"
-              jsonType.label: "String"
-          - name: "email"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              introspection.token.claim: true
-              userinfo.token.claim: true
-              user.attribute: "email"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "email"
-              jsonType.label: "String"
-      {{ end }}
     clients:
       - name: "opendesk-intercom"
         clientId: "opendesk-intercom"
@@ -665,25 +617,6 @@ config:
               jsonType.label: "String"
         defaultClientScopes:
           - "offline_access"
-      - name: "opendesk-portal"
-        clientId: "https://portal.demo.opendesk-edu.org/univention/oidc/"
-        protocol: "openid-connect"
-        clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.portal | quote }}
-        redirectUris:
-          - "https://portal.demo.opendesk-edu.org/univention/oidc/*"
-          - "https://portal.demo.opendesk-sme.org/univention/oidc/*"
-        consentRequired: false
-        frontchannelLogout: false
-        publicClient: false
-        authorizationServicesEnabled: false
-        attributes:
-          backchannel.logout.session.required: true
-          post.logout.redirect.uris: "https://portal.demo.opendesk-edu.org/*##https://portal.demo.opendesk-sme.org/*"
-        defaultClientScopes:
-          - "openid"
-          - "profile"
-          - "email"
       {{ if .Values.apps.oxAppSuite.enabled }}
       - name: "opendesk-dovecot"
         clientId: "opendesk-dovecot"
@@ -714,6 +647,15 @@ config:
           backchannel.logout.session.required: true
           backchannel.logout.url: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/ajax/oidc/backchannel_logout"
           post.logout.redirect.uris: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
+        protocolMappers:
+          - name: "dovecot-audience"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-audience-mapper"
+            consentRequired: false
+            config:
+              included.client.audience: "opendesk-dovecot"
+              id.token.claim: false
+              access.token.claim: true
         defaultClientScopes:
           - "opendesk-oxappsuite-scope"
           - "read_contacts"
@@ -860,27 +802,6 @@ config:
         defaultClientScopes:
           - "opendesk-opencloud-scope"
       {{ end }}
-      {{ if .Values.apps.snipr.enabled }}
-      - name: "snipr"
-        clientId: "snipr"
-        protocol: "openid-connect"
-        clientAuthenticatorType: "client-secret"
-        secret: {{ .Values.secrets.keycloak.clientSecret.snipr | quote }}
-        redirectUris:
-          - "https://snipr.{{ .Values.global.domain }}/*"
-        rootUrl: "https://snipr.{{ .Values.global.domain }}"
-        consentRequired: false
-        frontchannelLogout: true
-        publicClient: false
-        authorizationServicesEnabled: false
-        attributes:
-          post.logout.redirect.uris: "https://snipr.{{ .Values.global.domain }}/*"
-        defaultClientScopes:
-          - "opendesk-snipr-scope"
-          - "openid"
-          - "profile"
-          - "email"
-      {{ end }}
       {{ if true }}  # ILIAS SAML client - always configure
       - name: "ilias-saml"
         clientId: "ilias-saml"
@@ -888,11 +809,11 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.iliasSaml | quote }}
         redirectUris:
-          - "https://lms.{{ .Values.global.domain }}/*"
-        rootUrl: "https://lms.{{ .Values.global.domain }}"
-        adminUrl: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
+          - "https://lms.opendesk.example.com/*"
+        rootUrl: "https://lms.opendesk.example.com"
+        adminUrl: "https://lms.opendesk.example.com"
         consentRequired: false
-        frontchannelLogout: false
+        frontchannelLogout: true
         publicClient: false
         authorizationServicesEnabled: false
         attributes:
@@ -905,7 +826,9 @@ config:
           saml.client.signature: "false"
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
-          logout.service.url.binding.soap.post: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
+          frontchannel.logout.url: "https://lms.opendesk.example.com/Shibboleth.sso/Logout"
+          backchannel.logout.session.required: "true"
+          backchannel.logout.url: "https://lms.opendesk.example.com/Shibboleth.sso/Logout"
         protocolMappers:
           - name: "email"
             protocol: "saml"
@@ -947,11 +870,11 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.moodleSaml | quote }}
         redirectUris:
-          - "https://moodle.{{ .Values.global.domain }}/*"
-        rootUrl: "https://moodle.{{ .Values.global.domain }}"
-        adminUrl: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
+          - "https://moodle.opendesk.example.com/*"
+        rootUrl: "https://moodle.opendesk.example.com"
+        adminUrl: "https://moodle.opendesk.example.com"
         consentRequired: false
-        frontchannelLogout: false
+        frontchannelLogout: true
         publicClient: false
         authorizationServicesEnabled: false
         attributes:
@@ -964,7 +887,7 @@ config:
           saml.client.signature: "false"
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
-          logout.service.url.binding.soap.post: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/SLO/SOAP"
+          frontchannel.logout.url: "https://moodle.opendesk.example.com/Shibboleth.sso/Logout"
         protocolMappers:
           - name: "email"
             protocol: "saml"
@@ -1006,10 +929,10 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.bbbSaml | quote }}
         redirectUris:
-          - "https://bbb.{{ .Values.global.domain }}/*"
-          - "https://bbb.{{ .Values.global.domain }}/auth/saml2/callback"
-        rootUrl: "https://bbb.{{ .Values.global.domain }}"
-        adminUrl: "https://bbb.{{ .Values.global.domain }}/saml/logout"
+          - "https://bbb.opendesk.example.com/*"
+          - "https://bbb.opendesk.example.com/auth/saml2/callback"
+        rootUrl: "https://bbb.opendesk.example.com"
+        adminUrl: "https://bbb.opendesk.example.com"
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
@@ -1024,7 +947,7 @@ config:
           saml.client.signature: "false"
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
-          frontchannel.logout.url: "https://bbb.{{ .Values.global.domain }}/saml/logout"
+          frontchannel.logout.url: "https://bbb.opendesk.example.com/Shibboleth.sso/Logout"
         protocolMappers:
           - name: "email"
             protocol: "saml"
@@ -1066,10 +989,10 @@ config:
         clientAuthenticatorType: "client-secret"
         secret: {{ .Values.secrets.keycloak.clientSecret.ncoidc | quote }}
         redirectUris:
-          - "https://files.opendesk.hrz.uni-marburg.de/apps/user_saml/saml/acs"
-          - "https://files.opendesk.hrz.uni-marburg.de/*"
-        rootUrl: "https://files.opendesk.hrz.uni-marburg.de"
-        adminUrl: "https://files.opendesk.hrz.uni-marburg.de"
+          - "https://files.opendesk.example.com/apps/user_saml/saml/acs"
+          - "https://files.opendesk.example.com/*"
+        rootUrl: "https://files.opendesk.example.com"
+        adminUrl: "https://files.opendesk.example.com"
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
@@ -1084,8 +1007,8 @@ config:
           saml.client.signature: "false"
           saml.authnstatement: "true"
           saml_name_id_format: "persistent"
-          frontchannel.logout.url: "https://files.opendesk.hrz.uni-marburg.de/apps/user_saml/saml/sls"
-          saml entityId: "https://files.opendesk.hrz.uni-marburg.de/apps/user_saml/saml/metadata"
+          frontchannel.logout.url: "https://files.opendesk.example.com/apps/user_saml/saml/sls"
+          saml entityId: "https://files.opendesk.example.com/apps/user_saml/saml/metadata"
         protocolMappers:
           - name: "email"
             protocol: "saml"

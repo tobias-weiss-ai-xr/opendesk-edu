@@ -147,7 +147,13 @@ service:
     annotations:
       {{ .Values.annotations.openxchangeDovecot.serviceExternal | toYaml | nindent 6 }}
     type: {{ coalesce .Values.service.type.dovecot .Values.cluster.service.type | quote }}
-{{- end }}
+    ports:
+      imaps: {{ if .Values.functional.groupware.externalClients.exposeImaps }}{port: 993}{{ else }}~{{ end }}
+      pop3s: {{ if .Values.functional.groupware.externalClients.exposePop3s }}{port: 995}{{ else }}~{{ end }}
+    {{- if .Values.service.loadBalancerIp.dovecot }}
+    loadBalancerIp: {{ .Values.service.loadBalancerIp.dovecot }}
+    {{- end }}
+  {{- end }}
 
 serviceAccount:
   annotations:
