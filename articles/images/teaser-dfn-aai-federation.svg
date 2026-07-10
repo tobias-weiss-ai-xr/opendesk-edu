@@ -26,13 +26,6 @@
     <filter id="glowWide" x="-100%" y="-100%" width="300%" height="300%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="40"/>
     </filter>
-    <filter id="glowPrimary" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
     <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
       <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#571EFA" stroke-width="0.5" opacity="0.06"/>
     </pattern>

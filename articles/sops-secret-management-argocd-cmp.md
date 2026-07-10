@@ -61,8 +61,8 @@ Our secret management architecture consists of four components:
 ┌─────────────────────────────────────────────────────────┐
 │                    Git Repository                         │
 │                                                          │
-│  .sops.yaml          helmfile/secrets/                   │
-│  ──────────          ───────────────────                 │
+│  .sops.yaml          helmfile/environments/default/       │
+│  ──────────          ───────────────────────             │
 │  creation_rules:     secrets.enc.yaml (P0 critical)      │
 │    age: <public_key> secrets.prod.enc.yaml (P1-P3)       │
 │                                                          │
