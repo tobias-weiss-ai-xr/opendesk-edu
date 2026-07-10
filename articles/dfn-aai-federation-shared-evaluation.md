@@ -18,13 +18,13 @@ author: "Tobias Weiß and openDesk Edu Contributors"
 
 DFN-AAI (Deutsches Forschungsnetz — Authentication and Authorization Infrastructure) is Germany's national academic identity federation, connecting universities, research institutions, and service providers through SAML 2.0. It's part of the global eduGAIN inter-federation, which means a DFN-AAI login can authenticate users across participating institutions worldwide.
 
-For openDesk Edu, DFN-AAI integration is not optional — it's a core requirement. German universities don't create separate user accounts for every platform. They authenticate through their institutional Identity Provider (IdP), which is registered with DFN-AAI and federates witheduGAIN.
+For openDesk Edu, DFN-AAI integration is not optional — it's a core requirement. German universities don't create separate user accounts for every platform. They authenticate through their institutional Identity Provider (IdP), which is registered with DFN-AAI and federates with eduGAIN.
 
 Without DFN-AAI support, openDesk Edu would be a standalone island. With it, it becomes part of the national research and education infrastructure.
 
 ## What We Built
 
-Over Sprint 5 of our v1.1 roadmap, we implemented comprehensive DFN-AAI federation support for openDesk Edu. Here's what was delivered:
+Over Sprint 5 of our v1.1 release roadmap (July 2026), we implemented comprehensive DFN-AAI federation support for openDesk Edu. Here's what was delivered:
 
 ### 1. Keycloak as SAML Service Provider Proxy
 
@@ -93,10 +93,10 @@ The generated metadata includes:
 
 The DFN-AAI test federation provides a sandbox environment where SP registration can be validated before production:
 
-| Environment | Metadata | Registration Time |
-|-------------|----------|-------------------|
-| **Test Federation** | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` | 1-2 business days |
-| **Production Federation** | Via institutional registration | 3-5 business days |
+| Environment | Metadata Source | Registration Time |
+|-------------|-----------------|-------------------|
+| **Test Federation** | DFN-AAI test federation: `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` | 1-2 business days |
+| **Production Federation** | Your institution's DFN-AAI administrator | 3-5 business days |
 
 We documented the complete testing workflow — from test IdP accounts to attribute verification to single logout propagation — in [`docs/dfn-aai-testing-guide.md`](https://github.com/opendesk-edu/opendesk-edu/blob/main/docs/dfn-aai-testing-guide.md).
 
