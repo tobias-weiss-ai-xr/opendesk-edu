@@ -78,37 +78,29 @@ class AuthResolver:
         password = os.getenv("PORTAL_PASSWORD", "")
         client_id = os.getenv("OIDC_CLIENT_ID", "opendesk-intercom")
         client_secret = os.getenv("OIDC_CLIENT_SECRET", "")
+        ics_base = os.getenv("ICS_BASE_URL", "https://ics.opendesk.hrz.uni-marburg.de")
 
         if not username or not password:
             self._warn("PORTAL_USERNAME/PASSWORD not set, "
                        "session auth unavailable")
             return {}
 
-        cache_key = f"{keycloak_host}/{realm}/{username}"
+        cache_key = f"{keycloak_host}/{realm}/{username}:session"
         if cache_key in self._token_cache:
-            return {"Authorization": f"Bearer {self._token_cache[cache_key]}"}
-
-        token_url = (f"https://{keycloak_host}/realms/{realm}"
-                     f"/protocol/openid-connect/token")
-
-        data = {
-            "grant_type": "password",
-            "client_id": client_id,
-            "username": username,
-            "password": password,
-        }
-        if client_secret:
-            data["client_secret"] = client_secret
-
-        try:
-            resp = requests.post(token_url, data=data, timeout=15)
-            resp.raise_for_status()
-            token = resp.json()["access_token"]
-            self._token_cache[cache_key] = token
-            return {"Authorization": f"Bearer {token}"}
-        except requests.RequestException as e:
-            self._warn(f"OIDC token acquisition failed: {e}")
+            cookies = self._token_cache[cache_key]
+            if cookies:
+                return {"Cookie": "; ".join(f"{k}={v}" for k, v in cookies.items())}
             return {}
+
+        # ICS uses SAML-brokered authentication (portal → ICS redirects to
+        # Keycloak OIDC → Keycloak SAML proxy → SAML IdP). Browser-based
+        # session establishment is required for authenticated scenarios.
+        # For CLI-based testing, run with Playwright:
+        #   npx playwright test tests/playwright/ics-routing.spec.js
+        self._warn("ICS requires SAML-brokered auth via browser. "
+                    "Run authenticated scenarios with: "
+                    "npx playwright test tests/playwright/")
+        return {}
 
 
 # ---------------------------------------------------------------------------

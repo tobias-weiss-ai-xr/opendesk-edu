@@ -41,7 +41,7 @@ log = logging.getLogger("create-ics-testuser")
 
 def create_via_udm_rest(username, password, ldap_secret, ldap_base):
     """Create user via UDM REST API on localhost (run from ums-udm-rest-api pod)."""
-    url = f"http://localhost/udm/users/user/"
+    url = f"http://127.0.0.1:9979/univention/udm/users/user/"
     creds = base64.b64encode(f"cn=admin:{ldap_secret}".encode()).decode()
 
     user_data = json.dumps({
@@ -54,7 +54,6 @@ def create_via_udm_rest(username, password, ldap_secret, ldap_base):
             "description": "ICS integration test user",
             "primaryGroup": f"cn=Domain Users,cn=groups,{ldap_base}",
             "opendeskFileshareEnabled": True,
-            "opendeskFileshareCloudEnabled": True,
             "opendeskLearnmanagementEnabled": True,
             "opendeskLivecollaborationEnabled": True,
             "opendeskVideoconferenceEnabled": True,
