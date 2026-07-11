@@ -22,6 +22,7 @@ cd opendesk/tests
 | 3 | Integration | ~15min | LDAP, mail, storage, k8up, antivirus, filepicker |
 | 4 | E2E | ~30min | Browser-level critical journeys (Playwright) |
 | 5 | Regression | ~1min | Known bugfixes don't regress (OpenCloud OIDC) |
+| 6 | Specs | ~5min | Declarative YAML specs for ICS integration (Layer 6) |
 
 ## Service Map
 
@@ -50,6 +51,27 @@ test:
 - `--format table`: Human-readable (default)
 - `--format json`: Machine-parseable
 - `--format junit`: CI integration
+
+## ICS Integration Spec System
+
+The ICS integration testing uses a hybrid approach:
+
+1. **YAML Behavioral Specs** (`tests/specs/*.yaml`) — declarative scenarios for ICS routing
+   - Unauthenticated scenarios: executed directly via `tests/run-specs.py` (CLI, no browser needed)
+   - Authenticated scenarios: need browser-based auth via `tests/playwright/ics-auth.spec.js`
+2. **Playwright Browser Tests** (`tests/playwright/ics-auth.spec.js`) — authenticated flows
+   - Handles SAML-brokered auth chain (ICS → Keycloak → SAML IdP)
+   - Validates session establishment, cookie handling, logout propagation
+3. **Run commands:**
+   ```bash
+   # Unauthenticated tests (CLI)
+   python tests/run-specs.py
+   ./tests/run.sh --specs
+   
+   # Authenticated tests (Playwright, requires credentials)
+   PORTAL_USERNAME=ics-testuser PORTAL_PASSWORD=... \
+     npx playwright test tests/playwright/ics-auth.spec.js
+   ```
 
 ## Design
 

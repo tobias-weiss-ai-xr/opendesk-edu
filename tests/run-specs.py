@@ -92,14 +92,9 @@ class AuthResolver:
                 return {"Cookie": "; ".join(f"{k}={v}" for k, v in cookies.items())}
             return {}
 
-        # ICS uses SAML-brokered authentication (portal → ICS redirects to
-        # Keycloak OIDC → Keycloak SAML proxy → SAML IdP). Browser-based
-        # session establishment is required for authenticated scenarios.
-        # For CLI-based testing, run with Playwright:
-        #   npx playwright test tests/playwright/ics-routing.spec.js
         self._warn("ICS requires SAML-brokered auth via browser. "
                     "Run authenticated scenarios with: "
-                    "npx playwright test tests/playwright/")
+                    "npx playwright test tests/playwright/ics-auth.spec.js")
         return {}
 
 
