@@ -17,7 +17,7 @@ USAGE:
 OPTIONS:
     --layer <0|1|2|3|4|5|6>    Run specific layer (default: all)
     --layers <0-2>             Run range of layers
-    --specs                    Run spec-based tests (ICS routing, backchannel)
+    --specs                    Run spec-based tests (YAML CLI + Playwright auth)
     --service <name>           Run tests for specific service
     --format <table|json|junit> Output format (default: table)
     --ci                       CI mode: exit code 0/1, JSON output
@@ -37,7 +37,9 @@ EXAMPLES:
     ./run.sh --layer 0                    # Infrastructure only
     ./run.sh --layers 0-2                 # Quick health check
     ./run.sh --service opencloud          # OpenCloud tests only
+    ./run.sh --specs                      # ICS integration specs only (Layer 6)
     ./run.sh --ci --format json           # CI mode with JSON
+    PORTAL_USERNAME=... PORTAL_PASSWORD=... ./run.sh --specs  # Full specs incl. auth
 "
 
 ARGS=("$@")
@@ -98,14 +100,35 @@ layer_status=()
 
 run_specs() {
     local format="${1:-table}"
-    print_section "Running Spec-based Tests"
+    local failed=0
+
+    print_section "Running Spec-based Tests (Layer 6)"
+
+    # 6a: YAML CLI specs (unauthenticated scenarios)
     if python3 "$SCRIPT_DIR/run-specs.py" --format "$format"; then
-        print_result PASS "Spec-based tests completed"
-        return 0
+        print_result PASS "YAML CLI specs completed"
     else
-        print_result FAIL "Spec-based tests failed"
-        return 1
+        print_result FAIL "YAML CLI specs failed"
+        failed=1
     fi
+
+    # 6b: Playwright auth specs (browser-based, requires credentials)
+    if [ -n "${PORTAL_USERNAME:-}" ] && [ -n "${PORTAL_PASSWORD:-}" ]; then
+        print_section "Running Playwright Auth Specs"
+        cd "$SCRIPT_DIR/playwright"
+        if npx playwright test ics-auth.spec.js --reporter=list 2>&1; then
+            print_result PASS "Playwright auth specs completed"
+        else
+            print_result FAIL "Playwright auth specs failed"
+            failed=1
+        fi
+        cd "$SCRIPT_DIR"
+    else
+        print_result WARN "PORTAL_USERNAME/PASSWORD not set — skipping Playwright auth specs"
+        print_result INFO "Set credentials to run: PORTAL_USERNAME=... PORTAL_PASSWORD=... $0 --specs"
+    fi
+
+    return $failed
 }
 
 run_layer() {
