@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+#
+# Advanced Configuration: Nested States
+#
+helmfiles:
+  # Path to the helmfile state file being processed BEFORE releases in this state file
+  - path: "helmfile/apps/opendesk-migrations-pre/helmfile-defaults.yaml.gotmpl"
+    values: &values
+      - {{ toYaml .Values | nindent 8 }}
+  - path: "helmfile/apps/opendesk-services/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/services-external/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/nubus/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/open-xchange/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/nextcloud/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/collabora/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/cryptpad/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/jitsi/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/element/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/openproject/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/xwiki/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/notes/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/opendesk-openproject-bootstrap/helmfile-defaults.yaml.gotmpl"
+    values: *values
+  - path: "helmfile/apps/opendesk-migrations-post/helmfile-defaults.yaml.gotmpl"
+    values: *values
+missingFileHandler: "Error"
+...

@@ -25,6 +25,7 @@ When upgrading openDesk, two types of migrations may be required:
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
         * [Postfix: Changed network settings to list](#postfix-changed-network-settings-to-list)
+        * [Changed Helmfile structure: Allow overriding app helmfiles and consolidate helmfile environment definitions](#changed-helmfile-structure-allow-overriding-app-helmfiles-and-consolidate-helmfile-environment-definitions)
     * [Versions ≥ v1.16.0](#versions--v1160)
       * [Pre-upgrade to versions ≥ v1.16.0](#pre-upgrade-to-versions--v1160)
         * [Nubus bug fix: LDAP storage class settings](#nubus-bug-fix-ldap-storage-class-settings)
@@ -166,7 +167,8 @@ This section provides an overview of potential changes to be part of the next ma
   - Removal of the XWiki MariaDB support.
   - Removal of the Nextcloud MariaDB support.
 - The option `technical.nubus.keycloak.ldapFederation.importUsers` described in the [≥ 1.12.0 migrations](#new-application-default-keycloak-imports-users-to-its-own-database) is likely to be removed by enforcing the documented change of the user import setting.
-- Removal of MinIO as S3 storage backend for non-production installations (see [≥ 1.15.0 migrations](#new-helmfile-default-support-for-seaweedfs-as-s3-backend))
+- Removal of MinIO as S3 storage backend for non-production installations (see [≥ 1.15.0 migrations](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)).
+- Removal of the file `helmfile_generic.yaml.gotmpl`, use `helmfile-defaults.yaml.gotmpl` instead.
 
 ## Overview and mandatory upgrade path
 
@@ -282,6 +284,93 @@ postfix:
     - "1.2.3.4/24"
     - "2001:d35c:123:4::/64"
 ```
+
+##### Changed Helmfile structure: Allow overriding app helmfiles and consolidate helmfile environment definitions
+
+**Target group:** All deployments that deploy single applications or override the helmfiles from another repository
+
+**Context:**
+
+While the helmfile structure already allowed some advanced use cases like referencing the `helmfile_generic.yaml.gotmpl`
+file in the root directory of this repository to define your own environments from an external repository, there
+were also still some limitations:
+
+- It was not easily possible to reference the `helmfile.yaml.gotmpl` in an application directory, e.g.
+  `helmfile/apps/collabora`, to override a single application's default values.
+
+- The helmfile structure forced the maintenance of two files that define helmfile environments, the `helmfile.yaml.gotmpl` in
+  the root directory and `environments.yaml.gotmpl` in `helmfile/bases/`.
+
+To solve these problems the helmfile structure was changed by introducing three types of helmfiles:
+
+- `helmfile.yaml.gotmpl`: Entrypoint for helmfile that includes the environments defined in `helmfile/bases/environments.yaml.gotmpl`.
+
+  There is a `helmfile.yaml.gotmpl` in the root directory of this repository and in the directory of each application,
+  e.g. `helmfile/apps/collabora/helmfile.yaml.gotmpl`. All `helmfile` calls have to be made from the root directory
+  (see the required actions below).
+
+- `helmfile-defaults.yaml.gotmpl`: Entrypoint for external helmfile's. This helmfile does not include environments
+  but includes all default values for the applications. This file can be referenced from an external repository
+  to define environments that override the default values.
+
+  There is a `helmfile-defaults.yaml.gotmpl` in the root directory of this repository and in the directory for each application,
+  e.g. `helmfile/apps/collabora/helmfile-defaults.yaml.gotmpl`.
+
+- `helmfile-child.yaml.gotmpl`: Defines the deployment logic for an application. This file contains the definition of
+  which helm charts to deploy for each openDesk application without any value defined and is thus not meant to be used directly.
+
+  `helmfile-child.yaml.gotmpl` files are only present in the directory for each application, e.g. `helmfile/apps/collabora/helmfile-child.yaml.gotmpl`.
+
+A diagram showing the helmfile references might help to make this more descriptive:
+
+```mermaid
+flowchart TD
+    subgraph deployment_opendesk[deployment/opendesk]
+        helmfile_root[helmfile - root] --> helmfile_environments[helmfile - environments]
+        helmfile_environments --> values_prod((values - prod))
+        helmfile_root --> helmfile_defaults_root[helmfile-defaults - root]
+        helmfile_defaults_root --> helmfile_defaults_app[helmfile-defaults - app]
+        helmfile_defaults_app --> values_defaults((values - defaults))
+        helmfile_defaults_app --> helmfile_child_app[helmfile-child - app]
+        helmfile_app[helmfile - app] --> helmfile_environments
+        helmfile_app --> helmfile_defaults_app
+    end
+
+    subgraph external_opendesk_env[external/opendesk-environment-definitions]
+        helmfile_root_external[helmfile - root] --> helmfile_defaults_root
+        helmfile_root_external --> helmfile_environments_external[helmfile - environments]
+        helmfile_app_external[helmfile - app] --> helmfile_defaults_app
+        helmfile_app_external --> helmfile_environments_external
+        helmfile_environments_external --> values_external((values - external))
+    end
+```
+
+**Required action: Use the correct helmfile for your use-case**
+
+- Use-case: Deploying all openDesk applications from this repository:
+  - Nothing changes, run `helmfile` from the root directory.
+
+- Use-case: Deploying a single application from this repository:
+  - `helmfile` needs to be executed from the root directory instead of the application directory:
+
+    ```bash
+    # Instead of previously
+    cd helmfile/apps/collabora
+    helmfile apply
+
+    # Do this (from the root directory)
+    helmfile apply --file helmfile/apps/collabora/helmfile.yaml.gotmpl
+    ```
+
+- Use-case: Overriding all openDesk applications from an external repository
+  - Instead of `helmfile_generic.yaml.gotmpl` reference `helmfile-defaults.yaml.gotmpl` from the root directory.
+  - `helmfile_generic.yaml.gotmpl` is kept for backwards compatibility reasons but will be removed with version 2.0.
+
+- Use-case: Overriding a single openDesk application from an external repository
+  - Reference `helmfile-defaults.yaml.gotmpl` from the application directory,
+    e.g. `helmfile/apps/collabora/helmfile-defaults.yaml.gotmpl`.
+  - This was not easily possible before this release.
+  - For an example, see [updates.md](./updates.md#helmfile-defaultsyamlgotmpl).
 
 ### Versions ≥ v1.16.0
 

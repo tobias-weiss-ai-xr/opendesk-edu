@@ -21,6 +21,8 @@ While [migrations.md](./migrations.md) provides information about required actio
     * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
       * [Postfix HELO names](#postfix-helo-names)
       * [Postfix client, HELO, sender restrictions and rate limits](#postfix-client-helo-sender-restrictions-and-rate-limits)
+    * [`helmfile-defaults.yaml.gotmpl`](#helmfile-defaultsyamlgotmpl)
+      * [Allow override of single application helmfiles](#allow-override-of-single-application-helmfiles)
   * [1.16.0](#1160)
     * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
       * [OpenProject PDF export theming](#openproject-pdf-export-theming)
@@ -102,6 +104,30 @@ hostname:
 smtp:
   heloName: ~
   internalHeloName: ~
+```
+
+### `helmfile-defaults.yaml.gotmpl`
+
+#### Allow override of single application helmfiles
+
+It is now possible to override the helmfile definition with default values for
+a single openDesk application from an external repository by referencing
+the `helmfile-defaults.yaml.gotmpl` in the application directories.
+
+Example `helmfile.yaml.gotmpl`:
+
+```yaml
+---
+environments:
+  ext-env:
+    values:
+      ...
+---
+helmfiles:
+  - path: "git::https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk.git@helmfile/apps/collabora/helmfile-defaults.yaml.gotmpl?ref=main"
+    values:
+      - {{ toYaml .Values | nindent 6 }}
+...
 ```
 
 #### Postfix client, HELO, sender restrictions and rate limits
