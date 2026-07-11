@@ -264,6 +264,7 @@ cluster:
 ```
 
 ### Volumes
+
 The StorageClass must be set using the following attribute:
 
 ```yaml
@@ -446,6 +447,11 @@ helmfile apply -e dev -n <NAMESPACE> [-l <label>] [--suppress-diff]
 - `-l <label>`: Label selector
 - `--suppress-diff`: Disable diff printing
 
+> [!note]
+> The environment variable `$PWD` has to be set to the root directory of this repository where the
+> main `helmfile.yaml.gotmpl` is found. In a POSIX compliant shell environment, this variable
+> [is set automatically by the shell to the current working directory](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_05_03).
+
 ## Install single app
 
 You can also install or upgrade only a single app like Collabora, either by using a label selector:
@@ -457,8 +463,7 @@ helmfile apply -e dev -n <NAMESPACE> -l component=collabora
 or by switching to the apps' directory (faster) and install or upgrade from there directly:
 
 ```shell
-cd helmfile/apps/collabora
-helmfile apply -e dev -n <NAMESPACE>
+helmfile apply -f helmfile/apps/collabora/helmfile.yaml.gotmpl -e dev -n <NAMESPACE>
 ```
 
 ## Install single release/chart
