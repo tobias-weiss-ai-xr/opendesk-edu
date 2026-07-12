@@ -143,3 +143,133 @@ services:
               path: /ilias/
             expect:
               status: [200, 302]
+
+  bookstack:
+    route: /wiki
+    backend: wiki.opendesk.hrz.uni-marburg.de
+
+    tests:
+      - scenario: "Unauthenticated GET /wiki/ requires auth"
+        steps:
+          - request:
+              method: GET
+              path: /wiki/
+            expect:
+              status: [302, 401, 503]
+
+      - scenario: "Authenticated GET /wiki/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /wiki/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-Host:
+                  value: wiki.opendesk.hrz.uni-marburg.de
+                  soft_fail: true
+
+  self-service-password:
+    route: /ssp
+    backend: ssp.opendesk.hrz.uni-marburg.de
+
+    tests:
+      - scenario: "GET /ssp/ returns password change page"
+        steps:
+          - request:
+              method: GET
+              path: /ssp/
+            expect:
+              status: [200, 302, 401]
+
+      - scenario: "Authenticated GET /ssp/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /ssp/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-Host:
+                  value: ssp.opendesk.hrz.uni-marburg.de
+                  soft_fail: true
+
+  collab-dashboard:
+    route: /collab
+    backend: collab.opendesk.hrz.uni-marburg.de
+
+    tests:
+      - scenario: "GET /collab/ returns dashboard"
+        steps:
+          - request:
+              method: GET
+              path: /collab/
+            expect:
+              status: [200, 404, 503]
+
+  rstudio:
+    route: /r
+    backend: r.opendesk.hrz.uni-marburg.de
+
+    tests:
+      - scenario: "GET /r/ requires auth or redirects"
+        steps:
+          - request:
+              method: GET
+              path: /r/
+            expect:
+              status: [200, 302, 401]
+
+      - scenario: "Authenticated GET /r/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /r/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-Host:
+                  value: r.opendesk.hrz.uni-marburg.de
+                  soft_fail: true
+
+  ttyd:
+    route: /term
+    backend: term.opendesk.hrz.uni-marburg.de
+
+    tests:
+      - scenario: "GET /term/ reaches terminal"
+        steps:
+          - request:
+              method: GET
+              path: /term/
+            expect:
+              status: [200, 404, 503]
+
+  code-server:
+    route: /code
+    backend: code.opendesk.hrz.uni-marburg.de
+
+    tests:
+      - scenario: "GET /code/ requires auth or redirects"
+        steps:
+          - request:
+              method: GET
+              path: /code/
+            expect:
+              status: [200, 302, 401]
+
+      - scenario: "Authenticated GET /code/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /code/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-Host:
+                  value: code.opendesk.hrz.uni-marburg.de
+                  soft_fail: true
