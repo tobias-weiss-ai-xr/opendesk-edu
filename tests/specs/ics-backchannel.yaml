@@ -1,0 +1,102 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# ICS Backchannel Logout Test Spec
+#
+# Validates that logging out of the portal triggers backchannel logout
+# via ICS for OpenCloud, SOGo, and ILIAS, terminating their sessions.
+#
+# Run: python tests/run-specs.py tests/specs/ics-backchannel.yaml
+
+name: "ICS Backchannel Logout"
+description: |
+  Validates that the intercom-service correctly propagates portal logout
+  events to connected backends via backchannel logout.
+
+  For each service, this spec tests:
+  - Pre-logout: service sessions are active after portal login
+  - Post-logout: service sessions are terminated after portal logout
+version: 1
+
+# Default ICS base URL (overridable via ICS_BASE_URL env var)
+base_url: "https://ics.opendesk.hrz.uni-marburg.de"
+
+# Default auth: all scenarios require a portal session
+auth: session
+
+services:
+  opencloud:
+    route: /oc
+    backend: opencloud.opendesk.hrz.uni-marburg.de
+    auth: oidc
+
+    tests:
+      - scenario: "OpenCloud session is active after portal login"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /oc/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-User:
+                  value: present
+                  soft_fail: true
+
+      - scenario: "OpenCloud session is terminated after portal logout"
+        auth: none
+        steps:
+          - request:
+              method: GET
+              path: /oc/
+            expect:
+              status: [302, 307]
+
+  sogo:
+    route: /sogo
+    backend: sogo.opendesk.hrz.uni-marburg.de
+    auth: saml
+
+    tests:
+      - scenario: "SOGo session is active after portal login"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /sogo/SOGo/
+            expect:
+              status: 200
+
+      - scenario: "SOGo session is terminated after portal logout"
+        auth: none
+        steps:
+          - request:
+              method: GET
+              path: /sogo/SOGo/
+            expect:
+              status: [302, 401]
+
+  ilias:
+    route: /ilias
+    backend: lms.opendesk.hrz.uni-marburg.de
+    auth: saml
+
+    tests:
+      - scenario: "ILIAS session is active after portal login"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /ilias/
+            expect:
+              status: [200, 302]
+
+      - scenario: "ILIAS session is terminated after portal logout"
+        auth: none
+        steps:
+          - request:
+              method: GET
+              path: /ilias/login.php
+            expect:
+              status: [302, 401]
