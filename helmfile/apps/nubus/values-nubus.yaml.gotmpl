@@ -2084,6 +2084,240 @@ nubusStackDataUms:
           entries:
             - "cn=managementSogo,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
 
+      16-custom-collab-dashboard-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+        # Collab Dashboard Portal Entry
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementCollabDashboard"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "Collab Dashboard"
+            en_US: "Collab Dashboard"
+          description:
+            de_DE: "Übersicht aller Kollaborationsdienste"
+            en_US: "Overview of all collaboration services"
+          link:
+            - - "en_US"
+              - "https://collab.opendesk.hrz.uni-marburg.de"
+            - - "de_DE"
+              - "https://collab.opendesk.hrz.uni-marburg.de"
+
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementCollabDashboard,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementCollabDashboard,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
+      17-custom-open-webui-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+        # Open WebUI (AI Chat) Portal Entry
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementOpenWebui"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "KI-Assistent"
+            en_US: "AI Assistant"
+          description:
+            de_DE: "ChatGPT-kompatible Weboberfläche für lokale KI-Modelle"
+            en_US: "ChatGPT-compatible web interface for local AI models"
+          link:
+            - - "en_US"
+              - "https://ai.opendesk.hrz.uni-marburg.de"
+            - - "de_DE"
+              - "https://ai.opendesk.hrz.uni-marburg.de"
+
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementOpenWebui,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementOpenWebui,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
+      18-custom-rstudio-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+        # RStudio Portal Entry
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementRstudio"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "RStudio"
+            en_US: "RStudio"
+          description:
+            de_DE: "R-Entwicklungsumgebung im Browser"
+            en_US: "R development environment in the browser"
+          link:
+            - - "en_US"
+              - "https://r.opendesk.hrz.uni-marburg.de"
+            - - "de_DE"
+              - "https://r.opendesk.hrz.uni-marburg.de"
+
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementRstudio,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementRstudio,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
+      19-custom-ttyd-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+        # TTYD Terminal Portal Entry
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementTtyd"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "Terminal"
+            en_US: "Terminal"
+          description:
+            de_DE: "Browserbasiertes Terminal (TTYD)"
+            en_US: "Browser-based terminal (TTYD)"
+          link:
+            - - "en_US"
+              - "https://term.opendesk.hrz.uni-marburg.de"
+            - - "de_DE"
+              - "https://term.opendesk.hrz.uni-marburg.de"
+
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementTtyd,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementTtyd,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
+      20-custom-code-server-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+        # Code Server (VS Code) Portal Entry
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementCodeServer"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "VS Code Online"
+            en_US: "VS Code Online"
+          description:
+            de_DE: "Visual Studio Code im Browser"
+            en_US: "Visual Studio Code in the browser"
+          link:
+            - - "en_US"
+              - "https://code.opendesk.hrz.uni-marburg.de"
+            - - "de_DE"
+              - "https://code.opendesk.hrz.uni-marburg.de"
+
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementCodeServer,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementCodeServer,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
+      21-custom-ollama-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+
+        # Ollama (LLM Backend) Portal Entry
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementOllama"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "Ollama"
+            en_US: "Ollama"
+          description:
+            de_DE: "Lokale LLM-Infrastruktur (Modellverwaltung)"
+            en_US: "Local LLM infrastructure (model management)"
+          link:
+            - - "en_US"
+              - "https://ai.opendesk.hrz.uni-marburg.de"
+            - - "de_DE"
+              - "https://ai.opendesk.hrz.uni-marburg.de"
+
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementOllama,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementOllama,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
 
 nubusUmcServer:
   additionalAnnotations:
