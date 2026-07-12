@@ -12,7 +12,7 @@ ilias:
   autoSetup: true
   autoUpdate: "0"
   devMode: "0"
-  hostName: "lms.opendesk.hrz.uni-marburg.de"
+  hostName: "lms.opendesk.example.com"
   timezone: "Europe/Berlin"
   maxUploadSize: "200M"
   memoryLimit: "4096M"
@@ -85,16 +85,16 @@ ingress:
     haproxy-ingress.github.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.ilias }}"
     haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.ilias }}s"
     haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.ilias }}s"
-    haproxy-ingress.github.io/headers: "X-Forwarded-Host lms.opendesk.hrz.uni-marburg.de"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host lms.opendesk.example.com"
   hosts:
-    - host: "lms.opendesk.hrz.uni-marburg.de"
+    - host: "lms.opendesk.example.com"
       paths:
         - path: /
           pathType: "ImplementationSpecific"
   tls:
     - secretName: "opendesk-certificates-tls"
       hosts:
-        - "lms.opendesk.hrz.uni-marburg.de"
+        - "lms.opendesk.example.com"
 
 # Persistence configuration
 persistence:
@@ -163,12 +163,6 @@ extraVolumeMounts:
     mountPath: /var/www/html/auth/shibboleth/backchannel-handler.php
     subPath: backchannel-handler.php
     readOnly: true
-
-# SAML SSO configuration (SimpleSAMLphp native volumes)
-sso:
-  saml:
-    enabled: true
-    idpMetadataUrl: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
 
 # Node selector
 nodeSelector: {}

@@ -1,0 +1,100 @@
+name: Test Specs
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'tests/specs/**'
+      - 'tests/run-specs.py'
+      - 'tests/generate-playwright-specs.py'
+  pull_request:
+    paths:
+      - 'tests/specs/**'
+      - 'tests/run-specs.py'
+      - 'tests/generate-playwright-specs.py'
+  workflow_dispatch:
+
+jobs:
+  validate-specs:
+    name: Validate YAML specs
+    runs-on: codeberg-small
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Setup Python
+        uses: https://github.com/actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema requests
+
+      - name: Validate all spec files
+        run: python3 tests/run-specs.py --validate
+
+  generate-playwright:
+    name: Generate and lint Playwright tests
+    runs-on: codeberg-small
+    timeout-minutes: 5
+    needs: validate-specs
+
+    steps:
+      - name: Checkout repository
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Setup Python
+        uses: https://github.com/actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Generate Playwright specs from YAML
+        run: python3 tests/generate-playwright-specs.py
+
+      - name: Check generated JS syntax
+        run: |
+          for f in tests/playwright/ics-*.spec.js; do
+            echo "Checking $f..."
+            node --check "$f"
+          done
+
+  run-cli-specs:
+    name: Run CLI spec executor
+    runs-on: codeberg-small
+    timeout-minutes: 10
+    needs: validate-specs
+    if: vars.ICS_BASE_URL != ''
+
+    steps:
+      - name: Checkout repository
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Setup Python
+        uses: https://github.com/actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema requests
+
+      - name: Run all CLI specs
+        run: |
+          python3 tests/run-specs.py --format junit > junit-specs.xml
+        env:
+          ICS_BASE_URL: ${{ vars.ICS_BASE_URL }}
+
+      - name: Upload test results
+        if: always()
+        uses: https://github.com/actions/upload-artifact@v4
+        with:
+          name: junit-specs
+          path: junit-specs.xml
