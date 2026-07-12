@@ -61,6 +61,12 @@ htmlcov/
 .pytest_cache/
 .ruff_cache/
 
+# Generated Playwright specs (regenerated from YAML via generate-playwright-specs.py)
+tests/playwright/ics-*.spec.js
+
+# Playwright test artifacts
+test-results/
+
 # Ignore sensitive credential files
 k8up-*.yaml
 *secrets*.yaml
