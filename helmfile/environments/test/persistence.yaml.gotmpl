@@ -1,6 +1,10 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 # SPDX-License-Identifier: Apache-2.0
 ---
+storageclasses:
+  cephfs: "ceph-cephfs-hdd-ec"
+  rbd: "ceph-rbd-ssd"
+
 persistence:
   storageClassNames:
     RWX: ""

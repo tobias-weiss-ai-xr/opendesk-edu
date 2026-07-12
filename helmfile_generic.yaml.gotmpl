@@ -118,7 +118,8 @@ helmfiles:
     values: *values
 
   ## Dashboard, self-service & integrations
-  # collab-dashboard — consolidated to opendesk
+  - path: "helmfile/apps/collab-dashboard/helmfile-child.yaml.gotmpl"
+    values: *values
   - path: "helmfile/apps/self-service-password/helmfile-child.yaml.gotmpl"
     values: *values
   - path: "helmfile/apps/portal-entries/helmfile-child.yaml.gotmpl"
