@@ -27,16 +27,28 @@ lint-kyverno:
           - "services-external"
           - "xwiki"
   script:
-    - "cd ${CI_PROJECT_DIR}/helmfile/apps/${APP}"
+    - >
+      pushd "${CI_PROJECT_DIR}/helmfile/apps/${APP}"
     - >
       node /app/opendesk-ci-cli/src/index.js generate-kyverno-env
       -d ${CI_PROJECT_DIR}/helmfile/environments
       -x ${CI_PROJECT_DIR}/.kyverno/_overwrite.yaml
-    - "helmfile template -e test --include-needs --skip-tests > ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
+    - "popd"
+    - >
+      helmfile template
+      -f "${CI_PROJECT_DIR}/helmfile/apps/${APP}/helmfile.yaml.gotmpl"
+      -e test
+      --include-needs
+      --skip-tests
+      > "${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
+    - >
+      pushd "${CI_PROJECT_DIR}/helmfile/apps/${APP}"
     - >
       node /app/opendesk-ci-cli/src/index.js remove-empty-keys
       -f ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml
-    - "cd ${CI_PROJECT_DIR}/.kyverno"
+    - "popd"
+    - >
+      pushd "${CI_PROJECT_DIR}/.kyverno"
     # Test optional
     - >
       node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests
@@ -57,4 +69,5 @@ lint-kyverno:
       --skip-tests true
       ${APP}
     - "kyverno test ."
+    - "popd"
 ...
