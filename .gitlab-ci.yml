@@ -263,7 +263,6 @@ variables:
     name: "${NAMESPACE}"
   image: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/components/platform-development/images/helm:${HELM_IMAGE_PIN}"
   script:
-    - "cd ${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}"
     # MASTER_PASSWORD_WEB_VAR as precedence for MASTER_PASSWORD
     - |
       if [[ -n "${MASTER_PASSWORD_WEB_VAR:-}" ]]; then
@@ -282,7 +281,13 @@ variables:
       "  - OPENDESK_ENTERPRISE: '${OPENDESK_ENTERPRISE}'"
       "  - ADDITIONAL_ARGS: '${ADDITIONAL_ARGS}' (only used when deploying otterize policies)"
       "  - HELMFILE_ENVIRONMENT: ${HELMFILE_ENVIRONMENT}"
-    - "helmfile --namespace ${NAMESPACE} apply --suppress-diff ${ADDITIONAL_ARGS}"
+    - >
+      helmfile
+      --file "${CI_PROJECT_DIR}/helmfile/apps/${COMPONENT}/helmfile.yaml.gotmpl"
+      --namespace "${NAMESPACE}"
+      apply
+      --suppress-diff
+      ${ADDITIONAL_ARGS}
     - "echo \"- When deployment is completed access it at: https://${DOMAIN}\""
   tags:
     - "docker"
