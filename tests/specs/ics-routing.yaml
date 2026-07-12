@@ -1,0 +1,145 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# ICS Routing Integration Test Spec
+#
+# Validates that the intercom-service correctly proxies requests to
+# OpenCloud, SOGo, and ILIAS backends with proper auth handling.
+#
+# Run: python tests/run-specs.py tests/specs/ics-routing.yaml
+
+name: "ICS Routing Integration"
+description: |
+  Validates that the intercom-service (ICS) correctly proxies requests
+  to OpenCloud (OIDC), SOGo (SAML), and ILIAS (SAML) backends.
+
+  For each service, this spec tests:
+  - Unauthenticated access: requests are redirected to Keycloak for login
+  - Authenticated access: requests reach the backend with proper headers
+  - Backend health: the backend is reachable through ICS
+version: 1
+
+# Default ICS base URL (overridable via ICS_BASE_URL env var)
+base_url: "https://ics.opendesk.hrz.uni-marburg.de"
+
+# Default auth type for all services
+auth: none
+
+services:
+  opencloud:
+    route: /oc
+    backend: opencloud.opendesk.hrz.uni-marburg.de
+    auth: oidc
+
+    tests:
+      - scenario: "Unauthenticated GET /oc/ redirects to auth"
+        steps:
+          - request:
+              method: GET
+              path: /oc/
+            expect:
+              status: [302, 307]
+
+      - scenario: "Unauthenticated GET /oc/ Status endpoint is blocked"
+        steps:
+          - request:
+              method: GET
+              path: /oc/status.php
+            expect:
+              status: [302, 307]
+
+      - scenario: "Authenticated GET /oc/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /oc/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-User:
+                  value: present
+                  soft_fail: true
+
+      - scenario: "Authenticated GET /oc/status.php returns status"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /oc/status.php
+            expect:
+              status: 200
+
+      - scenario: "Authenticated request includes X-Forwarded-Host"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /oc/
+            expect:
+              headers:
+                X-Forwarded-Host:
+                  value: opencloud.opendesk.hrz.uni-marburg.de
+                  soft_fail: true
+
+  sogo:
+    route: /sogo
+    backend: sogo.opendesk.hrz.uni-marburg.de
+    auth: saml
+
+    tests:
+      - scenario: "Unauthenticated GET /sogo/SOGo/ requires auth"
+        steps:
+          - request:
+              method: GET
+              path: /sogo/SOGo/
+            expect:
+              status: [302, 401]
+
+      - scenario: "Unauthenticated GET /sogo/ root redirects to SOGo"
+        steps:
+          - request:
+              method: GET
+              path: /sogo/
+            expect:
+              status: [302, 200]
+
+      - scenario: "Authenticated GET /sogo/SOGo/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /sogo/SOGo/
+            expect:
+              status: 200
+
+  ilias:
+    route: /ilias
+    backend: lms.opendesk.hrz.uni-marburg.de
+    auth: saml
+
+    tests:
+      - scenario: "Unauthenticated GET /ilias/ requires auth"
+        steps:
+          - request:
+              method: GET
+              path: /ilias/
+            expect:
+              status: [302, 401]
+
+      - scenario: "Unauthenticated GET /ilias/login.php requires auth"
+        steps:
+          - request:
+              method: GET
+              path: /ilias/login.php
+            expect:
+              status: [302, 401]
+
+      - scenario: "Authenticated GET /ilias/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /ilias/
+            expect:
+              status: [200, 302]

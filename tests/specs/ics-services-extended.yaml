@@ -1,0 +1,112 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# ICS Extended Services Routing Test Spec
+#
+# Validates that the intercom-service correctly proxies requests to
+# Nextcloud and XWiki backends with proper auth handling.
+#
+# Run: python tests/run-specs.py tests/specs/ics-services-extended.yaml
+
+name: "ICS Extended Services Routing"
+description: |
+  Validates that the intercom-service (ICS) correctly proxies requests
+  to Nextcloud (OIDC) and XWiki (OIDC) backends.
+
+  For each service, this spec tests:
+  - Unauthenticated access: requests are redirected to Keycloak for login
+  - Authenticated access: requests reach the backend with proper headers
+version: 1
+
+base_url: "https://ics.opendesk.hrz.uni-marburg.de"
+
+auth: none
+
+services:
+  nextcloud:
+    route: /fs
+    backend: files.opendesk.hrz.uni-marburg.de
+    auth: oidc
+
+    tests:
+      - scenario: "Unauthenticated GET /fs/ redirects to auth"
+        steps:
+          - request:
+              method: GET
+              path: /fs/
+            expect:
+              status: [302, 307]
+
+      - scenario: "Unauthenticated GET /fs/status.php redirects to auth"
+        steps:
+          - request:
+              method: GET
+              path: /fs/status.php
+            expect:
+              status: [302, 307]
+
+      - scenario: "Authenticated GET /fs/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /fs/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-User:
+                  value: present
+                  soft_fail: true
+
+      - scenario: "Authenticated GET /fs/status.php returns status"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /fs/status.php
+            expect:
+              status: [200, 302]
+
+  xwiki:
+    route: /wiki
+    backend: wiki.opendesk.hrz.uni-marburg.de
+    auth: oidc
+
+    tests:
+      - scenario: "Unauthenticated GET /wiki/ redirects to auth"
+        steps:
+          - request:
+              method: GET
+              path: /wiki/
+            expect:
+              status: [302, 307]
+
+      - scenario: "Unauthenticated GET /wiki/bin/view/Main redirects to auth"
+        steps:
+          - request:
+              method: GET
+              path: /wiki/bin/view/Main
+            expect:
+              status: [302, 307]
+
+      - scenario: "Authenticated GET /wiki/ reaches backend"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /wiki/
+            expect:
+              status: [200, 302]
+              headers:
+                X-Forwarded-User:
+                  value: present
+                  soft_fail: true
+
+      - scenario: "Authenticated GET /wiki/bin/view/Main renders"
+        auth: session
+        steps:
+          - request:
+              method: GET
+              path: /wiki/bin/view/Main
+            expect:
+              status: [200, 302]
