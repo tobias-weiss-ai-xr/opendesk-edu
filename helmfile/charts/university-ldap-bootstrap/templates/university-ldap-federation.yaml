@@ -1,0 +1,155 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- if and .Values.hisinone.enabled .Values.hisinone.bootstrap.createLdapProvider }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-ldap-university-provider-config
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: ldap-federation
+    app.kubernetes.io/part-of: opendesk
+    hisinone-component: ldap-provider
+data:
+  ldap-provider.json: |
+    {
+      "name": "university-ldap",
+      "providerId": "ldap",
+      "providerType": "org.keycloak.storage.UserStorageProvider",
+      "parentId": "{{ .Values.platform.realm }}",
+      "config": {
+        "priority": ["{{ .Values.hisinone.bootstrap.providerPriority }}"],
+        "enabled": ["true"],
+        "importEnabled": ["{{ .Values.hisinone.ldap.importUsers }}"],
+        "editMode": ["READ_ONLY"],
+        "syncRegistrations": ["true"],
+        "vendor": ["{{ .Values.hisinone.bootstrap.vendor }}"],
+        "usernameLDAPAttribute": ["{{ .Values.hisinone.ldap.attributeMapping.username }}"],
+        "rdnLDAPAttribute": ["{{ .Values.hisinone.ldap.attributeMapping.username }}"],
+        "uuidLDAPAttribute": ["{{ .Values.hisinone.ldap.attributeMapping.uuid }}"],
+        "userObjectClasses": ["person,inetOrgPerson,organizationalPerson"],
+        "connectionUrl": ["ldap{{ if eq .Values.hisinone.ldap.useSsl "true" }}s{{ end }}://{{ .Values.hisinone.ldap.host }}:{{ .Values.hisinone.ldap.port }}"],
+        "usersDn": ["{{ .Values.hisinone.ldap.usersBaseDn }}"],
+        "customUserSearchFilter": ["{{ .Values.hisinone.ldap.userSearchFilter }}"],
+        "bindDn": ["{{ .Values.hisinone.ldap.bindDn }}"],
+        "bindCredential": ["${HISINONE_LDAP_BIND_PASSWORD}"],
+        "searchScope": ["1"],
+        "useTruststoreSpi": ["ldapsOnly"],
+        "connectionPooling": ["true"],
+        "connectionPoolingSize": ["10"],
+        "cachePolicy": ["DEFAULT"],
+        "batchSizeForSync": ["1000"],
+        "fullSyncPeriod": ["{{ .Values.hisinone.ldap.syncPeriodMinutes }}"],
+        "changedSyncPeriod": ["{{ .Values.hisinone.ldap.changedSyncPeriodMinutes }}"],
+        "trustEmail": ["true"],
+        "useKerberosForPasswordAuthentication": ["false"],
+        "pagination": ["true"]
+      }
+    }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloak-university-ldap-bootstrap
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: ldap-bootstrap
+    app.kubernetes.io/part-of: opendesk
+    hisinone-component: ldap-provider
+  annotations:
+    argocd.argoproj.io/hook: "PostSync"
+    argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ .Values.hisinone.bootstrap.serviceAccountName | default "keycloak-ldap-bootstrap" }}
+      restartPolicy: Never
+      containers:
+        - name: ldap-provider-setup
+          image: {{ .Values.hisinone.bootstrap.image | default "curlimages/curl:8.12.1" | quote }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              set -e
+
+              KEYCLOAK_URL="https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+              REALM="{{ .Values.platform.realm }}"
+              ADMIN_USER="{{ .Values.secrets.keycloak.adminUsername | default "kcadmin" }}"
+              ADMIN_PASS="{{ .Values.secrets.keycloak.adminPassword }}"
+
+              # Check if provider already exists
+              EXISTING=$(curl -sfk \
+                -u "${ADMIN_USER}:${ADMIN_PASS}" \
+                -H "Accept: application/json" \
+                "${KEYCLOAK_URL}/admin/realms/${REALM}/components?type=org.keycloak.storage.UserStorageProvider&name=university-ldap" \
+                | python3 -c "import sys,json; data=json.load(sys.stdin); print(len(data))" 2>/dev/null || echo "0")
+
+              if [ "$EXISTING" -gt "0" ]; then
+                echo "University LDAP provider already exists. Updating..."
+                PROVIDER_ID=$(curl -sfk \
+                  -u "${ADMIN_USER}:${ADMIN_PASS}" \
+                  -H "Accept: application/json" \
+                  "${KEYCLOAK_URL}/admin/realms/${REALM}/components?type=org.keycloak.storage.UserStorageProvider&name=university-ldap" \
+                  | python3 -c "import sys,json; data=json.load(sys.stdin); print(data[0]['id'])")
+
+                curl -sfk \
+                  -X PUT \
+                  -u "${ADMIN_USER}:${ADMIN_PASS}" \
+                  -H "Content-Type: application/json" \
+                  -d @/config/ldap-provider.json \
+                  "${KEYCLOAK_URL}/admin/realms/${REALM}/components/${PROVIDER_ID}"
+              else
+                echo "Creating university LDAP provider..."
+                curl -sfk \
+                  -X POST \
+                  -u "${ADMIN_USER}:${ADMIN_PASS}" \
+                  -H "Content-Type: application/json" \
+                  -d @/config/ldap-provider.json \
+                  "${KEYCLOAK_URL}/admin/realms/${REALM}/components"
+              fi
+
+              echo "University LDAP federation provider configured successfully."
+
+              # Trigger initial sync
+              echo "Triggering initial user sync..."
+              SYNC_ACTION="triggerFullSync"
+              curl -sfk \
+                -X POST \
+                -u "${ADMIN_USER}:${ADMIN_PASS}" \
+                "${KEYCLOAK_URL}/admin/realms/${REALM}/user-storage/university-ldap/sync?action=${SYNC_ACTION}" \
+                || echo "Warning: Initial sync may have failed (will run on schedule)"
+          volumeMounts:
+            - name: provider-config
+              mountPath: /config
+            - name: trusted-ca
+              mountPath: /etc/ssl/certs
+              readOnly: true
+      volumes:
+        - name: provider-config
+          configMap:
+            name: keycloak-ldap-university-provider-config
+        - name: trusted-ca
+          secret:
+            secretName: {{ .Values.hisinone.bootstrap.tlsSecretName | default "opendesk-certificates-ca-tls" | quote }}
+            items:
+              - key: ca.crt
+                path: ca-certificates.crt
+      {{- if .Values.hisinone.ldap.bindPasswordExistingSecret }}
+          - name: ldap-credentials
+            secret:
+              secretName: {{ .Values.hisinone.ldap.bindPasswordExistingSecret }}
+      {{- end }}
+      {{- if .Values.hisinone.ldap.bindPasswordExistingSecret }}
+      env:
+        - name: HISINONE_LDAP_BIND_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.hisinone.ldap.bindPasswordExistingSecret }}
+              key: {{ .Values.hisinone.ldap.bindPasswordKey | default "password" }}
+      {{- end }}
+  backoffLimit: 3
+{{- end }}
