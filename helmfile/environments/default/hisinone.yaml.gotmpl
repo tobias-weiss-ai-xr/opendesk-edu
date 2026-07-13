@@ -204,6 +204,21 @@ hisinone:
     ##
     enabled: {{ env "HISINONE_SEMESTER_ENABLED" | default "false" | quote }}
 
+    ## Re-registration grace period (in days)
+    ## After this many days past the re-registration deadline,
+    ## the student account is automatically disabled.
+    ##
+    reRegistrationGrace: {{ env "HISINONE_RE_REGISTRATION_GRACE" | default "30" | quote }}
+
+    ## Current semester identifier (e.g., "2026ws")
+    ## Used to identify which users are tracked for enrollment verification.
+    ##
+    currentSemester: {{ env "HISINONE_CURRENT_SEMESTER" | default "" | quote }}
+
+    ## Cron schedule for the semester check CronJob (default: daily 06:00)
+    ##
+    cronSchedule: {{ env "HISINONE_SEMESTER_CRON" | default "0 6 * * *" | quote }}
+
     ## Semester group name templates
     ##
     groups:
@@ -232,6 +247,35 @@ hisinone:
     ## Enable account lifecycle automation
     ##
     enabled: {{ env "HISINONE_LIFECYCLE_ENABLED" | default "false" | quote }}
+
+    ## Container image for lifecycle automation (webhook + CronJobs)
+    ##
+    image: {{ env "HISINONE_LIFECYCLE_IMAGE" | default "codeberg.org/opendesk-edu/hisinone-lifecycle:latest" | quote }}
+
+    ## Existing Kubernetes secret containing the webhook HMAC secret
+    ##
+    webhookSecretExistingSecret: {{ env "HISINONE_WEBHOOK_SECRET_NAME" | default "hisinone-lifecycle" | quote }}
+
+    ## Key within the webhook secret
+    ##
+    webhookSecretKey: {{ env "HISINONE_WEBHOOK_SECRET_KEY" | default "webhook-secret" | quote }}
+
+    ## Existing Kubernetes secret containing the Keycloak client credentials
+    ##
+    keycloakClientSecret: {{ env "HISINONE_LIFECYCLE_KC_CLIENT_SECRET" | default "hisinone-lifecycle-client" | quote }}
+
+    ## Key within the Keycloak client secret
+    ##
+    keycloakClientSecretKey: {{ env "HISINONE_LIFECYCLE_KC_CLIENT_SECRET_KEY" | default "client-secret" | quote }}
+
+    ## Existing Kubernetes secret containing the Keycloak admin password
+    ## (used as fallback when client secret is not available)
+    ##
+    keycloakAdminSecret: {{ env "HISINONE_LIFECYCLE_KC_ADMIN_SECRET" | default "hisinone-lifecycle" | quote }}
+
+    ## Key within the Keycloak admin secret
+    ##
+    keycloakAdminKey: {{ env "HISINONE_LIFECYCLE_KC_ADMIN_KEY" | default "admin-password" | quote }}
 
     ## Webhook receiver configuration for HISinOne events
     ## The existing hisinone_webhook.py handles these events.
@@ -277,6 +321,10 @@ hisinone:
     ## Enable guest lecturer provisioning
     ##
     enabled: {{ env "HISINONE_GUEST_LECTURERS_ENABLED" | default "false" | quote }}
+
+    ## Cron schedule for the guest cleanup CronJob (default: daily 06:00)
+    ##
+    cronSchedule: {{ env "HISINONE_GUEST_CRON" | default "0 6 * * *" | quote }}
 
     ## Default access duration in days
     ##
