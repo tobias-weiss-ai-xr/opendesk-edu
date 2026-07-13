@@ -1,0 +1,70 @@
+{{- if .Values.hisinone.accountLifecycle.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hisinone-lifecycle-webhook
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: hisinone-lifecycle
+    app.kubernetes.io/component: webhook
+    app.kubernetes.io/part-of: opendesk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hisinone-lifecycle
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hisinone-lifecycle
+        app.kubernetes.io/component: webhook
+    spec:
+      serviceAccountName: {{ .Values.hisinone.bootstrap.serviceAccountName | default "keycloak-ldap-bootstrap" }}
+      containers:
+        - name: webhook
+          image: {{ .Values.hisinone.lifecycle.image | default "codeberg.org/opendesk-edu/hisinone-lifecycle:latest" | quote }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: hisinone-lifecycle-config
+          env:
+            - name: HISINONE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.hisinone.lifecycle.webhookSecretExistingSecret | default "hisinone-lifecycle" | quote }}
+                  key: {{ .Values.hisinone.lifecycle.webhookSecretKey | default "webhook-secret" | quote }}
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.hisinone.lifecycle.keycloakClientSecret | default "hisinone-lifecycle-client" | quote }}
+                  key: {{ .Values.hisinone.lifecycle.keycloakClientSecretKey | default "client-secret" | quote }}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.hisinone.lifecycle.keycloakAdminSecret | default "hisinone-lifecycle" | quote }}
+                  key: {{ .Values.hisinone.lifecycle.keycloakAdminKey | default "admin-password" | quote }}
+                  optional: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+{{- end }}
