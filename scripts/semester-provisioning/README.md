@@ -1,312 +1,190 @@
-# Course Provisioning API / Kursverwaltungs-API
+# Semester Provisioning — HISinOne Account Lifecycle Automation
 
-<!---
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
-SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-SPDX-License-Identifier: Apache-2.0
--->
+Automated account lifecycle management for HISinOne integration with openDesk.
+Handles user creation, immatriculation/exmatriculation, semester re-registration
+verification, and guest lecturer account cleanup.
 
-![openDesk Edu](https://opendesk.org)
+## Architecture
 
-<p align="center">
-  <img src="docs/assets/logo-opendesk-edu.svg" alt="openDesk Edu Logo" width="150">
-</p>
+```
+                                    ┌─────────────────────┐
+                                    │   HISinOne Campus   │
+                                    │   Management System │
+                                    └────────┬────────────┘
+                                             │ Webhooks (HMAC-signed)
+                                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   hisinone_webhook.py (FastAPI)                  │
+│                                                                  │
+│  person.created  →  Create Keycloak user + assign base groups   │
+│  immatriculation →  Enable user + assign semester groups        │
+│  exmatriculation →  Remove semester groups + disable user       │
+│  leave_of_absence →  Mark user as suspended                     │
+│  role_change     →  Sync groups to new role                     │
+└─────────────────────────┬───────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   keycloak_client.py                             │
+│                                                                  │
+│  Keycloak Admin REST API (OAuth2 client credentials)            │
+│  User CRUD, Group management, Token caching                     │
+└─────────────────────────┬───────────────────────────────────────┘
+                          │
+                          ▼
+┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐
+│  semester_check  │   │  guest_cleanup   │   │  webhook_deploy  │
+│  (CronJob)       │   │  (CronJob)       │   │  (Deployment)    │
+│                  │   │                  │   │                  │
+│  LDAP enrollment │   │  Expired guest   │   │  FastAPI server  │
+│  → disable/      │   │  account cleanup │   │  port 8000       │
+│  re-enable users │   │  + 14d warnings  │   │                  │
+└──────────────────┘   └──────────────────┘   └──────────────────┘
+```
 
-## Overview / Übersicht
+## Services
 
-**English:**
-🎓 openDesk Edu extension for managing the lifecycle of university courses: from creation through archival. This REST API provides endpoints for course CRUD operations, enrollment management, semester management, and integration with ILIAS, Moodle, and Keycloak.
+### 1. Webhook Receiver (`sync/hisinone_webhook.py`)
 
-**Deutsch:**
-🎓 openDesk Edu Erweiterung zur Verwaltung des Lebenszyklus von Universitätskursen: von der Erstellung bis zur Archivierung. Diese REST-API stellt Endpunkte für Kurs-CRUD-Operationen, Einschreibungsverwaltung, Semester-Verwaltung und Integration mit ILIAS, Moodle und Keycloak bereit.
+FastAPI app that receives HMAC-signed webhooks from HISinOne.
 
----
+- **URL:** `POST /api/v1/webhooks/hisinone`
+- **Auth:** HMAC-SHA256 signature in `X-HISINONE-Signature` header
+- **Lifecycle events:**
+  - `person.created` — Provision new Keycloak user
+  - `immatriculation` — Enable account, assign semester groups
+  - `exmatriculation` — Remove groups, disable account
+  - `leave_of_absence` — Mark suspended via attributes
+  - `role_change` — Sync groups to new role
 
-## Features / Funktionen
+### 2. Semester Check (CronJob `sync/semester_check.py`)
 
-| English | Deutsch |
-|---------|---------|
-| Create courses in ILIAS and Moodle | Kurse in ILIAS und Moodle erstellen |
-| Manage course enrollments | Kurseinschreibungen verwalten |
-| Archive courses at semester end | Kurse am Semesterende archivieren |
-| Restore archived courses | Archivierte Kurse wiederherstellen |
-| Sync with Keycloak for role management | Mit Keycloak für Rollenverwaltung synchronisieren |
-| Bilingual documentation (German/English) | Zweisprachige Dokumentation (Deutsch/Englisch) |
-| OpenAPI documentation at `/docs` endpoint | OpenAPI-Dokumentation unter `/docs` Endpunkt |
-| SQLite database storage (PostgreSQL-ready) | SQLite-Datenbankspeicherung (PostgreSQL-fähig) |
-| Audit logging for all operations | Audit-Logging für alle Operationen |
+Runs daily (default: `0 6 * * *`) to verify re-registration:
 
----
+1. Query university LDAP for currently enrolled students
+2. Compare against Keycloak users with current semester attribute
+3. Students no longer enrolled → mark for re-registration with grace period
+4. Re-registered students with disabled accounts → re-enable
 
-## API Endpoints
+**ENV:** `HISINONE_RE_REGISTRATION_GRACE` (default: 30 days)
 
-### Courses / Kurse
+### 3. Guest Cleanup (CronJob `sync/guest_cleanup.py`)
 
-| Method | Endpoint | Description (EN) | Beschreibung (DE) |
-|--------|----------|------------------|-------------------|
-| POST | `/api/v1/courses` | Create a new course | Neuen Kurs erstellen |
-| GET | `/api/v1/courses` | List courses (with filters) | Kurse auflisten (mit Filtern) |
-| GET | `/api/v1/courses/{id}` | Get course details | Kursdetails abrufen |
-| PUT | `/api/v1/courses/{id}` | Update course | Kurs aktualisieren |
-| DELETE | `/api/v1/courses/{id}` | Soft delete course | Kurs löschen (soft) |
-| POST | `/api/v1/courses/{id}/archive` | Archive course | Kurs archivieren |
-| POST | `/api/v1/courses/{id}/restore` | Restore archived course | Archivierten Kurs wiederherstellen |
-| POST | `/api/v1/courses/{id}/enrollments` | Bulk enroll users | Benutzer einschreiben |
+Runs daily (default: `0 6 * * *`) to clean up expired guest lecturers:
 
-### Semesters / Semester
+1. Find Keycloak accounts with `guestLecturer=true` attribute
+2. Check `accountExpiry` attribute against current date
+3. Expired accounts: remove all groups, disable account
+4. Accounts expiring within 14 days: log warning
 
-| Method | Endpoint | Description (EN) | Beschreibung (DE) |
-|--------|----------|------------------|-------------------|
-| POST | `/api/v1/semesters` | Create semester | Semester erstellen |
-| GET | `/api/v1/semesters` | List semesters | Semester auflisten |
+## Keycloak Client (`sync/keycloak_client.py`)
 
-### Audit Logs / Audit-Logs
+Core library used by all services:
 
-| Method | Endpoint | Description (EN) | Beschreibung (DE) |
-|--------|----------|------------------|-------------------|
-| GET | `/api/v1/audit/logs` | List audit logs | Audit-Logs auflisten |
+- **Auth:** OAuth2 client credentials grant (or password grant fallback)
+- **Token caching:** Automatic refresh 10s before expiry
+- **User ops:** get, create, update, enable, disable
+- **Group ops:** get, list user groups, assign, remove, sync (diff-based)
+- **Config:** via `KeycloakConfig.from_env()` (see env vars below)
 
-### Health / Gesundheit
+## Environment Variables
 
-| Method | Endpoint | Description (EN) | Beschreibung (DE) |
-|--------|----------|------------------|-------------------|
-| GET | `/health` | Health check | Gesundheitscheck |
-| GET | `/ready` | Readiness check | Bereitschaftscheck |
+### Keycloak Auth
+| Variable | Default | Description |
+|---|---|---|
+| `KEYCLOAK_URL` | `https://id.opendesk.internal` | Keycloak base URL |
+| `KEYCLOAK_REALM` | `opendesk` | Keycloak realm name |
+| `KEYCLOAK_CLIENT_ID` | `admin-cli` | OAuth2 client ID |
+| `KEYCLOAK_CLIENT_SECRET` | — | Client secret (if using client creds) |
+| `KEYCLOAK_ADMIN_USER` | — | Admin username (if using password grant) |
+| `KEYCLOAK_ADMIN_PASSWORD` | — | Admin password (if using password grant) |
+| `KEYCLOAK_VERIFY_SSL` | `true` | Verify TLS certificates |
+| `KEYCLOAK_TIMEOUT` | `30` | HTTP request timeout (seconds) |
 
----
+### LDAP (for semester_check.py)
+| Variable | Default | Description |
+|---|---|---|
+| `HISINONE_LDAP_HOST` | `ldap.uni-marburg.de` | LDAP server hostname |
+| `HISINONE_LDAP_PORT` | `636` | LDAP server port |
+| `HISINONE_LDAP_USE_SSL` | `true` | Use LDAPS |
+| `HISINONE_LDAP_BIND_DN` | — | Bind DN for LDAP queries |
+| `HISINONE_LDAP_BIND_PASSWORD` | — | Bind password |
+| `HISINONE_LDAP_USERS_BASE_DN` | — | Users search base DN |
+| `HISINONE_LDAP_ATTR_USERNAME` | `uid` | Username attribute in LDAP |
+| `HISINONE_ENROLLMENT_STATUS_ATTR` | `hisinoneEnrollmentStatus` | Enrollment attribute |
 
-## Prerequisites / Voraussetzungen
+### Webhook
+| Variable | Default | Description |
+|---|---|---|
+| `HISINONE_WEBHOOK_SECRET` | — | HMAC secret for webhook verification |
+| `OPENDESK_API_BASE_URL` | `http://localhost:8000/api/v1` | Internal API URL |
 
-- Python 3.11+
-- FastAPI, Pydantic, httpx, pytest
-- Docker (optional)
+### Semester Check
+| Variable | Default | Description |
+|---|---|---|
+| `HISINONE_RE_REGISTRATION_GRACE` | `30` | Grace period in days |
+| `HISINONE_CURRENT_SEMESTER` | — | Current semester identifier (e.g., `2026ws`) |
 
----
+## Development
 
-## Quick Start / Schnellstart
+### Setup
 
 ```bash
 cd scripts/semester-provisioning
-
-# Create virtual environment / Virtuelle Umgebung erstellen
-python -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-# or: .venv\Scripts\activate  # Windows
-
-# Install dependencies / Abhängigkeiten installieren
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
-
-# Run the server / Server starten
-uvicorn api.server:app --host 0.0.0.0 --port 8000
-
-# Or using the course_api module directly
-# Oder das course_api Modul direkt verwenden
-python -m course_api
-```
-
----
-
-## API Usage Examples / API-Verwendungsbeispiele
-
-### Create Course / Kurs erstellen
-
-```bash
-curl -X POST "http://localhost:8000/api/v1/courses" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "semester_id": "2026ws",
-    "title": "Einführung in die Informatik",
-    "title_en": "Introduction to Computer Science",
-    "course_code": "INF-101",
-    "instructor_ids": ["prof-123"],
-    "expected_enrollment": 120,
-    "lms": "ilias"
-  }'
-```
-
-**Response / Antwort:**
-
-```json
-{
-  "course_id": "crs_abc123",
-  "lms_course_id": "lms_def456",
-  "semester_id": "2026ws",
-  "title": "Einführung in die Informatik",
-  "title_en": "Introduction to Computer Science",
-  "course_code": "INF-101",
-  "status": "draft",
-  "created_at": "2026-03-30T10:00:00Z"
-}
-```
-
-### List Courses / Kurse auflisten
-
-```bash
-curl "http://localhost:8000/api/v1/courses?semester_id=2026ws&status=active&page=1&page_size=20"
-```
-
-### Archive Course / Kurs archivieren
-
-```bash
-curl -X POST "http://localhost:8000/api/v1/courses/crs_abc123/archive" \
-  -H "Content-Type: application/json" \
-  -d '{"create_snapshots": true}'
-```
-
-### Restore Course / Kurs wiederherstellen
-
-```bash
-curl -X POST "http://localhost:8000/api/v1/courses/crs_abc123/restore" \
-  -H "Content-Type: application/json" \
-  -d '{"restore_enrollments": true}'
-```
-
-### Bulk Enroll Users / Benutzer einschreiben
-
-```bash
-curl -X POST "http://localhost:8000/api/v1/courses/crs_abc123/enrollments" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_ids": ["user-001", "user-002", "user-003"],
-    "role": "student"
-  }'
-```
-
-### Create Semester / Semester erstellen
-
-```bash
-curl -X POST "http://localhost:8000/api/v1/semesters" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "semester_id": "2026ws",
-    "name": "Wintersemester 2026/27",
-    "name_en": "Winter Semester 2026/27",
-    "type": "wintersemester",
-    "start_date": "2026-10-01",
-    "end_date": "2027-03-31"
-  }'
-```
-
-### Error Response / Fehlerantwort
-
-```json
-{
-  "error": "NotFound",
-  "detail": "Course crs_nonexistent not found / Kurs crs_nonexistent nicht gefunden",
-  "code": "COURSE_NOT_FOUND"
-}
-```
-
----
-
-## Configuration / Konfiguration
-
-Configuration is loaded from environment variables:
-
-| Variable | Default | Description (EN) | Beschreibung (DE) |
-|----------|---------|------------------|-------------------|
-| `API_HOST` | `0.0.0.0` | API server host | API-Server-Host |
-| `API_PORT` | `8000` | API server port | API-Server-Port |
-| `API_DEBUG` | `false` | Enable debug mode | Debug-Modus aktivieren |
-| `ILIAS_API_URL` | (none) | ILIAS API base URL | ILIAS-API-Basis-URL |
-| `ILIAS_API_USER` | (none) | ILIAS API username | ILIAS-API-Benutzername |
-| `ILIAS_API_KEY` | (none) | ILIAS API key | ILIAS-API-Schlüssel |
-| `MOODLE_API_URL` | (none) | Moodle API base URL | Moodle-API-Basis-URL |
-| `MOODLE_API_TOKEN` | (none) | Moodle API token | Moodle-API-Token |
-| `KEYCLOAK_URL` | (none) | Keycloak server URL | Keycloak-Server-URL |
-| `KEYCLOAK_REALM` | `opendesk-edu` | Keycloak realm | Keycloak-Realm |
-| `KEYCLOAK_ADMIN_USER` | (none) | Keycloak admin username | Keycloak-Admin-Benutzer |
-| `KEYCLOAK_ADMIN_PASSWORD` | (none) | Keycloak admin password | Keycloak-Admin-Passwort |
-| `DATABASE_PATH` | `:memory:` | SQLite database path | SQLite-Datenbankpfad |
-| `ARCHIVE_RETENTION_YEARS` | `5` | Years to retain archives | Jahre zur Archivaufbewahrung |
-
----
-
-## Docker Deployment / Docker-Bereitstellung
-
-```bash
-docker build -t semester-provisioning-api:latest .
-docker run -d -p 8000:8000 semester-provisioning-api
-```
-
----
-
-## Testing / Tests
-
-```bash
-cd scripts/semester-provisioning
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements-dev.txt
-
-# Run unit tests / Unit-Tests ausführen
-pytest tests/
-
-# Run integration tests / Integrationstests ausführen
-pytest tests/integration/
-
-# Run with coverage / Mit Abdeckung ausführen
-pytest --cov=. tests/
+pip install -r requirements.txt
+pip install pytest pytest-httpx pytest-asyncio ldap3  # dev extras
 ```
 
----
+### Running Tests
 
-## API Documentation / API-Dokumentation
+```bash
+# Quick unit tests
+python -m pytest tests/ -v
 
-Access the OpenAPI documentation at:
+# Integration suite (includes import checks + linting)
+./tests/run_integration.sh
 
-- **Swagger UI**: <http://localhost:8000/docs>
-- **ReDoc**: <http://localhost:8000/redoc>
-- **OpenAPI JSON**: <http://localhost:8000/openapi.json>
-
----
-
-## File Structure / Dateistruktur
-
-```
-scripts/semester-provisioning/
-├── __init__.py              # Package init / Paket-Initialisierung
-├── course_api.py            # FastAPI endpoints / FastAPI-Endpunkte
-├── models.py                # Data models / Datenmodelle
-├── config.py                # Configuration / Konfiguration
-├── database.py              # SQLite storage / SQLite-Speicherung
-├── audit.py                 # Audit logging / Audit-Logging
-├── README.md                # This file / Diese Datei
-├── requirements.txt         # Dependencies / Abhängigkeiten
-├── requirements-dev.txt     # Dev dependencies / Entwicklungsabhängigkeiten
-├── api/
-│   ├── main.py              # App factory / App-Factory
-│   ├── server.py            # Server entry / Server-Einstieg
-│   ├── config/
-│   │   └── settings.py      # Pydantic settings / Pydantic-Einstellungen
-│   ├── models/
-│   │   ├── course.py        # Course models / Kursmodelle
-│   │   ├── semester.py      # Semester models / Semestermodelle
-│   │   ├── enrollment.py    # Enrollment models / Einschreibungsmodelle
-│   │   └── archival.py      # Archival models / Archivierungsmodelle
-│   ├── routes/
-│   │   ├── courses.py       # Course routes / Kursrouten
-│   │   ├── semesters.py     # Semester routes / Semesterrouten
-│   │   ├── enrollments.py   # Enrollment routes / Einschreibungsrouten
-│   │   └── archival.py      # Archival routes / Archivierungsrouten
-│   └── utils/
-│       ├── ilias_client.py  # ILIAS client / ILIAS-Client
-│       ├── moodle_client.py # Moodle client / Moodle-Client
-│       └── keycloak_client.py # Keycloak client / Keycloak-Client
-├── tests/
-│   ├── conftest.py          # Pytest fixtures / Pytest-Fixtures
-│   ├── test_api_courses.py  # Course tests / Kurs-Tests
-│   ├── test_api_semesters.py # Semester tests / Semester-Tests
-│   ├── test_api_enrollments.py # Enrollment tests / Einschreibungs-Tests
-│   └── test_api_archival.py # Archival tests / Archivierungs-Tests
-└── sync/
-    ├── bulk_sync.py         # Bulk sync operations / Massensynchronisation
-    └── hisinone_webhook.py  # HISinOne webhook / HISinOne-Webhook
+# Single test file
+python -m pytest tests/test_keycloak_client.py -v
 ```
 
----
+### Running Locally
 
-## License / Lizenz
+```bash
+# Start webhook (requires env vars set)
+uvicorn sync.hisinone_webhook:app --reload --port 8000
 
-Apache-2.0 - see [LICENSE](../../LICENSE) for details.
+# Run semester check (dry-run)
+python -m sync.semester_check
+DRY_RUN=true python -m sync.semester_check
+
+# Run guest cleanup (dry-run)
+python -m sync.guest_cleanup
+DRY_RUN=true python -m sync.guest_cleanup
+```
+
+## Deployment
+
+Deployed via the `hisinone-lifecycle` Helm chart:
+
+```bash
+helmfile -e default sync --selector name=hisinone-lifecycle
+```
+
+The chart creates:
+- `Deployment` — webhook receiver (FastAPI on port 8000)
+- `Service` — ClusterIP for internal routing
+- `ConfigMap` — environment configuration
+- `CronJob` — semester_check.py (daily at 06:00)
+- `CronJob` — guest_cleanup.py (daily at 06:00)
+
+## Git Hooks / CI
+
+The integration test script is suitable for CI pipelines:
+
+```bash
+# Run before merge
+./scripts/semester-provisioning/tests/run_integration.sh
+```
