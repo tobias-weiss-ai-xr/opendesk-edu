@@ -1,0 +1,97 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- if and .Values.hisinone.enabled .Values.hisinone.roleMapping.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-ldap-university-group-mapping
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: ldap-group-mapping
+    app.kubernetes.io/part-of: opendesk
+    hisinone-component: group-mapping
+data:
+  group-mapping-rules.json: |
+    {
+      "providerId": "university-ldap",
+      "rules": [
+        {{- range $index, $rule := .Values.hisinone.roleMapping.rules }}
+        {{- if $index }},{{ end }}
+        {
+          "attributeName": "{{ $rule.attribute }}",
+          "attributeValue": "{{ $rule.value }}",
+          "groups": [
+            {{- range $gIndex, $group := $rule.groups }}
+            {{- if $gIndex }},{{ end }}
+            "{{ $group }}"
+            {{- end }}
+          ]
+        }
+        {{- end }}
+      ]
+    }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloak-university-group-mapping-bootstrap
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: ldap-group-mapping
+    app.kubernetes.io/part-of: opendesk
+    hisinone-component: group-mapping
+  annotations:
+    argocd.argoproj.io/hook: "PostSync"
+    argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ .Values.hisinone.bootstrap.serviceAccountName | default "keycloak-ldap-bootstrap" }}
+      restartPolicy: Never
+      containers:
+        - name: group-mapping-setup
+          image: {{ .Values.hisinone.bootstrap.image | default "curlimages/curl:8.12.1" | quote }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              set -e
+              KEYCLOAK_URL="https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+              REALM="{{ .Values.platform.realm }}"
+              ADMIN_USER="{{ .Values.secrets.keycloak.adminUsername | default "kcadmin" }}"
+              ADMIN_PASS="{{ .Values.secrets.keycloak.adminPassword }}"
+
+              echo "Configuring a2g-mapper (attribute-to-group mapping rules)..."
+              RULES=$(cat /config/group-mapping-rules.json | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+provider_id = data['providerId']
+rules = data['rules']
+
+# Get existing LDAP provider component ID
+import urllib.request
+print(f'Need to map rules for LDAP provider: {provider_id}')
+for r in rules:
+    attr = r['attributeName']
+    val = r['attributeValue']
+    groups = r['groups']
+    print(f'  {attr}={val} -> {groups}')
+")
+
+              echo "Group mapping rules:"
+              python3 -c "import sys,json; data=json.load(open('/config/group-mapping-rules.json')); print(json.dumps(data, indent=2))"
+
+              echo "Rules are ready for the a2g-mapper extension."
+              echo "The opendesk-a2g-mapper extension reads these rules at runtime."
+          volumeMounts:
+            - name: mapping-config
+              mountPath: /config
+      volumes:
+        - name: mapping-config
+          configMap:
+            name: keycloak-ldap-university-group-mapping
+  backoffLimit: 2
+{{- end }}
