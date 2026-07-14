@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -8,8 +8,17 @@ certificate:
     enabled: false
 
 containerSecurityContext:
-  allowPrivilegeEscalation: true
-  capabilities: {}
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "SETGID"
+      - "SETUID"
+      - "KILL"
   enabled: true
   seccompProfile:
     type: "RuntimeDefault"
@@ -17,13 +26,31 @@ containerSecurityContext:
   runAsNonRoot: false
   runAsUser: 0
   runAsGroup: 0
-  privileged: true
-  seLinuxOptions:
-    {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+
+initContainerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "FOWNER"
+  enabled: true
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: false
+  runAsUser: 0
+  runAsGroup: 0
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
 
 global:
-  imagePullSecrets:
-    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  imagePullSecrets: {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+hostUsers: {{ not .Values.technical.postfix.userNamespaces }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.postfix.registry | quote }}
@@ -104,7 +131,11 @@ postfix:
   {{- end }}
   allowRelayNets: false
 
+  spf:
+    enabled: {{ .Values.technical.postfix.checkSpf }}
+
   limit:
+    anvilRateTimeUnit: {{ printf "%vs" .Values.technical.postfix.anvilRateTimeUnit }}
     messageSize: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
     expansion: {{ .Values.functional.groupware.mail.localLimits.expansion }}
     recursion: {{ .Values.functional.groupware.mail.localLimits.recursion }}
@@ -221,8 +252,13 @@ resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
 
 service:
-  annotations:
-    {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
+  annotations: {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
+  ports:
+    smtp:
+      port: 25
+      targetPort: 2500
+    submission: ~
+    submissions: ~
   {{- if and (has (coalesce .Values.service.type.postfix .Values.cluster.service.type) (list "NodePort" "LoadBalancer"))
              (or .Values.functional.groupware.exposeSmtp
                  .Values.functional.groupware.externalClients.exposeSubmission

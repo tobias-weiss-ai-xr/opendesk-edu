@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -7,12 +7,20 @@ certificate:
   request:
     enabled: false
 
-commonAnnotations:
-  {{ .Values.annotations.servicesExternalPostfix.common | toYaml | nindent 2 }}
+commonAnnotations: {{ .Values.annotations.servicesExternalPostfix.common | toYaml | nindent 2 }}
 
 containerSecurityContext:
-  allowPrivilegeEscalation: true
-  capabilities: {}
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "SETGID"
+      - "SETUID"
+      - "KILL"
   enabled: true
   seccompProfile:
     type: "RuntimeDefault"
@@ -20,13 +28,31 @@ containerSecurityContext:
   runAsNonRoot: false
   runAsUser: 0
   runAsGroup: 0
-  privileged: true
-  seLinuxOptions:
-    {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+
+initContainerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "FOWNER"
+  enabled: true
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: false
+  runAsUser: 0
+  runAsGroup: 0
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
 
 global:
-  imagePullSecrets:
-    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  imagePullSecrets: {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+hostUsers: {{ not .Values.technical.postfix.userNamespaces }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.postfix.registry | quote }}
@@ -37,8 +63,7 @@ image:
 persistence:
   size: {{ .Values.persistence.storages.postfix.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.postfix.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
-  annotations:
-    {{ .Values.annotations.servicesExternalPostfix.persistence | toYaml | nindent 4 }}
+  annotations: {{ .Values.annotations.servicesExternalPostfix.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
   intents.otterize.com/service-name: "postfix"
@@ -175,6 +200,12 @@ resources:
 service:
   annotations:
     {{ .Values.annotations.servicesExternalPostfix.service | toYaml | nindent 4 }}
+  ports:
+    smtp:
+      port: 25
+      targetPort: 2500
+    submission: ~
+    submissions: ~
   external:
     enabled: false
 

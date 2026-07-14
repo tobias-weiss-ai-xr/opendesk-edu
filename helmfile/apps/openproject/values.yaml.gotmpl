@@ -77,11 +77,11 @@ environment:
   OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   OPENPROJECT_SMTP__USER__NAME: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
   OPENPROJECT_SMTP__PASSWORD: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
-  OPENPROJECT_SMTP__PORT: 587
+  OPENPROJECT_SMTP__PORT: 25
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
   OPENPROJECT_SMTP__ADDRESS: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
   OPENPROJECT_SMTP__AUTHENTICATION: "cram_md5"
-  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
+  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "false"
   OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "none"
   OPENPROJECT_SSRF__PROTECTION__IP__ALLOWLIST: {{ join " " .Values.cluster.networking.cidr | quote }}
   OPENPROJECT_MAIL__FROM: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"

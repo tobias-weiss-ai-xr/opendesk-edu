@@ -16,13 +16,16 @@ While [migrations.md](./migrations.md) provides information about required actio
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Enable the "Send later" (scheduled mail) feature for OX App Suite](#enable-the-send-later-scheduled-mail-feature-for-ox-app-suite)
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
-      * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
-    * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
-      * [Postfix HELO names](#postfix-helo-names)
-      * [Postfix client, HELO, sender restrictions and rate limits](#postfix-client-helo-sender-restrictions-and-rate-limits)
     * [`helmfile-defaults.yaml.gotmpl`](#helmfile-defaultsyamlgotmpl)
       * [Allow override of single application helmfiles](#allow-override-of-single-application-helmfiles)
+    * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
+      * [Postfix HELO names](#postfix-helo-names)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+      * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
+      * [Postfix](#postfix)
+        * [SPF validation for incoming mail](#spf-validation-for-incoming-mail)
+        * [User namespaces for the Postfix pod](#user-namespaces-for-the-postfix-pod)
+        * [Client, HELO, sender restrictions and rate limits](#client-helo-sender-restrictions-and-rate-limits)
   * [1.16.0](#1160)
     * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
       * [OpenProject PDF export theming](#openproject-pdf-export-theming)
@@ -77,35 +80,6 @@ functional:
 
 Set `rememberMe: false` to disable the "Remember Me" option entirely. The two lifespan values only take effect while `rememberMe` is enabled. All lifespan values are defined in seconds.
 
-### `technical.yaml.gotmpl`
-
-#### OX App Suite LDAP caching for contact picker
-
-The contact picker in OX App Suite can cache LDAP lookups. The cache lifetime is controlled by an expiry time in seconds:
-
-```yaml
-technical:
-  oxAppSuite:
-    contactPicker:
-      cacheExpirySeconds: 0
-```
-
-A value of `0` disables caching and is the default. Any positive value keeps LDAP results cached for that many seconds before they are refreshed.
-
-### `smtp.yaml.gotmpl`
-
-#### Postfix HELO names
-
-The HELO name announced by the OX App Suite facing Postfix (`postfix-ox`) and by the internal Postfix can now be
-overridden. Both default to `~`, which keeps the previous behaviour of letting Postfix derive the name from its
-hostname:
-
-```yaml
-smtp:
-  heloName: ~
-  internalHeloName: ~
-```
-
 ### `helmfile-defaults.yaml.gotmpl`
 
 #### Allow override of single application helmfiles
@@ -130,7 +104,74 @@ helmfiles:
 ...
 ```
 
-#### Postfix client, HELO, sender restrictions and rate limits
+### `smtp.yaml.gotmpl`
+
+#### Postfix HELO names
+
+The HELO name announced by the OX App Suite facing Postfix (`postfix-ox`) and by the internal Postfix can now be
+overridden. Both default to `~`, which keeps the previous behaviour of letting Postfix derive the name from its
+hostname:
+
+```yaml
+smtp:
+  heloName: ~
+  internalHeloName: ~
+```
+
+### `technical.yaml.gotmpl`
+
+#### OX App Suite LDAP caching for contact picker
+
+The contact picker in OX App Suite can cache LDAP lookups. The cache lifetime is controlled by an expiry time in seconds:
+
+```yaml
+technical:
+  oxAppSuite:
+    contactPicker:
+      cacheExpirySeconds: 0
+```
+
+A value of `0` disables caching and is the default. Any positive value keeps LDAP results cached for that many seconds before they are refreshed.
+
+#### Postfix
+
+##### SPF validation for incoming mail
+
+Postfix can now validate the SPF record of incoming mail and reject mail that fails the check:
+
+```yaml
+technical:
+  postfix:
+    checkSpf: false
+```
+
+The check is disabled by default, which keeps the previous behaviour. Only enable it if Postfix actually sees the IP
+of the originating mail server. If a load balancer or proxy in front of Postfix terminates the connection without
+preserving the client IP, every incoming mail is evaluated against the proxy's IP and legitimate mail is rejected. In
+such a setup, either configure `technical.postfix.smtpdUpstreamProxyProtocol` so that Postfix learns the real client
+IP, or leave `checkSpf` disabled.
+
+##### User namespaces for the Postfix pod
+
+The Postfix pods (`postfix` and `postfix-ox`) can now run in their own user namespace, so that UID 0 inside the
+container maps to an unprivileged UID on the host:
+
+```yaml
+technical:
+  postfix:
+    userNamespaces: false
+```
+
+The default `false` preserves the current behaviour. Set it to `true` if your cluster supports user namespaces
+(Kubernetes >= v1.36 with the feature enabled on the nodes); see the
+[Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads/pods/user-namespaces/). Enabling it on a
+cluster without support prevents the Postfix pods from starting.
+
+This complements the hardened container security contexts shipped with this release: the Postfix containers no longer
+run privileged, no longer allow privilege escalation, and drop all capabilities except those Postfix requires
+(`CHOWN`, `DAC_OVERRIDE`, `FOWNER`, `SETGID`, `SETUID`, `KILL`).
+
+##### Client, HELO, sender restrictions and rate limits
 
 A set of Postfix restrictions can now be toggled to harden the configuration. These only affect `postfix-ox`.
 Boolean options default to Postfix's previous behaviour (`false`, i.e. not rejecting), except
@@ -164,6 +205,7 @@ Additionally, several client connection limits can now be set for smtp (Port 25)
 ```yaml
 technical:
   postfix:
+    anvilRateTimeUnit: 60
     smtpdUpstreamProxyProtocol: ~
     smtpLimits:
       clientConnectionCount: 15
@@ -180,6 +222,11 @@ technical:
       clientNewTLSSessionRate: 0
       clientAuthRate: 0
 ```
+
+All `*Rate` limits are counted per time interval, and `anvilRateTimeUnit` defines the length of that interval in
+seconds. The default of `60` means the rate limits apply per minute; setting it to `3600`, for example, turns them
+into hourly limits. It applies to both `smtpLimits` and `submissionLimits` and has no effect on
+`clientConnectionCount`, which limits simultaneous connections rather than a rate.
 
 ## 1.16.0
 
