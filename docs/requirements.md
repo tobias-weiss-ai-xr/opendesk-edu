@@ -151,20 +151,20 @@ For the development and evaluation of openDesk, we bundle some services. Be awar
 deployments, you need to make use of your own production-grade services; see the
 [external-services.md](./external-services.md) for configuration details.
 
-| Group    | Type                | Version | Tested against        |
-|----------|---------------------|---------|-----------------------|
-| Cache    | Memcached           | `1.6.x` | Memcached             |
-|          | Redis               | `7.x.x` | Redis                 |
-| Database | Cassandra[^3]       | `5.0.x` | Cassandra             |
-|          | MariaDB             | `10.x`  | MariaDB               |
-|          | PostgreSQL          | `15.x`  | PostgreSQL            |
-| Mail     | Mail Transfer Agent |         | Postfix               |
-|          | PKI/CI (S/MIME)     |         |                       |
-| Security | AntiVirus/ICAP      |         | ClamAV                |
-| Storage  | K8s ReadWriteOnce   |         | Ceph / Cloud specific |
-|          | K8s ReadWriteMany   |         | Ceph / NFS            |
-|          | Object Storage      |         | MinIO                 |
-| Voice    | TURN                |         | Coturn                |
+| Group    | Type                  | Version | Tested against        |
+| -------- | --------------------- | ------- | --------------------- |
+| Cache    | Memcached             | `1.6.x` | Memcached             |
+|          | Redis                 | `7.x.x` | Redis                 |
+| Database | Cassandra[^3]         | `5.0.x` | Cassandra             |
+|          | MariaDB               | `10.x`  | MariaDB               |
+|          | PostgreSQL            | `15.x`  | PostgreSQL            |
+| Mail     | Mail Transfer Agent   |         | Postfix               |
+|          | PKI/CI (S/MIME)       |         |                       |
+| Security | AntiVirus/ICAP        |         | ClamAV                |
+| Storage  | K8s ReadWriteOnce[^4] |         | Ceph / Cloud specific |
+|          | K8s ReadWriteMany     |         | Ceph / NFS            |
+|          | Object Storage        |         | SeaWeed               |
+| Voice    | TURN                  |         | Coturn                |
 
 ## Deployment
 
@@ -180,3 +180,5 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 [^2]: Due to Helm bugs [[1](https://github.com/helm/helm/issues/31919), [2](https://github.com/helm/helm/issues/31971)] v3.20.1 is not supported.
 
 [^3]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
+
+[^4]: Due to technical limitations within NFS it is not supported as storage backend for RWO.
