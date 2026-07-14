@@ -144,7 +144,7 @@ hocuspocus:
     tag: {{ index (splitList "@" .Values.images.openprojectHocuspocus.tag) 0 | quote }}
     sha256: {{ index (splitList ":" (index (splitList "@" .Values.images.openprojectHocuspocus.tag) 1)) 1 | quote }}
   strategy:
-    type: "Recreate"
+    type: "RollingUpdate"
   podAnnotations:
     intents.otterize.com/service-name: "openproject-hocuspocus"
     {{- with .Values.annotations.openproject.hocuspocusPod }}
@@ -155,6 +155,9 @@ hocuspocus:
   resourcesPreset: ~
   resources:
     {{ .Values.resources.openproject | toYaml | nindent 4 }}
+
+strategy:
+  type: "RollingUpdate"
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openproject.registry | quote }}
@@ -300,6 +303,8 @@ seederJob:
 
 workers:
   default:
+    strategy:
+      type: "RollingUpdate"
     resources:
       {{ .Values.resources.openprojectWorkers | toYaml | nindent 6 }}
 
