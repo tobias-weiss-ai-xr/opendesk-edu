@@ -176,8 +176,8 @@ properties:
   ## SMTP settings
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.host": {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
-  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.port": 587
-  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.properties": "mail.smtp.starttls.enable=true"
+  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.port": 25
+  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.properties": "mail.smtp.starttls.enable=false"
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.username": {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.password": {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
   ## Link LDAP users and users authenticated through OIDC
