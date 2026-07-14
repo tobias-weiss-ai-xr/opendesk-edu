@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: "kyverno.io/v1"
+kind: "ClusterPolicy"
+metadata:
+  name: "restrict-volume-types"
+  annotations:
+    policies.kyverno.io/title: "Restrict Volume Types"
+    policies.kyverno.io/subject: "Pod,Volume"
+    policies.kyverno.io/description: >-
+      In addition to restricting HostPath volumes, the restricted pod security profile
+      limits usage of non-core volume types to those defined through PersistentVolumes.
+      This policy blocks any other type of volume other than those in the allow list.
+spec:
+  background: true
+  rules:
+    - name: "restrict-volume-types"
+      match:
+        any:
+          - resources:
+              kinds:
+                - "Pod"
+      validate:
+        message: >-
+          Only the following types of volumes may be used: configMap, csi, downwardAPI,
+          emptyDir, ephemeral, persistentVolumeClaim, projected, and secret.
+        deny:
+          conditions:
+            all:
+              - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
+                operator: "AnyNotIn"
+                value:
+                  - "name"
+                  - "configMap"
+                  - "csi"
+                  - "downwardAPI"
+                  - "emptyDir"
+                  - "ephemeral"
+                  - "persistentVolumeClaim"
+                  - "projected"
+                  - "secret"
+                  - ""
+  validationFailureAction: "audit"
+...
