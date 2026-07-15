@@ -31,9 +31,11 @@ include:
       - when: "always"
   - local: "/.gitlab/lint/lint-kyverno.yml"
     rules:
-      - if: >
-            $JOB_OPENDESK_LINTER_ENABLED == 'false' ||
-            $CI_PIPELINE_SOURCE =~ /^tags|merge_request_event|web|trigger|api$/
+      - if: "$JOB_OPENDESK_LINTER_ENABLED == 'false'"
+        when: "never"
+      - if: "$LINT_KYVERNO_STRICT == 'true'"
+        when: "always"
+      - if: "$CI_PIPELINE_SOURCE =~ /^tags|merge_request_event|web|trigger|api$/"
         when: "never"
       - when: "always"
 
@@ -202,6 +204,12 @@ variables:
     options:
       - "yes"
       - "no"
+  LINT_KYVERNO_STRICT:
+    description: "Set to 'true' to make Kyverno tests fail the pipeline when not strictly passing. Defaults to advisory-only."
+    value: "false"
+    options:
+      - "true"
+      - "false"
   RUN_TESTS:
     description: "Triggers execution of E2E-tests."
     value: "no"

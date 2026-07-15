@@ -58,7 +58,12 @@ lint-kyverno:
       -f opendesk.yaml
       --skip-tests true
       ${APP}
-    - "kyverno test . || true"
+    - |
+      if [ "${LINT_KYVERNO_STRICT}" = "true" ]; then
+        kyverno test .
+      else
+        kyverno test . || true
+      fi
     # Test required
     - >
       node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests
