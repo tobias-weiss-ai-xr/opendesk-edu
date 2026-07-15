@@ -21,9 +21,16 @@ spec:
       name: "template-replicas"
       validate:
         message: "Verifies that replica count can be customized by `.Values.replicas.<app>` variable."
-        pattern:
-          spec:
-            replicas: 42
+        anyPattern:
+          # Exception: The Nubus LDAP primary is pinned to 2 in `_overwrite.yaml`
+          # because it does not scale beyond 2, every other scaling is done through
+          # the LDAP secondary (read-only) Pods.
+          - metadata:
+              name: "*ldap-server-primary*"
+            spec:
+              replicas: 2
+          - spec:
+              replicas: 42
 
   validationFailureAction: "audit"
 ...
