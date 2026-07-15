@@ -189,7 +189,7 @@ configuration:
     fromAddress: {{ .Values.smtp.localpartNoReply | quote }}
     mailDomain: "{{ .Values.global.mailDomain | default .Values.global.domain }}"
     security: ""
-    skipVerifyPeer: false
+    skipVerifyPeer: true
 
   quota:
     default: "{{ .Values.functional.filestore.quota.default }} GB"
@@ -214,7 +214,7 @@ containerSecurityContext:
   runAsGroup: 101
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   runAsNonRoot: true
   seLinuxOptions:
     {{ .Values.seLinuxOptions.nextcloudManagement | toYaml | nindent 4 }}
