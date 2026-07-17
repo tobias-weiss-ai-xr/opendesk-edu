@@ -30,13 +30,13 @@
 
 **Documentation:**
 
-Does this MR introduce **ANY** new (non migration related) Helmfile options?
+This MR introduce **ANY** new (non migration related) Helmfile options:
 - [ ] No
 - [ ] Yes, and the documentation (updates.md) is addressing these changes.
 
-Does this MR introduce new (migration related) Helmfile options or other changes requiring automated or manual migrations?
+This MR introduce new (migration related) Helmfile options or other changes requiring automated or manual migrations:
 - [ ] No
-- [ ] Yes, and the documentation (migrations.md) is addressing these changes.
+- [ ] Yes, and the documentation (migrations-*.md) is addressing these changes.
 
 **Quality Assurance:**
 

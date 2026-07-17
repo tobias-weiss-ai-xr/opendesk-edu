@@ -46,11 +46,13 @@ Provide steps for QA or reviewers to test the fix and mention anything reviewers
 
 # 👷 Developer Checklist
 
-Does this MR introduce **ANY** new (non migration related) Helmfile options?
+**Documentation:**
+
+This MR introduce **ANY** new (non migration related) Helmfile options:
 - [ ] No
 - [ ] Yes, and the documentation (updates.md) is addressing these changes.
 
-Does this MR introduce new (migration related) Helmfile options or other changes requiring automated or manual migrations?
+This MR introduce new (migration related) Helmfile options or other changes requiring automated or manual migrations:
 - [ ] No
 - [ ] Yes -> **This should not happen on bugfix MRs**
 

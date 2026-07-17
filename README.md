@@ -57,7 +57,7 @@ Basic knowledge of Kubernetes and DevOps processes is required though.
 
 You want to upgrade an existing openDesk installation?
 
-⟶ Visit our detailed documentation about [Updates & Upgrades](./docs/migrations.md).
+⟶ Visit our detailed documentation about [Updates & Upgrades](./docs/migrations-manual.md).
 
 ## Requirements
 

@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Updates and features
 
-While [migrations.md](./migrations.md) provides information about required actions when updating or upgrading openDesk this document provides an overview on new (non-breaking) options made available in the Helmfile deployment.
+While [migrations-manual.md](./migrations-manual.md) provides information about required actions when updating or upgrading openDesk this document provides an overview on new (non-breaking) options made available in the Helmfile deployment.
 
 > [!note]
 > We only list newly introduced plain YAML structures here. For documentation of the described features, please refer to the comments in the referenced `.yaml.gotmpl` files.
@@ -18,6 +18,8 @@ While [migrations.md](./migrations.md) provides information about required actio
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`helmfile-defaults.yaml.gotmpl`](#helmfile-defaultsyamlgotmpl)
       * [Allow override of single application helmfiles](#allow-override-of-single-application-helmfiles)
+    * [`migrations.yaml.gotmpl`](#migrationsyamlgotmpl)
+      * [Skip single actions of the automated migrations](#skip-single-actions-of-the-automated-migrations)
     * [`secrets.yaml.gotmpl`, `objectstores.yaml.gotmpl`, `database.yaml.gotmpl`](#secretsyamlgotmpl-objectstoresyamlgotmpl-databaseyamlgotmpl)
       * [Provide selected secrets as pre-created Kubernetes Secrets](#provide-selected-secrets-as-pre-created-kubernetes-secrets)
     * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
@@ -105,6 +107,47 @@ helmfiles:
       - {{ toYaml .Values | nindent 6 }}
 ...
 ```
+
+### `migrations.yaml.gotmpl`
+
+#### Skip single actions of the automated migrations
+
+The automated migrations are now described by a list of actions per stage, see
+[Automated migrations overview](./migrations-automated.md#automated-migrations-overview) in
+`migrations-automated.md`.
+
+The new file `migrations.yaml.gotmpl` allows to opt out of single actions of these migrations via
+`migrations.actionsSkip`, e.g. when a migration is considered too complex or too risky for your
+environment.
+
+`actionsSkip` mirrors the `actions` structure of the migration definition: An entry names the stage
+(the list it is in), the `id` and the `tag` of the action it skips - the same footprint, just
+without its `config`. It has to match the declared action exactly, including its `tag` (or the
+absence of one), so that an opt-out can never silently suppress a later, different piece of work
+that reuses the same action under another tag. An entry that matches no declared action is logged
+as a warning.
+
+A skipped action is logged as a warning and is not recorded as executed, so an action that is
+declared to run once stays eligible should you un-skip it later.
+
+Example `migrations.yaml.gotmpl` for skipping the OX Connector restart post deployment:
+
+```yaml
+migrations:
+  actionsSkip:
+    pre: []
+    post:
+      - id: "ox_connector_restart"
+        tag: "v1.17.0"
+```
+
+> [!warning]
+> The automated migrations bring your deployment in line with the openDesk release you are
+> deploying. Skipping an action means the migration it implements is not applied and the affected
+> component may stay on the old state, so you take over the responsibility for its outcome - for
+> example because you already performed the step manually or because you need to perform it in a
+> maintenance window of your own. Only use this option if openDesk support asked you to do so or if
+> you are certain about the consequences.
 
 ### `secrets.yaml.gotmpl`, `objectstores.yaml.gotmpl`, `database.yaml.gotmpl`
 
