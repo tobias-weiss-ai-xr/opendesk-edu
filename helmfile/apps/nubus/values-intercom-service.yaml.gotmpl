@@ -80,7 +80,7 @@ ics:
     port: {{ .Values.cache.intercomService.port }}
     auth:
       username: {{ .Values.cache.intercomService.username }}
-      password: {{ .Values.cache.intercomService.password | default .Values.secrets.redis.password.value | quote }}
+      password: {{ .Values.cache.intercomService.password.value | default .Values.secrets.redis.password.value | quote }}
     ssl:
       enabled: {{ .Values.cache.intercomService.tls }}
   openxchange:

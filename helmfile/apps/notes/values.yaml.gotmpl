@@ -59,7 +59,7 @@ backend:
     ai:
       enabled: {{ if not (quote .Values.ai.endpoint | empty) }}true{{- else }}false{{- end }}
       apiKey:
-        value: {{ .Values.ai.apiKey }}
+        value: {{ .Values.ai.apiKey.value }}
       baseUrl: {{ .Values.ai.endpoint }}
       model: {{ .Values.ai.model | quote }}
       allowReachFrom: "authenticated"
@@ -123,7 +123,7 @@ backend:
           key: {{ .Values.secrets.notes.superuser.key | quote }}
     frontendTheme: "openDesk"
     redisUrl:
-      value: "redis{{ if .Values.cache.notes.tls }}s{{ else }}{{ end }}://{{ .Values.cache.notes.username }}:{{ .Values.cache.notes.password | default .Values.secrets.redis.password.value }}@{{ .Values.cache.notes.host }}:{{ .Values.cache.notes.port }}/7"
+      value: "redis{{ if .Values.cache.notes.tls }}s{{ else }}{{ end }}://{{ .Values.cache.notes.username }}:{{ .Values.cache.notes.password.value | default .Values.secrets.redis.password.value }}@{{ .Values.cache.notes.host }}:{{ .Values.cache.notes.port }}/7"
   extraEnvVars:
     - name: "FRONTEND_HOMEPAGE_FEATURE_ENABLED"
       value: "False"

@@ -5,7 +5,11 @@ smtp:
   host: ""
   port: 587
   username: ""
-  password: {{ env "SMTP_PASSWORD" | quote }}
+  # Value-only: credentials for an external SMTP relay, seeded from the SMTP_PASSWORD environment
+  # variable. Takes `value` only and not the `create`/`name`/`key` structure - the Postfix charts
+  # inline the literal value into their own configuration.
+  password:
+    value: {{ env "SMTP_PASSWORD" | quote }}
   localpartNoReply: "no-reply"
   spamMilter:
     host: ""

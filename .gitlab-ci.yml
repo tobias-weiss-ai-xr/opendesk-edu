@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-.opendesk-env-ref-anchor: &opendesk_env_ref "env-v2"
+.opendesk-env-ref-anchor: &opendesk_env_ref "env-v2-temp-existsec-followup"
 
 include:
   - project: "bmi/opendesk/tooling/gitlab-config"
