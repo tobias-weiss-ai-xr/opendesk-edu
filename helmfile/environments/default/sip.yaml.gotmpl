@@ -42,5 +42,9 @@ sip:
     transport: "TCP"
     # e.g. jigasi@sip.mydomain.tld
     uri: ""
-    password: ~
+    # Value-only: operator-provided SIP account password. Takes `value` only and not the
+    # `create`/`name`/`key` structure - it is empty by default (nothing to provision) and the Jitsi
+    # chart still reads the literal value.
+    password:
+      value: ~
 ...

@@ -51,7 +51,7 @@ configuration:
       username:
         value: {{ .Values.cache.nextcloud.username }}
       password:
-        value: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password.value | quote }}
+        value: {{ .Values.cache.nextcloud.password.value | default .Values.secrets.redis.password.value | quote }}
     host: {{ .Values.cache.nextcloud.host | quote }}
     port: {{ .Values.cache.nextcloud.port | quote }}
     tls: {{ .Values.cache.nextcloud.tls }}

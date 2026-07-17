@@ -125,7 +125,7 @@ postfix:
       username:
         value: {{ .Values.smtp.username }}
       password:
-        value: {{ .Values.smtp.password }}
+        value: {{ .Values.smtp.password.value }}
   smtpSASLAuthEnable: "yes"
   {{- else }}
   smtpSASLAuthEnable: "no"

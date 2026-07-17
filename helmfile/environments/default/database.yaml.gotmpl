@@ -106,7 +106,10 @@ databases:
     readHost: ~
     # If provided, uses a different set of credentials for read queries. By default oxAppSuite.username and oxAppsuite.password are used.
     readUser: ~
-    readPassword: ~
+    # Value-only: like `password` above, this is not a managed Secret - the OX chart inlines it into
+    # its own Secret - so it takes `value` only and not the `create`/`name`/`key` structure.
+    readPassword:
+      value: ~
     connectionLimit: ~
     # The key `useSSL` enables a SSL/TLS connection
     useSSL: false

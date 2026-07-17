@@ -34,7 +34,7 @@ SPDX-License-Identifier: Apache-2.0
         * [Changed Helmfile structure: Allow overriding app helmfiles and consolidate helmfile environment definitions](#changed-helmfile-structure-allow-overriding-app-helmfiles-and-consolidate-helmfile-environment-definitions)
         * [Changed Helmfile structure: Limited support for existing secrets](#changed-helmfile-structure-limited-support-for-existing-secrets)
           * [Structure of secret definitions](#structure-of-secret-definitions)
-          * [Database and object-store secrets consolidated into their domain files](#database-and-object-store-secrets-consolidated-into-their-domain-files)
+          * [Secrets consolidated into their domain files and a consistent `value` structure](#secrets-consolidated-into-their-domain-files-and-a-consistent-value-structure)
       * [Post-upgrade to versions ≥ v1.17.0](#post-upgrade-to-versions--v1170)
         * [Backup of the migration status](#backup-of-the-migration-status)
     * [Versions ≥ v1.16.0](#versions--v1160)
@@ -295,7 +295,7 @@ secret value now lives under a `value:` key, and secrets whose chart can consume
 additionally carry `create`, `name` and `key` fields.
 
 The same structural change applies to the secret-bearing entries in all of the following
-environment files (see the [Database and object-store secrets](#database-and-object-store-secrets-consolidated-into-their-domain-files)
+environment files (see the [Secrets consolidated into their domain files](#secrets-consolidated-into-their-domain-files-and-a-consistent-value-structure)
 subsection below for more details):
 
 - `helmfile/environments/default/secrets.yaml.gotmpl`: All `secrets.*` entries.
@@ -356,13 +356,14 @@ See [updates.md](./updates.md) for how to bring your secrets.
 > `secrets.nubus.systemAccounts.sysIdpUserPassword`
 > It was removed from the `secrets` structure.
 
-###### Database and object-store secrets consolidated into their domain files
+###### Secrets consolidated into their domain files and a consistent `value` structure
 
 **Target group**
 
 Deployments that
 - override any object-store S3 secret key (`objectstores.<store>.secretKey`) or any
-database password (`databases.<db>.password`) with a custom value or
+database password (`databases.<db>.password`) with a custom value,
+- override any of the remaining credentials listed below (cache, AI, SMTP) or
 - use MariaDB for Nextcloud with the out-of-the-box generated password, which
 was the default before [openDesk 1.2.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.2.0).
 
@@ -377,9 +378,27 @@ The database *server* credentials stay where they were: `secrets.mariadb.rootPas
 `secrets.postgresql.postgresUser` remain defined in `secrets.yaml.gotmpl`. Only the per-app
 database user passwords moved.
 
-**Required action: move custom overrides to the new paths**
+In addition, the credentials that still held their secret as a bare scalar now use the same nested
+`value:` structure, so that every credential in the Helmfile environment definition is written the
+same way:
 
-If you override any of these, move your value under the new `value:` key at the new location:
+- `cache.yaml.gotmpl`: The cache password of every component (`cache.<component>.password`) -
+  `intercomService`, `nextcloud`, `notes` and `oxAppSuite`.
+- `ai.yaml.gotmpl`: The API key of the external AI endpoint (`ai.apiKey`).
+- `smtp.yaml.gotmpl`: The password of the external SMTP relay (`smtp.password`).
+- `database.yaml.gotmpl`: The optional read-replica password of OX App Suite
+  (`databases.oxAppSuite.readPassword`).
+
+These entries stay value-only: They do not take the `create`/`name`/`key` fields, because they are
+operator-supplied overrides that are empty by default (there is nothing to provision from an empty
+value) and the consuming components still read the literal value. Adopting `value` now means they can
+gain `create`/`name`/`key` later without another change to the structure.
+
+**Required action: Move custom overrides under `value:`**
+
+If you override any of these, nest your value under the `value:` key - and, for the object-store and
+database secrets, at their new location. A bare scalar now replaces the whole mapping and breaks the
+components that read `<credential>.value`.
 
 Before:
 
@@ -390,6 +409,13 @@ objectstores:
 databases:
   keycloak:
     password: "your_custom_password"
+smtp:
+  password: "your_password"
+cache:
+  nextcloud:
+    password: "your_cache_password"
+ai:
+  apiKey: "your_api_key"
 ```
 
 After:
@@ -403,6 +429,16 @@ databases:
   keycloak:
     password:
       value: "your_custom_password"
+smtp:
+  password:
+    value: "your_password"
+cache:
+  nextcloud:
+    password:
+      value: "your_cache_password"
+ai:
+  apiKey:
+    value: "your_api_key"
 ```
 
 Special cases:
