@@ -6,8 +6,10 @@ additionalAnnotations:
   {{ .Values.annotations.servicesExternalDkimpy.additional | toYaml | nindent 2 }}
 
 containerSecurityContext:
-  allowPrivilegeEscalation: true
-  capabilities: {}
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
   enabled: true
   seccompProfile:
     type: "RuntimeDefault"
@@ -38,6 +40,12 @@ podAnnotations:
 podSecurityContext:
   enabled: true
   fsGroup: 1000
+  fsGroupChangePolicy: "Always"
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  seccompProfile:
+    type: "RuntimeDefault"
 
 configuration:
   domain: "{{ .Values.global.domain }}{{ if .Values.global.mailDomain }}, {{ .Values.global.mailDomain }}{{ end }}"
