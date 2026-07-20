@@ -47,6 +47,13 @@ openXchange:
     password: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
   oxSmtpServer: "smtp://127.0.0.1:587"
   oxSoapServer: {{ printf "http://%s.%s.svc.%s" "open-xchange-core-mw-admin" (.Values.apps.oxAppSuite.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+  oxSharedAccount: true
+  oxDbConnectionString: {{ printf "postgresql://%s:%s@%s:%v/%s"
+    (.Values.databases.oxConnector.username | urlquery | replace "+" "%20")
+    (.Values.databases.oxConnector.password.value | urlquery | replace "+" "%20")
+    .Values.databases.oxConnector.host
+    .Values.databases.oxConnector.port
+    .Values.databases.oxConnector.name | quote }}
 
 provisioningApi:
   connection:
@@ -57,6 +64,11 @@ provisioningApi:
       name: {{ .Values.secrets.oxConnector.provisioningApiPassword.name | quote }}
       keyMapping:
         password: {{ .Values.secrets.oxConnector.provisioningApiPassword.key | quote }}
+  resync:
+    enabled: true
+    auth:
+      username: "admin"
+      password: {{ .Values.secrets.nubus.provisioning.api.adminPassword.value | quote }}
 
 resources:
   {{ .Values.resources.oxConnector | toYaml | nindent 2 }}

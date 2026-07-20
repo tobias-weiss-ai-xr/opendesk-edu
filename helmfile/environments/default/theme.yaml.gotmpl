@@ -87,7 +87,9 @@ theme:
 
     portalTiles:
       adminAnnouncement: {{ readFile "./../../files/theme/admin_announcements/favicon.svg" | b64enc | quote }}
-      adminFunctionalmailbox: {{ readFile "./../../files/theme/admin_functionalmailbox/favicon.svg" | b64enc | quote }}
+      ## TODO: Remove when migrating to shared accounts
+      adminFunctionalmailbox: {{ readFile "./../../files/theme/admin_sharedaccount/favicon.svg" | b64enc | quote }}
+      adminSharedAccount: {{ readFile "./../../files/theme/admin_sharedaccount/favicon.svg" | b64enc | quote }}
       adminGroup: {{ readFile "./../../files/theme/admin_groups/favicon.svg" | b64enc | quote }}
       adminResource: {{ readFile "./../../files/theme/admin_resource/favicon.svg" | b64enc | quote }}
       adminUser: {{ readFile "./../../files/theme/admin_user/favicon.svg" | b64enc | quote }}
