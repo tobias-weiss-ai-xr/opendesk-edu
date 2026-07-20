@@ -27,6 +27,10 @@ SPDX-License-Identifier: Apache-2.0
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
+    * [Version ≥ v1.18.0](#version--v1180)
+      * [Pre-upgrade to versions ≥ v1.18.0](#pre-upgrade-to-versions--v1180)
+        * [New persistence requirement: OX Connector requires its own PostgreSQL database](#new-persistence-requirement-ox-connector-requires-its-own-postgresql-database)
+        * [Full re-provisioning of all objects on upgrade](#full-re-provisioning-of-all-objects-on-upgrade)
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
@@ -107,6 +111,7 @@ matching that constraint, though our links always point to the newest patch rele
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
 | Version                                                                                   | Mandatory | Pre-Upgrade                                                          | Post-Upgrade                                                           | Minimum Required Previous Version                                                     |
 | ----------------------------------------------------------------------------------------- | --------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [v1.18.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.18.0) | --        | [Pre](#pre-upgrade-to-versions--v1180)                               | --                                                                     | ⬇ Install v1.15.x first                                                              |
 | [v1.17.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.17.0) | --        | [Pre](#pre-upgrade-to-versions--v1170)                               | [Post](#post-upgrade-to-versions--v1170)                                | ⬇ Install v1.15.x first                                                              |
 | [v1.16.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.16.1) | --        | [Pre](#pre-upgrade-to-versions--v1160)                               | --                                                                     | [⚠ Install v1.15.x first](#pre-upgrade-to-versions--v1160)                           |
 | [v1.15.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.15.1) | **yes**   | [Pre](#pre-upgrade-to-versions--v1150)                               | [Post](#post-upgrade-to-versions--v1150)                               | ⬇ Install ≥ v1.12.x first                                                            |
@@ -135,6 +140,83 @@ matching that constraint, though our links always point to the newest patch rele
 > patch) starting from 1.7.0, e.g. 1.7.0, 1.7.1, 1.8.0, etc. Furthermore, if a version is not explicitly
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
+
+### Version ≥ v1.18.0
+
+#### Pre-upgrade to versions ≥ v1.18.0
+
+##### New persistence requirement: OX Connector requires its own PostgreSQL database
+
+**Target group:** All deployments using OX App Suite and an external PostgreSQL service.
+
+**Context**
+
+With OX Connector 0.41.0 the connector no longer keeps its object cache on its volume alone, it
+requires a dedicated PostgreSQL database.
+
+openDesk declares the database as `databases.oxConnector` in
+[`database.yaml.gotmpl`](../helmfile/environments/default/database.yaml.gotmpl):
+
+```yaml
+databases:
+  oxConnector:
+    type: "postgresql"
+    name: "oxconnector"
+    host: "postgresql"
+    port: 5432
+    username: "oxconnector_user"
+```
+
+On first start the connector's `init-db` container detects the empty tables, recreates its
+subscription to the Provisioning Service and requests a full replay of all UDM objects to rebuild
+its cache. The first start therefore takes considerably longer than usual.
+
+**Required action: Provide an empty database and user**
+
+If you run an external PostgreSQL service, required for production-grade deployments, create the
+database and its user yourself before the upgrade and grant the user full privileges on it:
+
+```sql
+CREATE USER oxconnector_user WITH PASSWORD '<databases.oxConnector.password.value>';
+CREATE DATABASE oxconnector OWNER oxconnector_user;
+GRANT ALL PRIVILEGES ON DATABASE oxconnector TO oxconnector_user;
+```
+
+> [!note]
+> The connector receives the connection as a single SQLAlchemy URL via
+> `openXchange.oxDbConnectionString`, which openDesk composes from the `databases.oxConnector`
+> values. The chart provides no `existingSecret` for it, so the password is part of that URL.
+> Username and password are percent-encoded by the Helmfile.
+
+##### Full re-provisioning of all objects on upgrade
+
+**Target group:** Large scale deployments using OX App Suite and no dedicated provisioning Pod.
+
+**Context**
+
+As described above, the OX Connector rebuilds its object cache on the first start after the upgrade.
+It re-subscribes to the Provisioning Service and replays all relevant objects (users, groups, resources,
+shared mailboxes), so all these objects get updated in OX App Suite again.
+
+Depending on the number of users and groups, the replay can take a long time and generates
+considerable load on the Core Middleware and on the OX database. End-user requests served by the
+same Core Middleware Pods can slow down noticeably while it runs. Plan the upgrade accordingly,
+e.g. outside of business hours.
+
+> [!note]
+> The replay is not visible in the Pod status. Follow the respective NATS queue to track its progress.
+
+**Recommended action: Use a dedicated provisioning Pod for larger deployments**
+
+For deployments with a large number of users and groups we recommend running provisioning on its own
+Core Middleware Pod, so that the replay does not compete with the Pods serving end-user sessions:
+
+```yaml
+technical:
+  oxAppSuite:
+    provisioning:
+      dedicatedCoreMwPod: true
+```
 
 ### Versions ≥ v1.17.0
 
