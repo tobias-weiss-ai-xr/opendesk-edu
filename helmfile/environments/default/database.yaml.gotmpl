@@ -117,6 +117,20 @@ databases:
     verifyServerCertificate: false
     enabledTLSProtocols: "TLSv1.2,TLSv1.3"
     nullCatalogMeansCurrent: true
+  oxConnector:
+    type: "postgresql"
+    name: "oxconnector"
+    host: "postgresql"
+    port: 5432
+    username: "oxconnector_user"
+    # Value-only in effect: the OX Connector chart has no `existingSecret` for its database
+    # connection.
+    password:
+      value: {{ derivePassword 1 "long" $masterPassword "postgres" "oxconnector_user" | sha1sum | quote }}
+      create: true
+      name: "database-oxconnector-password"
+      key: "password"
+    connectionLimit: ~
   synapse:
     type: "postgresql"
     name: "matrix"
