@@ -76,7 +76,9 @@ selfSigned:
     jks:
       enabled: true
       password:
-        value: {{ .Values.secrets.certificates.password | quote }}
+        secret:
+          name: {{ .Values.secrets.certificates.password.name | quote }}
+          key: {{ .Values.secrets.certificates.password.key | quote }}
 
 wildcard: {{ .Values.certificate.wildcard }}
 ...

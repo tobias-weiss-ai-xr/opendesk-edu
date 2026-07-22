@@ -1,0 +1,199 @@
+# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  enableReplication: false
+  imagePullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+  imagePullSecrets:
+    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  monitoring:
+    enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
+  seaweedfs:
+    createClusterRole: false
+
+image:
+  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.seaweedfs.registry | quote }}
+  repository: {{ .Values.images.seaweedfs.repository | quote }}
+  tag: {{ .Values.images.seaweedfs.tag | quote }}
+
+allInOne:
+  enabled: true
+  {{- if .Values.cluster.persistence.readWriteMany.enabled }}
+  replicas: {{ .Values.replicas.seaweedfs }}
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  dataCenter: "dc"
+  rack: "rack"
+  data:
+    type: "persistentVolumeClaim"
+    {{- if .Values.cluster.persistence.readWriteMany.enabled }}
+    storageClass: {{ coalesce .Values.persistence.storages.seaweedfs.storageClassName .Values.persistence.storageClassNames.RWX | quote }}
+    accessModes:
+      - "ReadWriteMany"
+    {{- else }}
+    storageClass: {{ coalesce .Values.persistence.storages.seaweedfs.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+    accessModes:
+      - "ReadWriteOnce"
+    {{- end }}
+    size: {{ .Values.persistence.storages.seaweedfs.size | quote }}
+    annotations:
+      {{ .Values.annotations.servicesExternalSeaweedfs.persistence | toYaml | nindent 6 }}
+  s3:
+    enabled: true
+    enableAuth: true
+    existingConfigSecret: "seaweedfs-config"
+    createBuckets:
+      {{- range $name, $store := .Values.objectstores }}
+      {{- if or (not (dig "enterprise" false $store)) (eq (env "OPENDESK_ENTERPRISE") "true") }}
+      - name: {{ $store.bucket | quote }}
+        anonymousRead: false
+        objectLock: false
+        versioning: "Suspended"
+      {{- end }}
+      {{- end }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1000
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    privileged: false
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: "RuntimeDefault"
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.seaweedfs | toYaml | nindent 6 }}
+  resources:
+    {{ .Values.resources.seaweedfs | toYaml | nindent 4 }}
+  extraVolumes: |
+    - name: "tmp"
+      emptyDir: {}
+  extraVolumeMounts: |
+    - name: "tmp"
+      mountPath: "/tmp"
+
+master:
+  enabled: false
+
+volume:
+  enabled: false
+  dataDirs:
+    - maxVolumes: 0
+
+filer:
+  enabled: false
+
+s3:
+  createBucketsHook:
+    resources:
+      {{ .Values.resources.seaweedfsCreateBucketsHook | toYaml | nindent 6 }}
+  ingress:
+    enabled: {{ .Values.ingress.enabled }}
+    className: {{ .Values.ingress.ingressClassName | quote }}
+    host: "{{ .Values.global.hosts.seaweedfs }}.{{ .Values.global.domain }}"
+    path: "/"
+    pathType: "Prefix"
+    annotations:
+      {{- if eq .Values.ingress.ingressClassName "nginx" }}
+      nginx.ingress.kubernetes.io/proxy-body-size: "4G"
+      nginx.org/client-max-body-size: "4G"
+      {{- else if eq .Values.ingress.ingressClassName "haproxy" }}
+      haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud}}s"
+      haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.nextcloud}}s"
+      {{- end }}
+      {{- with .Values.annotations.servicesExternalSeaweedfs.apiIngress }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
+    tls:
+      - hosts:
+          - "{{ .Values.global.hosts.seaweedfs }}.{{ .Values.global.domain }}"
+        secretName: {{ .Values.ingress.tls.secretName | quote }}
+
+{{- if .Values.debug.enabled }}
+admin:
+  enabled: true
+  replicas: 1
+  masters: "seaweedfs-all-in-one:9333"
+  secret:
+    adminUser: "admin"
+    adminPassword: {{ .Values.secrets.minio.rootPassword.value | quote }}
+  data:
+    type: "persistentVolumeClaim"
+    storageClass: {{ coalesce .Values.persistence.storages.seaweedfsAdmin.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+    accessModes:
+      - "ReadWriteOnce"
+    size: {{ .Values.persistence.storages.seaweedfsAdmin.size | quote }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1000
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    privileged: false
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: "RuntimeDefault"
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.seaweedfs | toYaml | nindent 6 }}
+  resources:
+    {{ .Values.resources.seaweedfsAdmin | toYaml | nindent 4 }}
+  ingress:
+    enabled: {{ .Values.ingress.enabled }}
+    className: {{ .Values.ingress.ingressClassName | quote }}
+    host: "{{ .Values.global.hosts.seaweedfsAdmin }}.{{ .Values.global.domain }}"
+    path: "/"
+    pathType: "Prefix"
+    annotations:
+      {{- with .Values.annotations.servicesExternalSeaweedfs.ingress }}
+      {{ . | toYaml | nindent 6 }}
+      {{- end }}
+    tls:
+      - hosts:
+          - "{{ .Values.global.hosts.seaweedfsAdmin }}.{{ .Values.global.domain }}"
+        secretName: {{ .Values.ingress.tls.secretName | quote }}
+
+worker:
+  enabled: true
+  replicas: {{ .Values.replicas.seaweedfsWorker }}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1000
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+    privileged: false
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: "RuntimeDefault"
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.seaweedfs | toYaml | nindent 6 }}
+  resources:
+    {{ .Values.resources.seaweedfsWorker | toYaml | nindent 4 }}
+{{- end }}
+
+podAnnotations:
+  intents.otterize.com/service-name: "seaweedfs"
+  {{- with .Values.annotations.servicesExternalSeaweedfs.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
+...

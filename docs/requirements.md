@@ -17,7 +17,7 @@ This section covers the internal system requirements and external service requir
     * [Supported controllers](#supported-controllers)
       * [haproxy-ingress.github.io](#haproxy-ingressgithubio)
       * [Ingress nginx](#ingress-nginx)
-    * [Minimal configuration](#minimal-configuration)
+        * [Minimal configuration](#minimal-configuration)
   * [Volume provisioner](#volume-provisioner)
   * [Certificate management](#certificate-management)
   * [External services](#external-services)
@@ -29,23 +29,29 @@ This section covers the internal system requirements and external service requir
 
 openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s) cluster.
 
-* K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
-* Domain and DNS Service
-* Ingress controller
-  * [haproxy-ingress.github.io](https://haproxy-ingress.github.io)
-  * [Ingress nginx](https://github.com/kubernetes/ingress-nginx/) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
-  * See section [Ingress controller](#ingress-controller) for more details.
-* [Helm](https://helm.sh/) >= v3.17.3 but not
-  * v3.18.0[^1]
-  * v4.x[^2]
-* [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
-* [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
-* Volume provisioner supporting RWO (read-write-once)
-* Certificate handling with [cert-manager](https://cert-manager.io/)
+- K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
+- Domain and DNS Service
+- Ingress controller
+  - [haproxy-ingress.github.io](https://haproxy-ingress.github.io)
+  - [Ingress nginx](https://github.com/kubernetes/ingress-nginx/) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
+  - See section [Ingress controller](#ingress-controller) for more details.
+- Deployment tools
+  - [Helm](https://helm.sh/) >= v3.17.3 but not
+    - v3.18.0[^1]
+    - v3.20.1[^2]
+  - [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
+  - [Helm Diff](https://github.com/databus23/helm-diff) >= v3.11.0
+  - [yq](https://github.com/mikefarah/yq) >= v4.52.4
+- Volume provisioner supporting RWO (read-write-once)
+- Certificate handling with [cert-manager](https://cert-manager.io/)
+
+> [!note]
+> You can check which versions of the deployment tools the openDesk team is using in their development pipelines by looking up the
+> default value for `HELM_IMAGE_PIN` in [`.gitlab-ci.yml`](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/.gitlab-ci.yml?ref_type=heads)
+> and checking the corresponding [release in the Helm image repository](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/helm/-/releases).
 
 **Additional openDesk Enterprise requirements**
-
-* [OpenKruise](https://openkruise.io/)[^3] >= v1.6
+- [OpenKruise](https://openkruise.io/)[^3] >= v1.6
 
 ## Hardware
 
@@ -74,11 +80,11 @@ configured ingress controller deployed in your cluster.
 
 ### Supported controllers
 
-* [haproxy-ingress.github.io](https://haproxy-ingress.github.io) - since openDesk 1.13
-* [Ingress nginx Controller](https://github.com/kubernetes/ingress-nginx) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
+- [haproxy-ingress.github.io](https://haproxy-ingress.github.io) - since openDesk 1.13
+- [Ingress nginx Controller](https://github.com/kubernetes/ingress-nginx) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
 
 > [!note]
-> We plan to move to [Gateway API](https://gateway-api.sigs.k8s.io/) ideally by end of 2026. The objective is to achieve
+> We plan to move to [Gateway API](https://gateway-api.sigs.k8s.io/) ideally by end of 2026. The objective is to achive
 > an implementation that is as controller agnostic as possible to give you the choice when it comes to selecting the
 > actual implementation for your infrastructure.
 
@@ -113,13 +119,14 @@ See the [`annotations-risk-level` documentation](https://kubernetes.github.io/in
 > Ensure to install at least Ingress nginx 1.11.5 or 1.12.1 due to [security
 > issues](https://www.wiz.io/blog/ingress-nginx-kubernetes-vulnerabilities) in earlier versions.
 
-### Minimal configuration
+##### Minimal configuration
 
-Several components in openDesk make use of snippet annotations, which are disabled by default. Please enable them using the following configuration:
-
-```
-controller.allowSnippetAnnotations=true
-controller.admissionWebhooks.allowSnippetAnnotations=true
+Several components in openDesk make use of snippet annotations, which are disabled by default. Please enable them using the following configuration for your ingress-nginx deployment:
+```yaml
+controller:
+  allowSnippetAnnotations: true      # -> allow-snippet-annotations: "true"
+  config:
+    annotations-risk-level: Critical # required since controller 1.12 / chart 4.12
 ```
 
 See the [`allowSnippetAnnotations` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#allow-snippet-annotations) for context.
@@ -147,20 +154,20 @@ For the development and evaluation of openDesk, we bundle some services. Be awar
 deployments, you need to make use of your own production-grade services; see the
 [external-services.md](./external-services.md) for configuration details.
 
-| Group    | Type                | Version | Tested against        |
-|----------|---------------------|---------|-----------------------|
-| Cache    | Memcached           | `1.6.x` | Memcached             |
-|          | Redis               | `7.x.x` | Redis                 |
-| Database | Cassandra[^3]       | `5.0.x` | Cassandra             |
-|          | MariaDB             | `10.x`  | MariaDB               |
-|          | PostgreSQL          | `15.x`  | PostgreSQL            |
-| Mail     | Mail Transfer Agent |         | Postfix               |
-|          | PKI/CI (S/MIME)     |         |                       |
-| Security | AntiVirus/ICAP      |         | ClamAV                |
-| Storage  | K8s ReadWriteOnce   |         | Ceph / Cloud specific |
-|          | K8s ReadWriteMany   |         | Ceph / NFS            |
-|          | Object Storage      |         | MinIO                 |
-| Voice    | TURN                |         | Coturn                |
+| Group    | Type                  | Version | Tested against        |
+| -------- | --------------------- | ------- | --------------------- |
+| Cache    | Memcached             | `1.6.x` | Memcached             |
+|          | Redis                 | `7.x.x` | Redis                 |
+| Database | Cassandra[^3]         | `5.0.x` | Cassandra             |
+|          | MariaDB               | `10.x`  | MariaDB               |
+|          | PostgreSQL            | `15.x`  | PostgreSQL            |
+| Mail     | Mail Transfer Agent   |         | Postfix               |
+|          | PKI/CI (S/MIME)       |         |                       |
+| Security | AntiVirus/ICAP        |         | ClamAV                |
+| Storage  | K8s ReadWriteOnce[^4] |         | Ceph / Cloud specific |
+|          | K8s ReadWriteMany     |         | Ceph / NFS            |
+|          | Object Storage        |         | SeaWeed               |
+| Voice    | TURN                  |         | Coturn                |
 
 ## Deployment
 
@@ -171,8 +178,10 @@ Helmfile requires [HelmDiff](https://github.com/databus23/helm-diff) to compare 
 
 ## Footnotes
 
-[^1]: Due to a [Helm bug](https://github.com/helm/helm/issues/30890) Helm v3.18.0 is not supported.
+[^1]: Due to a [Helm bug](https://github.com/helm/helm/issues/30890) v3.18.0 is not supported.
 
-[^2]: Helm v4 introduced stricter flag grouping that is not yet supported by the helmdiff plugin.
+[^2]: Due to Helm bugs [[1](https://github.com/helm/helm/issues/31919), [2](https://github.com/helm/helm/issues/31971)] v3.20.1 is not supported.
 
 [^3]: Required for Dovecot Pro as part of openDesk Enterprise Edition.
+
+[^4]: Due to technical limitations within NFS it is not supported as storage backend for RWO.

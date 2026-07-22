@@ -20,20 +20,33 @@ imagePullSecrets:
   {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
 javaOpts:
-  {{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense .Values.enterpriseKeys.xwiki.proApplicationslicense }}
+{{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense .Values.enterpriseKeys.xwiki.proApplicationslicense }}
   - "-Dlicenses={{ .Values.enterpriseKeys.xwiki.opendeskEnterpriseLicense }},{{ .Values.enterpriseKeys.xwiki.proApplicationslicense }}"
-  {{- end }}
-  {{- if .Values.certificate.selfSigned }}
+{{- end }}
+{{- if .Values.certificate.selfSigned }}
   - "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks"
   - "-Djavax.net.ssl.trustStoreType=jks"
-  - {{ printf "%s=%s" "-Djavax.net.ssl.trustStorePassword" .Values.secrets.certificates.password | quote }}
-  {{- end }}
+{{- end }}
+
+javaOptsSecrets:
+  smtpPassword:
+    option: "-Dproperty:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.password="
+    secret:
+      name: {{ .Values.secrets.postfix.opendeskSystemPassword.name | quote }}
+      key: {{ .Values.secrets.postfix.opendeskSystemPassword.key | quote }}
+{{- if .Values.certificate.selfSigned }}
+  trustStorePassword:
+    option: "-Djavax.net.ssl.trustStorePassword="
+    secret:
+      name: {{ .Values.secrets.certificates.password.name | quote }}
+      key: {{ .Values.secrets.certificates.password.key | quote }}
+{{- end }}
 
 externalDB:
   {{- if eq .Values.databases.xwiki.type "mariadb" }}
-  password: {{ .Values.databases.xwiki.password | default .Values.secrets.mariadb.rootPassword | quote }}
+  password: {{ .Values.secrets.mariadb.rootPassword.value | quote }}
   {{- else }}
-  password: {{ .Values.databases.xwiki.password | default .Values.secrets.postgresql.xwikiUser | quote }}
+  password: {{ .Values.databases.xwiki.password.value | quote }}
   {{- end }}
   database: {{ .Values.databases.xwiki.name | quote }}
   user: {{ .Values.databases.xwiki.username | quote }}
@@ -70,16 +83,11 @@ customConfigs:
     xwiki.authentication.ldap.photo_attribute: "jpegPhoto"
     ## Enable the synchronization of the LDAP profile picture
     xwiki.authentication.ldap.update_photo: 1
-    {{ if .Values.debug.enabled }}
-    ## Password of "superadmin" user, disables account if not password is set
-    xwiki.superadminpassword: {{ .Values.secrets.xwiki.superadminpassword | quote }}
-    {{ end }}
     ## LDAP Server configuration
     xwiki.authentication.ldap.server: {{ .Values.ldap.host | quote }}
     xwiki.authentication.ldap.port: 389
     ## Authentication to the LDAP server
     xwiki.authentication.ldap.bind_DN: "uid=ldapsearch_xwiki,cn=users,{{ .Values.ldap.baseDn }}"
-    xwiki.authentication.ldap.bind_pass: {{ .Values.secrets.nubus.ldapSearch.xwiki | quote }}
     ## Base DN used for searching for users
     xwiki.authentication.ldap.base_DN: "{{ .Values.ldap.baseDn }}"
     ## Allow short update cycles of the LDAP group cache
@@ -99,7 +107,6 @@ customConfigs:
     oidc.logoutMechanism: "rpInitiated"
     oidc.provider: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
     oidc.scope: "openid,opendesk-xwiki-scope"
-    oidc.secret: {{ .Values.secrets.keycloak.clientSecret.xwiki | quote }}
     oidc.skipped: false
     oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
     oidc.user.subjectFormater: "${oidc.user.opendesk_username}"
@@ -111,11 +118,33 @@ customConfigs:
     url.trustedDomains: "{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
     workplaceServices.navigationEndpoint: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/navigation.json"
     workplaceServices.base: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
-    workplaceServices.portalSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
     openoffice.serverType: "0"
     openoffice.autoStart: "false"
     openoffice.homePath: "/tmp"
     notifications.emails.live.graceTime: "5"
+
+customConfigsSecrets:
+  xwiki.cfg:
+    xwiki.authentication.ldap.bind_pass:
+      secret:
+        name: {{ .Values.secrets.nubus.ldapSearch.xwiki.name | quote }}
+        key: {{ .Values.secrets.nubus.ldapSearch.xwiki.key | quote }}
+    {{- if .Values.debug.enabled }}
+    ## Password of "superadmin" user; only wired in for debug deployments.
+    xwiki.superadminpassword:
+      secret:
+        name: {{ .Values.secrets.xwiki.superadminpassword.name | quote }}
+        key: {{ .Values.secrets.xwiki.superadminpassword.key | quote }}
+    {{- end }}
+  xwiki.properties:
+    oidc.secret:
+      secret:
+        name: {{ .Values.secrets.keycloak.clientSecret.xwiki.name | quote }}
+        key: {{ .Values.secrets.keycloak.clientSecret.xwiki.key | quote }}
+    workplaceServices.portalSecret:
+      secret:
+        name: {{ .Values.secrets.centralnavigation.apiKey.name | quote }}
+        key: {{ .Values.secrets.centralnavigation.apiKey.key | quote }}
 
 ingress:
   enabled: {{ .Values.ingress.enabled }}
@@ -179,10 +208,9 @@ properties:
   ## SMTP settings
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.from": "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.host": {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
-  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.port": 587
-  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.properties": "mail.smtp.starttls.enable=true"
+  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.port": 25
+  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.properties": "mail.smtp.starttls.enable=false"
   "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.username": {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
-  "property:xwiki:Mail.MailConfig^Mail.SendMailConfigClass.password": {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
   ## Link LDAP users and users authenticated through OIDC
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.addOIDCObject": 1
   "property:xwiki:LDAPUserImport.WebHome^LDAPUserImport.LDAPUserImportConfigClass.OIDCIssuer": "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"

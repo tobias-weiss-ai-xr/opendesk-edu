@@ -3,21 +3,33 @@
 ---
 global:
   collaborationServerSecret:
-    value: {{ .Values.secrets.notes.collaborationSecret | quote }}
+    existingSecret:
+      name: {{ .Values.secrets.notes.collaborationSecret.name | quote }}
+      key: {{ .Values.secrets.notes.collaborationSecret.key | quote }}
   fqdn: "{{ .Values.global.hosts.notes }}.{{ .Values.global.domain }}"
   imagePullSecrets:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
   tlsSecretName: {{ .Values.ingress.tls.secretName | quote }}
   yProviderApiKey:
-    value: {{ .Values.secrets.notes.collaborationSecret | quote }}
+    existingSecret:
+      name: {{ .Values.secrets.notes.collaborationSecret.name | quote }}
+      key: {{ .Values.secrets.notes.collaborationSecret.key | quote }}
   s3:
-    host: {{ .Values.objectstores.notes.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+    {{- if .Values.objectstores.notes.endpoint }}
+    host: {{ printf "%s" .Values.objectstores.notes.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    host: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    host: {{ printf "%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for notes found!" }}
+    {{- end }}
     port: {{ .Values.objectstores.notes.port }}
     bucketName: {{ .Values.objectstores.notes.bucket | quote }}
     accessKeyId:
       value: {{ .Values.objectstores.notes.username | quote }}
     secretAccessKey:
-      value: {{ .Values.objectstores.notes.secretKey | default .Values.secrets.minio.notesUser | quote }}
+      value: {{ .Values.objectstores.notes.secretKey.value | quote }}
 
 backend:
   image:
@@ -47,7 +59,7 @@ backend:
     ai:
       enabled: {{ if not (quote .Values.ai.endpoint | empty) }}true{{- else }}false{{- end }}
       apiKey:
-        value: {{ .Values.ai.apiKey }}
+        value: {{ .Values.ai.apiKey.value }}
       baseUrl: {{ .Values.ai.endpoint }}
       model: {{ .Values.ai.model | quote }}
       allowReachFrom: "authenticated"
@@ -58,7 +70,7 @@ backend:
       host: {{ .Values.databases.notes.host | quote }}
       name: {{ .Values.databases.notes.name | quote }}
       password:
-        value: {{ .Values.databases.notes.password | default .Values.secrets.postgresql.notesUser | quote }}
+        value: {{ .Values.databases.notes.password.value | quote }}
       port: {{ .Values.databases.notes.port | quote }}
       user:
         value: {{ .Values.databases.notes.username | quote }}
@@ -71,13 +83,19 @@ backend:
       user:
         value: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       password:
-        value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+        existingSecret:
+          name: {{ .Values.secrets.postfix.opendeskSystemPassword.name | quote }}
+          key: {{ .Values.secrets.postfix.opendeskSystemPassword.key | quote }}
     oidc:
       enabled: true
       rpClientId:
         value: "opendesk-notes"
       rpClientSecret:
-        value: {{ .Values.secrets.keycloak.clientSecret.notes | quote }}
+        # Consume the OIDC client secret from the managed Secret (existingSecret). The
+        # keycloak-bootstrap registration points at the same Secret/key (secrets.yaml.gotmpl).
+        existingSecret:
+          name: {{ .Values.secrets.keycloak.clientSecret.notes.name | quote }}
+          key: {{ .Values.secrets.keycloak.clientSecret.notes.key | quote }}
       opJWKSEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
       opAuthorizationEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
       opTokenEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
@@ -93,15 +111,19 @@ backend:
       shortnameField: "given_name"
     django:
       secretKey:
-        value: {{ .Values.secrets.notes.djangoSecretKey }}
+        existingSecret:
+          name: {{ .Values.secrets.notes.djangoSecretKey.name | quote }}
+          key: {{ .Values.secrets.notes.djangoSecretKey.key | quote }}
       createSuperuser: true
       superuserEmail:
         value: {{ printf "default.admin@%s" .Values.global.domain | quote }}
       superuserPassword:
-        value: {{ .Values.secrets.notes.superuser }}
+        existingSecret:
+          name: {{ .Values.secrets.notes.superuser.name | quote }}
+          key: {{ .Values.secrets.notes.superuser.key | quote }}
     frontendTheme: "openDesk"
     redisUrl:
-      value: "redis{{ if .Values.cache.notes.tls }}s{{ else }}{{ end }}://{{ .Values.cache.notes.username }}:{{ .Values.cache.notes.password | default .Values.secrets.redis.password }}@{{ .Values.cache.notes.host }}:{{ .Values.cache.notes.port }}/7"
+      value: "redis{{ if .Values.cache.notes.tls }}s{{ else }}{{ end }}://{{ .Values.cache.notes.username }}:{{ .Values.cache.notes.password.value | default .Values.secrets.redis.password.value }}@{{ .Values.cache.notes.host }}:{{ .Values.cache.notes.port }}/7"
   extraEnvVars:
     - name: "FRONTEND_HOMEPAGE_FEATURE_ENABLED"
       value: "False"
@@ -224,7 +246,7 @@ y-provider:
     pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.notesYProvider.tag }}
   replicaCount: 1
-  debug: {{ .Values.debug.enabled | default false }}
+  debug: true
   {{- if .Values.certificate.selfSigned }}
   extraEnvVars:
     - name: "NODE_EXTRA_CA_CERTS"

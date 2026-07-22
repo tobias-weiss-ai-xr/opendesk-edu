@@ -11,8 +11,8 @@ appsuite:
       {{ . | toYaml | nindent 6 }}
       {{- end }}
     properties:
-      # Enterprise contact picker
-      com.openexchange.contacts.ldap.accounts: "opendesk,other,functional"
+      com.openexchange.contacts.ldap.accounts: "sharedMailboxes,distributionLists,opendesk,noOrganization"
+      com.openexchange.contacts.ldap.cache.expire: {{ printf "%vs" .Values.technical.oxAppSuite.contactPicker.cacheExpirySeconds | quote }}
       com.openexchange.admin.bypassAccessCombinationChecks: "true"
       ENABLE_INTERNAL_USER_EDIT: "false"
 
@@ -29,7 +29,7 @@ appsuite:
             type: "adminDN"
             adminDN:
               dn: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
-              password: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
+              password: {{ .Values.secrets.nubus.ldapSearch.ox.value | quote }}
 
     serviceAccount:
       annotations:
@@ -38,7 +38,7 @@ appsuite:
     uiSettings:
       # Enterprise contact picker
       io.ox/core//features/enterprisePicker/enabled: "true"
-      io.ox/contacts//search/fields: 'email1,email2'
+      io.ox/contacts//search/fields: "email1,email2"
 
     yamlFiles:
       contacts-provider-ldap.yml:
@@ -88,9 +88,10 @@ appsuite:
 
           # Optionally enables a local cache that holds certain properties of all of the provider's contacts in
           # memory to speed up access. Can only be used if no individual authentication is used to access the
-          # LDAP server.
+          # LDAP server. Enabled automatically when the technical setting 'cacheExpirySeconds' is greater than 0;
+          # the expire time is then passed via the 'com.openexchange.contacts.ldap.cache.expire' property above.
           cache:
-            useCache: false
+            useCache: {{ if gt (int .Values.technical.oxAppSuite.contactPicker.cacheExpirySeconds) 0 }}true{{ else }}false{{ end }}
 
           # Definition of addressbook folders of the contacts provider. Different folder modes are possible, each
           # one with its specific configuration settings. The template contains examples for all possible modes,
@@ -140,17 +141,17 @@ appsuite:
               commonContactFilter: "(|(objectClass=person)(objectClass=groupOfNames))"
               commonContactSearchScope: "sub"
               folders:
-                - name: "Cupertino"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Cupertino))"
+                - name: "Berlin"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Berlin))"
                   contactSearchScope: "sub"
-                - name: "San Mateo"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=San Mateo))"
+                - name: "Den Haag"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Den Haag))"
                   contactSearchScope: "sub"
-                - name: "Redwood Shores"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Redwood Shores))"
+                - name: "Paris"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Paris))"
                   contactSearchScope: "sub"
-                - name: "Armonk"
-                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Armonk))"
+                - name: "Zurich"
+                  contactFilter: "(&(|(objectClass=person)(objectClass=groupOfNames))(l=Zurich))"
                   contactSearchScope: "sub"
 
             # With mode "dynamic attributes", all possible values for one attribute are fetched periodically and
@@ -186,8 +187,8 @@ appsuite:
                 - "Management"
                 - "Human Resources"
 
-        other:
-          name: "Other contacts"
+        noOrganization:
+          name: "No Organization"
           ldapClientId: "contactsLdapClient"
           mappings: "ucs"
           folders:
@@ -204,13 +205,13 @@ appsuite:
             static:
               commonContactFilter: "(&(univentionObjectType=users/user)(isOxUser=OK)(!(o=*)))"
               folders:
-                - name: "Ohne Organisation"
+                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Ohne Organisation{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Sans Organisation{{ else }}Without Organisation{{ end }}
                   contactFilter: "(&(univentionObjectType=users/user)(isOxUser=OK)(!(o=*)))"
 
-        functional:
-          name: "Functional mailboxes"
+        sharedMailboxes:
+          name: "Shared Mailboxes"
           ldapClientId: "contactsLdapClient"
-          mappings: "functional"
+          mappings: "sharedMailboxes"
           folders:
             mode: "static"
             usedForSync:
@@ -225,8 +226,29 @@ appsuite:
             static:
               commonContactFilter: "(univentionObjectType=oxmail/functional_account)"
               folders:
-                - name: "Funktionale Postfächer"
+                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Funktionspostfächer{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Boîtes aux lettres partagées{{ else }}Shared Mailboxes{{ end }}
                   contactFilter: "(univentionObjectType=oxmail/functional_account)"
+
+        distributionLists:
+          name: "Distribution Lists"
+          ldapClientId: "contactsLdapClient"
+          mappings: "distributionLists"
+          folders:
+            mode: "static"
+            usedForSync:
+              protected: true
+              defaultValue: false
+            usedInPicker:
+              protected: false
+              defaultValue: true
+            shownInTree:
+              protected: false
+              defaultValue: true
+            static:
+              commonContactFilter: "(univentionObjectType=mail/lists)"
+              folders:
+                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Verteilerlisten{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Listes de distribution{{ else }}Distribution Lists{{ end }}
+                  contactFilter: "(univentionObjectType=mail/lists)"
 
       contacts-provider-ldap-mappings.yml:
         # Example definitions of contact property <-> LDAP attribute mappings.
@@ -340,26 +362,26 @@ appsuite:
           telephone_telex: "oxTelephoneTelex,telexNumber"
           telephone_ttytdd: "oxTelephoneTtydd"
           url: "oxUrl,wWWHome"
-          userfield01: "oxUserfiels01"
-          userfield02: "oxUserfiels02"
-          userfield03: "oxUserfiels03"
-          userfield04: "oxUserfiels04"
-          userfield05: "oxUserfiels05"
-          userfield06: "oxUserfiels06"
-          userfield07: "oxUserfiels07"
-          userfield08: "oxUserfiels08"
-          userfield09: "oxUserfiels09"
-          userfield10: "oxUserfiels10"
-          userfield11: "oxUserfiels11"
-          userfield12: "oxUserfiels12"
-          userfield13: "oxUserfiels13"
-          userfield14: "oxUserfiels14"
-          userfield15: "oxUserfiels15"
-          userfield16: "oxUserfiels16"
-          userfield17: "oxUserfiels17"
-          userfield18: "oxUserfiels18"
-          userfield19: "oxUserfiels19"
-          userfield20: "oxUserfiels20"
+          userfield01: "oxUserfield01"
+          userfield02: "oxUserfield02"
+          userfield03: "oxUserfield03"
+          userfield04: "oxUserfield04"
+          userfield05: "oxUserfield05"
+          userfield06: "oxUserfield06"
+          userfield07: "oxUserfield07"
+          userfield08: "oxUserfield08"
+          userfield09: "oxUserfield09"
+          userfield10: "oxUserfield10"
+          userfield11: "oxUserfield11"
+          userfield12: "oxUserfield12"
+          userfield13: "oxUserfield13"
+          userfield14: "oxUserfield14"
+          userfield15: "oxUserfield15"
+          userfield16: "oxUserfield16"
+          userfield17: "oxUserfield17"
+          userfield18: "oxUserfield18"
+          userfield19: "oxUserfield19"
+          userfield20: "oxUserfield20"
           city_business: "l"
           country_business: "oxCountryBusiness,country"
           # telephone_primary     :
@@ -405,8 +427,15 @@ appsuite:
           # Will be set automatically to "image/jpeg" if not defined.
           # image1_content_type   :
 
-        functional:
+        sharedMailboxes:
           objectid: "mailPrimaryAddress"
           displayname: "oxPersonal,cn,mailPrimaryAddress"
           file_as: "oxPersonal,cn,mailPrimaryAddress"
           email1: "mailPrimaryAddress"
+
+        distributionLists:
+          objectid: "mailPrimaryAddress"
+          displayname: "cn,description"
+          file_as: "cn,description"
+          email1: "mailPrimaryAddress"
+...

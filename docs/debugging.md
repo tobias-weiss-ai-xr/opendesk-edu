@@ -16,15 +16,24 @@ SPDX-License-Identifier: Apache-2.0
     * [Helmfile](#helmfile)
     * [MariaDB](#mariadb)
     * [Nextcloud](#nextcloud)
-    * [OpenProject](#openproject)
-    * [PostgreSQL](#postgresql)
+      * [Running occ commands](#running-occ-commands)
     * [Open-Xchange](#open-xchange)
+    * [OpenProject](#openproject)
+    * [Postfix](#postfix)
+    * [PostgreSQL](#postgresql)
+    * [Redis](#redis)
+    * [Cassandra](#cassandra)
+    * [Open-Xchange](#open-xchange-1)
       * [OX App Suite](#ox-app-suite)
         * [Applying global config changes for debugging](#applying-global-config-changes-for-debugging)
         * [Using config cascade](#using-config-cascade)
       * [OX Dovecot](#ox-dovecot)
     * [Nubus](#nubus)
+      * [LDAP](#ldap)
       * [Provisioning](#provisioning)
+        * [Overview](#overview)
+        * [Looking into NATS](#looking-into-nats)
+        * [Re-running provisioning events, e.g. OX Connector](#re-running-provisioning-events-eg-ox-connector)
       * [Keycloak](#keycloak)
         * [Setting the log level](#setting-the-log-level)
         * [Accessing the Keycloak admin console](#accessing-the-keycloak-admin-console)
@@ -47,17 +56,15 @@ information where available.
 ## Enable debugging
 
 Check the openDesk [`debug.yaml.gotmpl`](../helmfile/environments/default/debug.yaml.gotmpl) and configure it for your deployment
-
 ```
 debug:
   enabled: true
 ```
 
 This will result in:
-
-* setting most component's log level to debug
-* making the Keycloak admin console available by default at `https://id.<your_domain>/admin/`
-* ingress for `http://minio-console.<your_domain>` being configured
+- setting most component's log level to debug
+- making the Keycloak admin console available by default at `https://id.<your_domain>/admin/`
+- ingress for `http://minio-console.<your_domain>` being configured
 
 > [!note]
 > When enabling debug mode and updating your deployment, you must manually delete all jobs before updating. In
@@ -81,13 +88,13 @@ Below are some brief notes on debugging openDesk by adding debug containers. Of 
 
 You can add a container by editing and updating an existing deployment, which is quite comfortable with tools like [Lens](https://k8slens.dev/).
 
-* Select the container you want to use as a debugging container; in the example below, it is `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:latest`.
-* Ensure the `shareProcessNamespace` option is enabled for the Pod.
-* Reference the selected container within the `containers` array of the deployment.
-* If you want to access another container's filesystem, ensure both containers' user/group settings match.
-* Save & update the deployment.
+- Select the container you want to use as a debugging container; in the example below, it is `registry.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-debugging-image:latest`.
+- Ensure the `shareProcessNamespace` option is enabled for the Pod.
+- Reference the selected container within the `containers` array of the deployment.
+- If you want to access another container's filesystem, ensure both containers' user/group settings match.
+- Save & update the deployment.
 
-The following example can be used to debug the `openDesk-Nextcloud-PHP` container; if you want to modify files, remember to set `readOnlyRootFilesystem` to `true` on the PHP container.
+The following example can be used to debug the `opendesk-nextcloud-aio` container; if you want to modify files, remember to set `readOnlyRootFilesystem` to `true` on the PHP container.
 
 ```yaml
       shareProcessNamespace: true
@@ -109,23 +116,22 @@ The following example can be used to debug the `openDesk-Nextcloud-PHP` containe
               type: RuntimeDefault
 ```
 
-* After the deployment has been reloaded, open the shell of the debugging container.
-* When you've succeeded, you will see the processes of both/all containers in the Pod when executing `ps aux`.
-* To access other containers' filesystems, select the PID of a process from the other container and do a `cd /proc/<selected_process_id>/root`.
+- After the deployment has been reloaded, open the shell of the debugging container.
+- When you've succeeded, you will see the processes of both/all containers in the Pod when executing `ps aux`.
+- To access other containers' filesystems, select the PID of a process from the other container and do a `cd /proc/<selected_process_id>/root`.
 
 ### Temporary/ephemeral containers
 
-An interesting read from which we picked most of the details below from: <https://iximiuz.com/en/posts/kubernetes-ephemeral-containers/>
+An interesting read from which we picked most of the details below from: https://iximiuz.com/en/posts/kubernetes-ephemeral-containers/
 
 Sometimes, you do not want to add a container permanently to your existing deployment. In that case, you could use [ephemeral containers](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/).
 
 For the commands further down this section, we need to set some environment variables first:
-
-* `NAMESPACE`: The namespace in which the Pod you want to inspect is running.
-* `DEPLOYMENT_NAME`: The deployment's name responsible for spawning the Pod you want to inspect within the aforementioned namespace.
-* `POD_NAME`: The name of the Pod you want to inspect within the aforementioned namespace.
-* `EPH_CONTAINER_NAME`: The name of your debugging container, "debugging" seems obvious.
-* `DEBUG_IMAGE`: The image you want to use for debugging purposes.
+- `NAMESPACE`: The namespace in which the Pod you want to inspect is running.
+- `DEPLOYMENT_NAME`: The deployment's name responsible for spawning the Pod you want to inspect within the aforementioned namespace.
+- `POD_NAME`: The name of the Pod you want to inspect within the aforementioned namespace.
+- `EPH_CONTAINER_NAME`: The name of your debugging container, "debugging" seems obvious.
+- `DEBUG_IMAGE`: The image you want to use for debugging purposes.
 
 e.g.
 
@@ -148,13 +154,10 @@ spec:
 ```
 
 Now, you can add the ephemeral container with:
-
 ```shell
 kubectl -n ${NAMESPACE} debug -it --attach=false -c ${EPH_CONTAINER_NAME} --image={DEBUG_IMAGE} ${POD_NAME}
 ```
-
 and open its interactive terminal with
-
 ```shell
 kubectl -n ${NAMESPACE} attach -it -c ${EPH_CONTAINER_NAME} ${POD_NAME}
 ```
@@ -176,17 +179,23 @@ When using the openDesk bundled MariaDB, you can explore the database(s) using t
 
 While you will find all the details for the CLI tool in the [MariaDB documentation](https://mariadb.com/kb/en/mariadb-command-line-client/), some commonly used commands are:
 
-* `help`: Get help on the psql command set
-* `show databases`: Lists all databases
-* `use <databasename>`: Connect to `<databasename>`
-* `show tables`: Lists tables within the currently connected database
-* `quit`: Quit the client
+- `help`: Get help on the psql command set
+- `show databases`: Lists all databases
+- `use <databasename>`: Connect to `<databasename>`
+- `show tables`: Lists tables within the currently connected database
+- `quit`: Quit the client
 
 ### Nextcloud
 
+#### Running occ commands
+
 `occ` is the CLI for Nextcloud; all the details can be found in the [upstream documentation](https://docs.nextcloud.com/server/stable/admin_manual/occ_command.html).
 
-You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php /var/www/html/occ config:list`
+You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php occ config:list`
+
+### Open-Xchange
+
+To retrieve more details about the OX App Suite components in use just through the user accessible UI, open the `(?)` drop down menu in the top navigation bar and hold the *Ctrl* key when clicking the "About" menu entry.
 
 ### OpenProject
 
@@ -202,17 +211,92 @@ Net::HTTP.start(uri.host, uri.port,
 end
 ```
 
+### Postfix
+
+When debugging mail related issues you may want to configure Postfix for debug output.
+The settings below enable maximum verbosity for all SMTP connections originating from or going to hosts in the `10.0.0.0/8` private IP range (i.e. internal cluster traffic), while leaving log verbosity for external connections unchanged.
+
+- **`debug_peer_list`**: Comma-separated list of hostnames, IP addresses, or CIDR ranges that trigger extra logging. Matches both inbound and outbound connections.
+- **`debug_peer_level`**: Number of extra verbosity levels added for matching peers on top of the base log level. The maximum useful value is `10`, which produces the most detailed output including full SMTP dialogues, TLS negotiation, DNS lookups, and queue manager activity. The settings can manually be set into the `main.cf` key of the Postfix's ConfigMap, afterwards restart the Postfix Pod.
+
+```
+debug_peer_level = 10
+debug_peer_list = 10.0.0.0/8
+```
+
 ### PostgreSQL
 
 Using the openDesk bundled PostgreSQL, you can explore database(s) using the PostgreSQL interactive terminal from the Pod's command line: `psql -U postgres`.
 
 While you will find all details about the cli tool `psql` in the [PostgreSQL documentation](https://www.postgresql.org/docs/current/app-psql.html), some commonly used commands are:
 
-* `\?`: Get help on the psql command set
-* `\l`: Lists all databases
-* `\c <databasename>`: Connect to `<databasename>`
-* `\dt`: List (describe) tables within the currently connected database
-* `\q`: Quit the client
+- `\?`: Get help on the psql command set
+- `\l`: Lists all databases
+- `\c <databasename>`: Connect to `<databasename>`
+- `\dt`: List (describe) tables within the currently connected database
+- `\q`: Quit the client
+
+### Redis
+
+Redis is used as a cache by several openDesk components e.g. Nextcloud, OX App Suite, Intercom Service, and Notes.
+
+Connect to the bundled Redis CLI from the Pod's command line:
+
+```shell
+redis-cli -a ${REDIS_PASSWORD}
+```
+
+Redis organises data into numbered keyspaces (databases 0–15). Switch between them with `SELECT`:
+
+```
+SELECT 0   # default keyspace, used by most components
+SELECT 1   # switch to keyspace 1
+```
+
+Useful commands for exploring keys:
+
+```
+DBSIZE                          # number of keys in the current keyspace
+SCAN 0 MATCH * COUNT 100        # iterate keys without blocking (preferred over KEYS in production)
+KEYS <pattern>                  # list keys matching a pattern (e.g. KEYS "oc_*" for Nextcloud)
+TYPE <key>                      # show the data type of a key
+TTL <key>                       # remaining time-to-live in seconds (-1 = no expiry, -2 = not found)
+GET <key>                       # retrieve a string value
+HGETALL <key>                   # retrieve all fields of a hash
+```
+
+> [!warning]
+> Avoid `KEYS *` on a large keyspace as it blocks the server for the duration of the scan. Use `SCAN` instead.
+
+### Cassandra
+
+Cassandra is used by OX Dovecot Pro (openDesk EE only) for storing dictionary mappings and ACL data. The two keyspaces provisioned by openDesk are:
+
+| Keyspace | Consumer | User |
+|---|---|---|
+| `dovecot_dictmap` | OX Dovecot – dictionary mappings | `dovecot_dictmap_user` |
+| `dovecot_acl` | OX Dovecot – ACL data | `dovecot_acl_user` |
+
+Connect to the CQL shell from the Pod's command line using the root credentials:
+
+```shell
+cqlsh -u root -p ${CASSANDRA_PASSWORD}
+```
+
+Useful CQL commands for exploring data:
+
+```sql
+DESCRIBE KEYSPACES;                        -- list all keyspaces
+USE dovecot_dictmap;                       -- switch to a keyspace
+DESCRIBE TABLES;                           -- list tables in the current keyspace
+SELECT * FROM <table> LIMIT 20;           -- inspect table contents (always use LIMIT)
+DESCRIBE TABLE <table>;                   -- show schema of a table
+SELECT COUNT(*) FROM <table>;             -- count rows (can be slow on large tables)
+```
+
+> [!note]
+> Cassandra queries without a `WHERE` clause on the partition key require `ALLOW FILTERING` and can be very
+> slow on large tables. Use targeted queries with known partition keys where possible.
 
 ### Open-Xchange
 
@@ -262,11 +346,11 @@ For deactivation on the given user run:
 
 When it comes to debugging Dovecot some commands come in handy:
 
-* Get the configuration in a standard (comparable) format and secrets removed: `doveconf -n`
-* Get the log output with focus on errors only: `doveadm log errors`
-* Looking into specific user mailbox activities: `doveadm dump /var/lib/dovecot/<UUID_2CHARS>/<UUID>/mdbox/dovecot.mailbox.log`
-  * When running openDesk CE the use `/srv/mail/` instead of `/var/lib/dovecot`
-* Listing a users mailbox: `doveadm mailbox list -u <EMAIL_ADDRESS>`
+- Get the configuration in a standard (comparable) format and secrets removed: `doveconf -n`
+- Get the log output with focus on errors only: `doveadm log errors`
+- Looking into specific user mailbox activities: `doveadm dump /var/lib/dovecot/<UUID_2CHARS>/<UUID>/mdbox/dovecot.mailbox.log`
+  - When running openDesk CE the use `/srv/mail/` instead of `/var/lib/dovecot`
+- Listing a users mailbox: `doveadm mailbox list -u <EMAIL_ADDRESS>`
 
 Example for getting log output for specific events:
 
@@ -285,13 +369,27 @@ metric imap_command_unsubscribe {
 
 ### Nubus
 
+#### LDAP
+
+To verify an LDAP filter, you can run `ldapsearch` from inside the LDAP container. Adapt [the filter](https://ldapwiki.com/wiki/Wiki.jsp?page=LDAP%20filters%20Syntax%20and%20Choices) on the last line to match your needs:
+
+```bash
+ldapsearch -x \
+  -D "${ADMIN_DN}" \
+  -w "${LDAP_CN_ADMIN_PW}" \
+  -b "${LDAP_BASE_DN}" \
+  '(|(univentionObjectType=oxmail/functional_account)(univentionObjectType=oxresources/oxresources))'
+```
+
 #### Provisioning
 
-This section should provide an overview on the Nubus Provisioning API in addition to the [available upstream documentation](https://docs.software-univention.de/nubus-customization/1.x/en/api/provisioning.html).
+This section provides additional information on the Nubus Provisioning API, complementing the [upstream documentation](https://docs.software-univention.de/nubus-customization/1.x/en/api/provisioning.html).
 
-As of openDesk 1.13 the provisioning is used for Nubus internal use cases e.g. the self-service except for OX App Suite provisioning of objects like users and groups.
+As of openDesk 1.13, provisioning is used for Nubus-internal use cases (such as self-service) as well as for provisioning OX App Suite objects like users and groups.
 
-A core element of Nubus Provisioning is the messagaging system [NATS](https://nats.io/).
+A core element of Nubus Provisioning is the messaging system [NATS](https://nats.io/).
+
+##### Overview
 
 Below is a [simplified](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#component-provisioning-service) representation of the end-to-end flow for an data object starting from the creation of using the UDM REST API until the object is getting persisted in the OX App Suite.
 
@@ -299,18 +397,20 @@ Below is a [simplified](https://docs.software-univention.de/nubus-kubernetes-arc
 2. [`udm-rest-api-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/directory-manager.html#directory-manager): Processes the request writing the resulting object into the LDAP.
 3. [`ldap-server-primary-0`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/identity-store.html): LDAP as the actual identity data store.
 4. [`ldap-notifier-0`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/identity-store.html#notify-about-changes-to-directory-objects): Monitors changes to LDAP objects and makes them available to other components that implement a so-called listener.
-5. [`provisioning-udm-listener-0`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#udm-listener): Receives the events from the notifier and generates NATS stream entries containing directory objects.
-   * `provisioning-nats-0`: `stream:ldap-producer`
+5. [`provisioning-udm-listener-0`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#udm-listener): Receives the events from the notifier and generates NATS stream entries containting directory objects.
+   - `provisioning-nats-0`: `stream:ldap-producer`
 6. [`provisioning-udm-transformer-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#udm-transformer): Processes the directory objects and transforms them into UDM objects.
-   * `provisioning-nats-0`: `stream:incoming`
+   - `provisioning-nats-0`: `stream:incoming`
 7. [`provisioning-dispatcher-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#dispatcher): Dispatches all objects into all registered consumer streams. The consumer filters for its relevant events.
-   * `provisioning-nats-0`: `stream:ox-connector`
+   - `provisioning-nats-0`: `stream:ox-connector`
 8. [`provisioning-api-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#consumer-messages-http-rest-api): The service for consumers to retrieve their stream messages through.
 9. [`ox-connector-0`](https://docs.software-univention.de/ox-connector-app/latest/index.html): The consumer retrieves the objects from its own stream through the Provisioning API, filters for the relevant ones and sends API requests to OX App Suite SOAP API.
 10. [`open-xchange-core-mw-groupware-*`](https://documentation.open-xchange.com/components/middleware/http/8/index.html): OX App Suite Pod receiving the API calls. When `technical.oxAppSuite.provisioning.dedicatedCoreMwPod` is set to `true` the Pod name is `open-xchange-core-mw-admin-*`.
 11. *OX App Suite MariaDB schema(s)*: Persistent storage for all received objects.
 
 The Pod [`provisioning-prefill-*`](https://docs.software-univention.de/nubus-kubernetes-architecture/1.x/en/components/provisioning-service.html#prefill-service): Provides the consumer with information about directory objects that already exist in the directory at the time of registration.
+
+##### Looking into NATS
 
 For interaction with NATS it is convenient to have the NATS Box container available in the `provisioning-nats` Pod to execute `nats` CLI commands.
 Check `technical.yaml.gotmpl` for details of the following setting:
@@ -325,7 +425,6 @@ technical:
 ```
 
 At good start is to check the NATS stream status using the following command, followed by more detailed looks at the key-value store:
-
 ```shell
 nats stream ls --user=admin --password=${NATS_PASSWORD}
 nats kv ls --user=admin --password=${NATS_PASSWORD}
@@ -333,7 +432,27 @@ nats kv ls --user=admin --password=${NATS_PASSWORD} SUBSCRIPTIONS
 nats kv get --user=admin --password=${NATS_PASSWORD} SUBSCRIPTIONS ox-connector
 ```
 
+##### Re-running provisioning events, e.g. OX Connector
+
+Some situations require a re-run of all events for a provisioning consumer. You can use the shell commands shown below as an example for the OX Connector. Adapting it for other provisioning consumers will require the related values to be set for the `SUBSCRIPTION_*` environment variables:
+
+```shell
+export NAMESPACE=<your_namespace>
+export SUBSCRIPTION_NAME=ox-connector
+export SUBSCRIPTION_SECRET_NAME=ums-ox-connector-provisioning-api
+export TEMPORARY_CONSUMER_JSON=$(mktemp)
+export PROVISIONING_API_POD_NAME=$(kubectl -n ${NAMESPACE} get pods --no-headers -o custom-columns=":metadata.name" | grep ums-provisioning-api | tr -d '\n')
+kubectl -n ${NAMESPACE} port-forward ${PROVISIONING_API_POD_NAME} 7777:7777 &
+export PROVISIONING_PORT_FORWARD_PID=$!
+sleep 10
+kubectl -n ${NAMESPACE} get secret ${SUBSCRIPTION_SECRET_NAME} -o json | jq '.data | map_values(@base64d)' | jq -r '."registration"' > ${TEMPORARY_CONSUMER_JSON}.json
+export PROVISIONING_ADMIN_PASSWORD=$(kubectl -n ${NAMESPACE} get secret ums-provisioning-api-admin -o jsonpath='{.data.password}' | base64 --decode)
+curl -o - -u "admin:${PROVISIONING_ADMIN_PASSWORD}" -X DELETE http://localhost:7777/v1/subscriptions/${SUBSCRIPTION_NAME}
+```
+
 #### Keycloak
+
+To check which Keycloak version is deployed you can run `/opt/keycloak/bin/kc.sh --version`.
 
 ##### Setting the log level
 
@@ -342,7 +461,6 @@ Keycloak is the gateway to integrate other authentication management systems or 
 Enabling debugging mode for Keycloak can easily be achieved in two steps:
 
 1. Updating the value for `KC_LOG_LEVEL` in the related configmap `ums-keycloak`.
-
 ```shell
 export NAMESPACE=<your_namespace>
 export CONFIGMAP_NAME=ums-keycloak

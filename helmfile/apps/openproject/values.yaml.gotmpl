@@ -39,8 +39,7 @@ environment:
   {{- if and (eq (env "OPENDESK_ENTERPRISE") "true") .Values.enterpriseKeys.openproject.token }}
   OPENPROJECT_SEED__ENTERPRISE__TOKEN: {{ .Values.enterpriseKeys.openproject.token | quote }}
   {{- end }}
-# For more details and more options see
-# https://www.openproject.org/docs/installation-and-operations/configuration/environment/
+# Ref. https://www.openproject.org/docs/installation-and-operations/configuration/environment/
   OPENPROJECT_APP__TITLE: "Projekte - {{ .Values.theme.texts.productName }}"
   OPENPROJECT_LOG__LEVEL: {{ if .Values.debug.enabled }}"debug"{{ else }}"info"{{ end }}
   OPENPROJECT_LOGIN__REQUIRED: "true"
@@ -49,10 +48,12 @@ environment:
   OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER: "keycloak"
   OPENPROJECT_EMAIL__DELIVERY__METHOD: "smtp"
   OPENPROJECT_DEFAULT__COMMENT__SORT__ORDER: "desc"
-  # Details: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
+  # Ref.: https://www.openproject.org/docs/system-admin-guide/authentication/ldap-connections/#enable-status-synchronization
+  OPENPROJECT_LDAP__USERS__SYNC__STATUS: "true"
+  # Ref.: https://www.openproject-edge.com/docs/installation-and-operations/configuration/#seeding-ldap-connections
   OPENPROJECT_SEED_LDAP_OPENDESK_HOST: {{ .Values.ldap.host | quote }}
   OPENPROJECT_SEED_LDAP_OPENDESK_PORT: "389"
-  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.nubus.ldapSearch.openproject | quote }}
+  OPENPROJECT_SEED_LDAP_OPENDESK_BINDPASSWORD: {{ .Values.secrets.nubus.ldapSearch.openproject.value | quote }}
   OPENPROJECT_SEED_LDAP_OPENDESK_SECURITY: "plain_ldap"
   OPENPROJECT_SEED_LDAP_OPENDESK_BINDUSER: "uid=ldapsearch_openproject,cn=users,{{ .Values.ldap.baseDn }}"
   OPENPROJECT_SEED_LDAP_OPENDESK_BASEDN: "{{ .Values.ldap.baseDn }}"
@@ -69,18 +70,17 @@ environment:
     "(&(objectClass=opendeskProjectmanagementGroup)(opendeskProjectmanagementEnabled=TRUE))"
   OPENPROJECT_SEED_LDAP_OPENDESK_GROUPFILTER_OPENDESK_SYNC__USERS: "true"
   OPENPROJECT_SEED_LDAP_OPENDESK_GROUPFILTER_OPENDESK_GROUP__ATTRIBUTE: "cn"
-  OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_USER: {{ .Values.secrets.openproject.apiAdminUsername | quote }}
-  OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_PASSWORD: {{ .Values.secrets.openproject.apiAdminPassword | quote }}
-  OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+  OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_USER: {{ .Values.secrets.openproject.apiAdminUsername.value | quote }}
+  OPENPROJECT_AUTHENTICATION_GLOBAL__BASIC__AUTH_PASSWORD: {{ .Values.secrets.openproject.apiAdminPassword.value | quote }}
+  OPENPROJECT_SOUVAP__NAVIGATION__SECRET: {{ .Values.secrets.centralnavigation.apiKey.value | quote }}
   OPENPROJECT_SOUVAP__NAVIGATION__URL: "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/univention/portal/navigation.json?base=https%3A//{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}"
   OPENPROJECT_SMTP__DOMAIN: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   OPENPROJECT_SMTP__USER__NAME: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
-  OPENPROJECT_SMTP__PASSWORD: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
-  OPENPROJECT_SMTP__PORT: 587
+  OPENPROJECT_SMTP__PORT: 25
   OPENPROJECT_SMTP__SSL: "false" # (default=false)
   OPENPROJECT_SMTP__ADDRESS: {{ printf "%s.%s.svc.%s" "postfix" (.Values.apps.postfix.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
   OPENPROJECT_SMTP__AUTHENTICATION: "cram_md5"
-  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
+  OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "false"
   OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE: "none"
   OPENPROJECT_SSRF__PROTECTION__IP__ALLOWLIST: {{ join " " .Values.cluster.networking.cidr | quote }}
   OPENPROJECT_MAIL__FROM: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
@@ -97,6 +97,7 @@ environment:
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__SELECTED__BACKGROUND: {{ .Values.theme.colors.primary | quote }}
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__HOVER__BACKGROUND: {{ .Values.theme.colors.secondaryGreyLight | quote }}
   OPENPROJECT_SEED_DESIGN_LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/logo.svg"
+  OPENPROJECT_SEED_DESIGN_LOGO__MOBILE: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
   OPENPROJECT_SEED_DESIGN_FAVICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
   OPENPROJECT_SEED_DESIGN_TOUCH__ICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
   OPENPROJECT_SEED_DESIGN_EXPORT__LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportLogoPath | lower }}"
@@ -125,10 +126,6 @@ extraVolumeMounts:
     subPath: "ca-certificates.crt"
 {{- end }}
 
-extraEnvVars:
-- name: SECRET_KEY_BASE
-  value: "458d47ccba119f036b9069c6e76be5e6669ab28dac584bfc390dbd5436429f3aa0c0b6088112e29fd931f1cbf4674fcc6cf3b6fd48c1b22c8f79bf53b6247a3e"
-
 hocuspocus:
   enabled: true
   ingress:
@@ -146,7 +143,7 @@ hocuspocus:
     tag: {{ index (splitList "@" .Values.images.openprojectHocuspocus.tag) 0 | quote }}
     sha256: {{ index (splitList ":" (index (splitList "@" .Values.images.openprojectHocuspocus.tag) 1)) 1 | quote }}
   strategy:
-    type: "Recreate"
+    type: "RollingUpdate"
   podAnnotations:
     intents.otterize.com/service-name: "openproject-hocuspocus"
     {{- with .Values.annotations.openproject.hocuspocusPod }}
@@ -157,6 +154,9 @@ hocuspocus:
   resourcesPreset: ~
   resources:
     {{ .Values.resources.openproject | toYaml | nindent 4 }}
+
+strategy:
+  type: "RollingUpdate"
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openproject.registry | quote }}
@@ -182,7 +182,7 @@ podAnnotations:
 postgresql:
   bundled: false
   auth:
-    password: {{ .Values.databases.openproject.password | default .Values.secrets.postgresql.openprojectUser | quote }}
+    password: {{ .Values.databases.openproject.password.value | quote }}
     username: {{ .Values.databases.openproject.username | quote }}
     database: {{ .Values.databases.openproject.name | quote }}
   connection:
@@ -198,18 +198,18 @@ probes:
     failureThreshold: 30
 
 openproject:
+  extraEnvVarsSecret: {{ .Values.secrets.postfix.opendeskSystemPassword.name | quote }}
   # seed will only be executed on initial installation
   seed_locale: "de"
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
-  # SECRET_KEY_BASE used to sign cookies/sessions
-  # Generate via: openssl rand -hex 64
-  secretKeyBase: {{ .Values.secrets.openproject.secretKeyBase | default .Values.databases.openproject.password | quote }}
   # Will only be set on initial seed / installation
   admin_user:
     name: "OpenProject Internal Admin"
     mail: "openproject-admin@swp-domain.internal"
     password_reset: "false"
-    password: {{ .Values.secrets.openproject.adminPassword | quote }}
+    secret: {{ .Values.secrets.openproject.adminPassword.name | quote }}
+    secretKeys:
+      password: {{ .Values.secrets.openproject.adminPassword.key | quote }}
     # Lock the admin user, preventing internal logins.
     # Switch to true once the NC filestore bootstrapping is optimized.
     locked: false
@@ -221,7 +221,7 @@ openproject:
     identifier: "opendesk-openproject"
     provider: "keycloak"
     scope: "[openid,opendesk-openproject-scope]"
-    secret: {{ .Values.secrets.keycloak.clientSecret.openproject | quote }}
+    secret: {{ .Values.secrets.keycloak.clientSecret.openproject.value | quote }}
     tokenEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
     userinfoEndpoint: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/userinfo"
     attribute_map:
@@ -266,15 +266,25 @@ s3:
   enabled: true
   directUploads: {{ .Values.objectstores.openproject.directUploads }}
   enableSignatureV4Streaming: {{ .Values.objectstores.openproject.enableSignatureV4Streaming }}
-  endpoint: {{ printf "https://%s" (.Values.objectstores.openproject.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
-  host: {{ printf "https://%s" (.Values.objectstores.openproject.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+  {{- if .Values.objectstores.openproject.endpoint }}
+  endpoint: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  host: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  {{- else if .Values.apps.minio.enabled }}
+  endpoint: {{ printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+  host: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  {{- else if .Values.apps.seaweedfs.enabled }}
+  endpoint: {{ printf "https://%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+  host: {{ printf "https://%s" .Values.objectstores.openproject.endpoint | quote }}
+  {{- else }}
+  {{- fail "No objectstorage endpoint for openproject found!" }}
+  {{- end }}
   pathStyle: {{ .Values.objectstores.openproject.pathStyle }}
   region: {{ .Values.objectstores.openproject.region | quote }}
   bucketName: {{ .Values.objectstores.openproject.bucket | quote }}
   useIamProfile: {{ .Values.objectstores.openproject.useIamProfile }}
   auth:
     accessKeyId: {{ .Values.objectstores.openproject.username | quote }}
-    secretAccessKey: {{ .Values.objectstores.openproject.secretKey | default .Values.secrets.minio.openprojectUser | quote }}
+    secretAccessKey: {{ .Values.objectstores.openproject.secretKey.value | quote }}
 
 seederJob:
   annotations:
@@ -289,6 +299,8 @@ seederJob:
 
 workers:
   default:
+    strategy:
+      type: "RollingUpdate"
     resources:
       {{ .Values.resources.openprojectWorkers | toYaml | nindent 6 }}
 

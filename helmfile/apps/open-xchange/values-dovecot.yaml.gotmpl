@@ -24,11 +24,13 @@ dovecot:
   mailDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
   defaultMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   password:
-    value: {{ .Values.secrets.dovecot.doveadm | quote }}
+    existingSecret:
+      name: {{ .Values.secrets.dovecot.doveadm.name | quote }}
+      key: {{ .Values.secrets.dovecot.doveadm.key | quote }}
   migration:
     enabled: {{ .Values.functional.migration.oxAppSuite.enabled }}
     masterPassword:
-      value: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+      value: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword.value | quote }}
   ldap:
     enabled: true
     host: {{ .Values.ldap.host | quote }}
@@ -36,14 +38,16 @@ dovecot:
     base: "{{ .Values.ldap.baseDn }}"
     dn: "uid=ldapsearch_dovecot,cn=users,{{ .Values.ldap.baseDn }}"
     password:
-      value: {{ .Values.secrets.nubus.ldapSearch.dovecot | quote }}
+      value: {{ .Values.secrets.nubus.ldapSearch.dovecot.value | quote }}
   loginTrustedNetworks: {{ join " " .Values.cluster.networking.cidr | quote }}
   oidc:
     enabled: true
     clientID:
       value: "opendesk-dovecot"
     clientSecret:
-      value: {{ .Values.secrets.keycloak.clientSecret.dovecot | quote }}
+      existingSecret:
+        name: {{ .Values.secrets.keycloak.clientSecret.dovecot.name | quote }}
+        key: {{ .Values.secrets.keycloak.clientSecret.dovecot.key | quote }}
     introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
     introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
     usernameAttribute: "opendesk_username"
@@ -150,8 +154,8 @@ service:
     ports:
       imaps: {{ if .Values.functional.groupware.externalClients.exposeImaps }}{port: 993}{{ else }}~{{ end }}
       pop3s: {{ if .Values.functional.groupware.externalClients.exposePop3s }}{port: 995}{{ else }}~{{ end }}
-    {{- if .Values.service.loadBalancerIp.dovecot }}
-    loadBalancerIp: {{ .Values.service.loadBalancerIp.dovecot }}
+    {{- if .Values.service.loadBalancerIP.dovecot }}
+    loadBalancerIP: {{ .Values.service.loadBalancerIP.dovecot }}
     {{- end }}
   {{- end }}
 

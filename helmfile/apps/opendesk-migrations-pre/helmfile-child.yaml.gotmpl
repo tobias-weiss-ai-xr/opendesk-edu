@@ -11,8 +11,29 @@ repositories:
     password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
     oci: true
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.migrations.registry }}/{{ .Values.charts.migrations.repository }}"
+  # openDesk Secrets
+  # Source:
+  - name: "openproject-secrets-repo"
+    keyring: "../../files/gpg-pubkeys/opencode.gpg"
+    verify: {{ .Values.charts.opendeskSecrets.verify }}
+    username: {{ env "OD_PRIVATE_REGISTRY_USERNAME" | quote }}
+    password: {{ env "OD_PRIVATE_REGISTRY_PASSWORD" | quote }}
+    oci: true
+    url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.opendeskSecrets.registry }}/{{ .Values.charts.opendeskSecrets.repository }}"
 
 releases:
+  # The provisioner is always installed. It renders a Kubernetes Secret only for the externalized
+  # secrets that are `create: true`; if every one of them is `create: false` (bring-your-own) the
+  # chart renders nothing and the release stays empty. Whether a consuming chart reads from a
+  # Secret is decided per-secret (by that secret's `name`), independent of this release.
+  - name: "opendesk-secrets"
+    chart: "openproject-secrets-repo/{{ .Values.charts.opendeskSecrets.name }}"
+    version: "{{ .Values.charts.opendeskSecrets.version }}"
+    values:
+      - "values-opendesk-secrets.yaml.gotmpl"
+    installed: true
+    timeout: 900
+
   - name: "opendesk-migrations-pre"
     chart: "openproject-migrations-repo/{{ .Values.charts.migrations.name }}"
     version: "{{ .Values.charts.migrations.version }}"
@@ -21,9 +42,11 @@ releases:
     values:
       - "values.yaml.gotmpl"
       - "../../shared/migrations.yaml.gotmpl"
-      {{- range .Values.customization.release.migrationsPre }}
+    {{- range .Values.customization.release.migrationsPre }}
       - {{ . }}
-      {{- end }}
+    {{- end }}
+    needs:
+      - "opendesk-secrets"
     installed: {{ .Values.apps.migrations.enabled }}
     timeout: 900
 

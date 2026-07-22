@@ -152,7 +152,7 @@ This list gives you an overview of templated security settings and if they compl
 | **jitsi**/jitsi/jitsi/prosody | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/jitsi/web | :x: | no | no | no | no | 0 | 0 | yes | no |
 | **jitsi**/jitsi/patchJVB | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
-| **nextcloud**/opendesk-nextcloud-management | :x: | no | no | no | yes | 101 | 101 | yes | yes |
+| **nextcloud**/opendesk-nextcloud-management | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud-notifypush | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/aio | :white_check_mark: | no | no | yes | yes | 101 | 101 | yes | yes |
 | **nextcloud**/opendesk-nextcloud/exporter | :white_check_mark: | no | no | yes | yes | 65532 | 65532 | yes | yes |
@@ -192,7 +192,7 @@ This list gives you an overview of templated security settings and if they compl
 | **open-xchange**/open-xchange/public-sector-ui | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/opendesk-open-xchange-bootstrap | :x: | no | n/a | yes | yes | 1000 | 1000 | yes | yes |
 | **open-xchange**/ox-connector | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
-| **open-xchange**/postfix-ox | :x: | yes | yes | yes | no | 0 | 0 | yes | no |
+| **open-xchange**/postfix-ox | :x: | no | no | yes | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","SETGID","SETUID","KILL"] |
 | **opendesk-migrations-post**/opendesk-migrations-post | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **opendesk-migrations-pre**/opendesk-migrations-pre | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
 | **opendesk-openproject-bootstrap**/opendesk-openproject-bootstrap | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
@@ -208,8 +208,8 @@ This list gives you an overview of templated security settings and if they compl
 | **services-external**/mariadb | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/memcached | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/minio | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
-| **services-external**/opendesk-dkimpy-milter | :x: | yes | no | yes | yes | 1000 | 1000 | yes | no |
-| **services-external**/postfix | :x: | yes | yes | yes | no | 0 | 0 | yes | no |
+| **services-external**/opendesk-dkimpy-milter | :white_check_mark: | no | no | yes | yes | 1000 | 1000 | yes | yes |
+| **services-external**/postfix | :x: | no | no | yes | no | 0 | 0 | yes | no ["CHOWN","DAC_OVERRIDE","FOWNER","SETGID","SETUID","KILL"] |
 | **services-external**/postgresql | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **services-external**/redis/master | :white_check_mark: | no | no | yes | yes | 1001 | 1001 | yes | yes |
 | **xwiki**/xwiki | :x: | no | no | no | yes | 100 | 101 | yes | yes |

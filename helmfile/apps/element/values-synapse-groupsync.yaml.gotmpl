@@ -9,12 +9,12 @@ global:
     {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
 configuration:
-  asToken: {{ .Values.secrets.matrixGroupsync.synapseAsToken | quote }}
+  asToken: {{ .Values.secrets.matrixGroupsync.synapseAsToken.value | quote }}
   dryRun: false
-  hsToken: {{ .Values.secrets.matrixGroupsync.synapseAsToken | quote }}
+  hsToken: {{ .Values.secrets.matrixGroupsync.synapseAsToken.value | quote }}
   id: "gps"
   homeserverName: {{ .Values.global.matrixDomain | default .Values.global.domain | quote }}
-  registrationSharedSecret: {{ .Values.secrets.synapse.registrationSharedSecret | quote }}
+  registrationSharedSecret: {{ .Values.secrets.synapse.registrationSharedSecret.value | quote }}
   runOnce: false
   username: "groupsyncbot"
   ldap:
@@ -23,7 +23,7 @@ configuration:
       uid: "uid"
     base: {{ .Values.ldap.baseDn | quote }}
     bind_dn: "uid=ldapsearch_element,cn=users,{{ .Values.ldap.baseDn }}"
-    bind_password: {{ .Values.secrets.nubus.ldapSearch.element | quote }}
+    bind_password: {{ .Values.secrets.nubus.ldapSearch.element.value | quote }}
     check_interval_seconds: 60
     type: mapped-ldap
     uri: "ldap://ums-ldap-server:389"

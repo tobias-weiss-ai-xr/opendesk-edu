@@ -44,24 +44,14 @@ image:
   image:
     digest: "sha256:de7451b563ef79eb6acb2851dbadd18388e6436cd757b65d275a3dc60dbb0b73"
 
-# Bootstrap job derives its users + databases lists dynamically from
-# .Values.databases.*, filtered to postgresql-typed entries. Each entry's
-# password is looked up in .Values.secrets.postgresql.<key>, where <key>
-# defaults to "<dbKey>User" (e.g. databases.keycloak -> secrets.postgresql.keycloakUser).
-# Outliers (currently only synapse, where dbKey=synapse but the secret has
-# historically been matrixUser) override via an explicit passwordKey field on
-# the databases.* entry. additionalParams (CREATE DATABASE flags) is also
-# read from the entry, so new postgres-typed apps can be added by extending
-# .Values.databases.* alone - no edits to this file needed.
 job:
   users:
 {{- range $k, $db := .Values.databases }}
 {{- if kindIs "map" $db }}
 {{- $type := dig "type" "" $db }}
 {{- if or (eq $type "postgresql") (eq $type "psql") }}
-{{- $key := dig "passwordKey" (printf "%sUser" $k) $db }}
     - username: {{ $db.username | quote }}
-      password: {{ index $.Values.secrets.postgresql $key | quote }}
+      password: {{ $db.password.value | quote }}
       connectionLimit: {{ $db.connectionLimit | default $.Values.databases.defaults.userConnectionLimit }}
 {{- end }}
 {{- end }}
@@ -96,7 +86,7 @@ podAnnotations:
 
 postgres:
   user: "postgres"
-  password: {{ .Values.secrets.postgresql.postgresUser | quote }}
+  password: {{ .Values.secrets.postgresql.postgresUser.value | quote }}
 
 resources:
   {{ .Values.resources.postgresql | toYaml | nindent 2 }}

@@ -16,9 +16,15 @@ global:
   ldap:
     baseDn: {{ .Values.ldap.baseDn | quote }}
     domainName: {{ .Values.global.domain | quote }}
+    # LDAP cn=admin password. This umbrella-global is the source for the shared
+    # "ums-ldap-server-admin" Secret that the UMS provisioning/UDM/UMC components read by name;
+    # it is not (yet) externalizable via existingSecret without re-pointing every consumer.
+    auth:
+      cnAdmin:
+        password: {{ .Values.secrets.nubus.ldapSecret.value | quote }}
   nubusDeployment: true
   secrets:
-    masterPassword: {{ .Values.secrets.nubus.masterpassword | quote }}
+    masterPassword: {{ .Values.secrets.nubus.masterpassword.value | quote }}
   subDomains:
     portal: {{ .Values.global.hosts.nubus | quote }}
     keycloak: {{ .Values.global.hosts.keycloak | quote }}
@@ -168,6 +174,7 @@ keycloak:
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -190,17 +197,16 @@ keycloak:
   keycloak:
     auth:
       username: "kcadmin"
-      password: {{ .Values.secrets.keycloak.adminPassword | quote }}
+      existingSecret:
+        name: {{ .Values.secrets.keycloak.adminPassword.name | quote }}
+        keyMapping:
+          adminPassword: {{ .Values.secrets.keycloak.adminPassword.key | quote }}
     login:
       messages:
         de:
           loginTitle: "Anmeldung bei {{ .Values.theme.texts.productName }}"
         en:
           loginTitle: "Sign in to {{ .Values.theme.texts.productName }}"
-    features:
-      enabled:
-        - "admin-fine-grained-authz:v1"
-        - "token-exchange"
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak"
     {{- with .Values.annotations.nubusKeycloak.pod }}
@@ -261,7 +267,7 @@ keycloak:
     - name: "KC_TRUSTSTORE_PATHS"
       value: "/etc/ssl/certs/ca-certificates.crt"
     - name: "KC_HTTPS_TRUST_STORE_PASSWORD"
-      value: {{ .Values.secrets.certificates.password | quote }}
+      value: {{ .Values.secrets.certificates.password.value | quote }}
     - name: "KC_HTTPS_TRUST_STORE_TYPE"
       value: "jks"
   {{- end }}
@@ -282,6 +288,7 @@ nubusNotificationsApi:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -320,7 +327,7 @@ nubusNotificationsApi:
     auth:
       username: {{ .Values.databases.umsNotificationsApi.username | quote }}
       database: {{ .Values.databases.umsNotificationsApi.name | quote }}
-      password: {{ .Values.databases.umsNotificationsApi.password | default .Values.secrets.postgresql.umsNotificationsApiUser | quote }}
+      password: {{ .Values.databases.umsNotificationsApi.password.value | quote }}
       # NOTE: Nubus has still an existing secret configured for legacy reasons.
       # This disables the existing secret and ensures that the value from above
       # is used.
@@ -346,6 +353,7 @@ nubusPortalFrontend:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -414,6 +422,10 @@ nubusKeycloakExtensions:
   keycloak:
     auth:
       username: "kcadmin"
+      existingSecret:
+        name: {{ .Values.secrets.keycloak.adminPassword.name | quote }}
+        keyMapping:
+          adminPassword: {{ .Values.secrets.keycloak.adminPassword.key | quote }}
   proxy:
     additionalAnnotations:
       {{ .Values.annotations.nubusKeycloakExtensions.proxyAdditional | toYaml | nindent 6 }}
@@ -452,6 +464,7 @@ nubusKeycloakExtensions:
       privileged: false
       allowPrivilegeEscalation: false
       capabilities:
+        add: []
         drop:
           - "ALL"
       # Unlike the other Nubus subcharts this one does not support the enabled option.
@@ -494,7 +507,7 @@ nubusKeycloakExtensions:
       enabled: true
       username: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       # TODO: Pending secrets refactoring in the component chart
-      password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      password: {{ .Values.secrets.postfix.opendeskSystemPassword.value | quote }}
       existingSecret:
         name: "ums-keycloak-extensions-smtp-opendesk-credentials"
         keyMapping:
@@ -524,6 +537,7 @@ nubusKeycloakExtensions:
       privileged: false
       allowPrivilegeEscalation: false
       capabilities:
+        add: []
         drop:
           - "ALL"
       readOnlyRootFilesystem: true
@@ -553,13 +567,7 @@ nubusPortalConsumer:
   objectStorage:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
-      {{- if .Values.objectstores.nubus.secretKey }}
-      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | quote }}
-      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
-      secretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
-      {{- else }}
-      {{- fail "No objectstorage secretKey for nubus found!" }}
-      {{- end }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey.value | quote }}
       existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
     {{- if .Values.objectstores.nubus.endpoint }}
@@ -583,7 +591,7 @@ nubusPortalConsumer:
   provisioningApi:
     auth:
       username: "portal-consumer"
-      password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword | quote }}
+      password: {{ .Values.secrets.nubus.portalConsumer.provisioningApiPassword.value | quote }}
   replicaCount: {{ .Values.replicas.umsPortalConsumer }}
   resources:
     {{ .Values.resources.umsPortalConsumer | toYaml | nindent 4 }}
@@ -594,6 +602,7 @@ nubusPortalConsumer:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     readOnlyRootFilesystem: true
@@ -659,6 +668,7 @@ nubusPortalServer:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -685,13 +695,7 @@ nubusPortalServer:
   objectStorage:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
-      {{- if .Values.objectstores.nubus.secretKey }}
-      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | quote }}
-      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
-      secretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
-      {{- else }}
-      {{- fail "No objectstorage secretKey for nubus found!" }}
-      {{- end }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey.value | quote }}
       existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
     {{- if .Values.objectstores.nubus.endpoint }}
@@ -715,7 +719,7 @@ nubusPortalServer:
     centralNavigation:
       enabled: true
       auth:
-        sharedSecret: {{ .Values.secrets.centralnavigation.apiKey | quote }}
+        sharedSecret: {{ .Values.secrets.centralnavigation.apiKey.value | quote }}
     featureToggles:
       notifications_api: false
       centered_layout: true
@@ -788,6 +792,7 @@ nubusUdmRestApi:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -864,6 +869,7 @@ nubusLdapNotifier:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -873,6 +879,11 @@ nubusLdapNotifier:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
     runAsNonRoot: true
+  # In this case the `seLinuxOptions` must be set at pod level (not container level) so that the
+  # MCS label is applied to the volumes shared with the ldap-server.
+  # umsLdapNotifier and umsLdapServer must resolve to the same SELinux level, otherwise the
+  # notifier cannot read the transaction data the ldap-server writes to the shared PVC.
+  podSecurityContext:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.umsLdapNotifier | toYaml | nindent 6 }}
   image:
@@ -897,6 +908,13 @@ serviceAccount:
 nubusLdapServer:
   additionalAnnotations:
     {{ .Values.annotations.nubusLdapServer.additional | toYaml | nindent 4 }}
+  # In this case the `seLinuxOptions` must be set at pod level (not container level) so that the
+  # MCS label is applied to the volumes shared with the ldap-server.
+  # umsLdapNotifier and umsLdapServer must resolve to the same SELinux level, otherwise the
+  # notifier cannot read the transaction data the ldap-server writes to the shared PVC.
+  podSecurityContext:
+    seLinuxOptions:
+      {{ .Values.seLinuxOptions.umsLdapServer | toYaml | nindent 6 }}
   dhInitcontainer:
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerDhInitContainer.registry | quote }}
@@ -909,7 +927,10 @@ nubusLdapServer:
       repository: {{ .Values.images.nubusLdapServer.repository }}
       tag: {{ .Values.images.nubusLdapServer.tag }}
     auth:
-      password: {{ .Values.secrets.nubus.ldapSecret | quote }}
+      # Inline (not existingSecret): the ldap-server subchart materialises the shared
+      # "ums-ldap-server-admin" Secret from this password, which the UMS components consume by
+      # name. Providing an existingSecret here stops that Secret from being created and breaks them.
+      password: {{ .Values.secrets.nubus.ldapSecret.value | quote }}
     leaderElector:
       image:
         registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapServerLeaderElector.registry | quote }}
@@ -966,18 +987,18 @@ nubusProvisioning:
       {{- end }}
     auth:
       admin:
-        password: {{ .Values.secrets.nubus.provisioning.api.adminPassword | quote }}
+        password: {{ .Values.secrets.nubus.provisioning.api.adminPassword.value | quote }}
       prefill:
-        password: {{ .Values.secrets.nubus.provisioning.api.prefillPassword | quote}}
+        password: {{ .Values.secrets.nubus.provisioning.api.prefillPassword.value | quote}}
       eventsUdm:
-        password: {{ .Values.secrets.nubus.provisioning.api.udmTransformerPassword | quote}}
+        password: {{ .Values.secrets.nubus.provisioning.api.udmTransformerPassword.value | quote}}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusProvisioningApi.registry | quote }}
       repository: {{ .Values.images.nubusProvisioningApi.repository }}
       tag: {{ .Values.images.nubusProvisioningApi.tag }}
     nats:
       auth:
-        password: {{ .Values.secrets.nubus.provisioning.api.natsPassword | quote}}
+        password: {{ .Values.secrets.nubus.provisioning.api.natsPassword.value | quote}}
     podAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-api"
       {{- with .Values.annotations.nubusProvisioning.apiPod }}
@@ -989,6 +1010,7 @@ nubusProvisioning:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -1011,7 +1033,7 @@ nubusProvisioning:
       tag: {{ .Values.images.nubusProvisioningDispatcher.tag }}
     nats:
       auth:
-        password: {{ .Values.secrets.nubus.provisioning.dispatcherNatsPassword | quote}}
+        password: {{ .Values.secrets.nubus.provisioning.dispatcherNatsPassword.value | quote}}
     podAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-dispatcher"
       {{- with .Values.annotations.nubusProvisioning.dispatcherPod }}
@@ -1030,11 +1052,12 @@ nubusProvisioning:
       createUsers:
         adminUser:
           auth:
-            password: {{ .Values.secrets.nats.natsAdminPassword | quote }}
+            password: {{ .Values.secrets.nats.natsAdminPassword.value | quote }}
     containerSecurityContext:
       privileged: false
       allowPrivilegeEscalation: false
       capabilities:
+        add: []
         drop:
           - "ALL"
       enabled: true
@@ -1089,7 +1112,7 @@ nubusProvisioning:
       tag: {{ .Values.images.nubusProvisioningPrefill.tag }}
     nats:
       auth:
-        password: {{ .Values.secrets.nubus.provisioning.prefillNatsPassword | quote}}
+        password: {{ .Values.secrets.nubus.provisioning.prefillNatsPassword.value | quote}}
     podAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-prefill"
       {{- with .Values.annotations.nubusProvisioning.prefillPod }}
@@ -1108,7 +1131,7 @@ nubusProvisioning:
       tag: {{ .Values.images.nubusProvisioningUdmTransformer.tag }}
     nats:
       auth:
-        password: {{ .Values.secrets.nubus.provisioning.udmTransformerNatsPassword | quote}}
+        password: {{ .Values.secrets.nubus.provisioning.udmTransformerNatsPassword.value | quote}}
     podAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-udm-transformer"
       {{- with .Values.annotations.nubusProvisioning.udmTransformerPod }}
@@ -1131,7 +1154,7 @@ nubusProvisioning:
     createUsers:
       oxConsumer:
         existingSecret:
-          name: "ox-connector-provisioning-api"
+          name: "ums-ox-connector-provisioning-api"
           keyMapping:
             registration: "registration"
     {{- end }}
@@ -1161,6 +1184,7 @@ nubusUdmListener:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -1194,7 +1218,7 @@ nubusUdmListener:
     {{ .Values.resources.umsUdmListener | toYaml | nindent 4 }}
   nats:
     auth:
-      password: {{ .Values.secrets.nubus.provisioning.udmListenerNatsPassword | quote}}
+      password: {{ .Values.secrets.nubus.provisioning.udmListenerNatsPassword.value | quote}}
   serviceAccount:
     annotations:
       {{ .Values.annotations.nubusUdmListener.serviceAccount | toYaml | nindent 6 }}
@@ -1205,6 +1229,7 @@ nubusSelfServiceConsumer:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -1229,7 +1254,7 @@ nubusSelfServiceConsumer:
     {{- end }}
   provisioningApi:
     auth:
-      password: {{ .Values.secrets.nubus.selfserviceConsumer.provisioningApiPassword | quote}}
+      password: {{ .Values.secrets.nubus.selfserviceConsumer.provisioningApiPassword.value | quote}}
   resources:
     {{ .Values.resources.umsSelfserviceConsumer | toYaml | nindent 4 }}
   replicaCount: {{ .Values.replicas.umsSelfserviceConsumer }}
@@ -1255,6 +1280,7 @@ nubusStackDataUms:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -1321,7 +1347,7 @@ nubusStackDataUms:
     annotations:
       {{ .Values.annotations.nubusStackDataUms.serviceAccount | toYaml | nindent 6 }}
   templateContext:
-    initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword | quote }}
+    initialPasswordAdministrator: {{ .Values.secrets.nubus.systemAccounts.administratorPassword.value | quote }}
     additionalMailDomains: {{ .Values.global.additionalMailDomains | toYaml | nindent 6 }}
     apps: {{ .Values.apps | toYaml | nindent 6 }}
     defaultGroupOtherObjects: "cn=Domain Users,cn=groups,{{ .Values.ldap.baseDn }}"
@@ -1362,12 +1388,12 @@ nubusStackDataUms:
     oxDefaultContext: "1"
     oxDefaultLanguage: {{ .Values.functional.internationalization.defaultLanguage | quote }}
     oxContextHidden: true
-    oxSystemUserPassword: {{ .Values.secrets.nubus.ldapSearch.ox }}
+    oxSystemUserPassword: {{ .Values.secrets.nubus.ldapSearch.ox.value }}
     portalOxLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
     ldapSearchUsers:
       {{- range $username, $password := .Values.secrets.nubus.ldapSearch }}
       - username: {{ printf "ldapsearch_%s" $username | quote }}
-        password: {{ $password | quote }}
+        password: {{ $password.value | quote }}
         lastname: "LDAP-Search-User"
       {{- end }}
     ldapSystemUsers: []
@@ -2330,6 +2356,7 @@ nubusUmcServer:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     runAsUser: 999
@@ -2344,6 +2371,7 @@ nubusUmcServer:
     enabled: true
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     runAsUser: 999
@@ -2358,21 +2386,9 @@ nubusUmcServer:
     enabled: true
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
-      add:
-        - "DAC_OVERRIDE"
-        - "SETGID"
-        - "AUDIT_WRITE"
-        - "SETUID"
-        - "CHOWN"
-        - "SETPCAP"
-        - "FOWNER"
-        - "FSETID"
-        - "KILL"
-        - "MKNOD"
-        - "NET_BIND_SERVICE"
-        - "SYS_CHROOT"
     runAsUser: 999
     runAsGroup: 999
     seccompProfile:
@@ -2415,7 +2431,7 @@ nubusUmcServer:
       auth:
         username: {{ .Values.databases.umsSelfservice.username | quote }}
         database: {{ .Values.databases.umsSelfservice.name | quote }}
-        password: {{ .Values.databases.umsSelfservice.password | default .Values.secrets.postgresql.umsSelfserviceUser | quote }}
+        password: {{ .Values.databases.umsSelfservice.password.value | quote }}
         # NOTE: Nubus has still an existing secret configured for legacy reasons.
         # This disables the existing secret and ensures that the value from above
         # is used.
@@ -2428,7 +2444,7 @@ nubusUmcServer:
       auth:
         username: {{ .Values.databases.umsAuthSession.username | quote }}
         database: {{ .Values.databases.umsAuthSession.name | quote }}
-        password: {{ .Values.databases.umsAuthSession.password | default .Values.secrets.postgresql.umsAuthSessionUser | quote }}
+        password: {{ .Values.databases.umsAuthSession.password.value | quote }}
         # NOTE: Nubus has still an existing secret configured for legacy reasons.
         # This disables the existing secret and ensures that the value from above
         # is used.
@@ -2464,13 +2480,14 @@ nubusUmcServer:
       {{ .Values.annotations.nubusUmcServer.serviceAccount | toYaml | nindent 6 }}
   smtp:
     auth:
-      password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      password: {{ .Values.secrets.postfix.opendeskSystemPassword.value | quote }}
 
 nubusUmcGateway:
   containerSecurityContext:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     enabled: true
@@ -2531,6 +2548,7 @@ nubusKeycloakBootstrap:
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
+      add: []
       drop:
         - "ALL"
     readOnlyRootFilesystem: true
@@ -2548,6 +2566,14 @@ nubusKeycloakBootstrap:
   keycloak:
     auth:
       username: "kcadmin"
+      # Keycloak admin credentials come from the managed Secret (see secrets.yaml.gotmpl
+      # keycloak.adminPassword). Without this the bootstrap Job mounts the chart-default Secret
+      # "ums-keycloak-credentials" (never created), so its init container never starts and the
+      # "opendesk" realm is never provisioned.
+      existingSecret:
+        name: {{ .Values.secrets.keycloak.adminPassword.name | quote }}
+        keyMapping:
+          adminPassword: {{ .Values.secrets.keycloak.adminPassword.key | quote }}
   ldap:
     auth:
       bindDn: {{ printf "uid=ldapsearch_keycloak,cn=users,%s" .Values.ldap.baseDn }}
@@ -2558,7 +2584,7 @@ nubusKeycloakBootstrap:
   oidc:
     rp:
       umcServer:
-        password: {{ .Values.secrets.keycloak.clientSecret.portal | quote }}
+        password: {{ .Values.secrets.keycloak.clientSecret.portal.value | quote }}
   podAnnotations:
     intents.otterize.com/service-name: "ums-keycloak-bootstrap"
     {{- with .Values.annotations.nubusKeycloakBootstrapNubus.pod }}
@@ -2583,19 +2609,25 @@ nubusKeycloakBootstrap:
 extraSecrets:
   - name: "ums-opendesk-guardian-client-secret"
     stringData:
-      managementApiClientSecret: {{ .Values.secrets.keycloak.clientSecret.guardian | quote }}
+      managementApiClientSecret: {{ .Values.secrets.keycloak.clientSecret.guardian.value | quote }}
   - name: "ums-keycloak-postgresql-opendesk-credentials"
     stringData:
-      keycloakDatabasePassword: {{ .Values.databases.keycloak.password | default .Values.secrets.postgresql.keycloakUser | quote }}
+      keycloakDatabasePassword: {{ .Values.databases.keycloak.password.value | quote }}
   - name: "ums-guardian-postgresql-opendesk-credentials"
     stringData:
-      guardianDatabasePassword: {{ .Values.databases.umsGuardianManagementApi.password | default .Values.secrets.postgresql.umsGuardianManagementApiUser | quote }}
+      guardianDatabasePassword: {{ .Values.databases.umsGuardianManagementApi.password.value | quote }}
   - name: "ums-keycloak-extensions-postgresql-opendesk-credentials"
     stringData:
-      umcKeycloakExtensionsDatabasePassword: {{ .Values.databases.keycloakExtension.password | default .Values.secrets.postgresql.keycloakExtensionUser | quote }}
+      umcKeycloakExtensionsDatabasePassword: {{ .Values.databases.keycloakExtension.password.value | quote }}
   - name: "ums-keycloak-extensions-smtp-opendesk-credentials"
     stringData:
-      umcKeycloakExtensionsSmtpPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      umcKeycloakExtensionsSmtpPassword: {{ .Values.secrets.postfix.opendeskSystemPassword.value | quote }}
   - name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
     stringData:
-      password: {{ .Values.secrets.nubus.ldapSearch.keycloak | quote }}
+      password: {{ .Values.secrets.nubus.ldapSearch.keycloak.value | quote }}
+{{- if .Values.apps.oxAppSuite.enabled }}
+  - name: "ums-ox-connector-provisioning-api"
+    stringData:
+      registration: "{ \"name\": \"ox-connector\", \"realms_topics\": [{\"realm\": \"udm\", \"topic\": \"oxmail/oxcontext\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/accessprofile\"}, {\"realm\": \"udm\", \"topic\": \"users/user\"}, {\"realm\": \"udm\", \"topic\": \"oxresources/oxresources\"}, {\"realm\": \"udm\", \"topic\": \"groups/group\"}, {\"realm\": \"udm\", \"topic\": \"oxmail/functional_account\"}], \"request_prefill\": true, \"password\": \"{{ .Values.secrets.oxConnector.provisioningApiPassword.value }}\" }"
+{{- end }}
+...
