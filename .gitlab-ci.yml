@@ -220,7 +220,7 @@ variables:
   TESTS_BRANCH:
     description: "Branch of E2E-tests on which the test pipeline is triggered"
     value: "develop"
-  TESTS_TESTSET:
+  TESTS_TESTSETS:
     description: >
       Define test sets: e.g. `K8s State`, `General Availability`, `Smoke`, `E2E`, `Pre-Upgrade`, `Post-Upgrade`.
       Use commas to group tests into the same run; use semicolons to split them into separate
@@ -849,7 +849,7 @@ run-tests:
           \"screenshot_before_step\": \"yes\", \
           \"screenshot_after_step\": \"yes\", \
           \"screenshot_redirect_step\": \"yes\", \
-          \"testset\": \"${TESTS_TESTSET}\", \
+          \"testsets\": \"${TESTS_TESTSETS}\", \
           \"testprofile\": \"Namespace\", \
           \"OPENDESK_BRANCH\": \"${CI_COMMIT_REF_NAME}\", \
           \"OPENDESK_ENTERPRISE\": \"${OPENDESK_ENTERPRISE}\", \
