@@ -5,8 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 
 # Release management
 
-> **Note:** This document describes the upstream openDesk release process. openDesk Edu follows the upstream release cycle and applies edu-specific patches independently. See [CHANGELOG.md](../CHANGELOG.md) for edu-specific changes.
-
 This document outlines the release and patch management strategy for **openDesk**, ensuring that all updates, patches, and new releases are systematically **planned, tested, documented**, and **reliably deployed** into production. The process is designed to align with operational planning requirements and maintain system stability and security.
 
 <!-- TOC -->
@@ -31,11 +29,11 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 
 ### Release types
 
-| Type           | Frequency     | Content                                                       |
-|----------------|---------------|---------------------------------------------------------------|
-| **Major**      | Annually (Q3) | Large feature sets, architecture changes, breaking changes |
-| **Minor**      | Monthly        | New features, enhancements, may contain breaking changes or refactors (clearly flagged in the notes)              |
-| **Patch**      | On demand      | Bug fixes, security updates, minor improvements, no intended breaking changes               |
+| Type      | Frequency     | Content                                                                                              |
+| --------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| **Major** | Annually (Q3) | Large feature sets, architecture changes, breaking changes                                           |
+| **Minor** | Monthly       | New features, enhancements, may contain breaking changes or refactors (clearly flagged in the notes) |
+| **Patch** | On demand     | Bug fixes, security updates, minor improvements, no intended breaking changes                        |
 
 > [!note]
 > openDesk does **not** guarantee that minor releases are 100% backward‑compatible. When a breaking > change
@@ -44,21 +42,22 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 
 ### Release schedule
 
-* **Major releases** are scheduled for **Q3 each year**, with planning beginning in Q1.
-* **Minor releases** occur **monthly on Mondays**, typically **around 10:00 AM** local time.
-  * Each minor release follows a **4-week cycle**.
-  * **Week 1–3**: Active development of new features and improvements.
-  * **End of Week 3**: **Feature freeze** is enforced to allow stabilization and testing.
-  * **Week 4**: Final testing, approvals, and preparation for release.
-  * At the **end of Week 4**, a new minor version is released, and a new cycle begins.
-* **Patch releases** are created **on demand**, based on criticality and urgency.
+- **Major releases** are scheduled for **Q3 each year**, with planning beginning in Q1.
+- **Minor releases** occur **monthly on Wednesdays**, typically **around 03:00 PM** local time.
+  - Each minor release follows a **4-week cycle**.
+  - **Week 1–3**: Active development of new features and improvements.
+  - **End of Week 3**: **Feature freeze** is enforced to allow stabilization and testing.
+  - **Week 4**: Final testing, approvals, and preparation for release.
+  - At the **end of Week 4**, a new version is released, and a new cycle begins.
+    - The development cycle can be extended if necessary, or a release can be skipped if it becomes necessary to delay or postpone the release.
+- **Patch releases** are created **on demand**, based on criticality and urgency, and have no planned development cycle.
 
 ### Upgrades
 
-* openDesk does not guarantee an in‑place upgrade between two major versions. Always consult the release notes and plan appropriate migration efforts.
-* Even within the same major line, skipping multiple monthly minor versions is not guaranteed to work without intermediate upgrade steps.
-* All breaking changes, including those in monthly minor releases, are highlighted in the release notes under Breaking Changes.
-* Additional, non‑binding migration hints are collected in [migrations.md](./migrations.md)
+- openDesk does not guarantee an in‑place upgrade between two major versions. Always consult the release notes and plan appropriate migration efforts.
+- Even within the same major line, skipping multiple monthly minor versions is not guaranteed to work without intermediate upgrade steps.
+- All breaking changes, including those in monthly minor releases, are highlighted in the release notes under Breaking Changes.
+- Migration instructions are collected in [migrations-manual.md](./migrations-manual.md)
 
 ## Patch management process
 
@@ -98,6 +97,7 @@ A lightweight approach reduces manual effort while maintaining transparency.
 | Channel | Audience | Purpose | Owner |
 |---------|----------|---------|-------|
 | **openCode Changelog** | Community & EE | Primary source of truth for every release | DevOps |
+| **opendesk.eu Blog** | Community & EE | Editorially revised release information for a quick overview. | Release Management |
 | **Account‑Manager Mail / Ticket** | Enterprise customers | Targeted information & upgrade advice | Customer Success |
 
 ### Timing of communications
@@ -117,12 +117,12 @@ Community users consume information via openCode; Enterprise customers get an ad
 
 Each release (major, minor, or patch) must include:
 
-* **Release notes** outlining new features, fixes, and known issues
-* **Change logs** with commit references and affected components
-* **Test reports** confirming QA coverage and results
-* **Deployment checklist** reviewed and approved by the product owner
+- **Release notes** outlining new features, fixes, and known issues
+- **Change logs** with commit references and affected components
+- **Test reports** confirming QA coverage and results
+- **Deployment checklist** reviewed and approved by the product owner
 
 ## Compliance & review
 
-* The release process is reviewed **bi-annually** to incorporate feedback and evolving requirements
-* Emergency patches (e.g., zero-day security issues) may bypass the standard schedule but must be documented post-deployment
+- The release process is reviewed **bi-annually** to incorporate feedback and evolving requirements
+- Emergency patches (e.g., zero-day security issues) may bypass the standard schedule but must be documented post-deployment

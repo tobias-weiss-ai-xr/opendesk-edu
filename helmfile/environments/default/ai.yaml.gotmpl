@@ -3,5 +3,9 @@
 ---
 ai:
   endpoint: ""
-  apiKey: ""
+  # Value-only: operator-provided API key for an external AI endpoint. Takes `value` only and not the
+  # `create`/`name`/`key` structure - it is empty by default (nothing to provision) and the Notes
+  # chart still reads the literal value.
+  apiKey:
+    value: ""
   model: ""

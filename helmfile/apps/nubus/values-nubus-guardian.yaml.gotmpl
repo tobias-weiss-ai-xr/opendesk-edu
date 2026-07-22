@@ -209,8 +209,8 @@ nubusGuardian:
       nubusBaseUrl: {{ printf "https://%s.%s" .Values.global.hosts.nubus .Values.global.domain }}
       keycloak:
         credentialSecret:
-          name: "ums-opendesk-keycloak-credentials"
-          key: "admin_password"
+          name: {{ .Values.secrets.keycloak.adminPassword.name | quote }}
+          key: {{ .Values.secrets.keycloak.adminPassword.key | quote }}
       realm: {{ .Values.platform.realm | quote }}
       username: "kcadmin"
     keycloak:
@@ -230,4 +230,4 @@ nubusGuardian:
   serviceAccount:
     annotations:
       {{ .Values.annotations.nubusGuardian.serviceAccount | toYaml | nindent 6 }}
----
+...

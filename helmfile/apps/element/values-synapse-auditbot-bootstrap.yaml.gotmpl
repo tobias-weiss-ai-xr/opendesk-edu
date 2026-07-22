@@ -12,15 +12,15 @@ configuration:
   username: "auditbot"
   pod: "opendesk-synapse-0"
   secretName: "matrix-auditbot-account"
-  password: {{ .Values.secrets.matrixAuditBot.password | quote }}
+  password: {{ .Values.secrets.matrixAuditBot.password.value | quote }}
   pipeConfig:
     enabled: true
     type: "admin"
     secretName: "matrix-auditbot-config"
-    asToken: {{ .Values.secrets.matrixAuditBot.synapseAsToken | quote }}
-    hsToken: {{ .Values.secrets.matrixAuditBot.synapseAsToken | quote }}
+    asToken: {{ .Values.secrets.matrixAuditBot.synapseAsToken.value | quote }}
+    hsToken: {{ .Values.secrets.matrixAuditBot.synapseAsToken.value | quote }}
     serviceUrl: "http://opendesk-synapse-web:8008"
-    backupPassphrase: {{ .Values.secrets.matrixAuditBot.backupPassphrase | quote }}
+    backupPassphrase: {{ .Values.secrets.matrixAuditBot.backupPassphrase.value | quote }}
     homeserverName: {{ .Values.global.matrixDomain | default .Values.global.domain | quote }}
 image:
   registry: {{ coalesce .Values.repositories.image.dockerHub .Values.global.imageRegistry .Values.images.synapseCreateUser.registry | quote }}

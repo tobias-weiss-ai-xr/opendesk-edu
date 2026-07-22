@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -8,8 +8,17 @@ certificate:
     enabled: false
 
 containerSecurityContext:
-  allowPrivilegeEscalation: true
-  capabilities: {}
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "SETGID"
+      - "SETUID"
+      - "KILL"
   enabled: true
   seccompProfile:
     type: "RuntimeDefault"
@@ -17,13 +26,31 @@ containerSecurityContext:
   runAsNonRoot: false
   runAsUser: 0
   runAsGroup: 0
-  privileged: true
-  seLinuxOptions:
-    {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+
+initContainerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "FOWNER"
+  enabled: true
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: false
+  runAsUser: 0
+  runAsGroup: 0
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
 
 global:
-  imagePullSecrets:
-    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  imagePullSecrets: {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+hostUsers: {{ not .Values.technical.postfix.userNamespaces }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.postfix.registry | quote }}
@@ -44,6 +71,9 @@ postfix:
   amavisPortIn: ""
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   hostname: {{ .Values.functional.groupware.externalClients.fqdnSmtp | default .Values.global.domain | quote }}
+  {{- with .Values.smtp.heloName }}
+  smtpHeloName: {{ . | quote }}
+  {{- end }}
   inetProtocols: "ipv4"
   ldap:
     host: "ums-ldap-server"
@@ -52,7 +82,7 @@ postfix:
     baseDn: "{{ .Values.ldap.baseDn }}"
     bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
     password:
-      value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+      value: {{ .Values.secrets.nubus.ldapSearch.postfix.value | quote }}
   messageSizeLimit: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
   milterDefaultAction: "tempfail"
   listfilter:
@@ -95,12 +125,63 @@ postfix:
       username:
         value: {{ .Values.smtp.username }}
       password:
-        value: {{ .Values.smtp.password }}
+        value: {{ .Values.smtp.password.value }}
   smtpSASLAuthEnable: "yes"
   {{- else }}
   smtpSASLAuthEnable: "no"
   {{- end }}
   allowRelayNets: false
+
+  spf:
+    enabled: {{ .Values.technical.postfix.checkSpf }}
+
+  limit:
+    anvilRateTimeUnit: {{ printf "%vs" .Values.technical.postfix.anvilRateTimeUnit }}
+    messageSize: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
+    expansion: {{ .Values.functional.groupware.mail.localLimits.expansion }}
+    recursion: {{ .Values.functional.groupware.mail.localLimits.recursion }}
+    recipient: {{ .Values.functional.groupware.mail.localLimits.recipient }}
+    smtp:
+      clientConnectionCount: {{ .Values.technical.postfix.smtpLimits.clientConnectionCount }}
+      clientConnectionRate: {{ .Values.technical.postfix.smtpLimits.clientConnectionRate }}
+      clientMessageRate: {{ .Values.technical.postfix.smtpLimits.clientMessageRate }}
+      clientRecipientRate: {{ .Values.technical.postfix.smtpLimits.clientRecipientRate }}
+      clientNewTLSSessionRate: {{ .Values.technical.postfix.smtpLimits.clientNewTLSSessionRate }}
+      clientAuthRate: {{ .Values.technical.postfix.smtpLimits.clientAuthRate }}
+    submission:
+      clientConnectionCount: {{ .Values.technical.postfix.submissionLimits.clientConnectionCount }}
+      clientConnectionRate: {{ .Values.technical.postfix.submissionLimits.clientConnectionRate }}
+      clientMessageRate: {{ .Values.technical.postfix.submissionLimits.clientMessageRate }}
+      clientRecipientRate: {{ .Values.technical.postfix.submissionLimits.clientRecipientRate }}
+      clientNewTLSSessionRate: {{ .Values.technical.postfix.submissionLimits.clientNewTLSSessionRate }}
+      clientAuthRate: {{ .Values.technical.postfix.submissionLimits.clientAuthRate }}
+
+  reject:
+    unknownReverseClientHostname: {{ .Values.technical.postfix.restrictions.unknownReverseClientHostname }}
+    unknownClientHostname: {{ .Values.technical.postfix.restrictions.unknownClientHostname }}
+    {{- with .Values.technical.postfix.restrictions.rblClient }}
+    rblClient: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    {{- with .Values.technical.postfix.restrictions.rhsblReverseClient }}
+    rhsblReverseClient: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    invalidHeloHostname: {{ .Values.technical.postfix.restrictions.invalidHeloHostname }}
+    nonFQDNHeloHostname: {{ .Values.technical.postfix.restrictions.nonFQDNHeloHostname }}
+    {{- with .Values.technical.postfix.restrictions.rhsblHelo }}
+    rhsblHelo: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    unknownHeloHostname: {{ .Values.technical.postfix.restrictions.unknownHeloHostname }}
+    nonFQDNSender: {{ .Values.technical.postfix.restrictions.nonFQDNSender }}
+    {{- with .Values.technical.postfix.restrictions.rhsblSender }}
+    rhsblSender: {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    unknownSenderDomain: {{ .Values.technical.postfix.restrictions.unknownSenderDomain }}
+    unlistedSender: {{ .Values.technical.postfix.restrictions.unlistedSender }}
+    nonFQDNRecipient: {{ .Values.technical.postfix.restrictions.nonFQDNRecipient }}
+    unlistedRecipient: {{ .Values.technical.postfix.restrictions.unlistedRecipient }}
+    unknownRecipientDomain: {{ .Values.technical.postfix.restrictions.unknownRecipientDomain }}
+    unauthDestination: {{ .Values.technical.postfix.restrictions.unauthDestination }}
+
   smtpTLSSecurityLevel: "encrypt"
   smtpdSASLAuthEnable: "yes"
   smtpdSASLSecurityOptions: {{ .Values.smtp.security.smtpdSASLSecurityOptions | join ", " | quote }}
@@ -110,16 +191,23 @@ postfix:
   smtpdSASLType: "dovecot"
   smtpdTLSSecurityLevel: "encrypt"
   smtpdTLSCertFile: "/etc/tls/tls.crt"
+  {{- with .Values.technical.postfix.smtpdUpstreamProxyProtocol }}
+  smtpdUpstreamProxyProtocol: {{ . | quote }}
+  {{- end }}
   smtpdKeyFile: "/etc/tls/tls.key"
   smtpdSASLPath: "inet:dovecot:3659"
-
-  allowPercentHack: "yes"
 
   staticAuthDB:
     enabled: false
 
+  ldapMailboxMaps:
+    010-opendesk:
+      queryFilter: "(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s))"
+      resultAttribute: "mailPrimaryAddress, mailAlternativeAddress"
+
   ldapSmtpdSenderLoginMaps:
-    enabled: true
+    # Disabled, as it does not support deputy and shared mailbox functionality yet
+    enabled: false
     queryFilter: "(&(objectClass=oxUserObject)(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s)))"
     result_attribute: "entryUUID, mailPrimaryAddress"
 
@@ -164,10 +252,18 @@ replicaCount: {{ .Values.replicas.postfix }}
 resources:
   {{ .Values.resources.postfix | toYaml | nindent 2 }}
 
-{{- if or (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "NodePort") (eq (coalesce .Values.service.type.postfix .Values.cluster.service.type) "LoadBalancer") }}
 service:
-  annotations:
-    {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
+  annotations: {{ .Values.annotations.openxchangePostfix.service | toYaml | nindent 4 }}
+  ports:
+    smtp:
+      port: 25
+      targetPort: 2500
+    submission: ~
+    submissions: ~
+  {{- if and (has (coalesce .Values.service.type.postfix .Values.cluster.service.type) (list "NodePort" "LoadBalancer"))
+             (or .Values.functional.groupware.exposeSmtp
+                 .Values.functional.groupware.externalClients.exposeSubmission
+                 .Values.functional.groupware.externalClients.exposeSubmissions) }}
   external:
     enabled: true
     annotations:
@@ -177,8 +273,8 @@ service:
       smtp: {{ if .Values.functional.groupware.exposeSmtp }}{port: 25}{{ else }}~{{ end }}
       submission: {{ if .Values.functional.groupware.externalClients.exposeSubmission }}{port: 587}{{ else }}~{{ end }}
       submissions: {{ if .Values.functional.groupware.externalClients.exposeSubmissions }}{port: 465}{{ else }}~{{ end }}
-    {{- if .Values.service.loadBalancerIp.postfix }}
-    loadBalancerIp: {{ .Values.service.loadBalancerIp.postfix }}
+    {{- if .Values.service.loadBalancerIP.postfix }}
+    loadBalancerIP: {{ .Values.service.loadBalancerIP.postfix }}
     {{- end }}
   {{- end }}
 ...

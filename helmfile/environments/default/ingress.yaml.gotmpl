@@ -4,8 +4,12 @@
 ---
 ingress:
   enabled: true
-  ingressClassName: "haproxy"
+  # Define the Ingress controller type in use. Only "haproxy" (https://haproxy-ingress.github.io) and
+  # "nginx" (https://github.com/kubernetes/ingress-NGINX) are supported at the moment. But note
+  # that the NGINX controller itself is out of maintenance.
   controller: "haproxy"
+  # Define the actual ingressClassName of the given controller you get with `kubectl get ingressclass`
+  ingressClassName: "haproxy"
   tls:
     enabled: true
     secretName: "opendesk-certificates-tls"
