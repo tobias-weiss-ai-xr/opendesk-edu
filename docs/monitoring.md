@@ -13,6 +13,7 @@ well as the overall status of the monitoring integration.
   * [Technology](#technology)
   * [Defaults](#defaults)
   * [Metrics](#metrics)
+  * [Alerts](#alerts)
   * [Dashboards for Grafana](#dashboards-for-grafana)
   * [Component overview](#component-overview)
 <!-- TOC -->
@@ -41,8 +42,6 @@ monitoring:
       enabled: true
     podMonitors:
       enabled: true
-```
-
 ```
 
 ## Alerts

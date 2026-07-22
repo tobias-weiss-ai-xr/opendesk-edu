@@ -17,7 +17,9 @@ exporter:
   configuration:
     server: "http://opendesk-nextcloud-aio"
     token:
-      value: {{ .Values.secrets.nextcloud.metricsToken | quote }}
+      secret:
+        name: {{ .Values.secrets.nextcloud.metricsToken.name | quote }}
+        key: {{ .Values.secrets.nextcloud.metricsToken.key | quote }}
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -91,7 +93,7 @@ aio:
         username:
           value: {{ .Values.cache.nextcloud.username }}
         password:
-          value: {{ .Values.cache.nextcloud.password | default .Values.secrets.redis.password | quote }}
+          value: {{ .Values.cache.nextcloud.password.value | default .Values.secrets.redis.password.value | quote }}
       host: {{ .Values.cache.nextcloud.host | quote }}
       port: {{ .Values.cache.nextcloud.port | quote }}
       tls: {{ .Values.cache.nextcloud.tls }}
@@ -112,18 +114,14 @@ aio:
         username:
           value: {{ .Values.databases.nextcloud.username | quote }}
         password:
-          {{- if or (eq .Values.databases.nextcloud.type "mariadb") (eq .Values.databases.nextcloud.type "mysql") }}
-          value: {{ .Values.databases.nextcloud.password | default .Values.secrets.mariadb.nextcloudUser | quote }}
-          {{- else if or (eq .Values.databases.nextcloud.type "postgresql") (eq .Values.databases.nextcloud.type "psql") }}
-          value: {{ .Values.databases.nextcloud.password | default .Values.secrets.postgresql.nextcloudUser | quote }}
-          {{- else }}
-          value: {{ .Values.databases.nextcloud.password | quote }}
-          {{- end }}
+          value: {{ .Values.databases.nextcloud.password.value | quote }}
     trustedProxy: {{ join " " .Values.cluster.networking.cidr | quote }}
     statusPhp:
       password:
         enabled: {{ not .Values.functional.filestore.nextcloud.clients.enabled }}
-        value: {{ .Values.secrets.nextcloud.statusPassword | quote }}
+        secret:
+          name: {{ .Values.secrets.nextcloud.statusPassword.name | quote }}
+          key: {{ .Values.secrets.nextcloud.statusPassword.key | quote }}
     php:
       memoryLimit: {{ .Values.technical.nextcloud.aio.php.memoryLimit | quote }}
       workers: {{ .Values.technical.nextcloud.aio.php.workers }}

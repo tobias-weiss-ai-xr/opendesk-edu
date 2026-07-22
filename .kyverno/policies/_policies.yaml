@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2024-2026 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
 pod:
@@ -122,6 +122,15 @@ pod:
       - "DaemonSet"
   - name: "require-containersecuritycontext"
     rule: "require-all-capabilities-dropped"
+    type: "optional"
+    kinds:
+      - "StatefulSet"
+      - "Deployment"
+      - "Job"
+      - "Pod"
+      - "DaemonSet"
+  - name: "require-containersecuritycontext"
+    rule: "restrict-capabilities-added"
     type: "optional"
     kinds:
       - "StatefulSet"
@@ -267,6 +276,33 @@ pod:
   - name: "disallow-host-process"
     rule: "disallow-host-process"
     type: "required"
+    kinds:
+      - "StatefulSet"
+      - "Deployment"
+      - "Job"
+      - "Pod"
+      - "DaemonSet"
+  - name: "restrict-volume-types"
+    rule: "restrict-volume-types"
+    type: "required"
+    kinds:
+      - "StatefulSet"
+      - "Deployment"
+      - "Job"
+      - "Pod"
+      - "DaemonSet"
+  - name: "restrict-apparmor-profiles"
+    rule: "restrict-apparmor-annotations"
+    type: "optional"
+    kinds:
+      - "StatefulSet"
+      - "Deployment"
+      - "Job"
+      - "Pod"
+      - "DaemonSet"
+  - name: "restrict-apparmor-profiles"
+    rule: "restrict-apparmor-fields"
+    type: "optional"
     kinds:
       - "StatefulSet"
       - "Deployment"

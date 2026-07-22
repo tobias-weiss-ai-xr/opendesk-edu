@@ -1,0 +1,68 @@
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: "kyverno.io/v1"
+kind: "ClusterPolicy"
+metadata:
+  name: "restrict-apparmor-profiles"
+  annotations:
+    policies.kyverno.io/title: "Restrict AppArmor"
+    policies.kyverno.io/subject: "Pod,Annotation"
+    policies.kyverno.io/description: >-
+      On supported hosts, the 'runtime/default' AppArmor profile is applied by default.
+      The baseline policy should prevent overriding or disabling the default AppArmor
+      profile, or restrict overrides to an allowed set of profiles. This policy ensures
+      Pods do not specify any other AppArmor profiles than `runtime/default` or
+      `localhost/*`, neither via the legacy annotations nor via the `appArmorProfile`
+      field introduced in Kubernetes v1.30.
+spec:
+  background: true
+  rules:
+    - name: "restrict-apparmor-annotations"
+      match:
+        any:
+          - resources:
+              kinds:
+                - "Pod"
+      validate:
+        message: >-
+          Specifying other AppArmor profiles is disallowed. The annotation
+          `container.apparmor.security.beta.kubernetes.io`, if defined, must be set to
+          `runtime/default` or `localhost/*`.
+        pattern:
+          =(metadata):
+            =(annotations):
+              =(container.apparmor.security.beta.kubernetes.io/*): "runtime/default | localhost/*"
+    - name: "restrict-apparmor-fields"
+      match:
+        any:
+          - resources:
+              kinds:
+                - "Pod"
+      validate:
+        message: >-
+          Specifying other AppArmor profiles is disallowed. The fields
+          spec.securityContext.appArmorProfile.type,
+          spec.containers[*].securityContext.appArmorProfile.type,
+          spec.initContainers[*].securityContext.appArmorProfile.type, and
+          spec.ephemeralContainers[*].securityContext.appArmorProfile.type
+          must be unset or set to `RuntimeDefault` or `Localhost`.
+        pattern:
+          spec:
+            =(securityContext):
+              =(appArmorProfile):
+                =(type): "RuntimeDefault | Localhost"
+            =(ephemeralContainers):
+              - =(securityContext):
+                  =(appArmorProfile):
+                    =(type): "RuntimeDefault | Localhost"
+            =(initContainers):
+              - =(securityContext):
+                  =(appArmorProfile):
+                    =(type): "RuntimeDefault | Localhost"
+            containers:
+              - =(securityContext):
+                  =(appArmorProfile):
+                    =(type): "RuntimeDefault | Localhost"
+  validationFailureAction: "audit"
+...

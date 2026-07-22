@@ -5,9 +5,9 @@
 global:
   hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
   appsuite:
-    cookieHashSalt: {{ .Values.secrets.oxAppSuite.cookieHashSalt }}
-    shareCryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey }}
-    sessiondEncryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey }}
+    cookieHashSalt: {{ .Values.secrets.oxAppSuite.cookieHashSalt.value }}
+    shareCryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey.value }}
+    sessiondEncryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey.value }}
   mysql:
     host: {{ .Values.databases.oxAppSuite.host | quote }}
     port: {{ .Values.databases.oxAppSuite.port }}
@@ -16,10 +16,10 @@ global:
     readDatabase: {{ .Values.databases.oxAppSuite.name | quote }}
     auth:
       user: {{ .Values.databases.oxAppSuite.username | quote }}
-      password: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
-      rootPassword: {{ .Values.databases.oxAppSuite.password | default .Values.secrets.mariadb.rootPassword | quote }}
+      password: {{ .Values.databases.oxAppSuite.password.value | default .Values.secrets.mariadb.rootPassword.value | quote }}
+      rootPassword: {{ .Values.databases.oxAppSuite.password.value | default .Values.secrets.mariadb.rootPassword.value | quote }}
       readUser: {{ .Values.databases.oxAppSuite.readUser | default .Values.databases.oxAppSuite.username | quote }}
-      readPassword: {{ .Values.databases.oxAppSuite.readPassword | default .Values.databases.oxAppSuite.password | quote}}
+      readPassword: {{ .Values.databases.oxAppSuite.readPassword.value | default .Values.databases.oxAppSuite.password.value | quote}}
 
 nextcloud-integration-ui:
   image:
@@ -138,6 +138,17 @@ appsuite:
           haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
           haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
           {{- with .Values.annotations.openxchangeAppsuiteIngress.rootredirect }}
+          {{ . | toYaml | nindent 10 }}
+          {{- end }}
+      trailslash:
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.parameters.bodyTimeout.oxAppSuite | quote }}
+          haproxy-ingress.github.io/proxy-body-size: {{ .Values.ingress.parameters.bodySize.oxAppSuite | quote }}
+          haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.oxAppSuite }}s"
+          {{- with .Values.annotations.openxchangeAppsuiteIngress.trailslash }}
           {{ . | toYaml | nindent 10 }}
           {{- end }}
       rest-routes-admin:
@@ -604,14 +615,14 @@ appsuite:
             com.openexchange.quota.attachment: "-1"
             # Mailfilter
             com.openexchange.mail.filter.passwordSource: "global"
-            com.openexchange.mail.filter.masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+            com.openexchange.mail.filter.masterPassword: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword.value | quote }}
             com.openexchange.mail.filter.preferredSaslMech: ""
             # Loosen API the rate limit
             com.openexchange.servlet.maxRateTimeWindow: "60000"
             com.openexchange.servlet.maxRate: "3000"
           propertiesFiles:
             /opt/open-xchange/etc/masterpassword-authentication.properties:
-              com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword | quote }}
+              com.openexchange.authentication.masterpassword.password: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword.value | quote }}
         services:
           - type: ClusterIP
             ports:
@@ -651,13 +662,13 @@ appsuite:
             - "admin"
         {{- end }}
     masterAdmin: "admin"
-    masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
+    masterPassword: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
     hzGroupName: "hzgroup"
-    hzGroupPassword: {{ .Values.secrets.oxAppSuite.hzGroupPassword | quote }}
+    hzGroupPassword: {{ .Values.secrets.oxAppSuite.hzGroupPassword.value | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword.value | quote }}
     jolokiaLogin: "jolokia"
-    jolokiaPassword: {{ .Values.secrets.oxAppSuite.jolokiaPassword | quote }}
+    jolokiaPassword: {{ .Values.secrets.oxAppSuite.jolokiaPassword.value | quote }}
     hostname: "{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}"
     podAnnotations:
       intents.otterize.com/service-name: "open-xchange-core-mw"
@@ -712,6 +723,10 @@ appsuite:
           {{ .Values.seLinuxOptions.openxchangeGotenberg | toYaml | nindent 10 }}
       serviceAccount:
         create: false
+    documentConverterClient:
+      cache:
+        remoteCache:
+          url: ""
     {{ if .Values.functional.groupware.mail.encryption.enabled }}
     hooks:
       beforeAppsuiteStart:
@@ -721,6 +736,7 @@ appsuite:
     {{ end }}
     packages:
       status:
+        # Authentication related packages
         open-xchange-oidc: "enabled"
         open-xchange-authentication-masterpassword: "disabled"
         open-xchange-authentication-oauth: "disabled"
@@ -734,8 +750,10 @@ appsuite:
         open-xchange-oauth-provider: "enabled"
         # Needed to set com.openexchange.hostname
         open-xchange-hostname-config-cascade: "enabled"
-        # Enable s3 storage
+        # Enable S3 storage for calendar, contacts and tasks attachments
         open-xchange-filestore-s3: "enabled"
+        # Switch off the "Feedback" option from the "Help" menu
+        open-xchange-userfeedback: "disabled"
         {{- if .Values.technical.oxAppSuite.provisioning.dedicatedCoreMwPod }}
         # disabling admin feature breaks webmail, so only sub packages are disabled:
         open-xchange-admin-contextrestore: "disabled"
@@ -751,7 +769,12 @@ appsuite:
       com.openexchange.share.guestHostname: {{ printf "%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
       com.openexchange.UIWebPath: "/appsuite/"
       com.openexchange.showAdmin: "false"
+      # Quota related setting
+      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota
       com.openexchange.quota.calendar: {{ .Values.technical.oxAppSuite.quota.calendar | quote }}
+      com.openexchange.quota.task: {{ .Values.technical.oxAppSuite.quota.tasks | quote }}
+      com.openexchange.quota.contact: {{ .Values.technical.oxAppSuite.quota.contacts | quote }}
+      com.openexchange.quota.attachment: {{ .Values.technical.oxAppSuite.quota.attachments | quote }}
       # Audit logs
       {{- if .Values.functional.admin.logging.auditLogs.enabled }}
       com.openexchange.log.audit.slf4j.enabled: "true"
@@ -762,9 +785,25 @@ appsuite:
       # Deputy feature
       # Ref.: https://documentation.open-xchange.com/8/middleware/permissions_and_capabilities/deputy_permission.html
       com.openexchange.deputy.enabled: "true"
+      com.openexchange.deputy.provider.imap.doveadm.personalNamespace: "/"
+      com.openexchange.deputy.provider.imap.doveadm.sharedNamespace: "shared/"
+      com.openexchange.deputy.provider.imap.doveadm.publicNamespace: "public/"
+      # Doveadm required for deputy feature
+      com.openexchange.dovecot.doveadm.enabled: "true"
+      com.openexchange.dovecot.doveadm.endpoints: {{ printf "http://%s.%s.svc.%s:8080/doveadm/v1" "dovecot" (.Values.apps.dovecot.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+      com.openexchange.dovecot.doveadm.endpoints.totalConnections: "100"
+      com.openexchange.dovecot.doveadm.endpoints.maxConnectionsPerRoute: "0"
+      com.openexchange.dovecot.doveadm.endpoints.readTimeout: "20000"
+      com.openexchange.dovecot.doveadm.endpoints.connectTimeout: "5000"
       # Various Mail settings
+      com.openexchange.mail.maxToCcBcc: "500"
       com.openexchange.mail.deleteDraftOnTransport: "true"
+      # Various Capability settings
       com.openexchange.capability.document_preview_xrechnung: "true"
+      # Schedule Outgoing Mail
+      com.openexchange.capability.scheduled_mail: {{ .Values.functional.groupware.mail.outbound.sendLater.enabled | quote }}
+      com.openexchange.mail.scheduled.enabled: {{ .Values.functional.groupware.mail.outbound.sendLater.enabled | quote }}
+      com.openexchange.mail.scheduled.requireMasterAuth: "false"
       # PDF Export
       com.openexchange.capability.mail_export_pdf: "true"
       com.openexchange.mail.exportpdf.gotenberg.enabled: "true"
@@ -777,7 +816,6 @@ appsuite:
       com.openexchange.oidc.autologinCookieMode: "ox_direct"
       com.openexchange.oidc.backchannelLogoutEnabled: "true"
       com.openexchange.oidc.clientId: "opendesk-oxappsuite"
-      com.openexchange.oidc.clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc | quote }}
       com.openexchange.oidc.contextLookupClaim: "context"
       com.openexchange.oidc.contextLookupNamePart: "full"
       com.openexchange.oidc.opAuthorizationEndpoint: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/auth"
@@ -806,10 +844,11 @@ appsuite:
       # MAIL
       com.openexchange.mail.authType: "xoauth2"
       com.openexchange.mail.loginSource: "name"
-      com.openexchange.mail.mailServer: "dovecot"
+      com.openexchange.mail.mailServer: {{ printf "%s.%s.svc.%s" "dovecot" (.Values.apps.dovecot.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       com.openexchange.mail.mailServerSource: "global"
       com.openexchange.mail.transport.authType: "xoauth2"
-      com.openexchange.mail.transportServer: "postfix-ox"
+      com.openexchange.mail.transportServer: "postfix-ox:25"
+      com.openexchange.mail.transportStartTls: "true"
       com.openexchange.mail.transportServerSource: "global"
       com.openexchange.mail.maxMailSize: {{ mul .Values.functional.groupware.mail.maxSize 1024 1024 | int | printf "%d" | quote }}
       # Mail Login Resolver
@@ -831,8 +870,8 @@ appsuite:
       com.openexchange.folderstorage.database.preferDisplayName: "false"
       # Mailfilter
       com.openexchange.mail.filter.loginType: "global"
-      com.openexchange.mail.filter.credentialSource: "imapLogin"
-      com.openexchange.mail.filter.server: "dovecot"
+      com.openexchange.mail.filter.credentialSource: "session"
+      com.openexchange.mail.filter.server: {{ printf "%s.%s.svc.%s" "dovecot" (.Values.apps.dovecot.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
       com.openexchange.mail.filter.preferredSaslMech: "XOAUTH2"
       # Dovecot
       com.openexchange.imap.attachmentMarker.enabled: "true"
@@ -844,8 +883,8 @@ appsuite:
       com.openexchange.capability.public-sector-navigation: "true"
       com.openexchange.capability.client-onboarding: "true"
       com.openexchange.capability.dynamic-theme: "true"
-      com.openexchange.capability.filestorage_nextcloud: "true"
-      com.openexchange.capability.filestorage_nextcloud_oauth: "true"
+      com.openexchange.capability.filestorage_nextcloud: {{ .Values.apps.nextcloud.enabled | quote }}
+      com.openexchange.capability.filestorage_nextcloud_oauth: {{ .Values.apps.nextcloud.enabled | quote }}
       com.openexchange.capability.guard: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
       com.openexchange.capability.guard-mail: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
       com.openexchange.capability.smime: {{ .Values.functional.groupware.mail.encryption.enabled | quote }}
@@ -893,7 +932,9 @@ appsuite:
       com.openexchange.mail.filter.options.apply.blockedActions: "redirect,notify"
       # functional.groupware.externalSharing.*
       com.openexchange.capability.share_links: {{ .Values.functional.groupware.externalSharing.shareLinks.enabled | quote }}
+      com.openexchange.quota.share_links: {{ .Values.functional.groupware.externalSharing.shareLinks.quota | quote }}
       com.openexchange.capability.invite_guests: {{ .Values.functional.groupware.externalSharing.inviteGuests.enabled | quote }}
+      com.openexchange.quota.invite_guests: {{ .Values.functional.groupware.externalSharing.shareLinks.quota | quote }}
       com.openexchange.share.guestCapabilityMode: "inherit"
       # Secondary Accounts
       com.openexchange.mail.secondary.authType: "XOAUTH2"
@@ -902,10 +943,6 @@ appsuite:
       com.openexchange.file.storage.nextcloud.oauth.url: "http://opendesk-nextcloud-aio/"
       com.openexchange.file.storage.nextcloud.oauth.webdav.username.strategy: "user"
       com.openexchange.nextcloud.filepicker.includeAccessToken: "false"
-      {{- if .Values.apps.opencloud.enabled }}
-      # OpenCloud integration
-      com.openexchange.capability.filestorage_owncloud_oauth: "true"
-      {{- end }}
       # Element integration
       com.openexchange.conference.element.enabled: {{ .Values.apps.element.enabled | quote }}
       com.openexchange.conference.element.meetingHostUrl: http://matrix-neodatefix-bot
@@ -918,11 +955,10 @@ appsuite:
       {{- if .Values.functional.groupware.mail.encryption.enabled }}
       com.openexchange.guard.storage.file.fileStorageType: "file"
       com.openexchange.guard.storage.file.uploadDirectory: "/opt/open-xchange/guard-files/"
+      com.openexchange.guard.passwordFromAddress: {{ printf "%s@%s" .Values.smtp.localpartNoReply ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.guestSMTPMailFrom: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
-      com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
       com.openexchange.guard.guestSMTPPort: "25"
       com.openexchange.guard.guestSMTPServer: "postfix"
-      com.openexchange.guard.guestSMTPUsername: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.useStartTLS: "false"
       # S/MIME
       # Usage (in browser console after login):
@@ -959,7 +995,6 @@ appsuite:
       com.openexchange.net.ssl.default.truststore.enabled: "false"
       com.openexchange.net.ssl.custom.truststore.enabled: "true"
       com.openexchange.net.ssl.custom.truststore.path: "/etc/ssl/certs/truststore.jks"
-      com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password | quote }}
       {{- end }}
       {{- if .Values.functional.groupware.davSupport.enabled }}
       com.openexchange.authentication.application.appTypes: "caldav,carddav"
@@ -970,7 +1005,7 @@ appsuite:
     {{- if .Values.certificate.selfSigned }}
     extraEnv:
     - name: "JAVA_OPTS_APPEND"
-      value: {{ printf "%s %s=%s" "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks -Djavax.net.ssl.trustStoreType=jks" "-Djavax.net.ssl.trustStorePassword" .Values.secrets.certificates.password | quote }}
+      value: {{ printf "%s %s=%s" "-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks -Djavax.net.ssl.trustStoreType=jks" "-Djavax.net.ssl.trustStorePassword" .Values.secrets.certificates.password.value | quote }}
     extraVolumes:
       - name: "trusted-cert-secret-volume"
         secret:
@@ -985,10 +1020,28 @@ appsuite:
         mountPath: "/etc/ssl/certs/"
     {{- end }}
     secretProperties:
-      com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppSuite.cookieHashSalt | quote }}
-      com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey | quote }}
-      com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey | quote }}
-      com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken | quote }}
+      com.openexchange.cookie.hash.salt: {{ .Values.secrets.oxAppSuite.cookieHashSalt.value | quote }}
+      com.openexchange.sessiond.encryptionKey: {{ .Values.secrets.oxAppSuite.sessiondEncryptionKey.value | quote }}
+      com.openexchange.share.cryptKey: {{ .Values.secrets.oxAppSuite.shareCryptKey.value | quote }}
+      com.openexchange.conference.element.authToken: {{ .Values.secrets.oxAppSuite.synapseAsToken.value | quote }}
+      com.openexchange.dovecot.doveadm.apiSecret: {{ .Values.secrets.dovecot.doveadm.value | quote }}
+      com.openexchange.oidc.clientSecret: {{ .Values.secrets.keycloak.clientSecret.as8oidc.value | quote }}
+      {{- if .Values.functional.groupware.mail.encryption.enabled }}
+      com.openexchange.guard.guestSMTPPassword: {{ .Values.secrets.postfix.opendeskSystemPassword.value | quote }}
+      com.openexchange.guard.guestSMTPUsername: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+      {{- end }}
+      {{- if .Values.certificate.selfSigned }}
+      com.openexchange.net.ssl.custom.truststore.password: {{ .Values.secrets.certificates.password.value | quote }}
+      {{- end }}
+    secretPropertiesFiles:
+      /opt/open-xchange/etc/filestore-s3.properties:
+        com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
+        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey.value | quote }}
+      /opt/open-xchange/etc/ldapauth.properties:
+        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox.value | quote }}
+      /opt/open-xchange/etc/noreply.properties:
+        com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
+        com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword.value | quote }}
     propertiesFiles:
       /opt/open-xchange/etc/Group.properties:
         CHECK_GROUP_UID_FOR_NOT_ALLOWED_CHARS: "false"
@@ -1017,19 +1070,22 @@ appsuite:
         {{- end }}
         com.openexchange.antivirus.maxFileSize: "1024"
       /opt/open-xchange/etc/filestore-s3.properties:
-        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ .Values.objectstores.openxchange.endpoint | default (printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain) | quote }}
+        {{- if .Values.objectstores.openxchange.endpoint }}
+        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ .Values.objectstores.openxchange.endpoint | quote }}
+        {{- else if .Values.apps.minio.enabled }}
+        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+        {{- else if .Values.apps.seaweedfs.enabled }}
+        com.openexchange.filestore.s3.ox-filestore-s3.endpoint: {{ printf "%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+        {{- else }}
+        {{- fail "No objectstorage endpoint for openxchange found!" }}
+        {{- end }}
         com.openexchange.filestore.s3.ox-filestore-s3.bucketName: {{ .Values.objectstores.openxchange.bucket | quote }}
-        com.openexchange.filestore.s3.ox-filestore-s3.accessKey: {{ .Values.objectstores.openxchange.username | quote }}
-        com.openexchange.filestore.s3.ox-filestore-s3.secretKey: {{ .Values.objectstores.openxchange.secretKey | default .Values.secrets.minio.openxchangeUser | quote }}
       /opt/open-xchange/etc/ldapauth.properties:
         java.naming.provider.url: "ldap://{{ .Values.ldap.host }}:389/{{ .Values.ldap.baseDn }}"
         bindDN: "uid=ldapsearch_ox,cn=users,{{ .Values.ldap.baseDn }}"
-        bindDNPassword: {{ .Values.secrets.nubus.ldapSearch.ox | quote }}
         bindOnly: "false"
       /opt/open-xchange/etc/noreply.properties:
         com.openexchange.noreply.address: "{{ .Values.smtp.localpartNoReply }}@{{ .Values.global.mailDomain | default .Values.global.domain }}"
-        com.openexchange.noreply.login: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
-        com.openexchange.noreply.password: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
         com.openexchange.noreply.server: "postfix"
         com.openexchange.noreply.port: "25"
         com.openexchange.noreply.secureMode: "plain"
@@ -1037,12 +1093,9 @@ appsuite:
         SERVER_NAME: "oxserver"
     uiSettings:
       io.ox.nextcloud//server: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/fs/"
-      {{- if .Values.apps.opencloud.enabled }}
-      io.ox.owncloud//server: "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/"
-{{- end }}
       io.ox.public-sector//ics/url: "https://{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}/"
       # Is user allowed to edit own display name
-      io.ox.mail//editRealName: {{ .Values.functional.groupware.userProfile.editRealName | quote }}
+      io.ox/mail//editRealName: {{ .Values.functional.groupware.userProfile.editRealName | quote }}
       # Show the Enterprise Picker in the top right corner instead of the launcher drop-down
       io.ox/core//features/enterprisePicker/showLauncher: "false"
       io.ox/core//features/enterprisePicker/showTopRightLauncher: "true"
@@ -1053,8 +1106,9 @@ appsuite:
       io.ox/core//features/resourceCalendars: "true"
       io.ox/core//features/managedResources: "true"
       # Features
-      io.ox/core//features/signatureDesigner: "true"
       io.ox/core//features/categories: {{ .Values.functional.groupware.mail.categories.enabled | quote }}
+      io.ox/core//features/scheduleSend: {{ .Values.functional.groupware.mail.outbound.sendLater.enabled | quote }}
+      io.ox/core//features/signatureDesigner: "true"
       io.ox/core//categories/predefined: >
         [{ "name": "Predefined", "color": "orange", "icon": "bi/exclamation-circle.svg" }]
       # Nextcloud integration
@@ -1084,8 +1138,8 @@ appsuite:
       # MC+base64(20 random bytes)
       # RC+base64(20 random bytes)
       oxguardpass: |
-        {{ .Values.secrets.oxAppSuite.oxguardMC }}
-        {{ .Values.secrets.oxAppSuite.oxguardRC }}
+        {{ .Values.secrets.oxAppSuite.oxguardMC.value }}
+        {{ .Values.secrets.oxAppSuite.oxguardRC.value }}
     {{ end }}
     redis: &redisConfiguration
       enabled: true
@@ -1097,7 +1151,7 @@ appsuite:
       auth:
         enabled: true
         username: {{ .Values.cache.oxAppSuite.username | quote }}
-        password: {{ .Values.cache.oxAppSuite.password | default .Values.secrets.redis.password | quote }}
+        password: {{ .Values.cache.oxAppSuite.password.value | default .Values.secrets.redis.password.value | quote }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeCoreMW.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
@@ -1242,14 +1296,15 @@ appsuite:
 
   core-documentconverter:
     adminUser: "admin"
-    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
+    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword.value | quote }}
     enabled: true
     documentConverter:
       cache:
         remoteCache:
           enabled: false
+          url: ""
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}
@@ -1341,9 +1396,9 @@ appsuite:
   core-imageconverter:
     enabled: true
     adminUser: "admin"
-    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword | quote }}
+    adminPassword: {{ .Values.secrets.oxAppSuite.adminPassword.value | quote }}
     basicAuthLogin: "oxlogin"
-    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword | quote }}
+    basicAuthPassword: {{ .Values.secrets.oxAppSuite.basicAuthPassword.value | quote }}
     imagePullSecrets:
     {{- range .Values.global.imagePullSecrets }}
       - name: {{ . | quote }}

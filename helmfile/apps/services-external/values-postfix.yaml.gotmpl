@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
@@ -7,12 +7,20 @@ certificate:
   request:
     enabled: false
 
-commonAnnotations:
-  {{ .Values.annotations.servicesExternalPostfix.common | toYaml | nindent 2 }}
+commonAnnotations: {{ .Values.annotations.servicesExternalPostfix.common | toYaml | nindent 2 }}
 
 containerSecurityContext:
-  allowPrivilegeEscalation: true
-  capabilities: {}
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "DAC_OVERRIDE"
+      - "FOWNER"
+      - "SETGID"
+      - "SETUID"
+      - "KILL"
   enabled: true
   seccompProfile:
     type: "RuntimeDefault"
@@ -20,13 +28,31 @@ containerSecurityContext:
   runAsNonRoot: false
   runAsUser: 0
   runAsGroup: 0
-  privileged: true
-  seLinuxOptions:
-    {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
+
+initContainerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+      - "FOWNER"
+  enabled: true
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+  runAsNonRoot: false
+  runAsUser: 0
+  runAsGroup: 0
+  privileged: false
+  seLinuxOptions: {{ .Values.seLinuxOptions.postfix | toYaml | nindent 4 }}
 
 global:
-  imagePullSecrets:
-    {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+  imagePullSecrets: {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
+
+hostUsers: {{ not .Values.technical.postfix.userNamespaces }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.postfix.registry | quote }}
@@ -37,14 +63,13 @@ image:
 persistence:
   size: {{ .Values.persistence.storages.postfix.size | quote }}
   storageClass: {{ coalesce .Values.persistence.storages.postfix.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
-  annotations:
-    {{ .Values.annotations.servicesExternalPostfix.persistence | toYaml | nindent 4 }}
+  annotations: {{ .Values.annotations.servicesExternalPostfix.persistence | toYaml | nindent 4 }}
 
 podAnnotations:
   intents.otterize.com/service-name: "postfix"
   {{- with .Values.annotations.servicesExternalPostfix.pod }}
   {{ . | toYaml | nindent 2}}
-  {{- end }}
+  {{- end}}
 
 podSecurityContext:
   enabled: true
@@ -55,6 +80,9 @@ postfix:
   amavisPortIn: ""
   domain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
   hostname: "postfix"
+  {{- with .Values.smtp.internalHeloName }}
+  smtpHeloName: {{ . | quote }}
+  {{- end }}
   inetProtocols: "ipv4"
   ldap:
     host: "ums-ldap-server"
@@ -63,7 +91,7 @@ postfix:
     baseDn: "{{ .Values.ldap.baseDn }}"
     bindDn: "uid=ldapsearch_postfix,cn=users,{{ .Values.ldap.baseDn }}"
     password:
-      value: {{ .Values.secrets.nubus.ldapSearch.postfix | quote }}
+      value: {{ .Values.secrets.nubus.ldapSearch.postfix.value | quote }}
   milterDefaultAction: "accept"
   smtpdMilters:
     {{- if .Values.apps.dkimpy.enabled }}
@@ -95,18 +123,18 @@ postfix:
       username:
         value: {{ .Values.smtp.username }}
       password:
-        value: {{ .Values.smtp.password }}
+        value: {{ .Values.smtp.password.value }}
   smtpSASLAuthEnable: "yes"
   {{- else }}
   smtpSASLAuthEnable: "no"
   {{- end }}
   # Warning: This setting allows unauthenticated mail relay from relayNets!
   allowRelayNets: true
-  relayNets: {{ join " " .Values.cluster.networking.cidr | quote }}
-  minTLSVersion: "TLSv1.3"
-  smtpdTLSMandatoryCiphers: "high"
+  relayNets: {{ concat (list "127.0.0.0/8" "::1/128") .Values.cluster.networking.cidr | toYaml | nindent 4 }}
+
+  minTLSVersion: "TLSv1.2"
+  smtpdTLSMandatoryCiphers: "medium"
   smtpTLSSecurityLevel: "encrypt"
-  smtpSASLPasswordMaps: "lmdb:/etc/postfix/sasl_passwd.map"
   smtpdSASLAuthEnable: "yes"
   smtpdSASLSecurityOptions: {{ .Values.smtp.security.smtpdSASLSecurityOptions | join ", " | quote }}
   smtpdSASLTLSSecurityOptions: {{ .Values.smtp.security.smtpdSASLTLSSecurityOptions | join ", " | quote }}
@@ -118,14 +146,14 @@ postfix:
   smtpdKeyFile: "/etc/tls/tls.key"
   smtpdSASLPath: "smtpd"
 
-  allowPercentHack: "yes"
-
   staticAuthDB:
     enabled: true
     username:
       value: "opendesk-system"
     password:
-      value: {{ .Values.secrets.postfix.opendeskSystemPassword | quote }}
+      existingSecret:
+        name: {{ .Values.secrets.postfix.opendeskSystemPassword.name | quote }}
+        key: {{ .Values.secrets.postfix.opendeskSystemPassword.key | quote }}
 
   ldapTransportMaps: {}
 
@@ -158,8 +186,10 @@ postfix:
   # Only deliver mail to Dovecot, if it is available
   {{- if .Values.apps.oxAppSuite.enabled }}
   virtualTransport: "lmtps:dovecot:24"
-  {{- else if .Values.global.grommunio.enabled }}
-  virtualTransport: "lmtp:grommunio:24"
+  ldapMailboxMaps:
+    010-opendesk:
+      queryFilter: "(|(mailPrimaryAddress=%s)(mailAlternativeAddress=%s))"
+      resultAttribute: "mailPrimaryAddress, mailAlternativeAddress"
   {{- else }}
   virtualMailboxDomains: []
   {{- end }}
@@ -172,6 +202,12 @@ resources:
 service:
   annotations:
     {{ .Values.annotations.servicesExternalPostfix.service | toYaml | nindent 4 }}
+  ports:
+    smtp:
+      port: 25
+      targetPort: 2500
+    submission: ~
+    submissions: ~
   external:
     enabled: false
 

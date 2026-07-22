@@ -1,320 +1,138 @@
-﻿<!--
-SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+<!--
+SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<div align="center">
+# openDesk Deployment Automation
 
-### TL;DR 🚀
+<!-- TOC -->
+* [openDesk Deployment Automation](#opendesk-deployment-automation)
+  * [Overview](#overview)
+  * [Upgrades](#upgrades)
+  * [Requirements](#requirements)
+  * [Getting started](#getting-started)
+  * [Advanced customization](#advanced-customization)
+  * [Architecture](#architecture)
+  * [Testing](#testing)
+  * [Permissions](#permissions)
+  * [Releases](#releases)
+  * [Data storage](#data-storage)
+  * [Feedback](#feedback)
+  * [Development](#development)
+  * [License](#license)
+  * [Copyright](#copyright)
+<!-- TOC -->
 
-openDesk CE + 25 education & research services (ILIAS, JupyterHub, Overleaf, Moodle, BigBlueButton, …)<br/>
-one-command Kubernetes deploy with unified Keycloak SSO
+## Overview
 
-# 🎓 openDesk Edu
+openDesk is a Kubernetes-based, open-source and cloud-native digital workplace suite provided by the
+*Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH*.
 
-**openDesk + Educational Services for Universities**
+For production use [openDesk Enterprise Edition](./README-EE.md) is recommended.
 
-![openDesk Edu](docs/assets/readme-lead-image.svg)
+openDesk currently features the following functional main components:
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Kubernetes](https://img.shields.io/badge/Platform-Kubernetes-326CE5?logo=kubernetes&logoColor=white)](https://kubernetes.io)
-[![Helm](https://img.shields.io/badge/Deploy-Helm-0F1689?logo=helm&logoColor=white)](https://helm.sh)
-[![Upstream](https://img.shields.io/badge/Upstream-openDesk_CE_v1.13.x-green)](https://www.opencode.de/en/opendesk)
-[![Test](https://github.com/opendesk-edu/opendesk-edu/actions/workflows/test.yml/badge.svg)](https://github.com/opendesk-edu/opendesk-edu/actions/workflows/test.yml)
+| Function             | Functional component        | License                                                                                | Component<br/>version                                                                         | Upstream documentation                                                                                                                |
+| -------------------- | --------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Chat & collaboration | Element ft. Nordeck widgets | AGPL-3.0-or-later (Element Web), AGPL-3.0-only (Synapse), Apache-2.0 (Nordeck widgets) | [1.12.6](https://github.com/element-hq/element-web/releases/tag/v1.12.6)                      | [For the most recent release](https://element.io/user-guide)                                                                          |
+| Collaborative notes  | Notes (aka Docs)            | MIT                                                                                    | [4.4.0](https://github.com/suitenumerique/docs/releases/tag/v4.4.0)                           | Online documentation/welcome document available in installed application                                                              |
+| Diagram editor       | CryptPad ft. diagrams.net   | AGPL-3.0-only                                                                          | [2025.9.0](https://github.com/cryptpad/cryptpad/releases/tag/2025.9.0)                        | [For the most recent release](https://docs.cryptpad.org/en/)                                                                          |
+| File management      | Nextcloud                   | AGPL-3.0-or-later                                                                      | [32.0.9](https://nextcloud.com/de/changelog/#32-0-9)                                          | [Nextcloud 32](https://docs.nextcloud.com/)                                                                                           |
+| Groupware            | OX App Suite                | GPL-2.0-only (backend), AGPL-3.0-or-later (frontend)                                   | [8.49](https://documentation.open-xchange.com/appsuite/releases/8.49/)                        | Online documentation available from within the installed application; [Additional resources](https://documentation.open-xchange.com/) |
+| Knowledge management | XWiki                       | LGPL-2.1-or-later                                                                      | [17.10.9](https://www.xwiki.org/xwiki/bin/view/ReleaseNotes/Data/XWiki/17.10.9/)              | [For the most recent release](https://www.xwiki.org/xwiki/bin/view/Documentation)                                                     |
+| Portal & IAM         | Nubus                       | AGPL-3.0-or-later                                                                      | [1.21.0](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/1.21.html) | [Univention's documentation website](https://docs.software-univention.de/n/en/nubus.html)                                             |
+| Project management   | OpenProject                 | GPL-3.0-only                                                                           | [17.6.0](https://www.openproject.org/docs/release-notes/17-6-0/)                              | [For the most recent release](https://www.openproject.org/docs/user-guide/)                                                           |
+| Videoconferencing    | Jitsi                       | Apache-2.0                                                                             | [2.0.11031](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_11031)       | [For the most recent  release](https://jitsi.github.io/handbook/docs/category/user-guide/)                                            |
+| Weboffice            | Collabora                   | MPL-2.0                                                                                | [25.04.11](https://www.collaboraoffice.com/code-25-04-release-notes/)                         | Online documentation available from within the installed application; [Additional resources](https://sdk.collaboraonline.com/)        |
 
-<br/>
+While not all components are perfectly designed for the execution inside containers, one of the project's objectives is to
+align the applications with best practices regarding container design and operations.
 
-[📖 ILIAS](https://www.ilias.de/) &nbsp;·&nbsp;
-[📚 Moodle](https://moodle.org/) &nbsp;·&nbsp;
-[🎥 BigBlueButton](https://bigbluebutton.org/) &nbsp;·&nbsp;
-[🧪 JupyterHub](https://jupyter.org/hub) &nbsp;·&nbsp;
-[✍️ Overleaf](https://github.com/overleaf/overleaf) &nbsp;·&nbsp;
-[🤖 Open WebUI](https://github.com/open-webui/open-webui) &nbsp;·&nbsp;
-[📊 RStudio](https://posit.co/) &nbsp;·&nbsp;
-[☁️ OpenCloud](https://opencloud.eu/) &nbsp;·&nbsp;
-[🔐 Keycloak SSO](https://www.keycloak.org/)
+This documentation aims to give you all that is needed to set up your own instance of the openDesk.
 
-<br/>
+Basic knowledge of Kubernetes and DevOps processes is required though.
 
-An extension of [openDesk Community Edition](https://www.opencode.de/en/opendesk) that adds
-**learning management systems** (ILIAS, Moodle), **scientific computing tools** (JupyterHub,
-Overleaf, RStudio, Open WebUI, code-server, Dask), and provides **alternative components** for
-email/groupware (Grommunio, SOGo ↔ OX App Suite), video conferencing (BigBlueButton ↔ Jitsi),
-and file sharing (OpenCloud ↔ Nextcloud) — all integrated with openDesk's existing Keycloak SSO
-and portal. Deploy everything on Kubernetes with a single `helmfile apply`.
+## Upgrades
 
-[Getting Started →](#-quick-start) &nbsp;·&nbsp; [What's Added →](#-whats-added-on-top-of-opendesk-ce) &nbsp;·&nbsp; [Roadmap →](./ROADMAP.md) &nbsp;·&nbsp; [All Components →](#-full-component-matrix) &nbsp;·&nbsp; [Local Dev →](./docs/local-development.md)
+You want to upgrade an existing openDesk installation?
 
-> 🏗️ **Note:** All charts currently use upstream container images. Building own images for sovereignty and security patching is on the [roadmap](./ROADMAP.md).
+⟶ Visit our detailed documentation about [Updates & Upgrades](./docs/migrations-manual.md).
 
-<br/>
+## Requirements
 
-**🎤 Presentations available in 30 languages** — [see all →](./docs/presentations/linuxtag-2026/README-presentation.md)
+You want to understand what is required to install openDesk yourself?
 
-| Language | Source | HTML |
-|:---------|:-------|:-----|
-| 🇨🇳 中文 | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.html) |
-| 🇩🇪 Deutsch | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk.html) |
-| 🇬🇧 English | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-en.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-en.html) |
-| 🇪🇸 Español | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-es.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-es.html) |
-| 🇫🇷 Français | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.html) |
+⟶ Visit our [Requirements](./docs/requirements.md) overview.
 
-</div>
+## Getting started
 
----
+You would like to install openDesk in your own infrastructure?
 
-## 🚀 Quick Start
+⟶ Visit our detailed [Getting started guide](./docs/getting-started.md).
 
-```bash
-# ✅ ONE COMMAND to deploy openDesk + all educational services
-helmfile -e default apply
-```
+## Advanced customization
 
-📖 **Prerequisites & Setup Guide:**
+- [Enhanced Configuration](./docs/enhanced-configuration.md)
+- [External services](./docs/external-services.md)
+- [Security](./docs/security.md)
+- [Scaling](./docs/scaling.md)
+- [Monitoring](./docs/monitoring.md)
+- [Theming](./docs/theming.md)
 
-- Kubernetes 1.28+, Helm 3, [helmfile](https://helmfile.readthedocs.io/)
-- Edit config: `helmfile/environments/default/global.yaml.gotmpl`
-- [Detailed guide →](./docs/getting-started.md)  |  [Requirements →](./docs/requirements.md)
-
----
-
-## 📚 What is openDesk Edu?
-
-openDesk Edu takes the stock [openDesk CE](https://www.opencode.de/en/opendesk) deployment and adds the
-core services universities need — all integrated with openDesk's existing Keycloak-based SSO and portal.
-
-### Educational Services Added ➕
-
-<p align="center">
-  <img src="docs/assets/icons/edu-services-icon-set.svg" alt="openDesk Edu service icons" width="720"/>
-</p>
-
-| Service | Component | Status | Description |
-|:--------|:----------|:------:|:------------|
-| 📖 **Learning Management** | [ILIAS](https://www.ilias.de/) | 🔄 Beta | Full-featured LMS with SAML SSO — courses, assessments, forums, SCORM |
-| 📖 **Learning Management** | [Moodle](https://moodle.org/) | 🔄 Beta | Plugin-rich LMS — assignments, workshops, gradebook, Shibboleth auth |
-
-### Additional education tools 🎓
-
-| Service | Component | Status | Description |
-|:--------|:----------|:------:|:------------|
-| 📝 **Collaborative Editing** | [Etherpad](https://etherpad.org/) | 🔄 Beta | Real-time collaborative document editor — meeting notes, workshops, live editing |
-| 📚 **Knowledge Base** | [BookStack](https://www.bookstackapp.com/) | 🔄 Beta | Wiki with book/chapter structure — course materials, SOPs, documentation |
-|| 📋 **Project Management** | [Planka](https://planka.app/) | 🟢 Stable | Kanban boards with OIDC — student projects, research planning |
-| 🎫 **Service Desk** | [Zammad](https://zammad.com/) | 🔄 Beta | Helpdesk with SAML — IT support, multi-channel (email, chat, phone) |
-| 📊 **Surveys** | [LimeSurvey](https://www.limesurvey.org/) | 🔄 Beta | Survey platform — course evaluations, academic research |
-|| 🔑 **Password Self-Service** | [LTB SSP](https://ltb-project.org/) | 🟢 Stable | LDAP password reset — reduces helpdesk tickets |
-| 📐 **Diagramming** | [Draw.io](https://www.drawio.com/) | 🔄 Beta | Architecture diagrams, flowcharts, UML — export to PDF/VSDX |
-| ✏️ **Whiteboarding** | [Excalidraw](https://excalidraw.com/) | 🔄 Beta | Hand-drawn sketches, brainstorming — lightweight and fast |
-| 📰 **CMS** | [TYPO3](https://typo3.org/) | 🔄 Beta | Enterprise CMS — university websites, department pages, research portals |
-
-### Scientific computing tools 🧪
-
-| Service | Component | Status | Description |
-|:--------|:----------|:------:|:------------|
-| 🧪 **Notebooks** | [JupyterHub](https://jupyter.org/hub) | 🟢 Stable | Multi-user notebooks with Python, R, Julia, SageMath, Octave kernels |
-| ✍️ **Collaborative LaTeX** | [Overleaf CE](https://github.com/overleaf/overleaf) | 🟢 Stable | Real-time LaTeX editor with version control and track changes |
-| 🤖 **AI Assistant** | [Open WebUI](https://github.com/open-webui/open-webui) | 🟡 Beta | ChatGPT-like UI for local LLMs via Ollama |
-| 🧠 **LLM Backend** | [Ollama](https://ollama.ai/) | 🟢 Stable | Local LLM runtime — llama3, mistral, embeddings |
-| 💻 **Cloud IDE** | [code-server](https://github.com/coder/code-server) | 🟢 Stable | VS Code in the browser — full IDE from any device |
-| 📊 **R Statistics** | [RStudio Server](https://posit.co/products/open-source/rstudio-server/) | 🟡 Beta | R IDE with Shiny app server integration |
-| 🖥️ **Linux Desktop** | [KasmVNC](https://kasmweb.com/) | 🟡 Beta | Full X11 desktop in the browser |
-| ⚡ **Distributed Compute** | [Dask Gateway](https://gateway.dask.org/) | 🔵 Planned | Parallel computing clusters for large-scale data |
-| 🖱️ **Web Terminal** | [ttyd](https://github.com/tsl0922/ttyd) | 🟢 Stable | Browser-based Linux terminal |
-| 📽️ **Slides** | [Slidev](https://sli.dev/) | 🟡 Beta | Markdown-to-presentations with code highlighting and diagrams |
-| 🗺️ **Feature Dashboard** | Collab Dashboard | 🟡 Beta | Single page listing all tools — maps every CoCalc feature to its open-source alternative |
-
-### 🔄 Alternative Components
-
-Each function has a default component and one or more alternatives. Pick one per row.
-
-| Function | Options | Key Differences |
-|:---------|:--------|:----------------|
-| 📧 **Email & Groupware** | [OX App Suite](https://www.open-xchange.com/) / [SOGo](https://www.sogo.nu/) / [Grommunio](https://grommunio.com/) | OX: full enterprise suite · SOGo: lightweight webmail · Grommunio: ActiveSync 16.1 for native mobile sync |
-| 📹 **Video Conferencing** | [Jitsi](https://jitsi.github.io/) / [BigBlueButton](https://bigbluebutton.org/) | Jitsi: quick meetings · BBB: lectures with recording, whiteboard, breakout rooms |
-| 📁 **Files & Cloud Storage** | [Nextcloud](https://nextcloud.com/) / [OpenCloud](https://opencloud.eu/) | Nextcloud: full-featured cloud suite · OpenCloud: lightweight CS3-based, per-course shares |
-| ✏️ **Whiteboard** | [Excalidraw](https://excalidraw.com/) / CryptPad diagrams | Excalidraw: freeform sketching · CryptPad: privacy-first collaborative diagrams |
-
-## ✨ How It Works
-
-- 🔐 **SSO** – One login (Keycloak) via SAML2/OIDC for all services
-- 🖥️ **Unified Portal** – Access educational & research services alongside openDesk apps
-- 📦 **Modular Charts** – Each service in its own configurable Helm chart
-- 💾 **Integrated Backups** – k8up-backed persistent data (LMS, recordings, files; Grommunio uses MariaDB)
-- 🧪 **Collab Services** – Scientific computing tools (JupyterHub, Overleaf, RStudio, Dask) at `collab.opendesk.example.com`
-
-### What's unchanged ✅
-
-All core openDesk CE components remain intact — Element, Nextcloud, Open-Xchange, XWiki, OpenProject,
-Jitsi, CryptPad, Notes, Collabora, and the full Nubus IAM stack. BBB, OpenCloud, Grommunio, SOGo, and
-the collab-services (JupyterHub, Overleaf, Open WebUI, etc.) are optional add-ons, not replacements.
-This is a **superset** of openDesk CE, not a fork.
-
----
-
-## 🏢 Full Component Matrix
-
-> The complete openDesk suite including all educational extensions.
-
-| 🏷️ Function | 📦 Component | 📜 License | 📌 Version | 📖 Docs |
-|:-------------|:-------------|:-----------|:-----------|:--------|
-| 💬 Chat | Element ft. Nordeck widgets | AGPL-3.0 / Apache-2.0 | [1.12.6](https://github.com/element-hq/element-web/releases/tag/v1.12.6) | [Docs](https://element.io/user-guide) |
-| 📝 Notes | Notes (aka Docs) | MIT | [4.4.0](https://github.com/suitenumerique/docs/releases/tag/v4.4.0) | In-app |
-| 📊 Diagrams | CryptPad ft. diagrams.net | AGPL-3.0 | [2025.9.0](https://github.com/cryptpad/cryptpad/releases/tag/2025.9.0) | [Docs](https://docs.cryptpad.org/en/) |
-| 📁 Files | Nextcloud | AGPL-3.0 | [32.0.6](https://nextcloud.com/de/changelog/#32-0-6) | [Docs](https://docs.nextcloud.com/) |
-| 📧 **Groupware** | **OX App Suite** | GPL-2.0 / AGPL-3.0 | [8.46](https://documentation.open-xchange.com/appsuite/releases/8.46/) | [Docs](https://documentation.open-xchange.com/) |
-| 💌 **Alt Webmail** | **SOGo** (↔ OX App Suite) | LGPL-2.1 | [5.11](https://github.com/Alinto/sogo/releases) | [Docs](https://www.sogo.nu/support/documentation.html) |
-| 💌 **Alt Webmail** | **Grommunio** (↔ OX/SOGo) | AGPL-3.0 | [2025.01](https://grommunio.com/) | [Docs](https://docs.grommunio.com/) |
-| 📚 Wiki | XWiki | LGPL-2.1 | [17.10.4](https://www.xwiki.org/xwiki/bin/view/ReleaseNotes/Data/XWiki/17.10.4/) | [Docs](https://www.xwiki.org/xwiki/bin/view/Documentation) |
-| 🔑 Portal & IAM | Nubus | AGPL-3.0 | [1.18.1](https://docs.software-univention.de/nubus-kubernetes-release-notes/1.x/en/1.18.html) | [Docs](https://docs.software-univention.de/n/en/nubus.html) |
-| 📋 Projects | OpenProject | GPL-3.0 | [17.2.1](https://www.openproject.org/docs/release-notes/17-2-1/) | [Docs](https://www.openproject.org/docs/user-guide/) |
-| 📹 Meetings | Jitsi | Apache-2.0 | [2.0.10590](https://github.com/jitsi/jitsi-meet/releases/tag/stable%2Fjitsi-meet_10590) | [Docs](https://jitsi.github.io/handbook/docs/category/user-guide/) |
-| 📄 Office | Collabora | MPL-2.0 | [25.04.8](https://www.collaboraoffice.com/code-25-04-release-notes/) | [Docs](https://sdk.collaboraonline.com/) |
-| 📖 **LMS** | **ILIAS** | GPL-3.0 | [7.28](https://github.com/ILIAS-eLearning/ILIAS/releases) | [Docs](https://docu.ilias.de/) |
-| 📖 **LMS** | **Moodle** | GPL-3.0 | [4.4](https://moodle.org/release/) | [Docs](https://docs.moodle.org/) |
-| 🎥 **Lectures** | **BigBlueButton** (↔ Jitsi) | LGPL-3.0 | [2.7](https://github.com/bigbluebutton/bigbluebutton/releases) | [Docs](https://docs.bigbluebutton.org/) |
-| ☁️ **Files** | **OpenCloud** (↔ Nextcloud) | Apache-2.0 | [4.0.3](https://github.com/opencloudeu/opencloud/releases) | [Docs](https://docs.opencloud.eu/) |
-| 📝 **Collab Editing** | **Etherpad** | Apache-2.0 | [1.9.9](https://github.com/ether/etherpad-lite/releases) | [Docs](https://etherpad.org/doc/) |
-| 📚 **Wiki** | **BookStack** | MIT | [26.03](https://github.com/BookStackApp/BookStack/releases) | [Docs](https://www.bookstackapp.com/docs/) |
-| 📋 **Kanban** | **Planka** | AGPL-3.0 | [2.1.0](https://github.com/plankanban/planka/releases) | [Docs](https://docs.planka.app/) |
-| 🎫 **Helpdesk** | **Zammad** | AGPL-3.0 | [7.0](https://github.com/zammad/zammad/releases) | [Docs](https://docs.zammad.com/) |
-| 📊 **Surveys** | **LimeSurvey** | GPL-2.0 | [6.6](https://github.com/LimeSurvey/LimeSurvey/releases) | [Docs](https://www.limesurvey.org/manual/) |
-| 🔑 **Password Reset** | **LTB SSP** | GPL-3.0 | [1.7](https://github.com/ltb-project/self-service-password/releases) | [Docs](https://self-service-password.readthedocs.io/) |
-| 📐 **Diagrams** | **Draw.io** | Apache-2.0 | [29.6](https://github.com/jgraph/drawio/releases) | [Docs](https://www.drawio.com/doc/) |
-| ✏️ **Whiteboard** | **Excalidraw** | MIT | [latest](https://github.com/excalidraw/excalidraw/releases) | [Docs](https://docs.excalidraw.com/) |
-| 📰 **CMS** | **[TYPO3](https://typo3.org/)** | Apache-2.0 | [13.4](https://get.typo3.org/) | [Docs](https://docs.typo3.org/) |
-| 🧪 **Notebooks** | **JupyterHub** | BSD-3-Clause | [5.2](https://jupyter.org/hub) | [Docs](https://jupyterhub.readthedocs.io/) |
-| ✍️ **LaTeX** | **Overleaf CE** | AGPL-3.0 | [5.0](https://github.com/overleaf/overleaf) | [Docs](https://www.overleaf.com/learn) |
-| 🤖 **AI Assistant** | **Open WebUI** | MIT | [0.5.20](https://github.com/open-webui/open-webui) | [Docs](https://docs.openwebui.com/) |
-| 🧠 **LLM Backend** | **Ollama** | MIT | [0.6.0](https://ollama.ai/) | [Docs](https://github.com/ollama/ollama) |
-| 💻 **Cloud IDE** | **code-server** | MIT | [4.96](https://github.com/coder/code-server) | [Docs](https://coder.com/docs) |
-| 📊 **Statistics** | **RStudio Server** | AGPL-3.0 | [4.4](https://posit.co/products/open-source/rstudio-server/) | [Docs](https://docs.posit.co/) |
-| 🖥️ **Desktop** | **KasmVNC** | GPL-2.0 | [1.16](https://kasmweb.com/) | [Docs](https://kasmweb.com/docs/) |
-| ⚡ **Compute** | **Dask Gateway** | BSD-3-Clause | [2024.1](https://gateway.dask.org/) | [Docs](https://gateway.dask.org/) |
-| 🖱️ **Web Terminal** | **ttyd** | MIT | [1.7](https://github.com/tsl0922/ttyd) | [Docs](https://github.com/tsl0922/ttyd) |
-| 📽️ **Presentations** | **Slidev** | MIT | [0.49](https://github.com/slidevjs/slidev) | [Docs](https://sli.dev/) |
-
-<details>
-<summary>🔐 DFN-AAI / eduGAIN SAML Federation — How it works</summary>
-
-<p align="center">
-  <img src="docs/assets/saml-federation-flow.svg" alt="SAML federation flow" width="640"/>
-</p>
-
-</details>
-
----
-
-## 🏗️ Deployment Status (HRZ Maui)
-
-openDesk Edu is actively deployed on the HRZ Maui cluster (University of Marburg). Current state:
-
-| Metric | Status |
-|:-------|:------:|
-| Pods running | 57/57 ✅ |
-| Services with SSO | 33/33 ✅ |
-| Ingresses on correct domain | 33/33 ✅ |
-| Keycloak clients audited | 44/44 ✅ |
-| Backups active (k8up) | ✅ 33 snapshots |
-| External DNS records needed | ⚠️ 12 A records |
-
-### Latest changes (Sprints 5-6)
-
-- **SSO audit** — verified all 44 Keycloak clients use `*.opendesk.hrz.uni-marburg.de` URIs
-- **Planka** — fixed ingress class (nginx→haproxy), fixed OIDC endpoints (had unrendered `.gotmpl` syntax), OIDC login verified
-- **SSP** — fixed ingress backend service name (was pointing to nonexistent `-oauth2-proxy` service), OAuth2-proxy now redirects to Keycloak correctly
-- **Domain migration** — patched 3 portal ingresses + 9 static-files ingresses from `*.opendesk-edu.org` to `*.opendesk.hrz.uni-marburg.de`
-- **k8up** — deployed operator, backup schedule active (01:22 daily, 14d retention)
-- **External DNS** — script generated for 12 missing A records (`scripts/generate-dns-records.sh`)
-- **Monitoring** — Grafana dashboards deployed (edu-health, k8up, opendesk-simple)
-- **Charts fixed** — `portal-saml-multidomain.yaml.gotmpl` (domain), `planka/values.yaml` (ingress class, OIDC)
-
----
-
-## 📖 Documentation
-
-| Topic | Link |
-|:------|:-----|
-| ⬆️ Upgrades & Migrations | [docs/migrations.md](./docs/migrations.md) |
-| 📋 Requirements | [docs/requirements.md](./docs/requirements.md) |
-| 🚀 Getting Started | [docs/getting-started.md](./docs/getting-started.md) |
-| 💻 Local Development | [docs/local-development.md](./docs/local-development.md) |
-| 🔧 Advanced Customization | [docs/enhanced-configuration.md](./docs/enhanced-configuration.md) |
-| 🔌 External Services (edu) | [docs/external-services.md](./docs/external-services.md) |
-| 🔐 User Provisioning | [docs/user-provisioning.md](./docs/user-provisioning.md) |
-| 🌐 DFN-AAI Federation | [docs/dfn-aai-federation.md](./docs/dfn-aai-federation.md) |
-| 🏗️ Architecture | [docs/architecture.md](./docs/architecture.md) |
-| 🔐 Security | [docs/security.md](./docs/security.md) |
-| 📊 Scaling | [docs/scaling.md](./docs/scaling.md) |
-| 📈 Monitoring | [docs/monitoring.md](./docs/monitoring.md) |
-| 🎨 Theming | [docs/theming.md](./docs/theming.md) |
-| 🔑 Permissions | [docs/permissions.md](./docs/permissions.md) |
-| 💾 Data Storage | [docs/data-storage.md](./docs/data-storage.md) |
-| 🧪 Testing | [docs/testing.md](./docs/testing.md) |
-| 🧪 Collab Services | [docs/superpowers/specs/2026-05-27-collab-services-design.md](./docs/superpowers/specs/2026-05-27-collab-services-design.md) |
-| 🚀 Collab Deployment | [docs/collab-services-deployment.md](./docs/collab-services-deployment.md) |
-| 🔐 OAuth2-Proxy Config | [docs/oauth2-proxy-config.md](./docs/oauth2-proxy-config.md) |
-| ☁️ OpenCloud Sidecar | [helmfile/charts/opencloud-sidecar/README.md](./helmfile/charts/opencloud-sidecar/README.md) |
-| 🔧 ILIAS SAML Fix | [docs/ilias-shibboleth-attribute-fix.md](./docs/ilias-shibboleth-attribute-fix.md) |
-
----
-
-**🎤 Presentations**
-> Available in 30 languages — [see the full list](./docs/presentations/linuxtag-2026/README-presentation.md)
-
-| Event | Language | Source | HTML |
-|:------|:--------|:-------|:-----:|
-| CLT 2026 | 🇩🇪 Deutsch | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk.html) |
-| CLT 2026 | 🇬🇧 English | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-en.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-en.html) |
-| CLT 2026 | 🇫🇷 Français | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-fr.html) |
-| CLT 2026 | 🇪🇸 Español | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-es.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-es.html) |
-| CLT 2026 | 🇨🇳 中文 | [Markdown](./docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.md) | [▶ View](https://opendesk-edu.github.io/opendesk-edu/docs/presentations/linuxtag-2026/linuxtag-2026-opendesk-zh.html) |
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|:------|:-----------|
-| ☸️ Orchestration | [Kubernetes](https://kubernetes.io) |
-| 📦 Package Management | [Helm](https://helm.sh) + [helmfile](https://helmfile.readthedocs.io/) |
-| 🔐 Authentication | [Keycloak](https://www.keycloak.org/) (SAML 2.0 + OIDC) |
-| 🎓 SAML SP | [Shibboleth](https://www.shibboleth.net/) (ILIAS, Moodle, BBB) |
-| 💾 Backup | [k8up](https://k8up.io/) (restic + Kubernetes operator) |
-| 🔒 Certificates | [openDesk Certificates](https://github.com/Bundesdruckerei/opendesk-certificates) |
-
----
-
-## 💬 Feedback & Issues
-
-Found a bug or have a feature request? Please [open an issue](https://github.com/opendesk-edu/opendesk-edu/issues).
-
-## 🔗 Repository Mirroring
-
-This repository is automatically synchronized between GitHub and Codeberg:
-
-- **GitHub:** <https://github.com/opendesk-edu/opendesk-edu>
-- **Codeberg:** <https://codeberg.org/opendesk-edu/opendesk-edu>
-
-Both repositories are kept in sync via automated CI/CD workflows. Pushes to either platform sync to the other within 1-2 minutes. See [sync documentation](./docs/maintenance/github-codeberg-sync.md) for details.
-
-## 🤝 Contributing
-
-Contributions are welcome! See the [Development guide](./docs/developer/development.md) for how to get started.
-
----
-
-## 📄 License
-
-[Apache-2.0](https://opensource.org/licenses/Apache-2.0) — see [LICENSE](./LICENSE) for details.
-
-## ©️ Copyright
-
-openDesk Edu is a fork of [openDesk](https://www.opencode.de/en/opendesk). Upstream copyright:
+## Architecture
+
+More information on openDesk's architecture can be found in our [architecture documentation](./docs/architecture.md).
+
+## Testing
+
+openDesk is continuously tested to ensure it meets high quality standards. Read how we test in openDesk in our [testing concept](./docs/testing.md).
+
+## Permissions
+
+Find out more about the permission system in the [roles & permissions concept](./docs/permissions.md)
+
+## Releases
+
+openDesk implements a defined [release and patch management process](./docs/releases.md) to ensure stability and security.
+
+All technical releases are currently created using [Pride Versioning](https://pridever.org/).
+For future releases we plan to use [Semantic Versioning 2.0.0](https://semver.org/).
+
+Gitlab provides an
+[overview on the releases](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases)
+of this project.
+
+Please find a list of the artifacts related to the release either in the source code archive attached to the release or
+in the files from the release's git-tag:
+- `./helmfile/environments/default/images.yaml.gotmpl`
+- `./helmfile/environments/default/charts.yaml.gotmpl`
+
+Find more information in our [Workflow documentation](./docs/developer/workflow.md).
+
+## Data storage
+
+More information about different data storages used within openDesk are described in the
+[Data Storage documentation](./docs/data-storage.md).
+
+## Feedback
+
+We love to get feedback from you!
+
+For feedback related to the deployment / contents of this repository,
+please use the [issues within this project](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/issues).
+
+If you want to address other topics, please check the section
+["Rückmeldungen und Beteiligung" in the OVERVIEW.md](https://gitlab.opencode.de/bmi/opendesk/info/-/blob/main/OVERVIEW.md#rückmeldungen-und-beteiligung) of the [openDesk Info Repository](https://gitlab.opencode.de/bmi/opendesk/info).
+
+## Development
+
+If you want to join or contribute to the development of openDesk please read the [Development guide](./docs/developer/development.md).
+
+## License
+
+This project uses the following license: Apache-2.0
+
+## Copyright
 
 Copyright (C) 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-
-openDesk Edu additions:
-
-Copyright (C) 2025-2026 openDesk Edu Contributors

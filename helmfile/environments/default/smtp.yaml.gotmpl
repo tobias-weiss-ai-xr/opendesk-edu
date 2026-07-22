@@ -5,11 +5,20 @@ smtp:
   host: ""
   port: 587
   username: ""
-  password: {{ env "SMTP_PASSWORD" | quote }}
+  # Value-only: credentials for an external SMTP relay, seeded from the SMTP_PASSWORD environment
+  # variable. Takes `value` only and not the `create`/`name`/`key` structure - the Postfix charts
+  # inline the literal value into their own configuration.
+  password:
+    value: {{ env "SMTP_PASSWORD" | quote }}
   localpartNoReply: "no-reply"
   spamMilter:
     host: ""
     port: 11332
+
+  # Helo name postfix-ox should use
+  heloName: ~
+  # Helo name internal postfix should use
+  internalHeloName: ~
 
   # For the following settings to have effect `apps.dkimpy.enabled` must be `true`.
   dkim:
