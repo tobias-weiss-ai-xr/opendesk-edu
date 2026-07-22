@@ -1,3 +1,39 @@
+# [1.17.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.1...v1.17.0) (2026-07-22)
+
+
+### Bug Fixes
+
+* **collabora:** Update from 25.04.10.3.1 to 25.04.11.3.1 ([e143a8c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e143a8c36d28118ffb4858e37a6c794cd56c0239))
+* **helmfile:** Always install `opendesk-secrets` ([0e21538](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0e21538d91882b801d13da2df41fc238976cf80e))
+* **helmfile:** Switch the remaining secrets to `secret.value` structure; see `migrations.md` for required upgrade steps ([2e53b9d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2e53b9da6de801e5410d4fc7f9ac5b0e852300ba))
+* **nextcloud:** Set `readOnlyRootFilesystem: true` for management job and bump apps ([25505c3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/25505c3f51f6381f5a1942ccc4e722717c0a3ac1))
+* **nubus:** [[#275](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/275)] Set `seLinuxOptions` for LDAP Server and Notifier on Pod level and document constraint ([0d0026b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0d0026b3e2081ab47865fc09f8cb355053762c1f))
+* **nubus:** Drop all container capabilities ([f211e32](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f211e3230fe487fb311def749c827e18fd8fbc94))
+* **open-xchange:** [[#372](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/372)] Update resources for Core-UI Pod ([77a5eff](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/77a5effe0d4f4d256c1269dfab6e67b9ed507769))
+* **open-xchange:** Add opt-in SPF checking and harden Postfix; see `updates.md` for more details ([112485c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/112485c97b6e42f19e0fe6d3aba0b511d35bed86))
+* **open-xchange:** Correct spelling of the field loadBalancerIP ([ddb838c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ddb838cf0a278a4ed926a072bd447e790d6c9f42))
+* **open-xchange:** Enable smtp port 25 auth only on internal services ([631b12b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/631b12b0d693005086eadaf172e89548737cdbad))
+* **open-xchange:** Fix broken ingress paths for all open-xchange haproxy ingresses ([8a9e21b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8a9e21b12ea67b1136efd3a0f7afe9498bb8cc3b))
+* **open-xchange:** Only run bootstrap when inputs change ([ce4979e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ce4979e25aca617be44ae42a388e46a814989921))
+* **openproject:** [[#384](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/384)] Improve Pod update strategy (`RollingUpdate` instead of `Recreate`) ([83b02a7](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/83b02a72fe5ebf6e977f6460085fd60d6c2d5e06))
+* **openproject:** Set mobile logo using theme icon of project module ([030644b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/030644bb3b5856428bb8a326f7aa7dee2e26e60a))
+* **services-external:** Harden security contexts of dkimpy ([80bd2f2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/80bd2f28f906f1a55213962aed6d86e2efb0b9d6))
+
+
+### Features
+
+* **helmfile:** Allow overwriting app helmfiles and consolidate helmfile environment definitions ([c19c48d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c19c48d20cbed3384223734b449104c1c1a9b3fc))
+* **helmfile:** Move to K8s secrets where possible with limited support for existing secrets; see `updates.md` and `migrations.md` for more details ([3db63ad](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/3db63adf30df07b64dd903b71068882a460bbb26))
+* **jitsi:** Update from 2.0.10590 to 2.0.11031 and jitsi-helm-2.20.0 ([573817a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/573817a25ee5abf013881815e15fab15ee7c3fff))
+* **migrations:** Make migrations Helm controlled with skip option in `migrations.yaml.gotmpl`; see `updates.md` and `migrations.md` for more details ([bd4b652](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/bd4b6525a5d9ba43d16bc3efffcb41a6baa206c6))
+* **nubus:** Move to Keycloak's (standard) token exchange v2 coming from legacy v1 ([7d20119](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7d2011973f1a5a3c6807672954c0b75e017176cf))
+* **nubus:** Support to toggle and configure Keycloak's "RememberMe" option ([e014d83](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/e014d833dd66fca52f9b73535f6d26567d0275eb))
+* **nubus:** Update from v1.20.1 to v1.21.0 ([63b55d9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/63b55d96131bfef6d203f80ab3f77b0122222b74))
+* **open-xchange:** Enable "Send Later" feature in OX App Suite; see `updates.md` for more details ([2ee884e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2ee884e32cc532d8cf67171e5855e3222ec68f9a))
+* **open-xchange:** Enable contact picker's LDAP cache and allow configuring it using `cacheExpirySeconds`; see `updates.md` for more details ([4a4bfe1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4a4bfe1a3571931d781b4ba41eb7571c888e5d18))
+* **open-xchange:** Harden Postfix config ([81e1daa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/81e1daa66a9bf9b51b8aa8d1a04f4e8c381ff081))
+* **openproject:** Update from 17.5.1 to 17.6.0 ([c1dd349](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c1dd349f1dae7ac21578c4475a0e62b24a926794))
+
 ## [1.16.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.0...v1.16.1) (2026-06-30)
 
 
