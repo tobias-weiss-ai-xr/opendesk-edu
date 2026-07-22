@@ -52,7 +52,7 @@ initContainerSecurityContext:
 global:
   imagePullSecrets: {{ .Values.global.imagePullSecrets | toYaml | nindent 4 }}
 
-hostUsers: {{ not .Values.technical.postfix.userNamespaces }}
+hostUsers: {{ not .Values.technical.userNamespaces }}
 
 image:
   registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.postfix.registry | quote }}

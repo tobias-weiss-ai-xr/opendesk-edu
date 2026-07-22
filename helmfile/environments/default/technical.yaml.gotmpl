@@ -3,6 +3,12 @@
 ---
 technical:
 
+  # Whether Pods that support it (postfix, postfix-ox, dovecot) use their own user namespace, so the
+  # container's UID 0 maps to an unprivileged UID on the host.
+  # Should be set to true if your cluster supports it (>= v1.36).
+  # Ref: https://kubernetes.io/docs/concepts/workloads/pods/user-namespaces/
+  userNamespaces: false
+
   # Cryptpad related technical settings
   cryptpad:
     # Define how many child processes are initially spawned, even without any user accessing Cryptpad.
@@ -150,10 +156,6 @@ technical:
     # Only activate, if Postfix knows the IP of the originating mail server.
     # When activated it is recommended to raise the memory limit of Postfix to at least 512MiB, as SPF validation can be memory intensive.
     checkSpf: false
-    # Whether the Postfix Pod uses its own user namespace, so the container's UID 0 maps to an unprivileged UID on the host.
-    # Should be set to true if your cluster supports it (>= v1.36).
-    # Ref: https://kubernetes.io/docs/concepts/workloads/pods/user-namespaces/
-    userNamespaces: false
     # Proxy protocol to use for incoming mail or externally connected mail clients (if any), only `haproxy` is supported at the moment.
     # Ref.: https://www.postfix.org/postconf.5.html#smtpd_upstream_proxy_protocol
     smtpdUpstreamProxyProtocol: ~
