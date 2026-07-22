@@ -1,45 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
-{{- /*
-  Deploy the opendesk-secrets provisioner ONLY when at least one externalized secret is
-  `create: true` (i.e. openDesk actually has to materialise a Kubernetes Secret). If every
-  externalized secret is `create: false` (bring-your-own) the chart would render nothing, so
-  the release is not installed at all. Whether a consuming chart reads from a Secret is decided
-  per-secret (by that secret's `name`), independent of this release.
-
-  This scans the same value trees with the same rule (and the same 4-level descent) as
-  `managedSecrets` in values-opendesk-secrets.yaml.gotmpl: an externalized secret is any node that
-  carries BOTH a `name` and a `create`, in `.Values.secrets`, `.Values.objectstores` or
-  `.Values.databases`, at `<tree>.<component>.<credential>`,
-  `<tree>.<component>.<group>.<credential>` or `<tree>.<component>.<group>.<subgroup>.<credential>`.
-*/}}
-{{- $installSecrets := false }}
-{{- range $tree := (list .Values.secrets .Values.objectstores .Values.databases) }}
-{{- range $component, $entries := $tree }}
-{{- range $key, $node := $entries }}
-{{- if kindIs "map" $node }}
-{{- if and (hasKey $node "name") (hasKey $node "create") }}
-{{- if $node.create }}{{- $installSecrets = true }}{{- end }}
-{{- else }}
-{{- range $subkey, $subnode := $node }}
-{{- if kindIs "map" $subnode }}
-{{- if and (hasKey $subnode "name") (hasKey $subnode "create") }}
-{{- if $subnode.create }}{{- $installSecrets = true }}{{- end }}
-{{- else }}
-{{- range $subsubkey, $subsubnode := $subnode }}
-{{- if and (kindIs "map" $subsubnode) (hasKey $subsubnode "name") (hasKey $subsubnode "create") }}
-{{- if $subsubnode.create }}{{- $installSecrets = true }}{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
 repositories:
   # openDesk Migrations
   # Source:
@@ -61,12 +22,16 @@ repositories:
     url: "{{ coalesce .Values.repositories.helm.registryOpencodeDe .Values.global.helmRegistry | default .Values.charts.opendeskSecrets.registry }}/{{ .Values.charts.opendeskSecrets.repository }}"
 
 releases:
+  # The provisioner is always installed. It renders a Kubernetes Secret only for the externalized
+  # secrets that are `create: true`; if every one of them is `create: false` (bring-your-own) the
+  # chart renders nothing and the release stays empty. Whether a consuming chart reads from a
+  # Secret is decided per-secret (by that secret's `name`), independent of this release.
   - name: "opendesk-secrets"
     chart: "openproject-secrets-repo/{{ .Values.charts.opendeskSecrets.name }}"
     version: "{{ .Values.charts.opendeskSecrets.version }}"
     values:
       - "values-opendesk-secrets.yaml.gotmpl"
-    installed: {{ $installSecrets }}
+    installed: true
     timeout: 900
 
   - name: "opendesk-migrations-pre"
@@ -80,10 +45,8 @@ releases:
     {{- range .Values.customization.release.migrationsPre }}
       - {{ . }}
     {{- end }}
-    {{- if $installSecrets }}
     needs:
       - "opendesk-secrets"
-    {{- end }}
     installed: {{ .Values.apps.migrations.enabled }}
     timeout: 900
 
