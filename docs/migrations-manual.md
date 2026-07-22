@@ -27,10 +27,11 @@ SPDX-License-Identifier: Apache-2.0
   * [Deprecation warnings](#deprecation-warnings)
   * [Overview and mandatory upgrade path](#overview-and-mandatory-upgrade-path)
   * [Manual checks/actions](#manual-checksactions)
-    * [Version ≥ v1.18.0](#version--v1180)
+    * [Versions ≥ v1.18.0](#versions--v1180)
       * [Pre-upgrade to versions ≥ v1.18.0](#pre-upgrade-to-versions--v1180)
         * [New persistence requirement: OX Connector requires its own PostgreSQL database](#new-persistence-requirement-ox-connector-requires-its-own-postgresql-database)
         * [Full re-provisioning of all objects on upgrade](#full-re-provisioning-of-all-objects-on-upgrade)
+        * [Changed Helmfile structure: `userNamespaces` setting moved to `technical.userNamespaces`](#changed-helmfile-structure-usernamespaces-setting-moved-to-technicalusernamespaces)
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
@@ -46,7 +47,7 @@ SPDX-License-Identifier: Apache-2.0
         * [Nubus bug fix: LDAP storage class settings](#nubus-bug-fix-ldap-storage-class-settings)
     * [Versions ≥ v1.15.0](#versions--v1150)
       * [Pre-upgrade to versions ≥ v1.15.0](#pre-upgrade-to-versions--v1150)
-        * [New Helmfile default: external mail services are no longer enabled by default](#new-helmfile-default-external-mail-services-are-no-longer-enabled-by-default)
+        * [New Helmfile default: External mail services are no longer enabled by default](#new-helmfile-default-external-mail-services-are-no-longer-enabled-by-default)
         * [New Helmfile default: Support for SeaweedFS as S3 backend](#new-helmfile-default-support-for-seaweedfs-as-s3-backend)
       * [Post-upgrade to versions ≥ v1.15.0](#post-upgrade-to-versions--v1150)
         * [XWiki bug fix: LDAP group synchronization incomplete](#xwiki-bug-fix-ldap-group-synchronization-incomplete)
@@ -141,7 +142,7 @@ matching that constraint, though our links always point to the newest patch rele
 > listed no extra manual steps are required when upgrading to that version, e.g. in the case of an update from
 > version 1.7.0 to version 1.7.1.
 
-### Version ≥ v1.18.0
+### Versions ≥ v1.18.0
 
 #### Pre-upgrade to versions ≥ v1.18.0
 
@@ -216,6 +217,35 @@ technical:
   oxAppSuite:
     provisioning:
       dedicatedCoreMwPod: true
+```
+
+##### Changed Helmfile structure: `userNamespaces` setting moved to `technical.userNamespaces`
+
+**Target group:** Deployments that set `technical.postfix.userNamespaces` introduced with 1.17.0 to (non-default) `true`.
+
+**Context**
+
+The setting to run a Pod in its own Kubernetes user namespace was previously specific to Postfix, under
+`technical.postfix.userNamespaces`. It has been generalized into a single, shared toggle at
+`technical.userNamespaces`, since Dovecot now supports running in its own user namespace as well.
+
+**Required action**
+
+If you set this option, move it out of `technical.postfix` to the new top-level location under `technical`:
+
+Before:
+
+```yaml
+technical:
+  postfix:
+    userNamespaces: true
+```
+
+After:
+
+```yaml
+technical:
+  userNamespaces: true
 ```
 
 ### Versions ≥ v1.17.0
@@ -608,7 +638,7 @@ persistence:
 
 #### Pre-upgrade to versions ≥ v1.15.0
 
-##### New Helmfile default: external mail services are no longer enabled by default
+##### New Helmfile default: External mail services are no longer enabled by default
 
 **Target group:** Deployments using the groupware module with support for external mail clients.
 

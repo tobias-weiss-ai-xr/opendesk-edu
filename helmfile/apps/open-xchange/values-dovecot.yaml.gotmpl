@@ -20,6 +20,8 @@ imageInitDovecot:
 imagePullSecrets:
   {{ .Values.global.imagePullSecrets | toYaml | nindent 2 }}
 
+hostUsers: {{ not .Values.technical.userNamespaces }}
+
 dovecot:
   mailDomains: {{ toYaml (prepend .Values.global.additionalMailDomains (.Values.global.mailDomain | default .Values.global.domain) | uniq) | nindent 4 }}
   defaultMailDomain: {{ .Values.global.mailDomain | default .Values.global.domain | quote }}
@@ -32,7 +34,6 @@ dovecot:
     masterPassword:
       value: {{ .Values.secrets.oxAppSuite.migrationsMasterPassword.value | quote }}
   ldap:
-    enabled: true
     host: {{ .Values.ldap.host | quote }}
     port: 389
     base: "{{ .Values.ldap.baseDn }}"
@@ -41,7 +42,6 @@ dovecot:
       value: {{ .Values.secrets.nubus.ldapSearch.dovecot.value | quote }}
   loginTrustedNetworks: {{ join " " .Values.cluster.networking.cidr | quote }}
   oidc:
-    enabled: true
     clientID:
       value: "opendesk-dovecot"
     clientSecret:
@@ -106,7 +106,27 @@ containerSecurityContext:
       - "SETUID"
       - "SYS_CHROOT"
   enabled: true
+  privileged: false
   readOnlyRootFilesystem: true
+  runAsNonRoot: false
+  seccompProfile:
+    type: "RuntimeDefault"
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.dovecot | toYaml | nindent 4 }}
+
+# The init-dovecot container only renders config files, chmods them, and (Pro only) chowns the metacache
+# volume, so it needs far fewer capabilities than the main container.
+initDovecotSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      - "CHOWN"
+  enabled: true
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: false
   seccompProfile:
     type: "RuntimeDefault"
   seLinuxOptions:
