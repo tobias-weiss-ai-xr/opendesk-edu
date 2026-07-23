@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "rstudio"
+    chart: "../../../charts/rstudio"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.rstudio.enabled }}
+    timeout: 600
+commonLabels:
+  deployStage: "050-components"
+  component: "rstudio"
