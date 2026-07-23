@@ -26,7 +26,7 @@ tests:
     asserts:
       - equal:
           path: spec.rules[0].host
-          value: "wiki.opendesk.example.com"
+          value: "bookstack.opendesk.hrz.uni-marburg.de"
 
   - it: should configure TLS when provided
     set:

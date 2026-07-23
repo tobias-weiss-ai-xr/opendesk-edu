@@ -186,7 +186,17 @@
         "SATOSA",
         "Webmail",
         "Whiteboarding",
-        "Württemberg"
+        "Württemberg",
+        "anchore",
+        "aquasecurity",
+        "codeberg",
+        "Dask",
+        "grommunio",
+        "Kasm",
+        "multidomain",
+        "pytest",
+        "returntocorp",
+        "sarif"
     ],
     "ignoreWords": [],
     "import": []

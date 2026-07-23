@@ -76,9 +76,6 @@ spec:
             {{- toYaml .Values.resources.elasticsearch | nindent 12 }}
   volumeClaimTemplates:
     - metadata:
-    labels:
-      backup-tier: "b"
-      k8up/backup: "true"
         name: elasticsearch-data
         labels:
           backup-tier: "b"
