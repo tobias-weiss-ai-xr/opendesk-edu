@@ -1,0 +1,229 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation "Navigationsleiste" [ref=e3]:
+      - generic [ref=e4]:
+        - link "Startseite" [ref=e5] [cursor=pointer]:
+          - /url: /
+        - link "Erkunden" [ref=e8] [cursor=pointer]:
+          - /url: /explore/repos
+        - link "About" [ref=e9] [cursor=pointer]:
+          - /url: https://docs.codeberg.org/getting-started/what-is-codeberg/#what-is-codeberg-e.v.%3F
+        - link "FAQ" [ref=e10] [cursor=pointer]:
+          - /url: https://docs.codeberg.org/getting-started/faq/
+        - link "Hilfe" [ref=e11] [cursor=pointer]:
+          - /url: https://docs.codeberg.org
+        - link "Donate" [ref=e12] [cursor=pointer]:
+          - /url: https://donate.codeberg.org
+      - generic [ref=e13]:
+        - link "Registrieren" [ref=e14] [cursor=pointer]:
+          - /url: /user/sign_up
+        - link "Anmelden" [ref=e18] [cursor=pointer]:
+          - /url: /user/login?redirect_to=%2fopendesk-edu%2fopendesk-edu%2factions%2fruns%2f805%2fjobs%2f0%2fattempt%2f1
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e25]:
+          - generic [ref=e26]:
+            - img "opendesk-edu/opendesk-edu" [ref=e28]
+            - generic [ref=e30]:
+              - link "opendesk-edu" [ref=e31] [cursor=pointer]:
+                - /url: /opendesk-edu
+              - text: /
+              - link "opendesk-edu" [ref=e32] [cursor=pointer]:
+                - /url: /opendesk-edu/opendesk-edu
+          - generic [ref=e33]:
+            - link "RSS-Feed" [ref=e34] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu.rss
+            - generic "Melde dich an, um dieses Repository zu beobachten." [ref=e38] [cursor=pointer]:
+              - button "Beobachten" [disabled]
+              - link "3 Beobachter" [ref=e39]:
+                - /url: /opendesk-edu/opendesk-edu/watchers
+                - text: "3"
+            - generic "Melde dich an, um dieses Repository zu favorisieren." [ref=e41] [cursor=pointer]:
+              - button "Favorisieren" [disabled]
+              - link "3 Favorisierungen" [ref=e42]:
+                - /url: /opendesk-edu/opendesk-edu/stars
+                - text: "3"
+            - generic "Melde dich an, um dieses Repository zu forken." [ref=e43]:
+              - generic: Fork
+              - link "0 Forks" [ref=e44] [cursor=pointer]:
+                - /url: /opendesk-edu/opendesk-edu/forks
+                - text: "0"
+        - navigation [ref=e45]:
+          - generic [ref=e46]:
+            - link "Code" [ref=e47] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu
+            - link "Issues 1" [ref=e51] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/issues
+              - generic [ref=e55]: Issues
+              - generic [ref=e56]: "1"
+            - link "Pull-Requests" [ref=e57] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/pulls
+            - link "Projekte" [ref=e61] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/projects
+            - link "Releases" [ref=e65] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/releases
+            - link "Pakete" [ref=e69] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/packages
+            - link "Aktivität" [ref=e73] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/activity
+            - link "Actions" [ref=e77] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e86]:
+            - generic "Fehler" [ref=e87]
+            - 'heading "ci: re-trigger sync after fixing SSH_DEPLOY_KEY encoding" [level=2] [ref=e90]'
+          - generic [ref=e91]:
+            - generic [ref=e92]:
+              - text: Commit
+              - link "a1b2cf5461" [ref=e93] [cursor=pointer]:
+                - /url: /opendesk-edu/opendesk-edu/commit/a1b2cf546145dae899f1d85affc4069a83eaa43a
+              - text: ", gepusht von"
+              - link "graphwiz-ai" [ref=e94] [cursor=pointer]:
+                - /url: /graphwiz-ai
+            - link "main" [ref=e96] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/src/branch/main
+          - generic [ref=e97]:
+            - text: Workflow
+            - link "github-sync.yml" [ref=e98] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/src/commit/a1b2cf546145dae899f1d85affc4069a83eaa43a/.forgejo/workflows/github-sync.yml
+            - generic [ref=e99]:
+              - text: (
+              - link "alle Runs" [ref=e100] [cursor=pointer]:
+                - /url: /opendesk-edu/opendesk-edu/actions?workflow=github-sync.yml
+              - text: )
+        - generic [ref=e101]:
+          - link "Fehler Sync to GitHub mirror 1m27s" [ref=e105] [cursor=pointer]:
+            - /url: /opendesk-edu/opendesk-edu/actions/runs/805/jobs/0
+            - generic [ref=e106]:
+              - generic "Fehler" [ref=e107]
+              - generic [ref=e110]: Sync to GitHub mirror
+            - generic [ref=e111]: 1m27s
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - generic [ref=e115]:
+                - heading "Sync to GitHub mirror" [level=3] [ref=e116]
+                - list [ref=e117]:
+                  - listitem [ref=e118]: Fehler
+              - button [ref=e121] [cursor=pointer]
+            - generic [ref=e124]:
+              - generic [ref=e126] [cursor=pointer]:
+                - generic [ref=e132]: Set up job
+                - generic [ref=e133]: 7s
+              - generic [ref=e135] [cursor=pointer]:
+                - generic [ref=e141]: Checkout repository
+                - generic [ref=e142]: 7s
+              - generic [ref=e144] [cursor=pointer]:
+                - generic [ref=e150]: Configure git
+                - generic [ref=e151]: 1s
+              - generic [ref=e153] [cursor=pointer]:
+                - generic [ref=e159]: Setup SSH deploy key
+                - generic [ref=e160]: 3s
+              - generic [ref=e162] [cursor=pointer]:
+                - generic [ref=e168]: Add GitHub remote
+                - generic [ref=e169]: 1s
+              - generic [ref=e171] [cursor=pointer]:
+                - generic [ref=e177]: Sync to GitHub (with retry)
+                - generic [ref=e178]: 34s
+              - generic [ref=e180]:
+                - generic [ref=e184]: Verify sync
+                - generic [ref=e185]: 0s
+              - generic [ref=e187]:
+                - generic [ref=e191]: Report status
+                - generic [ref=e192]: 0s
+              - generic [ref=e194] [cursor=pointer]:
+                - generic [ref=e200]: Report failure
+                - generic [ref=e201]: 1s
+              - generic [ref=e203] [cursor=pointer]:
+                - generic [ref=e209]: Complete job
+                - generic [ref=e210]: 6s
+  - group "Fußzeile" [ref=e211]:
+    - generic "Links" [ref=e212]:
+      - generic [ref=e216]:
+        - generic [ref=e217]: Betrieben mit
+        - link "Forgejo" [ref=e218] [cursor=pointer]:
+          - /url: https://forgejo.org
+        - text: with
+        - link "modifications" [ref=e221] [cursor=pointer]:
+          - /url: /Codeberg-Infrastructure/forgejo
+      - generic [ref=e222]:
+        - text: Codeberg
+        - list [ref=e223]:
+          - listitem [ref=e224]:
+            - link "Blog" [ref=e225] [cursor=pointer]:
+              - /url: https://blog.codeberg.org
+          - listitem [ref=e226]:
+            - link "Documentation" [ref=e227] [cursor=pointer]:
+              - /url: https://docs.codeberg.org
+          - listitem [ref=e228]:
+            - link "Community issues" [ref=e229] [cursor=pointer]:
+              - /url: /Codeberg/Community/issues
+          - listitem [ref=e230]:
+            - link "Contributing" [ref=e231] [cursor=pointer]:
+              - /url: /Codeberg/Contributing
+          - listitem [ref=e232]:
+            - link "Missbrauch melden" [ref=e233] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/contact/#abuse
+      - generic [ref=e234]:
+        - text: Association
+        - list [ref=e235]:
+          - listitem [ref=e236]:
+            - link "Who are we?" [ref=e237] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/getting-started/what-is-codeberg/#what-is-codeberg-e.v.%3F
+          - listitem [ref=e238]:
+            - link "Bylaws / Satzung" [ref=e239] [cursor=pointer]:
+              - /url: https://codeberg.org/codeberg/org/src/en/bylaws.md
+          - listitem [ref=e240]:
+            - link "Donate" [ref=e241] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/improving-codeberg/donate/
+          - listitem [ref=e242]:
+            - link "Join / Support" [ref=e243] [cursor=pointer]:
+              - /url: https://join.codeberg.org
+          - listitem [ref=e244]:
+            - link "Contact" [ref=e245] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/contact/
+      - generic [ref=e246]:
+        - text: Services
+        - list [ref=e247]:
+          - listitem [ref=e248]:
+            - link "Codeberg Pages" [ref=e249] [cursor=pointer]:
+              - /url: https://codeberg.page
+          - listitem [ref=e250]:
+            - link "Codeberg Translate" [ref=e251] [cursor=pointer]:
+              - /url: https://translate.codeberg.org
+          - listitem [ref=e252]:
+            - link "Woodpecker CI" [ref=e253] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/ci/#using-codeberg's-instance-of-woodpecker-ci
+          - listitem [ref=e254]:
+            - link "Forgejo API" [ref=e255] [cursor=pointer]:
+              - /url: /api/swagger
+          - listitem [ref=e256]:
+            - link "Status page" [ref=e257] [cursor=pointer]:
+              - /url: https://status.codeberg.eu
+      - generic [ref=e258]:
+        - text: Legal
+        - list [ref=e259]:
+          - listitem [ref=e260]:
+            - link "Imprint / Impressum" [ref=e261] [cursor=pointer]:
+              - /url: https://codeberg.org/codeberg/org/src/Imprint.md
+          - listitem [ref=e262]:
+            - link "Privacy Policy" [ref=e263] [cursor=pointer]:
+              - /url: /codeberg/org/src/PrivacyPolicy.md
+          - listitem [ref=e264]:
+            - link "Lizenzen" [ref=e265] [cursor=pointer]:
+              - /url: /assets/licenses.txt
+          - listitem [ref=e266]:
+            - link "Terms of Use" [ref=e267] [cursor=pointer]:
+              - /url: /codeberg/org/src/TermsOfUse.md
+    - generic [ref=e268]:
+      - generic [ref=e269]:
+        - link "Mastodon" [ref=e270] [cursor=pointer]:
+          - /url: https://social.anoxinon.de/@Codeberg
+        - text: "|"
+        - link "Matrix Space" [ref=e271] [cursor=pointer]:
+          - /url: matrix:r/codeberg-space:matrix.org?action=join
+        - link "(Web link)" [ref=e272] [cursor=pointer]:
+          - /url: https://matrix.to/#/#codeberg-space:matrix.org
+        - button "Copy to clipboard" [ref=e273] [cursor=pointer]
+      - menu [ref=e278] [cursor=pointer]:
+        - generic [ref=e281]: Deutsch
