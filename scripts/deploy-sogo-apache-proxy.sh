@@ -51,7 +51,7 @@ echo "Step 4: Deploying SOGo with Apache proxy..."
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 helm upgrade --install sogo helmfile/charts/sogo \
     --namespace opendesk \
-    --values sogo-direct-values.yaml \
+    --values helmfile/apps/edu/sogo/direct-values.yaml \
     --timeout 10m || {
     echo "ERROR: Helm upgrade failed"
     exit 1
