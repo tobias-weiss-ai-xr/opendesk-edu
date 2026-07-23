@@ -1,0 +1,724 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation "Navigationsleiste" [ref=e3]:
+      - generic [ref=e4]:
+        - link "Startseite" [ref=e5] [cursor=pointer]:
+          - /url: /
+        - link "Erkunden" [ref=e8] [cursor=pointer]:
+          - /url: /explore/repos
+        - link "About" [ref=e9] [cursor=pointer]:
+          - /url: https://docs.codeberg.org/getting-started/what-is-codeberg/#what-is-codeberg-e.v.%3F
+        - link "FAQ" [ref=e10] [cursor=pointer]:
+          - /url: https://docs.codeberg.org/getting-started/faq/
+        - link "Hilfe" [ref=e11] [cursor=pointer]:
+          - /url: https://docs.codeberg.org
+        - link "Donate" [ref=e12] [cursor=pointer]:
+          - /url: https://donate.codeberg.org
+      - generic [ref=e13]:
+        - link "Registrieren" [ref=e14] [cursor=pointer]:
+          - /url: /user/sign_up
+        - link "Anmelden" [ref=e18] [cursor=pointer]:
+          - /url: /user/login?redirect_to=%2fopendesk-edu%2fopendesk-edu%2factions
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e25]:
+          - generic [ref=e26]:
+            - img "opendesk-edu/opendesk-edu" [ref=e28]
+            - generic [ref=e30]:
+              - link "opendesk-edu" [ref=e31] [cursor=pointer]:
+                - /url: /opendesk-edu
+              - text: /
+              - link "opendesk-edu" [ref=e32] [cursor=pointer]:
+                - /url: /opendesk-edu/opendesk-edu
+          - generic [ref=e33]:
+            - link "RSS-Feed" [ref=e34] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu.rss
+            - generic "Melde dich an, um dieses Repository zu beobachten." [ref=e38] [cursor=pointer]:
+              - button "Beobachten" [disabled]
+              - link "3 Beobachter" [ref=e39]:
+                - /url: /opendesk-edu/opendesk-edu/watchers
+                - text: "3"
+            - generic "Melde dich an, um dieses Repository zu favorisieren." [ref=e41] [cursor=pointer]:
+              - button "Favorisieren" [disabled]
+              - link "3 Favorisierungen" [ref=e42]:
+                - /url: /opendesk-edu/opendesk-edu/stars
+                - text: "3"
+            - generic "Melde dich an, um dieses Repository zu forken." [ref=e43]:
+              - generic: Fork
+              - link "0 Forks" [ref=e44] [cursor=pointer]:
+                - /url: /opendesk-edu/opendesk-edu/forks
+                - text: "0"
+        - navigation [ref=e45]:
+          - generic [ref=e46]:
+            - link "Code" [ref=e47] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu
+            - link "Issues 1" [ref=e51] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/issues
+              - generic [ref=e55]: Issues
+              - generic [ref=e56]: "1"
+            - link "Pull-Requests" [ref=e57] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/pulls
+            - link "Projekte" [ref=e61] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/projects
+            - link "Releases" [ref=e65] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/releases
+            - link "Pakete" [ref=e69] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/packages
+            - link "Aktivität" [ref=e73] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/activity
+            - link "Actions" [ref=e77] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions
+      - generic [ref=e84]:
+        - generic [ref=e86]:
+          - link "Alle Workflows" [ref=e87] [cursor=pointer]:
+            - /url: "?actor=0&status=0"
+          - link "github-sync.yml" [ref=e88] [cursor=pointer]:
+            - /url: "?workflow=github-sync.yml&actor=0&status=0"
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - combobox [ref=e92] [cursor=pointer]:
+              - generic [ref=e93]: Initiator
+            - combobox [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]: Status
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - generic "Fehler" [ref=e103]
+              - generic [ref=e106]:
+                - 'link "ci: re-trigger sync after fixing SSH_DEPLOY_KEY encoding" [ref=e107] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/805
+                - generic [ref=e108]:
+                  - generic [ref=e109]: "github-sync.yml #805"
+                  - text: "- Commit"
+                  - link "a1b2cf5461" [ref=e110] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/a1b2cf546145dae899f1d85affc4069a83eaa43a
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e111] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e112]:
+                - link "main" [ref=e113] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e114]:
+                  - generic "10. Juli 2026, 13:34 MESZ" [ref=e118]: 2026-07-10 13:34:40 +02:00vor 3 Minuten
+                  - generic [ref=e119]: 1m27s
+            - generic [ref=e122]:
+              - generic "Fehler" [ref=e124]
+              - generic [ref=e127]:
+                - 'link "ci: trigger sync to verify SSH deploy key" [ref=e128] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/804
+                - generic [ref=e129]:
+                  - generic [ref=e130]: "github-sync.yml #804"
+                  - text: "- Commit"
+                  - link "c903089281" [ref=e131] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/c9030892819417d6def1e6a25a25aecfc7c5af0b
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e132] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e133]:
+                - link "main" [ref=e134] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e135]:
+                  - generic "10. Juli 2026, 13:26 MESZ" [ref=e139]: 2026-07-10 13:26:54 +02:00vor 11 Minuten
+                  - generic [ref=e140]: 1m10s
+            - generic [ref=e143]:
+              - generic "Fehler" [ref=e145]
+              - generic [ref=e148]:
+                - link "Sync to GitHub" [ref=e149] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/803
+                - generic [ref=e150]:
+                  - generic [ref=e151]: "github-sync.yml #803"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "0b9161bfac" [ref=e152] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/0b9161bfac2790cf834e581e642712edbea3a9ac
+              - generic [ref=e153]:
+                - link "main" [ref=e154] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e155]:
+                  - generic "10. Juli 2026, 10:02 MESZ" [ref=e159]: 2026-07-10 10:02:37 +02:00vor 3 Stunden
+                  - generic [ref=e160]: 1m17s
+            - generic [ref=e163]:
+              - generic "Fehler" [ref=e165]
+              - generic [ref=e168]:
+                - 'link "ci: switch GitHub sync from HTTPS token to SSH deploy key" [ref=e169] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/802
+                - generic [ref=e170]:
+                  - generic [ref=e171]: "github-sync.yml #802"
+                  - text: "- Commit"
+                  - link "0b9161bfac" [ref=e172] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/0b9161bfac2790cf834e581e642712edbea3a9ac
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e173] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e174]:
+                - link "main" [ref=e175] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e176]:
+                  - generic "10. Juli 2026, 09:08 MESZ" [ref=e180]: 2026-07-10 09:08:36 +02:00vor 4 Stunden
+                  - generic [ref=e181]: 1m23s
+            - generic [ref=e184]:
+              - generic "Fehler" [ref=e186]
+              - generic [ref=e189]:
+                - 'link "fix(articles): address review findings — path correction, typo, table col, SVG artifacts" [ref=e190] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/801
+                - generic [ref=e191]:
+                  - generic [ref=e192]: "github-sync.yml #801"
+                  - text: "- Commit"
+                  - link "6ea1f7ea42" [ref=e193] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/6ea1f7ea42855e6ae384e5e34e789f4640724376
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e194] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e195]:
+                - link "feat/v1.1-release-prep" [ref=e196] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/v1.1-release-prep
+                - generic [ref=e197]:
+                  - generic "10. Juli 2026, 07:24 MESZ" [ref=e201]: 2026-07-10 07:24:44 +02:00vor 6 Stunden
+                  - generic [ref=e202]: 1m1s
+            - generic [ref=e205]:
+              - generic "Abgebrochen" [ref=e207]
+              - generic [ref=e210]:
+                - 'link "feat(articles): add DFN-AAI federation blog article with shared eval CTA" [ref=e211] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/800
+                - generic [ref=e212]:
+                  - generic [ref=e213]: "github-sync.yml #800"
+                  - text: "- Commit"
+                  - link "8e63853ac0" [ref=e214] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/8e63853ac093bef0e4a9cd04d9a83fe60f3a0049
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e215] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e216]:
+                - link "feat/v1.1-release-prep" [ref=e217] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/v1.1-release-prep
+                - generic [ref=e218]:
+                  - generic "10. Juli 2026, 07:19 MESZ" [ref=e222]: 2026-07-10 07:19:38 +02:00vor 6 Stunden
+                  - generic [ref=e223]: 0s
+            - generic [ref=e226]:
+              - generic "Abgebrochen" [ref=e228]
+              - generic [ref=e231]:
+                - 'link "feat(articles): add SOPS secret management blog article with teaser SVG" [ref=e232] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/799
+                - generic [ref=e233]:
+                  - generic [ref=e234]: "github-sync.yml #799"
+                  - text: "- Commit"
+                  - link "17fe800b2d" [ref=e235] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/17fe800b2d518c10b99c96cb8a3cabb9d80efda3
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e236] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e237]:
+                - link "feat/v1.1-release-prep" [ref=e238] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/v1.1-release-prep
+                - generic [ref=e239]:
+                  - generic "10. Juli 2026, 07:14 MESZ" [ref=e243]: 2026-07-10 07:14:09 +02:00vor 6 Stunden
+                  - generic [ref=e244]: 0s
+            - generic [ref=e247]:
+              - generic "Fehler" [ref=e249]
+              - generic [ref=e252]:
+                - link "Sync to GitHub" [ref=e253] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/798
+                - generic [ref=e254]:
+                  - generic [ref=e255]: "github-sync.yml #798"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e256] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e257]:
+                - link "main" [ref=e258] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e259]:
+                  - generic "10. Juli 2026, 06:05 MESZ" [ref=e263]: 2026-07-10 06:05:24 +02:00vor 7 Stunden
+                  - generic [ref=e264]: 1m11s
+            - generic [ref=e267]:
+              - generic "Fehler" [ref=e269]
+              - generic [ref=e272]:
+                - link "Sync to GitHub" [ref=e273] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/797
+                - generic [ref=e274]:
+                  - generic [ref=e275]: "github-sync.yml #797"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e276] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e277]:
+                - link "main" [ref=e278] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e279]:
+                  - generic "10. Juli 2026, 02:09 MESZ" [ref=e283]: 2026-07-10 02:09:45 +02:00vor 11 Stunden
+                  - generic [ref=e284]: 1m32s
+            - generic [ref=e287]:
+              - generic "Fehler" [ref=e289]
+              - generic [ref=e292]:
+                - 'link "docs: v1.1 implementation gaps analysis and resolutions" [ref=e293] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/796
+                - generic [ref=e294]:
+                  - generic [ref=e295]: "github-sync.yml #796"
+                  - text: "- Commit"
+                  - link "de18de50b5" [ref=e296] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/de18de50b526f1ec929c8e56a425446b64606b6a
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e297] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e298]:
+                - link "feat/v1.1-release-prep" [ref=e299] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/v1.1-release-prep
+                - generic [ref=e300]:
+                  - generic "9. Juli 2026, 23:35 MESZ" [ref=e304]: 2026-07-09 23:35:44 +02:00vor 14 Stunden
+                  - generic [ref=e305]: 1m1s
+            - generic [ref=e308]:
+              - generic "Abgebrochen" [ref=e310]
+              - generic [ref=e313]:
+                - 'link "fix: Backchannel logout volume mounts and secrets templates" [ref=e314] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/795
+                - generic [ref=e315]:
+                  - generic [ref=e316]: "github-sync.yml #795"
+                  - text: "- Commit"
+                  - link "86e5bf87c2" [ref=e317] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/86e5bf87c2abd73d533d267acc6f402d73ac85fc
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e318] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e319]:
+                - link "feat/v1.1-release-prep" [ref=e320] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/v1.1-release-prep
+                - generic [ref=e321]:
+                  - generic "9. Juli 2026, 23:34 MESZ" [ref=e325]: 2026-07-09 23:34:31 +02:00vor 14 Stunden
+                  - generic [ref=e326]: 48s
+            - generic [ref=e329]:
+              - generic "Fehler" [ref=e331]
+              - generic [ref=e334]:
+                - 'link "docs: v1.1 integration test plan and release checklist" [ref=e335] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/794
+                - generic [ref=e336]:
+                  - generic [ref=e337]: "github-sync.yml #794"
+                  - text: "- Commit"
+                  - link "068c185b4b" [ref=e338] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/068c185b4b0040d745fdea2d6778f162dc44b341
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e339] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e340]:
+                - link "feat/v1.1-release-prep" [ref=e341] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/v1.1-release-prep
+                - generic [ref=e342]:
+                  - generic "9. Juli 2026, 23:27 MESZ" [ref=e346]: 2026-07-09 23:27:44 +02:00vor 14 Stunden
+                  - generic [ref=e347]: 1m1s
+            - generic [ref=e350]:
+              - generic "Fehler" [ref=e352]
+              - generic [ref=e355]:
+                - 'link "docs: DFN-AAI Keycloak integration guide with eduGAIN attributes" [ref=e356] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/793
+                - generic [ref=e357]:
+                  - generic [ref=e358]: "github-sync.yml #793"
+                  - text: "- Commit"
+                  - link "cfe078cdb6" [ref=e359] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cfe078cdb6c119b413a3e7ba09f1b74d79770ced
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e360] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e361]:
+                - link "feat/dfn-aai-federation" [ref=e362] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/dfn-aai-federation
+                - generic [ref=e363]:
+                  - generic "9. Juli 2026, 23:24 MESZ" [ref=e367]: 2026-07-09 23:24:46 +02:00vor 14 Stunden
+                  - generic [ref=e368]: 1m3s
+            - generic [ref=e371]:
+              - generic "Fehler" [ref=e373]
+              - generic [ref=e376]:
+                - 'link "feat: User provisioning Docker operations runbook and Kubernetes manifests" [ref=e377] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/792
+                - generic [ref=e378]:
+                  - generic [ref=e379]: "github-sync.yml #792"
+                  - text: "- Commit"
+                  - link "67dcff7dfc" [ref=e380] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/67dcff7dfc0a1b24cea042731e30b3e6ef50289a
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e381] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e382]:
+                - link "feat/user-provisioning-docker" [ref=e383] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/user-provisioning-docker
+                - generic [ref=e384]:
+                  - generic "9. Juli 2026, 23:20 MESZ" [ref=e388]: 2026-07-09 23:20:17 +02:00vor 14 Stunden
+                  - generic [ref=e389]: 1m4s
+            - generic [ref=e392]:
+              - generic "Fehler" [ref=e394]
+              - generic [ref=e397]:
+                - 'link "feat: OIDC backchannel logout for OpenCloud and Nextcloud" [ref=e398] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/791
+                - generic [ref=e399]:
+                  - generic [ref=e400]: "github-sync.yml #791"
+                  - text: "- Commit"
+                  - link "3c8242832f" [ref=e401] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/3c8242832fedb9e57c03b13b801fffdbe68c9520
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e402] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e403]:
+                - link "feat/backchannel-logout-oidc" [ref=e404] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/backchannel-logout-oidc
+                - generic [ref=e405]:
+                  - generic "9. Juli 2026, 23:16 MESZ" [ref=e409]: 2026-07-09 23:16:46 +02:00vor 14 Stunden
+                  - generic [ref=e410]: 1m3s
+            - generic [ref=e413]:
+              - generic "Fehler" [ref=e415]
+              - generic [ref=e418]:
+                - 'link "feat: ILIAS SAML backchannel logout implementation" [ref=e419] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/790
+                - generic [ref=e420]:
+                  - generic [ref=e421]: "github-sync.yml #790"
+                  - text: "- Commit"
+                  - link "06d0fd11a4" [ref=e422] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/06d0fd11a445894aa129d9443a6e7f5792c92814
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e423] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e424]:
+                - link "feat/backchannel-logout-ilias" [ref=e425] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/backchannel-logout-ilias
+                - generic [ref=e426]:
+                  - generic "9. Juli 2026, 23:10 MESZ" [ref=e430]: 2026-07-09 23:10:41 +02:00vor 14 Stunden
+                  - generic [ref=e431]: 58s
+            - generic [ref=e434]:
+              - generic "Fehler" [ref=e436]
+              - generic [ref=e439]:
+                - 'link "fix(portal): ensure ILIAS and OpenCloud tiles require login" [ref=e440] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/789
+                - generic [ref=e441]:
+                  - generic [ref=e442]: "github-sync.yml #789"
+                  - text: "- Commit"
+                  - link "d24ca963ed" [ref=e443] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/d24ca963edc6fe696592ace515fec21391db2179
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e444] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e445]:
+                - link "feat/secret-management-sops" [ref=e446] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/secret-management-sops
+                - generic [ref=e447]:
+                  - generic "9. Juli 2026, 22:57 MESZ" [ref=e451]: 2026-07-09 22:57:44 +02:00vor 14 Stunden
+                  - generic [ref=e452]: 1m1s
+            - generic [ref=e455]:
+              - generic "Fehler" [ref=e457]
+              - generic [ref=e460]:
+                - link "Merge upstream/develop into feat/secret-management-sops (v1.16.1)" [ref=e461] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/788
+                - generic [ref=e462]:
+                  - generic [ref=e463]: "github-sync.yml #788"
+                  - text: "- Commit"
+                  - link "a1a12276dc" [ref=e464] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/a1a12276dc06f1b8738ee35407d6ba56cd426f6c
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e465] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e466]:
+                - link "feat/secret-management-sops" [ref=e467] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/secret-management-sops
+                - generic [ref=e468]:
+                  - generic "9. Juli 2026, 22:28 MESZ" [ref=e472]: 2026-07-09 22:28:19 +02:00vor 15 Stunden
+                  - generic [ref=e473]: 1m6s
+            - generic [ref=e476]:
+              - generic "Fehler" [ref=e478]
+              - generic [ref=e481]:
+                - link "Sync to GitHub" [ref=e482] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/787
+                - generic [ref=e483]:
+                  - generic [ref=e484]: "github-sync.yml #787"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e485] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e486]:
+                - link "main" [ref=e487] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e488]:
+                  - generic "9. Juli 2026, 22:24 MESZ" [ref=e492]: 2026-07-09 22:24:41 +02:00vor 15 Stunden
+                  - generic [ref=e493]: 57s
+            - generic [ref=e496]:
+              - generic "Fehler" [ref=e498]
+              - generic [ref=e501]:
+                - 'link "docs(architecture): add accessibility tags to architecture SVG" [ref=e502] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/786
+                - generic [ref=e503]:
+                  - generic [ref=e504]: "github-sync.yml #786"
+                  - text: "- Commit"
+                  - link "9e9b83178a" [ref=e505] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/9e9b83178a3aeda1d0a6b6e45ad7b9e4ed677075
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e506] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e507]:
+                - link "feat/secret-management-sops" [ref=e508] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/secret-management-sops
+                - generic [ref=e509]:
+                  - generic "9. Juli 2026, 21:02 MESZ" [ref=e513]: 2026-07-09 21:02:36 +02:00vor 16 Stunden
+                  - generic [ref=e514]: 1m44s
+            - generic [ref=e517]:
+              - generic "Fehler" [ref=e519]
+              - generic [ref=e522]:
+                - link "Sync to GitHub" [ref=e523] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/785
+                - generic [ref=e524]:
+                  - generic [ref=e525]: "github-sync.yml #785"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e526] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e527]:
+                - link "main" [ref=e528] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e529]:
+                  - generic "9. Juli 2026, 18:02 MESZ" [ref=e533]: 2026-07-09 18:02:38 +02:00vor 19 Stunden
+                  - generic [ref=e534]: 1m24s
+            - generic [ref=e537]:
+              - generic "Fehler" [ref=e539]
+              - generic [ref=e542]:
+                - link "Sync to GitHub" [ref=e543] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/784
+                - generic [ref=e544]:
+                  - generic [ref=e545]: "github-sync.yml #784"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e546] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e547]:
+                - link "main" [ref=e548] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e549]:
+                  - generic "9. Juli 2026, 14:03 MESZ" [ref=e553]: 2026-07-09 14:03:59 +02:00vor 23 Stunden
+                  - generic [ref=e554]: 1m16s
+            - generic [ref=e557]:
+              - generic "Fehler" [ref=e559]
+              - generic [ref=e562]:
+                - link "Sync to GitHub" [ref=e563] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/783
+                - generic [ref=e564]:
+                  - generic [ref=e565]: "github-sync.yml #783"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e566] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e567]:
+                - link "main" [ref=e568] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e569]:
+                  - generic "9. Juli 2026, 10:22 MESZ" [ref=e573]: 2026-07-09 10:22:47 +02:00gestern
+                  - generic [ref=e574]: 1m4s
+            - generic [ref=e577]:
+              - generic "Fehler" [ref=e579]
+              - generic [ref=e582]:
+                - link "Sync to GitHub" [ref=e583] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/782
+                - generic [ref=e584]:
+                  - generic [ref=e585]: "github-sync.yml #782"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e586] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e587]:
+                - link "main" [ref=e588] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e589]:
+                  - generic "9. Juli 2026, 06:05 MESZ" [ref=e593]: 2026-07-09 06:05:06 +02:00gestern
+                  - generic [ref=e594]: 1m22s
+            - generic [ref=e597]:
+              - generic "Fehler" [ref=e599]
+              - generic [ref=e602]:
+                - link "Sync to GitHub" [ref=e603] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/781
+                - generic [ref=e604]:
+                  - generic [ref=e605]: "github-sync.yml #781"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e606] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e607]:
+                - link "main" [ref=e608] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e609]:
+                  - generic "9. Juli 2026, 02:18 MESZ" [ref=e613]: 2026-07-09 02:18:36 +02:00gestern
+                  - generic [ref=e614]: 1m23s
+            - generic [ref=e617]:
+              - generic "Fehler" [ref=e619]
+              - generic [ref=e622]:
+                - link "Sync to GitHub" [ref=e623] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/780
+                - generic [ref=e624]:
+                  - generic [ref=e625]: "github-sync.yml #780"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e626] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e627]:
+                - link "main" [ref=e628] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e629]:
+                  - generic "8. Juli 2026, 22:22 MESZ" [ref=e633]: 2026-07-08 22:22:25 +02:00gestern
+                  - generic [ref=e634]: 1m12s
+            - generic [ref=e637]:
+              - generic "Fehler" [ref=e639]
+              - generic [ref=e642]:
+                - 'link "docs(sops): update CMP sidecar guide with actual deployment configuration" [ref=e643] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/779
+                - generic [ref=e644]:
+                  - generic [ref=e645]: "github-sync.yml #779"
+                  - text: "- Commit"
+                  - link "e9bdeed47e" [ref=e646] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/e9bdeed47ee333cd32dc83ad66ce37b33e015537
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e647] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e648]:
+                - link "feat/secret-management-sops" [ref=e649] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/secret-management-sops
+                - generic [ref=e650]:
+                  - generic "8. Juli 2026, 21:34 MESZ" [ref=e654]: 2026-07-08 21:34:46 +02:00gestern
+                  - generic [ref=e655]: 1m3s
+            - generic [ref=e658]:
+              - generic "Fehler" [ref=e660]
+              - generic [ref=e663]:
+                - link "Sync to GitHub" [ref=e664] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/778
+                - generic [ref=e665]:
+                  - generic [ref=e666]: "github-sync.yml #778"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e667] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e668]:
+                - link "main" [ref=e669] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e670]:
+                  - generic "8. Juli 2026, 18:04 MESZ" [ref=e674]: 2026-07-08 18:04:05 +02:00gestern
+                  - generic [ref=e675]: 1m51s
+            - generic [ref=e678]:
+              - generic "Fehler" [ref=e680]
+              - generic [ref=e683]:
+                - 'link "docs(secrets): add ArgoCD CMP sidecar integration guide for SOPS" [ref=e684] [cursor=pointer]':
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/777
+                - generic [ref=e685]:
+                  - generic [ref=e686]: "github-sync.yml #777"
+                  - text: "- Commit"
+                  - link "fe19d68d71" [ref=e687] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/fe19d68d712b0ef34264c96f65c12dc4815c5b05
+                  - text: ", gepusht von"
+                  - link "graphwiz-ai" [ref=e688] [cursor=pointer]:
+                    - /url: /graphwiz-ai
+              - generic [ref=e689]:
+                - link "feat/secret-management-sops" [ref=e690] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/feat/secret-management-sops
+                - generic [ref=e691]:
+                  - generic "8. Juli 2026, 14:49 MESZ" [ref=e695]: 2026-07-08 14:49:52 +02:00gestern
+                  - generic [ref=e696]: 1m9s
+            - generic [ref=e699]:
+              - generic "Fehler" [ref=e701]
+              - generic [ref=e704]:
+                - link "Sync to GitHub" [ref=e705] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/actions/runs/776
+                - generic [ref=e706]:
+                  - generic [ref=e707]: "github-sync.yml #776"
+                  - text: "- Planmäßiger Run des Commits"
+                  - link "cc5b478df3" [ref=e708] [cursor=pointer]:
+                    - /url: /opendesk-edu/opendesk-edu/commit/cc5b478df38b26bff1a5a859a8688022a2861801
+              - generic [ref=e709]:
+                - link "main" [ref=e710] [cursor=pointer]:
+                  - /url: /opendesk-edu/opendesk-edu/src/branch/main
+                - generic [ref=e711]:
+                  - generic "8. Juli 2026, 14:09 MESZ" [ref=e715]: 2026-07-08 14:09:06 +02:00gestern
+                  - generic [ref=e716]: 1m23s
+          - generic [ref=e720]:
+            - generic: Erste
+            - generic: Vorherige
+            - generic [ref=e721] [cursor=pointer]: "1"
+            - link "2" [ref=e722] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions?page=2&workflow=&actor=0&status=0
+            - link "3" [ref=e723] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions?page=3&workflow=&actor=0&status=0
+            - link "4" [ref=e724] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions?page=4&workflow=&actor=0&status=0
+            - link "5" [ref=e725] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions?page=5&workflow=&actor=0&status=0
+            - generic: ...
+            - link "Nächste" [ref=e726] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions?page=2&workflow=&actor=0&status=0
+            - link "Letzte" [ref=e730] [cursor=pointer]:
+              - /url: /opendesk-edu/opendesk-edu/actions?page=27&workflow=&actor=0&status=0
+  - group "Fußzeile" [ref=e736]:
+    - generic "Links" [ref=e737]:
+      - generic [ref=e741]:
+        - generic [ref=e742]: Betrieben mit
+        - link "Forgejo" [ref=e743] [cursor=pointer]:
+          - /url: https://forgejo.org
+        - text: with
+        - link "modifications" [ref=e746] [cursor=pointer]:
+          - /url: /Codeberg-Infrastructure/forgejo
+      - generic [ref=e747]:
+        - text: Codeberg
+        - list [ref=e748]:
+          - listitem [ref=e749]:
+            - link "Blog" [ref=e750] [cursor=pointer]:
+              - /url: https://blog.codeberg.org
+          - listitem [ref=e751]:
+            - link "Documentation" [ref=e752] [cursor=pointer]:
+              - /url: https://docs.codeberg.org
+          - listitem [ref=e753]:
+            - link "Community issues" [ref=e754] [cursor=pointer]:
+              - /url: /Codeberg/Community/issues
+          - listitem [ref=e755]:
+            - link "Contributing" [ref=e756] [cursor=pointer]:
+              - /url: /Codeberg/Contributing
+          - listitem [ref=e757]:
+            - link "Missbrauch melden" [ref=e758] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/contact/#abuse
+      - generic [ref=e759]:
+        - text: Association
+        - list [ref=e760]:
+          - listitem [ref=e761]:
+            - link "Who are we?" [ref=e762] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/getting-started/what-is-codeberg/#what-is-codeberg-e.v.%3F
+          - listitem [ref=e763]:
+            - link "Bylaws / Satzung" [ref=e764] [cursor=pointer]:
+              - /url: https://codeberg.org/codeberg/org/src/en/bylaws.md
+          - listitem [ref=e765]:
+            - link "Donate" [ref=e766] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/improving-codeberg/donate/
+          - listitem [ref=e767]:
+            - link "Join / Support" [ref=e768] [cursor=pointer]:
+              - /url: https://join.codeberg.org
+          - listitem [ref=e769]:
+            - link "Contact" [ref=e770] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/contact/
+      - generic [ref=e771]:
+        - text: Services
+        - list [ref=e772]:
+          - listitem [ref=e773]:
+            - link "Codeberg Pages" [ref=e774] [cursor=pointer]:
+              - /url: https://codeberg.page
+          - listitem [ref=e775]:
+            - link "Codeberg Translate" [ref=e776] [cursor=pointer]:
+              - /url: https://translate.codeberg.org
+          - listitem [ref=e777]:
+            - link "Woodpecker CI" [ref=e778] [cursor=pointer]:
+              - /url: https://docs.codeberg.org/ci/#using-codeberg's-instance-of-woodpecker-ci
+          - listitem [ref=e779]:
+            - link "Forgejo API" [ref=e780] [cursor=pointer]:
+              - /url: /api/swagger
+          - listitem [ref=e781]:
+            - link "Status page" [ref=e782] [cursor=pointer]:
+              - /url: https://status.codeberg.eu
+      - generic [ref=e783]:
+        - text: Legal
+        - list [ref=e784]:
+          - listitem [ref=e785]:
+            - link "Imprint / Impressum" [ref=e786] [cursor=pointer]:
+              - /url: https://codeberg.org/codeberg/org/src/Imprint.md
+          - listitem [ref=e787]:
+            - link "Privacy Policy" [ref=e788] [cursor=pointer]:
+              - /url: /codeberg/org/src/PrivacyPolicy.md
+          - listitem [ref=e789]:
+            - link "Lizenzen" [ref=e790] [cursor=pointer]:
+              - /url: /assets/licenses.txt
+          - listitem [ref=e791]:
+            - link "Terms of Use" [ref=e792] [cursor=pointer]:
+              - /url: /codeberg/org/src/TermsOfUse.md
+    - generic [ref=e793]:
+      - generic [ref=e794]:
+        - link "Mastodon" [ref=e795] [cursor=pointer]:
+          - /url: https://social.anoxinon.de/@Codeberg
+        - text: "|"
+        - link "Matrix Space" [ref=e796] [cursor=pointer]:
+          - /url: matrix:r/codeberg-space:matrix.org?action=join
+        - link "(Web link)" [ref=e797] [cursor=pointer]:
+          - /url: https://matrix.to/#/#codeberg-space:matrix.org
+        - button "Copy to clipboard" [ref=e798] [cursor=pointer]
+      - menu [ref=e803] [cursor=pointer]:
+        - generic [ref=e806]: Deutsch
