@@ -1,0 +1,38 @@
+# Helmfile state values that override CE defaults
+# These are injected via --values when running CE's helmfile
+# They override CE's default environment values
+
+apps:
+  # Disable CE apps that edu replaces
+  open-x-change:
+    enabled: false
+  nextcloud:
+    enabled: false
+  # Enable SOGo (edu replaces OX with SOGo)
+  sogo:
+    enabled: true
+
+# Edu-specific global config
+global:
+  domain: opendesk.hrz.uni-marburg.de
+  mail_domain: uni-marburg.de
+
+# Keycloak bootstrap — add edu SAML clients
+# CE's bootstrap handles core CE clients
+# For edu SAML clients (ILIAS, Moodle, BBB), see post-migration restore task
+keycloak:
+  bootstrap:
+    clients:
+      ilias:
+        enabled: true
+        clientId: ilias
+        protocol: saml
+        # Restore full SAML config from backup (lost in --theirs merge)
+      moodle:
+        enabled: true
+        clientId: moodle
+        protocol: saml
+      bigbluebutton:
+        enabled: true
+        clientId: bigbluebutton
+        protocol: saml
