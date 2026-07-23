@@ -1,0 +1,13 @@
+---
+releases:
+  - name: "semester-provisioning"
+    chart: "./"
+    wait: true
+    values:
+      - "values.yaml"
+    installed: {{ .Values.apps.semesterProvisioning.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "semester-provisioning"

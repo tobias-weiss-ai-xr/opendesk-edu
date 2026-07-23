@@ -11,6 +11,11 @@ apps:
   # Enable SOGo (edu replaces OX with SOGo)
   sogo:
     enabled: true
+  # Edu-specific apps
+  grommunio:
+    enabled: true
+  semesterProvisioning:
+    enabled: true
 
 # Edu-specific global config
 global:
