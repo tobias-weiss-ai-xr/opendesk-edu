@@ -22,22 +22,181 @@ global:
   domain: opendesk.hrz.uni-marburg.de
   mail_domain: uni-marburg.de
 
-# Keycloak bootstrap — add edu SAML clients
-# CE's bootstrap handles core CE clients
-# For edu SAML clients (ILIAS, Moodle, BBB), see post-migration restore task
-keycloak:
-  bootstrap:
-    clients:
-      ilias:
-        enabled: true
-        clientId: ilias
-        protocol: saml
-        # Restore full SAML config from backup (lost in --theirs merge)
-      moodle:
-        enabled: true
-        clientId: moodle
-        protocol: saml
-      bigbluebutton:
-        enabled: true
-        clientId: bigbluebutton
-        protocol: saml
+# CE Keycloak bootstrap — inject edu SAML clients via CE's custom clients mechanism
+# CE reads functional.authentication.oidc.clients and injects into config.custom.clients
+functional:
+  authentication:
+    oidc:
+      clients:
+        - name: "ilias-saml"
+          clientId: "ilias-saml"
+          protocol: "saml"
+          clientAuthenticatorType: "client-secret"
+          secret: {{ .Values.secrets.keycloak.clientSecret.iliasSaml | quote }}
+          redirectUris:
+            - "https://lms.{{ .Values.global.domain }}/*"
+          rootUrl: "https://lms.{{ .Values.global.domain }}"
+          adminUrl: "https://lms.{{ .Values.global.domain }}"
+          consentRequired: false
+          frontchannelLogout: true
+          publicClient: false
+          authorizationServicesEnabled: false
+          attributes:
+            saml.assertion.signature: "false"
+            saml.force.post.binding: "true"
+            saml.multivalued.roles: "false"
+            saml.encrypt: "false"
+            saml.server.signature: "true"
+            saml.server.signature.keyinfo.ext: "false"
+            saml.client.signature: "false"
+            saml.authnstatement: "true"
+            saml_name_id_format: "persistent"
+            frontchannel.logout.url: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+          protocolMappers:
+            - name: "email"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "email"
+                attribute.name: "email"
+                attribute.nameformat: "Basic"
+            - name: "displayname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "displayName"
+                attribute.name: "displayname"
+                attribute.nameformat: "Basic"
+            - name: "givenname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "firstName"
+                attribute.name: "givenname"
+                attribute.nameformat: "Basic"
+            - name: "surname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "lastName"
+                attribute.name: "surname"
+                attribute.nameformat: "Basic"
+        - name: "moodle-saml"
+          clientId: "moodle-saml"
+          protocol: "saml"
+          clientAuthenticatorType: "client-secret"
+          secret: {{ .Values.secrets.keycloak.clientSecret.moodleSaml | quote }}
+          redirectUris:
+            - "https://moodle.{{ .Values.global.domain }}/*"
+          rootUrl: "https://moodle.{{ .Values.global.domain }}"
+          adminUrl: "https://moodle.{{ .Values.global.domain }}"
+          consentRequired: false
+          frontchannelLogout: true
+          publicClient: false
+          authorizationServicesEnabled: false
+          attributes:
+            saml.assertion.signature: "false"
+            saml.force.post.binding: "true"
+            saml.multivalued.roles: "false"
+            saml.encrypt: "false"
+            saml.server.signature: "true"
+            saml.server.signature.keyinfo.ext: "false"
+            saml.client.signature: "false"
+            saml.authnstatement: "true"
+            saml_name_id_format: "persistent"
+            frontchannel.logout.url: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+          protocolMappers:
+            - name: "email"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "email"
+                attribute.name: "email"
+                attribute.nameformat: "Basic"
+            - name: "displayname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "displayName"
+                attribute.name: "displayname"
+                attribute.nameformat: "Basic"
+            - name: "givenname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "firstName"
+                attribute.name: "givenname"
+                attribute.nameformat: "Basic"
+            - name: "surname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "lastName"
+                attribute.name: "surname"
+                attribute.nameformat: "Basic"
+        - name: "bbb-saml"
+          clientId: "bbb-saml"
+          protocol: "saml"
+          clientAuthenticatorType: "client-secret"
+          secret: {{ .Values.secrets.keycloak.clientSecret.bbbSaml | quote }}
+          redirectUris:
+            - "https://bbb.{{ .Values.global.domain }}/*"
+            - "https://bbb.{{ .Values.global.domain }}/auth/saml2/callback"
+          rootUrl: "https://bbb.{{ .Values.global.domain }}"
+          adminUrl: "https://bbb.{{ .Values.global.domain }}"
+          consentRequired: false
+          frontchannelLogout: true
+          publicClient: false
+          authorizationServicesEnabled: false
+          attributes:
+            saml.assertion.signature: "false"
+            saml.force.post.binding: "true"
+            saml.multivalued.roles: "false"
+            saml.encrypt: "false"
+            saml.server.signature: "true"
+            saml.server.signature.keyinfo.ext: "false"
+            saml.client.signature: "false"
+            saml.authnstatement: "true"
+            saml_name_id_format: "persistent"
+            frontchannel.logout.url: "https://bbb.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+          protocolMappers:
+            - name: "email"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "email"
+                attribute.name: "email"
+                attribute.nameformat: "Basic"
+            - name: "displayname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "displayName"
+                attribute.name: "displayname"
+                attribute.nameformat: "Basic"
+            - name: "givenname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "firstName"
+                attribute.name: "givenname"
+                attribute.nameformat: "Basic"
+            - name: "surname"
+              protocol: "saml"
+              protocolMapper: "saml-user-property-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "lastName"
+                attribute.name: "surname"
+                attribute.nameformat: "Basic"
