@@ -75,9 +75,6 @@ spec:
             {{- toYaml .Values.resources.feedbackDb | nindent 12 }}
   volumeClaimTemplates:
     - metadata:
-    labels:
-      backup-tier: "b"
-      k8up/backup: "true"
         name: postgres-data
         labels:
           backup-tier: "b"
