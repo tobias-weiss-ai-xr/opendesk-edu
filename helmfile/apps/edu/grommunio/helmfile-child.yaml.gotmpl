@@ -1,0 +1,16 @@
+---
+releases:
+  - name: "grommunio"
+    chart: "../../../charts/grommunio"
+    wait: true
+    values:
+      - "values-grommunio.yaml.gotmpl"
+      {{- range .Values.customization.release.grommunio }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.grommunio.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "grommunio"
