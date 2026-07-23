@@ -1,18 +1,18 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 # SPDX-License-Identifier: Apache-2.0
+{{- if .Values.postgresql.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-etherpad
+  name: {{ .Release.Name }}-postgresql
   labels:
-    etherpad/server: "true"
 {{ include "etherpad.labels" . | nindent 4 }}
 spec:
-  selector:
-    etherpad/server: "true"
-{{ include "etherpad.selectorLabels" . | nindent 4 }}
   ports:
-    - protocol: TCP
-      port: {{ .Values.etherpad.port }}
-      targetPort: {{ .Values.etherpad.port }}
-  type: ClusterIP
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+{{ include "etherpad.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+{{- end }}

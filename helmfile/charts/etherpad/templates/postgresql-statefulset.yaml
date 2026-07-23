@@ -1,0 +1,104 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.postgresql.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-postgresql
+  labels:
+{{ include "etherpad.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ .Release.Name }}-postgresql
+  selector:
+    matchLabels:
+{{ include "etherpad.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: postgresql
+  template:
+    metadata:
+      labels:
+{{ include "etherpad.labels" . | nindent 8 }}
+        app.kubernetes.io/component: postgresql
+    spec:
+      securityContext:
+        fsGroup: 999
+      initContainers:
+        - name: migrate-bitnami-data
+          image: {{ .Values.postgresql.image.registry | default "docker.io" }}/{{ .Values.postgresql.image.repository | default "library/postgres" }}:{{ .Values.postgresql.image.tag | default "17" }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              PGD="/var/lib/postgresql/data/data"
+              if [ -d "$PGD" ] && ([ ! -f "$PGD/postgresql.conf" ] || [ ! -f "$PGD/pg_hba.conf" ]); then
+                echo "Bitnami->official migration: creating config files in $PGD"
+                echo "listen_addresses = '*'" > "$PGD/postgresql.conf"
+                echo "port = 5432" >> "$PGD/postgresql.conf"
+                echo "max_connections = 100" >> "$PGD/postgresql.conf"
+                echo "local   all             all                                     trust" > "$PGD/pg_hba.conf"
+                echo "host    all             all             127.0.0.1/32            scram-sha-256" >> "$PGD/pg_hba.conf"
+                echo "host    all             all             ::1/128                 scram-sha-256" >> "$PGD/pg_hba.conf"
+                echo "host    all             all             0.0.0.0/0               scram-sha-256" >> "$PGD/pg_hba.conf"
+                chown 999:999 "$PGD/postgresql.conf" "$PGD/pg_hba.conf"
+                chmod 600 "$PGD/postgresql.conf" "$PGD/pg_hba.conf"
+                echo "Migration config files created"
+              else
+                echo "Config files present or PGDATA not found - no migration needed"
+              fi
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/data
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      containers:
+        - name: postgresql
+          image: {{ .Values.postgresql.image.registry | default "docker.io" }}/{{ .Values.postgresql.image.repository | default "library/postgres" }}:{{ .Values.postgresql.image.tag | default "17" }}
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.auth.username | default "etherpad" | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: password
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.auth.database | default "etherpad" | quote }}
+            - name: PGDATA
+              value: /var/lib/postgresql/data/data
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - {{ .Values.postgresql.auth.username | default "etherpad" | quote }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - {{ .Values.postgresql.auth.username | default "etherpad" | quote }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.postgresql.resources | nindent 12 }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - {{ .Values.postgresql.primary.persistence.accessMode | default "ReadWriteOnce" }}
+        storageClassName: {{ .Values.postgresql.primary.persistence.storageClass | default "" }}
+        resources:
+          requests:
+            storage: {{ .Values.postgresql.primary.persistence.size | default "8Gi" }}
+{{- end }}

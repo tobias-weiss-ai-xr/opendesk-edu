@@ -85,6 +85,10 @@ cluster:
 
 postgresql:
   enabled: true
+  image:
+    registry: docker.io
+    repository: library/postgres
+    tag: "17"
   auth:
     username: "etherpad"
     database: "etherpad"
