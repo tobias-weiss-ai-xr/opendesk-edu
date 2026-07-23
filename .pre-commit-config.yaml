@@ -68,21 +68,14 @@ repos:
 
       - id: helm-lint
         name: Helm Lint
-        entry: bash -c 'cd helmfile && make lint'
-        language: system
-        files: helmfile/charts/.*\.ya?ml$
-        pass_filenames: false
-
-      - id: helm-template
-        name: Helm Template
-        entry: bash -c 'cd helmfile && make template'
+        entry: bash -c 'helm lint helmfile/charts/*/'
         language: system
         files: helmfile/charts/.*\.ya?ml$
         pass_filenames: false
 
       - id: helmfile-syntax
         name: Helmfile Syntax
-        entry: bash -c 'cd helmfile && helmfile -e default template > /dev/null'
+        entry: bash -c 'helmfile -f helmfile/edu-helmfile.yaml.gotmpl -e edu template > /dev/null'
         language: system
-        files: (helmfile\.ya?ml|environments/.*\.ya?ml)$
+        files: (edu-helmfile\.ya?ml|environments/edu/.*\.ya?ml)$
         pass_filenames: false
