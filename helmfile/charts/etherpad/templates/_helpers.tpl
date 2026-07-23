@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 {{/*
 Expand the name of the release.
 */}}
@@ -55,10 +55,10 @@ DB Password generator
 {{- define "etherpad.dbPassword" -}}
 {{-   if .Values.etherpad.db.password }}
 {{- .Values.etherpad.db.password }}
-{{-   else if .Values.postgresql.auth.existingSecret }}
+{{-   else if .Values.etherpad.db.existingSecret }}
 {{- "" }}
 {{-   else }}
-{{- .Values.postgresql.auth.password }}
+{{- "" }}
 {{-   end -}}
 {{- end -}}
 

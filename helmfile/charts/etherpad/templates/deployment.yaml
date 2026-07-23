@@ -50,7 +50,10 @@ spec:
             - name: DB_USER
               value: {{ include "etherpad.dbUser" . | quote }}
             - name: DB_PASS
-              value: {{ include "etherpad.dbPassword" . | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: password
             - name: DB_NAME
               value: {{ include "etherpad.dbName" . | quote }}
             - name: DB_TYPE
