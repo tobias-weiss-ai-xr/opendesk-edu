@@ -1,2 +1,4 @@
-# TODO: Add edu image overrides as needed
-images: {}
+images:
+  typo3:
+    repository: ghcr.io/opendesk/typo3
+    tag: 13.4.0
