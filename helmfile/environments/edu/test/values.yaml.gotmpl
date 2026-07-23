@@ -1,0 +1,131 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  domain: "opendesk.hrz.uni-marburg.de"
+
+# Only enable collab-services apps for testing
+apps:
+  # Disable all default apps
+  cassandra:
+    enabled: false
+  certificates:
+    enabled: false
+  clamavSimple:
+    enabled: false
+  collabora:
+    enabled: false
+  cryptpad:
+    enabled: false
+  dkimpy:
+    enabled: false
+  dovecot:
+    enabled: false
+  element:
+    enabled: false
+  home:
+    enabled: false
+  jitsi:
+    enabled: false
+  mariadb:
+    enabled: false
+  memcached:
+    enabled: false
+  migrations:
+    enabled: false
+  minio:
+    enabled: false
+  nextcloud:
+    enabled: false
+  notes:
+    enabled: false
+  nubus:
+    enabled: false
+  opencloud:
+    enabled: false
+  openproject:
+    enabled: false
+  oxAppSuite:
+    enabled: false
+  postfix:
+    enabled: false
+  postgresql:
+    enabled: false
+  redis:
+    enabled: false
+  staticFiles:
+    enabled: false
+  xwiki:
+    enabled: false
+
+  # New edu services - phase 1: simple/standalone
+  drawio:
+    enabled: true
+  excalidraw:
+    enabled: true
+  selfServicePassword:
+    enabled: true
+
+  # New edu services - phase 1b: needs PostgreSQL (already running on cluster)
+  planka:
+    enabled: true
+  etherpad:
+    enabled: true
+
+  # New edu services - phase 1c: embedded MariaDB
+  bookstack:
+    enabled: true
+
+  # New edu services - coming later
+  limesurvey:
+    enabled: false
+  typo3:
+    enabled: false
+  snipr:
+    enabled: false
+  zammad:
+    enabled: false
+  sogo:
+    enabled: false
+  moodle:
+    enabled: false
+  ilias:
+    enabled: false
+
+  # Collab Services - test target (match actual deployed state)
+  rstudio:
+    enabled: true
+  ttyd:
+    enabled: true
+  slidev:
+    enabled: true
+  collabDashboard:
+    enabled: true
+  jupyterhub:
+    enabled: true
+  overleaf:
+    enabled: false
+  openWebui:
+    enabled: true
+  ollama:
+    enabled: true
+  codeServer:
+    enabled: true
+  kasmvnc:
+    enabled: false
+  dask:
+    enabled: false
+
+  # Portal entries: enable when any app with portal entries is deployed
+  portalEntries:
+    enabled: true
+
+namespace: "opendesk"
+
+ldap:
+  baseDn: "dc=swp-ldap,dc=internal"
+  adminDn: "cn=admin,dc=swp-ldap,dc=internal"
+
+ingress:
+  enabled: true
+  className: "haproxy"
