@@ -1,0 +1,118 @@
+{{ $root := . }}
+
+environments:
+  edu:
+    values:
+      - environments/edu/ce-overrides.yaml
+      - environments/edu/secrets.yaml
+      - environments/edu/images.yaml
+  edu-test:
+    values:
+      - environments/edu/test/values.yaml.gotmpl
+
+repositories:
+  - name: bitnami
+    url: oci://registry-1.docker.io/bitnamicharts
+
+helmfiles:
+  # Core edu apps
+  - path: apps/edu/bigbluebutton/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/bookstack/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/collab-dashboard/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/etherpad/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/ilias/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/moodle/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/sogo/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/opencloud/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+
+  # Collaboration services
+  - path: apps/edu/code-server/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/drawio/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/excalidraw/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/jupyterhub/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/kasmvnc/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/overleaf/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/rstudio/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/slidev/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/ttyd/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/open-webui/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/ollama/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+
+  # Additional edu apps
+  - path: apps/edu/dask/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/f13/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/grommunio/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/limesurvey/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/n8n/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/planka/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/seaweedfs/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/self-service-password/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/semester-provisioning/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/snipr/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/typo3/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/zammad/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
+  - path: apps/edu/portal-entries/helmfile-child.yaml.gotmpl
+    values:
+      - environments/edu/ce-overrides.yaml
