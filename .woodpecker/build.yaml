@@ -42,9 +42,9 @@ steps:
           opencloud)
             DOCKERFILE="helmfile/charts/opencloud/Dockerfile"; CONTEXT="helmfile/charts/opencloud/" ;;
           typo3)
-            DOCKERFILE="helmfile/apps/typo3/Dockerfile"; CONTEXT="helmfile/apps/typo3/" ;;
+            DOCKERFILE="helmfile/apps/edu/typo3/Dockerfile"; CONTEXT="helmfile/apps/edu/typo3/" ;;
           ilias-shibboleth)
-            DOCKERFILE="helmfile/apps/ilias/Dockerfile.shibboleth-source"; CONTEXT="helmfile/apps/ilias/" ;;
+            DOCKERFILE="helmfile/apps/edu/ilias/Dockerfile.shibboleth-source"; CONTEXT="helmfile/apps/edu/ilias/" ;;
           user-import)
             DOCKERFILE="scripts/user_import/Dockerfile"; CONTEXT="scripts/user_import/" ;;
           semester-provisioning)
