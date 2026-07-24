@@ -1,0 +1,377 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+## HISinOne Campus Management Integration Configuration
+##
+## This file configures the integration between openDesk Edu and the university's
+## HISinOne campus management system (qisserver / Marvin at HRZ Marburg).
+##
+## Overview:
+## HISinOne is the source of truth for user identity, roles, and enrollment status.
+## The integration flows: HISinOne → University LDAP/AD → Keycloak LDAP User Fed.
+##
+## Architecture:
+##   HISinOne (Marvin)  ──►  University LDAP/AD  ──►  Keycloak LDAP Federation
+##                                                       │
+##                                                       ▼
+##                                               a2g-mapper extension
+##                                               (attribute → Keycloak groups)
+##                                                       │
+##                                                       ▼
+##                                               openDesk service access
+##                                               (managed-by-attribute-* groups)
+##
+## Prerequisites:
+## - University LDAP/AD accessible from the cluster (reachable via LDAPS)
+## - Bind credentials for LDAP search (service account)
+## - HISinOne webhook/event accessible for lifecycle events
+## - a2g-mapper extension loaded (opendesk-a2g-mapper, already enabled)
+##
+## Enable: Set `.Values.hisinone.enabled: true` in environment config.
+##
+hisinone:
+
+  ## Master switch for HISinOne integration
+  ##
+  enabled: {{ if eq (env "HISINONE_ENABLED") "true" }}true{{ else }}false{{ end }}
+
+  ## University LDAP/AD connection configuration
+  ##
+  ldap:
+
+    ## LDAP server hostname
+    ## HRZ Marburg typically runs Active Directory / OpenLDAP on dedicated hosts.
+    ##
+    host: {{ env "HISINONE_LDAP_HOST" | default "ldap.uni-marburg.de" | quote }}
+
+    ## LDAP server port (636 for LDAPS, 389 for STARTTLS)
+    ##
+    port: {{ env "HISINONE_LDAP_PORT" | default "636" | quote }}
+
+    ## Use LDAPS (LDAP over SSL)
+    ##
+    useSsl: {{ env "HISINONE_LDAP_USE_SSL" | default "true" | quote }}
+
+    ## Base DN for user searches
+    ## HRZ-specific: users are typically under ou=people,dc=uni-marburg,dc=de
+    ##
+    usersBaseDn: {{ env "HISINONE_LDAP_USERS_BASE_DN" | default "ou=people,dc=uni-marburg,dc=de" | quote }}
+
+    ## User search filter
+    ## (objectClass=person) is standard; (objectClass=user) for AD.
+    ##
+    userSearchFilter: {{ env "HISINONE_LDAP_USER_FILTER" | default "(objectClass=person)" | quote }}
+
+    ## Base DN for group searches (if using group membership mapping)
+    ## HRZ-specific: groups typically under ou=groups,dc=uni-marburg,dc=de
+    ##
+    groupsBaseDn: {{ env "HISINONE_LDAP_GROUPS_BASE_DN" | default "ou=groups,dc=uni-marburg,dc=de" | quote }}
+
+    ## Group search filter
+    ##
+    groupSearchFilter: {{ env "HISINONE_LDAP_GROUP_FILTER" | default "(objectClass=group)" | quote }}
+
+    ## Bind DN for LDAP search (service account)
+    ## This account must have read access to user and group entries.
+    ##
+    bindDn: {{ env "HISINONE_LDAP_BIND_DN" | default "uid=opendesk-sync,ou=services,dc=uni-marburg,dc=de" | quote }}
+
+    ## LDAP attribute mapping (HISinOne LDAP → Keycloak user attributes)
+    ##
+    attributeMapping:
+
+      ## Keycloak username attribute
+      ##
+      username: {{ env "HISINONE_LDAP_ATTR_USERNAME" | default "uid" | quote }}
+
+      ## Email attribute
+      ##
+      email: {{ env "HISINONE_LDAP_ATTR_EMAIL" | default "mail" | quote }}
+
+      ## First name attribute
+      ##
+      firstName: {{ env "HISINONE_LDAP_ATTR_FIRST_NAME" | default "givenName" | quote }}
+
+      ## Last name attribute
+      ##
+      lastName: {{ env "HISINONE_LDAP_ATTR_LAST_NAME" | default "sn" | quote }}
+
+      ## LDAP UUID attribute (used for stable user identification)
+      ## entryUUID for OpenLDAP, objectGUID for AD
+      ##
+      uuid: {{ env "HISINONE_LDAP_ATTR_UUID" | default "entryUUID" | quote }}
+
+    ## Existing Kubernetes secret containing the LDAP bind password
+    ## The secret must exist in the target namespace with the key specified below.
+    ## Create it separately (e.g., via sealed-secrets, sops, or kubectl create secret).
+    ##
+    ## Example:
+    ##   kubectl create secret generic hisinone-ldap-credentials \
+    ##     --from-literal=password='<bind-password>'
+    ##
+    bindPasswordExistingSecret: {{ env "HISINONE_LDAP_BIND_SECRET" | default "" | quote }}
+
+    ## Key within the existing secret that holds the LDAP bind password
+    ##
+    bindPasswordKey: {{ env "HISINONE_LDAP_BIND_SECRET_KEY" | default "password" | quote }}
+
+    ## Import users from LDAP into Keycloak's internal DB
+    ## When true, creates Keycloak user records synced from LDAP.
+    ##
+    importUsers: {{ env "HISINONE_LDAP_IMPORT_USERS" | default "true" | quote }}
+
+    ## Sync period for periodic full synchronization (in minutes)
+    ##
+    syncPeriodMinutes: {{ env "HISINONE_LDAP_SYNC_PERIOD" | default "1440" | quote }}
+
+    ## Periodic changed users sync (in minutes). Shorter interval = lower latency
+    ## but higher LDAP load.
+    ##
+    changedSyncPeriodMinutes: {{ env "HISINONE_LDAP_CHANGED_SYNC_PERIOD" | default "60" | quote }}
+
+  ## Role-to-Group Mapping Configuration
+  ##
+  ## Maps HISinOne-derived LDAP attributes to openDesk Keycloak groups.
+  ## The a2g-mapper extension (opendesk-a2g-mapper) reads these rules and
+  ## automatically assigns users to the appropriate groups.
+  ##
+  roleMapping:
+
+    ## Enable automatic role-to-group mapping
+    ##
+    enabled: {{ if eq (env "HISINONE_ROLE_MAPPING_ENABLED") "true" }}true{{ else }}false{{ end }}
+
+    ## Define role mappings: LDAP attribute value → Keycloak group
+    ##
+    ## Rule format:
+    ##   - attribute: "<LDAP attribute name>"
+    ##     value: "<attribute value to match>"
+    ##     groups:
+    ##       - "<Keycloak group name>"
+    ##
+    rules:
+
+      ## Students get LMS (Learnmanagement) access
+      ## eduPersonAffiliation=student → managed-by-attribute-Learnmanagement
+      ##
+      - attribute: {{ env "HISINONE_ROLE_ATTR" | default "eduPersonAffiliation" | quote }}
+        value: "student"
+        groups:
+          - "managed-by-attribute-Learnmanagement"
+          - "managed-by-attribute-FileshareCloud"
+
+      ## Faculty/teachers get instructor access + collaboration tools
+      ##
+      - attribute: "eduPersonAffiliation"
+        value: "faculty"
+        groups:
+          - "managed-by-attribute-Learnmanagement"
+          - "managed-by-attribute-Groupware"
+          - "managed-by-attribute-Fileshare"
+          - "managed-by-attribute-FileshareCloud"
+          - "managed-by-attribute-Knowledgemanagement"
+          - "managed-by-attribute-Videoconference"
+          - "managed-by-attribute-Livecollaboration"
+          - "managed-by-attribute-Projectmanagement"
+
+      ## Staff/employees get groupware + file sharing + project management
+      ##
+      - attribute: "eduPersonAffiliation"
+        value: "employee"
+        groups:
+          - "managed-by-attribute-Groupware"
+          - "managed-by-attribute-Fileshare"
+          - "managed-by-attribute-FileshareCloud"
+          - "managed-by-attribute-Projectmanagement"
+
+      ## HISinOne lecturer flag → video conferencing + collaboration
+      ## Custom attribute set by HISinOne sync for course lecturers.
+      ##
+      - attribute: {{ env "HISINONE_LECTURER_ATTR" | default "hisinoneLecturer" | quote }}
+        value: "true"
+        groups:
+          - "managed-by-attribute-Videoconference"
+          - "managed-by-attribute-Livecollaboration"
+
+  ## Semester enrollment integration
+  ##
+  ## Maps HISinOne semester enrollments to semester-specific Keycloak groups.
+  ## These groups control access to course-specific resources.
+  ##
+  semesterEnrollment:
+
+    ## Enable semester enrollment integration
+    ##
+    enabled: {{ env "HISINONE_SEMESTER_ENABLED" | default "false" | quote }}
+
+    ## Re-registration grace period (in days)
+    ## After this many days past the re-registration deadline,
+    ## the student account is automatically disabled.
+    ##
+    reRegistrationGrace: {{ env "HISINONE_RE_REGISTRATION_GRACE" | default "30" | quote }}
+
+    ## Current semester identifier (e.g., "2026ws")
+    ## Used to identify which users are tracked for enrollment verification.
+    ##
+    currentSemester: {{ env "HISINONE_CURRENT_SEMESTER" | default "" | quote }}
+
+    ## Cron schedule for the semester check CronJob (default: daily 06:00)
+    ##
+    cronSchedule: {{ env "HISINONE_SEMESTER_CRON" | default "0 6 * * *" | quote }}
+
+    ## Semester group name templates
+    ##
+    groups:
+      ## Instructor group for a semester: e.g., "instructor:WS2026"
+      ##
+      instructor: {{ env "HISINONE_SEMESTER_INSTRUCTOR_GROUP" | default "instructor:{semester}" | quote }}
+
+      ## Student group for a semester
+      ##
+      student: {{ env "HISINONE_SEMESTER_STUDENT_GROUP" | default "student:{semester}" | quote }}
+
+      ## Tutor group for a semester
+      ##
+      tutor: {{ env "HISINONE_SEMESTER_TUTOR_GROUP" | default "tutor:{semester}" | quote }}
+
+      ## Guest group for a semester
+      ##
+      guest: {{ env "HISINONE_SEMESTER_GUEST_GROUP" | default "guest:{semester}" | quote }}
+
+  ## Account lifecycle integration
+  ##
+  ## Automates user provisioning and deprovisioning based on HISinOne events.
+  ##
+  accountLifecycle:
+
+    ## Enable account lifecycle automation
+    ##
+    enabled: {{ env "HISINONE_LIFECYCLE_ENABLED" | default "false" | quote }}
+
+    ## Container image for lifecycle automation (webhook + CronJobs)
+    ##
+    image: {{ env "HISINONE_LIFECYCLE_IMAGE" | default "codeberg.org/opendesk-edu/hisinone-lifecycle:latest" | quote }}
+
+    ## Existing Kubernetes secret containing the webhook HMAC secret
+    ##
+    webhookSecretExistingSecret: {{ env "HISINONE_WEBHOOK_SECRET_NAME" | default "hisinone-lifecycle" | quote }}
+
+    ## Key within the webhook secret
+    ##
+    webhookSecretKey: {{ env "HISINONE_WEBHOOK_SECRET_KEY" | default "webhook-secret" | quote }}
+
+    ## Existing Kubernetes secret containing the Keycloak client credentials
+    ##
+    keycloakClientSecret: {{ env "HISINONE_LIFECYCLE_KC_CLIENT_SECRET" | default "hisinone-lifecycle-client" | quote }}
+
+    ## Key within the Keycloak client secret
+    ##
+    keycloakClientSecretKey: {{ env "HISINONE_LIFECYCLE_KC_CLIENT_SECRET_KEY" | default "client-secret" | quote }}
+
+    ## Existing Kubernetes secret containing the Keycloak admin password
+    ## (used as fallback when client secret is not available)
+    ##
+    keycloakAdminSecret: {{ env "HISINONE_LIFECYCLE_KC_ADMIN_SECRET" | default "hisinone-lifecycle" | quote }}
+
+    ## Key within the Keycloak admin secret
+    ##
+    keycloakAdminKey: {{ env "HISINONE_LIFECYCLE_KC_ADMIN_KEY" | default "admin-password" | quote }}
+
+    ## Webhook receiver configuration for HISinOne events
+    ## The existing hisinone_webhook.py handles these events.
+    ##
+    webhook:
+
+      ## Enable the webhook receiver
+      ##
+      enabled: {{ env "HISINONE_WEBHOOK_ENABLED" | default "false" | quote }}
+
+      ## Webhook secret for HMAC validation
+      ##
+      secret: {{ env "HISINONE_WEBHOOK_SECRET" | default "" | quote }}
+
+      ## Action on enrollment (immatrikulation)
+      ## Supported: "create" (create user if not exists), "enable" (enable disabled user),
+      ##            "notify" (send notification only)
+      ##
+      onEnrollment: {{ env "HISINONE_ON_ENROLLMENT" | default "create" | quote }}
+
+      ## Action on exmatriculation
+      ## Supported: "disable" (disable account, keep data), "archive" (archive and disable),
+      ##            "delete" (permanent deletion after grace period)
+      ##
+      onExmatriculation: {{ env "HISINONE_ON_EXMATRICULATION" | default "disable" | quote }}
+
+      ## Action on leave of absence (beurlaubung)
+      ## Supported: "suspend" (suspend service access, keep account),
+      ##            "notify" (send notification only)
+      ##
+      onLeaveOfAbsence: {{ env "HISINONE_ON_LOA" | default "suspend" | quote }}
+
+      ## Grace period before permanent deletion (in days)
+      ##
+      deletionGracePeriodDays: {{ env "HISINONE_DELETION_GRACE_DAYS" | default "180" | quote }}
+
+  ## Guest lecturer provisioning
+  ##
+  ## Temporary accounts for external lecturers with time-limited access.
+  ##
+  guestLecturers:
+
+    ## Enable guest lecturer provisioning
+    ##
+    enabled: {{ env "HISINONE_GUEST_LECTURERS_ENABLED" | default "false" | quote }}
+
+    ## Cron schedule for the guest cleanup CronJob (default: daily 06:00)
+    ##
+    cronSchedule: {{ env "HISINONE_GUEST_CRON" | default "0 6 * * *" | quote }}
+
+    ## Default access duration in days
+    ##
+    defaultDurationDays: {{ env "HISINONE_GUEST_DURATION" | default "365" | quote }}
+
+    ## Groups granted to guest lecturers
+    ##
+    groups:
+      - "managed-by-attribute-Videoconference"
+      - "managed-by-attribute-Livecollaboration"
+
+  ## Bootstrap configuration for Keycloak LDAP federation provider
+  ##
+  ## This section is consumed by the Keycloak bootstrap job to create
+  ## the university LDAP user federation provider.
+  ##
+  bootstrap:
+
+    ## Create the LDAP federation provider in Keycloak
+    ##
+    createLdapProvider: {{ if eq (env "HISINONE_CREATE_LDAP_PROVIDER") "true" }}true{{ else }}false{{ end }}
+
+    ## Priority for the university LDAP provider (lower = higher priority)
+    ## The internal Nubus LDAP provider has priority 0.
+    ## University LDAP should have lower priority (e.g., 1) so it doesn't
+    ## override the internal Nubus LDAP for admin accounts.
+    ##
+    providerPriority: {{ env "HISINONE_LDAP_PRIORITY" | default "1" | quote }}
+
+    ## Vendor of the university LDAP server
+    ## Supported: "ad" (Active Directory), "rhds" (Red Hat DS), "tivoli",
+    ##            "openldap", "other"
+    ## HRZ Marburg uses Active Directory for identity management.
+    ##
+    vendor: {{ env "HISINONE_LDAP_VENDOR" | default "ad" | quote }}
+
+    ## Kubernetes ServiceAccount name for the bootstrap Job
+    ## Must have permissions to access the Keycloak Admin API.
+    ##
+    serviceAccountName: {{ env "HISINONE_BOOTSTRAP_SA" | default "keycloak-ldap-bootstrap" | quote }}
+
+    ## Container image for the bootstrap Job
+    ## Requires curl and python3 for Keycloak Admin API interaction.
+    ##
+    image: {{ env "HISINONE_BOOTSTRAP_IMAGE" | default "curlimages/curl:8.12.1" | quote }}
+
+    ## TLS secret name containing trusted CA certificates (ca.crt key)
+    ## Used for LDAPS and Keycloak Admin API TLS verification.
+    ##
+    tlsSecretName: {{ env "HISINONE_TLS_SECRET" | default "opendesk-certificates-ca-tls" | quote }}
