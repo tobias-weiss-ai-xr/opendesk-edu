@@ -3,11 +3,21 @@
 # They override CE's default environment values
 
 apps:
-  # Disable CE apps that edu replaces
-  open-x-change:
-    enabled: false
+  # Disable CE apps that edu replaces or conflicts with
+  oxAppSuite:
+    enabled: false              # edu uses SOGo + Grommunio instead of OX
   nextcloud:
-    enabled: false
+    enabled: false              # edu uses OpenCloud instead
+  seaweedfs:
+    enabled: false              # edu has its own seaweedfs deployment
+  dovecot:
+    enabled: false              # Grommunio handles its own mail stack
+  postfix:
+    enabled: false              # same
+  # Keep nubus (UMS + Keycloak) but disable its embedded intercom-service
+  # edu deploys its own intercom-service (forked chart with edu-specific fixes)
+  nubus:
+    intercomServiceEnabled: false
   # Enable SOGo (edu replaces OX with SOGo)
   sogo:
     enabled: true

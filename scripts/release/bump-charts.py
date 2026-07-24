@@ -115,8 +115,12 @@ def main() -> None:
     tag = args.tag
     if tag is None:
         try:
-            tag = run_git("describe", "--tags", "--abbrev=0")
-            print(f"Bumping from tag: {tag}")
+            last_tag = run_git("describe", "--tags", "--abbrev=0", "--match", "edu-v*")
+            tag = last_tag if last_tag.startswith("edu-v") else None
+            if tag:
+                print(f"Bumping from tag: {tag}")
+            else:
+                print("No edu-v* tag found, scanning full history")
         except subprocess.CalledProcessError:
             tag = None
             print("No tags found, scanning full history")
