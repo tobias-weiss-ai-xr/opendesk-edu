@@ -101,6 +101,44 @@ aws-vault exec edu-dev -- ./deploy.sh --verbose
 
 ---
 
+## CE Spec Alignment (ce-overrides.yaml)
+
+`helmfile/environments/edu/ce-overrides.yaml` overrides CE v1.17.0 defaults.
+Key decisions documented here:
+
+| CE App Key | Edu Override | Rationale |
+|---|---|---|
+| `oxAppSuite.enabled` | `false` | edu uses SOGo + Grommunio |
+| `nextcloud.enabled` | `false` | edu uses OpenCloud |
+| `seaweedfs.enabled` | `false` | edu deploys own seaweedfs |
+| `dovecot.enabled` | `false` | Grommunio handles its own mail |
+| `postfix.enabled` | `false` | same |
+| `nubus.intercomServiceEnabled` | `false` | edu deploys forked intercom-service |
+
+### Critical: Release Name Conflicts
+
+Two releases named `intercom-service` would deploy if not handled:
+- **CE nubus** deploys `intercom-service` (gated by `apps.nubus.enabled`)
+- **Edu intercom** deploys `intercom-service` (gated by `apps.intercom.enabled`)
+
+Fix: CE's nubus `helmfile-child.yaml.gotmpl` was patched to check
+`apps.nubus.intercomServiceEnabled` (defaults `true`). edu sets it `false`.
+
+### CE Local Modifications
+
+Any modification to files under `helmfile/ce/` creates a submodule divergence.
+Documented changes:
+- `helmfile/ce/helmfile/apps/nubus/helmfile-child.yaml.gotmpl` — added
+  `intercomServiceEnabled` check for intercom-service release `installed` field.
+
+### Release Pipeline
+
+- **Initial tag**: `edu-v0.1.0` (starting point for go-semantic-release)
+- **Tag prefix**: `edu-v` (config: `.releaserc.yaml` → `tagPrefix: edu-v`)
+- **Script**: `scripts/release/bump-charts.py` matches `git describe --tags --match edu-v*`
+
+---
+
 ## Deployment Guide
 
 See `docs/deployment.md` for complete deployment instructions.
