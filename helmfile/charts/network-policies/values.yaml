@@ -37,3 +37,74 @@ ingressControllerPolicy:
 # Allow specific service-to-service communications
 serviceToServicePolicies:
   enabled: true
+  rules:
+    # SOGo → PostgreSQL (database)
+    - name: sogo-postgresql
+      podSelector:
+        app.kubernetes.io/name: sogo
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+      ports:
+        - protocol: TCP
+          port: 5432
+    # SOGo → OpenLDAP (directory)
+    - name: sogo-openldap
+      podSelector:
+        app.kubernetes.io/name: sogo
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: openldap
+      ports:
+        - protocol: TCP
+          port: 389
+    # SOGo → Memcached (session cache)
+    - name: sogo-memcached
+      podSelector:
+        app.kubernetes.io/name: sogo
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: memcached
+      ports:
+        - protocol: TCP
+          port: 11211
+    # SOGo → Dovecot (IMAP/Sieve)
+    - name: sogo-dovecot
+      podSelector:
+        app.kubernetes.io/name: sogo
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: dovecot
+      ports:
+        - protocol: TCP
+          port: 143
+        - protocol: TCP
+          port: 993
+        - protocol: TCP
+          port: 4190
+    # SOGo → Postfix (SMTP submission)
+    - name: sogo-postfix
+      podSelector:
+        app.kubernetes.io/name: sogo
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postfix
+      ports:
+        - protocol: TCP
+          port: 587
+    # SOGo → Keycloak (OIDC)
+    - name: sogo-keycloak
+      podSelector:
+        app.kubernetes.io/name: sogo
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: keycloak
+      ports:
+        - protocol: TCP
+          port: 8080

@@ -12,6 +12,8 @@ apps:
   sogo:
     enabled: true
   # Edu-specific apps
+  intercom:
+    enabled: true
   grommunio:
     enabled: true
   semesterProvisioning:
