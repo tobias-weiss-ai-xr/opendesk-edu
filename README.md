@@ -24,7 +24,7 @@ openDesk Edu deploys in two layers:
 Every component is interchangeable — edu replaces or augments CE defaults to best serve university requirements:
 - **Groupware**: SOGo + Grommunio; OX App Suite also available
 - **File storage**: OpenCloud; Nextcloud also available
-- **Mail**: Grommunio; Dovecot + Postfix also available
+- **Mail**: Stalwart, Dovecot
 - **Portal**: Self-service portal with edu-specific entries and provisioning
 
 ---
