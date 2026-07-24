@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "coredns": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "targetIP": {
+          "type": "string"
+        },
+        "zoneName": {
+          "type": "string"
+        },
+        "serial": {
+          "type": "string"
+        },
+        "ttl": {
+          "type": "integer"
+        },
+        "hostEntries": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "nodePort": {
+          "type": "object",
+          "properties": {
+            "udp": {
+              "type": "integer"
+            },
+            "tcp": {
+              "type": "integer"
+            }
+          }
+        },
+        "annotations": {
+          "type": "object"
+        }
+      }
+    },
+    "nameOverride": {
+      "type": "string"
+    },
+    "fullnameOverride": {
+      "type": "string"
+    }
+  }
+}

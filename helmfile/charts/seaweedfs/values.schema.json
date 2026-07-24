@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "master": {
+      "$ref": "#/definitions/seaweedComponent"
+    },
+    "volume": {
+      "$ref": "#/definitions/volumeSpec"
+    },
+    "s3": {
+      "$ref": "#/definitions/s3Spec"
+    },
+    "ingress": {
+      "$ref": "#/definitions/ingressToggle"
+    },
+    "auth": {
+      "$ref": "#/definitions/authSpec"
+    },
+    "backup": {
+      "$ref": "#/definitions/backupSpec"
+    }
+  },
+  "definitions": {
+    "seaweedComponent": {
+      "type": "object",
+      "properties": {
+        "replicaCount": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "resources": {
+          "$ref": "#/definitions/resources"
+        },
+        "persistence": {
+          "$ref": "#/definitions/persistSpec"
+        }
+      }
+    },
+    "volumeSpec": {
+      "type": "object",
+      "properties": {
+        "replicaCount": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "resources": {
+          "$ref": "#/definitions/resources"
+        },
+        "persistence": {
+          "$ref": "#/definitions/persistSpec"
+        },
+        "maxVolumes": {
+          "type": "integer"
+        }
+      }
+    },
+    "s3Spec": {
+      "type": "object",
+      "properties": {
+        "replicaCount": {
+          "type": "integer"
+        },
+        "image": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "resources": {
+          "$ref": "#/definitions/resources"
+        },
+        "config": {
+          "type": "object"
+        }
+      }
+    },
+    "ingressToggle": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "authSpec": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "adminUser": {
+          "type": "string"
+        },
+        "adminPassword": {
+          "type": "string"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "secretKey": {
+          "type": "string"
+        }
+      }
+    },
+    "backupSpec": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "k8up": {
+          "type": "object"
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "$ref": "#/definitions/resourceSpec"
+        },
+        "limits": {
+          "$ref": "#/definitions/resourceSpec"
+        }
+      }
+    },
+    "resourceSpec": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "string"
+        }
+      }
+    },
+    "persistSpec": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "size": {
+          "type": "string"
+        },
+        "accessMode": {
+          "type": "string"
+        },
+        "storageClass": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

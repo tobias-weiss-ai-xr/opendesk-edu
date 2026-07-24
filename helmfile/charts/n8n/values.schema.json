@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "image": {
+      "$ref": "#/definitions/imageSpec"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "encryptionKey": {
+          "type": "string"
+        },
+        "dbType": {
+          "type": "string"
+        }
+      }
+    },
+    "resources": {
+      "$ref": "#/definitions/resources"
+    },
+    "persistence": {
+      "$ref": "#/definitions/persistenceSpec"
+    },
+    "sso": {
+      "type": "object",
+      "properties": {
+        "oidc": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "clientId": {
+              "type": "string"
+            },
+            "clientSecret": {
+              "type": "string"
+            },
+            "discoveryEndpoint": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "imageSpec": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "enum": [
+            "Always",
+            "IfNotPresent",
+            "Never"
+          ]
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "$ref": "#/definitions/resourceSpec"
+        },
+        "limits": {
+          "$ref": "#/definitions/resourceSpec"
+        }
+      }
+    },
+    "resourceSpec": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "string"
+        }
+      }
+    },
+    "persistenceSpec": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "size": {
+          "type": "string"
+        },
+        "storageClass": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
