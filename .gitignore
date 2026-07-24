@@ -52,7 +52,21 @@ helmfile-child.yaml-*/
 .venv/
 venv/
 __pycache__/
-*.pyc
+__pycache__
+*.py[cod]
+*$py.class
+
+# Node.js
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
 # Python test/coverage artifacts
 htmlcov/
@@ -61,10 +75,18 @@ htmlcov/
 .pytest_cache/
 .ruff_cache/
 
+# Generated Playwright specs (regenerated from YAML via generate-playwright-specs.py)
+tests/playwright/ics-*.spec.js
+
+# Playwright test artifacts
+test-results/
+
+# CE submodule (embedded repo, managed by CI/CD)
+helmfile/ce/
+
 # Ignore sensitive credential files
 k8up-*.yaml
 *secrets*.yaml
-!*secrets*.enc.yaml
 *credentials*.yaml
 *.env
 *.env.*
@@ -72,3 +94,4 @@ k8up-*.yaml
 *.key
 *.crt
 *.p12
+!*secrets*.enc.yaml
