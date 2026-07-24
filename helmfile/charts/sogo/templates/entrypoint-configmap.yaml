@@ -67,8 +67,11 @@ data:
     if ! command -v sogod &>/dev/null; then
       echo "Installing SOGo from Debian repos..."
       # Configure apt proxy and force IPv4
-      echo 'Acquire::http::Proxy "http://www-proxy2.uni-marburg.de:3128";' > /etc/apt/apt.conf.d/99proxy
-      echo 'Acquire::https::Proxy "http://www-proxy2.uni-marburg.de:3128";' >> /etc/apt/apt.conf.d/99proxy
+      # Proxy is optional — defaults to direct internet access if not configured
+      {{- if .Values.sogo.aptProxy }}
+      echo 'Acquire::http::Proxy "{{ .Values.sogo.aptProxy }}";' > /etc/apt/apt.conf.d/99proxy
+      echo 'Acquire::https::Proxy "{{ .Values.sogo.aptProxy }}";' >> /etc/apt/apt.conf.d/99proxy
+      {{- end }}
       echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99proxy
       apt-get update -qq
       apt-get install -y -qq --no-install-recommends \
@@ -135,6 +138,14 @@ data:
     export APACHE_PID_FILE="/var/run/apache2/apache2.pid"
     export APACHE_LOCK_DIR="/var/lock/apache2"
     export APACHE_LOG_DIR="/var/log/apache2"
+
+    # Substitute OIDC client secret in sogo.conf and write to config dir
+    if [ -f /opt/sogo-config-template/sogo.conf ]; then
+      sed "s/__SOGO_OIDC_CLIENT_SECRET__/${SOGO_OPENID_CLIENT_SECRET}/g" \
+        /opt/sogo-config-template/sogo.conf > /etc/sogo/sogo.conf
+      chown sogo:sogo /etc/sogo/sogo.conf
+      chmod 644 /etc/sogo/sogo.conf
+    fi
 
     echo "Starting supervisord..."
     exec /usr/bin/supervisord -c /opt/custom-entrypoint/supervisord.conf

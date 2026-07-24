@@ -1,0 +1,24 @@
+{{/*
+SPDX-FileCopyrightText: 2023-2025 Univention GmbH
+SPDX-License-Identifier: AGPL-3.0-only
+*/}}
+{{- if .Values.ics.redis.ssl.customca }}
+---
+apiVersion: "v1"
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-redis-ssl" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.provisioning.extraLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.extraLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.provisioning.extraAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.extraAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+data:
+  rootca.pem: |-
+{{ .Values.ics.redis.ssl.customca | indent 4 }}
+
+{{- end }}

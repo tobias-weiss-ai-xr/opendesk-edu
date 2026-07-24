@@ -1,0 +1,39 @@
+{{- if .Values.sogo.oidc.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "sogo.fullname" . }}
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "sogo.fullname . }}-oidc-sync
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""] 
+  resources: ["secrets"]
+  verbs: ["get", "patch", "create"]
+- apiGroups: [""] 
+  resources: ["pods/exec"]
+  verbs: ["create"]
+- apiGroups: [""] 
+  resources: ["pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "sogo.fullname . }}-oidc-sync
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "sogo.fullname . }}-oidc-sync
+subjects:
+- kind: ServiceAccount
+  name: {{ include "sogo.fullname" . }}
+{{- end }}

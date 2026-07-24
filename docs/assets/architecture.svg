@@ -1,10 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" font-family="system-ui,-apple-system,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" font-family="system-ui,-apple-system,sans-serif">
+  <title>openDesk Edu - Platform Architecture Diagram</title>
+  <desc>System architecture diagram showing the openDesk Edu platform with Identity layer (Shibboleth IdP, Keycloak SSO), Core services (Element, OX App Suite, Nextcloud, XWiki, OpenProject, Jitsi, Notes, Collabora, CryptPad), Educational Services (ILIAS, Moodle, BBB, OpenCloud, SOGo, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, LTB SSP), Infrastructure (Kubernetes, helmfile, HAProxy, k8up, Prometheus), and Roadmap items.</desc>
   <style>
     .g{font-size:10px;fill:#6B7280;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
     .n{font-size:11px;fill:#1F2937;text-anchor:middle;dominant-baseline:central;font-weight:500}
     .s{rx:6;stroke-width:1.5}
   </style>
-  <rect width="1200" height="680" fill="#FAFBFC"/>
+  <rect width="1200" height="520" fill="#FAFBFC"/>
   <text x="30" y="20" class="g">Identity</text>
   <rect x="30" y="32" width="120" height="40" rx="20" fill="#EFF6FF" stroke="#2563EB" class="s"/>
   <text x="90" y="52" class="n" fill="#2563EB">Users</text>
@@ -110,7 +112,7 @@
   <rect x="900" y="430" width="12" height="12" rx="3" fill="#2563EB"/><text x="918" y="440" font-size="9" fill="#374151">Identity</text>
   <rect x="975" y="430" width="12" height="12" rx="3" fill="#9CA3AF"/><text x="993" y="440" font-size="9" fill="#374151">Infra</text>
   <rect x="1040" y="430" width="12" height="12" rx="3" fill="none" stroke="#D1D5DB" stroke-dasharray="3 2"/><text x="1058" y="440" font-size="9" fill="#374151">Roadmap</text>
-  <text x="600" y="660" text-anchor="middle" font-size="9" fill="#9CA3AF">openDesk Edu — openDesk CE + Educational Services · Unified Keycloak SSO · One-command Kubernetes deploy</text>
+  <text x="600" y="495" text-anchor="middle" font-size="9" fill="#9CA3AF">openDesk Edu — openDesk CE + Educational Services · Unified Keycloak SSO · One-command Kubernetes deploy</text>
   <defs>
     <marker id="ab" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
       <polygon points="0 0,10 3.5,0 7" fill="#2563EB"/>

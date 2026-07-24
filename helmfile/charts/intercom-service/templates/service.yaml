@@ -1,0 +1,42 @@
+{{/*
+SPDX-FileCopyrightText: 2023-2025 Univention GmbH
+SPDX-License-Identifier: AGPL-3.0-only
+*/}}
+{{- if .Values.service.enabled }}
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: {{ include "common.names.fullname" . | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
+  annotations:
+    {{- if .Values.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" . ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.additionalAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type | quote }}
+  {{- if .Values.service.sessionAffinity.enabled }}
+  sessionAffinity: "ClientIP"
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ .Values.service.sessionAffinity.timeoutSeconds }}
+  {{- end }}
+  ports:
+    {{- range $key, $value := .Values.service.ports }}
+    - name: {{ $key | quote }}
+      port: {{ $value.port }}
+      targetPort: {{ $key }}
+      protocol: {{ $value.protocol | default "TCP" | quote }}
+      {{- if and $value.nodePort (not (eq $.Values.service.type "ClusterIP")) }}
+      nodePort: {{ $value.nodePort }}
+      {{- end }}
+    {{- end }}
+  selector:
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+...
+{{- end }}
