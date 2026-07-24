@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "loki": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "resources": {
+          "$ref": "#/definitions/resources"
+        },
+        "ingestionLimitsConfig": {
+          "type": "object",
+          "properties": {
+            "ingestionRateMb": {
+              "type": "integer"
+            },
+            "ingestionBurstSizeMb": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "persistence": {
+      "$ref": "#/definitions/persistenceSpec"
+    },
+    "serviceMonitor": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "days": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "resources": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "$ref": "#/definitions/resourceSpec"
+        },
+        "limits": {
+          "$ref": "#/definitions/resourceSpec"
+        }
+      }
+    },
+    "resourceSpec": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "string"
+        }
+      }
+    },
+    "persistenceSpec": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "size": {
+          "type": "string"
+        },
+        "storageClassName": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

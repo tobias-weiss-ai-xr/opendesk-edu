@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "object"
+          },
+          "description": {
+            "type": "object"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "ldap": {
+      "type": "object",
+      "properties": {
+        "baseDn": {
+          "type": "string"
+        },
+        "adminDn": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "promtail": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "resources": {
+          "$ref": "#/definitions/resources"
+        }
+      }
+    },
+    "config": {
+      "type": "object"
+    },
+    "snippets": {
+      "type": "object"
+    },
+    "serviceMonitor": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "resources": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "$ref": "#/definitions/resourceSpec"
+        },
+        "limits": {
+          "$ref": "#/definitions/resourceSpec"
+        }
+      }
+    },
+    "resourceSpec": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
