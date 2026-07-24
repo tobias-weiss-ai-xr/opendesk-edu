@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.sogo.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "sogo.fullname" . }}-alerts
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+    {{- if .Values.sogo.monitoring.prometheus.alertLabels }}
+    {{- toYaml .Values.sogo.monitoring.prometheus.alertLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: {{ include "sogo.fullname" . }}-alerts
+      rules:
+        - alert: SOGOPodNotReady
+          expr: |
+            kube_pod_status_ready{namespace="{{ .Release.Namespace }}",pod=~"{{ include "sogo.fullname" . }}.*"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "SOGo pod not ready"
+            description: "Pod {{ "{{ $labels.pod }}" }} in namespace {{ "{{ $labels.namespace }}" }} has been not ready for more than 5 minutes."
+        - alert: SOGOPodCrashLooping
+          expr: |
+            rate(kube_pod_container_status_restarts_total{namespace="{{ .Release.Namespace }}",pod=~"{{ include "sogo.fullname" . }}.*"}[15m]) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "SOGo pod crash looping"
+            description: "Pod {{ "{{ $labels.pod }}" }} in namespace {{ "{{ $labels.namespace }}" }} is crash looping."
+        - alert: SOGOHighMemory
+          expr: |
+            container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",container="sogo"} > 3Gi
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "SOGo memory usage near limit"
+            description: "SOGo container memory is {{ "{{ $value | humanize }}" }}, approaching the 4Gi limit."
+        - alert: SOGOReplicaDown
+          expr: |
+            kube_deployment_status_replicas_available{namespace="{{ .Release.Namespace }}",deployment="{{ include "sogo.fullname" . }}"} < 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "SOGo has no available replicas"
+            description: "Deployment {{ "{{ $labels.deployment }}" }} has zero available replicas."
+{{- end }}

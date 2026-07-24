@@ -1,0 +1,100 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# =============================================================================
+# HISinOne LIFECYCLE MANAGEMENT CONFIGURATION
+# =============================================================================
+
+# Account lifecycle management (user suspension, deletion)
+accountLifecycle:
+  enabled: false
+  schedule: "0 2 * * *"
+  suspendAfterDays: 90
+  deleteAfterDays: 30
+  notifyBeforeDays: 14
+  batchSize: 100
+  ldap:
+    suspendAttribute: "pwdAccountLockedTime"
+    suspendValue: "000001010000Z"
+  suspendEmail:
+    subject: "Your account has been suspended"
+    template: |
+      Dear user,
+      Your account has been suspended due to inactivity.
+      Please contact your administrator to reactivate it.
+
+# Guest lecturer account management
+guestLecturers:
+  enabled: false
+  schedule: "0 3 * * *"
+  expirationDays: 365
+  notifyBeforeDays: 30
+  autoDelete: false
+  defaultRole: "guest-lecturer"
+
+# Semester enrollment synchronization
+semesterEnrollment:
+  enabled: false
+  schedule: "0 4 * * *"
+  api:
+    url: "http://hisinone-api:8080"
+    timeout: 30
+  courseMapping:
+    prefix: "edu-"
+    defaultRole: "student"
+    syncInstructors: true
+  enrollment:
+    createUsers: true
+    userOu: "Students"
+    defaultPassword: ""
+    sendWelcomeEmail: true
+    welcomeEmail:
+      subject: "Welcome to the platform"
+      template: |
+        Dear {{ .Name }},
+        Your account has been created for the course {{ .CourseName }}.
+        Please log in at {{ .PlatformURL }}
+
+# Lifecycle event handlers (triggers for external systems)
+lifecycle:
+  enabled: false
+  events:
+    userCreated:
+      - url: "http://hooks.internal/opendesk/user-created"
+        method: "POST"
+        headers: {}
+        retryCount: 3
+    userSuspended:
+      - url: "http://hooks.internal/opendesk/user-suspended"
+        method: "POST"
+        headers: {}
+        retryCount: 3
+    userDeleted:
+      - url: "http://hooks.internal/opendesk/user-deleted"
+        method: "POST"
+        headers: {}
+        retryCount: 3
+
+# LDAP configuration
+ldap:
+  enabled: false
+  url: "ldap://openldap:389"
+  baseDn: "dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
+  bindDn: "cn=admin,dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
+  bindPassword: ""
+  userBaseDn: "ou=People,dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
+  groupBaseDn: "ou=Groups,dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
+  userFilter: "(objectClass=inetOrgPerson)"
+  groupFilter: "(objectClass=groupOfUniqueNames)"
+
+# Bootstrap configuration (initial LDAP seed)
+bootstrap:
+  enabled: false
+  adminUsers:
+    enabled: false
+    users: []
+  demoData:
+    enabled: false
+    organizations: []
+    users: []
+    courses: []
