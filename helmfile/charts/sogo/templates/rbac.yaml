@@ -9,30 +9,30 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ include "sogo.fullname . }}-oidc-sync
+  name: {{ include "sogo.fullname" . }}-oidc-sync
   labels:
     {{- include "sogo.labels" . | nindent 4 }}
 rules:
-- apiGroups: [""] 
+- apiGroups: [""]
   resources: ["secrets"]
   verbs: ["get", "patch", "create"]
-- apiGroups: [""] 
+- apiGroups: [""]
   resources: ["pods/exec"]
   verbs: ["create"]
-- apiGroups: [""] 
+- apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ include "sogo.fullname . }}-oidc-sync
+  name: {{ include "sogo.fullname" . }}-oidc-sync
   labels:
     {{- include "sogo.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "sogo.fullname . }}-oidc-sync
+  name: {{ include "sogo.fullname" . }}-oidc-sync
 subjects:
 - kind: ServiceAccount
   name: {{ include "sogo.fullname" . }}

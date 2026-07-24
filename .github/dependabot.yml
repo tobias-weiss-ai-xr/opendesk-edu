@@ -1,20 +1,47 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: pip
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: weekly
+    groups:
+      python-deps:
+        patterns:
+          - "*"
     commit-message:
-      prefix: "ci"
+      prefix: "build"
 
-  - package-ecosystem: "docker"
-    directory: "/"
+  - package-ecosystem: pip
+    directory: /scripts/semester-provisioning
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: weekly
+    groups:
+      semester-provisioning-deps:
+        patterns:
+          - "*"
     commit-message:
-      prefix: "deps"
-    ignore:
-      # Bitnami charts are vendored and updated via helm dep build
-      - dependency-name: "bitnami/*"
+      prefix: "build"
+
+  - package-ecosystem: pip
+    directory: /scripts/user_import
+    schedule:
+      interval: weekly
+    groups:
+      user-import-deps:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "build"
+
+  - package-ecosystem: npm
+    directory: /collab-dashboard
+    schedule:
+      interval: weekly
+    groups:
+      collab-dashboard-deps:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "build"
