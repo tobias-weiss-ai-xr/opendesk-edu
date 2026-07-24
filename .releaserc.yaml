@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version: 1
+hooks:
+  pre:
+    - python3 scripts/release/bump-charts.py
+    - git add helmfile/charts/*/Chart.yaml
+    - git commit -m "chore(release): bump chart versions [skip ci]" || true
+    - git push origin main 2>/dev/null || echo "push skipped (no auth)"
+  post:
+    - |
+      for remote in github opencode-de; do
+        git push "$remote" main --tags 2>/dev/null || echo "warning: sync to $remote failed"
+      done
+branches:
+  - main
+ci: true
+git: true
+github: false
+gitlab: false
+gitea: true
