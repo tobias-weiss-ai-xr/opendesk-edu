@@ -153,7 +153,8 @@ configuration:
       clientId: "opendesk-matrix"
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.matrix.value | quote }}
       issuer: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
-      matrixIdLocalpart: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"opendesk_useruuid"{{ else }}"opendesk_username"{{ end }}
+      matrixIdLocalpart: {{ if .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}"opendesk_objectid"{{ else }}"opendesk_username"{{ end }}
+      matrixIdSubject: "opendesk_objectid"
       scopes:
         - "openid"
         - "opendesk-matrix-scope"

@@ -151,17 +151,6 @@ config:
         description: "Scope for the claims required by openDesk's OpenProject instance."
         protocol: "openid-connect"
         protocolMappers:
-          - name: "opendesk_useruuid"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "entryUUID"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "opendesk_useruuid"
-              jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
@@ -227,17 +216,6 @@ config:
         description: "Scope for the claims required by openDesk's Jitsi instance."
         protocol: "openid-connect"
         protocolMappers:
-          - name: "opendesk_useruuid"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "entryUUID"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "opendesk_useruuid"
-              jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
@@ -277,16 +255,16 @@ config:
         description: "Scope for the claims required by openDesk's Nextcloud instance."
         protocol: "openid-connect"
         protocolMappers:
-          - name: "opendesk_useruuid"
+          - name: "opendesk_objectid"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
             consentRequired: false
             config:
               userinfo.token.claim: true
-              user.attribute: "entryUUID"
+              user.attribute: "univentionObjectIdentifier"
               id.token.claim: true
               access.token.claim: true
-              claim.name: "opendesk_useruuid"
+              claim.name: "opendesk_objectid"
               jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
@@ -329,16 +307,16 @@ config:
         description: "Scope for the claims required by openDesk's Matrix instance."
         protocol: "openid-connect"
         protocolMappers:
-          - name: "opendesk_useruuid"
+          - name: "opendesk_objectid"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
             consentRequired: false
             config:
               userinfo.token.claim: true
-              user.attribute: "entryUUID"
+              user.attribute: "univentionObjectIdentifier"
               id.token.claim: true
               access.token.claim: true
-              claim.name: "opendesk_useruuid"
+              claim.name: "opendesk_objectid"
               jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
@@ -379,16 +357,16 @@ config:
         description: "Scope for the claims required by openDesk's XWiki instance."
         protocol: "openid-connect"
         protocolMappers:
-          - name: "opendesk_useruuid"
+          - name: "opendesk_objectid"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
             consentRequired: false
             config:
               userinfo.token.claim: true
-              user.attribute: "entryUUID"
+              user.attribute: "univentionObjectIdentifier"
               id.token.claim: true
               access.token.claim: true
-              claim.name: "opendesk_useruuid"
+              claim.name: "opendesk_objectid"
               jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
@@ -429,16 +407,16 @@ config:
         description: "Scope for the claims required by openDesk's Dovecot instance."
         protocol: "openid-connect"
         protocolMappers:
-          - name: "opendesk_useruuid"
+          - name: "opendesk_objectid"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
             consentRequired: false
             config:
               userinfo.token.claim: true
-              user.attribute: "entryUUID"
+              user.attribute: "univentionObjectIdentifier"
               id.token.claim: true
               access.token.claim: true
-              claim.name: "opendesk_useruuid"
+              claim.name: "opendesk_objectid"
               jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
@@ -451,11 +429,53 @@ config:
               access.token.claim: true
               claim.name: "opendesk_username"
               jsonType.label: "String"
+          - name: "sub"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-sub-mapper"
+            consentRequired: false
+            config:
+              introspection.token.claim: true
+              access.token.claim: true
+      opendesk-dovecot-grant-scope:
+        name: "opendesk-dovecot-grant-scope"
+        description: "Scope for the claims required by openDesk's Dovecot instance to authenticate external IMAP clients via Resource Owner Password Grant."
+        protocol: "openid-connect"
+        protocolMappers:
+          - name: "opendesk_objectid"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "univentionObjectIdentifier"
+              id.token.claim: true
+              introspection.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_objectid"
+              jsonType.label: "String"
+          - name: "sub"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-sub-mapper"
+            consentRequired: false
+            config:
+              introspection.token.claim: true
+              access.token.claim: true
       opendesk-oxappsuite-scope:
         name: "opendesk-oxappsuite-scope"
         description: "Scope for the claims required by openDesk's OX Appuite instance."
         protocol: "openid-connect"
         protocolMappers:
+          - name: "opendesk_objectid"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-usermodel-attribute-mapper"
+            consentRequired: false
+            config:
+              userinfo.token.claim: true
+              user.attribute: "univentionObjectIdentifier"
+              id.token.claim: true
+              access.token.claim: true
+              claim.name: "opendesk_objectid"
+              jsonType.label: "String"
           - name: "context"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
@@ -467,17 +487,6 @@ config:
               access.token.claim: true
               claim.name: "context"
               jsonType.label: "String"
-          - name: "opendesk_useruuid"
-            protocol: "openid-connect"
-            protocolMapper: "oidc-usermodel-attribute-mapper"
-            consentRequired: false
-            config:
-              userinfo.token.claim: true
-              user.attribute: "entryUUID"
-              id.token.claim: true
-              access.token.claim: true
-              claim.name: "opendesk_useruuid"
-              jsonType.label: "String"
           - name: "opendesk_username"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
@@ -489,6 +498,13 @@ config:
               access.token.claim: true
               claim.name: "opendesk_username"
               jsonType.label: "String"
+          - name: "sub"
+            protocol: "openid-connect"
+            protocolMapper: "oidc-sub-mapper"
+            consentRequired: false
+            config:
+              introspection.token.claim: true
+              access.token.claim: true
       {{ end }}
       {{ if .Values.apps.notes.enabled }}
       opendesk-notes-scope:
@@ -608,16 +624,16 @@ config:
               access.token.claim: true
               claim.name: "opendesk_username"
               jsonType.label: "String"
-          - name: "opendesk_useruuid"
+          - name: "opendesk_objectid"
             protocol: "openid-connect"
             protocolMapper: "oidc-usermodel-attribute-mapper"
             consentRequired: false
             config:
               userinfo.token.claim: true
-              user.attribute: "entryUUID"
+              user.attribute: "univentionObjectIdentifier"
               id.token.claim: true
               access.token.claim: true
-              claim.name: "opendesk_useruuid"
+              claim.name: "opendesk_objectid"
               jsonType.label: "String"
         defaultClientScopes:
           - "offline_access"
@@ -682,6 +698,27 @@ config:
           backchannel.logout.session.required: false
         defaultClientScopes:
           - "opendesk-dovecot-scope"
+      opendesk-dovecot-grant:
+        name: "opendesk-dovecot-grant"
+        clientId: "opendesk-dovecot-grant"
+        protocol: "openid-connect"
+        clientAuthenticatorType: "client-secret"
+        secret:
+          existingSecret:
+            name: {{ .Values.secrets.keycloak.clientSecret.dovecotGrant.name | quote }}
+            key: {{ .Values.secrets.keycloak.clientSecret.dovecotGrant.key | quote }}
+        consentRequired: false
+        standardFlowEnabled: false
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: true
+        serviceAccountsEnabled: false
+        frontchannelLogout: false
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          backchannel.logout.session.required: false
+        defaultClientScopes:
+          - "opendesk-dovecot-grant-scope"
       opendesk-oxappsuite:
         name: "opendesk-oxappsuite"
         clientId: "opendesk-oxappsuite"

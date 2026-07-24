@@ -25,7 +25,7 @@ releases:
       - {{ . }}
       {{- end }}
     installed: {{ .Values.apps.migrations.enabled }}
-    timeout: 900
+    timeout: {{ .Values.migrations.job.timeoutSeconds }}
 
 commonLabels:
   deployStage: "090-migrations-post"

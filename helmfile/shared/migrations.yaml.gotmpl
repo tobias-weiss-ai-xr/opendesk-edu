@@ -13,57 +13,259 @@ additionalAnnotations:
   argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
 
 cleanup:
-  deletePodsOnSuccess: {{ .Values.debug.cleanup.deletePodsOnSuccess }}
-  deletePodsOnSuccessTimeout: {{ .Values.debug.cleanup.deletePodsOnSuccessTimeout }}
+  deletePodsOnSuccess: {{ gt (int .Values.migrations.job.keepOutputSeconds) 0 }}
+  deletePodsOnSuccessTimeout: {{ int .Values.migrations.job.keepOutputSeconds }}
 
 migrations:
   namespace: {{ .Values.apps.migrations.namespace | default .Release.Namespace | quote }}
-  # The platform release currently being deployed, used for the upgrade-range version gating.
+  # The platform release currently being deployed. It is recorded with every executed action and,
+  # once the POST stage completed, as the release this deployment migrated last.
   releaseVersion: {{ .Values.global.systemInformation.releaseVersion | quote }}
-  # The range of releases this migration supports upgrading from: it only runs when the last
-  # successfully migrated release (from the status ConfigMap) lies within this range.
-  upgradeFrom:
-    min: "v1.15.0"
-    max: "v1.16.1"
   loglevel: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
   cleanup: false
+
+  # The object store the two migration stages hand work over in, and a setting of the deployment
+  # rather than a parameter of the actions that use it: the stages are separate Jobs, so an action
+  # that has to read something before the release is applied and act on it afterwards is two
+  # actions, and the first leaves what it worked out here. Which store that is is the same answer
+  # for every one of them, so it is declared once - what stays with an action is the object key it
+  # writes under.
+  #
+  # openDesk provisions the `migrations` bucket and its identity for exactly this
+  # (`objectstores.migrations`), and only actions that hand work over read any of this - a
+  # deployment running none of them needs none of it, which is why an endpoint that cannot be
+  # determined is left empty here rather than failing the templating. The action needing it fails
+  # and names it. The identity's secret key is mounted through `secretFiles`, not declared here.
+  objectStore:
+    {{- if .Values.objectstores.migrations.endpoint }}
+    endpoint: {{ .Values.objectstores.migrations.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    endpoint: {{ printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    endpoint: {{ printf "%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    endpoint: ""
+    {{- end }}
+    bucket: {{ .Values.objectstores.migrations.bucket | quote }}
+    username: {{ .Values.objectstores.migrations.username | quote }}
+    region: {{ .Values.objectstores.migrations.region | quote }}
+    port: {{ .Values.objectstores.migrations.port }}
+    useSSL: {{ .Values.objectstores.migrations.useSSL }}
+    pathStyle: {{ .Values.objectstores.migrations.pathStyle }}
+    requestTimeoutSeconds: {{ .Values.migrations.objectStore.requestTimeoutSeconds }}
+    # The store is reached under the endpoint its other consumers use, which is the deployment's
+    # public one. A deployment whose certificate is issued by a CA the migrations image does not
+    # know sets `caBundle` to a mounted certificate; `verifySSL` is for test deployments with a
+    # self-signed one and belongs nowhere else.
+    verifySSL: {{ .Values.migrations.objectStore.verifySSL }}
+    {{- with .Values.migrations.objectStore.caBundle }}
+    caBundle: {{ . | quote }}
+    {{- end }}
+
   # `actions` defines the migration itself: which actions the image runs, in which stage and in
   # which order, plus the parameters each of them needs. `secretFiles` provides their credentials.
   # Each executed action is recorded in the `migrations-status` ConfigMap `history`.
+  #
+  # Every action states for itself which installed releases it applies to, in `versions`:
+  # `minimum` is the oldest release it supports - a deployment coming from an older one fails the
+  # migration rather than skipping it quietly - and `from`/`to` is the window of last migrated
+  # releases it runs for. All declarations are validated before the first action runs.
+  #
+  # `tag` and `runMode` together form an action's footprint, which is what makes it run only once:
+  # the `tag` is openDesk's own statement of which piece of work this is, the `runMode` states in
+  # which mode it was performed. Both are part of the migration definition and not configurable -
+  # the actions of a release bring the deployment in line with it, so they apply, which is what
+  # every `dryRun: false` below says. The image's dry run mode remains available to support.
+  #
+  # What an action does, what it needs and what it changes is documented once, per action, in
+  # `docs/migrations-automated.md`. The comments below only say what *this* declaration decides:
+  # why an action sits where it sits, and why a value is the value it is.
   actions:
     # Executed before the deployment, in the order listed. An action is only declared when the
     # components it works on are actually installed - the same conditions that gate the
     # corresponding releases.
-    pre: []
+    pre:
+    {{- if .Values.apps.oxAppSuite.enabled }}
+      # Takes the OX Connector down for the deployment, which brings it back up with the
+      # configuration of this release. See ../../docs/migrations-automated.md#workload_scale
+      #
+      # First of the stage, because the actions that follow change the objects the Connector
+      # provisions - the Functional Accounts and their OX counterparts, then the identifier every
+      # user and group is addressed by. Each of them is written on both sides by the action itself,
+      # which requires that nothing else writes them at the same time.
+      - id: "workload_scale"
+        tag: "v1.18.0"
+        versions:
+          minimum: "v1.15"
+          from: "v1.15"
+          to: "v1.17"
+        config:
+          workload:
+            kind: "StatefulSet"
+            name: "ox-connector"
+            replicas: 0
+    {{- end }}
+    {{- if and .Values.apps.oxAppSuite.enabled .Values.apps.nubus.enabled }}
+      # Part 1 of 2 of the Functional to Shared Account migration, see
+      # ../../docs/migrations-automated.md#ox_functional_accounts_export
+      #
+      # After `workload_scale`, and that order is what makes the action work: it removes the
+      # accounts from OX App Suite itself instead of deleting them in the IAM and waiting for the
+      # OX Connector to follow, which cannot be observed reliably - see the action's documentation.
+      - id: "ox_functional_accounts_export"
+        tag: "v1.18.0"
+        runMode: "apply"
+        versions:
+          minimum: "v1.15"
+          from: "v1.15"
+          to: "v1.17"
+        config:
+          dryRun: false
+          udm:
+            url: "http://ums-udm-rest-api:9979/univention/udm/"
+            username: "cn=admin"
+            requestTimeoutSeconds: 30
+          ldap:
+            pod: "ums-ldap-server-primary-0"
+            container: "main"
+            baseDn: {{ .Values.ldap.baseDn | quote }}
+          handover:
+            # Named in both halves, so a mismatch makes part 2 report that part 1 did not run.
+            objectKey: "ox-functional-accounts.yaml"
+          oxAppSuite:
+            # The OX context part 2 creates the Shared Accounts in. A Functional Account carries
+            # none of its own, so it is declared here and written into the handover, where it can
+            # still be changed per account before part 2 runs. See `oxDefaultContext` in
+            # `helmfile/apps/open-xchange/values-oxconnector.yaml.gotmpl`.
+            context: 1
+            # Where the action removes the accounts' OX counterparts - their secondary accounts -
+            # and where it reads the contexts back afterwards to confirm they are gone. The same
+            # endpoint `ox_names_to_object_identifier` provisions through.
+            soapUrl: {{ printf "http://%s.%s.svc.%s" "open-xchange-core-mw-admin" (.Values.apps.oxAppSuite.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+            username: "admin"
+            requestTimeoutSeconds: 60
+    {{- end }}
+    {{- if .Values.apps.nubus.enabled }}
+      # Gives every IAM object its own `entryUUID` as `univentionObjectIdentifier`, see
+      # ../../docs/migrations-automated.md#ldap_entryuuid_to_object_identifier
+      - id: "ldap_entryuuid_to_object_identifier"
+        tag: "v1.18.0"
+        runMode: "apply"
+        versions:
+          minimum: "v1.15"
+          from: "v1.15"
+          to: "v1.17"
+        config:
+          dryRun: false
+          ldap:
+            pod: "ums-ldap-server-primary-0"
+            container: "main"
+            baseDn: {{ .Values.ldap.baseDn | quote }}
+    {{- end }}
+    {{- if and .Values.apps.oxAppSuite.enabled .Values.apps.nubus.enabled }}
+      # Writes the identifier the action above put on the IAM objects into OX App Suite, see
+      # ../../docs/migrations-automated.md#ox_names_to_object_identifier
+      - id: "ox_names_to_object_identifier"
+        tag: "v1.18.0"
+        runMode: "apply"
+        versions:
+          minimum: "v1.15"
+          from: "v1.15"
+          to: "v1.17"
+        config:
+          dryRun: false
+          ldap:
+            pod: "ums-ldap-server-primary-0"
+            container: "main"
+            baseDn: {{ .Values.ldap.baseDn | quote }}
+          oxAppSuite:
+            soapUrl: {{ printf "http://%s.%s.svc.%s" "open-xchange-core-mw-admin" (.Values.apps.oxAppSuite.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
+            username: "admin"
+            requestTimeoutSeconds: 60
+      # Drops the OX-Connector subscription so that the deployment registers it again with the
+      # topics this release declares - which is what makes it receive the Shared Accounts. Costs a
+      # full re-provisioning, once. See
+      # ../../docs/migrations-automated.md#provisioning_drop_subscriptions
+      - id: "provisioning_drop_subscriptions"
+        tag: "v1.18.0"
+        versions:
+          minimum: "v1.15"
+          from: "v1.15"
+          to: "v1.17"
+        config:
+          provisioning:
+            url: "http://ums-provisioning-api/v1"
+            username: "admin"
+            requestTimeoutSeconds: 30
+          subscriptions:
+            # Gains `oxmail/shared_account` and `oxmail/shared_account_permission` with v1.18.0.
+            - "ox-connector"
+    {{- end }}
     # Executed after the deployment, in the order listed.
     post:
-      {{- if .Values.apps.oxAppSuite.enabled }}
-      # OX-Connector never reaches ready state, so it is restarted by scaling it down and up
-      # again to pick up the most recent configuration. Tagged with the release that needs the
-      # restart, so it happens once: a redeployment of this release does not restart the
-      # Connector again, and a future release that needs it again declares it under its own tag.
-      - id: "ox_connector_restart"
-        tag: "v1.17.0"
+    {{- if and .Values.apps.oxAppSuite.enabled .Values.apps.nubus.enabled }}
+      # Part 2 of 2 of the Functional to Shared Account migration, see
+      # ../../docs/migrations-automated.md#ox_shared_accounts_import
+      #
+      # Here and not in `migrations-pre`, because `oxmail/shared_account` is a UDM module *this*
+      # release brings. It imports what part 1 handed over, so both are skipped or neither is.
+      - id: "ox_shared_accounts_import"
+        tag: "v1.18.0"
+        runMode: "apply"
+        versions:
+          minimum: "v1.15"
+          from: "v1.15"
+          to: "v1.17"
         config:
-          statefulset:
-            name: "ox-connector"
-            replicas: {{ .Values.replicas.oxConnector }}
-            waitSeconds: 30
-      {{- end }}
+          dryRun: false
+          udm:
+            url: "http://ums-udm-rest-api:9979/univention/udm/"
+            username: "cn=admin"
+            requestTimeoutSeconds: 30
+          ldap:
+            baseDn: {{ .Values.ldap.baseDn | quote }}
+          handover:
+            objectKey: "ox-functional-accounts.yaml"
+          sharedAccounts:
+            permission: {{ .Values.migrations.actionOptions.oxFunctionalToSharedAccounts.permission | quote }}
+    {{- end }}
+    {{- if .Values.apps.nubus.enabled }}
+      # Drops the Intercom Service's sessions, so that none established against the release being
+      # replaced survives into this one. See
+      # ../../docs/migrations-automated.md#flush_intercom_sessions
+      #
+      # Here and not in `migrations-pre`: a session created between the two stages, while the old
+      # Intercom Service is still up, would outlive a flush that ran first.
+      - id: "flush_intercom_sessions"
+        tag: "v1.18.0"
+        versions:
+          minimum: "v1.15"
+          from: "v1.15"
+          to: "v1.17"
+        config:
+          redis:
+            host: {{ .Values.cache.intercomService.host | quote }}
+            port: {{ .Values.cache.intercomService.port }}
+            username: {{ .Values.cache.intercomService.username | quote }}
+            tls: {{ .Values.cache.intercomService.tls }}
+            database: 0
+            keyPattern: "sess:*"
+            requestTimeoutSeconds: 30
+    {{- end }}
   # `actionsSkip` opts out of declared actions. It mirrors `actions` - an entry names the stage,
-  # the `id` and the `tag` of the action it skips, without its `config` - and has to match the
-  # declared action exactly. It is not part of the migration's definition but configured per
-  # deployment in `migrations.yaml.gotmpl`.
+  # the `id` and the `tag` of the action it skips, and has to match both exactly; the `runMode` is
+  # not part of it. It is not part of the migration's definition but configured per deployment in
+  # `migrations.yaml.gotmpl`.
   actionsSkip:
     pre:
       {{ .Values.migrations.actionsSkip.pre | toYaml | nindent 6 }}
     post:
       {{ .Values.migrations.actionsSkip.post | toYaml | nindent 6 }}
-  secretFiles:
-    - name: "synapse-db-password"
-      secret:
-        name: {{ .Values.databases.synapse.password.name | quote }}
-        key: {{ .Values.databases.synapse.password.key | quote }}
+  # `secretFiles` is not defined here but per stage, in the values file of the `migrations-pre` and
+  # the `migrations-post` release. A Secret named there has to exist when that Job starts, and the
+  # two stages do not see the same ones: `migrations-pre` is the very first app of a deployment, so
+  # it can only mount Secrets that exist before any component was deployed, while `migrations-post`
+  # runs last and can mount every Secret the deployment creates.
 
 containerSecurityContext:
   allowPrivilegeEscalation: false
@@ -86,6 +288,9 @@ image:
   repository: {{ .Values.images.migrations.repository | quote }}
   tag: {{ .Values.images.migrations.tag | quote }}
   imagePullPolicy: {{ .Values.global.imagePullPolicy |quote }}
+
+resources:
+  {{ .Values.resources.migrations | toYaml | nindent 2 }}
 
 job:
   enabled: true

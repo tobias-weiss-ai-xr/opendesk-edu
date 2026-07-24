@@ -34,6 +34,9 @@ oxConnector:
     repository: {{ .Values.images.oxConnector.repository | quote }}
     pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
     tag: {{ .Values.images.oxConnector.tag | quote }}
+  extraEnvVars:
+    - name: "OX_CONNECTOR_STOP_ON_ERROR"
+      value: "True"
 
 openXchange:
   domainName: {{ .Values.global.domain | quote }}
@@ -48,6 +51,10 @@ openXchange:
   oxSmtpServer: "smtp://127.0.0.1:587"
   oxSoapServer: {{ printf "http://%s.%s.svc.%s" "open-xchange-core-mw-admin" (.Values.apps.oxAppSuite.namespace | default .Release.Namespace) .Values.cluster.networking.domain | quote }}
   oxSharedAccount: true
+  mappings:
+    userIdentifier: "univentionObjectIdentifier"
+    groupIdentifier: "univentionObjectIdentifier"
+    sharedAccountIdentifier: "univentionObjectIdentifier"
   oxDbConnectionString: {{ printf "postgresql://%s:%s@%s:%v/%s"
     (.Values.databases.oxConnector.username | urlquery | replace "+" "%20")
     (.Values.databases.oxConnector.password.value | urlquery | replace "+" "%20")
@@ -65,7 +72,7 @@ provisioningApi:
       keyMapping:
         password: {{ .Values.secrets.oxConnector.provisioningApiPassword.key | quote }}
   resync:
-    enabled: true
+    enabled: false
     auth:
       username: "admin"
       password: {{ .Values.secrets.nubus.provisioning.api.adminPassword.value | quote }}

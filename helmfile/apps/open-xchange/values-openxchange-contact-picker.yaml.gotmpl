@@ -224,10 +224,10 @@ appsuite:
               protected: false
               defaultValue: true
             static:
-              commonContactFilter: "(univentionObjectType=oxmail/functional_account)"
+              commonContactFilter: "(univentionObjectType=oxmail/shared_account)"
               folders:
-                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Funktionspostfächer{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Boîtes aux lettres partagées{{ else }}Shared Mailboxes{{ end }}
-                  contactFilter: "(univentionObjectType=oxmail/functional_account)"
+                - name: {{ if eq .Values.functional.internationalization.defaultLanguage "de_DE" }}Funktionskonto{{ else if eq .Values.functional.internationalization.defaultLanguage "fr_FR" }}Compte partagé{{ else }}Shared Accounts{{ end }}
+                  contactFilter: "(univentionObjectType=oxmail/shared_account)"
 
         distributionLists:
           name: "Distribution Lists"
@@ -296,7 +296,7 @@ appsuite:
           # Alternatively, if no internal context- or user identifier is available, also attributes yielding
           # the corresponding login information (username / contextname) can be used by appending ';logininfo'
           # to the attribute name.
-          internal_userid: "uid;logininfo"
+          internal_userid: "univentionObjectIdentifier;logininfo"
           contextid: "oxContextIDNum"
           # The 'guid' flag can be passed along properly decode a Microsoft GUID. For 'regular' UUIDs in binary
           # format, the flag 'binary' should be used.
