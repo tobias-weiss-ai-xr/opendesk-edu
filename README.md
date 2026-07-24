@@ -6,9 +6,9 @@ SPDX-License-Identifier: Apache-2.0
 
 # openDesk Edu
 
-**openDesk Edu** extends [openDesk Community Edition (CE)](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk) with applications and services tailored for higher education institutions.
+**openDesk Edu** is an open ecosystem built on [openDesk Community Edition (CE)](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk), providing educational institutions with full digital sovereignty through choice and interchangeability.
 
-It deploys on top of the CE submodule (`helmfile/ce/`, v1.17.0), overriding CE defaults and adding 30+ edu-specific apps on the **HRZ K3s cluster** (`*.opendesk.hrz.uni-marburg.de`).
+It deploys on the CE submodule (`helmfile/ce/`, v1.17.0) and adds 30+ edu-specific apps, all running on the **HRZ K3s cluster** (`*.opendesk.hrz.uni-marburg.de`).
 
 ---
 
@@ -21,10 +21,10 @@ openDesk Edu deploys in two layers:
 | **CE** | `helmfile/ce/` (git submodule) | Core services: Keycloak, Nubus, Collabora, Jitsi, Element, OpenProject, XWiki, etc. |
 | **Edu** | `helmfile/apps/edu/` | 33 edu-specific apps: ILIAS, Moodle, BigBlueButton, SOGo, Grommunio, Etherpad, OpenCloud, etc. |
 
-Key differences from CE:
-- **Groupware**: SOGo + Grommunio instead of OX App Suite
-- **File storage**: OpenCloud instead of Nextcloud
-- **Mail**: Grommunio instead of Dovecot + Postfix
+Every component is interchangeable — edu replaces or augments CE defaults to best serve university requirements:
+- **Groupware**: SOGo + Grommunio; OX App Suite also available
+- **File storage**: OpenCloud; Nextcloud also available
+- **Mail**: Grommunio; Dovecot + Postfix also available
 - **Portal**: Self-service portal with edu-specific entries and provisioning
 
 ---
