@@ -1,0 +1,52 @@
+{{- if and .Values.hisinone.accountLifecycle.enabled .Values.hisinone.semesterEnrollment.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hisinone-semester-check
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: hisinone-lifecycle
+    app.kubernetes.io/component: cronjob-semester
+    app.kubernetes.io/part-of: opendesk
+spec:
+  schedule: "{{ .Values.hisinone.semesterEnrollment.cronSchedule | default "0 6 * * *" }}"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Values.hisinone.bootstrap.serviceAccountName | default "keycloak-ldap-bootstrap" }}
+          restartPolicy: Never
+          containers:
+            - name: semester-check
+              image: {{ .Values.hisinone.lifecycle.image | default "codeberg.org/opendesk-edu/hisinone-lifecycle:latest" | quote }}
+              command:
+                - python
+                - -m
+                - sync.semester_check
+              envFrom:
+                - configMapRef:
+                    name: hisinone-lifecycle-config
+              env:
+                - name: KEYCLOAK_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.hisinone.lifecycle.keycloakClientSecret | default "hisinone-lifecycle-client" | quote }}
+                      key: {{ .Values.hisinone.lifecycle.keycloakClientSecretKey | default "client-secret" | quote }}
+                - name: HISINONE_LDAP_BIND_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.hisinone.ldap.bindPasswordExistingSecret | default "hisinone-ldap-credentials" | quote }}
+                      key: {{ .Values.hisinone.ldap.bindPasswordKey | default "password" | quote }}
+                      optional: true
+              resources:
+                requests:
+                  memory: "128Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "256Mi"
+                  cpu: "500m"
+  backoffLimit: 2
+{{- end }}

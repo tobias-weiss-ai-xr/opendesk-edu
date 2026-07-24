@@ -1,0 +1,29 @@
+{{- if .Values.hisinone.accountLifecycle.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hisinone-lifecycle-config
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: hisinone-lifecycle
+    app.kubernetes.io/component: webhook
+    app.kubernetes.io/part-of: opendesk
+data:
+  KEYCLOAK_URL: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}"
+  KEYCLOAK_REALM: "{{ .Values.platform.realm }}"
+  KEYCLOAK_CLIENT_ID: "hisinone-lifecycle"
+  KEYCLOAK_VERIFY_SSL: "false"
+  KEYCLOAK_TIMEOUT: "30"
+  HISINONE_LDAP_HOST: "{{ .Values.hisinone.ldap.host }}"
+  HISINONE_LDAP_PORT: "{{ .Values.hisinone.ldap.port }}"
+  HISINONE_LDAP_USE_SSL: "{{ .Values.hisinone.ldap.useSsl }}"
+  HISINONE_LDAP_BIND_DN: "{{ .Values.hisinone.ldap.bindDn }}"
+  HISINONE_LDAP_USERS_BASE_DN: "{{ .Values.hisinone.ldap.usersBaseDn }}"
+  HISINONE_LDAP_ATTR_USERNAME: "{{ .Values.hisinone.ldap.attributeMapping.username }}"
+  HISINONE_LDAP_USER_FILTER: "{{ .Values.hisinone.ldap.userSearchFilter }}"
+  HISINONE_ENROLLMENT_STATUS_ATTR: "hisinoneEnrollmentStatus"
+  HISINONE_RE_REGISTRATION_GRACE: "{{ .Values.hisinone.semesterEnrollment.reRegistrationGrace | default "30" }}"
+  HISINONE_CURRENT_SEMESTER: "{{ .Values.hisinone.semesterEnrollment.currentSemester | default "" }}"
+  OPENDESK_API_BASE_URL: "http://localhost:8000/api/v1"
+  LOG_LEVEL: "INFO"
+{{- end }}

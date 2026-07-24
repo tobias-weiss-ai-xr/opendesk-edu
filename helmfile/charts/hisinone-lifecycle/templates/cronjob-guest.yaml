@@ -1,0 +1,52 @@
+{{- if and .Values.hisinone.accountLifecycle.enabled .Values.hisinone.guestLecturers.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hisinone-guest-cleanup
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: hisinone-lifecycle
+    app.kubernetes.io/component: cronjob-guest
+    app.kubernetes.io/part-of: opendesk
+spec:
+  schedule: "{{ .Values.hisinone.guestLecturers.cronSchedule | default "0 6 * * *" }}"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Values.hisinone.bootstrap.serviceAccountName | default "keycloak-ldap-bootstrap" }}
+          restartPolicy: Never
+          containers:
+            - name: guest-cleanup
+              image: {{ .Values.hisinone.lifecycle.image | default "codeberg.org/opendesk-edu/hisinone-lifecycle:latest" | quote }}
+              command:
+                - python
+                - -m
+                - sync.guest_cleanup
+              envFrom:
+                - configMapRef:
+                    name: hisinone-lifecycle-config
+              env:
+                - name: KEYCLOAK_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.hisinone.lifecycle.keycloakClientSecret | default "hisinone-lifecycle-client" | quote }}
+                      key: {{ .Values.hisinone.lifecycle.keycloakClientSecretKey | default "client-secret" | quote }}
+                - name: KEYCLOAK_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.hisinone.lifecycle.keycloakAdminSecret | default "hisinone-lifecycle" | quote }}
+                      key: {{ .Values.hisinone.lifecycle.keycloakAdminKey | default "admin-password" | quote }}
+                      optional: true
+              resources:
+                requests:
+                  memory: "128Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "256Mi"
+                  cpu: "500m"
+  backoffLimit: 2
+{{- end }}
