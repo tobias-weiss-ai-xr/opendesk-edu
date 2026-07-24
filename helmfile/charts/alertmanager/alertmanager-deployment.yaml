@@ -4,14 +4,14 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: alertmanager-config
-  namespace: opendesk
+  namespace: {{ .Release.Namespace }}
   labels:
     app: alertmanager
 data:
   alertmanager.yaml: |
     global:
       resolve_timeout: 5m
-      smtp_smarthost: 'postfix.opendesk.svc.cluster.local:25'
+      smtp_smarthost: 'postfix.{{ .Release.Namespace }}.svc.cluster.local:25'
       smtp_from: 'alertmanager@opendesk.hrz.uni-marburg.de'
       smtp_require_tls: false
 
@@ -61,7 +61,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: alertmanager
-  namespace: opendesk
+  namespace: {{ .Release.Namespace }}
   labels:
     app: alertmanager
 spec:
@@ -77,7 +77,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: alertmanager
-  namespace: opendesk
+  namespace: {{ .Release.Namespace }}
   labels:
     app: alertmanager
 spec:

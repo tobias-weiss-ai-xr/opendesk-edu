@@ -9,6 +9,6 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: registry.hrz.uni-marburg.de/dockerio-cache/busybox:latest
+      image: registry.hrz.uni-marburg.de/dockerio-cache/busybox:1.37
       command: ['nc', '-z', '-w', '3', '{{ include "slidev.name" . }}', '{{ .Values.service.port | toString }}']
   restartPolicy: Never

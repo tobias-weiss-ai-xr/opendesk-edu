@@ -48,7 +48,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: sso-check
-              image: curlimages/curl:latest
+              image: curlimages/curl:8.12.1
               command: ["/bin/sh", "/tests/sso-redirect-check.sh"]
               securityContext:
                 allowPrivilegeEscalation: false

@@ -21,7 +21,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: guest-cleanup
-              image: {{ .Values.hisinone.lifecycle.image | default "codeberg.org/opendesk-edu/hisinone-lifecycle:latest" | quote }}
+              image: {{ .Values.hisinone.lifecycle.image | default "codeberg.org/opendesk-edu/hisinone-lifecycle:1.0.0" | quote }}
               command:
                 - python
                 - -m

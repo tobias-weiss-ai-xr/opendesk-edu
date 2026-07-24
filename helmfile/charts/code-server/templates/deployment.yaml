@@ -67,7 +67,7 @@ spec:
         {{- end }}
         {{- if .Values.opencloud.enabled }}
         - name: opencloud-sync
-          image: rclone/rclone:latest
+          image: rclone/rclone:1.69
           command:
             - sh
             - -c
