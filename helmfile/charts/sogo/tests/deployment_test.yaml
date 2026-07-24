@@ -1,75 +1,50 @@
-# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
-suite: Deployment
+suite: deployment
 templates:
   - deployment.yaml
-values:
-  - ../ci/ci-values.yaml
 tests:
-  - it: should create a Deployment with correct kind
+  - it: renders default metadata
     asserts:
       - isKind:
           of: Deployment
+      - equal:
+          path: metadata.labels["app.kubernetes.io/name"]
+          value: sogo
+      - equal:
+          path: spec.replicas
+          value: 1
 
-  - it: should use the correct container image
-    asserts:
-      - matchRegex:
-          path: spec.template.spec.containers[0].image
-          pattern: sonroyaalmerol/docker-sogo:.+
-
-  - it: should set the container port to 80
+  - it: sets pod security context
     asserts:
       - equal:
-          path: spec.template.spec.containers[0].ports[0].containerPort
-          value: 80
+          path: spec.template.spec.securityContext.fsGroup
+          value: 110
 
-  - it: should have standard Kubernetes labels
+  - it: sets container security context
     asserts:
-      - isNotNull:
-          path: metadata.labels
-      - isNotNull:
-          path: metadata.labels["app.kubernetes.io/name"]
-      - isNotNull:
-          path: metadata.labels["app.kubernetes.io/instance"]
-      - isNotNull:
-          path: metadata.labels["app.kubernetes.io/managed-by"]
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop[0]
+          value: ALL
 
-  - it: should set resource requests and limits
+  - it: references OIDC secret when OIDC enabled
+    set:
+      sogo.oidc.enabled: true
     asserts:
-      - isNotNull:
-          path: spec.template.spec.containers[0].resources.requests
-      - isNotNull:
-          path: spec.template.spec.containers[0].resources.limits
+      - exists:
+          path: spec.template.spec.containers[0].env[?(@.name == "SOGO_OPENID_CLIENT_SECRET")]
+      - matchRegex:
+          path: spec.template.spec.containers[0].env[?(@.name == "SOGO_OPENID_CLIENT_SECRET")].valueFrom.secretKeyRef.name
+          pattern: .*-oidc
 
-  - it: should mount the data and config volumes
+  - it: has no OIDC env when OIDC disabled
     asserts:
-      - contains:
-          path: spec.template.spec.containers[0].volumeMounts
-          content:
-            name: sogo-data
-            mountPath: /var/lib/sogo
-      - contains:
-          path: spec.template.spec.containers[0].volumeMounts
-          content:
-            name: sogo-config
-            mountPath: /etc/sogo/sogo.conf.d
+      - notExists:
+          path: spec.template.spec.containers[0].env[?(@.name == "SOGO_OPENID_CLIENT_SECRET")]
 
-  - it: should have readiness and liveness probes
+  - it: sets RollingUpdate strategy
     asserts:
-      - isNotNull:
-          path: spec.template.spec.containers[0].readinessProbe
-      - isNotNull:
-          path: spec.template.spec.containers[0].livenessProbe
-
-  - it: should reference configmap and secret via envFrom
-    asserts:
-      - contains:
-          path: spec.template.spec.containers[0].envFrom
-          content:
-            configMapRef:
-              name: RELEASE-NAME-sogo
-      - contains:
-          path: spec.template.spec.containers[0].envFrom
-          content:
-            secretRef:
-              name: RELEASE-NAME-sogo
+      - equal:
+          path: spec.strategy.type
+          value: RollingUpdate

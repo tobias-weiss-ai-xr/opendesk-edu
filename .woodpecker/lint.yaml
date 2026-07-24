@@ -42,7 +42,15 @@ steps:
     image: docker.io/alpine/helm:3.17.0
     depends_on: []
     commands:
-      - for chart in helmfile/charts/*/; do helm template test "$chart" --dependency-update > /dev/null; done
+      - for chart in helmfile/charts/*/; do helm template test "$chart" --dependency-update > /dev/null 2>&1; done
+
+  - name: helm-unittest
+    image: docker.io/alpine/helm:3.17.0
+    depends_on: []
+    commands:
+      - apk add --no-cache git
+      - helm plugin install https://github.com/helm-unittest/helm-unittest.git > /dev/null 2>&1 || true
+      - for chart in helmfile/charts/*/; do if [ -d "$chart/tests" ]; then helm unittest "$chart"; fi; done
 
   - name: pre-commit
     image: python:3.12-slim
