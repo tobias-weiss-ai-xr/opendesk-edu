@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+releases:
+  - name: "intercom-service"
+    chart: "../../../charts/intercom-service"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.intercom }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.intercom.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "intercom-service"
