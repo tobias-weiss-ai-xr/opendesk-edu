@@ -71,3 +71,6 @@ k8up-*.yaml
 *.key
 *.crt
 *.p12
+
+# Allow test env templates to be committed
+!*.env.test
