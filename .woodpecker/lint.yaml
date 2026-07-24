@@ -24,12 +24,25 @@ steps:
       - pip install ruff
       - ruff check scripts/
 
+  - name: commitlint
+    image: node:20-slim
+    depends_on: []
+    commands:
+      - npm install -g @commitlint/cli @commitlint/config-conventional
+      - echo "$CI_COMMIT_MESSAGE" | commitlint
+
   - name: spellcheck
     image: node:20-slim
     depends_on: []
     commands:
       - npm install -g cspell
       - cspell --config cspell.json README.md ROADMAP.md CONTRIBUTING.md docs/university-apps-concept.md docs/external-services.md docs/getting-started.md .github/ --no-progress
+
+  - name: helm-template
+    image: docker.io/alpine/helm:3.17.0
+    depends_on: []
+    commands:
+      - for chart in helmfile/charts/*/; do helm template test "$chart" --dependency-update > /dev/null; done
 
   - name: pre-commit
     image: python:3.12-slim
