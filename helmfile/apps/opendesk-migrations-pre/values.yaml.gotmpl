@@ -13,4 +13,45 @@ serviceAccount:
 
 migrations:
   stage: "PRE"
+  secretFiles:
+  {{- if and .Values.apps.nubus.enabled .Values.apps.element.enabled }}
+    - name: "synapse-db-password"
+      secret:
+        name: {{ .Values.databases.synapse.password.name | quote }}
+        key: {{ .Values.databases.synapse.password.key | quote }}
+  {{- end }}
+  {{- if and .Values.apps.oxAppSuite.enabled .Values.apps.nubus.enabled }}
+    - name: "provisioning-api-admin-password"
+      secret:
+        name: "ums-provisioning-api-admin"
+        key: "password"
+        # Marked optional because this Secret belongs to the Nubus release, which a fresh installation
+        # deploys after the opendesk-migrations-pre Job.
+        optional: true
+    - name: "udm-admin-password"
+      secret:
+        name: "ums-ldap-server-admin"
+        key: "password"
+        # Same reason as above: the Secret belongs to the Nubus release. On an upgrade - the only
+        # situation in which the actions reading it are dispatched - it is the one of the
+        # deployment being replaced and exists.
+        optional: true
+    - name: "ox-master-password"
+      secret:
+        name: {{ .Values.secrets.oxAppSuite.adminPassword.name | quote }}
+        key: {{ .Values.secrets.oxAppSuite.adminPassword.key | quote }}
+
+        optional: true
+    # The identity of the `migrations` bucket, which `ox_functional_accounts_export` hands its work
+    # to `ox_shared_accounts_import` in - see ../../../docs/migrations-automated.md. Unlike the
+    # Secrets above, this one belongs to the `opendesk-secrets` release this Job already depends on
+    # (see helmfile-child.yaml.gotmpl), so it is there when the Job starts. Still optional, so that
+    # a deployment bringing its own object store Secret and not creating it does not keep the Job
+    # from starting at all; the action reading it fails and names it.
+    - name: "objectstore-migrations-secret-key"
+      secret:
+        name: {{ .Values.objectstores.migrations.secretKey.name | quote }}
+        key: {{ .Values.objectstores.migrations.secretKey.key | quote }}
+        optional: true
+  {{- end }}
 ...

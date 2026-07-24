@@ -15,6 +15,9 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
   * [1.18.0](#1180)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Options to configure the list views of the admin portal](#options-to-configure-the-list-views-of-the-admin-portal)
+      * [Identity a user schedules under in a Shared Account's calendar](#identity-a-user-schedules-under-in-a-shared-accounts-calendar)
+    * [`migrations.yaml.gotmpl`](#migrationsyamlgotmpl)
+      * [Timeout and log retention of the migration jobs](#timeout-and-log-retention-of-the-migration-jobs)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [Allow overriding HTTP request rate limiting for the core-mw component of the OX App Suite](#allow-overriding-http-request-rate-limiting-for-the-core-mw-component-of-the-ox-app-suite)
     * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
@@ -26,7 +29,7 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`helmfile-defaults.yaml.gotmpl`](#helmfile-defaultsyamlgotmpl)
       * [Allow override of single application helmfiles](#allow-override-of-single-application-helmfiles)
-    * [`migrations.yaml.gotmpl`](#migrationsyamlgotmpl)
+    * [`migrations.yaml.gotmpl`](#migrationsyamlgotmpl-1)
       * [Skip single actions of the automated migrations](#skip-single-actions-of-the-automated-migrations)
     * [`secrets.yaml.gotmpl`, `objectstores.yaml.gotmpl`, `database.yaml.gotmpl`](#secretsyamlgotmpl-objectstoresyamlgotmpl-databaseyamlgotmpl)
       * [Provide selected secrets as pre-created Kubernetes Secrets](#provide-selected-secrets-as-pre-created-kubernetes-secrets)
@@ -79,6 +82,55 @@ functional:
         sizelimit: 500
         autoload: true
 ```
+
+#### Identity a user schedules under in a Shared Account's calendar
+
+A Shared Account brings a calendar with it, and an appointment a user creates or answers there can name either
+the user acting on behalf of the Shared Account, or the Shared Account alone. Which of the two applies can now be
+configured:
+
+```yaml
+functional:
+  groupware:
+    sharedAccounts:
+      calendar:
+        # `sendOnBehalf` or `sendAs`
+        sentByPreference: "sendOnBehalf"
+```
+
+`sendOnBehalf`, the default, keeps both visible to the recipients: The appointment is the Shared Account's, sent
+by that user. `sendAs` shows only the Shared Account and does not reveal who acted.
+
+The setting applies to users whose permission grants both "send as" and "send on behalf of" which is what openDesk default permission profiles do.
+
+### `migrations.yaml.gotmpl`
+
+#### Timeout and log retention of the migration jobs
+
+The two migration jobs now have their own timeout and log retention, instead of following the `debug.cleanup.*`
+settings that govern the jobs of all other components:
+
+```yaml
+migrations:
+  job:
+    # Seconds the deployment waits for a migration job to complete.
+    timeoutSeconds: 3600
+    # Seconds a completed migration job and its Pod are kept, so its log stays readable. `0` keeps
+    # it without a time limit.
+    keepOutputSeconds: 604800
+```
+
+Both defaults changed with this: A migration job used to be given 900 seconds and its Pod removed 60 seconds
+after it completed. A migration is not a component that can simply be redeployed - it is a one-time change to
+your data, and its log is the only record of what it did, per object and including the values it replaced.
+
+Raise `timeoutSeconds` for a large IAM. A migration that is still working when it elapses keeps running, but the
+deployment has already been reported as failed and no longer waits for its outcome.
+
+> [!note]
+> `keepOutputSeconds` is an upper bound, not a guarantee: the jobs are deployed as hooks that are replaced on the
+> next deployment, so a job's log survives at most until you deploy again. Collect anything you need beyond that
+> from the Pod, e.g. with your log aggregation.
 
 ### `technical.yaml.gotmpl`
 
@@ -213,11 +265,9 @@ The new file `migrations.yaml.gotmpl` allows to opt out of single actions of the
 environment.
 
 `actionsSkip` mirrors the `actions` structure of the migration definition: An entry names the stage
-(the list it is in), the `id` and the `tag` of the action it skips - the same footprint, just
-without its `config`. It has to match the declared action exactly, including its `tag` (or the
-absence of one), so that an opt-out can never silently suppress a later, different piece of work
-that reuses the same action under another tag. An entry that matches no declared action is logged
-as a warning.
+(the list it is in), the `id` and the `tag` of the action it skips. Both have to match the declared
+action exactly, including the absence of a tag, so that an opt-out can never silently suppress a
+later, different piece of work that reuses the same action under another tag.
 
 A skipped action is logged as a warning and is not recorded as executed, so an action that is
 declared to run once stays eligible should you un-skip it later.

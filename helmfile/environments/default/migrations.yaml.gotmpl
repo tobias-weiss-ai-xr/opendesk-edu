@@ -9,15 +9,65 @@
 # parameters, and from which openDesk releases they can be upgraded - are defined by openDesk in
 # `helmfile/shared/migrations.yaml.gotmpl` and are not configurable.
 migrations:
+  # How the deployment treats the two migration jobs themselves. Both settings are deliberately
+  # separate from `debug.cleanup.*`, which governs the jobs of all other components: a migration
+  # job is not a component that can simply be redeployed, it is a one-time change to your data, and
+  # its log is the only record of what it did.
+  job:
+    # Seconds a deployment waits for a migration job to complete, before it gives up on it and
+    # reports the release as failed.
+    #
+    # The deployment waits on purpose - the components after `migrations-pre`, respectively the
+    # deployment as a whole after `migrations-post`, must not continue on a migration that is still
+    # running or has failed. How long a migration takes depends on your data, so raise this for a
+    # large IAM: a migration that is still working when this elapses keeps running, but the
+    # deployment has already been reported as failed and no longer waits for its outcome.
+    timeoutSeconds: 3600
+
+    # Seconds a completed migration job and its Pod are kept, so that its log stays readable.
+    #
+    # The log is where a migration reports what it did, per object, and for the values it replaced
+    # it is the only record there is. The default keeps it for a week; `0` keeps it without a time
+    # limit.
+    #
+    # Note that this is an upper bound, not a guarantee: the jobs are deployed as hooks that are
+    # replaced on the next deployment, so a job's log survives at most until you deploy again.
+    # Anything you need beyond that has to be collected from the Pod, e.g. by your log aggregation.
+    keepOutputSeconds: 604800
+
+  # Where the two migration stages hand work over. They are separate jobs, so an action that has to
+  # read something before your release is applied and act on it afterwards is two actions, and the
+  # first leaves what it worked out in an object store - not in a ConfigMap, which holds 1 MiB and
+  # would fail exactly in the installations that have the most to migrate.
+  #
+  # Which store, bucket and identity that is comes from `objectstores.migrations`, the bucket
+  # openDesk provisions for this; the migration jobs reach it under the endpoint its other
+  # consumers use, which is your deployment's public one. What is settable here is how they trust
+  # and address it, once for every action rather than per action:
+  objectStore:
+    # Set to the path of a mounted CA certificate when your object store's certificate is issued by
+    # a CA the migrations image does not know. Mount it through the migration releases'
+    # `extraVolumes`/`extraVolumeMounts`.
+    caBundle: ""
+    # Only for test deployments with a self-signed certificate. Switching this off means the
+    # handover between the two stages travels over a connection nothing authenticates.
+    verifySSL: true
+    # Seconds a single request to the object store may take.
+    requestTimeoutSeconds: 30
+
   # `actionsSkip` opts out of single migration actions, e.g. when a migration is considered too
   # complex or too risky for this environment.
   #
   # It mirrors the `actions` structure in `helmfile/shared/migrations.yaml.gotmpl`: an entry names
-  # the stage (the list it is in), the `id` and the `tag` of the action it skips - the same
-  # footprint, just without its `config`. It has to match the declared action exactly, including
-  # its `tag` (or the absence of one), so that an opt-out can never silently suppress a later,
-  # different piece of work that reuses the same action under another tag. An entry that matches
-  # no declared action is logged as a warning.
+  # the stage (the list it is in), the `id` and the `tag` of the action it skips. Both have to
+  # match the declared action exactly, including the absence of a tag, so that an opt-out can never
+  # silently suppress a later, different piece of work that reuses the same action under another
+  # tag. The action's `runMode` is not part of an opt-out.
+  #
+  # An entry naming an action of that stage under a different tag stops the deployment before any
+  # action runs - it would otherwise let exactly the action through that you excluded. An entry
+  # naming an action the stage does not declare at all is only logged as a warning: that is what
+  # an opt-out becomes once the release it was written for is behind you.
   #
   # **Warning:** The automated migrations bring your deployment in line with the openDesk release
   # you are deploying. Skipping an action means the migration it implements is not applied and the
@@ -30,14 +80,39 @@ migrations:
   # migrations:
   #   actionsSkip:
   #     pre:
-  #       - id: "some_action_module"
+  #       - id: "ox_functional_accounts_export"
+  #         tag: "v1.18.0"
   #     post:
-  #       - id: "ox_connector_restart"
-  #         tag: "v1.17.0"
+  #       - id: "ox_shared_accounts_import"
+  #         tag: "v1.18.0"
   # ```
   actionsSkip:
     # Actions to be skipped in the stage `migrations-pre`.
     pre: []
     # Actions to be skipped in the stage `migrations-post`.
     post: []
+  # Various options for specific actions.
+  #
+  # Every action applies its change, and it is not configurable whether it does: the actions of a
+  # release bring your deployment in line with that release, and the components deployed after them
+  # rely on what they wrote. Where an action needs a decision that cannot be derived from your
+  # data, it is asked for here.
+  #
+  # What each action does is documented in `docs/migrations-automated.md`. To take the
+  # responsibility for a migration yourself, opt out of its actions through `actionsSkip` above.
+  actionOptions:
+    # The migration of the OX App Suite Functional Accounts still in your IAM to the Shared
+    # Accounts that replace them, in two halves: `ox_functional_accounts_export` records and
+    # deletes them in `migrations-pre`, `ox_shared_accounts_import` creates the Shared Accounts in
+    # `migrations-post`.
+    #
+    # To migrate them yourself instead, opt out through `actionsSkip` above - of *both* actions, so
+    # in `pre` *and* in `post`, as opting out of only one leaves the migration half applied.
+    oxFunctionalToSharedAccounts:
+      # The permission every user of a migrated account is linked with, given as the `name` of the
+      # `oxmail/shared_account_permission` object - not its display name, which is a label that may
+      # be reworded. Defaults to openDesk's "Mail: Full access, Calendar: Full access", which comes
+      # closest to what a Functional Account granted its users; `ox_shared_accounts_import` reports
+      # the permissions your deployment provides should this one not exist.
+      permission: "opendesk_mail_author_calendar_author"
 ...

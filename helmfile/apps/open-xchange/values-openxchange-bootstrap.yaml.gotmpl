@@ -41,6 +41,10 @@ serviceAccount:
   annotations:
     {{ .Values.annotations.openxchangeBootstrap.serviceAccount | toYaml | nindent 4 }}
 
+coreMiddleware:
+  image: {{ printf "%s:%s" .Values.images.openxchangeCoreMW.repository .Values.images.openxchangeCoreMW.tag | quote }}
+  chart: {{ printf "%s-%s" .Values.charts.oxAppSuite.name .Values.charts.oxAppSuite.version | quote }}
+
 filestore:
   # identifier must match identifier in /opt/open-xchange/etc/filestore-s3.properties
   identifier: "ox-filestore-s3"

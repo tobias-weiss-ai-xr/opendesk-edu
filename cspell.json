@@ -79,7 +79,8 @@
         "Xchange",
         "xwiki",
         "Zentrum",
-        "analysed"
+        "analysed",
+        "oxmail"
     ],
     "ignoreWords": [],
     "import": []

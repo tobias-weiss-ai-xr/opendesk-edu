@@ -525,6 +525,7 @@ While the IAM manages users centrally, some applications come with local account
 |              | `meeting-bot`                                 | Used by the Nordeck Meeting-Bot to manage meeting rooms in Synapse.                                                     | `secrets.matrixNeoDateFixBot.password`           |
 | Nextcloud    | `nextcloud`                                   | Bootstrap the Nextcloud fileshare for OpenProject with `opendesk-openproject-bootstrap` job[^1].                        | `secrets.nextcloud.adminPassword`                |
 | OX App Suite | `admin`                                       | OX Connector to provision context, users, groups etc.                                                                   | `secrets.oxAppsuite.adminPassword`               |
+|              | `rest-api`                                    | Dovecot to resolve a user's permission on a Shared Account, and OX Guard, both via the OX REST API.                      | `secrets.oxAppSuite.restApiPassword`             |
 | OpenProject  | set in `secrets.openproject.apiAdminUsername` | Bootstrap the Nextcloud fileshare for OpenProject with `opendesk-openproject-bootstrap` job[^1].                        | `secrets.openproject.apiAdminPassword`           |
 | XWiki        | `superadmin`                                  | Only available with `debug.enabled: true`, can be used for interactive login using `/bin/view/Main/?oidc.skipped=true`. | `secrets.xwiki.superadminpassword`               |
 
