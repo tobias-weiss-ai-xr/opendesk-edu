@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 apiVersion: v2
 name: dev-dns
 description: Dev DNS server customization for k3s CoreDNS - adds static host entries for internal services and exposes DNS externally via NodePort
