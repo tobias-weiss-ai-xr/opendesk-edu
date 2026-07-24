@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v2
+name: hisinone-lifecycle
+description: HISinOne account lifecycle automation - webhook, semester check, guest cleanup
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - hisinone
+  - lifecycle
+  - keycloak
+  - campus-management
+sources:
+  - https://codeberg.org/opendesk-edu/opendesk-edu
+annotations:
+  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/prerelease: "true"
