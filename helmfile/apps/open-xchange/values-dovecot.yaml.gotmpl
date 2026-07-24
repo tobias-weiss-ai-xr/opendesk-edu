@@ -48,9 +48,27 @@ dovecot:
       existingSecret:
         name: {{ .Values.secrets.keycloak.clientSecret.dovecot.name | quote }}
         key: {{ .Values.secrets.keycloak.clientSecret.dovecot.key | quote }}
-    introspectionHost: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
+    host: {{ printf "%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
     introspectionPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token/introspect"
+    certsPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
     usernameAttribute: "opendesk_username"
+    # OX AppSuite forwards the user's OIDC access token (opendesk-oxappsuite) to Dovecot
+    # via xoauth2 for IMAP, so its signing keys must be synced for local JWT validation too:
+    jwtExtraAzp:
+      - "opendesk-oxappsuite"
+    grant:
+      tokenPath: "/realms/{{ .Values.platform.realm }}/protocol/openid-connect/token"
+      clientID:
+        value: "opendesk-dovecot-grant"
+      clientSecret:
+        existingSecret:
+          name: {{ .Values.secrets.keycloak.clientSecret.dovecotGrant.name | quote }}
+          key: {{ .Values.secrets.keycloak.clientSecret.dovecotGrant.key | quote }}
+  oxApi:
+    url: "http://open-xchange-core-mw-http-api"
+    username: "rest-api"
+    password:
+      value: {{ .Values.secrets.oxAppSuite.restApiPassword.value | quote }}
   protocol:
     imap:
       limits:

@@ -771,7 +771,7 @@ fetch-administrator-credentials:
 
 import-default-accounts:
   stage: "post-execute"
-  extends: ".environments"
+  extends: ".deploy-common"
   dependencies:
     - "fetch-administrator-credentials"
   environment:
@@ -780,7 +780,7 @@ import-default-accounts:
     - if: >
           $CI_PIPELINE_SOURCE =~ /^(web|schedule|trigger|api)$/ && $NAMESPACE =~ /.+/ && $CREATE_DEFAULT_ACCOUNTS == "yes"
       when: "on_success"
-  image: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.8.1"
+  image: "registry.open-de.sk/registry.opencode.de/bmi/opendesk/components/platform-development/images/user-import:3.9.0"
   script:
     - "echo \"Starting default account import for ${DOMAIN}\""
     - "cd /app"

@@ -119,6 +119,10 @@ configuration:
     dn: "uid=ldapsearch_nextcloud,cn=users,{{ .Values.ldap.baseDn }}"
     password:
       value: {{ .Values.secrets.nubus.ldapSearch.nextcloud.value | quote }}
+    ldapLoginFilter: "(&(opendeskFileshareEnabled=TRUE)(univentionObjectIdentifier=%uid))"
+    # Semicolon separated, as the image ships it (`sn;givenname;uid`) and as it joins a list.
+    ldapAttributesForUserSearch: "sn;givenname;uid;univentionObjectIdentifier"
+    ldapExpertUsernameAttr: "univentionObjectIdentifier"
     adminGroupName: "managed-by-attribute-FileshareAdmin"
 
   objectstore:
@@ -144,6 +148,7 @@ configuration:
     useSSL: {{ .Values.objectstores.nextcloud.useSSL | quote }}
 
   oidc:
+    mappingUid: "opendesk_objectid"
     username:
       value: "opendesk-nextcloud"
     password:

@@ -400,6 +400,18 @@ functional:
       # Just provide the plain number without quoting. It will allow a quota grace of 10% and +20% in trash storage.
       # If you need different rules you can use customizing on Dovecot's `quotaRules` and `quotaGrace` templating.
       default: 1
+    # Settings for the Shared Accounts, the shared mailboxes with their own calendar that users are
+    # given access to through the IAM.
+    sharedAccounts:
+      calendar:
+        # Under which identity a user acts when scheduling in a Shared Account's calendar, meaning
+        # who an appointment created or answered there names as its organizer respectively sender.
+        # - `sendOnBehalf`: The user acts on behalf of the Shared Account. Both are visible to the
+        #   recipients - the appointment is the Shared Account's, sent by that user.
+        # - `sendAs`: The user impersonates the Shared Account. Only the Shared Account is visible
+        #   to the recipients, the acting user is not shown.
+        # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.sharedaccount.calendar.sentByPreference
+        sentByPreference: "sendOnBehalf"
     # User profile related control options
     userProfile:
       # The user's display name is managed by openDesk IAM and should not be manually changed by the user.

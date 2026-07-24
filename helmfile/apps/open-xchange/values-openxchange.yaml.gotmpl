@@ -795,6 +795,14 @@ appsuite:
       com.openexchange.log.audit.slf4j.delimiter: ","
       com.openexchange.log.audit.slf4j.includeAttributeNames: "true"
       {{- end }}
+      # Shared Accounts
+      com.openexchange.sharedaccount.enabled: "true"
+      {{- if not (has .Values.functional.groupware.sharedAccounts.calendar.sentByPreference (list "sendOnBehalf" "sendAs")) }}
+      {{- fail "Unsupported value for .Values.functional.groupware.sharedAccounts.calendar.sentByPreference, supported values are 'sendOnBehalf' or 'sendAs'" }}
+      {{- end }}
+      com.openexchange.sharedaccount.calendar.sentByPreference: {{ .Values.functional.groupware.sharedAccounts.calendar.sentByPreference | quote }}
+      com.openexchange.rest.services.basic-auth.login: "rest-api"
+      com.openexchange.rest.services.basic-auth.password: {{ .Values.secrets.oxAppSuite.restApiPassword.value | quote }}
       # Deputy feature
       # Ref.: https://documentation.open-xchange.com/8/middleware/permissions_and_capabilities/deputy_permission.html
       com.openexchange.deputy.enabled: "true"
@@ -841,7 +849,7 @@ appsuite:
       com.openexchange.oidc.rpRedirectURIPostSSOLogout: "https://{{ .Values.global.hosts.openxchange }}.{{ .Values.global.domain }}/appsuite/api/oidc/logout"
       com.openexchange.oidc.ssoLogout: "true"
       com.openexchange.oidc.startDefaultBackend: "true"
-      com.openexchange.oidc.userLookupClaim: "opendesk_username"
+      com.openexchange.oidc.userLookupClaim: "opendesk_objectid"
       com.openexchange.oidc.userLookupNamePart: "full"
       com.openexchange.oidc.enablePasswordGrant: "true"
       com.openexchange.oidc.passwordGrantUserNamePart: "local-part"
@@ -853,7 +861,7 @@ appsuite:
       com.openexchange.oauth.provider.jwt.jwksUri: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/openid-connect/certs"
       com.openexchange.oauth.provider.mode: "expect_jwt"
       com.openexchange.oauth.provider.userLookupNamePart: "full"
-      com.openexchange.oauth.provider.userLookupClaim: "opendesk_username"
+      com.openexchange.oauth.provider.userLookupClaim: "opendesk_objectid"
       # MAIL
       com.openexchange.mail.authType: "xoauth2"
       com.openexchange.mail.loginSource: "name"
@@ -868,11 +876,11 @@ appsuite:
       com.openexchange.mail.login.resolver.enabled: "true"
       com.openexchange.mail.login.resolver.ldap.enabled: "true"
       com.openexchange.mail.login.resolver.ldap.clientId: "contactsLdapClient"
-      com.openexchange.mail.login.resolver.ldap.mailLoginSearchFilter: "(entryUUID=[mailLogin])"
-      com.openexchange.mail.login.resolver.ldap.userNameAttribute: "uid"
+      com.openexchange.mail.login.resolver.ldap.mailLoginSearchFilter: "(univentionObjectIdentifier=[mailLogin])"
+      com.openexchange.mail.login.resolver.ldap.userNameAttribute: "univentionObjectIdentifier"
       com.openexchange.mail.login.resolver.ldap.contextNameAttribute: "oxContextIDNum"
-      com.openexchange.mail.login.resolver.ldap.entitySearchFilter: "(&(oxContextIDNum=[cid])(uid=[uname]))"
-      com.openexchange.mail.login.resolver.ldap.mailLoginAttribute: "entryUUID"
+      com.openexchange.mail.login.resolver.ldap.entitySearchFilter: "(&(oxContextIDNum=[cid])(univentionObjectIdentifier=[uname]))"
+      com.openexchange.mail.login.resolver.ldap.mailLoginAttribute: "univentionObjectIdentifier"
       # Contacts collector
       # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=contactCollect
       com.openexchange.contactcollector.enabled: "true"
@@ -888,6 +896,9 @@ appsuite:
       com.openexchange.mail.filter.preferredSaslMech: "XOAUTH2"
       # Dovecot
       com.openexchange.imap.attachmentMarker.enabled: "true"
+      # The following is the default setting, but we explicitly set it to `true`
+      # as tests with `false` showed issues with the deputy feature and folder sharing.
+      com.openexchange.imap.namespacePerUser: "true"
       # Capabilities
       # Old capability can be used to toggle all integrations with a single switch
       com.openexchange.capability.public-sector: "true"
@@ -960,7 +971,7 @@ appsuite:
       com.openexchange.conference.element.enabled: {{ .Values.apps.element.enabled | quote }}
       com.openexchange.conference.element.meetingHostUrl: http://matrix-neodatefix-bot
       com.openexchange.conference.element.matrixLoginUrl: http://opendesk-synapse-web:8008/_matrix/client/v3/login
-      com.openexchange.conference.element.matrixUuidClaimName: {{ ternary "opendesk_useruuid" "opendesk_username" .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}
+      com.openexchange.conference.element.matrixUuidClaimName: {{ ternary "opendesk_objectid" "opendesk_username" .Values.functional.chat.matrix.profile.useImmutableIdentifierForLocalpart }}
       # GDPR
       com.openexchange.gdpr.dataexport.enabled: "false"
       com.openexchange.gdpr.dataexport.active: "false"
@@ -972,6 +983,8 @@ appsuite:
       com.openexchange.guard.guestSMTPMailFrom: {{ printf "%s@%s" "opendesk-system" ( .Values.global.mailDomain | default .Values.global.domain ) }}
       com.openexchange.guard.guestSMTPPort: "25"
       com.openexchange.guard.guestSMTPServer: "postfix"
+      com.openexchange.guard.restApiUsername: "rest-api"
+      com.openexchange.guard.restApiPassword: {{ .Values.secrets.oxAppSuite.restApiPassword.value | quote }}
       com.openexchange.guard.useStartTLS: "false"
       # S/MIME
       # Usage (in browser console after login):

@@ -31,9 +31,13 @@ SPDX-License-Identifier: Apache-2.0
       * [Pre-upgrade to versions ≥ v1.18.0](#pre-upgrade-to-versions--v1180)
         * [New persistence requirement: OX Connector requires its own PostgreSQL database](#new-persistence-requirement-ox-connector-requires-its-own-postgresql-database)
         * [Full re-provisioning of all objects on upgrade](#full-re-provisioning-of-all-objects-on-upgrade)
+        * [OX App Suite: Switch to `univentionObjectIdentifier` and Shared Accounts](#ox-app-suite-switch-to-univentionobjectidentifier-and-shared-accounts)
+        * [New Helmfile secrets: Dovecot's password grant client and the OX App Suite REST API](#new-helmfile-secrets-dovecots-password-grant-client-and-the-ox-app-suite-rest-api)
+        * [IAM: An externally maintained `univentionObjectIdentifier` has to move](#iam-an-externally-maintained-univentionobjectidentifier-has-to-move)
         * [Changed Helmfile structure: `userNamespaces` setting moved to `technical.userNamespaces`](#changed-helmfile-structure-usernamespaces-setting-moved-to-technicalusernamespaces)
         * [Changed Helmfile structure: Streamlined naming of the theming attributes](#changed-helmfile-structure-streamlined-naming-of-the-theming-attributes)
         * [Changed Helmfile structure: Redis secret moved to `cache.redis.password`](#changed-helmfile-structure-redis-secret-moved-to-cacheredispassword)
+        * [Changed Helmfile default: Matrix federation is no longer enabled by default](#changed-helmfile-default-matrix-federation-is-no-longer-enabled-by-default)
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
@@ -114,8 +118,8 @@ matching that constraint, though our links always point to the newest patch rele
 <!-- IMPORTANT: Make sure to mark mandatory releases if an automatic migration requires a previous update to be installed -->
 | Version                                                                                   | Mandatory | Pre-Upgrade                                                          | Post-Upgrade                                                           | Minimum Required Previous Version                                                     |
 | ----------------------------------------------------------------------------------------- | --------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| [v1.18.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.18.0) | --        | [Pre](#pre-upgrade-to-versions--v1180)                               | --                                                                     | ⬇ Install v1.15.x first                                                              |
-| [v1.17.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.17.0) | --        | [Pre](#pre-upgrade-to-versions--v1170)                               | [Post](#post-upgrade-to-versions--v1170)                                | ⬇ Install v1.15.x first                                                              |
+| [v1.18.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.18.0) | **yes**   | [Pre](#pre-upgrade-to-versions--v1180)                               | [Post](#post-upgrade-to-versions--v1180)                               | ⬇ Install v1.15.x first                                                              |
+| [v1.17.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.17.0) | --        | [Pre](#pre-upgrade-to-versions--v1170)                               | [Post](#post-upgrade-to-versions--v1170)                               | ⬇ Install v1.15.x first                                                              |
 | [v1.16.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.16.1) | --        | [Pre](#pre-upgrade-to-versions--v1160)                               | --                                                                     | [⚠ Install v1.15.x first](#pre-upgrade-to-versions--v1160)                           |
 | [v1.15.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.15.1) | **yes**   | [Pre](#pre-upgrade-to-versions--v1150)                               | [Post](#post-upgrade-to-versions--v1150)                               | ⬇ Install ≥ v1.12.x first                                                            |
 | [v1.14.x](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/releases/v1.14.2) | --        | [Pre](#pre-upgrade-to-versions--v1140)                               | [Post](#post-upgrade-to-versions--v1140)                               | ⬇ Install ≥ v1.12.x first                                                            |
@@ -208,6 +212,7 @@ e.g. outside of business hours.
 
 > [!note]
 > The replay is not visible in the Pod status. Follow the respective NATS queue to track its progress.
+> Only once the replay is completed newly created or updated objects will be available in OX App Suite.
 
 **Recommended action: Use a dedicated provisioning Pod for larger deployments**
 
@@ -220,6 +225,124 @@ technical:
     provisioning:
       dedicatedCoreMwPod: true
 ```
+
+##### OX App Suite: Switch to `univentionObjectIdentifier` and Shared Accounts
+
+**Target group:** All deployments using OX App Suite.
+
+> [!warning]
+> Between `migrations-pre` and `migrations-post` the Functional Account mailboxes do not exist: Action 2 (see below)
+> deletes them in OX App Suite and their objects in the IAM, and only action 5 recreates them as Shared Accounts.
+> For that window  their addresses are unknown recipients, so mail to them - especially from the internet -
+> is **rejected permanently and bounces back to the sender**; it is not queued and not delivered later.
+> If external mail is expected during the upgrade, point the MX records of the affected mail domains at a host that
+> answers with a temporary failure (`4xx`) for the duration, so sending servers keep the messages in their queue and
+> retry once the migration has finished. Personal mailboxes are not affected, but they share the same MX.
+
+**Context:**
+
+openDesk 1.18.0 changes two things in the OX provisioning at once, and the automated actions that migrate them depend on each other:
+
+- Up to 1.17.x the OX Connector addressed users, groups and shared accounts in OX App Suite by their name. From 1.18.0 on it addresses them by their `univentionObjectIdentifier`, so that renaming a user or a group in the IAM no longer makes the Connector lose the account it provisioned and create a second one beside it.
+- The IAM's Functional Accounts (`oxmail/functional_account`) are replaced by Shared Accounts (`oxmail/shared_account`). The two objects are not the same thing: A Functional Account listed its users, a Shared Account links each of its users together with a permission (`oxmail/shared_account_permission`), which is what allows to grant each user a different level of access - calendar only, or the mailbox with or without the calendar - instead of one blanket access for everyone linked to it.
+
+Five automated actions do this, and they are applied with the upgrade - the Connector deployed right after them addresses its objects by what they write:
+
+1. [`workload_scale`](./migrations-automated.md#workload_scale) scales the OX Connector to 0 as the first step of `migrations-pre`. The actions that follow change the objects it provisions, on both sides, so it must not write them at the same time. The deployment brings it back up with the configuration of this release.
+2. [`ox_functional_accounts_export`](./migrations-automated.md#ox_functional_accounts_export) records the Functional Accounts in `migrations-pre`, removes their counterparts in OX App Suite, deletes the IAM objects and reads every OX context back to confirm that none of the mailboxes is left.
+3. [`ldap_entryuuid_to_object_identifier`](./migrations-automated.md#ldap_entryuuid_to_object_identifier) copies the value of `entryUUID`  to `univentionObjectIdentifier` for each object of the LDAP.
+4. [`ox_names_to_object_identifier`](./migrations-automated.md#ox_names_to_object_identifier) renames the user accounts and the groups in OX App Suite to that identifier, in every OX context the IAM hold.
+5. [`ox_shared_accounts_import`](./migrations-automated.md#ox_shared_accounts_import) creates the Shared Accounts from the export in `migrations-post`, where the IAM knows the module they need.
+
+Every action logs per object what it changes, in the log of the `migrations-pre` respectively the `migrations-post` Job. That log is the only record of the previous values.
+
+> [!note]
+> Actions 2 and 5 are two halves of one migration running in two jobs, so the first hands its export to the second
+> as an object in the `migrations` bucket - one record per Functional Account. That bucket has been declared as `objectstores.migrations` in
+> [`objectstores.yaml.gotmpl`](../helmfile/environments/default/objectstores.yaml.gotmpl) all along, but **1.18.0 is
+> the first release in which anything writes to it**. The bundled MinIO and SeaweedFS provision it from that
+> declaration. If you run an externally managed S3 storage backend, make sure the bucket and its identity exist and
+> are reachable before you upgrade. The migration proves both before it changes anything, so a deployment that
+> cannot reach the bucket fails in `migrations-pre` with the Functional Accounts still untouched.
+
+**Required action:**
+
+1. Choose the permission every linked user of a Shared Account is to receive via `migrations.actionOptions.oxFunctionalToSharedAccounts.permission` in [`migrations.yaml.gotmpl`](../helmfile/environments/default/migrations.yaml.gotmpl), given as the `name` of the `oxmail/shared_account_permission` object. It defaults to openDesk's `opendesk_mail_author_calendar_author` ("Mail: Full access, Calendar: Full access"), the permission that comes closest to what a Functional Account granted its users:
+   - `opendesk_mail_none_calendar_viewer`: "Mail: No access, Calendar: Read"
+   - `opendesk_mail_author_calendar_none`: "Mail: Full access, Calendar: No access". If you do not want to make use of the calendar functionality available with Shared Accounts, provide a permission for mail only.
+   - `opendesk_mail_author_calendar_viewer`: "Mail: Full access, Calendar: Read"
+   - `opendesk_mail_author_calendar_editor`: "Mail: Full access, Calendar: Edit"
+   - `opendesk_mail_author_calendar_author`: "Mail: Full access, Calendar: Full access" - the default setting
+   - `opendesk_mail_admin_calendar_none`: "Mail: Administration, Calendar: No access"
+   - `opendesk_mail_admin_calendar_viewer`: "Mail: Administration, Calendar: Read"
+   - `opendesk_mail_admin_calendar_editor`: "Mail: Administration, Calendar: Edit"
+   - `opendesk_mail_admin_calendar_author`: "Mail: Administration, Calendar: Full access"
+2. Upgrade, then review the logs of both Jobs. The identifier actions verify their own result and fail the deployment rather than leaving the Connector unable to find the accounts.
+3. Review the resulting Shared Accounts in the IAM and adjust the per user permissions where the single permission granted by the migration is not what that user should have. Accounts whose name contained spaces or punctuation are renamed, because a Shared Account is named with the same syntax as a user name - "Team Sales" becomes `Team-Sales`, with the original kept as the account's display name. The `migrations-post` Job lists every such rename.
+
+The four actions cannot be previewed, and they are not meant to be run one by one: the OX Connector of 1.18.0 addresses its objects by the identifier they write, so a deployment that applied only some of them is a state this release cannot work with. Either the migration runs as a whole, or you perform it yourself.
+
+If you perform one of the migrations yourself, opt out through `migrations.actionsSkip` - of **all** actions belonging to it, for the Shared Accounts so in `pre` *and* in `post`, as opting out of only one leaves that migration half applied. See [Skip single actions of the automated migrations](./updates.md#skip-single-actions-of-the-automated-migrations).
+
+##### New Helmfile secrets: Dovecot's password grant client and the OX App Suite REST API
+
+**Target group:** Deployments using OX App Suite that supply their own secret values instead of deriving them from `MASTER_PASSWORD`.
+
+**Context:**
+
+The Shared Accounts introduced with [OX App Suite: Switch to `univentionObjectIdentifier` and Shared Accounts](#ox-app-suite-switch-to-univentionobjectidentifier-and-shared-accounts) grant each linked user an individual permission on the account, and Dovecot has to establish on every login who is connecting and what that user is allowed to do. Two new entries in [`secrets.yaml.gotmpl`](../helmfile/environments/default/secrets.yaml.gotmpl) cover the two halves of that question:
+
+- `secrets.keycloak.clientSecret.dovecotGrant`: The client secret of a second Keycloak client for Dovecot, `opendesk-dovecot-grant`, delivered as the Secret `keycloak-grant-client-secret-dovecot` and registered by the Keycloak bootstrap. Opening a Shared Account from an external mail client is a `user@account` login with the user's own password, not a token login, so Dovecot verifies that password itself: It exchanges it at Keycloak's token endpoint through a Direct Access Grant and takes the `opendesk_objectid` of the authenticated user from the returned token. That capability gets its own client rather than being added to the existing `opendesk-dovecot`, which is only allowed to introspect tokens: The grant client has the standard and the implicit flow switched off and a scope that carries nothing but `opendesk_objectid` and `sub`, so its secret cannot be used to obtain tokens with the full `opendesk-dovecot-scope`.
+- `secrets.oxAppSuite.restApiPassword`: The password of the OX App Suite REST user `rest-api` (`com.openexchange.rest.services.basic-auth.login`/`.password`). With the identity established, Dovecot asks OX which permission that user holds on the requested Shared Account and translates the answer into the mailbox ACL it applies for the session. OX Guard reads the same credential (`com.openexchange.guard.restApiUsername`/`Password`). The REST routes themselves are not new, but this is the first release that configures a login for them.
+
+**Required action**
+
+None if your secrets are derived from `MASTER_PASSWORD` - both are generated along with all the others.
+
+If you override secret values, add the two entries in the structure described in [Structure of secret definitions](#structure-of-secret-definitions):
+
+```yaml
+secrets:
+  oxAppSuite:
+    restApiPassword:
+      value: "your_custom_password"
+  keycloak:
+    clientSecret:
+      dovecotGrant:
+        value: "your_custom_secret"
+        create: false
+        name: "your-own-secret"
+        key: "secret"
+```
+
+> [!note]
+> `secrets.oxAppSuite.adminPassword` gained `create`/`name`/`key` in the same release and is now additionally
+> rendered as the Secret `opendesk-ox-admin-password`. The OX App Suite charts keep receiving the plain value; the
+> Secret exists because the automated migrations read the master administrator's credentials from a mount only. If
+> you bring your own, set `create: false` and point `name`/`key` at your Secret.
+
+##### IAM: An externally maintained `univentionObjectIdentifier` has to move
+
+**Target group:** Deployments that provision users and groups from an external IAM and store that IAM's identifier in the `univentionObjectIdentifier` of the objects they create.
+
+**Context:**
+
+As described in [OX App Suite: Switch to `univentionObjectIdentifier` and Shared Accounts](#ox-app-suite-switch-to-univentionobjectidentifier-and-shared-accounts), openDesk takes the `univentionObjectIdentifier` into its own use with this release: [`ldap_entryuuid_to_object_identifier`](./migrations-automated.md#ldap_entryuuid_to_object_identifier) gives every object that carries one its own `entryUUID` as identifier, and the components deployed after it - the OX Connector above all - address their objects by that value. An identifier your synchronization wrote there is therefore overwritten with the upgrade, and it cannot be written back afterwards.
+
+For this case openDesk reserves the LDAP attribute `univentionFreeAttribute2` and ships it from 1.18.0 on as the UDM extended attribute `reservedLegacyExternalIamIdentifier` ("Identifier from external IAM"). openDesk neither reads nor writes it; it exists so that the identifier of an external IAM has a place that stays yours.
+
+**Required action:**
+
+Move your identifiers there **before** you upgrade:
+
+1. Stop the synchronization from your external IAM.
+2. Create the extended attribute `reservedLegacyExternalIamIdentifier` through the UDM REST API, with the definition openDesk ships.
+3. Copy the `univentionObjectIdentifier` of all users and groups into that attribute.
+4. Reconfigure the synchronization to write and match on the new attribute.
+5. Upgrade openDesk.
+6. Restart the synchronization, about 30 minutes after the upgrade, so that the LDAP index for `univentionFreeAttribute2` added with this release has been created.
+
+Each step with its API calls and a helper script for the copy: see [Preserve an externally maintained object identifier](./migrations-instructions/1.18.0-preserve-external-iam-identifier.md).
 
 ##### Changed Helmfile structure: `userNamespaces` setting moved to `technical.userNamespaces`
 
@@ -273,6 +396,40 @@ content of an SVG file.
 
 If you set one or both of these attributes, rename them in your customization.
 
+Before:
+
+```yaml
+theme:
+  imagery:
+    logoHeaderSvgB64: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
+    logoHeaderInvertedSvgB64: {{ readFile "./files/theme/myLogoHeaderInverted.svg" | b64enc | quote }}
+```
+
+After:
+
+```yaml
+theme:
+  imagery:
+    logoHeaderSvg: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
+    logoHeaderInvertedSvg: {{ readFile "./files/theme/myLogoHeaderInverted.svg" | b64enc | quote }}
+```
+
+The old attribute names are not evaluated any longer. If they are not renamed, the deployment silently
+falls back to openDesk's default logos instead of failing, so please verify your branding after the
+upgrade.
+
+> [!note]
+> Along with the rename, the assets that are shared by several modules have been moved into the new
+> directory `helmfile/files/theme/_common/`, matching the per-module directories that already existed:
+>
+> - `helmfile/files/theme/logoHeader.svg` → `helmfile/files/theme/_common/logoHeader.svg`
+> - `helmfile/files/theme/logoHeaderInverted.svg` → `helmfile/files/theme/_common/logoHeaderInverted.svg`
+> - `helmfile/files/theme/logoHeader.jpg` → `helmfile/files/theme/_common/logoHeader.jpg`
+> - `helmfile/files/theme/robots.txt` → `helmfile/files/theme/_common/robots.txt`
+>
+> This only affects you if your customization references these openDesk-shipped files by path, e.g. via
+> `readFile` or in `theme.imagery.projects.pdfExport*Path`. Adjust such references accordingly.
+
 ##### Changed Helmfile structure: Redis secret moved to `cache.redis.password`
 
 **Target group:** Deployments that override `secrets.redis.password` or point a component at an external cache
@@ -297,45 +454,15 @@ If you set the Redis password yourself, move it:
 Before:
 
 ```yaml
-<<<<<<< HEAD
-theme:
-  imagery:
-    logoHeaderSvgB64: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
-    logoHeaderInvertedSvgB64: {{ readFile "./files/theme/myLogoHeaderInverted.svg" | b64enc | quote }}
-=======
 secrets:
   redis:
     password:
       value: "..."
->>>>>>> ae1b6086 (fix(helmfile): Consolidate Redis secret definition; see `migrations-manual.md` for required upgrade steps)
 ```
 
 After:
 
 ```yaml
-<<<<<<< HEAD
-theme:
-  imagery:
-    logoHeaderSvg: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
-    logoHeaderInvertedSvg: {{ readFile "./files/theme/myLogoHeaderInverted.svg" | b64enc | quote }}
-```
-
-The old attribute names are not evaluated any longer. If they are not renamed, the deployment silently
-falls back to openDesk's default logos instead of failing, so please verify your branding after the
-upgrade.
-
-> [!note]
-> Along with the rename, the assets that are shared by several modules have been moved into the new
-> directory `helmfile/files/theme/_common/`, matching the per-module directories that already existed:
->
-> - `helmfile/files/theme/logoHeader.svg` → `helmfile/files/theme/_common/logoHeader.svg`
-> - `helmfile/files/theme/logoHeaderInverted.svg` → `helmfile/files/theme/_common/logoHeaderInverted.svg`
-> - `helmfile/files/theme/logoHeader.jpg` → `helmfile/files/theme/_common/logoHeader.jpg`
-> - `helmfile/files/theme/robots.txt` → `helmfile/files/theme/_common/robots.txt`
->
-> This only affects you if your customization references these openDesk-shipped files by path, e.g. via
-> `readFile` or in `theme.imagery.projects.pdfExport*Path`. Adjust such references accordingly.
-=======
 cache:
   redis:
     password:
@@ -346,7 +473,6 @@ Note that the per-component entries default to `cache.redis.password` rather tha
 only `cache.redis.password` therefore still changes the password for all components using the bundled Redis. If
 a component uses an external cache, override that component's own `password.value` as before - it is now the
 only place its password is read from.
->>>>>>> ae1b6086 (fix(helmfile): Consolidate Redis secret definition; see `migrations-manual.md` for required upgrade steps)
 
 ##### Changed Helmfile default: Matrix federation is no longer enabled by default
 

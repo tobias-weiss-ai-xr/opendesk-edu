@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-License-Identifier: Apache-2.0
 ---
 additionalAnnotations:
@@ -102,9 +102,9 @@ global:
     ldap:
       index:
         eq:
-          # Currently, we need to define all LDAP indices again in order to add a new index (https://forge.univention.org/bugzilla/show_bug.cgi?id=58993)
-          # Upstream indices at the time of writing start at "aRecord".
-          univentionFreeAttribute1,aRecord,automountInformation,cNAMERecord,cn,description,dhcpHWAddress,displayName,entryUUID,gidNumber,givenName,homeDirectory,krb5PrincipalName,macAddress,mail,mailAlternativeAddress,mailPrimaryAddress,memberUid,objectClass,ou,pTRRecord,relativeDomainName,sambaAcctFlags,sambaDomainName,sambaGroupType,sambaPrimaryGroupSID,sambaSID,sambaSIDList,secretary,shadowExpire,sn,uid,uidNumber,uniqueMember,univentionCanonicalRecipientRewriteEnabled,univentionDataType,univentionInventoryNumber,univentionLicenseModule,univentionLicenseObject,univentionMailHomeServer,univentionNagiosHostname,univentionObjectFlag,univentionObjectType,univentionPolicyReference,univentionServerRole,univentionService,univentionShareGid,univentionShareSambaName,univentionShareWriteable,univentionUDMOptionModule,univentionUDMPropertyCLIName,univentionUDMPropertyCopyable,univentionUDMPropertyDefault,univentionUDMPropertyDeleteObjectClass,univentionUDMPropertyDoNotSearch,univentionUDMPropertyHook,univentionUDMPropertyLayoutOverwritePosition,univentionUDMPropertyLayoutOverwriteTab,univentionUDMPropertyLayoutPosition,univentionUDMPropertyLayoutTabAdvanced,univentionUDMPropertyLayoutTabName,univentionUDMPropertyLdapMapping,univentionUDMPropertyLongDescription,univentionUDMPropertyModule,univentionUDMPropertyMultivalue,univentionUDMPropertyObjectClass,univentionUDMPropertyOptions,univentionUDMPropertyShortDescription,univentionUDMPropertySyntax,univentionUDMPropertyTranslationLongDescription,univentionUDMPropertyTranslationShortDescription,univentionUDMPropertyTranslationTabName,univentionUDMPropertyValueMayChange,univentionUDMPropertyValueRequired,univentionUDMPropertyVersion,zoneName,univentionObjectIdentifier
+          # Currently, we need to define all LDAP indices again to add a new index (https://forge.univention.org/bugzilla/show_bug.cgi?id=58993)
+          # Upstream indices at the time of writing start at "aRecord", the openDesk specific ones are added before that.
+          univentionFreeAttribute1,univentionFreeAttribute2,aRecord,automountInformation,cNAMERecord,cn,description,dhcpHWAddress,displayName,entryUUID,gidNumber,givenName,homeDirectory,krb5PrincipalName,macAddress,mail,mailAlternativeAddress,mailPrimaryAddress,memberUid,objectClass,ou,pTRRecord,relativeDomainName,sambaAcctFlags,sambaDomainName,sambaGroupType,sambaPrimaryGroupSID,sambaSID,sambaSIDList,secretary,shadowExpire,sn,uid,uidNumber,uniqueMember,univentionCanonicalRecipientRewriteEnabled,univentionDataType,univentionInventoryNumber,univentionLicenseModule,univentionLicenseObject,univentionMailHomeServer,univentionNagiosHostname,univentionObjectFlag,univentionObjectType,univentionPolicyReference,univentionServerRole,univentionService,univentionShareGid,univentionShareSambaName,univentionShareWriteable,univentionUDMOptionModule,univentionUDMPropertyCLIName,univentionUDMPropertyCopyable,univentionUDMPropertyDefault,univentionUDMPropertyDeleteObjectClass,univentionUDMPropertyDoNotSearch,univentionUDMPropertyHook,univentionUDMPropertyLayoutOverwritePosition,univentionUDMPropertyLayoutOverwriteTab,univentionUDMPropertyLayoutPosition,univentionUDMPropertyLayoutTabAdvanced,univentionUDMPropertyLayoutTabName,univentionUDMPropertyLdapMapping,univentionUDMPropertyLongDescription,univentionUDMPropertyModule,univentionUDMPropertyMultivalue,univentionUDMPropertyObjectClass,univentionUDMPropertyOptions,univentionUDMPropertyShortDescription,univentionUDMPropertySyntax,univentionUDMPropertyTranslationLongDescription,univentionUDMPropertyTranslationShortDescription,univentionUDMPropertyTranslationTabName,univentionUDMPropertyValueMayChange,univentionUDMPropertyValueRequired,univentionUDMPropertyVersion,zoneName,univentionObjectIdentifier
 
     ucs:
       web:
@@ -1659,6 +1659,11 @@ nubusKeycloakBootstrap:
         alwaysReadFromLdap: true
       oxContextIDNum:
         alwaysReadFromLdap: true
+      univentionObjectIdentifier:
+        # This is a read-only attribute, just for openDesk 1.18.0 it will be updated.
+        # We keep it always read from LDAP to avoid any issues with the attribute being out of sync.
+        # But that can be changed to "false" with 1.19+
+        alwaysReadFromLdap: true
     twoFactorAuthentication:
       enabled: true
   config:
@@ -1747,6 +1752,9 @@ extraSecrets:
 {{- if .Values.apps.oxAppSuite.enabled }}
   - name: "ums-ox-connector-provisioning-api"
     stringData:
+      # The sequence of topics matters, as they are subscribed in the order they are listed.
+      # So independed objects must be listed before dependent objects, e.g.
+      # `shared_account_permission` before `shared_account`, as the shared account references permissions.
       registration: |-
         {
           "name": "ox-connector",
@@ -1756,8 +1764,8 @@ extraSecrets:
             {"realm": "udm", "topic": "users/user"},
             {"realm": "udm", "topic": "oxresources/oxresources"},
             {"realm": "udm", "topic": "groups/group"},
-            {"realm": "udm", "topic": "oxmail/shared_account"},
-            {"realm": "udm", "topic": "oxmail/shared_account_permission"}
+            {"realm": "udm", "topic": "oxmail/shared_account_permission"},
+            {"realm": "udm", "topic": "oxmail/shared_account"}
           ],
           "request_prefill": true,
           "password": "{{ .Values.secrets.oxConnector.provisioningApiPassword.value }}"
