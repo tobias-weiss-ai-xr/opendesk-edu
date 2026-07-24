@@ -81,6 +81,12 @@ tests/playwright/ics-*.spec.js
 # Playwright test artifacts
 test-results/
 
+# Playwright MCP browser artifacts
+.playwright-mcp/
+
+# Stale tool/report artifacts at root
+improvement-report.*
+
 # Ignore sensitive credential files
 k8up-*.yaml
 *secrets*.yaml
