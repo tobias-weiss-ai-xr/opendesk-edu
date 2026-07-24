@@ -66,6 +66,13 @@ sogo:
   # Memcached
   memcachedHost: "memcached:11211"
 
+# Values injected by parent helmfile for sync-oidc-secret-job
+global:
+  keycloak:
+    secretName: "ums-keycloak"
+    podName: "ums-keycloak-0"
+    realm: "opendesk"
+
 replicas: 1
 
 # Node selector for SOGo deployment

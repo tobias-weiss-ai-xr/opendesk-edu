@@ -136,5 +136,13 @@ data:
     export APACHE_LOCK_DIR="/var/lock/apache2"
     export APACHE_LOG_DIR="/var/log/apache2"
 
+    # Substitute OIDC client secret in sogo.conf and write to config dir
+    if [ -f /opt/sogo-config-template/sogo.conf ]; then
+      sed "s/__SOGO_OIDC_CLIENT_SECRET__/${SOGO_OPENID_CLIENT_SECRET}/g" \
+        /opt/sogo-config-template/sogo.conf > /etc/sogo/sogo.conf
+      chown sogo:sogo /etc/sogo/sogo.conf
+      chmod 644 /etc/sogo/sogo.conf
+    fi
+
     echo "Starting supervisord..."
     exec /usr/bin/supervisord -c /opt/custom-entrypoint/supervisord.conf

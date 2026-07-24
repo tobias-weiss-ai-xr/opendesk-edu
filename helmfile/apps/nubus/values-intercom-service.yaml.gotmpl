@@ -109,10 +109,10 @@ ics:
     audience: "opendesk-ilias"
   {{- end }}
   image:
-  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
-  registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.intercom.registry | quote }}
-  repository: {{ .Values.images.intercom.repository | quote }}
-  tag: {{ .Values.images.intercom.tag | quote }}
+    pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+    registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.intercom.registry | quote }}
+    repository: {{ .Values.images.intercom.repository | quote }}
+    tag: {{ .Values.images.intercom.tag | quote }}
 
 ingress:
   host: "{{ .Values.global.hosts.intercomService }}.{{ .Values.global.domain }}"
