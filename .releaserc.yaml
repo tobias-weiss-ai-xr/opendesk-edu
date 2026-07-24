@@ -6,12 +6,14 @@ hooks:
     - python3 scripts/release/bump-charts.py
     - git add helmfile/charts/*/Chart.yaml
     - git commit -m "chore(release): bump chart versions [skip ci]" || true
-    - git push origin main 2>/dev/null || echo "push skipped (no auth)"
   post:
     - |
-      for remote in github opencode-de; do
-        git push "$remote" main --tags 2>/dev/null || echo "warning: sync to $remote failed"
-      done
+      if git remote get-url github &>/dev/null; then
+        git push github main --tags 2>/dev/null || echo "warning: sync to github failed"
+      fi
+      if git remote get-url opencode-de &>/dev/null; then
+        git push opencode-de main --tags 2>/dev/null || echo "warning: sync to opencode-de failed"
+      fi
 branches:
   - main
 ci: true
@@ -19,3 +21,4 @@ git: true
 github: false
 gitlab: false
 gitea: true
+tagPrefix: edu-v
