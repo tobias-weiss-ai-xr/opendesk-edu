@@ -1,0 +1,281 @@
+{{/*
+SPDX-FileCopyrightText: 2023-2025 Univention GmbH
+SPDX-License-Identifier: AGPL-3.0-only
+*/}}
+---
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: "Deployment"
+metadata:
+  name: {{ include "common.names.fullname" . | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
+  {{- if .Values.additionalAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+  strategy: {{ include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" .) | nindent 4 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "common.labels.standard" . | nindent 8 }}
+    spec:
+      {{- if or .Values.imagePullSecrets .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.global.imagePullSecrets }}
+        - name: {{ . | quote }}
+        {{- end }}
+        {{- range .Values.imagePullSecrets }}
+        - name: {{ . | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ include "common.names.fullname" . | quote }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+      {{- if .Values.provisioning.enabled }}
+      - name: "wait-for-keycloak-container"
+        {{- if .Values.containerSecurityContext.enabled }}
+        securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 10 }}
+        {{- end }}
+        image: "{{ coalesce .Values.provisioning.image.registry .Values.global.imageRegistry }}/{{ .Values.provisioning.image.repository }}{{ if .Values.provisioning.image.sha256 }}@sha256:{{ .Values.provisioning.image.sha256 }}{{ else }}:{{ .Values.provisioning.image.tag }}{{ end }}"
+        imagePullPolicy: {{ coalesce .Values.provisioning.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+        envFrom:
+          - configMapRef:
+              name: {{ printf "%s-provisioning-init" (include "common.names.fullname" .) }}
+        {{- with .Values.provisioning.extraEnvVars }}
+        env:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
+        command: ["wait-for-keycloak.py"]
+        {{- if .Values.resources }}
+        resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" .) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.provisioning.extraVolumeMounts }}
+        volumeMounts:
+          {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" .) | nindent 10 }}
+        {{- end }}
+      - name: "keycloak-provisioning"
+        securityContext:
+          {{- toYaml .Values.provisioning.securityContext | nindent 10 }}
+        image: "{{ coalesce .Values.provisioning.provisioningImage.registry .Values.global.imageRegistry }}/{{ .Values.provisioning.provisioningImage.repository }}{{ if .Values.provisioning.provisioningImage.sha256 }}@sha256:{{ .Values.provisioning.provisioningImage.sha256 }}{{ else }}:{{ .Values.provisioning.provisioningImage.tag }}{{ end }}"
+        imagePullPolicy: {{ coalesce .Values.provisioning.provisioningImage.pullPolicy .Values.global.imagePullPolicy | quote }}
+        command:
+          - /bin/bash
+          - -c
+          - |
+            univention-keycloak \
+            --keycloak-url $KEYCLOAK_URL \
+            --realm $KEYCLOAK_REALM \
+            --binduser $KEYCLOAK_USERNAME \
+            --bindpwdfile /credentials/keycloak.secret \
+            oidc/rp create \
+            $CLIENT_NAME \
+            --direct-access-grants \
+            --backchannel-logout-url $KEYCLOAK_APP_BASE_URL/backchannel-logout \
+            --web-origins $KEYCLOAK_APP_BASE_URL \
+            --client-secret $ICS_CLIENT_SECRET \
+            --redirect-uri $KEYCLOAK_APP_BASE_URL/callback \
+            --add-ics-mappers \
+            --backchannel-logout-revoke-session \
+            --use-refresh-tokens \
+            --backchannel-logout-session-required \
+            --token-exchange-enabled \
+            --token-exchange-refresh-token-type SAME_SESSION \
+            --pkce-code-challenge-method "" \
+            --host-fqdn $KEYCLOAK_HOST
+        envFrom:
+          - configMapRef:
+              name: {{ printf "%s-provisioning-env" (include "common.names.fullname" .) }}
+        env:
+          - name: KEYCLOAK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.provisioning.config.keycloak.auth.existingSecret "defaultNameSuffix" "keycloak-provisioning" "context" .) | quote }}
+                key: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.provisioning.config.keycloak.auth.existingSecret "key" "password") | quote }}
+          - name: ICS_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ics.oidc.existingSecret "defaultNameSuffix" "oidc" "context" .) | quote }}
+                key: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ics.oidc.existingSecret "key" "clientSecret") | quote }}
+          {{- with .Values.provisioning.extraEnvVars }}
+          {{- . | toYaml | nindent 10 }}
+          {{- end }}
+        {{- if .Values.provisioning.args }}
+        args: {{ .Values.provisioning.args }}
+        {{- end }}
+        {{- if .Values.resources }}
+        resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" .) | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+          - mountPath: "/credentials/keycloak.secret"
+            name: "keycloak-credentials-volume"
+            subPath: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.provisioning.config.keycloak.auth.existingSecret "key" "password") | quote }}
+          - name: "temp-dir"
+            mountPath: "/tmp"
+          {{- if .Values.provisioning.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" .) | nindent 10 }}
+          {{- end }}
+      {{- end }}
+      containers:
+        - name: "intercom-service"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: {{ printf "%s/%s:%s" (coalesce .Values.image.registry .Values.global.imageRegistry) .Values.image.repository .Values.image.tag | quote }}
+          imagePullPolicy: {{ coalesce .Values.image.pullPolicy .Values.global.imagePullPolicy }}
+          env:
+            {{- if .Values.ics.portal.enabled }}
+            - name: "PORTAL_API_KEY"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ics.portal.auth.existingSecret "defaultNameSuffix" "portal-central-navigation" "context" .) | quote }}
+                  key: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ics.portal.auth.existingSecret "key" "sharedSecret") | quote }}
+            {{- end }}
+            {{- if .Values.ics.matrix.enabled }}
+            - name: "MATRIX_AS_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ics.matrix.auth.existingSecret "defaultNameSuffix" "matrix" "context" .) | quote }}
+                  key: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ics.matrix.auth.existingSecret "key" "password") | quote }}
+            {{- end }}
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ics.redis.auth.existingSecret "defaultNameSuffix" "redis" "context" .) | quote }}
+                  key: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ics.redis.auth.existingSecret "key" "password") | quote }}
+            - name: "CLIENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ics.oidc.existingSecret "defaultNameSuffix" "oidc" "context" .) | quote }}
+                  key: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ics.oidc.existingSecret "key" "clientSecret") | quote }}
+            - name: "SECRET"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ics.session.existingSecret "defaultNameSuffix" "session" "context" .) | quote }}
+                  key: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ics.session.existingSecret "key" "secret") | quote }}
+             {{- if .Values.ics.redis.ssl.customca }}
+            - name: NODE_EXTRA_CA_CERTS
+              value: "{{ .Values.ics.redis.ssl.pathCA }}"
+            {{- end }}
+            {{- with .Values.extraEnvVars }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}
+          livenessProbe:
+            tcpSocket:
+              port: "http"
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          readinessProbe:
+            tcpSocket:
+              port: "http"
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          ports:
+            {{- range $key, $value := .Values.service.ports }}
+            - name: {{ $key }}
+              containerPort: {{ $value.containerPort }}
+              protocol: {{ $value.protocol }}
+            {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" .) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.ics.redis.ssl.customca }}
+            - name: "customca"
+              mountPath: "{{ .Values.ics.redis.ssl.pathCA }}"
+              subPath: rootca.pem
+              readOnly: true
+            {{- end  }}
+            {{- if .Values.ics.redis.ssl.mTLS.enabled }}
+            - name: "redis-client-cert"
+              mountPath: "/app/client-cert.pem"
+              subPath: client-cert.pem
+              readOnly: true
+            {{- end  }}
+            {{- if .Values.ics.redis.ssl.mTLS.enabled }}
+            - name: "redis-client-key"
+              mountPath: "/app/client-key.pem"
+              subPath: client-key.pem
+              readOnly: true
+            {{- end  }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
+            {{- end }}
+      volumes:
+        {{- if .Values.provisioning.enabled }}
+        - name: "wait-for-keycloak"
+          configMap:
+            name: {{ printf "%s-provisioning-init" (include "common.names.fullname" .) }}
+        - name: "keycloak-credentials-volume"
+          secret:
+            secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.provisioning.config.keycloak.auth.existingSecret "defaultNameSuffix" "keycloak-provisioning" "context" .) | quote }}
+        {{- end }}
+        - name: "temp-dir"
+          emptyDir:
+            sizeLimit: "20Mi"
+        {{- if .Values.ics.redis.ssl.customca }}
+        - name: "customca"
+          configMap:
+            name: {{ printf "%s-redis-ssl" (include "common.names.fullname" .) }}
+        {{- end }}
+        {{- if .Values.ics.redis.ssl.mTLS.enabled }}
+        - name: "redis-client-key"
+          secret:
+            secretName: {{ tpl .Values.ics.redis.ssl.mTLS.existingSecret.name . }}
+            items:
+              - key: tls.key
+                path: client-key.pem
+        {{- end }}
+        {{- if .Values.ics.redis.ssl.mTLS.enabled }}
+        - name: "redis-client-cert"
+          secret:
+            secretName: {{ tpl .Values.ics.redis.ssl.mTLS.existingSecret.name . }}
+            items:
+              - key: tls.crt
+                path: client-cert.pem
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes  "context" .) | nindent 8 }}
+        {{- end }}
+
+...

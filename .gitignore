@@ -94,3 +94,4 @@ k8up-*.yaml
 *.key
 *.crt
 *.p12
+!*secrets*.enc.yaml

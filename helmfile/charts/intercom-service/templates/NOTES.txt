@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+Thank you for installing intercom service 🎉
+
+{{- if .Values.ingress.enabled }}
+You can access it via http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.host }}{{ .Values.ingress.path }}
+{{- end }}
