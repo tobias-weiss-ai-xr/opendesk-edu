@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "accountLifecycle": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "schedule": { "type": "string", "default": "0 2 * * *" },
+        "suspendAfterDays": { "type": "integer", "minimum": 1 },
+        "deleteAfterDays": { "type": "integer", "minimum": 1 },
+        "notifyBeforeDays": { "type": "integer", "minimum": 1 },
+        "batchSize": { "type": "integer", "minimum": 1, "default": 100 },
+        "ldap": {
+          "type": "object",
+          "properties": {
+            "suspendAttribute": { "type": "string" },
+            "suspendValue": { "type": "string" }
+          }
+        },
+        "suspendEmail": {
+          "type": "object",
+          "properties": {
+            "subject": { "type": "string" },
+            "template": { "type": "string" }
+          }
+        }
+      }
+    },
+    "guestLecturers": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "schedule": { "type": "string", "default": "0 3 * * *" },
+        "expirationDays": { "type": "integer", "minimum": 1 },
+        "notifyBeforeDays": { "type": "integer", "minimum": 1 },
+        "autoDelete": { "type": "boolean", "default": false },
+        "defaultRole": { "type": "string" }
+      }
+    },
+    "semesterEnrollment": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "schedule": { "type": "string", "default": "0 4 * * *" },
+        "api": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string", "format": "uri" },
+            "timeout": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "courseMapping": {
+          "type": "object",
+          "properties": {
+            "prefix": { "type": "string" },
+            "defaultRole": { "type": "string" },
+            "syncInstructors": { "type": "boolean" }
+          }
+        },
+        "enrollment": {
+          "type": "object",
+          "properties": {
+            "createUsers": { "type": "boolean" },
+            "userOu": { "type": "string" },
+            "defaultPassword": { "type": "string" },
+            "sendWelcomeEmail": { "type": "boolean" },
+            "welcomeEmail": {
+              "type": "object",
+              "properties": {
+                "subject": { "type": "string" },
+                "template": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "events": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z]+$": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": { "type": "string", "format": "uri" },
+                  "method": { "type": "string", "enum": ["GET", "POST", "PUT", "DELETE"] },
+                  "headers": { "type": "object" },
+                  "retryCount": { "type": "integer", "minimum": 0 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ldap": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "url": { "type": "string" },
+        "baseDn": { "type": "string" },
+        "bindDn": { "type": "string" },
+        "bindPassword": { "type": "string" },
+        "userBaseDn": { "type": "string" },
+        "groupBaseDn": { "type": "string" },
+        "userFilter": { "type": "string" },
+        "groupFilter": { "type": "string" }
+      }
+    },
+    "bootstrap": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "adminUsers": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "users": { "type": "array" }
+          }
+        },
+        "demoData": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "organizations": { "type": "array" },
+            "users": { "type": "array" },
+            "courses": { "type": "array" }
+          }
+        }
+      }
+    }
+  }
+}
