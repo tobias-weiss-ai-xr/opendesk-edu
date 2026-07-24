@@ -1,6 +1,7 @@
 ---
 title: "Reclaim Your Digital Sovereignty: The openDesk Edu Open-Source Ecosystem for European Educational Institutions"
 description: "How openDesk Edu helps universities break free from vendor lock-in, reduce costs by 80-90%, ensure GDPR compliance, and deploy a production-ready ecosystem of 25 integrated open-source services."
+image: "images/teaser-digital-sovereignty.svg"
 date: 2026-06-27
 tags: [digital-sovereignty, gdpr, open-source, education, kubernetes, vendor-lockin, german-higher-education]
 author: "Tobias Weiß and openDesk Edu Contributors"

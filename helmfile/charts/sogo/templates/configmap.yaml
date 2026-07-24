@@ -23,16 +23,6 @@ data:
     SOGoLanguage: {{ .Values.sogo.language }}
     SOGoTimeZone: "{{ .Values.sogo.timezone }}"
     SOGoMailDomain: "{{ .Values.sogo.mailDomain }}"
-    {{- if .Values.sogo.oidc.enabled }}
-    SOGoAuthenticationType: openid
-    SOGoXSRFValidationEnabled: false
-    SOGoOpenIdConfigUrl: "{{ .Values.sogo.oidc.configUrl }}"
-    SOGoOpenIdClient: "{{ .Values.sogo.oidc.clientId }}"
-    SOGoOpenIdScope: "{{ .Values.sogo.oidc.scope }}"
-    SOGoOpenIdEnableRefreshToken: true
-    SOGoOpenIdTokenCheckInterval: 3600
-    SOGoOpenIdLogoutEnabled: true
-    {{- end }}
     WOWorkersCount: 5
     SOGoPageTitle: "{{ .Values.sogo.pageTile }}"
     SOGoVacationEnabled: true

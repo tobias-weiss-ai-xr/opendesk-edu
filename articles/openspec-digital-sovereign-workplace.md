@@ -1,6 +1,7 @@
 ---
 title: "OpenSpec for the Digital Sovereign Workplace"
 description: "How the openDesk Edu OpenSpec methodology enables organizations to build fully sovereign digital workplaces using integrated open-source ecosystems."
+image: "images/teaser-openspec.svg"
 date: 2026-06-27
 tags: [digital-sovereignty, gdpr, open-source, openspec, workplace, vendor-lockin]
 author: "Tobias Weiß and openDesk Edu Contributors"
