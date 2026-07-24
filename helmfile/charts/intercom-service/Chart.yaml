@@ -1,9 +1,5 @@
 apiVersion: v2
 appVersion: "1.4"
-dependencies:
-- name: nubus-common
-  repository: oci://artifacts.software-univention.de/nubus/charts
-  version: ^0.11.x
 description: intercom service, short ICS, is used to allow inter component API usage
   from the user's webbrowser
 keywords:
