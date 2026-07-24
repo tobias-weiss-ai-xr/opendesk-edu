@@ -62,7 +62,7 @@ steps:
     image: python:3.12-slim
     depends_on: []
     commands:
-      - cd scripts/semester-provisioning && pip install pytest httpx
+      - cd scripts/semester-provisioning && pip install pytest -r requirements.txt
       - cd scripts/semester-provisioning && python -m pytest tests/ -v
     when:
       - matrix:
