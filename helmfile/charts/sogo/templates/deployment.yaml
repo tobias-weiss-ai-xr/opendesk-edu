@@ -69,11 +69,13 @@ spec:
           env:
             - name: SOGO_DEFAULT_ENCODING
               value: "UTF-8"
+            {{- if .Values.sogo.oidc.enabled }}
             - name: SOGO_OPENID_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "sogo.fullname" . }}
+                  name: {{ include "sogo.fullname" . }}-oidc
                   key: oidc-client-secret
+            {{- end }}
             - name: VIEWSO_PATH
               value: "/var/run/sogo"
           envFrom:
