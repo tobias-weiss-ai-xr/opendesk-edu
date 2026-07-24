@@ -114,6 +114,14 @@ ingress:
           pathType: Prefix
   tls: []
 
+monitoring:
+  enabled: false
+  prometheus:
+    path: /metrics
+    scrapeInterval: 30s
+    additionalLabels: {}
+    alertLabels: {}
+
 service:
   type: ClusterIP
   port: 80
