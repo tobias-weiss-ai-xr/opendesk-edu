@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 apiVersion: v2
 name: smoke-tests
 description: Periodic smoke tests for OpenDesk Edu services - verifies DNS resolution and HTTP health endpoints

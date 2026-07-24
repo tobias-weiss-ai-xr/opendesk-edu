@@ -30,3 +30,10 @@ steps:
     commands:
       - npm install -g cspell
       - cspell --config cspell.json README.md ROADMAP.md CONTRIBUTING.md docs/university-apps-concept.md docs/external-services.md docs/getting-started.md .github/ --no-progress
+
+  - name: pre-commit
+    image: python:3.12-slim
+    depends_on: []
+    commands:
+      - pip install pre-commit
+      - pre-commit run --all-files
