@@ -59,6 +59,12 @@ sogo:
 
   mailDomain: "opendesk.example.com"
 
+  persistence:
+    enabled: true
+    size: 1Gi
+    accessMode: ReadWriteOnce
+    storageClass: ""
+
   # OIDC/Keycloak SSO
   oidc:
     enabled: false
@@ -107,11 +113,6 @@ ingress:
         - path: /
           pathType: Prefix
   tls: []
-
-persistence:
-  size: 1Gi
-  accessMode: ReadWriteOnce
-  storageClass: ""
 
 service:
   type: ClusterIP

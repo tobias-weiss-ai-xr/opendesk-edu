@@ -15,6 +15,30 @@ Edu overrides CE via `ce-overrides.yaml` (disables CE's OX and Nextcloud, enable
 - `kubectl` with cluster context configured
 - Cluster access (Kubeconfig)
 
+### SOPS-encrypted Secrets
+
+edu secrets (`secrets.yaml`) are encrypted with [SOPS](https://github.com/getsops/sops) using an Age key.
+
+**Before deploying**, you need:
+
+- **SOPS CLI** installed (`pip install sops` or `brew install sops` or `go install github.com/getsops/sops/v3/cmd/sops@latest`)
+- **Age key** (`~/.config/sops/age/keys.txt`) corresponding to the public key in `.sops.yaml`
+- The public key (`age13zw40j4ax88ljk032zyd7yjr707ejce5ps5nlxmgld6ynwswnc2qcat04y`) is at `.sops-age.pub`
+
+To edit encrypted secrets:
+
+```bash
+sops helmfile/environments/edu/secrets.yaml
+```
+
+To re-encrypt after key rotation:
+
+```bash
+sops updatekeys helmfile/environments/edu/secrets.yaml
+```
+
+See `docs/developer/sops-argocd-integration.md` for ArgoCD CMP setup.
+
 ## Deploy
 
 ```bash

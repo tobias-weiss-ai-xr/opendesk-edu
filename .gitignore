@@ -81,9 +81,6 @@ tests/playwright/ics-*.spec.js
 # Playwright test artifacts
 test-results/
 
-# CE submodule (embedded repo, managed by CI/CD)
-helmfile/ce/
-
 # Ignore sensitive credential files
 k8up-*.yaml
 *secrets*.yaml
