@@ -80,7 +80,7 @@ backup_keycloak() {
     kubectl exec -n "$keycloak_namespace" "$keycloak_pod" -- \
         /opt/keycloak/bin/kcadm.sh \
         realms get \
-        --server http://localhost:8080/auth \
+        --server http://localhost:8080 \
         --realm master \
         --user admin \
         --password "${KEYCLOAK_ADMIN_PASSWORD:-admin}" \
@@ -175,6 +175,8 @@ backup_provisioning() {
     log "Backing up provisioning data..."
 
     # Backup provisioning scripts configuration
+    # NOTE: /opt/opendesk-edu/scripts/ is a host path. In K3s, mount via PVC
+    # or use kubectl cp to transfer from the semester-provisioning pod.
     tar -czf "$BACKUP_DIR/provisioning/scripts_${TIMESTAMP}.tar.gz" \
         /opt/opendesk-edu/scripts/ 2>/dev/null || \
         warn "Provisioning scripts backup failed"

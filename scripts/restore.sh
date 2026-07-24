@@ -121,14 +121,15 @@ restore_keycloak() {
     fi
 
     # Restore Keycloak database
-    if [ -f "$backup_dir/keycloak/keycloak_db_*.sql" ]; then
-        log "Restoring Keycloak database..."
+    local keycloak_files=( "$backup_dir"/keycloak/keycloak_db_*.sql )
+    if [ ${#keycloak_files[@]} -gt 0 ] && [ -f "${keycloak_files[0]}" ]; then
+        log "Restoring Keycloak database from ${keycloak_files[0]}..."
         kubectl exec -n "$keycloak_namespace" "$keycloak_pod" -- \
             bash -c "dropdb -U keycloak keycloak 2>/dev/null; createdb -U keycloak keycloak" 2>/dev/null || \
             warn "Database recreation failed, continuing..."
 
         kubectl exec -n "$keycloak_namespace" -i "$keycloak_pod" -- \
-            bash -c "psql -U keycloak keycloak" < "$backup_dir/keycloak/keycloak_db_*.sql" || \
+            bash -c "psql -U keycloak keycloak" < "${keycloak_files[0]}" || \
             error "Keycloak database restore failed"
     else
         warn "Keycloak database backup not found"
@@ -152,24 +153,26 @@ restore_ilias() {
     fi
 
     # Restore ILIAS database
-    if [ -f "$backup_dir/services/ilias_db_*.sql" ]; then
-        log "Restoring ILIAS database..."
+    local ilias_db_files=( "$backup_dir"/services/ilias_db_*.sql )
+    if [ ${#ilias_db_files[@]} -gt 0 ] && [ -f "${ilias_db_files[0]}" ]; then
+        log "Restoring ILIAS database from ${ilias_db_files[0]}..."
         kubectl exec -n "$ilias_namespace" "$ilias_pod" -- \
             bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} -e 'DROP DATABASE IF EXISTS ilias; CREATE DATABASE ilias;'" 2>/dev/null || \
             warn "ILIAS database recreation failed"
 
         kubectl exec -n "$ilias_namespace" -i "$ilias_pod" -- \
-            bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} ilias" < "$backup_dir/services/ilias_db_*.sql" || \
+            bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} ilias" < "${ilias_db_files[0]}" || \
             error "ILIAS database restore failed"
     else
         warn "ILIAS database backup not found"
     fi
 
     # Restore ILIAS data directory
-    if [ -f "$backup_dir/services/ilias_data_*.tar.gz" ]; then
-        log "Restoring ILIAS data directory..."
+    local ilias_data_files=( "$backup_dir"/services/ilias_data_*.tar.gz )
+    if [ ${#ilias_data_files[@]} -gt 0 ] && [ -f "${ilias_data_files[0]}" ]; then
+        log "Restoring ILIAS data directory from ${ilias_data_files[0]}..."
         kubectl exec -n "$ilias_namespace" -i "$ilias_pod" -- \
-            tar -xzf - < "$backup_dir/services/ilias_data_*.tar.gz" || \
+            tar -xzf - < "${ilias_data_files[0]}" || \
             warn "ILIAS data restore failed"
     fi
 
@@ -191,24 +194,26 @@ restore_moodle() {
     fi
 
     # Restore Moodle database
-    if [ -f "$backup_dir/services/moodle_db_*.sql" ]; then
-        log "Restoring Moodle database..."
+    local moodle_db_files=( "$backup_dir"/services/moodle_db_*.sql )
+    if [ ${#moodle_db_files[@]} -gt 0 ] && [ -f "${moodle_db_files[0]}" ]; then
+        log "Restoring Moodle database from ${moodle_db_files[0]}..."
         kubectl exec -n "$moodle_namespace" "$moodle_pod" -- \
             bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} -e 'DROP DATABASE IF EXISTS moodle; CREATE DATABASE moodle;'" 2>/dev/null || \
             warn "Moodle database recreation failed"
 
         kubectl exec -n "$moodle_namespace" -i "$moodle_pod" -- \
-            bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} moodle" < "$backup_dir/services/moodle_db_*.sql" || \
+            bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} moodle" < "${moodle_db_files[0]}" || \
             error "Moodle database restore failed"
     else
         warn "Moodle database backup not found"
     fi
 
     # Restore Moodle data directory
-    if [ -f "$backup_dir/services/moodle_data_*.tar.gz" ]; then
-        log "Restoring Moodle data directory..."
+    local moodle_data_files=( "$backup_dir"/services/moodle_data_*.tar.gz )
+    if [ ${#moodle_data_files[@]} -gt 0 ] && [ -f "${moodle_data_files[0]}" ]; then
+        log "Restoring Moodle data directory from ${moodle_data_files[0]}..."
         kubectl exec -n "$moodle_namespace" -i "$moodle_pod" -- \
-            tar -xzf - < "$backup_dir/services/moodle_data_*.tar.gz" || \
+            tar -xzf - < "${moodle_data_files[0]}" || \
             warn "Moodle data restore failed"
     fi
 
@@ -230,24 +235,26 @@ restore_nextcloud() {
     fi
 
     # Restore Nextcloud database
-    if [ -f "$backup_dir/services/nextcloud_db_*.sql" ]; then
-        log "Restoring Nextcloud database..."
+    local nextcloud_db_files=( "$backup_dir"/services/nextcloud_db_*.sql )
+    if [ ${#nextcloud_db_files[@]} -gt 0 ] && [ -f "${nextcloud_db_files[0]}" ]; then
+        log "Restoring Nextcloud database from ${nextcloud_db_files[0]}..."
         kubectl exec -n "$nextcloud_namespace" "$nextcloud_pod" -- \
             bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} -e 'DROP DATABASE IF EXISTS nextcloud; CREATE DATABASE nextcloud;'" 2>/dev/null || \
             warn "Nextcloud database recreation failed"
 
         kubectl exec -n "$nextcloud_namespace" -i "$nextcloud_pod" -- \
-            bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} nextcloud" < "$backup_dir/services/nextcloud_db_*.sql" || \
+            bash -c "mariadb -u root -p\${MARIADB_ROOT_PASSWORD} nextcloud" < "${nextcloud_db_files[0]}" || \
             error "Nextcloud database restore failed"
     else
         warn "Nextcloud database backup not found"
     fi
 
     # Restore Nextcloud data directory
-    if [ -f "$backup_dir/services/nextcloud_data_*.tar.gz" ]; then
-        log "Restoring Nextcloud data directory..."
+    local nextcloud_data_files=( "$backup_dir"/services/nextcloud_data_*.tar.gz )
+    if [ ${#nextcloud_data_files[@]} -gt 0 ] && [ -f "${nextcloud_data_files[0]}" ]; then
+        log "Restoring Nextcloud data directory from ${nextcloud_data_files[0]}..."
         kubectl exec -n "$nextcloud_namespace" -i "$nextcloud_pod" -- \
-            tar -xzf - < "$backup_dir/services/nextcloud_data_*.tar.gz" || \
+            tar -xzf - < "${nextcloud_data_files[0]}" || \
             warn "Nextcloud data restore failed"
     fi
 
@@ -261,18 +268,20 @@ restore_provisioning() {
     log "Restoring provisioning data..."
 
     # Restore provisioning scripts
-    if [ -f "$backup_dir/provisioning/scripts_*.tar.gz" ]; then
-        log "Restoring provisioning scripts..."
-        tar -xzf "$backup_dir/provisioning/scripts_*.tar.gz" -C /opt/ 2>/dev/null || \
+    local scripts_files=( "$backup_dir"/provisioning/scripts_*.tar.gz )
+    if [ ${#scripts_files[@]} -gt 0 ] && [ -f "${scripts_files[0]}" ]; then
+        log "Restoring provisioning scripts from ${scripts_files[0]}..."
+        tar -xzf "${scripts_files[0]}" -C /opt/ 2>/dev/null || \
             warn "Provisioning scripts restore failed"
     else
         warn "Provisioning scripts backup not found"
     fi
 
     # Restore provisioning archives
-    if [ -f "$backup_dir/provisioning/archives_*.tar.gz" ]; then
-        log "Restoring provisioning archives..."
-        tar -xzf "$backup_dir/provisioning/archives_*.tar.gz" -C /var/lib/ 2>/dev/null || \
+    local archives_files=( "$backup_dir"/provisioning/archives_*.tar.gz )
+    if [ ${#archives_files[@]} -gt 0 ] && [ -f "${archives_files[0]}" ]; then
+        log "Restoring provisioning archives from ${archives_files[0]}..."
+        tar -xzf "${archives_files[0]}" -C /var/lib/ 2>/dev/null || \
             warn "Provisioning archives restore failed"
     else
         warn "Provisioning archives backup not found"
@@ -287,7 +296,8 @@ restore_helm() {
 
     log "Restoring Helm releases..."
 
-    if [ -f "$backup_dir/helm/releases_*.json" ]; then
+    local helm_files=( "$backup_dir"/helm/releases_*.json )
+    if [ ${#helm_files[@]} -gt 0 ] && [ -f "${helm_files[0]}" ]; then
         log "Restoring Helm release values..."
         # Note: This doesn't restore releases, only their values
         # Full Helm restore requires manual intervention
