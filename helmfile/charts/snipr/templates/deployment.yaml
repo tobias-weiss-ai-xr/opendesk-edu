@@ -129,7 +129,7 @@ spec:
             {{- toYaml .Values.snipr.web.resources | nindent 12 }}
       {{- if .Values.snipr.ffmpeg.enabled }}
         - name: ffmpeg-sidecar
-          image: "jrottenberg/ffmpeg:latest"
+          image: "jrottenberg/ffmpeg:7.1"
           imagePullPolicy: IfNotPresent
           command: ["sh", "-c", "while true; do sleep 3600; done"]
           resources:

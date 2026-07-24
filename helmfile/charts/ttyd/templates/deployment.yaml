@@ -17,7 +17,7 @@ spec:
       {{- if .Values.opencloud.enabled }}
       initContainers:
         - name: volume-init
-          image: busybox:latest
+          image: busybox:1.37
           command:
             - sh
             - -c
