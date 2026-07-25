@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v2
+name: stalwart
+description: A Helm chart for Stalwart Mail Server
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
+kubeVersion: ">=1.25.0"
+keywords:
+  - mail
+  - imap
+  - smtp
+  - pop3
+  - stalwart
+maintainers:
+  - name: openDesk Edu Contributors
+    url: https://opendesk.edu

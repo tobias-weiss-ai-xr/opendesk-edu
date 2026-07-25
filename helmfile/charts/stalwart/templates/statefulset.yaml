@@ -1,0 +1,176 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "stalwart.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "stalwart.labels" . | nindent 4 }}
+  {{- with .Values.additionalAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.stalwart.replicaCount }}
+  serviceName: {{ include "stalwart.fullname" . }}
+  podManagementPolicy: OrderedReady
+  selector:
+    matchLabels:
+      {{- include "stalwart.selectorLabels" . | nindent 6 }}
+  updateStrategy:
+    type: {{ .Values.stalwart.strategy.type }}
+    {{- if eq .Values.stalwart.strategy.type "RollingUpdate" }}
+    rollingUpdate:
+      maxSurge: {{ .Values.stalwart.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.stalwart.strategy.rollingUpdate.maxUnavailable }}
+    {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "stalwart.labels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "stalwart.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ .Values.stalwart.serviceAccount.name | default (include "stalwart.fullname" .) }}
+      securityContext:
+        fsGroup: {{ .Values.stalwart.podSecurityContext.fsGroup }}
+        runAsUser: {{ .Values.stalwart.podSecurityContext.runAsUser }}
+        runAsGroup: {{ .Values.stalwart.podSecurityContext.runAsGroup }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- if .Values.stalwart.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.stalwart.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if .Values.stalwart.tolerations }}
+      tolerations:
+        {{- toYaml .Values.stalwart.tolerations | nindent 8 }}
+      {{- end }}
+      {{- if .Values.stalwart.affinity }}
+      affinity:
+        {{- toYaml .Values.stalwart.affinity | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: stalwart
+          image: {{ include "stalwart.image" . }}
+          imagePullPolicy: {{ coalesce .Values.stalwart.image.pullPolicy .Values.global.imagePullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: {{ .Values.stalwart.containerSecurityContext.allowPrivilegeEscalation }}
+            runAsNonRoot: {{ .Values.stalwart.containerSecurityContext.runAsNonRoot }}
+            readOnlyRootFilesystem: {{ .Values.stalwart.containerSecurityContext.readOnlyRootFilesystem }}
+            seccompProfile:
+              type: {{ .Values.stalwart.containerSecurityContext.seccompProfile.type }}
+            capabilities:
+              drop:
+                {{- range .Values.stalwart.containerSecurityContext.capabilities.drop }}
+                - {{ . }}
+                {{- end }}
+          ports:
+            - name: smtp
+              containerPort: 25
+              protocol: TCP
+            - name: smtp-submission
+              containerPort: 587
+              protocol: TCP
+            - name: smtp-submissions
+              containerPort: 465
+              protocol: TCP
+            - name: imap
+              containerPort: 143
+              protocol: TCP
+            - name: imap-tls
+              containerPort: 993
+              protocol: TCP
+            - name: pop3
+              containerPort: 110
+              protocol: TCP
+            - name: pop3-tls
+              containerPort: 995
+              protocol: TCP
+            - name: sieve
+              containerPort: 4190
+              protocol: TCP
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            {{- if .Values.stalwart.tls.enabled }}
+            {{- if .Values.stalwart.tls.certificate.certPath }}
+            - name: STALWART_TLS_CERT
+              value: {{ .Values.stalwart.tls.certificate.certPath | quote }}
+            - name: STALWART_TLS_KEY
+              value: {{ .Values.stalwart.tls.certificate.keyPath | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- toYaml .Values.extraEnvVars | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "stalwart.configmap" . }}
+          volumeMounts:
+            - name: data
+              mountPath: /opt/stalwart/data
+            - name: logs
+              mountPath: /opt/stalwart/logs
+            - name: config
+              mountPath: /opt/stalwart/etc/config.toml
+              subPath: config.toml
+              readOnly: true
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+          {{- if .Values.stalwart.healthCheck.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.stalwart.healthCheck.path }}
+              port: {{ .Values.stalwart.healthCheck.port }}
+            initialDelaySeconds: {{ .Values.stalwart.healthCheck.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.stalwart.healthCheck.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.stalwart.healthCheck.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.stalwart.healthCheck.liveness.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.stalwart.healthCheck.path }}
+              port: {{ .Values.stalwart.healthCheck.port }}
+            initialDelaySeconds: {{ .Values.stalwart.healthCheck.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.stalwart.healthCheck.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.stalwart.healthCheck.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.stalwart.healthCheck.readiness.failureThreshold }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.stalwart.healthCheck.path }}
+              port: {{ .Values.stalwart.healthCheck.port }}
+            initialDelaySeconds: {{ .Values.stalwart.healthCheck.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.stalwart.healthCheck.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.stalwart.healthCheck.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.stalwart.healthCheck.startup.failureThreshold }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.stalwart.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "stalwart.configmap" . }}
+            defaultMode: 0644
+        - name: data
+        {{- if .Values.stalwart.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "stalwart.pvc" . }}
+        {{- else }}
+          emptyDir:
+            sizeLimit: 1Gi
+        {{- end }}
+        - name: logs
+          emptyDir:
+            sizeLimit: 512Mi
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}

@@ -102,9 +102,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "rstudio.fullname" . }}-workspace
           {{- else }}
-          emptyDir: {}
-          {{- end }}
+          emptyDir: { sizeLimit: "256Mi" }
+        {{- end }}
         {{- if .Values.opencloud.enabled }}
         - name: opencloud
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }
         {{- end }}

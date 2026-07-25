@@ -1,0 +1,282 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# =============================================================================
+# STALWART MAIL SERVER CONFIGURATION
+# =============================================================================
+stalwart:
+  # Image configuration
+  image:
+    registry: ""
+    repository: stalwartlabs/stalwart
+    tag: "0.0.1"
+    pullPolicy: IfNotPresent
+
+  # Deployment scaling
+  replicaCount: 1
+
+  # Rolling update strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  # =========================================================================
+  # RESOURCE REQUIREMENTS
+  # =========================================================================
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+  # Pod security context
+  podSecurityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+    runAsGroup: 1000
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
+
+  # Scheduling
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  # =========================================================================
+  # LISTENER CONFIGURATION
+  # =========================================================================
+  listeners:
+    smtp:
+      bind: "[::]:25"
+      protocol: smtp
+    submission:
+      bind: "[::]:587"
+      protocol: submission
+    submissions:
+      bind: "[::]:465"
+      protocol: submissions
+      tls:
+        implicit: true
+    imap:
+      bind: "[::]:143"
+      protocol: imap
+    imaptls:
+      bind: "[::]:993"
+      protocol: imap
+      tls:
+        implicit: true
+    pop3:
+      bind: "[::]:110"
+      protocol: pop3
+    pop3s:
+      bind: "[::]:995"
+      protocol: pop3
+      tls:
+        implicit: true
+    sieve:
+      bind: "[::]:4190"
+      protocol: sieve
+    http:
+      bind: "[::]:8080"
+      protocol: http
+
+  # =========================================================================
+  # TLS CONFIGURATION (optional, for listeners with implicit TLS)
+  # =========================================================================
+  tls:
+    enabled: true
+    certificate:
+      # Provide paths to cert and key within the container
+      # If using Kubernetes TLS secrets, mount them via extraVolumes/extraVolumeMounts
+      certPath: ""
+      keyPath: ""
+
+  # =========================================================================
+  # STORAGE (RocksDB)
+  # =========================================================================
+  storage:
+    type: rocksdb
+    dataPath: /opt/stalwart/data
+    # Optional: blob storage configuration
+    blob:
+      type: rocksdb
+      path: ""
+
+  # =========================================================================
+  # DIRECTORY (Internal by default, can be LDAP later)
+  # =========================================================================
+  directory:
+    type: internal
+    ldap:
+      host: ""
+      port: 389
+      baseDn: ""
+      bindDn: ""
+      bindPassword: ""
+      tls:
+        enabled: false
+
+  # =========================================================================
+  # AUTHENTICATION
+  # =========================================================================
+  auth:
+    # Fallback admin user (SHA-512 crypt hash)
+    # Generate with: openssl passwd -6
+    fallbackAdmin:
+      username: admin
+      # -- SHA-512 crypt hash of the admin password
+      passwordHash: ""
+      # description: "Server administrator"
+      description: ""
+
+    # OIDC authentication (optional)
+    oidc:
+      enabled: false
+      issuerUrl: ""
+      clientId: ""
+      clientSecret: ""
+      scope: "openid profile email"
+
+  # =========================================================================
+  # LOGGING
+  # =========================================================================
+  logging:
+    level: info
+    type: daily
+    path: /opt/stalwart/logs/stalwart.log
+    retentionDays: 30
+
+  # =========================================================================
+  # RATE LIMITING & SECURITY
+  # =========================================================================
+  rateLimit:
+    enabled: true
+    maxMessagesPerSession: 100
+    maxRecipientsPerMessage: 100
+    maxConnectionsPerIp: 50
+
+  # =========================================================================
+  # HEALTH CHECKS
+  # =========================================================================
+  healthCheck:
+    enabled: true
+    path: /api/health
+    port: 8080
+    liveness:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+    readiness:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    startup:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 5
+      failureThreshold: 60
+
+  # =========================================================================
+  # PERSISTENCE
+  # =========================================================================
+  persistence:
+    enabled: true
+    size: 10Gi
+    accessMode: ReadWriteOnce
+    storageClass: ""
+
+  # =========================================================================
+  # INGRESS CONFIGURATION (for HTTP admin API only)
+  # =========================================================================
+  ingress:
+    enabled: false
+    ingressClassName: "haproxy"
+    hostname: ""
+    annotations: {}
+    tls:
+      enabled: true
+      secretName: ""
+
+  # =========================================================================
+  # SERVICE CONFIGURATION
+  # =========================================================================
+  service:
+    type: ClusterIP
+    annotations: {}
+    sessionAffinity:
+      enabled: false
+      timeoutSeconds: 10800
+
+  # =========================================================================
+  # NETWORK POLICY
+  # =========================================================================
+  networkPolicy:
+    enabled: true
+
+  # =========================================================================
+  # SERVICE ACCOUNT
+  # =========================================================================
+  serviceAccount:
+    create: true
+    name: ""
+    annotations: {}
+    automountServiceAccountToken: false
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: false
+    minAvailable: 1
+
+# =============================================================================
+# GLOBAL CONFIGURATION
+# =============================================================================
+global:
+  imageRegistry: ""
+  imagePullPolicy: null
+  imagePullSecrets: []
+
+# -- Additional custom annotations to add to all deployed objects.
+additionalAnnotations: {}
+
+# -- Additional custom labels to add to all deployed objects.
+additionalLabels: {}
+
+# -- String to partially override release name.
+nameOverride: ""
+
+# -- String to fully override release name.
+fullnameOverride: ""
+
+# -- Pod Annotations.
+podAnnotations: {}
+
+# -- Pod Labels.
+podLabels: {}
+
+# -- Optionally specify an extra list of additional volumes.
+extraVolumes: []
+
+# -- Optionally specify an extra list of additional volumeMounts.
+extraVolumeMounts: []
+
+# -- Array with extra environment variables to add to the container.
+extraEnvVars: []
+
+# -- In seconds, the time given to the pod to terminate gracefully.
+terminationGracePeriodSeconds: 30

@@ -14,6 +14,10 @@ spec:
       labels:
         {{- include "ttyd.selectorLabels" . | nindent 8 }}
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       {{- if .Values.opencloud.enabled }}
       initContainers:
         - name: volume-init
@@ -88,6 +92,6 @@ spec:
       {{- if .Values.opencloud.enabled }}
       volumes:
         - name: opencloud
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }
       {{- end }}
 
