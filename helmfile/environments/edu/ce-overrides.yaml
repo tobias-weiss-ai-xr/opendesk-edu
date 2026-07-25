@@ -30,6 +30,8 @@ apps:
     enabled: true               # Alternative groupware, not first-class
   semesterProvisioning:
     enabled: true
+  stalwart:
+    enabled: true
 
 # Edu-specific global config
 global:
@@ -84,29 +86,29 @@ functional:
           clientId: "opendesk-opencloud"
           protocol: "openid-connect"
           clientAuthenticatorType: "client-secret"
-          secret: {{ .Values.secrets.keycloak.clientSecret.opencloud | quote }}
+          secret: "changeme-replace-with-actual-secret"
           redirectUris:
-            - "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/*"
-            - "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
+            - "https://files.opendesk.hrz.uni-marburg.de/*"
+            - "https://portal.opendesk.hrz.uni-marburg.de/*"
           consentRequired: false
           frontchannelLogout: true
           publicClient: false
           authorizationServicesEnabled: false
           attributes:
             backchannel.logout.session.required: true
-            backchannel.logout.url: "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/backchannel_logout"
-            post.logout.redirect.uris: "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
+            backchannel.logout.url: "https://files.opendesk.hrz.uni-marburg.de/backchannel_logout"
+            post.logout.redirect.uris: "https://files.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*"
           defaultClientScopes:
             - "opendesk-opencloud-scope"
         - name: "ilias-saml"
           clientId: "ilias-saml"
           protocol: "saml"
           clientAuthenticatorType: "client-secret"
-          secret: {{ .Values.secrets.keycloak.clientSecret.iliasSaml | quote }}
+          secret: "changeme-replace-with-actual-secret"
           redirectUris:
-            - "https://lms.{{ .Values.global.domain }}/*"
-          rootUrl: "https://lms.{{ .Values.global.domain }}"
-          adminUrl: "https://lms.{{ .Values.global.domain }}"
+            - "https://lms.opendesk.hrz.uni-marburg.de/*"
+          rootUrl: "https://lms.opendesk.hrz.uni-marburg.de"
+          adminUrl: "https://lms.opendesk.hrz.uni-marburg.de"
           consentRequired: false
           frontchannelLogout: true
           publicClient: false
@@ -121,7 +123,7 @@ functional:
             saml.client.signature: "false"
             saml.authnstatement: "true"
             saml_name_id_format: "persistent"
-            frontchannel.logout.url: "https://lms.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+            frontchannel.logout.url: "https://lms.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout"
           protocolMappers:
             - name: "email"
               protocol: "saml"
@@ -159,11 +161,11 @@ functional:
           clientId: "moodle-saml"
           protocol: "saml"
           clientAuthenticatorType: "client-secret"
-          secret: {{ .Values.secrets.keycloak.clientSecret.moodleSaml | quote }}
+          secret: "changeme-replace-with-actual-secret"
           redirectUris:
-            - "https://moodle.{{ .Values.global.domain }}/*"
-          rootUrl: "https://moodle.{{ .Values.global.domain }}"
-          adminUrl: "https://moodle.{{ .Values.global.domain }}"
+            - "https://moodle.opendesk.hrz.uni-marburg.de/*"
+          rootUrl: "https://moodle.opendesk.hrz.uni-marburg.de"
+          adminUrl: "https://moodle.opendesk.hrz.uni-marburg.de"
           consentRequired: false
           frontchannelLogout: true
           publicClient: false
@@ -178,7 +180,7 @@ functional:
             saml.client.signature: "false"
             saml.authnstatement: "true"
             saml_name_id_format: "persistent"
-            frontchannel.logout.url: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+            frontchannel.logout.url: "https://moodle.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout"
           protocolMappers:
             - name: "email"
               protocol: "saml"
@@ -216,12 +218,12 @@ functional:
           clientId: "bbb-saml"
           protocol: "saml"
           clientAuthenticatorType: "client-secret"
-          secret: {{ .Values.secrets.keycloak.clientSecret.bbbSaml | quote }}
+          secret: "changeme-replace-with-actual-secret"
           redirectUris:
-            - "https://bbb.{{ .Values.global.domain }}/*"
-            - "https://bbb.{{ .Values.global.domain }}/auth/saml2/callback"
-          rootUrl: "https://bbb.{{ .Values.global.domain }}"
-          adminUrl: "https://bbb.{{ .Values.global.domain }}"
+            - "https://bbb.opendesk.hrz.uni-marburg.de/*"
+            - "https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback"
+          rootUrl: "https://bbb.opendesk.hrz.uni-marburg.de"
+          adminUrl: "https://bbb.opendesk.hrz.uni-marburg.de"
           consentRequired: false
           frontchannelLogout: true
           publicClient: false
@@ -236,7 +238,7 @@ functional:
             saml.client.signature: "false"
             saml.authnstatement: "true"
             saml_name_id_format: "persistent"
-            frontchannel.logout.url: "https://bbb.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+            frontchannel.logout.url: "https://bbb.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout"
           protocolMappers:
             - name: "email"
               protocol: "saml"
