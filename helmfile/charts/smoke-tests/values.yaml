@@ -101,7 +101,7 @@ extraChecks:
 # ---------------------------------------------------------------------------
 monitoring:
   enabled: true
-  namespace: opendesk
+  namespace: ""
   releaseLabel: kube-prom-stack
 
 # ---------------------------------------------------------------------------

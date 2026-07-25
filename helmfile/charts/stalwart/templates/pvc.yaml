@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.stalwart.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "stalwart.pvc" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "stalwart.labels" . | nindent 4 }}
+    backup-tier: "b"
+    k8up/backup: "true"
+spec:
+  accessModes:
+    - {{ .Values.stalwart.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.stalwart.persistence.size }}
+  {{- if .Values.stalwart.persistence.storageClass }}
+  storageClassName: {{ .Values.stalwart.persistence.storageClass }}
+  {{- end }}
+{{- end }}

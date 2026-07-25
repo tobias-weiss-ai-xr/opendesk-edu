@@ -29,8 +29,8 @@ spec:
           ports:
             - containerPort: {{ .Values.excalidraw.port }}
           securityContext:
-            runAsUser: 0
-            runAsGroup: 0
+            runAsUser: 1000
+            runAsGroup: 1000
           volumeMounts:
             - name: nginx-tmp
               mountPath: /var/cache/nginx
@@ -76,6 +76,6 @@ spec:
 {{- end }}
       volumes:
         - name: nginx-tmp
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }
         - name: nginx-run
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }

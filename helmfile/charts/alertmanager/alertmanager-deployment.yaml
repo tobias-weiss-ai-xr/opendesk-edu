@@ -100,6 +100,12 @@ spec:
           ports:
             - containerPort: 9093
               name: web
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            runAsNonRoot: true
+            runAsUser: 1000
           volumeMounts:
             - name: config
               mountPath: /etc/alertmanager
@@ -124,9 +130,10 @@ spec:
               port: web
             initialDelaySeconds: 10
             periodSeconds: 5
+      serviceAccountName: alertmanager
       volumes:
         - name: config
           configMap:
             name: alertmanager-config
         - name: storage
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }

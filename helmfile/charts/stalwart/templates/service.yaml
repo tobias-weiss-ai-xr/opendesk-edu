@@ -1,0 +1,64 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "stalwart.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "stalwart.labels" . | nindent 4 }}
+  {{- with .Values.stalwart.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.additionalAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.stalwart.service.type }}
+  {{- if .Values.stalwart.service.sessionAffinity.enabled }}
+  sessionAffinity: "ClientIP"
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: {{ .Values.stalwart.service.sessionAffinity.timeoutSeconds }}
+  {{- end }}
+  ports:
+    - name: smtp
+      port: 25
+      targetPort: smtp
+      protocol: TCP
+    - name: smtp-submission
+      port: 587
+      targetPort: smtp-submission
+      protocol: TCP
+    - name: smtp-submissions
+      port: 465
+      targetPort: smtp-submissions
+      protocol: TCP
+    - name: imap
+      port: 143
+      targetPort: imap
+      protocol: TCP
+    - name: imap-tls
+      port: 993
+      targetPort: imap-tls
+      protocol: TCP
+    - name: pop3
+      port: 110
+      targetPort: pop3
+      protocol: TCP
+    - name: pop3-tls
+      port: 995
+      targetPort: pop3-tls
+      protocol: TCP
+    - name: sieve
+      port: 4190
+      targetPort: sieve
+      protocol: TCP
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "stalwart.selectorLabels" . | nindent 4 }}

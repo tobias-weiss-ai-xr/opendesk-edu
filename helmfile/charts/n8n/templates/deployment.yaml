@@ -75,7 +75,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-n8n-data
           {{- else }}
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }
           {{- end }}
 ---
 apiVersion: v1

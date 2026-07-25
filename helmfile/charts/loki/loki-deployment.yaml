@@ -53,6 +53,7 @@ spec:
       labels:
         app: loki
     spec:
+      serviceAccountName: loki
       containers:
         - name: loki
           image: grafana/loki:3.6.7
