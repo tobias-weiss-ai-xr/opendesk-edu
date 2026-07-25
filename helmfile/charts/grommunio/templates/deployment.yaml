@@ -100,7 +100,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "grommunio.fullname" . }}-pvc
         {{- else }}
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }
         {{- end }}
         - name: grommunio-config
           configMap:

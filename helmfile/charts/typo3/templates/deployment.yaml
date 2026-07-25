@@ -108,7 +108,7 @@ spec:
           configMap:
             name: {{ .Release.Name }}-typo3-config
         - name: typo3-typo3temp
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }
 {{- if .Values.extraVolumes }}
 {{- toYaml .Values.extraVolumes | nindent 8 }}
 {{- end }}

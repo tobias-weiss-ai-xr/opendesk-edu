@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if or (not .Values.networkPolicy) .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "seaweedfs.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "seaweedfs.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "seaweedfs.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Release.Namespace }}
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: haproxy
+      ports:
+        - port: 8080
+          protocol: TCP
+        - port: 8333
+          protocol: TCP
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- include "seaweedfs.selectorLabels" . | nindent 14 }}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Release.Namespace }}
+  egress:
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- include "seaweedfs.selectorLabels" . | nindent 14 }}
+{{- end }}

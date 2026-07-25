@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+Thank you for installing {{ .Chart.Name }} {{ .Chart.Version }}.
+
+The Stalwart Mail Server has been deployed in namespace {{ .Release.Namespace }}.
+
+Service: {{ include "stalwart.fullname" . }} ({{ .Values.stalwart.service.type }})
+
+Ports:
+  SMTP:            25
+  SMTP Submission: 587
+  SMTP Submissions: 465
+  IMAP:            143
+  IMAP TLS:        993
+  POP3:            110
+  POP3 TLS:        995
+  ManageSieve:     4190
+  HTTP Admin API:  8080 (cluster-internal)
+
+Storage:
+  Data: {{ .Values.stalwart.persistence.size }} {{ .Values.stalwart.persistence.storageClass | default "default" }} PVC
+  Logs: emptyDir (512Mi limit)
+
+For configuration details, see the configmap: {{ include "stalwart.configmap" . }}

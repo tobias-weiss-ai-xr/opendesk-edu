@@ -1,0 +1,37 @@
+# Patterns to ignore when building Helm packages.
+# This file is used by `helm package` to exclude files from the chart package.
+# By default, all files in the chart directory are included.
+# https://helm.sh/docs/topics/charts/#the-helmignore-file
+
+# Editors
+*~
+*.swp
+*.swo
+*~
+
+# VCS
+.git/
+.gitignore
+.gitattributes
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# CI
+.gitlab-ci.yml
+.github/
+
+# Chart testing
+ci/
+linter_values.yaml
+
+# Other
+*.md
+UPSTREAM.md
+Dockerfile

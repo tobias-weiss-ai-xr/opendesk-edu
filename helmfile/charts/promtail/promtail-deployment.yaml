@@ -79,6 +79,9 @@ spec:
           ports:
             - containerPort: 3101
               name: http-metrics
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
           volumeMounts:
             - name: config
               mountPath: /etc/promtail

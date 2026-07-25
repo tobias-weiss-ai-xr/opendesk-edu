@@ -100,9 +100,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "code-server.fullname" . }}-workspace
           {{- else }}
-          emptyDir: {}
-          {{- end }}
+          emptyDir: { sizeLimit: "256Mi" }
+        {{- end }}
         {{- if .Values.opencloud.enabled }}
         - name: opencloud
-          emptyDir: {}
+          emptyDir: { sizeLimit: "256Mi" }
         {{- end }}

@@ -5,15 +5,15 @@
 apps:
   # Disable CE apps that edu replaces or conflicts with
   oxAppSuite:
-    enabled: false              # edu uses SOGo + Grommunio instead of OX
+    enabled: false              # edu uses SOGo instead of OX
   nextcloud:
     enabled: false              # edu uses OpenCloud instead
   seaweedfs:
     enabled: false              # edu has its own seaweedfs deployment
   dovecot:
-    enabled: false              # Grommunio handles its own mail stack
+    enabled: false              # Stalwart replaces Dovecot
   postfix:
-    enabled: false              # same
+    enabled: true               # Postfix stays as SMTP relay for SOGo + Stalwart
   # Keep nubus (UMS + Keycloak) but disable its embedded intercom-service
   # edu deploys its own intercom-service (forked chart with edu-specific fixes)
   nubus:
@@ -21,11 +21,13 @@ apps:
   # Enable SOGo (edu replaces OX with SOGo)
   sogo:
     enabled: true
+  opencloud:
+    enabled: true               # OpenCloud replaces Nextcloud
   # Edu-specific apps
   intercom:
     enabled: true
   grommunio:
-    enabled: true
+    enabled: true               # Alternative groupware, not first-class
   semesterProvisioning:
     enabled: true
 
@@ -34,12 +36,68 @@ global:
   domain: opendesk.hrz.uni-marburg.de
   mail_domain: uni-marburg.de
 
-# CE Keycloak bootstrap — inject edu SAML clients via CE's custom clients mechanism
+# CE Keycloak bootstrap — inject edu OIDC + SAML clients via CE's custom clients mechanism
 # CE reads functional.authentication.oidc.clients and injects into config.custom.clients
 functional:
   authentication:
     oidc:
+      clientScopes:
+        opendesk-opencloud-scope:
+          name: "opendesk-opencloud-scope"
+          protocol: "openid-connect"
+          protocolMappers:
+            - name: "opendesk-opencloud-uuid"
+              protocol: "openid-connect"
+              protocolMapper: "oidc-usermodel-attribute-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "uid"
+                claim.name: "opendesk_useruuid"
+                claim.value: "uid"
+                id.token.claim: "true"
+                access.token.claim: "true"
+                userinfo.token.claim: "true"
+            - name: "opendesk-opencloud-username"
+              protocol: "openid-connect"
+              protocolMapper: "oidc-usermodel-attribute-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "uid"
+                claim.name: "preferred_username"
+                claim.value: "uid"
+                id.token.claim: "true"
+                access.token.claim: "true"
+                userinfo.token.claim: "true"
+            - name: "opendesk-opencloud-email"
+              protocol: "openid-connect"
+              protocolMapper: "oidc-usermodel-attribute-mapper"
+              consentRequired: false
+              config:
+                user.attribute: "mail"
+                claim.name: "email"
+                claim.value: "mail"
+                id.token.claim: "true"
+                access.token.claim: "true"
+                userinfo.token.claim: "true"
       clients:
+        - name: "opendesk-opencloud"
+          clientId: "opendesk-opencloud"
+          protocol: "openid-connect"
+          clientAuthenticatorType: "client-secret"
+          secret: {{ .Values.secrets.keycloak.clientSecret.opencloud | quote }}
+          redirectUris:
+            - "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/*"
+            - "https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
+          consentRequired: false
+          frontchannelLogout: true
+          publicClient: false
+          authorizationServicesEnabled: false
+          attributes:
+            backchannel.logout.session.required: true
+            backchannel.logout.url: "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/backchannel_logout"
+            post.logout.redirect.uris: "https://{{ .Values.global.hosts.opencloud }}.{{ .Values.global.domain }}/*##https://{{ .Values.global.hosts.nubus }}.{{ .Values.global.domain }}/*"
+          defaultClientScopes:
+            - "opendesk-opencloud-scope"
         - name: "ilias-saml"
           clientId: "ilias-saml"
           protocol: "saml"

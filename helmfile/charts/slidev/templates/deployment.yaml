@@ -14,6 +14,10 @@ spec:
       labels:
         {{- include "slidev.selectorLabels" . | nindent 8 }}
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        fsGroup: 101
       containers:
         - name: slidev
           image: nginx:alpine
