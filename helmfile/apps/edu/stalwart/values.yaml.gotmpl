@@ -1,0 +1,177 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+stalwart:
+  image:
+    registry: docker.io
+    repository: stalwartlabs/mail-server
+    tag: v0.11
+    pullPolicy: IfNotPresent
+
+  replicaCount: 1
+
+  # OIDC Authentication - integrates with Keycloak
+  auth:
+    oidc:
+      enabled: true
+      issuerUrl: {{ printf "https://%s.%s/realms/%s" .Values.global.hosts.keycloak .Values.global.domain .Values.platform.realm | quote }}
+      clientId: stalwart
+      clientSecret: {{ .Values.secrets.keycloak.clientSecret.stalwart | default "" | quote }}
+      scope: "openid profile email"
+    
+    # Fallback admin for initial setup (SHA-512 hash)
+    # Generate with: openssl passwd -6 <password>
+    fallbackAdmin:
+      username: admin
+      passwordHash: {{ .Values.secrets.stalwart.adminPasswordHash | default "" | quote }}
+      description: "Stalwart Mail Server Administrator"
+
+  directory:
+    type: ldap
+    ldap:
+      host: "ums-ldap.{{ .Values.global.domain }}"
+      port: 636
+      baseDn: "{{ .Values.ldap.baseDn | default "dc=uni-marburg,dc=de" }}"
+      bindDn: "{{ .Values.ldap.bindDn | default "cn=admin,dc=uni-marburg,dc=de" }}"
+      bindPassword: {{ .Values.secrets.ldap.bindPassword | default "" | quote }}
+      tls:
+        enabled: true
+        skipVerify: true
+
+  listeners:
+    smtp:
+      bind: "0.0.0.0:25"
+      protocol: smtp
+    submission:
+      bind: "0.0.0.0:587"
+      protocol: smtp
+      requireAuthentication: true
+    submissions:
+      bind: "0.0.0.0:465"
+      protocol: smtp
+      requireAuthentication: true
+      tls:
+        implicit: true
+    imap:
+      bind: "0.0.0.0:143"
+      protocol: imap
+    imaptls:
+      bind: "0.0.0.0:993"
+      protocol: imap
+      tls:
+        implicit: true
+    pop3:
+      bind: "0.0.0.0:110"
+      protocol: pop3
+    pop3s:
+      bind: "0.0.0.0:995"
+      protocol: pop3
+      tls:
+        implicit: true
+    sieve:
+      bind: "0.0.0.0:4190"
+      protocol: managesieve
+    http:
+      bind: "0.0.0.0:8080"
+      protocol: http
+
+  tls:
+    enabled: true
+    certificate:
+      certPath: "/etc/ssl/certs/tls.crt"
+      keyPath: "/etc/ssl/private/tls.key"
+
+  storage:
+    type: rocksdb
+    dataPath: /opt/stalwart-mail/data
+    blob:
+      type: rocksdb
+      path: /opt/stalwart-mail/blob
+
+  logging:
+    level: info
+    type: daily
+    path: /opt/stalwart-mail/logs/stalwart.log
+    retentionDays: 30
+
+  rateLimit:
+    enabled: true
+    maxMessagesPerSession: 100
+    maxRecipientsPerMessage: 100
+    maxConnectionsPerIp: 50
+
+  healthCheck:
+    enabled: true
+    path: /api/health
+    port: 8080
+    liveness:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+    readiness:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    startup:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 5
+      failureThreshold: 60
+
+  ingress:
+    enabled: true
+    ingressClassName: "haproxy"
+    hostname: mail.{{ .Values.global.domain }}
+    annotations:
+      haproxy-ingress.github.io/ssl-redirect: "true"
+      haproxy-ingress.github.io/timeout-server: "600s"
+    tls:
+      enabled: true
+      secretName: opendesk-certificates-tls
+
+  service:
+    type: ClusterIP
+    annotations: {}
+    sessionAffinity:
+      enabled: false
+
+  persistence:
+    enabled: true
+    size: 20Gi
+    accessMode: ReadWriteOnce
+    storageClass: ceph-rbd-ssd
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+
+  podSecurityContext:
+    fsGroup: 0
+    runAsUser: 0
+    runAsGroup: 0
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: false
+    readOnlyRootFilesystem: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
+
+  networkPolicy:
+    enabled: true
+
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: false
+
+  pdb:
+    enabled: false

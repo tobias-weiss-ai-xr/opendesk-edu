@@ -28,29 +28,29 @@ spec:
       port: 25
       targetPort: smtp
       protocol: TCP
-    - name: smtp-submission
+    - name: submission
       port: 587
-      targetPort: smtp-submission
+      targetPort: submission
       protocol: TCP
-    - name: smtp-submissions
+    - name: submissions
       port: 465
-      targetPort: smtp-submissions
+      targetPort: submissions
       protocol: TCP
     - name: imap
       port: 143
       targetPort: imap
       protocol: TCP
-    - name: imap-tls
+    - name: imaps
       port: 993
-      targetPort: imap-tls
+      targetPort: imaps
       protocol: TCP
     - name: pop3
       port: 110
       targetPort: pop3
       protocol: TCP
-    - name: pop3-tls
+    - name: pop3s
       port: 995
-      targetPort: pop3-tls
+      targetPort: pop3s
       protocol: TCP
     - name: sieve
       port: 4190
