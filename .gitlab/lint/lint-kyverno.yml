@@ -4,12 +4,16 @@
 include:
   - local: "/.gitlab/lint/lint-common.yml"
 
-lint-kyverno:
+helmfile-template:
   allow_failure: false
+  artifacts:
+    paths:
+      - "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}.yaml"
+    expire_in: "1 day"
   extends: ".lint-common"
   image: "${OPENDESK_LINT_IMAGE}"
   parallel:
-    matrix:
+    matrix: &matrix
       - APP:
           - "collabora"
           - "cryptpad"
@@ -40,7 +44,62 @@ lint-kyverno:
       -e test
       --include-needs
       --skip-tests
-      > "${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
+      > "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}.yaml"
+
+
+helmfile-template-diff:
+  allow_failure: true
+  extends: ".lint-common"
+  image: "${OPENDESK_LINT_IMAGE}"
+  needs:
+    - job: "helmfile-template"
+      artifacts: true
+      parallel:
+        matrix:
+          - APP: ["$[[ matrix.APP ]]"]
+  parallel:
+    matrix: *matrix
+  rules:
+    - if: "$CI_COMMIT_BRANCH !~ 'develop|main'"
+  script:
+    - "git fetch"
+    - "git checkout develop"
+    - >
+      pushd "${CI_PROJECT_DIR}/helmfile/apps/${APP}"
+    - >
+      node /app/opendesk-ci-cli/src/index.js generate-kyverno-env
+      -d ${CI_PROJECT_DIR}/helmfile/environments
+      -x ${CI_PROJECT_DIR}/.kyverno/_overwrite.yaml
+    - "popd"
+    - >
+      helmfile template
+      -f "${CI_PROJECT_DIR}/helmfile/apps/${APP}/helmfile.yaml.gotmpl"
+      -e test
+      --include-needs
+      --skip-tests
+      > "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}-develop.yaml"
+    - >
+      diff "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}.yaml" "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}-develop.yaml"
+    - >
+      cmp "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}.yaml" "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}-develop.yaml"
+  variables:
+    GIT_STRATEGY: "clone"
+
+lint-kyverno-required:
+  allow_failure: false
+  extends: ".lint-common"
+  image: "${OPENDESK_LINT_IMAGE}"
+  needs:
+    - job: "helmfile-template"
+      artifacts: true
+      parallel:
+        matrix:
+          - APP: ["$[[ matrix.APP ]]"]
+  parallel:
+    matrix: *matrix
+  script:
+    - >
+      mv "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}.yaml" "${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
     - >
       pushd "${CI_PROJECT_DIR}/helmfile/apps/${APP}"
     - >
@@ -49,26 +108,44 @@ lint-kyverno:
     - "popd"
     - >
       pushd "${CI_PROJECT_DIR}/.kyverno"
-    # Test optional
-    - >
-      node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests
-      -d ${CI_PROJECT_DIR}/.kyverno
-      -t optional
-      -s manifest
-      -f opendesk.yaml
-      --skip-tests true
-      ${APP}
-    - |
-      if [ "${LINT_KYVERNO_STRICT}" = "true" ]; then
-        kyverno test .
-      else
-        kyverno test . || true
-      fi
-    # Test required
     - >
       node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests
       -d ${CI_PROJECT_DIR}/.kyverno
       -t required
+      -s manifest
+      -f opendesk.yaml
+      --skip-tests true
+      ${APP}
+    - "kyverno test ."
+    - "popd"
+
+lint-kyverno-prefereable:
+  allow_failure: true
+  extends: ".lint-common"
+  image: "${OPENDESK_LINT_IMAGE}"
+  needs:
+    - job: "helmfile-template"
+      artifacts: true
+      parallel:
+        matrix:
+          - APP: ["$[[ matrix.APP ]]"]
+  parallel:
+    matrix: *matrix
+  script:
+    - >
+      mv "${CI_PROJECT_DIR}/.kyverno/opendesk-${APP}.yaml" "${CI_PROJECT_DIR}/.kyverno/opendesk.yaml"
+    - >
+      pushd "${CI_PROJECT_DIR}/helmfile/apps/${APP}"
+    - >
+      node /app/opendesk-ci-cli/src/index.js remove-empty-keys
+      -f ${CI_PROJECT_DIR}/.kyverno/opendesk.yaml
+    - "popd"
+    - >
+      pushd "${CI_PROJECT_DIR}/.kyverno"
+    - >
+      node /app/opendesk-ci-cli/src/index.js generate-kyverno-tests
+      -d ${CI_PROJECT_DIR}/.kyverno
+      -t optional
       -s manifest
       -f opendesk.yaml
       --skip-tests true
