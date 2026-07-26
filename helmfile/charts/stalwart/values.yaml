@@ -35,14 +35,14 @@ stalwart:
 
   # Pod security context
   podSecurityContext:
-    fsGroup: 1000
-    runAsUser: 1000
-    runAsGroup: 1000
+    fsGroup: 0
+    runAsUser: 0
+    runAsGroup: 0
 
   containerSecurityContext:
     allowPrivilegeEscalation: false
-    runAsNonRoot: true
-    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    readOnlyRootFilesystem: false
     seccompProfile:
       type: RuntimeDefault
     capabilities:
