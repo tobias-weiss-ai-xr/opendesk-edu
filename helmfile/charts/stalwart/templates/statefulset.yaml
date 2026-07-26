@@ -76,22 +76,22 @@ spec:
             - name: smtp
               containerPort: 25
               protocol: TCP
-            - name: smtp-submission
+            - name: submission
               containerPort: 587
               protocol: TCP
-            - name: smtp-submissions
+            - name: submissions
               containerPort: 465
               protocol: TCP
             - name: imap
               containerPort: 143
               protocol: TCP
-            - name: imap-tls
+            - name: imaps
               containerPort: 993
               protocol: TCP
             - name: pop3
               containerPort: 110
               protocol: TCP
-            - name: pop3-tls
+            - name: pop3s
               containerPort: 995
               protocol: TCP
             - name: sieve
@@ -117,11 +117,11 @@ spec:
                 name: {{ include "stalwart.configmap" . }}
           volumeMounts:
             - name: data
-              mountPath: /opt/stalwart/data
+              mountPath: /opt/stalwart-mail/data
             - name: logs
-              mountPath: /opt/stalwart/logs
+              mountPath: /opt/stalwart-mail/logs
             - name: config
-              mountPath: /opt/stalwart/etc/config.toml
+              mountPath: /opt/stalwart-mail/etc/config.toml
               subPath: config.toml
               readOnly: true
             {{- if .Values.extraVolumeMounts }}
@@ -163,14 +163,19 @@ spec:
         - name: data
         {{- if .Values.stalwart.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "stalwart.pvc" . }}
+            claimName: {{ .Values.stalwart.persistence.existingClaim | default (include "stalwart.fullname" .) }}
         {{- else }}
-          emptyDir:
-            sizeLimit: 1Gi
+          emptyDir: {}
         {{- end }}
         - name: logs
           emptyDir:
-            sizeLimit: 512Mi
+            {{- if .Values.stalwart.resources.limits.memory }}
+            sizeLimit: {{ .Values.stalwart.resources.limits.memory }}
+            {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
+{{- with .Values.stalwart.nodeSelector }}
+nodeSelector:
+  {{- toYaml . | nindent 8 }}
+{{- end }}

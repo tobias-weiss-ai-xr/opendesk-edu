@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: stalwart
+    chart: ../../../charts/stalwart
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.stalwart.enabled | default true }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "stalwart"

@@ -37,6 +37,14 @@ apps:
 global:
   domain: opendesk.hrz.uni-marburg.de
   mail_domain: uni-marburg.de
+  hosts:
+    keycloak: portal
+    opencloud: files
+    stalwart: mail
+    sogo: contacts
+  
+platform:
+  realm: opendesk
 
 # CE Keycloak bootstrap — inject edu OIDC + SAML clients via CE's custom clients mechanism
 # CE reads functional.authentication.oidc.clients and injects into config.custom.clients
@@ -100,6 +108,25 @@ functional:
             post.logout.redirect.uris: "https://files.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*"
           defaultClientScopes:
             - "opendesk-opencloud-scope"
+        - name: "stalwart"
+          clientId: "stalwart"
+          protocol: "openid-connect"
+          clientAuthenticatorType: "client-secret"
+          secret: "changeme-replace-with-actual-secret"
+          redirectUris:
+            - "https://mail.opendesk.hrz.uni-marburg.de/*"
+            - "https://portal.opendesk.hrz.uni-marburg.de/*"
+          consentRequired: false
+          frontchannelLogout: true
+          publicClient: false
+          authorizationServicesEnabled: false
+          attributes:
+            backchannel.logout.session.required: true
+            post.logout.redirect.uris: "https://mail.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*"
+          defaultClientScopes:
+            - "openid"
+            - "profile"
+            - "email"
         - name: "ilias-saml"
           clientId: "ilias-saml"
           protocol: "saml"
