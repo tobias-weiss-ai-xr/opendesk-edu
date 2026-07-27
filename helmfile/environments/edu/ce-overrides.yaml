@@ -561,3 +561,19 @@ resources:
     requests:
       cpu: 0.1
       memory: "1.5Gi"
+
+# Customization release overrides (empty defaults for ArgoCD CMP)
+# These are used by helmfile children to include additional value files.
+# In the CE deployment these come from the operator's customization system.
+# In ArgoCD CMP context they must exist as empty lists.
+customization:
+  release:
+    opendeskOpencloud: []
+    drawio: []
+    excalidraw: []
+    etherpad: []
+    f13: []
+    ilias: []
+    intercom: []
+    self-service-password: []
+    zammad: []
