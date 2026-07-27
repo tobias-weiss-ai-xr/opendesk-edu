@@ -10,7 +10,7 @@ releases:
       {{- range .Values | dig "customization" "release" "opendeskOpencloud" (list) }}
       - {{ . }}
       {{- end }}
-    installed: {{ .Values.apps.opencloud.enabled | default true }}
+    installed: {{ .Values | dig "apps" "opencloud" "enabled" true }}
     timeout: 1800
     force: false
 
