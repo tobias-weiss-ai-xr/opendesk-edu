@@ -1,0 +1,132 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: edu-service-alerts
+  namespace: opendesk
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: opendesk-edu-services
+      rules:
+
+        # ── Stalwart ────────────────────────────────────────────────────
+        - alert: StalwartDown
+          expr: |
+            absent(kube_pod_status_ready{namespace="opendesk", pod=~"stalwart-stalwart-.*", condition="true"} == 1)
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Stalwart mail server is down"
+            description: "Stalwart pod has not been ready for >5 minutes. Mail services (SMTP, IMAP, POP3) are unavailable."
+
+        - alert: StalwartHighRestarts
+          expr: |
+            kube_pod_status_ready{namespace="opendesk", pod=~"stalwart-stalwart-.*", condition="true"} == 1
+            and on(pod)
+            kube_pod_restarts_over_time{namespace="opendesk", pod=~"stalwart-stalwart-.*"}[15m] > 3
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Stalwart restarting frequently"
+            description: "Stalwart has restarted >3 times in 15 minutes. Possible config error or resource issue."
+
+        # ── OpenCloud ──────────────────────────────────────────────────
+        - alert: OpenCloudDown
+          expr: |
+            absent(kube_pod_status_ready{namespace="opendesk", pod=~"opendesk-opencloud-.*", condition="true"} == 1)
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "OpenCloud is down"
+            description: "OpenCloud pod has not been ready for >5 minutes. File sync and web UI are unavailable."
+
+        - alert: OpenCloudHighRestarts
+          expr: |
+            kube_pod_status_ready{namespace="opendesk", pod=~"opendesk-opencloud-.*", condition="true"} == 1
+            and on(pod)
+            kube_pod_restarts_over_time{namespace="opendesk", pod=~"opendesk-opencloud-.*"}[15m] > 3
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "OpenCloud restarting frequently"
+            description: "OpenCloud has restarted >3 times in 15 minutes."
+
+        - alert: OpenCloudIngressDown
+          expr: |
+            probe_success{job="opendesk-opencloud-ingress", namespace="opendesk"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "OpenCloud ingress unreachable"
+            description: "OpenCloud HTTPS endpoint at files.opendesk.hrz.uni-marburg.de is returning errors."
+
+        # ── k8up Operator ──────────────────────────────────────────────
+        - alert: K8upOperatorDown
+          expr: |
+            absent(kube_pod_status_ready{namespace="opendesk", pod=~"k8up-.*", condition="true"} == 1)
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "k8up backup operator is down"
+            description: "No k8up operator pod has been ready for >5 minutes. All backups will fail."
+
+        - alert: K8upOperatorRestarts
+          expr: |
+            kube_pod_restarts_over_time{namespace="opendesk", pod=~"k8up-.*"}[1h] > 5
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "k8up operator restarting"
+            description: "k8up operator has restarted >5 times in the last hour."
+
+        # ── Backups ────────────────────────────────────────────────────
+        - alert: BackupFailed
+          expr: |
+            k8up_backup_job_failed_total{namespace="opendesk"} > 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Backup job failed"
+            description: "A k8up backup job has failed. Check k8up logs for details."
+
+        - alert: BackupScheduleMissed
+          expr: |
+            time() - k8up_backup_job_last_successful_timestamp{namespace="opendesk"} > 86400
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Backup schedule missed"
+            description: "No successful backup in >24 hours for {{ $labels.schedule }}."
+
+        # ── Quota ──────────────────────────────────────────────────────
+        - alert: QuotaAlmostExhausted
+          expr: |
+            kube_resourcequota{namespace="opendesk", resource="limits.cpu"} /
+            kube_resourcequota{namespace="opendesk", resource="limits.cpu", type="hard"} > 0.85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CPU quota >85% used"
+            description: "Namespace CPU quota is {{ $value | humanizePercentage }} used."
+
+        - alert: QuotaExhausted
+          expr: |
+            kube_resourcequota{namespace="opendesk", resource="limits.cpu"} /
+            kube_resourcequota{namespace="opendesk", resource="limits.cpu", type="hard"} > 0.95
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CPU quota >95% used"
+            description: "Namespace CPU quota is {{ $value | humanizePercentage }} used. New pods may fail to schedule."
