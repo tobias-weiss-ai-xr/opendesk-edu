@@ -1,3 +1,0 @@
-[submodule "helmfile/ce"]
-	path = helmfile/ce
-	url = https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk.git
