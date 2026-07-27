@@ -9,7 +9,7 @@ stalwart:
   image:
     registry: ""
     repository: stalwartlabs/stalwart
-    tag: "0.0.1"
+    tag: "0.15.5"
     pullPolicy: IfNotPresent
 
   # Deployment scaling
@@ -112,7 +112,7 @@ stalwart:
     # Optional: blob storage configuration
     blob:
       type: rocksdb
-      path: "/opt/stalwart-mail/data/blob"
+      path: "/opt/stalwart/data/blob"
       # S3-compatible storage (set type: "s3" to use)
       s3:
         bucket: ""

@@ -73,7 +73,7 @@ data:
     # RocksDB store configuration
     [store.rocksdb]
     type = "rocksdb"
-    path = "{{ .Values.stalwart.storage.dataPath | default "/opt/stalwart-mail/data" }}"
+    path = "{{ .Values.stalwart.storage.dataPath | default "/opt/stalwart/data" }}"
     compression = "lz4"
     
     # Internal directory
@@ -100,7 +100,7 @@ data:
     [tracer.log]
     type = "log"
     level = "{{ .Values.stalwart.logging.level | default "info" }}"
-    path = "{{ .Values.stalwart.logging.path | default "/opt/stalwart-mail/logs" }}"
+    path = "{{ .Values.stalwart.logging.path | default "/opt/stalwart/logs" }}"
     prefix = "stalwart.log"
     rotate = "daily"
     ansi = false

@@ -121,11 +121,11 @@ spec:
                 name: {{ include "stalwart.configmap" . }}
           volumeMounts:
             - name: data
-              mountPath: /opt/stalwart-mail/data
+              mountPath: /opt/stalwart/data
             - name: logs
-              mountPath: /opt/stalwart-mail/logs
+              mountPath: /opt/stalwart/logs
             - name: config
-              mountPath: /opt/stalwart-mail/etc/config.toml
+              mountPath: /opt/stalwart/etc/config.toml
               subPath: config.toml
               readOnly: true
             {{- if .Values.extraVolumeMounts }}
