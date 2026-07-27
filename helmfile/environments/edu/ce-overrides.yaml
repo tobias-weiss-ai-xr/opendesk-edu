@@ -12,8 +12,13 @@ apps:
     enabled: false              # edu has its own seaweedfs deployment
   dovecot:
     enabled: false              # Stalwart replaces Dovecot
+  # SMTP relay selection: "stalwart" or "postfix"
+  # Stalwart handles inbound mail. For outbound (service notifications),
+  # either Stalwart or Postfix can relay. Stalwart is recommended.
+  smtpRelay: stalwart
   postfix:
-    enabled: true               # Postfix stays as SMTP relay for SOGo + Stalwart
+    enabled: {{ eq .Values.apps.smtpRelay "postfix" | quote }}
+    # Postfix stays as SMTP relay for services
   # Keep nubus (UMS + Keycloak) but disable its embedded intercom-service
   # edu deploys its own intercom-service (forked chart with edu-specific fixes)
   nubus:
