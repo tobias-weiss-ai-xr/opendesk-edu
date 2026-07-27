@@ -96,7 +96,7 @@ data:
     secret = "{{ .Values.stalwart.auth.fallbackAdmin.passwordHash | default "" }}"
     description = "Stalwart Mail Server Administrator"
     
-    # Logging
+    # Logging to file (daily rotation)
     [tracer.log]
     type = "log"
     level = "{{ .Values.stalwart.logging.level | default "info" }}"
@@ -104,4 +104,10 @@ data:
     prefix = "stalwart.log"
     rotate = "daily"
     ansi = false
+    enable = true
+    
+    # Logging to stdout (visible in kubectl logs)
+    [tracer.stdout]
+    type = "stdout"
+    level = "{{ .Values.stalwart.logging.level | default "info" }}"
     enable = true
