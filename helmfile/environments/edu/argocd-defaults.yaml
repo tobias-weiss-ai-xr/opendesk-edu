@@ -1,0 +1,52 @@
+# ArgoCD CMP defaults — provides parent .Values context for standalone helmfile children
+global:
+  domain: opendesk.hrz.uni-marburg.de
+  hosts:
+    keycloak: portal
+    opencloud: files
+    stalwart: mail
+    sogo: contacts
+    static: static
+  imageRegistry: ""
+platform:
+  realm: opendesk
+ingress:
+  ingressClassName: haproxy
+  tls:
+    secretName: opendesk-certificates-tls
+apps:
+  opencloud:
+    enabled: true
+  stalwart:
+    enabled: true
+secrets:
+  keycloak:
+    clientSecret:
+      opencloud: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
+      stalwart: "4a312df6bfb2c74cd73e895a09818ca2e58f51a1c1b5db906224780542c97b85"
+  ldap:
+    bindPassword: "19a7f3c4b8d2e1f5a6c7b9d0e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f"
+  opencloud:
+    jwtSecret: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b"
+    transferSecret: "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c"
+    machineAuthApiKey: "c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d"
+    systemUserApiKey: "d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e"
+    urlSigningSecret: "e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f"
+    systemUserId: "system-a1b2c3d4e5f6"
+    backchannelLogoutSecret: "f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a"
+customization:
+  release:
+    opendeskOpencloud: []
+    stalwart: []
+    bigbluebutton: []
+    bookstack: []
+    etherpad: []
+    ilias: []
+    moodle: []
+    sogo: []
+    drawio: []
+    excalidraw: []
+    f13: []
+    intercom: []
+    self-service-password: []
+    zammad: []
