@@ -1,6 +1,11 @@
 #!/bin/bash
 # deploy-stalwart.sh — Deploy Stalwart Mail Server
 # Part of openDesk Edu deployment
+#
+# Usage: ./deploy-stalwart.sh [--diff] [--verbose] [--help]
+#
+# This script deploys Stalwart via the edu helmfile.
+# It handles both the CE base and the edu overlay.
 
 set -euo pipefail
 
@@ -17,98 +22,74 @@ usage() {
   echo ""
   echo "Environment variables:"
   echo "  ENVIRONMENT  Deployment environment (default: edu)"
+  echo ""
+  echo "Examples:"
+  echo "  $0                         # Deploy Stalwart"
+  echo "  $0 --diff                  # Preview changes"
+  echo "  ENVIRONMENT=edu-test $0    # Deploy to edu-test"
   exit 0
 }
 
-# Parse arguments
+# --- Parse arguments ---
 DIFF=false
 VERBOSE=false
-ENVIRONMENT="edu"
+ENVIRONMENT="${ENVIRONMENT:-edu}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --diff)
-      DIFF=true
-      shift
-      ;;
-    --verbose)
-      VERBOSE=true
-      shift
-      ;;
-    --help)
-      usage
-      ;;
-    *)
-      echo "Error: Unknown option $1" >&2
-      usage
-      ;;
+    --diff)     DIFF=true; shift ;;
+    --verbose)  VERBOSE=true; shift ;;
+    --help)     usage ;;
+    *)          echo "Error: Unknown option $1" >&2; usage ;;
   esac
 done
 
-# Validate environment
+# --- Validate environment ---
 if [[ ! -d "$HELMFILE_DIR/environments/$ENVIRONMENT" ]]; then
-  echo "Error: Environment '$ENVIRONMENT' not found" >&2
+  echo "Error: Environment '$ENVIRONMENT' not found at $HELMFILE_DIR/environments/$ENVIRONMENT" >&2
   exit 1
 fi
 
-# Build helmfile command
-HELMFILE_OPTIONS=()
-if [[ "$VERBOSE" == true ]]; then
-  HELMFILE_OPTIONS+=(--log-level debug)
-fi
+# --- Build helmfile command ---
+HELMFILE_OPTS=()
+[[ "$VERBOSE" == true ]] && HELMFILE_OPTS+=(--log-level debug)
+ACTION="sync"
+[[ "$DIFF" == true ]] && ACTION="diff"
 
-if [[ "$DIFF" == true ]]; then
-  ACTION="diff"
-else
-  ACTION="sync"
-fi
-
-cd "$HELMFILE_DIR"
+# Determine domain from ce-overrides
+DOMAIN=$(grep 'domain:' "$HELMFILE_DIR/environments/$ENVIRONMENT/ce-overrides.yaml" 2>/dev/null | head -1 | awk '{print $2}' || echo "opendesk.hrz.uni-marburg.de")
 
 echo "========================================="
-echo "Deploying Stalwart Mail Server ($ENVIRONMENT)"
+echo " Stalwart Mail Server — Deploy ($ENVIRONMENT)"
+echo " Domain: $DOMAIN"
+echo " Action: $ACTION"
 echo "========================================="
 
-# Deploy Stalwart via edu-helmfile
-# The edu-helmfile includes the stalwart helmfile-child
-echo ""
-echo "--- Deploying Stalwart ---"
-
-# First, ensure CE base is deployed
-cd "$HELMFILE_DIR/ce"
-echo "Deploying CE base..."
-helmfile ${HELMFILE_OPTIONS[*]} -f helmfile.yaml.gotmpl \
-  --values "../environments/$ENVIRONMENT/ce-overrides.yaml" \
-  --values "../environments/$ENVIRONMENT/secrets.yaml" \
-  --values "../environments/$ENVIRONMENT/images.yaml" \
-  $ACTION
-
-# Then deploy edu overlay with Stalwart
+# Deploy via edu helmfile (component filter)
 cd "$HELMFILE_DIR"
-echo "Deploying edu overlay with Stalwart..."
-helmfile ${HELMFILE_OPTIONS[*]} -f edu-helmfile.yaml.gotmpl \
+helmfile ${HELMFILE_OPTS[*]} -f edu-helmfile.yaml.gotmpl \
   -e "$ENVIRONMENT" \
   -l "component=stalwart" \
   $ACTION
 
+# === Summary ===
 if [[ "$DIFF" == true ]]; then
   echo ""
   echo "========================================="
-  echo "Stalwart deployment diff complete"
-  echo "(no changes applied)"
+  echo " Stalwart — diff complete (no changes applied)"
   echo "========================================="
 else
   echo ""
   echo "========================================="
-  echo "Stalwart deployment complete!"
+  echo " ✅ Stalwart deployment complete!"
   echo ""
-  echo "Accessantilwart at:"
-  echo "  Admin Console: https://mail.$(grep domain ../helmfile/environments/$ENVIRONMENT/ce-overrides.yaml | head -1 | cut -d' ' -f2)"
-  echo "  IMAP:      mail.$(grep domain ../helmfile/environments/$ENVIRONMENT/ce-overrides.yaml | head -1 | cut -d' ' -f2):993"
-  echo "  SMTP:      mail.$(grep domain ../helmfile/environments/$ENVIRONMENT/ce-overrides.yaml | head -1 | cut -d' ' -f2):465"
+  echo " Access Stalwart at:"
+  echo "   Admin API:  https://mail.$DOMAIN"
+  echo "   IMAP:       mail.$DOMAIN:993"
+  echo "   SMTP:       mail.$DOMAIN:465"
   echo ""
-  echo "Check status:"
-  echo "  kubectl get pods -l component=stalwart"
-  echo "  kubectl logs -f deployment/stalwart"
+  echo " Verify with:"
+  echo "   kubectl get pods -n opendesk -l app.kubernetes.io/name=stalwart"
+  echo "   kubectl logs -n opendesk -l app.kubernetes.io/name=stalwart"
   echo "========================================="
 fi
