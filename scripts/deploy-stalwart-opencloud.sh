@@ -1,6 +1,10 @@
 #!/bin/bash
-# deploy-stalwart-opencloud.sh — Deploy both Stalwart and OpenCloud together
+# deploy-stalwart-opencloud.sh — Deploy Stalwart and/or OpenCloud
 # Part of openDesk Edu deployment
+#
+# Usage: ./deploy-stalwart-opencloud.sh [--diff] [--stalwart] [--opencloud] [--verbose]
+#
+# Deploy both Stalwart Mail Server and OpenCloud, or individual services.
 
 set -euo pipefail
 
@@ -17,154 +21,106 @@ usage() {
   echo "  --opencloud  Deploy only OpenCloud"
   echo "  --help       Show this help"
   echo ""
+  echo "If neither --stalwart nor --opencloud is given, both are deployed."
+  echo ""
   echo "Environment variables:"
   echo "  ENVIRONMENT  Deployment environment (default: edu)"
   exit 0
 }
 
-# Parse arguments
+# --- Parse arguments ---
 DIFF=false
 VERBOSE=false
-DEPLOY_STALWART=true
-DEPLOY_OPENCLOUD=true
-ENVIRONMENT="edu"
+DEPLOY_STALWART=false
+DEPLOY_OPENCLOUD=false
+ENVIRONMENT="${ENVIRONMENT:-edu}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --diff)
-      DIFF=true
-      shift
-      ;;
-    --verbose)
-      VERBOSE=true
-      shift
-      ;;
-    --stalwart)
-      DEPLOY_OPENCLOUD=false
-      shift
-      ;;
-    --opencloud)
-      DEPLOY_STALWART=false
-      shift
-      ;;
-    --help)
-      usage
-      ;;
-    *)
-      echo "Error: Unknown option $1" >&2
-      usage
-      ;;
+    --diff)      DIFF=true; shift ;;
+    --verbose)   VERBOSE=true; shift ;;
+    --stalwart)  DEPLOY_STALWART=true; shift ;;
+    --opencloud) DEPLOY_OPENCLOUD=true; shift ;;
+    --help)      usage ;;
+    *)           echo "Error: Unknown option $1" >&2; usage ;;
   esac
 done
 
-# Validate environment
+# If no specific service selected, deploy both
+if [[ "$DEPLOY_STALWART" == false && "$DEPLOY_OPENCLOUD" == false ]]; then
+  DEPLOY_STALWART=true
+  DEPLOY_OPENCLOUD=true
+fi
+
+# --- Validate environment ---
 if [[ ! -d "$HELMFILE_DIR/environments/$ENVIRONMENT" ]]; then
-  echo "Error: Environment '$ENVIRONMENT' not found" >&2
+  echo "Error: Environment '$ENVIRONMENT' not found at $HELMFILE_DIR/environments/$ENVIRONMENT" >&2
   exit 1
 fi
 
-# Build helmfile options
-HELMFILE_OPTIONS=()
-if [[ "$VERBOSE" == true ]]; then
-  HELMFILE_OPTIONS+=(--log-level debug)
-fi
-
+# --- Build helmfile command ---
+HELMFILE_OPTS=()
+[[ "$VERBOSE" == true ]] && HELMFILE_OPTS+=(--log-level debug)
 ACTION="sync"
-if [[ "$DIFF" == true ]]; then
-  ACTION="diff"
-fi
+[[ "$DIFF" == true ]] && ACTION="diff"
+
+DOMAIN=$(grep 'domain:' "$HELMFILE_DIR/environments/$ENVIRONMENT/ce-overrides.yaml" 2>/dev/null | head -1 | awk '{print $2}' || echo "opendesk.hrz.uni-marburg.de")
+
+echo "========================================="
+echo " openDesk Edu — Deploy Services ($ENVIRONMENT)"
+echo " Domain: $DOMAIN"
+echo " Action: $ACTION"
+echo "========================================="
 
 cd "$HELMFILE_DIR"
 
-echo "========================================="
-echo "Deploying Services ($ENVIRONMENT)"
-echo "========================================="
-
-# Deploy CE base first
-cd "$HELMFILE_DIR/ce"
-echo ""
-echo "--- Step 1: Deploying CE base ---"
-helmfile ${HELMFILE_OPTIONS[*]} -f helmfile.yaml.gotmpl \
-  --values "../environments/$ENVIRONMENT/ce-overrides.yaml" \
-  --values "../environments/$ENVIRONMENT/secrets.yaml" \
-  --values "../environments/$ENVIRONMENT/images.yaml" \
-  $ACTION
-
-# Deploy edu overlay with selected services
-cd "$HELMFILE_DIR"
-
+# --- Deploy Stalwart ---
 if [[ "$DEPLOY_STALWART" == true ]]; then
   echo ""
-  echo "--- Step 2: Deploying Stalwart Mail Server ---"
-  helmfile ${HELMFILE_OPTIONS[*]} -f edu-helmfile.yaml.gotmpl \
+  echo "--- Deploying Stalwart Mail Server ---"
+  helmfile ${HELMFILE_OPTS[*]} -f edu-helmfile.yaml.gotmpl \
     -e "$ENVIRONMENT" \
     -l "component=stalwart" \
     $ACTION
 fi
 
+# --- Deploy OpenCloud ---
 if [[ "$DEPLOY_OPENCLOUD" == true ]]; then
   echo ""
-  echo "--- Step 3: Deploying OpenCloud ---"
-  helmfile ${HELMFILE_OPTIONS[*]} -f edu-helmfile.yaml.gotmpl \
+  echo "--- Deploying OpenCloud ---"
+  helmfile ${HELMFILE_OPTS[*]} -f edu-helmfile.yaml.gotmpl \
     -e "$ENVIRONMENT" \
     -l "component=opencloud" \
     $ACTION
 fi
 
-# Summary
+# === Summary ===
+echo ""
+echo "========================================="
 if [[ "$DIFF" == true ]]; then
-  echo ""
-  echo "========================================="
-  if [[ "$DEPLOY_STALWART" == true && "$DEPLOY_OPENCLOUD" == true ]]; then
-    echo "Stalwart + OpenCloud deployment diff complete"
-  elif [[ "$DEPLOY_STALWART" == true ]]; then
-    echo "Stalwart deployment diff complete"
-  else
-    echo "OpenCloud deployment diff complete"
-  fi
-  echo "(no changes applied)"
-  echo "========================================="
+  echo " ✅ Diff complete (no changes applied)"
 else
-  echo ""
-  echo "========================================="
-  if [[ "$DEPLOY_STALWART" == true && "$DEPLOY_OPENCLOUD" == true ]]; then
-    echo "Stalwart + OpenCloud deployment complete!"
-  elif [[ "$DEPLOY_STALWART" == true ]]; then
-    echo "Stalwart deployment complete!"
-  else
-    echo "OpenCloud deployment complete!"
-  fi
-  echo ""
-  
-  DOMAIN=$(grep domain ../helmfile/environments/$ENVIRONMENT/ce-overrides.yaml | head -1 | cut -d' ' -f2)
-  
-  if [[ "$DEPLOY_STALWART" == true ]]; then
-    echo "Stalwart Mail Server:"
-    echo "  Admin Console: https://mail.$DOMAIN"
-    echo "  IMAP:         mail.$DOMAIN:993"
-    echo "  SMTP:         mail.$DOMAIN:465"
-    echo ""
-    echo "Stalwart status:"
-    echo "  kubectl get pods -l component=stalwart"
-    echo "  kubectl logs -f deployment/stalwart"
-  fi
-  
-  if [[ "$DEPLOY_OPENCLOUD" == true ]]; then
-    echo "OpenCloud:"
-    echo "  Web: https://files.$DOMAIN"
-    echo ""
-    echo "OpenCloud status:"
-    echo "  kubectl get pods -l component=opencloud"
-    echo "  kubectl logs -f deployment/opendesk-opencloud"
-  fi
-  
-  echo ""
-  echo "Verify services:"
-  if [[ "$DEPLOY_STALWART" == true ]]; then
-    echo "  curl -k https://mail.$DOMAIN/api/health"
-  fi
-  if [[ "$DEPLOY_OPENCLOUD" == true ]]; then
-    echo "  curl -k https://files.$DOMAIN/status.php"
-  fi
-  echo "========================================="
+  echo " ✅ Deployment complete!"
 fi
+echo ""
+
+if [[ "$DEPLOY_STALWART" == true ]]; then
+  echo " Stalwart Mail Server:"
+  echo "   Admin:  https://mail.$DOMAIN"
+  echo "   IMAP:   mail.$DOMAIN:993"
+  echo "   SMTP:   mail.$DOMAIN:465"
+  echo "   Pods:   kubectl get pods -n opendesk -l app.kubernetes.io/name=stalwart"
+fi
+
+if [[ "$DEPLOY_OPENCLOUD" == true ]]; then
+  echo ""
+  echo " OpenCloud:"
+  echo "   Web UI: https://files.$DOMAIN"
+  echo "   Status: curl -sk https://files.$DOMAIN/status.php"
+  echo "   OIDC:   https://id.$DOMAIN/realms/opendesk"
+  echo "   Pods:   kubectl get pods -n opendesk -l app.kubernetes.io/name=opencloud"
+fi
+
+echo ""
+echo " Logs: kubectl logs -n opendesk -l app.kubernetes.io/name=<service>"
+echo "========================================="

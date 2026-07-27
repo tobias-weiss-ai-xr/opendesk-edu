@@ -57,6 +57,10 @@ spec:
       affinity:
         {{- toYaml .Values.stalwart.affinity | nindent 8 }}
       {{- end }}
+      {{- if .Values.stalwart.hostAliases }}
+      hostAliases:
+        {{- toYaml .Values.stalwart.hostAliases | nindent 8 }}
+      {{- end }}
       containers:
         - name: stalwart
           image: {{ include "stalwart.image" . }}
