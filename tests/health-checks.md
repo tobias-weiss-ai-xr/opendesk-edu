@@ -5,8 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # openDesk Edu Service Health Checks
 
-Smoke tests for the three core edu services: ILIAS, SOGo, and OpenCloud.
-Run these after deployment to verify all services are operational.
+Smoke tests for all edu services: ILIAS, SOGo, OpenCloud, Stalwart, XWiki, OpenProject.
+Run after deployment to verify all services and cross-service integrations are operational.
+
+## Quick Run
+
+```bash
+# Run all integration tests
+bash opendesk-edu/scripts/verify-integrations.sh
+
+# Expected: 15+ passed, <4 expected failures (config-only changes not yet deployed)
+```
 
 ## Prerequisites
 
@@ -463,3 +472,74 @@ health-check:
 | ICS | /ilias/ route (302) | Smoke | Every deploy |
 | ICS | Proxy URL resolution | Smoke | Every deploy |
 | ICS | Authenticated routing (Playwright) | E2E | Daily |
+
+
+---
+
+## 6. Cross-Service Integration Tests
+
+Verify all 5 core services work together.
+
+### 6.1 SSO / OIDC (Single Sign-On)
+```bash
+echo "Keycloak readiness:"
+kubectl get pods -n "$NAMESPACE" -l app.kubernetes.io/instance=ums-keycloak
+
+echo "OIDC discovery URL responds:"
+kubectl run test-oidc --image=curlimages/curl -n "$NAMESPACE" --rm -it -- \
+  -s -o /dev/null -w "%{http_code}" \
+  "http://ums-keycloak.$NAMESPACE.svc.cluster.local:8080/realms/opendesk/.well-known/openid-configuration"
+# Expected: 200
+```
+
+### 6.2 SOGo → Stalwart (Mail Backend)
+```bash
+echo "SOGo IMAP server:"
+kubectl exec -n "$NAMESPACE" deploy/sogo-sogo -- sh -c 'grep SOGoIMAPServer /etc/sogo/*.yaml'
+# Expected: stalwart-stalwart:993
+
+echo "SOGo SMTP server:"
+kubectl exec -n "$NAMESPACE" deploy/sogo-sogo -- sh -c 'grep SOGoSMTPServer /etc/sogo/*.yaml'
+# Expected: stalwart-stalwart:587
+
+echo "Stalwart IMAP port:"
+kubectl get svc stalwart-stalwart -n "$NAMESPACE" -o jsonpath='{.spec.ports[?(@.name=="imap")].port}'
+# Expected: 143
+```
+
+### 6.3 XWiki → Stalwart (Email Notifications)
+```bash
+echo "XWiki SMTP config:"
+kubectl describe configmap -n "$NAMESPACE" -l app.kubernetes.io/instance=xwiki | grep "SendMailConfigClass.host"
+# Expected: stalwart-stalwart (after next deploy)
+```
+
+### 6.4 OpenProject → Stalwart (Email Notifications)
+```bash
+echo "OpenProject SMTP address:"
+kubectl exec -n "$NAMESPACE" deploy/openproject-web -- env | grep OPENPROJECT_SMTP__ADDRESS
+# Expected: stalwart-stalwart
+```
+
+### 6.5 SOGo → OpenCloud (File Picker)
+```bash
+echo "SOGo external storage config:"
+kubectl exec -n "$NAMESPACE" deploy/sogo-sogo -- sh -c 'grep -A5 "ExternalStorage\|OpenCloud" /etc/sogo/*.yaml'
+# Expected: OpenCloud WebDAV external storage configured
+
+echo "OpenCloud WebDAV availability:"
+kubectl run test-webdav --image=curlimages/curl -n "$NAMESPACE" --rm -it -- \
+  -s -o /dev/null -w "%{http_code}" \
+  "http://opendesk-opencloud:8080/remote.php/dav/"
+# Expected: 401 or 403 (requires auth, but service is up)
+```
+
+### 6.6 Stalwart → SeaweedFS (Blob Storage)
+```bash
+echo "Stalwart blob storage type:"
+kubectl get configmap stalwart-stalwart-config -n "$NAMESPACE" -o yaml | grep -A2 "storage.blob"
+# Expected: rocksdb (default) or s3 (if configured)
+
+echo "SeaweedFS S3 endpoint:"
+kubectl get svc seaweedfs-all-in-one -n "$NAMESPACE" -o jsonpath='{.spec.ports[?(@.name=="swfs-s3")].port}'
+# Expected: 8333
