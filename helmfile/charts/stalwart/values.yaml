@@ -9,7 +9,7 @@ stalwart:
   image:
     registry: ""
     repository: stalwartlabs/stalwart
-    tag: "0.15.5"
+    tag: "v0.16.15"
     pullPolicy: IfNotPresent
 
   # Deployment scaling
