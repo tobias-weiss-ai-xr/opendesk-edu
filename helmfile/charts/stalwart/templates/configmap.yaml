@@ -8,4 +8,7 @@ metadata:
     {{- include "stalwart.labels" . | nindent 4 }}
 data:
   config.json: |
-    {{ .Values.stalwart.configJson | default "{\"@type\":\"RocksDb\",\"path\":\"/var/lib/stalwart/data\"}" | nindent 4 }}
+    {
+      "@type": "RocksDb",
+      "path": "/var/lib/stalwart/data"
+    }
