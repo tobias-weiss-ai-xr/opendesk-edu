@@ -1,0 +1,23 @@
+{{- if .Values.planka.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "planka.fullname" . }}-monitor
+  labels:
+{{ include "planka.labels" . | nindent 4 }}
+    {{- if .Values.planka.monitoring.labels }}
+{{ toYaml .Values.planka.monitoring.labels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: {{ .Values.planka.monitoring.port | default "http" | quote }}
+      interval: {{ .Values.planka.monitoring.interval | default "30s" }}
+      path: {{ .Values.planka.monitoring.path | default "/health" | quote }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "planka.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

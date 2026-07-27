@@ -17,11 +17,11 @@ sogo:
     bindPassword: {{ .Values.ldap.sogoBindPassword | default "" }}
 
   imap:
-    server: {{ .Values.apps.sogo.imapServer | default "imaps://dovecot:993" }}
+    server: {{ .Values.apps.sogo.imapServer | default "imaps://stalwart-stalwart:993" }}
   smtp:
-    server: {{ .Values.apps.sogo.smtpServer | default "smtp://postfix:587" }}
+    server: {{ .Values.apps.sogo.smtpServer | default "smtp://stalwart-stalwart:587" }}
   sieve:
-    server: {{ .Values.apps.sogo.sieveServer | default "sieve://dovecot:4190" }}
+    server: {{ .Values.apps.sogo.sieveServer | default "sieve://stalwart-stalwart:4190" }}
 
   mailDomain: {{ .Values.apps.sogo.mailDomain | default "opendesk.hrz.uni-marburg.de" }}
 
@@ -49,3 +49,9 @@ sogo:
 
   persistence:
     enabled: {{ .Values.apps.sogo.persistence.enabled | default true }}
+
+  # OpenCloud file picker integration
+  opencloud:
+    enabled: true
+    url: {{ printf "https://%s.%s" .Values.global.hosts.opencloud .Values.global.domain | quote }}
+    webdavPath: "/remote.php/dav/files/{uid}/"

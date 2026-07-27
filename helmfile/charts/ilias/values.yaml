@@ -479,3 +479,14 @@ sso:
   saml:
     enabled: false
     idpMetadataUrl: https://id.opendesk.example.com/realms/opendesk/protocol/saml/descriptor
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack

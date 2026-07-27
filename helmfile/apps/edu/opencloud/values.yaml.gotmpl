@@ -84,3 +84,16 @@ systemUserApiKey: {{ .Values.secrets.opencloud.systemUserApiKey | quote }}
 systemUserId: {{ .Values.secrets.opencloud.systemUserId | quote }}
 
 urlSigningSecret: {{ .Values.secrets.opencloud.urlSigningSecret | quote }}
+  pdb:
+    enabled: true
+    minAvailable: 1
+  monitoring:
+    enabled: true
+
+# Email notifications via Stalwart
+notifications:
+  smtp:
+    host: "stalwart-stalwart.opendesk.svc.cluster.local"
+    port: 587
+    sender: "noreply@opendesk.hrz.uni-marburg.de"
+    username: ""

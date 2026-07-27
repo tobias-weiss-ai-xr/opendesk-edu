@@ -1,0 +1,23 @@
+{{- if .Values.self-service-password.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "self-service-password.fullname" . }}-monitor
+  labels:
+{{ include "self-service-password.labels" . | nindent 4 }}
+    {{- if .Values.self-service-password.monitoring.labels }}
+{{ toYaml .Values.self-service-password.monitoring.labels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: {{ .Values.self-service-password.monitoring.port | default "http" | quote }}
+      interval: {{ .Values.self-service-password.monitoring.interval | default "30s" }}
+      path: {{ .Values.self-service-password.monitoring.path | default "/health" | quote }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "self-service-password.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

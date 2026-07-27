@@ -1,0 +1,18 @@
+{{- if .Values.collab-dashboard.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "collab-dashboard.fullname" . }}-pdb
+  labels:
+{{ include "collab-dashboard.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.collab-dashboard.pdb.minAvailable }}
+  minAvailable: {{ .Values.collab-dashboard.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.collab-dashboard.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "collab-dashboard.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

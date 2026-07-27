@@ -104,9 +104,19 @@ data:
     type = "{{ .Values.stalwart.storage.type | default "rocksdb" }}"
     path = "{{ .Values.stalwart.storage.dataPath | default "/opt/stalwart-mail/data" }}"
     
+    {{- if eq .Values.stalwart.storage.blob.type "s3" }}
+    [storage.blob]
+    type = "s3"
+    bucket = "{{ .Values.stalwart.storage.blob.s3.bucket }}"
+    endpoint = "{{ .Values.stalwart.storage.blob.s3.endpoint }}"
+    region = "{{ .Values.stalwart.storage.blob.s3.region }}"
+    access-key = "{{ .Values.stalwart.storage.blob.s3.accessKey }}"
+    secret-key = "{{ .Values.stalwart.storage.blob.s3.secretKey }}"
+    {{- else }}
     [storage.blob]
     type = "{{ .Values.stalwart.storage.blob.type | default "rocksdb" }}"
     path = "{{ .Values.stalwart.storage.blob.path | default "/opt/stalwart-mail/data/blob" }}"
+    {{- end }}
     
     [storage.lookup]
     type = "{{ .Values.stalwart.storage.type | default "rocksdb" }}"

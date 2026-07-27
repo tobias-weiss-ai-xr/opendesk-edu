@@ -1,13 +1,9 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 # SPDX-License-Identifier: Apache-2.0
 ---
-repositories:
-  - name: "dask"
-    url: "https://helm.dask.org"
-    oci: false
 releases:
   - name: "dask"
-    chart: "dask/dask-gateway"
+    chart: "../../vendor/charts/dask"
     version: "{{ .Values.charts.dask.version }}"
     values:
       - "values.yaml.gotmpl"

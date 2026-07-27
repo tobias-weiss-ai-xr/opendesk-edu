@@ -7,7 +7,7 @@ commonAnnotations:
 bookstack:
   # Image configuration - using official LinuxServer.io BookStack image
   image: "linuxserver/bookstack"
-  tag: "latest"
+  tag: "latest@sha256:d945ea01e37d5fd800e506f80be98c9e650952c0e3b41f95f736b753778de7a8"
 
   # Database configuration (embedded MariaDB)
   db:
@@ -19,7 +19,8 @@ bookstack:
   volumes:
     uploads:
       size: "1Gi"
-      accessMode: "ReadWriteMany"
+      accessMode: "ReadWriteOnce"
+      storageClass: "ceph-rbd-ssd"
 
   # Resource configuration
   resources:
@@ -104,3 +105,8 @@ mariadb:
       enabled: true
       size: "8Gi"
       accessMode: "ReadWriteOnce"
+  pdb:
+    enabled: true
+    minAvailable: 1
+  monitoring:
+    enabled: true

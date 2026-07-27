@@ -1,0 +1,9 @@
+dn: cn=sogo-opencloud-files,cn=applications,cn=opendesk,cn=edu
+cn: sogo-opencloud-files
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Meine Dateien (OpenCloud)
+odApplicationDescription: Dateien aus OpenCloud in SOGo einbinden
+odApplicationURL: https://files.{{ .Values.global.domain }}
+odApplicationIcon: opencloud
+odApplicationOrder: 85

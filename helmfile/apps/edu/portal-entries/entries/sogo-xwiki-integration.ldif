@@ -1,0 +1,9 @@
+dn: cn=sogo-xwiki-link,cn=applications,cn=opendesk,cn=edu
+cn: sogo-xwiki-link
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Wiki-Seiten teilen (XWiki)
+odApplicationDescription: Wiki-Inhalte aus XWiki in SOGo-E-Mails teilen
+odApplicationURL: https://wiki.{{ .Values.global.domain }}
+odApplicationIcon: xwiki
+odApplicationOrder: 87

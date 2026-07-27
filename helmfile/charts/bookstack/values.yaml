@@ -3,7 +3,7 @@
 
 bookstack:
   image: linuxserver/bookstack
-  tag: latest
+  tag: "latest@sha256:d945ea01e37d5fd800e506f80be98c9e650952c0e3b41f95f736b753778de7a8"
   port: 80
 
   # Database configuration
@@ -70,3 +70,14 @@ mariadb:
       enabled: true
       size: 8Gi
       accessMode: ReadWriteOnce
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack

@@ -125,3 +125,9 @@ monitoring:
 service:
   type: ClusterIP
   port: 80
+
+  # OpenCloud external file storage integration
+  opencloud:
+    enabled: false
+    url: "https://files.opendesk.hrz.uni-marburg.de"
+    webdavPath: "/remote.php/dav/files/{uid}/"

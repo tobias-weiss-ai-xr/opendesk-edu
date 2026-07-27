@@ -174,4 +174,19 @@ stalwart:
     automountServiceAccountToken: false
 
   pdb:
-    enabled: false
+    enabled: true
+    minAvailable: 1
+
+  monitoring:
+    enabled: true
+
+  # S3 blob storage via SeaweedFS (replaces local RocksDB for mail attachments)
+  storage:
+    blob:
+      type: s3
+      s3:
+        bucket: "stalwart-blobs"
+        endpoint: "http://seaweedfs-all-in-one.opendesk.svc.cluster.local:8333"
+        region: "us-east-1"
+        accessKey: "AiYgPhUTvGURGTr4h1vb"
+        secretKey: "HUiOJhOgrO3DDtcCaq63KCHz1iK9dlSp85Ef2M2U"

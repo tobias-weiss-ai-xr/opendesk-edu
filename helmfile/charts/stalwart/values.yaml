@@ -112,7 +112,14 @@ stalwart:
     # Optional: blob storage configuration
     blob:
       type: rocksdb
-      path: ""
+      path: "/opt/stalwart-mail/data/blob"
+      # S3-compatible storage (set type: "s3" to use)
+      s3:
+        bucket: ""
+        endpoint: ""
+        region: "us-east-1"
+        accessKey: ""
+        secretKey: ""
 
   # =========================================================================
   # DIRECTORY (Internal by default, can be LDAP later)
@@ -280,3 +287,13 @@ extraEnvVars: []
 
 # -- In seconds, the time given to the pod to terminate gracefully.
 terminationGracePeriodSeconds: 30
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /api/health
+    labels:
+      release: kube-prometheus-stack

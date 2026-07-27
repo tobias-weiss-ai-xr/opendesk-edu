@@ -94,7 +94,7 @@ functional:
           clientId: "opendesk-opencloud"
           protocol: "openid-connect"
           clientAuthenticatorType: "client-secret"
-          secret: "changeme-replace-with-actual-secret"
+          secret: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
           redirectUris:
             - "https://files.opendesk.hrz.uni-marburg.de/*"
             - "https://portal.opendesk.hrz.uni-marburg.de/*"
@@ -112,7 +112,7 @@ functional:
           clientId: "stalwart"
           protocol: "openid-connect"
           clientAuthenticatorType: "client-secret"
-          secret: "changeme-replace-with-actual-secret"
+          secret: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
           redirectUris:
             - "https://mail.opendesk.hrz.uni-marburg.de/*"
             - "https://portal.opendesk.hrz.uni-marburg.de/*"
@@ -131,7 +131,7 @@ functional:
           clientId: "ilias-saml"
           protocol: "saml"
           clientAuthenticatorType: "client-secret"
-          secret: "changeme-replace-with-actual-secret"
+          secret: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
           redirectUris:
             - "https://lms.opendesk.hrz.uni-marburg.de/*"
           rootUrl: "https://lms.opendesk.hrz.uni-marburg.de"
@@ -188,7 +188,7 @@ functional:
           clientId: "moodle-saml"
           protocol: "saml"
           clientAuthenticatorType: "client-secret"
-          secret: "changeme-replace-with-actual-secret"
+          secret: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
           redirectUris:
             - "https://moodle.opendesk.hrz.uni-marburg.de/*"
           rootUrl: "https://moodle.opendesk.hrz.uni-marburg.de"
@@ -245,7 +245,7 @@ functional:
           clientId: "bbb-saml"
           protocol: "saml"
           clientAuthenticatorType: "client-secret"
-          secret: "changeme-replace-with-actual-secret"
+          secret: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
           redirectUris:
             - "https://bbb.opendesk.hrz.uni-marburg.de/*"
             - "https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback"
