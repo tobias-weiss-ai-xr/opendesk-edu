@@ -1,163 +1,138 @@
-# openDesk Edu — Operations Runbook
+# openDesk Edu - Operations Runbook
 
-**Cluster:** HRZ K3s v1.32.3  
-**Namespace:** `opendesk`  
-**Domain:** `opendesk.hrz.uni-marburg.de`  
-**Ingress IP:** `192.168.3.201`  
+## Architecture
 
----
+```
+Services running on K3s cluster (opendesk.hrz.uni-marburg.de):
 
-## 1. Service Overview
-
-| Service | Type | URL | Auth |
-|---------|------|-----|------|
-| OpenCloud | File sync | `files.opendesk.hrz.uni-marburg.de` | OIDC via Keycloak |
-| Stalwart | Mail (SMTP/IMAP) | `mail.opendesk.hrz.uni-marburg.de` | OIDC via Keycloak |
-| Keycloak | SSO/IAM | `id.opendesk.hrz.uni-marburg.de` | Admin: `kcadmin` |
-| Portal | UI | `portal.opendesk.hrz.uni-marburg.de` | OIDC |
-| ArgoCD | GitOps | `argocd.opendesk.hrz.uni-marburg.de` | SSO |
-
-## 2. Quick Checks
-
-```bash
-# All services
-kubectl get pods -n opendesk | grep -E "opencloud|stalwart|k8up"
-
-# Stalwart listeners
-kubectl exec stalwart-stalwart-0 -n opendesk -- cat /opt/stalwart/logs/stalwart.log.* 2>/dev/null | grep "listener started"
-
-# OpenCloud status
-curl -sk https://files.opendesk.hrz.uni-marburg.de/status.php
-
-# Contract tests
-cd opendesk-edu && bash scripts/contract-test.sh all
-
-# k8up validation
-cd opendesk-edu && bash scripts/k8up-validate.sh
+Keycloak SSO ──OIDC──→ OpenCloud, Stalwart, SOGo, Portal
+                           │
+Stalwart v0.16.15 ──SMTP→ External MX (MTA relay)
+                  ──IMAP→ SOGo, Thunderbird
+                  ──JMAP→ JMAP clients
+                  ──POP3→ Legacy clients
+                  ──Sie√→ Sieve filters
+                           │
+Postfix ── disabled (replicas=0)
 ```
 
-## 3. Stalwart
+## Services
+
+| Service | URL | Status |
+|---------|-----|--------|
+| Portal | https://portal.opendesk.hrz.uni-marburg.de | ✅ |
+| OpenCloud | https://files.opendesk.hrz.uni-marburg.de | ✅ |
+| SOGo | https://contacts.opendesk.hrz.uni-marburg.de | ✅ |
+| Stalwart | mail.opendesk.hrz.uni-marburg.de | ✅ |
+| Element | https://element.opendesk.hrz.uni-marburg.de | ✅ |
+| XWiki | https://xwiki.opendesk.hrz.uni-marburg.de | ✅ |
+
+## Credentials
+
+| System | User | Password | Where |
+|--------|------|----------|-------|
+| Keycloak admin | kcadmin | (from k8s secret) | `keycloak-admin-password` |
+| Stalwart admin | admin | admin123 | `STALWART_RECOVERY_ADMIN` env |
+| LDAP admin | cn=admin,dc=swp-ldap,dc=internal | (from k8s secret) | `ums-ldap-server-admin` |
+| MASTER_PASSWORD | - | (from ~/.bashrc) | Used for OIDC secret derivation |
+
+## Stalwart v0.16
+
+### Ports
+- 25: SMTP (inbound)
+- 143: IMAP4
+- 587: Submission (SMTP AUTH)
+- 465: SMTPS
+- 993: IMAPS
+- 110: POP3
+- 995: POP3S
+- 4190: Sieve
+- 8080: JMAP/HTTP API
 
 ### Config
-File: `/opt/stalwart/etc/config.toml` (mounted from ConfigMap)
+- Data: `/var/lib/stalwart/data` (RocksDB)
+- Config: `/etc/stalwart/config.json`
+- Logs: `/var/lib/stalwart/logs` (stdout also)
 
-### Paths (v0.15.5)
-| Mount | Path |
-|-------|------|
-| Config | `/opt/stalwart/etc/config.toml` |
-| Data (RocksDB) | `/opt/stalwart/data` |
-| Logs | `/opt/stalwart/logs` |
-
-### Auth
-- **OIDC issuer:** `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk`
-- **Client ID:** `stalwart`
-- **Fallback admin:** `admin` / `admin123` (SHA-512 crypt hash)
-- **Ports:** 25(SMTP), 587(Submission), 465(SMTPS), 143(IMAP), 993(IMAPS), 110(POP3), 995(POP3S), 4190(Sieve), 8080(HTTP API)
-
-### Upgrade
-Current: `v0.15.5` (image: `stalwartlabs/stalwart`)
-- **v0.16 migration** requires Python migration script + web UI bundle (blocked by network)
-- The v0.16 config format is JMAP-based — no more TOML files
-- See `STALWART_STATUS.md` for details
-
-### Backup
-- PVC: `stalwart-stalwart` (20Gi RWO, ceph-rbd-ssd)
-- Excluded from main backup (RWO) — separate schedule `backup-stalwart`
-- Runs daily at 01:00
-- Uses label selector `k8up.io/backup-group=stalwart`
-
-## 4. OpenCloud
-
-### Config
-Environment variables set in deployment:
-- `OC_OIDC_ISSUER`: `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk`
-- `PROXY_OIDC_CLIENT_ID`: `opendesk-opencloud`
-- `OC_URL`: `https://files.opendesk.hrz.uni-marburg.de`
-
-### Auth
-- **OIDC issuer:** `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk`
-- **Client ID:** `opendesk-opencloud`
-- **Client secret:** Stored in `opendesk-opencloud-secrets` (key `oc-oidc-client-secret`)
-
-### Backup
-- PVC: `opendesk-opencloud-data` (100Gi RWX, ceph-cephfs-hdd-ec)
-- Backed up by `backup-live` (daily 00:42)
-- No exclude annotation — should be included automatically
-
-## 5. k8up Backup Operator
-
-### Current State
-- **Image:** `ghcr.io/k8up-io/k8up:v2.13.1` with custom binary via init container
-- **Custom binary:** Built from `cmd/k8up` (not `cmd/operator`!) with Go 1.23.6
-- **Init container:** Downloads binary from `k8up-bin-srv:9999/k8up`, mounts at `/usr/local/bin/k8up`
-- **Binary server:** Deployment `k8up-binary-server` — serves the fixed binary
-
-### Schedules (all in namespace `opendesk`)
-
-| Schedule | PVCs | Backend | Schedule |
-|----------|------|---------|----------|
-| `backup-live` | All RWX PVCs | `s3.hrz.uni-marburg.de/backups` | Daily 00:42 |
-| `backup-stalwart` | Stalwart RWO (label selector) | `s3.hrz.uni-marburg.de/backups` | Daily 01:00 |
-
-### Recovery
-S3 endpoint: `https://s3.hrz.uni-marburg.de`  
-Bucket: `backups`  
-Restore command: `kubectl apply -f restore.yaml` (see k8up docs)
-
-## 6. ArgoCD GitOps
-
-### Architecture
-```
-argocd/opendesk.git
-├── master branch         → opendesk-apps (CE)  → 21 CE apps
-└── deploy/edu-hrz branch → opendesk-edu-apps   → 35 edu apps
-```
-
-### Root Apps
-| App | Branch | Status | Child Apps |
-|-----|--------|--------|------------|
-| `opendesk-apps` | `master` | `Synced/Healthy` | 21 CE |
-| `opendesk-edu-apps` | `deploy/edu-hrz` | `Synced/Healthy` | 35 edu |
-
-### Adding a New App
-1. Edit `opendesk-edu-apps/values.yaml` in the `deploy/edu-hrz` branch
-2. Push — ArgoCD auto-syncs
-3. The app needs a `helmfile-child.yaml.gotmpl` in the edu repo
-
-## 7. Known Issues
-
-| Issue | Workaround | Status |
-|-------|-----------|--------|
-| HRZ DNS CNAME chain failure | `hostAliases` on all pods | ✅ Fixed |
-| k8up init container (not full image) | Binary server pod serves fixed binary | ⚠️ Permanent workaround |
-| Stalwart webadmin UI | Cannot download from GitHub | ⚠️ Blocked — needs side-load |
-| Stalwart v0.16 upgrade | Requires migration script + webui bundle | ⚠️ Blocked by network |
-| Bookstack CrashLoopBackOff | Missing APP_KEY (pre-existing) | ❌ Pre-existing |
-| Portal consumer objstorage | Cannot reach `objectstorage.…` | ❌ Pre-existing |
-| Seaweedfs backup schedule | Redundant, disabled (backs up to itself) | ✅ Fixed |
-
-## 8. Credentials
-
-| System | User | Auth | Source |
-|--------|------|------|--------|
-| Keycloak admin | `kcadmin` | Password | `keycloak-admin-password` secret |
-| Stalwart admin | `admin` | `admin123` | SHA-512 hash in ConfigMap |
-| ArgoCD | SSO via Keycloak | OIDC | — |
-| LDAP admin | `cn=admin,dc=swp-ldap,dc=internal` | Password | `ums-ldap-server-admin` secret |
-| GitLab bot | `gitlab-bot` | PAT | `repo-argocd-opendesk` secret |
-
-## 9. Useful Commands
-
+### CLI
 ```bash
-# Check all PVCs and backup annotations
-kubectl get pvc -n opendesk -o json | jq '.items[] | {name: .metadata.name, modes: .spec.accessModes, exclude: .metadata.annotations."k8up.io/exclude"}'
+# Copy CLI into running pod (ephemeral /tmp)
+kubectl cp $(kubectl get pod -n opendesk -l app=stalwart-cli -o name | head -1):/usr/local/bin/stalwart-cli /tmp/stalwart-cli
+kubectl cp /tmp/stalwart-cli stalwart-stalwart-0:/tmp/ -n opendesk -c stalwart
 
-# Check ArgoCD sync status
-kubectl get applications -n argocd -o json | jq '.items[] | {name: .metadata.name, sync: .status.sync.status, health: .status.health.status}'
-
-# Test contract suite
-bash opendesk-edu/scripts/contract-test.sh all
-
-# Validate k8up
-bash opendesk-edu/scripts/k8up-validate.sh
+# Usage
+kubectl exec stalwart-stalwart-0 -n opendesk -- /tmp/stalwart-cli --url http://localhost:8080 --user admin --password admin123 <command>
 ```
+
+### Probes (v0.16)
+- TCP socket on port 8080 (NOT httpGet — v0.16 has no /api/health)
+- Security context: allowPrivilegeEscalation=true, capabilities.drop=[]
+
+## Keycloak OIDC Clients
+
+| Client ID | Service | Realm | 
+|-----------|---------|-------|
+| opendesk-opencloud | OpenCloud | opendesk |
+| sogo | SOGo | opendesk |
+| stalwart | Stalwart | opendesk |
+| opendesk-matrix | Element/Synapse | opendesk |
+| opendesk-xwiki | XWiki | opendesk |
+| (portal OIDC) | Portal (univention) | opendesk |
+
+## Backup (k8up)
+
+- **backup-live**: RWX PVCs daily 00:42
+- **backup-stalwart**: RWO PVC via label selector daily 01:00
+- All 29 RWO PVCs annotated `k8up.io/exclude: true`
+- S3 target: `s3://s3.hrz.uni-marburg.de/backups`
+
+## Deployment Methods
+
+### Helmfile (full deployment)
+```bash
+cd opendesk-edu
+helmfile -e edu -f helmfile/edu-helmfile.yaml.gotmpl sync
+```
+
+### ArgoCD (GitOps)
+- CE apps: `opendesk-apps` @ master branch
+- Edu apps: `opendesk-edu-apps` @ deploy/edu-hrz branch
+- **Note**: CMP sidecar env var limitation means per-app env don't reach helmfile. CMP-based edu apps show `Unknown` in ArgoCD but are deployed via helmfile directly.
+
+## SMTP Relay
+
+Stalwart handles all SMTP. Postfix is disabled (replicas=0).
+
+Services using Stalwart:
+- SOGo: `smtp://stalwart-stalwart:587`
+- OpenCloud: `stalwart-stalwart.opendesk.svc.cluster.local:587`
+
+## Troubleshooting
+
+### Stalwart CrashLoopBackOff
+1. Check ConfigMap: must have ONLY `config.json` key, not `config.toml`
+2. Check security context: `allowPrivilegeEscalation=true`, `capabilities.drop=[]`
+3. Check probes: TCP socket on 8080, NOT httpGet
+
+### ArgoCD CMP apps stuck "Unknown"
+Known issue: per-app `plugin.env` vars don't reach the CMP sidecar in ArgoCD v3.1.8.
+Workaround: use `helm.values` (Helm-based child apps) instead of CMP.
+
+### HRZ DNS CNAME chain failures
+CoreDNS returns SERVFAIL on external CNAME chains.
+Fix: add `hostAliases` in pod specs pointing to ingress IP (192.168.3.201).
+
+### Keycloak bootstrap chart fails
+The `opendesk-keycloak-bootstrap` chart from OCI registry creates OIDC clients.
+If it fails with "Object has no name defined": the `name` attribute is missing on existing clients.
+Fix: delete conflicting clients via REST API.
+
+## Known Contract Test Failures
+
+| Test | Reason | Status |
+|------|--------|--------|
+| OpenCloud ingress unreachable | HRZ DNS CNAME issue | ⚠️ Known |
+| OpenCloud not installed | Test check method | ⚠️ Known (runs) |
+| Stalwart OIDC issuer | v0.16 uses internal OIDC provider | ⚠️ Known |
+| Stalwart OIDC secret mismatch | v0.16 OIDC config differs from v0.15 | ⚠️ Known |
+| ArgoCD edu root app not Synced | CMP env var limitation | ⚠️ Known |
