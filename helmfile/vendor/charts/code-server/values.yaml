@@ -1,0 +1,471 @@
+# coderd -- Primary service responsible for all things Coder!
+coderd:
+  # coderd.image -- Injected by Coder during release.
+  image: docker.io/coderenvs/coder-service:1.44.6
+  # coderd.replicas -- The number of Kubernetes Pod replicas.
+  replicas: 1
+  # coderd.imagePullSecret -- The secret used for pulling the coderd image from
+  # a private registry.
+  imagePullSecret: ""
+  # coderd.annotations -- Apply annotations to the coderd deployment.
+  # https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  annotations: {}
+  # coderd.serviceAnnotations -- Apply annotations to the coderd service.
+  # https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  serviceAnnotations: {}
+  # coderd.serviceSpec -- Specification to inject for the coderd service. See:
+  # https://kubernetes.io/docs/concepts/services-networking/service/
+  serviceSpec:
+    # coderd.serviceSpec.type -- Set the type of Service. See:
+    # https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+    type: LoadBalancer
+    # coderd.serviceSpec.externalTrafficPolicy -- Set the traffic policy for the service. See:
+    # https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    externalTrafficPolicy: Local
+    # coderd.serviceSpec.loadBalancerIP -- Set the IP address of the coderd service.
+    loadBalancerIP: ""
+    # coderd.serviceSpec.loadBalancerSourceRanges -- Traffic through the LoadBalancer
+    # will be restricted to the specified client IPs. This field will be ignored if
+    # the cloud provider does not support this feature.
+    loadBalancerSourceRanges: []
+  # coderd.serviceNodePorts -- Allows manually setting static node ports for the coderd service.
+  # This is only helpful if static ports are required, and usually should be left alone.
+  # By default these are dynamically chosen.
+  serviceNodePorts:
+    # coderd.serviceNodePorts.http -- Sets a static 'coderd' service non-TLS nodePort.
+    # This should usually be omitted.
+    http: null
+    # coderd.serviceNodePorts.https -- Sets a static 'coderd' service TLS nodePort
+    # This should usually be omitted.
+    https: null
+  # coderd.trustProxyIP -- Configures Coder to accept X-Real-IP and X-Forwarded-For
+  # headers from any origin. This option is deprecated and will be removed in a
+  # future release. Use the coderd.reverseProxy setting instead, which supports
+  # configuring an allowlist of trusted origins.
+  trustProxyIP: false
+  # coderd.devurlsHost -- Wildcard hostname to allow matching against custom-created
+  # dev URLs. Leaving as an empty string results in DevURLs being disabled.
+  devurlsHost: ""
+  # coderd.tls -- TLS configuration for coderd.
+  # These options will override dashboard configuration.
+  tls:
+    # coderd.tls.hostSecretName -- The secret to use for TLS.
+    hostSecretName: ""
+    # coderd.tls.devurlsHostSecretName -- The secret to use for DevURL TLS.
+    devurlsHostSecretName: ""
+  # coderd.clientTLS -- Client-side TLS configuration for coderd.
+  clientTLS:
+    # coderd.clientTLS.secretName -- Secret containing a PEM encoded cert file.
+    secretName: ""
+  # coderd.proxy -- Whether Coder should initiate outbound connections using
+  # a proxy.
+  proxy:
+    # coderd.proxy.http -- Proxy to use for HTTP connections. If unset,
+    # coderd will initiate HTTP connections directly. This corresponds to
+    # the http_proxy environment variable.
+    #
+    # Examples:
+    # - localhost:3128 - a HTTP proxy on localhost:3128
+    # - socks5://localhost:1080 - a SOCKS5 proxy on localhost:1080
+    http: ""
+    # coderd.proxy.https -- Proxy to use for HTTPS connections. If this is
+    # not set, coderd will use the HTTP proxy (if set), otherwise it will
+    # initiate HTTPS connections directly. This corresponds to the
+    # https_proxy environment variable.
+    https: ""
+    # coderd.proxy.exempt -- Bypass the configured proxy rules for this
+    # comma-delimited list of hosts or prefixes. This corresponds to the
+    # no_proxy environment variable.
+    #
+    # Examples:
+    # - host.example.com,abc.example.com:3100 - connect directly to
+    #   host.example.com or its subdomains (any port), as well as
+    #   abc.example.com:3100 or its subdomains (port 3100 only).
+    # - example.com - connect directly to example.com or any of its
+    #   subdomains (any port)
+    exempt: "cluster.local"
+  # coderd.reverseProxy -- Whether Coder should trust proxy headers for
+  # inbound connections, important for ensuring correct IP addresses
+  # when an Ingress Controller, service mesh, or other Layer 7 reverse
+  # proxy are deployed in front of Coder.
+  reverseProxy:
+    # coderd.reverseProxy.trustedOrigins -- A list of IPv4 or IPv6
+    # subnets to consider trusted, specified in CIDR format. If hosts
+    # are part of a matching network, the configured headers will be
+    # trusted; otherwise, coderd will rely on the connecting client
+    # IP address.
+    trustedOrigins: []
+    # coderd.reverseProxy.headers -- A list of trusted headers.
+    #
+    # Coder currently supports the following list of headers, with the
+    # following fixed search order:
+    #
+    # - CF-Connecting-IP
+    # - True-Client-IP
+    # - X-Real-IP
+    # - X-Forwarded-For
+    headers: []
+  # coderd.alternateHostnames -- A list of hostnames that coderd (including
+  # satellites) will allow for OIDC. If this list is not set, all OIDC traffic
+  # will go to the configured access URL in the admin settings on the dashboard
+  # (or the satellite's primary URL as configured by Helm).
+  #
+  # Example:
+  #   alternateHostnames:
+  #     - coder.example.com
+  #     - primary.example.com
+  #
+  # This is used for having a unified hostname across all satellites. Read more:
+  # TODO: link to docs:
+  alternateHostnames: []
+  # coderd.satellite -- Deploy a satellite to geodistribute access to
+  # workspaces for lower latency.
+  satellite:
+    # coderd.satellite.enable -- Run coderd as a satellite pointing to a primary
+    # deployment. Satellite enable low-latency access to workspaces all over the
+    # world. Read more:
+    # https://coder.com/docs/coder/latest/admin/satellites
+    enable: false
+    # coderd.satellite.accessURL -- URL of the satellite that clients will
+    # connect to.
+    # e.g. https://sydney.coder.myorg.com
+    accessURL: ""
+    # coderd.satellite.primaryURL -- URL of the primary Coder deployment. Must
+    # be accessible from the satellite and clients.
+    # eg. https://coder.myorg.com
+    primaryURL: ""
+  # coderd.podSecurityContext -- Fields related to the pod's security context
+  # (as opposed to the container). Some fields are also present in the
+  # container security context, which will take precedence over these values.
+  podSecurityContext:
+    # coderd.podSecurityContext.runAsNonRoot -- Requires that containers in
+    # the pod run as an unprivileged user. If setting runAsUser to 0 (root),
+    # this will need to be set to false.
+    runAsNonRoot: true
+    # coderd.podSecurityContext.runAsUser -- Sets the user id of the pod.
+    # For security reasons, we recommend using a non-root user.
+    runAsUser: 1000
+    # coderd.podSecurityContext.runAsGroup -- Sets the group id of the pod.
+    # For security reasons, we recommend using a non-root group.
+    runAsGroup: 1000
+    # coderd.podSecurityContext.seccompProfile -- Sets the seccomp profile
+    # for the pod. If set, the container security context setting will take
+    # precedence over this value.
+    seccompProfile:
+      type: RuntimeDefault
+  # coderd.securityContext -- Fields related to the container's security
+  # context (as opposed to the pod). Some fields are also present in the pod
+  # security context, in which case these values will take precedence.
+  securityContext:
+    # coderd.securityContext.runAsNonRoot -- Requires that the coderd and
+    # migrations containers run as an unprivileged user. If setting
+    # runAsUser to 0 (root), this will need to be set to false.
+    runAsNonRoot: true
+    # coderd.securityContext.runAsUser -- Sets the user id of the pod.
+    # For security reasons, we recommend using a non-root user.
+    runAsUser: 1000
+    # coderd.securityContext.runAsGroup -- Sets the group id of the pod.
+    # For security reasons, we recommend using a non-root group.
+    runAsGroup: 1000
+    # coderd.securityContext.readOnlyRootFilesystem -- Mounts the container's
+    # root filesystem as read-only. It is recommended to leave this setting
+    # enabled in production. This will override the same setting in the pod
+    readOnlyRootFilesystem: true
+    # coderd.securityContext.seccompProfile -- Sets the seccomp profile for
+    # the migration and runtime containers.
+    seccompProfile:
+      type: RuntimeDefault
+    # coderd.securityContext.allowPrivilegeEscalation -- Controls whether
+    # the container can gain additional privileges, such as escalating to
+    # root. It is recommended to leave this setting disabled in production.
+    allowPrivilegeEscalation: false
+  # coderd.resources -- Kubernetes resource specification for coderd pods.
+  # To unset a value, set it to "". To unset all values, set resources to nil.
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "250m"
+      memory: "512Mi"
+  # coderd.liveness -- Configure the liveness check for the coderd service.
+  liveness:
+    initialDelaySeconds: 30
+    failureThreshold: 30
+    periodSeconds: 10
+    timeoutSeconds: 3
+  # coderd.readiness -- Configure the readiness check for the coderd service.
+  readiness:
+    initialDelaySeconds: 10
+    failureThreshold: 15
+    periodSeconds: 10
+    timeoutSeconds: 3
+  # coderd.builtinProviderServiceAccount -- Customize the built-in Kubernetes
+  # provider service account.
+  builtinProviderServiceAccount:
+    # coderd.builtinProviderServiceAccount.annotations -- A KV mapping of annotations. See:
+    # https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    annotations: {}
+    # coderd.builtinProviderServiceAccount.labels -- Add labels to the service account
+    # used for the built-in provider.
+    labels: {}
+    # coderd.builtinProviderServiceAccount.migrate -- Will migrate the built-in workspace
+    # provider using the coded environment.
+    migrate: true
+  # coderd.workspaceServiceAccount -- Customize the default service account used
+  # for workspaces.
+  workspaceServiceAccount:
+    # coderd.workspaceServiceAccount.annotations -- A KV mapping of annotations.
+    # See: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    annotations: {}
+    # coderd.workspaceServiceAccount.labels -- Add labels to the service account
+    # used for workspaces.
+    labels: {}
+  # Temporary options for opting in to the new OIDC refresh feature, which
+  # allows Coder-issued API keys to inherit session timing limits and uses
+  # refresh tokens to ensure continued access. These are purposefully not
+  # documented in the README since they will be moved into the OIDC config on
+  # the dashboard.
+  oidc:
+    # enableRefresh enables the new OIDC refresh feature.
+    enableRefresh: false
+    # redirectOptions controls which query parameters are set when redirecting
+    # the user to the OIDC provider.
+    redirectOptions: {}
+  # Options for customizing the built-in super admin account for managing a
+  # Coder installation.
+  superAdmin:
+    # Options for configuring the secret used to specify the password for the
+    # built-in super admin account.
+    passwordSecret:
+      # coderd.superAdmin.passwordSecret.name -- Name of a secret that should
+      # be used to determine the password for the super admin account. The
+      # password should be contained in the field `password`, or the manually
+      # specified one.
+      name: ""
+      # coderd.superAdmin.passwordSecret.key -- The key of the secret that
+      # contains the super admin password.
+      key: "password"
+  # coderd.extraLabels -- Allows specifying additional labels to pods in the
+  # `coderd` deployment (.spec.template.metadata.labels).
+  extraLabels: {}
+  # coderd.extraEnvs -- Add additional environment variables to the coderd
+  # deployment containers. Overriding any environment variables that the Helm
+  # chart sets automatically is unsupported and will result in undefined
+  # behavior. You can find a list of the environment variables we set by default
+  # by inspecting the helm template files or by running `kubectl describe`
+  # against your existing coderd deployment.
+  # https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+  extraEnvs: []
+  # coderd.affinity -- Allows specifying an affinity rule for the `coderd`
+  # deployment. The default rule prefers to schedule coderd pods on different
+  # nodes, which is only applicable if coderd.replicas is greater than 1.
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - "coderd"
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+  # coderd.networkPolicy -- Configure the network policy to apply to coderd.
+  networkPolicy:
+    # coderd.networkPolicy.enable -- Manage a network policy for coderd using
+    # Helm. If false, no policies will be created for the Coder control plane.
+    enable: true
+  # Controls the embedded SCIM server in coderd that can be used to
+  # automatically provision and deprovision users from third-party identity
+  # providers.
+  scim:
+    # coderd.scim.enable -- Enable SCIM support in coderd. SCIM allows you to
+    # automatically provision/deprovision users. If true, authSecret.name must
+    # be set.
+    enable: false
+    authSecret:
+      # coderd.scim.authSecret.name -- Name of a secret that should be used to
+      # determine the auth header used for the SCIM server. The secret should be
+      # contained in the field `secret`, or the manually specified one.
+      name: ""
+      # coderd.scim.authSecret.key -- The key of the secret that contains the
+      # SCIM auth header.
+      key: "secret"
+# ingress -- Configure an Ingress to route traffic to Coder services.
+ingress:
+  # ingress.enable -- A boolean controlling whether to create an Ingress.
+  enable: false
+  # ingress.className -- The ingressClassName to set on the Ingress.
+  className: ""
+  # ingress.host -- The hostname to proxy to the Coder installation.
+  # The cluster Ingress Controller typically uses server name indication
+  # or the HTTP Host header to route traffic. The dev URLs hostname is specified
+  # in coderd.devurlsHost.
+  host: ""
+  # ingress.annotations -- Additional annotations to add to the Ingress
+  # object. The behavior is typically dependent on the Ingress Controller
+  # implementation, and useful for managing features like TLS termination.
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+  # ingress.tls -- Configures TLS settings for the Ingress. TLS certificates are
+  # specified in coderd.tls.hostSecretName and coderd.tls.devurlsHostSecretName.
+  tls:
+    # ingress.tls.enable -- Determines whether the Ingress handles TLS.
+    enable: false
+# envbox -- Required for running Docker inside containers. See requirements:
+# https://coder.com/docs/coder/latest/admin/workspace-management/cvms
+envbox:
+  # envbox.image -- Injected by Coder during release.
+  image: docker.io/coderenvs/envbox:1.44.6
+# Contains fields related to the Postgres backend. If providing your own
+# instance, a minimum version of Postgres 11 is required with the contrib
+# package installed.
+postgres:
+  # postgres.host -- Host of the external PostgreSQL instance.
+  host: ""
+  # postgres.port -- Port of the external PostgreSQL instance.
+  port: ""
+  # postgres.user -- User of the external PostgreSQL instance.
+  user: ""
+  # postgres.database -- Name of the database that Coder will use.
+  # You must create this database first.
+  database: ""
+  # postgres.searchPath -- Optional. Schema for coder tables in the external
+  # PostgresSQL instance. This changes the 'search_path' client configuration 
+  # option (https://www.postgresql.org/docs/current/runtime-config-client.html).
+  # By default, the 'public' schema will be used.
+  searchPath: ""
+  # postgres.passwordSecret -- Name of an existing secret in the
+  # current namespace with the password of the PostgreSQL instance.
+  # The password must be contained in the secret field `password`.
+  # This should be set to an empty string if the database does not
+  # require a password to connect.
+  passwordSecret: ""
+  # postgres.sslMode -- Provides variable levels of protection for
+  # the PostgreSQL connection. For acceptable values, see:
+  #  https://www.postgresql.org/docs/11/libpq-ssl.html
+  sslMode: "require"
+  # postgres.ssl -- Options for configuring the SSL cert, key, and root cert
+  # when connecting to Postgres.
+  ssl:
+    # postgres.ssl.certSecret -- Secret containing a PEM encoded cert file.
+    certSecret:
+      # postgres.ssl.certSecret.name -- Name of the secret.
+      name: ""
+      # postgres.ssl.certSecret.key -- Key pointing to a certificate in the secret.
+      key: ""
+    # postgres.ssl.keySecret -- Secret containing a PEM encoded key file.
+    keySecret:
+      # postgres.ssl.keySecret.name -- Name of the secret.
+      name: ""
+      # postgres.ssl.keySecret.key -- Key pointing to a certificate in the secret.
+      key: ""
+    # postgres.ssl.rootCertSecret -- Secret containing a PEM encoded root cert file.
+    rootCertSecret:
+      # postgres.ssl.rootCertSecret.name -- Name of the secret.
+      name: ""
+      # postgres.ssl.rootCertSecret.key -- Key pointing to a certificate in the secret.
+      key: ""
+  # postgres.connector -- Option for configuring database connector type.
+  # valid values are:
+  # - "postgres" -- default connector
+  # - "awsiamrds" -- uses AWS IAM account in environment to authenticate using
+  #   IAM to connect to an RDS instance.
+  connector: "postgres"
+  # postgres.noPasswordEnv -- If enabled, passwordSecret will be specified as a volumeMount
+  # and the env `DB_PASSWORD_PATH` will be set instead to point to that location.
+  # The default behaviour is to set the environment variable `DB_PASSWORD` to the value
+  # of the postgres password secret.
+  noPasswordEnv: false
+  # postgres.default -- Configure a built-in PostgreSQL deployment.
+  default:
+    # postgres.default.enable -- Deploys a PostgreSQL instance. We recommend
+    # using an external PostgreSQL instance in production.
+    # If true, all other values are ignored.
+    enable: true
+    # postgres.default.image -- Injected by Coder during release.
+    image: docker.io/coderenvs/timescale:1.44.6
+    # postgres.default.storageClassName -- Set the storageClass to store
+    # the database.
+    storageClassName: ""
+    # postgres.default.resources -- Kubernetes resource specification for the PostgreSQL pod.
+    # To unset a value, set it to "". To unset all values, set resources to nil.
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "1Gi"
+        # postgres.default.resources.requests.storage -- Specifies the size of the volume claim
+        # for persisting the database.
+        storage: "10Gi"
+      limits:
+        cpu: "250m"
+        memory: "1Gi"
+    # postgres.default.networkPolicy -- Configure the network policy to apply
+    # to the built-in PostgreSQL deployment.
+    networkPolicy:
+      # postgres.default.networkPolicy.enable -- Manage a network policy for
+      # PostgreSQL using Helm. If false, no policies will be created for the
+      # built-in database.
+      enable: true
+    # postgres.default.annotations -- Apply annotations to the default postgres service.
+    # https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    annotations: {}
+# services -- Kubernetes Service configuration that applies to Coder services.
+services:
+  # services.annotations -- A KV mapping of annotations. See:
+  # https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  # DEPRECATED -- Please use the annotations value for each object.
+  annotations: {}
+  # services.clusterDomainSuffix -- Custom domain suffix for DNS resolution in your cluster. See:
+  # https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/
+  clusterDomainSuffix: ".svc.cluster.local"
+  # services.tolerations -- Each element is a toleration object. See:
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+  tolerations: []
+  # services.nodeSelector -- See:
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+  nodeSelector:
+    kubernetes.io/os: linux
+    kubernetes.io/arch: amd64
+  # services.type -- See the following for configurable types:
+  # https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  type: "ClusterIP"
+# logging -- Configures the logging format and output of Coder.
+logging:
+  # logging.verbose -- Toggles coderd debug logging.
+  verbose: true
+  # logging.human -- Location to send logs that are formatted for readability.
+  # Set to an empty string to disable.
+  human: /dev/stderr
+  # logging.stackdriver -- Location to send logs that are formatted for Google
+  # Stackdriver. Set to an empty string to disable.
+  stackdriver: ""
+  # logging.json -- Location to send logs that are formatted as JSON.
+  # Set to an empty string to disable.
+  json: ""
+  # logging.splunk -- Coder can send logs directly to Splunk
+  # in addition to file-based output.
+  splunk:
+    # logging.splunk.url -- Splunk HEC collector endpoint.
+    url: ""
+    # logging.splunk.token -- Splunk HEC collector token.
+    token: ""
+    # logging.splunk_channel -- Optional. Specify the channel
+    # to associate messages with.
+    channel: ""
+# metrics -- Configure various metrics to gain observability into Coder.
+metrics:
+  # metrics.amplitudeKey -- Enables telemetry pushing to Amplitude. Amplitude records how users
+  # interact with Coder, which is used to improve the product. No events store any personal
+  # information. Amplitude can be found here: https://amplitude.com/
+  # Keep empty to disable.
+  amplitudeKey: ""
+# certs -- Certificate that will be mounted inside Coder services.
+certs:
+  secret:
+    # certs.secret.name -- Name of the secret.
+    name: ""
+    # certs.secret.key -- Key pointing to a certificate in the secret.
+    key: ""

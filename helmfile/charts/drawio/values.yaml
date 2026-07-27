@@ -3,7 +3,7 @@
 
 drawio:
   image: jgraph/drawio
-  tag: latest
+  tag: "latest@sha256:51adba39a4a13cd0cb2979916ea9ee6e4438564e76acd51f92e79fc65e728b73"
   port: 8080
 
   resources:
@@ -37,3 +37,14 @@ ingress:
     - secretName: drawio-tls
       hosts:
         - draw.opendesk.hrz.uni-marburg.de
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack

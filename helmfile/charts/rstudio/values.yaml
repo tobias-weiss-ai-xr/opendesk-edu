@@ -61,3 +61,11 @@ opencloud:
   remotePath: "/"
   # Local mount point (relative to the main container's workspace)
   mountPath: "opencloud"
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ""

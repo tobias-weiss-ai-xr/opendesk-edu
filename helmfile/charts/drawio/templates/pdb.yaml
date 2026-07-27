@@ -1,5 +1,4 @@
-# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.drawio.pdb.enabled }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -7,8 +6,13 @@ metadata:
   labels:
 {{ include "drawio.labels" . | nindent 4 }}
 spec:
-  minAvailable: {{ if .Values.pdb }}{{ .Values.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
+  {{- if .Values.drawio.pdb.minAvailable }}
+  minAvailable: {{ .Values.drawio.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.drawio.pdb.maxUnavailable }}
+  {{- end }}
   selector:
     matchLabels:
-      drawio/server: "true"
-{{ include "drawio.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ include "drawio.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

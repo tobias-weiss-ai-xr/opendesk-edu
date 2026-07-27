@@ -1,0 +1,23 @@
+{{- if .Values.drawio.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-drawio-monitor
+  labels:
+{{ include "drawio.labels" . | nindent 4 }}
+    {{- if .Values.drawio.monitoring.labels }}
+{{ toYaml .Values.drawio.monitoring.labels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: {{ .Values.drawio.monitoring.port | default "http" | quote }}
+      interval: {{ .Values.drawio.monitoring.interval | default "30s" }}
+      path: {{ .Values.drawio.monitoring.path | default "/health" | quote }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "drawio.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

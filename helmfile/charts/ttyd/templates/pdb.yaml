@@ -1,0 +1,18 @@
+{{- if .Values.ttyd.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "ttyd.fullname" . }}-pdb
+  labels:
+{{ include "ttyd.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.ttyd.pdb.minAvailable }}
+  minAvailable: {{ .Values.ttyd.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.ttyd.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ttyd.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

@@ -1,0 +1,18 @@
+{{- if .Values.rstudio.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "rstudio.fullname" . }}-pdb
+  labels:
+{{ include "rstudio.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.rstudio.pdb.minAvailable }}
+  minAvailable: {{ .Values.rstudio.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.rstudio.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "rstudio.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

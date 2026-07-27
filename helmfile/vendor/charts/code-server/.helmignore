@@ -1,0 +1,11 @@
+.git
+.github
+.gitignore
+.shellcheckrc
+build
+examples
+kube-linter.yaml
+Makefile
+README.md.gotmpl
+scripts
+tests

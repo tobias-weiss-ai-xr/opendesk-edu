@@ -1,0 +1,310 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "coder.serviceName" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: {{ include "coder.serviceName" . }}
+    app: {{ include "coder.serviceName" . }}
+    coder.deployment: {{ include "coder.serviceName" . }}
+  annotations: {{ toYaml (merge (.Values.coderd.annotations | default (dict)) (.Values.services.annotations | default (dict))) | nindent 4 }}
+spec:
+  replicas: {{ default 1 .Values.coderd.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: "25%"
+      maxUnavailable: "25%"
+  selector:
+    matchLabels:
+      coder.deployment: {{ include "coder.serviceName" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: coderd
+        app.kubernetes.io/part-of: coder
+        app: {{ include "coder.serviceName" . }}
+        coder.deployment: {{ include "coder.serviceName" . }}
+        {{- with .Values.coderd.extraLabels -}}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+      annotations: {{ toYaml (merge (.Values.coderd.annotations | default (dict)) (.Values.services.annotations | default (dict))) | nindent 8 }}
+    spec:
+      securityContext: {{ toYaml .Values.coderd.podSecurityContext | nindent 8 }}
+      restartPolicy: Always
+      {{- if .Values.coderd.imagePullSecret }}
+      imagePullSecrets:
+      - name: {{ .Values.coderd.imagePullSecret | quote }}
+      {{- end }}
+      # terminationGracePeriodSeconds should be set to the upper bound for container rebuilds and creates.
+      # 5 minutes
+      terminationGracePeriodSeconds: 300
+      {{- if not .Values.coderd.satellite.enable }}
+      serviceAccountName: coder
+      {{- end }}
+      {{- if .Values.coderd.affinity }}
+      affinity: {{- include "coder.template.render" (dict "value" .Values.coderd.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- include "coder.services.nodeSelector" . | indent 6 }}
+      {{- include "coder.serviceTolerations" . | indent 6 }}
+      {{- if not .Values.coderd.satellite.enable }}
+      initContainers:
+        - name: migrations
+          image: {{ .Values.coderd.image | default (printf "docker.io/coderenvs/coder-service:%s" (.Chart.AppVersion)) | quote }}
+          imagePullPolicy: Always
+          env:
+            - name: HUMAN_LOG
+              value: {{ .Values.logging.human | quote }}
+            - name: JSON_LOG
+              value: {{ .Values.logging.json | quote }}
+            - name: STACKDRIVER_LOG
+              value: {{ .Values.logging.stackdriver | quote }}
+            - name: SPLUNK_URL
+              value: {{ .Values.logging.splunk.url | quote }}
+            - name: SPLUNK_TOKEN
+              value: {{ .Values.logging.splunk.token | quote }}
+            - name: SPLUNK_CHANNEL
+              value: {{ .Values.logging.splunk.channel | quote }}
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: DEVURL_HOST
+              value: {{ .Values.coderd.devurlsHost | quote }}
+            - name: VERBOSE
+              value: "true"
+            - name: http_proxy
+              value: {{ .Values.coderd.proxy.http | quote }}
+            - name: https_proxy
+              value: {{ .Values.coderd.proxy.https | quote }}
+            - name: no_proxy
+              value: {{ .Values.coderd.proxy.exempt | quote }}
+            {{- include "coder.postgres.env" . | indent 12 }}
+            {{- include "coder.workspaces.configMapEnv" . | indent 12 }}
+            {{- with .Values.coderd.extraEnvs -}}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+          command:
+            - coderd
+            - migrate
+            - up
+          securityContext: {{ toYaml .Values.coderd.securityContext | nindent 12 }}
+          {{- include "coder.volumeMounts" . | indent 10 }}
+      {{- end }}
+      containers:
+        - name: {{ include "coder.serviceName" . }}
+          image: {{ .Values.coderd.image | default (printf "docker.io/coderenvs/coder-service:%s" (.Chart.AppVersion)) | quote }}
+          imagePullPolicy: Always
+          ports:
+            - name: tcp-{{ include "coder.serviceName" . }}
+              containerPort: 8080
+            - name: pprof-{{ include "coder.serviceName" . }}
+              containerPort: 6060
+            - name: prom-{{ include "coder.serviceName" . }}
+              containerPort: 2112
+          securityContext: {{ toYaml .Values.coderd.securityContext | nindent 12 }}
+          # coderd is a daemon service, no need to allocate a tty for it.
+          tty: false
+          env:
+            - name: SKIP_MIGRATIONS
+              value: "true"
+            - name: ASSETS_URL
+            - name: HUMAN_LOG
+              value: {{ .Values.logging.human | quote }}
+            - name: JSON_LOG
+              value: {{ .Values.logging.json | quote }}
+            - name: STACKDRIVER_LOG
+              value: {{ .Values.logging.stackdriver | quote }}
+            - name: AMPLITUDE_API_KEY
+              value: {{ .Values.metrics.amplitudeKey | quote }}
+              # ENVBOX_IMAGE describes the image used to provide
+              # additional features to users for running applications
+              # such as dockerd and kubernetes.
+            - name: ENVBOX_IMAGE
+              value: {{ .Values.envbox.image | default (printf "docker.io/coderenvs/envbox:%s" (.Chart.AppVersion)) | quote }}
+            - name: CLUSTER_ADDRESS
+              value: {{ include "coder.cluster.accessURL" . | quote }}
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: DEVURL_HOST
+              value: {{ .Values.coderd.devurlsHost | quote }}
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: VERBOSE
+              value: {{ .Values.logging.verbose | quote }}
+            {{- if .Values.coderd.satellite.enable }}
+            - name: CODER_SATELLITE_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: coder-replica-private-key
+                  key: privateKey
+            - name: CODER_PRIMARY_ACCESS_URL
+              value: {{ .Values.coderd.satellite.primaryURL | quote }}
+            - name: CODER_SATELLITE_ACCESS_URL
+              value: {{ .Values.coderd.satellite.accessURL | quote }}
+            {{- end }}
+            {{- $serverCerts := list }}
+            {{- $serverKeys := list }}
+            {{- if ne .Values.coderd.tls.hostSecretName "" }}
+              {{ $serverCerts = append $serverCerts "/etc/ssl/certs/host/tls.crt" }}
+              {{ $serverKeys = append $serverKeys "/etc/ssl/certs/host/tls.key" }}
+            {{- end }}
+            {{- if ne .Values.coderd.tls.devurlsHostSecretName "" }}
+              {{- $serverCerts = append $serverCerts "/etc/ssl/certs/devurls/tls.crt" }}
+              {{- $serverKeys = append $serverKeys "/etc/ssl/certs/devurls/tls.key" }}
+            {{- end }}
+            {{- if gt (len $serverCerts) 0 }}
+            - name: SSL_SERVER_CERT_FILE
+              value: {{ join ":" $serverCerts }}
+            {{- end }}
+            {{- if gt (len $serverKeys) 0 }}
+            - name: SSL_SERVER_KEY_FILE
+              value: {{ join ":" $serverKeys }}
+            {{- end }}
+            {{- if .Values.coderd.oidc.enableRefresh }}
+            - name: OIDC_ENABLE_REFRESH
+              value: "true"
+            {{- end }}
+            - name: OIDC_REDIRECT_OPTIONS
+              value: {{ toJson .Values.coderd.oidc.redirectOptions | quote }}
+            {{- if .Values.coderd.superAdmin.passwordSecret.name }}
+            - name: SUPER_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.coderd.superAdmin.passwordSecret.name | quote }}
+                  key: {{ .Values.coderd.superAdmin.passwordSecret.key | quote }}
+            {{- end }}
+            {{- if .Values.coderd.scim.enable }}
+            - name: SCIM_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.coderd.scim.authSecret.name | quote }}
+                  key: {{ .Values.coderd.scim.authSecret.key | quote }}
+            {{- end }}
+            - name: http_proxy
+              value: {{ .Values.coderd.proxy.http | quote }}
+            - name: https_proxy
+              value: {{ .Values.coderd.proxy.https | quote }}
+            - name: no_proxy
+              value: {{ .Values.coderd.proxy.exempt | quote }}
+            - name: TRUST_PROXY_IP
+              value: {{ .Values.coderd.trustProxyIP | quote }}
+            - name: PROXY_TRUSTED_ORIGINS
+              value: {{ join "," .Values.coderd.reverseProxy.trustedOrigins | quote }}
+            - name: PROXY_TRUSTED_HEADERS
+              value: {{ join "," .Values.coderd.reverseProxy.headers | quote }}
+            {{- if ne .Values.coderd.clientTLS.secretName "" }}
+            - name: SSL_CLIENT_CERT_FILE
+              value: "/etc/ssl/certs/client/tls.crt"
+            - name: SSL_CLIENT_KEY_FILE
+              value: "/etc/ssl/certs/client/tls.key"
+            {{- end }}
+            - name: CODER_ALTERNATE_HOSTNAMES
+              value: {{ join "," .Values.coderd.alternateHostnames | quote }}
+            - name: CODER_MIGRATE_BUILT_IN_PROVIDER
+              value: {{ .Values.coderd.builtinProviderServiceAccount.migrate | quote }}
+            {{- include "coder.workspaces.configMapEnv" . | indent 12 }}
+            {{- include "coder.postgres.env" . | indent 12 }}
+            {{- with .Values.coderd.extraEnvs -}}
+            {{ toYaml . | nindent 12 }}
+            {{- end }}
+          command:
+            - coderd
+            {{- if not .Values.coderd.satellite.enable }}
+            - run
+            {{- else }}
+            - replica
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /cem-healthz
+              port: 8080
+            initialDelaySeconds: {{ .Values.coderd.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.coderd.readiness.failureThreshold }}
+            periodSeconds: {{ .Values.coderd.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.coderd.readiness.timeoutSeconds }}
+          livenessProbe:
+            httpGet:
+              path: /cem-healthz
+              port: 8080
+            initialDelaySeconds: {{ .Values.coderd.liveness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.coderd.liveness.failureThreshold }}
+            periodSeconds: {{ .Values.coderd.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.coderd.liveness.timeoutSeconds }}
+          {{- include "coder.resources" .Values.coderd.resources | indent 10 }}
+          {{- include "coder.volumeMounts" . | indent 10 }}
+      {{- include "coder.volumes" . | indent 6 }}
+{{- if .Values.coderd.satellite.enable }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: coder-replica-private-key
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: {{ include "coder.serviceName" . }}
+type: Opaque
+# Adapted from https://stackoverflow.com/a/64325744
+data:
+  {{- if (lookup "v1" "Secret" .Release.Namespace "coder-replica-private-key") }}
+  privateKey: {{ (lookup "v1" "Secret" .Release.Namespace "coder-replica-private-key").data.privateKey }}
+  {{- else }}
+  privateKey: {{ genPrivateKey "ecdsa" | b64enc }}
+  {{- end }}
+{{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  {{- if (lookup "v1" "Service" .Release.Namespace "ingress-nginx") }}
+  name: ingress-nginx
+  {{- else }}
+  name: {{ include "coder.serviceName" . }}
+  {{- end }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: {{ include "coder.serviceName" . }}
+  annotations: {{ toYaml (merge (.Values.coderd.serviceAnnotations | default (dict)) (.Values.services.annotations | default (dict))) | nindent 4 }}
+spec:
+  {{- if .Values.coderd.serviceSpec }}
+  {{- toYaml .Values.coderd.serviceSpec | nindent 2 }}
+  {{- end }}
+  selector:
+    coder.deployment: {{ include "coder.serviceName" . }}
+  ports:
+    - name: tcp-{{ include "coder.serviceName" . }}
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+      {{- if .Values.coderd.serviceNodePorts.http }}
+      nodePort: {{ .Values.coderd.serviceNodePorts.http }}
+      {{- end }}
+    - name: tcp-{{ include "coder.serviceName" . }}-https
+      port: 443
+      targetPort: 8443
+      protocol: TCP
+      {{- if .Values.coderd.serviceNodePorts.https }}
+      nodePort: {{ .Values.coderd.serviceNodePorts.https }}
+      {{- end }}

@@ -1,0 +1,18 @@
+{{- if .Values.opencloud-sidecar.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "opencloud-sidecar.fullname" . }}-pdb
+  labels:
+{{ include "opencloud-sidecar.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.opencloud-sidecar.pdb.minAvailable }}
+  minAvailable: {{ .Values.opencloud-sidecar.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.opencloud-sidecar.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "opencloud-sidecar.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

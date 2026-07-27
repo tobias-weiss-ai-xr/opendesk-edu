@@ -1,0 +1,67 @@
+{{- if .Values.ingress.enable }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: coderd-ingress
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: {{ include "coder.serviceName" . }}
+  annotations: {{ toYaml .Values.ingress.annotations | nindent 4 }}
+spec:
+  {{- if .Values.ingress.className }}
+  {{/* If this is set to an empty string it fails validation on K8s */}}
+  ingressClassName: {{ .Values.ingress.className | quote }}
+  {{- end }}
+  rules:
+  - host: {{ .Values.ingress.host | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "coder.serviceName" . }}
+            port:
+              name: tcp-{{ include "coder.serviceName" . }}
+
+    {{/* Regex docs on '*-suffix.example.com'. This is required as the original
+       * input including the suffix is not a legal ingress host. We need to
+       * remove the suffix, and keep the wildcard '*'.
+       *
+       *   - '\\*'     Starts with '*'
+       *   - '[^.]*'   Suffix is 0 or more characters, '-suffix'
+       *   - '('       Start domain capture group
+       *   -   '\\.'     The domain should be separated with a '.' from the subdomain
+       *   -   '.*'      Rest of the domain.
+       *   - ')'       $1 is the ''.example.com'
+       */}}
+  - host: {{ regexReplaceAll "\\*[^.]*(\\..*)" .Values.coderd.devurlsHost "*${1}" | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "coder.serviceName" . }}
+            port:
+              name: tcp-{{ include "coder.serviceName" . }}
+  {{- if .Values.ingress.tls.enable }}
+  tls:
+    {{- if and .Values.ingress.host .Values.coderd.tls.hostSecretName }}
+    - hosts:
+      - {{ .Values.ingress.host | quote }}
+      secretName: {{ .Values.coderd.tls.hostSecretName | quote}}
+    {{- end }}
+    {{- if and .Values.coderd.devurlsHost .Values.coderd.tls.devurlsHostSecretName }}
+    - hosts:
+      - {{ .Values.coderd.devurlsHost | quote }}
+      secretName: {{ .Values.coderd.tls.devurlsHostSecretName | quote }}
+    {{- end }}
+  {{- end }}
+{{- end }}

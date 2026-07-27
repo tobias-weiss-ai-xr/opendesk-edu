@@ -51,3 +51,14 @@ postgresql:
     username: etherpad
     database: etherpad
     existingSecret: ""
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack

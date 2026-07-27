@@ -1,0 +1,18 @@
+{{- if .Values.intercom.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "common.names.fullname" . }}-pdb
+  labels:
+{{ include "intercom-service.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.intercom.pdb.minAvailable }}
+  minAvailable: {{ .Values.intercom.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.intercom.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "intercom-service.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

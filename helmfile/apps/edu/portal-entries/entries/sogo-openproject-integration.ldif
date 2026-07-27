@@ -1,0 +1,9 @@
+dn: cn=sogo-openproject-link,cn=applications,cn=opendesk,cn=edu
+cn: sogo-openproject-link
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Projekte teilen (OpenProject)
+odApplicationDescription: Projektaufgaben aus OpenProject in SOGo-E-Mails teilen
+odApplicationURL: https://projects.{{ .Values.global.domain }}
+odApplicationIcon: openproject
+odApplicationOrder: 88

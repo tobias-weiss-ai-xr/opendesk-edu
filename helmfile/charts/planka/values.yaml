@@ -3,7 +3,7 @@
 
 planka:
   image: ghcr.io/plankanban/planka
-  tag: latest
+  tag: "latest@sha256:19b507ae3ab5cb1855c3f6984249e4a4881ed0b912febdfd492139c29bf10f39"
   port: 1337
 
   # Default admin user credentials (overridden by secretRef when set)
@@ -68,3 +68,14 @@ postgresql:
     persistence:
       enabled: true
       size: 8Gi
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack

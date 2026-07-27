@@ -132,3 +132,25 @@ resources:
   limits:
     cpu: 1000m
     memory: 1Gi
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack
+
+# =========================================================================
+# NOTIFICATIONS (email via SMTP)
+# =========================================================================
+notifications:
+  smtp:
+    host: ""
+    port: 587
+    sender: "noreply@opendesk.hrz.uni-marburg.de"
+    username: ""
+    # password is set via secrets

@@ -1,0 +1,19 @@
+{{- if .Values.n8n.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Release.Name }}-n8n-pdb
+  labels:
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  {{- if .Values.n8n.pdb.minAvailable }}
+  minAvailable: {{ .Values.n8n.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.n8n.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: n8n
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

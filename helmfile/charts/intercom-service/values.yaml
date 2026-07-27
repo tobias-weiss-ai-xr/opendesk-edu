@@ -723,3 +723,11 @@ provisioning:
     # -- Run container as a user.
     runAsNonRoot: true
 ...
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ""

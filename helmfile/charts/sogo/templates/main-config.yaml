@@ -38,6 +38,19 @@ data:
       SOGoOpenIdTokenCheckInterval = 3600;
       SOGoOpenIdLogoutEnabled = YES;
 
+      {{- if .Values.sogo.opencloud.enabled }}
+      // OpenCloud External Storage (WebDAV)
+      SOGoExternalStorage = (
+        {
+          type = webdav;
+          name = "OpenCloud";
+          host = "{{ .Values.sogo.opencloud.url }}";
+          path = "{{ .Values.sogo.opencloud.webdavPath }}";
+          auth = openid;
+        }
+      );
+      {{- end }}
+
       // Vacation / Forward / Sieve
       SOGoVacationEnabled = YES;
       SOGoForwardEnabled = YES;

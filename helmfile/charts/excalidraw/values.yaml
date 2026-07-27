@@ -3,7 +3,7 @@
 
 excalidraw:
   image: excalidraw/excalidraw
-  tag: latest
+  tag: "latest@sha256:f7ee194addd607bf831d2af0f0a34463dd4225e426cf35199ef0b12a803398e9"
   port: 80
 
   resources:
@@ -36,3 +36,14 @@ ingress:
     - secretName: excalidraw-tls
       hosts:
         - excalidraw.opendesk.hrz.uni-marburg.de
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack

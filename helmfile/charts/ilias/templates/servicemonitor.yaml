@@ -1,0 +1,23 @@
+{{- if .Values.ilias.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "ilias.fullname" . }}-monitor
+  labels:
+{{ include "ilias.labels" . | nindent 4 }}
+    {{- if .Values.ilias.monitoring.labels }}
+{{ toYaml .Values.ilias.monitoring.labels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: {{ .Values.ilias.monitoring.port | default "http" | quote }}
+      interval: {{ .Values.ilias.monitoring.interval | default "30s" }}
+      path: {{ .Values.ilias.monitoring.path | default "/health" | quote }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ilias.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}
