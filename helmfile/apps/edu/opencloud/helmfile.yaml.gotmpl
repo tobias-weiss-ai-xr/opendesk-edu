@@ -7,7 +7,10 @@ releases:
     wait: true
     values:
       - "values.yaml.gotmpl"
-    installed: true
+      {{- range .Values | dig "customization" "release" "opendeskOpencloud" (list) }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values | dig "apps" "opencloud" "enabled" true }}
     timeout: 1800
     force: false
 
