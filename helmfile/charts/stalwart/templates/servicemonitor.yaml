@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.stalwart.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "stalwart.fullname" . }}-monitor
+  labels:
+    {{- include "stalwart.labels" . | nindent 4 }}
+    {{- if .Values.stalwart.monitoring.labels }}
+    {{- toYaml .Values.stalwart.monitoring.labels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: http
+      interval: {{ .Values.stalwart.monitoring.interval | default "30s" }}
+      path: {{ .Values.stalwart.monitoring.path | default "/api/health" }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "stalwart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

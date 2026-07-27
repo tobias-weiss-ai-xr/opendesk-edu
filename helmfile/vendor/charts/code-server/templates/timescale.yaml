@@ -1,0 +1,147 @@
+{{- if (and .Values.postgres.default.enable (not .Values.coderd.satellite.enable)) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescale
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: {{ include "timescale.serviceName" . }}
+    app: {{ include "timescale.serviceName" . }}
+    coder.deployment: {{ include "timescale.serviceName" . }}
+spec:
+  ports:
+    - port: 5432
+      name: tcp-timescale
+  selector:
+    app: {{ include "timescale.serviceName" . }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: timescale
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: {{ include "timescale.serviceName" . }}
+  annotations: {{ toYaml (merge (.Values.postgres.default.annotations | default (dict)) (.Values.services.annotations | default (dict))) | nindent 4 }}
+spec:
+  serviceName: {{ include "timescale.serviceName" . }}
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  selector:
+    matchLabels:
+      app: timescale
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/component: {{ include "timescale.serviceName" . }}
+        app: timescale
+        coder.deployment: timescale
+      annotations: {{ toYaml (merge (.Values.postgres.default.annotations | default (dict)) (.Values.services.annotations | default (dict))) | nindent 8 }}
+    spec:
+      serviceAccountName: timescale
+      securityContext:
+        runAsNonRoot: true
+        # User 70 is postgres.
+        runAsUser: 70
+        runAsGroup: 70
+        fsGroup: 70
+      terminationGracePeriodSeconds: 60
+      {{- include "coder.serviceTolerations" . | indent 6 }}
+      containers:
+        - name: timescale
+          image: {{ .Values.postgres.default.image | default (printf "docker.io/coderenvs/timescale:%s" (.Chart.AppVersion)) | quote }}
+          imagePullPolicy: Always
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - coder
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - coder
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
+          ports:
+            - containerPort: 5432
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: timescale-data
+              mountPath: /var/lib/postgresql/data
+              readOnly: false
+            - name: tmp
+              mountPath: /tmp
+              readOnly: false
+            - name: run
+              mountPath: /var/run/postgresql
+              readOnly: false
+          {{- include "coder.resources" .Values.postgres.default.resources | indent 10 }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - pg_ctl
+                  - stop
+                  - --mode=fast
+                  - --timeout=60
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: run
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: timescale-data
+      spec:
+        {{- include "coder.storageClassName" . | indent 8 }}
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.postgres.default.resources.requests.storage | quote }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: {{ .Release.Namespace | quote }}
+  name: timescale
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: {{ include "timescale.serviceName" . }}
+    coder.deployment: {{ include "timescale.serviceName" . }}
+{{- end }}

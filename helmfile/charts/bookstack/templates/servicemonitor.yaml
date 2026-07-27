@@ -1,0 +1,23 @@
+{{- if .Values.bookstack.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "bookstack.fullname" . }}-monitor
+  labels:
+{{ include "bookstack.labels" . | nindent 4 }}
+    {{- if .Values.bookstack.monitoring.labels }}
+{{ toYaml .Values.bookstack.monitoring.labels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: {{ .Values.bookstack.monitoring.port | default "http" | quote }}
+      interval: {{ .Values.bookstack.monitoring.interval | default "30s" }}
+      path: {{ .Values.bookstack.monitoring.path | default "/health" | quote }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "bookstack.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

@@ -6,7 +6,7 @@ commonAnnotations:
 
 excalidraw:
   image: excalidraw/excalidraw
-  tag: latest
+  tag: latest@sha256:f7ee194addd607bf831d2af0f0a34463dd4225e426cf35199ef0b12a803398e9
   port: 80
 
   resources:
@@ -40,3 +40,8 @@ ingress:
     - secretName: "opendesk-certificates-tls"
       hosts:
         - "excalidraw.{{ .Values.global.domain }}"
+  pdb:
+    enabled: true
+    minAvailable: 1
+  monitoring:
+    enabled: true

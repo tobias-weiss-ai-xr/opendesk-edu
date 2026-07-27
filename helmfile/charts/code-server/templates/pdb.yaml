@@ -1,0 +1,18 @@
+{{- if .Values.code-server.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "code-server.fullname" . }}-pdb
+  labels:
+{{ include "code-server.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.code-server.pdb.minAvailable }}
+  minAvailable: {{ .Values.code-server.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.code-server.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "code-server.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

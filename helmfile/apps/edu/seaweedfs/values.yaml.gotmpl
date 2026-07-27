@@ -2,6 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 ---
 master:
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
   persistence:
     storageClass: {{ .Values.storageclasses.cephfs | default "ceph-cephfs-hdd-ec" | quote }}
 
@@ -28,3 +35,4 @@ backup:
       daily: {{ .Values.backup.seaweedfs.retention.daily | default 7 }}
       weekly: {{ .Values.backup.seaweedfs.retention.weekly | default 4 }}
       monthly: {{ .Values.backup.seaweedfs.retention.monthly | default 3 }}
+

@@ -1,0 +1,31 @@
+annotations:
+    opendesk/upstream-chart: "ollama/ollama"
+    opendesk/upstream-repo: "https://ollama.github.io/helm-chart"
+    opendesk/upstream-version: "0.68.0"
+  artifacthub.io/category: ai-machine-learning
+  artifacthub.io/changes: |
+    - kind: changed
+      description: upgrade app version to 0.4.5
+      links:
+        - name: Ollama release v0.4.5
+          url: https://github.com/ollama/ollama/releases/tag/v0.4.5
+apiVersion: v2
+appVersion: 0.4.5
+description: Get up and running with large language models locally.
+home: https://ollama.ai/
+icon: https://ollama.ai/public/ollama.png
+keywords:
+- ai
+- llm
+- llama
+- mistral
+kubeVersion: ^1.16.0-0
+maintainers:
+- email: contact@otwld.com
+  name: OTWLD
+name: ollama
+sources:
+- https://github.com/ollama/ollama
+- https://github.com/otwld/ollama-helm
+type: application
+version: 0.68.0

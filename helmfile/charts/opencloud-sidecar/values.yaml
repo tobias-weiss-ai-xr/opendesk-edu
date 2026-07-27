@@ -22,3 +22,11 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ""

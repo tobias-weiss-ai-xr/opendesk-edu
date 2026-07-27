@@ -1,0 +1,106 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-deny-all
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component:  {{ include "coder.serviceName" . }}
+spec:
+  # Deny all ingress traffic for workspace pods. The coder agent initiates
+  # all network traffic (TURN-over-HTTPS or STUN)
+  podSelector:
+    matchLabels:
+      com.coder.resource: "true"
+  policyTypes:
+    - Ingress
+  ingress: []
+
+{{/* Policies for coderd and satelites */}}
+{{- if .Values.coderd.networkPolicy.enable }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: coderd
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: coderd
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: coderd
+  policyTypes:
+    - Ingress
+  # Deny all ingress traffic, except on our service ports
+  ingress:
+    - {}
+{{- end }}
+
+{{/* Policies for the built-in PostgreSQL database */}}
+{{- if (and .Values.postgres.default.enable .Values.postgres.default.networkPolicy.enable (not .Values.coderd.satellite.enable)) }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: timescale
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: timescale
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: timescale
+  policyTypes:
+    - Ingress
+    - Egress
+  # Deny all ingress traffic, except for traffic from coderd
+  ingress:
+    - from:
+        # Ideally, we would also use a namespaceSelector, but it's not possible
+        # to select using a namespace name, and we cannot rely on the standard
+        # kubernetes.io/metadata.name label being set, since that is a beta
+        # feature behind a feature gate.
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+              app.kubernetes.io/component: coderd
+      ports:
+        - protocol: TCP
+          port: 5432
+  # Allow egress to istio service mesh. This shouldn't cause any issues if
+  # Istio is not in use.
+  egress:
+  # Allow all traffic to Istio control plane. This may need to be adjusted
+  # based on your cluster configuration.
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: istio-controlplane
+      podSelector:
+        matchLabels:
+          istio: pilot
+  # Allow all outbound DNS traffic (53/UDP and TCP)
+  - ports:
+    - port: 53
+      protocol: TCP
+    - port: 53
+      protocol: UDP
+{{- end }}

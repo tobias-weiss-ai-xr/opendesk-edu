@@ -1,0 +1,23 @@
+{{- if .Values.excalidraw.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "excalidraw.fullname" . }}-monitor
+  labels:
+{{ include "excalidraw.labels" . | nindent 4 }}
+    {{- if .Values.excalidraw.monitoring.labels }}
+{{ toYaml .Values.excalidraw.monitoring.labels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: {{ .Values.excalidraw.monitoring.port | default "http" | quote }}
+      interval: {{ .Values.excalidraw.monitoring.interval | default "30s" }}
+      path: {{ .Values.excalidraw.monitoring.path | default "/health" | quote }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "excalidraw.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

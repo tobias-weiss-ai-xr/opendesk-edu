@@ -1,0 +1,9 @@
+dn: cn=openproject-xwiki,cn=applications,cn=opendesk,cn=edu
+cn: openproject-xwiki
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Wiki & Projekte
+odApplicationDescription: Projekte mit Wiki-Seiten verknüpfen (OpenProject + XWiki)
+odApplicationURL: https://projects.{{ .Values.global.domain }}
+odApplicationIcon: openproject
+odApplicationOrder: 86

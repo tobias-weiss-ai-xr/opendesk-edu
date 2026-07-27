@@ -46,3 +46,11 @@ opencloud:
   syncInterval: "60s"
   remotePath: "/"
   mountPath: "opencloud"
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ""

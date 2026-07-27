@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.stalwart.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "stalwart.fullname" . }}-pdb
+  labels:
+{{ include "stalwart.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.stalwart.pdb.minAvailable }}
+  minAvailable: {{ .Values.stalwart.pdb.minAvailable }}
+  {{- else }}
+  maxUnavailable: {{ .Values.stalwart.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "stalwart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

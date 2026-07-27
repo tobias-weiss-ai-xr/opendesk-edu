@@ -15,3 +15,8 @@ univentionNewPortalCentralNavigation: cn=code-server,cn=entry,cn=portals,cn=univ
 univentionNewPortalCentralNavigation: cn=slidev,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
 univentionNewPortalCentralNavigation: cn=collab-dashboard,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
 univentionNewPortalCentralNavigation: cn=open-webui,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=sogo-opencloud-files,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=openproject-xwiki,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=sogo-xwiki-link,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=sogo-openproject-link,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=xwiki-openproject-wiki,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal

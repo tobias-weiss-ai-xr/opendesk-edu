@@ -121,6 +121,23 @@ spec:
                   key: oc-url-signing-secret
             - name: OC_URL
               value: {{ printf "https://%s" (index .Values.ingress.hosts 0).host | quote }}
+            {{- if .Values.notifications.smtp.host }}
+            - name: NOTIFICATIONS_SMTP_HOST
+              value: {{ .Values.notifications.smtp.host | quote }}
+            - name: NOTIFICATIONS_SMTP_PORT
+              value: {{ .Values.notifications.smtp.port | quote }}
+            - name: NOTIFICATIONS_SMTP_SENDER
+              value: {{ .Values.notifications.smtp.sender | quote }}
+            {{- if .Values.notifications.smtp.username }}
+            - name: NOTIFICATIONS_SMTP_USERNAME
+              value: {{ .Values.notifications.smtp.username | quote }}
+            - name: NOTIFICATIONS_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: notifications-smtp-password
+            {{- end }}
+            {{- end }}
             - name: PROXY_CSP_CONFIG_FILE_OVERRIDE_LOCATION
               value: "/etc/opencloud/csp.yaml"
           volumeMounts:

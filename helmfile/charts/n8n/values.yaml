@@ -26,3 +26,11 @@ sso:
     clientId: opendesk-n8n
     clientSecret: vp0XnZw87Baw4uZJsvuG8uyT8fAEV1ep
     discoveryEndpoint: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ""

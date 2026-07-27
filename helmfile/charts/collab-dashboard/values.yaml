@@ -37,3 +37,11 @@ oauth2:
   clientSecret: ""
   oidcIssuerUrl: "https://id.opendesk.example.com/realms/opendesk"
   cookieSecret: ""
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: ""
