@@ -14,7 +14,7 @@ stalwart:
   auth:
     oidc:
       enabled: true
-      issuerUrl: {{ printf "https://%s.%s/realms/%s" .Values.global.hosts.keycloak .Values.global.domain .Values.platform.realm | quote }}
+      issuerUrl: {{ printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm | quote }}
       clientId: stalwart
       clientSecret: {{ .Values.secrets.keycloak.clientSecret.stalwart | default "" | quote }}
       scope: "openid profile email"
@@ -84,9 +84,15 @@ stalwart:
   storage:
     type: rocksdb
     dataPath: /opt/stalwart-mail/data
+    # S3 blob storage via SeaweedFS
     blob:
-      type: rocksdb
-      path: /opt/stalwart-mail/blob
+      type: s3
+      s3:
+        bucket: "stalwart-blobs"
+        endpoint: "http://seaweedfs-all-in-one.opendesk.svc.cluster.local:8333"
+        region: "us-east-1"
+        accessKey: "AiYgPhUTvGURGTr4h1vb"
+        secretKey: "HUiOJhOgrO3DDtcCaq63KCHz1iK9dlSp85Ef2M2U"
 
   logging:
     level: info
@@ -180,13 +186,12 @@ stalwart:
   monitoring:
     enabled: true
 
-  # S3 blob storage via SeaweedFS (replaces local RocksDB for mail attachments)
-  storage:
-    blob:
-      type: s3
-      s3:
-        bucket: "stalwart-blobs"
-        endpoint: "http://seaweedfs-all-in-one.opendesk.svc.cluster.local:8333"
-        region: "us-east-1"
-        accessKey: "AiYgPhUTvGURGTr4h1vb"
-        secretKey: "HUiOJhOgrO3DDtcCaq63KCHz1iK9dlSp85Ef2M2U"
+  # DNS host aliases for HRZ cluster (CoreDNS can't resolve external CNAME chains)
+  hostAliases:
+    - ip: "192.168.3.201"
+      hostnames:
+        - "id.opendesk.hrz.uni-marburg.de"
+        - "mail.opendesk.hrz.uni-marburg.de"
+        - "portal.opendesk.hrz.uni-marburg.de"
+
+

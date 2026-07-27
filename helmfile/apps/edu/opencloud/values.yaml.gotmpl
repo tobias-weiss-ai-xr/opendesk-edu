@@ -33,7 +33,7 @@ persistence:
   annotations: {}
 
 oidc:
-  issuer: {{ printf "https://%s.%s/realms/%s" .Values.global.hosts.keycloak .Values.global.domain .Values.platform.realm | quote }}
+  issuer: {{ printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm | quote }}
   clientId: opendesk-opencloud
   clientSecret: {{ .Values.secrets.keycloak.clientSecret.opencloud | quote }}
   autoProvisionAccounts: "true"
@@ -47,7 +47,7 @@ oidc:
   assignDefaultUserRole: "false"
   usernameMatch: "none"
   excludeRunServices: "idp,idm,auth-basic"
-  accountEditLink: {{ printf "https://%s.%s/realms/%s/account" .Values.global.hosts.keycloak .Values.global.domain .Values.platform.realm | quote }}
+  accountEditLink: {{ printf "https://id.%s/realms/%s/account" .Values.global.domain .Values.platform.realm | quote }}
   
   # OIDC Backchannel Logout configuration
   backchannelLogout:
@@ -89,6 +89,14 @@ urlSigningSecret: {{ .Values.secrets.opencloud.urlSigningSecret | quote }}
     minAvailable: 1
   monitoring:
     enabled: true
+
+# DNS host aliases for HRZ cluster (CoreDNS can't resolve external CNAME chains)
+hostAliases:
+  - ip: "192.168.3.201"
+    hostnames:
+      - "id.opendesk.hrz.uni-marburg.de"
+      - "files.opendesk.hrz.uni-marburg.de"
+      - "portal.opendesk.hrz.uni-marburg.de"
 
 # Email notifications via Stalwart
 notifications:

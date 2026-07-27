@@ -112,7 +112,7 @@ functional:
           clientId: "stalwart"
           protocol: "openid-connect"
           clientAuthenticatorType: "client-secret"
-          secret: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
+          secret: "4a312df6bfb2c74cd73e895a09818ca2e58f51a1c1b5db906224780542c97b85"
           redirectUris:
             - "https://mail.opendesk.hrz.uni-marburg.de/*"
             - "https://portal.opendesk.hrz.uni-marburg.de/*"
@@ -299,3 +299,265 @@ functional:
                 user.attribute: "lastName"
                 attribute.name: "surname"
                 attribute.nameformat: "Basic"
+
+# =============================================================================
+# RESOURCE OVERRIDES
+# Fix insane default CPU limits in upstream Nubus chart (288 CPU per container).
+# The Nubus chart uses YAML anchors (&nubusDevelopmentResources) that set
+# limits.cpu: 288 for ALL components by default. These overrides ensure
+# sensible resource limits are applied instead.
+# =============================================================================
+resources:
+  # === UMS / Nubus Core ===
+  umsKeycloak:
+    limits:
+      cpu: 2
+      memory: "2Gi"
+    requests:
+      cpu: 0.1
+      memory: "512Mi"
+  umsKeycloakBootstrap:
+    limits:
+      cpu: 2
+      memory: "512Mi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsKeycloakExtensionHandler:
+    limits:
+      cpu: 2
+      memory: "256Mi"
+    requests:
+      cpu: 0.1
+      memory: "48Mi"
+  umsKeycloakExtensionProxy:
+    limits:
+      cpu: 2
+      memory: "256Mi"
+    requests:
+      cpu: 0.1
+      memory: "48Mi"
+  # === UMS LDAP ===
+  umsLdapNotifier:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsLdapServer:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  # === UMS Portal ===
+  umsNotificationsApi:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsPortalFrontend:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsPortalConsumer:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsPortalConsumerDependencies:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsPortalServer:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  # === UMS Provisioning ===
+  umsProvisioningApi:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "100Mi"
+  umsProvisioningDispatcher:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsProvisioningPrefill:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsProvisioningRegisterConsumers:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "64Mi"
+  umsProvisioningUdmTransformer:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "64Mi"
+  umsProvisioningNats:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "128Mi"
+  # === UMS Auth / Gateway ===
+  umsGuardianManagementApi:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsGuardianManagementUi:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsGuardianAuthorizationApi:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsOpenPolicyAgent:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsUmcGateway:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsUmcServer:
+    limits:
+      cpu: 2
+      memory: "2Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  # === UMS Data ===
+  umsStackDataUms:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsUdmListener:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsUdmRestApi:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsUdmRestApiInit:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  umsSelfserviceConsumer:
+    limits:
+      cpu: 2
+      memory: "1Gi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  # === OpenProject ===
+  openproject:
+    limits:
+      cpu: 4
+      memory: "4Gi"
+    requests:
+      cpu: 0.25
+      memory: "512Mi"
+  openprojectAppInit:
+    limits:
+      cpu: 2
+      memory: "768Mi"
+    requests:
+      cpu: 0.1
+      memory: "512Mi"
+  openprojectDbInit:
+    limits:
+      cpu: 2
+      memory: "256Mi"
+    requests:
+      cpu: 0.1
+      memory: "256Mi"
+  openprojectHocuspocus:
+    limits:
+      cpu: 4
+      memory: "1Gi"
+    requests:
+      cpu: 0.25
+      memory: "256Mi"
+  openprojectSeederJob:
+    limits:
+      cpu: 2
+      memory: "768Mi"
+    requests:
+      cpu: 0.1
+      memory: "512Mi"
+  openprojectWorkers:
+    limits:
+      cpu: 4
+      memory: "4Gi"
+    requests:
+      cpu: 0.25
+      memory: "512Mi"
+  # === XWiki ===
+  xwiki:
+    limits:
+      cpu: 2
+      memory: "8Gi"
+    requests:
+      cpu: 0.1
+      memory: "1.5Gi"

@@ -1,6 +1,10 @@
 #!/bin/bash
 # deploy-opencloud.sh — Deploy OpenCloud (Nextcloud with OIDC)
 # Part of openDesk Edu deployment
+#
+# Usage: ./deploy-opencloud.sh [--diff] [--verbose] [--help]
+#
+# This script deploys OpenCloud via the edu helmfile.
 
 set -euo pipefail
 
@@ -17,105 +21,77 @@ usage() {
   echo ""
   echo "Environment variables:"
   echo "  ENVIRONMENT  Deployment environment (default: edu)"
+  echo ""
+  echo "Examples:"
+  echo "  $0                         # Deploy OpenCloud"
+  echo "  $0 --diff                  # Preview changes"
+  echo "  ENVIRONMENT=edu-test $0    # Deploy to edu-test"
   exit 0
 }
 
-# Parse arguments
+# --- Parse arguments ---
 DIFF=false
 VERBOSE=false
-ENVIRONMENT="edu"
+ENVIRONMENT="${ENVIRONMENT:-edu}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --diff)
-      DIFF=true
-      shift
-      ;;
-    --verbose)
-      VERBOSE=true
-      shift
-      ;;
-    --help)
-      usage
-      ;;
-    *)
-      echo "Error: Unknown option $1" >&2
-      usage
-      ;;
+    --diff)     DIFF=true; shift ;;
+    --verbose)  VERBOSE=true; shift ;;
+    --help)     usage ;;
+    *)          echo "Error: Unknown option $1" >&2; usage ;;
   esac
 done
 
-# Validate environment
+# --- Validate environment ---
 if [[ ! -d "$HELMFILE_DIR/environments/$ENVIRONMENT" ]]; then
-  echo "Error: Environment '$ENVIRONMENT' not found" >&2
+  echo "Error: Environment '$ENVIRONMENT' not found at $HELMFILE_DIR/environments/$ENVIRONMENT" >&2
   exit 1
 fi
 
-# Build helmfile command
-HELMFILE_OPTIONS=()
-if [[ "$VERBOSE" == true ]]; then
-  HELMFILE_OPTIONS+=(--log-level debug)
-fi
+# --- Build helmfile command ---
+HELMFILE_OPTS=()
+[[ "$VERBOSE" == true ]] && HELMFILE_OPTS+=(--log-level debug)
+ACTION="sync"
+[[ "$DIFF" == true ]] && ACTION="diff"
 
-if [[ "$DIFF" == true ]]; then
-  ACTION="diff"
-else
-  ACTION="sync"
-fi
-
-cd "$HELMFILE_DIR"
+# Determine domain from ce-overrides
+DOMAIN=$(grep 'domain:' "$HELMFILE_DIR/environments/$ENVIRONMENT/ce-overrides.yaml" 2>/dev/null | head -1 | awk '{print $2}' || echo "opendesk.hrz.uni-marburg.de")
 
 echo "========================================="
-echo "Deploying OpenCloud ($ENVIRONMENT)"
+echo " OpenCloud — Deploy ($ENVIRONMENT)"
+echo " Domain: $DOMAIN"
+echo " Action: $ACTION"
 echo "========================================="
 
-# Deploy OpenCloud via edu-helmfile
-# The edu-helmfile includes the opencloud helmfile-child
-echo ""
-echo "--- Deploying OpenCloud ---"
-
-# First, ensure CE base is deployed
-cd "$HELMFILE_DIR/ce"
-echo "Deploying CE base..."
-helmfile ${HELMFILE_OPTIONS[*]} -f helmfile.yaml.gotmpl \
-  --values "../environments/$ENVIRONMENT/ce-overrides.yaml" \
-  --values "../environments/$ENVIRONMENT/secrets.yaml" \
-  --values "../environments/$ENVIRONMENT/images.yaml" \
-  $ACTION
-
-# Then deploy edu overlay with OpenCloud
+# Deploy via edu helmfile (component filter)
 cd "$HELMFILE_DIR"
-echo "Deploying edu overlay with OpenCloud..."
-helmfile ${HELMFILE_OPTIONS[*]} -f edu-helmfile.yaml.gotmpl \
+helmfile ${HELMFILE_OPTS[*]} -f edu-helmfile.yaml.gotmpl \
   -e "$ENVIRONMENT" \
   -l "component=opencloud" \
   $ACTION
 
+# === Summary ===
 if [[ "$DIFF" == true ]]; then
   echo ""
   echo "========================================="
-  echo "OpenCloud deployment diff complete"
-  echo "(no changes applied)"
+  echo " OpenCloud — diff complete (no changes applied)"
   echo "========================================="
 else
   echo ""
   echo "========================================="
-  echo "OpenCloud deployment complete!"
+  echo " ✅ OpenCloud deployment complete!"
   echo ""
-  DOMAIN=$(grep domain ../helmfile/environments/$ENVIRONMENT/ce-overrides.yaml | head -1 | cut -d' ' -f2)
-  echo "Access OpenCloud at:"
-  echo "  Web: https://files.$DOMAIN"
+  echo " Access OpenCloud at:"
+  echo "   Web UI:  https://files.$DOMAIN"
   echo ""
-  echo "OIDC Configuration:"
-  echo "  Issuer: https://portal.$DOMAIN/realms/opendesk"
-  echo "  Client ID: opendesk-opencloud"
+  echo " OIDC Configuration:"
+  echo "   Issuer:    https://id.$DOMAIN/realms/opendesk"
+  echo "   Client ID: opendesk-opencloud"
   echo ""
-  echo "Check status:"
-  echo "  kubectl get pods -l component=opencloud"
-  echo "  kubectl logs -f deployment/opendesk-opencloud"
-  echo ""
-  echo "Verify OIDC login:"
-  echo "  Visit https://files.$DOMAIN"
-  echo "  You should be redirected to Keycloak for authentication"
+  echo " Verify with:"
+  echo "   kubectl get pods -n opendesk -l app.kubernetes.io/name=opencloud"
+  echo "   kubectl logs -n opendesk -l app.kubernetes.io/name=opencloud"
+  echo "   curl -sk https://files.$DOMAIN/status.php"
   echo "========================================="
 fi
