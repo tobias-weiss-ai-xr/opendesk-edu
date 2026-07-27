@@ -139,7 +139,6 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.stalwart.healthCheck.port }}
-              port: {{ .Values.stalwart.healthCheck.port }}
             initialDelaySeconds: {{ .Values.stalwart.healthCheck.liveness.initialDelaySeconds }}
             periodSeconds: {{ .Values.stalwart.healthCheck.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.stalwart.healthCheck.liveness.timeoutSeconds }}
@@ -147,14 +146,12 @@ spec:
           readinessProbe:
             tcpSocket:
               port: {{ .Values.stalwart.healthCheck.port }}
-              port: {{ .Values.stalwart.healthCheck.port }}
             initialDelaySeconds: {{ .Values.stalwart.healthCheck.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.stalwart.healthCheck.readiness.periodSeconds }}
             timeoutSeconds: {{ .Values.stalwart.healthCheck.readiness.timeoutSeconds }}
             failureThreshold: {{ .Values.stalwart.healthCheck.readiness.failureThreshold }}
           startupProbe:
             tcpSocket:
-              port: {{ .Values.stalwart.healthCheck.port }}
               port: {{ .Values.stalwart.healthCheck.port }}
             initialDelaySeconds: {{ .Values.stalwart.healthCheck.startup.initialDelaySeconds }}
             periodSeconds: {{ .Values.stalwart.healthCheck.startup.periodSeconds }}
