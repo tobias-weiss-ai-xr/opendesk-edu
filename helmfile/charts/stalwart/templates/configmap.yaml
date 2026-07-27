@@ -82,7 +82,7 @@ data:
     store = "rocksdb"
     
     # OIDC authentication
-    [auth.oauth2]
+    [authentication.oauth2]
     enabled = true
     issuer = "{{ .Values.stalwart.auth.oidc.issuerUrl | default "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk" }}"
     client-id = "{{ .Values.stalwart.auth.oidc.clientId | default "stalwart" }}"
@@ -91,7 +91,7 @@ data:
     scope = ["{{ .Values.stalwart.auth.oidc.scope | default "openid profile email" }}"]
     
     # Fallback admin account
-    [auth.fallback-admin]
+    [authentication.fallback-admin]
     user = "{{ .Values.stalwart.auth.fallbackAdmin.username | default "admin" }}"
     secret = "{{ .Values.stalwart.auth.fallbackAdmin.passwordHash | default "" }}"
     description = "Stalwart Mail Server Administrator"
