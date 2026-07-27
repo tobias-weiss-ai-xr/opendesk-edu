@@ -288,12 +288,12 @@ extraEnvVars: []
 # -- In seconds, the time given to the pod to terminate gracefully.
 terminationGracePeriodSeconds: 30
 
-  # =========================================================================
-  # MONITORING (ServiceMonitor for Prometheus)
-  # =========================================================================
-  monitoring:
-    enabled: false
-    interval: 30s
-    path: /api/health
-    labels:
-      release: kube-prometheus-stack
+# =========================================================================
+# MONITORING (ServiceMonitor for Prometheus)
+# =========================================================================
+monitoring:
+  enabled: false
+  interval: 30s
+  path: /api/health
+  labels:
+    release: kube-prometheus-stack
