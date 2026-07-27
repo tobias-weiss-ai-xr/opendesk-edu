@@ -17,7 +17,7 @@ apps:
   # either Stalwart or Postfix can relay. Stalwart is recommended.
   smtpRelay: stalwart
   postfix:
-    enabled: {{ eq .Values.apps.smtpRelay "postfix" | quote }}
+    enabled: "false"
     # Postfix stays as SMTP relay for services
   # Keep nubus (UMS + Keycloak) but disable its embedded intercom-service
   # edu deploys its own intercom-service (forked chart with edu-specific fixes)
@@ -587,7 +587,7 @@ customization:
           clientId: "sogo"
           protocol: "openid-connect"
           clientAuthenticatorType: "client-secret"
-          secret: "16bdb4acd0e54d71fa0334d866667952827fc4e2fb6bdd429b7f5d0524c50893"
+          secret: "g8GJtmxFMahTBGf3JsVolETd92oIJfR1KYTjbaJH1wp7NmfHKvw1PgFYKbNzpgMH54ZmwXel0sbtRpUM5r6EbD"
           redirectUris:
             - "https://contacts.opendesk.hrz.uni-marburg.de/*"
             - "https://portal.opendesk.hrz.uni-marburg.de/*"
