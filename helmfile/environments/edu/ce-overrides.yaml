@@ -29,6 +29,8 @@ apps:
   opencloud:
     enabled: true               # OpenCloud replaces Nextcloud
   # Edu-specific apps
+  bigbluebutton:
+    enabled: false
   intercom:
     enabled: true
   grommunio:
@@ -37,6 +39,55 @@ apps:
     enabled: true
   stalwart:
     enabled: true
+  bookstack:
+    enabled: false
+  codeServer:
+    enabled: false
+  collabDashboard:
+    enabled: false
+  dask:
+    enabled: false
+  drawio:
+    enabled: false
+  etherpad:
+    enabled: false
+  excalidraw:
+    enabled: false
+  f13:
+    enabled: false
+  ilias:
+    enabled: true
+  jupyterhub:
+    enabled: false
+  kasmvnc:
+    enabled: false
+  limesurvey:
+    enabled: false
+  mariadb:
+    enabled: false
+  ollama:
+    enabled: false
+  openWebui:
+    enabled: false
+  overleaf:
+    enabled: false
+  planka:
+    enabled: true
+  rstudio:
+    enabled: false
+  selfServicePassword:
+    enabled: false
+  slidev:
+    enabled: false
+  snipr:
+    enabled: false
+  ttyd:
+    enabled: false
+  typo3:
+    enabled: false
+  zammad:
+    enabled: false
+
 
 # Edu-specific global config
 global:
