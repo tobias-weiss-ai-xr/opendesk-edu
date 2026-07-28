@@ -18,6 +18,13 @@ planka:
     userinfoEndpoint: {{ .Values.oidc.userinfoEndpoint | default "https://id.{{ .Values.global.domain }}/realms/opendesk/protocol/openid-connect/userinfo" | quote }}
     scope: "openid profile email"
 
+  # Database connection (overrides postgresql.auth.*)
+  db:
+    host: planka-postgresql
+    user: planka
+    password: plankapass123
+    name: planka
+
   volumes:
     data:
       size: "1Gi"
@@ -74,17 +81,7 @@ affinity: {}
 cluster:
   replicas: {{ default 1 .Values.replicas.planka }}
 
+# PostgreSQL is provided by the shared postgresql release
+# planka-postgresql is an ExternalName service pointing to postgresql.opendesk.svc.cluster.local
 postgresql:
-  enabled: true
-  auth:
-    username: "planka"
-    database: "planka"
-  primary:
-    persistence:
-      enabled: true
-      size: "8Gi"
-  pdb:
-    enabled: true
-    minAvailable: 1
-  monitoring:
-    enabled: true
+  enabled: false
