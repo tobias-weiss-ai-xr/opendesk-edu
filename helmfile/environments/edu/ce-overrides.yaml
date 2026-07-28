@@ -710,5 +710,12 @@ secrets:
   keycloak:
     clientSecret: {}
   adminPassword: ""
+  grommunio:
+    dbPassword: "changeme"
+  moodleSaml:
+    spCert: ""
+    spKey: ""
+    idpMetadata: ""
+    idpCert: ""
 services: {}
 storageclasses: {}
