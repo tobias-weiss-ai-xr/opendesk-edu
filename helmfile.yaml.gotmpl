@@ -1,1 +1,21 @@
-helmfile/helmfile.yaml.gotmpl
+{{ $root := . }}
+
+environments:
+  edu:
+    values:
+      - helmfile/environments/edu/ce-overrides.yaml
+      - helmfile/environments/edu/secrets.yaml
+      - helmfile/environments/edu/images.yaml
+  edu-test:
+    values:
+      - helmfile/environments/edu/test/values.yaml.gotmpl
+
+repositories:
+  - name: bitnami
+    url: oci://registry-1.docker.io/bitnamicharts
+
+helmfiles:
+  # Auto-discover all edu app helmfiles via glob
+  - path: helmfile/apps/edu/*/helmfile.yaml.gotmpl
+    values:
+      - helmfile/environments/edu/ce-overrides.yaml
