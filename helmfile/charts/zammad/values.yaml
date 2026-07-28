@@ -55,7 +55,7 @@ ingress:
 
 # Embedded PostgreSQL configuration
 postgresql:
-  enabled: true
+  enabled: false
   auth:
     username: zammad
     password: ""
@@ -67,4 +67,4 @@ postgresql:
 
 # Embedded Elasticsearch configuration
 elasticsearch:
-  enabled: true
+  enabled: false

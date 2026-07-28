@@ -2,15 +2,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 apiVersion: v2
 appVersion: "7.0.0"
-dependencies:
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 18.7.0
-  - condition: elasticsearch.enabled
-    name: elasticsearch
-    repository: https://charts.bitnami.com/bitnami
-    version: 22.1.6
 description: A Helm chart for Zammad service desk
 name: zammad
 type: application

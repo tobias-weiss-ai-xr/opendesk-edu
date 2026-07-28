@@ -54,6 +54,10 @@ ingress:
 
 mariadb:
   enabled: true
+  image:
+    registry: docker.io
+    repository: library/mariadb
+    tag: "11.4"
   auth:
     username: limesurvey
     password: ""
@@ -63,6 +67,14 @@ mariadb:
     persistence:
       enabled: true
       size: 5Gi
+      storageClass: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 sso:
   oidc:

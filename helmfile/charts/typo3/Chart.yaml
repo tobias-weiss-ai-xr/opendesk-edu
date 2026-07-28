@@ -2,11 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 apiVersion: v2
 appVersion: 13.4.0
-dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: https://charts.bitnami.com/bitnami
-  version: 20.2.2
 description: A Helm chart for TYPO3 CMS
 name: typo3
 type: application

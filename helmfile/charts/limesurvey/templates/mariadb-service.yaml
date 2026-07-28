@@ -1,0 +1,17 @@
+{{- if .Values.mariadb.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-mariadb
+  labels:
+{{ include "limesurvey.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mariadb
+spec:
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql
+  selector:
+{{ include "limesurvey.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: mariadb
+{{- end }}
