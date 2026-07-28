@@ -677,7 +677,9 @@ annotations: {}
 autoscaling: {}
 backchannelLogout: {}
 backup: {}
-cluster: {}
+cluster:
+  networking:
+    domain: "opendesk.hrz.uni-marburg.de"
 database:
   host: ""
   name: ""
