@@ -14,7 +14,8 @@ grommunio:
   auth:
     oidc:
       enabled: true
-      issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm | default 'opendesk' }}"
+      # issuerUrl uses a template variable to avoid nesting quotes
+      issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
       clientId: "grommunio"
       scope: "openid profile email"
 
