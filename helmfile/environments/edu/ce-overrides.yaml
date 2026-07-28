@@ -661,3 +661,24 @@ customization:
     snipr: []
     sogo: []
     typo3: []
+
+annotations: {}
+autoscaling: {}
+backchannelLogout: {}
+backup: {}
+cluster: {}
+database: {}
+databases: {}
+debug: {}
+image: {}
+images: {}
+ingress: {}
+ldap: {}
+monitoring: {}
+oidc: {}
+persistence: {}
+registry: {}
+replicas: {}
+secrets: {}
+services: {}
+storageclasses: {}
