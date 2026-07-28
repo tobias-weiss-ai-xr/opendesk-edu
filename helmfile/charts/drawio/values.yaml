@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 drawio:
-  image: jgraph/drawio
-  tag: "latest@sha256:51adba39a4a13cd0cb2979916ea9ee6e4438564e76acd51f92e79fc65e728b73"
+  image: ghcr.io/opendesk-edu/drawio
+  tag: "latest"
   port: 8080
 
   resources:
