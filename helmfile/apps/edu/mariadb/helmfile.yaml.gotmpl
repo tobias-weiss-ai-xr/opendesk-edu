@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: {{ .Values.mariadb.releaseName | default "mariadb" }}
+    chart: "../../../charts/mariadb"
+    version: 0.1.0
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.mariadb.enabled | default false }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "040-database"
+  component: mariadb

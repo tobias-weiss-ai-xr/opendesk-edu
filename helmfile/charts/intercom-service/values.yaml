@@ -90,7 +90,7 @@ image:
 
   # -- Container repository string.
   repository: "nubus/images/intercom-service"
-  pullPolicy: null
+  pullPolicy: IfNotPresent
 
   # -- Define image tag.
   tag: "2.23.11@sha256:67591ebb8374574318bb61c036f608edb47007e4599be1dcf8aa62c09b5acd3f"
@@ -637,7 +637,7 @@ provisioning:
     tag: "0.36.10@sha256:d0f02b847daad4cae834bcd29266ba30bfc806034a9aac2811e3f66bfd6ecec8"
     # -- Define image sha256 as an alternative to `tag`
     # sha256: null
-    pullPolicy: null
+    pullPolicy: IfNotPresent
 
   provisioningImage:
     imagePullSecrets: []
@@ -645,7 +645,7 @@ provisioning:
     registry: null
     repository: "nubus/images/keycloak-bootstrap"
     tag: "0.25.1@sha256:c2a4fd2d4de55a78195fdddd9087a6a390520a3be6141b10c777c971019d772e"
-    pullPolicy: null
+    pullPolicy: IfNotPresent
 
   config:
     # -- Base URL for setting in Keycloak client URL without backslash.

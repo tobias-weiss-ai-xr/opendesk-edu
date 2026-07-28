@@ -2,16 +2,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 apiVersion: v2
 appVersion: 9-php8.2-apache
-dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: https://charts.bitnami.com/bitnami
-  version: 20.2.2
-- alias: mariadbgalera
-  condition: mariadbgalera.enabled
-  name: mariadb-galera
-  repository: https://charts.bitnami.com/bitnami
-  version: 14.1.2
 description: A Helm chart for ILIAS LMS
 name: ilias
 type: application

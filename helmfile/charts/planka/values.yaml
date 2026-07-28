@@ -32,6 +32,13 @@ planka:
       accessMode: ReadWriteMany
       # storageClass: ""
 
+  # Database connection (overrides postgresql.auth.*)
+  db:
+    host: ""
+    user: ""
+    password: ""
+    name: ""
+
   # Resource configuration
   resources:
     requests:
@@ -40,6 +47,17 @@ planka:
     limits:
       cpu: 500m
       memory: 512Mi
+
+  # =========================================================================
+  # MONITORING (ServiceMonitor for Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: false
+    interval: 30s
+    path: /health
+    port: http
+    labels:
+      release: kube-prometheus-stack
 
 extraVolumes: []
 extraVolumeMounts: []
@@ -58,24 +76,11 @@ ingress:
       hosts:
         - planka.opendesk.example.com
 
+# PostgreSQL is provided by the shared postgresql release.
+# The service planka-postgresql is an ExternalName pointing to postgresql.opendesk.svc.cluster.local
 postgresql:
-  enabled: true
+  enabled: false
   auth:
     username: planka
     password: ""
     database: planka
-  primary:
-    persistence:
-      enabled: true
-      size: 8Gi
-
-  # =========================================================================
-  # MONITORING (ServiceMonitor for Prometheus)
-  # =========================================================================
-  monitoring:
-    enabled: false
-    interval: 30s
-    path: /health
-    port: http
-    labels:
-      release: kube-prometheus-stack
