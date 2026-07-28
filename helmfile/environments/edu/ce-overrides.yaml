@@ -712,6 +712,7 @@ secrets:
   adminPassword: ""
   grommunio:
     dbPassword: "changeme"
+    cachePassword: "changeme"
   moodleSaml:
     spCert: ""
     spKey: ""
