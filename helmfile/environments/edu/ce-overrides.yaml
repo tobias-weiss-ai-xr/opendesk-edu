@@ -667,18 +667,35 @@ autoscaling: {}
 backchannelLogout: {}
 backup: {}
 cluster: {}
-database: {}
+database:
+  host: ""
+  name: ""
 databases: {}
 debug: {}
-image: {}
-images: {}
-ingress: {}
-ldap: {}
-monitoring: {}
-oidc: {}
-persistence: {}
+image:
+  repository: ""
+  tag: ""
+images:
+  repository: ""
+  tag: ""
+ingress:
+  enabled: false
+ldap:
+  baseDn: ""
+  bindPassword: ""
+  host: ""
+monitoring:
+  enabled: false
+oidc:
+  clientId: ""
+  clientSecret: ""
+persistence:
+  enabled: false
 registry: {}
 replicas: {}
-secrets: {}
+secrets:
+  keycloak:
+    clientSecret: {}
+  adminPassword: ""
 services: {}
 storageclasses: {}
