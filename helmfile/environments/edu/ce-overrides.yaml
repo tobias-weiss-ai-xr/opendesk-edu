@@ -582,22 +582,3 @@ customization:
     intercom: []
     self-service-password: []
     zammad: []
-
-        - name: "sogo"
-          clientId: "sogo"
-          protocol: "openid-connect"
-          clientAuthenticatorType: "client-secret"
-          secret: "g8GJtmxFMahTBGf3JsVolETd92oIJfR1KYTjbaJH1wp7NmfHKvw1PgFYKbNzpgMH54ZmwXel0sbtRpUM5r6EbD"
-          redirectUris:
-            - "https://contacts.opendesk.hrz.uni-marburg.de/*"
-            - "https://portal.opendesk.hrz.uni-marburg.de/*"
-          consentRequired: false
-          frontchannelLogout: true
-          publicClient: false
-          authorizationServicesEnabled: false
-          attributes:
-            post.logout.redirect.uris: "https://contacts.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*"
-          defaultClientScopes:
-            - "openid"
-            - "profile"
-            - "email"
