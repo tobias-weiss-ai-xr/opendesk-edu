@@ -103,5 +103,3 @@ k8up-*.yaml
 !*.env.test
 
 # Encrypted secrets — plaintext version is local only
-helmfile/environments/edu/secrets.yaml
-!helmfile/environments/edu/secrets.enc.yaml
