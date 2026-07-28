@@ -29,44 +29,28 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 DB Host generator
 */}}
 {{- define "planka.dbHost" -}}
-{{-   if .Values.planka.db.host }}
-{{-     .Values.planka.db.host }}
-{{-   else }}
-{{- .Release.Name }}-postgresql
-{{-   end }}
+{{- .Values.planka.db.host | default (printf "%s-postgresql" .Release.Name) -}}
 {{- end -}}
 
 {{/*
 DB Username generator
 */}}
 {{- define "planka.dbUser" -}}
-{{-   if .Values.planka.db.user }}
-{{-     .Values.planka.db.user }}
-{{-   else }}
-{{- .Values.postgresql.auth.username -}}
-{{-   end }}
+{{- .Values.planka.db.user | default "planka" -}}
 {{- end -}}
 
-{{/*\
+{{/*
 DB Password generator
 */}}
 {{- define "planka.dbPassword" -}}
-{{-   if .Values.planka.db.password }}
-{{-     .Values.planka.db.password }}
-{{-   else }}
-{{- .Values.postgresql.auth.password -}}
-{{-   end }}
+{{- .Values.planka.db.password | default "" -}}
 {{- end -}}
 
-{{/*\
+{{/*
 DB Name generator
 */}}
 {{- define "planka.dbName" -}}
-{{-   if .Values.planka.db.name }}
-{{-     .Values.planka.db.name }}
-{{-   else }}
-{{- .Values.postgresql.auth.database -}}
-{{-   end }}
+{{- .Values.planka.db.name | default "planka" -}}
 {{- end -}}
 
 {{/*

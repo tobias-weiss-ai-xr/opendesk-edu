@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# MariaDB image configuration
+image:
+  registry: ghcr.io
+  repository: opendesk-edu/mariadb
+  tag: "11.4.4"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+# Database credentials
+auth:
+  username: ilias
+  database: ilias
+  existingSecret: ""        # Name of existing secret with keys 'password' and 'root-password'
+  existingSecretPasswordKey: password
+  existingSecretRootPasswordKey: root-password
+
+# Persistence
+persistence:
+  enabled: true
+  size: 10Gi
+  accessMode: ReadWriteOnce
+  storageClass: ""
+
+# Resource requests and limits
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 2
+    memory: 4Gi
+
+# Service
+service:
+  port: 3306
+  annotations: {}
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Monitoring
+monitoring:
+  enabled: false
+  interval: 30s

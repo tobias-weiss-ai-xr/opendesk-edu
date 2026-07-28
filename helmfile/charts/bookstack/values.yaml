@@ -32,7 +32,8 @@ bookstack:
 
   # Replica count
   replicas: 1
-  appKey: ""  # Generate with: docker run --rm --entrypoint /bin/bash lscr.io/linuxserver/bookstack:latest appkey
+  appKey: ""  # Deprecated: use appKeyExistingSecret instead
+  appKeyExistingSecret: ""  # Name of existing secret with key 'app-key'. Generate with: docker run --rm --entrypoint /bin/bash lscr.io/linuxserver/bookstack:latest appkey
   phpFpmPoolOverride:
     enabled: false
 
@@ -61,6 +62,10 @@ ingress:
 
 mariadb:
   enabled: true
+  image:
+    registry: docker.io
+    repository: library/mariadb
+    tag: "11.4"
   auth:
     username: bookstack
     password: ""
@@ -70,6 +75,14 @@ mariadb:
       enabled: true
       size: 8Gi
       accessMode: ReadWriteOnce
+      storageClass: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
   # =========================================================================
   # MONITORING (ServiceMonitor for Prometheus)

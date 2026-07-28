@@ -51,21 +51,24 @@ spec:
               echo "Done."
           env:
             - name: APP_KEY
-              value: "{{ .Values.bookstack.appKey }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bookstack.appKeySecretName" . }}
+                  key: app-key
             - name: APP_URL
               value: "https://{{ (index .Values.ingress.hosts 0).host }}"
             - name: DB_CONNECTION
               value: {{ .Values.bookstack.dbConnection | default "mysql" | quote }}
             - name: DB_HOST
-              value: {{ .Values.bookstack.db.host | quote }}
+              value: {{ include "bookstack.dbHost" . | quote }}
             - name: DB_PORT
-              value: "{{ .Values.bookstack.db.port }}"
+              value: {{ include "bookstack.dbPort" . | quote }}
             - name: DB_DATABASE
-              value: {{ .Values.bookstack.db.database | quote }}
+              value: {{ include "bookstack.dbName" . | quote }}
             - name: DB_USER
-              value: {{ .Values.bookstack.db.user | quote }}
+              value: {{ include "bookstack.dbUser" . | quote }}
             - name: DB_PASS
-              value: {{ .Values.bookstack.db.password | quote }}
+              value: {{ include "bookstack.dbPassword" . | quote }}
             - name: AUTH_METHOD
               value: "oidc"
             - name: OIDC_NAME
@@ -83,6 +86,7 @@ spec:
             capabilities:
               add:
                 - CHOWN
+                - DAC_OVERRIDE
                 - FOWNER
                 - SETUID
                 - SETGID
@@ -115,7 +119,10 @@ spec:
             - name: APP_URL
               value: "https://{{ (index .Values.ingress.hosts 0).host }}"
             - name: APP_KEY
-              value: {{ .Values.bookstack.appKey | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bookstack.appKeySecretName" . }}
+                  key: app-key
             - name: PUID
               value: "1000"
             - name: PGID

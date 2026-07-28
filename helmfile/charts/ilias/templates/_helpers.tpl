@@ -30,67 +30,35 @@ DB Host generator
 */}}
 {{- define "ilias.dbHost" -}}
 {{-   if .Values.ilias.db.host }}
-{{- .Values.ilias.db.host }}
-{{-   else if .Values.mariadbgalera.enabled }}
-{{- .Release.Name }}-mariadbgalera
+{{- .Values.ilias.db.host | quote }}
 {{-   else }}
-{{- .Release.Name }}-mariadb
+{{- printf "%s-mariadb" .Release.Name }}
 {{-   end -}}
 {{- end -}}
-
 
 {{/*
 DB Username generator
 */}}
 {{- define "ilias.dbUser" -}}
-{{-   if .Values.ilias.db.user }}
-{{- .Values.ilias.db.user }}
-{{-   else if .Values.mariadbgalera.enabled }}
-{{- .Values.mariadbgalera.db.user }}
-{{-   else }}
-{{- .Values.mariadb.auth.username }}
-{{-   end -}}
+{{-   .Values.ilias.db.user | default "ilias" | quote -}}
 {{- end -}}
-
 
 {{/*
 DB Password generator
 */}}
 {{- define "ilias.dbPassword" -}}
 {{-   if .Values.ilias.db.password }}
-{{- .Values.ilias.db.password }}
-{{-   else if .Values.mariadbgalera.enabled }}
-{{- .Values.mariadbgalera.db.password }}
+{{- .Values.ilias.db.password | quote }}
 {{-   else }}
-{{- .Values.mariadb.auth.password }}
+{{-   "" -}}
 {{-   end -}}
 {{- end -}}
-
 
 {{/*
 DB Name generator
 */}}
 {{- define "ilias.dbName" -}}
-{{-   if .Values.ilias.db.name }}
-{{- .Values.ilias.db.name }}
-{{-   else if .Values.mariadbgalera.enabled }}
-{{- .Values.mariadbgalera.db.name }}
-{{-   else }}
-{{- .Values.mariadb.auth.database }}
-{{-   end -}}
-{{- end -}}
-
-{{/*
-MariaDB image
-*/}}
-{{- define "mariadbImage" -}}
-{{-   if .Values.mariadbgalera.enabled }}
-{{- .Values.mariadbgalera.image.repository }}:{{ .Values.mariadbgalera.image.tag }}
-{{-   else if .Values.mariadb.enabled }}
-{{- .Values.mariadb.image.repository }}:{{ .Values.mariadb.image.tag }}
-{{-   else }}
-{{- .Values.ilias.image }}:{{ .Values.ilias.tag }}
-{{-   end -}}
+{{-   .Values.ilias.db.name | default "ilias" | quote -}}
 {{- end -}}
 
 {{/*

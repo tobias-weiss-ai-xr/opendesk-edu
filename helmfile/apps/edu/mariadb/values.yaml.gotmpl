@@ -1,0 +1,40 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+image:
+  registry: {{ .Values.registry.mariadb | default "ghcr.io" }}
+  repository: {{ .Values.image.mariadb.repository | default "opendesk-edu/mariadb" }}
+  tag: {{ .Values.image.mariadb.tag | default "11.4.4" }}
+  pullPolicy: IfNotPresent
+  pullSecrets:
+    {{- range .Values.image.mariadb.pullSecrets }}
+    - {{ . }}
+    {{- end }}
+
+auth:
+  username: "ilias"
+  database: "ilias"
+  existingSecret: {{ .Values.secrets.mariadb.existingSecret | default "" }}
+  existingSecretPasswordKey: {{ .Values.secrets.mariadb.passwordKey | default "password" }}
+  existingSecretRootPasswordKey: {{ .Values.secrets.mariadb.rootPasswordKey | default "root-password" }}
+
+persistence:
+  enabled: true
+  size: {{ .Values.persistence.sizes.mariadb | default "10Gi" }}
+  accessMode: {{ .Values.persistence.accessModes.mariadb | default "ReadWriteOnce" }}
+  storageClass: {{ coalesce .Values.persistence.storages.mariadb.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "512Mi"
+  limits:
+    cpu: "2"
+    memory: {{ .Values.resources.mariadb.memoryLimit | default "4Gi" }}
+
+service:
+  annotations:
+    {{ .Values.annotations.mariadb.service | default (dict) | toYaml | nindent 4 }}
+
+monitoring:
+  enabled: {{ .Values.monitoring.enabled | default false }}

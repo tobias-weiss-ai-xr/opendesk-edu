@@ -69,6 +69,13 @@ DB Password generator
 {{- end -}}
 
 {{/*
+APP_KEY secret name
+*/}}
+{{- define "bookstack.appKeySecretName" -}}
+{{-   .Values.bookstack.appKeyExistingSecret | default (printf "%s-app-key" .Release.Name) -}}
+{{- end -}}
+
+{{/*
 DB Name generator
 */}}
 {{- define "bookstack.dbName" -}}

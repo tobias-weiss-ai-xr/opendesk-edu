@@ -2,11 +2,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 apiVersion: v2
 appVersion: 26.03.1
-dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: https://charts.bitnami.com/bitnami
-  version: 20.2.2
 description: A Helm chart for BookStack knowledge base
 name: bookstack
 type: application

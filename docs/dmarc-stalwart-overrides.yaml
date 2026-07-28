@@ -1,0 +1,94 @@
+# DMARC/DKIM/SPF Override für Stalwart im opendesk-edu Helm-Chart
+#
+# Datei: helmfile/apps/edu/stalwart/values.yaml.gotmpl (Ergänzung)
+# Anwendung: Bei Stalwart v0.17+ (config.toml-basiert)
+# Für v0.16.x: Über Web-Admin-UI (mail.opendesk.hrz.uni-marburg.de/admin/)
+#
+# Credentials: admin / ${STALWART_ADMIN_PASSWORD}
+
+# =============================================================================
+# ERGÄNZUNG ZU helmfile/apps/edu/stalwart/values.yaml.gotmpl
+# =============================================================================
+
+stalwart:
+  # ... bestehende Konfiguration ...
+
+  # --- DMARC/DKIM/SPF Konfiguration ---
+  config:
+    # Ausgehende DKIM-Signatur
+    session.smtp.mail.sign: true
+    session.smtp.mail.key: "s2"
+    session.smtp.mail.domain: "uni-marburg.de"
+
+    session.smtp.mail.dkim.canonicalization: "relaxed/simple"
+    session.smtp.mail.dkim.headers: ["From", "Reply-To", "Subject", "Date", "To", "Cc", "Message-ID"]
+    session.smtp.mail.dkim.signature-expiry: "7d"
+
+    # Eingehende Prüfung (Phase 1: Monitoring)
+    session.smtp.rcpt.reject-spf: false
+    session.smtp.rcpt.reject-dkim: false
+    session.smtp.rcpt.reject-dmarc: false
+
+    # DMARC-Reporting
+    session.smtp.rcpt.dmarc.report: true
+    session.smtp.rcpt.dmarc.report-interval: 86400
+    session.smtp.rcpt.dmarc.report-rua: "mailto:dmarc-report@hrz.uni-marburg.de"
+    session.smtp.rcpt.dmarc.report-fo: "1"
+
+    session.smtp.rcpt.spf.reject: false
+    session.smtp.rcpt.dkim.reject: false
+    session.smtp.rcpt.dkim.verify: true
+
+    # ARC (für DFN-AAI-Weiterleitungen)
+    session.smtp.arc.add-seal: true
+    session.smtp.arc.add-timestamp: true
+    session.smtp.arc.verify: true
+
+    # Reporting
+    report.dmarc.enable: true
+    report.dmarc.rua: "mailto:dmarc-report@hrz.uni-marburg.de"
+    report.dmarc.interval: 86400
+
+    report.tls.enable: true
+    report.tls.rua: "mailto:tls-report@hrz.uni-marburg.de"
+
+  # DKIM-Keys via extraConfigMap mounten
+  extraVolumes:
+    - name: dkim-keys
+      secret:
+        secretName: stalwart-dkim-keys
+
+  extraVolumeMounts:
+    - name: dkim-keys
+      mountPath: /opt/stalwart/etc/keys
+      readOnly: true
+
+# =============================================================================
+# NOTWENDIGE DNS-EINTRÄGE (in der Zonenverwaltung eintragen)
+# =============================================================================
+#
+# 1. SPF: Cluster-IPs in SPF aufnehmen
+#    uni-marburg.de.  TXT  "v=spf1 include:_spf.uni-marburg.de include:_spf.plan.io
+#                            ip4:192.168.3.110/24 ~all"
+#
+# 2. DKIM: Selector s2 für Stalwart
+#    s2._domainkey.uni-marburg.de.  TXT  "v=DKIM1; k=rsa; p=<PUBLIC_KEY>"
+#
+# 3. DMARC: Bestehenden Record optimieren
+#    _dmarc.uni-marburg.de.  TXT  "v=DMARC1; p=quarantine; sp=quarantine;
+#                                  rua=mailto:dmarc-report@hrz.uni-marburg.de;
+#                                  ruf=mailto:dmarc-ruf@hrz.uni-marburg.de;
+#                                  fo=1; ri=3600"
+#
+# 4. TLS-RPT (optional)
+#    _smtp._tls.uni-marburg.de.  TXT  "v=TLSRPTv1; rua=mailto:tls-report@hrz.uni-marburg.de"
+
+# =============================================================================
+# SCHRITTWEISE AKTIVIERUNG
+# =============================================================================
+#
+# Phase 1 (Sofort):   reject-* = false, report = true → Status quo
+# Phase 2 (2 Wochen): reject-dmarc = true
+# Phase 3 (1 Monat):  reject-spf = true, reject-dkim = true
+#
+# Jeweils `reject-*` von false auf true setzen.
