@@ -131,3 +131,8 @@ service:
     enabled: false
     url: "https://files.opendesk.hrz.uni-marburg.de"
     webdavPath: "/remote.php/dav/files/{uid}/"
+
+  # Skip the OIDC sync hook (pre-install job).
+  # Set to true if the OIDC secret already exists and the hook
+  # image (bitnami/kubectl) cannot be pulled due to network restrictions.
+  skipOidcHook: false
