@@ -1,0 +1,108 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Build and push custom openDesk Edu images when their Dockerfiles change.
+# Images are pushed to:
+#   - GHCR (ghcr.io/opendesk-edu/*)
+#   - GitLab registry (registry.gitlab.com/tbsweiss/opendesk-edu/*)
+
+name: Build Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "images/**/Dockerfile"
+      - "images/**/requirements.txt"
+      - ".github/workflows/build-images.yml"
+  workflow_dispatch:
+    inputs:
+      image:
+        description: "Image to build (empty = all)"
+        required: false
+        default: ""
+        type: string
+
+env:
+  GHCR_REGISTRY: ghcr.io
+  GHCR_ORG: opendesk-edu
+  GITLAB_REGISTRY: registry.gitlab.com
+  GITLAB_PROJECT: tbsweiss/opendesk-edu
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: set-matrix
+        run: |
+          if [ -n "${{ inputs.image }}" ]; then
+            echo "matrix={\"include\":[{\"name\":\"${{ inputs.image }}\"}]}" >> $GITHUB_OUTPUT
+          else
+            IMAGES=$(find images -name Dockerfile -exec dirname {} \; | sed 's|images/||' | jq -R -s -c 'split("\n")[:-1] | {include: map({name: .})}')
+            echo "matrix=$IMAGES" >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    needs: detect
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.detect.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract image metadata
+        id: meta
+        run: |
+          NAME="${{ matrix.name }}"
+          DOCKERFILE="images/$NAME/Dockerfile"
+          
+          # Read tag from Dockerfile LABEL or use directory name convention
+          # Convention: images/<name>/Dockerfile produces ghcr.io/opendesk-edu/<name>:<tag>
+          # Tag defaults to "latest" unless overridden by a TAG file
+          TAG="latest"
+          if [ -f "images/$NAME/TAG" ]; then
+            TAG=$(cat "images/$NAME/TAG" | tr -d '\n')
+          fi
+          
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "dockerfile=$DOCKERFILE" >> $GITHUB_OUTPUT
+          echo "ghcr_image=${{ env.GHCR_REGISTRY }}/${{ env.GHCR_ORG }}/$NAME:$TAG" >> $GITHUB_OUTPUT
+          echo "gitlab_image=${{ env.GITLAB_REGISTRY }}/${{ env.GITLAB_PROJECT }}/$NAME:$TAG" >> $GITHUB_OUTPUT
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log in to GitLab registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GITLAB_REGISTRY }}
+          username: ${{ secrets.GITLAB_REGISTRY_USERNAME }}
+          password: ${{ secrets.GITLAB_REGISTRY_TOKEN }}
+
+      - name: Build and push to GHCR
+        uses: docker/build-push-action@v6
+        with:
+          context: images/${{ steps.meta.outputs.name }}
+          file: images/${{ steps.meta.outputs.name }}/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.ghcr_image }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Tag and push to GitLab
+        run: |
+          docker tag ${{ steps.meta.outputs.ghcr_image }} ${{ steps.meta.outputs.gitlab_image }}
+          docker push ${{ steps.meta.outputs.gitlab_image }}
+
+      - name: Clean up
+        run: docker image prune -f
