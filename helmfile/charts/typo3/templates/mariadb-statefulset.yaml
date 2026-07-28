@@ -1,0 +1,81 @@
+{{- if .Values.mariadb.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-mariadb
+  labels:
+{{ include "typo3.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mariadb
+spec:
+  replicas: 1
+  serviceName: {{ .Release.Name }}-mariadb
+  selector:
+    matchLabels:
+{{ include "typo3.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mariadb
+  template:
+    metadata:
+      labels:
+{{ include "typo3.labels" . | nindent 8 }}
+        app.kubernetes.io/component: mariadb
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: mariadb
+          image: {{ .Values.mariadb.image.registry | default "docker.io" }}/{{ .Values.mariadb.image.repository | default "library/mariadb" }}:{{ .Values.mariadb.image.tag | default "11.4" }}
+          ports:
+            - name: mysql
+              containerPort: 3306
+          env:
+            - name: MARIADB_USER
+              value: {{ .Values.mariadb.auth.username | quote }}
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-mariadb
+                  key: mariadb-password
+            - name: MARIADB_DATABASE
+              value: {{ .Values.mariadb.auth.database | quote }}
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-mariadb
+                  key: mariadb-root-password
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command:
+                - mariadb-admin
+                - ping
+                - -u
+                - {{ .Values.mariadb.auth.username | quote }}
+                - -p$(MARIADB_PASSWORD)
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - mariadb-admin
+                - ping
+                - -u
+                - {{ .Values.mariadb.auth.username | quote }}
+                - -p$(MARIADB_PASSWORD)
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.mariadb.resources | nindent 12 }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - {{ .Values.mariadb.primary.persistence.accessMode | default "ReadWriteOnce" }}
+        storageClassName: {{ .Values.mariadb.primary.persistence.storageClass | default "" }}
+        resources:
+          requests:
+            storage: {{ .Values.mariadb.primary.persistence.size | default "5Gi" }}
+{{- end }}

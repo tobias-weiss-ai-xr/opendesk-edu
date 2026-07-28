@@ -32,12 +32,3 @@ annotations:
   description: Grommunio is a groupware solution providing email, calendar, contacts, and tasks with native ActiveSync, EWS, and MAPI/HTTP support for seamless Outlook and mobile integration
   requires: MariaDB and Redis
   supported_platforms: Windows, iOS, Android, Outlook
-dependencies:
-  - name: mariadb
-    version: ">=16.0.0"
-    repository: "https://charts.bitnami.com/bitnami"
-    condition: mariadb.enabled
-  - name: redis
-    version: ">=18.0.0"
-    repository: "https://charts.bitnami.com/bitnami"
-    condition: redis.enabled
