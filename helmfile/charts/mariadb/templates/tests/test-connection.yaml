@@ -1,0 +1,27 @@
+{{- if .Values.mariadb.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-connection-test"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: mariadb-test
+      image: {{ include "mariadb.image" . }}
+      command:
+        - mariadb-admin
+        - ping
+        - -h
+        - "{{ include "mariadb.fullname" . }}"
+        - -u
+        - "{{ .Values.auth.username }}"
+        - "-p$(MARIADB_PASSWORD)"
+      env:
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.auth.existingSecret | default (printf "%s-database-credentials" (include "mariadb.fullname" .)) }}
+              key: {{ .Values.auth.existingSecretPasswordKey | default "password" }}
+  restartPolicy: Never
+{{- end }}
