@@ -111,6 +111,10 @@ global:
   hosts:
     keycloak: portal
     opencloud: files
+    f13: f13
+    grommunio: grommunio
+    nextcloud: nextcloud
+    typo3: typo3
     stalwart: mail
     sogo: contacts
   
