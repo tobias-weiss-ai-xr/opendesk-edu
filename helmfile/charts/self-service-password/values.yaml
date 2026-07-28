@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 selfServicePassword:
-  image: ltbproject/self-service-password
-  tag: "latest@sha256:9735d99b0b45a3187ff4be5ee0ca1b569ea85cfb2428d9f00c309fdaedfd0142"
+  image: ghcr.io/opendesk-edu/self-service-password
+  tag: "latest"
   port: 80
 
   resources:
