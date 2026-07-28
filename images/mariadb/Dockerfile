@@ -39,3 +39,13 @@ LABEL org.opencontainers.image.title="openDesk ILIAS MariaDB" \
       org.opencontainers.image.description="MariaDB 11.4 with ILIAS-optimized defaults" \
       org.opencontainers.image.source="https://github.com/opendesk-edu/opendesk-edu" \
       org.opencontainers.image.licenses="Apache-2.0"
+
+# Structured logging
+RUN { \
+    echo 'log_output=FILE'; \
+    echo 'general_log=on'; \
+    echo 'general_log_file=/dev/stdout'; \
+    echo 'slow_query_log=on'; \
+    echo 'slow_query_log_file=/dev/stdout'; \
+    echo 'log_error=/dev/stderr'; \
+} >> /etc/mysql/conf.d/ilias.cnf
