@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+image:
+  registry: ghcr.io
+  repository: opendesk-edu/eudi-issuer
+  tag: "v0.1.0"
+  pullPolicy: IfNotPresent
+
+did:
+  method: key
+  keyType: Ed25519
+
+database:
+  host: ""
+  port: 5432
+  name: eudi_issuer
+  user: eudi_issuer
+  existingSecret: ""
+
+keycloak:
+  realm: opendesk
+  clientId: eudi-issuer
+  existingSecret: ""
+
+ingress:
+  enabled: true
+  className: haproxy
+  host: "issuer.opendesk.example.com"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
