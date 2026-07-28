@@ -34,3 +34,12 @@ LABEL org.opencontainers.image.title="openDesk ILIAS with Shibboleth SP" \
       org.opencontainers.image.source="https://github.com/opendesk-edu/opendesk-edu" \
       org.opencontainers.image.version="9-php8.2-apache" \
       org.opencontainers.image.licenses="AGPL-3.0-or-later"
+
+# Apache JSON logging
+RUN { \
+    echo 'LogFormat "{ \\"timestamp\\": \\"%{%Y-%m-%dT%H:%M:%S%z}t\\", \\"remote_ip\\": \\"%a\\", \\"request\\": \\"%r\\", \\"status\\": %>s, \\"bytes\\": %b, \\"referer\\": \\"%{Referer}i\\", \\"user_agent\\": \\"%{User-Agent}i\\", \\"request_time_ms\\": %D }" json'; \
+    echo 'CustomLog /dev/stdout json'; \
+} >> /etc/apache2/conf-enabled/json-logging.conf
+
+# PHP error logging to stderr
+RUN echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/ilias.ini
