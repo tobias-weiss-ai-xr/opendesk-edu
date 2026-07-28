@@ -111,3 +111,19 @@ SPDX-License-Identifier: APACHE-2.0
     {{- $value }}
 {{- end }}
 {{- end -}}
+
+{{/*
+Create a fully qualified app name.
+*/}}
+{{- define "ilias.fullname" -}}
+{{- if .Values.ilias.fullnameOverride }}
+{{- .Values.ilias.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.ilias.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
