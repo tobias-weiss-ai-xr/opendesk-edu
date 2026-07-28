@@ -142,3 +142,57 @@ Documented changes:
 ## Deployment Guide
 
 See `docs/deployment.md` for complete deployment instructions.
+
+---
+
+## Bitnami Migration (2026-07-28)
+
+All Helm charts have been migrated away from Bitnami dependencies.
+**8 charts cleaned → 0 Bitnami dependencies remaining.**
+
+### Pattern for removing Bitnami subcharts
+
+1. Delete `dependencies:` block from `Chart.yaml`
+2. Delete packaged `charts/` directory
+3. Delete `Chart.lock`
+4. Create `templates/<db>-statefulset.yaml` + `templates/<db>-service.yaml`
+5. Update `_helpers.tpl` to remove Bitnami fallback logic
+6. Update `values.yaml` to simplify DB config
+
+### Custom Images
+
+Built from `images/<name>/Dockerfile`.
+All available on **GHCR** (`ghcr.io/opendesk-edu/*`), Zot, and GitLab.
+
+| Image | Type | Description |
+|-------|------|-------------|
+| `mariadb:11.4.4` | Custom | MariaDB with ILIAS-optimized config + mysqladmin symlinks |
+| `ilias-shibboleth:9-php8.2-apache` | Custom | ILIAS + Shibboleth SP 3.5 + mod_ssl + self-signed certs |
+| `moodle-shib:v1.4.0` | Custom | Moodle 4.4 + Shibboleth SP on Ubuntu 22.04 |
+| `bookstack:latest` | Mirror | linuxserver/bookstack pinned by digest |
+| `drawio:latest` | Mirror | jgraph/drawio pinned by digest |
+| `excalidraw:latest` | Mirror | excalidraw/excalidraw pinned by digest |
+| `self-service-password:latest` | Mirror | ltbproject/self-service-password pinned by digest |
+| `planka:latest` | Mirror | ghcr.io/plankanban/planka pinned by digest |
+
+### Known Issues
+
+- **Bookstack**: Needs `APP_KEY` in secret `bookstack-app-key` with `DAC_OVERRIDE` capability
+- **ILIAS shibboleth**: SSL certs must be `644` perms (container runs as www-data UID 33 with `capabilities.drop: [ALL]`)
+- **MariaDB 11.4 probes**: Use `mariadb-admin ping`, not `mysqladmin` (binary renamed)
+- **k8up RWO PVC backups**: Annotated with `k8up.io/exclude: "true"`
+- **ArgoCD**: Apps have `selfHeal: false`; `HELMFILE_FILE_PATH` must point to `helmfile.yaml.gotmpl`
+
+### CI/CD
+
+`.github/workflows/build-images.yml` auto-builds images on Dockerfile changes.
+`scripts/build-and-push.sh` for manual builds (supports all registries).
+
+### GHCR Authentication
+
+Cluster needs pull secret `ghcr-pull` on all service accounts:
+```bash
+kubectl create secret docker-registry -n <ns> ghcr-pull \
+  --docker-server=ghcr.io --docker-username=<user> --docker-password=<pat>
+kubectl patch serviceaccount -n <ns> default -p '{"imagePullSecrets": [{"name": "ghcr-pull"}]}'
+```
