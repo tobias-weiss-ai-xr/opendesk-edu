@@ -3,7 +3,7 @@
 
 drawio:
   image: ghcr.io/opendesk-edu/drawio
-  tag: "latest"
+  tag: "latest@sha256:51adba39a4a13cd0cb2979916ea9ee6e4438564e76acd51f92e79fc65e728b73"
   port: 8080
 
   resources:
