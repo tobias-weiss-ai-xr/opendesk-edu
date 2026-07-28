@@ -72,3 +72,19 @@ DB Name generator
 {{- .Values.postgresql.auth.database }}
 {{-   end -}}
 {{- end -}}
+
+{{/*
+Create a fully qualified app name.
+*/}}
+{{- define "etherpad.fullname" -}}
+{{- if .Values.etherpad.fullnameOverride }}
+{{- .Values.etherpad.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.etherpad.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
