@@ -136,3 +136,11 @@ service:
   # Set to true if the OIDC secret already exists and the hook
   # image (bitnami/kubectl) cannot be pulled due to network restrictions.
   skipOidcHook: false
+
+  # Hook job image for OIDC sync.
+  # Uses our own minimal kubectl image for air-gapped clusters.
+  # Registry: registry.hrz.uni-marburg.de/opendesk/kubectl
+  # Source: https://github.com/tobias-weiss-ai-xr/opendesk-kubectl
+  hookImage:
+    repository: registry.gitlab.com/tbsweiss/opendesk-kubectl
+    tag: "1.32.3"
