@@ -16,6 +16,6 @@ repositories:
 
 helmfiles:
   # Auto-discover all edu app helmfiles via glob
-  - path: helmfile/apps/edu/*/helmfile-child.yaml.gotmpl
+  - path: helmfile/apps/edu/*/helmfile.yaml.gotmpl
     values:
       - helmfile/environments/edu/ce-overrides.yaml
