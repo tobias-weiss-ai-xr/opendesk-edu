@@ -1,6 +1,6 @@
 ilias:
-  image: srsolutions/ilias
-  tag: 9-php8.2-apache # or specify a tag
+  image: ghcr.io/opendesk-edu/ilias-shibboleth
+  tag: "9-php8.2-apache"
   port: 80
   autoSetup: true
   autoUpdate: 0 # Same as autoSetup if ILIAS >= 7
@@ -258,8 +258,8 @@ mariadbgalera:
   enabled: false
 cronjob:
   enabled: true
-  image: srsolutions/ilias
-  tag: 9-php8.2-apache # or specify a tag
+  image: ghcr.io/opendesk-edu/ilias-shibboleth
+  tag: "9-php8.2-apache"
   schedule: "0 2 * * *" # Daily at 2 AM
 
 ssoCheck:
