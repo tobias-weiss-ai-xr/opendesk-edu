@@ -1,0 +1,48 @@
+{{- if .Values.monitoring.alerts.edu.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: opendesk-edu-alerts
+  labels:
+    app.kubernetes.io/name: opendesk-edu
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    prometheus: kube-prometheus-stack
+spec:
+  groups:
+  - name: opendesk-edu
+    rules:
+    - alert: SOGoDown
+      expr: up{app="sogo"} == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "SOGo mail/calendar service is down"
+    - alert: EtherpadDown
+      expr: up{app="etherpad"} == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Etherpad collaborative editor is down"
+    - alert: SniprDown
+      expr: up{app="snipr"} == 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Snipr pastebin service is down"
+    - alert: PortalEntriesDown
+      expr: up{app="portal-entries"} == 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Portal entries service is down"
+    - alert: HighSOGoMemory
+      expr: container_memory_usage_bytes{container="sogo"} > 1.5e9
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "SOGo memory usage above 1.5GB"
