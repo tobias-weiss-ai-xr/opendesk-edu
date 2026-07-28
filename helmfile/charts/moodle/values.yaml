@@ -1,6 +1,6 @@
 moodle:
   replicaCount: 2
-  image: "ghcr.io/<your-org>/moodle-shib"
+  image: "ghcr.io/opendesk-edu/moodle-shib"
   tag: "v1.4.0"
   moodleUsername: "admin"
   moodlePassword: ""

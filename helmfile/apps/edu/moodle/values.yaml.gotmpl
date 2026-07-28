@@ -5,8 +5,8 @@ commonAnnotations:
   {{ .Values.annotations.moodle.common | default (dict) | toYaml | nindent 2 }}
 
 moodle:
-  image: "ghcr.io/<your-org>/moodle-shib"
-  tag: "v1.0.0"
+  image: "ghcr.io/opendesk-edu/moodle-shib"
+  tag: "v1.4.0"
   replicaCount: 2
   
   # Moodle configuration
