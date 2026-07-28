@@ -45,7 +45,7 @@ deploy openDesk onto your Kubernetes infrastructure.
 
 ## Requirements
 
-Detailed system requirements are covered on the [requirements](./docs/requirements.md) page.
+Detailed system requirements are covered on the [requirements](./requirements.md) page.
 
 ## Customize environment
 
@@ -264,7 +264,7 @@ ingress:
 
 > [!note]
 > Currently, the only Ingress controllers supported are `haproxy-ingress.github.io` and the deprecated `ingress-nginx`.
-> See [requirements.md](./docs/requirements.md) for more details.
+> See [requirements.md](./requirements.md) for more details.
 
 ### Container runtime
 
@@ -301,7 +301,7 @@ cluster:
 
 ## Customize deployment
 
-While openDesk configures the applications with meaningful defaults, you can check [functional.md](./docs/functional.md) if you want to change these defaults to better match your use case.
+While openDesk configures the applications with meaningful defaults, you can check [functional.md](./functional.md) if you want to change these defaults to better match your use case.
 
 ## Connectivity
 

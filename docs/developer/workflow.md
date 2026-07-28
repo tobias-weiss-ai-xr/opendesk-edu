@@ -122,7 +122,7 @@ classDiagram
 
 The focus of openDesk is to provide an integrated and functional productivity platform based on the involved suppliers' functional components (products). These functional components usually rely on specific service components, e.g. database services for persistence. When running openDesk in production, the operator is responsible for providing these production-grade services. For evaluation and development purposes, the openDesk deployment automation includes these services.
 
-Find the list of functional and service components in the [archictecture documentation](./docs/architecture.md).
+Find the list of functional and service components in the [archictecture documentation](../architecture.md).
 
 ### Origins
 
@@ -242,7 +242,7 @@ The Standard Quality Gate addresses quality assurance steps that should be execu
 1. Linting
    - Blocking
      - Licensing: [reuse](https://github.com/fsfe/reuse-tool)
-     - openDesk specific: Especially `images.yaml.gotmpl` and `charts.yaml.gotmpl`, find more details in [development.md](./docs/developer/development.md).
+     - openDesk specific: Especially `images.yaml.gotmpl` and `charts.yaml.gotmpl`, find more details in [development.md](./developer/development.md).
    - Non-Blocking
      - Security: [Kyverno policy check](../.kyverno) addressing some IT-Grundschutz requirements
      - Formal: Yaml
