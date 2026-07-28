@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+image:
+  registry: {{ .Values.registry.eudiIssuer | default "ghcr.io" }}
+  repository: {{ .Values.image.eudiIssuer.repository | default "opendesk-edu/eudi-issuer" }}
+  tag: {{ .Values.image.eudiIssuer.tag | default "v0.1.0" }}
+
+did:
+  method: key
+  keyType: Ed25519
+
+database:
+  host: {{ .Values.database.eudiIssuer.host | default "postgresql" }}
+  port: 5432
+  name: eudi_issuer
+  user: eudi_issuer
+  existingSecret: {{ .Values.secrets.eudiIssuer.existingSecret | default "" }}
+
+keycloak:
+  realm: {{ .Values.global.keycloak.realm | default "opendesk" }}
+  clientId: {{ .Values.eudiIssuer.keycloak.clientId | default "eudi-issuer" }}
+  existingSecret: {{ .Values.secrets.eudiIssuer.keycloakSecret | default "" }}
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: haproxy
+  host: "issuer.{{ .Values.global.domain }}"
+  annotations:
+    {{ .Values.annotations.eudiIssuer.ingress | default (dict) | toYaml | nindent 4 }}
+
+resources:
+  requests:
+    cpu: {{ .Values.resources.eudiIssuer.requests.cpu | default "100m" }}
+    memory: {{ .Values.resources.eudiIssuer.requests.memory | default "256Mi" }}
+  limits:
+    cpu: {{ .Values.resources.eudiIssuer.limits.cpu | default "500m" }}
+    memory: {{ .Values.resources.eudiIssuer.limits.memory | default "512Mi" }}
