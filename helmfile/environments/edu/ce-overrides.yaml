@@ -684,7 +684,8 @@ database:
   host: ""
   name: ""
 databases: {}
-debug: {}
+debug:
+  enabled: false
 image:
   repository: ""
   tag: ""
