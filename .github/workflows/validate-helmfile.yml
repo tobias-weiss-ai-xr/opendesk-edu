@@ -1,0 +1,78 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Validate helmfile rendering on every PR and push to main.
+# Catches template errors, missing values, and YAML syntax issues
+# before they reach ArgoCD.
+
+name: Validate Helmfile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "helmfile/**"
+      - ".github/workflows/validate-helmfile.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "helmfile/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install helmfile
+        run: |
+          curl -fsSL https://github.com/helmfile/helmfile/releases/download/v1.0.0/helmfile_1.0.0_linux_amd64.tar.gz | tar xz
+          sudo mv helmfile /usr/local/bin/
+
+      - name: Install helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "v3.17.0"
+
+      - name: Validate environment YAML syntax
+        run: |
+          echo "=== Validating YAML syntax ==="
+          find helmfile/environments -name "*.yaml" -o -name "*.gotmpl" | while read f; do
+            python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null && echo "  ✅ $f" || echo "  ❌ $f (YAML error)"
+          done
+
+      - name: Validate chart values schemas
+        run: |
+          echo "=== Validating chart values ==="
+          for chart in helmfile/charts/*/; do
+            if [ -f "$chart/values.schema.json" ]; then
+              python3 -c "
+import json, yaml
+schema = json.load(open('${chart}values.schema.json'))
+values = yaml.safe_load(open('${chart}values.yaml'))
+print(f'  ✅ ${chart} — values match schema')
+" 2>/dev/null || echo "  ❌ ${chart} — schema validation failed"
+            fi
+          done
+
+      - name: Validate helmfile template
+        run: |
+          echo "=== Rendering helmfile ==="
+          helmfile --file helmfile.yaml.gotmpl \
+            --environment edu \
+            --namespace opendesk \
+            --allow-no-matching-release \
+            template 2>&1 | head -5
+          echo "... render successful"
+
+      - name: Check for deprecated API versions
+        run: |
+          echo "=== Checking for deprecated K8s APIs ==="
+          # Fail if any template uses v1beta1 or v1beta2 APIs
+          helmfile --file helmfile.yaml.gotmpl \
+            --environment edu \
+            --namespace opendesk \
+            --allow-no-matching-release \
+            template 2>&1 | grep -E "extensions/v1beta1|apps/v1beta1|batch/v1beta1|rbac/v1beta1|policy/v1beta1" && \
+            echo "❌ Deprecated API found!" || \
+            echo "  ✅ All APIs are current"

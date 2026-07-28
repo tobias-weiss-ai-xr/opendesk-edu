@@ -1,3 +1,16 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# SOPS configuration for encrypted secrets.
+# Uses age encryption key from environment.
+#
+# Usage:
+#   sops encrypt helmfile/environments/edu/secrets.yaml > helmfile/environments/edu/secrets.enc.yaml
+#   sops decrypt helmfile/environments/edu/secrets.enc.yaml
+#
+# Key location: ~/.config/sops/age/keys.txt (SOPS_AGE_KEY_FILE)
+
 creation_rules:
-  - path_regex: \.enc\.yaml$
-    age: age13zw40j4ax88ljk032zyd7yjr707ejce5ps5nlxmgld6ynwswnc2qcat04y
+  - path_regex: helmfile/environments/.*/secrets.*\.yaml
+    age: age15437xk7432fpwtrd2gpwcmh7xyzacvp2sy6qr5sq2n3zqah5u9tqw5s539
+    encrypted_regex: "^(password|secret|apiKey|token|privateKey)$"
