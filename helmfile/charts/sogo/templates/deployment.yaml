@@ -90,8 +90,10 @@ spec:
               mountPath: /etc/sogo/sogo.conf.d
             - name: sogo-main-config
               mountPath: /opt/sogo-config-template
+            {{- if .Values.sogo.oidc.enabled }}
             - name: custom-entrypoint
               mountPath: /opt/custom-entrypoint
+            {{- end }}
           readinessProbe:
             httpGet:
               path: /
