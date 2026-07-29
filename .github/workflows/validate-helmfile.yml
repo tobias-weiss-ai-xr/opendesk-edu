@@ -1,10 +1,3 @@
-# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
-#
-# Validate helmfile rendering on every PR and push to main.
-# Catches template errors, missing values, and YAML syntax issues
-# before they reach ArgoCD.
-
 name: Validate Helmfile
 
 on:
@@ -24,56 +17,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install helmfile
+      - name: Validate YAML syntax
         run: |
-          # Use GitHub API with token to get latest release
-          LATEST=$(curl -sL -H "Authorization: Bearer ${{ github.token }}"             https://api.github.com/repos/helmfile/helmfile/releases/latest |             python3 -c "import json,sys; d=json.load(sys.stdin); print(d['tag_name'])")
-          echo "Latest: $LATEST"
-          # Download the specific release asset
-          curl -fsSL -H "Authorization: Bearer ${{ github.token }}"             "https://api.github.com/repos/helmfile/helmfile/releases/latest" |             python3 -c "import json,sys; d=json.load(sys.stdin); a=[a for a in d['assets'] if 'linux_amd64' in a['name']][0]; print(a['browser_download_url'])" |             wget -qi - -O helmfile.tar.gz
-          tar xzf helmfile.tar.gz
-          sudo mv helmfile /usr/local/bin/
-          helmfile --version
-
-      - name: Install helm
-        uses: azure/setup-helm@v4
-        with:
-          version: "v3.17.0"
-
-      - name: Validate environment YAML syntax
-        run: |
-          echo "=== Validating YAML syntax ==="
-          find helmfile/environments -name "*.yaml" -o -name "*.gotmpl" | while read f; do
-            python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null && echo "  ✅ $f" || echo "  ❌ $f (YAML error)"
+          echo "=== Validating YAML ==="
+          find helmfile/environments -name "*.yaml" -o -name "*.gotmpl" 2>/dev/null | while read f; do
+            python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null && echo "  ✅ $f" || echo "  ❌ $f"
           done
 
-      - name: Validate chart values schemas
+      - name: Validate chart schemas
         run: |
-          echo "=== Validating chart values ==="
+          echo "=== Validating chart schemas ==="
           for chart in helmfile/charts/*/; do
-            if [ -f "$chart/values.schema.json" ]; then
-              python3 -c "import json, yaml; schema = json.load(open('${chart}values.schema.json')); values = yaml.safe_load(open('${chart}values.yaml')); print('  OK ${chart} values match schema')" 2>/dev/null || echo "  FAIL ${chart} schema validation error"
+            if [ -f "${chart}values.schema.json" ]; then
+              python3 -c "
+import json, yaml
+schema = json.load(open('${chart}values.schema.json'))
+values = yaml.safe_load(open('${chart}values.yaml'))
+print(f'  ✅ ${chart}')
+" 2>/dev/null || echo "  ❌ ${chart}"
             fi
           done
 
-      - name: Validate helmfile template (best-effort)
+      - name: Check deprecated K8s APIs
         run: |
-          echo "=== Rendering helmfile ==="
-          helmfile --file helmfile.yaml.gotmpl \
-            --environment edu \
-            --namespace opendesk \
-            --allow-no-matching-release \
-            template 2>&1 | head -5 || echo "  (helmfile template failed — likely missing CE deps)"
-          echo "... check complete"
-
-      - name: Check for deprecated API versions
-        run: |
-          echo "=== Checking for deprecated K8s APIs ==="
-          # Fail if any template uses v1beta1 or v1beta2 APIs
-          helmfile --file helmfile.yaml.gotmpl \
-            --environment edu \
-            --namespace opendesk \
-            --allow-no-matching-release \
-            template 2>&1 | grep -E "extensions/v1beta1|apps/v1beta1|batch/v1beta1|rbac/v1beta1|policy/v1beta1" && \
-            echo "❌ Deprecated API found!" || \
-            echo "  ✅ All APIs are current"
+          echo "=== Checking deprecated APIs ==="
+          if grep -rn "v1beta1\|v1beta2\|extensions/v1beta" helmfile/charts/ --include="*.yaml" --include="*.tpl" 2>/dev/null; then
+            echo "❌ Found deprecated APIs!"
+            exit 1
+          else
+            echo "  ✅ All APIs current"
+          fi
