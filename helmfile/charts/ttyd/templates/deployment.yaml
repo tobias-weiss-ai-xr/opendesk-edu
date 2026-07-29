@@ -1,97 +1,13 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "ttyd.fullname" . }}
-  labels:
-    {{- include "ttyd.labels" . | nindent 4 }}
-spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      {{- include "ttyd.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        {{- include "ttyd.selectorLabels" . | nindent 8 }}
-    spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        fsGroup: 1000
-      {{- if .Values.opencloud.enabled }}
-      initContainers:
-        - name: volume-init
-          image: busybox:1.37
-          command:
-            - sh
-            - -c
-            - |
-              mkdir -p /root/{{ .Values.opencloud.mountPath }}
-          volumeMounts:
-            - name: opencloud
-              mountPath: /root
-          resources:
-            requests:
-              cpu: 10m
-              memory: 16Mi
-      {{- end }}
-      containers:
-        - name: ttyd
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - /usr/bin/tini
-            - --
-            - ttyd
-            - -p
-            - "{{ .Values.service.port }}"
-            {{- range .Values.extraArgs }}
-            - {{ . | quote }}
-            {{- end }}
-            - bash
-          ports:
-            - containerPort: {{ .Values.service.port }}
-              protocol: TCP
-              name: http
-          volumeMounts:
-            {{- if .Values.opencloud.enabled }}
-            - name: opencloud
-              mountPath: /root/{{ .Values.opencloud.mountPath }}
-            {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-        {{- if .Values.oauth2.enabled }}
-        - name: oauth2-proxy
-          image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
-          args:
-            - --provider={{ .Values.oauth2.provider }}
-            - --client-id={{ .Values.oauth2.clientId }}
-            - --client-secret={{ .Values.oauth2.clientSecret }}
-            - --oidc-issuer-url={{ .Values.oauth2.oidcIssuerUrl }}
-            - --cookie-secret={{ .Values.oauth2.cookieSecret }}
-            # --scope intentionally omitted; defaults work correctly with Keycloak
-            - --set-authorization-header=true
-            - --set-xauthrequest=true
-            - --email-domain=*
-            - --skip-provider-button=true
-            - --redirect-url=https://{{ (index .Values.ingress.hosts 0).host }}/oauth2/callback
-            - --upstream=http://127.0.0.1:{{ .Values.service.port }}
-            - --http-address=0.0.0.0:4180
-          ports:
-            - containerPort: 4180
-              protocol: TCP
-              name: oauth2
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 256Mi
-        {{- end }}
-      {{- if .Values.opencloud.enabled }}
-      volumes:
-        - name: opencloud
-          emptyDir: { sizeLimit: "256Mi" }
-      {{- end }}
-
+{{- include "common.deployment" (dict
+  "name" .Release.Name
+  "image" .Values.image
+  "tag" .Values.tag
+  "port" .Values.port
+  "replicas" .Values.replicas
+  "env" .Values.extraEnv
+  "imagePullPolicy" .Values.imagePullPolicy
+  "resources" .Values.resources
+  "securityContext" .Values.securityContext
+  "podSecurityContext" .Values.podSecurityContext
+  "Release" .Release
+) -}}

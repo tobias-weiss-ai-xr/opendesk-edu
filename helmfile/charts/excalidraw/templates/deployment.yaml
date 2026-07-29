@@ -1,81 +1,13 @@
-# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: Apache-2.0
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ .Release.Name }}-excalidraw
-  labels:
-    excalidraw/server: "true"
-{{ include "excalidraw.labels" . | nindent 4 }}
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      excalidraw/server: "true"
-{{ include "excalidraw.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        excalidraw/server: "true"
-{{ include "excalidraw.labels" . | nindent 8 }}
-{{- if .Values.excalidraw.oidc.enabled }}
-      annotations:
-        sidecar.istio.io/inject: "false"
-{{- end }}
-    spec:
-      containers:
-        - name: excalidraw
-          image: {{ .Values.excalidraw.image }}:{{ .Values.excalidraw.tag }}
-          ports:
-            - containerPort: {{ .Values.excalidraw.port }}
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-          volumeMounts:
-            - name: nginx-tmp
-              mountPath: /var/cache/nginx
-            - name: nginx-run
-              mountPath: /var/run
-          livenessProbe:
-            tcpSocket:
-              port: {{ .Values.excalidraw.port }}
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: {{ .Values.excalidraw.port }}
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          resources: {{ .Values.excalidraw.resources | toYaml | nindent 12 }}
-{{- if .Values.excalidraw.oidc.enabled }}
-        - name: oauth2-proxy
-          image: {{ .Values.excalidraw.oidc.proxyImage }}:{{ .Values.excalidraw.oidc.proxyTag }}
-          ports:
-            - containerPort: 4180
-              protocol: TCP
-          args:
-            - --provider=oidc
-            - --oidc-issuer-url={{ .Values.excalidraw.oidc.issuerUrl }}
-            - --upstream=http://127.0.0.1:{{ .Values.excalidraw.port }}
-            - --http-address=0.0.0.0:4180
-            - --email-domain=*
-            - --client-id={{ .Values.excalidraw.oidc.clientId }}
-            - --client-secret={{ .Values.excalidraw.oidc.clientSecret }}
-            - --cookie-secret={{ .Values.excalidraw.oidc.cookieSecret }}
-            - --cookie-secure=true
-            - --pass-authorization-header=true
-            - --set-xauthrequest=true
-            - --ssl-insecure-skip-verify=true
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
-{{- end }}
-      volumes:
-        - name: nginx-tmp
-          emptyDir: { sizeLimit: "256Mi" }
-        - name: nginx-run
-          emptyDir: { sizeLimit: "256Mi" }
+{{- include "common.deployment" (dict
+  "name" .Release.Name
+  "image" .Values.image
+  "tag" .Values.tag
+  "port" .Values.port
+  "replicas" .Values.replicas
+  "env" .Values.extraEnv
+  "imagePullPolicy" .Values.imagePullPolicy
+  "resources" .Values.resources
+  "securityContext" .Values.securityContext
+  "podSecurityContext" .Values.podSecurityContext
+  "Release" .Release
+) -}}
