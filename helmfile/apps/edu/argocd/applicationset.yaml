@@ -1,0 +1,181 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# ArgoCD ApplicationSet — replaces 50+ individual Application resources.
+# Deploy with: kubectl apply -f helmfile/apps/edu/argocd/applicationset.yaml
+#
+# Each app in the list gets an auto-generated Application with consistent env vars.
+# Add a new app by adding one line to the elements list.
+
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: edu-apps
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - app: bigbluebutton
+          - app: bookstack
+          - app: code-server
+          - app: collabora
+          - app: collab-dashboard
+          - app: cryptpad
+          - app: dask
+          - app: drawio
+          - app: etherpad
+          - app: excalidraw
+          - app: f13
+          - app: grommunio
+          - app: ilias
+          - app: intercom
+          - app: jitsi
+          - app: jupyterhub
+          - app: kasmvnc
+          - app: limesurvey
+          - app: moodle
+          - app: n8n
+          - app: nextcloud
+          - app: ollama
+          - app: open-webui
+          - app: opencloud
+          - app: openproject
+          - app: overleaf
+          - app: planka
+          - app: rstudio
+          - app: seaweedfs
+          - app: self-service-password
+          - app: slidev
+          - app: snipr
+          - app: sogo
+          - app: stalwart
+          - app: ttyd
+          - app: typo3
+          - app: xwiki
+          - app: zammad
+  template:
+    metadata:
+      name: "{{ app }}"
+      labels:
+        app.kubernetes.io/managed-by: "argocd-appset"
+    spec:
+      project: default
+      destination:
+        namespace: opendesk
+        server: https://kubernetes.default.svc
+      source:
+        repoURL: https://github.com/opendesk-edu/opendesk-edu.git
+        targetRevision: main
+        path: "."
+        plugin:
+          env:
+            - name: HELMFILE_FILE_PATH
+              value: "helmfile.yaml.gotmpl"
+            - name: HELMFILE_GLOBAL_OPTIONS
+              value: "--environment edu --namespace opendesk --allow-no-matching-release"
+            - name: HELMFILE_APP
+              value: "{{ app }}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 2
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+EOF
+echo "✅ ArgoCD ApplicationSet manifest created"
+
+echo ""
+echo "=== 2. Create chart publishing workflow ==="
+mkdir -p .github/workflows
+
+cat > .github/workflows/publish-charts.yml << 'YAML'
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Publish Helm charts to GHCR OCI registry on version bumps.
+# Enables cross-variant chart sharing between CE, Edu, SME, Sec.
+
+name: Publish Charts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "helmfile/charts/**/Chart.yaml"
+  workflow_dispatch:
+    inputs:
+      chart:
+        description: "Chart to publish (empty = all with version changes)"
+        required: false
+        default: ""
+
+env:
+  REGISTRY: ghcr.io
+  ORG: opendesk-edu
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.charts.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - id: charts
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'helmfile/charts/*/Chart.yaml' | sed 's|helmfile/charts/||' | sed 's|/Chart.yaml||' | tr '\n' ' ')
+          if [ -z "$CHANGED" ]; then
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+          else
+            MATRIX=$(echo "$CHANGED" | jq -R -s -c 'split(" ") | map(select(. != "")) | {include: map({name: .})}')
+            echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+          fi
+      - name: Show changes
+        run: echo "Changed charts: ${{ steps.charts.outputs.matrix }}"
+
+  publish:
+    needs: detect
+    if: needs.detect.outputs.matrix != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.detect.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "v3.17.0"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package and publish chart
+        run: |
+          CHART="helmfile/charts/${{ matrix.name }}"
+          echo "Packaging $CHART..."
+          helm dependency build "$CHART" 2>/dev/null || true
+          helm package "$CHART" -d /tmp/charts
+          
+          echo "Publishing ${{ matrix.name }} to ${{ env.REGISTRY }}/${{ env.ORG }}/charts/${{ matrix.name }}..."
+          helm push "/tmp/charts/${{ matrix.name }}-*.tgz" "oci://${{ env.REGISTRY }}/${{ env.ORG }}/charts"
+
+      - name: Verify
+        run: |
+          helm pull "oci://${{ env.REGISTRY }}/${{ env.ORG }}/charts/${{ matrix.name }}" --version "$(grep '^version:' helmfile/charts/${{ matrix.name }}/Chart.yaml | awk '{print $2}')" 2>&1 | tail -3
+          echo "✅ ${{ matrix.name }} published"
