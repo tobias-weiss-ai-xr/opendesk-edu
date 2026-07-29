@@ -1,71 +1,14 @@
-# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ .Release.Name }}-drawio
-  labels:
-    drawio/server: "true"
-{{ include "drawio.labels" . | nindent 4 }}
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      drawio/server: "true"
-{{ include "drawio.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        drawio/server: "true"
-{{ include "drawio.labels" . | nindent 8 }}
-{{- if .Values.sso.oidc.enabled }}
-      annotations:
-        sidecar.istio.io/inject: "false"
-{{- end }}
-    spec:
-      containers:
-        - name: drawio
-          image: {{ .Values.drawio.image }}:{{ .Values.drawio.tag }}
-          ports:
-            - containerPort: {{ .Values.drawio.port }}
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-          livenessProbe:
-            tcpSocket:
-              port: {{ .Values.drawio.port }}
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: {{ .Values.drawio.port }}
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          resources: {{ .Values.drawio.resources | toYaml | nindent 12 }}
-{{- if .Values.sso.oidc.enabled }}
-        - name: oauth2-proxy
-          image: {{ .Values.sso.oidc.proxyImage }}:{{ .Values.sso.oidc.proxyTag }}
-          ports:
-            - containerPort: 4180
-              protocol: TCP
-          args:
-            - --provider=oidc
-            - --oidc-issuer-url={{ .Values.sso.oidc.issuerUrl }}
-            - --upstream=http://127.0.0.1:{{ .Values.drawio.port }}
-            - --http-address=0.0.0.0:4180
-            - --email-domain=*
-            - --client-id={{ .Values.sso.oidc.clientId }}
-            - --client-secret={{ .Values.sso.oidc.clientSecret }}
-            - --cookie-secret={{ .Values.sso.oidc.cookieSecret }}
-            - --cookie-secure=true
-            - --pass-authorization-header=true
-            - --set-xauthrequest=true
-            - --ssl-insecure-skip-verify=true
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
-{{- end }}
+{{- include "common.deployment" (dict
+  "name" .Release.Name
+  "image" .Values.image
+  "tag" .Values.tag
+  "port" .Values.port
+  "replicas" .Values.replicas
+  "env" .Values.extraEnv
+  "imagePullPolicy" .Values.imagePullPolicy
+  "resources" .Values.resources
+  "securityContext" .Values.securityContext
+  "podSecurityContext" .Values.podSecurityContext
+  "probes" (dict "port" .Values.port)
+  "Release" .Release
+) -}}

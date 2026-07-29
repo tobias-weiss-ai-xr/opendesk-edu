@@ -97,6 +97,7 @@ k8up-*.yaml
 *.key
 *.crt
 *.p12
+<<<<<<< Updated upstream
 !*secrets*.enc.yaml
 
 # Allow test env templates to be committed
@@ -106,3 +107,8 @@ k8up-*.yaml
 
 # Decrypted by scripts/deploy.sh — use secrets.enc.yaml in git
 helmfile/environments/edu/secrets.yaml
+=======
+
+# Allow tracking of SOPS-encrypted secret files
+!*secrets*.enc.yaml
+>>>>>>> Stashed changes
