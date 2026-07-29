@@ -1,5 +1,17 @@
 { lib }:
-let name = "stalwart"; image = "ghcr.io/opendesk-edu/mirror/stalwartlabs/stalwart"; tag = "v0.16.15";
-in lib.statefulset { inherit name image tag; port = 80; resources.limits = { cpu = "2"; memory = "2Gi"; }; }
-// lib.service { inherit name; port = 80; }
-// lib.ingress { inherit name; host = "mail.opendesk.hrz.uni-marburg.de"; port = 80; }
+let
+  name = "stalwart";
+  image = "ghcr.io/opendesk-edu/stalwart";
+  tag = "latest";
+in
+[ (lib.deployment { 
+    inherit name image tag; 
+    port = 8080; 
+    securityContext = lib.securityContext { user = 1000; }; 
+  })
+  (lib.service { inherit name; port = 8080; })
+] ++ (lib.ingressWithCert { 
+  inherit name; 
+  host = "mail.opendesk.hrz.uni-marburg.de"; 
+  port = 8080; 
+})
