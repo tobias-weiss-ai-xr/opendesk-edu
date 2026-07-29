@@ -15,12 +15,13 @@ let
       { name = "ILIAS_HOST_NAME"; value = "lms.opendesk.hrz.uni-marburg.de"; }
     ];
     envFrom = [
-      (lib.mkEnvFromSecret { name = "ILIAS_DB_PASSWORD"; key = "mariadb-password"; secret = "ilias-database-credentials"; })
-      (lib.mkEnvFromSecret { name = "ILIAS_ROOT_PASSWORD"; key = "password"; secret = "ilias-admin-credentials"; })
+      (lib.mkEnvFromSecret { name = "ilias-database-credentials"; })
+      (lib.mkEnvFromSecret { name = "ilias-admin-credentials"; })
     ];
     volumes = [ shibVol shibCerts ];
     initContainers = [(lib.mkContainer { name = "wait-db"; image = "docker.io/library/mariadb"; tag = "11.4"; command = ["/bin/sh" "-c" "until mariadb-admin ping -h ilias-mariadb --silent; do sleep 2; done"]; probes = false; })];
-    resources.limits = { cpu = "3"; memory = "6G"; };
+    resources = { limits = { cpu = "3"; memory = "6G"; }; };
   };
   svc = lib.service { inherit name; port = 80; };
-   ] ++ (lib.ingressWithCert { inherit name; host = "lms.opendesk.hrz.uni-marburg.de"; port = 80; })
+in
+  [ dep svc ] ++ (lib.ingressWithCert { inherit name; host = "lms.opendesk.hrz.uni-marburg.de"; port = 80; })
