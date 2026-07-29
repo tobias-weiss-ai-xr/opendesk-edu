@@ -26,7 +26,7 @@ jobs:
 
       - name: Install helmfile
         run: |
-          curl -fsSL https://github.com/helmfile/helmfile/releases/latest/download/helmfile_linux_amd64.tar.gz | tar xz
+          curl -fsSL https://github.com/helmfile/helmfile/releases/download/v1.1.0/helmfile_linux_amd64.tar.gz | tar xz
           sudo mv helmfile /usr/local/bin/
           helmfile --version
 
