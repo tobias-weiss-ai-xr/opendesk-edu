@@ -69,7 +69,8 @@ let
         livenessProbe = tcpProbe (if port != null then port else 80);
         readinessProbe = tcpProbe (if port != null then port else 80);
       } else withResources;
-    in withProbes;
+    volumeMounts = map (v: v.mount) volumes;
+  in withProbes // { inherit volumeMounts; };
 
   # Full deployment with init containers, volumes, sidecars
   deployment = { name, image, tag ? "latest", port ? 80, replicas ? 1
