@@ -1,50 +1,13 @@
-# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
-
-selfServicePassword:
-  image: ghcr.io/opendesk-edu/self-service-password
-  tag: "latest@sha256:9735d99b0b45a3187ff4be5ee0ca1b569ea85cfb2428d9f00c309fdaedfd0142"
-  port: 80
-
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
-
-  ldap:
-    host: ""
-    port: "389"
-    baseDn: ""
-    bindDn: ""
-    startTls: "false"
-    networkTimeout: "2"
-
-  oidc:
-    enabled: false
-    proxyImage: quay.io/oauth2-proxy/oauth2-proxy
-    proxyTag: latest
-    issuerUrl: "https://keycloak.opendesk.example.com/realms/opendesk"
-    clientId: "opendesk-ssp"
-    clientSecret: ""
-    cookieSecret: ""
-
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-  hosts: []
-  tls: []
-
-  # =========================================================================
-  # MONITORING (ServiceMonitor for Prometheus)
-  # =========================================================================
-  monitoring:
-    enabled: false
-    interval: 30s
-    path: /health
-    port: http
-    labels:
-      release: kube-prometheus-stack
+image: ghcr.io/opendesk-edu/self-service-password
+tag: "latest@sha256:9735d99b0b45a3187ff4be5ee0ca1b569ea85cfb2428d9f00c309fdaedfd0142"
+port: 80
+replicas: 1
+imagePullPolicy: IfNotPresent
+extraEnv: []
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
