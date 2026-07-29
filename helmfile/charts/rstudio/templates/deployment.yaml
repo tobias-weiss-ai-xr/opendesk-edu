@@ -9,5 +9,6 @@
   "resources" .Values.resources
   "securityContext" .Values.securityContext
   "podSecurityContext" .Values.podSecurityContext
+  "probes" (dict "port" .Values.port)
   "Release" .Release
 ) -}}
