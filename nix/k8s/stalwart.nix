@@ -7,7 +7,7 @@ in
 [ (lib.deployment { 
     inherit name image tag; 
     port = 8080; 
-    securityContext = lib.securityContext { user = 1000; }; 
+    securityContext = lib.securityContext;
   })
   (lib.service { inherit name; port = 8080; })
 ] ++ (lib.ingressWithCert { 
