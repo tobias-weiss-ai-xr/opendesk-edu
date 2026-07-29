@@ -73,6 +73,7 @@ let
     , imagePullSecrets ? null, serviceAccountName ? null
     , podAnnotations ? {}, podLabels ? {}
     , topologySpreadConstraints ? null
+    , securityContext ? null
   }:
     let
       defaultLabels = {
@@ -91,7 +92,7 @@ let
         template = {
           metadata = { labels = mergedLabels; };
           spec = {
-            securityContext = { fsGroup = 1000; };
+            securityContext = (if securityContext != null then securityContext else { fsGroup = 1000; });
             containers = [
               (mkContainer { inherit name image tag port ports env envFrom resources probes probeType volumes; })
             ] ++ extraContainers;
