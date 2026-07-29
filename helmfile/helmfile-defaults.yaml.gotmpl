@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Default values for all edu app helmfiles.
+# Included by app helmfiles via:
+#   {{ readFile "../../helmfile-defaults.yaml.gotmpl" }}
+#
+# Apps only need to override values that differ from these defaults.
+
+# Default resource limits for all apps
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Default persistence
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: ""
+
+# Default ingress
+ingress:
+  enabled: true
+  className: haproxy
+  annotations: {}
+
+# Default monitoring
+monitoring:
+  enabled: false
+  interval: 30s
+
+# Default SSO
+sso:
+  saml:
+    enabled: false
+  oidc:
+    enabled: false
+
+# Default security context
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  runAsNonRoot: true

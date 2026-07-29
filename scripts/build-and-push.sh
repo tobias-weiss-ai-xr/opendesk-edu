@@ -118,3 +118,24 @@ for img_def in "${MIRRORS[@]}"; do
 done
 
 echo "=== All images built and pushed ==="
+
+# Supplier mirrors (key third-party images we depend on)
+mirror_supplier() {
+  local category="$1"
+  local name="$2"
+  local tag="$3"
+  local source="$4"
+  
+  echo "=== Mirroring $category/$name:$tag ==="
+  docker pull "$source:$tag" 2>/dev/null | tail -1 || return 1
+  
+  for registry in "$GHCR_REGISTRY/supplier" "$GITLAB_REGISTRY/supplier"; do
+    docker tag "$source:$tag" "$registry/$category/$name:$tag"
+    docker push "$registry/$category/$name:$tag" 2>/dev/null | tail -2
+  done
+  echo "✅ $category/$name mirrored"
+}
+
+# Uncomment to run:
+# mirror_supplier univention intercom-service 2.24.0 "$OPENDESK_REGISTRY/supplier/univention/images-mirror/intercom-service"
+# mirror_supplier collabora online 25.04.11.3.1 "$OPENDESK_REGISTRY/supplier/collabora/images/collabora-online-for-opendesk"

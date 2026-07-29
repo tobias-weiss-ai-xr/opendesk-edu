@@ -1,0 +1,25 @@
+#!/bin/bash
+# SOPS check: warn when secrets.yaml is modified without updating .enc.yaml
+set -euo pipefail
+
+CHANGED_YAML=$(git diff --cached --name-only | grep "secrets.yaml$" || true)
+CHANGED_ENC=$(git diff --cached --name-only | grep "secrets.enc.yaml$" || true)
+
+if [ -n "$CHANGED_YAML" ] && [ -z "$CHANGED_ENC" ]; then
+  echo "⚠️  WARNING: secrets.yaml changed but secrets.enc.yaml not updated!"
+  echo "   Run: sops encrypt helmfile/environments/edu/secrets.yaml > helmfile/environments/edu/secrets.enc.yaml"
+  echo "   Then: git add helmfile/environments/edu/secrets.enc.yaml"
+  echo ""
+  # Block the commit? Optional — comment next line to allow
+  # exit 1
+fi
+
+# Also validate YAML syntax
+for f in $(git diff --cached --name-only | grep "\.ya?ml$" || true); do
+  if [ -f "$f" ]; then
+    python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null || {
+      echo "❌ YAML syntax error in $f"
+      exit 1
+    }
+  fi
+done
