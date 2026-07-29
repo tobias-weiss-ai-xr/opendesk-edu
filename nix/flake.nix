@@ -19,6 +19,12 @@
           "drawio" "excalidraw" "planka" "coderd" "ollama"
           "intercom-service" "clamav" "seaweedfs"
           "self-service-password" "code-server" "rstudio" "ttyd" "slidev"
+          "argocd" "bigbluebutton" "etherpad" "eudi-issuer"
+          "f13" "grommunio" "jupyterhub" "kasmvnc"
+          "limesurvey" "monitoring" "n8n" "opencloud"
+          "open-webui" "overleaf" "portal-entries"
+          "semester-provisioning" "snipr" "typo3" "zammad"
+          "dask" "intercom"
         ];
 
         buildService = name:
