@@ -1,0 +1,5 @@
+platform:
+  realm: opendesk
+
+# CE Keycloak bootstrap — inject edu OIDC + SAML clients via CE's custom clients mechanism
+# CE reads functional.authentication.oidc.clients and injects into config.custom.clients
