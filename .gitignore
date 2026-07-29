@@ -112,3 +112,4 @@ helmfile/environments/edu/secrets.yaml
 # Allow tracking of SOPS-encrypted secret files
 !*secrets*.enc.yaml
 >>>>>>> Stashed changes
+nix/result
