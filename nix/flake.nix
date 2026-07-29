@@ -26,10 +26,19 @@
             builtins.toJSON (import ./k8s/${name}.nix { inherit lib; })
           );
 
-        allServices = pkgs.symlinkJoin {
-          name = "opendesk-edu";
-          paths = map buildService services;
-        };
+        allServices = pkgs.runCommand "opendesk-edu" { buildInputs = [ pkgs.yq ]; } (
+          let
+            copyCmds = builtins.concatStringsSep "
+" (map (name: ''
+              ${pkgs.yq}/bin/yq -P evalall '.' ${buildService name} > "$out/${name}.yaml"
+            '') services);
+          in
+          ''
+            mkdir -p $out
+            ${copyCmds}
+            echo "Done — $out has $(ls $out/*.yaml | wc -w) manifests"
+          ''
+        );
       in
       {
         packages = {
