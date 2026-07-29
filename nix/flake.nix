@@ -22,9 +22,11 @@
         ];
 
         buildService = name:
-          pkgs.writeText "${name}.yaml" (
-            builtins.toJSON (import ./k8s/${name}.nix { inherit lib; })
-          );
+          let
+            data = import ./k8s/${name}.nix { inherit lib; };
+            jsonFormat = pkgs.formats.json { };
+          in
+          jsonFormat.generate "${name}.yaml" data;
 
         allServices = pkgs.runCommand "opendesk-edu" { buildInputs = [ pkgs.yq ]; } (
           let
