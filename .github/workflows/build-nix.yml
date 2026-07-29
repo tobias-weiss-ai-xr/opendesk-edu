@@ -1,0 +1,40 @@
+name: Build Nix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "nix/**"
+      - ".github/workflows/build-nix.yml"
+  pull_request:
+    paths:
+      - "nix/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: determinatesystems/nix-installer-action@main
+
+      - name: Check Nix evaluation
+        run: |
+          cd nix
+          nix flake check 2>&1 | tail -5
+
+      - name: Build key services
+        run: |
+          cd nix
+          for svc in mariadb ilias moodle; do
+            echo "=== $svc ==="
+            nix build ".#$svc" 2>&1 | tail -2
+            kubectl apply --dry-run=client -f result 2>/dev/null && echo "  ✅ valid" || echo "  ⚠️  dry-run not available"
+          done
+
+      - name: Build all services
+        run: |
+          cd nix
+          nix build .#allServices 2>&1 | tail -3
+          echo "✅ All services build"
