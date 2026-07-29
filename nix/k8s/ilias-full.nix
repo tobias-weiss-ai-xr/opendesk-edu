@@ -24,4 +24,4 @@ let
   };
   svc = lib.service { inherit name; port = 80; };
   ing = lib.ingress { inherit name; host = "lms.opendesk.hrz.uni-marburg.de"; port = 80; };
-in [ dep svc ing ]
+   ] ++ (lib.ingressWithCert { inherit name; host = "lms.opendesk.hrz.uni-marburg.de"; port = 80; })
