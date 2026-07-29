@@ -103,3 +103,6 @@ k8up-*.yaml
 !*.env.test
 
 # Encrypted secrets — plaintext version is local only
+
+# Decrypted by scripts/deploy.sh — use secrets.enc.yaml in git
+helmfile/environments/edu/secrets.yaml
