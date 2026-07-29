@@ -13,3 +13,8 @@ annotations:
   artifacthub.io/links: |
     - name: Source
       url: https://github.com/tobias-weiss-ai-xr/opendesk-edu
+
+dependencies:
+  - name: common
+    repository: file://../common
+    version: 0.1.0

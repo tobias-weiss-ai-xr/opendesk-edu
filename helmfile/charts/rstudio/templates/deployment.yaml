@@ -1,110 +1,13 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "rstudio.fullname" . }}
-  labels:
-    {{- include "rstudio.labels" . | nindent 4 }}
-spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      {{- include "rstudio.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        {{- include "rstudio.selectorLabels" . | nindent 8 }}
-    spec:
-      containers:
-        - name: rstudio
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - containerPort: 8787
-              protocol: TCP
-              name: http
-          env:
-            {{- if not .Values.oauth2.enabled }}
-            - name: DISABLE_AUTH
-              value: "true"
-            {{- end }}
-          volumeMounts:
-            - name: workspace
-              mountPath: /home/rstudio
-            {{- if .Values.opencloud.enabled }}
-            - name: opencloud
-              mountPath: /home/rstudio/{{ .Values.opencloud.mountPath }}
-            {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-        {{- if .Values.oauth2.enabled }}
-        - name: oauth2-proxy
-          image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
-          args:
-            - --provider={{ .Values.oauth2.provider }}
-            - --client-id={{ .Values.oauth2.clientId }}
-            - --client-secret={{ .Values.oauth2.clientSecret }}
-            - --oidc-issuer-url={{ .Values.oauth2.oidcIssuerUrl }}
-            - --cookie-secret={{ .Values.oauth2.cookieSecret }}
-            # Note: --scope intentionally omitted; defaults to "openid email profile"
-            # which is what Keycloak requires. oauth2-proxy v7.6.0 sends comma-separated
-            # scopes when --scope is explicit, which Keycloak rejects as invalid.
-            - --set-authorization-header=true
-            - --set-xauthrequest=true
-            - --email-domain=*
-            - --skip-provider-button=true
-            - --redirect-url=https://{{ (index .Values.ingress.hosts 0).host }}/oauth2/callback
-            - --upstream=http://127.0.0.1:8787
-            - --http-address=0.0.0.0:4180
-          ports:
-            - containerPort: 4180
-              protocol: TCP
-              name: oauth2
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 256Mi
-        {{- end }}
-        {{- if .Values.opencloud.enabled }}
-        - name: opencloud-sync
-          image: rclone/rclone:1.69
-          command:
-            - sh
-            - -c
-            - |
-              rclone config create opencloud webdav \
-                url "{{ .Values.opencloud.url }}/dav/files/{{ .Values.opencloud.username }}" \
-                vendor "other" \
-                user "{{ .Values.opencloud.username }}" \
-                pass "{{ .Values.opencloud.password }}"
-              while true; do
-                echo "Syncing OpenCloud..."
-                rclone sync opencloud:{{ .Values.opencloud.remotePath }} /data/ \
-                  --verbose --progress
-                sleep {{ .Values.opencloud.syncInterval }}
-              done
-          volumeMounts:
-            - name: opencloud
-              mountPath: /data
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 256Mi
-        {{- end }}
-      volumes:
-        - name: workspace
-          {{- if .Values.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ include "rstudio.fullname" . }}-workspace
-          {{- else }}
-          emptyDir: { sizeLimit: "256Mi" }
-        {{- end }}
-        {{- if .Values.opencloud.enabled }}
-        - name: opencloud
-          emptyDir: { sizeLimit: "256Mi" }
-        {{- end }}
+{{- include "common.deployment" (dict
+  "name" .Release.Name
+  "image" .Values.image
+  "tag" .Values.tag
+  "port" .Values.port
+  "replicas" .Values.replicas
+  "env" .Values.extraEnv
+  "imagePullPolicy" .Values.imagePullPolicy
+  "resources" .Values.resources
+  "securityContext" .Values.securityContext
+  "podSecurityContext" .Values.podSecurityContext
+  "Release" .Release
+) -}}
