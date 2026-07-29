@@ -1,0 +1,13 @@
+charts:
+  codeServer:
+    version: "4.99.2"
+  dask:
+    version: "2024.12.0"
+  jupyterhub:
+    version: "3.3.8"
+
+# App-specific overrides (merged per app)
+ilias: {}
+mariadb: {}
+
+
