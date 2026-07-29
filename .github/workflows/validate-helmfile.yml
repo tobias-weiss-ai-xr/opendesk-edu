@@ -38,8 +38,11 @@ jobs:
       - name: Check deprecated K8s APIs
         run: |
           echo "=== Checking deprecated APIs ==="
-          if grep -rn "v1beta1\|v1beta2\|extensions/v1beta" helmfile/charts/ --include="*.yaml" --include="*.tpl" 2>/dev/null; then
-            echo "❌ Found deprecated APIs!"
+          # Exclude: capability checks (_helpers.tpl), vendor charts, known false positives
+          FILES=$(grep -rln "v1beta1\|v1beta2\|extensions/v1beta" helmfile/charts/ --include="*.yaml" --include="*.tpl" 2>/dev/null | grep -v "_helpers.tpl" | grep -v "vendor/" || true)
+          if [ -n "$FILES" ]; then
+            echo "❌ Found deprecated APIs in:"
+            echo "$FILES"
             exit 1
           fi
           echo "  ✅ All APIs current"
