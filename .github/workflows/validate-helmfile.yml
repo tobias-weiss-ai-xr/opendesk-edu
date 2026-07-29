@@ -46,12 +46,7 @@ jobs:
           echo "=== Validating chart values ==="
           for chart in helmfile/charts/*/; do
             if [ -f "$chart/values.schema.json" ]; then
-              python3 -c "
-import json, yaml
-schema = json.load(open('${chart}values.schema.json'))
-values = yaml.safe_load(open('${chart}values.yaml'))
-print(f'  ✅ ${chart} — values match schema')
-" 2>/dev/null || echo "  ❌ ${chart} — schema validation failed"
+              python3 -c "import json, yaml; schema = json.load(open('${chart}values.schema.json')); values = yaml.safe_load(open('${chart}values.yaml')); print('  OK ${chart} values match schema')" 2>/dev/null || echo "  FAIL ${chart} schema validation error"
             fi
           done
 

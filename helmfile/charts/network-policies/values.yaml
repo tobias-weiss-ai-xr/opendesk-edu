@@ -20,6 +20,12 @@ betty:
 defaultDenyPolicy:
   enabled: true
 
+# Allow pods to send traffic to other pods within the same namespace.
+# Must be enabled alongside defaultDenyPolicy to allow intra-namespace
+# communication; without it, Egress is blocked by default-deny-all.
+allowIntraNamespaceEgress:
+  enabled: true
+
 # Allow DNS resolution (CoreDNS access)
 dnsPolicy:
   enabled: true
