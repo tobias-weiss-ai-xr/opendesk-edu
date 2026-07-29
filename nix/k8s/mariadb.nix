@@ -1,14 +1,14 @@
 { lib }:
 let
   name = "mariadb";
+  instance = "ilias";
   storageSize = "10Gi";
   storageClass = "ceph-rbd-ssd";
-  # TODO: This creates a StatefulSet named "mariadb" with labels instance=name=mariadb
-  # The existing Helmfile deployment uses instance=ilias, name=mariadb for ilias-mariadb
-  # Consider adding instance parameter to statefulset for compatibility
+  fullName = "${instance}-${name}";
 in [
   (lib.statefulset { 
-    inherit name;
+    name = fullName;
+    inherit instance;
     image = "ghcr.io/opendesk-edu/mariadb"; 
     tag = "11.4.4"; 
     port = 3306;
@@ -20,5 +20,5 @@ in [
       }; }
     ];
   })
-  (lib.service { inherit name; port = 3306; })
+  (lib.service { name = fullName; inherit instance; port = 3306; })
 ]
