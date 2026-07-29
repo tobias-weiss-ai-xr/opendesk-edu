@@ -1,0 +1,24 @@
+{{/*
+SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+SPDX-License-Identifier: AGPL-3.0-or-later
+*/}}
+
+{{- if .Values.allowIntraNamespaceEgress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-intra-namespace-egress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: network-policies
+    app.kubernetes.io/component: security
+spec:
+  podSelector: {}
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Release.Namespace }}
+  policyTypes:
+    - Egress
+{{- end }}
