@@ -22,9 +22,14 @@
         ];
 
         buildService = name:
-          pkgs.writeText "${name}.yaml" (
-            builtins.toJSON (import ./k8s/${name}.nix { inherit lib; })
-          );
+          pkgs.runCommand "${name}.yaml" { buildInputs = [ pkgs.yq ]; } ''
+            JSON=$(${pkgs.writeText "${name}.json" (
+              builtins.toJSON (import ./k8s/${name}.nix { inherit lib; })
+            )})
+            ${pkgs.yq}/bin/yq -P eval '... style = "flow" | ... comments = ""' "$JSON" > $out 2>/dev/null
+            # Fallback: just copy JSON as-is if yq fails
+            if [ ! -s "$out" ]; then cp "$JSON" "$out"; fi
+          '';
 
         allServices = pkgs.runCommand "opendesk-edu" { buildInputs = [ pkgs.yq ]; } (
           let
