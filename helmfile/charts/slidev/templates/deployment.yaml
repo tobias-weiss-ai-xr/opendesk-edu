@@ -1,77 +1,13 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "slidev.fullname" . }}
-  labels:
-    {{- include "slidev.labels" . | nindent 4 }}
-spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      {{- include "slidev.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        {{- include "slidev.selectorLabels" . | nindent 8 }}
-    spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 101
-        fsGroup: 101
-      containers:
-        - name: slidev
-          image: nginx:alpine
-          ports:
-            - containerPort: 80
-              protocol: TCP
-              name: http
-          volumeMounts:
-            - name: slides
-              mountPath: /usr/share/nginx/html
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - sh
-                  - -c
-                  - |
-                    echo '<!DOCTYPE html><html><head><title>Slidev</title></head><body><h1>Slidev - Markdown Presentations</h1><p>Upload your slides to the slides volume.</p></body></html>' > /usr/share/nginx/html/index.html
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-        {{- if .Values.oauth2.enabled }}
-        - name: oauth2-proxy
-          image: quay.io/oauth2-proxy/oauth2-proxy:v7.6.0
-          args:
-            - --provider={{ .Values.oauth2.provider }}
-            - --client-id={{ .Values.oauth2.clientId }}
-            - --client-secret={{ .Values.oauth2.clientSecret }}
-            - --oidc-issuer-url={{ .Values.oauth2.oidcIssuerUrl }}
-            - --cookie-secret={{ .Values.oauth2.cookieSecret }}
-            # --scope intentionally omitted; defaults work correctly with Keycloak
-            - --set-authorization-header=true
-            - --set-xauthrequest=true
-            - --email-domain=*
-            - --skip-provider-button=true
-            - --redirect-url=https://{{ (index .Values.ingress.hosts 0).host }}/oauth2/callback
-            - --upstream=http://127.0.0.1:{{ .Values.service.port }}
-            - --http-address=0.0.0.0:4180
-          ports:
-            - containerPort: 4180
-              protocol: TCP
-              name: oauth2
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 256Mi
-        {{- end }}
-      volumes:
-        - name: slides
-          {{- if .Values.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ include "slidev.fullname" . }}-slides
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
+{{- include "common.deployment" (dict
+  "name" .Release.Name
+  "image" .Values.image
+  "tag" .Values.tag
+  "port" .Values.port
+  "replicas" .Values.replicas
+  "env" .Values.extraEnv
+  "imagePullPolicy" .Values.imagePullPolicy
+  "resources" .Values.resources
+  "securityContext" .Values.securityContext
+  "podSecurityContext" .Values.podSecurityContext
+  "Release" .Release
+) -}}

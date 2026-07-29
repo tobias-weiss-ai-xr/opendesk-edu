@@ -6,3 +6,8 @@ description: RStudio Server Helm chart for openDesk Edu
 type: application
 version: 0.1.0
 appVersion: "4.4.2"
+
+dependencies:
+  - name: common
+    repository: file://../common
+    version: 0.1.0
