@@ -14,7 +14,7 @@ etherpad:
   volumes:
     data:
       size: "1Gi"
-      accessMode: "ReadWriteMany"
+      accessMode: "ReadWriteOnce"
   resources:
     requests:
       cpu: "100m"
@@ -97,4 +97,4 @@ postgresql:
     persistence:
       enabled: true
       size: "8Gi"
-      accessMode: "ReadWriteMany"
+      accessMode: "ReadWriteOnce"
