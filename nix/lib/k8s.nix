@@ -268,6 +268,12 @@ let
     };
   };
 
+  # Environment variable helpers
+  mkEnvFromSecret = { name, secret }: { secretRef = { name = secret; }; };
+  mkEnvFromConfigMap = { name, configMap }: { configMapRef = { name = configMap; }; };
+  mkEnvVarFromSecret = { name, key, secret }: { name = name; valueFrom = { secretKeyRef = { name = secret; key = key; }; }; };
+  mkEnvVarFromConfigMap = { name, key, configMap }: { name = name; valueFrom = { configMapKeyRef = { name = configMap; key = key; }; }; };
+
   # Volume helpers
   mkVolume = { name, mountPath, subPath ? null, secret ? null, configMap ? null, items ? null, hostPath ? null }: {
     volume = { inherit name; } // (if secret != null then { secret = { secretName = secret; }; }
@@ -307,7 +313,8 @@ in {
     certificate
     hpa pdb networkPolicy job cronJob serviceAccount
     podSpec mkContainer
-    mkVolume emptyDir hostPath
+    mkVolume mkEnvFromSecret mkEnvFromConfigMap mkEnvVarFromSecret mkEnvVarFromConfigMap
+    emptyDir hostPath
     securityContext tcpProbe httpProbe commandProbe defaultResources
     toYAML;
 }
