@@ -26,11 +26,11 @@ jobs:
 
       - name: Install helmfile
         run: |
-          # Find latest release URL via GitHub API
-          LATEST=$(curl -sL https://api.github.com/repos/helmfile/helmfile/releases/latest | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'])")
-          echo "Latest helmfile: $LATEST"
-          # Download and install
-          curl -fsSL "https://github.com/helmfile/helmfile/releases/download/$LATEST/helmfile_${LATEST}_linux_amd64.tar.gz" -o helmfile.tar.gz ||             curl -fsSL "https://github.com/helmfile/helmfile/releases/download/$LATEST/helmfile_linux_amd64.tar.gz" -o helmfile.tar.gz
+          # Use GitHub API with token to get latest release
+          LATEST=$(curl -sL -H "Authorization: Bearer ${{ github.token }}"             https://api.github.com/repos/helmfile/helmfile/releases/latest |             python3 -c "import json,sys; d=json.load(sys.stdin); print(d['tag_name'])")
+          echo "Latest: $LATEST"
+          # Download the specific release asset
+          curl -fsSL -H "Authorization: Bearer ${{ github.token }}"             "https://api.github.com/repos/helmfile/helmfile/releases/latest" |             python3 -c "import json,sys; d=json.load(sys.stdin); a=[a for a in d['assets'] if 'linux_amd64' in a['name']][0]; print(a['browser_download_url'])" |             wget -qi - -O helmfile.tar.gz
           tar xzf helmfile.tar.gz
           sudo mv helmfile /usr/local/bin/
           helmfile --version
