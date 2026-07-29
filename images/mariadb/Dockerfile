@@ -49,3 +49,5 @@ RUN { \
     echo 'slow_query_log_file=/dev/stdout'; \
     echo 'log_error=/dev/stderr'; \
 } >> /etc/mysql/conf.d/ilias.cnf
+
+# CI trigger 1785319079
