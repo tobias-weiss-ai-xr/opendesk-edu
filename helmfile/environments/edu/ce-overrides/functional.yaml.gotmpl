@@ -1,0 +1,251 @@
+functional:
+  authentication:
+    oidc:
+      clientScopes:
+        opendesk-opencloud-scope:
+          name: opendesk-opencloud-scope
+          protocol: openid-connect
+          protocolMappers:
+          - name: opendesk-opencloud-uuid
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              user.attribute: uid
+              claim.name: opendesk_useruuid
+              claim.value: uid
+              id.token.claim: 'true'
+              access.token.claim: 'true'
+              userinfo.token.claim: 'true'
+          - name: opendesk-opencloud-username
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              user.attribute: uid
+              claim.name: preferred_username
+              claim.value: uid
+              id.token.claim: 'true'
+              access.token.claim: 'true'
+              userinfo.token.claim: 'true'
+          - name: opendesk-opencloud-email
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              user.attribute: mail
+              claim.name: email
+              claim.value: mail
+              id.token.claim: 'true'
+              access.token.claim: 'true'
+              userinfo.token.claim: 'true'
+      clients:
+      - name: opendesk-opencloud
+        clientId: opendesk-opencloud
+        protocol: openid-connect
+        clientAuthenticatorType: client-secret
+        secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
+        redirectUris:
+        - https://files.opendesk.hrz.uni-marburg.de/*
+        - https://portal.opendesk.hrz.uni-marburg.de/*
+        consentRequired: false
+        frontchannelLogout: true
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          backchannel.logout.session.required: true
+          backchannel.logout.url: https://files.opendesk.hrz.uni-marburg.de/backchannel_logout
+          post.logout.redirect.uris: https://files.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*
+        defaultClientScopes:
+        - opendesk-opencloud-scope
+      - name: stalwart
+        clientId: stalwart
+        protocol: openid-connect
+        clientAuthenticatorType: client-secret
+        secret: 4a312df6bfb2c74cd73e895a09818ca2e58f51a1c1b5db906224780542c97b85
+        redirectUris:
+        - https://mail.opendesk.hrz.uni-marburg.de/*
+        - https://portal.opendesk.hrz.uni-marburg.de/*
+        consentRequired: false
+        frontchannelLogout: true
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          backchannel.logout.session.required: true
+          post.logout.redirect.uris: https://mail.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*
+        defaultClientScopes:
+        - openid
+        - profile
+        - email
+      - name: ilias-saml
+        clientId: ilias-saml
+        protocol: saml
+        clientAuthenticatorType: client-secret
+        secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
+        redirectUris:
+        - https://lms.opendesk.hrz.uni-marburg.de/*
+        rootUrl: https://lms.opendesk.hrz.uni-marburg.de
+        adminUrl: https://lms.opendesk.hrz.uni-marburg.de
+        consentRequired: false
+        frontchannelLogout: true
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          saml.assertion.signature: 'false'
+          saml.force.post.binding: 'true'
+          saml.multivalued.roles: 'false'
+          saml.encrypt: 'false'
+          saml.server.signature: 'true'
+          saml.server.signature.keyinfo.ext: 'false'
+          saml.client.signature: 'false'
+          saml.authnstatement: 'true'
+          saml_name_id_format: persistent
+          frontchannel.logout.url: https://lms.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout
+        protocolMappers:
+        - name: email
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: email
+            attribute.name: email
+            attribute.nameformat: Basic
+        - name: displayname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: displayName
+            attribute.name: displayname
+            attribute.nameformat: Basic
+        - name: givenname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: firstName
+            attribute.name: givenname
+            attribute.nameformat: Basic
+        - name: surname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: lastName
+            attribute.name: surname
+            attribute.nameformat: Basic
+      - name: moodle-saml
+        clientId: moodle-saml
+        protocol: saml
+        clientAuthenticatorType: client-secret
+        secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
+        redirectUris:
+        - https://moodle.opendesk.hrz.uni-marburg.de/*
+        rootUrl: https://moodle.opendesk.hrz.uni-marburg.de
+        adminUrl: https://moodle.opendesk.hrz.uni-marburg.de
+        consentRequired: false
+        frontchannelLogout: true
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          saml.assertion.signature: 'false'
+          saml.force.post.binding: 'true'
+          saml.multivalued.roles: 'false'
+          saml.encrypt: 'false'
+          saml.server.signature: 'true'
+          saml.server.signature.keyinfo.ext: 'false'
+          saml.client.signature: 'false'
+          saml.authnstatement: 'true'
+          saml_name_id_format: persistent
+          frontchannel.logout.url: https://moodle.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout
+        protocolMappers:
+        - name: email
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: email
+            attribute.name: email
+            attribute.nameformat: Basic
+        - name: displayname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: displayName
+            attribute.name: displayname
+            attribute.nameformat: Basic
+        - name: givenname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: firstName
+            attribute.name: givenname
+            attribute.nameformat: Basic
+        - name: surname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: lastName
+            attribute.name: surname
+            attribute.nameformat: Basic
+      - name: bbb-saml
+        clientId: bbb-saml
+        protocol: saml
+        clientAuthenticatorType: client-secret
+        secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
+        redirectUris:
+        - https://bbb.opendesk.hrz.uni-marburg.de/*
+        - https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback
+        rootUrl: https://bbb.opendesk.hrz.uni-marburg.de
+        adminUrl: https://bbb.opendesk.hrz.uni-marburg.de
+        consentRequired: false
+        frontchannelLogout: true
+        publicClient: false
+        authorizationServicesEnabled: false
+        attributes:
+          saml.assertion.signature: 'false'
+          saml.force.post.binding: 'true'
+          saml.multivalued.roles: 'false'
+          saml.encrypt: 'false'
+          saml.server.signature: 'true'
+          saml.server.signature.keyinfo.ext: 'false'
+          saml.client.signature: 'false'
+          saml.authnstatement: 'true'
+          saml_name_id_format: persistent
+          frontchannel.logout.url: https://bbb.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout
+        protocolMappers:
+        - name: email
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: email
+            attribute.name: email
+            attribute.nameformat: Basic
+        - name: displayname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: displayName
+            attribute.name: displayname
+            attribute.nameformat: Basic
+        - name: givenname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: firstName
+            attribute.name: givenname
+            attribute.nameformat: Basic
+        - name: surname
+          protocol: saml
+          protocolMapper: saml-user-property-mapper
+          consentRequired: false
+          config:
+            user.attribute: lastName
+            attribute.name: surname
+            attribute.nameformat: Basic

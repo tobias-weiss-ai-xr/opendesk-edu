@@ -1,0 +1,90 @@
+apps:
+  # Disable CE apps that edu replaces or conflicts with
+  oxAppSuite:
+    enabled: false              # edu uses SOGo instead of OX
+  nextcloud:
+    enabled: false              # edu uses OpenCloud instead
+  seaweedfs:
+    enabled: false              # edu has its own seaweedfs deployment
+  dovecot:
+    enabled: false              # Stalwart replaces Dovecot
+  # SMTP relay selection: "stalwart" or "postfix"
+  # Stalwart handles inbound mail. For outbound (service notifications),
+  # either Stalwart or Postfix can relay. Stalwart is recommended.
+  smtpRelay: stalwart
+  postfix:
+    enabled: "false"
+    # Postfix stays as SMTP relay for services
+  # Keep nubus (UMS + Keycloak) but disable its embedded intercom-service
+  # edu deploys its own intercom-service (forked chart with edu-specific fixes)
+  nubus:
+    intercomServiceEnabled: false
+  # Enable SOGo (edu replaces OX with SOGo)
+  sogo:
+    enabled: true
+  opencloud:
+    enabled: true               # OpenCloud replaces Nextcloud
+  # Edu-specific apps
+  bigbluebutton:
+    enabled: false
+  intercom:
+    enabled: true
+  grommunio:
+    enabled: true               # Alternative groupware, not first-class
+  semesterProvisioning:
+    enabled: true
+  stalwart:
+    enabled: true
+  bookstack:
+    enabled: false
+  codeServer:
+    enabled: false
+  collabDashboard:
+    enabled: false
+  dask:
+    enabled: false
+  drawio:
+    enabled: false
+  etherpad:
+    enabled: false
+  excalidraw:
+    enabled: false
+  f13:
+    enabled: false
+  ilias:
+    enabled: true
+  jupyterhub:
+    enabled: false
+  kasmvnc:
+    enabled: false
+  limesurvey:
+    enabled: false
+  mariadb:
+    enabled: false
+  ollama:
+    enabled: false
+  openWebui:
+    enabled: false
+  overleaf:
+    enabled: false
+  planka:
+    enabled: true
+  rstudio:
+    enabled: false
+  selfServicePassword:
+    enabled: false
+  slidev:
+    enabled: false
+  snipr:
+    enabled: false
+  ttyd:
+    enabled: false
+  typo3:
+    enabled: false
+  zammad:
+    enabled: false
+
+
+# Edu-specific global config
+
+# Chart versions for components that need explicit versioning

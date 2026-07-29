@@ -1,0 +1,24 @@
+global:
+  mailDomain: "opendesk.hrz.uni-marburg.de"
+  domain: "opendesk.hrz.uni-marburg.de"
+  moodleSaml:
+    entityId: "https://moodle.opendesk.hrz.uni-marburg.de/shibboleth"
+  grommunio:
+    resources:
+      requests:
+        memory: "4Gi"
+  keycloak:
+    realm: opendesk
+  hosts:
+  domain: opendesk.hrz.uni-marburg.de
+  mail_domain: uni-marburg.de
+  hosts:
+    keycloak: portal
+    opencloud: files
+    f13: f13
+    grommunio: grommunio
+    nextcloud: nextcloud
+    typo3: typo3
+    stalwart: mail
+    sogo: contacts
+  

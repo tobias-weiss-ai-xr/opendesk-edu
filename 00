@@ -1,0 +1,4 @@
+# Helmfile state values that override CE defaults
+# These are injected via --values when running CE's helmfile
+# They override CE's default environment values
+
