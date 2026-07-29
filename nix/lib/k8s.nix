@@ -120,8 +120,7 @@ let
       apiVersion = "apps/v1";
       kind = "Deployment";
       metadata = builtins.removeAttrs ps.metadata [ "spec" ];
-      spec = builtins.removeAttrs ps.spec [ "template" ];
-      spec.template = ps.spec.template;
+      spec = (builtins.removeAttrs ps.spec [ "template" ]) // { template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {}; };
     };
 
   statefulset = args:
@@ -130,9 +129,7 @@ let
       apiVersion = "apps/v1";
       kind = "StatefulSet";
       metadata = builtins.removeAttrs ps.metadata [ "spec" ];
-      spec = builtins.removeAttrs ps.spec [ "template" ];
-      spec.serviceName = args.name;
-      spec.template = ps.spec.template;
+      spec = (builtins.removeAttrs ps.spec [ "template" ]) // { serviceName = args.name; template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {}; };
     };
 
   daemonSet = args:
@@ -141,8 +138,7 @@ let
       apiVersion = "apps/v1";
       kind = "DaemonSet";
       metadata = builtins.removeAttrs ps.metadata [ "spec" ];
-      spec = builtins.removeAttrs ps.spec [ "replicas" "template" ];
-      spec.template = ps.spec.template;
+      spec = (builtins.removeAttrs ps.spec [ "replicas" "template" ]) // { template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {}; };
     };
 
   service = { name, port ? 80, targetPort ? null, type ? "ClusterIP", clusterIP ? null, ports ? [ ], annotations ? {} }: {
@@ -260,8 +256,8 @@ let
     mount = { inherit name mountPath; };
   };
 
-  hostPath = { name, mountPath, hostPath: path, type ? "Directory" }: {
-    volume = { inherit name; hostPath = { path = hostPath.type; type = type; }; };
+  hostPath = { name, mountPath, path, type ? "Directory" }: {
+    volume = { inherit name; hostPath = { inherit path type; }; };
     mount = { inherit name mountPath; };
   };
 
