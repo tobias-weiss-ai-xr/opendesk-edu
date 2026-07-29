@@ -74,6 +74,7 @@ let
     , podAnnotations ? {}, podLabels ? {}
     , topologySpreadConstraints ? null
     , securityContext ? null
+    , volumeClaims ? [ ]
   }:
     let
       defaultLabels = {
@@ -126,11 +127,16 @@ let
 
   statefulset = args:
     let ps = podSpec args;
+      volumeClaims = if args ? volumeClaims then map (vc: { metadata = { name = vc.name; }; spec = vc.spec; }) args.volumeClaims else [];
     in {
       apiVersion = "apps/v1";
       kind = "StatefulSet";
       metadata = builtins.removeAttrs ps.metadata [ "spec" ];
-      spec = (builtins.removeAttrs ps.spec [ "template" ]) // { serviceName = args.name; template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {}; };
+      spec = (builtins.removeAttrs ps.spec [ "template" ]) // {
+        serviceName = args.name;
+        template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {};
+        volumeClaimTemplates = volumeClaims;
+      };
     };
 
   daemonSet = args:
