@@ -26,7 +26,12 @@ jobs:
 
       - name: Install helmfile
         run: |
-          curl -fsSL https://github.com/helmfile/helmfile/releases/download/v1.1.0/helmfile_linux_amd64.tar.gz | tar xz
+          # Find latest release URL via GitHub API
+          LATEST=$(curl -sL https://api.github.com/repos/helmfile/helmfile/releases/latest | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'])")
+          echo "Latest helmfile: $LATEST"
+          # Download and install
+          curl -fsSL "https://github.com/helmfile/helmfile/releases/download/$LATEST/helmfile_${LATEST}_linux_amd64.tar.gz" -o helmfile.tar.gz ||             curl -fsSL "https://github.com/helmfile/helmfile/releases/download/$LATEST/helmfile_linux_amd64.tar.gz" -o helmfile.tar.gz
+          tar xzf helmfile.tar.gz
           sudo mv helmfile /usr/local/bin/
           helmfile --version
 
