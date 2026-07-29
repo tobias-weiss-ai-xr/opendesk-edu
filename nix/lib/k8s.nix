@@ -75,11 +75,12 @@ let
     , topologySpreadConstraints ? null
     , securityContext ? null
     , volumeClaims ? [ ]
+    , instance ? name
   }:
     let
       defaultLabels = {
         "app.kubernetes.io/name" = name;
-        "app.kubernetes.io/instance" = name;
+        "app.kubernetes.io/instance" = instance;
       };
       mergedLabels = defaultLabels // podLabels;
     in {
@@ -89,7 +90,7 @@ let
       } // (if podAnnotations != {} then { annotations = podAnnotations; } else {});
       spec = {
         replicas = replicas;
-        selector = { matchLabels = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = name; }; };
+        selector = { matchLabels = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = instance; }; };
         template = {
           metadata = { labels = mergedLabels; };
           spec = {
@@ -148,13 +149,13 @@ let
       spec = (builtins.removeAttrs ps.spec [ "replicas" "template" ]) // { template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {}; };
     };
 
-  service = { name, port ? 80, targetPort ? null, type ? "ClusterIP", clusterIP ? null, ports ? [ ], annotations ? {} }: {
+  service = { name, port ? 80, targetPort ? null, type ? "ClusterIP", clusterIP ? null, ports ? [ ], annotations ? {}, instance ? name }: {
     apiVersion = "v1";
     kind = "Service";
     metadata = { inherit name annotations; };
     spec = {
       ports = [ { port = port; targetPort = if targetPort != null then targetPort else port; } ] ++ ports;
-      selector = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = name; };
+      selector = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = instance; };
     } // (if type != "ClusterIP" then { type = type; } else {})
       // (if clusterIP != null then { clusterIP = clusterIP; } else {});
   };
