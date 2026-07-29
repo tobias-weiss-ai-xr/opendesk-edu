@@ -96,7 +96,8 @@ let
               (mkContainer { inherit name image tag port ports env envFrom resources probes probeType volumes; })
             ] ++ extraContainers;
             volumes = map (v: v.volume) volumes;
-          } // (if initContainers != [] then { initContainers = initContainers; } else {})
+          }
+            // (if initContainers != null then { initContainers = initContainers; } else {})
             // (if nodeSelector != null then { nodeSelector = nodeSelector; } else {})
             // (if affinity != null then { affinity = affinity; } else {})
             // (if tolerations != null then { tolerations = tolerations; } else {})
@@ -107,8 +108,8 @@ let
             // (if dnsPolicy != null then { dnsPolicy = dnsPolicy; } else {})
             // (if imagePullSecrets != null then { imagePullSecrets = imagePullSecrets; } else {})
             // (if serviceAccountName != null then { serviceAccountName = serviceAccountName; } else {})
-            // (if topologySpreadConstraints != null then { topologySpreadConstraints = topologySpreadConstraints; } else {})
-          ,
+            // (if topologySpreadConstraints != null then { topologySpreadConstraints = topologySpreadConstraints; } else {});
+          
         };
       };
     };
