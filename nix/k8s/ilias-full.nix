@@ -23,5 +23,4 @@ let
     resources.limits = { cpu = "3"; memory = "6G"; };
   };
   svc = lib.service { inherit name; port = 80; };
-  ing = lib.ingress { inherit name; host = "lms.opendesk.hrz.uni-marburg.de"; port = 80; };
    ] ++ (lib.ingressWithCert { inherit name; host = "lms.opendesk.hrz.uni-marburg.de"; port = 80; })
