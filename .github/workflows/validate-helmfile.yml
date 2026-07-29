@@ -20,21 +20,18 @@ jobs:
       - name: Validate YAML syntax
         run: |
           echo "=== Validating YAML ==="
-          find helmfile/environments -name "*.yaml" -o -name "*.gotmpl" 2>/dev/null | while read f; do
-            python3 -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null && echo "  ✅ $f" || echo "  ❌ $f"
+          find helmfile/environments -name "*.yaml" -o -name "*.gotmpl" | while read f; do
+            python3 -c "import yaml; yaml.safe_load(open('$f'))" && echo "OK: $f" || echo "FAIL: $f"
           done
 
       - name: Validate chart schemas
         run: |
-          echo "=== Validating chart schemas ==="
+          echo "=== Validating schemas ==="
           for chart in helmfile/charts/*/; do
-            if [ -f "${chart}values.schema.json" ]; then
-              python3 -c "
-import json, yaml
-schema = json.load(open('${chart}values.schema.json'))
-values = yaml.safe_load(open('${chart}values.yaml'))
-print(f'  ✅ ${chart}')
-" 2>/dev/null || echo "  ❌ ${chart}"
+            schema="${chart}values.schema.json"
+            values="${chart}values.yaml"
+            if [ -f "$schema" ] && [ -f "$values" ]; then
+              python3 -c "import json,yaml; json.load(open('$schema')); yaml.safe_load(open('$values'))" && echo "OK: $chart" || echo "FAIL: $chart"
             fi
           done
 
@@ -44,6 +41,5 @@ print(f'  ✅ ${chart}')
           if grep -rn "v1beta1\|v1beta2\|extensions/v1beta" helmfile/charts/ --include="*.yaml" --include="*.tpl" 2>/dev/null; then
             echo "❌ Found deprecated APIs!"
             exit 1
-          else
-            echo "  ✅ All APIs current"
           fi
+          echo "  ✅ All APIs current"
