@@ -3,12 +3,12 @@
 environments:
   edu:
     values:
-      - helmfile/environments/edu/ce-overrides.yaml
-      - helmfile/environments/edu/secrets.yaml
-      - helmfile/environments/edu/images.yaml
+      - environments/edu/secrets.yaml
+      - environments/edu/ce-overrides.yaml.gotmpl
+      - environments/edu/images.yaml
   edu-test:
     values:
-      - helmfile/environments/edu/test/values.yaml.gotmpl
+      - environments/edu/test/values.yaml.gotmpl
 
 repositories:
   - name: bitnami
@@ -16,6 +16,6 @@ repositories:
 
 helmfiles:
   # Auto-discover all edu app helmfiles via glob
-  - path: helmfile/apps/edu/*/helmfile.yaml.gotmpl
+  - path: apps/edu/*/helmfile.yaml.gotmpl
     values:
-      - helmfile/environments/edu/ce-overrides.yaml
+      - environments/edu/ce-overrides.yaml.gotmpl
