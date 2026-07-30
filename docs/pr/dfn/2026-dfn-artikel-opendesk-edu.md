@@ -42,8 +42,8 @@ openDesk Edu ist eine **modulare, Kubernetes-native Plattform**, die speziell f�
 
 ## Die Architektur: Ein System, das zusammenwächst
 
-![Architekturübersicht](images/architecture-diagram.svg)
-*So funktioniert's: Die modulare Architektur mit Kubernetes, Ceph CSI und integrierten Diensten.*
+![Architekturübersicht – Landscape](https://landscape.opendesk-edu.org/images/landscape.png)
+*Das openDesk Edu Ökosystem – alle integrierten Dienste auf einen Blick. Interaktive Version: [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/)*
 
 Die Plattform basiert auf einer **containerisierten Mikroservice-Architektur**:
 - **K3s Cluster** (9 Nodes) mit **Ceph CSI** für skalierbaren Speicher
@@ -113,15 +113,12 @@ Das Portal bietet:
 
 ## Dienst-Beispiele: Was ist möglich?
 
-### 📚 Lernmanagement
+### 📚 Lernmanagement & E-Learning
 
-![Moodle Integration](images/moodle.png)
-*Moodle – vollständig integriert mit SSO und automatischen Backups.*
+![ILIAS Integration](images/opendesk-edu-ilias-integration.gif)
+*ILIAS – mit Shibboleth-Integration für sichere Authentifizierung und automatische Anmeldung.*
 
-### 🎓 E-Learning & Prüfen
-
-![ILIAS Integration](images/ilias-login.png)
-*ILIAS – mit Shibboleth-Integration für sichere Authentifizierung.*
+Moodle und ILIAS sind über SSO (SAML 2.0) voll in die Plattform integriert – inklusive automatischer Backups und zentraler Benutzerverwaltung.
 
 ### 📊 Monitoring & Betrieb
 
@@ -135,7 +132,7 @@ Das Portal bietet:
 openDesk Edu ist **kein fertiges Produkt, sondern eine Initiative** – und wir suchen **Ihre Expertise**.
 
 ### 🧪 **1. Testen und Feedback geben**
-- Zugang zur **Demo-Umgebung** anfordern
+- **Eval-Umgebung** aufsetzten (Community of Practice für Fragen nutzen)
 - **Lasttests** mit typischen Nutzungsmustern Ihrer Hochschule
 - **Bug-Meldungen** über [GitLab-Issue-Tracker](https://gitlab.com/opendesk-edu/opendesk-edu/issues)
 
@@ -169,13 +166,6 @@ openDesk Edu ist **kein fertiges Produkt, sondern eine Initiative** – und wir 
 
 ---
 
-## Stimmen aus der Community
-
-> *„Früher haben wir Moodle, Nextcloud und Etherpad separat betrieben – mit eigenem SSO, eigenen Backups und eigener Wartung. Mit openDesk Edu sparen wir nicht nur Zeit, sondern haben auch eine **einheitliche Basis**, auf der wir aufbauen können."*
-> **— Tobias Weiß, HRZ Marburg**
-
----
-
 ## Roadmap
 
 | **Zeitraum**  | **Meilenstein**                          | **Status**       |
@@ -198,21 +188,18 @@ Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – *
 > Abteilung Zentrale Systeme
 > Hochschulrechenzentrum (HRZ)
 > Philipps-Universität Marburg
-> Hans-Meerwein-Str. 6, 35032 Marburg
-> Büro: Gebäude H|04, Raum 05A12
 > 📧 [tobias.weiss@uni-marburg.de](mailto:tobias.weiss@uni-marburg.de)
 > 💬 [Matrix](https://matrix.to/#/@weissto:matrix.uni-marburg.de)
 > 🌐 [https://www.uni-marburg.de/de/hrz](https://www.uni-marburg.de/de/hrz)
 
-**Projekt-Kontakt**:
+**Projekt-Repositories**:
 - **🌐 Projekt-Website**: [https://opendesk-edu.org](https://opendesk-edu.org/en)
+- **🗺️ Ökosystem-Landscape**: [https://landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/)
 - **🐙 GitLab**: [https://gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu)
-- **✉️ E-Mail**: [opendesk-edu@hrz.uni-marburg.de](mailto:opendesk-edu@hrz.uni-marburg.de)
 
 ### 📅 Veranstaltungen
-- **DFN-Tagung 2026**: Vortrag & Workshop (September 2026)
 - **Community of Practice Calls**: Quartalsweise (Termine im [opendesk-edu-cop](https://gitlab.com/opendesk-edu/opendesk-edu-cop) Repo)
-- **Individuelle Demos**: Nach Absprache möglich
+- **Individuelle Hilfestellung/Demos**: Nach Absprache möglich
 
 ---
 
@@ -230,30 +217,6 @@ Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – *
 
 ---
 
-## Für Techniker: Schnellstart
-
-```bash
-# 1. Repository klonen
-git clone https://gitlab.com/opendesk-edu/opendesk-edu.git
-cd opendesk-edu
-
-# 2. Testumgebung mit Docker Compose (für Einsteiger)
-cd opendesk-compose
-docker-compose up -d
-
-# 3. Oder: Kubernetes-Deployment mit Helmfile
-cd helmfile
-helmfile sync
-
-# 4. Status prüfen
-kubectl get pods -n opendesk
-```
-
-**Detaillierte Anleitung**: [Quickstart-Guide](https://docs.opendesk-edu.org/quickstart) |
-**Fehlerbehebung**: [Debugging-Guide](https://docs.opendesk-edu.org/debugging)
-
----
-
 ## Für die Redaktion
 
 ### 📰 Platzierungsvorschläge
@@ -267,13 +230,14 @@ kubectl get pods -n opendesk
 - DFN-Mitglieder
 
 ### 📷 Bildmaterial
-Alle Bilder in **Druckqualität** (300 dpi) verfügbar:
 - `images/readme-lead-image.svg` – Titelbild (Vektor, skalierbar)
-- `images/architecture-diagram.svg` – Architektur (Vektor)
 - `images/opendesk-portal2.png` – Portal-Screenshot (1920×1080)
-- `images/moodle.png`, `images/ilias-login.png`, `images/grafana.png` – Dienst-Beispiele
+- `images/opendesk-edu-ilias-integration.gif` – ILIAS SSO-Integration (animiert)
+- `images/grafana.png` – Grafana-Dashboard
+- [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/) – Interaktives Ökosystem-Diagramm
 
 ### 🔗 Weiterführende Links
+- [openDesk Edu Landscape – Ökosystem-Übersicht](https://landscape.opendesk-edu.org/)
 - [Offener Brief (PAK DiGS / GI e.V.)](https://pak-digs.gi.de/mitteilung/offener-brief-an-den-herrn-bundesminister-fuer-digitales-und-staatsmodernisierung-bmds-digitale-souveraenitaet-an-hochschulen-dringender-handlungsbedarf-fuer-eine-faire-marktsituation-opendesk-vs-microsoft)
 - [Baden-Württemberg: Digitaler Arbeitsplatz für Lehrkräfte](https://www.baden-wuerttemberg.de/de/service/presse/pressemitteilung/pid/digitaler-arbeitsplatz-fuer-lehrkraefte-wird-nun-mit-opendesk-umgesetzt-1)
 - [Schleswig-Holstein: Linux+1 Open-Source-Strategie](https://www.schleswig-holstein.de/DE/landesregierung/themen/digitalisierung/linux-plus1)

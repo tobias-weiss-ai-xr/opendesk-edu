@@ -174,6 +174,7 @@ kubectl get pods -n opendesk
 
 **Projekt-Links:**
 - 🌐 [Website](https://opendesk-edu.org/en)
+- 🗺️ [Landscape – Ökosystem-Übersicht](https://landscape.opendesk-edu.org/)
 - 🐙 [GitLab](https://gitlab.com/opendesk-edu)
 - 📖 [Dokumentation](https://docs.opendesk-edu.org)
 
