@@ -73,11 +73,14 @@ let
     , imagePullSecrets ? null, serviceAccountName ? null
     , podAnnotations ? {}, podLabels ? {}
     , topologySpreadConstraints ? null
+    , securityContext ? null
+    , volumeClaims ? [ ]
+    , instance ? name
   }:
     let
       defaultLabels = {
         "app.kubernetes.io/name" = name;
-        "app.kubernetes.io/instance" = name;
+        "app.kubernetes.io/instance" = instance;
       };
       mergedLabels = defaultLabels // podLabels;
     in {
@@ -87,11 +90,11 @@ let
       } // (if podAnnotations != {} then { annotations = podAnnotations; } else {});
       spec = {
         replicas = replicas;
-        selector = { matchLabels = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = name; }; };
+        selector = { matchLabels = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = instance; }; };
         template = {
           metadata = { labels = mergedLabels; };
           spec = {
-            securityContext = { fsGroup = 1000; };
+            securityContext = (if securityContext != null then securityContext else { fsGroup = 1000; });
             containers = [
               (mkContainer { inherit name image tag port ports env envFrom resources probes probeType volumes; })
             ] ++ extraContainers;
@@ -125,11 +128,16 @@ let
 
   statefulset = args:
     let ps = podSpec args;
+      volumeClaims = if args ? volumeClaims then map (vc: { metadata = { name = vc.name; }; spec = vc.spec; }) args.volumeClaims else [];
     in {
       apiVersion = "apps/v1";
       kind = "StatefulSet";
       metadata = builtins.removeAttrs ps.metadata [ "spec" ];
-      spec = (builtins.removeAttrs ps.spec [ "template" ]) // { serviceName = args.name; template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {}; };
+      spec = (builtins.removeAttrs ps.spec [ "template" ]) // {
+        serviceName = args.name;
+        template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {};
+        volumeClaimTemplates = volumeClaims;
+      };
     };
 
   daemonSet = args:
@@ -141,20 +149,20 @@ let
       spec = (builtins.removeAttrs ps.spec [ "replicas" "template" ]) // { template = if builtins.hasAttr "template" ps.spec then ps.spec.template else {}; };
     };
 
-  service = { name, port ? 80, targetPort ? null, type ? "ClusterIP", clusterIP ? null, ports ? [ ], annotations ? {} }: {
+  service = { name, port ? 80, targetPort ? null, type ? "ClusterIP", clusterIP ? null, ports ? [ ], annotations ? {}, instance ? name }: {
     apiVersion = "v1";
     kind = "Service";
     metadata = { inherit name annotations; };
     spec = {
       ports = [ { port = port; targetPort = if targetPort != null then targetPort else port; } ] ++ ports;
-      selector = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = name; };
+      selector = { "app.kubernetes.io/name" = name; "app.kubernetes.io/instance" = instance; };
     } // (if type != "ClusterIP" then { type = type; } else {})
       // (if clusterIP != null then { clusterIP = clusterIP; } else {});
   };
 
   headlessService = { name, port ? 80 }: service { inherit name port; clusterIP = "None"; };
 
-  ingress = { name, host, port ? 80, className ? "haproxy", tls ? true, tlsSecret ? "opendesk-certificates-tls", annotations ? {}, paths ? null }: {
+  ingress = { name, host, port ? 80, className ? "haproxy", tls ? true, tlsSecret ? "opendesk-certificates-tls", annotations ? {}, paths ? null, certIssuer ? null, certDuration ? "8760h" }: {
     apiVersion = "networking.k8s.io/v1";
     kind = "Ingress";
     metadata = { inherit name annotations; };
@@ -169,6 +177,13 @@ let
       }];
     } // (if tls then { tls = [{ hosts = [ host ]; secretName = tlsSecret; }]; } else {});
   };
+
+  # Ingress with automatic certificate generation
+  ingressWithCert = { name, host, port ? 80, className ? "haproxy", issuerName ? "opendesk-ca", secretName ? "${name}-tls", certDuration ? "8760h", annotations ? {}, paths ? null }:
+    [
+      (certificate { inherit name issuerName secretName; hostname = host; duration = certDuration; })
+      (ingress {inherit name host port className; tls = true; tlsSecret = secretName; annotations = annotations; paths = paths;})
+    ];
 
   configMap = { name, data }: { apiVersion = "v1"; kind = "ConfigMap"; metadata = { inherit name; }; inherit data; };
 
@@ -242,6 +257,30 @@ let
     metadata = { inherit name annotations; };
   };
 
+  # cert-manager Certificate resource
+  certificate = { name, hostname, issuerName ? "opendesk-ca", secretName ? "${name}-tls", namespace ? "opendesk", duration ? "8760h" }: {
+    apiVersion = "cert-manager.io/v1";
+    kind = "Certificate";
+    metadata = { inherit name namespace; };
+    spec = {
+      secretName = secretName;
+      duration = duration;
+      renewBefore = "360h";  # 15 days
+      issuerRef = {
+        name = issuerName;
+        kind = "ClusterIssuer";
+        group = "cert-manager.io";
+      };
+      dnsNames = [ hostname ];
+    };
+  };
+
+  # Environment variable helpers
+  mkEnvFromSecret = { name, secret }: { secretRef = { name = secret; }; };
+  mkEnvFromConfigMap = { name, configMap }: { configMapRef = { name = configMap; }; };
+  mkEnvVarFromSecret = { name, key, secret }: { name = name; valueFrom = { secretKeyRef = { name = secret; key = key; }; }; };
+  mkEnvVarFromConfigMap = { name, key, configMap }: { name = name; valueFrom = { configMapKeyRef = { name = configMap; key = key; }; }; };
+
   # Volume helpers
   mkVolume = { name, mountPath, subPath ? null, secret ? null, configMap ? null, items ? null, hostPath ? null }: {
     volume = { inherit name; } // (if secret != null then { secret = { secretName = secret; }; }
@@ -276,11 +315,13 @@ let
 in {
   inherit
     deployment statefulset daemonSet
-    service headlessService ingress
+    service headlessService ingress ingressWithCert
     configMap pvc namespace
+    certificate
     hpa pdb networkPolicy job cronJob serviceAccount
     podSpec mkContainer
-    mkVolume emptyDir hostPath
+    mkVolume mkEnvFromSecret mkEnvFromConfigMap mkEnvVarFromSecret mkEnvVarFromConfigMap
+    emptyDir hostPath
     securityContext tcpProbe httpProbe commandProbe defaultResources
     toYAML;
 }
