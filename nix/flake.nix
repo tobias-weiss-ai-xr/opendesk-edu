@@ -21,10 +21,16 @@
           "self-service-password" "code-server" "rstudio" "ttyd" "slidev"
           "argocd" "bigbluebutton" "etherpad" "eudi-issuer"
           "f13" "grommunio" "jupyterhub" "kasmvnc"
-          "limesurvey" "monitoring" "n8n" "opencloud"
+          "limesurvey" "n8n" "opencloud"
           "open-webui" "overleaf" "collab-dashboard" "portal-entries"
           "semester-provisioning" "snipr" "typo3" "zammad"
           "dask" "intercom"
+          # Monitoring stack
+          "kube-prometheus-stack" "monitoring"
+          # Centralized Logging - EFK stack
+          "elasticsearch" "filebeat" "kibana"
+          # Centralized Logging - Loki stack
+          "loki" "promtail"
         ];
 
         buildService = name:
