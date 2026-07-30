@@ -82,15 +82,14 @@ und ist die **logische Weiterentwicklung** des CE-Ansatzes für den Hochschulber
 
 ### 🧪 **1. Testen & Feedback geben**
 - **Demo-Umgebung anfordern**: Schreibe an [tobias.weiss@uni-marburg.de](mailto:tobias.weiss@uni-marburg.de)
-- **Testzugang erhalten**: Innerhalb von 24 Stunden
-- **Pilotphase starten**: 3 Monate kostenlos
+- Fragen, Feedback und Bug-Meldungen sind jederzeit willkommen
 
-**Was du testen kannst:**
-- [x] Moodle/ILIAS mit SSO
-- [x] Nextcloud-Integration
-- [x] Etherpad & Draw.io
-- [x] Monitoring (Grafana)
-- [x] Backup & Restore
+**Verfügbare Dienste in der Demo-Umgebung:**
+- Moodle & ILIAS mit SSO
+- Nextcloud-Integration
+- Etherpad & Draw.io
+- Monitoring (Grafana)
+- Backup & Restore
 
 ### 🛠️ **2. Code beitragen**
 - **Repository**: [https://gitlab.com/opendesk-edu/opendesk-edu](https://gitlab.com/opendesk-edu/opendesk-edu)
@@ -142,13 +141,13 @@ kubectl get pods -n opendesk
 
 ---
 
-## 💡 Warum sollte deine Hochschule mitmachen?
+## 💡 Warum sollte eure Hochschule mitmachen?
 
-1. **Vermeiden Sie Vendor Lock-in** – Keine Abhängigkeit von einzelnen Anbietern.
-2. **Behalten Sie die Kontrolle** – Sie entscheiden, welche Dienste Sie nutzen.
-3. **Sparen Sie Kosten** – Gemeinsame Wartung statt Insellösungen.
-4. **Sichern Sie die Zukunft** – Offene Standards garantieren **Langzeitkompatibilität**.
-5. **Profitieren Sie von der Community** – Teilen Sie Erfahrung mit anderen Hochschulen.
+1. **Vendor Lock-in vermeiden** – Keine Abhängigkeit von einzelnen Anbietern.
+2. **Kontrolle behalten** – Die Hochschule entscheidet, welche Dienste sie nutzt.
+3. **Kosten sparen** – Gemeinsame Wartung statt Insellösungen.
+4. **Zukunft sichern** – Offene Standards garantieren **Langzeitkompatibilität**.
+5. **Von der Community profitieren** – Erfahrungen mit anderen Hochschulen teilen.
 
 ---
 
@@ -184,8 +183,3 @@ kubectl get pods -n opendesk
 
 Antworte einfach auf diesen Post oder schreibe mir direkt!  
 Ich freue mich auf den Austausch. **Gemeinsam können wir den Betrieb von Bildungsdiensten an Hochschulen vereinfachen – ohne neue Abhängigkeiten zu schaffen!**
-
----
-
-*openDesk Edu – **Offen. Austauschbar. Unabhängig.***
-*#OpenSource #Hochschulen #Kubernetes #DFN #Zusammenarbeit #VendorLockIn*
