@@ -137,7 +137,7 @@ helmfile sync
 kubectl get pods -n opendesk
 ```
 
-**Dokumentation:** [https://docs.opendesk-edu.org](https://docs.opendesk-edu.org)
+**Dokumentation:** [https://docs.opendesk.eu](https://docs.opendesk.eu)
 
 ---
 
@@ -175,7 +175,7 @@ kubectl get pods -n opendesk
 - 🌐 [Website](https://opendesk-edu.org/en)
 - 🗺️ [Landscape – Ökosystem-Übersicht](https://landscape.opendesk-edu.org/)
 - 🐙 [GitLab](https://gitlab.com/opendesk-edu)
-- 📖 [Dokumentation](https://docs.opendesk-edu.org)
+- 📖 [Dokumentation](https://docs.opendesk.eu)
 
 ---
 
