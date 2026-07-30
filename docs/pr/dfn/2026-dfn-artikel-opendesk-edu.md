@@ -6,8 +6,6 @@ SPDX-License-Identifier: AGPL-3.0
 
 *Wie ein modulares Open-Source-Ökosystem den Betrieb von Lernplattformen, Groupware und Kollaborationstools an Hochschulen vereinfacht – und warum der Wechsel von Microsoft 365 zu Nextcloud allein nicht reicht.*
 
-*Von Tobias Weiß – Veröffentlicht: Juli 2026*
-
 ---
 
 ![openDesk Edu – Lead Image](images/readme-lead-image.svg)
@@ -73,18 +71,6 @@ Interessierte Hochschulen können eine Demo-Umgebung anfordern, um die Plattform
 | **Backups** | k8up (inkrementell, Restic) |
 
 ---
-
-## Kontakt
-
-**Tobias Weiß**
-Abteilung Zentrale Systeme
-Hochschulrechenzentrum (HRZ)
-Philipps-Universität Marburg
-Hans-Meerwein-Str. 6, 35032 Marburg
-Büro: Gebäude H\|04, Raum 05A12
-[tobias.weiss@uni-marburg.de](mailto:tobias.weiss@uni-marburg.de)
-[Matrix](https://matrix.to/#/@weissto:matrix.uni-marburg.de)
-[www.uni-marburg.de/de/hrz](https://www.uni-marburg.de/de/hrz)
 
 **Projekt-Links:**
 [opendesk-edu.org](https://opendesk-edu.org/en) · [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/) · [gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu)
