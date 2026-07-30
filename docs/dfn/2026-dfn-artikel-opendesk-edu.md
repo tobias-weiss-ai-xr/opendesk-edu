@@ -144,7 +144,7 @@ Hier ist, wie **Ihre Hochschule** mitmachen kann:
 - **Dokumentation verbessern**: [Docs-Repository](https://gitlab.com/opendesk-edu/opendesk-edu/-/tree/main/docs)
 
 ### 💬 **Community**
-- **Monatlicher Call**: [Termine hier](https://opendesk.edu/community)
+- **Monatlicher Call**: [Termine hier](https://opendesk-edu.org/community)
 - **Matrix-Chat**: `#opendesk-edu:matrix.org`
 - **DFN-Tagung 2026**: [Workshop anmelden](#) *(Link einfügen)*
 
@@ -202,18 +202,18 @@ Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – *
 > Philipps-Universität Marburg
 > Hans-Meerwein-Str. 6, 35032 Marburg
 > Büro: Gebäude H|04, Raum 05A12
-> 📧 [tobias.weiss@hrz.uni-marburg.de](mailto:tobias.weiss@hrz.uni-marburg.de)
+> 📧 [tobias.weiss@uni-marburg.de](mailto:tobias.weiss@uni-marburg.de)
 > 💬 [@weissto:matrix.uni-marburg.de](https://matrix.to/#/@weissto:matrix.uni-marburg.de)
 > 🌐 [https://www.uni-marburg.de/de/hrz](https://www.uni-marburg.de/de/hrz)
 
 **Projekt-Kontakt**:
-- **🌐 Projekt-Website**: [https://opendesk.edu](https://opendesk.edu)
+- **🌐 Projekt-Website**: [https://opendesk-edu.org](https://opendesk-edu.org)
 - **🐙 GitLab**: [https://gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu)
 - **✉️ E-Mail**: [opendesk-edu@hrz.uni-marburg.de](mailto:opendesk-edu@hrz.uni-marburg.de)
 
 ### 📅 Veranstaltungen
 - **DFN-Tagung 2026**: Vortrag & Workshop (September 2026)
-- **Monatliche Online-Treffen**: [Termine hier](https://opendesk.edu/community)
+- **Monatliche Online-Treffen**: [Termine hier](https://opendesk-edu.org/community)
 - **Individuelle Demos**: Nach Absprache möglich
 
 ---
@@ -229,7 +229,7 @@ Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – *
 | **📜 Lizenz** | Apache 2.0 / AGPL 3.0 (je nach Komponente) |
 | **🛠️ Technologie** | Kubernetes (K3s), Helm, Ceph CSI, Restic |
 | **📦 Aktuelle Version** | v1.0 (Stabil) |
-| **🎯 Unterstützte Dienste** | 28 (siehe [Dokumentation](https://docs.opendesk.edu)) |
+| **🎯 Unterstützte Dienste** | 28 (siehe [Dokumentation](https://docs.opendesk-edu.org)) |
 | **👥 Community** | Offene Collaboration (Hochschulen, DFN, Unternehmen) |
 | **💾 Storage-Backend** | Ceph (RBD für DBs, CephFS für Dateien) |
 | **🔐 Authentifizierung** | Keycloak (SAML 2.0 + OIDC + DFN-AAI) |
@@ -255,8 +255,8 @@ helmfile sync
 kubectl get pods -n opendesk
 ```
 
-**Detaillierte Anleitung**: [Quickstart-Guide](https://docs.opendesk.edu/quickstart) |
-**Fehlerbehebung**: [Debugging-Guide](https://docs.opendesk.edu/debugging)
+**Detaillierte Anleitung**: [Quickstart-Guide](https://docs.opendesk-edu.org/quickstart) |
+**Fehlerbehebung**: [Debugging-Guide](https://docs.opendesk-edu.org/debugging)
 
 ---
 
@@ -283,7 +283,7 @@ Alle Bilder in **Druckqualität** (300 dpi) verfügbar:
 - `images/moodle.png`, `images/ilias-login.png`, `images/grafana.png` – Dienst-Beispiele
 
 ### 🔗 Weiterführende Links
-- [Technische Dokumentation](https://docs.opendesk.edu)
+- [Technische Dokumentation](https://docs.opendesk-edu.org)
 - [Sicherheits-Assessment 2026](https://gitlab.com/opendesk-edu/opendesk-sec)
 - [Präsentation LinuxTag 2026](https://gitlab.com/opendesk-edu/presentations)
 
