@@ -42,8 +42,7 @@ openDesk Edu ist eine **modulare, Kubernetes-native Plattform**, die speziell f�
 
 ## Die Architektur: Ein System, das zusammenwächst
 
-![Architekturübersicht – Landscape](https://landscape.opendesk-edu.org/images/landscape.png)
-*Das openDesk Edu Ökosystem – alle integrierten Dienste auf einen Blick. Interaktive Version: [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/)*
+Interaktive Übersicht aller integrierten Dienste: [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/)
 
 Die Plattform basiert auf einer **containerisierten Mikroservice-Architektur**:
 - **K3s Cluster** (9 Nodes) mit **Ceph CSI** für skalierbaren Speicher
