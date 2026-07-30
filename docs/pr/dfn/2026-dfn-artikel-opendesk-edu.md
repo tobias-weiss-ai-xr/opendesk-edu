@@ -52,25 +52,19 @@ Die Plattform basiert auf einer **containerisierten Mikroservice-Architektur**:
 
 ---
 
-## Warum openDesk Edu? Die Herausforderungen
+## Warum openDesk Edu?
 
-### 🔄 Ein Ökosystem, kein Monolith
-openDesk Edu ist **kein Monolith**, sondern ein **modulares System**, in dem **jeder Dienst austauschbar** ist.
-Wir wollen **nicht von einer Abhängigkeit (z. B. Microsoft 365) in die nächste (z. B. Nextcloud als einziger Anbieter) wechseln**. Jede Hochschule soll selbst entscheiden, welche Dienste sie einsetzt – heute und in Zukunft.
+An Hochschulen wiederholt sich dasselbe Muster: Einzelne Dienste – Moodle hier, Nextcloud dort, ILIAS in der Fakultät – werden isoliert betrieben, jeder mit eigenem SSO, eigenen Backups, eigener Wartung. Der Wechsel zu Microsoft 365 löst das Problem nicht, sondern erzeugt eine neue Abhängigkeit. Aber auch der Wechsel zu einer einzelnen Open-Source-Alternative (z. B. Nextcloud) kann zu einem Vendor Lock-in führen, wenn die neue Lösung proprietäre Schnittstellen oder Formate nutzt.
 
-### Die Probleme im Detail
-1. **🔗 Fragmentierung**: Einzelne Dienste (Moodle hier, Nextcloud dort) erfordern separaten Aufwand für Authentifizierung, Backups und Wartung.
-2. **📈 Komplexität**: Kubernetes und Helm sind mächtig, aber der Einstieg ist steil – besonders für kleinere Teams.
-3. **🔒 Sicherheit**: Pentests zeigen immer wieder Lücken in Standard-Deployments. openDesk Edu integriert **Sicherheits-Hardening** von Anfang an.
-4. **💰 Kosten**: Kommerzielle Lösungen sind teuer, Open-Source-Alternativen oft unverbunden.
-5. **🔒 Vendor Lock-in**: Der Wechsel von Microsoft zu einer einzelnen Open-Source-Alternative löst das Problem nicht, wenn die neue Lösung ebenfalls proprietäre Schnittstellen oder Formate nutzt.
+openDesk Edu löst dieses Problem anders: **nicht als monolithische Plattform, sondern als modulares Ökosystem**, in dem jeder Dienst austauschbar ist. Jede Hochschule wählt selbst, welche Komponenten sie einsetzt – heute und in Zukunft.
 
-### Unsere Antwort
-✅ **Vorgefertigte Helm-Charts** (Bitnami-frei!) für alle Dienste – sofort einsatzbereit
-✅ **Gemeinsame Authentifizierung** über Keycloak – Single Sign-On für alle Dienste
-✅ **Automatisierte Backups** mit k8up (Restic) – Datenverlust vermeiden
-✅ **Dokumentation und Best Practices** aus dem echten Betrieb (HRZ Marburg)
+**Was openDesk Edu bietet:**
+
+✅ **Vorgefertigte Helm-Charts** (Bitnami-frei) für alle Dienste – sofort einsatzbereit
+✅ **Gemeinsame Authentifizierung** über Keycloak – Single Sign-On für alle Anwendungen
+✅ **Automatisierte Backups** mit k8up (Restic) – inkrementell, zentral, zuverlässig
 ✅ **Austauschbare Module** – Groupware, Dateiablage, Lernmanagement: Die Hochschule entscheidet
+✅ **Dokumentation und Best Practices** aus dem produktiven Betrieb am HRZ Marburg
 
 ---
 
@@ -187,6 +181,8 @@ Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – *
 > Abteilung Zentrale Systeme
 > Hochschulrechenzentrum (HRZ)
 > Philipps-Universität Marburg
+> Hans-Meerwein-Str. 6, 35032 Marburg
+> Büro: Gebäude H|04, Raum 05A12
 > 📧 [tobias.weiss@uni-marburg.de](mailto:tobias.weiss@uni-marburg.de)
 > 💬 [Matrix](https://matrix.to/#/@weissto:matrix.uni-marburg.de)
 > 🌐 [https://www.uni-marburg.de/de/hrz](https://www.uni-marburg.de/de/hrz)
@@ -198,7 +194,7 @@ Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – *
 
 ### 📅 Veranstaltungen
 - **Community of Practice Calls**: Quartalsweise (Termine im [opendesk-edu-cop](https://gitlab.com/opendesk-edu/opendesk-edu-cop) Repo)
-- **Individuelle Hilfestellung/Demos**: Nach Absprache möglich
+- **Individuelle Demos**: Auf Anfrage möglich
 
 ---
 
@@ -236,7 +232,6 @@ Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – *
 - [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/) – Interaktives Ökosystem-Diagramm
 
 ### 🔗 Weiterführende Links
-- [openDesk Edu Landscape – Ökosystem-Übersicht](https://landscape.opendesk-edu.org/)
 - [Offener Brief (PAK DiGS / GI e.V.)](https://pak-digs.gi.de/mitteilung/offener-brief-an-den-herrn-bundesminister-fuer-digitales-und-staatsmodernisierung-bmds-digitale-souveraenitaet-an-hochschulen-dringender-handlungsbedarf-fuer-eine-faire-marktsituation-opendesk-vs-microsoft)
 - [Baden-Württemberg: Digitaler Arbeitsplatz für Lehrkräfte](https://www.baden-wuerttemberg.de/de/service/presse/pressemitteilung/pid/digitaler-arbeitsplatz-fuer-lehrkraefte-wird-nun-mit-opendesk-umgesetzt-1)
 - [Schleswig-Holstein: Linux+1 Open-Source-Strategie](https://www.schleswig-holstein.de/DE/landesregierung/themen/digitalisierung/linux-plus1)
