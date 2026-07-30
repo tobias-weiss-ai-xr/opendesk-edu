@@ -22,7 +22,7 @@
           "argocd" "bigbluebutton" "etherpad" "eudi-issuer"
           "f13" "grommunio" "jupyterhub" "kasmvnc"
           "limesurvey" "monitoring" "n8n" "opencloud"
-          "open-webui" "overleaf" "portal-entries"
+          "open-webui" "overleaf" "collab-dashboard" "portal-entries"
           "semester-provisioning" "snipr" "typo3" "zammad"
           "dask" "intercom"
         ];
