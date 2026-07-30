@@ -11,9 +11,9 @@ openpyxl>=3.1
 
 # User provisioning dependencies
 ldap3>=2.9.1
-python-keycloak>=4.0.0
+python-keycloak>=7.1.1
 
 # Testing dependencies
 pytest>=7.4.0
 pytest-mock>=3.10.0
-pytest-cov>=4.1.0
+pytest-cov>=7.1.0
