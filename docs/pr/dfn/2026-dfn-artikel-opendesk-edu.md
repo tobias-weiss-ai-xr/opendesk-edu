@@ -55,7 +55,7 @@ openDesk Edu versteht sich nicht als fertiges Produkt, sondern als offene Initia
 
 Die Community organisiert sich über quartalsweise Community-of-Practice-Calls, deren Termine im [opendesk-edu-cop-Repository](https://gitlab.com/opendesk-edu/opendesk-edu-cop) veröffentlicht werden. Der gesamte Quellcode ist auf GitLab unter [gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu) verfügbar. Fragen und Fehlermeldungen können über den integrierten Issue-Tracker eingereicht werden.
 
-Interessierte Hochschulen können eine Demo-Umgebung anfordern, um die Plattform mit eigenen Nutzungsszenarien zu evaluieren. Der Quellcode steht unter der Apache-2.0- bzw. AGPL-3.0-Lizenz und kann frei verwendet, angepasst und weitergegeben werden.
+Interessierte Hochschulen können Unterstützung bei der Konzipierung einer Demo-Umgebung anfragen, um die Plattform mit eigenen Nutzungsszenarien zu evaluieren. Der Quellcode steht unter der Apache-2.0- bzw. AGPL-3.0-Lizenz und kann frei verwendet, angepasst und weitergegeben werden.
 
 ---
 
