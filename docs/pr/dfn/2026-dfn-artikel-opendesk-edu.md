@@ -31,7 +31,7 @@ Dieser Brief war der Auslöser für openDesk Edu. Das Projekt nimmt die dort bes
 
 ## Was openDesk Edu anders macht
 
-openDesk Edu baut auf **openDesk CE** auf – der Community Edition, die bereits in mehreren Bundesländern produktiv eingesetzt wird. In Baden-Württemberg nutzt das Landesmedienzentrum (LMZ) openDesk CE für den digitalen Arbeitsplatz von Lehrkräften, in Schleswig-Holstein bildet openDesk CE einen Baustein der Open-Source-Strategie [„Linux+1"](https://www.schleswig-holstein.de/DE/landesregierung/themen/digitalisierung/linux-plus1). openDesk Edu erweitert diese Basis gezielt um Lernmanagement-Systeme, Forschungsinfrastruktur und weitere Dienste, die im Hochschulbetrieb benötigt werden – ohne dabei den Ansatz der Modularität aufzugeben.
+openDesk Edu baut auf **openDesk CE** auf – der Community Edition, die bereits in mehreren Bundesländern produktiv eingesetzt wird. In Baden-Württemberg nutzt das Landesmedienzentrum (LMZ) openDesk CE für den digitalen Arbeitsplatz von Lehrkräften, in Schleswig-Holstein bildet openDesk CE einen Baustein der Open-Source-Strategie „[Linux+1](https://www.schleswig-holstein.de/DE/landesregierung/themen/digitalisierung/linux-plus1)". OpenDesk Edu erweitert diese Basis gezielt um Lernmanagement-Systeme, Forschungsinfrastruktur und weitere Dienste, die im Hochschulbetrieb benötigt werden – ohne dabei den Ansatz der Modularität aufzugeben.
 
 Technisch basiert die Plattform auf einem Kubernetes-Cluster (K3s) mit containerisierten Diensten. Jede Anwendung wird als eigener Container bereitgestellt, über Helm-Charts versioniert und über Helmfile als Gesamtsystem verwaltet. Die Datenhaltung erfolgt über Ceph CSI – mit RBD-Volumes für Datenbanken und CephFS für Dateispeicher, beide auf demselben Cluster. Die Authentifizierung läuft zentral über Keycloak mit SAML 2.0 und OIDC; eine Integration mit DFN-AAI ist geplant. Backups werden automatisiert über den Kubernetes-Operator k8up mit Restic als Backend. Eine interaktive Übersicht aller integrierten Dienste ist auf [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/) zu finden.
 
@@ -40,7 +40,7 @@ Der entscheidende Punkt: **Keine dieser Komponenten ist zwingend.** Wer SOGo als
 ## In der Praxis: Vom Login zur Vorlesung
 
 ![openDesk Edu Portal](images/opendesk-portal2.png)
-*Das zentrale Webportal: Ein Login reicht für den Zugang zu allen integrierten Diensten.*
+*Ein Login für alle Dienste: Das Portal bietet Zugang zu allen integrierten Anwendungen.*
 
 Ein zentrales Webportal dient als Einstiegspunkt. Studierende, Lehrende und Verwaltung melden sich einmal an und erhalten Zugriff auf alle integrierten Dienste – je nach Rolle und Berechtigung. Das Portal selbst ist konfigurierbar: Hochschulen können die Anwendungen auswählen, die für sie relevant sind, und die Benutzeroberfläche entsprechend anpassen.
 
@@ -49,13 +49,13 @@ Im HRZ Marburg läuft openDesk Edu aktuell in der Testphase auf einem K3s-Cluste
 ![Grafana Dashboard](images/grafana.png)
 *Grafana: Administratoren können den Zustand aller Dienste auf einen Blick einsehen.*
 
-Das Monitoring läuft über Grafana und Prometheus. Backups werden zentral über k8up verwaltet und täglich inkrementell auf ein S3-kompatibles Ziel gesichert – auch bei einem Totalausfall eines Knotens lassen sich alle Daten zuverlässig wiederherstellen.
+Das Monitoring läuft über Grafana und Prometheus. Backups werden zentral über k8up verwaltet und täglich inkrementell auf ein S3-kompatibles Ziel gesichert. Auch bei einem Totalausfall eines Knotens lassen sich alle Daten zuverlässig wiederherstellen.
 
 ## Mitmachen statt zuschauen
 
 openDesk Edu versteht sich nicht als fertiges Produkt, sondern als offene Initiative. Das unterscheidet das Projekt von vielen kommerziellen Angeboten, die erst nach dem Kauf eine Umsetzung erlauben. Stattdessen lädt openDesk Edu Hochschulen ein, von Anfang an mitzugestalten – ob durch Testing, Code-Beiträge, Betriebserfahrungen oder die Entwicklung neuer Helm-Charts für bislang nicht integrierte Dienste.
 
-Die Community organisiert sich über quartalsweise Community-of-Practice-Calls, deren Termine im [opendesk-edu-cop-Repository](https://gitlab.com/opendesk-edu/opendesk-edu-cop) veröffentlicht werden. Der gesamte Quellcode ist auf GitLab unter [gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu) verfügbar. Fragen und Bug-Meldungen können über den integrierten Issue-Tracker eingereicht werden.
+Die Community organisiert sich über quartalsweise Community-of-Practice-Calls, deren Termine im [opendesk-edu-cop-Repository](https://gitlab.com/opendesk-edu/opendesk-edu-cop) veröffentlicht werden. Der gesamte Quellcode ist auf GitLab unter [gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu) verfügbar. Fragen und Fehlermeldungen können über den integrierten Issue-Tracker eingereicht werden.
 
 Interessierte Hochschulen können eine Demo-Umgebung anfordern, um die Plattform mit eigenen Nutzungsszenarien zu evaluieren. Der Quellcode steht unter der Apache-2.0- bzw. AGPL-3.0-Lizenz und kann frei verwendet, angepasst und weitergegeben werden.
 
