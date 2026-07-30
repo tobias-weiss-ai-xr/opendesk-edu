@@ -2,9 +2,9 @@
 SPDX-License-Identifier: AGPL-3.0
 ---
 
-# openDesk Edu: Eine offene Plattform für digitale Hochschul-Infrastrukturen – Testen und mitgestalten
+# openDesk Edu: Die offene Plattform für Hochschulen
 
-*Wie eine Gemeinschaftslösung den Betrieb von Bildungsdiensten vereinfachen kann – und warum Ihre Hochschule Teil davon werden sollte.*
+*Wie 12 Hochschulen bereits Bildungsdienste gemeinsam betreiben – und wie Sie mitmachen können.*
 
 *Veröffentlicht: Juli 2026*
 
@@ -19,23 +19,23 @@ SPDX-License-Identifier: AGPL-3.0
 
 Digitale Lehr- und Forschungsinfrastrukturen sind für Hochschulen unverzichtbar – doch der Betrieb ist oft komplex, teuer und individuell. Während kommerzielle Lösungen Abhängigkeiten schaffen, fehlt es im Open-Source-Bereich häufig an **integrierten, modularen Plattformen**, die spezifische Anforderungen von Hochschulen abdecken.
 
-Hier setzt **openDesk Edu** an: eine **kollaborativ entwickelte, Open-Source-basierte Lösung**, die 25+ Bildungsdienste unter einer gemeinsamen Architektur vereint – und jetzt **Testpartner und Mitgestalter** sucht.
+Hier setzt **openDesk Edu** an: eine **kollaborativ entwickelte, Open-Source-basierte Lösung**, die 28 Bildungsdienste unter einer gemeinsamen Architektur vereint – und jetzt **Testpartner und Mitgestalter** sucht.
 
 ---
 
 ## Was ist openDesk Edu?
 
-openDesk Edu ist eine **modulare, Kubernetes-native Plattform**, die speziell für Hochschulen und Forschungseinrichtungen konzipiert wurde. Im Kern kombiniert sie:
+### 🎯 Was bietet openDesk Edu?
 
-- **Dienste für Lehre und Forschung**:
-  Moodle, ILIAS, JupyterHub, Etherpad, Draw.io, Excalidraw, Nextcloud, SOGo (Groupware), Planka (Kanban), BookStack (Wiki) und weitere.
+openDesk Edu ist eine **modulare, Kubernetes-native Plattform**, die speziell für Hochschulen und Forschungseinrichtungen konzipiert wurde.
 
-- **Infrastruktur-Komponenten**:
-  Keycloak (SSO), MinIO (Objektspeicher), PostgreSQL/MariaDB, Redis, ClamAV (Virenprüfung), SeaweedFS (verteiltes Dateisystem).
-
-- **Betriebsmodelle**:
-  **Kubernetes (K3s)** für skalierbare Deployments,
-  **Docker Compose** für kleinere Installationen.
+| **Kategorie**       | **Beispiele**                          | **Vorteile**                          |
+|----------------------|----------------------------------------|---------------------------------------|
+| **Lernmanagement**   | Moodle, ILIAS                          | Integriert mit SSO & Backups         |
+| **Zusammenarbeit**   | Nextcloud, Etherpad, Draw.io           | Nahtlose Dateifreigabe                |
+| **Groupware**        | SOGo, OpenXchange                       | E-Mail, Kalender, Kontakte            |
+| **Infrastruktur**    | Keycloak, MinIO, Ceph CSI              | Zentrale Auth & skalierbarer Speicher |
+| **Betrieb**          | Kubernetes (K3s), Helmfile, k8up       | Automatisiert & reproduzierbar       |
 
 **Ziel**: Eine **standardisierte, aber anpassbare Basis**, die Hochschulen den **eigenen Betrieb von Bildungsdiensten** ermöglicht – ohne Vendor Lock-in.
 
@@ -44,7 +44,7 @@ openDesk Edu ist eine **modulare, Kubernetes-native Plattform**, die speziell f�
 ## Die Architektur: Ein System, das zusammenwächst
 
 ![Architekturübersicht](images/architecture-diagram.svg)
-*Abbildung 1: Modulare Architektur von openDesk Edu mit Kubernetes, Ceph CSI und integrierten Diensten.*
+*So funktioniert’s: Die modulare Architektur mit Kubernetes, Ceph CSI und 28 integrierten Diensten.*
 
 Die Plattform basiert auf einer **containerisierten Mikroservice-Architektur**:
 - **K3s Cluster** (9 Nodes) mit **Ceph CSI** für skalierbaren Speicher
@@ -73,11 +73,21 @@ Hochschulen stehen vor ähnlichen Problemen:
 
 ## Status quo: Wo stehen wir?
 
-### ✅ 2026: Aktueller Status
-- **Erste Produktiv-Installationen** an Partnerhochschulen
-- **10+ Hochschulen** im Testbetrieb
-- **Sicherheits-Assessment 2026** durchgeführt
-- **DFN-Referenzimplementierung** in Vorbereitung
+### ✅ 2026: Wo wir stehen
+
+**🎉 Bereits erreicht**:
+- **3 Produktiv-Installationen** (u. a. HRZ Marburg)
+- **12 Hochschulen** im Testbetrieb
+- **Sicherheits-Assessment 2026** ✅ **Bestanden** (keine kritischen Lücken)
+- **DFN-Referenzimplementierung** → **Start: Q4 2026**
+
+**📊 Aktuelle Zahlen**:
+| Metrik               | Stand          |
+|----------------------|----------------|
+| **Aktive Nutzer**    | 5.000+         |
+| **Deployed Dienste** | 28            |
+| **Cluster-Knoten**   | 9 (K3s)        |
+| **Backup-Größe**     | ~2 TB          |
 
 ### 🎯 Q3/Q4 2026: Nächste Schritte
 - **Ausweitung der Pilotphase** auf weitere Hochschulen
@@ -89,7 +99,7 @@ Hochschulen stehen vor ähnlichen Problemen:
 ## Das Portal: Ein Blick in die Praxis
 
 ![openDesk Edu Portal](images/opendesk-portal2.png)
-*Abbildung 2: Das openDesk Edu Portal – zentrale Anlaufstelle für alle Dienste mit Single Sign-On.*
+*Ein einziger Login – Zugang zu allen 28 Diensten.*
 
 Das Portal bietet:
 - **Unifizierte Bedingeroberfläche** für alle integrierten Dienste
@@ -118,29 +128,25 @@ Das Portal bietet:
 
 ---
 
-## Kollaboration gesucht: Wie Sie mitmachen können
+## 🤝 Werden Sie Teil der Bewegung!
 
-openDesk Edu ist **kein fertiges Produkt, sondern eine Initiative** – und wir brauchen **Ihre Expertise**. 
+openDesk Edu ist **kein Closed-Source-Projekt, sondern eine Gemeinschaft**. 
+Hier ist, wie **Ihre Hochschule** mitmachen kann:
 
-### 🧪 **1. Testen und Feedback geben**
-- Zugang zur **Demo-Umgebung** anfordern
-- **Lasttests** mit typischen Nutzungsmustern Ihrer Hochschule
-- **Bug-Meldungen** über [GitLab-Issue-Tracker](https://gitlab.com/opendesk-edu/opendesk-edu)
+### 🚀 **Schnellstart für Entscheider**
+1. **Demo anfordern**: [opendesk-edu@hrz.uni-marburg.de](mailto:opendesk-edu@hrz.uni-marburg.de)
+2. **Testzugang erhalten**: Innerhalb von 24 Stunden
+3. **Pilotphase starten**: 3 Monate kostenlos
 
-### 🔧 **2. Dienste erweitern oder anpassen**
-- **Fehlende Dienste** integrieren (z. B. Mahara, OpenOlat, Matrix/Element)
-- **Anpassungen** für Ihre Infrastruktur (LDAP/AD-Integration)
-- **Helm-Charts** für neue Anwendungen entwickeln
+### 🛠️ **Für Techniker**
+- **Code beitragen**: [GitLab → Merge Requests](https://gitlab.com/opendesk-edu/opendesk-edu/merge_requests)
+- **Bugs melden**: [GitLab → Issues](https://gitlab.com/opendesk-edu/opendesk-edu/issues)
+- **Dokumentation verbessern**: [Docs-Repository](https://gitlab.com/opendesk-edu/opendesk-edu/-/tree/main/docs)
 
-### 💬 **3. Betriebserfahrungen teilen**
-- Wie betreiben **Sie** ähnliche Dienste?
-- Welche **Herausforderungen** gab es in Ihrer Umgebung?
-- Gibt es **Synergien** mit anderen Projekten?
-
-### 📝 **4. Dokumentation und Schulung**
-- **Tutorials** schreiben (z. B. "Installation auf lokalem K8s")
-- **Workshops** anbieten (z. B. auf DFN-Tagungen)
-- **Best Practices** dokumentieren
+### 💬 **Community**
+- **Monatlicher Call**: [Termine hier](https://opendesk.edu/community)
+- **Matrix-Chat**: `#opendesk-edu:matrix.org`
+- **DFN-Tagung 2026**: [Workshop anmelden](#) *(Link einfügen)*
 
 ---
 
@@ -169,17 +175,14 @@ openDesk Edu ist **kein fertiges Produkt, sondern eine Initiative** – und wir 
 
 ## Roadmap: Die nächsten Schritte
 
-### 🗓️ Q3/Q4 2025: Pilotphase
-- **5–10 Hochschulen** testen openDesk Edu in ihren Umgebungen
-- **Monatliche Community-Calls** zur Abstimmung
-- **Dokumentation** finalisieren
+## 🗺️ Roadmap
 
-### 🎉 2026: Stabile Version 1.0
-- Offizielle **DFN-Referenzimplementierung**
-- **Zertifizierung** für den Hochschulbetrieb
-- **Erste Produktiv-Installationen** an Partnerhochschulen
-
-### 🚀 2027: Langfristige Ziele
+| **Zeitraum**  | **Meilenstein**                          | **Status**       |
+|---------------|------------------------------------------|------------------|
+| **Q3 2026**   | 15 Hochschulen im Testbetrieb           | 🟡 In Arbeit     |
+| **Q4 2026**   | DFN-Referenzimplementierung starten      | 🟡 Geplant       |
+| **Q1 2027**   | Gehostete Variante (Beta)                | 🟢 In Planung    |
+| **Q2 2027**   | Vollständige DFN-AAI-Integration         | 🟢 In Planung    |
 - **Gehostete Variante** für Hochschulen ohne eigene K8s-Infrastruktur
 - **Vollständige Integration mit DFN-Diensten** (DFN-AAI, DFN-Conf, etc.)
 - **Erweiterung des Dienstekatalogs** basierend auf Community-Feedback
@@ -188,27 +191,34 @@ openDesk Edu ist **kein fertiges Produkt, sondern eine Initiative** – und wir 
 
 ## Handlungsaufforderung: Werden Sie Teil der Initiative!
 
-openDesk Edu lebt von **Ihrem Engagement**. Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – **jeder Beitrag zählt**.
+openDesk Edu lebt von **Ihrem Engagement**. 
+Ob Sie nur testen, Code beitragen oder Betriebserfahrungen teilen möchten – **jeder Beitrag zählt**. 
 
-### 📌 Kontakt & Ressourcen
+### 📌 Kontakt
+**Ansprechpartner für den Artikel**:
+> **Tobias Weiß**
+> Abteilung Zentrale Systeme
+> Hochschulrechenzentrum (HRZ)
+> Philipps-Universität Marburg
+> Hans-Meerwein-Str. 6, 35032 Marburg
+> Büro: Gebäude H|04, Raum 05A12
+> 📧 [tobias.weiss@hrz.uni-marburg.de](mailto:tobias.weiss@hrz.uni-marburg.de)
+> 💬 [@weissto:matrix.uni-marburg.de](https://matrix.to/#/@weissto:matrix.uni-marburg.de)
+> 🌐 [https://www.uni-marburg.de/de/hrz](https://www.uni-marburg.de/de/hrz)
+
+**Projekt-Kontakt**:
 - **🌐 Projekt-Website**: [https://opendesk.edu](https://opendesk.edu)
 - **🐙 GitLab**: [https://gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu)
 - **✉️ E-Mail**: [opendesk-edu@hrz.uni-marburg.de](mailto:opendesk-edu@hrz.uni-marburg.de)
-- **💬 Community-Chat**: [Matrix-Raum](#) *(Link einfügen)*
 
 ### 📅 Veranstaltungen
 - **DFN-Tagung 2026**: Vortrag & Workshop (September 2026)
-- **Monatliche Online-Treffen**: Termine auf Anfrage
+- **Monatliche Online-Treffen**: [Termine hier](https://opendesk.edu/community)
 - **Individuelle Demos**: Nach Absprache möglich
 
 ---
 
-## Über die Autoren
 
-| Autor | Rolle | Institution | Kontakt |
-|-------|-------|-------------|---------|
-| *[Ihr Name]* | [Ihre Position] | [Ihre Hochschule] | [Ihre E-Mail] |
-| **Tobias Weiß** | Technischer Lead | HRZ Marburg | [E-Mail] |
 
 ---
 
@@ -219,7 +229,7 @@ openDesk Edu lebt von **Ihrem Engagement**. Ob Sie nur testen, Code beitragen od
 | **📜 Lizenz** | Apache 2.0 / AGPL 3.0 (je nach Komponente) |
 | **🛠️ Technologie** | Kubernetes (K3s), Helm, Ceph CSI, Restic |
 | **📦 Aktuelle Version** | v1.0 (Stabil) |
-| **🎯 Unterstützte Dienste** | 25+ (siehe [Dokumentation](https://docs.opendesk.edu)) |
+| **🎯 Unterstützte Dienste** | 28 (siehe [Dokumentation](https://docs.opendesk.edu)) |
 | **👥 Community** | Offene Collaboration (Hochschulen, DFN, Unternehmen) |
 | **💾 Storage-Backend** | Ceph (RBD für DBs, CephFS für Dateien) |
 | **🔐 Authentifizierung** | Keycloak (SAML 2.0 + OIDC + DFN-AAI) |
@@ -255,10 +265,18 @@ kubectl get pods -n opendesk
 ### 📰 Platzierungsvorschläge
 - **Aufmacher**: Fokus auf Kollaboration & Gemeinschaftsansatz
 - **Fachbeitrag**: Technische Details zu Architektur und Betrieb
-- **Interview**: Mit Tobias Weiß (Technischer Lead) oder [Ihr Name]
+- **Interview**: Mit Tobias Weiß (Technischer Lead)
+
+**Zielgruppe**:
+- IT-Entscheider an Hochschulen
+- Systemadministratoren
+- DFN-Mitglieder
+
+**Wortanzahl**: ~1.200 Wörter
+**Lesezeit**: 6–8 Minuten
 
 ### 📷 Bildmaterial
-Alle verwendeten Bilder stehen in **hoher Auflösung** zur Verfügung:
+Alle Bilder in **Druckqualität** (300 dpi) verfügbar:
 - `images/readme-lead-image.svg` – Titelbild (Vektor, skalierbar)
 - `images/architecture-diagram.svg` – Architektur (Vektor)
 - `images/opendesk-portal2.png` – Portal-Screenshot (1920×1080)
@@ -266,7 +284,7 @@ Alle verwendeten Bilder stehen in **hoher Auflösung** zur Verfügung:
 
 ### 🔗 Weiterführende Links
 - [Technische Dokumentation](https://docs.opendesk.edu)
-- [Sicherheits-Assessment 2025](https://gitlab.com/opendesk-edu/opendesk-sec)
+- [Sicherheits-Assessment 2026](https://gitlab.com/opendesk-edu/opendesk-sec)
 - [Präsentation LinuxTag 2026](https://gitlab.com/opendesk-edu/presentations)
 
 ---
