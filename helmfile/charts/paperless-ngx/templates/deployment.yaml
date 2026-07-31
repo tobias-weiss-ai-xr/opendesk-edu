@@ -1,0 +1,214 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "paperless-ngx.fullname" . }}
+  labels:
+    {{- include "paperless-ngx.labels" . | nindent 4 }}
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "paperless-ngx.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "paperless-ngx.selectorLabels" . | nindent 8 }}
+        deployStage: "050-components"
+        component: "paperless-ngx"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "paperless-ngx.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hostAliases }}
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          env:
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "paperless-ngx.oidcSecret" . }}
+                  key: "secret-key"
+            - name: PAPERLESS_DBENGINE
+              value: "postgres"
+            - name: PAPERLESS_DBNAME
+              value: {{ .Values.paperless.database.name | quote }}
+            - name: PAPERLESS_DBUSER
+              value: {{ .Values.paperless.database.user | quote }}
+            - name: PAPERLESS_DBHOST
+              value: {{ .Values.paperless.database.host | quote }}
+            - name: PAPERLESS_DBPORT
+              value: {{ .Values.paperless.database.port | toString | quote }}
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "paperless-ngx.databaseSecret" . }}
+                  key: {{ .Values.paperless.database.existingSecretPasswordKey | default "postgresql-password" }}
+            - name: PAPERLESS_REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "paperless-ngx.redisSecret" . }}
+                  key: {{ .Values.paperless.redis.existingSecretPasswordKey | default "redis-password" }}
+            - name: PAPERLESS_REDIS
+              value: "redis://:$(PAPERLESS_REDIS_PASS)@{{ .Values.paperless.redis.host }}:{{ .Values.paperless.redis.port }}/0"
+            - name: PAPERLESS_CACHE_BACKEND
+              value: "django.core.cache.backends.redis.RedisCache"
+            - name: PAPERLESS_CACHE_REDIS
+              value: "redis://:$(PAPERLESS_REDIS_PASS)@{{ .Values.paperless.redis.host }}:{{ .Values.paperless.redis.port }}/1"
+            {{- if .Values.paperless.oidc.enabled }}
+            - name: PAPERLESS_AUTHENTICATION_BACKENDS
+              value: "oidc,model"
+            - name: PAPERLESS_OIDC_ISSUER
+              value: {{ .Values.paperless.oidc.issuer | quote }}
+            - name: PAPERLESS_OIDC_CLIENT_ID
+              value: {{ .Values.paperless.oidc.clientId | quote }}
+            - name: PAPERLESS_OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "paperless-ngx.oidcSecret" . }}
+                  key: {{ .Values.paperless.oidc.existingSecretClientSecretKey | default "client-secret" }}
+            - name: PAPERLESS_OIDC_SIGN_ALGORITHM
+              value: {{ .Values.paperless.oidc.signAlgorithm | quote }}
+            - name: PAPERLESS_OIDC_ALLOW_INSECURE
+              value: "false"
+            {{- end }}
+            {{- if .Values.paperless.ocr.enabled }}
+            - name: PAPERLESS_OCR_ENABLED
+              value: "1"
+            - name: PAPERLESS_OCR_LANGUAGES
+              value: {{ .Values.paperless.ocr.language | quote }}
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: {{ .Values.paperless.ocr.language | quote }}
+            {{- end }}
+            {{- if .Values.paperless.tesseract.enabled }}
+            - name: PAPERLESS_TESSERACT_ENABLED
+              value: "1"
+            - name: PAPERLESS_TESSERACT_LANGUAGES
+              value: {{ .Values.paperless.tesseract.languages | quote }}
+            {{- end }}
+            {{- if .Values.paperless.consume.enabled }}
+            - name: PAPERLESS_CONSUMPTION_DIR
+              value: "/usr/src/paperless/consume"
+            {{- end }}
+            - name: PAPERLESS_TIME_ZONE
+              value: "Europe/Berlin"
+            {{- if .Values.paperless.email.enabled }}
+            - name: PAPERLESS_EMAIL_HOST
+              value: {{ .Values.paperless.email.imap.host | quote }}
+            - name: PAPERLESS_EMAIL_PORT
+              value: {{ .Values.paperless.email.imap.port | toString | quote }}
+            - name: PAPERLESS_EMAIL_SSL
+              value: {{ .Values.paperless.email.imap.ssl | toString | quote }}
+            - name: PAPERLESS_EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "paperless-ngx.emailSecret" . }}
+                  key: "username"
+            - name: PAPERLESS_EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "paperless-ngx.emailSecret" . }}
+                  key: "password"
+            {{- end }}
+            {{- range $key, $value := .Values.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "paperless-ngx.fullname" . }}-config
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: consume
+              mountPath: /usr/src/paperless/consume
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /api/
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /api/
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /api/
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "paperless-ngx.fullname" . }}-data
+        - name: consume
+          persistentVolumeClaim:
+            claimName: {{ include "paperless-ngx.fullname" . }}-consume
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

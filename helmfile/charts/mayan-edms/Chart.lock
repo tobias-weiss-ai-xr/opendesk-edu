@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+# This is the lock file generated when dependencies are updated.
+# It prevents Helm from fetching the latest version of dependencies when installing/upgrading.
+# It will only be updated when dependencies are explicitly updated using `helm dependency update`.
+# It can be ignored when building the chart as a dependency in another chart.
+#
+# Dependencies:
+# - name: postgresql
+#   repository: oci://registry-1.docker.io/bitnamicharts
+#   version: 12.x.x
+# - name: redis
+#   repository: oci://registry-1.docker.io/bitnamicharts
+#   version: 18.x.x
+# Generated from:
+# dependencies:
+#   - name: postgresql
+#     version: 12.x.x
+#     repository: oci://registry-1.docker.io/bitnamicharts
+#     condition: postgresql.enabled
+#   - name: redis
+#     version: 18.x.x
+#     repository: oci://registry-1.docker.io/bitnamicharts
+#     condition: redis.enabled

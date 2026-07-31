@@ -1,0 +1,342 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+# Default values for Mayan EDMS
+
+# Image configuration
+image:
+  repository: mayanedms/mayanedms
+  tag: 4.5.0
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+# Replica configuration
+replicaCount: 1
+
+# Image pull secrets for private registries
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Service account configuration
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: true
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 1001
+  runAsUser: 1001
+  runAsNonRoot: true
+
+# Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+  annotations: {}
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "haproxy"
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/proxy-body-size: "200M"
+    haproxy-ingress.github.io/timeout-server: "600s"
+    haproxy-ingress.github.io/timeout-client: "600s"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: "mayan.{{ .Values.global.domain }}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "mayan.{{ .Values.global.domain }}"
+
+# Persistence configuration
+persistence:
+  enabled: true
+  # Data storage for documents
+  data:
+    enabled: true
+    size: 50Gi
+    storageClass: "ceph-cephfs-hdd-ec"
+    accessMode: ReadWriteMany
+    annotations: {}
+  # Media storage for uploads
+  media:
+    enabled: true
+    size: 100Gi
+    storageClass: "ceph-cephfs-hdd-ec"
+    accessMode: ReadWriteMany
+    retentionPolicy: Retain
+    annotations: {}
+  # Index storage for search
+  index:
+    enabled: true
+    size: 10Gi
+    storageClass: "ceph-rbd-ssd"
+    accessMode: ReadWriteOnce
+    retentionPolicy: Retain
+    annotations: {}
+
+# Mayan EDMS configuration
+mayan:
+  # Secret key (generate with: openssl rand -hex 32)
+  secretKey: ""
+  
+  # Database configuration
+  database:
+    engine: postgresql
+    host: "mayan-edms-postgresql"
+    port: 5432
+    name: "mayan"
+    user: "mayan"
+    password: ""
+    existingSecret: "mayan-edms-database"
+    existingSecretPasswordKey: "postgresql-password"
+  
+  # Redis cache configuration
+  redis:
+    host: "mayan-edms-redis-master"
+    port: 6379
+    password: ""
+    existingSecret: "mayan-edms-redis"
+    existingSecretPasswordKey: "redis-password"
+  
+  # OIDC authentication configuration
+  oidc:
+    enabled: true
+    issuer: "https://id.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+    clientId: "mayan-edms"
+    clientSecret: ""
+    existingSecret: "mayan-edms-oidc"
+    existingSecretClientSecretKey: "client-secret"
+    
+    # OIDC settings
+    signAlgorithm: "RS256"
+    useState: true
+    scopes: "openid email profile"
+    usernameClaim: "preferred_username"
+    emailClaim: "email"
+    firstNameClaim: "given_name"
+    lastNameClaim: "family_name"
+  
+  # OCR configuration
+  ocr:
+    enabled: true
+    language: "eng+deu"
+    autoRotatePages: true
+    imageDpi: 300
+    
+  # Tesseract configuration
+  tesseract:
+    enabled: true
+    languages: "eng+deu+fra+ita"  # Common academic languages
+  
+  # Storage configuration (S3-compatible)
+  storage:
+    backend: ""
+    options: {}
+  
+  # S3 storage configuration for SeaweedFS
+  s3Storage:
+    enabled: false
+    bucket_name: "mayan-documents"
+    endpoint_url: "http://seaweedfs-s3.opendesk.svc.cluster.local:8333"
+    access_key: ""
+    secret_key: ""
+    existingSecret: "seaweedfs-credentials"
+    region_name: "us-east-1"
+    signature_version: "s3v4"
+    
+  # Email configuration
+  email:
+    enabled: true
+    host: "stalwart-stalwart.opendesk.svc.cluster.local"
+    port: 587
+    useTls: true
+    username: ""
+    password: ""
+    defaultFrom: "noreply@{{ .Values.global.domain }}"
+    existingSecret: "mayan-edms-email"
+  
+  # Workflow configuration
+  workflows:
+    enabled: true
+    defaultReviewInterval: 30  # days
+    defaultDocumentType: "document"
+  
+  # Metadata configuration
+  metadata:
+    documentTypes:
+      - name: "Lecture Notes"
+        label: "Lecture Notes"
+      - name: "Research Paper"
+        label: "Research Paper"
+      - name: "Thesis"
+        label: "Thesis"
+      - name: "Assignment"
+        label: "Assignment"
+      - name: "Contract"
+        label: "Contract"
+      - name: "Form"
+        label: "Form"
+    
+  # GUNICORN configuration
+  gunicorn:
+    workers: 4
+    threads: 2
+    timeout: 120
+    maxRequests: 1000
+    maxRequestsJitter: 50
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: ""
+    username: "mayan"
+    password: ""
+    database: "mayan"
+    existingSecret: "mayan-edms-database"
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: "ceph-rbd-ssd"
+      accessModes:
+        - ReadWriteOnce
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+
+# Redis configuration
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: ""
+    existingSecret: "mayan-edms-redis"
+  primary:
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClass: "ceph-rbd-ssd"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+# Resource configuration
+resources:
+  requests:
+    cpu: 1
+    memory: 2Gi
+  limits:
+    cpu: 2
+    memory: 4Gi
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Autoscaling configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Pod Disruption Budget
+pdb:
+  enabled: true
+  minAvailable: 1
+
+# Backup configuration
+backup:
+  enabled: true
+  k8up:
+    schedule: "0 2 * * *"
+    retention:
+      daily: 7
+      weekly: 4
+      monthly: 3
+    snapshotVolumes: true
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    path: /metrics
+    port: 8000
+    scrapeTimeout: 30s
+    interval: 60s
+
+# Network policies
+networkPolicies:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: opendesk
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: haproxy-ingress
+      ports:
+        - port: 8000
+
+# Additional environment variables
+extraEnv:
+  # Mayan specific settings
+  MAYAN_DATABASES: "default"
+  MAYAN_DATABASE_ENGINE: "django.db.backends.postgresql"
+  MAYAN Dezezer ENCODING: "utf-8"
+  MAYAN_CELAERY_RESULT_BACKEND: "redis://mayan-edms-redis-master:6379/0"
+  MAYAN_CELAERY_BROKER_URL: "redis://mayan-edms-redis-master:6379/0"
+  MAYAN_CACHE_BACKEND: "django_redis.cache.RedisCache"
+  MAYAN_CACHE_REDIS_URL: "redis://mayan-edms-redis-master:6379/1"
+  
+# Additional volume mounts
+extraVolumeMounts: []
+
+# Additional volumes
+extraVolumes: []
+
+# Host aliases (for HRZ DNS issues)
+hostAliases:
+  - ip: "192.168.3.201"
+    hostnames:
+      - "id.opendesk.hrz.uni-marburg.de"

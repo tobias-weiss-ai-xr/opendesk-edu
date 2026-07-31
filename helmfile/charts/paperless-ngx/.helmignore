@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Patterns to ignore when building packages.
+# NOTE: Do NOT use negation patterns (!pattern) after a broad glob —
+# this triggers a helm bug where Chart.yaml appears missing
+# (https://github.com/helm/helm/issues). Keep patterns simple.
+
+.DS_Store
+*.swp
+*.bak
+*.sh
+.git
+.gitignore
+ci/
+tests/
+*.log

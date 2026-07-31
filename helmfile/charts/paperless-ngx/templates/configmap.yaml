@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "paperless-ngx.fullname" . }}-config
+  labels:
+    {{- include "paperless-ngx.labels" . | nindent 4 }}
+data:
+  # Paperless-ngx settings
+  PAPERLESS_URL: "https://paperless.{{ .Values.global.domain }}"
+  PAPERLESS_DATA_DIR: "/usr/src/paperless/data"
+  PAPERLESS_MEDIA_ROOT: "/usr/src/paperless/data/media"
+  
+  # Date and time settings
+  PAPERLESS_DATE_ORDER: "DMY"
+  PAPERLESS_DF: "Y-m-d"
+  PAPERLESS_DFS: "d.m.Y"
+  PAPERLESS_TIME_ZONE: "Europe/Berlin"
+  
+  # User interface settings
+  PAPERLESS_ENABLE_UPDATE_CHECK: "0"
+  PAPERLESS_COLLAPSE_SIDEBAR: "0"
+  
+  # Performance settings
+  PAPERLESS_GUNICORN_WORKERS: "{{ .Values.paperless.gunicorn.workers }}"
+  PAPERLESS_GUNICORN_TIMEOUT: "{{ .Values.paperless.gunicorn.timeout }}"
+  
+  # Consumption settings
+  {{- if .Values.paperless.consume.enabled }}
+  PAPERLESS_CONSUMPTION_POLLING: "{{ .Values.paperless.consume.pollInterval }}"
+  PAPERLESS_CONSUMPTION_RECURSIVE: "{{ .Values.paperless.consume.recursive | toString | lower }}"
+  {{- if .Values.paperless.consume.barcode.enabled }}
+  PAPERLESS_CONSUMPTION_BARCODE_ENABLED: "1"
+  PAPERLESS_CONSUMPTION_BARCODE_BASE64: "{{ .Values.paperless.consume.barcode.base64 | toString | lower }}"
+  {{- end }}
+  {{- end }}
+  
+  # OCR settings
+  {{- if .Values.paperless.ocr.enabled }}
+  PAPERLESS_OCR_ENABLED: "1"
+  PAPERLESS_OCR_LANGUAGES: "{{ .Values.paperless.ocr.language }}"
+  PAPERLESS_OCR_PAGE_AUTOROTATE: "{{ .Values.paperless.ocr.rotatePages | toString | lower }}"
+  PAPERLESS_OCR_IMAGE_DPI: "{{ .Values.paperless.ocr.imageDpi }}"
+  {{- end }}
+  
+  {{- if .Values.paperless.tesseract.enabled }}
+  PAPERLESS_TESSERACT_ENABLED: "1"
+  PAPERLESS_TESSERACT_LANGUAGES: "{{ .Values.paperless.tesseract.languages }}"
+  {{- end }}

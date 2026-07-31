@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+# Patterns to ignore when building packages.
+# NOTE: Do NOT use negation patterns after a broad glob - triggers helm Chart.yaml-missing bug
+
+.DS_Store
+*.swp
+*.bak
+*.sh
+.git
+.gitignore
+ci/
+tests/
+*.log
