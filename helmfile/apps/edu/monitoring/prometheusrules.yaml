@@ -25,7 +25,7 @@ spec:
           expr: |
             kube_pod_status_ready{namespace="opendesk", pod=~"stalwart-stalwart-.*", condition="true"} == 1
             and on(pod)
-            kube_pod_restarts_over_time{namespace="opendesk", pod=~"stalwart-stalwart-.*"}[15m] > 3
+            increase(kube_pod_restarts_over_time{namespace="opendesk", pod=~"stalwart-stalwart-.*"}[15m]) > 3
           for: 5m
           labels:
             severity: warning
@@ -48,7 +48,7 @@ spec:
           expr: |
             kube_pod_status_ready{namespace="opendesk", pod=~"opendesk-opencloud-.*", condition="true"} == 1
             and on(pod)
-            kube_pod_restarts_over_time{namespace="opendesk", pod=~"opendesk-opencloud-.*"}[15m] > 3
+            increase(kube_pod_restarts_over_time{namespace="opendesk", pod=~"opendesk-opencloud-.*"}[15m]) > 3
           for: 5m
           labels:
             severity: warning
@@ -79,7 +79,7 @@ spec:
 
         - alert: K8upOperatorRestarts
           expr: |
-            kube_pod_restarts_over_time{namespace="opendesk", pod=~"k8up-.*"}[1h] > 5
+            increase(kube_pod_restarts_over_time{namespace="opendesk", pod=~"k8up-.*"}[1h]) > 5
           for: 5m
           labels:
             severity: warning
