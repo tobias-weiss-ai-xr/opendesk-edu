@@ -9,6 +9,9 @@ metadata:
 {{ include "sogo.labels" . | nindent 4 }}
     backup-tier: "b"
     k8up/backup: "true"
+  annotations:
+    # RWO PVC: exclude from k8up backup-live (multi-attach hang, AGENTS.md #7)
+    k8up.io/exclude: "true"
 spec:
   accessModes:
     - {{ .Values.sogo.persistence.accessMode }}
