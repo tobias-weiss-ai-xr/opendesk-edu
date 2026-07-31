@@ -644,3 +644,18 @@ This implementation adds two powerful Document Management Systems to openDesk Ed
 Mayan EDMS ist chart-fertig, aber noch nicht deployed. Wichtige Einschränkungen:
 OIDC-Login bei Paperless 2.12 nicht verfügbar (lokaler Login), celery-beat crasht auf CephFS
 (nur Hintergrund-Tasks betroffen), externer DNS-Record fehlt noch (cluster-intern gelöst via CoreDNS).
+
+## Cluster-Hardening Session (2026-07-31) — Fixes
+
+| # | Issue | Fix |
+|---|-------|-----|
+| 1 | OpenCloud CrashLoopBackOff ("system user ID not configured") | ArgoCD-App `opencloud`: `systemUserId=admin` in helm.values (json-replace); `kubectl set env OC_SYSTEM_USER_ID=admin`; values.yaml.gotmpl Default `admin`; fehlende `helmfile-child.yaml.gotmpl` erstellt |
+| 2 | ArgoCD-App-of-Apps überschrieb Patches | `selfHeal` von `opendesk-apps` + `opendesk-edu-apps` deaktiviert (syncPolicy.automated=null) |
+| 3 | Etherpad Sync-Failed (PVC immutable, Probe 2 Handler, Image 1.9.9 weg) | App-Values: PVC RWO+ceph-rbd-ssd, pg.persistence ohne storageClass; Image `2.2`; `Replace=true` SyncOption |
+| 4 | PrometheusRule edu-service-alerts invalid | Range-Vectors in `increase()` gewrappt (Stalwart/OpenCloud/K8up HighRestarts) |
+| 5 | Backups Error (Upload hängt) | S3 war temporär unerreichbar; `sogo-sogo-data` PVC mit `k8up.io/exclude=true` annotiert (RWO multi-attach) |
+| 6 | TLS-Order dms Failed (NXDOMAIN) | cert-manager-Annotation vom paperless-Ingress entfernt; obsoletes dms-Certificate gelöscht (Wildcard-`*.opendesk...` bis 2027 bleibt) |
+| 7 | sogo: PVC storageClass immutable + Ingress `example.com` | Chart: storageClassName immer `ceph-rbd-ssd`; example.com-Defaults → reale Domain (ArgoCD ignorierte App-Values) |
+| 8 | Verwaistes PVC `opencloud-helm-data` (100Gi) + stuck Backup-Pod | PVC gelöscht, Job gelöscht → 100Gi Quota frei |
+
+**Bekannte Rest-Themen:** opencloud App bleibt OutOfSync (GitLab-Parent-helmfile rendert ohne systemUserId; Patches halten solange kein Parent-Sync); sogo health=Progressing (harmlos); stalwart/portal-entries Soft-Drift; ES-Cluster (ECK ApplyingChanges 62d, VolumeResize auf Ceph); seaweedfs-Backup-Cron `0 0 31 2 *` ungültig (31. Feb); license-cache-CronJob (bekannt AGENTS.md #10).
