@@ -81,7 +81,7 @@ machineAuthApiKey: {{ .Values.secrets.opencloud.machineAuthApiKey | quote }}
 
 systemUserApiKey: {{ .Values.secrets.opencloud.systemUserApiKey | quote }}
 
-systemUserId: {{ .Values.secrets.opencloud.systemUserId | quote }}
+systemUserId: {{ .Values.secrets.opencloud.systemUserId | default "admin" | quote }}
 
 urlSigningSecret: {{ .Values.secrets.opencloud.urlSigningSecret | quote }}
   pdb:
