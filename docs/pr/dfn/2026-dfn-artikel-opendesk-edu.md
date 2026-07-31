@@ -29,7 +29,7 @@ openDesk Edu verfolgt einen anderen Ansatz: Statt eine weitere Plattform zu scha
 
 Technisch basiert openDesk Edu auf Kubernetes (K3s) und containerisierten Diensten. Das ermöglicht es, Anwendungen unabhängig voneinander zu betreiben, zu aktualisieren und auszutauschen – ohne die zugrundeliegende Infrastruktur jedes Mal anpassen zu müssen. Wer SOGo als Groupware bevorzugt, kann Grommunio einsetzen; wer Moodle statt ILIAS nutzen möchte, tauscht das Lernmanagement-System aus. Voraussetzung ist die Unterstützung offener Standards: SAML 2.0 oder OIDC für die Authentifizierung, standardisierte Protokolle für den Datenaustausch.
 
-openDesk Edu baut auf **openDesk CE** auf – der Community Edition, die in mehreren Bundesländern im Einsatz ist. In Baden-Württemberg nutzt das Landesmedienzentrum (LMZ) openDesk CE für den digitalen Arbeitsplatz von Lehrkräften, in Schleswig-Holstein ist openDesk CE Teil der Open-Source-Strategie des Landes. openDesk Edu erweitert diese Basis um Dienste, die spezifisch für den Hochschulbetrieb benötigt werden.
+openDesk Edu baut auf der **Vanilla-Version von openDesk** auf – also der Basis, die sowohl die Community Edition als auch die Enterprise Edition umfasst und die in mehreren Bundesländern im Einsatz ist. In Baden-Württemberg nutzt das Landesmedienzentrum (LMZ) openDesk für den digitalen Arbeitsplatz von Lehrkräften, in Schleswig-Holstein ist openDesk Teil der Open-Source-Strategie des Landes. openDesk Edu erweitert diese Basis um Dienste, die spezifisch für den Hochschulbetrieb benötigt werden.
 
 ## Der Mehrwert für Hochschulen
 
@@ -80,7 +80,7 @@ Die Community organisiert sich über quartalsweise Community-of-Practice-Calls; 
 | **Kategorie** | **Details** |
 |---------------|------------|
 | **Lizenz** | Apache 2.0 / AGPL 3.0 (je nach Komponente) |
-| **Basis** | openDesk CE (Community Edition) |
+| **Basis** | openDesk (Vanilla-Version, CE und EE) |
 | **Technologie** | Kubernetes (K3s), Helm, Ceph CSI, Restic / k8up |
 | **Authentifizierung** | Keycloak (SAML 2.0 + OIDC); DFN-AAI-Integration in Vorbereitung |
 | **Monitoring** | Prometheus + Grafana |
