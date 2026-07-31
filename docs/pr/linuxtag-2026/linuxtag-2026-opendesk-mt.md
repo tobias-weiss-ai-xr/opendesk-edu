@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Panorama
 
-- **Estensjoni ta' openDesk CE** għall-universitajiet 🏫
+- **Estensjoni ta' openDesk** għall-universitajiet 🏫
 - **Komponenti Ġodda:**
   - Sistemi ta' Ġestjoni tal-Learnimg (ILIAS, Moodle)
   - Konferenzi bil-Vidjo għat-tagħlim (BigBlueButton)

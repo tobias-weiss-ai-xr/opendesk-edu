@@ -65,7 +65,7 @@ In diesem Brief fordert der **Präsidiumsarbeitskreis „Digitale Souveränität
 ---
 
 ## 🌍 Aktuelle Einsatzgebiete von openDesk
-openDesk **CE** (Community Edition) wird bereits produktiv eingesetzt:
+openDesk wird bereits produktiv eingesetzt:
 
 | **Bundesland / Organisation** | **Projekt** | **Verantwortlich** | **Link** |
 |-------------------------------|-------------|--------------------|----------|

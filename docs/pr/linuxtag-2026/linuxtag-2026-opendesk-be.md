@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Агляд
 
-- **Пашырэнне openDesk CE** для ўніверсітэтаў 🏫
+- **Пашырэнне openDesk** для ўніверсітэтаў 🏫
 - **Новыя Кампаненты:**
   - Сістэмы Кіравання Навучаннем (ILIAS, Moodle)
   - Відэаканферэнцыі для Навучання (BigBlueButton)
