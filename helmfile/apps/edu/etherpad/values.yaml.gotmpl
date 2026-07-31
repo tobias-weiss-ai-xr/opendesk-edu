@@ -15,6 +15,7 @@ etherpad:
     data:
       size: "1Gi"
       accessMode: "ReadWriteOnce"
+      storageClass: {{ coalesce .Values.persistence.storages.etherpad.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
   resources:
     requests:
       cpu: "100m"
