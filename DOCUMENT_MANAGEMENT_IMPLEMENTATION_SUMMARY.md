@@ -659,3 +659,13 @@ OIDC-Login bei Paperless 2.12 nicht verfügbar (lokaler Login), celery-beat cras
 | 8 | Verwaistes PVC `opencloud-helm-data` (100Gi) + stuck Backup-Pod | PVC gelöscht, Job gelöscht → 100Gi Quota frei |
 
 **Bekannte Rest-Themen:** opencloud App bleibt OutOfSync (GitLab-Parent-helmfile rendert ohne systemUserId; Patches halten solange kein Parent-Sync); sogo health=Progressing (harmlos); stalwart/portal-entries Soft-Drift; ES-Cluster (ECK ApplyingChanges 62d, VolumeResize auf Ceph); seaweedfs-Backup-Cron `0 0 31 2 *` ungültig (31. Feb); license-cache-CronJob (bekannt AGENTS.md #10).
+
+## Cluster-Hardening Session — Runde 2 (2026-07-31)
+
+| # | Issue | Fix |
+|---|-------|-----|
+| 9 | seaweedfs-Backup-Cron `0 0 31 2 *` ungültig (31. Feb) + S3-Auth fehlgeschlagen | Schedule `backup-live-seaweedfs` gelöscht (defekt + redundant — SeaweedFS-Daten im PVC werden vom Haupt-Backup `backup-live` gesichert). Definition gesichert unter /tmp/seaweedfs-schedule-backup.json |
+| 10 | Elasticsearch: `master_not_discovered_exception`, phase=ApplyingChanges (62d), VolumeResizeFailed | **Wurzel: Disk-Full** — 30Gi-PVCs von es-master-0/1 zu 100% belegt. PVCs auf 100Gi expandiert (ceph-rbd-ssd allowVolumeExpansion) → Cluster wieder `green`, phase=Ready, Lizenz-Check ok |
+| 11 | SeaweedFS-S3-Auth (Filer-DB-Store überschrieb Config) | Untersuchung: aktive Filer-DB hat anderen Key als die Config-Datei; Config-Datei (admin/admin) wiederhergestellt, Pod neu gestartet — SeaweedFS läuft wieder. Für k8up-Backups nicht mehr relevant (Schedule gelöscht) |
+
+**Kernaussage:** Beide "tiefen" Probleme hatten einfache Wurzeln — ein ungültiger Cron + ein volles PVC. Die ES-`ApplyingChanges`-Phase (62d) war ein reines Disk-Problem, kein Operator-Bug.
