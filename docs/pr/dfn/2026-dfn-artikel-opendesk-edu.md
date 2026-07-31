@@ -17,9 +17,11 @@ SPDX-License-Identifier: AGPL-3.0
 
 Die digitale Infrastruktur an Hochschulen ist in den letzten Jahren stetig gewachsen. Moodle und ILIAS für Lernmanagement, Nextcloud für Dateifreigabe, SOGo oder Grommunio für E-Mail und Kalender, Etherpad für kollaboratives Arbeiten, JupyterHub für datengetriebene Lehre – die Liste bewährter Open-Source-Anwendungen ist lang und wird kontinuierlich länger.
 
-Doch dieser Erfolg bringt eine Herausforderung mit sich: Jeder Dienst benötigt eine eigene Authentifizierung, ein eigenes Backup-Konzept, eigene Wartungsroutinen. Die Betriebskosten skalieren linear mit der Anzahl der Dienste, während die personellen Ressourcen an vielen Rechenzentren begrenzt sind. Vor diesem Hintergrund ist die Attraktivität integrierter Lösungen wie Microsoft 365 nachvollziehbar: Ein Dienst, ein Login, ein Vertrag – scheinbar einfacher zu betreiben als ein heterogenes Ökosystem.
+Doch dieser Erfolg bringt eine Herausforderung mit sich: Jeder Dienst benötigt eine eigene Authentifizierung, ein eigenes Backup-Konzept, eigene Wartungsroutinen. Die Betriebskosten skalieren mit der Anzahl der Dienste, während die personellen Ressourcen vielerorts begrenzt sind. Die Rechenzentren leisten hier oft immense Arbeit – sie sind bei jedem Thema mit an Bord, halten den Laden am Laufen, wissen genau, was die Nutzenden brauchen und wie sie arbeiten. Vor diesem Hintergrund ist die Attraktivität integrierter Lösungen wie Microsoft 365 nachvollziehbar: Ein Dienst, ein Login, ein Vertrag – scheinbar einfacher zu betreiben als ein heterogenes Ökosystem.
 
-Die Kehrseite dieser Entscheidung ist bekannt: proprietäre Formate, fehlende Kontrolle über die Datenhaltung, Abhängigkeit von einem einzigen Anbieter und dessen Lizenzpolitik. DFN-Mitglieder, die diesen Weg gegangen sind, berichten von steigenden Kosten bei nachlassender Flexibilität. Und der Wechsel zurück – oder zu einer anderen Lösung – ist teuer und aufwändig.
+Die Kehrseite dieser Entscheidung ist bekannt: proprietäre Formate, fehlende Kontrolle über die Datenhaltung, Abhängigkeit von einem einzigen Anbieter und dessen Lizenzpolitik. DFN-Mitglieder, die diesen Weg gegangen sind, berichten von steigenden Kosten bei nachlassender Flexibilität.
+
+openDesk Edu ist ein Angebot an Hochschulen, die diesen Schritt gehen möchten – nicht die Behauptung, dass es für alle der richtige Weg ist. Jede Hochschule hat eigene Rahmenbedingungen, eigene Historie, eigene Prioritäten. Das Projekt versteht sich als Werkzeugkasten, nicht als Dogma.
 
 ## Was openDesk Edu anders macht
 
@@ -47,18 +49,21 @@ Eine interaktive Übersicht aller integrierten Dienste ist auf [landscape.opende
 
 ## Warum der Wechsel zu Nextcloud allein nicht reicht
 
-Ein häufig gewählter erster Schritt aus dem Microsoft-Ökosystem ist die Einführung von Nextcloud als zentraler Dateiablage. Das ist ein wichtiger und richtiger Schritt – aber er löst das grundlegende Problem nicht: Die Abhängigkeit von einem einzelnen Anbieter bleibt bestehen, nur die Lizenz wechselt von proprietär zu Open Source. Die Migration bleibt aufwändig, die Schnittstellen sind oft anbieterspezifisch, und der nächste Wechsel ist kaum weniger schmerzhaft.
+Ein häufig gewählter erster Schritt aus dem Microsoft-Ökosystem ist die Einführung von Nextcloud als zentraler Dateiablage. Das ist ein wichtiger und richtiger Schritt. Vielerorts funktioniert das hervorragend – Nextcloud ist eine ausgereifte Plattform, die viele Anforderungen abdeckt.
 
-openDesk Edu setzt hier einen Schritt früher an: Statt eine Plattform durch eine andere zu ersetzen, entsteht eine **Infrastruktur für den Betrieb beliebiger Dienste**. Die Plattform selbst ist der gemeinsame Rahmen – Authentifizierung, Monitoring, Backup, Deployment. Die Dienste darin sind austauschbar. Das reduziert das Risiko von Fehlentscheidungen, weil keine Komponente so eng an die Plattform gebunden ist, dass ein späterer Austausch prohibitiv teuer wäre.
+openDesk Edu adressiert eine Frage, die danach kommt: Was ist mit den Diensten, die Nextcloud nicht abbildet – Lernmanagement, Groupware, Videokonferenz, Forschungsumgebungen? Für jede dieser Aufgaben gibt es bewährte Open-Source-Lösungen. openDesk Edu bietet eine gemeinsame Infrastruktur, um diese Dienste zusammenzuführen, ohne sie an die Plattform zu binden. Wer Nextcloud durch OpenCloud ersetzen möchte, kann das. Wer Moodle statt ILIAS einsetzt, tauscht das Lernmanagement-System aus. Die Plattform selbst ist der gemeinsame Rahmen – Authentifizierung, Monitoring, Backup, Deployment. Die Dienste darin bleiben austauschbar.
 
-## Einladung zur Mitarbeit
+## Einladung – auf unterschiedlichen Wegen
 
-openDesk Edu versteht sich als offene Initiative – nicht als fertiges Produkt. Hochschulen sind eingeladen, von Anfang an mitzugestalten:
+openDesk Edu versteht sich als offene Initiative, nicht als fertiges Produkt. Zugleich ist klar: Nicht jede Hochschule kann oder will sich von Beginn an intensiv einbringen. Der Betrieb der bestehenden Infrastruktur bindet bereits alle Kräfte – und das ist gut so. Dass Rechenzentren ihre vorhandenen Dienste zuverlässig am Laufen halten, ist die Grundlage, auf der Projekte wie openDesk Edu überhaupt erst aufbauen können. Ohne diese tägliche Arbeit gäbe es keine stabile Basis für neue Entwicklungen.
 
-- **Testen und Evaluieren**: Interessierte Hochschulen können Unterstützung bei der Einrichtung einer Demo-Umgebung erhalten.
-- **Betriebserfahrungen teilen**: Wer openDesk Edu bereits testet, kann seine Erfahrungen in die Weiterentwicklung einfließen lassen.
+Mitarbeit kann daher ganz unterschiedlich aussehen, je nachdem, wo eine Hochschule steht:
+
+- **Ein Blick von außen**: Wer openDesk Edu aus der Ferne betrachtet und sich fragt „Ist das etwas für uns?" – allein diese Frage ist wertvoll. Sie hilft dem Projekt, sich zu schärfen und klarer zu kommunizieren. Rückmeldungen wie „das klingt interessant, aber bei uns sieht die Welt anders aus" sind wichtige Realitätschecks.
+- **Betriebserfahrungen teilen**: Wer bereits openDesk Edu testet oder ähnliche Plattformen betreibt, kann Erfahrungen weitergeben – auch und gerade die Hindernisse und Stolpersteine. Scheitert etwas an den realen Bedingungen vor Ort, ist das der wichtigste Hinweis für die Weiterentwicklung.
+- **Als Informationsquelle**: Wer tief in den operativen Abläufen einer Hochschule steckt – E-Mail, Authentifizierung, Lernplattformen, Forschungsinfrastruktur – und bereit ist, Einblicke zu teilen: Wie arbeiten die Nutzenden wirklich? Was sind ihre unausgesprochenen Erwartungen? Dieses Wissen ist für das Projekt enorm wertvoll und direkt in die Entwicklung der nächsten Integrationsschritte eingeflossen. Der Blick derjenigen, die „bei allem mit an Bord sind", ist für openDesk Edu unverzichtbar.
 - **Code beitragen**: Neue Helm-Charts für bislang nicht integrierte Dienste, Bugfixes und Verbesserungen sind jederzeit willkommen.
-- **Anforderungen einbringen**: Welche Dienste fehlen? Welche Integrationen sind wichtig? Die Community definiert die Roadmap gemeinsam.
+- **Anforderungen einbringen**: Welche Dienste fehlen? Welche Integrationen sind wichtig? Die Community definiert die Roadmap gemeinsam – aber auch hier gilt: Nicht jede Stimme muss alles entscheiden. Es geht nicht darum, alle mitzunehmen und dadurch zu bremsen, sondern darum, dass die Richtung von denen bestimmt wird, die aktiv mitgestalten wollen.
 
 Die Community organisiert sich über quartalsweise Community-of-Practice-Calls; Termine werden im [opendesk-edu-cop-Repository](https://gitlab.com/opendesk-edu/opendesk-edu-cop) veröffentlicht. Der gesamte Quellcode ist auf GitLab unter [gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu) verfügbar und steht unter der Apache-2.0- bzw. AGPL-3.0-Lizenz.
 
