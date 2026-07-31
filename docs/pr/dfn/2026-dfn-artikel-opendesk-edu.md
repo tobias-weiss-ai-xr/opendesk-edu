@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0
 
 # Offen. Austauschbar. Unabhängig. openDesk Edu: Ein Ökosystem für digitale Hochschulinfrastruktur
 
-*Warum ein modulares Open-Source-Ökosystem den Betrieb digitaler Dienste an Hochschulen vereinfacht – und wie der Wechsel von Microsoft 365 gelingen kann, ohne sich in neue Abhängigkeiten zu begeben.*
+*Warum ein modulares Open-Source-Ökosystem den Betrieb digitaler Dienste an Hochschulen vereinfachen kann – und worauf es beim Wechsel von Microsoft 365 ankommt, um neue Abhängigkeiten zu vermeiden.*
 
 ---
 
@@ -17,7 +17,7 @@ SPDX-License-Identifier: AGPL-3.0
 
 Die digitale Infrastruktur an Hochschulen ist in den letzten Jahren stetig gewachsen. Moodle und ILIAS für Lernmanagement, Nextcloud für Dateifreigabe, SOGo oder Grommunio für E-Mail und Kalender, Etherpad für kollaboratives Arbeiten, JupyterHub für datengetriebene Lehre – die Liste bewährter Open-Source-Anwendungen ist lang und wird kontinuierlich länger.
 
-Doch dieser Erfolg bringt eine Herausforderung mit sich: Jeder Dienst benötigt eine eigene Authentifizierung, ein eigenes Backup-Konzept, eigene Wartungsroutinen. Die Betriebskosten skalieren mit der Anzahl der Dienste, während die personellen Ressourcen vielerorts begrenzt sind. Die Rechenzentren leisten hier oft immense Arbeit – sie sind bei jedem Thema mit an Bord, halten den Laden am Laufen, wissen genau, was die Nutzenden brauchen und wie sie arbeiten. Vor diesem Hintergrund ist die Attraktivität integrierter Lösungen wie Microsoft 365 nachvollziehbar: Ein Dienst, ein Login, ein Vertrag – scheinbar einfacher zu betreiben als ein heterogenes Ökosystem.
+Doch dieser Erfolg bringt eine Herausforderung mit sich: Jeder Dienst benötigt eine eigene Authentifizierung, ein eigenes Backup-Konzept, eigene Wartungsroutinen. Die Betriebskosten skalieren mit der Anzahl der Dienste, während die personellen Ressourcen vielerorts begrenzt sind. Die Rechenzentren leisten hier oft viel Arbeit – sie sind in vielen Themen mit an Bord, halten den Laden am Laufen, wissen oft genau, was die Nutzenden brauchen und wie sie arbeiten. Vor diesem Hintergrund ist die Attraktivität integrierter Lösungen wie Microsoft 365 nachvollziehbar: Ein Dienst, ein Login, ein Vertrag – scheinbar einfacher zu betreiben als ein heterogenes Ökosystem.
 
 Die Kehrseite dieser Entscheidung ist bekannt: proprietäre Formate, fehlende Kontrolle über die Datenhaltung, Abhängigkeit von einem einzigen Anbieter und dessen Lizenzpolitik. DFN-Mitglieder, die diesen Weg gegangen sind, berichten von steigenden Kosten bei nachlassender Flexibilität.
 
@@ -25,25 +25,25 @@ openDesk Edu ist ein Angebot an Hochschulen, die diesen Schritt gehen möchten �
 
 ## Was openDesk Edu anders macht
 
-openDesk Edu verfolgt einen grundlegend anderen Ansatz. Statt eine weitere Plattform zu schaffen, die alle Funktionen in sich vereint, entsteht ein **Ökosystem austauschbarer Komponenten**. Jede Anwendung bleibt eigenständig, wird aber über gemeinsame Infrastrukturdienste integriert: zentrale Authentifizierung über Keycloak, einheitliches Monitoring mit Prometheus und Grafana, automatisierte Backups über den Kubernetes-Operator k8up mit Restic.
+openDesk Edu verfolgt einen anderen Ansatz: Statt eine weitere Plattform zu schaffen, die alle Funktionen in sich vereint, entsteht ein **Ökosystem austauschbarer Komponenten**. Jede Anwendung bleibt eigenständig, wird aber über gemeinsame Infrastrukturdienste integriert: zentrale Authentifizierung über Keycloak, einheitliches Monitoring mit Prometheus und Grafana, automatisierte Backups über den Kubernetes-Operator k8up mit Restic.
 
-Technisch basiert openDesk Edu auf Kubernetes (K3s) und containerisierten Diensten. Das ermöglicht es, Anwendungen unabhängig voneinander zu betreiben, zu aktualisieren und auszutauschen – ohne die Plattform als Ganzes zu berühren. Wer SOGo als Groupware bevorzugt, kann Grommunio einsetzen; wer Moodle statt ILIAS nutzen möchte, tauscht das Lernmanagement-System aus. Voraussetzung ist die Unterstützung offener Standards: SAML 2.0 oder OIDC für die Authentifizierung, standardisierte Protokolle für den Datenaustausch.
+Technisch basiert openDesk Edu auf Kubernetes (K3s) und containerisierten Diensten. Das ermöglicht es, Anwendungen unabhängig voneinander zu betreiben, zu aktualisieren und auszutauschen – ohne die zugrundeliegende Infrastruktur jedes Mal anpassen zu müssen. Wer SOGo als Groupware bevorzugt, kann Grommunio einsetzen; wer Moodle statt ILIAS nutzen möchte, tauscht das Lernmanagement-System aus. Voraussetzung ist die Unterstützung offener Standards: SAML 2.0 oder OIDC für die Authentifizierung, standardisierte Protokolle für den Datenaustausch.
 
-openDesk Edu baut auf **openDesk CE** auf – der Community Edition, die bereits in mehreren Bundesländern produktiv im Einsatz ist. In Baden-Württemberg nutzt das Landesmedienzentrum (LMZ) openDesk CE für den digitalen Arbeitsplatz von Lehrkräften, in Schleswig-Holstein ist openDesk CE Teil der Open-Source-Strategie des Landes. openDesk Edu erweitert diese Basis um Dienste, die spezifisch für den Hochschulbetrieb benötigt werden.
+openDesk Edu baut auf **openDesk CE** auf – der Community Edition, die in mehreren Bundesländern im Einsatz ist. In Baden-Württemberg nutzt das Landesmedienzentrum (LMZ) openDesk CE für den digitalen Arbeitsplatz von Lehrkräften, in Schleswig-Holstein ist openDesk CE Teil der Open-Source-Strategie des Landes. openDesk Edu erweitert diese Basis um Dienste, die spezifisch für den Hochschulbetrieb benötigt werden.
 
 ## Der Mehrwert für Hochschulen
 
-Die zentrale Authentifizierung über Keycloak mit SAML 2.0 und OIDC – eine Integration der DFN-AAI ist in Vorbereitung – vereinfacht die Benutzerverwaltung erheblich. Neue Studierende werden einmal angelegt und haben sofort Zugang zu allen Diensten. Der Aufwand für die Administration sinkt, die Sicherheit steigt, weil Passwörter zentral verwaltet werden.
+Die zentrale Authentifizierung über Keycloak mit SAML 2.0 und OIDC – eine Integration der DFN-AAI ist in Vorbereitung – vereinfacht die Benutzerverwaltung: Neue Studierende werden einmal angelegt und haben Zugang zu den angebundenen Diensten. Der Aufwand für die Administration sinkt, die Sicherheit steigt, weil Passwörter zentral verwaltet werden.
 
-Das einheitliche Monitoring in Grafana gibt Administratoren einen vollständigen Überblick über den Zustand aller Dienste. Statt sich in verschiedene Dashboards einzuarbeiten, reicht ein Blick auf eine zentrale Übersicht. Das spart Zeit bei der Fehlersuche und ermöglicht eine frühzeitige Erkennung von Engpässen.
+Das einheitliche Monitoring in Grafana gibt Administratoren einen Überblick über den Zustand der Dienste. Statt sich in verschiedene Dashboards einzuarbeiten, reicht ein Blick auf eine zentrale Übersicht. Das spart Zeit bei der Fehlersuche und ermöglicht eine frühzeitige Erkennung von Engpässen.
 
-Die automatisierte Backup-Lösung mit k8up und Restic sichert täglich inkrementell alle Daten auf ein S3-kompatibles Ziel. Auch bei einem Totalausfall eines Knotens lassen sich alle Dienste zuverlässig wiederherstellen. Die Konfiguration erfolgt deklarativ über Kubernetes-Ressourcen und ist damit versionierbar und auditierbar.
+Die automatisierte Backup-Lösung mit k8up und Restic sichert täglich inkrementell Daten auf ein S3-kompatibles Ziel. Auch bei einem Totalausfall eines Knotens lassen sich die Dienste wiederherstellen. Die Konfiguration erfolgt deklarativ über Kubernetes-Ressourcen und ist damit versionierbar und auditierbar.
 
 ## Betriebserfahrung aus Marburg
 
 Am HRZ der Universität Marburg läuft openDesk Edu aktuell auf einem K3s-Cluster mit neun Knoten. Der produktionsnahe Testbetrieb umfasst 28 Dienste, darunter Lernmanagement-Systeme (Moodle, ILIAS), Kollaborationsdienste (Nextcloud/OpenCloud, Etherpad, Jitsi, Collabora), Groupware (SOGo), Forschungsinfrastruktur (JupyterHub, RStudio, Dask) sowie verschiedene Spezialdienste wie Overleaf, XWiki und Zammad.
 
-Eine zentrale Erkenntnis der Testphase: Der Betrieb einer integrierten Plattform mit gemeinsamer Authentifizierung und Monitoring ist effizienter als der Betrieb vieler einzelner Dienste mit jeweils eigener Infrastruktur. Die Anfälligkeit für Konfigurationsfehler sinkt, weil zentrale Einstellungen einmal definiert und von allen Diensten genutzt werden. Gleichzeitig bleibt die Flexibilität erhalten, neue Dienste zu integrieren oder bestehende auszutauschen, ohne die Plattform umbauen zu müssen.
+Eine Beobachtung aus der Testphase: Der Betrieb mit gemeinsamer Authentifizierung und Monitoring reduziert den Aufwand für wiederkehrende Konfigurationsarbeiten – Admins müssen zentrale Einstellungen nur einmal definieren. Gleichzeitig bleibt die Flexibilität erhalten, neue Dienste zu integrieren oder bestehende auszutauschen.
 
 Eine interaktive Übersicht aller integrierten Dienste ist auf [landscape.opendesk-edu.org](https://landscape.opendesk-edu.org/) verfügbar.
 
@@ -55,15 +55,21 @@ openDesk Edu adressiert eine Frage, die danach kommt: Was ist mit den Diensten, 
 
 ## Einladung – auf unterschiedlichen Wegen
 
-openDesk Edu versteht sich als offene Initiative, nicht als fertiges Produkt. Zugleich ist klar: Nicht jede Hochschule kann oder will sich von Beginn an intensiv einbringen. Der Betrieb der bestehenden Infrastruktur bindet bereits alle Kräfte – und das ist gut so. Dass Rechenzentren ihre vorhandenen Dienste zuverlässig am Laufen halten, ist die Grundlage, auf der Projekte wie openDesk Edu überhaupt erst aufbauen können. Ohne diese tägliche Arbeit gäbe es keine stabile Basis für neue Entwicklungen.
+### Was wir bisher gelernt haben
 
-Mitarbeit kann daher ganz unterschiedlich aussehen, je nachdem, wo eine Hochschule steht:
+Die Rückmeldungen der ersten Gespräche haben uns gezeigt: Es gibt gute Gründe, aus der Distanz zu beobachten. Das tagesgeschäft bindet – und zwar völlig zu Recht. Wer den Betrieb am Laufen hält, hat nicht automatisch Kapazität, sich in neue Plattformen einzuarbeiten. Dass Rechenzentren ihre vorhandenen Dienste zuverlässig betreiben, ist die Voraussetzung dafür, dass Projekte wie dieses überhaupt denkbar sind.
 
-- **Ein Blick von außen**: Wer openDesk Edu aus der Ferne betrachtet und sich fragt „Ist das etwas für uns?" – allein diese Frage ist wertvoll. Sie hilft dem Projekt, sich zu schärfen und klarer zu kommunizieren. Rückmeldungen wie „das klingt interessant, aber bei uns sieht die Welt anders aus" sind wichtige Realitätschecks.
-- **Betriebserfahrungen teilen**: Wer bereits openDesk Edu testet oder ähnliche Plattformen betreibt, kann Erfahrungen weitergeben – auch und gerade die Hindernisse und Stolpersteine. Scheitert etwas an den realen Bedingungen vor Ort, ist das der wichtigste Hinweis für die Weiterentwicklung.
-- **Als Informationsquelle**: Wer tief in den operativen Abläufen einer Hochschule steckt – E-Mail, Authentifizierung, Lernplattformen, Forschungsinfrastruktur – und bereit ist, Einblicke zu teilen: Wie arbeiten die Nutzenden wirklich? Was sind ihre unausgesprochenen Erwartungen? Dieses Wissen ist für das Projekt enorm wertvoll und direkt in die Entwicklung der nächsten Integrationsschritte eingeflossen. Der Blick derjenigen, die „bei allem mit an Bord sind", ist für openDesk Edu unverzichtbar.
-- **Code beitragen**: Neue Helm-Charts für bislang nicht integrierte Dienste, Bugfixes und Verbesserungen sind jederzeit willkommen.
-- **Anforderungen einbringen**: Welche Dienste fehlen? Welche Integrationen sind wichtig? Die Community definiert die Roadmap gemeinsam – aber auch hier gilt: Nicht jede Stimme muss alles entscheiden. Es geht nicht darum, alle mitzunehmen und dadurch zu bremsen, sondern darum, dass die Richtung von denen bestimmt wird, die aktiv mitgestalten wollen.
+Wir haben auch gelernt, dass die Frage „Ist das etwas für uns?" nicht von allein beantwortet wird und dass Skepsis gegenüber neuen Plattformen berechtigt ist. Deshalb setzen wir auf konkret erfahrbare Ergebnisse statt auf Versprechen: Wer neugierig geworden ist, kann sich eine Demo-Umgebung ansehen, die Code-Repositories durchstöbern oder einen Blick in die Architektur-Dokumentation werfen.
+
+### Beteiligung, die zum eigenen Tempo passt
+
+Beteiligung an openDesk Edu kann unterschiedlich aussehen. Die Erfahrung zeigt, dass die hilfreichsten Beiträge oft von denen kommen, die zunächst nur eine Frage hatten oder eine Unsicherheit geteilt haben:
+
+- **Nachfragen und Zweifel teilen**: Wer sich fragt, ob das eigene Rechenzentrum überhaupt zu openDesk Edu passt, spricht damit oft ein Thema an, das auch andere beschäftigt. Diese Fragen helfen, das Projekt verständlicher zu machen.
+- **Von den eigenen Realitäten erzählen**: Jede Hochschule hat eigene Rahmenbedingungen – historisch gewachsene Infrastruktur, spezifische Anforderungen, knappe Ressourcen. Diese Geschichten sind nicht „nur" lokale Besonderheiten, sondern zeigen dem Projekt, wo die Praxis von der Theorie abweicht.
+- **Einzelfragen stellen statt alles entscheiden**: Es muss nicht jede Stimme zu jeder Entscheidung gehört werden. Aber: Wer eine konkrete Frage hat – zu einem Dienst, zur Authentifizierung, zum Betrieb – kann sie jederzeit stellen, ohne sich vorher in das gesamte Projekt einarbeiten zu müssen.
+
+Wer sich stärker einbringen möchte, kann Code beitragen, Helm-Charts beisteuern oder bei der Weiterentwicklung der Roadmap mitwirken. Das ist willkommen, aber keine Voraussetzung.
 
 Die Community organisiert sich über quartalsweise Community-of-Practice-Calls; Termine werden im [opendesk-edu-cop-Repository](https://gitlab.com/opendesk-edu/opendesk-edu-cop) veröffentlicht. Der gesamte Quellcode ist auf GitLab unter [gitlab.com/opendesk-edu](https://gitlab.com/opendesk-edu) verfügbar und steht unter der Apache-2.0- bzw. AGPL-3.0-Lizenz.
 
