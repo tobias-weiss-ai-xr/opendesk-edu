@@ -1,3 +1,10 @@
+## [1.16.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.1...v1.16.2) (2026-07-31)
+
+
+### Bug Fixes
+
+* **element:** Update from 1.12.6 to 1.12.8 incl. Synapse update to 1.157.2 including CVE fixes especially relevant for setups configured with open federation; see upstream release notes for details: https://github.com/element-hq/synapse/releases/tag/v1.157.2 ([e2ecf700](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/e2ecf70000ac94baa8e0676a69945b21d3c1becd))
+
 ## [1.16.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.0...v1.16.1) (2026-06-30)
 
 
