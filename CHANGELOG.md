@@ -41,6 +41,13 @@
 * **open-xchange:** Harden Postfix config ([81e1daa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/81e1daa66a9bf9b51b8aa8d1a04f4e8c381ff081))
 * **openproject:** Update from 17.5.1 to 17.6.0 ([c1dd349](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c1dd349f1dae7ac21578c4475a0e62b24a926794))
 
+## [1.16.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.1...v1.16.2) (2026-07-31)
+
+
+### Bug Fixes
+
+* **element:** Update from 1.12.6 to 1.12.8 incl. Synapse update to 1.157.2 including CVE fixes especially relevant for setups configured with open federation; see upstream release notes for details: https://github.com/element-hq/synapse/releases/tag/v1.157.2 ([e2ecf700](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/e2ecf70000ac94baa8e0676a69945b21d3c1becd))
+
 ## [1.16.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.0...v1.16.1) (2026-06-30)
 
 
