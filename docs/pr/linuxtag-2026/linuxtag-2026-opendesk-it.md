@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Panoramica
 
-- **Estensione di openDesk CE** per le università 🏫
+- **Estensione di openDesk** per le università 🏫
 - **Nuovi componenti:**
   - Piattaforme di e-learning (ILIAS, Moodle)
   - Videoconferenza per la didattica (BigBlueButton)

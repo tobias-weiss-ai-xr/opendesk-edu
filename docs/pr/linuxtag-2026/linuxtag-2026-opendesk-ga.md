@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Forbhreathnú
 
-- **Síneadh openDesk CE** do ollscoileanna 🏫
+- **Síneadh openDesk** do ollscoileanna 🏫
 - **Comhpháirteanna Nua:**
   - Córais Bainistíochta Foghlama (ILIAS, Moodle)
   - Comhdhálacha Físe don Mhúinteoireacht (BigBlueButton)

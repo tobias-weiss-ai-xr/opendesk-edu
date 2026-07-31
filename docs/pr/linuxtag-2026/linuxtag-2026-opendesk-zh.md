@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — 概览
 
-- **面向高校的 openDesk CE 扩展** 🏫
+- **面向高校的 openDesk 扩展** 🏫
 - **新组件：**
   - 学习管理系统（ILIAS、Moodle）
   - 教学视频会议（BigBlueButton）

@@ -209,7 +209,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Überblick
 
-- **Erweiterung von openDesk CE** für Hochschulen 🏫
+- **Erweiterung von openDesk** für Hochschulen 🏫
 - **Neue Komponenten:**
   - Lernplattformen (ILIAS, Moodle)
   - Videokonferenzen für die Lehre (BigBlueButton)

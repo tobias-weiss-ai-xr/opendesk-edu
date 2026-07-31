@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Yhteenveto
 
-- **openDesk CE:n laajennus** yliopistoille 🏫
+- **openDesk:n laajennus** yliopistoille 🏫
 - **Uudet Komponentit:**
   - Oppimisalustat (ILIAS, Moodle)
   - Videokonferenssit opetukseen (BigBlueButton)

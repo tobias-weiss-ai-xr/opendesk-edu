@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Áttekintés
 
-- **Az openDesk CE kiterjesztése** egyetemek számára 🏫
+- **Az openDesk kiterjesztése** egyetemek számára 🏫
 - **Új Komponensek:**
   - Tanuláskezelő Rendszerek (ILIAS, Moodle)
   - Oktatási Videókonferencia (BigBlueButton)

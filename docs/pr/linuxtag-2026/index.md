@@ -59,7 +59,7 @@ paginate: true
 
 <div style="font-size: 0.85em;">
 
-**openDesk Edu** ist eine Erweiterung von openDesk Community Edition, die Lern-Management-Systeme und hochschul-spezifische Komponenten für digitale Souveränität an Hochschulen bereitstellt.
+**openDesk Edu** ist eine Erweiterung von openDesk (Vanilla-Version, CE und EE), die Lern-Management-Systeme und hochschul-spezifische Komponenten für digitale Souveränität an Hochschulen bereitstellt.
 
 ## 🎯 Was ist openDesk Edu?
 
