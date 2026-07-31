@@ -11,7 +11,7 @@ sogo:
 
   # External server URL for OIDC redirect_uri construction
   # Falls back to ingress.hosts[0].host if not set
-  serverURL: "https://sogo.opendesk.hrz.uni-marburg.de"
+  serverURL: "https://contacts.opendesk.hrz.uni-marburg.de"
 
   resources:
     requests:
@@ -57,7 +57,7 @@ sogo:
   sieve:
     server: "sieve://dovecot:4190"
 
-  mailDomain: "opendesk.example.com"
+  mailDomain: "opendesk.hrz.uni-marburg.de"
 
   persistence:
     enabled: true
@@ -68,7 +68,7 @@ sogo:
   # OIDC/Keycloak SSO
   oidc:
     enabled: false
-    configUrl: "https://keycloak.opendesk.example.com/realms/opendesk/.well-known/openid-configuration"
+    configUrl: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
     clientId: "sogo"
     # clientSecret is NOT set here — it is managed by the pre-install hook
     # (sync-oidc-secret-job.yaml) which creates the Keycloak client with a
@@ -108,7 +108,7 @@ ingress:
   className: "nginx"
   annotations: {}
   hosts:
-    - host: sogo.opendesk.example.com
+    - host: contacts.opendesk.hrz.uni-marburg.de
       paths:
         - path: /
           pathType: Prefix
