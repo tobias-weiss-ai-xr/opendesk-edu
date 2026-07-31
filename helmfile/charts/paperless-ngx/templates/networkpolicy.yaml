@@ -1,0 +1,79 @@
+{{- if .Values.networkPolicies.enabled }}
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "paperless-ngx.fullname" . }}-ingress
+  labels:
+    {{- include "paperless-ngx.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "paperless-ngx.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+  ingress:
+    {{- range .Values.networkPolicies.ingress }}
+    - from:
+        {{- toYaml .from | nindent 10 }}
+      ports:
+        {{- toYaml .ports | nindent 10 }}
+    {{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "paperless-ngx.fullname" . }}-egress
+  labels:
+    {{- include "paperless-ngx.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "paperless-ngx.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Egress
+  egress:
+    # Allow outbound to PostgreSQL
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+      ports:
+        - port: 5432
+          protocol: TCP
+    # Allow outbound to Redis
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+      ports:
+        - port: 6379
+          protocol: TCP
+    # Allow outbound to Stalwart (IMAP)
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: stalwart
+      ports:
+        - port: 993
+          protocol: TCP
+        - port: 143
+          protocol: TCP
+    # Allow outbound toSeaweedFS
+    - to:
+        - podSelector:
+            matchLabels:
+              app: seaweedfs
+      ports:
+        - port: 8333
+          protocol: TCP
+    # Allow outbound to DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+{{- end -}}

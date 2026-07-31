@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if and .Values.persistence.enabled .Values.persistence.data.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "mayan-edms.fullname" . }}-data
+  labels:
+    {{- include "mayan-edms.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.persistence.data.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- if .Values.backup.enabled }}
+    k8up.io/exclude: "false"
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.data.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.data.size | quote }}
+  storageClassName: {{ .Values.persistence.data.storageClass | quote }}
+---
+{{- end }}
+{{- if and .Values.persistence.enabled .Values.persistence.media.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "mayan-edms.fullname" . }}-media
+  labels:
+    {{- include "mayan-edms.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.persistence.media.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- if .Values.backup.enabled }}
+    k8up.io/exclude: "false"
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.media.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.media.size | quote }}
+  storageClassName: {{ .Values.persistence.media.storageClass | quote }}
+---
+{{- end }}
+{{- if and .Values.persistence.enabled .Values.persistence.index.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "mayan-edms.fullname" . }}-index
+  labels:
+    {{- include "mayan-edms.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.persistence.index.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- if .Values.backup.enabled }}
+    k8up.io/exclude: "false"
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.index.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.index.size | quote }}
+  {{- with .Values.persistence.index.storageClass }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,354 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+---
+# Default values for Paperless-ngx
+
+# Image configuration
+image:
+  repository: ghcr.io/paperless-ngx/paperless-ngx
+  tag: 2.12.0
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+# Replica configuration
+replicaCount: 1
+
+# Image pull secrets for private registries
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Service account configuration
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: true
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 1001
+  runAsUser: 1001
+  runAsNonRoot: true
+
+# Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+  annotations: {}
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "haproxy"
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/proxy-body-size: "200M"
+    haproxy-ingress.github.io/timeout-server: "600s"
+    haproxy-ingress.github.io/timeout-client: "600s"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: "paperless.{{ .Values.global.domain }}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "paperless.{{ .Values.global.domain }}"
+
+# Persistence configuration
+persistence:
+  enabled: true
+  # Data storage for documents and media
+  data:
+    enabled: true
+    size: 100Gi
+    storageClass: "ceph-cephfs-hdd-ec"
+    accessMode: ReadWriteMany
+    annotations: {}
+  # Consume folder for new documents
+  consume:
+    enabled: true
+    size: 50Gi
+    storageClass: "ceph-cephfs-hdd-ec"
+    accessMode: ReadWriteMany
+    annotations: {}
+  # Index storage for search
+  index:
+    enabled: true
+    size: 10Gi
+    storageClass: "ceph-rbd-ssd"
+    accessMode: ReadWriteOnce
+    annotations: {}
+
+# Paperless-ngx configuration
+paperless:
+  # Secret key (generate with: openssl rand -hex 32)
+  secretKey: ""
+  
+  # Admin user configuration
+  admin:
+    username: "admin"
+    password: ""
+    email: "admin@{{ .Values.global.domain }}"
+  
+  # Database configuration
+  database:
+    engine: postgresql
+    host: "paperless-ngx-postgresql"
+    port: 5432
+    name: "paperless"
+    user: "paperless"
+    password: ""
+    existingSecret: "paperless-ngx-database"
+    existingSecretPasswordKey: "postgresql-password"
+  
+  # Redis cache configuration
+  redis:
+    host: "paperless-ngx-redis-master"
+    port: 6379
+    password: ""
+    existingSecret: "paperless-ngx-redis"
+    existingSecretPasswordKey: "redis-password"
+  
+  # OIDC authentication configuration
+  oidc:
+    enabled: false  # Disabled by default, enable in values.yaml.gotmpl
+    issuer: "https://id.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}"
+    clientId: "paperless-ngx"
+    clientSecret: ""
+    existingSecret: "paperless-ngx-oidc"
+    existingSecretClientSecretKey: "client-secret"
+    
+    # OIDC settings
+    signAlgorithm: "RS256"
+    scopes: "openid email profile"
+    usernameClaim: "preferred_username"
+    emailClaim: "email"
+    firstNameClaim: "given_name"
+    lastNameClaim: "family_name"
+  
+  # OCR configuration
+  ocr:
+    enabled: true
+    language: "eng+deu"
+    imageDpi: 300
+    rotatePages: true
+    
+  # Tesseract configuration
+  tesseract:
+    enabled: true
+    languages: "eng+deu+fra+ita+spa"
+    UseTesseract: true
+    
+  # Consumption configuration
+  consume:
+    enabled: true
+    pollInterval: 60  # seconds
+    recursive: true
+    barcode:
+      enabled: true
+      base64: false
+    
+  # Email consumption
+  email:
+    enabled: true
+    imap:
+      enabled: true
+      host: "stalwart-stalwart.opendesk.svc.cluster.local"
+      port: 993
+      ssl: true
+      username: ""
+      password: ""
+      existingSecret: "paperless-ngx-email"
+      mailbox: "INBOX"
+      readOnly: false
+    
+  # GUNICORN configuration
+  gunicorn:
+    workers: 4
+    threads: 2
+    timeout: 120
+    maxRequests: 1000
+    maxRequestsJitter: 50
+  
+  # Celery configuration
+  celery:
+    workers: 2
+    concurrency: 1
+    
+  # Storage configuration (S3-compatible)
+  storage:
+    backend: ""
+    options: {}
+  
+  # S3 storage configuration for SeaweedFS
+  s3Storage:
+    enabled: false
+    bucket_name: "paperless-documents"
+    endpoint_url: "http://seaweedfs-s3.opendesk.svc.cluster.local:8333"
+    access_key: ""
+    secret_key: ""
+    existingSecret: "seaweedfs-credentials"
+    region_name: "us-east-1"
+    signature_version: "s3v4"
+  
+  # Default settings
+  defaultSettings:
+    dateOrder: "DMY"
+    df: "Y-m-d"
+    dfs: "d.m.Y"
+    useStatic: true
+    enableUpdateCheck: false
+    
+  # AI configuration (for automatic classification)
+  ai:
+    enabled: false
+    model: ""
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: ""
+    username: "paperless"
+    password: ""
+    database: "paperless"
+    existingSecret: "paperless-ngx-database"
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: "ceph-rbd-ssd"
+      accessModes:
+        - ReadWriteOnce
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+
+# Redis configuration
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: ""
+    existingSecret: "paperless-ngx-redis"
+  primary:
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClass: "ceph-rbd-ssd"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+# Resource configuration
+resources:
+  requests:
+    cpu: 1
+    memory: 2Gi
+  limits:
+    cpu: 2
+    memory: 4Gi
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Autoscaling configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Pod Disruption Budget
+pdb:
+  enabled: true
+  minAvailable: 1
+
+# Backup configuration
+backup:
+  enabled: true
+  k8up:
+    schedule: "0 2 * * *"
+    retention:
+      daily: 7
+      weekly: 4
+      monthly: 3
+    snapshotVolumes: true
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    path: /metrics
+    port: 8000
+    scrapeTimeout: 30s
+    interval: 60s
+
+# Network policies
+networkPolicies:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: opendesk
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: haproxy-ingress
+      ports:
+        - port: 8000
+          protocol: TCP
+
+# Pod Disruption Budget
+pdb:
+  enabled: true
+  minAvailable: 1
+
+# Additional environment variables
+extraEnv: {}
+
+# Additional volume mounts
+extraVolumeMounts: []
+
+# Additional volumes
+extraVolumes: []
+
+# Host aliases (for HRZ DNS issues)
+hostAliases:
+  - ip: "192.168.3.201"
+    hostnames:
+      - "id.opendesk.hrz.uni-marburg.de"
+      - "files.opendesk.hrz.uni-marburg.de"
+      - "portal.opendesk.hrz.uni-marburg.de"
