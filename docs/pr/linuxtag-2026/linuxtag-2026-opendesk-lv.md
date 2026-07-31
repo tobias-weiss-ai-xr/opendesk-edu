@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Pārskats
 
-- **openDesk CE paplašinājums** universitātēm 🏫
+- **openDesk paplašinājums** universitātēm 🏫
 - **Jauni Komponenti:**
   - Mācību vadības sistēmas (ILIAS, Moodle)
   - Video konferences mācībām (BigBlueButton)

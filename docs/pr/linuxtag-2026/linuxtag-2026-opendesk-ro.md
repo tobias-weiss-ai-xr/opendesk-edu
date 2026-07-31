@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Prezentare Generală
 
-- **Extensie a openDesk CE** pentru universități 🏫
+- **Extensie a openDesk** pentru universități 🏫
 - **Componente Noi:**
   - Sisteme de Management al Învățării (ILIAS, Moodle)
   - Videoconferințe pentru Predare (BigBlueButton)

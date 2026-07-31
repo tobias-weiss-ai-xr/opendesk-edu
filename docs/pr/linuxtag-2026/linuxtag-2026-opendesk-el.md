@@ -149,7 +149,7 @@ python3 dev/charts-local.py --revert
 
 # 🎓 openDesk Edu — Επισκόπηση
 
-- **Επέκταση του openDesk CE** για πανεπιστήμια 🏫
+- **Επέκταση του openDesk** για πανεπιστήμια 🏫
 - **Νέα Συστατικά:**
   - Συστήματα Διαχείρισης Μάθησης (ILIAS, Moodle)
   - Βιντεοδιάσκεψη για Διδασκαλία (BigBlueButton)
