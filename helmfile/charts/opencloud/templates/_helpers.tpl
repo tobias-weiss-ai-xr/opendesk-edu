@@ -33,7 +33,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{- define "opencloud.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "opencloud.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/instance: {{ include "opencloud.fullname" . }}
 {{- end -}}
 
 {{- define "opencloud.serviceAccountName" -}}
