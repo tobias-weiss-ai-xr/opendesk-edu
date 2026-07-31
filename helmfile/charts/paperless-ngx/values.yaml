@@ -59,7 +59,6 @@ ingress:
     haproxy-ingress.github.io/proxy-body-size: "200M"
     haproxy-ingress.github.io/timeout-server: "600s"
     haproxy-ingress.github.io/timeout-client: "600s"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
   hosts:
     - host: "paperless.{{ .Values.global.domain }}"
       paths:
