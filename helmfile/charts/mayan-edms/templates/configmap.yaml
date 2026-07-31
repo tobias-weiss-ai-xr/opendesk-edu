@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mayan-edms.fullname" . }}-config
+  labels:
+    {{- include "mayan-edms.labels" . | nindent 4 }}
+data:
+  # Mayan EDMS settings
+  MAYAN_MEDIA_ROOT: "/var/lib/mayan/media"
+  MAYAN_MEDIA_URL: "/media/"
+  MAYAN_STATIC_ROOT: "/var/lib/mayan/static"
+  MAYAN_STATIC_URL: "/static/"
+  
+  # Document settings
+  MAYAN_DOCUMENT_FILE Task_IP_PREVIEW_MAX_SIZE: "25"
+  MAYAN_DOCUMENT_FILE_TASK_IMAGE_PREVIEW_MAX_SIZE: "2048"
+  MAYAN_DOCUMENT_PAGINATOR_NEXT_NUM_PAGES: "5"
+  MAYAN_DOCUMENT_PAGINATOR_PREVIOUS_NUM_PAGES: "5"
+  
+  # Pagination
+  MAYANpland PAGINATE_BY: "40"
+  
+  # Workflow settings
+  {{- if .Values.mayan.workflows.enabled }}
+  MAYAN_WORKFLOW_DEFAULT_REVIEW_INTERVAL: "{{ .Values.mayan.workflows.defaultReviewInterval }}"
+  MAYAN_WORKFLOW_DEFAULT_DOCUMENT_TYPE: "{{ .Values.mayan.workflows.defaultDocumentType }}"
+  {{- end }}
+  
+  # Metadata types (will be configured via API on startup)
+  MAYAN_METADATA/types.json: |
+    {{- toJson .Values.mayan.metadata.documentTypes | nindent 4 }}
+  
+  # Logging
+  MAYAN_LOGGING_LEVEL: "INFO"
+  MAYAN_LOGGING_FILE_PATH: "/var/log/mayan/mayan.log"
+  
+  # Performance
+  MAYAN_GUNICORN_WORKERS: "{{ .Values.mayan.gunicorn.workers }}"
+  MAYAN_GUNICORN_THREADS: "{{ .Values.mayan.gunicorn.threads }}"
+  MAYAN_GUNICORN_TIMEOUT: "{{ .Values.mayan.gunicorn.timeout }}"
+  MAYAN_GUNICORN_MAX_REQUESTS: "{{ .Values.mayan.gunicorn.maxRequests }}"
+  MAYAN_GUNICORN_MAX_REQUESTS_JITTER: "{{ .Values.mayan.gunicorn.maxRequestsJitter }}"

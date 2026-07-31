@@ -1,0 +1,115 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+# Helm unittest tests for Mayan EDMS deployment
+
+suite: test mayan-edms deployment
+values:
+  - values.yaml
+
+tests:
+  - it: should render deployment with correct image
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].image
+          content: mayanedms/mayanedms:4.5.0
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should have correct labels
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: metadata.labels.app.kubernetes.io/name
+          content: mayan-edms
+      - contains:
+          path: metadata.labels.app.kubernetes.io/instance
+          content: RELEASE-NAME
+
+  - it: should have OIDC environment variables when enabled
+    template: templates/deployment.yaml
+    set:
+      mayan.oidc.enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: SOCIAL_AUTH_OPENIDCONNECT_KEY
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: SOCIAL_AUTH_OPENIDCONNECT_SECRET
+
+  - it: should have database environment variables
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: MAYAN_DATABASE_ENGINE
+            value: django.db.backends.postgresql
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: MAYAN_DATABASE_NAME
+            value: mayan
+
+  - it: should have Redis environment variables
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: MAYAN_REDIS_URL
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: MAYAN_CACHE_BACKEND
+            value: django_redis.cache.RedisCache
+
+  - it: should have security context
+    template: templates/deployment.yaml
+    asserts:
+      - isNull:
+          path: spec.template.spec.containers[0].securityContext.privileged
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+
+  - it: should have liveness probe
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].livenessProbe
+          content:
+            httpGet:
+              path: /health/
+              port: http
+
+  - it: should have readiness probe
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].readinessProbe
+          content:
+            httpGet:
+              path: /health/
+              port: http
+
+  - it: should have volume mounts for data
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: data
+            mountPath: /var/lib/mayan
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: media
+            mountPath: /var/lib/mayan/media
