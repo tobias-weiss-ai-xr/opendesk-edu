@@ -20,5 +20,7 @@ spec:
       storage: {{ .Values.sogo.persistence.size }}
   {{- if .Values.sogo.persistence.storageClass }}
   storageClassName: {{ .Values.sogo.persistence.storageClass }}
+  {{- else }}
+  storageClassName: ceph-rbd-ssd
   {{- end }}
 {{- end }}
