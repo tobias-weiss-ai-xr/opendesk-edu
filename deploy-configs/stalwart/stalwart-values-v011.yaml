@@ -1,0 +1,242 @@
+# Stalwart Mail Server v0.11 Values
+# Use with: helm install stalwart ./charts/stalwart -f stalwart-values-v011.yaml --namespace opendesk
+
+stalwart:
+  # Server configuration
+  serverName: "opendesk-mail"
+  
+  # Image configuration
+  image:
+    registry: docker.io
+    repository: stalwartlabs/mail-server
+    tag: "v0.11.8"
+    pullPolicy: IfNotPresent
+  
+  # Replica count
+  replicaCount: 1
+  
+  # Deployment strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  
+  # Authentication - OIDC
+  auth:
+    oidc:
+      enabled: true
+      issuerUrl: "https://portal.opendesk.hrz.uni-marburg.de/realms/opendesk"
+      clientId: "stalwart"
+      clientSecret: "changeme-stalwart-oidc-secret-replace-me"
+      scope: "openid profile email"
+    
+    fallbackAdmin:
+      username: "admin"
+      passwordHash: "$2y$10$YFjOqBrebL9hXgCJ1p7qVOBwlJ7JQY3i3gxJQrL5Jt6T5t8v2"
+      description: "Stalwart Mail Server Administrator"
+  
+  # Directory - LDAP
+  directory:
+    type: ldap
+    ldap:
+      host: "ums-ldap.opendesk.svc.cluster.local"
+      port: 636
+      baseDn: "dc=uni-marburg,dc=de"
+      bindDn: "cn=admin,dc=uni-marburg,dc=de"
+      bindPassword: "changeme-ldap-password-replace-me"
+      tls:
+        enabled: true
+        skipVerify: true
+  
+  # Listeners configuration
+  listeners:
+    smtp:
+      bind: "[::]:25"
+      protocol: smtp
+      requireAuthentication: false
+    submission:
+      bind: "[::]:587"
+      protocol: submission
+      requireAuthentication: true
+    submissions:
+      bind: "[::]:465"
+      protocol: submissions
+      requireAuthentication: true
+      tls:
+        implicit: true
+    imap:
+      bind: "[::]:143"
+      protocol: imap
+    imaptls:
+      bind: "[::]:993"
+      protocol: imap
+      tls:
+        implicit: true
+    pop3:
+      bind: "[::]:110"
+      protocol: pop3
+    pop3s:
+      bind: "[::]:995"
+      protocol: pop3
+      tls:
+        implicit: true
+    sieve:
+      bind: "[::]:4190"
+      protocol: sieve
+    http:
+      bind: "[::]:8080"
+      protocol: http
+  
+  # TLS configuration
+  tls:
+    enabled: true
+    certificate:
+      certPath: "/etc/ssl/certs/tls.crt"
+      keyPath: "/etc/ssl/private/tls.key"
+  
+  # Storage configuration
+  storage:
+    type: rocksdb
+    dataPath: /opt/stalwart-mail/data
+    blob:
+      type: rocksdb
+      path: /opt/stalwart-mail/data/blob
+  
+  # Logging configuration
+  logging:
+    level: info
+    type: daily
+    path: /opt/stalwart-mail/logs/stalwart.log
+    retentionDays: 30
+  
+  # Rate limiting
+  rateLimit:
+    enabled: true
+    maxMessagesPerSession: 100
+    maxRecipientsPerMessage: 100
+    maxConnectionsPerIp: 50
+  
+  # Health checks
+  healthCheck:
+    enabled: true
+    path: /health
+    port: 8080
+    liveness:
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+    readiness:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    startup:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 5
+      failureThreshold: 30
+  
+  # Ingress configuration
+  ingress:
+    enabled: true
+    ingressClassName: "haproxy"
+    hostname: mail.opendesk.hrz.uni-marburg.de
+    annotations:
+      haproxy-ingress.github.io/ssl-redirect: "true"
+      haproxy-ingress.github.io/timeout-server: "600s"
+      haproxy-ingress.github.io/timeout-client: "600s"
+    tls:
+      enabled: true
+      secretName: opendesk-certificates-tls
+      hosts:
+        - mail.opendesk.hrz.uni-marburg.de
+  
+  # Service configuration
+  service:
+    type: ClusterIP
+    annotations: {}
+    sessionAffinity:
+      enabled: false
+    ports:
+      smtp: 25
+      submission: 587
+      submissions: 465
+      imap: 143
+      imaps: 993
+      pop3: 110
+      pop3s: 995
+      sieve: 4190
+      http: 8080
+  
+  # Persistence
+  persistence:
+    enabled: true
+    size: 20Gi
+    accessMode: ReadWriteOnce
+    storageClass: ceph-rbd-ssd
+    existingClaim: ""
+  
+  # Resources
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+  
+  # Security context
+  podSecurityContext:
+    fsGroup: 0
+    runAsUser: 0
+    runAsGroup: 0
+  
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: false
+    readOnlyRootFilesystem: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
+  
+  # Network policy
+  networkPolicy:
+    enabled: true
+  
+  # Service Account
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
+  
+  # Pod Disruption Budget
+  pdb:
+    enabled: false
+    minAvailable: 1
+    maxUnavailable: 0
+  
+  # Tolerations
+  tolerations: []
+  
+  # Node selector
+  nodeSelector: {}
+  
+  # Affinity
+  affinity: {}
+  
+  # Additional annotations
+  additionalAnnotations: {}
+  
+  # Extra environment variables
+  extraEnvVars: []
+  
+  # Extra volume mounts
+  extraVolumeMounts: []
+  
+  # Extra volumes
+  extraVolumes: []

@@ -1,0 +1,26 @@
+# Unmigrated v0.15 settings
+
+These v0.15 settings were not migrated by the script and must be
+reviewed manually. The list below is grouped by the first two
+segments of the setting key. Each prefix maps to one or more v0.16
+objects; consult UPGRADING/v0_16.md and the v0.16 reference docs
+to identify the equivalent on the new schema.
+
+Total unmigrated keys: 119 across 16 prefixes.
+
+  authentication.fallback-admin      3 keys
+  authentication.oauth2              8 keys
+  directory.internal                 2 keys
+  oauth.key                          1 keys
+  queue.connection                   2 keys
+  queue.limiter                      7 keys
+  queue.quota                        3 keys
+  queue.route                        7 keys
+  queue.schedule                    41 keys
+  queue.tls                          4 keys
+  queue.virtual                      8 keys
+  report.analysis                    1 keys
+  server.listener                   21 keys
+  server.name                        1 keys
+  tracer.log                         7 keys
+  tracer.stdout                      3 keys

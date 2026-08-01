@@ -1,0 +1,70 @@
+# OpenCloud values for production
+image:
+  registry: docker.io
+  repository: opencloudeu/opencloud
+  tag: "4.0.3"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+podSecurityContext:
+  fsGroup: 33
+  runAsUser: 33
+  runAsGroup: 33
+
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi
+
+ingress:
+  enabled: true
+  className: "haproxy"
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/proxy-body-size: "100M"
+    haproxy-ingress.github.io/timeout-server: "600s"
+    haproxy-ingress.github.io/timeout-client: "600s"
+  hosts:
+    - host: "files.opendesk.hrz.uni-marburg.de"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "files.opendesk.hrz.uni-marburg.de"
+
+persistence:
+  enabled: true
+  size: 100Gi
+  storageClass: "ceph-cephfs-hdd-ec"
+  accessModes:
+    - ReadWriteMany
+
+oidc:
+  enabled: true
+  issuer: "https://portal.opendesk.hrz.uni-marburg.de/realms/opendesk"
+  clientId: "opendesk-opencloud"
+  clientSecret: "changeme-opencloud-oidc"
+  discoveryEndpoint: "https://portal.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+
+jwtSecret: "changeme-jwt-secret"
+transferSecret: "changeme-transfer-secret"
+
+php:
+  memoryLimit: "512M"
+  uploadMaxFilesize: "100M"
+  postMaxSize: "100M"
+  maxExecutionTime: 600
