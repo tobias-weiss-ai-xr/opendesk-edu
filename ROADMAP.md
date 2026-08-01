@@ -71,6 +71,11 @@ SAML Service Provider within this federation.
 - [x] Predictable federation metadata (SP) — scripts at `scripts/saml-metadata-generator/` and `scripts/dfn-aai-setup/`
 - [ ] Test with DFN-AAI test federation (`https://www.aai.dfn.de/`)
 
+> **Forward ref:** The current setup brokers DFN-AAI via a Keycloak SAML SP proxy — one hardcoded IdP, SAML only at the edge.
+> The next step toward **unified login** (discovery, any federated IdP, SAML↔OIDC, cross-institution) is a **SATOSA proxy**, tracked in
+> [v5.0 — SATOSA Proxy for Federated Instances](#satosa-proxy-for-federated-instances). It can be pulled forward once the shared
+> evaluation instance / DFN-AAI test federation is running.
+
 ### Semester Lifecycle Management
 
 Universities run on semester cycles (Wintersemester, Sommersemester). Courses, enrollments, and access
@@ -518,11 +523,29 @@ while keeping data separate.
 [SATOSA](https://github.com/IdentityPython/SATOSA) is a SAML/OIDC proxy that enables federated
 identity scenarios — ideal for universities sharing openDesk Edu across federations (eduGAIN, DFN-AAI).
 
-- [ ] Helm chart for SATOSA proxy
+> **Why it matters:** This is the path to **unified login** — one federated identity via DFN-AAI that opens every
+> service, including across institutions. Today Keycloak brokers DFN-AAI as a single hardcoded SAML SP. A SATOSA
+> proxy in front of (or beside) Keycloak adds discovery (route users to their home institution's IdP),
+> SAML↔OIDC translation, and centralized eduPerson attribute harmonization — turning the SP into a genuine
+> federation entry point rather than a point-to-point link.
+
+- [ ] Helm chart for SATOSA proxy (production-ready, within the existing helmfile structure)
 - [ ] SAML-to-OIDC translation for legacy university IdPs
-- [ ] Attribute mapping (eduPerson → Keycloak claims)
-- [ ] Multi-IdP routing (route users to their home institution's IdP)
+- [ ] Attribute mapping (eduPerson → Keycloak claims), harmonized centrally against real, heterogeneous IdP releases
+- [ ] Multi-IdP routing / discovery service (route users to their home institution's IdP)
 - [ ] Integration with existing Keycloak broker setup
+- [ ] End-to-end Single Logout verified through the additional proxy hop (all services)
+
+**Rigorous testing is mandatory — no shortcuts.** Federation bugs surface only against real IdPs:
+
+- [ ] Test against the DFN-AAI test federation (`https://www.aai.dfn.de/`) with multiple institutional IdPs
+- [ ] Validate assertion/ACS handling against real DFN-AAI production metadata
+- [ ] Attribute harmonization validated across real (heterogeneous) institution releases, not just the documented 5+5
+- [ ] Security review of the identity path (signing, encryption, metadata hygiene) before production traffic
+
+**De-risking assets already in place (v1.1):** Keycloak SAML SP proxy pattern, 10 eduGAIN attribute mappers,
+Shibboleth IdP integration, SP metadata generation scripts (`scripts/dfn-aai-setup/`, `scripts/saml-metadata-generator/`),
+bilingual test-federation guide, 1,000+-line troubleshooting runbook, and integration tests with SAML assertion fixtures.
 
 ### Research Data Management
 
