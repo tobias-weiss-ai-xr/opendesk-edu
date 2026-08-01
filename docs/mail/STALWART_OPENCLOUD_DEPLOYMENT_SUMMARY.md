@@ -425,10 +425,10 @@ helmfile -e edu rollback opendesk-opencloud <revision-number>
 
 ## Additional Resources
 
-- [Full Deployment Guide](./opendesk-edu/docs/services-stalwart-opencloud.md)
+- [Full Deployment Guide](../services-stalwart-opencloud.md)
 - [Stalwart Documentation](https://docs.stalwartlabs.com/)
 - [OpenCloud Documentation](https://opencloudeu.github.io/opencloud/)
-- [openDesk Edu Architecture](./opendesk-edu/docs/architecture.md)
+- [openDesk Edu Architecture](../architecture.md)
 
 ## Support
 

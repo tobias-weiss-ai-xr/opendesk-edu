@@ -432,8 +432,8 @@ echo "✅ Should be >= 1"
 - [TLS CA Trust Setup](tls-ca-trust.md)
 - [Internal CA Documentation](internal-ca-docs.md)
 - [Backup & DR Procedures](backup-dr.md)
-- [Nix Deployment Documentation](../articles/nix-shift.md)
-- [ArgoCD ApplicationSet Pattern](../../docs/discussions/argo-appset.md)
+- [Nix Deployment Documentation](https://nix.dev/)
+- [ArgoCD ApplicationSet Pattern](../../docs/discussions/argo-appset-chart-oci.md)
 
 ---
 
