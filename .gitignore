@@ -1,0 +1,43 @@
+# Parent container repo tracks only AGENTS.md and README.md.
+# All sub-projects are maintained in their own git repositories.
+
+# Nested git repositories (each has its own .git/)
+/addon-nextcloud_integration/
+/argocd-opendesk/
+/charts-upgrade-v1.20.1/
+/erprobungskonzept/
+/k8s-mc-mirror/
+/k8up/
+/monitoring/
+/opencode-de-analysis/
+/opendesk/
+/opendesk-collab-dashboard/
+/opendesk-cop/
+/opendesk-dev-agent/
+/opendesk-dev-agent-operator/
+/opendesk-edu/
+/opendesk-edu-landscape/
+/opendesk-edu-spec/
+/opendesk-edu-website/
+/opendesk-helm-charts/
+/opendesk-knowledge/
+/opendesk-kubectl/
+/opendesk-sogo-image/
+/registry/
+/user_import/
+
+# Component directories without their own repo (kept out of the container repo)
+/_archive/
+/certificates/
+/common/
+/demo-namespace/
+/opendesk-compose/
+/passvault/
+
+# Local agent tooling / editor config
+/.github/
+/.hermes/
+/.opencode/
+/.ralph/
+/.sisyphus/
+/.vscode/
