@@ -1,0 +1,132 @@
+================================================================================
+QUICK START: Deploy Stalwart Mail Server + OpenCloud
+================================================================================
+
+REPOSITORY: opendesk_git (openDesk Edu variant)
+
+================================================================================
+STEP 1: Generate All Secrets
+================================================================================
+
+# Stalwart
+STALWART_ADMIN_HASH=$(openssl passwd -6 "your-admin-password")
+STALWART_OIDC_SECRET=$(openssl rand -hex 32)
+LDAP_BIND_PASSWORD="your-ldap-password"
+
+# OpenCloud
+OPENCLOUD_OIDC_SECRET=$(openssl rand -hex 32)
+OPENCLOUD_JWT_SECRET=$(openssl rand -hex 32)
+OPENCLOUD_TRANSFER_SECRET=$(openssl rand -hex 32)
+OPENCLOUD_MACHINE_AUTH_KEY=$(openssl rand -hex 32)
+OPENCLOUD_SYSTEM_USER_KEY=$(openssl rand -hex 32)
+OPENCLOUD_SYSTEM_USER_ID=$(openssl rand -hex 16)
+OPENCLOUD_URL_SIGNING_SECRET=$(openssl rand -hex 32)
+OPENCLOUD_BACKCHANNEL_SECRET=$(openssl rand -hex 32)
+
+================================================================================
+STEP 2: Update Secrets File
+================================================================================
+
+File: ./opendesk-edu/helmfile/environments/edu/secrets.yaml
+
+Replace all "changeme-replace-with-actual-secret" with generated secrets.
+
+================================================================================
+STEP 3: Register OIDC Clients in Keycloak
+================================================================================
+
+1. Stalwart:
+   - Client ID: stalwart
+   - Secret: $STALWART_OIDC_SECRET
+   - Redirect URIs: https://mail.opendesk.hrz.uni-marburg.de/*, https://portal.opendesk.hrz.uni-marburg.de/*
+   - Protocol: openid-connect
+   - Access Type: confidential
+
+2. OpenCloud:
+   - Client ID: opendesk-opencloud
+   - Secret: $OPENCLOUD_OIDC_SECRET
+   - Redirect URIs: https://files.opendesk.hrz.uni-marburg.de/*, https://portal.opendesk.hrz.uni-marburg.de/*
+   - Backchannel Logout URL: https://files.opendesk.hrz.uni-marburg.de/backchannel_logout
+
+================================================================================
+STEP 4: Deploy
+================================================================================
+
+Option A - Deploy Everything (CE + Edu + Stalwart + OpenCloud):
+  cd ./opendesk-edu
+  ./deploy.sh --diff               # Dry run first!
+  ./deploy.sh                      # Deploy for real
+
+Option B - Deploy Only Stalwart + OpenCloud:
+  cd ./opendesk-edu
+  ./scripts/deploy-stalwart-opencloud.sh --diff
+  ./scripts/deploy-stalwart-opencloud.sh
+
+Option C - Deploy Individually:
+  cd ./opendesk-edu
+  ./scripts/deploy-stalwart.sh --diff
+  ./scripts/deploy-stalwart.sh
+  
+  ./scripts/deploy-opencloud.sh --diff
+  ./scripts/deploy-opencloud.sh
+
+================================================================================
+STEP 5: Verify Deployment
+================================================================================
+
+# Check pods
+kubectl get pods -l component=stalwart
+kubectl get pods -l component=opencloud
+
+# Check services
+kubectl get svc stalwart
+kubectl get svc opendesk-opencloud
+
+# Test health endpoints
+curl -k https://mail.opendesk.hrz.uni-marburg.de/api/health
+curl -k https://files.opendesk.hrz.uni-marburg.de/status.php
+
+# View logs
+kubectl logs -f deployment/stalwart
+kubectl logs -f deployment/opendesk-opencloud
+
+================================================================================
+ACCESS YOUR SERVICES
+================================================================================
+
+Stalwart Mail Server:
+  Admin Console: https://mail.opendesk.hrz.uni-marburg.de
+  IMAP:          mail.opendesk.hrz.uni-marburg.de:993
+  SMTP:          mail.opendesk.hrz.uni-marburg.de:465
+
+OpenCloud:
+  Web: https://files.opendesk.hrz.uni-marburg.de
+  
+Both use Keycloak for authentication:
+  Login at: https://portal.opendesk.hrz.uni-marburg.de
+
+================================================================================
+DOCUMENTATION
+================================================================================
+
+Full Guide: ./opendesk-edu/docs/services-stalwart-opencloud.md
+Summary:    ./STALWART_OPENCLOUD_DEPLOYMENT_SUMMARY.md
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+1. Pods crash? Check logs:
+   kubectl logs -f <pod-name>
+   
+2. Secrets wrong? Verify:
+   kubectl get secret opendesk-opencloud-secrets -o yaml
+   kubectl get cm stalwart-config -o yaml
+   
+3. DNS issues? Test:
+   nslookup mail.opendesk.hrz.uni-marburg.de
+   nslookup files.opendesk.hrz.uni-marburg.de
+
+4. More help: See STALWART_OPENCLOUD_DEPLOYMENT_SUMMARY.md
+
+================================================================================

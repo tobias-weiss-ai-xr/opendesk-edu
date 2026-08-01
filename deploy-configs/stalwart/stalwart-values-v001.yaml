@@ -1,0 +1,171 @@
+# Static values for Stalwart Mail Server v0.0.1
+
+stalwart:
+  image:
+    registry: ""
+    repository: stalwartlabs/mail-server
+    tag: "0.0.1"
+    pullPolicy: IfNotPresent
+
+  replicaCount: 1
+
+  auth:
+    oidc:
+      enabled: true
+      issuerUrl: "https://portal.opendesk.hrz.uni-marburg.de/realms/opendesk"
+      clientId: stalwart
+      clientSecret: "changeme-replace-with-actual-stalwart-oidc-client-secret"
+      scope: "openid profile email"
+    
+    fallbackAdmin:
+      username: admin
+      passwordHash: "$2y$10$YFjOqBrebL9hXgCJ1p7qVOBwlJ7JQY3i3gxJQrL5Jt6T5t8v2"
+      description: "Stalwart Mail Server Administrator"
+
+  directory:
+    type: ldap
+    ldap:
+      host: "ums-ldap.opendesk.svc.cluster.local"
+      port: 636
+      baseDn: "dc=uni-marburg,dc=de"
+      bindDn: "cn=admin,dc=uni-marburg,dc=de"
+      bindPassword: "changeme-replace-with-actual-ldap-password"
+      tls:
+        enabled: true
+        skipVerify: true
+
+  listeners:
+    smtp:
+      bind: "[::]:25"
+      protocol: smtp
+    submission:
+      bind: "[::]:587"
+      protocol: submission
+    submissions:
+      bind: "[::]:465"
+      protocol: submissions
+      tls:
+        implicit: true
+    imap:
+      bind: "[::]:143"
+      protocol: imap
+    imaptls:
+      bind: "[::]:993"
+      protocol: imap
+      tls:
+        implicit: true
+    pop3:
+      bind: "[::]:110"
+      protocol: pop3
+    pop3s:
+      bind: "[::]:995"
+      protocol: pop3
+      tls:
+        implicit: true
+    sieve:
+      bind: "[::]:4190"
+      protocol: sieve
+    http:
+      bind: "[::]:8080"
+      protocol: http
+
+  tls:
+    enabled: true
+    certificate:
+      certPath: "/etc/ssl/certs/tls.crt"
+      keyPath: "/etc/ssl/private/tls.key"
+
+  storage:
+    type: rocksdb
+    dataPath: /opt/stalwart/data
+    blob:
+      type: rocksdb
+      path: /opt/stalwart/data/blob
+
+  logging:
+    level: info
+    type: daily
+    path: /opt/stalwart/logs/stalwart.log
+    retentionDays: 30
+
+  rateLimit:
+    enabled: true
+    maxMessagesPerSession: 100
+    maxRecipientsPerMessage: 100
+    maxConnectionsPerIp: 50
+
+  healthCheck:
+    enabled: true
+    path: /health
+    port: 8080
+    liveness:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+    readiness:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    startup:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 5
+      failureThreshold: 60
+
+  ingress:
+    enabled: true
+    ingressClassName: "haproxy"
+    hostname: mail.opendesk.hrz.uni-marburg.de
+    annotations:
+      haproxy-ingress.github.io/ssl-redirect: "true"
+      haproxy-ingress.github.io/timeout-server: "600s"
+    tls:
+      enabled: true
+      secretName: opendesk-certificates-tls
+
+  service:
+    type: ClusterIP
+    annotations: {}
+    sessionAffinity:
+      enabled: false
+
+  persistence:
+    enabled: true
+    size: 20Gi
+    accessMode: ReadWriteOnce
+    storageClass: ceph-rbd-ssd
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+
+  podSecurityContext:
+    fsGroup: 0
+    runAsUser: 0
+    runAsGroup: 0
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: false
+    readOnlyRootFilesystem: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
+
+  networkPolicy:
+    enabled: true
+
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: false
+
+  pdb:
+    enabled: false
