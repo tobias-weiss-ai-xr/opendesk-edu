@@ -1,0 +1,61 @@
+---
+# SOGo 5 Configuration
+# Nix-built image: registry.gitlab.opencode.de/umr/sogo5:latest
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sogo5-config
+  namespace: opendesk
+  labels:
+    app: sogo5
+    app.kubernetes.io/name: sogo5
+    opendesk.org/container-registry: gitlab.opencode.de
+  annotations:
+    opendesk.org/nix-flake: opendesk-nix/sogo/flake.nix
+    opendesk.org/image: registry.gitlab.opencode.de/umr/sogo5:latest
+
+data:
+  # SOGo configuration
+  sogod.conf: |
+    {
+      /* Database configuration for sessions and folders */
+      SOGoProfileURL = "postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo";
+      OCSFolderInfoURL = "postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo";
+      OCSSessionsFolderURL = "postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo";
+      
+      /* Folder settings */
+      OCSEMailDomains = ("opendesk.org");
+      
+      /* Authentication */
+      SOGoUserSources = (
+        {
+          type = ldap;
+          host = "ldap://ldap.opendesk.svc:389";
+          baseDN = "dc=opendesk,dc=org";
+          bindDN = "cn=admin,dc=opendesk,dc=org";
+          bindPassword = "${SOGO_LDAP_BIND_PASSWORD}";
+          idFieldName = uid;
+          UIDFieldName = uid;
+          isAddressBook = YES;
+          displayName = "OpenDesk LDAP";
+          canAuthenticate = YES;
+        }
+      );
+      
+      /* Performance */
+      SOGoMaximumMessageSize = 100; // MB
+      WOWorkersCount = 10;
+      WOMaxThreadsPerWorker = 100;
+      
+      /* Logging */
+      SOGoDebugRequests = NO;
+      SOGoDebugSQLQueries = NO;
+      
+      /* Defaults */
+      SOGoDefaultCalendar = YES;
+      SOGoDefaultAddressBook = YES;
+      SOGoMailCustomFrom = YES;
+    }
+
+---

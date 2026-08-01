@@ -1,0 +1,37 @@
+---
+# SOGo 6 Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo6
+  namespace: opendesk
+  labels:
+    app: sogo6
+    app.kubernetes.io/name: sogo6
+    opendesk.org/container-registry: gitlab.opencode.de
+spec:
+  selector:
+    app: sogo6
+  ports:
+    - name: sogod
+      port: 20000
+      targetPort: 20000
+      protocol: TCP
+  type: ClusterIP
+
+---
+# Headless Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo6-headless
+  namespace: opendesk
+spec:
+  clusterIP: None
+  selector:
+    app: sogo6
+  ports:
+    - port: 20000
+      targetPort: 20000
+      name: sogod

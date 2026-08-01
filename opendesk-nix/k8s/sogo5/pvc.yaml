@@ -1,0 +1,29 @@
+---
+# Persistent Volume Claim for SOGo 5
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sogo5-data
+  namespace: opendesk
+  labels:
+    app: sogo5
+    app.kubernetes.io/name: sogo5
+    opendesk.org/container-registry: gitlab.opencode.de
+
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ceph-cephfs-hdd-ec
+  resources:
+    requests:
+      storage: 10Gi
+  volumeMode: Filesystem
+
+---
+# For RWX (ReadWriteMany) access - CephFS
+# For RWO access (some deployments), use:
+# storageClassName: ceph-rbd-ssd
+# accessModes: [ReadWriteOnce]
+
+---

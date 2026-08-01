@@ -1,0 +1,80 @@
+---
+# RBAC for openDesk Dev Agent
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opendesk-dev-agent
+  namespace: opendesk
+  labels:
+    app: opendesk-dev-agent
+    app.kubernetes.io/name: opendesk-dev-agent
+    opendesk.org/container-registry: gitlab.opencode.de
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opendesk-dev-agent
+  labels:
+    app: opendesk-dev-agent
+    app.kubernetes.io/name: opendesk-dev-agent
+    opendesk.org/container-registry: gitlab.opencode.de
+
+rules:
+  # Pods
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "pods/exec"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Deployments and StatefulSets
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "replicasets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+  # Services
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+  # ConfigMaps and Secrets
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get", "list", "watch"]
+
+  # Events
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+
+  # PersistentVolumeClaims
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch"]
+
+  # Custom Resources
+  - apiGroups: ["opendesk-dev-agent.tobias-weiss-ai-xr.github.com"]
+    resources: ["healthpolicies", "repairstrategies", "healthpolicies/status", "repairstrategies/status"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: opendesk-dev-agent
+  labels:
+    app: opendesk-dev-agent
+    app.kubernetes.io/name: opendesk-dev-agent
+    opendesk.org/container-registry: gitlab.opencode.de
+
+subjects:
+  - kind: ServiceAccount
+    name: opendesk-dev-agent
+    namespace: opendesk
+
+roleRef:
+  kind: ClusterRole
+  name: opendesk-dev-agent
+  apiGroup: rbac.authorization.k8s.io
+
+---

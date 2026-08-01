@@ -1,0 +1,43 @@
+---
+# SOGo 5 Service
+# Exposes SOGo 5 on port 20000 for internal access
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5
+  namespace: opendesk
+  labels:
+    app: sogo5
+    app.kubernetes.io/name: sogo5
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.x"
+    app.kubernetes.io/component: groupware
+    opendesk.org/container-registry: gitlab.opencode.de
+spec:
+  selector:
+    app: sogo5
+  ports:
+    - name: sogod
+      port: 20000
+      targetPort: 20000
+      protocol: TCP
+  type: ClusterIP
+  sessionAffinity: ClientIP
+---
+# Headless Service for DNS-based pod discovery
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5-headless
+  namespace: opendesk
+  labels:
+    app: sogo5
+spec:
+  clusterIP: None
+  selector:
+    app: sogo5
+  ports:
+    - port: 20000
+      targetPort: 20000
+      name: sogod

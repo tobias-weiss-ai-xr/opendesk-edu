@@ -1,0 +1,103 @@
+---
+# SOGo 6 Deployment for openDesk
+# Image: registry.gitlab.opencode.de/umr/sogo6:latest
+# Maintained via Nix: opendesk-nix/sogo/flake.nix
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sogo6
+  namespace: opendesk
+  labels:
+    app: sogo6
+    app.kubernetes.io/name: sogo6
+    app.kubernetes.io/instance: sogo6
+    app.kubernetes.io/version: "6.x"
+    app.kubernetes.io/component: groupware
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: nix
+    opendesk.org/container-registry: gitlab.opencode.de
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: sogo6
+  template:
+    metadata:
+      labels:
+        app: sogo6
+        app.kubernetes.io/name: sogo6
+        app.kubernetes.io/instance: sogo6
+        app.kubernetes.io/version: "6.x"
+      annotations:
+        checksum/config: {{ include "opendesk-nix/k8s/sogo6/configmap.yaml" | sha256sum }}
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: sogo
+          image: registry.gitlab.opencode.de/umr/sogo6:latest
+          imagePullPolicy: Always
+          ports:
+            - name: sogod
+              containerPort: 20000
+              protocol: TCP
+          env:
+            - name: SOGOUserSources
+              value: >-
+                ({type=ldap; host=ldap.opendesk.svc; port=389; 
+                baseDN='dc=opendesk,dc=org'; bindDN='cn=admin,dc=opendesk,dc=org'; 
+                bindPassword='{{ .Values.ldap.bindPassword }}'; 
+                idFieldName='uid'; isAddressBook=YES; })
+            - name: SOGOMemcachedHost
+              value: "memcached.opendesk.svc"
+            - name: LDAPContactInfoAttribute
+              value: "mail"
+            - name: TZ
+              value: "Europe/Berlin"
+            - name: SOGoLanguage
+              value: "German"
+            - name: SOGoTimeZone
+              value: "Europe/Berlin"
+          envFrom:
+            - secretRef:
+                name: sogo6-secrets
+          resources:
+            requests:
+              cpu: 200m
+              memory: 384Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          livenessProbe:
+            tcpSocket:
+              port: 20000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 20000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: sogo-data
+              mountPath: /var/lib/sogo
+            - name: sogo-config
+              mountPath: /etc/sogo
+      volumes:
+        - name: sogo-data
+          persistentVolumeClaim:
+            claimName: sogo6-data
+        - name: sogo-config
+          configMap:
+            name: sogo6-config
+      imagePullSecrets:
+        - name: gitlab-registry-opencode

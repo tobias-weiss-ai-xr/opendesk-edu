@@ -1,0 +1,108 @@
+---
+# openDesk Dev Agent Deployment
+# Image: registry.gitlab.opencode.de/umr/dev-agent:latest
+# Built from: opendesk-dev-agent-operator with Nix
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opendesk-dev-agent
+  namespace: opendesk
+  labels:
+    app: opendesk-dev-agent
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: nix
+    opendesk.org/container-registry: gitlab.opencode.de
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: opendesk-dev-agent
+      control-plane: controller-manager
+  template:
+    metadata:
+      labels:
+        app: opendesk-dev-agent
+        control-plane: controller-manager
+        app.kubernetes.io/name: opendesk-dev-agent
+        app.kubernetes.io/instance: opendesk-dev-agent
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532
+      serviceAccountName: opendesk-dev-agent
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: manager
+          image: registry.gitlab.opencode.de/umr/dev-agent:latest
+          imagePullPolicy: Always
+          args:
+            - --debug
+            - --disable-pi-memory
+            - --watch-namespace=opendesk
+            - --zap-log-level=info
+            - --zap-encoder=console
+            - --leader-elect=false
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "opendesk-dev-agent"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      imagePullSecrets:
+        - name: gitlab-registry-opencode

@@ -1,0 +1,29 @@
+---
+# Kustomize configuration for openDesk Dev Agent
+# Usage: kubectl apply -k opendesk-nix/k8s/dev-agent
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: opendesk-dev-agent
+  namespace: opendesk
+  labels:
+    app: opendesk-dev-agent
+    opendesk.org/container-registry: gitlab.opencode.de
+    opendesk.org/nix-maintained: "true"
+
+namespace: opendesk
+
+resources:
+  - deployment.yaml
+  - rbac.yaml
+
+# For production, you might want to separate RBAC:
+# resources:
+#   - namespace.yaml
+#   - rbac/
+#   - deployment.yaml
+
+# Use with:
+# kubectl apply -k opendesk-nix/k8s/dev-agent

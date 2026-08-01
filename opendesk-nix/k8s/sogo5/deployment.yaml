@@ -1,0 +1,127 @@
+---
+# SOGo 5 Deployment for openDesk
+# Image: registry.gitlab.opencode.de/umr/sogo5:latest
+# Maintained via Nix: opendesk-nix/sogo/flake.nix
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sogo5
+  namespace: opendesk
+  labels:
+    app: sogo5
+    app.kubernetes.io/name: sogo5
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.x"
+    app.kubernetes.io/component: groupware
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: nix
+    opendesk.org/container-registry: gitlab.opencode.de
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: sogo5
+  template:
+    metadata:
+      labels:
+        app: sogo5
+        app.kubernetes.io/name: sogo5
+        app.kubernetes.io/instance: sogo5
+        app.kubernetes.io/version: "5.x"
+      annotations:
+        checksum/config: {{ include "opendesk-nix/k8s/sogo5/config.yaml" | sha256sum }}
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: sogo
+          image: registry.gitlab.opencode.de/umr/sogo5:latest
+          imagePullPolicy: Always
+          ports:
+            - name: sogod
+              containerPort: 20000
+              protocol: TCP
+          env:
+            - name: SOGOUserSources
+              value: >-
+                ({type=ldap; host=ldap.opendesk.svc; port=389; 
+                baseDN='dc=opendesk,dc=org'; bindDN='cn=admin,dc=opendesk,dc=org'; 
+                bindPassword='{{ .Values.ldap.bindPassword }}'; 
+                idFieldName='uid'; isAddressBook=YES; })
+            - name: LDAPContactInfoAttribute
+              value: "mail"
+            - name: TZ
+              value: "Europe/Berlin"
+            - name: SOGoLanguage
+              value: "German"
+            - name: SOGoTimeZone
+              value: "Europe/Berlin"
+            - name: SOGoDefault Calendar
+              value: "YES"
+            - name: SOGoDefault AddressBook
+              value: "YES"
+          envFrom:
+            - secretRef:
+                name: sogo5-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            tcpSocket:
+              port: 20000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            tcpSocket:
+              port: 20000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: sogo-data
+              mountPath: /var/lib/sogo
+            - name: sogo-config
+              mountPath: /etc/sogo
+            - name: sogo-logs
+              mountPath: /var/log/sogo
+      volumes:
+        - name: sogo-data
+          persistentVolumeClaim:
+            claimName: sogo5-data
+        - name: sogo-config
+          configMap:
+            name: sogo5-config
+        - name: sogo-logs
+          emptyDir: {}
+      imagePullSecrets:
+        - name: gitlab-registry-opencode
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - sogo5
+                topologyKey: "kubernetes.io/hostname"
