@@ -485,8 +485,8 @@ All infrastructure is in place. All documentation is complete. The finish line i
 - **Deployment Guide:** [DEPLOY_QUICK_START.md](./DEPLOY_QUICK_START.md)
 - **Implementation Details:** [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)
 - **Troubleshooting:** [ANALYSIS_REPORT.md](./ANALYSIS_REPORT.md)
-- **Automated Fixes:** [./FIX_ISSUES.sh](./FIX_ISSUES.sh)
-- **Interactive Deploy:** [./DEPLOY_NOW.sh](./DEPLOY_NOW.sh)
+- **Automated Fixes:** [../../scripts/FIX_ISSUES.sh](../../scripts/FIX_ISSUES.sh)
+- **Interactive Deploy:** [../../scripts/DEPLOY_NOW.sh](../../scripts/DEPLOY_NOW.sh)
 
 ### Commands
 ```bash
