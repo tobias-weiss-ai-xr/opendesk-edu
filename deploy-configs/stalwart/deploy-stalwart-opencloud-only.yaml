@@ -1,0 +1,29 @@
+---
+# Simplified helmfile for deploying only Stalwart + OpenCloud
+# Use: helmfile -f deploy-stalwart-opencloud-only.yaml sync
+
+repositories:
+  - name: bitnami
+    url: oci://registry-1.docker.io/bitnamicharts
+
+environments:
+  default:
+    values:
+      - opendesk-edu/helmfile/environments/edu/ce-overrides.yaml
+      - opendesk-edu/helmfile/environments/edu/secrets.yaml
+      - opendesk-edu/helmfile/environments/edu/images.yaml
+
+releases:
+  # Stalwart Mail Server
+  - name: stalwart
+    namespace: opendesk
+    chart: opendesk-edu/helmfile/charts/stalwart
+    values:
+      - opendesk-edu/helmfile/apps/edu/stalwart/values.yaml.gotmpl
+
+  # OpenCloud (Nextcloud)
+  - name: opencloud
+    namespace: opendesk
+    chart: opendesk-edu/helmfile/charts/opencloud
+    values:
+      - opendesk-edu/helmfile/apps/edu/opencloud/values.yaml.gotmpl
