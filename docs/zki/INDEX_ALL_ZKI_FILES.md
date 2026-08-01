@@ -338,7 +338,7 @@ opendesk_git/
 | Text | 1 | 2 KB | ~85 | .txt |
 | **Total** | **17** | **~312 KB** | **~11,415** | |
 
-**Note**: [QUICK_START_STALWART_OPENCLOUD.txt](QUICK_START_STALWART_OPENCLOUD.txt) is not part of ZKI implementation.
+**Note**: [QUICK_START_STALWART_OPENCLOUD.txt](../mail/QUICK_START_STALWART_OPENCLOUD.txt) is not part of ZKI implementation.
 
 ---
 
