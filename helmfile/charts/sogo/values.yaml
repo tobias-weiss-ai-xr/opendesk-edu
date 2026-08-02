@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 sogo:
   image:
-    repository: weissto/sogo
-    tag: "bookworm-5.12.9"
-    pullPolicy: Always
+    registry: ghcr.io
+    repository: opendesk-edu/sogo
+    tag: "latest"
+    pullPolicy: IfNotPresent
 
   replicaCount: 1
   workers: 5

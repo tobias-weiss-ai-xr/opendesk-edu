@@ -1,5 +1,5 @@
 { lib }:
-let name = "opendesk-opencloud"; image = "opencloudeu/opencloud"; tag = "4.0.3";
+let name = "opendesk-opencloud"; image = "ghcr.io/opendesk-edu/opencloud"; tag = "4.0.3";
   port = 80;
 in
 [ (lib.deployment { inherit name image tag port; })
