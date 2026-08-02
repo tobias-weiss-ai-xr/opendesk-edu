@@ -4,12 +4,14 @@
 # With self-signed certificates
 
 repositories:
-  - name: bitnami
-    url: https://charts.bitnami.com/bitnami
+  - name: opendesk-edu
+    url: https://ghcr.io/opendesk-edu
   - name: opencloud
     url: https://charts.opencloudeu.com
   - name: stalwart
     url: https://charts.stalwartlabs.com
+  # Note: bitnami charts replaced with GHCR images
+  # bitnami charts are not accessible in air-gapped environments
 
 environments:
   internal:
@@ -57,12 +59,15 @@ releases:
       - name: cert-manager.webhook.enabled
         value: true
 
-  # PostgreSQL
+  # PostgreSQL (using GHCR image instead of bitnami chart)
   - name: postgresql
     namespace: edu
-    chart: bitnami/postgresql
-    version: 13.2.23
+    chart: opendesk-edu/postgresql
+    version: 0.1.0
     values:
+      - image.registry: ghcr.io
+      - image.repository: opendesk-edu/postgresql
+      - image.tag: latest
       - global.postgresql.auth.postgresPassword: {{ .Values.secrets.postgresql.password | quote }}
       - auth.username: sogo
       - auth.password: {{ .Values.secrets.postgresql.sogoPassword | quote }}  
@@ -70,12 +75,15 @@ releases:
       - primary.persistence.size: 20Gi
       - primary.persistence.storageClass: ceph-rbd-ssd
 
-  # Memcached
+  # Memcached (using GHCR image instead of bitnami chart)
   - name: memcached
     namespace: edu
-    chart: bitnami/memcached
-    version: 7.5.0
+    chart: opendesk-edu/memcached
+    version: 0.1.0
     values:
+      - image.registry: ghcr.io
+      - image.repository: opendesk-edu/memcached
+      - image.tag: latest
       - architecture: standalone
       - replicaCount: 1
 
@@ -159,12 +167,15 @@ releases:
       - edu/stalwart
       - edu/opencloud
 
-  # Keycloak (Identity Provider)
+  # Keycloak (Identity Provider) - using GHCR image
   - name: keycloak
     namespace: educ
-    chart: bitnami/keycloak
-    version: 12.0.0
+    chart: opendesk-edu/keycloak
+    version: 0.1.0
     values:
+      - image.registry: ghcr.io
+      - image.repository: opendesk-edu/supplier/univention/keycloak
+      - image.tag: "26.7.0"
       - auth.adminUser: admin
       - auth.adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
       - service.type: ClusterIP
@@ -188,9 +199,12 @@ releases:
 
   - name: keycloak-db
     namespace: edu
-    chart: bitnami/postgresql
-    version: 13.2.23
+    chart: opendesk-edu/postgresql
+    version: 0.1.0
     values:
+      - image.registry: ghcr.io
+      - image.repository: opendesk-edu/postgresql
+      - image.tag: latest
       - global.postgresql.auth.postgresPassword: {{ .Values.secrets.postgresql.password | quote }}
       - auth.username: keycloak
       - auth.password: {{ .Values.secrets.keycloak.dbPassword | quote }}

@@ -49,7 +49,7 @@ spec:
             name: {{ include "opencloud.fullname" . }}-ldap-schema
       containers:
         - name: kubectl
-          image: bitnami/kubectl:1.30
+          image: ghcr.io/opendesk-edu/kubectl:1.30
           volumeMounts:
             - name: schema-ldif
               mountPath: /ldif
