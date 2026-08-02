@@ -200,6 +200,24 @@ entries:
       de: Cloud-Dateispeicher und Synchronisation
     url: "https://opencloud.{{ .Values.global.domain }}"
 
+  - id: mayan-edms
+    displayName:
+      en: Mayan EDMS
+      de: Mayan EDMS
+    description:
+      en: Document Management System
+      de: Dokumentenmanagement-System
+    url: "https://mayan.{{ .Values.global.domain }}"
+
+  - id: paperless-ngx
+    displayName:
+      en: Paperless-ngx
+      de: Paperless-ngx
+    description:
+      en: Document Archiving with OCR
+      de: Dokumentenarchivierung mit OCR
+    url: "https://paperless.{{ .Values.global.domain }}"
+
 ldap:
   baseDn: {{ .Values.ldap.baseDn | default "dc=swp-ldap,dc=internal" | quote }}
   adminDn: {{ .Values.ldap.adminDn | default "cn=admin,dc=swp-ldap,dc=internal" | quote }}

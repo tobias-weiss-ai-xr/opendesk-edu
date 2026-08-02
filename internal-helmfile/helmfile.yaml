@@ -1,0 +1,204 @@
+# Internal OpenDesk EDU Helmfile
+# Deploys minimal stack: OpenCloud, Stalwart, SOGo
+# Using internal DNS: *.opendesk.internal
+# With self-signed certificates
+
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+  - name: opencloud
+    url: https://charts.opencloudeu.com
+  - name: stalwart
+    url: https://charts.stalwartlabs.com
+
+environments:
+  internal:
+    values:
+      - values-internal.yaml
+
+releases:
+  # Certificates first
+  {{ if eq .Environment.Name "internal" }}
+  - name: cert-manager
+    namespace: cert-manager
+    chart: bitnami/cert-manager
+    version: v0.11.0
+    values:
+      - installCRDs: true
+    needs:
+      - cert-manager/cert-manager-cainjector
+      - cert-manager/cert-manager-webhook
+
+  - name: cert-manager-cainjector
+    namespace: cert-manager
+    chart: bitnami/cert-manager
+    version: v0.11.0
+    values:
+      - installCRDs: true
+    set:
+      - name: cert-manager.cainjector.enabled
+        value: true
+      - name: cert-manager.enabled
+        value: false
+      - name: cert-manager.webhook.enabled
+        value: false
+
+  - name: cert-manager-webhook
+    namespace: cert-manager
+    chart: bitnami/cert-manager
+    version: v0.11.0
+    values:
+      - installCRDs: true
+    set:
+      - name: cert-manager.enabled
+        value: false
+      - name: cert-manager.cainjector.enabled
+        value: false
+      - name: cert-manager.webhook.enabled
+        value: true
+
+  # PostgreSQL
+  - name: postgresql
+    namespace: edu
+    chart: bitnami/postgresql
+    version: 13.2.23
+    values:
+      - global.postgresql.auth.postgresPassword: {{ .Values.secrets.postgresql.password | quote }}
+      - auth.username: sogo
+      - auth.password: {{ .Values.secrets.postgresql.sogoPassword | quote }}  
+      - auth.database: sogo
+      - primary.persistence.size: 20Gi
+      - primary.persistence.storageClass: ceph-rbd-ssd
+
+  # Memcached
+  - name: memcached
+    namespace: edu
+    chart: bitnami/memcached
+    version: 7.5.0
+    values:
+      - architecture: standalone
+      - replicaCount: 1
+
+  # OpenCloud (Nextcloud)
+  - name: opencloud
+    namespace: edu
+    chart: opencloud/opencloud
+    version: 4.0.3
+    values:
+      - image.iteration: "4.0.3"
+      - ingress.enabled: true
+      - ingress.className: "haproxy"
+      - ingress.hosts[0].host: files.opendesk.internal
+      - ingress.tls[0].hosts[0]: files.opendesk.internal
+      - ingress.tls[0].secretName: opendesk-internal-tls
+      - persistence.enabled: true
+      - persistence.size: 100Gi
+      - persistence.storageClass: ceph-cephfs-hdd-ec
+      - oidc.issuer: "http://keycloak.educ.svc.cluster.local:8080/realms/opendesk"
+      - oidc.clientId: opendesk-opencloud
+      - oidc.clientSecret: "2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577"
+    needs:
+      - edu/postgresql
+      - edu/memcached
+
+  # Stalwart (Mail Server)
+  - name: stalwart
+    namespace: edu
+    chart: stalwart/stalwart
+    version: 0.16.15
+    values:
+      - replicaCount: 1
+      - auth.oidc.enabled: true
+      - auth.oidc.issuerUrl: "http://keycloak.educ.svc.cluster.local:8080/realms/opendesk"
+      - auth.oidc.clientId: stalwart
+      - auth.oidc.clientSecret: "4a312df6bfb2c74cd73e895a09818ca2e58f51a1c1b5db906224780542c97b85"
+      - auth.oidc.scope: "openid profile email"
+      - auth.fallbackAdmin.username: admin
+      - auth.fallbackAdmin.passwordHash: "$6$MDMOV/WEg1xC.Cpc$5ogGNgcBj6fvc5aDZ9KzNOkJrng9uwhyBQhfNSuyYfG4U8oi38bM3e33qCJZLb9Wgar7GdquuDgeNaU0ovS2I/"
+      - auth.fallbackAdmin.description: "Stalwart Mail Server Administrator"
+      - ingress.enabled: true
+      - ingress.hostname: mail.opendesk.internal
+      - ingress.ingressClassName: haproxy
+      - persistence.enabled: true
+      - persistence.size: 20Gi
+      - persistence.storageClass: ceph-rbd-ssd
+      - storage.blob.type: filesystem
+    needs:
+      - edu/postgresql
+      - edu/memcached
+
+  # SOGo (Groupware)
+  - name: sogo
+    namespace: edu
+    chart: opendesk/sogo
+    version: 1.0.0
+    values:
+      - db.host: postgresql
+      - db.port: 5432
+      - db.user: sogo
+      - db.password: {{ .Values.secrets.postgresql.sogoPassword | quote }}
+      - db.name: sogo
+      - imap.server: imaps://stalwart:993
+      - smtp.server: smtp://stalwart:587
+      - sieve.server: sieve://stalwart:4190
+      - mailDomain: opendesk.internal
+      - ingress.enabled: true
+      - ingress.hosts[0].host: contacts.opendesk.internal
+      - ingress.className: haproxy
+      - oidc.enabled: true
+      - oidc.configUrl: "http://keycloak.educ.svc.cluster.local:8080/realms/opendesk/.well-known/openid-configuration"
+      - oidc.clientId: sogo
+      - oidc.scope: "openid profile email"
+      - opencloud.enabled: true
+      - opencloud.url: https://files.opendesk.internal
+      - memcachedHost: memcached:11211
+      - timezone: Europe/Berlin
+    needs:
+      - edu/postgresql
+      - edu/memcached
+      - edu/stalwart
+      - edu/opencloud
+
+  # Keycloak (Identity Provider)
+  - name: keycloak
+    namespace: educ
+    chart: bitnami/keycloak
+    version: 12.0.0
+    values:
+      - auth.adminUser: admin
+      - auth.adminPassword: {{ .Values.secrets.keycloak.adminPassword | quote }}
+      - service.type: ClusterIP
+      - httpRelativePath: /auth
+      - ingress.enabled: false  # Use internal service name
+      - postgresql.enabled: false
+      - externalDatabase.host: postgresql.edu.svc.cluster.local
+      - externalDatabase.port: 5432
+      - externalDatabase.user: keycloak
+      - externalDatabase.password: {{ .Values.secrets.keycloak.dbPassword | quote }}
+      - externalDatabase.database: keycloak
+      - extraEnvVars:
+          - name: KEYCLOAK_FRONTEND_URL
+            value: http://keycloak.educ.svc.cluster.local:8080/auth
+          - name: PROXY_ADDRESS_FORWARDING
+            value: "true"
+          - name: KEYCLOAK_HOSTNAME
+            value: keycloak.educ.svc.cluster.local
+    needs:
+      - edu/postgresql
+
+  - name: keycloak-db
+    namespace: edu
+    chart: bitnami/postgresql
+    version: 13.2.23
+    values:
+      - global.postgresql.auth.postgresPassword: {{ .Values.secrets.postgresql.password | quote }}
+      - auth.username: keycloak
+      - auth.password: {{ .Values.secrets.keycloak.dbPassword | quote }}
+      - auth.database: keycloak
+      - auth.postgresPassword: {{ .Values.secrets.postgresql.password | quote }}
+      - primary.persistence.size: 10Gi
+      - primary.persistence.storageClass: ceph-rbd-ssd
+    needs:
+      - cert-manager/cert-manager
+
+  {{ end }}

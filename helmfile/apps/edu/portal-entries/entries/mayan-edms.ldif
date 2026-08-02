@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+# LDIF file for Mayan EDMS portal entry
+
+dn: cn=mayan-edms,ou=portals,dc=opendesk,dc=edu
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: mayan-edms
+ou: portals
+description: Mayan EDMS - Document Management System
+roleOccupant: cn=mayan-edms,ou=applications,dc=opendesk,dc=edu
+
+# Application entry
+dn: cn=mayan-edms,ou=applications,dc=opendesk,dc=edu
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: mayan-edms
+ou: applications
+roleOccupant: uid=mayan-edms-service,ou=services,dc=opendesk,dc=edu
+
+# Service account
+dn: uid=mayan-edms-service,ou=services,dc=opendesk,dc=edu
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+uid: mayan-edms-service
+sn: Service
+givenName: Mayan EDMS
+cn: Mayan EDMS Service
+displayName: Mayan EDMS
+mail: mayan-edms@opendesk.example.com
+userPassword:: <hashed-password>

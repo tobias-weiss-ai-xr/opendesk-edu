@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "mayan-edms"
+    chart: "../../../charts/mayan-edms"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.mayanEdms }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.mayanEdms.enabled | default false }}
+    timeout: 1800
+
+commonLabels:
+  deployStage: "050-components"
+  component: "mayan-edms"

@@ -1,0 +1,877 @@
+# SPDX-FileCopyrightText: 2026 openDesk Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# Security Values for openDesk Edu
+# ZKI IT-Grundschutz-Profil aligned security configuration
+
+---
+# Kyverno Policies Configuration
+kyverno:
+  enabled: true
+  
+  # Policy enforcement mode
+  # Options: enforce, audit, simulate
+  enforcement:
+    podSecurity: enforce      # P0 Critical policies
+    networkSecurity: enforce  # P0 Critical policies
+    accessControl: enforce    # P0 Critical policies
+    dataProtection: enforce   # P0 Critical policies
+    logging: audit            # P1 High policies (transition to enforce)
+    applicationSecurity: audit # P1 High policies
+    compliance: audit         # P2 Medium policies
+  
+  # Excluded namespaces (system components)
+  excludedNamespaces:
+    - kube-system
+    - kube-public
+    - kube-node-lease
+    - kyverno
+    - logging
+    - monitoring
+    - ingress-nginx
+    - traefik
+
+---
+# Audit Logging Configuration
+audit:
+  enabled: true
+  
+  # Audit log configuration
+  log:
+    # Log level: None, Metadata, Request, RequestResponse
+    level: RequestResponse
+    
+    # Log file path
+    path: /var/log/kubernetes/audit.log
+    
+    # Maximum log size (MB)
+    maxSize: 100
+    
+    # Maximum number of old log files
+    maxAge: 30
+    
+    # Compress old log files
+    compress: true
+  
+  # Audit policy rules
+  policy:
+    # Log all requests to secrets
+    - level: RequestResponse
+      resources:
+        - group: ""
+          resources: ["secrets", "configmaps"]
+    
+    # Log all authentication requests
+    - level: RequestResponse
+      resources:
+        - group: ""
+          resources: ["serviceaccounts", "serviceaccounttokens"]
+      verbs: ["create", "update", "delete"]
+    
+    # Log all RBAC changes
+    - level: RequestResponse
+      resources:
+        - group: rbac.authorization.k8s.io
+          resources: ["roles", "clusterroles", "rolebindings", "clusterrolebindings"]
+    
+    # Log all pod changes
+    - level: Request
+      resources:
+        - group: ""
+          resources: ["pods"]
+    
+    # Log all namespace changes
+    - level: Request
+      resources:
+        - group: ""
+          resources: ["namespaces"]
+
+---
+# Security Headers Configuration
+securityHeaders:
+  enabled: true
+  
+  # Default security headers
+  default:
+    # HTTP Strict Transport Security
+    strictTransportSecurity: "max-age=63072000; includeSubDomains; preload"
+    
+    # X-Content-Type-Options
+    xContentTypeOptions: "nosniff"
+    
+    # X-Frame-Options
+    xFrameOptions: "DENY"
+    
+    # X-XSS-Protection
+    xXssProtection: "1; mode=block"
+    
+    # Content Security Policy
+    contentSecurityPolicy: >-
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;
+      style-src 'self' 'unsafe-inline' https:;
+      img-src 'self' data: https:;
+      font-src 'self' https:;
+      connect-src 'self' https:;
+      frame-src 'none';
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self' https:;
+      upgrade-insecure-requests;
+    
+    # Referrer Policy
+    referrerPolicy: "strict-origin-when-cross-origin"
+    
+    # Permissions Policy
+    permissionsPolicy: >-
+      geolocation=(),
+      microphone=(),
+      camera=(),
+      payment=(),
+      usb=(),
+      vr=()
+    
+    # Additional headers
+    additionalHeaders: |
+      Server: openDesk
+      Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
+      Pragma: no-cache
+      Expires: 0
+
+---
+# Network Policies Configuration
+network:
+  enabled: true
+  
+  # Default deny policy
+  defaultDeny:
+    enabled: true
+    
+    # Deny all ingress by default
+    denyIngress: true
+    
+    # Deny all egress by default (for sensitive namespaces)
+    denyEgress: false
+    sensitiveNamespaces:
+      - database
+      - auth
+      - secrets
+  
+  # Egress filtering
+  egress:
+    # Allow DNS (UDP 53)
+    allowDns: true
+    dnsServers:
+      - 137.248.21.22
+      - 137.248.1.5
+      - 137.248.1.8
+    
+    # Allow HTTP/HTTPS to internet
+    allowInternetHttp: true
+    
+    # Allow NTP
+    allowNtp: true
+    ntpServers:
+      - pool.ntp.org
+    
+    # Allow SMTP
+    allowSmtp: true
+    smtpServers:
+      - mx.uni-marburg.de
+    
+    # Custom egress rules
+    customRules:
+      - name: allow-hrz-services
+        destinations:
+          - 192.168.3.0/24
+        ports:
+          - protocol: TCP
+            port: 443
+  
+  # Ingress filtering
+  ingress:
+    # Only allow from trusted sources
+    trustedSources:
+      - 192.168.0.0/16  # Internal network
+      - 10.0.0.0/8      # Other internal
+      - 172.16.0.0/12   # More internal
+    
+    # Allow from cloudflare IPs (for CDN)
+    allowCloudflare: false
+    cloudflareIps:
+      - 173.245.48.0/20
+      - 103.21.244.0/22
+      - 103.22.200.0/22
+      - 103.31.4.0/22
+      - 141.101.64.0/18
+      - 108.162.192.0/18
+      - 190.93.240.0/20
+      - 188.114.96.0/20
+      - 197.234.240.0/22
+      - 198.41.128.0/17
+      - 162.158.0.0/15
+      - 104.16.0.0/13
+      - 104.24.0.0/14
+      - 172.64.0.0/13
+      - 131.0.72.0/22
+
+---
+# Pod Security Configuration
+podSecurity:
+  enabled: true
+  
+  # Pod Security Admission (PSA) enforcement
+  psa:
+    enforce: "baseline"
+    enforce-version: "latest"
+    audit: "restricted"
+    audit-version: "latest"
+    warn: "privileged"
+    warn-version: "latest"
+  
+  # Additional security contexts
+  securityContext:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    
+  # Capabilities
+  capabilities:
+    drop:
+      - ALL
+    add: []  # No additional capabilities by default
+    
+  # Seccomp profile
+  seccompProfile:
+    type: RuntimeDefault
+  
+  # AppArmor profile (if available)
+  appArmorProfile: runtime/default
+  
+  # SELinux options
+  selinux:
+    enabled: false  # Disabled in K3s by default
+
+---
+# Data Protection Configuration
+dataProtection:
+  enabled: true
+  
+  # Encryption
+  encryption:
+    atRest: true
+    inTransit: true
+    
+    # Storage classes with encryption
+    encryptedStorageClasses:
+      - ceph-rbd-ssd-crypt
+      - ceph-cephfs-hdd-ec-crypt
+    
+    # Enable encryption for new PVCs
+    enableForNewPvcs: true
+  
+  # Data classification
+  classification:
+    enabled: true
+    
+    # Default classification for new resources
+    default: internal
+    
+    # Classification levels
+    levels:
+      - public
+      - internal
+      - confidential
+      - restricted
+      - top-secret
+    
+    # Retention periods by classification
+    retention:
+      public: "30 days"
+      internal: "1 year"
+      confidential: "7 years"
+      restricted: "10 years"
+      top-secret: "30 years"
+  
+  # Backup configuration
+  backup:
+    enabled: true
+    
+    # k8up configuration
+    k8up:
+      schedule: "backup-live"
+      namespace: default
+      
+      # Exclude RWO PVCs from default backup
+      excludeRwoPvcs: true
+      rwoPvcSelector:
+        matchLabels:
+          k8up.io/exclude: "true"
+      
+      # Backup retention
+      retention:
+        daily: 7
+        weekly: 4
+        monthly: 12
+        yearly: 5
+
+---
+# Logging Configuration
+logging:
+  enabled: true
+  
+  # Centralized logging
+  centralized:
+    enabled: true
+    provider: loki
+    
+    # Loki configuration
+    loki:
+      namespace: logging
+      service: loki
+      port: 3100
+    
+    # Promtail configuration
+    promtail:
+      enabled: true
+      image: grafana/promtail
+      tag: latest
+      
+      # Scrape all pods by default
+      scrapeAll: true
+      
+      # Excluded namespaces
+      excludedNamespaces:
+        - kube-system
+        - logging
+      
+      # Relabeling configuration
+      relabel:
+        # Add namespace label
+        - source_labels: [__meta_kubernetes_namespace]
+          target_label: namespace
+        
+        # Add pod name label
+        - source_labels: [__meta_kubernetes_pod_name]
+          target_label: pod
+        
+        # Add container name label
+        - source_labels: [__meta_kubernetes_pod_container_name]
+          target_label: container
+        
+        # Add app label
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          target_label: app
+
+  # Audit logging
+  audit:
+    enabled: true
+    retention: 7 years  # BSI IT-Grundschutz requirement
+    
+  # Application logging
+  application:
+    level: info
+    format: json
+    
+    # Log fields to include
+    fields:
+      timestamp: true
+      level: true
+      message: true
+      namespace: true
+      pod: true
+      container: true
+      node: true
+      user: true
+      requestId: true
+      sessionId: true
+
+---
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  
+  # Prometheus configuration
+  prometheus:
+    enabled: true
+    namespace: monitoring
+    
+    # Scrape interval
+    scrapeInterval: 15s
+    
+    # Evaluation interval
+    evaluationInterval: 30s
+    
+    # Scrape timeout
+    scrapeTimeout: 10s
+    
+    # Retention
+    retention: 90d
+    
+    # Storage
+    storage:
+      size: 100Gi
+      class: ceph-rbd-ssd
+  
+  # Grafana configuration
+  grafana:
+    enabled: true
+    namespace: monitoring
+    
+    # Admin credentials (should be in secrets)
+    admin:
+      username: admin
+      # password: CHANGE_ME (use secrets)
+    
+    # Dashboards
+    dashboards:
+      security: true
+      compliance: true
+  
+  # Alerting
+  alerting:
+    enabled: true
+    
+    # Alertmanager configuration
+    alertmanager:
+      namespace: monitoring
+      
+      # Receivers
+      receivers:
+        - name: security-team
+          email: security@opendesk.hrz.uni-marburg.de
+          slack: "#security-alerts"
+          pagerduty: "security-pagerduty"
+        
+        - name: devops-team
+          email: devops@opendesk.hrz.uni-marburg.de
+          slack: "#devops-alerts"
+    
+    # Alert rules
+    rules:
+      # Security alerts
+      - name: security-auth-failures
+        condition: rates wk ratio 0.05
+        severity: high
+        receiver: security-team
+        
+      - name: security-unauthorized-access
+        condition: any empty false
+        severity: critical
+        receiver: security-team
+        
+      - name: security-policy-violation
+        condition: any empty false
+        severity: warning
+        receiver: security-team
+        
+      # System alerts
+      - name: system-high-cpu
+        condition: cpu usage ratio 0.9
+        severity: warning
+        receiver: devops-team
+        
+      - name: system-high-memory
+        condition: memory usage ratio 0.9
+        severity: warning
+        receiver: devops-team
+        
+      - name: system-disk-full
+        condition: disk usage ratio 0.9
+        severity: critical
+        receiver: devops-team
+
+---
+# Compliance Configuration
+compliance:
+  enabled: true
+  
+  # BSI IT-Grundschutz
+  bsi:
+    enabled: true
+    
+    # Modules to implement
+    modules:
+      - ISMS
+      - ORP
+      - CON
+      - OPS
+      - INF.1
+      - INF.2
+      - INF.5
+      - INF.6
+      - INF.12
+      - INF.14
+      - INF.18
+      - DS
+      - NET
+  
+  # ZKI IT-Grundschutz-Profil
+  zki:
+    enabled: true
+    
+    # University-specific requirements
+    requirements:
+      - federated-identity
+      - student-data-protection
+      - research-data-handling
+      - decentralized-administration
+      - open-collaboration
+    
+    # Target compliance level
+    targetCompliance: 90%
+  
+  # ISO 27001
+  iso27001:
+    enabled: false  # Only if pursuing ISO certification
+    alignment: true  # Align with ISO 27001
+  
+  # DSGVO/GDPR
+  dsgvo:
+    enabled: true
+    
+    # Data protection officer
+    dpo:
+      name: "[To be assigned]"
+      email: dpo@uni-marburg.de
+    
+    # Required for DSGVO
+    requirements:
+      - data-encryption
+      - access-controls
+      - audit-logging
+      - data-classification
+      - retention-policies
+      - breach-notification
+
+---
+# Vulnerability Management
+vulnerability:
+  enabled: true
+  
+  # Scanning
+  scanning:
+    enabled: true
+    
+    # Trivy configuration
+    trivy:
+      enabled: true
+      image: aquasec/trivy
+      tag: latest
+      
+      # Scan targets
+      targets:
+        - images
+        - filesystems
+        - dependencies
+      
+      # Scan frequency
+      frequency:
+        onPush: true
+        daily: true
+        weekly: false
+      
+      # Severity levels to report
+      severities:
+        - CRITICAL
+        - HIGH
+        - MEDIUM
+        - LOW
+      
+      # Ignore vulnerabilities (temporarily)
+      ignore:
+        # Example: ignore a known false positive
+        # - CVE-2021-12345
+        
+      # Exit code behavior
+      exitCode:
+        critical: 1
+        high: 1
+        medium: 0
+        low: 0
+  
+  # Reporting
+  reporting:
+    enabled: true
+    
+    # Report formats
+    formats:
+      - json
+      - html
+      - sarif
+    
+    # Report recipients
+    recipients:
+      - security@opendesk.hrz.uni-marburg.de
+    
+    # Report storage
+    storage:
+      enabled: true
+      path: /reports/vulnerability
+      retention: 90d
+
+---
+# Incident Response
+incidentResponse:
+  enabled: true
+  
+  # Incident Response Team
+  irt:
+    manager: "[To be assigned]"
+    members:
+      - "[To be assigned]"
+    
+    # Contact information
+    contact:
+      email: incident@opendesk.hrz.uni-marburg.de
+      phone: "+49-xxx-xxxx"
+      slack: "#incident-response"
+  
+  # Classification levels
+  classification:
+    levels:
+      - name: Critical
+        value: 0
+        responseTime: "15 minutes"
+        escalation: "24/7"
+      
+      - name: High
+        value: 1
+        responseTime: "1 hour"
+        escalation: "Business hours + on-call"
+      
+      - name: Medium
+        value: 2
+        responseTime: "4 hours"
+        escalation: "Business hours"
+      
+      - name: Low
+        value: 3
+        responseTime: "24 hours"
+        escalation: "Business hours"
+  
+  # Escalation paths
+  escalation:
+    - level: 0
+      notify:
+        - irt
+        - management
+        - on-call
+      method:
+        - phone
+        - sms
+        - slack
+    
+    - level: 1
+      notify:
+        - irt
+        - management
+      method:
+        - phone
+        - slack
+    
+    - level: 2
+      notify:
+        - irt
+      method:
+        - slack
+    
+    - level: 3
+      notify:
+        - irt delegate
+      method:
+        - slack
+
+---
+# Business Continuity
+businessContinuity:
+  enabled: true
+  
+  # Disaster Recovery
+  disasterRecovery:
+    enabled: true
+    
+    # RPO and RTO targets
+    targets:
+      - service: authentication
+        rpo: 15m
+        rto: 1h
+        priority: critical
+      
+      - service: database
+        rpo: 15m
+        rto: 1h
+        priority: critical
+      
+      - service: storage
+        rpo: 1h
+        rto: 4h
+        priority: high
+      
+      - service: kubernetes
+        rpo: 15m
+        rto: 2h
+        priority: critical
+      
+      - service: applications
+        rpo: 15m
+        rto: 2h
+        priority: high
+  
+  # Backup schedule
+  backup:
+    full: "0 2 * * 0"  # Weekly on Sunday at 2 AM
+    incremental: "0 2 * * *"  # Daily at 2 AM
+    
+    # Retention
+    retention:
+      daily: 7
+      weekly: 4
+      monthly: 12
+      yearly: 5
+  
+  # Testing
+  testing:
+    tabletop: "0 9 1 */3 *"  # Quarterly at 9 AM on the 1st
+    failover: "0 9 1 */6 *"  # Semi-annually at 9 AM on the 1st
+    fullDr: "0 9 1 1 *"  # Annually at 9 AM on January 1st
+
+---
+# Security Awareness
+securityAwareness:
+  enabled: true
+  
+  # Training
+  training:
+    # All staff
+    allStaff:
+      frequency: annual
+      duration: 1h
+      topics:
+        - password-security
+        - phishing-awareness
+        - data-protection
+        - incident-reporting
+    
+    # Administrators
+    administrators:
+      frequency: semi-annual
+      duration: 2h
+      topics:
+        - secure-configuration
+        - access-control
+        - monitoring
+        - incident-response
+    
+    # Developers
+    developers:
+      frequency: semi-annual
+      duration: 2h
+      topics:
+        - secure-coding
+        - dependency-management
+        - code-review
+        - security-testing
+  
+  # Phishing simulation
+  phishing:
+    enabled: true
+    frequency: quarterly
+    difficulty: medium
+    
+    # Target groups
+    targetGroups:
+      - all-staff
+      - administrators
+    
+    # Metrics
+    metrics:
+      - clickRate
+      - credentialSubmissionRate
+      - reportingRate
+  
+  # Newsletter
+  newsletter:
+    enabled: true
+    frequency: monthly
+    topics:
+      - security-updates
+      - best-practices
+      - incident-summaries
+      - policy-changes
+
+---
+# Ruby on Rails specific configuration (for some openDesk services)
+rails:
+  enabled: false  # Only enable if Rails services are deployed
+  
+  # Security headers for Rails
+  headers:
+    # Enable all security headers
+    enabled: true
+    
+    # Individual header configuration
+    hsts:
+      enabled: true
+      expires: 1.year
+      subdomains: true
+      preload: true
+    
+    csp:
+      enabled: true
+      reportOnly: false
+      
+      # Content Security Policy directives
+      directives:
+        defaultSrc: ["'self'"]
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https:"]
+        styleSrc: ["'self'", "'unsafe-inline'", "https:"]
+        imgSrc: ["'self'", "data:", "https:"]
+        fontSrc: ["'self'", "https:"]
+        connectSrc: ["'self'", "https:"]
+        frameSrc: ["'none'"]
+        objectSrc: ["'none'"]
+        baseUri: ["'self'"]
+        formAction: ["'self'", "https:"]
+        upgradeInsecureRequests: []
+
+---
+# WordPress specific configuration (for some openDesk services)
+wordpress:
+  enabled: false  # Only enable if WordPress services are deployed
+  
+  # Security configuration
+  security:
+    # Disable file editing
+    disableFileEdit: true
+    
+    # Disable XML-RPC
+    disableXmlRpc: true
+    
+    # Hide WordPress version
+    hideVersion: true
+    
+    # Disable directory listing
+    disableDirectoryListing: true
+    
+    # Two-factor authentication
+    twoFactor:
+      enabled: true
+      methods:
+        - totp
+        - email
+    
+    # Security headers
+    headers:
+      enabled: true
+      hsts: true
+      csp: true
+      xContentTypeOptions: true
+      xFrameOptions: DENY
+      xXssProtection: "1; mode=block"
+
+---
+# Service-specific overrides
+services: {}
