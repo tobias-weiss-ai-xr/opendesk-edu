@@ -89,7 +89,6 @@ declare -a EDU_IMAGES=(
     "ghcr.io/opendesk-edu/coderd:latest"
     "ghcr.io/opendesk-edu/code-server:latest"
     "ghcr.io/opendesk-edu/collab-dashboard:latest"
-    "ghcr.io/opendesk-edu/drawio:latest"
     "ghcr.io/opendesk-edu/eudi-issuer:v0.1.0"
     "ghcr.io/opendesk-edu/f13:latest"
     "ghcr.io/opendesk-edu/grommunio:latest"
@@ -166,16 +165,34 @@ login_registry() {
 
 # Convert a source image reference to a target image reference
 # e.g. ghcr.io/opendesk-edu/sogo:latest → registry.gitlab.opencode.de/umr/sogo:latest
+# e.g. ghcr.io/opendesk-edu/supplier/univention/keycloak:26.7.0 → registry.gitlab.opencode.de/umr/supplier/univention/keycloak:26.7.0
+# e.g. ghcr.io/tobias-weiss-ai-xr/snipr:latest → registry.gitlab.opencode.de/umr/snipr:latest
 convert_image() {
     local source_image="$1"
     # Strip the registry prefix
     local without_registry
     without_registry="${source_image#${SOURCE_REGISTRY}/}"
-    # Strip any sub-paths like "opendesk-edu/" or "tobias-weiss-ai-xr/" or "project-zot/"
-    # Keep only the last component (the image name) + tag
-    local image_name
-    image_name="${without_registry##*/}"
-    echo "${TARGET_REGISTRY}/${image_name}"
+    
+    # Strip known sub-paths but preserve meaningful ones
+    # opendesk-edu/ and tobias-weiss-ai-xr/ are registry org names, not part of image path
+    # project-zot/ is also a registry org name
+    local image_path
+    case "$without_registry" in
+        opendesk-edu/*)
+            image_path="${without_registry#opendesk-edu/}"
+            ;;
+        tobias-weiss-ai-xr/*)
+            image_path="${without_registry#tobias-weiss-ai-xr/}"
+            ;;
+        project-zot/*)
+            image_path="${without_registry#project-zot/}"
+            ;;
+        *)
+            image_path="$without_registry"
+            ;;
+    esac
+    
+    echo "${TARGET_REGISTRY}/${image_path}"
 }
 
 push_single_image() {
