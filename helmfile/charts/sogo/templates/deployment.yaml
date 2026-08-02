@@ -28,7 +28,7 @@ spec:
       {{- if .Values.sogo.db.initSchema }}
       initContainers:
         - name: init-db-schema
-          image: "docker.io/bitnami/postgresql:17"
+          image: "ghcr.io/opendesk-edu/postgresql:17"
           imagePullPolicy: {{ .Values.sogo.image.pullPolicy }}
           env:
             - name: PGPASSWORD
