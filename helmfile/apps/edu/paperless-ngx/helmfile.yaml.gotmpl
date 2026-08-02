@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+---
+releases:
+  - name: "paperless-ngx"
+    chart: "../../../charts/paperless-ngx"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.paperlessNgx }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.paperlessNgx.enabled | default false }}
+    timeout: 1800
+
+commonLabels:
+  deployStage: "050-components"
+  component: "paperless-ngx"
