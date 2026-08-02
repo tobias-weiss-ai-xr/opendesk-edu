@@ -7,7 +7,7 @@ releases:
     wait: true
     values:
       - "values.yaml.gotmpl"
-    installed: {{ or .Values.apps.collabDashboard.enabled .Values.apps.drawio.enabled .Values.apps.excalidraw.enabled .Values.apps.planka.enabled .Values.apps.etherpad.enabled .Values.apps.bookstack.enabled .Values.apps.selfServicePassword.enabled }}
+    installed: {{ or .Values.apps.collabDashboard.enabled .Values.apps.drawio.enabled .Values.apps.excalidraw.enabled .Values.apps.planka.enabled .Values.apps.etherpad.enabled .Values.apps.bookstack.enabled .Values.apps.selfServicePassword.enabled .Values.apps.mayanEdms.enabled .Values.apps.paperlessNgx.enabled }}
     timeout: 120
 commonLabels:
   deployStage: "060-frontend"

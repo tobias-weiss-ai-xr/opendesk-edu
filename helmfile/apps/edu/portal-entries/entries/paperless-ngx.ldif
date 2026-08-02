@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+# LDIF file for Paperless-ngx portal entry
+
+dn: cn=paperless-ngx,ou=portals,dc=opendesk,dc=edu
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: paperless-ngx
+ou: portals
+description: Paperless-ngx - Document Archiving System
+roleOccupant: cn=paperless-ngx,ou=applications,dc=opendesk,dc=edu
+
+# Application entry
+dn: cn=paperless-ngx,ou=applications,dc=opendesk,dc=edu
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: paperless-ngx
+ou: applications
+roleOccupant: uid=paperless-ngx-service,ou=services,dc=opendesk,dc=edu
+
+# Service account
+dn: uid=paperless-ngx-service,ou=services,dc=opendesk,dc=edu
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+uid: paperless-ngx-service
+sn: Service
+givenName: Paperless-ngx
+cn: Paperless-ngx Service
+displayName: Paperless-ngx
+mail: paperless-ngx@opendesk.example.com
+userPassword:: <hashed-password>

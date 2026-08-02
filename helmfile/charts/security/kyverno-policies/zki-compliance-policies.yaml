@@ -1,0 +1,1152 @@
+# SPDX-FileCopyrightText: 2026 openDesk Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Kyverno ClusterPolicies for ZKI IT-Grundschutz-Profil Compliance
+# These policies enforce security requirements aligned with:
+# - BSI IT-Grundschutz
+# - ZKI IT-Grundschutz-Profil (Higher Education)
+# - ISO 27001
+#
+# Usage:
+#   kubectl apply -f zki-compliance-policies.yaml
+#
+# Categories:
+#   - Identity and Access Management (IAM)
+#   - Network Security
+#   - System Security
+#   - Data Protection
+#   - Application Security
+#   - Monitoring and Logging
+
+---
+# =============================================================================
+# SECTION 1: POD SECURITY POLICIES
+# BSI IT-Grundschutz: INF.1 (General Servers), INF.18 (Containers)
+# ZKI Priority: Critical
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-non-root
+  annotations:
+    policies.kyverno.io/title: Require Non-Root Users
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all pods to run as non-root users.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "System Security"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-non-root
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.object.spec.securityContext.runAsNonRoot }}"
+          operator: AnyNotIn
+          value: [null]
+      validate:
+        message: >-
+          Running as root is not allowed. Use a non-root user.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+          Recommendation: Set securityContext.runAsNonRoot: true
+        pattern:
+          spec:
+            securityContext:
+              runAsNonRoot: true
+    - name: check-containers-non-root
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} is running as root.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          pattern:
+            securityContext:
+              runAsNonRoot: true
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-readonly-rootfs
+  annotations:
+    policies.kyverno.io/title: Require Read-Only Root Filesystem
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all containers to use read-only root filesystems.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P1 (High)
+      Exceptions: Containers that need to write to filesystem (e.g., logging, temp files)
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P1"
+    openDesk.zki/category: "System Security"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-readonly-rootfs
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} should use read-only root filesystem.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+          Exception: Use emptyDir or volumes for writable data
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          pattern:
+            securityContext:
+              readOnlyRootFilesystem: true
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-drop-all-capabilities
+  annotations:
+    policies.kyverno.io/title: Drop All Linux Capabilities
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all containers to drop ALL Linux capabilities.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "System Security"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: drop-all-capabilities
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} must drop ALL capabilities.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+          Current: {{ element.securityContext.capabilities }}
+          Required: capabilities: { drop: ["ALL"] }
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          anyPattern:
+          - securityContext:
+              capabilities:
+                drop:
+                - ALL
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-seccomp
+  annotations:
+    policies.kyverno.io/title: Require Seccomp Profile
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all pods to use a seccomp profile.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "System Security"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-seccomp-pod
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Pod must specify a seccomp profile.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+          Recommendation: Use RuntimeDefault or custom profile
+        pattern:
+          spec:
+            securityContext:
+              seccompProfile:
+                type: RuntimeDefault
+    - name: check-seccomp-containers
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} must specify a seccomp profile.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          pattern:
+            securityContext:
+              seccompProfile:
+                type: RuntimeDefault
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-prevent-privilege-escalation
+  annotations:
+    policies.kyverno.io/title: Prevent Privilege Escalation
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Prevents containers from escalating privileges.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "System Security"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-allow-privilege-escalation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} must not allow privilege escalation.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          pattern:
+            securityContext:
+              allowPrivilegeEscalation: false
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-restrict-capabilities
+  annotations:
+    policies.kyverno.io/title: Restrict Linux Capabilities
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Restricts Linux capabilities to only those explicitly allowed.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P1 (High)
+      Allowed: NET_BIND_SERVICE, CHOWN, SETUID, SETGID, DAC_OVERRIDE
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P1"
+    openDesk.zki/category: "System Security"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: restrict-capabilities
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} is using a capability that is not in the allowed list.
+          Allowed capabilities: NET_BIND_SERVICE, CHOWN, SETUID, SETGID, DAC_OVERRIDE
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+         Current: {{ element.securityContext.capabilities.add }}
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          anyPattern:
+          - securityContext:
+              capabilities:
+                add:
+                - NET_BIND_SERVICE
+                - CHOWN
+                - SETUID
+                - SETGID
+                - DAC_OVERRIDE
+
+---
+# =============================================================================
+# SECTION 2: NETWORK SECURITY POLICIES
+# BSI IT-Grundschutz: INF.5 (Firewalls), INF.6 (Network Components)
+# ZKI Priority: Critical
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-network-policy
+  annotations:
+    policies.kyverno.io/title: Require NetworkPolicy for Namespaces
+    policies.kyverno.io/category: Network Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Namespace
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all namespaces to have at least one NetworkPolicy.
+      BSI IT-Grundschutz: INF.5 M 2.6 (Network Segmentation)
+      ZKI Priority: P0 (Critical)
+      This ensures default-deny and proper segmentation
+    openDesk.zki/compliance: "BSI-INF.5-M2.6"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Network Security"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-networkpolicy-exists
+      match:
+        any:
+        - resources:
+            kinds:
+              - Namespace
+      preconditions:
+        all:
+        - key: "{{ request.object.metadata.labels['kubernetes.io/metadata.name'] }}"
+          operator: NotEquals
+          value: "kube-system"
+        - key: "{{ request.object.metadata.labels['kubernetes.io/metadata.name'] }}"
+          operator: NotEquals
+          value: "kyverno"
+      validate:
+        message: >-
+          Namespace {{ request.object.metadata.name }} must have at least one NetworkPolicy.
+          BSI Requirement: INF.5 M 2.6 - Network Segmentation
+          All namespaces must have NetworkPolicies to ensure proper isolation.
+        pattern:
+          metadata:
+            annotations:
+              networkpolicy-exists: "true"
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-default-deny-all
+  annotations:
+    policies.kyverno.io/title: Default Deny All Traffic
+    policies.kyverno.io/category: Network Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: NetworkPolicy
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Ensures all NetworkPolicies have a default-deny rule.
+      BSI IT-Grundschutz: INF.5 M 2.2 (Firewall Rules)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.5-M2.2"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Network Security"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-default-deny
+      match:
+        any:
+        - resources:
+            kinds:
+              - NetworkPolicy
+      validate:
+        message: >-
+          NetworkPolicy must include a default-deny rule.
+          BSI Requirement: INF.5 M 2.2 - Firewall Rules
+          Add a rule with no podSelector matching all pods, denying all traffic.
+          Example:
+          - podSelector: {}
+            policyTypes: ["Ingress", "Egress"]
+        anyPattern:
+        - spec:
+            podSelector: {}
+            policyTypes:
+            - Ingress
+            - Egress
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-restrict-ingress-to-haproxy
+  annotations:
+    policies.kyverno.io/title: Restrict Ingress to HAProxy Only
+    policies.kyverno.io/category: Network Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Ingress
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Restricts external traffic to only HAProxy ingress controllers.
+      BSI IT-Grundschutz: INF.5 M 2.2 (Firewall Rules)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.5-M2.2"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Network Security"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-ingress-class
+      match:
+        any:
+        - resources:
+            kinds:
+              - Ingress
+      validate:
+        message: >-
+          Ingress must use the haproxy ingress class.
+          BSI Requirement: INF.5 M 2.2 - Firewall Rules
+          All external traffic must go through authorized ingress controllers.
+        pattern:
+          spec:
+            ingressClassName: haproxy
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-tls-for-ingress
+  annotations:
+    policies.kyverno.io/title: Require TLS for All Ingress
+    policies.kyverno.io/category: Network Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Ingress
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all Ingress resources to have TLS configured.
+      BSI IT-Grundschutz: INF.5 M 2.2 (Firewall Rules)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.5-M2.2, BSI-INF.9-M3.4"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Network Security"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-tls
+      match:
+        any:
+        - resources:
+            kinds:
+              - Ingress
+      validate:
+        message: >-
+          Ingress {{ request.object.metadata.name }} must have TLS configured.
+          BSI Requirement: INF.5 M 2.2 - Firewall Rules, INF.9 M 3.4 - Cryptography
+          Add a tls section with at least one secret.
+          Example:
+          tls:
+          - hosts: ["example.opendesk.hrz.uni-marburg.de"]
+            secretName: tls-secret
+        pattern:
+          spec:
+            tls:
+            - hosts: "?"
+              secretName: "?"
+
+---
+# =============================================================================
+# SECTION 3: ACCESS CONTROL POLICIES
+# BSI IT-Grundschutz: INF.2 (Application Servers)
+# ZKI Priority: Critical
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-pod-security-context
+  annotations:
+    policies.kyverno.io/title: Require Pod Security Context
+    policies.kyverno.io/category: Access Control
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all pods to have a securityContext defined.
+      BSI IT-Grundschutz: INF.2 M 1.92 (Secure Application Server Configuration)
+      ZKI Priority: P0 (Critical)
+    openDesk.zki/compliance: "BSI-INF.2-M1.92"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Access Control"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-pod-security-context
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Pod must have a securityContext defined.
+          BSI Requirement: INF.2 M 1.92 - Secure configuration of application servers
+          Add spec.securityContext with runAsNonRoot, fsGroup, etc.
+        pattern:
+          spec:
+            securityContext: "?"
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-restrict-host-path
+  annotations:
+    policies.kyverno.io/title: Restrict Host Path Mounts
+    policies.kyverno.io/category: Access Control
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Restricts the use of hostPath volumes to prevent host filesystem access.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P0 (Critical)
+      Exceptions: Only for system-critical components (e.g., CNI, storage)
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Access Control"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-host-path
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of hostPath volumes is restricted.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+          Pod {{ request.object.metadata.name }} is using hostPath: {{ element.mountPath }}
+          Exception: Only allowed for system-critical components in kube-system namespace.
+          Use PVCs or other volume types instead.
+        foreach:
+        - list: "{{ request.object.spec.volumes }}"
+          when:
+          - key: "{{ element.hostPath }}"
+            operator: NotEquals
+            value: null
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-restrict-host-network
+  annotations:
+    policies.kyverno.io/title: Restrict Host Network Access
+    policies.kyverno.io/category: Access Control
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Restricts the use of hostNetwork to prevent network namespace sharing.
+      BSI IT-Grundschutz: INF.1 M 1.84 (OS Hardening)
+      ZKI Priority: P0 (Critical)
+      Exceptions: Only for system-critical components (e.g., CNI, ingress controllers)
+    openDesk.zki/compliance: "BSI-INF.1-M1.84, BSI-INF.18-M1.137"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Access Control"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-host-network
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of hostNetwork is restricted.
+          BSI Requirement: INF.1 M 1.84 - Hardening of the operating system
+          Pod {{ request.object.metadata.name }} is using hostNetwork: true
+          Exception: Only allowed for system-critical components (CNI, ingress, etc.)
+        pattern:
+          spec:
+            hostNetwork: false
+
+---
+# =============================================================================
+# SECTION 4: DATA PROTECTION POLICIES
+# BSI IT-Grundschutz: DS (Data Protection), INF.9 (Cryptography)
+# ZKI Priority: Critical
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-storage-encryption
+  annotations:
+    policies.kyverno.io/title: Require Storage Encryption
+    policies.kyverno.io/category: Data Protection
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: PersistentVolumeClaim
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all PVCs to use encrypted storage classes.
+      BSI IT-Grundschutz: DS M 5.5 (Encryption), INF.9 M 3.4 (Cryptography)
+      ZKI Priority: P0 (Critical)
+      Only allows PVCs with storage classes that have encryption enabled.
+    openDesk.zki/compliance: "BSI-DS-M5.5, BSI-INF.9-M3.4"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Data Protection"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-encrypted-storage-class
+      match:
+        any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+      validate:
+        message: >-
+          PVC must use an encrypted storage class.
+          BSI Requirement: DS M 5.5 - Encryption, INF.9 M 3.4 - Cryptography
+          Current storage class: {{ request.object.spec.storageClassName }}
+          Allowed storage classes: ceph-rbd-ssd-crypt, ceph-cephfs-hdd-ec-crypt
+          If encryption is not available, use k8up for backup encryption.
+        pattern:
+          spec:
+            storageClassName: ceph-rbd-ssd-crypt || ceph-cephfs-hdd-ec-crypt
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-data-classification
+  annotations:
+    policies.kyverno.io/title: Require Data Classification Labels
+    policies.kyverno.io/category: Data Protection
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: All
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all resources storing or processing data to have classification labels.
+      BSI IT-Grundschutz: DS M 5.1 (Data Classification)
+      ZKI Priority: P1 (High)
+      Labels: data-classification, data-owner, data-retention
+    openDesk.zki/compliance: "BSI-DS-M5.1"
+    openDesk.zki/priority: "P1"
+    openDesk.zki/category: "Data Protection"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-data-classification
+      match:
+        any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+              - Pod
+              - Deployment
+              - StatefulSet
+              - DaemonSet
+      validate:
+        message: >-
+          Resource must have data classification labels.
+          BSI Requirement: DS M 5.1 - Data Classification
+          Required labels:
+            - data-classification: public/internal/confidential/restricted/top-secret
+            - data-owner: Team or individual responsible
+            - data-retention: Retention period (e.g., "7 years")
+          Current labels: {{ request.object.metadata.labels }}
+        pattern:
+          metadata:
+            labels:
+              data-classification: "?"
+              data-owner: "?"
+              data-retention: "?"
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-k8up-backup-annotation
+  annotations:
+    policies.kyverno.io/title: Require k8up Backup Annotations
+    policies.kyverno.io/category: Data Protection
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: PersistentVolumeClaim
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires PVCs to have k8up backup annotations.
+      BSI IT-Grundschutz: DS M 5.2 (Backup)
+      ZKI Priority: P0 (Critical)
+      RWO PVCs must be excluded from default backups (use per-node schedules)
+      RWX PVCs can be included in main backup schedule.
+    openDesk.zki/compliance: "BSI-DS-M5.2"
+    openDesk.zki/priority: "P0"
+    openDesk.zki/category: "Data Protection"
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: check-k8up-annotation
+      match:
+        any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+      validate:
+        message: >-
+          PVC must have k8up backup annotation.
+          BSI Requirement: DS M 5.2 - Backup
+          Required annotation: k8up.io/exclude: "true" for RWO PVCs
+          RWX PVCs can omit this annotation (backed up by default schedule).
+          Current PVC: {{ request.object.metadata.name }}
+          Current annotations: {{ request.object.metadata.annotations }}
+        pattern:
+          metadata:
+            annotations:
+              k8up.io/exclude: "?"
+
+---
+# =============================================================================
+# SECTION 5: LOGGING AND MONITORING POLICIES
+# BSI IT-Grundschutz: INF.1 M 1.89 (Logging), INF.1 M 1.90 (Log Review)
+# ZKI Priority: High
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-sidecar-logging
+  annotations:
+    policies.kyverno.io/title: Require Sidecar Container for Logging
+    policies.kyverno.io/category: Logging
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Recommends that all pods have a dedicated sidecar container for logging.
+      BSI IT-Grundschutz: INF.1 M 1.89 (Security Logging)
+      ZKI Priority: P1 (High)
+      Sidecars should forward logs to Loki using Promtail or Fluent Bit.
+      Exceptions: System components that log directly (e.g., kube-system, logging namespace)
+    openDesk.zki/compliance: "BSI-INF.1-M1.89"
+    openDesk.zki/priority: "P1"
+    openDesk.zki/category: "Logging and Monitoring"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-logging-sidecar
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.object.metadata.namespace }}"
+          operator: NotIn
+          value: ["kube-system", "logging", "monitoring", "kyverno"]
+      validate:
+        message: >-
+          Pod should have a dedicated logging sidecar container.
+          BSI Requirement: INF.1 M 1.89 - Logging of security-relevant events
+          Recommended sidecars:
+          - Promtail (for Loki)
+          - Fluent Bit (for Elasticsearch/Loki)
+          - Logstash (for Elasticsearch)
+          Current containers: {{ request.object.spec.containers[*].name }}
+        anyPattern:
+        - spec:
+            containers:
+            - name: promtail*
+            - name: fluent-bit*
+            - name: logstash*
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-loki-labels
+  annotations:
+    policies.kyverno.io/title: Require Loki Logging Labels
+    policies.kyverno.io/category: Logging
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires pods to have Loki-compatible labels for log scraping.
+      BSI IT-Grundschutz: INF.1 M 1.89 (Security Logging)
+      ZKI Priority: P1 (High)
+      Loki uses these labels to organize and query logs.
+    openDesk.zki/compliance: "BSI-INF.1-M1.89"
+    openDesk.zki/priority: "P1"
+    openDesk.zki/category: "Logging and Monitoring"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-loki-labels
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Pod should have Loki-compatible labels.
+          BSI Requirement: INF.1 M 1.89 - Logging of security-relevant events
+          Recommended labels:
+            - app.kubernetes.io/name: Application name
+            - app.kubernetes.io/instance: Instance name
+            - app.kubernetes.io/component: Component name
+          Current labels: {{ request.object.metadata.labels }}
+        pattern:
+          metadata:
+            labels:
+              app.kubernetes.io/name: "?"
+              app.kubernetes.io/instance: "?"
+
+---
+# =============================================================================
+# SECTION 6: APPLICATION SECURITY POLICIES
+# BSI IT-Grundschutz: INF.14 (Web Applications), APP.2 (Web Servers)
+# ZKI Priority: High
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-security-headers
+  annotations:
+    policies.kyverno.io/title: Require Security Headers for Ingress
+    policies.kyverno.io/category: Application Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Ingress
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Recommends that all Ingress resources have security headers configured.
+      BSI IT-Grundschutz: INF.14 M 4.10 (Security Headers)
+      ZKI Priority: P1 (High)
+      Headers should be configured via ConfigMap or directly in Ingress.
+    openDesk.zki/compliance: "BSI-INF.14-M4.10"
+    openDesk.zki/priority: "P1"
+    openDesk.zki/category: "Application Security"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-security-headers
+      match:
+        any:
+        - resources:
+            kinds:
+              - Ingress
+      context:
+        - name: requiredHeaders
+          configMap:
+            name: security-headers
+            namespace: default
+      validate:
+        message: >-
+          Ingress should have security headers configured.
+          BSI Requirement: INF.14 M 4.10 - Web Application Firewall / Security Headers
+          Recommended headers:
+            - Strict-Transport-Security
+            - X-Content-Type-Options
+            - X-Frame-Options
+            - X-XSS-Protection
+            - Content-Security-Policy
+            - Referrer-Policy
+            - Permissions-Policy
+          Use a ConfigMap with nginx.ingress.kubernetes.io/configuration-snippet annotation.
+        pattern:
+          metadata:
+            annotations:
+              nginx.ingress.kubernetes.io/configuration-snippet: "?*"
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-probe-timeouts
+  annotations:
+    policies.kyverno.io/title: Require Probe Timeouts
+    policies.kyverno.io/category: Application Security
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Recommends that all containers have properly configured probe timeouts.
+      BSI IT-Grundschutz: INF.2 M 1.92 (Secure Application Server Configuration)
+      ZKI Priority: P2 (Medium)
+      Prevents probes from causing service disruptions.
+    openDesk.zki/compliance: "BSI-INF.2-M1.92"
+    openDesk.zki/priority: "P2"
+    openDesk.zki/category: "Application Security"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-liveness-probe-timeout
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} liveness probe timeout should be less than the interval.
+          Current: timeoutSeconds: {{ element.livenessProbe.timeoutSeconds }}, intervalSeconds: {{ element.livenessProbe.intervalSeconds }}
+          Best practice: timeoutSeconds < intervalSeconds
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          when:
+          - key: "{{ element.livenessProbe }}"
+            operator: NotEquals
+            value: null
+          - key: "{{ element.livenessProbe.timeoutSeconds }}"
+            operator: NotEquals
+            value: null
+          - key: "{{ element.livenessProbe.intervalSeconds }}"
+            operator: NotEquals
+            value: null
+          pattern:
+            livenessProbe:
+              timeoutSeconds: < {{ element.livenessProbe.intervalSeconds }}
+    - name: check-readiness-probe-timeout
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Container {{ element.name }} readiness probe timeout should be less than the interval.
+          Current: timeoutSeconds: {{ element.readinessProbe.timeoutSeconds }}, intervalSeconds: {{ element.readinessProbe.intervalSeconds }}
+          Best practice: timeoutSeconds < intervalSeconds
+        foreach:
+        - list: "{{ request.object.spec.containers }}"
+          when:
+          - key: "{{ element.readinessProbe }}"
+            operator: NotEquals
+            value: null
+          - key: "{{ element.readinessProbe.timeoutSeconds }}"
+            operator: NotEquals
+            value: null
+          - key: "{{ element.readinessProbe.intervalSeconds }}"
+            operator: NotEquals
+            value: null
+          pattern:
+            readinessProbe:
+              timeoutSeconds: < {{ element.readinessProbe.intervalSeconds }}
+
+---
+# =============================================================================
+# SECTION 7: METADATA AND LABELING POLICIES
+# BSI IT-Grundschutz: CON (Concepts and Strategies)
+# ZKI Priority: Medium
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-spdx-license
+  annotations:
+    policies.kyverno.io/title: Require SPDX License Header
+    policies.kyverno.io/category: Compliance
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: ConfigMap, Secret
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all ConfigMaps and Secrets to have SPDX license headers.
+      This ensures REUSE compliance for openDesk.
+      ZKI Priority: P2 (Medium)
+    openDesk.zki/compliance: "REUSE"
+    openDesk.zki/priority: "P2"
+    openDesk.zki/category: "Compliance"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-spdx-license
+      match:
+        any:
+        - resources:
+            kinds:
+              - ConfigMap
+              - Secret
+      validate:
+        message: >-
+          Resource must have SPDX license header in data.
+          All files in openDesk must have SPDX headers for REUSE compliance.
+          Example: # SPDX-License-Identifier: AGPL-3.0
+          Current data keys: {{ request.object.data | keys }}
+        pattern:
+          data:
+            (X): "# SPDX-FileCopyrightText:*\n# SPDX-License-Identifier:*\n*"
+
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-require-owner-labels
+  annotations:
+    policies.kyverno.io/title: Require Owner Labels
+    policies.kyverno.io/category: Compliance
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: All
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Requires all resources to have owner labels.
+      BSI IT-Grundschutz: ISMS M 7.1.3 (Responsibilities)
+      ZKI Priority: P2 (Medium)
+    openDesk.zki/compliance: "BSI-ISMS-M7.1.3"
+    openDesk.zki/priority: "P2"
+    openDesk.zki/category: "Compliance"
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-owner-labels
+      match:
+        any:
+        - resources:
+            kinds:
+              - Deployment
+              - StatefulSet
+              - DaemonSet
+              - Job
+              - CronJob
+              - Service
+              - Ingress
+              - PersistentVolumeClaim
+      validate:
+        message: >-
+          Resource must have owner labels.
+          BSI Requirement: ISMS M 7.1.3 - Responsibilities
+          Required labels:
+            - owner: Team or individual responsible
+            - team: Team name
+          Current labels: {{ request.object.metadata.labels }}
+        pattern:
+          metadata:
+            labels:
+              owner: "?"
+              team: "?"
+
+---
+# =============================================================================
+# SECTION 8: EXCEPTIONS AND WAIVERS
+# BSI IT-Grundschutz: ISMS (Management)
+# ZKI Priority: Low
+# =============================================================================
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: zki-exception-handling
+  annotations:
+    policies.kyverno.io/title: Exception Handling Procedure
+    policies.kyverno.io/category: Compliance
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: All
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      Documents the procedure for handling policy exceptions.
+      BSI IT-Grundschutz: ISMS M 7.1 (Information Security Management System)
+      ZKI Priority: P3 (Low)
+      Exceptions must be approved and documented.
+    openDesk.zki/compliance: "BSI-ISMS-M7.1"
+    openDesk.zki/priority: "P3"
+    openDesk.zki/category: "Compliance"
+spec:
+  validationFailureAction: audit
+  background: false
+  rules:
+    - name: exception-child-policies
+      match:
+        resources:
+          kinds:
+            - ""  # This is a documentation-only policy
+      values:
+        message: >-
+          EXCEPTION HANDLING PROCEDURE
+          ============================
+          
+          To request an exception to a ZKI Kyverno policy:
+          
+          1. ACCEPT RISK
+             - Acknowledge that you understand the security risk
+             - Accept responsibility for any incidents
+          
+          2. PROVIDE JUSTIFICATION
+             - Explain why the exception is needed
+             - Describe the business requirement
+             - Document the impact of not granting the exception
+          
+          3. IMPLEMENT COMPENSATING CONTROLS
+             - Identify alternative security measures
+             - Implement additional monitoring or logging
+             - Add extra access controls
+          
+          4. LIMIT SCOPE AND DURATION
+             - Limit exception to specific resources
+             - Set an expiration date
+             - Plan for future compliance
+          
+          5. OBTAIN APPROVALS
+             - Security Team review
+             - CISO approval for P0/P1 policies
+             - Document approval in exception register
+          
+          6. IMPLEMENT AND MONITOR
+             - Apply exception via policy exception
+             - Monitor for incidents
+             - Review regularly
+          
+          Exception Register Location: https://github.com/opendesk-edu/security-docs/blob/main/exceptions.md
+          Exception Template: Available in security-policies/templates/
+          
+          EXCEPTIONS TO THIS POLICY:
+          - kube-system namespace (system components)
+          - kyverno namespace (policy management)
+          - logging namespace (central logging)
+          - monitoring namespace (central monitoring)

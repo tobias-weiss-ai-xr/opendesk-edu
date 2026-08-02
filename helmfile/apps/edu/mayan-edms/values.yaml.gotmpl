@@ -1,0 +1,254 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+# Image configuration (can override in values-static.yaml or environments)
+image:
+  repository: {{ .Values.images.mayan.repository | default "mayanedms/mayanedms" }}
+  tag: {{ .Values.images.mayan.tag | default "4.5.0" }}
+  pullPolicy: "{{ .Values.images.mayan.pullPolicy | default "IfNotPresent" }}"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "haproxy"
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/proxy-body-size: "200M"
+    haproxy-ingress.github.io/timeout-server: "600s"
+    haproxy-ingress.github.io/timeout-client: "600s"
+    {{- with .Values.annotations.mayan.ingress }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  hosts:
+    - host: {{ printf "%s.%s" .Values.global.hosts.mayan .Values.global.domain | quote }}
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - {{ printf "%s.%s" .Values.global.hosts.mayan .Values.global.domain | quote }}
+
+# Mayan EDMS specific configuration
+mayan:
+  # Secret key - generate if not provided
+  secretKey: {{ .Values.secrets.mayan.secretKey | default (randAlphaNum 64) | quote }}
+  
+  # OIDC authentication
+  oidc:
+    enabled: true
+    issuer: {{ printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm | quote }}
+    clientId: "mayan-edms"
+    clientSecret: {{ .Values.secrets.mayan.oidcClientSecret | default "" | quote }}
+    existingSecret: "mayan-edms-oidc-secrets"
+    existingSecretClientSecretKey: "oidc-client-secret"
+    signAlgorithm: "RS256"
+    useState: true
+    scopes: "openid email profile"
+    usernameClaim: "preferred_username"
+    emailClaim: "email"
+    firstNameClaim: "given_name"
+    lastNameClaim: "family_name"
+  
+  # Database configuration
+  database:
+    host: "mayan-edms-postgresql"
+    port: 5432
+    name: "mayan"
+    user: "mayan"
+    password: ""
+    existingSecret: "mayan-edms-database-secrets"
+    existingSecretPasswordKey: "postgresql-password"
+  
+  # Redis configuration
+  redis:
+    host: "mayan-edms-redis-master"
+    port: 6379
+    password: ""
+    existingSecret: "mayan-edms-redis-secrets"
+    existingSecretPasswordKey: "redis-password"
+  
+  # OCR configuration
+  ocr:
+    enabled: true
+    language: "eng+deu+fra"
+    autoRotatePages: true
+    imageDpi: 300
+  
+  # Tesseract configuration
+  tesseract:
+    enabled: true
+    languages: "eng+deu+fra+ita+spa"  # Common academic languages
+  
+  # Email configuration (via Stalwart)
+  email:
+    enabled: true
+    host: "stalwart-stalwart.opendesk.svc.cluster.local"
+    port: 587
+    useTls: true
+    username: ""
+    password: ""
+    defaultFrom: "noreply@{{ .Values.global.domain }}"
+    existingSecret: "mayan-edms-email-secrets"
+  
+  # Document workflow settings
+  workflows:
+    enabled: true
+    defaultReviewInterval: 30
+    defaultDocumentType: "document"
+  
+  # Metadata types
+  metadata:
+    documentTypes:
+      - name: "Lecture Notes"
+        label: "Lecture Notes"
+      - name: "Research Paper"
+        label: "Research Paper"
+      - name: "Thesis"
+        label: "Thesis"
+      - name: "Assignment"
+        label: "Assignment"
+      - name: "Contract"
+        label: "Contract"
+      - name: "Form"
+        label: "Form"
+      - name: "Exam"
+        label: "Exam"
+      - name: "Syllabus"
+        label: "Syllabus"
+
+# Persistence configuration
+persistence:
+  enabled: true
+  data:
+    enabled: true
+    size: {{ .Values.apps.mayanEdms.storage.dataSize | default "50Gi" | quote }}
+    storageClass: {{ .Values.storageclasses.cephfs | default "ceph-cephfs-hdd-ec" | quote }}
+    accessMode: ReadWriteMany
+    annotations: {}
+  media:
+    enabled: true
+    size: {{ .Values.apps.mayanEdms.storage.mediaSize | default "100Gi" | quote }}
+    storageClass: {{ .Values.storageclasses.cephfs | default "ceph-cephfs-hdd-ec" | quote }}
+    accessMode: ReadWriteMany
+    annotations: {}
+  index:
+    enabled: true
+    size: {{ .Values.apps.mayanEdms.storage.indexSize | default "10Gi" | quote }}
+    storageClass: {{ .Values.storageclasses.cephRbdSsd | default "ceph-rbd-ssd" | quote }}
+    accessMode: ReadWriteOnce
+    annotations: {}
+
+# Resource configuration
+resources:
+  {{- toYaml .Values.resources.mayan | nindent 2 }}
+
+# PostgreSQL configuration (sub-chart)
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: {{ .Values.secrets.mayan.postgresPassword | default (randAlphaNum 32) | quote }}
+    username: "mayan"
+    password: {{ .Values.secrets.mayan.databasePassword | default (randAlphaNum 32) | quote }}
+    database: "mayan"
+    existingSecret: "mayan-edms-database-secrets"
+  primary:
+    persistence:
+      enabled: true
+      size: {{ .Values.apps.mayanEdms.storage.databaseSize | default "20Gi" | quote }}
+      storageClass: {{ .Values.storageclasses.cephRbdSsd | default "ceph-rbd-ssd" | quote }}
+      accessModes:
+        - ReadWriteOnce
+    resources:
+      {{- toYaml .Values.resources.mayanPostgresql | nindent 6 }}
+
+# Redis configuration (sub-chart)
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: {{ .Values.secrets.mayan.redisPassword | default (randAlphaNum 32) | quote }}
+    existingSecret: "mayan-edms-redis-secrets"
+  primary:
+    persistence:
+      enabled: true
+      size: {{ .Values.apps.mayanEdms.storage.redisSize | default "5Gi" | quote }}
+      storageClass: {{ .Values.storageclasses.cephRbdSsd | default "ceph-rbd-ssd" | quote }}
+    resources:
+      {{- toYaml .Values.resources.mayanRedis | nindent 6 }}
+
+# Backup configuration
+backup:
+  enabled: {{ .Values.backup.mayan.enabled | default true }}
+  k8up:
+    schedule: {{ .Values.backup.mayan.schedule | default "0 2 * * *" | quote }}
+    retention:
+      daily: {{ .Values.backup.mayan.retention.daily | default 7 }}
+      weekly: {{ .Values.backup.mayan.retention.weekly | default 4 }}
+      monthly: {{ .Values.backup.mayan.retention.monthly | default 3 }}
+    snapshotVolumes: true
+
+# Autoscaling configuration
+autoscaling:
+  enabled: {{ .Values.apps.mayanEdms.autoscaling.enabled | default false }}
+  minReplicas: {{ .Values.apps.mayanEdms.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ .Values.apps.mayanEdms.autoscaling.maxReplicas | default 3 }}
+  targetCPUUtilizationPercentage: {{ .Values.apps.mayanEdms.autoscaling.targetCPU | default 80 }}
+  targetMemoryUtilizationPercentage: {{ .Values.apps.mayanEdms.autoscaling.targetMemory | default 80 }}
+
+# Pod Disruption Budget
+pdb:
+  enabled: true
+  minAvailable: 1
+
+# Network policies
+networkPolicies:
+  enabled: {{ .Values.apps.mayanEdms.networkPolicies.enabled | default true }}
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: opendesk
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: haproxy-ingress
+      ports:
+        - port: 8000
+          protocol: TCP
+
+# Common annotations
+commonAnnotations:
+  {{- with .Values.annotations.mayan.common }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+
+# Service annotations
+service:
+  annotations:
+    {{- with .Values.annotations.mayan.service }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+# Service account annotations
+serviceAccount:
+  annotations:
+    {{- with .Values.annotations.mayan.serviceAccount }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Host aliases for HRZ DNS issues
+hostAliases:
+  - ip: "192.168.3.201"
+    hostnames:
+      - "id.{{ .Values.global.domain }}"
+      - "files.{{ .Values.global.domain }}"
+      - "portal.{{ .Values.global.domain }}"

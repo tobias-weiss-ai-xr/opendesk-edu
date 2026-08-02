@@ -1,0 +1,73 @@
+# SPDX-FileCopyrightText: 2026 openDesk Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v2
+name: security
+description: |-
+  openDesk Security Helm Chart
+  
+  This chart deploys security components and policies for openDesk Edu,
+  aligned with ZKI IT-Grundschutz-Profil and BSI IT-Grundschutz requirements.
+  
+  ## Components
+  
+  - **Kyverno Policies**: Cluster-wide security policies for:
+    - Pod Security (PSA compliance)
+    - Network Security (NetworkPolicies, Ingress)
+    - Access Control (RBAC, service accounts)
+    - Data Protection (encryption, classification)
+    - Application Security (headers, probes)
+    - Logging and Monitoring
+    - Compliance (SPDX headers, owner labels)
+    
+  - **Security Headers**: ConfigMap with recommended HTTP security headers
+  
+  - **Audit Policies**: Kubernetes audit logging configuration
+  
+  ## Requirements
+  
+  - Kubernetes >= 1.25.0
+  - Kyverno >= 1.10.0 (for policy enforcement)
+  - Helm >= 3.10.0
+
+type: application
+version: 1.0.0
+depends_on: []
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you ship a new version of the application.
+appVersion: "1.0.0"
+
+# Chart home page
+home: https://github.com/opendesk-edu/opendesk-edu
+
+# Source code repository
+sources:
+  - https://github.com/opendesk-edu/opendesk-edu
+
+# Maintainers
+maintainers:
+  - name: openDesk Contributors
+    email: info@opendesk.hrz.uni-marburg.de
+    url: https://www.opendesk.hrz.uni-marburg.de
+
+# License
+annotations:
+  license: Apache-2.0
+  
+# Keywords for the chart
+keywords:
+  - security
+  - compliance
+  - kyverno
+  - zki
+  - bsi
+  - it-grundschutz
+  - policies
+
+# Categories
+category: Security

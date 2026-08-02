@@ -1,0 +1,60 @@
+# SPDX-FileCopyrightText: 2026 openDesk Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# Security Helmfile
+# Deploys security policies and components for openDesk Edu
+# Aligned with ZKI IT-Grundschutz-Profil
+
+templating:
+  autoEscape: "true"
+
+environments:
+  {{- if .Environment.Name == "edu" }}
+  default:
+    values:
+      - global.yaml.gotmpl
+      - values.yaml.gotmpl
+  {{- end }}
+
+releases:
+  # Kyverno must be installed first (dependency)
+  # Note: Kyverno is typically installed via Helm chart in kube-system
+  # This helmfile assumes Kyverno is already installed
+
+  # Deploy security policies
+  - name: security-policies
+    namespace: default
+    chart: ../../../charts/security
+    values:
+      - values.yaml.gotmpl
+    needs:
+      - opendesk-edu/kyverno
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "https://raw.githubusercontent.com/kyverno/kyverno/main/definitions/install.sh"]
+      
+  # Deploy audit policies (if audit logging is enabled)
+  {{- if .Values.security.audit.enabled }}
+  - name: security-audit-policies
+    namespace: default
+    chart: ../../../charts/security
+    values:
+      - values.yaml.gotmpl
+    needs:
+      - opendesk-edu/security-policies
+  {{- end }}
+
+# Selectors for conditional deployment
+selectors:
+  # Only deploy in edu environment
+  - name: edu
+    labels:
+      environment: edu
+  
+  # Skip in non-edu environments
+  - name: not-edu
+    labels:
+      environment: "!edu"
+    skip: true
