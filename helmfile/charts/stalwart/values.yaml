@@ -7,9 +7,9 @@
 stalwart:
   # Image configuration
   image:
-    registry: ""
-    repository: stalwartlabs/stalwart
-    tag: "v0.16.15"
+    registry: ghcr.io
+    repository: opendesk-edu/stalwart
+    tag: "latest"
     pullPolicy: IfNotPresent
 
   # Deployment scaling

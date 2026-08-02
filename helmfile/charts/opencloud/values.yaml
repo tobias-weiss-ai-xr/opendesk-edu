@@ -4,8 +4,8 @@
 replicaCount: 2
 
 image:
-  registry: docker.io
-  repository: opencloudeu/opencloud
+  registry: ghcr.io
+  repository: opendesk-edu/opencloud
   tag: 4.0.3
   pullPolicy: IfNotPresent
 
