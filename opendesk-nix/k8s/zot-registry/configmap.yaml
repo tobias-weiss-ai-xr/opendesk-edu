@@ -1,0 +1,126 @@
+---
+# Zot Registry Configuration ConfigMap
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zot-registry-config
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+    opendesk.org/container-registry: gitlab.opencode.de
+
+# Hardened configuration - mounted to /etc/zot/config.yml
+data:
+  config.yml: |
+    version: 2.0.0
+    
+    server:
+      addr: ":8080"
+      tls:
+        enabled: false
+      enableMetric: true
+      enablePprof: false
+    
+    storage:
+      rootDirectory: /var/lib/zot/storage
+      gc:
+        enabled: true
+        interval: 24h
+        deleteUntagged: true
+        keepUntaggedManifests: 5
+      filesystem:
+        maxThreads: 10
+        dedicatedBlobDir: false
+        cache:
+          enabled: true
+          directory: /var/lib/zot/cache
+          maxSize: "20Gi"
+    
+    auth:
+      htpasswd:
+        path: /etc/zot/passwd
+        realm: "Zot Registry"
+      allowAnonymousReads: true
+    
+    accessControl:
+      roles:
+        - name: "reader"
+          permissions:
+            read: ["*"]
+        - name: "pusher"
+          permissions:
+            read: ["*"]
+            write: ["*"]
+            delete: ["*"]
+      users:
+        - name: "cache-user"
+          password: "${ZOT_CACHE_PASSWORD:changeme}"
+          roles: ["reader", "pusher"]
+    
+    upstream:
+      - name: ghcr
+        url: https://ghcr.io
+        tlsVerify: true
+        timeout: 30s
+        maxRetries: 3
+        auth:
+          username: "${GHCR_USERNAME:-}"
+          password: "${GHCR_PASSWORD:-}"
+        pullThrough:
+          enabled: true
+          destinations:
+            - "ghcr.io/opendesk-edu/*"
+            - "ghcr.io/tobias-weiss-ai-xr/*"
+      
+      - name: gitlab-opencode
+        url: https://registry.gitlab.opencode.de
+        tlsVerify: true
+        timeout: 30s
+        maxRetries: 3
+        auth:
+          username: "${GITLAB_USERNAME:-}"
+          password: "${GITLAB_PASSWORD:-}"
+        pullThrough:
+          enabled: true
+          destinations:
+            - "registry.gitlab.opencode.de/umr/*"
+    
+    cache:
+      embedded:
+        enabled: true
+        maxSize: "20Gi"
+    
+    notification:
+      audit:
+        enabled: true
+        file: /var/log/zot/audit.log
+        maxSize: 100
+        maxBackups: 5
+      events:
+        - Push
+        - Pull
+        - Delete
+        - AuthenticationFailure
+    
+    security:
+      rateLimit:
+        ip:
+          enabled: true
+          requestsPerSecond: 100
+          burst: 200
+    
+    network:
+      timeout: 30s
+    
+    gc:
+      schedule:
+        - at: "00:00"
+          keepSigned: true
+          keepUntagged: false
+          dryRun: false
+      quotas:
+        - name: "cache-quota"
+          maxStorage: "50Gi"
+          maxArtifacts: 1000

@@ -1,0 +1,54 @@
+---
+# Zot Registry RBAC Configuration
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: zot-registry
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+
+---
+# Role for Zot Registry
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: zot-registry
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+
+rules:
+  # Read access to PVCs
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch"]
+  
+  # Read access to configmaps and secrets
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    verbs: ["get"]
+
+---
+# RoleBinding for Zot Registry
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: zot-registry
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+
+subjects:
+  - kind: ServiceAccount
+    name: zot-registry
+    namespace: opendesk
+
+roleRef:
+  kind: Role
+  name: zot-registry
+  apiGroup: rbac.authorization.k8s.io

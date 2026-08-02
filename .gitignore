@@ -41,3 +41,4 @@
 /.ralph/
 /.sisyphus/
 /.vscode/
+!opendesk-nix/

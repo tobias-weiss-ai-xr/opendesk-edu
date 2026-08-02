@@ -1,0 +1,63 @@
+---
+# Persistent Volume Claims für Zot Registry
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zot-registry-storage
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+    opendesk.org/pvc-type: storage
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-ssd
+  resources:
+    requests:
+      storage: 50Gi
+  volumeMode: Filesystem
+
+---
+# Cache PVC - kann auf schnellerem Storage sein
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zot-registry-cache
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+    opendesk.org/pvc-type: cache
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-ssd
+  resources:
+    requests:
+      storage: 20Gi
+  volumeMode: Filesystem
+
+---
+# Backup PVC (optional)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zot-registry-backup
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+    opendesk.org/pvc-type: backup
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-ssd
+  resources:
+    requests:
+      storage: 100Gi
+  volumeMode: Filesystem

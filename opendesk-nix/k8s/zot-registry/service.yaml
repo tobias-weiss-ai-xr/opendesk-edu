@@ -1,0 +1,59 @@
+---
+# Zot Registry Services
+# Exposes registry on ClusterIP and optionally NodePort
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: zot-registry
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+    opendesk.org/container-registry: gitlab.opencode.de
+  annotations:
+    # For MetalLB or external load balancer
+    metallb.universe.tf/allow-shared-ip: "true"
+
+spec:
+  type: ClusterIP
+  selector:
+    app: zot-registry
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+      appProtocol: http
+    - name: metrics
+      port: 8081
+      targetPort: 8081
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 8443
+      protocol: TCP
+      appProtocol: https
+
+---
+# NodePort Service for external access (optional)
+apiVersion: v1
+kind: Service
+metadata:
+  name: zot-registry-external
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry-external
+    opendesk.org/container-registry: gitlab.opencode.de
+
+spec:
+  type: NodePort
+  selector:
+    app: zot-registry
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+      protocol: TCP

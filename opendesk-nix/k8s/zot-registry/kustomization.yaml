@@ -1,0 +1,55 @@
+---
+# Kustomize Configuration für Zot Registry
+# Usage: kubectl apply -k opendesk-nix/k8s/zot-registry
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: zot-registry
+  namespace: opendesk
+  labels:
+    app: zot-registry
+    opendesk.org/container-registry: gitlab.opencode.de
+    opendesk.org/hardened: "true"
+
+namespace: opendesk
+
+# Common labels for all resources
+commonLabels:
+  app: zot-registry
+  app.kubernetes.io/name: zot-registry
+  app.kubernetes.io/version: "2.0.0"
+  app.kubernetes.io/part-of: opendesk
+  opendesk.org/component: registry
+
+# Resources to deploy
+resources:
+  - deployment.yaml
+  - service.yaml
+  - pvc.yaml
+  - configmap.yaml
+  - rbac.yaml
+
+# Secrets (uncomment when ready for production)
+# - secret.yaml
+
+# ConfigMap generator
+configMapGenerator:
+  - name: zot-registry-config
+    files:
+      - configmap.yaml
+
+# Secret generator (if needed)
+# secretGenerator:
+#   - name: zot-registry-secrets
+#     files:
+#       - passwd=docker/zot-registry/passwd
+
+# Transformers
+# Uncomment to add annotations to all resources
+# commonAnnotations:
+#   opendesk.org/managed-by: kustomize
+
+# Use with:
+# kubectl apply -k opendesk-nix/k8s/zot-registry

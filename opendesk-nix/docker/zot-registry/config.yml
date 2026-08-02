@@ -1,0 +1,218 @@
+# Hardened Zot Registry Configuration for openDesk
+# Security Level: PRODUCTION
+# SPDX-License-Identifier: Apache-2.0
+
+version: 2.0.0
+
+# --- SERVER CONFIGURATION ---
+server:
+  # Listen addresses - bind to specific interfaces for security
+  addr: ":8080"
+  tls:
+    # TLS is disabled in this base config
+    # For production, uncomment and configure TLS:
+    # cert: /etc/zot/tls/cert.pem
+    # key: /etc/zot/tls/key.pem
+    enabled: false
+    # Security: Only allow modern TLS versions
+    # minTLSVersion: "1.3"
+  
+  # Security headers
+  enableMetric: false
+  enablePprof: false
+  
+  # Rate limiting
+  rateLimits:
+    upload: 100  # MB/s
+    download: 100  # MB/s
+    requestsPerSecond: 100
+
+# --- STORAGE CONFIGURATION ---
+storage:
+  # Use filesystem storage for caching
+  rootDirectory: /var/lib/zot/storage
+  # Enable garbage collection
+  gc:
+    enabled: true
+    interval: 24h
+    deleteUntagged: true
+    # Keep at least 5 untagged images
+    keepUntaggedManifests: 5
+  
+  # Storage driver - filesystem is most secure for our use case
+  filesystem:
+    maxThreads: 10
+    dedicatedBlobDir: false
+    cache:
+      enabled: true
+      directory: /var/lib/zot/cache
+      maxSize: "10Gi"
+  
+  # Disable S3 (we're using local storage for caching)
+  s3: null
+
+# --- AUTHENTICATION & AUTHORIZATION ---
+auth:
+  # Enable basic auth (for caching, we might use token auth)
+  htpasswd:
+    path: /etc/zot/passwd
+    # Realm for authentication
+    realm: "Zot Registry"
+  
+  # Allow anonymous read access (for caching pull-through)
+  allowAnonymousReads: true
+  
+  # Disable all write operations except for cache
+  # (will be configured via access control)
+  
+# --- ACCESS CONTROL ---
+accessControl:
+  # Define roles and permissions
+  roles:
+    - name: "reader"
+      permissions:
+        read: 
+          - "*"
+    - name: "pusher"
+      permissions:
+        read: 
+          - "*"
+        write:
+          - "*" 
+        delete:
+          - "*"
+    
+  # Assign roles to users
+  users:
+    - name: "cache-user"
+      password: "${ZOT_CACHE_PASSWORD:changeme}"
+      roles: ["reader", "pusher"]
+
+# --- UPSTREAM CONFIGURATION --- (Pull-through caching)
+# Configure upstream registries for pull-through caching
+upstream:
+  # GitHub Container Registry
+  - name: ghcr
+    url: https://ghcr.io
+    tlsVerify: true
+    timeout: 30s
+    maxRetries: 3
+    
+    # Credentials for authenticated pulls
+    # (will be provided via Kubernetes secrets)
+    auth:
+      username: "${GHCR_USERNAME:-}"
+      password: "${GHCR_PASSWORD:-}"
+    
+    # Only cache openDesk images
+    pullThrough:
+      enabled: true
+      destinations:
+        - "ghcr.io/opendesk-edu/*"
+        - "ghcr.io/tobias-weiss-ai-xr/*"
+  
+  # GitLab Container Registry (opencode.de)
+  - name: gitlab-opencode
+    url: https://registry.gitlab.opencode.de
+    tlsVerify: true
+    timeout: 30s
+    maxRetries: 3
+    
+    auth:
+      username: "${GITLAB_USERNAME:-}"
+      password: "${GITLAB_PASSWORD:-}"
+    
+    pullThrough:
+      enabled: true
+      destinations:
+        - "registry.gitlab.opencode.de/umr/*"
+  
+  # Docker Hub (fallback)
+  - name: dockerhub
+    url: https://registry-1.docker.io
+    tlsVerify: true
+    timeout: 30s
+    maxRetries: 3
+    
+    pullThrough:
+      enabled: false
+      # Only enable if needed - security risk
+      # destinations: ["library/*"]
+
+# ---爵 CACHE CONFIGURATION ---
+cache:
+  # Use Redis for distributed cache (optional)
+  redis:
+    enabled: false
+    # addr: "redis.opendesk.svc:6379"
+    # password: "${REDIS_PASSWORD:}"
+    
+  # Use embedded cache
+  embedded:
+    enabled: true
+    maxSize: "10Gi"
+    
+# --- NOTIFICATIONS & AUDITING ---
+notification:
+  # Enable audit logging
+  audit:
+    enabled: true
+    file: /var/log/zot/audit.log
+    maxSize: 100  # MB
+    maxBackups: 5
+    
+  # Security events to log
+  events:
+    - Push
+    - Pull
+    - Delete
+    - AuthenticationFailure
+
+# --- SECURITY CONFIGURATION ---
+security:
+  # Enable vulnerability scanning for cached images
+  scan:
+    enabled: true
+    # Use Trivy for scanning (will be added as sidecar)
+    trivy:
+      enabled: false
+      # image: "aquasec/trivy:latest"
+    
+  # Rate limiting per IP
+  rateLimit:
+    ip:
+      enabled: true
+      requestsPerSecond: 100
+      burst: 200
+      
+  # CORS configuration
+  cors:
+    enabled: false
+    # origins: ["*.opendesk-edu.org"]
+    # methods: ["GET", "HEAD", "OPTIONS"]
+
+# --- NETWORK CONFIGURATION ---
+network:
+  # Proxy configuration (for HRZ environment)
+  http:
+    proxy:
+      enabled: false
+      # url: "http://www-proxy2.uni-marburg.de:3128"
+    
+  # Timeout configuration
+  timeout: 30s
+
+# --- CLEANUP & MAINTENANCE ---
+gc:
+  # Garbage collection schedule
+  schedule:
+    - at: "00:00"
+      keepSigned: true
+      keepUntagged: false
+      dryRun: false
+    
+  # Storage quotas
+  quotas:
+    - name: "cache-quota"
+      maxStorage: "50Gi"
+      maxArtifacts: 1000
