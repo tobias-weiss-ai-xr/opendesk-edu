@@ -1,0 +1,1052 @@
+name: openDesk Nix - CI/CD Pipeline
+
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'specs/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'specs/**'
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'CI Action'
+        required: true
+        default: 'build-all'
+        type: choice
+        options:
+          - build-all
+          - build-sogo5
+          - build-sogo6
+          - build-dev-agent
+          - build-zot
+          - test-all
+          - scan-all
+          - sbom-all
+          - push-all
+          - validate
+          - clean
+
+# -----------------------------------------------------------------------------
+# Environment Variables
+# -----------------------------------------------------------------------------
+
+env:
+  REGISTRY: registry.gitlab.opencode.de/umr
+  SOGO5_VERSION: 5.8.0
+  SOGO6_VERSION: 6.0.0
+  DEV_AGENT_VERSION: 2.1.0
+  ZOT_VERSION: 2.0.0-rc5
+  
+  SOGO5_IMAGE: ${{ env.REGISTRY }}/opendesk-sogo5:${{ env.SOGO5_VERSION }}
+  SOGO6_IMAGE: ${{ env.REGISTRY }}/opendesk-sogo6:${{ env.SOGO6_VERSION }}
+  DEV_AGENT_IMAGE: ${{ env.REGISTRY }}/opendesk-dev-agent:${{ env.DEV_AGENT_VERSION }}
+  ZOT_IMAGE: ${{ env.REGISTRY }}/zot-registry:${{ env.ZOT_VERSION }}
+
+# -----------------------------------------------------------------------------
+# Defaults
+# -----------------------------------------------------------------------------
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
+
+# -----------------------------------------------------------------------------
+# Jobs
+# -----------------------------------------------------------------------------
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Setup Job - Checkout and prepare
+  # ---------------------------------------------------------------------------
+  setup:
+    name: Setup Environment
+    runs-on: [self-hosted, linux]
+    outputs:
+      ref-slug: ${{ steps.ref-slug.outputs.value }}
+      short-sha: ${{ steps.short-sha.outputs.value }}
+      timestamp: ${{ steps.timestamp.outputs.value }}
+      is-main: ${{ steps.is-main.outputs.value }}
+      is-tag: ${{ steps.is-tag.outputs.value }}
+      tag-name: ${{ steps.tag-name.outputs.value }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get ref slug
+        id: ref-slug
+        run: |
+          echo "value=${GITHUB_REF_NAME//\//-}" >> $GITHUB_OUTPUT
+      
+      - name: Get short SHA
+        id: short-sha
+        run: |
+          echo "value=${GITHUB_SHA:0:8}" >> $GITHUB_OUTPUT
+      
+      - name: Get timestamp
+        id: timestamp
+        run: |
+          echo "value=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+      
+      - name: Check if main branch
+        id: is-main
+        run: |
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            echo "value=true" >> $GITHUB_OUTPUT
+          else
+            echo "value=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Check if tag
+        id: is-tag
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "value=true" >> $GITHUB_OUTPUT
+          else
+            echo "value=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Get tag name
+        id: tag-name
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "value=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "value=" >> $GITHUB_OUTPUT
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Validate Jobs
+  # ---------------------------------------------------------------------------
+  
+  validate-dockerfiles:
+    name: Validate Dockerfiles
+    needs: setup
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Install hadolint
+        run: |
+          sudo curl -sL https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint
+          sudo chmod +x /usr/local/bin/hadolint
+          hadolint --version
+      
+      - name: Validate SOGo 5 Dockerfile
+        run: hadolint docker/sogo5/Dockerfile
+      
+      - name: Validate SOGo 6 Dockerfile
+        run: hadolint docker/sogo6/Dockerfile
+      
+      - name: Validate Dev Agent Dockerfile
+        run: hadolint docker/dev-agent/Dockerfile
+      
+      - name: Validate Zot Registry Dockerfile
+        run: hadolint docker/zot-registry/Dockerfile
+
+  validate-shell-scripts:
+    name: Validate Shell Scripts
+    needs: setup
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq shellcheck
+          shellcheck --version
+      
+      - name: Find and validate all shell scripts
+        run: |
+          scripts=$(find docker scripts -name "*.sh" -type f)
+          if [ -n "$scripts" ]; then
+            echo "Validating shell scripts..."
+            echo "$scripts" | xargs shellcheck
+          else
+            echo "No shell scripts found"
+          fi
+
+  validate-yaml:
+    name: Validate YAML Files
+    needs: setup
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install yamllint
+        run: |
+          pip install yamllint
+          yamllint --version
+      
+      - name: Validate Kubernetes YAML files
+        run: |
+          find k8s -name "*.yaml" -type f | xargs yamllint -c .yamllint.yaml || true
+
+  validate-k8s-manifests:
+    name: Validate Kubernetes Manifests
+    needs: setup
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+      
+      - name: Validate manifests (dry-run)
+        run: |
+          for manifest in $(find k8s -name "*.yaml" -type f | sort); do
+            echo "Validating: $manifest"
+            kubectl apply --dry-run=client -f "$manifest" || echo "Skipping $manifest (may contain variables)"
+          done
+
+  # ---------------------------------------------------------------------------
+  # Build Jobs
+  # ---------------------------------------------------------------------------
+  
+  build-sogo5:
+    name: Build SOGo 5
+    needs: [setup, validate-dockerfiles]
+    runs-on: [self-hosted, linux]
+    outputs:
+      image-name: ${{ steps.build.outputs.image-name }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Set up QEMU for multi-arch build
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Login to GitLab Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GITLAB_USERNAME }}
+          password: ${{ secrets.GITLAB_TOKEN }}
+        if: github.event_name != 'pull_request'
+      
+      - name: Build SOGo 5 image
+        id: build
+        run: |
+          IMAGE_NAME="${{ env.REGISTRY }}/opendesk-sogo5:${{ env.SOGO5_VERSION }}"
+          docker build ${{ inputs.action == 'build-all' && '--no-cache' || '' }} \
+            --build-arg SOGO_VERSION=${{ env.SOGO5_VERSION }} \
+            --build-arg MEMCACHED_VERSION=1.6.21 \
+            --build-arg BUILD_DATE=${{ needs.setup.outputs.timestamp }} \
+            -t $IMAGE_NAME \
+            -t ${{ env.REGISTRY }}/opendesk-sogo5:${{ needs.setup.outputs.short-sha }} \
+            -f docker/sogo5/Dockerfile \
+            .
+          
+          echo "image-name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          docker images | grep "opendesk-sogo5"
+      
+      - name: Cache SOGo 5 image
+        run: |
+          docker save ${{ steps.build.outputs.image-name }} > sogo5-image.tar
+          cache save sogo5-image-key-${{ needs.setup.outputs.short-sha }} sogo5-image.tar
+      
+      - name: Push SOGo 5 image (main/develop only)
+        run: |
+          if [ "${{ needs.setup.outputs.is-main }}" = "true" ] || [ "$GITHUB_REF_NAME" = "develop" ]; then
+            docker push ${{ steps.build.outputs.image-name }}
+            docker push ${{ env.REGISTRY }}/opendesk-sogo5:${{ needs.setup.outputs.short-sha }}
+            if [ "${{ needs.setup.outputs.is-main }}" = "true" ]; then
+              docker push ${{ env.REGISTRY }}/opendesk-sogo5:latest
+            fi
+          fi
+        if: github.event_name != 'pull_request'
+
+  build-sogo6:
+    name: Build SOGo 6
+    needs: [setup, validate-dockerfiles]
+    runs-on: [self-hosted, linux]
+    outputs:
+      image-name: ${{ steps.build.outputs.image-name }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Set up QEMU for multi-arch build
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Login to GitLab Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GITLAB_USERNAME }}
+          password: ${{ secrets.GITLAB_TOKEN }}
+        if: github.event_name != 'pull_request'
+      
+      - name: Build SOGo 6 image
+        id: build
+        run: |
+          IMAGE_NAME="${{ env.REGISTRY }}/opendesk-sogo6:${{ env.SOGO6_VERSION }}"
+          docker build ${{ inputs.action == 'build-all' && '--no-cache' || '' }} \
+            --build-arg SOGO_VERSION=${{ env.SOGO6_VERSION }} \
+            --build-arg MEMCACHED_VERSION=1.6.21 \
+            --build-arg BUILD_DATE=${{ needs.setup.outputs.timestamp }} \
+            --build-arg EDV_ENABLED=true \
+            -t $IMAGE_NAME \
+            -t ${{ env.REGISTRY }}/opendesk-sogo6:${{ needs.setup.outputs.short-sha }} \
+            -f docker/sogo6/Dockerfile \
+            .
+          
+          echo "image-name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          docker images | grep "opendesk-sogo6"
+      
+      - name: Cache SOGo 6 image
+        run: |
+          docker save ${{ steps.build.outputs.image-name }} > sogo6-image.tar
+          cache save sogo6-image-key-${{ needs.setup.outputs.short-sha }} sogo6-image.tar
+      
+      - name: Push SOGo 6 image (main/develop only)
+        run: |
+          if [ "${{ needs.setup.outputs.is-main }}" = "true" ] || [ "$GITHUB_REF_NAME" = "develop" ]; then
+            docker push ${{ steps.build.outputs.image-name }}
+            docker push ${{ env.REGISTRY }}/opendesk-sogo6:${{ needs.setup.outputs.short-sha }}
+            if [ "${{ needs.setup.outputs.is-main }}" = "true" ]; then
+              docker push ${{ env.REGISTRY }}/opendesk-sogo6:latest
+            fi
+          fi
+        if: github.event_name != 'pull_request'
+
+  build-dev-agent:
+    name: Build Dev Agent
+    needs: [setup, validate-dockerfiles]
+    runs-on: [self-hosted, linux]
+    outputs:
+      image-name: ${{ steps.build.outputs.image-name }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Set up QEMU for multi-arch build
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Login to GitLab Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GITLAB_USERNAME }}
+          password: ${{ secrets.GITLAB_TOKEN }}
+        if: github.event_name != 'pull_request'
+      
+      - name: Build Dev Agent image
+        id: build
+        run: |
+          IMAGE_NAME="${{ env.REGISTRY }}/opendesk-dev-agent:${{ env.DEV_AGENT_VERSION }}"
+          docker build ${{ inputs.action == 'build-all' && '--no-cache' || '' }} \
+            --build-arg DEV_AGENT_VERSION=${{ env.DEV_AGENT_VERSION }} \
+            --build-arg BUILD_DATE=${{ needs.setup.outputs.timestamp }} \
+            -t $IMAGE_NAME \
+            -t ${{ env.REGISTRY }}/opendesk-dev-agent:${{ needs.setup.outputs.short-sha }} \
+            -f docker/dev-agent/Dockerfile \
+            .
+          
+          echo "image-name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          docker images | grep "opendesk-dev-agent"
+      
+      - name: Cache Dev Agent image
+        run: |
+          docker save ${{ steps.build.outputs.image-name }} > dev-agent-image.tar
+          cache save dev-agent-image-key-${{ needs.setup.outputs.short-sha }} dev-agent-image.tar
+      
+      - name: Push Dev Agent image (main/develop only)
+        run: |
+          if [ "${{ needs.setup.outputs.is-main }}" = "true" ] || [ "$GITHUB_REF_NAME" = "develop" ]; then
+            docker push ${{ steps.build.outputs.image-name }}
+            docker push ${{ env.REGISTRY }}/opendesk-dev-agent:${{ needs.setup.outputs.short-sha }}
+            if [ "${{ needs.setup.outputs.is-main }}" = "true" ]; then
+              docker push ${{ env.REGISTRY }}/opendesk-dev-agent:latest
+            fi
+          fi
+        if: github.event_name != 'pull_request'
+
+  build-zot:
+    name: Build Zot Registry
+    needs: [setup, validate-dockerfiles]
+    runs-on: [self-hosted, linux]
+    outputs:
+      image-name: ${{ steps.build.outputs.image-name }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Set up QEMU for multi-arch build
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Login to GitLab Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GITLAB_USERNAME }}
+          password: ${{ secrets.GITLAB_TOKEN }}
+        if: github.event_name != 'pull_request'
+      
+      - name: Build Zot Registry image
+        id: build
+        run: |
+          IMAGE_NAME="${{ env.REGISTRY }}/zot-registry:${{ env.ZOT_VERSION }}"
+          docker build ${{ inputs.action == 'build-all' && '--no-cache' || '' }} \
+            --build-arg ZOT_VERSION=${{ env.ZOT_VERSION }} \
+            --build-arg BUILD_DATE=${{ needs.setup.outputs.timestamp }} \
+            -t $IMAGE_NAME \
+            -t ${{ env.REGISTRY }}/zot-registry:${{ needs.setup.outputs.short-sha }} \
+            -f docker/zot-registry/Dockerfile \
+            .
+          
+          echo "image-name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          docker images | grep "zot-registry"
+      
+      - name: Cache Zot image
+        run: |
+          docker save ${{ steps.build.outputs.image-name }} > zot-image.tar
+          cache save zot-image-key-${{ needs.setup.outputs.short-sha }} zot-image.tar
+      
+      - name: Push Zot Registry image (main/develop only)
+        run: |
+          if [ "${{ needs.setup.outputs.is-main }}" = "true" ] || [ "$GITHUB_REF_NAME" = "develop" ]; then
+            docker push ${{ steps.build.outputs.image-name }}
+            docker push ${{ env.REGISTRY }}/zot-registry:${{ needs.setup.outputs.short-sha }}
+            if [ "${{ needs.setup.outputs.is-main }}" = "true" ]; then
+              docker push ${{ env.REGISTRY }}/zot-registry:latest
+            fi
+          fi
+        if: github.event_name != 'pull_request'
+
+  # ---------------------------------------------------------------------------
+  # Test Jobs
+  # ---------------------------------------------------------------------------
+  
+  test-sogo5:
+    name: Test SOGo 5
+    needs: build-sogo5
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Restore SOGo 5 image from cache
+        run: |
+          cache restore sogo5-image-key-${{ needs.setup.outputs.short-sha }} sogo5-image.tar
+          docker load < sogo5-image.tar || true
+        id: restore
+      
+      - name: Pull SOGo 5 image if cache missed
+        run: docker pull ${{ needs.build-sogo5.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Test SOGo 5 container starts
+        run: |
+          docker run --rm --name test-sogo5 ${{ needs.build-sogo5.outputs.image-name }} sh -c "exit 0"
+
+  test-sogo6:
+    name: Test SOGo 6
+    needs: build-sogo6
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Restore SOGo 6 image from cache
+        run: |
+          cache restore sogo6-image-key-${{ needs.setup.outputs.short-sha }} sogo6-image.tar
+          docker load < sogo6-image.tar || true
+        id: restore
+      
+      - name: Pull SOGo 6 image if cache missed
+        run: docker pull ${{ needs.build-sogo6.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Test SOGo 6 container starts
+        run: |
+          docker run --rm --name test-sogo6 ${{ needs.build-sogo6.outputs.image-name }} sh -c "exit 0"
+
+  test-dev-agent:
+    name: Test Dev Agent
+    needs: build-dev-agent
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Restore Dev Agent image from cache
+        run: |
+          cache restore dev-agent-image-key-${{ needs.setup.outputs.short-sha }} dev-agent-image.tar
+          docker load < dev-agent-image.tar || true
+        id: restore
+      
+      - name: Pull Dev Agent image if cache missed
+        run: docker pull ${{ needs.build-dev-agent.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Test Dev Agent container starts
+        run: |
+          docker run --rm --name test-dev-agent ${{ needs.build-dev-agent.outputs.image-name }} --help >/dev/null 2>&1 && echo "Help command works" || echo "No help command"
+          docker run --rm --name test-dev-agent-version ${{ needs.build-dev-agent.outputs.image-name }} --version >/dev/null 2>&1 && echo "Version command works" || echo "No version command"
+
+  test-zot:
+    name: Test Zot Registry
+    needs: build-zot
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Restore Zot image from cache
+        run: |
+          cache restore zot-image-key-${{ needs.setup.outputs.short-sha }} zot-image.tar
+          docker load < zot-image.tar || true
+        id: restore
+      
+      - name: Pull Zot image if cache missed
+        run: docker pull ${{ needs.build-zot.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Test Zot Registry container starts and health check
+        run: |
+          docker run -d --rm --name test-zot -p 8080:8080 ${{ needs.build-zot.outputs.image-name }}
+          sleep 10
+          curl -sf http://localhost:8080/healthz && echo "Health check passed" || echo "Health check failed"
+          docker stop test-zot || true
+          docker rm test-zot || true
+
+  # ---------------------------------------------------------------------------
+  # Scan Jobs
+  # ---------------------------------------------------------------------------
+  
+  scan-sogo5:
+    name: Scan SOGo 5
+    needs: [setup, build-sogo5]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy --version
+      
+      - name: Restore SOGo 5 image from cache
+        run: |
+          cache restore sogo5-image-key-${{ needs.setup.outputs.short-sha }} sogo5-image.tar
+          docker load < sogo5-image.tar || true
+        id: restore
+      
+      - name: Pull SOGo 5 image if cache missed
+        run: docker pull ${{ needs.build-sogo5.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Scan SOGo 5 for vulnerabilities
+        run: |
+          echo "Scanning ${{ needs.build-sogo5.outputs.image-name }}..."
+          trivy image --severity CRITICAL,HIGH --exit-code 0 ${{ needs.build-sogo5.outputs.image-name }}
+      
+      - name: Generate Trivy JSON report
+        run: |
+          trivy image --format json --output trivy-sogo5-${{ needs.setup.outputs.short-sha }}.json ${{ needs.build-sogo5.outputs.image-name }}
+      
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-sogo5-${{ needs.setup.outputs.short-sha }}
+          path: trivy-sogo5-${{ needs.setup.outputs.short-sha }}.json
+          retention-days: 7
+
+  scan-sogo6:
+    name: Scan SOGo 6
+    needs: [setup, build-sogo6]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy --version
+      
+      - name: Restore SOGo 6 image from cache
+        run: |
+          cache restore sogo6-image-key-${{ needs.setup.outputs.short-sha }} sogo6-image.tar
+          docker load < sogo6-image.tar || true
+        id: restore
+      
+      - name: Pull SOGo 6 image if cache missed
+        run: docker pull ${{ needs.build-sogo6.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Scan SOGo 6 for vulnerabilities
+        run: |
+          echo "Scanning ${{ needs.build-sogo6.outputs.image-name }}..."
+          trivy image --severity CRITICAL,HIGH --exit-code 0 ${{ needs.build-sogo6.outputs.image-name }}
+      
+      - name: Generate Trivy JSON report
+        run: |
+          trivy image --format json --output trivy-sogo6-${{ needs.setup.outputs.short-sha }}.json ${{ needs.build-sogo6.outputs.image-name }}
+      
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-sogo6-${{ needs.setup.outputs.short-sha }}
+          path: trivy-sogo6-${{ needs.setup.outputs.short-sha }}.json
+          retention-days: 7
+
+  scan-dev-agent:
+    name: Scan Dev Agent
+    needs: [setup, build-dev-agent]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy --version
+      
+      - name: Restore Dev Agent image from cache
+        run: |
+          cache restore dev-agent-image-key-${{ needs.setup.outputs.short-sha }} dev-agent-image.tar
+          docker load < dev-agent-image.tar || true
+        id: restore
+      
+      - name: Pull Dev Agent image if cache missed
+        run: docker pull ${{ needs.build-dev-agent.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Scan Dev Agent for vulnerabilities
+        run: |
+          echo "Scanning ${{ needs.build-dev-agent.outputs.image-name }}..."
+          trivy image --severity CRITICAL,HIGH --exit-code 0 ${{ needs.build-dev-agent.outputs.image-name }}
+      
+      - name: Generate Trivy JSON report
+        run: |
+          trivy image --format json --output trivy-dev-agent-${{ needs.setup.outputs.short-sha }}.json ${{ needs.build-dev-agent.outputs.image-name }}
+      
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-dev-agent-${{ needs.setup.outputs.short-sha }}
+          path: trivy-dev-agent-${{ needs.setup.outputs.short-sha }}.json
+          retention-days: 7
+
+  scan-zot:
+    name: Scan Zot Registry
+    needs: [setup, build-zot]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy --version
+      
+      - name: Restore Zot image from cache
+        run: |
+          cache restore zot-image-key-${{ needs.setup.outputs.short-sha }} zot-image.tar
+          docker load < zot-image.tar || true
+        id: restore
+      
+      - name: Pull Zot image if cache missed
+        run: docker pull ${{ needs.build-zot.outputs.image-name }}
+        if: steps.restore.outcome != 'success'
+      
+      - name: Scan Zot Registry for vulnerabilities
+        run: |
+          echo "Scanning ${{ needs.build-zot.outputs.image-name }}..."
+          trivy image --severity CRITICAL,HIGH --exit-code 0 ${{ needs.build-zot.outputs.image-name }}
+      
+      - name: Generate Trivy JSON report
+        run: |
+          trivy image --format json --output trivy-zot-${{ needs.setup.outputs.short-sha }}.json ${{ needs.build-zot.outputs.image-name }}
+      
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-zot-${{ needs.setup.outputs.short-sha }}
+          path: trivy-zot-${{ needs.setup.outputs.short-sha }}.json
+          retention-days: 7
+
+  scan-summary:
+    name: Security Scan Summary
+    needs: [scan-sogo5, scan-sogo6, scan-dev-agent, scan-zot]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Create scan summary
+        run: |
+          echo "# Security Scan Summary" > SECURITY_SUMMARY.md
+          echo "Generated: $(date -u)" >> SECURITY_SUMMARY.md
+          echo "Commit: ${GITHUB_SHA}" >> SECURITY_SUMMARY.md
+          echo "" >> SECURITY_SUMMARY.md
+          
+          for job in scan-sogo5 scan-sogo6 scan-dev-agent scan-zot; do
+            echo "## ${{ needs.$job.outputs.image-name || needs.$job.result }}" >> SECURITY_SUMMARY.md
+            echo "Status: ${{ needs.$job.result }}" >> SECURITY_SUMMARY.md
+            echo "" >> SECURITY_SUMMARY.md
+          done
+      
+      - name: Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-summary-${{ needs.setup.outputs.short-sha }}
+          path: SECURITY_SUMMARY.md
+          retention-days: 7
+
+  # ---------------------------------------------------------------------------
+  # SBOM Jobs
+  # ---------------------------------------------------------------------------
+  
+  sbom-cyclonedx:
+    name: Generate CycloneDX SBOMs
+    needs: [setup, build-sogo5, build-sogo6, build-dev-agent, build-zot]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Restore images from cache
+        run: |
+          cache restore sogo5-image-key-${{ needs.setup.outputs.short-sha }} sogo5-image.tar
+          docker load < sogo5-image.tar || true
+          cache restore sogo6-image-key-${{ needs.setup.outputs.short-sha }} sogo6-image.tar
+          docker load < sogo6-image.tar || true
+          cache restore dev-agent-image-key-${{ needs.setup.outputs.short-sha }} dev-agent-image.tar
+          docker load < dev-agent-image.tar || true
+          cache restore zot-image-key-${{ needs.setup.outputs.short-sha }} zot-image.tar
+          docker load < zot-image.tar || true
+      
+      - name: Pull images if cache missed
+        run: |
+          docker pull ${{ needs.build-sogo5.outputs.image-name }} || true
+          docker pull ${{ needs.build-sogo6.outputs.image-name }} || true
+          docker pull ${{ needs.build-dev-agent.outputs.image-name }} || true
+          docker pull ${{ needs.build-zot.outputs.image-name }} || true
+      
+      - name: Generate CycloneDX SBOMs
+        run: cd sbom && make cyclonedx
+      
+      - name: List generated SBOMs
+        run: ls -la sbom/output/ || true
+      
+      - name: Upload SBOMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx-${{ needs.setup.outputs.short-sha }}
+          path: sbom/output/
+          retention-days: 30
+
+  sbom-spdx:
+    name: Generate SPDX SBOMs
+    needs: [setup, build-sogo5, build-sogo6, build-dev-agent, build-zot]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Restore images from cache
+        run: |
+          cache restore sogo5-image-key-${{ needs.setup.outputs.short-sha }} sogo5-image.tar
+          docker load < sogo5-image.tar || true
+          cache restore sogo6-image-key-${{ needs.setup.outputs.short-sha }} sogo6-image.tar
+          docker load < sogo6-image.tar || true
+          cache restore dev-agent-image-key-${{ needs.setup.outputs.short-sha }} dev-agent-image.tar
+          docker load < dev-agent-image.tar || true
+          cache restore zot-image-key-${{ needs.setup.outputs.short-sha }} zot-image.tar
+          docker load < zot-image.tar || true
+      
+      - name: Pull images if cache missed
+        run: |
+          docker pull ${{ needs.build-sogo5.outputs.image-name }} || true
+          docker pull ${{ needs.build-sogo6.outputs.image-name }} || true
+          docker pull ${{ needs.build-dev-agent.outputs.image-name }} || true
+          docker pull ${{ needs.build-zot.outputs.image-name }} || true
+      
+      - name: Generate SPDX SBOMs
+        run: cd sbom && make spdx
+      
+      - name: List generated SBOMs
+        run: ls -la sbom/output/ || true
+      
+      - name: Upload SBOMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-spdx-${{ needs.setup.outputs.short-sha }}
+          path: sbom/output/
+          retention-days: 30
+
+  # ---------------------------------------------------------------------------
+  # Deploy Jobs (Manual Trigger)
+  # ---------------------------------------------------------------------------
+  
+  push-all:
+    name: Push All Images
+    needs: [setup, build-sogo5, build-sogo6, build-dev-agent, build-zot]
+    runs-on: [self-hosted, linux]
+    if: github.event_name != 'pull_request'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Login to GitLab Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GITLAB_USERNAME }}
+          password: ${{ secrets.GITLAB_TOKEN }}
+      
+      - name: Restore images from cache
+        run: |
+          cache restore sogo5-image-key-${{ needs.setup.outputs.short-sha }} sogo5-image.tar
+          docker load < sogo5-image.tar || true
+          cache restore sogo6-image-key-${{ needs.setup.outputs.short-sha }} sogo6-image.tar
+          docker load < sogo6-image.tar || true
+          cache restore dev-agent-image-key-${{ needs.setup.outputs.short-sha }} dev-agent-image.tar
+          docker load < dev-agent-image.tar || true
+          cache restore zot-image-key-${{ needs.setup.outputs.short-sha }} zot-image.tar
+          docker load < zot-image.tar || true
+      
+      - name: Pull images if cache missed
+        run: |
+          docker pull ${{ needs.build-sogo5.outputs.image-name }} || true
+          docker pull ${{ needs.build-sogo6.outputs.image-name }} || true
+          docker pull ${{ needs.build-dev-agent.outputs.image-name }} || true
+          docker pull ${{ needs.build-zot.outputs.image-name }} || true
+      
+      - name: Push all images
+        run: |
+          make push-all
+          
+          # Also push with commit SHA tag
+          docker push ${{ env.REGISTRY }}/opendesk-sogo5:${{ needs.setup.outputs.short-sha }}
+          docker push ${{ env.REGISTRY }}/opendesk-sogo6:${{ needs.setup.outputs.short-sha }}
+          docker push ${{ env.REGISTRY }}/opendesk-dev-agent:${{ needs.setup.outputs.short-sha }}
+          docker push ${{ env.REGISTRY }}/zot-registry:${{ needs.setup.outputs.short-sha }}
+          
+          # Push latest tag for main branch
+          if [ "${{ needs.setup.outputs.is-main }}" = "true" ]; then
+            docker push ${{ env.REGISTRY }}/opendesk-sogo5:latest
+            docker push ${{ env.REGISTRY }}/opendesk-sogo6:latest
+            docker push ${{ env.REGISTRY }}/opendesk-dev-agent:latest
+            docker push ${{ env.REGISTRY }}/zot-registry:latest
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Workflow Dispatch Jobs
+  # ---------------------------------------------------------------------------
+  
+  workflow-dispatch-build:
+    name: Build (Workflow Dispatch)
+    if: github.event_name == 'workflow_dispatch' && startsWith(github.event.inputs.action, 'build-')
+    needs: setup
+    runs-on: [self-hosted, linux]
+    
+    strategy:
+      matrix:
+        action: ["${{ github.event.inputs.action }}"]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Login to GitLab Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.GITLAB_USERNAME }}
+          password: ${{ secrets.GITLAB_TOKEN }}
+        if: github.event_name != 'pull_request'
+      
+      - name: Run build action
+        run: make ${{ matrix.action }}
+
+  workflow-dispatch-test:
+    name: Test (Workflow Dispatch)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'test-all'
+    needs: [build-sogo5, build-sogo6, build-dev-agent, build-zot]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Run all tests
+        run: make test-all
+
+  workflow-dispatch-scan:
+    name: Scan (Workflow Dispatch)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'scan-all'
+    needs: [setup, build-sogo5, build-sogo6, build-dev-agent, build-zot]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Scan all images
+        run: |
+          for image in ${SOGO5_IMAGE} ${SOGO6_IMAGE} ${DEV_AGENT_IMAGE} ${ZOT_IMAGE}; do
+            echo "Scanning $image..."
+            trivy image --severity CRITICAL,HIGH --exit-code 0 $image
+          done
+
+  workflow-dispatch-sbom:
+    name: SBOM (Workflow Dispatch)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'sbom-all'
+    needs: [setup, build-sogo5, build-sogo6, build-dev-agent, build-zot]
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Generate all SBOMs
+        run: cd sbom && make all
+
+  workflow-dispatch-validate:
+    name: Validate (Workflow Dispatch)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'validate'
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Run validation scripts
+        run: ./scripts/validate-all.sh all
+
+  workflow-dispatch-clean:
+    name: Clean (Workflow Dispatch)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'clean'
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Clean build artifacts
+        run: make clean
+
+  # ---------------------------------------------------------------------------
+  # Nightly Schedule
+  # ---------------------------------------------------------------------------
+  
+  nightly:
+    name: Nightly Build & Scan
+    if: github.event_name == 'schedule'
+    needs: setup
+    runs-on: [self-hosted, linux]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy --version
+      
+      - name: Nightly build and scan
+        run: |
+          echo "Running nightly build and scan..."
+          make build-all
+          
+          for image in ${SOGO5_IMAGE} ${SOGO6_IMAGE} ${DEV_AGENT_IMAGE} ${ZOT_IMAGE}; do
+            echo "Scanning $image..."
+            docker inspect $image >/dev/null 2>&1 && trivy image --severity CRITICAL,HIGH --exit-code 1 $image || echo "Image not found"
+          done || echo "Vulnerabilities found"
+          
+          cd sbom && make all

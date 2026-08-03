@@ -1,39 +1,107 @@
----
-# Kustomize configuration for SOGo 5
-# Usage: kubectl apply -k opendesk-nix/k8s/sogo5
-
+# SOGo 5 Kustomization
+# SPDX-License-Identifier: Apache-2.0
+#
+# Usage:
+#   kubectl apply -k opendesk-nix/k8s/sogo5
+#   
+# For production:
+#   kubectl apply -k opendesk-nix/k8s/sogo5/overlays/production
+#
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-metadata:
-  name: sogo5
-  namespace: opendesk
-  labels:
-    app: sogo5
-    opendesk.org/container-registry: gitlab.opencode.de
-    opendesk.org/nix-maintained: "true"
+# Metadata
+labels:
+  - includeSelectors: false
+    pairs:
+      app.kubernetes.io/name: sogo
+      app.kubernetes.io/instance: sogo5
+      app.kubernetes.io/version: "5.8.0"
+      app.kubernetes.io/component: mail-calendar-contacts
+      app.kubernetes.io/part-of: opendesk
+      app.kubernetes.io/managed-by: kustomize
+      
+      opendesk.org/component: mail-calendar-contacts
+      opendesk.org/version: "5.8.0"
+      
+      de.zki.it-grundschutz.module: SY.3.4Mail
+      de.container.gov.component: sogo5
 
-namespace: opendesk
+# Common annotations
+commonAnnotations:
+  opendesk.org/description: "SOGo 5 - Groupware server with web interface, CalDAV, CardDAV, and ActiveSync"
+  opendesk.org/build-date: "2026-08-03T12:00:00Z"
+  opendesk.org/registry: "registry.gitlab.opencode.de/umr"
 
+# Resource list
 resources:
-  - deployment.yaml
-  - service.yaml
+  # Namespace
+  - namespace.yaml
+  
+  # Configuration
   - configmap.yaml
+  
+  # Secrets (template - create actual secrets manually)
+  # - secret.yaml
+  
+  # Persistent Volume Claims
   - pvc.yaml
+  
+  # Deployment
+  - deployment.yaml
+  
+  # Services
+  - service.yaml
 
-# Uncomment to include sealed secrets
-# - sealed-secret.yaml
+# Image substitutions
+images:
+  - name: registry.gitlab.opencode.de/umr/opendesk-sogo5
+    newName: registry.gitlab.opencode.de/umr/opendesk-sogo5
+    newTag: 5.8.0
 
-configMapGenerator:
-  - name: sogo5-config
-    files:
-      - configmap.yaml
+# ConfigMap generator (optional)
+# configMapGenerator:
+#   - name: sogo5-custom-config
+#     behavior: merge
+#     files:
+#       - custom-sogo.conf
 
-# For production, use:
-# generatorOptions:
-#   disableNameSuffixHash: true
-#   labels:
-#     opendesk.org/managed-by: kustomize
+# Secret generator (optional - for non-sensitive config)
+# secretGenerator:
+#   - name: sogo5-app-secrets
+#     behavior: create
+#     literals:
+#       - SOGO_SESSION_KEY=generated_value
 
-# Use with:
-# kubectl apply -k opendesk-nix/k8s/sogo5
+# Patched resources
+patches:
+  # Patch to increase replicas
+  # - target:
+  #     kind: Deployment
+  #     name: sogo5
+  #   patch: |-
+  #     - op: replace
+  #       path: /spec/replicas
+  #       value: 3
+
+# Disable monitoring by default
+configurations:
+  - kustomizeconfig.yaml
+
+# Variables for templating
+vars:
+  - name: HASH_CONFIG
+    objref:
+      kind: ConfigMap
+      name: sogo5-config
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.uid
+  
+  - name: HASH_SECRET
+    objref:
+      kind: Secret
+      name: sogo5-secrets
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.uid

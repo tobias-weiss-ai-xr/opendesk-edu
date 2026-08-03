@@ -1,29 +1,161 @@
+# SOGo 5 Persistent Volume Claims
+# SPDX-License-Identifier: Apache-2.0
+#
+# SOGo 5 requires persistent storage for:
+# - User data (emails, calendars, contacts)
+# - Log files
+# - Session data
+# - Attachments
+#
+# Storage classes available:
+# - ceph-rbd-ssd: Fast SSD storage (RWO) - recommended for databases
+# - ceph-cephfs-hdd-ec: Erasure-coded HDD storage (RWX) - for shared data
+#
 ---
-# Persistent Volume Claim for SOGo 5
-
+# PVC for SOGo user data (RWO)
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: sogo5-data
-  namespace: opendesk
+  namespace: sogo5
   labels:
-    app: sogo5
-    app.kubernetes.io/name: sogo5
-    opendesk.org/container-registry: gitlab.opencode.de
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: data
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    opendesk.org/pvc-type: data
+    opendesk.org/backup: "k8up-daily"
+    
+    de.zki.it-grundschutz.module: SY.3.4Mail
+    de.zki.it-grundschutz.classification: confidential
+    de.container.gov.component: sogo5
 
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: ceph-cephfs-hdd-ec
+    - ReadWriteOnce
+  
   resources:
     requests:
-      storage: 10Gi
+      storage: 50Gi
+  
+  storageClassName: ceph-rbd-ssd
+  
   volumeMode: Filesystem
 
 ---
-# For RWX (ReadWriteMany) access - CephFS
-# For RWO access (some deployments), use:
-# storageClassName: ceph-rbd-ssd
-# accessModes: [ReadWriteOnce]
+# PVC for SOGo logs (RWO)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sogo5-logs
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: logs
+    
+    opendesk.org/pvc-type: logs
+    opendesk.org/backup: "k8up-daily"
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  
+  resources:
+    requests:
+      storage: 10Gi
+  
+  storageClassName: ceph-rbd-ssd
+  
+  volumeMode: Filesystem
 
 ---
+# PVC for SOGo sessions (Redis/memcached alternative)
+# Note: SOGo primarily uses memcached (in-memory) for sessions
+# This PVC is for persistent session storage if configured
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sogo5-sessions
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: sessions
+    
+    opendesk.org/pvc-type: sessions
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  
+  resources:
+    requests:
+      storage: 1Gi
+  
+  storageClassName: ceph-rbd-ssd
+  
+  volumeMode: Filesystem
+
+---
+# PVC for SOGo attachments
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sogo5-attachments
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: attachments
+    
+    opendesk.org/pvc-type: attachments
+    opendesk.org/backup: "k8up-daily"
+    
+    de.zki.it-grundschutz.classification: confidential
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  
+  resources:
+    requests:
+      storage: 100Gi
+  
+  storageClassName: ceph-rbd-ssd
+  
+  volumeMode: Filesystem
+
+---
+# PVC for SOGo temp files
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sogo5-tmp
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: tmp
+    
+    opendesk.org/pvc-type: tmp
+    opendesk.org/backup: "false"  # Temp files don't need backup
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  
+  resources:
+    requests:
+      storage: 5Gi
+  
+  storageClassName: ceph-rbd-ssd
+  
+  volumeMode: Filesystem
