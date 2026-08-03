@@ -311,3 +311,6 @@ Central flake for all NixOS-based container builds
       }
     );
 }
+    dev-agent-nixos
+    sogo5-nixos
+    sogo6-nixos

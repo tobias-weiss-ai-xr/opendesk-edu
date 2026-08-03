@@ -470,3 +470,36 @@ in rec {
     );
   };
 }
+
+    dev-agent = mkService {
+      name = "dev-agent";
+      version = "latest";
+      description = "dev-agent service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/dev-agent/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/dev-agent/nixos/default.nix;
+    } // serviceTypes.other;
+
+    sogo5 = mkService {
+      name = "sogo5";
+      version = "latest";
+      description = "sogo5 service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/sogo5/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/sogo5/nixos/default.nix;
+    } // serviceTypes.other;
+
+    sogo6 = mkService {
+      name = "sogo6";
+      version = "latest";
+      description = "sogo6 groupware server for openDesk";
+      category = "groupware";
+      tier = "backend";
+      ports = [ 20000 ];
+      configPath = ./docker/services/sogo6/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/sogo6/nixos/default.nix;
+    } // serviceTypes.groupware;

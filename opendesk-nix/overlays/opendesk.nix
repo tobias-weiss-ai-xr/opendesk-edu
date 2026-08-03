@@ -189,3 +189,27 @@ self: super: rec {
   # Legacy compatibility
   opendesk = opendeskPackages;
 }
+    # zot-registry
+    zot-registry = super.zot-registry.overrideAttrs (old: rec {
+      version = "2.0.0-rc4";
+      pname = "zot-registry-opendesk";
+      # TODO: Add custom source
+    });
+    # dev-agent
+    dev-agent = super.dev-agent.overrideAttrs (old: rec {
+      version = "latest";
+      pname = "dev-agent-opendesk";
+      # TODO: Add custom source
+    });
+    # sogo5
+    sogo5 = super.sogo5.overrideAttrs (old: rec {
+      version = "latest";
+      pname = "sogo5-opendesk";
+      # TODO: Add custom source
+    });
+    # sogo6
+    sogo6 = super.sogo6.overrideAttrs (old: rec {
+      version = "latest";
+      pname = "sogo6-opendesk";
+      # TODO: Add custom source
+    });
