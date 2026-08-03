@@ -160,7 +160,7 @@ migrate_service() {
     fi
     
     # Run the migration
-    if ./migrate-service.sh "$service" "$version" "" 2>&1 | grep -q "Success"; then
+    if ./migrate-service.sh "$service" "$version" "" >/dev/null 2>&1; then
         log "OK" "$service: Migrated successfully"
         return 0
     else
