@@ -7,10 +7,10 @@ let
   # Create a dummy derivation for stub purposes
   dummyDerivation = name: pkgs.stdenv.mkDerivation {
     name = name;
-    src = pkgs.stdenv.mkDerivation { name = "dummy-src"; builder = "${pkgs.bash}/bin/bash"; args = [ "-c" "touch \$out" ]; };
-    installPhase = "";
+    inherit (pkgs) bash;
+    builder = "${pkgs.bash}/bin/bash";
+    args = [ "-c" "echo 'Stub: ${name}' > \$out" ];
   };
-
   
   # All service containers - dummy derivations for stub purposes
   allContainers = {

@@ -3,7 +3,6 @@
 
 { lib, ... }:
 # Type definitions for openDesk Nix configurations.
-# 
 # This library provides type definitions and validations for:
 # - Image configurations
 # - Kubernetes resource configurations
