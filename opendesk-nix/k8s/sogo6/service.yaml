@@ -1,24 +1,41 @@
+# SOGo 6 Service Configuration
+# SPDX-License-Identifier: Apache-2.0
 ---
-# SOGo 6 Service
-
+# Web Interface Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: sogo6
-  namespace: opendesk
+  name: sogo6-web
+  namespace: sogo6
   labels:
-    app: sogo6
-    app.kubernetes.io/name: sogo6
-    opendesk.org/container-registry: gitlab.opencode.de
+    app: sogo
+    version: "6.0.0"
+    component: web
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo6
+    opendesk.org/service-type: web
+    de.container.gov.component: sogo6
+
 spec:
   selector:
-    app: sogo6
+    app: sogo
+    version: "6.0.0"
+    component: app
+  
   ports:
-    - name: sogod
-      port: 20000
+    - name: http
+      port: 80
       targetPort: 20000
       protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 20001
+      protocol: TCP
+
   type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIPTimeoutSeconds: 3600
 
 ---
 # Headless Service
@@ -26,12 +43,119 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sogo6-headless
-  namespace: opendesk
+  namespace: sogo6
+  labels:
+    app: sogo
+    version: "6.0.0"
+    component: app
+    opendesk.org/service-type: headless
+
 spec:
   clusterIP: None
   selector:
-    app: sogo6
+    app: sogo
+    version: "6.0.0"
+    component: app
+  
   ports:
-    - port: 20000
+    - name: http
+      port: 20000
       targetPort: 20000
-      name: sogod
+      protocol: TCP
+    - name: https
+      port: 20001
+      targetPort: 20001
+      protocol: TCP
+    - name: dav
+      port: 20002
+      targetPort: 20002
+      protocol: TCP
+    - name: activesync
+      port: 20003
+      targetPort: 20003
+      protocol: TCP
+    - name: admin
+      port: 20004
+      targetPort: 20004
+      protocol: TCP
+
+---
+# DAV Service (CalDAV/CardDAV)
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo6-dav
+  namespace: sogo6
+  labels:
+    app: sogo
+    version: "6.0.0"
+    component: dav
+    opendesk.org/service-type: dav
+
+spec:
+  selector:
+    app: sogo
+    version: "6.0.0"
+    component: app
+  
+  ports:
+    - name: dav
+      port: 20002
+      targetPort: 20002
+      protocol: TCP
+
+  type: ClusterIP
+
+---
+# ActiveSync Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo6-activesync
+  namespace: sogo6
+  labels:
+    app: sogo
+    version: "6.0.0"
+    component: activesync
+    opendesk.org/service-type: activesync
+
+spec:
+  selector:
+    app: sogo
+    version: "6.0.0"
+    component: app
+  
+  ports:
+    - name: activesync
+      port: 20003
+      targetPort: 20003
+      protocol: TCP
+
+  type: ClusterIP
+
+---
+# Admin Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo6-admin
+  namespace: sogo6
+  labels:
+    app: sogo
+    version: "6.0.0"
+    component: admin
+    opendesk.org/service-type: admin
+
+spec:
+  selector:
+    app: sogo
+    version: "6.0.0"
+    component: app
+  
+  ports:
+    - name: admin
+      port: 20004
+      targetPort: 20004
+      protocol: TCP
+
+  type: ClusterIP

@@ -1,160 +1,144 @@
----
-# Zot Registry - Hardened Container Image Registry for Caching
-# Purpose: Local caching of container images on K3s cluster
-# Image: registry.gitlab.opencode.de/umr/zot-registry:latest
+# Zot Registry Deployment
 # SPDX-License-Identifier: Apache-2.0
-
+# Purpose: Deploy Zot Registry as a caching proxy for openDesk
+# Strategy: Recreate (single replica, ensures clean startup)
+# Security: Non-root, read-only root filesystem, capability dropping
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zot-registry
-  namespace: opendesk
+  namespace: zot-registry
   labels:
     app: zot-registry
-    app.kubernetes.io/name: zot-registry
-    app.kubernetes.io/version: "2.0.0"
-    app.kubernetes.io/component: registry
-    app.kubernetes.io/part-of: opendesk
-    opendesk.org/container-registry: gitlab.opencode.de
-    opendesk.org/hardened: "true"
-    opendesk.org/purpose: caching
-
+    component: registry
+    managed-by: opendesk-edu
+    version: "2.0.0"
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+    opendesk.org.version: "2.0.0"
+  annotations:
+    description: "Zot Registry deployment for caching openDesk container images"
+    reloader.stakater.com/auto: "true"  # Auto-reload on ConfigMap/Secret changes
+    opendesk.org/deployment-strategy: "recreate"
 spec:
   replicas: 1
-  revisionHistoryLimit: 3
   strategy:
     type: Recreate
     rollingUpdate: null
   selector:
     matchLabels:
       app: zot-registry
+      component: registry
   template:
     metadata:
       labels:
         app: zot-registry
-        app.kubernetes.io/name: zot-registry
-        app.kubernetes.io/version: "2.0.0"
+        component: registry
+        version: "2.0.0"
+        managed-by: opendesk-edu
+        opendesk.org/component: registry
+        opendesk.org.purpose: caching
       annotations:
-        checksum/config: {{ include "opendesk-nix/k8s/zot-registry/configmap.yaml" | sha256sum }}
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        # Sidecar injection (if using service meshes)
+        sidecar.istio.io/inject: "false"
+        sidecar.linkerd.io/inject: "false"
+        
+        # Prometheus scraping
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+        prometheus.io/scheme: "http"
+        
+        # pod-restart policy
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
     spec:
-      # --- SECURITY CONTEXT ---
+      # ===================================================================== 
+      # SERVICE ACCOUNT
+      # ===================================================================== 
+      serviceAccountName: zot-registry
+      automountServiceAccountToken: true
+      
+      # ===================================================================== 
+      # POD SECURITY
+      # ===================================================================== 
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        seccompProfile:
-          type: RuntimeDefault
-        
-      # --- SERVICE ACCOUNT ---
-      serviceAccountName: zot-registry
+        fsGroupChangePolicy: "OnRootMismatch"
       
-      # --- AFFINITY ---
-      # Prefer to run on control plane nodes
+      # ===================================================================== 
+      # SCHEDULING
+      # ===================================================================== 
       affinity:
+        # Prefer nodes with SSD storage
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
               preference:
                 matchExpressions:
-                  - key: node-role.kubernetes.io/control-plane
+                  - key: storage
                     operator: In
-                    values: ["true"]
-                  - key: node-role.kubernetes.io/master
-                    operator: In
-                    values: ["true"]
-        
-        # Anti-affinity: only one registry pod per node
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
+                    values: ["ssd", "fast"]
+        # Anti-affinity: don't run on control-plane nodes
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 50
+              preference:
                 matchExpressions:
-                  - key: app
-                    operator: In
-                    values: ["zot-registry"]
-              topologyKey: "kubernetes.io/hostname"
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
       
-      # --- CONTAINERS ---
+      # Keep registry on a specific node for performance
+      # nodeName: vhrz2334  # Uncomment for static assignment
+      
+      # ===================================================================== 
+      # TOLERATIONS
+      # ===================================================================== 
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 3600
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 3600
+      
+      # ===================================================================== 
+      # PRIORITY & TOPOLOGY
+      # ===================================================================== 
+      priorityClassName: system-cluster-critical
+      
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: zot-registry
+              component: registry
+      
+      # ===================================================================== 
+      # CONTAINERS
+      # ===================================================================== 
       containers:
         - name: zot
           image: registry.gitlab.opencode.de/umr/zot-registry:latest
           imagePullPolicy: Always
           
-          # --- SECURITY ---
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            seccompProfile:
-              type: RuntimeDefault
-          
-          # --- PORTS ---
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-            - name: metrics
-              containerPort: 8081
-              protocol: TCP
-          
-          # --- ENVIRONMENT ---
-          env:
-            - name: ZOT_CACHE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: zot-registry-secrets
-                  key: cache-password
-                  optional: true
-            - name: GHCR_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: zot-registry-secrets
-                  key: ghcr-username
-                  optional: true
-            - name: GHCR_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: zot-registry-secrets
-                  key: ghcr-password
-                  optional: true
-            - name: GITLAB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: zot-registry-secrets
-                  key: gitlab-username
-                  optional: true
-            - name: GITLAB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: zot-registry-secrets
-                  key: gitlab-password
-                  optional: true
-            - name: TZ
-              value: "Europe/Berlin"
-          
-          # --- RESOURCES ---
-          resources:
-            requests:
-              cpu: 100m
-              memory: 256Mi
-              ephemeral-storage: 10Gi
-            limits:
-              cpu: 500m
-              memory: 1Gi
-              ephemeral-storage: 50Gi
-          
-          # --- LIVENESS & READINESS PROBES ---
+          # Health checks
           livenessProbe:
             httpGet:
               path: /v2/
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            initialDelaySeconds: 15
+            periodSeconds: 30
             timeoutSeconds: 5
             successThreshold: 1
             failureThreshold: 3
@@ -164,73 +148,189 @@ spec:
               path: /v2/
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            initialDelaySeconds: 10
+            periodSeconds: 10
             timeoutSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           
-          # --- VOLUME MOUNTS ---
-          volumeMounts:
-            - name: storage
-              mountPath: /var/lib/zot/storage
-            - name: cache
-              mountPath: /var/lib/zot/cache
-            - name: logs
-              mountPath: /var/log/zot
-            - name: config
-              mountPath: /etc/zot/config.yml
-              subPath: config.yml
-            - name: passwd
-              mountPath: /etc/zot/passwd
-              subPath: passwd
-          
-          # --- STARTUP PROBE ---
           startupProbe:
             httpGet:
               path: /v2/
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 10
+            initialDelaySeconds: 5
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 3
             successThreshold: 1
-            failureThreshold: 10
+            failureThreshold: 60
+          
+          # Ports
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: metrics
+              containerPort: 8080
+              protocol: TCP
+          
+          # Environment variables
+          env:
+            # Zot-specific environment
+            - name: ZOT_LOG_LEVEL
+              value: "info"
+            - name: ZOT_LOG_OUTPUT
+              value: "/var/log/zot/zot.log"
+            - name: ZOT_STORAGE_ROOT
+              value: "/var/lib/zot/storage"
+            - name: ZOT_CACHE_ROOT
+              value: "/var/lib/zot/cache"
+            - name: K8S_CLUSTER_TYPE
+              value: "k3s"
+            
+            # Upstream registry credentials (from Secrets)
+            - name: GHCR_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: zot-secrets
+                  key: GHCR_USERNAME
+                  optional: true
+            - name: GHCR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zot-secrets
+                  key: GHCR_PASSWORD
+                  optional: true
+            - name: GITLAB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: zot-secrets
+                  key: GITLAB_USERNAME
+                  optional: true
+            - name: GITLAB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zot-secrets
+                  key: GITLAB_PASSWORD
+                  optional: true
+            - name: ZOT_CACHE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zot-secrets
+                  key: ZOT_CACHE_PASSWORD
+                  optional: true
+            - name: ZOT_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zot-secrets
+                  key: ZOT_ADMIN_PASSWORD
+                  optional: true
+            - name: ZOT_CI_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zot-secrets
+                  key: ZOT_CI_PASSWORD
+                  optional: true
+          
+          # Volume mounts
+          volumeMounts:
+            # Configuration files
+            - name: config
+              mountPath: /etc/zot/config.yml
+              subPath: config.yml
+              readOnly: true
+            - name: htpasswd
+              mountPath: /etc/zot/passwd
+              subPath: passwd
+              readOnly: true
+            
+            # Storage volumes
+            - name: storage
+              mountPath: /var/lib/zot/storage
+              readOnly: false
+            - name: cache
+              mountPath: /var/lib/zot/cache
+              readOnly: false
+            - name: backups
+              mountPath: /var/lib/zot/backups
+              readOnly: false
+            - name: logs
+              mountPath: /var/log/zot
+              readOnly: false
+            
+            # Temporary directory
+            - name: tmp
+              mountPath: /tmp
+              readOnly: false
+          
+          # Resource requests and limits
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+              ephemeral-storage: 10Gi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+              ephemeral-storage: 100Gi
+          
+          # Security context for container
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+            appArmorProfile:
+              type: RuntimeDefault
       
-      # --- VOLUMES ---
+      # ===================================================================== 
+      # VOLUMES
+      # ===================================================================== 
       volumes:
-        - name: storage
-          persistentVolumeClaim:
-            claimName: zot-registry-storage
-        - name: cache
-          persistentVolumeClaim:
-            claimName: zot-registry-cache
-        - name: logs
-          emptyDir: {}
+        # Configuration
         - name: config
           configMap:
-            name: zot-registry-config
-        - name: passwd
-          secret:
-            secretName: zot-registry-secrets
+            name: zot-config
             items:
-              - key: htpasswd
+              - key: config.yml
+                path: config.yml
+        - name: htpasswd
+          secret:
+            secretName: zot-htpasswd
+            items:
+              - key: passwd
                 path: passwd
+        
+        # Persistent storage
+        - name: storage
+          persistentVolumeClaim:
+            claimName: zot-storage
+        - name: cache
+          persistentVolumeClaim:
+            claimName: zot-cache
+        - name: backups
+          persistentVolumeClaim:
+            claimName: zot-backups
+        - name: logs
+          persistentVolumeClaim:
+            claimName: zot-logs
+        
+        # Temporary volume
+        - name: tmp
+          emptyDir:
+            sizeLimit: 1Gi
+            medium: Memory
       
-      # --- IMAGE PULL SECRETS ---
-      imagePullSecrets:
-        - name: gitlab-registry-opencode
-      
-      # --- TOLERATIONS ---
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
-        - key: "node-role.kubernetes.io/master"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
-      
-      # --- PRIORITY CLASS (if available) ---
-      priorityClassName: system-cluster-critical
+      # ===================================================================== 
+      # NODE SELECTOR
+      # ===================================================================== 
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        kubernetes.io/os: linux
+        # storage: ssd  # Uncomment if you have SSD-labeled nodes
