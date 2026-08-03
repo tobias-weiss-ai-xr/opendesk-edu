@@ -1,0 +1,226 @@
+# openDesk Dev Agent Operator Monitoring Configuration
+# SPDX-License-Identifier: Apache-2.0
+#
+# This file contains monitoring resources for the Dev Agent Operator:
+# - ServiceMonitor for Prometheus Operator
+# - PrometheusRule for alerts
+# - Grafana Dashboard (reference)
+---
+# ServiceMonitor for Prometheus Operator
+# Requires prometheus-operator to be installed
+# To install: helm install prometheus-operator prometheus-community/kube-prometheus-stack
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: opendesk-dev-agent-operator
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    
+    # Prometheus selector
+    prometheus: k8s
+    
+    # openDesk specific
+    opendesk.org/component: operator
+    opendesk.org.monitoring: "true"
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+    de.container.gov.monitoring: enabled
+
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opendesk-dev-agent
+      app.kubernetes.io/instance: opendesk-dev-agent-operator
+      app.kubernetes.io/component: operator
+  
+  # Service endpoints to monitor
+  endpoints:
+    - port: metrics
+      path: /metrics
+      scheme: http
+      interval: 30s
+      scrapeTimeout: 10s
+      
+      # Relabeling for multi-namespace monitoring
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: namespace
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          targetLabel: pod
+        - sourceLabels: [__meta_kubernetes_pod_container_name]
+          targetLabel: container
+    
+    # Health endpoint
+    - port: health
+      path: /healthz
+      scheme: http
+      interval: 60s
+      scrapeTimeout: 5s
+      names:
+        - healthz
+      relabelings:
+        - sourceLabels: [__name__]
+          targetLabel: probe
+          replacement: healthz
+
+---
+# Prometheus Alert Rules
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: opendesk-dev-agent-operator-alerts
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    
+    # Alert manager selector
+    alertmanager: main
+    
+    # openDesk specific
+    opendesk.org/alerts: operator
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+    de.container.gov.alerts: enabled
+
+spec:
+  groups:
+    - name: opendesk-dev-agent-operator.rules
+      interval: 30s
+      
+      rules:
+        # Operator Down
+        - alert: OpenDeskDevAgentOperatorDown
+          annotations:
+            summary: "openDesk Dev Agent Operator is down"
+            description: "The openDesk Dev Agent Operator has been down for more than 5 minutes."
+            impact: "Self-healing capabilities are not available. Deployments may not be automatically repaired."
+            action: "Check operator logs and restart if necessary. Ensure Kubernetes API is accessible."
+          expr: up{job="opendesk-dev-agent-operator"} == 0
+          for: 5m
+          labels:
+            severity: critical
+            category: availability
+            component: operator
+            namespace: opendesk-dev-agent
+            
+        # Operator High CPU
+        - alert: OpenDeskDevAgentOperatorHighCPU
+          annotations:
+            summary: "openDesk Dev Agent Operator high CPU usage"
+            description: "The openDesk Dev Agent Operator is using {{ $value }}% CPU."
+            impact: "High CPU usage may affect operator performance and timely repair operations."
+            action: "Check operator logs for repair loops or inefficient processing. Consider scaling resources."
+          expr: (sum(rate(container_cpu_usage_seconds_total{container="operator",namespace="opendesk-dev-agent"}[5m])) by (pod) * 100) > 80
+          for: 10m
+          labels:
+            severity: warning
+            category: performance
+            component: operator
+            
+        # Operator High Memory
+        - alert: OpenDeskDevAgentOperatorHighMemory
+          annotations:
+            summary: "openDesk Dev Agent Operator high memory usage"
+            description: "The openDesk Dev Agent Operator is using {{ $value }} memory."
+            impact: "High memory usage may cause OOM kills and operator restarts."
+            action: "Check operator logs for memory leaks. Consider increasing memory limits."
+          expr: container_memory_working_set_bytes{container="operator",namespace="opendesk-dev-agent"} > 400000000  # > 400MB
+          for: 15m
+          labels:
+            severity: warning
+            category: performance
+            component: operator
+            
+        # Operator Restart Loop
+        - alert: OpenDeskDevAgentOperatorRestartLoop
+          annotations:
+            summary: "openDesk Dev Agent Operator restarting too frequently"
+            description: "The openDesk Dev Agent Operator has restarted {{ $value }} times in the last 15 minutes."
+            impact: "Frequent restarts may cause repair operations to fail or delay."
+            action: "Check operator logs for crash reasons. Verify configuration and dependencies."
+          expr: increase(kube_pod_container_status_restarts_total{container="operator",namespace="opendesk-dev-agent"}[15m]) > 3
+          for: 5m
+          labels:
+            severity: critical
+            category: stability
+            component: operator
+            
+        # Repair Failures
+        - alert: OpenDeskDevAgentRepairFailures
+          annotations:
+            summary: "openDesk Dev Agent repair failures detected"
+            description: "The operator has {{ $value }} repair failures in the last hour."
+            impact: "Failing repairs may leave components in degraded state."
+            action: "Check operator logs for repair failure details. Verify repair strategies and permissions."
+          expr: increase(opendesk_dev_agent_repair fail_ure_total[1h]) > 5
+          for: 10m
+          labels:
+            severity: warning
+            category: functionality
+            component: operator
+    
+    # Health Policy alerts
+    - name: opendesk-dev-agent-health-policy.rules
+      interval: 60s
+      
+      rules:
+        - alert: OpenDeskDevAgentHealthPolicyDegraded
+          annotations:
+            summary: "HealthPolicy in degraded state"
+            description: "HealthPolicy {{ $labels.policy }} in namespace {{ $labels.namespace }} is degraded."
+            impact: "The associated component(s) may not be monitored or repaired properly."
+            action: "Check the HealthPolicy status and the monitored components."
+          expr: opendesk_dev_agent_healthpolicy_status{status="degraded"} == 1
+          for: 5m
+          labels:
+            severity: warning
+            category: health
+            component: health-policy
+            
+        - alert: OpenDeskDevAgentHealthPolicyUnknown
+          annotations:
+            summary: "HealthPolicy in unknown state"
+            description: "HealthPolicy {{ $labels.policy }} in namespace {{ $labels.namespace }} is in unknown state."
+            impact: "The health status of associated components cannot be determined."
+            action: "Investigate why the HealthPolicy status cannot be determined."
+          expr: opendesk_dev_agent_healthpolicy_status{status="unknown"} == 1
+          for: 10m
+          labels:
+            severity: warning
+            category: health
+            component: health-policy
+    
+    # Repair Strategy alerts
+    - name: opendesk-dev-agent-repair-strategy.rules
+      interval: 60s
+      
+      rules:
+        - alert: OpenDeskDevAgentRepairStrategyInactive
+          annotations:
+            summary: "RepairStrategy is inactive"
+            description: "RepairStrategy {{ $labels.strategy }} in namespace {{ $labels.namespace }} is inactive."
+            impact: "Automatic repairs for the associated targets are not being executed."
+            action: "Check the RepairStrategy configuration and ensure it is enabled."
+          expr: opendesk_dev_agent_repairstrategy_active == 0
+          for: 15m
+          labels:
+            severity: warning
+            category: configuration
+            component: repair-strategy

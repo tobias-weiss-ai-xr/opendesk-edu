@@ -101,6 +101,62 @@ opendesk-nix/
 
 ---
 
+## 📚 Libraries
+
+This project includes comprehensive Nix libraries for building, securing, and deploying containerized applications:
+
+| Library | Purpose | OpenSpec Compliance |
+|---------|---------|---------------------|
+| `lib/k8s.nix` | Kubernetes resource builders | FR-K8S-001 - FR-K8S-010 |
+| `lib/security.nix` | Security hardening presets (8 profiles) | FR-IMAGE-001, 002, 003, 005 |
+| `lib/sbom.nix` | SBOM generation (SPDX + CycloneDX) | FR-SEC-002 |
+| `lib/registry.nix` | Multi-registry support (GHCR, GitLab, Zot) | FR-DEPLOY-003 |
+| `lib/types.nix` | Type definitions | All |
+| `lib/build.nix` | Docker/OCI image building | FR-BUILD-001 - FR-BUILD-007 |
+| `lib/security-scanning.nix` | Vulnerability scanning (Grype, Trivy, Snyk) | FR-SEC-001, FR-SEC-004 |
+| `lib/cosign.nix` | Image signing and verification | FR-SEC-003, FR-SEC-004 |
+| `lib/cicd.nix` | CI/CD pipelines (GitHub Actions, GitLab CI) | FR-CICD-001 - FR-CICD-006 |
+| `lib/dev.nix` | Development environments and IDE integration | FR-DEV-001, FR-DEV-002, FR-DEV-004 |
+
+**Usage Example:**
+```nix
+{ pkgs, lib, ... }:
+let
+  k8s = lib.k8s;
+  security = lib.security;
+  registry = lib.registry;
+  types = lib.types;
+  sbom = lib.sbom;
+  build = lib.build;
+  scanning = lib.security-scanning;
+  cosign = lib.cosign;
+  cicd = lib.cicd;
+  dev = lib.dev;
+in {
+  # Kubernetes deployment with security
+  deployment = k8s.deployment {
+    name = "my-app";
+    image = "my-image";
+    securityContext = security.mkContainerSecurityContext { profile = "web"; };
+    ociLabels = k8s.mkOCILabels { name = "my-app"; version = "1.0.0"; };
+  };
+  
+  # Build a Docker image
+  myImage = build.docker.mkServiceImage { serviceName = "mariadb"; version = "11.4.4"; };
+  
+  # Scan for vulnerabilities
+  scanResult = scanning.scanImage { image = "my-image:latest"; scanner = "grype"; };
+  
+  # Sign with Cosign
+  signedImage = cosign.withSigning myImage;
+  
+  # Development shell
+  devShell = dev.shells.forService { serviceName = "mariadb"; };
+}
+```
+
+---
+
 ## 🎯 Dependencies
 
 - [Nix](https://nixos.org/download.html) (v2.10+ recommended)

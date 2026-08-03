@@ -1,0 +1,87 @@
+# Grafana datasource configuration for Prometheus
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# This file can be mounted into Grafana as a provisioned datasource.
+#
+# Usage with Docker:
+#   docker run -d \
+#     -p 3000:3000 \
+#     -v $(pwd)/monitoring/grafana/datasources:/etc/grafana/provisioning/datasources \
+#     grafana/grafana:latest
+#
+# ==============================================================================
+
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    # Access mode: proxy or direct
+    access: proxy
+    
+    # URL of Prometheus server
+    url: http://prometheus:9090
+    
+    # If running in Docker, use the service name
+    # If running in Kubernetes, use the appropriate service
+    # url: http://localhost:9090  # For local development
+    
+    # For direct access (if Grafana can access Prometheus directly)
+    # access: direct
+    # url: http://<prometheus-ip>:9090
+    
+    # Basic authentication (if required)
+    # basicAuth: true
+    # basicAuthUser: username
+    # basicAuthPassword: password
+    
+    # Bearer token authentication (if required)
+    # editable: true
+    # jsonData:
+    #   tlsAuth: false
+    #   tlsAuthWithCACert: false
+    #   httpHeaderName: "Authorization"
+    # secureJsonData:
+    #   httpHeaderValue: "Bearer <token>"
+    
+    # Timeout settings
+    jsonData:
+      # Time interval between queries
+      timeInterval: "15s"
+      
+      # Prometheus type (Prometheus or Cortex)
+      prometheusType: "Prometheus"
+      
+      # Custom query parameters
+      customQueryParameters: ""
+      
+      # Min time range for queries
+      minTimeRange: "5m"
+      
+      # Max points returned
+      maxDataPoints: 5000
+    
+    # Skip TLS verification (for development)
+    # tlsSkipVerify: true
+    
+    # Version (for provisioning)
+    version: 1
+    
+    # Mark as default datasource
+    isDefault: true
+    
+    # Editable through UI
+    editable: true
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    
+    jsonData:
+      maxLines: 1000
+      timeInterval: "15s"
+    
+    isDefault: false
+    editable: true

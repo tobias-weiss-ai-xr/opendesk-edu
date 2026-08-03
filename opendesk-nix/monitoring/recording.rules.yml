@@ -1,0 +1,382 @@
+# Prometheus Recording Rules for openDesk Nix
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# ==============================================================================
+# Pre-computed time series for complex queries to improve performance
+# and reduce resource usage when querying.
+#
+# Recording rules allow you to pre-compute frequently used or computationally
+# expensive expressions and save their results as a new set of time series.
+#
+# Usage:
+#   These rules are automatically applied by Prometheus when loaded from
+#   prometheus.yml
+#
+# ==============================================================================
+
+groups:
+  # -----------------------------------------------------------------------------
+  # General System Metrics
+  # -----------------------------------------------------------------------------
+  - name: general.recording
+    interval: 30s
+    
+    rules:
+      # System uptime
+      - record: job:up:count
+        expr: count(up)
+      
+      - record: job:up:total
+        expr: count(up == 1)
+      
+      - record: job:down:total
+        expr: count(up == 0)
+      
+      # System availability
+      - record: job:availability:5m
+        expr: avg_over_time(up[5m])
+      
+      - record: job:availability:1h
+        expr: avg_over_time(up[1h])
+
+  # -----------------------------------------------------------------------------
+  # Dev Agent Operator Metrics
+  # -----------------------------------------------------------------------------
+  - name: dev-agent.recording
+    interval: 15s
+    
+    rules:
+      # Repair statistics
+      - record: dev_agent:repairs_total:5m_rate
+        expr: rate(dev_agent_repairs_total[5m])
+      
+      - record: dev_agent:repairs_total:1h_rate
+        expr: rate(dev_agent_repairs_total[1h])
+      
+      - record: dev_agent:repair_failures_total:5m_rate
+        expr: rate(dev_agent_repair_failures_total[5m])
+      
+      - record: dev_agent:repair_success_rate:5m
+        expr: 1 - (rate(dev_agent_repair_failures_total[5m]) / rate(dev_agent_repairs_total[5m]))
+      
+      # Repair duration percentiles
+      - record: dev_agent:repair_duration_seconds:p50
+        expr: histogram_quantile(0.50, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))
+      
+      - record: dev_agent:repair_duration_seconds:p95
+        expr: histogram_quantile(0.95, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))
+      
+      - record: dev_agent:repair_duration_seconds:p99
+        expr: histogram_quantile(0.99, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))
+      
+      # Components monitored
+      - record: dev_agent:components_monitored
+        expr: count(dev_agent_component_health_status)
+      
+      - record: dev_agent:components_healthy
+        expr: count(dev_agent_component_health_status{status="healthy"})
+      
+      - record: dev_agent:components_degraded
+        expr: count(dev_agent_component_health_status{status="degraded"})
+      
+      - record: dev_agent:components_failed
+        expr: count(dev_agent_component_health_status{status="failed"})
+
+  # -----------------------------------------------------------------------------
+  # SOGo 5 Metrics
+  # -----------------------------------------------------------------------------
+  - name: sogo5.recording
+    interval: 30s
+    
+    rules:
+      # SOGo 5 health status
+      - record: sogo5:health:status
+        expr: probe_success{job="blackbox",module="http_2xx",instance=~"sogo5:.*"}
+      
+      - record: sogo5:health:availability:5m
+        expr: avg_over_time(probe_success{job="blackbox",module="http_2xx",instance=~"sogo5:.*"}[5m])
+      
+      - record: sogo5:health:availability:1h
+        expr: avg_over_time(probe_success{job="blackbox",module="http_2xx",instance=~"sogo5:.*"}[1h])
+      
+      # Container resource usage
+      - record: sogo5:container:cpu_usage:5m
+        expr: rate(container_cpu_usage_seconds_total{container_name=~"sogo5.*"}[5m])
+      
+      - record: sogo5:container:memory_usage_bytes
+        expr: container_memory_working_set_bytes{container_name=~"sogo5.*"}
+      
+      - record: sogo5:container:memory_usage_percent
+        expr: (container_memory_working_set_bytes{container_name=~"sogo5.*"} / container_spec_memory_limit_bytes{container_name=~"sogo5.*"}) * 100
+      
+      # Response time (if available)
+      - record: sogo5:http:request_duration_seconds:p50
+        expr: histogram_quantile(0.50, sum(rate(sogo_http_request_duration_seconds_bucket[5m])) by (le))
+      
+      - record: sogo5:http:request_duration_seconds:p95
+        expr: histogram_quantile(0.95, sum(rate(sogo_http_request_duration_seconds_bucket[5m])) by (le))
+
+  # -----------------------------------------------------------------------------
+  # SOGo 6 Metrics
+  # -----------------------------------------------------------------------------
+  - name: sogo6.recording
+    interval: 30s
+    
+    rules:
+      # SOGo 6 health status
+      - record: sogo6:health:status
+        expr: probe_success{job="blackbox",module="http_2xx",instance=~"sogo6:.*"}
+      
+      - record: sogo6:health:availability:5m
+        expr: avg_over_time(probe_success{job="blackbox",module="http_2xx",instance=~"sogo6:.*"}[5m])
+      
+      - record: sogo6:health:availability:1h
+        expr: avg_over_time(probe_success{job="blackbox",module="http_2xx",instance=~"sogo6:.*"}[1h])
+      
+      # Container resource usage
+      - record: sogo6:container:cpu_usage:5m
+        expr: rate(container_cpu_usage_seconds_total{container_name=~"sogo6.*"}[5m])
+      
+      - record: sogo6:container:memory_usage_bytes
+        expr: container_memory_working_set_bytes{container_name=~"sogo6.*"}
+      
+      - record: sogo6:container:memory_usage_percent
+        expr: (container_memory_working_set_bytes{container_name=~"sogo6.*"} / container_spec_memory_limit_bytes{container_name=~"sogo6.*"}) * 100
+      
+      # Storage usage
+      - record: sogo6:storage:used_bytes
+        expr: volume_used_bytes{volume=~"sogo6-data.*"}
+      
+      - record: sogo6:storage:available_bytes
+        expr: volume_capacity_bytes{volume=~"sogo6-data.*"} - volume_used_bytes{volume=~"sogo6-data.*"}
+      
+      - record: sogo6:storage:usage_percent
+        expr: (volume_used_bytes{volume=~"sogo6-data.*"} / volume_capacity_bytes{volume=~"sogo6-data.*"}) * 100
+
+  # -----------------------------------------------------------------------------
+  # Zot Registry Metrics
+  # -----------------------------------------------------------------------------
+  - name: zot-registry.recording
+    interval: 30s
+    
+    rules:
+      # Zot Registry health status
+      - record: zot:health:status
+        expr: probe_success{job="blackbox",module="http_2xx",instance=~"zot-registry:.*"}
+      
+      - record: zot:health:availability:5m
+        expr: avg_over_time(probe_success{job="blackbox",module="http_2xx",instance=~"zot-registry:.*"}[5m])
+      
+      # Zot Registry metrics
+      - record: zot:storage:total_bytes
+        expr: sum(zot_stored_manifests_size_bytes)
+      
+      - record: zot:storage:manifests_count
+        expr: sum(zot_stored_manifests_count)
+      
+      - record: zot:storage:blobs_count
+        expr: sum(zot_stored_blobs_count)
+      
+      - record: zot:cache:size_bytes
+        expr: sum(zot_cache_size_bytes)
+      
+      - record: zot:cache:hits:5m_rate
+        expr: rate(zot_cache_hits_total[5m])
+      
+      - record: zot:cache:misses:5m_rate
+        expr: rate(zot_cache_misses_total[5m])
+      
+      - record: zot:cache:hit_ratio:5m
+        expr: rate(zot_cache_hits_total[5m]) / (rate(zot_cache_hits_total[5m]) + rate(zot_cache_misses_total[5m]))
+      
+      # Container resource usage
+      - record: zot:container:cpu_usage:5m
+        expr: rate(container_cpu_usage_seconds_total{container_name=~"zot-registry.*"}[5m])
+      
+      - record: zot:container:memory_usage_bytes
+        expr: container_memory_working_set_bytes{container_name=~"zot-registry.*"}
+
+  # -----------------------------------------------------------------------------
+  # Kubernetes Metrics
+  # -----------------------------------------------------------------------------
+  - name: kubernetes.recording
+    interval: 30s
+    
+    rules:
+      # Pod metrics
+      - record: kube:pod:status:running
+        expr: sum(kube_pod_status_phase{phase="Running"}) by (namespace)
+      
+      - record: kube:pod:status:pending
+        expr: sum(kube_pod_status_phase{phase="Pending"}) by (namespace)
+      
+      - record: kube:pod:status:failed
+        expr: sum(kube_pod_status_phase{phase="Failed"}) by (namespace)
+      
+      - record: kube:pod:restarts:total
+        expr: sum(kube_pod_container_status_restarts_total) by (namespace, pod)
+      
+      # Node metrics
+      - record: kube:node:cpu:usage:5m
+        expr: rate(sum(node_cpu_seconds_total{mode!="idle",mode!="iowait"}) by (instance)[5m])
+      
+      - record: kube:node:memory:usage_bytes
+        expr: node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes
+      
+      - record: kube:node:memory:usage_percent
+        expr: ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes) * 100
+
+  # -----------------------------------------------------------------------------
+  # Database Metrics (MariaDB)
+  # -----------------------------------------------------------------------------
+  - name: mariadb.recording
+    interval: 30s
+    
+    rules:
+      # Database connections
+      - record: mariadb:connections:active
+        expr: mysql_global_status_threads_connected
+      
+      - record: mariadb:connections:max
+        expr: mysql_global_variables_max_connections
+      
+      - record: mariadb:connections:usage_percent
+        expr: (mysql_global_status_threads_connected / mysql_global_variables_max_connections) * 100
+      
+      # Database queries
+      - record: mariadb:queries:total:5m_rate
+        expr: rate(mysql_global_status_queries[5m])
+      
+      - record: mariadb:queries:slow:5m_rate
+        expr: rate(mysql_global_status_slow_queries[5m])
+      
+      - record: mariadb:queries:errors:5m_rate
+        expr: rate(mysql_global_status_questions[5m]) - rate(mysql_global_status_queries[5m])
+      
+      # Database performance
+      - record: mariadb:innodb:rows_read:5m_rate
+        expr: rate(mysql_global_status_innodb_rows_read[5m])
+      
+      - record: mariadb:innodb:rows_inserted:5m_rate
+        expr: rate(mysql_global_status_innodb_rows_inserted[5m])
+      
+      - record: mariadb:innodb:rows_updated:5m_rate
+        expr: rate(mysql_global_status_innodb_rows_updated[5m])
+      
+      - record: mariadb:innodb:rows_deleted:5m_rate
+        expr: rate(mysql_global_status_innodb_rows_deleted[5m])
+
+  # -----------------------------------------------------------------------------
+  # Memcached Metrics
+  # -----------------------------------------------------------------------------
+  - name: memcached.recording
+    interval: 30s
+    
+    rules:
+      # Memcached connections
+      - record: memcached:connections:current
+        expr: memcached_stats_curr_connections
+      
+      - record: memcached:connections:total
+        expr: memcached_stats_total_connections
+      
+      # Memcached memory
+      - record: memcached:memory:used_bytes
+        expr: memcached_stats_bytes_used
+      
+      - record: memcached:memory:limit_bytes
+        expr: memcached_stats_limit_maxbytes
+      
+      - record: memcached:memory:usage_percent
+        expr: (memcached_stats_bytes_used / memcached_stats_limit_maxbytes) * 100
+      
+      # Memcached operations
+      - record: memcached:operations:get:5m_rate
+        expr: rate(memcached_stats_cmd_get[5m])
+      
+      - record: memcached:operations:set:5m_rate
+        expr: rate(memcached_stats_cmd_set[5m])
+      
+      - record: memcached:operations:hits:5m_rate
+        expr: rate(memcached_stats_get_hits[5m])
+      
+      - record: memcached:operations:misses:5m_rate
+        expr: rate(memcached_stats_get_misses[5m])
+      
+      - record: memcached:operations:hit_ratio
+        expr: rate(memcached_stats_get_hits[5m]) / (rate(memcached_stats_get_hits[5m]) + rate(memcached_stats_get_misses[5m]))
+      
+      - record: memcached:operations:evictions:5m_rate
+        expr: rate(memcached_stats_evictions[5m])
+
+  # -----------------------------------------------------------------------------
+  # Container Metrics
+  # -----------------------------------------------------------------------------
+  - name: container.recording
+    interval: 30s
+    
+    rules:
+      # Container count by state
+      - record: container:state:total
+        expr: sum(container_state) by (state)
+      
+      # Container CPU usage
+      - record: container:cpu:usage:5m_rate
+        expr: rate(container_cpu_usage_seconds_total[5m])
+      
+      # Container memory usage
+      - record: container:memory:usage_bytes
+        expr: container_memory_working_set_bytes
+      
+      # Container network
+      - record: container:network:tx_bytes:5m_rate
+        expr: rate(container_network_transmit_bytes_total[5m])
+      
+      - record: container:network:rx_bytes:5m_rate
+        expr: rate(container_network_receive_bytes_total[5m])
+
+  # -----------------------------------------------------------------------------
+  # Node Metrics
+  # -----------------------------------------------------------------------------
+  - name: node.recording
+    interval: 30s
+    
+    rules:
+      # Node CPU
+      - record: node:cpu:usage:5m
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+      
+      # Node memory
+      - record: node:memory:usage_bytes
+        expr: node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes
+      
+      - record: node:memory:usage_percent
+        expr: ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes) * 100
+      
+      # Node disk
+      - record: node:disk:io:time:5m_rate
+        expr: rate(node_disk_io_time_seconds_total[5m])
+      
+      - record: node:disk:read:bytes:5m_rate
+        expr: rate(node_disk_read_bytes_total[5m])
+      
+      - record: node:disk:write:bytes:5m_rate
+        expr: rate(node_disk_written_bytes_total[5m])
+      
+      # Node filesystem
+      - record: node:filesystem:free_bytes
+        expr: node_filesystem_free_bytes
+      
+      - record: node:filesystem:available_bytes
+        expr: node_filesystem_avail_bytes
+      
+      - record: node:filesystem:usage_percent
+        expr: ((node_filesystem_size_bytes - node_filesystem_free_bytes) / node_filesystem_size_bytes) * 100
+      
+      # Node network
+      - record: node:network:tx_bytes:5m_rate
+        expr: rate(node_network_transmit_bytes_total[5m])
+      
+      - record: node:network:rx_bytes:5m_rate
+        expr: rate(node_network_receive_bytes_total[5m])

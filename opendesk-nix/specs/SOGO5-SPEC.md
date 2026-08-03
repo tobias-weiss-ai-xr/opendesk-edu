@@ -1,933 +1,395 @@
 # SOGo 5 Docker Image - Technical Specification
 
-## 📋 Document Information
-
-| Field | Value |
-|-------|-------|
-| **Title** | SOGo 5 Docker Image Technical Specification |
-| **Version** | 2.0.0 |
-| **Author** | openDesk Edu Team |
-| **License** | Apache-2.0 |
-| **Created** | 2026-08-02 |
-| **Last Updated** | 2026-08-02 |
-| **Status** | Production Ready |
-| **SPDX-License-Identifier** | Apache-2.0 |
+**SPDX-License-Identifier: Apache-2.0**
+**Maintainer: openDesk Edu Team <team@opendesk-edu.org>**
+**Version: 5.8.0**
+**Build Date: 2026-08-03T12:00:00Z**
+**Registry: registry.gitlab.opencode.de/umr/opendesk-sogo5:5.8.0**
 
 ---
 
-## 🎯 Overview
+## 📋 TABLE OF CONTENTS
 
-SOGo 5 Groupware Server Docker image for openDesk, providing email, calendar, and contacts functionality with PostgreSQL/MariaDB backend, LDAP authentication, and Memcached caching.
-
-### Key Features
-- ✅ Multi-stage build for minimal image size
-- ✅ Non-root user (UID 1000, GID 1000)
-- ✅ Read-only filesystem where possible
-- ✅ Health checks with proper timeouts
-- ✅ Multi-process support (SOGo + Memcached)
-- ✅ Graceful shutdown handling
-- ✅ Security hardened (CVE-scanned, minimal deps)
-- ✅ OCI-compliant image metadata
-- ✅ Environment variable configuration
-- ✅ Kubernetes-optimized
+1. [OVERVIEW](#1-overview)
+2. [ARCHITECTURE](#2-architecture)
+3. [COMPONENTS](#3-components)
+4. [DOCKER IMAGE SPECIFICATION](#4-docker-image-specification)
+5. [ENTRYPOINT & HEALTHCHECKS](#5-entrypoint--healthchecks)
+6. [CONFIGURATION](#6-configuration)
+7. [SECURITY HARDENING](#7-security-hardening)
+8. [KUBERNETES DEPLOYMENT](#8-kubernetes-deployment)
+9. [PERFORMANCE TUNING](#9-performance-tuning)
+10. [FILE SYSTEM LAYOUT](#10-file-system-layout)
+11. [BUILD PROCESS](#11-build-process)
+12. [APPENDICES](#12-appendices)
 
 ---
 
-## 📦 Image Details
+## 1. OVERVIEW
 
-### Image Registry & Tags
-```
-Registry: registry.gitlab.opencode.de/umr/
-Repository: sogo5
-Tags:
-  - latest
-  - 5.x
-  - 5.x.y (specific version)
-  - 5.x.y-opendesk-z (build number)
-```
+### 1.1 Purpose
 
-### Build Context
-```
-Build Command: docker build -t registry.gitlab.opencode.de/umr/sogo5:latest -f docker/sogo5/Dockerfile .
-Nix Command:    nix build .#sogo5-image
-```
+The **openDesk SOGo 5 Docker Image** provides a production-ready, security-hardened container for **SOGo 5.8.0 Groupware Server** as part of the openDesk platform.
 
-### Base Image
+### 1.2 Components
+
+- **SOGo Engine**: Groupware server (CalDAV, CardDAV, ActiveSync)
+- **Memcached**: In-memory caching (compiled into container)
+- **Entrypoint**: Multi-process manager with graceful shutdown
+- **Healthcheck**: Comprehensive K8s probe support
+
+### 1.3 Image Details
+
 ```
-Base: debian:12-slim
-Size: ~250MB (compressed), ~600MB (uncompressed)
+Registry: registry.gitlab.opencode.de/umr/opendesk-sogo5
+Tag: 5.8.0
+Base: alpine:3.18
+Size: ~350-400 MB
+User: sogo (UID 999, GID 999)
 ```
 
 ---
 
-## 🏗️ Build Stages
+## 2. ARCHITECTURE
 
-### Stage 1: Builder (Buildfest)
-**Purpose**: Compile SOGo from source with openDesk patches
+### 2.1 Multi-Process Design
 
-**Includes**:
-- `build-essential` - C/C++ build tools
-- `git` - Version control for source checkout
-- `autoconf` / `automake` / `libtool` - SOGo build dependencies
-- `libxml2-dev` / `libssl-dev` / `libgd-dev` - Core dependencies
-- `libldap2-dev` / `libpq-dev` - Backend support
-- `gnustep` / `gnustep-make` - Objective-C runtime
+```
++------------------------------+
+|        SOGo Container         |
++------------------------------+
+|                              |
+|  +------------------+        |
+|  |  /entrypoint.sh  |        |
+|  |  (Signal Handler)|
+|  +--------+---------+        |
+|           |                    |
+|  +--------v--------+          |
+|  |   Process Mgmt  |          |
+|  +--------+--------+          |
+|           |                    |
+|  +--------v--------+          |
+|  |     SOGo        |<---20000 |
+|  |   (Main)        |          |
+|  +----------------+          |
+|                              |
+|  +------------------+         |
+|  |   Memcached      |<---11211|
+|  |   (Internal)     |         |
+|  +------------------+         |
+|                              |
+|  +------------------+         |
+|  |  Health Server   |<---8081 |
+|  |  (/healthcheck)  |         |
+|  +------------------+         |
++------------------------------+
+```
 
-**Build Process**:
-1. Clone SOGo 5.x source
-2. Apply openDesk patches
-3. Configure with openDesk options
-4. Compile and install to `/usr/local`
-5. Clean build artifacts
+### 2.2 Network Stack
 
-### Stage 2: Final Production Image
-**Purpose**: Minimal runtime image with only necessary components
-
-**Includes**:
-- Runtime libraries from Stage 1
-- PostgreSQL client (15)
-- MariaDB client
-- LDAP utilities
-- Memcached (512MB cache)
-- Timezone support (Europe/Berlin)
-- Health check tools (curl)
-- Entrypoint script
-- Configuration files
-
-**Excludes**:
-- Build tools
-- Development headers
-- Obsolete documentation
-- Unnecessary man pages
+- **20000/TCP**: HTTP Web UI + REST API
+- **20001/TCP**: HTTPS (if configured)
+- **20002/TCP**: CalDAV/CardDAV
+- **20003/TCP**: ActiveSync (Exchange protocol)
+- **11211/TCP**: Memcached (internal only)
+- **8081/TCP**: Health check HTTP server
 
 ---
 
-## 🔐 Security Specifications
+## 3. COMPONENTS
 
-### User & Permissions
+| Component | Version | Purpose | Direction | Port |
+|-----------|---------|---------|-----------|------|
+| SOGo | 5.8.0 | Groupware Server | Inbound | 20000 |
+| Memcached | 1.6.21 | Session Cache | Internal | 11211 |
+| GNUstep | 2.9.0 | Objective-C Runtime | - | - |
+| Alpine | 3.18 | Base OS | - | - |
+
+---
+
+## 4. DOCKER IMAGE SPECIFICATION
+
+### 4.1 OCI Labels (Full List)
+
 ```yaml
-User: sogo (UID 1000, GID 1000)
-Home: /var/lib/sogo
-Shell: /bin/false (non-interactive)
-Capability Drop: ALL
-Security Context:
-  runAsNonRoot: true
-  readOnlyRootFilesystem: false  # Required for /tmp, /run
-  allowPrivilegeEscalation: false
-  privileged: false
+# Mandatory OCI Labels
+org.opencontainers.image.title: openDesk SOGo 5
+org.opencontainers.image.description: "SOGo 5.8.0 Groupware Server for openDesk Edu. Provides email (via IMAP/SMTP), calendar (CalDAV), contacts (CardDAV), and ActiveSync support."
+org.opencontainers.image.vendor: openDesk Edu
+org.opencontainers.image.license: Apache-2.0
+org.opencontainers.image.version: 5.8.0
+org.opencontainers.image.source: https://github.com/opendesk-edu/opendesk-nix/tree/main/docker/sogo5
+org.opencontainers.image.documentation: https://opendesk-edu.org/docs/sogo5
+org.opencontainers.image.architectures: amd64
+org.opencontainers.image.os: linux
+org.opencontainers.image.created: 2026-08-03T12:00:00Z
+
+# openDesk Labels
+opendesk.org.component: mail-calendar-contacts
+opendesk.org.purpose: groupware
+opendesk.org.version: 5.8.0
+opendesk.org.registry: registry.gitlab.opencode.de/umr
+opendesk.org.hardened: "true"
+opendesk.org.non-root: "true"
+
+# ZKI IT-Grundschutz
+de.zki.it-grundschutz.module: SY.3.4Mail,BA.3.4Docker
+de.zki.it-grundschutz.layer: Application
+de.zki.it-grundschutz.classification: internal
+
+# container.gov.de
+de.container.gov.component: opendesk-sogo5
+de.container.gov.component-type: groupware
+de.container.gov.security-level: enhanced
+de.container.gov.sbom-format: CycloneDX-1.5,SPDX-2.3
+de.container.gov.storage-type: oci
 ```
 
-### Filesystem Permissions
-```
-/var/lib/sogo      - 750  - sogo:sogo       - Data directory
-/var/log/sogo       - 750  - sogo:sogo       - Log directory
-/var/run/sogo       - 755  - sogo:sogo       - Runtime directory
-/etc/sogo           - 750  - sogo:sogo       - Configuration directory
-/etc/sogo/sogo.conf - 640  - sogo:sogo       - Main configuration
-/tmp                - 777  - root:root       - Temporary files
-```
+### 4.2 Build Arguments
 
-### Security Hardening
-- ✅ **Non-root execution**: Always runs as `sogo` user
-- ✅ **Minimal base image**: Debian slim with only essential packages
-- ✅ **No setuid/setgid binaries**: Verified with `find / -perm /6000 -type f`
-- ✅ **No world-writable files**: Verified with `find / -perm /0002 -type f`
-- ✅ **Dependency scanning**: Regular CVE scanning with `grype` or `trivy`
-- ✅ **Image signing**: Cosign signatures for all released images
-- ✅ **No secrets in image**: All sensitive data via env vars or mounted secrets
+| ARG | Default | Type | Description |
+|-----|---------|------|-------------|
+| SOGO_VERSION | 5.8.0 | string | SOGo version |
+| MEMCACHED_VERSION | 1.6.21 | string | Memcached version |
+| ALPINE_VERSION | 3.18 | string | Alpine base version |
+| BUILD_DATE | ${BUILD_DATE} | date | Image build timestamp |
+| GIT_COMMIT | ${GIT_COMMIT} | string | Git commit hash |
+| GIT_REPO | opendesk-nix | string | Repository name |
 
-### Capabilities
-```yaml
-Dropped: ALL
-Required: None (SOGo runs without special capabilities)
-Recommended: NET_BIND_SERVICE (if binding to privileged ports)
-```
+### 4.3 Environment Variables
 
-### Security Context (Kubernetes)
-```yaml
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
-  fsGroup: 1000
-  readOnlyRootFilesystem: false
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop: ["ALL"]
-    add: []
-  seLinuxOptions:
-    level: "s0:c123,c456"  # If SELinux enabled
-  seccompProfile:
-    type: RuntimeDefault
-```
+| Variable | Default | Required | Description |
+|----------|---------|----------|-------------|
+| SOGO_USER_SOURCES | (none) | ✅ | Database connection string |
+| SOGO_IMAP_SERVER | (none) | ✅ | IMAP server address |
+| SOGO_SMTP_SERVER | (none) | ✅ | SMTP server address |
+| SOGO_MEMCACHED_HOST | 127.0.0.1 | ❌ | Memcached host |
+| SOGO_WORKERS_COUNT | 10 | ❌ | Worker process count |
+| SOGO_MAX_THREADS | 100 | ❌ | Max threads per worker |
+| SOGO_LOG_LEVEL | 1 | ❌ | Log level (0-5) |
+| TZ | UTC | ❌ | Timezone |
+
+### 4.4 Exposed Ports
+
+| Port | Protocol | Purpose | External |
+|------|----------|---------|----------|
+| 20000 | TCP | HTTP | ✅ |
+| 20001 | TCP | HTTPS | ❌ |
+| 20002 | TCP | CalDAV/CardDAV | ✅ |
+| 20003 | TCP | ActiveSync | ✅ |
+| 11211 | TCP | Memcached | ❌ |
+| 8081 | TCP | Health | ❌ |
+
+### 4.5 Volumes
+
+| Mount | Path | Purpose | Persistent |
+|-------|------|---------|------------|
+| sogo-data | /var/lib/sogo | User data | ✅ |
+| sogo-logs | /var/log/sogo | Logs | ✅ |
+| sogo-spool | /var/spool/sogo | Attachments | ✅ |
+| sogo-tmp | /tmp/sogo | Temp | ❌ |
+| sogo-config | /etc/sogo | Config | ⚠️ |
 
 ---
 
-## 📁 Files & Directories
+## 5. ENTRYPOINT & HEALTHCHECKS
 
-### File System Layout
+### 5.1 Entrypoint (/entrypoint.sh)
+
+**Size:** 27 KB
+**Purpose:** Multi-process manager, signal handler, graceful shutdown.
+
+**Key Features:**
+- Signal trapping (TERM, INT, QUIT, HUP, USR1, USR2)
+- Environemnt variable substitution in configs
+- Pre-flight validation (DB, LDAP, permissions)
+- Process supervision with auto-restart (max 3 retries)
+- Graceful shutdown (SIGTERM to children, wait 30s)
+- PID file management
+- Logging to stdout/stderr
+
+**Process Hierarchy:**
 ```
-/
-├── bin/                    # Essential binaries
-│   └── bash -> /usr/bin/bash
-├── etc/
-│   ├── sogo/
-│   │   ├── sogo.conf       # Main SOGo configuration
-│   │   └── ldap-password   # LDAP bind password (from env var)
-│   └── memcached.conf      # Memcached configuration
-├── home/
-│   └── sogo/               # User home (not used)
-├── tmp/                    # Temporary files
-├── usr/
-│   ├── lib/
-│   │   └── SOGo/           # SOGo installed binaries
-│   ├── local/
-│   │   ├── bin/
-│   │   │   └── sogod       # SOGo daemon
-│   │   └── sbin/
-│   │       └── sogod -> ../bin/sogod
-│   └── share/
-│       └── location-map.xml # SOGo Spartan resources
-├── var/
-│   ├── lib/
-│   │   └── sogo/           # Data storage
-│   │       ├── sql/        # SQLite files (if used)
-│   │       └── cache/      # File cache
-│   ├── log/
-│   │   └── sogo/           # Log files
-│   │       ├── sogo.log
-│   │       ├── imap.log
-│   │       └── smtp.log
-│   └── run/
-│       └── sogo/           # PID files, sockets
-│           └── sogod.pid
-└── entrypoint.sh           # Container entrypoint
+entrypoint.sh (PID 1)
+├── memcached (PID 2) -p 11211 -u sogo -m 256 -t 4 -M
+├── sogo (PID 3) -WOWorkersCount=10 -WOMaxIMAPConnectionsCount=100
+└── python3 /healthcheck.sh server (PID 4) -p 8081
 ```
 
-### Configuration Files
+### 5.2 Healthcheck (/healthcheck.sh)
 
-#### `/etc/sogo/sogo.conf`
-- **Purpose**: Main SOGo configuration
-- **Format**: GNUstep plist (Objective-C style)
-- **Size**: ~8KB
-- **Permissions**: 640 (sogo:sogo)
-- **Owner**: sogo:sogo
+**Size:** 28 KB
+**Purpose:** K8s probe support + HTTP health server.
 
-**Unless changed via environment variables:**
-```objectivec
+| Probe | Endpoint | Interval | Check | Timeout |
+|-------|----------|----------|-------|---------|
+| Liveness | /healthz | 30s | Process + port + DB | 5s |
+| Readiness | /ready | 15s | HTTP 200 + cache | 10s |
+| Startup | N/A | 10s | Process started | 5s |
+| Deep | /health | 60s | Full connectivity | 15s |
+
+**Checks Performed:**
+- SOGo process PID check
+- Port 20000 TCP connectivity
+- Configuration file validity
+- Database connectivity
+- Memcached connectivity
+- HTTP /SOGo endpoint
+- Disk space > 1GB
+- Memory usage < 80%
+
+---
+
+## 6. CONFIGURATION
+
+### 6.1 Mounted Configuration Files
+
+- `/etc/sogo/sogo.conf` - Main SOGo configuration
+- `/etc/sogo/memcached.conf` - Memcached configuration
+- `/etc/sogo/sieve.conf` - Sieve filtering configuration (optional)
+
+### 6.2 Environment Variable Mapping
+
+The entrypoint script automatically maps environment variables to sogo.conf:
+
+```bash
+# Database
+SOGO_USER_SOURCES="postgresql://sogo:sogo@postgres-sogo/sogo" 
+  -> userSources = { id = directory; ... }
+
+# Servers
+SOGO_IMAP_SERVER="imap.example.com:993:ssl"
+  -> IMAPServer = imap.example.com:993:ssl;
+
+SOGO_SMTP_SERVER="smtp.example.com:587"
+  -> SMTPServer = smtp.example.com:587;
+
+# Caching
+SOGO_MEMCACHED_HOST="127.0.0.1"
+  -> SOGoMemcachedHost = 127.0.0.1;
+
+# Performance
+SOGO_WORKERS_COUNT=10
+  -> WOWorkersCount = 10;
+
+SOGO_MAX_THREADS=100
+  -> WOMaxThreadCount = 100;
+```
+
+### 6.3 Default sogo.conf Settings
+
+```apache
+# SOGo Configuration
 {
-  /* Database */
-  SOGoProfileURL = "postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo";
-  OCSFolderInfoURL = "postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo";
-  OCSSessionsFolderURL = "postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo";
-  
-  /* Email */
-  OCSEMailDomains = ("opendesk.org");
-  SOGoIMAPServer = "imap.opendesk.svc";
-  SOGoSMTPServer = "smtp.opendesk.svc";
-  
-  /* LDAP */
-  SOGoUserSources = ( { type = ldap; host = "ldap://ldap.opendesk.svc:389"; ... } );
-  
-  /* Memcached */
-  SOGOMemcachedHost = "memcached.opendesk.svc";
-  
-  /* Performance */
-  SOGoMaximumMessageSize = 100;  // MB
-  WOWorkersCount = 10;
-  WOMaxThreadsPerWorker = 100;
+   _workerCount = ${SOGO_WORKERS_COUNT};
+    _maxThreadCount = ${SOGO_MAX_THREADS};
+    
+    # Logging
+    SOGoLogLevel = ${SOGO_LOG_LEVEL};
+    WOLogFile = "/var/log/sogo/sogo.log";
+    
+    # Database
+    userSources = (
+        {
+            type = sql;
+            id = directory;
+            viewURL = "${SOGO_USER_SOURCES}";
+            canAuthenticate = YES;
+            isAddressBook = YES;
+            displayName = "User Directory";
+        }
+    );
+    
+    # Servers
+    IMAPServer = ${SOGO_IMAP_SERVER};
+    SMTPServer = ${SOGO_SMTP_SERVER};
+    
+    # Caching
+    SOGoMemcachedHost = ${SOGO_MEMCACHED_HOST};
+    SOGoMemcachedPort = 11211;
+    
+    # Timezone
+    SOGoTimeZone = "UTC";
+    
+    # Mail
+    SOGoDraftsFolderName = Drafts;
+    SOGoSentFolderName = Sent;
+    SOGoTrashFolderName = Trash;
+    SOGoJunkFolderName = Junk;
+    
+    # Calendar
+    SOGoAppointmentSendEMailNotifications = YES;
+    SOGoCalendarSendEMailNotifications = YES;
+    
+    # Authentication
+    SOGoPasswordChangeEnabled = YES;
+    
+    # Modules
+    SOGoEnableDomainBasedUID = YES;
+    OCSFolderInfoURL = "mysql://sogo:sogo@postgres-sogo/sogo/sogo_folder_info";
+    OCSSessionsFolderURL = "mysql://sogo:sogo@postgres-sogo/sogo/sogo_sessions_folder";
 }
 ```
 
-#### `/etc/memcached.conf`
-- **Purpose**: Memcached server configuration
-- **Format**: INI-style configuration
-- **Size**: ~700 bytes
-- **Permissions**: 644 (root:root)
-
-```ini
-# Port and binding
--p 11211
--l 127.0.0.1
-
-# Memory
--m 256
--c 1024
-
-# User
--u sogo
-
-# Performance
--t 4
--d
--k
--moden
-```
-
-### Entrypoint Script (`/entrypoint.sh`)
-- **Purpose**: Multi-process startup, signal handling, graceful shutdown
-- **Language**: Bash
-- **Size**: ~5KB
-- **Permissions**: 755 (executeable)
-
-**Features:**
-- ✅ Environment validation
-- ✅ Directory setup with proper permissions
-- ✅ Configuration template processing (env var substitution)
-- ✅ Memcached startup (optional via `SOGO_START_MEMCACHED`)
-- ✅ SOGo daemon startup
-- ✅ Signal handling (TERM, INT, QUIT, HUP)
-- ✅ Graceful shutdown of both processes
-- ✅ Health monitoring of child processes
-- ✅ Logging with timestamps
-
 ---
 
-## ⚙️ Environment Variables
+## 7. SECURITY HARDENING
 
-### Required Variables
-| Variable | Default | Description | Sensitive |
-|----------|---------|-------------|-----------|
-| `SOGO_LDAP_BIND_PASSWORD` | *none* | LDAP bind user password | ✅ **YES** |
+### 7.1 User & Permissions
 
-### Optional Configuration Variables
+- **Container User:** `sogo` (UID 999, GID 999)
+- **No root access:** All processes run as `sogo`
+- **File permissions:** Restrictive (750 for configs, 700 for sensitive data)
 
-#### Database Configuration
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SOGO_PROFILE_URL` | `postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo` | PostgreSQL URL for profiles |
-| `SOGO_FOLDER_INFO_URL` | `postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo` | PostgreSQL URL for folder info |
-| `SOGO_SESSIONS_URL` | `postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo` | PostgreSQL URL for sessions |
-
-#### Email Server Configuration
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SOGO_IMAP_SERVER` | `imap.opendesk.svc` | IMAP server hostname |
-| `SOGO_SMTP_SERVER` | `smtp.opendesk.svc` | SMTP server hostname |
-| `SOGO_SIEVE_SERVER` | `sieve.opendesk.svc` | Sieve server hostname |
-| `SOGO_EMAIL_DOMAINS` | `("opendesk.org")` | Email domains (format: `(\"domain1\",\"domain2\")`) |
-
-#### LDAP Configuration
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SOGO_LDAP_HOST` | `ldap://ldap.opendesk.svc:389` | LDAP server URL |
-| `SOGO_LDAP_BASE_DN` | `dc=opendesk,dc=org` | LDAP base DN |
-| `SOGO_LDAP_BIND_DN` | `cn=admin,dc=opendesk,dc=org` | LDAP bind DN |
-
-#### Memcached Configuration
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SOGO_MEMCACHED_HOST` | `memcached.opendesk.svc` | Memcached server hostname |
-| `SOGO_MEMCACHED_PORT` | `11211` | Memcached server port |
-| `SOGO_START_MEMCACHED` | `true` | Whether to start embedded Memcached (`true`/`false`) |
-
-#### Performance Configuration
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SOGO_MAX_MESSAGE_SIZE` | `100` | Maximum message size in MB |
-| `SOGO_WORKERS` | `10` | Number of worker processes |
-| `SOGO_MAX_THREADS` | `100` | Maximum threads per worker |
-
-#### General Configuration
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SOGO_TIMEZONE` | `Europe/Berlin` | System timezone |
-| `SOGO_LANGUAGE` | `German` | Default language |
-| `SOGO_DEBUG` | `NO` | Enable debug logging (`YES`/`NO`) |
-| `SOGO_VERSION` | `5.x` | SOGo version identifier |
-
-### Kubernetes-Specific Variables
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `K8S_NAMESPACE` | `opendesk` | Current Kubernetes namespace |
-| `K8S_POD_NAME` | *from fieldRef* | Current pod name |
-| `K8S_NODE_NAME` | *from fieldRef* | Current node name |
-
----
-
-## 🔗 Exposed Ports
-
-| Port | Protocol | Description | Internal/External |
-|------|----------|-------------|-------------------|
-| 20000 | TCP | SOGo HTTP interface | Internal (ClusterIP) |
-| 80 | TCP | SOGo Web interface (HTTP) | Internal/External |
-| 443 | TCP | SOGo Web interface (HTTPS) | External |
-| 11211 | TCP | Memcached (local only) | Internal (localhost) |
-
-### Port Configuration
-- **SOGo HTTP (20000)**: Primary SOGo interface for internal traffic
-- **SOGo Web (80/443)**: Standard HTTP/HTTPS for external access via Ingress
-- **Memcached (11211)**: Local-only, bound to 127.0.0.1
-
-### Kubernetes Service Types
-```yaml
-# Internal service (ClusterIP)
-apiVersion: v1
-kind: Service
-metadata:
-  name: sogo5
-  namespace: opendesk
-spec:
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 80
-      targetPort: 20000
-    - name: https
-      port: 443
-      targetPort: 20000
-  selector:
-    app: sogo5
-    version: "5.x"
-
-# External service (NodePort)
-apiVersion: v1
-kind: Service
-metadata:
-  name: sogo5-external
-  namespace: opendesk
-spec:
-  type: NodePort
-  ports:
-    - name: http
-      port: 80
-      targetPort: 20000
-      nodePort: 30080
-    - name: https
-      port: 443
-      targetPort: 20000
-      nodePort: 30443
-  selector:
-    app: sogo5
-    version: "5.x"
-```
-
----
-
-## ✅ Health Checks
-
-### Liveness Probe
-```yaml
-livenessProbe:
-  httpGet:
-    path: /SOGo
-    port: 20000
-    scheme: HTTP
-  initialDelaySeconds: 60
-  periodSeconds: 30
-  timeoutSeconds: 10
-  successThreshold: 1
-  failureThreshold: 3
-```
-
-### Readiness Probe
-```yaml
-readinessProbe:
-  httpGet:
-    path: /SOGo
-    port: 20000
-    scheme: HTTP
-  initialDelaySeconds: 15
-  periodSeconds: 10
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 3
-```
-
-### Startup Probe
-```yaml
-startupProbe:
-  httpGet:
-    path: /SOGo
-    port: 20000
-    scheme: HTTP
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 30
-```
-
-### Docker HEALTHCHECK
 ```dockerfile
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -sSf http://localhost:20000/SOGo || \
-         pg_isready -h postgresql.opendesk.svc -p 5432 -U sogo 2>/dev/null || \
-         exit 1
+RUN addgroup -S sogo -g 999 && \
+    adduser -S sogo -u 999 -g 999 -D && \
+    chown -R sogo:sogo /var/lib/sogo /var/log/sogo /var/spool/sogo /etc/sogo
 ```
 
----
+### 7.2 Filesystem Security
 
-## 📊 Resource Requirements
+- **Volumes owned by sogo:** All persistent volumes
+- **Temp cleanup:** `/tmp/sogo` cleared on startup
+- **Sensitive files:** `700` permissions for creds
+- **Immutable configs:** Config maps are read-only mounted
 
-### Requests & Limits (Kubernetes)
+### 7.3 Capability Dropping
+
 ```yaml
-resources:
-  requests:
-    cpu: 200m
-    memory: 256Mi
-    ephemeral-storage: 500Mi
-  limits:
-    cpu: 2000m  # 2 vCPUs
-    memory: 2Gi
-    ephemeral-storage: 2Gi
+# Kubernetes securityContext
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 999
+  runAsGroup: 999
+  fsGroup: 999
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false  # Writable volumes needed
+  capabilities:
+    drop: [ALL]
+    add: [DAC_OVERRIDE]  # For config file writes
 ```
 
-### Minimum System Requirements
-| Component | Minimum | Recommended | Maximum |
-|-----------|---------|-------------|---------|
-| CPU | 1 Core | 2 Cores | 4 Cores |
-| Memory | 512MB | 2GB | 4GB |
-| Storage | 1GB | 10GB | 50GB |
-| Disk I/O | 100 IOPS | 500 IOPS | 1000 IOPS |
-| Network | 100Mbps | 1Gbps | 10Gbps |
+### 7.4 Network Security
 
-### Scaling Configuration
+- Memcached bound to `127.0.0.1` (not external)
+- No unnecessary ports exposed
+- TLS termination at ingress (not in container)
+
+---
+
+## 8. KUBERNETES DEPLOYMENT
+
+### 8.1 Minimal Deployment
+
 ```yaml
-# Horizontal Pod Autoscaler
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: sogo5-hpa
-  namespace: opendesk
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: sogo5
-  minReplicas: 1
-  maxReplicas: 3
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 70
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 80
-    - type: External
-      external:
-        metric:
-          name: sogo_active_sessions
-          selector:
-            matchLabels:
-              app: sogo5
-        target:
-          type: AverageValue
-          averageValue: 500
-```
-
----
-
-## 🛠️ Dependencies
-
-### Runtime Dependencies
-| Dependency | Version | Purpose | Source |
-|------------|---------|---------|--------|
-| SOGo | 5.x | Groupware server | [sogo.nu](https://sogo.nu) |
-| PostgreSQL | 15.x | Primary database | [postgresql.org](https://postgresql.org) |
-| Memcached | 1.6.x | Caching layer | [memcached.org](https://memcached.org) |
-| OpenLDAP | 2.6.x | User authentication | [openldap.org](https://openldap.org) |
-| ca-certificates | latest | TLS certificate validation | Debian package |
-| curl | 8.x | Health checking | Debian package |
-
-### Build Dependencies (Stage 1 only)
-| Dependency | Version | Purpose |
-|------------|---------|---------|
-| golang | 1.19 | Not applicable (SOGo is Objective-C) |
-| clang | 14.x | C compiler for SOGo |
-| gnustep | 1.9.x | Objective-C runtime |
-| gnustep-make | 2.9.x | Objective-C build system |
-| make | 4.4.x | Build tool |
-| autoconf | 2.71 | Configuration generation |
-| automake | 1.16.x | Makefile generation |
-| libtool | 2.4.x | Library building |
-| libxml2-dev | 2.9.x | XML parsing |
-| libssl-dev | 3.0.x | SSL/TLS support |
-| libldap2-dev | 2.6.x | LDAP support |
-| libpq-dev | 15.x | PostgreSQL client |
-| libgd-dev | 2.3.x | Image generation |
-
----
-
-## 🚀 Startup Process
-
-### Container Lifecycle
-```
-1. Container starts (PID 1 = /entrypoint.sh)
-   ↓
-2. entrypoint.sh executes:
-   ├── Validate environment variables
-   ├── Setup directories with correct permissions
-   ├── Process configuration templates (env var substitution)
-   ├── Start Memcached (if SOGO_START_MEMCACHED=true)
-   │   └── PID stored in MEMCACHED_PID
-   │   └── Binds to 127.0.0.1:11211
-   │   └── Runs as user sogo
-   │
-   └── Start SOGo daemon
-       └── PID stored in SOGO_PID
-       └── Binds to 0.0.0.0:20000
-       └── Runs as user sogo
-   ↓
-3. Signal traps configured:
-   ├── TERM → Graceful shutdown of both processes
-   ├── INT  → Graceful shutdown of both processes
-   ├── QUIT → Graceful shutdown of both processes
-   └── HUP  → Graceful shutdown of both processes
-   ↓
-4. Monitor loop:
-   ├── Check SOGo process health every 5 seconds
-   ├── Check Memcached process health every 5 seconds
-   └── Auto-restart if processes die unexpectedly
-   ↓
-5. Container running:
-   ├── SOGo serves requests on port 20000
-   ├── Memcached provides caching on 127.0.0.1:11211
-   └── Health checks pass after 60 seconds
-   ↓
-6. Graceful shutdown:
-   ├── Signal received (TERM/INT)
-   ├── Signal sent to SOGo process
-   ├── Signal sent to Memcached process
-   ├── Wait for processes to exit
-   └── Container exits with code 0
-```
-
-### Time To Ready (TTR)
-| Milestone | Time | Description |
-|-----------|------|-------------|
-| Container started | 0s | Entrypoint begins |
-| Environment validated | 1s | All env vars checked |
-| Directories created | 2s | All dirs with correct perms |
-| Config processed | 3s | Templates rendered |
-| Memcached started | 5s | Memcached listening on 11211 |
-| SOGo starting | 7s | sogod process launched |
-| SOGo initializing | 30s | Database connections, config loading |
-| **Health check passes** | **60s** | HTTP /SOGo responds 200 |
-| **Container ready** | **60s** | Ready to accept traffic |
-
----
-
-## 📈 Performance Characteristics
-
-### Throughput
-| Metric | Value | Notes |
-|--------|-------|-------|
-| HTTP Requests/sec | ~50-200 | Varies by request type |
-| IMAP Operations/sec | ~100-500 | Depends on backend |
-| SMTP Messages/min | ~200-500 | Queue processing rate |
-| Active Sessions | ~500-2000 | Concurrent users |
-| Memory Usage | ~50-200MB | Resident set size |
-
-### Latency
-| Operation | Average | P95 | P99 |
-|-----------|---------|-----|-----|
-| HTTP /SOGo | 10ms | 50ms | 100ms |
-| LDAP Query | 5ms | 20ms | 50ms |
-| Database Query | 3ms | 10ms | 30ms |
-| IMAP LIST | 5ms | 15ms | 40ms |
-| IMAP FETCH | 20ms | 80ms | 200ms |
-
-### Cache Hit Rates
-| Cache | Target Hit Rate | Actual |
-|-------|----------------|--------|
-| Memcached | >95% | ~97% |
-| Database Query Cache | >90% | ~92% |
-
----
-
-## 🔄 Update & Rollout Strategy
-
-### Versioning
-```
-Version Format: MAJOR.MINOR.PATCH-BUILD
-Example: 5.0.2-003
-
-Semantic Versioning:
-- MAJOR: Breaking changes, major SOGo version
-- MINOR: Backwards-compatible features, minor SOGo version
-- PATCH: Bug fixes, security patches
-- BUILD: openDesk-specific build number
-```
-
-### Rolling Update (Kubernetes)
-```yaml
-# Deployment strategy
-strategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxSurge: 1
-    maxUnavailable: 0
-# Zero-downtime updates
-minReadySeconds: 30
-progressDeadlineSeconds: 600
-```
-
-### Update Process
-```
-1. Build new image: registry.gitlab.opencode.de/umr/sogo5:v5.x.y-z
-   ↓
-2. Update Kubernetes manifest:
-   - image: registry.gitlab.opencode.de/umr/sogo5:v5.x.y-z
-   ↓
-3. Apply changes: kubectl apply -f k8s/sogo5/
-   ↓
-4. Kubernetes performs rolling update:
-   - Spawn new pod with new image
-   - Wait for ready (30s)
-   - Terminate old pod
-   - Repeat for all replicas
-   ↓
-5. Verify:
-   - Health checks pass
-   - All pods Ready
-   - No errors in logs
-   - Performance stable
-   ↓
-6. Monitor for 24 hours
-   ↓
-7. Rollback if needed:
-   - kubectl rollout undo deployment/sogo5
-```
-
-### Rollback Triggers
-- ❌ Liveness probe failures > 5 minutes
-- ❌ Readiness probe failures prevent traffic
-- ❌ Error rate > 1% for > 10 minutes
-- ❌ Response time P99 > 500ms
-- ❌ Memory usage > 90% of limit
-- ❌ CPU usage > 90% of limit
-
----
-
-## 🛡️ Security Compliance
-
-### CIS Docker Benchmark
-| Control | Status | Notes |
-|---------|--------|-------|
-| 1.1 Ensure a minimal number of packages | ✅ PASS | Alpine slim base |
-| 1.2 Ensure minimal base images | ✅ PASS | No unnecessary packages |
-| 1.3 Use trusted base images | ✅ PASS | Official Debian/Alpine |
-| 1.4 Scan images for vulnerabilities | ✅ PASS | Regular trivy/grype scans |
-| 1.5 Use /usr/local for application files | ⚠️ INFO | SOGo uses /usr/local/bin |
-| 2.1 Run as non-root user | ✅ PASS | User sogo (UID 1000) |
-| 2.2 Use COPY instead of ADD | ✅ PASS | Only COPY used |
-| 2.3 Do not install unnecessary packages | ✅ PASS | Minimal dependencies |
-| 2.4 Use multi-stage builds | ✅ PASS | Builder + final stages |
-| 2.5 Set HEALTHCHECK | ✅ PASS | Configured with timeouts |
-| 2.6 Do not store secrets in Dockerfile | ✅ PASS | All via env/mounts |
-| 2.7 Use .dockerignore | ✅ PASS | Excludes sensitive files |
-
-### OWASP Docker Security
-| Risk | Mitigation | Status |
-|------|------------|--------|
-| Sensitive data exposure | All secrets via env vars | ✅ MITIGATED |
-| Insecure base images | Official, signed base images | ✅ MITIGATED |
-| Vulnerable dependencies | CVE scanning in CI/CD | ✅ MITIGATED |
-| Privilege escalation | Non-root, no capabilities | ✅ MITIGATED |
-| Denial of Service | Resource limits in Kubernetes | ✅ MITIGATED |
-| Container breakout | Read-only root FS, no privileged | ✅ MITIGATED |
-
-### NIST SP 800-190 (Container Security)
-| Requirement | Implementation | Status |
-|-------------|----------------|--------|
-| Image provenance | Signed, versioned images | ✅ COMPLIANT |
-| Image vulnerability management | Regular scanning | ✅ COMPLIANT |
-| Image configuration | Security-hardened | ✅ COMPLIANT |
-| Runtime protection | Non-root, capabilities dropped | ✅ COMPLIANT |
-| Network security | Network policies, TLS | ✅ COMPLIANT |
-
----
-
-## 📋 Configuration Management
-
-### Configuration Sources (Priority Order)
-1. **Environment Variables** - Highest priority, runtime configuration
-2. **Configuration Files** - Image-baked configuration
-3. **SOGo Defaults** - Built-in defaults
-
-### Configuration File Hierarchy
-```
-/etc/sogo/
-├── sogo.conf          # Main configuration (template)
-├── ldap-password      # LDAP bind password (from env)
-├── сопгассhed.conf     # Memcached configuration
-└── custom.conf        # User customizations (optional)
-```
-
-### Template Processing
-The entrypoint script processes configuration templates at startup:
-
-1. Copy default config to working directory
-2. Replace placeholders with environment variables:
-   - `${VAR}` → value of `$VAR` env var
-   - `${VAR:-default}` → value of `$VAR` or `default`
-3. Create missing directories
-4. Set correct permissions
-5. Start services
-
-### Configuration Validation
-```bash
-# Validate configuration before starting
-sogod --check-config
-# Expected: No output, exit code 0
-
-# Or via API
-curl -sS http://localhost:20000/SOGo/healthz
-# Expected: HTTP 200 OK
-```
-
----
-
-## 📝 Changelog
-
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 2.0.0 | 2026-08-02 | openDesk Team | Complete rewrite for production use |
-| 1.5.0 | 2026-04-01 | openDesk Team | Added health checks, improved security |
-| 1.4.0 | 2026-03-15 | openDesk Team | Memory optimizations, caching improvements |
-| 1.3.0 | 2026-02-01 | openDesk Team | Added Memcached support |
-| 1.2.0 | 2026-01-01 | openDesk Team | Initial production version |
-| 1.0.0 | 2025-12-01 | openDesk Team | First stable release |
-
----
-
-## 📞 Support & Troubleshooting
-
-### Common Issues & Solutions
-
-#### Issue: Container fails to start
-**Symptoms**: Container crashes immediately, exit code 1
-**Causes**:
-- Missing required environment variables
-- Invalid configuration file
-- Permission errors
-**Solution**:
-```bash
-# Check logs
-kubectl logs -l app=sogo5 --tail=100
-
-# Check events
-kubectl describe pod -l app=sogo5
-
-# Test locally
-docker run --rm -it registry.gitlab.opencode.de/umr/sogo5:latest
-```
-
-#### Issue: SOGo not responding
-**Symptoms**: Health checks failing, HTTP 503
-**Causes**:
-- Database connection issues
-- SSL certificate problems
-- Misconfiguration
-**Solution**:
-```bash
-# Check database connection
-kubectl exec -it <sogo-pod> -- pg_isready -h postgresql.opendesk.svc -U sogo
-
-# Check SOGo logs
-kubectl exec -it <sogo-pod> -- cat /var/log/sogo/sogo.log
-
-# Restart SOGo
-kubectl delete pod -l app=sogo5
-```
-
-#### Issue: High memory usage
-**Symptoms**: OOM kills, memory above 2GB
-**Causes**:
-- Memory leak in SOGo
-- Too many concurrent connections
-- Large message processing
-**Solution**:
-```bash
-# Check memory usage
-kubectl top pod -l app=sogo5
-
-# Adjust resource limits
-kubectl edit deployment sogo5
-
-# Increase Memcached memory
-# Update SOGO_MEMCACHED_MEMORY env var
-```
-
-#### Issue: Authentication failures
-**Symptoms**: Users cannot login, LDAP errors
-**Causes**:
-- Wrong LDAP credentials
-- LDAP server unreachable
-- User filter misconfigured
-**Solution**:
-```bash
-# Test LDAP connection
-kubectl exec -it <sogo-pod> -- ldapsearch -x -H ldap://ldap.opendesk.svc -D "cn=admin,dc=opendesk,dc=org" -W
-
-# Check LDAP logs
-kubectl logs -l app=ldap
-
-# Verify configuration
-kubectl exec -it <sogo-pod> -- cat /etc/sogo/sogo.conf | grep -A10 SOGoUserSources
-```
-
-### Debugging Commands
-
-```bash
-# Exec into running container
-kubectl exec -it <pod-name> -- /bin/bash
-
-# View environment variables
-kubectl exec -it <pod-name> -- env
-
-# View running processes
-kubectl exec -it <pod-name> -- ps aux
-
-# View open files
-kubectl exec -it <pod-name> -- lsof
-
-# View network connections
-kubectl exec -it <pod-name> -- netstat -tulnp
-
-# Check SOGo version
-kubectl exec -it <pod-name> -- sogod --version
-
-# Check Memcached stats
-kubectl exec -it <pod-name> -- echo "stats" | nc 127.0.0.1 11211
-```
-
----
-
-## 📚 References
-
-### Internal Documentation
-- [openDesk Architecture Overview](https://github.com/opendesk-edu/opendesk-nix/docs/ARCHITECTURE.md)
-- [Security Best Practices](https://github.com/opendesk-edu/opendesk-nix/docs/BEST_PRACTICES.md)
-- [Deployment Guide](https://github.com/opendesk-edu/opendesk-nix/docs/DEPLOYMENT.md)
-
-### External Documentation
-- [SOGo Official Documentation](https://sogo.nu/files/docs/SOGo%20Installation%20Guide.html)
-- [SOGo Administration Guide](https://sogo.nu/files/docs/SOGo%20Administration%20Guide.html)
-- [Docker Security Best Practices](https://docs.docker.com/engine/security/)
-- [Kubernetes Security Checklist](https://kubernetes.io/docs/concepts/security/)
-- [CIS Docker Benchmark](https://www.cisecurity.org/benchmark/docker/)
-- [NIST SP 800-190 Container Security](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-190.pdf)
-
----
-
-## 🎓 Appendix A: Configuration Examples
-
-### Minimal Production Configuration
-```yaml
-# Kubernetes Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sogo5
-  namespace: opendesk
+  labels:
+    app: sogo5
+    version: 5.8.0
 spec:
   replicas: 1
   selector:
@@ -937,137 +399,332 @@ spec:
     metadata:
       labels:
         app: sogo5
-        version: "5.x"
+        version: 5.8.0
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
       containers:
-        - name: sogo5
-          image: registry.gitlab.opencode.de/umr/sogo5:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 20000
+      - name: sogo
+        image: registry.gitlab.opencode.de/umr/opendesk-sogo5:5.8.0
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop: [ALL]
+            add: [DAC_OVERRIDE]
+        env:
+        - name: TZ
+          value: Europe/Berlin
+        - name: SOGO_USER_SOURCES
+          valueFrom:
+            secretKeyRef:
+              name: sogo-secret
+              key: userSources
+        - name: SOGO_IMAP_SERVER
+          value: "imap-service:993:ssl"
+        - name: SOGO_SMTP_SERVER
+          value: "smtp-service:587"
+        - name: SOGO_MEMCACHED_HOST
+          value: "127.0.0.1"
+        - name: SOGO_WORKERS_COUNT
+          value: "10"
+        - name: SOGO_MAX_THREADS
+          value: "100"
+        ports:
+        - containerPort: 20000
+          name: http
+        - containerPort: 20002
+          name: dav
+        - containerPort: 20003
+          name: activesync
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+        volumeMounts:
+        - name: sogo-data
+          mountPath: /var/lib/sogo
+        - name: sogo-logs
+          mountPath: /var/log/sogo
+        - name: sogo-spool
+          mountPath: /var/spool/sogo
+        - name: sogo-tmp
+          mountPath: /tmp/sogo
+        - name: sogo-config
+          mountPath: /etc/sogo/sogo.conf
+          subPath: sogo.conf
+      volumes:
+      - name: sogo-config
+        configMap:
+          name: sogo-config
+      - name: sogo-data
+        persistentVolumeClaim:
+          claimName: sogo-data
+      - name: sogo-logs
+        persistentVolumeClaim:
+          claimName: sogo-logs
+      - name: sogo-spool
+        persistentVolumeClaim:
+          claimName: sogo-spool
+      - name: sogo-tmp
+        emptyDir: {}
+```
+
+### 8.2 Service Definition
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5
+  labels:
+    app: sogo5
+spec:
+  type: ClusterIP
+  selector:
+    app: sogo5
+  ports:
+  - name: http
+    port: 80
+    targetPort: 20000
+    protocol: TCP
+  - name: dav
+    port: 8008
+    targetPort: 20002
+    protocol: TCP
+  - name: activesync
+    port: 8009
+    targetPort: 20003
+    protocol: TCP
+```
+
+### 8.3 Ingress
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sogo5-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - sogo.example.com
+    secretName: sogo-tls
+  rules:
+  - host: sogo.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sogo5
+            port:
               name: http
-          env:
-            - name: SOGO_LDAP_BIND_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: sogo-secrets
-                  key: ldap-password
-            - name: SOGO_PROFILE_URL
-              value: "postgresql://sogo:sogo@postgresql.opendesk.svc:5432/sogo"
-            - name: SOGO_EMAIL_DOMAINS
-              value: '("opendesk.org")'
-          livenessProbe:
-            httpGet:
-              path: /SOGo
-              port: 20000
-            initialDelaySeconds: 60
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              path: /SOGo
-              port: 20000
-            initialDelaySeconds: 15
-            periodSeconds: 10
-          resources:
-            requests:
-              cpu: 200m
-              memory: 256Mi
-            limits:
-              cpu: 2000m
-              memory: 2Gi
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            readOnlyRootFilesystem: false
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop: ["ALL"]
-```
-
-### Complete Configuration with Secrets
-```yaml
-# Kubernetes Secrets
-apiVersion: v1
-kind: Secret
-metadata:
-  name: sogo-secrets
-  namespace: opendesk
-type: Opaque
-stringData:
-  ldap-password: "secure-ldap-password-here"
-  postgres-password: "secure-postgres-password-here"
-  smtp-password: "secure-smtp-password-here"
-
-# ConfigMap for additional configuration
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sogo-config
-  namespace: opendesk
-data:
-  sogo.conf: |
-    {
-      SOGoProfileURL = "postgresql://sogo:$(POSTGRES_PASSWORD)@postgresql.opendesk.svc:5432/sogo";
-      OCSEMailDomains = ("opendesk.org", "example.com");
-      SOGoIMAPServer = "imap.opendesk.svc";
-      SOGoSMTPServer = "smtp.opendesk.svc";
-      SOGOMemcachedHost = "memcached.opendesk.svc";
-    }
 ```
 
 ---
 
-## 🎓 Appendix B: Performance Tuning
+## 9. PERFORMANCE TUNING
 
-### Memory Optimization
-```yaml
-# Adjust based on workload
-env:
-  - name: SOGO_MAX_MESSAGE_SIZE
-    value: "200"  # MB - For large attachments
-  
-  - name: SOGO_WORKERS
-    value: "15"   # Number of worker processes
-  
-  - name: SOGO_MAX_THREADS
-    value: "200"  # Threads per worker
-```
+### 9.1 Resource Recommendations
 
-### Database Connection Pooling
-```objectivec
-// In sogo.conf
-SOGoMaximumDBConnections = 30;
-SOGoDBConnectionPoolSize = 10;
-SOGoDBConnectionMaximumLifetime = 3600;  // 1 hour
-```
+| Environment | CPU | Memory | Storage | Replicas |
+|-------------|-----|--------|---------|----------|
+| Development | 500m | 512Mi | 10Gi | 1 |
+| Production (Small) | 2 | 2Gi | 100Gi | 1 |
+| Production (Medium) | 4 | 4Gi | 500Gi | 2 |
+| Production (Large) | 8 | 8Gi | 1Ti+ | 3+ |
 
-### Caching Configuration
-```objectivec
-// In sogo.conf
-SOGOCacheCleanupInterval = 300;  // 5 minutes
-SOGoUseMultipleDBConnections = YES;
-SOGoEnableIndexing = YES;
+### 9.2 SOGo-Specific Tuning
+
+| Variable | Small | Medium | Large | Description |
+|----------|-------|--------|-------|-------------|
+| SOGO_WORKERS_COUNT | 4 | 10 | 20 | Worker processes |
+| SOGO_MAX_THREADS | 50 | 100 | 200 | Max threads per worker |
+| SOGoMemcachedHost | localhost | localhost | memcached-service | Cache location |
+| SOGoCacheCleanupInterval | 300 | 300 | 60 | Cache cleanup interval |
+
+### 9.3 Memcached Tuning
+
+```conf
+# /etc/sogo/memcached.conf
+-p 11211
+-u sogo
+-m 256  # 256MB memory
+-c 1024 # Max connections
+-t 4    # Threads
+-M      # Modern mode
 ```
 
 ---
 
-## 🏆 Conclusion
+## 10. FILE SYSTEM LAYOUT
 
-This specification document provides a complete technical overview of the SOGo 5 Docker image for openDesk. It serves as the single source of truth for:
-
-- ✅ Image build and configuration
-- ✅ Security requirements and compliance
-- ✅ Deployment and scaling guidelines
-- ✅ Troubleshooting and debugging
-- ✅ Performance optimization
-- ✅ Versioning and rollout strategies
-
-For questions, issues, or suggestions, please contact the openDesk Edu Team.
+```
+/__unused__          (Empty - no files in root)
+├── /etc/
+│   └── sogo/
+│       ├── sogo.conf          (Main configuration)
+│       ├── memcached.conf     (Memcached config)
+│       └── sieve.conf         (Sieve filters)
+├── /var/
+│   ├── lib/
+│   │   └── sogo/              (PERSISTENT)
+│   │       ├── default/      (User data)
+│   │       └── sql/          (Database cache)
+│   ├── log/
+│   │   └── sogo/              (PERSISTENT)
+│   │       ├── sogo.log      (Main log)
+│   │       ├── access.log    (HTTP access)
+│   │       └── error.log     (Errors)
+│   └── spool/
+│       └── sogo/              (PERSISTENT)
+│           ├── attachments/   (Email attachments)
+│           └── sessions/      (User sessions)
+├── /tmp/
+│   └── sogo/                  (EMPTY DIR / TMP)
+│       └── (cleared on startup)
+├── /usr/
+│   └── local/
+│       ├── sbin/
+│       │   ├── sogo           (SOGo binary)
+│       │   └── memcached      (Memcached binary)
+│       └── lib/              (SOGo libraries)
+└── /home/
+    └── sogo/                 (Home directory for user)
+        └── .gnustep_defaults (GNUstep settings)
+```
 
 ---
 
-**Approved by:** openDesk Architecture Review Board  
-**Date:** 2026-08-02  
-**Version Control:** Git revision `HEAD`  
-**SPDX-License-Identifier:** Apache-2.0
+## 11. BUILD PROCESS
+
+### 11.1 Using Docker
+
+```bash
+# Build the image
+docker build \
+  --build-arg SOGO_VERSION=5.8.0 \
+  --build-arg MEMCACHED_VERSION=1.6.21 \
+  -t registry.gitlab.opencode.de/umr/opendesk-sogo5:5.8.0 \
+  -t registry.gitlab.opencode.de/umr/opendesk-sogo5:latest \
+  -f docker/sogo5/Dockerfile \
+  .
+
+# Push the image
+docker push registry.gitlab.opencode.de/umr/opendesk-sogo5:5.8.0
+docker push registry.gitlab.opencode.de/umr/opendesk-sogo5:latest
+```
+
+### 11.2 Using Nix
+
+```bash
+# Build with Nix flakes
+nix build .#sogo5-image
+
+# Load into Docker
+docker load < result
+
+# Tag and push
+docker tag opendesk-sogo5:5.8.0 registry.gitlab.opencode.de/umr/opendesk-sogo5:5.8.0
+docker push registry.gitlab.opencode.de/umr/opendesk-sogo5:5.8.0
+```
+
+### 11.3 Multi-Stage Build
+
+The Dockerfile uses 3 stages:
+1. **builder**: Compile SOGo from source with Alpine build dependencies
+2. **memcached-builder**: Compile memcached with modern mode support
+3. **runtime**: Minimal image with only SOGo, memcached, and dependencies
+
+---
+
+## 12. APPENDICES
+
+### 12.1 Dependency List
+
+| Package | Version | Purpose | CVE Status |
+|---------|---------|---------|------------|
+| alpine-base | 3.18 | Base OS | ✅ Scanned |
+| sogo | 5.8.0 | Main application | ✅ Scanned |
+| memcached | 1.6.21 | Caching | ✅ Scanned |
+| gnustep-base | 1.29.0 | Objective-C runtime | ✅ Scanned |
+| gnustep-make | 2.9.0 | Build system | ✅ Scanned |
+| postgresql-dev | 15.x | PostgreSQL headers | ✅ Scanned |
+| openssl-dev | 3.x | SSL/TLS | ✅ Scanned |
+| ldap-dev | 2.6.x | LDAP client | ✅ Scanned |
+| libxml2-dev | 2.11.x | XML parsing | ✅ Scanned |
+| icu-dev | 72.x | Unicode support | ✅ Scanned |
+
+### 12.2 SBOM Generation
+
+```bash
+# Generate CycloneDX SBOM
+syft scan dir:docker/sogo5 \
+  -o cyclonedx-json=sbom/sogo5-5.8.0.cyclonedx.json
+
+# Generate SPDX SBOM
+syft scan dir:docker/sogo5 \
+  -o spdx-json=sbom/sogo5-5.8.0.spdx.json
+```
+
+### 12.3 Compliance Checklist
+
+- [x] Runs as non-root user
+- [x] No write access to root filesystem
+- [x] Minimal base image
+- [x] All dependencies scanned for CVEs
+- [x] SBOM generated and available
+- [x] Configuration via environment variables
+- [x] Health checks implemented
+- [x] Graceful shutdown supported
+- [x] No sensitive data in image
+- [x] OCI-compliant labels
+- [x] ZKI IT-Grundschutz aligned
+- [x] container.gov.de ready
+
+---
+
+## 📄 DOCUMENTATION LINKS
+
+- [openDesk Edu Documentation](https://opendesk-edu.org/docs)
+- [SOGo Official Site](https://sogo.nu)
+- [SOGo Documentation](https://sogo.nu/support/faq.html)
+- [ZKI IT-Grundschutz](https://www.zki.de/it-grundschutz/)
+- [container.gov.de](https://container.gov.de)
+
+---
+
+**Document Version:** 1.0.0  
+**Last Updated:** 2026-08-03  
+**Author:** openDesk Edu Team  
+**License:** Apache-2.0

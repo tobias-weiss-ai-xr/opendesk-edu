@@ -1,0 +1,610 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "dev-agent-details",
+    "title": "Dev Agent Operator Details",
+    "tags": ["opendesk", "dev-agent", "operator"],
+    "timezone": "browser",
+    "schemaVersion": 30,
+    "version": 1,
+    "refresh": "15s",
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Operator Status",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": { "text": "Down" },
+                  "1": { "text": "Up" }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "green", "value": 1 }
+              ]
+            },
+            "color": { "mode": "thresholds" }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "up{job=\"dev-agent\"}",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Components Monitored",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 0 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "green", "value": 1 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:components_monitored",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Components Healthy",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "red", "value": 0 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:components_healthy",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Components Degraded",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 1 },
+                { "color": "red", "value": 3 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:components_degraded",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Components Failed",
+        "gridPos": { "h": 8, "w": 6, "x": 24, "y": 0 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "red", "value": 1 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:components_failed",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Repair Success Rate",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 8 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "orange", "value": 90 },
+                { "color": "green", "value": 95 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:repair_success_rate:5m * 100",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total Repairs (1h)",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 8 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 10 },
+                { "color": "red", "value": 20 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum(increase(dev_agent_repairs_total[1h]))",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total Failures (1h)",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 8 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "red", "value": 1 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum(increase(dev_agent_repair_failures_total[1h]))",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Avg Repair Time",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 8 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "decimals": 2,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 30 },
+                { "color": "red", "value": 60 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:repair_duration_seconds:p95",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Health Check Status",
+        "gridPos": { "h": 8, "w": 6, "x": 24, "y": 8 },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": { "text": "Down" },
+                  "1": { "text": "Up" }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "green", "value": 1 }
+              ]
+            },
+            "color": { "mode": "thresholds" }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "probe_success{job=\"blackbox\",instance=~\"dev-agent:.*\"}",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Repair Rate Over Time",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text"
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "rate(dev_agent_repairs_total[1m])",
+            "legendFormat": "Repairs",
+            "lineWidth": 2
+          },
+          {
+            "expr": "rate(dev_agent_repair_failures_total[1m])",
+            "legendFormat": "Failures",
+            "lineWidth": 2
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Repair Duration Percentiles",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom":{
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:repair_duration_seconds:p50",
+            "legendFormat": "P50",
+            "lineWidth": 2
+          },
+          {
+            "expr": "dev_agent:repair_duration_seconds:p95",
+            "legendFormat": "P95",
+            "lineWidth": 2
+          },
+          {
+            "expr": "dev_agent:repair_duration_seconds:p99",
+            "legendFormat": "P99",
+            "lineWidth": 2
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Component Health Status",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Healthy"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#119600",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Degraded"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E5AC0E",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Failed"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "dev_agent:components_healthy",
+            "legendFormat": "Healthy",
+            "lineWidth": 3
+          },
+          {
+            "expr": "dev_agent:components_degraded",
+            "legendFormat": "Degraded",
+            "lineWidth": 3
+          },
+          {
+            "expr": "dev_agent:components_failed",
+            "legendFormat": "Failed",
+            "lineWidth": 3
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Repair Duration Distribution",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.25, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "P25"
+          },
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "P50"
+          },
+          {
+            "expr": "histogram_quantile(0.75, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "P75"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "P95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "P99"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Repairs by Component",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 32 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum by (component) (rate(dev_agent_repairs_total{component=~".+"}[5m]))",
+            "legendFormat": "{{component}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Repair Duration by Component",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 40 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum by (component) (rate(dev_agent_repair_duration_seconds_sum{component=~".+"}[5m]) / rate(dev_agent_repair_duration_seconds_count{component=~".+"}[5m]))",
+            "legendFormat": "{{component}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Health Check Probe Results",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 48 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "max": 1,
+            "custom": {
+              "lineWidth": 2
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "probe_success{job=\"blackbox\",instance=~".*\"}",
+            "legendFormat": "{{instance}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Health Check Response Time",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 48 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": {
+              "lineWidth": 2
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "probe_duration_seconds{job=\"blackbox\",instance=~".*\"}",
+            "legendFormat": "{{instance}}"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "",
+            "value": ""
+          },
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": ".*"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(dev_agent_repairs_total, component)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Component",
+          "multi": true,
+          "name": "component",
+          "options": [],
+          "query": "label_values(dev_agent_repairs_total, component)",
+          "refresh": 1,
+          "regex": ".*",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "type": "query"
+        }
+      ]
+    },
+    "schemaVersion": 30,
+    "style": "dark",
+    "tags": ["opendesk", "dev-agent", "operator"],
+    "time": { "from": "now-1h", "to": "now" },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "15s", "30s", "1m", "5m", "15m", "30m", "1h"]
+    },
+    "timezone": "",
+    "title": "Dev Agent Operator Details",
+    "version": 1
+  },
+  "folderId": 0,
+  "overwrite": true
+}

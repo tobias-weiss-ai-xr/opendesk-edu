@@ -1,0 +1,669 @@
+# openDesk Dev Agent Operator Configuration
+# Target: /etc/opendesk-dev-agent/config.yaml in container
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# ==============================================================================
+# CONFIGURATION HIERARCHY (highest to lowest priority):
+# 1. CLI flags (--KEY=value)
+# 2. Environment variables (OPERATOR_KEY=value)
+# 3. This config file (/etc/opendesk-dev-agent/config.yaml)
+# 4. Default values (hardcoded in operator)
+# ==============================================================================
+#
+# ENVIRONMENT VARIABLE OVERRIDES:
+# All settings can be overridden via environment variables with the
+# OPERATOR_ prefix (e.g., OPERATOR_LOG_LEVEL=debug)
+#
+# Kubernetes secrets can be mounted at:
+# /etc/opendesk-dev-agent/secrets/ - for sensitive configuration
+#
+# ==============================================================================
+
+# ==============================================================================
+# OPERATOR IDENTITY & VERSIONING
+# ==============================================================================
+operator:
+  # Operator name (used in metrics, logs, etc.)
+  name: "opendesk-dev-agent"
+  
+  # Version (matches Chart version)
+  version: "2.1.0"
+  
+  # Build information
+  build_date: "2026-08-03T12:00:00Z"
+  git_commit: "d1fd35d"
+  git_repo: "github.com/opendesk-edu/opendesk-nix"
+  
+  # Instance identifier (unique per cluster)
+  instance_id: "${OPERATOR_INSTANCE_ID:-}"
+
+# ==============================================================================
+# WATCH NAMESPACES
+# ==============================================================================
+# Namespaces to monitor for HealthPolicy and RepairStrategy resources
+# Also used for workload monitoring (Deployments, StatefulSets, Pods)
+#
+watch:
+  # Default namespaces (override via OPERATOR_WATCH_NAMESPACES)
+  namespaces:
+    - "opendesk"
+    - "opendesk-edu"
+    - "default"
+  
+  # Include all namespaces (set to true to ignore namespaces list)
+  all_namespaces: false
+  
+  # Namespace labels to include (when all_namespaces=false)
+  # If specified, only namespaces with these labels will be watched
+  namespace_selector:
+    match_labels:
+      {}
+    # Example:
+    #   opendesk.org/monitored: "true"
+    #   environment: "production"
+
+# ==============================================================================
+# HEALTH CONTROLLER CONFIGURATION
+# ==============================================================================
+health_controller:
+  # Enable/disable health controller
+  enabled: true
+  
+  # Reconciliation interval (how often to check health)
+  reconcile_interval: "60s"
+  
+  # Health check timeout
+  health_check_timeout: "10s"
+  
+  # Default health check interval for all components
+  default_check_interval: "60s"
+  
+  # Maximum number of concurrent health checks
+  max_concurrent_checks: 10
+  
+  # Health history retention (how long to keep health history)
+  history_retention: "24h"
+  
+  # Default thresholds
+  defaults:
+    health_threshold: 3    # Number of checks before marking healthy
+    unhealthy_threshold: 5 # Number of checks before marking unhealthy
+    
+  # Component-specific overrides
+  component_overrides:
+    keycloak:
+      check_interval: "30s"
+      health_threshold: 2
+      unhealthy_threshold: 3
+      
+    postgresql:
+      check_interval: "45s"
+      health_threshold: 5
+      unhealthy_threshold: 10
+      
+    nextcloud:
+      check_interval: "60s"
+      health_threshold: 3
+      unhealthy_threshold: 5
+
+# ==============================================================================
+# REPAIR CONTROLLER CONFIGURATION
+# ==============================================================================
+repair_controller:
+  # Enable/disable repair controller
+  enabled: true
+  
+  # Reconciliation interval
+  reconcile_interval: "30s"
+  
+  # Maximum number of concurrent repairs
+  max_concurrent_repairs: 5
+  
+  # Repair backoff (time to wait before retrying a failed repair)
+  repair_backoff: "30s"
+  
+  # Maximum repair attempts per issue
+  max_repair_attempts: 3
+  
+  # Repair window (time window for repair operations)
+  # Repairs outside this window will be queued
+  repair_window: "00:00-23:59"  # 24/7 by default
+  repair_window_enabled: false    # Set to true to enable time-based repairs
+  
+  # Default repair strategy
+  default_strategy:
+    # Repair actions in order of priority
+    actions:
+      - name: restartPod
+        priority: 1
+        condition: "podNotReady"
+        timeout: "30s"
+        
+      - name: deletePod
+        priority: 1
+        condition: "podCrashLoopBackOff"
+        timeout: "10s"
+        
+      - name: scaleDeployment
+        priority: 2
+        condition: "deploymentNotAvailable"
+        parameters:
+          scale_to: "original"
+        timeout: "60s"
+        
+      - name: notify
+        priority: 3
+        condition: "healthDegraded"
+        timeout: "10s"
+  
+  # Repair priority levels
+  priority_levels:
+    Critical: 1
+    High: 2
+    Medium: 3
+    Low: 4
+
+# ==============================================================================
+# PI MEMORY INTEGRATION (Self-Learning Knowledge Base)
+# ==============================================================================
+pi_memory:
+  # Enable/disable PI Memory integration
+  # Disabled by default for security and performance
+  enabled: false
+  
+  # PI Memory service endpoint
+  endpoint: "http://localhost:8082"
+  
+  # Connection timeout
+  timeout: "5s"
+  
+  # Maximum retries
+  max_retries: 3
+  
+  # Query parameters
+  namespace: "opendesk-dev-agent"
+  collection: "repair-strategies"
+  
+  # Knowledge storage
+  storage:
+    type: "neo4j"
+    url: "bolt://localhost:7687"
+    username: "${PI_MEMORY_USERNAME:-}"
+    password: "${PI_MEMORY_PASSWORD:-}"
+    database: "neo4j"
+  
+  # Learning parameters
+  learning:
+    # Learn from successful repairs
+    learn_from_success: true
+    
+    # Learn from failed repairs
+    learn_from_failure: true
+    
+    # Minimum confidence for stored knowledge
+    min_confidence: 0.7
+    
+    # Maximum stored knowledge items
+    max_items: 10000
+    
+    # Knowledge retention period
+    retention_period: "30d"
+
+# ==============================================================================
+# MONITORING & METRICS
+# ==============================================================================
+monitoring:
+  # Enable metrics endpoint
+  enabled: true
+  
+  # Metrics bind address
+  bind_address: "0.0.0.0:8080"
+  
+  # Metrics path
+  metrics_path: "/metrics"
+  
+  # Prometheus configuration
+  prometheus:
+    enabled: true
+    
+    # Service labels
+    labels:
+      app: "opendesk-dev-agent"
+      component: "operator"
+      
+  # Health probe configuration
+  health_probes:
+    liveness:
+      enabled: true
+      bind_address: "0.0.0.0:8081"
+      path: "/healthz"
+      
+    readiness:
+      enabled: true
+      bind_address: "0.0.0.0:8081"
+      path: "/ready"
+      
+    startup:
+      enabled: true
+      bind_address: "0.0.0.0:8081"
+      path: "/startup"
+
+# ==============================================================================
+# LOGGING CONFIGURATION
+# ==============================================================================
+logging:
+  # Log level: debug, info, warn, error, fatal
+  level: "info"
+  
+  # Log format: text, json
+  format: "json"
+  
+  # Output: stdout, stderr, file
+  output: "stdout"
+  
+  # File configuration (if output=file)
+  file:
+    path: "/var/log/opendesk/operator.log"
+    max_size: "100MiB"
+    max_age: "30d"
+    max_backups: 5
+    compress: true
+  
+  # Structured logging
+  structured: true
+  
+  # Caller information (file:line)
+  caller: true
+  
+  # Stack traces for errors
+  stack_trace: true
+
+# ==============================================================================
+# LEADER ELECTION
+# ==============================================================================
+leader_election:
+  # Enable leader election (recommended for HA)
+  enabled: true
+  
+  # Lease duration
+  lease_duration: "15s"
+  
+  # Renew deadline
+  renew_deadline: "10s"
+  
+  # Retry period
+  retry_period: "2s"
+  
+  # Resource name for leader election
+  resource_name: "opendesk-dev-agent-leader-election"
+  
+  # Resource namespace
+  resource_namespace: "opendesk-dev-agent"
+
+# ==============================================================================
+# RATE LIMITING
+# ==============================================================================
+rate_limiting:
+  # Enable rate limiting
+  enabled: true
+  
+  # Global rate limit
+  global:
+    requests_per_second: 100
+    burst_size: 200
+  
+  # Per-component rate limits
+  components:
+    health_controller:
+      requests_per_second: 50
+      burst_size: 100
+      
+    repair_controller:
+      requests_per_second: 20
+      burst_size: 50
+
+# ==============================================================================
+# KUBERNETES CLIENT CONFIGURATION
+# ==============================================================================
+kubernetes:
+  # Kubeconfig path (default: in-cluster config)
+  kubeconfig: "${KUBECONFIG:-/home/opendesk/.kube/config}"
+  
+  # Maximum QPS (queries per second)
+  max_qps: 100
+  
+  # Maximum burst
+  max_burst: 200
+  
+  # Request timeout
+  request_timeout: "30s"
+  
+  # Client connection settings
+  connection:
+    enable_compression: true
+    tls_handshake_timeout: "10s"
+    
+  # Caching
+  cache:
+    enabled: true
+    ttl: "5m"
+    max_size: 1000
+
+# ==============================================================================
+# WORKLOAD MONITORING CONFIGURATION
+# ==============================================================================
+workload_monitoring:
+  # Types of workloads to monitor
+  resources:
+    - "Deployments"
+    - "StatefulSets"
+    - "DaemonSets"
+    - "Pods"
+  
+  # Labels to select workloads
+  # If empty, all workloads in watched namespaces are monitored
+  label_selector:
+    match_labels:
+      {}
+    # Example:
+    #   app.kubernetes.io/part-of: opendesk
+    
+  field_selector:
+    match_fields:
+      {}
+
+# ==============================================================================
+# ALERTING & NOTIFICATIONS
+# ==============================================================================
+alerting:
+  # Enable alerting
+  enabled: true
+  
+  # Alert providers
+  providers:
+    - type: "log"
+      severity: "warning"
+      
+    - type: "metrics"
+      severity: "warning"
+      
+    # Example: Slack (requires webhook URL)
+    # - type: "slack"
+    #   url: "${ALERT_SLACK_WEBHOOK_URL}"
+    #   channel: "#opendesk-alerts"
+    #   severity: "critical"
+    #   enabled: ${ALERT_SLACK_ENABLED:-false}
+    
+    # Example: Email (requires SMTP configuration)
+    # - type: "email"
+    #   smtp:
+    #     host: "smtp.opendesk.svc"
+    #     port: 587
+    #   from: "operator@opendesk-edu.org"
+    #   to: ["alerts@opendesk-edu.org"]
+    #   severity: "warning"
+    #   enabled: ${ALERT_EMAIL_ENABLED:-false}
+  
+  # Alert severity levels
+  severity_levels:
+    - name: "debug"
+      level: 0
+      color: "#571EFA"
+    - name: "info"
+      level: 1
+      color: "#571EFA"
+    - name: "warning"
+      level: 2
+      color: "#927AFA"
+    - name: "error"
+      level: 3
+      color: "#DDD6FE"
+    - name: "fatal"
+      level: 4
+      color: "#0a0014"
+
+# ==============================================================================
+# SECURITY CONFIGURATION
+# ==============================================================================
+security:
+  # Allow insecure connections (for development)
+  allow_insecure: false
+  
+  # TLS configuration
+  tls:
+    # Enable TLS for the operator HTTP server
+    enabled: false
+    
+    # Certificate path (if enabled)
+    cert_file: "/etc/opendesk-dev-agent/tls/tls.crt"
+    key_file: "/etc/opendesk-dev-agent/tls/tls.key"
+    
+    # Client certificate authentication
+    client_auth:
+      enabled: false
+      ca_file: "/etc/opendesk-dev-agent/tls/ca.crt"
+  
+  # CORS configuration (for web UI)
+  cors:
+    enabled: false
+    allowed_origins:
+      - "*"
+    allowed_methods:
+      - "GET"
+      - "POST"
+    allowed_headers:
+      - "*"
+
+# ==============================================================================
+# FEATURE FLAGS
+# ==============================================================================
+feature_flags:
+  # Enable experimental features
+  experimental:
+    auto_knowledge_learning: false
+    predictive_repair: false
+    external_knowledge_sources: false
+  
+  # Enable beta features
+  beta:
+    enhanced_metrics: true
+    distributed_coordination: false
+
+# ==============================================================================
+# DEBUG & DEVELOPMENT SETTINGS
+# ==============================================================================
+debug:
+  # Enable debug mode
+  enabled: false
+  
+  # Debug profiling
+  profiling:
+    enabled: false
+    bind_address: "0.0.0.0:6060"
+    
+  # Trace sampling rate
+  trace_sampling_rate: 0.01
+  
+  # Development features
+  dev_features:
+    mock_kubernetes: false
+    mock_pi_memory: false
+
+# ==============================================================================
+# PERFORMANCE TUNING
+# ==============================================================================
+performance:
+  # Garbage collection settings
+  gc:
+    percent: 20
+    timeout: "5s"
+  
+  # Memory limits
+  memory:
+    soft_limit: "400MiB"
+    hard_limit: "512MiB"
+  
+  # CPU settings
+  cpu:
+    max_threads: 8
+    affinity: ""
+  
+  # I/O settings
+  io:
+    max_open_files: 1024
+    read_buffer_size: "4KB"
+    write_buffer_size: "4KB"
+
+# ==============================================================================
+# HEALTH CHECKS (for Kubernetes probes)
+# ==============================================================================
+health_checks:
+  # Liveness probe configuration
+  liveness:
+    enabled: true
+    path: "/healthz"
+    port: 8081
+    initial_delay: "60s"
+    period: "10s"
+    timeout: "5s"
+    failure_threshold: 3
+    success_threshold: 1
+  
+  # Readiness probe configuration
+  readiness:
+    enabled: true
+    path: "/ready"
+    port: 8081
+    initial_delay: "45s"
+    period: "15s"
+    timeout: "10s"
+    failure_threshold: 3
+    success_threshold: 1
+  
+  # Startup probe configuration
+  startup:
+    enabled: true
+    path: "/startup"
+    port: 8081
+    failure_threshold: 60
+    period: "10s"
+    timeout: "5s"
+
+# ==============================================================================
+# EXTERNAL DEPENDENCIES
+# ==============================================================================
+dependencies:
+  # Kubernetes API
+  kubernetes_api:
+    required: true
+    health_check:
+      path: "/healthz"
+      port: 443
+      interval: "30s"
+      timeout: "10s"
+  
+  # PI Memory (if enabled)
+  pi_memory:
+    required: false
+    health_check:
+      path: "/health"
+      port: 8082
+      interval: "60s"
+      timeout: "5s"
+
+# ==============================================================================
+# DEFAULT REPAIR STRATEGIES
+# ==============================================================================
+default_repair_strategies:
+  # Keycloak repair strategy
+  - name: "keycloak-repair"
+    targets: ["ums-keycloak-extensions-handler", "ums-keycloak-extensions-proxy"]
+    priority: "Critical"
+    actions:
+      - name: "restartPod"
+        timeout: "30s"
+      - name: "deletePod"
+        timeout: "10s"
+    conditions:
+      - "podNotReady"
+      - "podCrashLoopBackOff"
+    max_attempts: 3
+    backoff: "30s"
+    
+  # Nextcloud repair strategy
+  - name: "nextcloud-repair"
+    targets: ["nextcloud"]
+    priority: "High"
+    actions:
+      - name: "restartPod"
+        timeout: "60s"
+      - name: "scaleDeployment"
+        parameters:
+          scale_to: "original"
+        timeout: "120s"
+    conditions:
+      - "deploymentNotAvailable"
+      - "podNotReady"
+    max_attempts: 5
+    backoff: "60s"
+    
+  # PostgreSQL repair strategy
+  - name: "postgresql-repair"
+    targets: ["postgresql"]
+    priority: "High"
+    actions:
+      - name: "restartPod"
+        timeout: "120s"
+      - name: "notify"
+        message: "PostgreSQL is degraded. Manual intervention may be required."
+    conditions:
+      - "statefulSetNotReady"
+      - "podNotReady"
+    max_attempts: 2
+    backoff: "120s"
+
+# ==============================================================================
+# DEFAULT HEALTH POLICIES
+# ==============================================================================
+default_health_policies:
+  - name: "default-health-check"
+    check_interval: "60s"
+    health_threshold: 3
+    unhealthy_threshold: 5
+    components:
+      - name: "keycloak"
+        selector:
+          app: "keycloak"
+        health_checks:
+          - type: "http"
+            path: "/health"
+            port: 8080
+            expected_status: 200
+          - type: "tcp"
+            port: 8080
+          - type: "podReady"
+          
+      - name: "nextcloud"
+        selector:
+          app: "nextcloud"
+        health_checks:
+          - type: "http"
+            path: "/status.php"
+            port: 80
+            expected_status: 200
+          - type: "podReady"
+          
+      - name: "postgresql"
+        selector:
+          app: "postgresql"
+        health_checks:
+          - type: "tcp"
+            port: 5432
+          - type: "podReady"
+          - type: "exec"
+            command: ["pg_isready"]
+
+# ==============================================================================
+# END OF CONFIGURATION
+# ==============================================================================
