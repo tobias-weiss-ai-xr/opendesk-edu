@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-ttyd NixOS Configuration for openDesk
-Version: latest
-OpenSpec: Full compliance (FR-IMAGE-001 through FR-IMAGE-009)
-"""
+# 
+# ttyd NixOS Configuration for openDesk
+# Version: latest
+# OpenSpec: Full compliance (FR-IMAGE-001 through FR-IMAGE-009)
+# 
 
 { config, pkgs, lib, ... }:
 
