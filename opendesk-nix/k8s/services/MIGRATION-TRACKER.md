@@ -12,16 +12,17 @@
 |-------|-------------|--------|---------|-----------|
 | Phase 1 | Create libraries | ✅ Done | 2026-08-28 | 2026-08-28 |
 | Phase 2a | Copy service files | ✅ Done | 2026-08-28 | 2026-08-28 |
-| Phase 2b | Update imports in services | ⚠️ TODO | - | - |
-| Phase 2c | Update opendesk-edu flake | ⚠️ TODO | - | - |
-| Phase 2d | Remove duplicates | ⚠️ TODO | - | - |
-| Phase 3 | Deprecate old location | ⚠️ TODO | - | - |
+| Phase 2b | Update imports in services | ✅ Done | 2026-08-28 | 2026-08-28 |
+| Phase 2c | Update opendesk-edu flake | ✅ Done | 2026-08-28 | 2026-08-28 |
+| Phase 2d | Remove duplicates | ✅ Done | 2026-08-28 | 2026-08-28 |
+| Phase 2e | Consolidate all .nix files | ✅ Done | 2026-08-28 | 2026-08-28 |
+| Phase 3 | Deprecate old location | ⏳ Pending | - | - |
 
 ---
 
 ## 📁 Files Migrated
 
-### ✅ Completed (57 files migrated)
+### ✅ Completed (69 files consolidated)
 
 **Databases & Caches (7)**
 - ✅ mariadb.nix
