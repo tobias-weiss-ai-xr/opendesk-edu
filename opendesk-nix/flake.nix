@@ -14,33 +14,19 @@ Central flake for all NixOS-based container builds
     
     # Flake utilities
     flake-utils.url = "github:numtide/flake-utils";
-    
-    # NixOS container support
-    dockernix.url = "github:dockernix/docks.nix";
-    
-    # Secrets management
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-    
-    # Cosign for image signing
-    cosign.url = "github:astral-sh/cosign";
-    cosign.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { 
     self,
     nixpkgs,
     flake-utils,
-    dockernix,
-    sops-nix,
-    cosign,
     ...
   } @inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
         lib = pkgs.lib;
-        docks = dockernix.lib.${system};
+        docks = import ./lib/docks.nix { inherit pkgs; };
         
         # Import openDesk libraries
         types = import ./lib/types.nix { inherit pkgs lib; };
@@ -311,57 +297,3 @@ Central flake for all NixOS-based container builds
       }
     );
 }
-    dev-agent-nixos
-    sogo5-nixos
-    sogo6-nixos
-    argocd-nixos
-    bigbluebutton-nixos
-    clamav-nixos
-    coderd-nixos
-    code-server-nixos
-    collab-dashboard-nixos
-    dask-nixos
-    dovecot-nixos
-    elasticsearch-nixos
-    eudi-issuer-nixos
-    f13-nixos
-    filebeat-nixos
-    grommunio-nixos
-    ilias-full-nixos
-    intercom-nixos
-    intercom-service-nixos
-    jupyterhub-nixos
-    kasmvnc-nixos
-    kibana-nixos
-    kube-prometheus-stack-nixos
-    limesurvey-nixos
-    loki-nixos
-    mariadb-enhanced-nixos
-    memcached-nixos
-    minio-nixos
-    monitoring-nixos
-    n8n-nixos
-    notes-nixos
-    nubus-ldap-nixos
-    nubus-portal-nixos
-    nubus-provisioning-nixos
-    nubus-udm-nixos
-    ollama-nixos
-    opencloud-nixos
-    open-webui-nixos
-    open-xchange-nixos
-    overleaf-nixos
-    portal-entries-nixos
-    promtail-nixos
-    rstudio-nixos
-    seaweedfs-nixos
-    self-service-password-nixos
-    semester-provisioning-nixos
-    slidev-nixos
-    snipr-nixos
-    sogo-nixos
-    stalwart-nixos
-    timescale-nixos
-    ttyd-nixos
-    typo3-nixos
-    zammad-nixos
