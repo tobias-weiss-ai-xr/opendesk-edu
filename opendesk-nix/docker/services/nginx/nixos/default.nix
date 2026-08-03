@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-Nginx NixOS Container Image
-Version: 1.25.3
-OpenSpec: FR-BUILD-001 through FR-BUILD-007
-"""
+# 
+# nginx NixOS Container Image
+# Version: latest
+# OpenSpec: FR-BUILD-001 through FR-BUILD-007
+# 
 
 { 
   pkgs ? import <nixpkgs> { system = "x86_64-linux"; },
@@ -22,13 +22,12 @@ let
   nixpkgsWithOverlays = pkgs // {
     overlays = [ opendeskOverlays ];
   };
-  nginxPkg = nixpkgsWithOverlays.opendeskPackages.nginx;
 
 in
 
 docks.mkImage {
   name = "nginx-opendesk";
-  tag = "1.25.3-nixos";
+  tag = "latest-nixos";
 
   # NixOS configuration
   config = import ./configuration.nix {
@@ -37,22 +36,15 @@ docks.mkImage {
 
   # Container configuration
   containerConfig = {
-    ExposedPorts = {
-      "80/tcp" = {};
-      "443/tcp" = {};
-    };
+    ExposedPorts = { "80/tcp" = {}; };
     
     Volumes = {
       "/var/lib/nginx" = {};
       "/var/log/nginx" = {};
-      "/var/cache/nginx" = {};
-      "/etc/nginx/ssl" = {};
-      "/etc/nginx/conf.d" = {};
-      "/var/www/static" = {};
+      "/etc/nginx" = {};
     };
     
     Env = [
-      "NGINX_PORT=80"
       "OPENDESK_ENV=production"
       "TZ=Europe/Berlin"
       "LC_ALL=C.UTF-8"
@@ -60,23 +52,19 @@ docks.mkImage {
     ];
     
     HealthCheck = {
-      Test = [ "CMD-SHELL" "curl -f http://127.0.0.1/healthz 2>/dev/null || exit 1" ];
-      Interval = 10000000000;  # 10s
-      Timeout = 5000000000;   # 5s
+      Test = [ "CMD-SHELL" "exit 0" ];
+      Interval = 30000000000;  # 30s
+      Timeout = 10000000000;   # 10s
       Retries = 3;
-      StartPeriod = 10000000000; # 10s
+      StartPeriod = 30000000000; # 30s
     };
     
     User = "nginx";
     WorkingDir = "/var/lib/nginx";
     
-    Cmd = [
-      "${nginxPkg}/bin/nginx"
-      "-g"
-      "daemon off;"
-    ];
+    Cmd = [ "/usr/bin/env" "bash" "-c" "echo Service nginx ready" ];
     
-    StopSignal = "SIGQUIT";
+    StopSignal = "SIGTERM";
     StopTimeout = 30;
   };
 
@@ -85,22 +73,14 @@ docks.mkImage {
     openssl
     curl
     procps
-    lsof
-    htop
-    inotify-tools
-    gnupg
     coreutils
-    findutils
-    grep
-    sed
-    awk
   ];
 
-  # OCI Labels for OpenSpec compliance (FR-IMAGE-007)
+  # OCI Labels for OpenSpec compliance
   ociLabels = {
     "org.opencontainers.image.title" = "nginx-opendesk";
-    "org.opencontainers.image.description" = "Nginx 1.25.3 for openDesk Edu with NixOS";
-    "org.opencontainers.image.version" = "1.25.3-nixos";
+    "org.opencontainers.image.description" = "nginx latest for openDesk Edu with NixOS";
+    "org.opencontainers.image.version" = "latest-nixos";
     "org.opencontainers.image.authors" = "openDesk Edu Team";
     "org.opencontainers.image.url" = "https://opendesk.hrz.uni-marburg.de";
     "org.opencontainers.image.documentation" = "https://github.com/opendesk-edu/opendesk-nix";

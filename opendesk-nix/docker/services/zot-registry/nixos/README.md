@@ -1,6 +1,6 @@
 # zot-registry NixOS Container
 
-## Version: 2.0.0-rc4
+## Version: latest
 
 ### OpenSpec Compliance
 - FR-BUILD-001: Docker image build for service
@@ -25,7 +25,7 @@ docker load < result
 ### Run the container
 docker run -d --name zot-registry \
   -p 8080:8080 \
-  zot-registry-opendesk:2.0.0-rc4-nixos
+  zot-registry-opendesk:latest-nixos
 
 ---
 

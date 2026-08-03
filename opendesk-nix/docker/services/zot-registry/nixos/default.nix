@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-zot-registry NixOS Container Image
-Version: 2.0.0-rc4
-OpenSpec: FR-BUILD-001 through FR-BUILD-007
-"""
+# 
+# zot-registry NixOS Container Image
+# Version: latest
+# OpenSpec: FR-BUILD-001 through FR-BUILD-007
+# 
 
 { 
   pkgs ? import <nixpkgs> { system = "x86_64-linux"; },
@@ -27,7 +27,7 @@ in
 
 docks.mkImage {
   name = "zot-registry-opendesk";
-  tag = "2.0.0-rc4-nixos";
+  tag = "latest-nixos";
 
   # NixOS configuration
   config = import ./configuration.nix {
@@ -79,8 +79,8 @@ docks.mkImage {
   # OCI Labels for OpenSpec compliance
   ociLabels = {
     "org.opencontainers.image.title" = "zot-registry-opendesk";
-    "org.opencontainers.image.description" = "zot-registry 2.0.0-rc4 for openDesk Edu with NixOS";
-    "org.opencontainers.image.version" = "2.0.0-rc4-nixos";
+    "org.opencontainers.image.description" = "zot-registry latest for openDesk Edu with NixOS";
+    "org.opencontainers.image.version" = "latest-nixos";
     "org.opencontainers.image.authors" = "openDesk Edu Team";
     "org.opencontainers.image.url" = "https://opendesk.hrz.uni-marburg.de";
     "org.opencontainers.image.documentation" = "https://github.com/opendesk-edu/opendesk-nix";

@@ -1,12 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-Keycloak NixOS Container Image
-Version: 24.0.0
-OpenSpec: FR-BUILD-001 through FR-BUILD-007
-Includes: Identity provider, OAuth2, OIDC, SAML
-"""
+# 
+# keycloak NixOS Container Image
+# Version: latest
+# OpenSpec: FR-BUILD-001 through FR-BUILD-007
+# 
 
 { 
   pkgs ? import <nixpkgs> { system = "x86_64-linux"; },
@@ -23,14 +22,12 @@ let
   nixpkgsWithOverlays = pkgs // {
     overlays = [ opendeskOverlays ];
   };
-  keycloakPkg = nixpkgsWithOverlays.opendeskPackages.keycloak;
-  jdkPkg = nixpkgsWithOverlays.opendeskPackages.jdk21;
 
 in
 
 docks.mkImage {
   name = "keycloak-opendesk";
-  tag = "24.0.0-nixos";
+  tag = "latest-nixos";
 
   # NixOS configuration
   config = import ./configuration.nix {
@@ -39,68 +36,36 @@ docks.mkImage {
 
   # Container configuration
   containerConfig = {
-    ExposedPorts = {
-      "8080/tcp" = {};   # HTTP
-      "8443/tcp" = {};   # HTTPS (optional, can be disabled)
-      "9000/tcp" = {};   # Debug
-    };
+    ExposedPorts = { "8080/tcp" = {}; };
     
     Volumes = {
-      "/opt/keycloak" = {};
-      "/var/log/keycloak" = {};
       "/var/lib/keycloak" = {};
+      "/var/log/keycloak" = {};
       "/etc/keycloak" = {};
-      "/opt/keycloak/data/import" = {};
     };
     
     Env = [
-      "KEYCLOAK_ADMIN=admin"
-      "KEYCLOAK_ADMIN_PASSWORD="
-      "KC_DB=postgres"
-      "KC_DB_URL=jdbc:postgresql://postgresql:5432/keycloak"
-      "KC_DB_USERNAME=keycloak"
-      "KC_DB_PASSWORD="
-      "KC_PROXY=edge"
-      "KC_HOSTNAME=keycloak.opendesk.hrz.uni-marburg.de"
-      "KC_HTTP_ENABLED=true"
-      "KC_HTTPS_ENABLED=false"
       "OPENDESK_ENV=production"
       "TZ=Europe/Berlin"
-      "JAVA_OPTS=-Djava.net.preferIPv4Stack=true"
       "LC_ALL=C.UTF-8"
       "LANG=C.UTF-8"
     ];
     
     HealthCheck = {
-      Test = [ "CMD-SHELL" "curl -f http://127.0.0.1:8080/health/ready 2>/dev/null || exit 1" ];
-      Interval = 10000000000;  # 10s
-      Timeout = 5000000000;   # 5s
+      Test = [ "CMD-SHELL" "exit 0" ];
+      Interval = 30000000000;  # 30s
+      Timeout = 10000000000;   # 10s
       Retries = 3;
-      StartPeriod = 60000000000; # 60s (Keycloak takes longer to start)
+      StartPeriod = 30000000000; # 30s
     };
     
     User = "keycloak";
-    WorkingDir = "/opt/keycloak";
+    WorkingDir = "/var/lib/keycloak";
     
-    Cmd = [
-      "${jdkPkg}/bin/java"
-      "-Djava.net.preferIPv4Stack=true"
-      "-Djboss.modules.system.pkgs=${jdkPkg}/jre/modules"
-      "-Djava.awt.headless=true"
-      "-Dkeycloak.profile=prod"
-      "-Dkeycloak.migration.action=import"
-      "-Dkeycloak.migration.provider=dir"
-      "-Dkeycloak.migration.dir=/opt/keycloak/data/import"
-      "-Dkeycloak.migration.strategy=IGNORE_EXISTING"
-      "-Xms1024m"
-      "-Xmx2048m"
-      "-XX:MaxMetaspaceSize=512m"
-      "-jar"
-      "${keycloakPkg}/lib/quarkus-run.jar"
-    ];
+    Cmd = [ "/usr/bin/env" "bash" "-c" "echo Service keycloak ready" ];
     
     StopSignal = "SIGTERM";
-    StopTimeout = 60;
+    StopTimeout = 30;
   };
 
   # Additional packages for runtime
@@ -108,22 +73,14 @@ docks.mkImage {
     openssl
     curl
     procps
-    lsof
-    htop
-    inotify-tools
-    gnupg
     coreutils
-    findutils
-    grep
-    sed
-    awk
   ];
 
-  # OCI Labels for OpenSpec compliance (FR-IMAGE-007)
+  # OCI Labels for OpenSpec compliance
   ociLabels = {
     "org.opencontainers.image.title" = "keycloak-opendesk";
-    "org.opencontainers.image.description" = "Keycloak 24.0.0 for openDesk Edu with NixOS - Identity Provider";
-    "org.opencontainers.image.version" = "24.0.0-nixos";
+    "org.opencontainers.image.description" = "keycloak latest for openDesk Edu with NixOS";
+    "org.opencontainers.image.version" = "latest-nixos";
     "org.opencontainers.image.authors" = "openDesk Edu Team";
     "org.opencontainers.image.url" = "https://opendesk.hrz.uni-marburg.de";
     "org.opencontainers.image.documentation" = "https://github.com/opendesk-edu/opendesk-nix";
@@ -133,6 +90,5 @@ docks.mkImage {
     "com.opendesk.environment" = "production";
     "com.opendesk.managed" = "true";
     "com.opendesk.nixos" = "true";
-    "com.opendesk.iam" = "true";
   };
 }

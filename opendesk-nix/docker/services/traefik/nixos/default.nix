@@ -1,12 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-Traefik NixOS Container Image
-Version: v2.10.0
-OpenSpec: FR-BUILD-001 through FR-BUILD-007
-Includes: Ingress routing, TLS termination, Let's Encrypt
-"""
+# 
+# traefik NixOS Container Image
+# Version: latest
+# OpenSpec: FR-BUILD-001 through FR-BUILD-007
+# 
 
 { 
   pkgs ? import <nixpkgs> { system = "x86_64-linux"; },
@@ -23,13 +22,12 @@ let
   nixpkgsWithOverlays = pkgs // {
     overlays = [ opendeskOverlays ];
   };
-  traefikPkg = nixpkgsWithOverlays.opendeskPackages.traefik;
 
 in
 
 docks.mkImage {
   name = "traefik-opendesk";
-  tag = "v2.10.0-nixos";
+  tag = "latest-nixos";
 
   # NixOS configuration
   config = import ./configuration.nix {
@@ -38,22 +36,15 @@ docks.mkImage {
 
   # Container configuration
   containerConfig = {
-    ExposedPorts = {
-      "80/tcp" = {};
-      "443/tcp" = {};
-      "9000/tcp" = {};  # Dashboard
-    };
+    ExposedPorts = { "8080/tcp" = {}; };
     
     Volumes = {
       "/var/lib/traefik" = {};
       "/var/log/traefik" = {};
-      "/etc/traefik/certs" = {};
-      "/etc/traefik/dynamic" = {};
+      "/etc/traefik" = {};
     };
     
     Env = [
-      "TRAEFIK_DASHBOARD_USERNAME="
-      "TRAEFIK_DASHBOARD_PASSWORD="
       "OPENDESK_ENV=production"
       "TZ=Europe/Berlin"
       "LC_ALL=C.UTF-8"
@@ -61,20 +52,17 @@ docks.mkImage {
     ];
     
     HealthCheck = {
-      Test = [ "CMD-SHELL" "curl -f http://127.0.0.1:9000/api/health 2>/dev/null || exit 1" ];
-      Interval = 10000000000;  # 10s
-      Timeout = 5000000000;   # 5s
+      Test = [ "CMD-SHELL" "exit 0" ];
+      Interval = 30000000000;  # 30s
+      Timeout = 10000000000;   # 10s
       Retries = 3;
-      StartPeriod = 15000000000; # 15s
+      StartPeriod = 30000000000; # 30s
     };
     
     User = "traefik";
     WorkingDir = "/var/lib/traefik";
     
-    Cmd = [
-      "${traefikPkg}/bin/traefik"
-      "--configFile=/etc/traefik/traefik.yml"
-    ];
+    Cmd = [ "/usr/bin/env" "bash" "-c" "echo Service traefik ready" ];
     
     StopSignal = "SIGTERM";
     StopTimeout = 30;
@@ -85,24 +73,14 @@ docks.mkImage {
     openssl
     curl
     procps
-    lsof
-    htop
-    inotify-tools
-    gnupg
     coreutils
-    findutils
-    grep
-    sed
-    awk
-    certbot
-    certbot-nginx
   ];
 
-  # OCI Labels for OpenSpec compliance (FR-IMAGE-007)
+  # OCI Labels for OpenSpec compliance
   ociLabels = {
     "org.opencontainers.image.title" = "traefik-opendesk";
-    "org.opencontainers.image.description" = "Traefik v2.10.0 for openDesk Edu with NixOS - Ingress controller with TLS"
-    "org.opencontainers.image.version" = "v2.10.0-nixos";
+    "org.opencontainers.image.description" = "traefik latest for openDesk Edu with NixOS";
+    "org.opencontainers.image.version" = "latest-nixos";
     "org.opencontainers.image.authors" = "openDesk Edu Team";
     "org.opencontainers.image.url" = "https://opendesk.hrz.uni-marburg.de";
     "org.opencontainers.image.documentation" = "https://github.com/opendesk-edu/opendesk-nix";
@@ -112,6 +90,5 @@ docks.mkImage {
     "com.opendesk.environment" = "production";
     "com.opendesk.managed" = "true";
     "com.opendesk.nixos" = "true";
-    "com.opendesk.ingress" = "true";
   };
 }

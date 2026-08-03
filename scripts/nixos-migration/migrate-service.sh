@@ -81,11 +81,11 @@ cat > "$NIXOS_DIR_PATH/configuration.nix" <<EOF
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-${SERVICE_NAME} NixOS Configuration for openDesk
-Version: ${VERSION}
-OpenSpec: Full compliance (FR-IMAGE-001 through FR-IMAGE-009)
-"""
+# 
+# ${SERVICE_NAME} NixOS Configuration for openDesk
+# Version: ${VERSION}
+# OpenSpec: Full compliance (FR-IMAGE-001 through FR-IMAGE-009)
+# 
 
 { config, pkgs, lib, ... }:
 
@@ -138,11 +138,11 @@ cat > "$NIXOS_DIR_PATH/default.nix" <<EOF
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-${SERVICE_NAME} NixOS Container Image
-Version: ${VERSION}
-OpenSpec: FR-BUILD-001 through FR-BUILD-007
-"""
+# 
+# ${SERVICE_NAME} NixOS Container Image
+# Version: ${VERSION}
+# OpenSpec: FR-BUILD-001 through FR-BUILD-007
+# 
 
 { 
   pkgs ? import <nixpkgs> { system = "x86_64-linux"; },
@@ -238,11 +238,11 @@ cat > "$NIXOS_DIR_PATH/secrets.nix" <<EOF
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-${SERVICE_NAME} Secrets Configuration
-Uses sops-nix for encrypted secrets management
-OpenSpec: FR-SEC-004 (Image verification & secrets)
-"""
+# 
+# ${SERVICE_NAME} Secrets Configuration
+# Uses sops-nix for encrypted secrets management
+# OpenSpec: FR-SEC-004 (Image verification & secrets)
+# 
 
 { config, lib, ... }:
 

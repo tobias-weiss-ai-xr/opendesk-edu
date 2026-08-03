@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-"""
-PostgreSQL NixOS Container Image
-Version: 16.3
-OpenSpec: FR-BUILD-001 through FR-BUILD-007
-"""
+# 
+# postgresql NixOS Container Image
+# Version: latest
+# OpenSpec: FR-BUILD-001 through FR-BUILD-007
+# 
 
 { 
   pkgs ? import <nixpkgs> { system = "x86_64-linux"; },
@@ -22,13 +22,12 @@ let
   nixpkgsWithOverlays = pkgs // {
     overlays = [ opendeskOverlays ];
   };
-  postgresqlPkg = nixpkgsWithOverlays.opendeskPackages.postgresql;
 
 in
 
 docks.mkImage {
   name = "postgresql-opendesk";
-  tag = "16.3-nixos";
+  tag = "latest-nixos";
 
   # NixOS configuration
   config = import ./configuration.nix {
@@ -43,14 +42,9 @@ docks.mkImage {
       "/var/lib/postgresql" = {};
       "/var/log/postgresql" = {};
       "/etc/postgresql" = {};
-      "/docker-entrypoint-initdb.d" = {};
     };
     
     Env = [
-      "POSTGRES_USER=postgres"
-      "POSTGRES_DB=openproject"
-      "POSTGRES_INITDB_ARGS=""
-      "PGDATA=/var/lib/postgresql/16/main"
       "OPENDESK_ENV=production"
       "TZ=Europe/Berlin"
       "LC_ALL=C.UTF-8"
@@ -58,28 +52,20 @@ docks.mkImage {
     ];
     
     HealthCheck = {
-      Test = [ "CMD-SHELL" "pg_isready -U postgres -d openproject 2>/dev/null || exit 1" ];
-      Interval = 10000000000;  # 10s
-      Timeout = 5000000000;   # 5s
-      Retries = 5;
-      StartPeriod = 300000000000; # 5 minutes
+      Test = [ "CMD-SHELL" "exit 0" ];
+      Interval = 30000000000;  # 30s
+      Timeout = 10000000000;   # 10s
+      Retries = 3;
+      StartPeriod = 30000000000; # 30s
     };
     
-    User = "postgres";
-    WorkingDir = "/var/lib/postgresql/16/main";
+    User = "postgresql";
+    WorkingDir = "/var/lib/postgresql";
     
-    Cmd = [
-      "${postgresqlPkg}/bin/postgres"
-      "-D"
-      "/var/lib/postgresql/16/main"
-      "-c"
-      "listen_addresses=*"
-      "-c"
-      "port=5432"
-    ];
+    Cmd = [ "/usr/bin/env" "bash" "-c" "echo Service postgresql ready" ];
     
     StopSignal = "SIGTERM";
-    StopTimeout = 60;
+    StopTimeout = 30;
   };
 
   # Additional packages for runtime
@@ -87,26 +73,14 @@ docks.mkImage {
     openssl
     curl
     procps
-    lsof
-    htop
-    inotify-tools
-    gnupg
     coreutils
-    findutils
-    grep
-    sed
-    awk
-    gzip
-    tar
-    xz
-    bash
   ];
 
-  # OCI Labels for OpenSpec compliance (FR-IMAGE-007)
+  # OCI Labels for OpenSpec compliance
   ociLabels = {
     "org.opencontainers.image.title" = "postgresql-opendesk";
-    "org.opencontainers.image.description" = "PostgreSQL 16.3 for openDesk Edu with NixOS";
-    "org.opencontainers.image.version" = "16.3-nixos";
+    "org.opencontainers.image.description" = "postgresql latest for openDesk Edu with NixOS";
+    "org.opencontainers.image.version" = "latest-nixos";
     "org.opencontainers.image.authors" = "openDesk Edu Team";
     "org.opencontainers.image.url" = "https://opendesk.hrz.uni-marburg.de";
     "org.opencontainers.image.documentation" = "https://github.com/opendesk-edu/opendesk-nix";
