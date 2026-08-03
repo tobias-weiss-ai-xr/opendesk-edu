@@ -17,9 +17,17 @@ let
   instance = "ilias";
   version = "11.4.4";
   description = "MariaDB 11.4 database server for ILIAS";
-  
   fullName = "${instance}-${name}";
   storageSize = "10Gi";
+  
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = fullName;
+    version = version;
+    description = description;
+    serviceType = "database";
+    component = "backend";
+  };
   storageClass = env.storage.rwo;
   
   # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)

@@ -8,9 +8,19 @@
   types ? import ../../lib/types.nix { },
   sbom ? import ../../lib/sbom.nix { },
   pkgs ? import <nixpkgs> { }
+  env ? import ../environments/hrz/default.nix { lib = lib; },
 }:
 
 let
+
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = name;
+    version = tag;
+    description = "nubus-udm service for openDesk";
+    serviceType = "web";
+    component = "backend";
+  };
  name = "nubus-udm"; image = "ghcr.io/opendesk-edu/supplier/univention/udm-rest-api"; tag = "0.44.2";
 
   # Security configuration

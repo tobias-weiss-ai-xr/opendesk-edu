@@ -8,9 +8,19 @@
   types ? import ../../lib/types.nix { },
   sbom ? import ../../lib/sbom.nix { },
   pkgs ? import <nixpkgs> { }
+  env ? import ../environments/hrz/default.nix { lib = lib; },
 }:
 
 let
+
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = name;
+    version = tag;
+    description = "typo3 service for openDesk";
+    serviceType = "web";
+    component = "backend";
+  };
  name = "typo3"; image = "ghcr.io/opendesk-edu/typo3"; tag = "13.4.0";
   port = 80;
 

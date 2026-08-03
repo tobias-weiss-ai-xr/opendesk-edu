@@ -8,9 +8,19 @@
   types ? import ../../lib/types.nix { },
   sbom ? import ../../lib/sbom.nix { },
   pkgs ? import <nixpkgs> { }
+  env ? import ../environments/hrz/default.nix { lib = lib; },
 }:
 
 let
+
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = name;
+    version = tag;
+    description = "jitsi service for openDesk";
+    serviceType = "web";
+    component = "backend";
+  };
 
   web = lib.deployment { name = "jitsi-web"; image = "ghcr.io/opendesk-edu/jitsi-web"; tag = "latest"; port = 80; };
   jicofo = lib.deployment { name = "jitsi-jicofo"; image = "ghcr.io/opendesk-edu/jitsi-jicofo"; tag = "latest"; port = 5347; };

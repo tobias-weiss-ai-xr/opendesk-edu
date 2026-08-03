@@ -3,9 +3,19 @@
   security ? import ../../lib/security.nix { },
   registry ? import ../../lib/registry.nix { },
   pkgs ? import <nixpkgs> { }
+  env ? import ../environments/hrz/default.nix { lib = lib; },
 }:
 
 let
+
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = name;
+    version = tag;
+    description = "mariadb-enhanced service for openDesk";
+    serviceType = "web";
+    component = "backend";
+  };
   # Service configuration
   name = "mariadb";
   instance = "ilias";
