@@ -12,10 +12,8 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        # Use K8s library from opendesk-nix for consistency
+        # Use K8s library from opendesk-nix
         k8s-lib = opendesk-nix.lib.${system}.k8s;
-        # Keep old lib for backward compatibility during transition
-        lib = import ./lib/k8s.nix { inherit pkgs; };
 
         services = [
           "mariadb" "postgresql" "redis" "memcached" "timescale"
@@ -38,26 +36,11 @@
           "loki" "promtail"
         ];
 
-        # Check if service exists in opendesk-nix first, then fall back to local
-        getServicePath = name: 
-          let
-            opendeskNixPath = "${opendesk-nix}/k8s/services/${name}.nix";
-            localPath = "./k8s/${name}.nix";
-          in
-            if builtins.pathExists opendeskNixPath then opendeskNixPath
-            else if builtins.pathExists localPath then localPath
-            else throw "Service file not found for: ${name}";
-
+        # All services are now in opendesk-nix/k8s/services/
         buildService = name:
           let
-            servicePath = getServicePath name;
-            # Use the appropriate library based on where the service is loaded from
-            serviceLib = if builtins.stringPrefix "${opendesk-nix}/" servicePath then
-              k8s-lib  # Use opendesk-nix library
-            else
-              lib;  # Use local library for backward compatibility
-            
-            data = import servicePath { lib = serviceLib; };
+            servicePath = "${opendesk-nix}/k8s/services/${name}.nix";
+            data = import servicePath { lib = k8s-lib; };
             jsonFormat = pkgs.formats.json { };
           in
           jsonFormat.generate "${name}.yaml" data;
