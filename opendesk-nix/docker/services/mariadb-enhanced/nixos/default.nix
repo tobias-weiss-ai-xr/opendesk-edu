@@ -9,16 +9,13 @@
 
 { 
   pkgs ? import <nixpkgs> { system = "x86_64-linux"; },
-  docks ? import (builtins.fetchGit {
-    url = "https://github.com/dockernix/docks.nix";
-    ref = "refs/tags/0.5.0";
-  }) { inherit pkgs; },
+  docks ? import ../../../../../opendesk-nix/lib/docks.nix { inherit pkgs; },
   ...
 }:
 
 let
   lib = pkgs.lib;
-  opendeskOverlays = import ../../../../../overlays/opendesk.nix;
+  opendeskOverlays = import ../../../../../opendesk-nix/overlays/opendesk.nix;
   nixpkgsWithOverlays = pkgs // {
     overlays = [ opendeskOverlays ];
   };
