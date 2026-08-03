@@ -4,6 +4,7 @@
 { pkgs, lib, ... }:
 
 let
+  # Dummy derivation for shell
   dummyShell = name: pkgs.stdenv.mkDerivation {
     name = "${name}-shell";
     inherit (pkgs) bash;

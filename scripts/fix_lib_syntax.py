@@ -10,17 +10,17 @@ def fix_content(content):
     in_triple = False
 
     for line in lines:
-        if not in_triple and line.strip().startswith('"""'):
+        if not in_triple and line.strip() == '"""':
             in_triple = True
             continue
-        elif in_triple and line.strip().endswith('"""'):
+        elif in_triple and line.strip() == '"""':
             in_triple = False
             continue
         elif in_triple:
             new_lines.append('# ' + line)
             continue
 
-        if re.match(r'^(\s*//)', line):
+        if re.match(r'^\s*//', line):
             new_lines.append('#' + line.lstrip()[2:])
             continue
 
@@ -40,13 +40,17 @@ def main():
     with open(input_file, 'r') as f:
         content = f.read()
 
-    # Remove existing SPDX headers (both // and # styles) - more flexible pattern
-    content = re.sub(r'^(//|# )? *SPDX-.*\n', '', content, flags=re.MULTILINE | re.IGNORECASE)
-    content = re.sub(r'^ *$\n', '', content, flags=re.MULTILINE)  # Remove empty lines
+    # Remove existing SPDX headers (both // and # styles)
+    # Match lines that start with optional whitespace, then SPDX (case insensitive)
+    content = re.sub(r'^(\s*(//|# )?\s*)?SPDX-.*(\n|$)', '', content, flags=re.MULTILINE | re.IGNORECASE)
+    
+    # Remove empty lines left behind
+    content = re.sub(r'^\s*$\n', '', content, flags=re.MULTILINE)
     content = content.lstrip()
     
-    # Add SPDX header at the top
-    content = '# SPDX-License-Identifier: Apache-2.0\n# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors\n\n' + content
+    if not content.startswith('# SPDX'):
+        # Add SPDX header at the top
+        content = '# SPDX-License-Identifier: Apache-2.0\n# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors\n\n' + content
 
     fixed_content = fix_content(content)
 
