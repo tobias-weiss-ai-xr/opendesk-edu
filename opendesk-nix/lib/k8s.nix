@@ -1027,5 +1027,24 @@ in {
     
     # Utility
     toYAML
+    
+    # =============================================================================
+    # OCI LABELS (OpenSpec Compliance - FR-IMAGE-007)
+    # =============================================================================
+    
+    # Standard OCI labels required by OpenSpec
+    mkOCILabelsBase
+    mkOCILabelsOpendesk
+    mkOCILabels
+    
+    # =============================================================================
+    # INGRESS HELPERS (OpenSpec Compliance - FR-K8S-004)
+    # =============================================================================
+    
+    # Generate labels for Ingress resources
+    mkIngressLabels
+    
+    # Generate Ingress with TLS (FR-K8S-004)
+    mkIngressWithTLS
     ;
 }
