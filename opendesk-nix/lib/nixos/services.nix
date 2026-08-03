@@ -503,3 +503,564 @@ in rec {
       configPath = ./docker/services/sogo6/nixos/configuration.nix;
       defaultNixPath = ./docker/services/sogo6/nixos/default.nix;
     } // serviceTypes.groupware;
+
+    argocd = mkService {
+      name = "argocd";
+      version = "latest";
+      description = "argocd service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/argocd/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/argocd/nixos/default.nix;
+    } // serviceTypes.other;
+
+    bigbluebutton = mkService {
+      name = "bigbluebutton";
+      version = "latest";
+      description = "bigbluebutton communication tool for openDesk";
+      category = "communication";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/bigbluebutton/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/bigbluebutton/nixos/default.nix;
+    } // serviceTypes.communication;
+
+    clamav = mkService {
+      name = "clamav";
+      version = "latest";
+      description = "clamav service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/clamav/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/clamav/nixos/default.nix;
+    } // serviceTypes.other;
+
+    coderd = mkService {
+      name = "coderd";
+      version = "latest";
+      description = "coderd service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/coderd/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/coderd/nixos/default.nix;
+    } // serviceTypes.other;
+
+    code-server = mkService {
+      name = "code-server";
+      version = "latest";
+      description = "code-server service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/code-server/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/code-server/nixos/default.nix;
+    } // serviceTypes.other;
+
+    collab-dashboard = mkService {
+      name = "collab-dashboard";
+      version = "latest";
+      description = "collab-dashboard service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/collab-dashboard/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/collab-dashboard/nixos/default.nix;
+    } // serviceTypes.other;
+
+    dask = mkService {
+      name = "dask";
+      version = "latest";
+      description = "dask service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/dask/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/dask/nixos/default.nix;
+    } // serviceTypes.other;
+
+    dovecot = mkService {
+      name = "dovecot";
+      version = "latest";
+      description = "dovecot service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/dovecot/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/dovecot/nixos/default.nix;
+    } // serviceTypes.other;
+
+    elasticsearch = mkService {
+      name = "elasticsearch";
+      version = "latest";
+      description = "elasticsearch infrastructure service";
+      category = "infrastructure";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/elasticsearch/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/elasticsearch/nixos/default.nix;
+    } // serviceTypes.infrastructure;
+
+    eudi-issuer = mkService {
+      name = "eudi-issuer";
+      version = "latest";
+      description = "eudi-issuer service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/eudi-issuer/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/eudi-issuer/nixos/default.nix;
+    } // serviceTypes.other;
+
+    f13 = mkService {
+      name = "f13";
+      version = "latest";
+      description = "f13 service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/f13/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/f13/nixos/default.nix;
+    } // serviceTypes.other;
+
+    filebeat = mkService {
+      name = "filebeat";
+      version = "latest";
+      description = "filebeat service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/filebeat/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/filebeat/nixos/default.nix;
+    } // serviceTypes.other;
+
+    grommunio = mkService {
+      name = "grommunio";
+      version = "latest";
+      description = "grommunio service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/grommunio/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/grommunio/nixos/default.nix;
+    } // serviceTypes.other;
+
+    ilias-full = mkService {
+      name = "ilias-full";
+      version = "latest";
+      description = "ilias-full service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/ilias-full/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/ilias-full/nixos/default.nix;
+    } // serviceTypes.other;
+
+    intercom = mkService {
+      name = "intercom";
+      version = "latest";
+      description = "intercom service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/intercom/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/intercom/nixos/default.nix;
+    } // serviceTypes.other;
+
+    intercom-service = mkService {
+      name = "intercom-service";
+      version = "latest";
+      description = "intercom-service service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/intercom-service/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/intercom-service/nixos/default.nix;
+    } // serviceTypes.other;
+
+    jupyterhub = mkService {
+      name = "jupyterhub";
+      version = "latest";
+      description = "jupyterhub service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/jupyterhub/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/jupyterhub/nixos/default.nix;
+    } // serviceTypes.other;
+
+    kasmvnc = mkService {
+      name = "kasmvnc";
+      version = "latest";
+      description = "kasmvnc service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/kasmvnc/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/kasmvnc/nixos/default.nix;
+    } // serviceTypes.other;
+
+    kibana = mkService {
+      name = "kibana";
+      version = "latest";
+      description = "kibana infrastructure service";
+      category = "infrastructure";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/kibana/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/kibana/nixos/default.nix;
+    } // serviceTypes.infrastructure;
+
+    kube-prometheus-stack = mkService {
+      name = "kube-prometheus-stack";
+      version = "latest";
+      description = "kube-prometheus-stack service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/kube-prometheus-stack/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/kube-prometheus-stack/nixos/default.nix;
+    } // serviceTypes.other;
+
+    limesurvey = mkService {
+      name = "limesurvey";
+      version = "latest";
+      description = "limesurvey service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/limesurvey/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/limesurvey/nixos/default.nix;
+    } // serviceTypes.other;
+
+    loki = mkService {
+      name = "loki";
+      version = "latest";
+      description = "loki monitoring tool for openDesk";
+      category = "monitoring";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/loki/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/loki/nixos/default.nix;
+    } // serviceTypes.monitoring;
+
+    mariadb-enhanced = mkService {
+      name = "mariadb-enhanced";
+      version = "latest";
+      description = "mariadb-enhanced service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/mariadb-enhanced/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/mariadb-enhanced/nixos/default.nix;
+    } // serviceTypes.other;
+
+    memcached = mkService {
+      name = "memcached";
+      version = "latest";
+      description = "memcached cache server for openDesk";
+      category = "cache";
+      tier = "infrastructure";
+      ports = [ 6379 ];
+      configPath = ./docker/services/memcached/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/memcached/nixos/default.nix;
+    } // serviceTypes.cache;
+
+    minio = mkService {
+      name = "minio";
+      version = "latest";
+      description = "minio infrastructure service";
+      category = "infrastructure";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/minio/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/minio/nixos/default.nix;
+    } // serviceTypes.infrastructure;
+
+    monitoring = mkService {
+      name = "monitoring";
+      version = "latest";
+      description = "monitoring service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/monitoring/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/monitoring/nixos/default.nix;
+    } // serviceTypes.other;
+
+    n8n = mkService {
+      name = "n8n";
+      version = "latest";
+      description = "n8n service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/n8n/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/n8n/nixos/default.nix;
+    } // serviceTypes.other;
+
+    notes = mkService {
+      name = "notes";
+      version = "latest";
+      description = "notes service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/notes/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/notes/nixos/default.nix;
+    } // serviceTypes.other;
+
+    nubus-ldap = mkService {
+      name = "nubus-ldap";
+      version = "latest";
+      description = "nubus-ldap service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/nubus-ldap/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/nubus-ldap/nixos/default.nix;
+    } // serviceTypes.other;
+
+    nubus-portal = mkService {
+      name = "nubus-portal";
+      version = "latest";
+      description = "nubus-portal service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/nubus-portal/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/nubus-portal/nixos/default.nix;
+    } // serviceTypes.other;
+
+    nubus-provisioning = mkService {
+      name = "nubus-provisioning";
+      version = "latest";
+      description = "nubus-provisioning service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/nubus-provisioning/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/nubus-provisioning/nixos/default.nix;
+    } // serviceTypes.other;
+
+    nubus-udm = mkService {
+      name = "nubus-udm";
+      version = "latest";
+      description = "nubus-udm service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/nubus-udm/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/nubus-udm/nixos/default.nix;
+    } // serviceTypes.other;
+
+    ollama = mkService {
+      name = "ollama";
+      version = "latest";
+      description = "ollama service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/ollama/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/ollama/nixos/default.nix;
+    } // serviceTypes.other;
+
+    opencloud = mkService {
+      name = "opencloud";
+      version = "latest";
+      description = "opencloud service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/opencloud/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/opencloud/nixos/default.nix;
+    } // serviceTypes.other;
+
+    open-webui = mkService {
+      name = "open-webui";
+      version = "latest";
+      description = "open-webui service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/open-webui/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/open-webui/nixos/default.nix;
+    } // serviceTypes.other;
+
+    open-xchange = mkService {
+      name = "open-xchange";
+      version = "latest";
+      description = "open-xchange service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/open-xchange/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/open-xchange/nixos/default.nix;
+    } // serviceTypes.other;
+
+    overleaf = mkService {
+      name = "overleaf";
+      version = "latest";
+      description = "overleaf service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/overleaf/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/overleaf/nixos/default.nix;
+    } // serviceTypes.other;
+
+    portal-entries = mkService {
+      name = "portal-entries";
+      version = "latest";
+      description = "portal-entries service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/portal-entries/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/portal-entries/nixos/default.nix;
+    } // serviceTypes.other;
+
+    promtail = mkService {
+      name = "promtail";
+      version = "latest";
+      description = "promtail service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/promtail/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/promtail/nixos/default.nix;
+    } // serviceTypes.other;
+
+    rstudio = mkService {
+      name = "rstudio";
+      version = "latest";
+      description = "rstudio service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/rstudio/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/rstudio/nixos/default.nix;
+    } // serviceTypes.other;
+
+    seaweedfs = mkService {
+      name = "seaweedfs";
+      version = "latest";
+      description = "seaweedfs service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/seaweedfs/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/seaweedfs/nixos/default.nix;
+    } // serviceTypes.other;
+
+    self-service-password = mkService {
+      name = "self-service-password";
+      version = "latest";
+      description = "self-service-password service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/self-service-password/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/self-service-password/nixos/default.nix;
+    } // serviceTypes.other;
+
+    semester-provisioning = mkService {
+      name = "semester-provisioning";
+      version = "latest";
+      description = "semester-provisioning service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/semester-provisioning/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/semester-provisioning/nixos/default.nix;
+    } // serviceTypes.other;
+
+    slidev = mkService {
+      name = "slidev";
+      version = "latest";
+      description = "slidev service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/slidev/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/slidev/nixos/default.nix;
+    } // serviceTypes.other;
+
+    snipr = mkService {
+      name = "snipr";
+      version = "latest";
+      description = "snipr service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/snipr/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/snipr/nixos/default.nix;
+    } // serviceTypes.other;
+
+    sogo = mkService {
+      name = "sogo";
+      version = "latest";
+      description = "sogo service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/sogo/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/sogo/nixos/default.nix;
+    } // serviceTypes.other;
+
+    stalwart = mkService {
+      name = "stalwart";
+      version = "latest";
+      description = "stalwart service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/stalwart/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/stalwart/nixos/default.nix;
+    } // serviceTypes.other;
+
+    timescale = mkService {
+      name = "timescale";
+      version = "latest";
+      description = "timescale service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/timescale/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/timescale/nixos/default.nix;
+    } // serviceTypes.other;
+
+    ttyd = mkService {
+      name = "ttyd";
+      version = "latest";
+      description = "ttyd service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/ttyd/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/ttyd/nixos/default.nix;
+    } // serviceTypes.other;
+
+    typo3 = mkService {
+      name = "typo3";
+      version = "latest";
+      description = "typo3 service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/typo3/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/typo3/nixos/default.nix;
+    } // serviceTypes.other;
+
+    zammad = mkService {
+      name = "zammad";
+      version = "latest";
+      description = "zammad service for openDesk";
+      category = "other";
+      tier = "backend";
+      ports = [ 8080 ];
+      configPath = ./docker/services/zammad/nixos/configuration.nix;
+      defaultNixPath = ./docker/services/zammad/nixos/default.nix;
+    } // serviceTypes.other;
