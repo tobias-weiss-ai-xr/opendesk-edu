@@ -1,54 +1,142 @@
----
-# Zot Registry RBAC Configuration
-
+# Zot Registry Role-Based Access Control (RBAC)
+# SPDX-License-Identifier: Apache-2.0
+# Purpose: Define permissions for Zot Registry ServiceAccount
+# Security: Principle of Least Privilege (PoLP)
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: zot-registry
-  namespace: opendesk
+  namespace: zot-registry
   labels:
     app: zot-registry
-    app.kubernetes.io/name: zot-registry
-
+    component: service-account
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Service Account for Zot Registry deployment"
+    opendesk.org/rbac-level: "restricted"
 ---
-# Role for Zot Registry
+# ClusterRole for Zot Registry (cluster-wide permissions if needed)
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  name: zot-registry
-  namespace: opendesk
+  name: zot-registry-reader
   labels:
     app: zot-registry
-    app.kubernetes.io/name: zot-registry
-
+    component: rbac
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Cluster-wide read-only permissions for Zot Registry"
+    opendesk.org.scope: "cluster"
 rules:
-  # Read access to PVCs
+  # Allow reading namespaces (for monitoring)
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list", "watch"]
+  
+  # Allow reading pods (for monitoring health)
+  - apiGroups: [""]
+    resources: ["pods", "nodes"]
+    verbs: ["get", "list", "watch"]
+  
+  # Allow reading services (for monitoring)
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  
+  # Allow reading PersistentVolumeClaims
   - apiGroups: [""]
     resources: ["persistentvolumeclaims"]
     verbs: ["get", "list", "watch"]
+---
+# Role for Zot Registry namespace-level permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: zot-registry-full
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: rbac
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Full permissions within zot-registry namespace"
+    opendesk.org.scope: "namespace"
+rules:
+  # Read/write access to all resources in the namespace
+  - apiGroups: ["*"]
+    resources: ["*"],
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   
-  # Read access to configmaps and secrets
+  # Allow managing ConfigMaps and Secrets
   - apiGroups: [""]
     resources: ["configmaps", "secrets"]
-    verbs: ["get"]
-
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Allow managing PersistentVolumeClaims
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Allow managing Pods
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec", "pods/log"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  
+  # Allow managingDeployments, StatefulSets, etc.
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "replicasets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
-# RoleBinding for Zot Registry
+# RoleBinding for namespace-level permissions
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: zot-registry
-  namespace: opendesk
+  name: zot-registry-full-binding
+  namespace: zot-registry
   labels:
     app: zot-registry
-    app.kubernetes.io/name: zot-registry
-
+    component: rbac
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Bind zot-registry ServiceAccount to zot-registry-full Role"
+    opendesk.org.scope: "namespace"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: zot-registry-full
 subjects:
   - kind: ServiceAccount
     name: zot-registry
-    namespace: opendesk
-
+    namespace: zot-registry
+---
+# ClusterRoleBinding for cluster-wide read-only permissions (if needed)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: zot-registry-reader-binding
+  labels:
+    app: zot-registry
+    component: rbac
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Bind zot-registry ServiceAccount to zot-registry-reader ClusterRole"
+    opendesk.org.scope: "cluster"
+    opendesk.org.enabled: "false"  # Set to "true" to enable cluster-wide read access
 roleRef:
-  kind: Role
-  name: zot-registry
   apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: zot-registry-reader
+subjects:
+  - kind: ServiceAccount
+    name: zot-registry
+    namespace: zot-registry

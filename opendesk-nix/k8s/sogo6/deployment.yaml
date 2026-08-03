@@ -1,103 +1,331 @@
----
-# SOGo 6 Deployment for openDesk
-# Image: registry.gitlab.opencode.de/umr/sogo6:latest
-# Maintained via Nix: opendesk-nix/sogo/flake.nix
-
+# SOGo 6 Deployment
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sogo6
-  namespace: opendesk
+  namespace: sogo6
   labels:
-    app: sogo6
-    app.kubernetes.io/name: sogo6
+    app: sogo
+    version: "6.0.0"
+    component: app
+    app.kubernetes.io/name: sogo
     app.kubernetes.io/instance: sogo6
-    app.kubernetes.io/version: "6.x"
-    app.kubernetes.io/component: groupware
+    app.kubernetes.io/version: "6.0.0"
     app.kubernetes.io/part-of: opendesk
-    app.kubernetes.io/managed-by: nix
-    opendesk.org/container-registry: gitlab.opencode.de
+    opendesk.org/component: mail-calendar-contacts
+    de.container.gov.component: sogo6
+
 spec:
   replicas: 2
-  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: sogo
+      version: "6.0.0"
+      component: app
+  
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
-  selector:
-    matchLabels:
-      app: sogo6
+  
+  minReadySeconds: 30
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 5
+
   template:
     metadata:
       labels:
-        app: sogo6
-        app.kubernetes.io/name: sogo6
-        app.kubernetes.io/instance: sogo6
-        app.kubernetes.io/version: "6.x"
+        app: sogo
+        version: "6.0.0"
+        component: app
+        de.container.gov.component: sogo6
       annotations:
-        checksum/config: {{ include "opendesk-nix/k8s/sogo6/configmap.yaml" | sha256sum }}
+        checksum/config: "${HASH_CONFIG:-default}"
+        checksum/secret: "${HASH_SECRET:-default}"
+    
     spec:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsUser: 998
+        runAsGroup: 998
+        fsGroup: 998
+        fsGroupChangePolicy: "OnRootMismatch"
+        supplementalGroups: []
+      
+      hostname: sogo6-pod
+      subdomain: sogo6-headless
+      
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values: ["sogo"]
+                topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: topology.kubernetes.io/zone
+                    operator: In
+                    values: ["ssd"]
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values: ["amd64"]
+      
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: Exists
+          effect: NoSchedule
+        - key: "node-role.kubernetes.io/master"
+          operator: Exists
+          effect: NoSchedule
+      
+      priorityClassName: "opendesk-high-priority"
+      
+      resources:
+        limits:
+          cpu: "4"
+          memory: "8Gi"
+          ephemeral-storage: "10Gi"
+        requests:
+          cpu: "1"
+          memory: "4Gi"
+          ephemeral-storage: "5Gi"
+      
       containers:
-        - name: sogo
-          image: registry.gitlab.opencode.de/umr/sogo6:latest
-          imagePullPolicy: Always
-          ports:
-            - name: sogod
-              containerPort: 20000
-              protocol: TCP
+        - name: sogo6
+          image: registry.gitlab.opencode.de/umr/opendesk-sogo6:6.0.0
+          imagePullPolicy: IfNotPresent
+          
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 998
+            capabilities:
+              drop: ["ALL"]
+              add: []
+          
           env:
-            - name: SOGOUserSources
-              value: >-
-                ({type=ldap; host=ldap.opendesk.svc; port=389; 
-                baseDN='dc=opendesk,dc=org'; bindDN='cn=admin,dc=opendesk,dc=org'; 
-                bindPassword='{{ .Values.ldap.bindPassword }}'; 
-                idFieldName='uid'; isAddressBook=YES; })
-            - name: SOGOMemcachedHost
-              value: "memcached.opendesk.svc"
-            - name: LDAPContactInfoAttribute
-              value: "mail"
+            # Database
+            - name: DB_HOST
+              value: "postgresql.opendesk.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "sogo"
+            - name: DB_USER
+              value: "sogo"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sogo6-secrets
+                  key: db-password
+            
+            # LDAP
+            - name: LDAP_HOST
+              value: "ldap.opendesk.svc.cluster.local"
+            - name: LDAP_PORT
+              value: "389"
+            - name: LDAP_BASE_DN
+              value: "dc=opendesk,dc=org"
+            - name: LDAP_BIND_DN
+              value: "cn=admin,dc=opendesk,dc=org"
+            - name: LDAP_BIND_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sogo6-secrets
+                  key: ldap-bind-password
+            
+            # Mail Servers
+            - name: IMAP_HOST
+              value: "dovecot.opendesk.svc.cluster.local"
+            - name: IMAP_PORT
+              value: "993"
+            - name: SMTP_HOST
+              value: "postfix.opendesk.svc.cluster.local"
+            - name: SMTP_PORT
+              value: "587"
+            - name: SIEVE_HOST
+              value: "dovecot.opendesk.svc.cluster.local"
+            - name: SIEVE_PORT
+              value: "4190"
+            
+            # SOGo Settings
+            - name: SOGO_TIMEZONE
+              value: "Europe/Berlin"
+            - name: SOGO_LANGUAGE
+              value: "German"
+            - name: SOGO_HOSTNAME
+              value: "sogo6.opendesk-edu.org"
+            - name: SOGO_MAIL_DOMAINS
+              value: "opendesk-edu.org,opendesk.org"
+            
+            # Performance
+            - name: SOGO_WORKERS_COUNT
+              value: "16"
+            - name: SOGO_MAX_THREADS
+              value: "200"
+            
+            # Kubernetes
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
             - name: TZ
               value: "Europe/Berlin"
-            - name: SOGoLanguage
-              value: "German"
-            - name: SOGoTimeZone
-              value: "Europe/Berlin"
-          envFrom:
-            - secretRef:
-                name: sogo6-secrets
-          resources:
-            requests:
-              cpu: 200m
-              memory: 384Mi
-            limits:
-              cpu: 1000m
-              memory: 1Gi
+          
+          ports:
+            - containerPort: 20000
+              name: http
+              protocol: TCP
+            - containerPort: 20001
+              name: https
+              protocol: TCP
+            - containerPort: 20002
+              name: dav
+              protocol: TCP
+            - containerPort: 20003
+              name: activesync
+              protocol: TCP
+            - containerPort: 20004
+              name: admin
+              protocol: TCP
+            - containerPort: 11211
+              name: memcached
+              protocol: TCP
+          
+          command: ["/sbin/tini", "--"]
+          args: ["/entrypoint.sh"]
+          
           livenessProbe:
-            tcpSocket:
-              port: 20000
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            httpGet:
+              path: /SOGo
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 30
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          
           readinessProbe:
-            tcpSocket:
-              port: 20000
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            httpGet:
+              path: /SOGo
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          
+          startupProbe:
+            httpGet:
+              path: /SOGo
+              port: http
+              scheme: HTTP
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+          
           volumeMounts:
-            - name: sogo-data
+            - name: sogo6-data
               mountPath: /var/lib/sogo
-            - name: sogo-config
-              mountPath: /etc/sogo
+              subPath: data
+            - name: sogo6-logs
+              mountPath: /var/log/sogo
+              subPath: logs
+            - name: sogo6-attachments
+              mountPath: /var/spool/sogo
+              subPath: attachments
+            - name: sogo6-tmp
+              mountPath: /tmp/sogo
+              subPath: tmp
+            - name: sogo6-config
+              mountPath: /etc/sogo/sogo.conf
+              subPath: sogo.conf
+            - name: sogo6-pid
+              mountPath: /var/run/sogo
+            - name: tz-config
+              mountPath: /etc/localtime
+              subPath: localtime
+              readOnly: true
+            - name: tz-config
+              mountPath: /etc/timezone
+              subPath: timezone
+              readOnly: true
+            - name: scripts
+              mountPath: /healthcheck.sh
+              subPath: healthcheck.sh
+              readOnly: true
+            - name: scripts
+              mountPath: /startup-probe.sh
+              subPath: startup-probe.sh
+              readOnly: true
+          
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "echo 'Shutting down SOGo 6...'; pkill -TERM -u 998; sleep 60; pkill -KILL -u 998"]
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "echo 'SOGo 6 started' > /var/log/sogo/startup.log; touch /tmp/sogo-ready"]
+      
+      imagePullSecrets:
+        - name: sogo6-pull-secret
+      
       volumes:
-        - name: sogo-data
+        - name: sogo6-data
           persistentVolumeClaim:
             claimName: sogo6-data
-        - name: sogo-config
+        - name: sogo6-logs
+          persistentVolumeClaim:
+            claimName: sogo6-logs
+        - name: sogo6-attachments
+          persistentVolumeClaim:
+            claimName: sogo6-attachments
+        - name: sogo6-tmp
+          persistentVolumeClaim:
+            claimName: sogo6-tmp
+        - name: sogo6-config
           configMap:
             name: sogo6-config
-      imagePullSecrets:
-        - name: gitlab-registry-opencode
+            defaultMode: 420
+        - name: sogo6-pid
+          emptyDir: {}
+        - name: tz-config
+          configMap:
+            name: timezone-config
+            items:
+              - key: localtime
+                path: localtime
+              - key: timezone
+                path: timezone
+        - name: scripts
+          configMap:
+            name: sogo6-config
+            defaultMode: 509
+            items:
+              - key: healthcheck.sh
+                path: healthcheck.sh
+              - key: startup-probe.sh
+                path: startup-probe.sh

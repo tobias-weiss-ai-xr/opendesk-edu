@@ -1,59 +1,88 @@
----
 # Zot Registry Services
-# Exposes registry on ClusterIP and optionally NodePort
-
+# SPDX-License-Identifier: Apache-2.0
+# Purpose: Network access to Zot Registry
+# Services: ClusterIP (internal), NodePort (external access if needed)
 apiVersion: v1
 kind: Service
 metadata:
   name: zot-registry
-  namespace: opendesk
+  namespace: zot-registry
   labels:
     app: zot-registry
-    app.kubernetes.io/name: zot-registry
-    opendesk.org/container-registry: gitlab.opencode.de
+    component: registry
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
   annotations:
-    # For MetalLB or external load balancer
-    metallb.universe.tf/allow-shared-ip: "true"
-
+    description: "Internal ClusterIP service for Zot Registry"
+    opendesk.org/service-type: "cluster-internal"
+    # Metallb annotation for external access (if LoadBalancer is used)
+    # metallb.universe.tf/loadBalancerIPs: "192.168.3.210"
 spec:
   type: ClusterIP
-  selector:
-    app: zot-registry
   ports:
     - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+    - name: metrics
       port: 8080
       targetPort: 8080
       protocol: TCP
-      appProtocol: http
-    - name: metrics
-      port: 8081
-      targetPort: 8081
-      protocol: TCP
-    - name: https
-      port: 443
-      targetPort: 8443
-      protocol: TCP
-      appProtocol: https
-
+  selector:
+    app: zot-registry
+    component: registry
 ---
-# NodePort Service for external access (optional)
+# NodePort Service for development/external access (optional)
 apiVersion: v1
 kind: Service
 metadata:
-  name: zot-registry-external
-  namespace: opendesk
+  name: zot-registry-nodeport
+  namespace: zot-registry
   labels:
     app: zot-registry
-    app.kubernetes.io/name: zot-registry-external
-    opendesk.org/container-registry: gitlab.opencode.de
-
+    component: registry
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "NodePort service for external access to Zot Registry"
+    opendesk.org/service-type: "node-external"
+    opendesk.org enabled: "false"  # Set to "true" to enable
 spec:
   type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30080
   selector:
     app: zot-registry
+    component: registry
+---
+# Headless Service for direct pod access (optional, for debugging)
+apiVersion: v1
+kind: Service
+metadata:
+  name: zot-registry-headless
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: registry
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Headless service for direct pod access"
+    opendesk.org/service-type: "headless"
+    opendesk.org.enabled: "false"  # Set to "true" to enable
+spec:
+  clusterIP: None
   ports:
     - name: http
       port: 8080
-      targetPort: 8080
-      nodePort: 30080
       protocol: TCP
+  selector:
+    app: zot-registry
+    component: registry

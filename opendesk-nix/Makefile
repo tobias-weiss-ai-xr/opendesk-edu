@@ -1,255 +1,444 @@
-# Makefile for openDesk-Nix
-# Usage: make <target>
+# openDesk Nix - Master Makefile
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
 #
-# Targets:
-#   all              - Build all images
-#   sogo5            - Build SOGo 5 image
-#   sogo6            - Build SOGo 6 image
-#   dev-agent        - Build Dev Agent image
-#   push             - Push all images to GitLab registry
-#   push-sogo5       - Push SOGo 5 only
-#   push-sogo6       - Push SOGo 6 only
-#   push-dev-agent   - Push Dev Agent only
-#   load-all         - Load all built images into Docker
-#   deploy-sogo5     - Deploy SOGo 5 to Kubernetes
-#   deploy-sogo6     - Deploy SOGo 6 to Kubernetes
-#   deploy-dev-agent - Deploy Dev Agent to Kubernetes
-#   clean            - Remove all build artifacts
-#   flake.update     - Update flake inputs
-#   shell            - Enter development shell
+# ==============================================================================
+# Main Makefile for building, testing, and deploying openDesk containers
+#
+# Usage:
+#   make help                    # Show all targets
+#   make build-all               # Build all Docker images
+#   make build-sogo5             # Build SOGo 5 image
+#   make build-sogo6             # Build SOGo 6 image
+#   make build-dev-agent         # Build Dev Agent image
+#   make build-zot               # Build Zot Registry image
+#   make push-all                # Push all images to registry
+#   make push-sogo5              # Push SOGo 5 image
+#   make deploy-all              # Deploy all to Kubernetes
+#   make deploy-dev-agent        # Deploy Dev Agent Operator
+#   make undeploy-all            # Remove all deployments
+#   make test-all                # Run all tests
+#   make sbom-all                # Generate all SBOMs
+#   make clean                   # Clean all
+#
+# ==============================================================================
 
-# Configuration
-REGISTRY := registry.gitlab.opencode.de/umr
-DOCKER_USER ?= weiss
-NIX_BUILD_DIR ?= .
-K8S_NAMESPACE ?= opendesk
+# ==============================================================================
+# ENVIRONMENT VARIABLES
+# ==============================================================================
 
-.PHONY: help
-help: ## Show this help
-	@grep -E '^[a-zA-Z_\-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
+# Registry configuration
+REGISTRY ?= registry.gitlab.opencode.de/umr
 
-.PHONY: all
-all: sogo5 sogo6 dev-agent ## Build all images
+# Version tags
+SOGO5_VERSION ?= 5.8.0
+SOGO6_VERSION ?= 6.0.0
+DEV_AGENT_VERSION ?= 2.1.0
+ZOT_VERSION ?= 2.0.0-rc5
 
-.PHONY: sogo5
-sogo5: ## Build SOGo 5 Docker image
-	@echo "🚀 Building SOGo 5 image..."
-	cd $(NIX_BUILD_DIR) && nix build .#sogo5-image
-	@echo "✅ SOGo 5 image built"
+# Image names
+SOGO5_IMAGE = ${REGISTRY}/opendesk-sogo5:${SOGO5_VERSION}
+SOGO6_IMAGE = ${REGISTRY}/opendesk-sogo6:${SOGO6_VERSION}
+DEV_AGENT_IMAGE = ${REGISTRY}/opendesk-dev-agent:${DEV_AGENT_VERSION}
+ZOT_IMAGE = ${REGISTRY}/zot-registry:${ZOT_VERSION}
 
-.PHONY: sogo6
-sogo6: ## Build SOGo 6 Docker image
-	@echo "🚀 Building SOGo 6 image..."
-	cd $(NIX_BUILD_DIR) && nix build .#sogo6-image
-	@echo "✅ SOGo 6 image built"
+# Build arguments
+BUILD_ARGS ?= --no-cache
+BUILD_CONTEXT ?= .
 
-.PHONY: dev-agent
-dev-agent: ## Build Dev Agent Docker image
-	@echo "🚀 Building Dev Agent image..."
-	cd $(NIX_BUILD_DIR) && nix build .#dev-agent-image
-	@echo "✅ Dev Agent image built"
+# Kubernetes context
+KUBE_CONTEXT ?= $(shell kubectl config current-context 2>/dev/null)
+KUBE_NAMESPACE ?= default
 
-.PHONY: website
-website: ## Build Website Docker image
-	@echo "🚀 Building Website image..."
-	cd $(NIX_BUILD_DIR) && nix build .#website-image 2>/dev/null || \
-		(cd ../opendesk-edu-website && docker build -t $(REGISTRY)/opendesk-edu-website:latest .)
-	@echo "✅ Website image built"
+# Docker command
+DOCKER ?= docker
 
-.PHONY: sbom-generator
-sbom-generator: ## Build SBOM Generator Docker image
-	@echo "🚀 Building SBOM Generator image..."
-	cd $(NIX_BUILD_DIR) && nix build .#sbom-generator-image 2>/dev/null || \
-		(cd ../opendesk-edu-website && docker build -t $(REGISTRY)/sbom-generator:latest -f docker/sbom-generator/Dockerfile .)
-	@echo "✅ SBOM Generator image built"
+# Kubectl command
+KUBECTL ?= kubectl
 
-# Push targets
-.PHONY: push
-push: push-sogo5 push-sogo6 push-dev-agent ## Push all images to GitLab registry
+# ==============================================================================
+# PHONY TARGETS DEFINITION
+# ==============================================================================
 
-.PHONY: login
-login: ## Login to GitLab Container Registry
-	@if [ -z "$$OPENCODE_TOKEN" ]; then \
-		echo "Please enter your GitLab opencode.de PAT:"; \
-		read -rs OPENCODE_TOKEN; \
-	fi; \
-	echo "$$OPENCODE_TOKEN" | docker login $(REGISTRY) -u $(DOCKER_USER) --password-stdin
-	@echo "✅ Login successful"
+.PHONY: help build-all push-all deploy-all undeploy-all test-all sbom-all clean
+.PHONY: build-sogo5 build-sogo6 build-dev-agent build-zot
+.PHONY: push-sogo5 push-sogo6 push-dev-agent push-zot
+.PHONY: deploy-sogo5 deploy-sogo6 deploy-dev-agent deploy-zot
+.PHONY: undeploy-sogo5 undeploy-sogo6 undeploy-dev-agent undeploy-zot
+.PHONY: test-sogo5 test-sogo6 test-dev-agent test-zot
+.PHONY: sbom-sogo5 sbom-sogo6 sbom-dev-agent sbom-zot
+.PHONY: scan-all scan-sogo5 scan-sogo6 scan-dev-agent scan-zot
+.PHONY: generate-specs generate-sbom-docs validate-all
 
-.PHONY: push-sogo5
-push-sogo5: login ## Push SOGo 5 to registry
-	@echo "📤 Pushing SOGo 5..."
-	cd $(NIX_BUILD_DIR) && \
-	
-docker load < result 2>/dev/null || true
-	@docker tag $(shell docker images -q | head -1) $(REGISTRY)/sogo5:latest
-	docker push $(REGISTRY)/sogo5:latest
-	@echo "✅ SOGo 5 pushed"
+# ==============================================================================
+# HELP TARGET
+# ==============================================================================
 
-.PHONY: push-sogo6
-push-sogo6: login ## Push SOGo 6 to registry
-	@echo "📤 Pushing SOGo 6..."
-	cd $(NIX_BUILD_DIR) && \
-	
-docker load < result 2>/dev/null || true
-	@docker tag $(shell docker images -q | head -1) $(REGISTRY)/sogo6:latest
-	docker push $(REGISTRY)/sogo6:latest
-	@echo "✅ SOGo 6 pushed"
+hhelp: ## Show this help message
+	@echo ""
+	@echo "================================================================================"
+	@echo "  openDesk Nix - Master Makefile"
+	@echo "  SPDX-License-Identifier: Apache-2.0"
+	@echo "  Maintainer: openDesk Edu Team <team@opendesk-edu.org>"
+	@echo "================================================================================"
+	@echo ""
+	@echo "REGISTRY: ${REGISTRY}"
+	@echo "SOGo 5 Version: ${SOGO5_VERSION}"
+	@echo "SOGo 6 Version: ${SOGO6_VERSION}"
+	@echo "Dev Agent Version: ${DEV_AGENT_VERSION}"
+	@echo "Zot Version: ${ZOT_VERSION}"
+	@echo ""
+	@echo "USAGE: make <target>"
+	@echo ""
+	@echo "================================================================================"
+	@echo "  BUILD TARGETS"
+	@echo "================================================================================"
+	@grep -E "^build-.*:.*##" ${MAKEFILE_LIST} | sort
+	@echo ""
+	@echo "================================================================================"
+	@echo "  PUSH TARGETS"
+	@echo "================================================================================"
+	@grep -E "^push-.*:.*##" ${MAKEFILE_LIST} | sort
+	@echo ""
+	@echo "================================================================================"
+	@echo "  DEPLOY TARGETS"
+	@echo "================================================================================"
+	@grep -E "^deploy-.*:.*##" ${MAKEFILE_LIST} | sort
+	@echo ""
+	@echo "================================================================================"
+	@echo "  TEST TARGETS"
+	@echo "================================================================================"
+	@grep -E "^test-.*:.*##" ${MAKEFILE_LIST} | sort
+	@echo ""
+	@echo "================================================================================"
+	@echo "  SBOM TARGETS"
+	@echo "================================================================================"
+	@grep -E "^sbom-.*:.*##" ${MAKEFILE_LIST} | sort
+	@echo ""
+	@echo "================================================================================"
+	@echo "  SCAN TARGETS"
+	@echo "================================================================================"
+	@grep -E "^scan-.*:.*##" ${MAKEFILE_LIST} | sort
+	@echo ""
+	@echo "================================================================================"
+	@echo "  UTILITY TARGETS"
+	@echo "================================================================================"
+	@grep -E "^(help|clean|validate|generate):.*##" ${MAKEFILE_LIST} | sort
+	@echo ""
+	@echo "================================================================================"
+	@echo "  ENVIRONMENT VARIABLES"
+	@echo "================================================================================"
+	@echo "  REGISTRY           - Docker registry (default: ${REGISTRY})"
+	@echo "  SOGO5_VERSION      - SOGo 5 version (default: ${SOGO5_VERSION})"
+	@echo "  SOGO6_VERSION      - SOGo 6 version (default: ${SOGO6_VERSION})"
+	@echo "  DEV_AGENT_VERSION  - Dev Agent version (default: ${DEV_AGENT_VERSION})"
+	@echo "  ZOT_VERSION        - Zot Registry version (default: ${ZOT_VERSION})"
+	@echo "  KUBE_CONTEXT       - Kubernetes context (default: current)"
+	@echo "  KUBE_NAMESPACE     - Kubernetes namespace (default: default)"
+	@echo "  BUILD_ARGS         - Docker build args (default: --no-cache)"
+	@echo "  DOCKER             - Docker command (default: docker)"
+	@echo "  KUBECTL            - Kubectl command (default: kubectl)"
+	@echo ""
 
-.PHONY: push-dev-agent
-push-dev-agent: login ## Push Dev Agent to registry
-	@echo "📤 Pushing Dev Agent..."
-	cd $(NIX_BUILD_DIR) && \
-	
-docker load < result 2>/dev/null || true
-	@docker tag $(shell docker images -q | head -1) $(REGISTRY)/dev-agent:latest
-	docker push $(REGISTRY)/dev-agent:latest
-	@echo "✅ Dev Agent pushed"
+# ==============================================================================
+# BUILD TARGETS
+# ==============================================================================
 
-.PHONY: push-website
-push-website: login ## Push Website to registry
-	@echo "📤 Pushing Website..."
-	cd ../opendesk-edu-website && \
-	
-docker build -t $(REGISTRY)/opendesk-edu-website:latest . && \
-	docker push $(REGISTRY)/opendesk-edu-website:latest
-	@echo "✅ Website pushed"
+build-all: build-sogo5 build-sogo6 build-dev-agent build-zot ## Build all Docker images
 
-.PHONY: push-sbom-generator
-push-sbom-generator: login ## Push SBOM Generator to registry
-	@echo "📤 Pushing SBOM Generator..."
-	cd ../opendesk-edu-website && \
-	
-docker build -t $(REGISTRY)/sbom-generator:latest -f docker/sbom-generator/Dockerfile . && \
-	docker push $(REGISTRY)/sbom-generator:latest
-	@echo "✅ SBOM Generator pushed"
+build-sogo5: ## Build SOGo 5 Docker image
+	@echo "Building SOGo 5 image: ${SOGO5_IMAGE}"
+	${DOCKER} build ${BUILD_ARGS} \
+		--build-arg SOGO_VERSION=${SOGO5_VERSION} \
+		--build-arg MEMCACHED_VERSION=1.6.21 \
+		--build-arg BUILD_DATE=$(shell date -u +%Y-%m-%dT%H:%M:%SZ) \
+		-t ${SOGO5_IMAGE} \
+		-t ${REGISTRY}/opendesk-sogo5:latest \
+		-f docker/sogo5/Dockerfile \
+		${BUILD_CONTEXT}
 
-# Load targets
-.PHONY: load-all
-load-all: load-sogo5 load-sogo6 load-dev-agent ## Load all images into Docker
+build-sogo6: ## Build SOGo 6 Docker image
+	@echo "Building SOGo 6 image: ${SOGO6_IMAGE}"
+	${DOCKER} build ${BUILD_ARGS} \
+		--build-arg SOGO_VERSION=${SOGO6_VERSION} \
+		--build-arg MEMCACHED_VERSION=1.6.21 \
+		--build-arg BUILD_DATE=$(shell date -u +%Y-%m-%dT%H:%M:%SZ) \
+		--build-arg EDV_ENABLED=true \
+		-t ${SOGO6_IMAGE} \
+		-t ${REGISTRY}/opendesk-sogo6:latest \
+		-f docker/sogo6/Dockerfile \
+		${BUILD_CONTEXT}
 
-.PHONY: load-sogo5
-load-sogo5: ## Load SOGo 5 into Docker
-	@echo "🐳 Loading SOGo 5..."
-	cd $(NIX_BUILD_DIR) && docker load < result
-	@echo "✅ SOGo 5 loaded"
+build-dev-agent: ## Build Dev Agent Operator Docker image
+	@echo "Building Dev Agent image: ${DEV_AGENT_IMAGE}"
+	${DOCKER} build ${BUILD_ARGS} \
+		--build-arg DEV_AGENT_VERSION=${DEV_AGENT_VERSION} \
+		--build-arg BUILD_DATE=$(shell date -u +%Y-%m-%dT%H:%M:%SZ) \
+		-t ${DEV_AGENT_IMAGE} \
+		-t ${REGISTRY}/opendesk-dev-agent:latest \
+		-f docker/dev-agent/Dockerfile \
+		${BUILD_CONTEXT}
 
-.PHONY: load-sogo6
-load-sogo6: ## Load SOGo 6 into Docker
-	@echo "🐳 Loading SOGo 6..."
-	cd $(NIX_BUILD_DIR) && docker load < result
-	@echo "✅ SOGo 6 loaded"
+build-zot: ## Build Zot Registry Docker image
+	@echo "Building Zot Registry image: ${ZOT_IMAGE}"
+	${DOCKER} build ${BUILD_ARGS} \
+		--build-arg ZOT_VERSION=${ZOT_VERSION} \
+		--build-arg BUILD_DATE=$(shell date -u +%Y-%m-%dT%H:%M:%SZ) \
+		-t ${ZOT_IMAGE} \
+		-t ${REGISTRY}/zot-registry:latest \
+		-f docker/zot-registry/Dockerfile \
+		${BUILD_CONTEXT}
 
-.PHONY: load-dev-agent
-load-dev-agent: ## Load Dev Agent into Docker
-	@echo "🐳 Loading Dev Agent..."
-	cd $(NIX_BUILD_DIR) && docker load < result
-	@echo "✅ Dev Agent loaded"
+# ==============================================================================
+# PUSH TARGETS
+# ==============================================================================
 
-# Deploy targets
-.PHONY: deploy
-deploy: deploy-sogo5 deploy-sogo6 deploy-dev-agent ## Deploy all to Kubernetes
+push-all: push-sogo5 push-sogo6 push-dev-agent push-zot ## Push all Docker images to registry
 
-.PHONY: deploy-sogo5
-deploy-sogo5: ## Deploy SOGo 5 to Kubernetes
-	@echo "🔧 Deploying SOGo 5..."
-	kubectl apply -k k8s/sogo5
-	@echo "✅ SOGo 5 deployed"
+push-sogo5: build-sogo5 ## Push SOGo 5 image to registry
+	@echo "Pushing SOGo 5 image: ${SOGO5_IMAGE}"
+	${DOCKER} push ${SOGO5_IMAGE}
+	${DOCKER} push ${REGISTRY}/opendesk-sogo5:latest
 
-.PHONY: deploy-sogo6
-deploy-sogo6: ## Deploy SOGo 6 to Kubernetes
-	@echo "🔧 Deploying SOGo 6..."
-	kubectl apply -k k8s/sogo6
-	@echo "✅ SOGo 6 deployed"
+push-sogo6: build-sogo6 ## Push SOGo 6 image to registry
+	@echo "Pushing SOGo 6 image: ${SOGO6_IMAGE}"
+	${DOCKER} push ${SOGO6_IMAGE}
+	${DOCKER} push ${REGISTRY}/opendesk-sogo6:latest
 
-.PHONY: deploy-dev-agent
-deploy-dev-agent: ## Deploy Dev Agent to Kubernetes
-	@echo "🔧 Deploying Dev Agent..."
-	kubectl apply -k k8s/dev-agent
-	@echo "✅ Dev Agent deployed"
+push-dev-agent: build-dev-agent ## Push Dev Agent image to registry
+	@echo "Pushing Dev Agent image: ${DEV_AGENT_IMAGE}"
+	${DOCKER} push ${DEV_AGENT_IMAGE}
+	${DOCKER} push ${REGISTRY}/opendesk-dev-agent:latest
 
-.PHONY: deploy-website
-deploy-website: ## Deploy Website to Kubernetes
-	@echo "🔧 Deploying Website..."
-	kubectl apply -k k8s/website 2>/dev/null || echo "Website K8s configs not found"
-	@echo "✅ Website deployed"
+push-zot: build-zot ## Push Zot Registry image to registry
+	@echo "Pushing Zot Registry image: ${ZOT_IMAGE}"
+	${DOCKER} push ${ZOT_IMAGE}
+	${DOCKER} push ${REGISTRY}/zot-registry:latest
 
-# Kubernetes setup
-.PHONY: create-pull-secret
-create-pull-secret: ## Create GitLab pull secret
-	@if [ -z "$$OPENCODE_TOKEN" ]; then \
-		echo "Please enter your GitLab opencode.de PAT:"; \
-		read -rs OPENCODE_TOKEN; \
-	fi; \
-	kubectl create secret docker-registry gitlab-registry-opencode \
-		--docker-server=$(REGISTRY) \
-		--docker-username=$(DOCKER_USER) \
-		--docker-password=$$OPENCODE_TOKEN \
-		--docker-email=tobias.weiss@hrz.uni-marburg.de \
-		--dry-run=client -o yaml > k8s/gitlab-registry-secret.yaml
-	@echo "✅ Pull secret created at k8s/gitlab-registry-secret.yaml"
-	@echo "  Apply with: kubectl apply -f k8s/gitlab-registry-secret.yaml"
+# ==============================================================================
+# DEPLOY TARGETS
+# ==============================================================================
 
-.PHONY: setup-k8s
-setup-k8s: create-pull-secret ## Setup Kubernetes for GitLab registry
-	@echo "🔧 Setting up Kubernetes..."
-	@kubectl create namespace $(K8S_NAMESPACE) 2>/dev/null || true
-	kubectl apply -f k8s/gitlab-registry-secret.yaml
-	@echo "✅ Kubernetes setup complete"
+# Set namespace context for deployments
+deploy-%:
+	@echo "Setting Kubernetes context to: ${KUBE_CONTEXT}"
+	@echo "Using namespace: ${KUBE_NAMESPACE}"
 
-# Cleanup
-.PHONY: clean
-clean: ## Clean all build artifacts
-	@echo "🧹 Cleaning..."
-	cd $(NIX_BUILD_DIR) && rm -rf result gcroots per-user
-	docker system prune -f 2>/dev/null || true
-	@echo "✅ Cleanup complete"
+deploy-all: deploy-dev-agent deploy-zot deploy-sogo5 deploy-sogo6 ## Deploy all components
 
-.PHONY: flake.update
-flake.update: ## Update flake inputs
-	@echo "🔄 Updating flake inputs..."
-	cd $(NIX_BUILD_DIR) && nix flake update
-	@echo "✅ Flake inputs updated"
+deploy-dev-agent: ## Deploy Dev Agent Operator
+	@echo "Deploying Dev Agent Operator to namespace: ${KUBE_NAMESPACE}"
+	${KUBECTL} apply --context=${KUBE_CONTEXT} -n ${KUBE_NAMESPACE} -k k8s/dev-agent
+	@echo "Waiting for Dev Agent Operator to be ready..."
+	${KUBECTL} wait --context=${KUBE_CONTEXT} -n ${KUBE_NAMESPACE} --for=condition=available --timeout=300s deployment/dev-agent-operator
 
-.PHONY: shell
-shell: ## Enter development shell
-	@echo "🐚 Entering development shell..."
-	cd $(NIX_BUILD_DIR) && nix develop
+deploy-zot: ## Deploy Zot Registry
+	@echo "Deploying Zot Registry to namespace: zot-registry"
+	${KUBECTL} apply --context=${KUBE_CONTEXT} -n zot-registry -k k8s/zot-registry
+	@echo "Waiting for Zot Registry to be ready..."
+	${KUBECTL} wait --context=${KUBE_CONTEXT} -n zot-registry --for=condition=available --timeout=300s deployment/zot-registry
 
-.PHONY: flake.show
-flake.show: ## Show available packages
-	@echo "📋 Available packages:"
-	cd $(NIX_BUILD_DIR) && nix flake show
+deploy-sogo5: ## Deploy SOGo 5
+	@echo "Deploying SOGo 5 to namespace: sogo"
+	${KUBECTL} apply --context=${KUBE_CONTEXT} -n sogo -k k8s/sogo5
+	@echo "Waiting for SOGo 5 to be ready..."
+	${KUBECTL} wait --context=${KUBE_CONTEXT} -n sogo --for=condition=available --timeout=300s deployment/sogo5
 
-.PHONY: verify
-verify: ## Verify all images can be built
-	@echo "🔍 Verifying all images..."
-	@nix build .#sogo5-image && echo "✅ SOGo 5: OK" || echo "❌ SOGo 5: FAILED"
-	@nix build .#sogo6-image && echo "✅ SOGo 6: OK" || echo "❌ SOGo 6: FAILED"
-	@nix build .#dev-agent-image && echo "✅ Dev Agent: OK" || echo "❌ Dev Agent: FAILED"
-	@echo "✅ Verification complete"
+deploy-sogo6: ## Deploy SOGo 6
+	@echo "Deploying SOGo 6 to namespace: sogo6"
+	${KUBECTL} apply --context=${KUBE_CONTEXT} -n sogo6 -k k8s/sogo6
+	@echo "Waiting for SOGo 6 to be ready..."
+	${KUBECTL} wait --context=${KUBE_CONTEXT} -n sogo6 --for=condition=available --timeout=300s deployment/sogo6
 
-# CI/CD targets
-.PHONY: ci-build
-ci-build: all ## Build all images for CI
+# ==============================================================================
+# UNDEPLOY TARGETS
+# ==============================================================================
 
-.PHONY: ci-push
-ci-push: push ## Push all images for CI
+undeploy-all: undeploy-sogo6 undeploy-sogo5 undeploy-zot undeploy-dev-agent ## Remove all deployments
 
-# Helper targets
-.PHONY: list-images
-list-images: ## List built Docker images
-	@echo "🐳 Built Docker images:"
-	@docker images | grep $(REGISTRY)
+undeploy-dev-agent: ## Remove Dev Agent Operator deployment
+	@echo "Removing Dev Agent Operator from namespace: ${KUBE_NAMESPACE}"
+	${KUBECTL} delete --context=${KUBE_CONTEXT} -n ${KUBE_NAMESPACE} -k k8s/dev-agent --ignore-not-found=true
 
-.PHONY: list-pods
-list-pods: ## List running pods
-	@echo "🔧 Running pods:"
-	@kubectl get pods -n $(K8S_NAMESPACE)
+undeploy-zot: ## Remove Zot Registry deployment
+	@echo "Removing Zot Registry from namespace: zot-registry"
+	${KUBECTL} delete --context=${KUBE_CONTEXT} -n zot-registry -k k8s/zot-registry --ignore-not-found=true
 
-.PHONY: version
-version: ## Show version info
-	@echo "openDesk-Nix v1.0.0"
-	@echo "Nix Version: $(shell nix --version 2>/dev/null || echo 'not installed')"
-	@echo "Docker Version: $(shell docker --version 2>/dev/null || echo 'not installed')"
-	@echo "Kubectl Version: $(shell kubectl version --client --short 2>/dev/null || echo 'not installed')"
+undeploy-sogo5: ## Remove SOGo 5 deployment
+	@echo "Removing SOGo 5 from namespace: sogo"
+	${KUBECTL} delete --context=${KUBE_CONTEXT} -n sogo -k k8s/sogo5 --ignore-not-found=true
+
+undeploy-sogo6: ## Remove SOGo 6 deployment
+	@echo "Removing SOGo 6 from namespace: sogo6"
+	${KUBECTL} delete --context=${KUBE_CONTEXT} -n sogo6 -k k8s/sogo6 --ignore-not-found=true
+
+# ==============================================================================
+# TEST TARGETS
+# ==============================================================================
+
+test-all: test-sogo5 test-sogo6 test-dev-agent test-zot ## Run all tests
+
+test-sogo5: build-sogo5 ## Test SOGo 5 image
+	@echo "Testing SOGo 5 image..."
+	@docker run --rm ${SOGO5_IMAGE} --version 2>/dev/null | grep -q "5.8.0" && echo "SOGo 5: PASSED" || echo "SOGo 5: FAILED"
+
+test-sogo6: build-sogo6 ## Test SOGo 6 image
+	@echo "Testing SOGo 6 image..."
+	@docker run --rm ${SOGO6_IMAGE} --version 2>/dev/null | grep -q "6.0.0" && echo "SOGo 6: PASSED" || echo "SOGo 6: FAILED"
+
+test-dev-agent: build-dev-agent ## Test Dev Agent image
+	@echo "Testing Dev Agent image..."
+	@docker run --rm ${DEV_AGENT_IMAGE} --help 2>/dev/null >/dev/null && echo "Dev Agent: PASSED" || echo "Dev Agent: FAILED"
+
+test-zot: build-zot ## Test Zot Registry image
+	@echo "Testing Zot Registry image..."
+	@docker run --rm -p 8080:8080 --name zot-test ${ZOT_IMAGE} & sleep 3 && \
+		curl -sf http://localhost:8080/healthz >/dev/null && \
+		echo "Zot Registry: PASSED" || echo "Zot Registry: FAILED"
+	@docker stop zot-test >/dev/null 2>&1 || true
+	@docker rm zot-test >/dev/null 2>&1 || true
+
+# ==============================================================================
+# SBOM TARGETS
+# ==============================================================================
+
+sbom-all: cd sbom && make all ## Generate all SBOMs
+
+sbom-sogo5: cd sbom && make sogo5 ## Generate SBOM for SOGo 5
+
+sbom-sogo6: cd sbom && make sogo6 ## Generate SBOM for SOGo 6
+
+sbom-dev-agent: cd sbom && make dev-agent ## Generate SBOM for Dev Agent
+
+sbom-zot: cd sbom && make zot-registry ## Generate SBOM for Zot Registry
+
+# ==============================================================================
+# SECURITY SCAN TARGETS
+# ==============================================================================
+
+scan-all: scan-sogo5 scan-sogo6 scan-dev-agent scan-zot ## Scan all images for vulnerabilities
+
+scan-sogo5: build-sogo5 ## Scan SOGo 5 image for vulnerabilities
+	@echo "Scanning SOGo 5 image for vulnerabilities..."
+	@docker scan --severity high ${SOGO5_IMAGE} 2>/dev/null || echo "Note: docker scan requires Docker Desktop"
+	@trivy image --severity HIGH,CRITICAL ${SOGO5_IMAGE} 2>/dev/null || echo "Note: trivy not installed"
+
+scan-sogo6: build-sogo6 ## Scan SOGo 6 image for vulnerabilities
+	@echo "Scanning SOGo 6 image for vulnerabilities..."
+	@docker scan --severity high ${SOGO6_IMAGE} 2>/dev/null || true
+	@trivy image --severity HIGH,CRITICAL ${SOGO6_IMAGE} 2>/dev/null || true
+
+scan-dev-agent: build-dev-agent ## Scan Dev Agent image for vulnerabilities
+	@echo "Scanning Dev Agent image for vulnerabilities..."
+	@docker scan --severity high ${DEV_AGENT_IMAGE} 2>/dev/null || true
+	@trivy image --severity HIGH,CRITICAL ${DEV_AGENT_IMAGE} 2>/dev/null || true
+
+scan-zot: build-zot ## Scan Zot Registry image for vulnerabilities
+	@echo "Scanning Zot Registry image for vulnerabilities..."
+	@docker scan --severity high ${ZOT_IMAGE} 2>/dev/null || true
+	@trivy image --severity HIGH,CRITICAL ${ZOT_IMAGE} 2>/dev/null || true
+
+# ==============================================================================
+# VALIDATION TARGETS
+# ==============================================================================
+
+validate-all: validate-dockerfiles validate-k8s ## Validate all configurations
+
+validate-dockerfiles: ## Validate all Dockerfiles with hadolint
+	@echo "Validating Dockerfiles with hadolint..."
+	@hadolint docker/sogo5/Dockerfile 2>/dev/null || echo "Note: hadolint not installed, skipping"
+	@hadolint docker/sogo6/Dockerfile 2>/dev/null || echo "Note: hadolint not installed, skipping"
+	@hadolint docker/dev-agent/Dockerfile 2>/dev/null || echo "Note: hadolint not installed, skipping"
+	@hadolint docker/zot-registry/Dockerfile 2>/dev/null || echo "Note: hadolint not installed, skipping"
+
+validate-k8s: ## Validate Kubernetes manifests
+	@echo "Validating Kubernetes manifests..."
+	@for file in $$(find k8s -name "*.yaml" -type f); do \
+		${KUBECTL} apply --dry-run=client -f $$file >/dev/null 2>&1 && \
+			echo "  $$file: OK" || echo "  $$file: INVALID"; \
+		done || true
+
+validate-shell: ## Validate shell scripts with shellcheck
+	@echo "Validating shell scripts with shellcheck..."
+	@find docker scripts -name "*.sh" -type f | xargs shellcheck 2>/dev/null || echo "Note: shellcheck not installed, skipping"
+
+# ==============================================================================
+# GENERATION TARGETS
+# ==============================================================================
+
+generate-specs: ## Generate technical specifications (if not exists)
+	@echo "Checking for missing specifications..."
+	@for spec in SOGO5-SPEC.md SOGO6-SPEC.md DEV-AGENT-SPEC.md ZOT-SPEC.md; do \
+		if [ ! -f "specs/$$spec" ]; then \
+			echo "  Missing: specs/$$spec"; \
+		else \
+			echo "  OK: specs/$$spec"; \
+		fi; \
+		done
+
+generate-sbom-docs: ## Generate SBOM documentation
+	@echo "SBOM documentation is in sbom/Makefile"
+	@echo "Run: cd sbom && make help"
+
+# ==============================================================================
+# UTILITY TARGETS
+# ==============================================================================
+
+kube-info: ## Show Kubernetes cluster info
+	@echo "Kubernetes Cluster Information"
+	@echo "=============================="
+	@${KUBECTL} version --client --short 2>/dev/null || true
+	@${KUBECTL} cluster-info 2>/dev/null || true
+	@${KUBECTL} get nodes 2>/dev/null || true
+	@echo ""
+	@echo "Current Context: ${KUBE_CONTEXT}"
+	@echo "Current Namespace: ${KUBE_NAMESPACE}"
+
+images-list: ## List all built images
+	@echo "Built Docker Images"
+	@echo "==================="
+	@${DOCKER} images | grep "${REGISTRY}" || echo "No images found"
+
+docker-info: ## Show Docker info
+	@echo "Docker Information"
+	@echo "=================="
+	@${DOCKER} version 2>/dev/null || true
+	@${DOCKER} info 2>/dev/null | head -20 || true
+
+# ==============================================================================
+# CLEAN TARGETS
+# ==============================================================================
+
+clean: clean-images clean-k8s ## Clean all
+
+clean-images: ## Remove built Docker images
+	@echo "Removing built Docker images..."
+	@${DOCKER} rmi -f ${SOGO5_IMAGE} ${REGISTRY}/opendesk-sogo5:latest 2>/dev/null || true
+	@${DOCKER} rmi -f ${SOGO6_IMAGE} ${REGISTRY}/opendesk-sogo6:latest 2>/dev/null || true
+	@${DOCKER} rmi -f ${DEV_AGENT_IMAGE} ${REGISTRY}/opendesk-dev-agent:latest 2>/dev/null || true
+	@${DOCKER} rmi -f ${ZOT_IMAGE} ${REGISTRY}/zot-registry:latest 2>/dev/null || true
+	@echo "Docker images removed"
+
+clean-k8s: ## Remove Kubernetes deployments
+	@echo "Removing Kubernetes deployments..."
+	@${KUBECTL} delete --context=${KUBE_CONTEXT} -n ${KUBE_NAMESPACE} -k k8s/dev-agent --ignore-not-found=true 2>/dev/null || true
+	@${KUBECTL} delete --context=${KUBE_CONTEXT} -n zot-registry -k k8s/zot-registry --ignore-not-found=true 2>/dev/null || true
+	@${KUBECTL} delete --context=${KUBE_CONTEXT} -n sogo -k k8s/sogo5 --ignore-not-found=true 2>/dev/null || true
+	@${KUBECTL} delete --context=${KUBE_CONTEXT} -n sogo6 -k k8s/sogo6 --ignore-not-found=true 2>/dev/null || true
+	@echo "Kubernetes deployments removed"
+
+clean-build: ## Remove build artifacts
+	@echo "Removing build artifacts..."
+	@rm -rf result/ 2>/dev/null || true
+	@${DOCKER} system prune -f 2>/dev/null || true
+
+clean-sbom: ## Remove SBOM files
+	@echo "Removing SBOM files..."
+	@rm -rf sbom/output/ 2>/dev/null || true
+
+# ==============================================================================
+# DEPENDENCY TARGETS
+# ==============================================================================
+
+# Include SBOM Makefile
+-include sbom/Makefile

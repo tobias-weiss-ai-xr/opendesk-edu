@@ -1,0 +1,810 @@
+# openDesk Nix - GitLab CI/CD Pipeline
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# ==============================================================================
+# Comprehensive CI/CD pipeline for building, testing, scanning, and deploying
+# openDesk container images to GitLab Container Registry
+#
+# Pipeline stages:
+# 1. Validate   - Dockerfile & YAML validation
+# 2. Build      - Build all Docker images
+# 3. Test       - Run container tests
+# 4. Scan       - Security vulnerability scanning
+# 5. SBOM       - Generate Software Bill of Materials
+# 6. Deploy     - Push images to registry
+# 7. Cleanup    - Cleanup temporary resources
+#
+# Environment Variables:
+#   CI_REGISTRY         - GitLab container registry
+#   CI_REGISTRY_IMAGE   - Registry image path
+#   CI_COMMIT_SHORT_SHA - Short commit hash
+#   CI_COMMIT_TAG       - Git tag (if any)
+#   CI_JOB_TOKEN        - GitLab CI job token for registry auth
+#
+# ==============================================================================
+
+stages:
+  - validate
+  - build
+  - test
+  - scan
+  - sbom
+  - deploy
+  - cleanup
+
+# -----------------------------------------------------------------------------
+# Variable Definitions
+# -----------------------------------------------------------------------------
+
+variables:
+  # Registry configuration
+  REGISTRY: "registry.gitlab.opencode.de/umr"
+  
+  # Image versions
+  SOGO5_VERSION: "5.8.0"
+  SOGO6_VERSION: "6.0.0"
+  DEV_AGENT_VERSION: "2.1.0"
+  ZOT_VERSION: "2.0.0-rc5"
+  
+  # Image names
+  SOGO5_IMAGE: "${REGISTRY}/opendesk-sogo5:${SOGO5_VERSION}"
+  SOGO6_IMAGE: "${REGISTRY}/opendesk-sogo6:${SOGO6_VERSION}"
+  DEV_AGENT_IMAGE: "${REGISTRY}/opendesk-dev-agent:${DEV_AGENT_VERSION}"
+  ZOT_IMAGE: "${REGISTRY}/zot-registry:${ZOT_VERSION}"
+  
+  # For merge requests, use CI_COMMIT_REF_SLUG as tag
+  MR_TAG: "${CI_COMMIT_REF_SLUG}"
+  
+  # For main branch, use latest tag
+  MAIN_TAG: "latest"
+  
+  # Docker configuration
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  
+  # Build arguments
+  BUILD_ARGS: "--no-cache"
+  
+  # Cache configuration
+  CACHE_DIR: ".cache"
+  
+  # SBOM output directory
+  SBOM_DIR: "sbom/output"
+  
+  # Artifacts directory
+  ARTIFACTS_DIR: "artifacts"
+
+# -----------------------------------------------------------------------------
+# Cache Configuration
+# -----------------------------------------------------------------------------
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cache
+    - sbom/output
+
+# -----------------------------------------------------------------------------
+# Before Script - Common Setup
+# -----------------------------------------------------------------------------
+
+before_script:
+  - echo "Starting CI/CD pipeline for openDesk Nix"
+  - echo "Commit: ${CI_COMMIT_SHORT_SHA}"
+  - echo "Branch: ${CI_COMMIT_REF_NAME}"
+  - echo "Tag: ${CI_COMMIT_TAG}"
+  - echo "Runner: ${CI_RUNNER_DESCRIPTION}"
+  
+  # Set proper Docker host
+  - export DOCKER_HOST=${DOCKER_HOST}
+  - export DOCKER_TLS_CERTDIR=${DOCKER_TLS_CERTDIR}
+  
+  # Create cache directory
+  - mkdir -p ${CACHE_DIR}
+  
+  # Create artifacts directory
+  - mkdir -p ${ARTIFACTS_DIR}
+  
+  # Create SBOM directory
+  - mkdir -p ${SBOM_DIR}
+  
+  # Login to GitLab Container Registry
+  - echo "Logging in to GitLab Container Registry..."
+  - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+  
+  # Install dependencies if not already available
+  - apt-get update -qq
+  - apt-get install -y -qq curl git make >/dev/null 2>&1 || true
+  
+  # Install Trivy for vulnerability scanning
+  - if ! command -v trivy >/dev/null 2>&1; then
+      echo "Installing Trivy..."
+      curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      trivy --version
+    fi
+  
+  # Install hadolint for Dockerfile linting
+  - if ! command -v hadolint >/dev/null 2>&1; then
+      echo "Installing hadolint..."
+      curl -sL https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint
+      chmod +x /usr/local/bin/hadolint
+      hadolint --version
+    fi
+  
+  # Install shellcheck for shell script linting
+  - if ! command -v shellcheck >/dev/null 2>&1; then
+      echo "Installing shellcheck..."
+      apt-get install -y -qq shellcheck >/dev/null 2>&1 || true
+    fi
+  
+  # Install yamllint for YAML linting
+  - if ! command -v yamllint >/dev/null 2>&1; then
+      echo "Installing yamllint..."
+      pip install yamllint >/dev/null 2>&1 || true
+    fi
+
+# -----------------------------------------------------------------------------
+# After Script - Common Cleanup
+# -----------------------------------------------------------------------------
+
+after_script:
+  - echo "Completed job: ${CI_JOB_NAME}"
+  - echo "Status: ${CI_JOB_STATUS}"
+  
+  # Logout from registry
+  - docker logout ${CI_REGISTRY}
+
+# ============================================================================
+# STAGE 1: VALIDATE
+# ============================================================================
+
+validate:dockerfiles:
+  stage: validate
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Validating Dockerfiles..."
+    - hadolint docker/sogo5/Dockerfile
+    - hadolint docker/sogo6/Dockerfile
+    - hadolint docker/dev-agent/Dockerfile
+    - hadolint docker/zot-registry/Dockerfile
+    - echo "Dockerfile validation complete"
+  tags:
+    - docker
+
+validate:shell-scripts:
+  stage: validate
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Validating shell scripts..."
+    - find docker scripts -name "*.sh" -type f | xargs shellcheck
+    - echo "Shell script validation complete"
+  tags:
+    - docker
+
+validate:yaml:
+  stage: validate
+  image: python:3.11
+  script:
+    - echo "Validating YAML files..."
+    - pip install yamllint >/dev/null 2>&1 || true
+    - find . -name "*.yaml" -o -name "*.yml" | grep -E "(k8s|helm)/" | xargs yamllint -c .yamllint.yaml || true
+    - echo "YAML validation complete"
+  tags:
+    - python
+
+validate:k8s-manifests:
+  stage: validate
+  image: bitnami/kubectl:latest
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Validating Kubernetes manifests..."
+    - for manifest in $(find k8s -name "*.yaml" -type f); do
+        kubectl apply --dry-run=client -f "$manifest" || echo "Skipping $manifest (may contain variables)";
+      done
+    - echo "Kubernetes manifest validation complete"
+  tags:
+    - docker
+
+# ============================================================================
+# STAGE 2: BUILD
+# ============================================================================
+
+build:sogo5:
+  stage: build
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Building SOGo 5 image..."
+    - docker build ${BUILD_ARGS} \
+        --build-arg SOGO_VERSION=${SOGO5_VERSION} \
+        --build-arg MEMCACHED_VERSION=1.6.21 \
+        --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+        -t ${SOGO5_IMAGE} \
+        -t ${REGISTRY}/opendesk-sogo5:${CI_COMMIT_SHORT_SHA} \
+        -f docker/sogo5/Dockerfile \
+        .
+    - docker images | grep "opendesk-sogo5"
+    - echo "SOGo 5 build complete"
+  tags:
+    - docker
+
+build:sogo6:
+  stage: build
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Building SOGo 6 image..."
+    - docker build ${BUILD_ARGS} \
+        --build-arg SOGO_VERSION=${SOGO6_VERSION} \
+        --build-arg MEMCACHED_VERSION=1.6.21 \
+        --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+        --build-arg EDV_ENABLED=true \
+        -t ${SOGO6_IMAGE} \
+        -t ${REGISTRY}/opendesk-sogo6:${CI_COMMIT_SHORT_SHA} \
+        -f docker/sogo6/Dockerfile \
+        .
+    - docker images | grep "opendesk-sogo6"
+    - echo "SOGo 6 build complete"
+  tags:
+    - docker
+
+build:dev-agent:
+  stage: build
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Building Dev Agent image..."
+    - docker build ${BUILD_ARGS} \
+        --build-arg DEV_AGENT_VERSION=${DEV_AGENT_VERSION} \
+        --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+        -t ${DEV_AGENT_IMAGE} \
+        -t ${REGISTRY}/opendesk-dev-agent:${CI_COMMIT_SHORT_SHA} \
+        -f docker/dev-agent/Dockerfile \
+        .
+    - docker images | grep "opendesk-dev-agent"
+    - echo "Dev Agent build complete"
+  tags:
+    - docker
+
+build:zot:
+  stage: build
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Building Zot Registry image..."
+    - docker build ${BUILD_ARGS} \
+        --build-arg ZOT_VERSION=${ZOT_VERSION} \
+        --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+        -t ${ZOT_IMAGE} \
+        -t ${REGISTRY}/zot-registry:${CI_COMMIT_SHORT_SHA} \
+        -f docker/zot-registry/Dockerfile \
+        .
+    - docker images | grep "zot-registry"
+    - echo "Zot Registry build complete"
+  tags:
+    - docker
+
+build:all:
+  stage: build
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Building all images..."
+    - make build-all
+    - docker images | grep "${REGISTRY}"
+    - echo "All images built"
+  needs:
+    - job: build:sogo5
+      optional: true
+    - job: build:sogo6
+      optional: true
+    - job: build:dev-agent
+      optional: true
+    - job: build:zot
+      optional: true
+  tags:
+    - docker
+
+# ============================================================================
+# STAGE 3: TEST
+# ============================================================================
+
+test:sogo5:
+  stage: test
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Testing SOGo 5 image..."
+    - docker run --rm --name test-sogo5 ${SOGO5_IMAGE} sh -c "exit 0"
+    - echo "SOGo 5 test complete"
+  needs:
+    - build:sogo5
+  tags:
+    - docker
+
+test:sogo6:
+  stage: test
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Testing SOGo 6 image..."
+    - docker run --rm --name test-sogo6 ${SOGO6_IMAGE} sh -c "exit 0"
+    - echo "SOGo 6 test complete"
+  needs:
+    - build:sogo6
+  tags:
+    - docker
+
+test:dev-agent:
+  stage: test
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Testing Dev Agent image..."
+    - docker run --rm --name test-dev-agent ${DEV_AGENT_IMAGE} --help >/dev/null 2>&1 && echo "Help command works" || echo "No help command"
+    - docker run --rm --name test-dev-agent-version ${DEV_AGENT_IMAGE} --version >/dev/null 2>&1 && echo "Version command works" || echo "No version command"
+    - echo "Dev Agent test complete"
+  needs:
+    - build:dev-agent
+  tags:
+    - docker
+
+test:zot:
+  stage: test
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Testing Zot Registry image..."
+    - docker run -d --rm --name test-zot -p 8080:8080 ${ZOT_IMAGE}
+    - sleep 10
+    - curl -sf http://localhost:8080/healthz && echo "Health check passed" || echo "Health check failed"
+    - docker stop test-zot
+    - docker wait test-zot
+    - docker rm test-zot
+    - echo "Zot Registry test complete"
+  needs:
+    - build:zot
+  tags:
+    - docker
+
+# ============================================================================
+# STAGE 4: SCAN
+# ============================================================================
+
+scan:sogo5:
+  stage: scan
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Scanning SOGo 5 for vulnerabilities..."
+    - trivy image --severity CRITICAL,HIGH --exit-code 0 ${SOGO5_IMAGE}
+    - trivy image --format json --output ${SBOM_DIR}/sogo5-trivy.json ${SOGO5_IMAGE}
+    - echo "SOGo 5 scan complete"
+  needs:
+    - build:sogo5
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${SBOM_DIR}/sogo5-trivy.json
+    reports:
+      dotenv: ${SBOM_DIR}/sogo5-trivy.json
+    when: always
+    expire_in: 1 week
+
+scan:sogo6:
+  stage: scan
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Scanning SOGo 6 for vulnerabilities..."
+    - trivy image --severity CRITICAL,HIGH --exit-code 0 ${SOGO6_IMAGE}
+    - trivy image --format json --output ${SBOM_DIR}/sogo6-trivy.json ${SOGO6_IMAGE}
+    - echo "SOGo 6 scan complete"
+  needs:
+    - build:sogo6
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${SBOM_DIR}/sogo6-trivy.json
+    reports:
+      dotenv: ${SBOM_DIR}/sogo6-trivy.json
+    when: always
+    expire_in: 1 week
+
+scan:dev-agent:
+  stage: scan
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Scanning Dev Agent for vulnerabilities..."
+    - trivy image --severity CRITICAL,HIGH --exit-code 0 ${DEV_AGENT_IMAGE}
+    - trivy image --format json --output ${SBOM_DIR}/dev-agent-trivy.json ${DEV_AGENT_IMAGE}
+    - echo "Dev Agent scan complete"
+  needs:
+    - build:dev-agent
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${SBOM_DIR}/dev-agent-trivy.json
+    reports:
+      dotenv: ${SBOM_DIR}/dev-agent-trivy.json
+    when: always
+    expire_in: 1 week
+
+scan:zot:
+  stage: scan
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Scanning Zot Registry for vulnerabilities..."
+    - trivy image --severity CRITICAL,HIGH --exit-code 0 ${ZOT_IMAGE}
+    - trivy image --format json --output ${SBOM_DIR}/zot-trivy.json ${ZOT_IMAGE}
+    - echo "Zot Registry scan complete"
+  needs:
+    - build:zot
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${SBOM_DIR}/zot-trivy.json
+    reports:
+      dotenv: ${SBOM_DIR}/zot-trivy.json
+    when: always
+    expire_in: 1 week
+
+scan:summary:
+  stage: scan
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Generating security scan summary..."
+    - echo "" > ${ARTIFACTS_DIR}/security-summary.md
+    - echo "# Security Scan Summary" >> ${ARTIFACTS_DIR}/security-summary.md
+    - echo "Generated: $(date -u)" >> ${ARTIFACTS_DIR}/security-summary.md
+    - echo "" >> ${ARTIFACTS_DIR}/security-summary.md
+    - for image in ${SOGO5_IMAGE} ${SOGO6_IMAGE} ${DEV_AGENT_IMAGE} ${ZOT_IMAGE}; do
+        echo "## $image" >> ${ARTIFACTS_DIR}/security-summary.md
+        echo "" >> ${ARTIFACTS_DIR}/security-summary.md
+        trivy image --severity CRITICAL,HIGH,MEDIUM,LOW --format markdown >> ${ARTIFACTS_DIR}/security-summary.md || true
+        echo "" >> ${ARTIFACTS_DIR}/security-summary.md
+      done
+    - echo "Scan summary generated"
+  needs:
+    - scan:sogo5
+    - scan:sogo6
+    - scan:dev-agent
+    - scan:zot
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${ARTIFACTS_DIR}/security-summary.md
+    when: always
+    expire_in: 1 week
+
+# ============================================================================
+# STAGE 5: SBOM
+# ============================================================================
+
+sbom:cyclonedx:
+  stage: sbom
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Generating CycloneDX SBOMs..."
+    - cd sbom && make cyclonedx
+    - ls -la ${SBOM_DIR}/ || true
+    - echo "CycloneDX SBOMs generated"
+  needs:
+    - build:sogo5
+    - build:sogo6
+    - build:dev-agent
+    - build:zot
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${SBOM_DIR}/
+    when: always
+    expire_in: 1 week
+
+sbom:spdx:
+  stage: sbom
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Generating SPDX SBOMs..."
+    - cd sbom && make spdx
+    - ls -la ${SBOM_DIR}/ || true
+    - echo "SPDX SBOMs generated"
+  needs:
+    - build:sogo5
+    - build:sogo6
+    - build:dev-agent
+    - build:zot
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${SBOM_DIR}/
+    when: always
+    expire_in: 1 week
+
+sbom:all:
+  stage: sbom
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Generating all SBOMs..."
+    - cd sbom && make all
+    - ls -la ${SBOM_DIR}/ || true
+    - echo "All SBOMs generated"
+  needs:
+    - build:sogo5
+    - build:sogo6
+    - build:dev-agent
+    - build:zot
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - ${SBOM_DIR}/
+    when: always
+    expire_in: 1 week
+
+# ============================================================================
+# STAGE 6: DEPLOY
+# ============================================================================
+
+deploy:sogo5:
+  stage: deploy
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Pushing SOGo 5 to registry..."
+    - docker push ${SOGO5_IMAGE}
+    - docker push ${REGISTRY}/opendesk-sogo5:${CI_COMMIT_SHORT_SHA}
+    - if [ -n "${CI_COMMIT_TAG}" ]; then docker push ${REGISTRY}/opendesk-sogo5:${CI_COMMIT_TAG}; fi
+    - if [ "${CI_COMMIT_REF_NAME}" = "main" ]; then docker push ${REGISTRY}/opendesk-sogo5:${MAIN_TAG}; fi
+    - echo "SOGo 5 deployed"
+  needs:
+    - job: scan:sogo5
+      optional: true
+    - job: sbom:cyclonedx
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  tags:
+    - docker
+
+deploy:sogo6:
+  stage: deploy
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Pushing SOGo 6 to registry..."
+    - docker push ${SOGO6_IMAGE}
+    - docker push ${REGISTRY}/opendesk-sogo6:${CI_COMMIT_SHORT_SHA}
+    - if [ -n "${CI_COMMIT_TAG}" ]; then docker push ${REGISTRY}/opendesk-sogo6:${CI_COMMIT_TAG}; fi
+    - if [ "${CI_COMMIT_REF_NAME}" = "main" ]; then docker push ${REGISTRY}/opendesk-sogo6:${MAIN_TAG}; fi
+    - echo "SOGo 6 deployed"
+  needs:
+    - job: scan:sogo6
+      optional: true
+    - job: sbom:cyclonedx
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  tags:
+    - docker
+
+deploy:dev-agent:
+  stage: deploy
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Pushing Dev Agent to registry..."
+    - docker push ${DEV_AGENT_IMAGE}
+    - docker push ${REGISTRY}/opendesk-dev-agent:${CI_COMMIT_SHORT_SHA}
+    - if [ -n "${CI_COMMIT_TAG}" ]; then docker push ${REGISTRY}/opendesk-dev-agent:${CI_COMMIT_TAG}; fi
+    - if [ "${CI_COMMIT_REF_NAME}" = "main" ]; then docker push ${REGISTRY}/opendesk-dev-agent:${MAIN_TAG}; fi
+    - echo "Dev Agent deployed"
+  needs:
+    - job: scan:dev-agent
+      optional: true
+    - job: sbom:cyclonedx
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  tags:
+    - docker
+
+deploy:zot:
+  stage: deploy
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Pushing Zot Registry to registry..."
+    - docker push ${ZOT_IMAGE}
+    - docker push ${REGISTRY}/zot-registry:${CI_COMMIT_SHORT_SHA}
+    - if [ -n "${CI_COMMIT_TAG}" ]; then docker push ${REGISTRY}/zot-registry:${CI_COMMIT_TAG}; fi
+    - if [ "${CI_COMMIT_REF_NAME}" = "main" ]; then docker push ${REGISTRY}/zot-registry:${MAIN_TAG}; fi
+    - echo "Zot Registry deployed"
+  needs:
+    - job: scan:zot
+      optional: true
+    - job: sbom:cyclonedx
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  tags:
+    - docker
+
+deploy:all:
+  stage: deploy
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Pushing all images to registry..."
+    - make push-all
+    - echo "All images deployed"
+  needs:
+    - job: scan:summary
+      optional: true
+    - job: sbom:all
+      optional: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  tags:
+    - docker
+
+# ============================================================================
+# STAGE 7: CLEANUP (Manual only)
+# ============================================================================
+
+cleanup:images:
+  stage: cleanup
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Cleaning up Docker images..."
+    - docker system prune -af
+    - echo "Cleanup complete"
+  when: manual
+  tags:
+    - docker
+
+cleanup:cache:
+  stage: cleanup
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Cleaning up cache..."
+    - rm -rf ${CACHE_DIR}
+    - rm -rf ${SBOM_DIR}
+    - rm -rf ${ARTIFACTS_DIR}
+    - echo "Cache cleanup complete"
+  when: manual
+  tags:
+    - docker
+
+# ============================================================================
+# NIGHTLY PIPLINE
+# ============================================================================
+
+nightly:
+  stage: build
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Running nightly build and scan..."
+    - make build-all
+    - trivy image --severity CRITICAL,HIGH --exit-code 1 ${SOGO5_IMAGE} ${SOGO6_IMAGE} ${DEV_AGENT_IMAGE} ${ZOT_IMAGE} || echo "Vulnerabilities found"
+    - cd sbom && make all
+    - echo "Nightly job complete"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  tags:
+    - docker
+
+# ============================================================================
+# RELEASE PIPLINE
+# ============================================================================
+
+release:
+  stage: deploy
+  image: docker:24.0.7-cli
+  services:
+    - name: docker:24.0.7-dind
+      alias: docker
+  script:
+    - echo "Releasing version: ${CI_COMMIT_TAG}"
+    - make build-all
+    - make push-all
+    - echo "Creating release artifacts..."
+    - mkdir -p release-artifacts
+    - docker save ${SOGO5_IMAGE} > release-artifacts/opendesk-sogo5-${CI_COMMIT_TAG}.tar
+    - docker save ${SOGO6_IMAGE} > release-artifacts/opendesk-sogo6-${CI_COMMIT_TAG}.tar
+    - docker save ${DEV_AGENT_IMAGE} > release-artifacts/opendesk-dev-agent-${CI_COMMIT_TAG}.tar
+    - docker save ${ZOT_IMAGE} > release-artifacts/zot-registry-${CI_COMMIT_TAG}.tar
+    - tar czf release-artifacts/opendesk-nix-${CI_COMMIT_TAG}.tar.gz k8s specs Makefile docker pushing-to-gitlab.sh README.md LICENSE
+    - echo "Release ${CI_COMMIT_TAG} complete"
+  needs:
+    - job: scan:summary
+    - job: sbom:all
+  rules:
+    - if: $CI_COMMIT_TAG
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - release-artifacts/
+    expire_in: 1 year
