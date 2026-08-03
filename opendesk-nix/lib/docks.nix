@@ -1,50 +1,56 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-# Minimal docks.nix compatibility layer
-# Provides mkImage function for building Docker/OCI images
+# docks.nix compatibility layer for openDesk
+# Provides mkImage function for building Docker/OCI containers
 
-{ pkgs, ... }:
+{ pkgs, lib ? pkgs.lib, ... }:
 
 let
-  lib = pkgs.lib;
   dockerTools = pkgs.dockerTools;
 
-  # Helper to get attribute with default
-  getAttrWithDefault = attr: default: config:
-    if config ? ${attr} then config.${attr} else default;
+  # Helper to merge attribute sets with defaults
+  defaults = attrs: default: 
+    if attrs ? name then attrs else attrs // default;
 
-  mkImage = { 
-    name ? "opendesk-image",
+  # mkImage creates a Docker image
+  mkImage = {
+    name ? "opendesk-container",
     tag ? "latest",
-    config ? {}, 
+    config ? {},          # NixOS configuration (optional, for future use)
     containerConfig ? {},
     extraPackages ? (_: []),
-    ociLabels ? {}, 
-    ... 
+    ociLabels ? {},
+    ...
   }:
-    
-    let
-      cmd = getAttrWithDefault "Cmd" [ "/usr/bin/env" "bash" "-c" "echo Container ready" ] containerConfig;
-      env = getAttrWithDefault "Env" [] containerConfig;
-      user = getAttrWithDefault "User" "nobody" containerConfig;
-      workingDir = getAttrWithDefault "WorkingDir" "/" containerConfig;
-      exposedPorts = getAttrWithDefault "ExposedPorts" {} containerConfig;
-      volumes = getAttrWithDefault "Volumes" {} containerConfig;
-      healthCheck = getAttrWithDefault "HealthCheck" null containerConfig;
-      stopSignal = getAttrWithDefault "StopSignal" "SIGTERM" containerConfig;
-      stopTimeout = getAttrWithDefault "StopTimeout" 30 containerConfig;
-    in
     
     dockerTools.buildImage {
       inherit name tag;
-      fromImage = pkgs.dockerTools.emptyImage;
-      contents = with pkgs; [ bash coreutils ] ++ extraPackages pkgs;
       
+      # Base: no fromImage, contents will create the image
+      
+      # Contents: base packages + extra
+      contents = with pkgs; (
+        [ bash coreutils findutils gnugrep gnused procps ]
+        ++ (extraPackages pkgs // [])
+      );
+      
+      # Container configuration - merge with defaults
       config = {
-        inherit cmd env user workingDir exposedPorts volumes healthCheck stopSignal;
-        StopTimeout = lib.toString stopTimeout;
-        Labels = ociLabels;
+        Cmd = containerConfig.Cmd // 
+          [ "/usr/bin/env" "bash" "-c" "echo Service ready" ];
+        Env = containerConfig.Env // 
+          [ "TZ=Europe/Berlin" "LC_ALL=C.UTF-8" "LANG=C.UTF-8" ];
+        User = containerConfig.User // "nobody";
+        WorkingDir = containerConfig.WorkingDir // "/";
+        ExposedPorts = containerConfig.ExposedPorts // {};
+        Volumes = containerConfig.Volumes // {};
+        HealthCheck = containerConfig.HealthCheck // null;
+        StopSignal = containerConfig.StopSignal // "SIGTERM";
+        StopTimeout = if containerConfig ? StopTimeout 
+          then lib.toString containerConfig.StopTimeout 
+          else "30";
+        Labels = ociLabels // {};
       };
     };
 
