@@ -4,12 +4,17 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
+    # Reference opendesk-nix as a local path (same monorepo)
+    opendesk-nix.path = "../../opendesk-nix";
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, opendesk-nix, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+        # Use K8s library from opendesk-nix for consistency
+        k8s-lib = opendesk-nix.lib.${system}.k8s;
+        # Keep old lib for backward compatibility during transition
         lib = import ./lib/k8s.nix { inherit pkgs; };
 
         services = [
