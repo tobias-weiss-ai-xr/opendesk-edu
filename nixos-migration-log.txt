@@ -1,0 +1,7 @@
+========================================
+NixOS Container Migration Log
+Started: Mo 3. Aug 17:21:40 CEST 2026
+========================================
+[0;34m[2026-08-03 17:21:40] INFO:  Services to migrate: 3 (moodle ilias nextcloud)[0m
+[0;34m[2026-08-03 17:21:40] INFO:  Starting migration for: moodle[0m
+[1;33m[2026-08-03 17:21:40] WARN:  Service directory not found, skipping: opendesk-nix/docker/services/moodle[0m
