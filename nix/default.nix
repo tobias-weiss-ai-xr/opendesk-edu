@@ -1,5 +1,9 @@
 { pkgs ? import <nixpkgs> {}, libPath ? ./lib/k8s.nix }:
 
+# DEPRECATION NOTICE: This module is being migrated to opendesk-nix/
+# See: ../../opendesk-edu-spec/changes/nix-integration-proposal/
+# For new projects, use opendesk-nix/ directly
+
 let
   lib = import libPath { inherit pkgs; };
   
