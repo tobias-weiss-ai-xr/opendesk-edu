@@ -101,6 +101,38 @@ opendesk-nix/
 
 ---
 
+## 📚 Libraries
+
+This project includes comprehensive Nix libraries for building, securing, and deploying containerized applications:
+
+| Library | Purpose | Documentation |
+|---------|---------|---------------|
+| `lib/k8s.nix` | Kubernetes resource builders | [View](lib/k8s.nix) |
+| `lib/security.nix` | Security hardening presets | [View](lib/security.nix) |
+| `lib/sbom.nix` | SBOM generation utilities | [View](lib/sbom.nix) |
+| `lib/registry.nix` | Multi-registry support | [View](lib/registry.nix) |
+| `lib/types.nix` | Type definitions | [View](lib/types.nix) |
+
+**Usage Example:**
+```nix
+{ pkgs, lib, ... }:
+let
+  k8s = lib.k8s;
+  security = lib.security;
+  registry = lib.registry;
+  types = lib.types;
+  sbom = lib.sbom;
+in {
+  deployment = k8s.deployment {
+    name = "my-app";
+    image = "my-image";
+    securityContext = security.mkContainerSecurityContext { profile = "web"; };
+  };
+}
+```
+
+---
+
 ## 🎯 Dependencies
 
 - [Nix](https://nixos.org/download.html) (v2.10+ recommended)
