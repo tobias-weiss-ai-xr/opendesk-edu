@@ -18,7 +18,7 @@ These files were migrated from `opendesk-edu/nix/k8s/` as part of Phase 2 consol
 | Import paths | ⚠️ TODO | Need to update to use opendesk-nix/lib/k8s |
 | Image references | ⚠️ TODO | Standardize on ghcr.io/opendesk-edu/* |
 
-## Current Services (57 total)
+## Current Services (69 total)
 
 ### Databases & Caches
 - mariadb.nix
