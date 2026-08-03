@@ -8,9 +8,19 @@
   types ? import ../../lib/types.nix { },
   sbom ? import ../../lib/sbom.nix { },
   pkgs ? import <nixpkgs> { }
+  env ? import ../environments/hrz/default.nix { lib = lib; },
 }:
 
 let
+
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = name;
+    version = tag;
+    description = "rstudio service for openDesk";
+    serviceType = "web";
+    component = "backend";
+  };
  name = "rstudio"; image = "ghcr.io/opendesk-edu/rstudio"; tag = "latest";
 
   # Security configuration

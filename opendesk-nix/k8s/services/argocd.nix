@@ -8,9 +8,19 @@
   types ? import ../../lib/types.nix { },
   sbom ? import ../../lib/sbom.nix { },
   pkgs ? import <nixpkgs> { }
+  env ? import ../environments/hrz/default.nix { lib = lib; },
 }:
 
 let
+
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = name;
+    version = tag;
+    description = "argocd service for openDesk";
+    serviceType = "web";
+    component = "backend";
+  };
  name = "argocd"; image = "ghcr.io/argoproj/argo-cd"; tag = "v2.10.0";
   port = 8080;
 

@@ -8,9 +8,19 @@
   types ? import ../../lib/types.nix { },
   sbom ? import ../../lib/sbom.nix { },
   pkgs ? import <nixpkgs> { }
+  env ? import ../environments/hrz/default.nix { lib = lib; },
 }:
 
 let
+
+  # OCI Labels (OpenSpec Compliance - FR-IMAGE-007)
+  ociLabels = lib.mkOCILabels {
+    name = name;
+    version = tag;
+    description = "notes service for openDesk";
+    serviceType = "web";
+    component = "backend";
+  };
  name = "notes"; image = "ghcr.io/opendesk-edu/mirror/notes"; tag = "latest";
 
   # Security configuration
