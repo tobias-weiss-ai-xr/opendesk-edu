@@ -29,22 +29,23 @@ This section covers the internal system requirements and external service requir
 
 openDesk is a Kubernetes-only solution and requires an existing Kubernetes (K8s) cluster.
 
-- K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
-- Domain and DNS Service
-- Ingress controller
-  - [haproxy-ingress.github.io](https://haproxy-ingress.github.io)
-  - [Ingress nginx](https://github.com/kubernetes/ingress-nginx/) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
-  - See section [Ingress controller](#ingress-controller) for more details.
-- [Helm](https://helm.sh/) >= v3.17.3 but not
-  - v3.18.0[^1]
-  - v4.x[^2]
-- [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
-- [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
-- Volume provisioner supporting RWO (read-write-once)
-- Certificate handling with [cert-manager](https://cert-manager.io/)
+* K8s cluster >= v1.24, [CNCF Certified Kubernetes distribution](https://www.cncf.io/certification/software-conformance/)
+* Domain and DNS Service
+* Ingress controller
+  * [haproxy-ingress.github.io](https://haproxy-ingress.github.io)
+  * [Ingress nginx](https://github.com/kubernetes/ingress-nginx/) >= [4.11.5/1.11.5](https://github.com/kubernetes/ingress-nginx/releases) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
+  * See section [Ingress controller](#ingress-controller) for more details.
+* [Helm](https://helm.sh/) >= v3.17.3 but not
+  * v3.18.0[^1]
+  * v4.x[^2]
+* [Helmfile](https://helmfile.readthedocs.io/en/latest/) >= v1.0.0
+* [HelmDiff](https://github.com/databus23/helm-diff) >= v3.11.0
+* Volume provisioner supporting RWO (read-write-once)
+* Certificate handling with [cert-manager](https://cert-manager.io/)
 
 **Additional openDesk Enterprise requirements**
-- [OpenKruise](https://openkruise.io/)[^3] >= v1.6
+
+* [OpenKruise](https://openkruise.io/)[^3] >= v1.6
 
 ## Hardware
 
@@ -73,11 +74,11 @@ configured ingress controller deployed in your cluster.
 
 ### Supported controllers
 
-- [haproxy-ingress.github.io](https://haproxy-ingress.github.io) - since openDesk 1.13
-- [Ingress nginx Controller](https://github.com/kubernetes/ingress-nginx) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
+* [haproxy-ingress.github.io](https://haproxy-ingress.github.io) - since openDesk 1.13
+* [Ingress nginx Controller](https://github.com/kubernetes/ingress-nginx) - [now deprecated](https://www.kubernetes.dev/blog/2025/11/12/ingress-nginx-retirement/)
 
 > [!note]
-> We plan to move to [Gateway API](https://gateway-api.sigs.k8s.io/) ideally by end of 2026. The objective is to achive
+> We plan to move to [Gateway API](https://gateway-api.sigs.k8s.io/) ideally by end of 2026. The objective is to achieve
 > an implementation that is as controller agnostic as possible to give you the choice when it comes to selecting the
 > actual implementation for your infrastructure.
 
@@ -115,10 +116,12 @@ See the [`annotations-risk-level` documentation](https://kubernetes.github.io/in
 ### Minimal configuration
 
 Several components in openDesk make use of snippet annotations, which are disabled by default. Please enable them using the following configuration:
+
 ```
 controller.allowSnippetAnnotations=true
 controller.admissionWebhooks.allowSnippetAnnotations=true
 ```
+
 See the [`allowSnippetAnnotations` documentation](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#allow-snippet-annotations) for context.
 
 ## Volume provisioner

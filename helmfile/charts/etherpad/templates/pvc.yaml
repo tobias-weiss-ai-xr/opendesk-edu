@@ -6,6 +6,8 @@ metadata:
   name: {{ .Release.Name }}-etherpad-data
   labels:
 {{ include "etherpad.labels" . | nindent 4 }}
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.etherpad.volumes.data.accessMode }}

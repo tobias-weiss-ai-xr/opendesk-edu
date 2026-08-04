@@ -36,6 +36,7 @@ Fullname — release-name-chart-name
 
 {{/*
 PostgreSQL URL from db values
+SOGo expects: postgresql://user:pass@host:port/database?sslmode=disable
 */}}
 {{- define "sogo.dbUrl" -}}
 postgresql://{{ .Values.sogo.db.user }}:{{ .Values.sogo.db.password }}@{{ .Values.sogo.db.host }}:{{ .Values.sogo.db.port }}/{{ .Values.sogo.db.name }}

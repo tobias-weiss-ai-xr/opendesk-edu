@@ -2,10 +2,11 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from typing import Any
 from configargparse import ArgumentTypeError
 
 
-def opt2bool(opt):
+def opt2bool(opt: Any) -> bool:
     if isinstance(opt, bool):
         return opt
     elif opt.lower() in ["true", "yes", "ok", "1"]:

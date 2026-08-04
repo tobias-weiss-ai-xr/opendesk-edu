@@ -34,10 +34,38 @@ repos:
     rev: v2.2.6
     hooks:
       - id: codespell
-        args: [--config=cspell.json]
+        args: [--ignore-words-list=analysed,configurability,explorative,openDesk,opendesk,keycloak,moodle,ilias,helmfile,helmfiles,kubespray,kyverno,letsencrypt,selfsigned,containerd,clamav,coturn,cryptpad,databasename,filestore,templating,trashbin,truststore,commandline,nindent,gotmpl,pseudonymize,restic,subcomponent,webservice]
 
   - repo: local
     hooks:
+      - id: ruff-lint
+        name: Ruff Lint
+        entry: ruff check
+        language: system
+        types: [python]
+        pass_filenames: true
+
+      - id: ruff-format
+        name: Ruff Format Check
+        entry: ruff format --check
+        language: system
+        types: [python]
+        pass_filenames: true
+
+      - id: shellcheck
+        name: ShellCheck
+        entry: shellcheck
+        language: system
+        types: [shell]
+        pass_filenames: true
+
+      - id: pip-audit
+        name: pip-audit
+        entry: bash -c 'pip-audit scripts/user_import/requirements.txt && pip-audit scripts/semester-provisioning/'
+        language: system
+        files: .*requirements\.txt$
+        pass_filenames: false
+
       - id: helm-lint
         name: Helm Lint
         entry: bash -c 'cd helmfile && make lint'

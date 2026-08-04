@@ -15,11 +15,14 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 # Configure logging
-log_file = os.getenv("LOG_FILE", "./opendesk-service-archiver.log")
+_log_handlers = [logging.StreamHandler()]
+_log_file = os.getenv("LOG_FILE", "/var/log/opendesk-service-archiver.log")
+if os.path.exists(os.path.dirname(_log_file)):
+    _log_handlers.append(logging.FileHandler(_log_file))
 logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler(log_file), logging.StreamHandler()],
+    handlers=_log_handlers,
 )
 logger = logging.getLogger(__name__)
 
@@ -27,7 +30,7 @@ logger = logging.getLogger(__name__)
 class ServiceArchiver:
     """Archives user data from individual services"""
 
-    def __init__(self, archive_dir: str = "/var/lib/opendesk-archives"):
+    def __init__(self, archive_dir: str = "/var/lib/opendesk-archives") -> None:
         self.archive_dir = archive_dir
         self.kubernetes_config = os.getenv("KUBECONFIG", "~/.kube/config")
 
@@ -515,7 +518,7 @@ class ServiceArchiver:
             return None
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Archive user data from services")
     parser.add_argument("username", help="Username to archive")
     parser.add_argument("--services", nargs="+", help="Specific services to archive (default: all available)")

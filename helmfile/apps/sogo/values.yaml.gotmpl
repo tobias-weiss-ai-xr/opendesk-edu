@@ -23,13 +23,13 @@ sogo:
   sieve:
     server: {{ .Values.apps.sogo.sieveServer | default "sieve://dovecot:4190" }}
 
-  mailDomain: {{ .Values.apps.sogo.mailDomain | default "opendesk.example.com" }}
+  mailDomain: {{ .Values.apps.sogo.mailDomain | default "opendesk.hrz.uni-marburg.de" }}
 
   oidc:
     enabled: {{ .Values.apps.sogo.oidc.enabled | default true }}
     configUrl: {{ .Values.apps.sogo.oidc.configUrl | default (printf "https://%s/realms/opendesk/.well-known/openid-configuration" .Values.apps.keycloak.host) }}
     clientId: {{ .Values.apps.sogo.oidc.clientId | default "sogo" }}
-    clientSecret: {{ .Values.apps.sogo.oidc.clientSecret | default "" }}
+    clientSecret: {{ .Values.secrets.keycloak.clientSecret.sogo | default "" | quote }}
     scope: "openid profile email"
 
   memcachedHost: {{ .Values.apps.sogo.memcachedHost | default "memcached:11211" }}

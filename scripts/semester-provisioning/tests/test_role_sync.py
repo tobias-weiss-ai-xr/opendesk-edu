@@ -1,6 +1,5 @@
 import importlib.util
 import pathlib
-from typing import List
 
 
 def load_role_sync_module():
@@ -56,7 +55,7 @@ def test_role_sync_ignores_unmapped_role_and_maps_instructor(monkeypatch):
     engine = role_sync.RoleSyncEngine(lms_client=fake_lms)
 
     KCUser = role_sync.KCUser
-    kc_users: List[role_sync.KCUser] = [KCUser(id="u2", realm_roles=["lecturer"])]
+    kc_users = [KCUser(id="u2", realm_roles=["lecturer"])]
 
     results = engine.sync(kc_users)
 

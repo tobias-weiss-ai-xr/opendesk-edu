@@ -145,6 +145,8 @@ aio:
     seLinuxOptions:
       {{ .Values.seLinuxOptions.nextcloud | toYaml | nindent 6 }}
   cron:
+    activeDeadlineSeconds: 10800
+    concurrencyPolicy: "Allow"
     successfulJobsHistoryLimit: {{ if .Values.debug.enabled }}"3"{{ else }}"1"{{ end }}
     resources:
       {{ .Values.resources.nextcloudCron | toYaml | nindent 6 }}

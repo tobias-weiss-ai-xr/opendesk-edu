@@ -1,0 +1,9 @@
+dn: cn=planka,cn=applications,cn=opendesk,cn=edu
+cn: planka
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Planka
+odApplicationDescription: Kanban-Projektmanagement
+odApplicationURL: https://planka.{{ .Values.global.domain }}
+odApplicationIcon: planka
+odApplicationOrder: 130

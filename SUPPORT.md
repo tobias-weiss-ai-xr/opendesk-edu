@@ -14,7 +14,6 @@ Deutsch: Dieser Leitfaden hilft Ihnen, die richtigen Ressourcen für Ihre Fragen
 
 | I need... / Ich brauche... | Go to / Gehe zu |
 |----------------------------|-----------------|
-| **Project website** | [opendesk-edu.org](https://opendesk-edu.org) |
 | **Setup instructions** | [Getting Started Guide](./docs/getting-started.md) |
 | **System requirements** | [Requirements](./docs/requirements.md) |
 | **Configuration help** | [Enhanced Configuration](./docs/enhanced-configuration.md) |
@@ -165,7 +164,7 @@ For issues specific to individual components, check their upstream support chann
 | Method / Methode | Details |
 |------------------|---------|
 | **GitHub Security Advisory** | [Create private advisory](https://github.com/opendesk-edu/opendesk-edu/security/advisories/new) |
-| **Email** | security@opendesk-edu.org |
+| **Email** | <security@opendesk-edu.org> |
 
 See [SECURITY.md](./.github/SECURITY.md) for full details.
 Siehe [SECURITY.md](./.github/SECURITY.md) für vollständige Details.
@@ -251,7 +250,7 @@ Want to contribute? See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
 
 | Situation | Contact |
 |-----------|---------|
-| **Security vulnerability** | security@opendesk-edu.org |
+| **Security vulnerability** | <security@opendesk-edu.org> |
 | **Critical production issue** | [GitHub Issue](https://github.com/opendesk-edu/opendesk-edu/issues/new?labels=critical) with `critical` label |
 | **General support** | [GitHub Discussions](https://github.com/opendesk-edu/opendesk-edu/discussions) |
 

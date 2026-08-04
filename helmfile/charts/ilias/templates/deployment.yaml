@@ -167,6 +167,17 @@ spec:
             - name: ilias-config
               mountPath: /var/www/html/ilias.ini.php
               subPath: ilias-config.php
+{{- if .Values.sso.saml.enabled }}
+            - name: simplesamlphp-config
+              mountPath: /etc/simplesamlphp/config
+              readOnly: true
+            - name: simplesamlphp-metadata
+              mountPath: /etc/simplesamlphp/metadata
+              readOnly: true
+            - name: simplesamlphp-certs
+              mountPath: /etc/simplesamlphp/cert
+              readOnly: true
+{{- end }}
 {{- if .Values.extraVolumeMounts }}
 {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
 {{- end }}
@@ -203,6 +214,17 @@ spec:
                 path: ilias-client.php
               - key: setup.json
                 path: setup.json
+{{- if .Values.sso.saml.enabled }}
+        - name: simplesamlphp-config
+          configMap:
+            name: {{ .Release.Name }}-simplesamlphp-config
+        - name: simplesamlphp-metadata
+          configMap:
+            name: {{ .Release.Name }}-simplesamlphp-metadata
+        - name: simplesamlphp-certs
+          secret:
+            secretName: {{ .Release.Name }}-simplesamlphp-certs
+{{- end }}
 {{- if .Values.extraVolumes }}
 {{- toYaml .Values.extraVolumes | nindent 8 }}
 {{- end }}

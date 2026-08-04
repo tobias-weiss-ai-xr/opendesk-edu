@@ -1,0 +1,187 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "smoke-tests.fullname" . }}-script
+  labels:
+    {{- include "smoke-tests.labels" . | nindent 4 }}
+data:
+  e2e-test.sh: |
+    #!/bin/sh
+    # SPDX-FileCopyrightText: 2026 OpenDesk Edu Team
+    # SPDX-License-Identifier: Apache-2.0
+    #
+    # E2E Test Suite for OpenDesk Edu
+    #
+    # 7 test suites:
+    #   1. DNS resolution
+    #   2. HTTPS + content verification
+    #   3. SSL/TLS certificate validity
+    #   4. OIDC redirect chain
+    #   5. Portal JSON structure
+    #   6. Keycloak OIDC config
+    #   7. OpenCloud config integrity
+
+    set -e
+
+    PASSED=0; FAILED=0; TOTAL=0
+    check()  { TOTAL=$((TOTAL + 1)); }
+    pass()   { PASSED=$((PASSED + 1)); echo "  [PASS] $*"; }
+    fail()   { FAILED=$((FAILED + 1)); echo "  [FAIL] $*"; }
+    info()   { echo "  [INFO] $*"; }
+    header() { echo ""; echo "=== $* ==="; }
+
+    echo "=============================================="
+    echo " OpenDesk Edu E2E Test Suite"
+    echo " Started: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+    echo "=============================================="
+
+    # ---- Suite 1: DNS ----
+    header "1/7: DNS Resolution"
+    for URL in \
+      {{- range .Values.services }}
+      {{ .url }} \
+      {{- end }}
+    ; do
+      HOST=$(echo "$URL" | sed 's|https://||;s|/.*||')
+      check
+      RESULT=$(nslookup "$HOST" 2>/dev/null || true)
+      ADDR=$(echo "$RESULT" | grep "Address:" | tail -1 | sed 's/.*Address: *//;s/#.*//')
+      [ -n "$ADDR" ] && pass "DNS $HOST -> $ADDR" || fail "DNS $HOST -> no address"
+    done
+
+    # ---- Suite 2: HTTP ----
+    header "2/7: HTTP Health & Content"
+    # Alpine musl libc has ndots:5 bug that breaks DNS for *.opendesk (4 dots).
+    # Pre-resolve hostnames using nslookup (not affected) and inject via --resolve.
+    # All services route through the same HAProxy at 192.168.3.201.
+    HOSTS=""
+    add_host() {
+      local HOST=$(echo "$1" | sed 's|https://||;s|/.*||')
+      echo "$HOSTS" | grep -qw "$HOST" || HOSTS="$HOSTS --resolve $HOST:443:192.168.3.201"
+    }
+    {{- range .Values.services }}
+    add_host "{{ .url }}"
+    {{- end }}
+    {{- range .Values.extraChecks.http }}
+    add_host "{{ .url }}"
+    {{- end }}
+    {{- range .Values.extraChecks.oidc }}
+    add_host "{{ .url }}"
+    {{- end }}
+    add_host "https://portal.opendesk.hrz.uni-marburg.de"
+    add_host "https://id.opendesk.hrz.uni-marburg.de"
+    add_host "https://opencloud.opendesk.hrz.uni-marburg.de"
+
+    {{- range .Values.services }}
+    check
+        CTYPE="--connect-timeout 10 --max-time 15"
+    STATUS=$(curl -sk $HOSTS $CTYPE -o /dev/null -w "%{http_code}" "{{ .url }}" 2>/dev/null || echo "000")
+    if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ] 2>/dev/null; then
+      pass "HTTP {{ .name }} ({{ .url }}) -> $STATUS"
+    else
+      fail "HTTP {{ .name }} ({{ .url }}) -> $STATUS"
+    fi
+    {{- end }}
+
+    {{- range .Values.extraChecks.http }}
+    check
+    STATUS=$(curl -sk $HOSTS $CTYPE -o /tmp/e2e-body.txt -w "%{http_code}" "{{ .url }}" 2>/dev/null || echo "000")
+    BODY=$(cat /tmp/e2e-body.txt 2>/dev/null || echo "")
+    if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ] 2>/dev/null; then
+      {{- if .expect }}
+      if echo "$BODY" | grep -qi "{{ .expect }}"; then
+        pass "HTTP {{ .name }} -> $STATUS, matches [{{ .expect }}]"
+      else
+        fail "HTTP {{ .name }} -> $STATUS, no match for [{{ .expect }}]"
+      fi
+      {{- else }}
+      pass "HTTP {{ .name }} -> $STATUS"
+      {{- end }}
+    else
+      fail "HTTP {{ .name }} -> $STATUS"
+    fi
+    {{- end }}
+
+    # ---- Suite 3: SSL ----
+    header "3/7: SSL/TLS Certificates"
+    if command -v openssl >/dev/null 2>&1; then
+    {{- range .Values.extraChecks.ssl }}
+      check
+      INFO=$(echo | openssl s_client -servername {{ .host }} -connect {{ .host }}:443 2>/dev/null | openssl x509 -noout -dates 2>/dev/null || echo "FAILED")
+      if echo "$INFO" | grep -q "notAfter"; then
+        EXP=$(echo "$INFO" | grep "notAfter" | sed 's/notAfter=//')
+        pass "SSL {{ .host }} -> valid, expires $EXP"
+      else
+        fail "SSL {{ .host }} -> cert fetch failed"
+      fi
+    {{- end }}
+    else
+      info "openssl not available, skipping SSL tests"
+    fi
+
+    # ---- Suite 4: OIDC ----
+    header "4/7: OIDC Redirect Chain"
+    {{- range .Values.extraChecks.oidc }}
+    check
+    LOCATION=$(curl -sk $HOSTS -o /dev/null -w "%{redirect_url}" $CTYPE "{{ .url }}" 2>/dev/null || echo "")
+    if echo "$LOCATION" | grep -q "id.opendesk.hrz.uni-marburg.de"; then
+      {{- if .clientId }}
+      if echo "$LOCATION" | grep -q "client_id={{ .clientId }}"; then
+        pass "OIDC {{ .name }} -> Keycloak (client={{ .clientId }})"
+      else
+        fail "OIDC {{ .name }} -> Keycloak, wrong client"
+      fi
+      {{- else }}
+      pass "OIDC {{ .name }} -> redirects to Keycloak"
+      {{- end }}
+    elif [ -z "$LOCATION" ]; then
+      STATUS=$(curl -sk $HOSTS -o /dev/null -w "%{http_code}" "{{ .url }}" 2>/dev/null || echo "000")
+      [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ] 2>/dev/null && pass "OIDC {{ .name }} -> $STATUS (no auth)" || fail "OIDC {{ .name }} -> $STATUS"
+    else
+      fail "OIDC {{ .name }} -> $(echo "$LOCATION" | head -c 30)..."
+    fi
+    {{- end }}
+
+    # ---- Suite 5: Portal ----
+    header "5/7: Portal Data Integrity"
+    check
+    PJSON=$(curl -sk $HOSTS "https://portal.opendesk.hrz.uni-marburg.de/univention/portal/portal.json" 2>/dev/null || echo "")
+    echo "$PJSON" | grep -q '"cache_id"' && pass "Portal JSON is parseable" || fail "Portal JSON not parseable"
+    {{- range .Values.extraChecks.portalEntries }}
+    check; echo "$PJSON" | grep -qi "{{ . }}" && pass "Portal entry '{{ . }}' present" || fail "Portal entry '{{ . }}' MISSING"
+    {{- end }}
+
+    # ---- Suite 6: Keycloak ----
+    header "6/7: Keycloak OIDC Configuration"
+    check
+    KCONFIG=$(curl -sk $HOSTS "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration" 2>/dev/null || echo "")
+    if echo "$KCONFIG" | grep -q '"issuer"'; then
+      ISSUER=$(echo "$KCONFIG" | sed 's/.*"issuer":"\([^"]*\)".*/\1/')
+      pass "Keycloak issuer: $ISSUER"
+      for ep in authorization_endpoint token_endpoint userinfo_endpoint jwks_uri; do
+        check; echo "$KCONFIG" | grep -q "$ep" && pass "  endpoint $ep present" || fail "  endpoint $ep MISSING"
+      done
+    else
+      fail "Keycloak OIDC config not accessible"
+    fi
+
+    # ---- Suite 7: OpenCloud ----
+    header "7/7: OpenCloud Configuration"
+    check
+    OC=$(curl -sk $HOSTS "https://opencloud.opendesk.hrz.uni-marburg.de/config.json" 2>/dev/null || echo "")
+    if echo "$OC" | grep -q '"openIdConnect"'; then
+      OCID=$(echo "$OC" | sed 's/.*"authority":"\([^"]*\)".*/\1/')
+      pass "OpenCloud OIDC authority: $OCID"
+      echo "$OCID" | grep -q "id.opendesk" && pass "  issuer matches Keycloak" || fail "  issuer mismatch"
+      echo "$OC" | grep -q '"files"' && pass "  default app: files" || fail "  missing files app"
+    else
+      fail "OpenCloud config.json not accessible"
+    fi
+
+    # ---- Summary ----
+    echo ""
+    echo "=============================================="
+    echo " E2E Test Results: $PASSED/$TOTAL passed, $FAILED failed"
+    echo "=============================================="
+    rm -f /tmp/e2e-body.txt
+    exit $FAILED

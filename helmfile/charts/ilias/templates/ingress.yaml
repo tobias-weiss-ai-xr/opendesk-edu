@@ -10,6 +10,7 @@ metadata:
   labels:
 {{ include "ilias.labels" . | nindent 4 }}
 spec:
+  ingressClassName: haproxy
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host }}

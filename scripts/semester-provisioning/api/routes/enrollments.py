@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """
 Enrollment management API routes.
 API-Routen für die Einschreibungsverwaltung.
@@ -44,7 +44,7 @@ def _get_courses_db() -> dict[str, Course]:
     return _courses_db
 
 
-async def _get_lms_client(lms: LMSPlatform):
+async def _get_lms_client(lms: LMSPlatform) -> ILIASClient | MoodleClient:
     """
     Get appropriate LMS client based on platform.
     Passenden LMS-Client basierend auf der Plattform abrufen.

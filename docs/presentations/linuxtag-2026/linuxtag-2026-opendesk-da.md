@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Komfortabel og Suveræn?
 
 🎓 openDesk Edu — Digital Suverænitet på Universiteterne
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Vær Med!
+# 🤝 Vær Med
 
 **Hjælp os med at bygge openDesk Edu til universiteter!**
 

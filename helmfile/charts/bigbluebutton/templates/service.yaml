@@ -4,15 +4,15 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    {{- if .Values.service.annotations }}
-    {{- range $key, $value := .Values.service.annotations }}
+    {{- if .Values.bigbluebutton.service.annotations }}
+    {{- range $key, $value := .Values.bigbluebutton.service.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
     {{- end }}
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.service.externalPort }}
+    - port: {{ .Values.bigbluebutton.service.externalPort }}
       targetPort: 80
       protocol: TCP
       name: http

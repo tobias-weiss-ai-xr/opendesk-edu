@@ -22,14 +22,14 @@ data:
         <If "%{REQUEST_METHOD} == 'POST'">
             SetHandler application/x-httpd-php
             Action application/x-httpd-php /files/backchannel-handler.php virtual
-            
+
             Header always set X-Content-Type-Options "nosniff"
             Header always set X-Frame-Options "DENY"
             Header always set X-XSS-Protection "1; mode=block"
-            
+
             {{ if .Values.backchannelLogout.saml.moodle.signature.requireSignedRequests }}
             {{ end }}
-            
+
             Require all granted
         </If>
         <Else>
@@ -45,11 +45,11 @@ data:
         Options None
         AllowOverride None
         Require all granted
-        
+
         <Files "backchannel-handler.php">
             Require all granted
         </Files>
-        
+
         <FilesMatch "^.*\.(php|inc|cfg|txt)$">
             Require all denied
         </FilesMatch>
@@ -82,13 +82,13 @@ data:
     <Location /Shibboleth.sso/Logout>
         <If "%{REQUEST_METHOD} == 'POST'">
             SetHandler "proxy:unix:/run/php/php-fpm.sock|fcgi://localhost"
-            
+
             ProxyFCGISetEnvIf "true" SCRIPT_FILENAME "/var/www/moodle/auth/shibboleth/backchannel-handler.php"
-            
+
             Header always set X-Content-Type-Options "nosniff"
             Header always set X-Frame-Options "DENY"
             Header always set X-XSS-Protection "1; mode=block"
-            
+
             Require all granted
         </If>
         <Else>

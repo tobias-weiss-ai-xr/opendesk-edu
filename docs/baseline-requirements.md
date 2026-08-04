@@ -51,11 +51,12 @@ This document MAY be used to assess the status for a component and possible gaps
 
 > [!note]
 > The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
->      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
->      "OPTIONAL" in this document are to be interpreted as described in
->      [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
-> - MUST (NOT): These requirements are hard requirements and must be fulfilled. If technically possible they can be considered hard-blocking qualitygates that could prevent a new components artifact/container from being deployed.
-> - SHOULD (NOT): These requirements don't need to be fulfilled, but might be in the future. Any given MUST requirement was a SHOULD requirement for at minimum 90 days.
+> NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+> "OPTIONAL" in this document are to be interpreted as described in
+> [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
+>
+> * MUST (NOT): These requirements are hard requirements and must be fulfilled. If technically possible they can be considered hard-blocking qualitygates that could prevent a new components artifact/container from being deployed.
+> * SHOULD (NOT): These requirements don't need to be fulfilled, but might be in the future. Any given MUST requirement was a SHOULD requirement for at minimum 90 days.
 
 ## License compliance
 
@@ -63,8 +64,8 @@ All parts of openDesk Community Edition MUST be [open source](https://opensource
 
 openCode provides some boundaries when it comes to open source license compliance openDesk has to adhere to:
 
-- The components MUST be published under a license listed in the [openCode license allow list](https://opencode.de/en/knowledge/general-conditions/standardised-open-source-licenses).
-- Delivered artifacts (container images) MUST contain only components licensed under the aforementioned allow list. A container MUST NOT contain any artifact using a license from the [openCode license block list](https://opencode.de/en/knowledge/general-conditions/standardised-open-source-licenses#3.-Negative-list-of-all-non-released-licenses).
+* The components MUST be published under a license listed in the [openCode license allow list](https://opencode.de/en/knowledge/general-conditions/standardised-open-source-licenses).
+* Delivered artifacts (container images) MUST contain only components licensed under the aforementioned allow list. A container MUST NOT contain any artifact using a license from the [openCode license block list](https://opencode.de/en/knowledge/general-conditions/standardised-open-source-licenses#3.-Negative-list-of-all-non-released-licenses).
 
 Deviations from the above requirements must be documented in the openDesk license deviation report.
 
@@ -79,7 +80,8 @@ Therefore, suppliers MUST apply the [OpenChain ISO/IEC 5230](https://openchainpr
 Components MUST provide [Semantic Versioning (SemVer) 2.0.0](https://semver.org/) compliant releases of the container image. Patch level-maintained releases MUST exist for all component minor versions currently used in supported openDesk releases.
 
 Caveats:
-- If a component uses non SemVer compliant versioning, it may get relabeled. This may break documentation and encourage a revision of versioning upstream.
+
+* If a component uses non SemVer compliant versioning, it may get relabeled. This may break documentation and encourage a revision of versioning upstream.
 
 ## Container architectural basics
 
@@ -87,28 +89,30 @@ Caveats:
 > openDesk is operated as a Kubernetes (K8s) workload.
 
 Components SHOULD adhere to best practices for K8s application/container design. While there are dozens of documents about these best practices please use them as references:
-- https://cloud.google.com/architecture/best-practices-for-building-containers
-- https://cloud.google.com/architecture/best-practices-for-operating-containers
+
+* <https://cloud.google.com/architecture/best-practices-for-building-containers>
+* <https://cloud.google.com/architecture/best-practices-for-operating-containers>
 
 As some applications were initially created years before K8s was introduced, they naturally might take different approaches.
 
 You will find below some of the most common best practice requirements, some of which are auto-tested as part of the openDesk deployment automation:
 
-- Containers come with readiness and liveness probes.
-- Containers are stateless and immutable (read-only root file system), state should be placed into a database (or similar).
-- Allow horizontal scaling (auto-scaling is of course nice to have).
-- Provide resource requests and limits (we do not want to limit CPU though).
-- Provide application-specific monitoring endpoints and expose the health of the application.
-- Write your logs to STDOUT/STDERR and ideally provide JSON-based logs.
-- Use one service per container (microservice pattern).
-- Minimize the footprint of your container e.g. removing unnecessary tools, ideally providing a distroless container.
-- Allow restrictive setting of the security contexts (see [security-context.md](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/security-context.md) for reference).
-- Support for external secrets.
-- Support for externally provided/self-signed certificates.
+* Containers come with readiness and liveness probes.
+* Containers are stateless and immutable (read-only root file system), state should be placed into a database (or similar).
+* Allow horizontal scaling (auto-scaling is of course nice to have).
+* Provide resource requests and limits (we do not want to limit CPU though).
+* Provide application-specific monitoring endpoints and expose the health of the application.
+* Write your logs to STDOUT/STDERR and ideally provide JSON-based logs.
+* Use one service per container (microservice pattern).
+* Minimize the footprint of your container e.g. removing unnecessary tools, ideally providing a distroless container.
+* Allow restrictive setting of the security contexts (see [security-context.md](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/security-context.md) for reference).
+* Support for external secrets.
+* Support for externally provided/self-signed certificates.
 
 **Reference:** Some of these requirements are tested and/or documented within the deployment automation:
-- CI executed Kyverno tests: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/tree/main/.kyverno/policies
-- Generated documentation regarding security contexts: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/security-context.md
+
+* CI executed Kyverno tests: <https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/tree/main/.kyverno/policies>
+* Generated documentation regarding security contexts: <https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/security-context.md>
 
 ## Kubernetes APIs
 
@@ -126,10 +130,10 @@ The central IdP ensures the single sign-on and logout workflows. openDesk consis
 
 Components MUST support OIDC. The following configuration is REQUIRED regarding the OIDC support in a component, besides the actual login flow:
 
-- Back-channel logout: [OIDC Back-Channel Logout](https://openid.net/specs/openid-connect-backchannel-1_0.html) must be supported by the components unless there is a significant reason why it technically cannot be supported, in that case [OIDC Front-Channel Logout](https://openid.net/specs/openid-connect-frontchannel-1_0.html) is the alternative.
-- IdP Session Refresh: Ensure that your application regularly checks the IdP session for its validity and invalidates the local session when there is no longer an IdP session.
+* Back-channel logout: [OIDC Back-Channel Logout](https://openid.net/specs/openid-connect-backchannel-1_0.html) must be supported by the components unless there is a significant reason why it technically cannot be supported, in that case [OIDC Front-Channel Logout](https://openid.net/specs/openid-connect-frontchannel-1_0.html) is the alternative.
+* IdP Session Refresh: Ensure that your application regularly checks the IdP session for its validity and invalidates the local session when there is no longer an IdP session.
 
-**Reference:** Most components are directly connected to the IdP and are using OIDC: https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/architecture.md#identity-data-flows
+**Reference:** Most components are directly connected to the IdP and are using OIDC: <https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/architecture.md#identity-data-flows>
 
 ### User lifecycle
 
@@ -144,7 +148,7 @@ The objective is to have all components using the IAM managed account details in
 
 Components can access the IAM's LDAP to access all data necessary for managing their part of the ULC.
 
-**Reference:** Most components use LDAP access as per https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/components.md?ref_type=heads#identity-data-flows
+**Reference:** Most components use LDAP access as per <https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/main/docs/components.md?ref_type=heads#identity-data-flows>
 
 > [!note]
 > The direct access to LDAP is going to be deprecated for most use cases. openDesk plans to introduce active
@@ -179,10 +183,12 @@ openDesk aims to provide components that are excellent in *their main domain*. T
 While components usually support technical and functional administration, the technical part SHOULD be in the responsibility of the operator and is usually done at (re)deployment time. Therefore, the administrative tasks within a component should be limited to functional administration.
 
 Example for "technical administration":
-- Configuring the SMTP relay for an application to send out emails.
+
+* Configuring the SMTP relay for an application to send out emails.
 
 Example of "functional administration":
-- Creating and maintaining users and groups.
+
+* Creating and maintaining users and groups.
 
 **Reference:** OpenProject took the approach that all settings pre-defined in the deployment are still rendered in the admin section of OpenProject, but can not be changed.
 
@@ -190,7 +196,7 @@ Example of "functional administration":
 
 Theming MUST be controlled with the deployment and affect all components that support branding options.
 
-**Reference:** https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/helmfile/environments/default/theme.yaml.gotmpl
+**Reference:** <https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/develop/helmfile/environments/default/theme.yaml.gotmpl>
 
 ### Central user profile
 
@@ -212,13 +218,13 @@ Components MUST provide a top bar for navigation. The top bar SHOULD provide a c
 
 Components MUST provide a top bar that can be customized (or adheres to a given openDesk standard) in various settings:
 
-- Size (height) of the bar.
-- Foreground and -background colors, including hover/active.
-- Size and color of the bar's bottom line.
-- Logo position, size, and link including the link's target.
-- Icon position and size of the central navigation.
-- Ideally have the user's menu on the right-hand side of the top bar using the user's profile picture.
-- Have the search option/bar as the leftmost option in the right content section of the top bar or even allow the search bar to be rendered in the center of the top bar.
+* Size (height) of the bar.
+* Foreground and -background colors, including hover/active.
+* Size and color of the bar's bottom line.
+* Logo position, size, and link including the link's target.
+* Icon position and size of the central navigation.
+* Ideally have the user's menu on the right-hand side of the top bar using the user's profile picture.
+* Have the search option/bar as the leftmost option in the right content section of the top bar or even allow the search bar to be rendered in the center of the top bar.
 
 **Reference:** This is available in current deployments, see e.g. Nextcloud, Open-Xchange, and XWiki.
 
@@ -228,8 +234,8 @@ Within the top bar, users MUST be able to access the central navigation: A menu 
 
 When implementing the central navigation into a component, there are two options to access the user's data from the portal:
 
-- Frontend-based: Issuing an IFrame-based silent login against the intercom service (ICS) to get a session with the ICS, followed by a request for the JSON containing the user's central navigation contents through the ICS.
-- Backend-based: Requesting the JSON using a backend call to the portal providing the user's name and a shared secret.
+* Frontend-based: Issuing an IFrame-based silent login against the intercom service (ICS) to get a session with the ICS, followed by a request for the JSON containing the user's central navigation contents through the ICS.
+* Backend-based: Requesting the JSON using a backend call to the portal providing the user's name and a shared secret.
 
 **Reference:** This is available in current deployments in all applications except for Jitsi, Collabora, and CryptPad.
 
@@ -280,22 +286,23 @@ openDesk MUST be operatable conforming to the BSI IT-Grundschutz (IT baseline pr
 The IT-Grundschutz catalog knows a lot of modules ("Bausteine"), but not all of them apply to all components, as there are some related to hardware or some just relevant for the operator, while openDesk is "just" the software platform. The first step for an IT-Grundschutz evaluation of a component (or the platform as a whole) requires defining which modules are applicable. Other modules apply to all components e.g. [APP.4.4 Kubernetes](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/06_APP_Anwendungen/APP_4_4_Kubernetes_Edition_2023.pdf), [SYS.1.6 Containerisierung](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/07_SYS_IT_Systeme/SYS_1_6_Containerisierung_Edition_2023.pdf) and [CON.2 Datenschutz](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2023/03_CON_Konzepte_und_Vorgehensweisen/CON_2_Datenschutz_Edition_2023.pdf).
 
 Within each module are multiple requirements ("Anforderungen") that are usually composed of multiple partial requirements ("Teilanforderungen"). Each requirement has a given category:
-- B for basic ("Basis") - the requirement must be fulfilled.
-- S for standard ("Standard") - the requirement should also be fulfilled, if not there must be a good reason why it is not the case that does not tamper the security of the overall system. There is only a defined amount of deviations allowed for standard requirements.
-- H for high ("Hoch") - in certain scenarios you have extended security requirements, in that case, the high requirements must be fulfilled. openDesk is working towards making that possible.
+
+* B for basic ("Basis") - the requirement must be fulfilled.
+* S for standard ("Standard") - the requirement should also be fulfilled, if not there must be a good reason why it is not the case that does not tamper the security of the overall system. There is only a defined amount of deviations allowed for standard requirements.
+* H for high ("Hoch") - in certain scenarios you have extended security requirements, in that case, the high requirements must be fulfilled. openDesk is working towards making that possible.
 
 Different requirements address different roles in IT-Grundschutz.
 
-- Supplier: processes & product (component -> e.g. Open-Xchange, OpenProject)
-- Provider: processes & product (platform -> openDesk)
-- Operator: processes & product (service)
-- Customer: processes.
+* Supplier: processes & product (component -> e.g. Open-Xchange, OpenProject)
+* Provider: processes & product (platform -> openDesk)
+* Operator: processes & product (service)
+* Customer: processes.
 
 As a supplier of an openDesk component, you will focus on the "Supplier" requirements, while the outcome (your product) must enable the Provider to fulfill the requirements that lay with its responsibility for the openDesk platform. Operators use openDesk to provide a service, therefore the openDesk platform must enable an Operator to fulfill the related requirements. Finally, the service must enable the customer to align with the scope of the IT-Grundschutz catalog. So it will happen that a requirement from e.g. the customer level needs a specific capability by the product (Supplier's responsibility), a defined core configuration from the platform (Provider's responsibility), or a certain service setup from the Operator.
 
 We are aware that IT-Grundschutz is a complex topic and are working towards a streamlined process to reduce overhead as much as possible and ensure to maximize the use of synergies.
 
-**Reference:** https://gitlab.opencode.de/bmi/opendesk/documentation/it-grundschutz
+**Reference:** <https://gitlab.opencode.de/bmi/opendesk/documentation/it-grundschutz>
 
 ## Accessibility
 
@@ -316,20 +323,20 @@ Each vendor MUST provide a certificate that their component - or the parts of th
 
 Each component MUST be able to operate according to the [EU's General Data Protection Regulation (GDPR)](https://gdpr.eu/). This requires some key messages to be answered when it comes to personal data[^1]:
 
-- Who are the affected data subjects?
-- What personal data (attributes) from the subjects is being processed?
-- Who is the controller and processor of the subject's data?
-- Which processing activities involve which data attributes?
-- How can the data be deleted?
-- Are personal data-related activities traceable?
-- How can data be provided uniformly to affected people?
-- What does a data privacy-friendly configuration look like?
+* Who are the affected data subjects?
+* What personal data (attributes) from the subjects is being processed?
+* Who is the controller and processor of the subject's data?
+* Which processing activities involve which data attributes?
+* How can the data be deleted?
+* Are personal data-related activities traceable?
+* How can data be provided uniformly to affected people?
+* What does a data privacy-friendly configuration look like?
 
 While this can be answered by each component that will be in the spotlight for the suppliers, we also need an aligned overall picture for openDesk that at least has the platform-specific user lifecycle and cross-application interfaces in focus.
 
 Note: The topics of availability, integrity, and confidentiality of personal data are also being addressed by the IT-Grundschutz module "CON.2". It has to be ensured that it is not in contradiction to what is being done in the general area of data protection.
 
-**Reference:** https://gitlab.opencode.de/bmi/opendesk/documentation/datenschutz
+**Reference:** <https://gitlab.opencode.de/bmi/opendesk/documentation/datenschutz>
 
 ## Footnotes
 

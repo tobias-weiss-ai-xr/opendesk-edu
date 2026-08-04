@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "kasmvnc"
+    chart: "oci://registry.kasmweb.com/kasmweb/charts/kasmvnc"
+    version: "1.0.0"
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.kasmvnc.enabled }}
+    timeout: 600
+commonLabels:
+  deployStage: "050-components"
+  component: "kasmvnc"

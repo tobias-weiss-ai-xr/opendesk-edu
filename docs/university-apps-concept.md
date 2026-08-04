@@ -31,7 +31,6 @@ The following university-specific applications have been integrated into OpenDes
 | **BigBlueButton**    | Video Conferencing               | Video            | SAML 2.0 (Shibboleth SP) | ✅ Deployed  |
 | **OpenCloud**        | File Sync & Share (Nextcloud alternative) | Applications | OIDC (Keycloak)    | 🔧 In Progress |
 
-
 ### ILIAS LMS
 
 **ILIAS** is a widely used learning management system at the University of Marburg. It provides course management, assessments, and collaborative learning tools.
@@ -41,7 +40,6 @@ The following university-specific applications have been integrated into OpenDes
 - **URL**: `lms.opendesk.example.com`
 - **Commits**: ~25 commits for SSO, portal integration, and end-to-end testing
 - **Status**: Fully deployed and operational
-
 
 ### Moodle LMS
 
@@ -54,7 +52,6 @@ The following university-specific applications have been integrated into OpenDes
 - **Admin Interface**: Whitelisted with LDAP authentication
 - **Status**: Fully deployed and operational
 
-
 ### BigBlueButton
 
 **BigBlueButton** is a video conferencing platform designed for online lectures, seminars, and virtual classrooms.
@@ -64,7 +61,6 @@ The following university-specific applications have been integrated into OpenDes
 - **Storage**: CephFS for recordings (500Gi, RWX for multi-node access)
 - **Portal Tile**: Located in the "Video" category
 - **Status**: Fully deployed and operational
-
 
 ### OpenCloud
 
@@ -97,8 +93,8 @@ The University Apps integration extends OpenDesk’s existing architecture, whic
 │  │      │ │ BBB) │ │bora) │ │      │ │          │      │
 │  └──────┘ └──────┘ └──────┘ └──────┘ └──────────┘      │
 └────────────────────┬────────────────────────────────────┘
-                     │ SSO (SAML 2.0 / OIDC)              
-                     ▼                                    
+                     │ SSO (SAML 2.0 / OIDC)
+                     ▼
 ┌─────────────────────────────────────────────────────────┐
 │              Keycloak Identity Provider                  │
 │  ┌──────────────┐  ┌──────────────┐                     │
@@ -108,8 +104,8 @@ The University Apps integration extends OpenDesk’s existing architecture, whic
 │  │  UCS/DS)     │  │              │                     │
 │  └──────────────┘  └──────────────┘                     │
 └─────────────────────────────────────────────────────────┘
-                     │                                    
-                     ▼                                    
+                     │
+                     ▼
 ┌─────────────────────────────────────────────────────────┐
 │              Kubernetes (OpenStack + Ceph)                │
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐   │
@@ -179,37 +175,39 @@ Integrating university applications into OpenDesk required several technical dec
 **Solution**: Deploy **Shibboleth Service Provider (SP)** as an Apache module alongside each application. The Shibboleth SP translates SAML assertions from Keycloak into HTTP headers, allowing the application to authenticate users without code changes.
 
 **Implementation**:
+
 - Custom Docker images for ILIAS, Moodle, and BigBlueButton with Shibboleth SP pre-installed (`ghcr.io/<your-org>/ilias:7.28-shibboleth`, `ghcr.io/<your-org>/moodle:4.4-apache-shibboleth`, `ghcr.io/<your-org>/bbb:2.7-shibboleth`)
 - Configuration files (`shibboleth2.xml`) tailored to each application’s requirements
-
 
 ### 2. Ceph Dual Storage Strategy
 
 **Problem**: University applications have diverse storage requirements. Some, like Moodle, require fast, block-level storage (RWO), while others, like BigBlueButton, need shared file storage (RWX) for multi-node access.
 
 **Solution**: Leverage **Ceph** for both block and file storage:
+
 - **Ceph RBD (SSD-backed)**: Provides **ReadWriteOnce (RWO)** access for databases (e.g., PostgreSQL for Moodle) and stateful workloads
 - **CephFS (HDD-backed)**: Provides **ReadWriteMany (RWX)** access for shared file storage (e.g., BigBlueButton recordings)
 
 **Implementation**:
+
 - Moodle: Ceph RBD for database storage (100Gi)
 - BigBlueButton: CephFS for recordings (500Gi)
-
 
 ### 3. OpenCloud as a Nextcloud Alternative
 
 **Problem**: While Nextcloud is a robust file sync and share platform, its PHP-based architecture and resource requirements make it less ideal for some university use cases.
 
 **Solution**: Adopt **OpenCloud**, a Go-based fork of ownCloud, as a lightweight alternative. OpenCloud offers:
+
 - Native OIDC integration via Keycloak
 - Lower resource consumption
 - Direct integration with OpenXchange via the `filestorage_owncloud_oauth` capability
 
 **Implementation**:
+
 - Custom Docker image (`ghcr.io/<your-org>/opencloud:v1.0.0`)
 - OIDC integration with Keycloak
 - Portal tile in the "Anwendungen" (Applications) category
-
 
 ### 4. Helmfile-Based Deployment
 
@@ -218,16 +216,17 @@ Integrating university applications into OpenDesk required several technical dec
 **Solution**: Follow OpenDesk’s **helmfile-based deployment** pattern. Each application is defined as a helmfile "app" with **gotmpl** templates that reference global configuration values (e.g., domains, secrets, resource limits).
 
 **Implementation**:
+
 - Helmfiles for ILIAS, Moodle, BigBlueButton, and OpenCloud
 - Global values (`values.yaml`) for shared configurations
 - Overrides for app-specific settings
-
 
 ### 5. Value Coalescing and Conflict Resolution
 
 **Problem**: Conflicts arise when chart default values (e.g., manifests as `map` types) clash with app-level overrides (e.g., secrets as `string` types).
 
 **Solution**: Implement a **strict value coalescing strategy** to ensure consistency:
+
 - Use `tpl` functions in Helm templates to render values dynamically
 - Define clear precedence rules: app-level overrides > chart defaults > global defaults
 - Validate configurations during CI/CD pipelines
@@ -243,46 +242,48 @@ Integrating university applications into OpenDesk presented several technical an
 **Challenge**: Go template directives like `{{- if` and `-}}` can inadvertently merge YAML document separators (`---`) with comments, causing parse failures.
 
 **Solution**:
-- Use explicit whitespace control: `{{ ` and ` }}` to avoid merging lines
+
+- Use explicit whitespace control: `{{` and `}}` to avoid merging lines
 - Test Helm templates locally with `helm template --debug` before deployment
 - Document template formatting guidelines for future contributors
-
 
 ### 2. Ceph RBD Access Modes
 
 **Challenge**: The `ReadWriteOncePod` access mode, which ensures a volume is mounted to only one pod, is not supported by the Ceph RBD CSI driver.
 
 **Solution**:
+
 - Use standard `ReadWriteOnce` (RWO) for all RBD-backed PVCs
 - Implement pod anti-affinity rules to ensure workloads are scheduled on the same node
-
 
 ### 3. PVC Immutability
 
 **Challenge**: Kubernetes PersistentVolumeClaims (PVCs) are immutable with respect to access modes and volume modes. Changing these properties on an existing PVC requires deleting and recreating it.
 
 **Solution**:
+
 - Plan PVC configurations carefully before deployment
 - Use Helm hooks to manage PVC lifecycle during upgrades
 - Document rollback procedures for PVC-related changes
 
-
 ### 4. UDM Portal Entry API Limitations
 
 **Challenge**: The Univention Directory Manager (UDM) portal entry API has limited property support:
+
 - `icon_url` is not supported (must use theme registry instead)
 - DN (Distinguished Name) case sensitivity issues with `allowedGroups`
 
 **Solution**:
+
 - Use theme registry for icons instead of direct URLs
 - Normalize group DNs to lowercase before referencing them in portal entries
-
 
 ### 5. Value Coalescing Conflicts
 
 **Challenge**: Conflicts between chart default values (e.g., `map` types) and app-level overrides (e.g., `string` types) can break deployments.
 
 **Solution**:
+
 - Use `tpl` functions in Helm templates to render values dynamically
 - Define strict type coercion rules in `values.yaml`
 - Validate configurations during CI/CD pipelines
@@ -297,21 +298,17 @@ The University Apps integration demonstrates the **power of open-source composab
 
 OpenDesk is built on open-source components—Kubernetes, Ceph, Keycloak, and more—which provide the flexibility to customize and extend the platform for new use cases. This project shows how open-source software can **transcend its original scope** and serve entirely new domains, such as education.
 
-
 ### 2. Breaking Down Silos
 
 Universities often struggle with fragmented digital ecosystems. By integrating disparate applications—LMS, video conferencing, file sharing, and collaboration tools—into a **single portal with SSO**, OpenDesk eliminates silos and reduces friction for users. This approach improves user experience, enhances security, and reduces administrative overhead.
-
 
 ### 3. Data Sovereignty and On-Premise Control
 
 Unlike proprietary cloud solutions, OpenDesk is **on-premise**, ensuring full control over data and infrastructure. This is particularly important for universities, where data privacy and compliance are critical. By leveraging Kubernetes and Ceph, OpenDesk provides a **scalable, resilient, and vendor-neutral** platform.
 
-
 ### 4. Community-Driven Development
 
 The University Apps integration is a collaborative effort, involving contributions from developers, administrators, and end-users. This project exemplifies the **strength of the open-source community** in solving real-world problems through shared effort and innovation.
-
 
 ### 5. A Blueprint for Other Institutions
 
@@ -329,13 +326,11 @@ The University Apps integration is just the beginning. Several exciting directio
 - Support **calendar and contact synchronization** between the two platforms
 - Explore **real-time collaboration** features (e.g., shared documents)
 
-
 ### 2. Exam Management Integration
 
 - Integrate **exam management systems** (e.g., EvaExam, ONYX) into the OpenDesk portal
 - Support **secure exam environments** with lockdown browsers and proctoring tools
 - Enable **automated grading and feedback** workflows
-
 
 ### 3. Library System Integration
 
@@ -343,13 +338,11 @@ The University Apps integration is just the beginning. Several exciting directio
 - Support **digital lending** and resource management
 - Enable **research data management** for faculty and students
 
-
 ### 4. Student Information System (HIS/LSF) Integration
 
 - Integrate **campus management systems** (e.g., HISinOne, LSF) for course enrollment and scheduling
 - Support **automated course provisioning** in ILIAS and Moodle
 - Enable **student lifecycle management** (enrollment, grading, graduation)
-
 
 ### 5. Automated Course Provisioning
 

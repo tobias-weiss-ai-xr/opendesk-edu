@@ -17,19 +17,27 @@ drawio:
       cpu: "1"
       memory: 2Gi
 
+sso:
+  oidc:
+    enabled: {{ .Values.apps.drawio.oidc.enabled | default false }}
+    issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
+    clientId: "opendesk-drawio"
+    clientSecret: "{{ .Values.secrets.keycloak.clientSecret.drawio | default "" }}"
+    cookieSecret: "{{ .Values.secrets.keycloak.cookieSecret.drawio | default "" }}"
+
 ingress:
   enabled: {{ .Values.ingress.enabled }}
   className: "haproxy"
   annotations:
     {{ .Values.annotations.drawio.ingress | toYaml | nindent 4 }}
     haproxy-ingress.github.io/ssl-redirect: "true"
-    haproxy-ingress.github.io/headers: "X-Forwarded-Host drawio.opendesk.hrz.uni-marburg.de"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host drawio.{{ .Values.global.domain }}"
   hosts:
-    - host: "drawio.opendesk.hrz.uni-marburg.de"
+    - host: "drawio.{{ .Values.global.domain }}"
       paths:
         - path: /
           pathType: "ImplementationSpecific"
   tls:
     - secretName: "opendesk-certificates-tls"
       hosts:
-        - "drawio.opendesk.hrz.uni-marburg.de"
+        - "drawio.{{ .Values.global.domain }}"

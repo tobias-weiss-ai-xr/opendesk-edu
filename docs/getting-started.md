@@ -197,8 +197,9 @@ Doing a test deployment will be fine with this setup. In case you want to deploy
 and fetch from the same IP address, you might run into rate limits at Docker Hub. In that case, and in case you
 prefer the use of a private image registry, you can configure these in
 [your target environment](../helmfile/environments/default/global.yaml.gotmpl) by setting
-- `global.imageRegistry` for a private image registry and
-- `global.helmRegistry` for a private Helm chart registry.
+
+* `global.imageRegistry` for a private image registry and
+* `global.helmRegistry` for a private Helm chart registry.
 
 ```yaml
 global:
@@ -300,6 +301,7 @@ cluster:
 ```
 
 ### Volumes
+
 The StorageClass must be set using the following attribute:
 
 ```yaml
@@ -454,12 +456,12 @@ export MASTER_PASSWORD="your_individual_master_password"
 > using externally provided passwords/secrets make sure that none of the ones listed below are starting with a
 > number:
 >
-> - `secrets.nubus.provisioning.api.natsPassword`
-> - `secrets.nubus.provisioning.dispatcherNatsPassword`
-> - `secrets.nubus.provisioning.prefillNatsPassword`
-> - `secrets.nubus.provisioning.udmListenerNatsPassword`
-> - `secrets.nubus.provisioning.udmTransformerNatsPassword`
-> - `secrets.nats.natsAdminPassword`
+> * `secrets.nubus.provisioning.api.natsPassword`
+> * `secrets.nubus.provisioning.dispatcherNatsPassword`
+> * `secrets.nubus.provisioning.prefillNatsPassword`
+> * `secrets.nubus.provisioning.udmListenerNatsPassword`
+> * `secrets.nubus.provisioning.udmTransformerNatsPassword`
+> * `secrets.nats.natsAdminPassword`
 
 ## Install
 
@@ -471,10 +473,10 @@ helmfile apply -e dev -n <NAMESPACE> [-l <label>] [--suppress-diff]
 
 **Arguments:**
 
-- `-e <env>`: Environment name out of `default`, `dev`, `test`, `prod`
-- `-n <namespace>`: Kubernetes namespace
-- `-l <label>`: Label selector
-- `--suppress-diff`: Disable diff printing
+* `-e <env>`: Environment name out of `default`, `dev`, `test`, `prod`
+* `-n <namespace>`: Kubernetes namespace
+* `-l <label>`: Label selector
+* `--suppress-diff`: Disable diff printing
 
 ## Install single app
 

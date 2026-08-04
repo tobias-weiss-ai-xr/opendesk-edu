@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Còmode i Sobirà?
 
 🎓 openDesk Edu — Sobirania Digital a les Universitats
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Participa!
+# 🤝 Participa
 
 **Ajuda'ns a construir openDesk Edu per a les universitats!**
 

@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Kényelmes és Szuverén?
 
 🎓 openDesk Edu — Digitális Szuverenitás az Egyetemeken
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Csatlakozz!
+# 🤝 Csatlakozz
 
 **Segíts nekünk az openDesk Edu felépítésében az egyetemek számára!**
 

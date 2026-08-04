@@ -32,22 +32,32 @@ bookstack:
 
   # Replica count
   replicas: 1
+  appKey: ""  # Generate with: docker run --rm --entrypoint /bin/bash lscr.io/linuxserver/bookstack:latest appkey
+  phpFpmPoolOverride:
+    enabled: false
 
 extraVolumes: []
 extraVolumeMounts: []
+
+sso:
+  oidc:
+    enabled: false
+    clientId: ""
+    clientSecret: ""
+    issuerBaseUrl: ""
 
 ingress:
   enabled: true
   annotations: {}
   hosts:
-    - host: wiki.opendesk.example.com
+    - host: bookstack.opendesk.hrz.uni-marburg.de
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - secretName: bookstack-tls
       hosts:
-        - wiki.opendesk.example.com
+        - bookstack.opendesk.hrz.uni-marburg.de
 
 mariadb:
   enabled: true

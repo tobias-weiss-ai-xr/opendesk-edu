@@ -1,0 +1,12 @@
+dn: cn=ttyd,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+objectClass: univentionNewPortalEntry
+objectClass: top
+cn: ttyd
+univentionNewPortalEntryActivate: TRUE
+univentionNewPortalEntryLink: en_US https://term.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLinkTarget: newwindow
+univentionNewPortalEntryDisplayName: en_US Web Terminal
+univentionNewPortalEntryDisplayName: de_DE Web Terminal
+univentionNewPortalEntryDescription: en_US Browser-based Linux terminal
+univentionNewPortalEntryDescription: de_DE Browser-basiertes Linux-Terminal
+univentionNewPortalEntryOnlyAnonymous: FALSE

@@ -1,11 +1,15 @@
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# SPDX-License-Identifier: Apache-2.0
+
 #
+
 # DFN-AAI Federation Setup Scripts
 
 [English](#english) | [Deutsch](#deutsch)
 
 <a name="english"></a>
+
 ## English
 
 ### Overview
@@ -53,7 +57,7 @@ This directory contains setup scripts for configuring Keycloak as a SAML Service
 - **Keycloak 22+** with SAML 2.0 identity broker support
 - **kcadm.sh** in PATH (Keycloak Admin CLI)
 - **Network access** to DFN-AAI metadata URLs
-- **DFN-AAI membership** (contact support@aai.dfn.de)
+- **DFN-AAI membership** (contact <support@aai.dfn.de>)
 
 ### Environment Variables
 
@@ -66,9 +70,9 @@ This directory contains setup scripts for configuring Keycloak as a SAML Service
 
 | Environment | URL |
 |-------------|-----|
-| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml` |
-| Production | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml` |
-| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml` |
+| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` |
+| Production | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
+| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml` |
 
 ### Attribute Mapping
 
@@ -106,7 +110,7 @@ This directory contains setup scripts for configuring Keycloak as a SAML Service
 
 ```bash
 # Check network connectivity
-curl -I https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml
+curl -I https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml
 
 # Verify Keycloak is running
 curl -s https://id.example.edu/realms/opendesk/.well-known/openid-configuration
@@ -127,6 +131,7 @@ curl -s https://id.example.edu/realms/opendesk/.well-known/openid-configuration
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Übersicht
@@ -174,7 +179,7 @@ Dieses Verzeichnis enthält Einrichtungsskripte für die Konfiguration von Keycl
 - **Keycloak 22+** mit SAML 2.0 Identity-Broker-Unterstützung
 - **kcadm.sh** im PATH (Keycloak Admin CLI)
 - **Netzwerkzugriff** auf DFN-AAI-Metadaten-URLs
-- **DFN-AAI-Mitgliedschaft** (Kontakt: support@aai.dfn.de)
+- **DFN-AAI-Mitgliedschaft** (Kontakt: <support@aai.dfn.de>)
 
 ### Attribut-Mapping
 
@@ -212,7 +217,7 @@ Dieses Verzeichnis enthält Einrichtungsskripte für die Konfiguration von Keycl
 
 ```bash
 # Netzwerkkonnektivität prüfen
-curl -I https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml
+curl -I https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml
 
 # Prüfen, ob Keycloak läuft
 curl -s https://id.beispiel-universitaet.de/realms/opendesk/.well-known/openid-configuration
@@ -240,4 +245,4 @@ curl -s https://id.beispiel-universitaet.de/realms/opendesk/.well-known/openid-c
 
 ## License
 
-SPDX-License-Identifier: AGPL-3.0-or-later
+SPDX-License-Identifier: Apache-2.0

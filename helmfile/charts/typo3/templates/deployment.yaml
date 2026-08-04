@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,8 +20,10 @@ spec:
     spec:
       initContainers:
         - name: typo3-init
-          image: {{ .Values.typo3.image.repository }}:{{ .Values.typo3.image.tag }}
-          command: ["vendor/bin/typo3", "install:fixfolderstructure"]
+          image: {{ .Values.typo3.image }}:{{ .Values.typo3.tag }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - "mkdir -p /var/www/html/typo3temp/var/assets /var/www/html/typo3temp/var/cache /var/www/html/typo3temp/var/charset /var/www/html/typo3temp/var/locks /var/www/html/typo3temp/var/log /var/www/html/typo3temp/var/session /var/www/html/typo3temp/var/transient /var/www/html/l10n /var/www/html/assets && chown -R www-data:www-data /var/www/html/fileadmin /var/www/html/var /var/www/html/typo3temp /var/www/html/typo3conf /var/www/html/l10n /var/www/html/assets"
           volumeMounts:
             - name: typo3-fileadmin
               mountPath: /var/www/html/fileadmin
@@ -31,7 +33,7 @@ spec:
               mountPath: /var/www/html/config
       containers:
         - name: typo3
-          image: {{ .Values.typo3.image.repository }}:{{ .Values.typo3.image.tag }}
+          image: {{ .Values.typo3.image }}:{{ .Values.typo3.tag }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -60,6 +62,14 @@ spec:
               value: {{ include "typo3.dbName" . | quote }}
             - name: TYPO3_CONTEXT
               value: Production
+{{- if .Values.sso.oidc.enabled }}
+            - name: OIDC_CLIENT_ID
+              value: {{ .Values.sso.oidc.clientId | quote }}
+            - name: OIDC_CLIENT_SECRET
+              value: {{ .Values.sso.oidc.clientSecret | quote }}
+            - name: OIDC_ISSUER_URL
+              value: {{ .Values.sso.oidc.issuerUrl | quote }}
+{{- end }}
           volumeMounts:
             - name: typo3-fileadmin
               mountPath: /var/www/html/fileadmin

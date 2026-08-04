@@ -1,0 +1,47 @@
+---
+replicaCount: 1
+image:
+  repository: node
+  tag: "20-alpine"
+  pullPolicy: IfNotPresent
+slidevImage:
+  repository: ghcr.io/slidevjs/slidev
+  tag: "0.49.0"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+  hosts:
+    - host: slides.opendesk.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+persistence:
+  enabled: true
+  size: 1Gi
+  accessMode: ReadWriteOnce
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# OAuth2-proxy sidecar for Keycloak SSO
+oauth2:
+  enabled: false
+  provider: "keycloak-oidc"
+  clientId: "opendesk-slidev"
+  clientSecret: ""
+  oidcIssuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+  cookieSecret: ""

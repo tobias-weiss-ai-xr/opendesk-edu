@@ -4,6 +4,7 @@
 .idea
 .opencode
 .sisyphus
+.yamllint
 
 # Ignore changes to sample environments
 helmfile/environments/dev/*.yaml.gotmpl
@@ -12,6 +13,9 @@ helmfile/environments/prod/*.yaml.gotmpl
 helmfile/environments/dev/*.yaml
 helmfile/environments/test/*.yaml
 helmfile/environments/prod/*.yaml
+helmfile/environments/dev/*.json
+helmfile/environments/test/*.json
+helmfile/environments/prod/*.json
 helmfile/environments/dev/*/
 helmfile/environments/test/*/
 helmfile/environments/prod/*/

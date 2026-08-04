@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 from typing import Any, Optional
 import httpx
 from api.config.settings import get_settings
@@ -22,7 +22,9 @@ class MoodleClient:
     Falls back to mock data when no API URL/token is configured.
     """
 
-    def __init__(self, base_url: Optional[str] = None, api_token: Optional[str] = None):
+    def __init__(
+        self, base_url: Optional[str] = None, api_token: Optional[str] = None
+    ) -> None:
         settings = get_settings()
         self.base_url = base_url or settings.moodle_api_url
         self.api_token = api_token or settings.moodle_api_token
@@ -35,7 +37,12 @@ class MoodleClient:
         self._client = httpx.AsyncClient(base_url=url, timeout=30.0)
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: Any,
+    ) -> None:
         if self._client:
             await self._client.aclose()
 

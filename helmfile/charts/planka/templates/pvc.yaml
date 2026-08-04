@@ -4,6 +4,8 @@ metadata:
   name: {{ .Release.Name }}-planka-data
   labels:
 {{ include "planka.labels" . | nindent 4 }}
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.planka.volumes.data.accessMode }}

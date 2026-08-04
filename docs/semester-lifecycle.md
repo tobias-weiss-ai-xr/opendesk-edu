@@ -12,6 +12,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### Overview
@@ -50,6 +51,7 @@ semester-provisioning current --config /path/to/semester-config.yaml
 ```
 
 **Example Output:**
+
 ```
 === Current Semester ===
 Name:       WS25/26
@@ -74,6 +76,7 @@ semester-provisioning transition --old WS24/25 --new WS25/26 --config ./config.y
 ```
 
 **Transition Workflow:**
+
 1. Archive all active courses from old semester
 2. Create new semester configuration
 3. Provision new courses (if auto-provisioning enabled)
@@ -81,6 +84,7 @@ semester-provisioning transition --old WS24/25 --new WS25/26 --config ./config.y
 5. Activate new semester courses
 
 **Example Output:**
+
 ```
 === Semester Transition Report ===
 Old Semester:        WS24/25
@@ -109,6 +113,7 @@ semester-provisioning phases --config ./semester-config.yaml
 ```
 
 **Example Output:**
+
 ```
 === Semester Phases ===
   enrollment:
@@ -133,13 +138,13 @@ Semester settings are defined in the Helm values:
 # helmfile/apps/semester-provisioning/values.yaml
 semester:
   enabled: true
-  
+
   current:
     name: "WS25/26"
     type: "wintersemester"
     start_date: "2025-10-01"
     end_date: "2026-03-31"
-    
+
     phases:
       enrollment:
         start: "2025-07-01"
@@ -152,7 +157,7 @@ semester:
         end: "2026-03-31"
       archival:
         deadline: "2026-04-15"
-  
+
   previous:
     name: "SS25"
     type: "sommersemester"
@@ -197,6 +202,7 @@ No current semester configured for the given date.
 #### Transition Errors
 
 If transition fails, check:
+
 1. LMS API connectivity (ILIAS/Moodle)
 2. Keycloak admin credentials
 3. Database connectivity
@@ -205,6 +211,7 @@ If transition fails, check:
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Übersicht
@@ -243,6 +250,7 @@ semester-provisioning current --config /pfad/zur/semester-config.yaml
 ```
 
 **Beispielausgabe:**
+
 ```
 === Current Semester ===
 Name:       WS25/26
@@ -267,6 +275,7 @@ semester-provisioning transition --old WS24/25 --new WS25/26 --config ./config.y
 ```
 
 **Übergangs-Workflow:**
+
 1. Alle aktiven Kurse des alten Semesters archivieren
 2. Neue Semesterkonfiguration erstellen
 3. Neue Kurse bereitstellen (wenn Auto-Provisioning aktiviert)
@@ -274,6 +283,7 @@ semester-provisioning transition --old WS24/25 --new WS25/26 --config ./config.y
 5. Kurse des neuen Semesters aktivieren
 
 **Beispielausgabe:**
+
 ```
 === Semester Transition Report ===
 Old Semester:        WS24/25
@@ -302,6 +312,7 @@ semester-provisioning phases --config ./semester-config.yaml
 ```
 
 **Beispielausgabe:**
+
 ```
 === Semester Phases ===
   enrollment:
@@ -326,13 +337,13 @@ Die Semester-Einstellungen werden in den Helm-Values definiert:
 # helmfile/apps/semester-provisioning/values.yaml
 semester:
   enabled: true
-  
+
   current:
     name: "WS25/26"
     type: "wintersemester"
     start_date: "2025-10-01"
     end_date: "2026-03-31"
-    
+
     phases:
       enrollment:
         start: "2025-07-01"
@@ -345,7 +356,7 @@ semester:
         end: "2026-03-31"
       archival:
         deadline: "2026-04-15"
-  
+
   previous:
     name: "SS25"
     type: "sommersemester"
@@ -390,6 +401,7 @@ No current semester configured for the given date.
 #### Übergangsfehler
 
 Wenn der Übergang fehlschlägt, prüfen Sie:
+
 1. LMS-API-Konnektivität (ILIAS/Moodle)
 2. Keycloak-Admin-Anmeldedaten
 3. Datenbankverbindung

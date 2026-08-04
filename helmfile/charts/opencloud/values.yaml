@@ -92,6 +92,26 @@ storageUsersMountId: "ca65db73-407e-43ca-b393-9b141f43aa8f"
 
 graphApplicationId: "fdfc30d2-5cc5-40a4-8beb-ce6801bbca41"
 
+graph:
+  ldap:
+    # Set enabled: true to use an external LDAP server as identity backend
+    enabled: false
+    uri: "ldap://ums-ldap-server-primary.opendesk.svc.cluster.local:389"
+    bind_dn: "cn=admin,dc=swp-ldap,dc=internal"
+    bind_password: ""
+    base_dn: "dc=swp-ldap,dc=internal"
+    scope: sub
+    user_schema:
+      id: uid
+      displayName: cn
+      mail: mail
+      name: givenName
+    group_schema:
+      id: cn
+      mail: mail
+      member: member
+    write_disabled: true
+
 config:
   enabled: true
 

@@ -17,7 +17,7 @@ $CFG->dboptions = array (
   'dbsocket' => '',
 );
 
-$CFG->wwwroot   = 'http://moodle.opendesk.example.com';
+$CFG->wwwroot   = getenv('MOODLE_WWWROOT') ?: 'https://moodle.opendesk.example.com';
 $CFG->dataroot  = '/var/www/moodledata';
 $CFG->admin     = 'admin';
 
