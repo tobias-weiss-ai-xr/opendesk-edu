@@ -1,0 +1,14 @@
+{
+  "name": "opendesk-e2e-tests",
+  "version": "1.0.0",
+  "description": "openDesk Platform E2E Tests",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "install": "playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

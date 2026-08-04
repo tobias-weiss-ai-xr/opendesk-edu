@@ -7,6 +7,7 @@ This guide provides detailed instructions for setting up comprehensive monitorin
 openDesk Edu uses Prometheus-based monitoring with Grafana dashboards for observability across all services.
 
 **Monitoring Stack Components:**
+
 - **Prometheus** - Metrics collection and storage
 - **Grafana** - Dashboard and visualization
 - **Alertmanager** - Alert routing and notification
@@ -87,6 +88,7 @@ kubectl port-forward -n monitoring svc/kube-prometheus-stack-grafana 3000:80
 ```
 
 Default credentials:
+
 - Username: `admin`
 - Password: Get via: `kubectl get secret -n monitoring kube-prometheus-stack-grafana -o jsonpath='{.data.admin-password}' | base64 -d`
 
@@ -690,18 +692,21 @@ curl http://grafana.monitoring:3000/api/health
 ### Metrics Not Appearing
 
 1. **Check PodMonitor/ServiceMonitor:**
+
    ```bash
    kubectl get podmonitor -A
    kubectl get servicemonitor -A
    ```
 
 2. **Check Prometheus targets:**
+
    ```bash
    kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090
    # http://localhost:9090/targets
    ```
 
 3. **Verify labels match:**
+
    ```bash
    kubectl get pod <pod-name> -o yaml | grep labels
    ```
@@ -709,16 +714,19 @@ curl http://grafana.monitoring:3000/api/health
 ### Alerts Not Firing
 
 1. **Check Alertmanager config:**
+
    ```bash
    kubectl get secret alertmanager-kube-prometheus-stack-alertmanager -o jsonpath='{.data.alertmanager\.yaml}' | base64 -d
    ```
 
 2. **Check alert rules:**
+
    ```bash
    kubectl exec -n monitoring prometheus-0 -- promtool check rules /etc/prometheus/rules/
    ```
 
 3. **Check alert evaluation:**
+
    ```bash
    kubectl exec -n monitoring prometheus-0 -- promtool query instant 'up{job="prometheus"}'
    ```

@@ -22,7 +22,7 @@ Deutsch: Wie man Sicherheitslücken in openDesk Edu verantwortungsvoll meldet.
 | Method / Methode | Details |
 |------------------|---------|
 | **GitHub Security Advisory** (preferred) | [Create private advisory](https://github.com/opendesk-edu/opendesk-edu/security/advisories/new) |
-| **Email** | security@opendesk-edu.org |
+| **Email** | <security@opendesk-edu.org> |
 
 ### What to Include / Was Sie einschließen sollten
 
@@ -154,7 +154,7 @@ Wir werden keine rechtlichen Schritte gegen Forscher einleiten, die:
 
 | Purpose / Zweck | Contact / Kontakt |
 |-----------------|-------------------|
-| **Security issues** | security@opendesk-edu.org |
+| **Security issues** | <security@opendesk-edu.org> |
 | **General questions** | [GitHub Discussions](https://github.com/opendesk-edu/opendesk-edu/discussions) |
 | **Bug reports** | [GitHub Issues](https://github.com/opendesk-edu/opendesk-edu/issues) |
 

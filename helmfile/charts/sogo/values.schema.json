@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "sogo": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object",
+          "properties": {
+            "repository": { "type": "string" },
+            "tag": { "type": "string" },
+            "pullPolicy": { "type": "string" }
+          }
+        },
+        "replicaCount": { "type": "integer", "minimum": 1 },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "requests": {
+              "type": "object",
+              "properties": {
+                "cpu": { "type": ["string", "number"] },
+                "memory": { "type": "string" }
+              }
+            },
+            "limits": {
+              "type": "object",
+              "properties": {
+                "cpu": { "type": ["string", "number"] },
+                "memory": { "type": "string" }
+              }
+            }
+          }
+        },
+        "timezone": { "type": "string" },
+        "language": { "type": "string" },
+        "pageTile": { "type": "string" },
+        "db": {
+          "type": "object",
+          "properties": {
+            "host": { "type": "string" },
+            "port": { "type": "integer" },
+            "user": { "type": "string" },
+            "password": { "type": "string" },
+            "name": { "type": "string" }
+          }
+        },
+        "ldap": {
+          "type": "object",
+          "properties": {
+            "host": { "type": "string" },
+            "port": { "type": "integer" },
+            "baseDN": { "type": "string" },
+            "bindDN": { "type": "string" },
+            "bindPassword": { "type": "string" }
+          }
+        },
+        "imap": {
+          "type": "object",
+          "properties": { "server": { "type": "string" } }
+        },
+        "smtp": {
+          "type": "object",
+          "properties": { "server": { "type": "string" } }
+        },
+        "sieve": {
+          "type": "object",
+          "properties": { "server": { "type": "string" } }
+        },
+        "mailDomain": { "type": "string" },
+        "oidc": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "configUrl": { "type": "string" },
+            "clientId": { "type": "string" },
+            "clientSecret": { "type": "string" },
+            "scope": { "type": "string" }
+          }
+        },
+        "memcachedHost": { "type": "string" },
+        "replicas": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "className": { "type": "string" },
+        "annotations": { "type": "object" },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": { "type": "string" },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": { "type": "string" },
+                    "pathType": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tls": { "type": "array" }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "size": { "type": "string" },
+        "accessMode": { "type": "string" },
+        "storageClass": { "type": "string" }
+      }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "port": { "type": "integer" }
+      }
+    }
+  }
+}

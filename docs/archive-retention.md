@@ -5,6 +5,7 @@ This document defines the retention policy for user archives in openDesk Edu.
 ## Archive Storage
 
 Archives are stored at:
+
 ```
 /var/lib/opendesk-archives/
   <username>/
@@ -103,6 +104,7 @@ All archives are compressed using gzip (`tar.gz`).
 ### Deduplication
 
 When storage is limited, consider deduplication:
+
 ```bash
 # Use rdiff-backup for deduplicated backups
 apt install rdiff-backup
@@ -112,6 +114,7 @@ rdiff-backup /var/lib/opendesk-archives /backup/opendesk-archives-dedup
 ### Offsite Backup
 
 For disaster recovery, consider offsite backup:
+
 ```bash
 # Copy archives to remote storage
 rsync -avz /var/lib/opendesk-archives backup-server:/backups/opendesk/
@@ -153,6 +156,7 @@ python archive_service_user.py --restore-all --username john.doe
 ### Archive Not Found
 
 If user archive is missing:
+
 1. Check `/var/log/opendesk-archive.log` for errors
 2. Verify archive retention period
 3. Check if archive was manually deleted
@@ -161,6 +165,7 @@ If user archive is missing:
 ### Corrupted Archive
 
 If archive is corrupted:
+
 1. Try extracting with verbose output: `tar -xzf archive.tar.gz -v`
 2. Check disk for errors: `fsck /var/lib/opendesk-archives`
 3. Restore from offsite backup if available
@@ -168,6 +173,7 @@ If archive is corrupted:
 ### Insufficient Permissions
 
 If cleanup fails due to permissions:
+
 ```bash
 # Fix permissions
 chown -R opendesk:opendesk /var/lib/opendesk-archives
@@ -191,6 +197,7 @@ ARCHIVE_RETENTION_SUBMISSIONS=3650  # 10 years
 ## Support
 
 For archive-related issues:
+
 1. Check `/var/log/opendesk-archive.log` and `/var/log/opendesk-user-deprovisioning.log`
 2. Verify archive directory permissions
 3. Ensure sufficient disk space

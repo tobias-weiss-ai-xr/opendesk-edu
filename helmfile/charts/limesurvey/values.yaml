@@ -27,6 +27,15 @@ limesurvey:
       cpu: 500m
       memory: 512Mi
 
+  oidc:
+    enabled: false
+    proxyImage: quay.io/oauth2-proxy/oauth2-proxy
+    proxyTag: latest
+    issuerUrl: "https://keycloak.opendesk.example.com/realms/opendesk"
+    clientId: "opendesk-limesurvey"
+    clientSecret: ""
+    cookieSecret: ""
+
 extraVolumes: []
 extraVolumeMounts: []
 
@@ -34,14 +43,14 @@ ingress:
   enabled: true
   annotations: {}
   hosts:
-    - host: survey.opendesk.example.com
+    - host: limesurvey.opendesk.hrz.uni-marburg.de
       paths:
         - path: /
           pathType: Prefix
   tls:
     - secretName: limesurvey-tls
       hosts:
-        - survey.opendesk.example.com
+        - limesurvey.opendesk.hrz.uni-marburg.de
 
 mariadb:
   enabled: true

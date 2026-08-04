@@ -15,7 +15,9 @@ pre-commit install
 ## Available Hooks
 
 ### YAML Linting
+
 Checks YAML syntax and style.
+
 ```yaml
 - repo: https://github.com/adrienverge/yamllint
   rev: v1.35.1
@@ -25,7 +27,9 @@ Checks YAML syntax and style.
 ```
 
 ### Markdown Linting
+
 Checks Markdown formatting and link validity.
+
 ```yaml
 - repo: https://github.com/igorshubovych/markdownlint-cli
   rev: v0.39.0
@@ -35,7 +39,9 @@ Checks Markdown formatting and link validity.
 ```
 
 ### Helm Linting
+
 Validates Helm charts.
+
 ```yaml
 - repo: local
   hooks:
@@ -47,7 +53,9 @@ Validates Helm charts.
 ```
 
 ### Spell Check
+
 Checks for common spelling errors.
+
 ```yaml
 - repo: https://github.com/codespell-project/codespell
   rev: v2.2.6
@@ -72,11 +80,13 @@ pre-commit run
 ## Skipping Hooks
 
 To skip hooks for a single commit:
+
 ```bash
 git commit --no-verify -m "your message"
 ```
 
 To skip hooks permanently:
+
 ```bash
 pre-commit uninstall
 ```

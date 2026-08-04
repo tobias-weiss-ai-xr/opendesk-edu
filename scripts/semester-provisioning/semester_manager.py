@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """
 Semester Lifecycle Manager - Central orchestrator for semester transitions.
 Semester-Lebenszyklus-Manager - Zentraler Orchestrator für Semesterübergänge.
@@ -68,7 +68,7 @@ class SemesterManager:
         database: Optional[Any] = None,
         course_api: Optional[Any] = None,
         role_sync: Optional[Any] = None,
-    ):
+    ) -> None:
         """
         Initialize the SemesterManager.
         Initialisiert den SemesterManager.

@@ -26,8 +26,26 @@ data:
         insecure: true
       identity:
         ldap:
+{{- if .Values.graph.ldap.enabled }}
+          uri: {{ .Values.graph.ldap.uri | quote }}
+          bind_dn: {{ .Values.graph.ldap.bind_dn | quote }}
+          bind_password: {{ .Values.graph.ldap.bind_password | quote }}
+          base_dn: {{ .Values.graph.ldap.base_dn | quote }}
+          scope: {{ .Values.graph.ldap.scope | quote }}
+          user_schema:
+            id: {{ .Values.graph.ldap.user_schema.id | quote }}
+            displayName: {{ .Values.graph.ldap.user_schema.displayName | quote }}
+            mail: {{ .Values.graph.ldap.user_schema.mail | quote }}
+            name: {{ .Values.graph.ldap.user_schema.name | quote }}
+          group_schema:
+            id: {{ .Values.graph.ldap.group_schema.id | quote }}
+            mail: {{ .Values.graph.ldap.group_schema.mail | quote }}
+            member: {{ .Values.graph.ldap.group_schema.member | quote }}
+          write_disabled: {{ .Values.graph.ldap.write_disabled }}
+{{- else }}
           bind_password: "disabled"
           write_disabled: true
+{{- end }}
       service_account:
         service_account_id: {{ .Values.serviceAccountId | quote }}
         service_account_secret: "override-via-env"
@@ -58,13 +76,40 @@ data:
     users:
       drivers:
         ldap:
+{{- if .Values.graph.ldap.enabled }}
+          uri: {{ .Values.graph.ldap.uri | quote }}
+          bind_dn: {{ .Values.graph.ldap.bind_dn | quote }}
+          bind_password: {{ .Values.graph.ldap.bind_password | quote }}
+          base_dn: {{ .Values.graph.ldap.base_dn | quote }}
+          scope: {{ .Values.graph.ldap.scope | quote }}
+          user_schema:
+            id: {{ .Values.graph.ldap.user_schema.id | quote }}
+            displayName: {{ .Values.graph.ldap.user_schema.displayName | quote }}
+            mail: {{ .Values.graph.ldap.user_schema.mail | quote }}
+            name: {{ .Values.graph.ldap.user_schema.name | quote }}
+          write_disabled: {{ .Values.graph.ldap.write_disabled }}
+{{- else }}
           bind_password: "disabled"
           write_disabled: true
+{{- end }}
     groups:
       drivers:
         ldap:
+{{- if .Values.graph.ldap.enabled }}
+          uri: {{ .Values.graph.ldap.uri | quote }}
+          bind_dn: {{ .Values.graph.ldap.bind_dn | quote }}
+          bind_password: {{ .Values.graph.ldap.bind_password | quote }}
+          base_dn: {{ .Values.graph.ldap.base_dn | quote }}
+          scope: {{ .Values.graph.ldap.scope | quote }}
+          group_schema:
+            id: {{ .Values.graph.ldap.group_schema.id | quote }}
+            mail: {{ .Values.graph.ldap.group_schema.mail | quote }}
+            member: {{ .Values.graph.ldap.group_schema.member | quote }}
+          write_disabled: {{ .Values.graph.ldap.write_disabled }}
+{{- else }}
           bind_password: "disabled"
           write_disabled: true
+{{- end }}
     ocdav:
       insecure: true
     ocm:
@@ -127,4 +172,45 @@ data:
       service_account:
         service_account_id: {{ .Values.serviceAccountId | quote }}
         service_account_secret: "override-via-env"
+
+
+  csp.yaml: |
+    directives:
+      child-src:
+        - "'self'"
+      connect-src:
+        - "'self'"
+        - "blob:"
+        - "https://raw.githubusercontent.com/opencloud-eu/awesome-apps/"
+        - "https://update.opencloud.eu/"
+        - "https://{{ (index .Values.ingress.hosts 0).host }}"
+        - "{{ .Values.oidc.issuer | regexFind "^https://[^/]+" }}"
+      default-src:
+        - "'none'"
+      font-src:
+        - "'self'"
+      frame-ancestors:
+        - "'self'"
+      frame-src:
+        - "'self'"
+        - "blob:"
+        - "https://embed.diagrams.net/"
+      img-src:
+        - "'self'"
+        - "data:"
+        - "blob:"
+        - "https://raw.githubusercontent.com/opencloud-eu/awesome-apps/"
+      manifest-src:
+        - "'self'"
+      media-src:
+        - "'self'"
+      object-src:
+        - "'self'"
+        - "blob:"
+      script-src:
+        - "'self'"
+        - "'unsafe-inline'"
+      style-src:
+        - "'self'"
+        - "'unsafe-inline'"
 {{- end }}

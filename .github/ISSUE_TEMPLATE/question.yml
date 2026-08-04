@@ -11,15 +11,15 @@ body:
     attributes:
       value: |
         ## Have a question? / Haben Sie eine Frage?
-        
+
         Before asking, please check our resources:
         Bevor Sie fragen, überprü Sie bitte unsere Ressourcen:
-        
+
         📖 [Documentation](https://github.com/tobias-weiss-ai-xr/opendesk-edu/tree/main/docs)
         📋 [Getting Started](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/getting-started.md)
         🔧 [Configuration Guide](https://github.com/tobias-weiss-ai-xr/opendesk-edu/blob/main/docs/enhanced-configuration.md)
         💬 [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions)
-        
+
         ---
 
   - type: dropdown
@@ -104,7 +104,7 @@ body:
     attributes:
       value: |
         ---
-        
+
         💡 **Tip:** For general discussions, consider using [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) instead.
-        
+
         💡 **Tipp:** Für allgemeine Diskussionen erwägen Sie bitte [GitHub Discussions](https://github.com/tobias-weiss-ai-xr/opendesk-edu/discussions) stattdessen.

@@ -121,6 +121,8 @@ spec:
                   key: oc-url-signing-secret
             - name: OC_URL
               value: {{ printf "https://%s" (index .Values.ingress.hosts 0).host | quote }}
+            - name: PROXY_CSP_CONFIG_FILE_OVERRIDE_LOCATION
+              value: "/etc/opencloud/csp.yaml"
           volumeMounts:
             - name: opencloud-data
               mountPath: /var/lib/opencloud

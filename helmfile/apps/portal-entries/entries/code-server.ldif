@@ -1,0 +1,12 @@
+dn: cn=code-server,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+objectClass: univentionNewPortalEntry
+objectClass: top
+cn: code-server
+univentionNewPortalEntryActivate: TRUE
+univentionNewPortalEntryLink: en_US https://code.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLinkTarget: newwindow
+univentionNewPortalEntryDisplayName: en_US code-server
+univentionNewPortalEntryDisplayName: de_DE code-server
+univentionNewPortalEntryDescription: en_US VS Code in the browser
+univentionNewPortalEntryDescription: de_DE VS Code im Browser
+univentionNewPortalEntryOnlyAnonymous: FALSE

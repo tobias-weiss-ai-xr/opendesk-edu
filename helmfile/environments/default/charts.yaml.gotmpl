@@ -139,7 +139,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "intercom-service"
-    version: "2.23.7"
+    version: "2.23.11"
     verify: true
   jitsi:
     # providerCategory: "Platform"
@@ -311,7 +311,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "nubus"
-    version: "1.18.1"
+    version: "1.19.1"
     verify: true
   opendeskAlerts:
     # providerCategory: "Platform"
@@ -363,7 +363,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/openproject/charts-mirror"
     name: "openproject"
-    version: "13.4.0"
+    version: "13.4.3"
     verify: true
   openprojectBootstrap:
     # providerCategory: "Platform"
@@ -417,7 +417,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/univention/charts-mirror"
     name: "ox-connector"
-    version: "0.35.1"
+    version: "0.36.4"
     verify: true
   postfix:
     # providerCategory: "Platform"
@@ -525,7 +525,7 @@ charts:
     registry: "registry.opencode.de"
     repository: "bmi/opendesk/components/supplier/xwiki/charts-mirror"
     name: "xwiki"
-    version: "1.4.4"
+    version: "1.4.5"
     verify: true
   ilias:
     # providerCategory: "Community"
@@ -546,4 +546,36 @@ charts:
     repository: "../../charts/snipr"
     name: "snipr"
     version: "1.0.0"
+    verify: false
+
+  # Collab Services chart references
+  jupyterhub:
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk Edu"
+    # upstreamRegistry: "https://hub.jupyter.org/helm-chart"
+    # upstreamRepository: "jupyterhub"
+    registry: "hub.jupyter.org"
+    repository: "helm-chart"
+    name: "jupyterhub"
+    version: "3.3.9"
+    verify: false
+  dask:
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk Edu"
+    # upstreamRegistry: "https://helm.dask.org"
+    # upstreamRepository: "dask-gateway"
+    registry: "helm.dask.org"
+    repository: ""
+    name: "dask-gateway"
+    version: "2024.1.0"
+    verify: false
+  codeServer:
+    # providerCategory: "Community"
+    # providerResponsible: "openDesk Edu"
+    # upstreamRegistry: "https://helm.coder.com/coder-v2"
+    # upstreamRepository: "coder"
+    registry: "helm.coder.com"
+    repository: "coder-v2"
+    name: "coder"
+    version: "2.16.0"
     verify: false

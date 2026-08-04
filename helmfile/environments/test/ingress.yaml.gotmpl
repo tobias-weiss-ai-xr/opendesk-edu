@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+ingress:
+  enabled: true
+  ingressClassName: "haproxy"
+  controller: "haproxy"
+  tls:
+    enabled: true
+    secretName: "opendesk-certificates-tls"
+  parameters:
+    bodySize:
+      drawio: "10M"
+      excalidraw: "10M"
+      selfServicePassword: "10M"
+      planka: "10M"
+      etherpad: "10M"
+      bookstack: "10M"
+      limesurvey: "10M"
+      typo3: "100M"
+      zammad: "100M"
+      snipr: "100M"
+      opencloud: "100M"
+      moodle: "100M"
+      ilias: "100M"
+    bodyTimeout:
+      drawio: 60
+      excalidraw: 60
+      selfServicePassword: 60
+      planka: 60
+      etherpad: 60
+      bookstack: 60
+      limesurvey: 60
+      typo3: 60
+      zammad: 60
+      snipr: 60
+      opencloud: 60
+      moodle: 60
+      ilias: 60

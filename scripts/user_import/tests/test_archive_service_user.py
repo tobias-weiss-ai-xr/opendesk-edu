@@ -27,7 +27,6 @@ class TestServiceArchiver(unittest.TestCase):
 
         self.test_username = "testuser"
         self.test_services = ["keycloak", "ilias", "moodle", "bbb", "nextcloud"]
-        self.test_archive_dir = tempfile.mkdtemp()
 
     @patch.dict(os.environ, {"KUBECONFIG": "/tmp/test-kubeconfig"})
     def test_archiver_initialization(self):
@@ -40,13 +39,13 @@ class TestServiceArchiver(unittest.TestCase):
     @patch("archive_service_user.subprocess.run")
     def test_archive_keycloak_user(self, mock_run):
         """Test archiving Keycloak user"""
-        archiver = ServiceArchiver(archive_dir=tempfile.mkdtemp())
+        archiver = ServiceArchiver()
 
         # Mock kubectl get pods
         mock_run.return_value = MagicMock(stdout="keycloak-0", returncode=0)
 
         # Mock KeycloakAdminClient
-        with patch("sync_users.KeycloakAdminClient") as mock_keycloak:
+        with patch("archive_service_user.KeycloakAdminClient") as mock_keycloak:
             mock_admin = MagicMock()
             mock_keycloak.return_value = mock_admin
             mock_admin.connect.return_value = True
@@ -65,7 +64,7 @@ class TestServiceArchiver(unittest.TestCase):
                 mock_tar = MagicMock()
                 mock_tarfile.open.return_value = mock_tar
 
-                result = archiver._archive_keycloak_user(self.test_username)
+                result = archiver._archive_keycloak(self.test_username)
 
                 # Verify archiver ran
                 self.assertIsNotNone(result)
@@ -73,7 +72,7 @@ class TestServiceArchiver(unittest.TestCase):
     @patch("archive_service_user.subprocess.run")
     def test_archive_ilias(self, mock_run):
         """Test archiving ILIAS user data"""
-        archiver = ServiceArchiver(archive_dir=self.test_archive_dir)
+        archiver = ServiceArchiver()
 
         # Mock kubectl get pods
         mock_run.return_value = MagicMock(stdout="ilias-0", returncode=0)
@@ -90,7 +89,7 @@ class TestServiceArchiver(unittest.TestCase):
     @patch("archive_service_user.subprocess.run")
     def test_archive_moodle(self, mock_run):
         """Test archiving Moodle user data"""
-        archiver = ServiceArchiver(archive_dir=self.test_archive_dir)
+        archiver = ServiceArchiver()
 
         # Mock kubectl get pods
         mock_run.return_value = MagicMock(stdout="moodle-0", returncode=0)
@@ -106,7 +105,7 @@ class TestServiceArchiver(unittest.TestCase):
     @patch("archive_service_user.subprocess.run")
     def test_archive_bbb(self, mock_run):
         """Test archiving BBB user data"""
-        archiver = ServiceArchiver(archive_dir=self.test_archive_dir)
+        archiver = ServiceArchiver()
 
         # Mock kubectl get pods
         mock_run.return_value = MagicMock(stdout="bbb-0", returncode=0)
@@ -122,7 +121,7 @@ class TestServiceArchiver(unittest.TestCase):
     @patch("archive_service_user.subprocess.run")
     def test_archive_nextcloud(self, mock_run):
         """Test archiving Nextcloud user data"""
-        archiver = ServiceArchiver(archive_dir=self.test_archive_dir)
+        archiver = ServiceArchiver()
 
         # Mock kubectl get pods
         mock_run.return_value = MagicMock(stdout="nextcloud-0", returncode=0)
@@ -138,7 +137,7 @@ class TestServiceArchiver(unittest.TestCase):
     @patch("archive_service_user.subprocess.run")
     def test_archive_user_all_services(self, mock_run):
         """Test archiving user data from all services"""
-        archiver = ServiceArchiver(archive_dir=self.test_archive_dir)
+        archiver = ServiceArchiver()
 
         # Mock kubectl pod lookups
         mock_run.side_effect = [
@@ -154,7 +153,7 @@ class TestServiceArchiver(unittest.TestCase):
             mock_tarfile.open.return_value = mock_tar
 
             # Mock individual archive methods
-            with patch.object(archiver, "_archive_keycloak_user") as mock_keycloak:
+            with patch.object(archiver, "_archive_keycloak") as mock_keycloak:
                 mock_keycloak.return_value = "/tmp/test-archives/testuser/keycloak.tar.gz"
 
                 with patch.object(archiver, "_archive_ilias") as mock_ilias:
@@ -169,7 +168,7 @@ class TestServiceArchiver(unittest.TestCase):
                             with patch.object(archiver, "_archive_nextcloud") as mock_nextcloud:
                                 mock_nextcloud.return_value = "/tmp/test-archives/testuser/nextcloud.tar.gz"
 
-                                archives = archiver.archive_user(self.test_username, self.test_services)
+                                archives = archiver.archive_user(self.test_username)
 
                                 # Verify all archives were created
                                 self.assertIn("keycloak", archives)
@@ -209,9 +208,10 @@ class TestServiceArchiver(unittest.TestCase):
     @patch("archive_service_user.subprocess.run")
     def test_compress_all_archives(self, mock_run):
         """Test compressing all user archives"""
+        archiver = ServiceArchiver()
+
         # Create test archive structure
         with tempfile.TemporaryDirectory() as test_archives:
-            archiver = ServiceArchiver(archive_dir=test_archives)
             user_dir = os.path.join(test_archives, self.test_username)
             os.makedirs(user_dir)
 
@@ -237,10 +237,6 @@ class TestServiceArchiver(unittest.TestCase):
 
 class TestServiceArchiverCLI(unittest.TestCase):
     """Test archive_service_user.py command-line interface"""
-
-    def setUp(self):
-        """Set up test fixtures"""
-        self.test_username = "testuser"
 
     @patch("archive_service_user.argparse.ArgumentParser")
     @patch("archive_service_user.ServiceArchiver")

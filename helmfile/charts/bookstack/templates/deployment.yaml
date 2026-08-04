@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,19 +18,94 @@ spec:
         bookstack/server: "true"
 {{ include "bookstack.labels" . | nindent 8 }}
     spec:
+      initContainers:
+        - name: init-config
+          image: {{ .Values.bookstack.image }}:{{ .Values.bookstack.tag }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              mkdir -p /config/log/php /config/log/bookstack /config/log/nginx /config/keys /config/backups /config/www /config/nginx
+              touch /config/log/php/error.log /config/log/nginx/access.log /config/log/nginx/error.log
+              # Create dummy cert in case nginx needs one (CephFS root_squash)
+              openssl req -x509 -newkey rsa:4096 -keyout /config/keys/cert.key -out /config/keys/cert.crt -days 365 -nodes -subj "/CN=bookstack" 2>/dev/null || true
+              chmod 777 /config/log /config/log/php /config/log/bookstack /config/log/nginx /config/keys /config/backups /config/www
+              chmod 666 /config/log/php/error.log /config/log/nginx/access.log /config/log/nginx/error.log
+              chmod 644 /config/keys/cert.key /config/keys/cert.crt 2>/dev/null || true
+              # Create .env from env vars (s6 init won't overwrite if /config/www exists)
+              {
+                echo "APP_KEY=${APP_KEY}"
+                echo "APP_URL=${APP_URL}"
+                echo "DB_CONNECTION=${DB_CONNECTION}"
+                echo "DB_HOST=${DB_HOST}"
+                echo "DB_PORT=${DB_PORT}"
+                echo "DB_DATABASE=${DB_DATABASE}"
+                echo "DB_USERNAME=${DB_USER}"
+                echo "DB_PASSWORD=${DB_PASS}"
+                echo "AUTH_METHOD=${AUTH_METHOD}"
+                echo "OIDC_NAME=${OIDC_NAME}"
+                echo "OIDC_CLIENT_ID=${OIDC_CLIENT_ID}"
+                echo "OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET}"
+                echo "OIDC_ISSUER_BASE_URL=${OIDC_ISSUER_BASE_URL}"
+              } > /config/www/.env
+              echo "Done."
+          env:
+            - name: APP_KEY
+              value: "{{ .Values.bookstack.appKey }}"
+            - name: APP_URL
+              value: "https://{{ (index .Values.ingress.hosts 0).host }}"
+            - name: DB_CONNECTION
+              value: {{ .Values.bookstack.dbConnection | default "mysql" | quote }}
+            - name: DB_HOST
+              value: {{ .Values.bookstack.db.host | quote }}
+            - name: DB_PORT
+              value: "{{ .Values.bookstack.db.port }}"
+            - name: DB_DATABASE
+              value: {{ .Values.bookstack.db.database | quote }}
+            - name: DB_USER
+              value: {{ .Values.bookstack.db.user | quote }}
+            - name: DB_PASS
+              value: {{ .Values.bookstack.db.password | quote }}
+            - name: AUTH_METHOD
+              value: "oidc"
+            - name: OIDC_NAME
+              value: "Keycloak"
+            - name: OIDC_CLIENT_ID
+              value: "{{ .Values.sso.oidc.clientId }}"
+            - name: OIDC_CLIENT_SECRET
+              value: "{{ .Values.sso.oidc.clientSecret }}"
+            - name: OIDC_ISSUER_BASE_URL
+              value: "{{ .Values.sso.oidc.issuerBaseUrl }}"
+          volumeMounts:
+            - name: bookstack-uploads
+              mountPath: /config
+          securityContext:
+            capabilities:
+              add:
+                - CHOWN
+                - FOWNER
+                - SETUID
+                - SETGID
+              drop:
+              - ALL
       containers:
         - name: bookstack
           image: {{ .Values.bookstack.image }}:{{ .Values.bookstack.tag }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
+              add:
+                - CHOWN
+                - FOWNER
+                - SETUID
+                - SETGID
               drop:
               - ALL
             privileged: false
             readOnlyRootFilesystem: false
-            runAsGroup: 33
-            runAsNonRoot: true
-            runAsUser: 33
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
             seLinuxOptions: {}
             seccompProfile:
               type: RuntimeDefault
@@ -39,8 +114,16 @@ spec:
           env:
             - name: APP_URL
               value: "https://{{ (index .Values.ingress.hosts 0).host }}"
+            - name: APP_KEY
+              value: {{ .Values.bookstack.appKey | quote }}
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
             - name: APP_ENV
               value: "production"
+            - name: DB_CONNECTION
+              value: {{ .Values.bookstack.dbConnection | default "mysql" | quote }}
             - name: DB_HOST
               value: {{ include "bookstack.dbHost" . | quote }}
             - name: DB_PORT
@@ -51,12 +134,27 @@ spec:
               value: {{ include "bookstack.dbPassword" . | quote }}
             - name: DB_DATABASE
               value: {{ include "bookstack.dbName" . | quote }}
+{{- if .Values.sso.oidc.enabled }}
+            - name: AUTH_METHOD
+              value: "oidc"
+            - name: OIDC_NAME
+              value: "Keycloak"
+            - name: OIDC_CLIENT_ID
+              value: "{{ .Values.sso.oidc.clientId }}"
+            - name: OIDC_CLIENT_SECRET
+              value: "{{ .Values.sso.oidc.clientSecret }}"
+            - name: OIDC_ISSUER_BASE_URL
+              value: "{{ .Values.sso.oidc.issuerBaseUrl }}"
+{{- end }}
           volumeMounts:
             - name: bookstack-uploads
               mountPath: /config
 {{- if .Values.extraVolumeMounts }}
 {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
 {{- end }}
+            - name: fpm-config
+              mountPath: /config/php/www2.conf
+              subPath: www2.conf
           livenessProbe:
             tcpSocket:
               port: {{ .Values.bookstack.port }}
@@ -79,3 +177,6 @@ spec:
 {{- if .Values.extraVolumes }}
 {{- toYaml .Values.extraVolumes | nindent 8 }}
 {{- end }}
+        - name: fpm-config
+          configMap:
+            name: {{ .Release.Name }}-bookstack-fpm-config

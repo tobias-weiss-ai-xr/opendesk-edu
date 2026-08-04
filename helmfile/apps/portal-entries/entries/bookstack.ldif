@@ -1,0 +1,9 @@
+dn: cn=bookstack,cn=applications,cn=opendesk,cn=edu
+cn: bookstack
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: BookStack
+odApplicationDescription: Wikis und Dokumentation
+odApplicationURL: https://wiki.{{ .Values.global.domain }}
+odApplicationIcon: bookstack
+odApplicationOrder: 140

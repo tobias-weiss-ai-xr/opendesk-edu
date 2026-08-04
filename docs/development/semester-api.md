@@ -82,24 +82,24 @@ The Semester Course Provisioning API provides a RESTful interface for managing t
 
 **Core Capabilities:**
 
-- **Course Lifecycle:** Create, update, archive, and restore courses
-- **Semester Management:** Organize courses by academic semester (Wintersemester, Sommersemester)
-- **Resource Allocation:** Manage storage quotas and course-level limits
-- **Enrollment Management:** Synchronize student rosters and role assignments
-- **Integration:** Connect with campus management systems via SAML/OIDC认证
-- **Event Notifications:** Webhooks for course lifecycle events
+* **Course Lifecycle:** Create, update, archive, and restore courses
+* **Semester Management:** Organize courses by academic semester (Wintersemester, Sommersemester)
+* **Resource Allocation:** Manage storage quotas and course-level limits
+* **Enrollment Management:** Synchronize student rosters and role assignments
+* **Integration:** Connect with campus management systems via SAML/OIDC认证
+* **Event Notifications:** Webhooks for course lifecycle events
 
 **Semester Model:**
 
-- **Wintersemester (WS):** October to March (e.g., WS 2025/26)
-- **Sommersemester (SS):** April to September (e.g., SS 2026)
+* **Wintersemester (WS):** October to March (e.g., WS 2025/26)
+* **Sommersemester (SS):** April to September (e.g., SS 2026)
 
 **Learning Platforms Supported:**
 
-- ILIAS (primary LMS)
-- Moodle (alternative LMS)
-- BigBlueButton (video lectures)
-- OpenCloud (file storage)
+* ILIAS (primary LMS)
+* Moodle (alternative LMS)
+* BigBlueButton (video lectures)
+* OpenCloud (file storage)
 
 > [!note]
 > This API specification is focused on design and integration patterns. The actual API implementation is planned for future development phases and will be implemented as a separate service or extension to the existing Keycloak-based IAM infrastructure.
@@ -136,24 +136,24 @@ The Semester Course Provisioning API is designed as a RESTful service that orche
 **Integration Points:**
 
 1. **Campus Management System:**
-   - HISinOne / HISinOne-Proxy as source of truth for course data
-   - SAML/OIDC authentication for secure data exchange
-   - Periodic synchronization or event-driven updates
+   * HISinOne / HISinOne-Proxy as source of truth for course data
+   * SAML/OIDC authentication for secure data exchange
+   * Periodic synchronization or event-driven updates
 
 2. **Identity Provider (Keycloak):**
-   - User authentication and authorization
-   - Role-based access control (instructor, student, tutor)
-   - Semester groups for enrollment management
+   * User authentication and authorization
+   * Role-based access control (instructor, student, tutor)
+   * Semester groups for enrollment management
 
 3. **Learning Platforms:**
-   - Course creation via platform-specific APIs or bulk import
-   - User provisioning through LDAP/REST
-   - Resource allocation based on API quotas
+   * Course creation via platform-specific APIs or bulk import
+   * User provisioning through LDAP/REST
+   * Resource allocation based on API quotas
 
 4. **Resource Management:**
-   - Persistent storage provisioning (OpenCloud, Nextcloud)
-   - Per-course quota enforcement
-   - Backup and archival workflows
+   * Persistent storage provisioning (OpenCloud, Nextcloud)
+   * Per-course quota enforcement
+   * Backup and archival workflows
 
 ## Authentication and Authorization
 
@@ -181,10 +181,10 @@ Authorization: Bearer <access-token>
 
 **Token Validation:**
 
-- JWT access tokens with RS256 signature
-- Token lifetime: 15 minutes (configurable)
-- Refresh tokens: 24 hours (configurable)
-- Token introspection endpoint for offline validation
+* JWT access tokens with RS256 signature
+* Token lifetime: 15 minutes (configurable)
+* Refresh tokens: 24 hours (configurable)
+* Token introspection endpoint for offline validation
 
 ### Authorization Scopes
 
@@ -218,9 +218,9 @@ Token-based access is supplemented with Keycloak groups/roles for fine-grained p
 
 **Group-Based Enrollment:**
 
-- Semester groups: `semester:WS2025:students`, `semester:WS2025:instructors`
-- Course-specific groups: `course:CS101:instructors`, `course:CS101:students`
-- Role inheritance: Instructors have read access to all courses in their semester
+* Semester groups: `semester:WS2025:students`, `semester:WS2025:instructors`
+* Course-specific groups: `course:CS101:instructors`, `course:CS101:students`
+* Role inheritance: Instructors have read access to all courses in their semester
 
 > [!important]
 > Client credentials are used for service-to-service authentication (e.g., campus management system integration). For user-initiated actions (e.g., instructor updating course metadata), use Resource Owner Password Credentials or Authorization Code flow.
@@ -230,6 +230,7 @@ Token-based access is supplemented with Keycloak groups/roles for fine-grained p
 All API endpoints are prefixed with `/api/v1/semesters`.
 
 **Base URL:**
+
 ```
 https://api.education.example.org/api/v1/semesters
 ```
@@ -331,10 +332,10 @@ https://api.education.example.org/api/v1/semesters
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `409 Conflict`: Course already exists for this semester
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `409 Conflict`: Course already exists for this semester
 
 #### Update Course
 
@@ -379,10 +380,10 @@ https://api.education.example.org/api/v1/semesters
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
 
 #### Get Course
 
@@ -396,9 +397,9 @@ Returns the same response structure as Create Course.
 
 **Error Responses:**
 
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
 
 #### List Courses
 
@@ -454,8 +455,8 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid query parameters
-- `401 Unauthorized`: Missing or invalid authentication token
+* `400 Bad Request`: Invalid query parameters
+* `401 Unauthorized`: Missing or invalid authentication token
 
 #### Archive Course
 
@@ -502,17 +503,17 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
-- `409 Conflict`: Course already archived
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
+* `409 Conflict`: Course already archived
 
 #### Restore Course
 
 **Endpoint:** `POST /courses/{courseId}/restore`
 
-**Description:** Restore a previously archived course for re-use.
+**Description:** Restore a previously archived course for reuse.
 
 **Request Body:**
 
@@ -541,11 +542,11 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
-- `409 Conflict`: Course already exists in target semester
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
+* `409 Conflict`: Course already exists in target semester
 
 #### Delete Course
 
@@ -579,11 +580,11 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
-- `409 Conflict`: Course is archived (restore before deletion)
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
+* `409 Conflict`: Course is archived (restore before deletion)
 
 ### Semesters
 
@@ -634,10 +635,10 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `409 Conflict`: Semester already exists
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `409 Conflict`: Semester already exists
 
 #### Get Semester
 
@@ -676,9 +677,9 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Semester not found
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Semester not found
 
 #### List Semesters
 
@@ -721,7 +722,7 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `401 Unauthorized`: Missing or invalid authentication token
+* `401 Unauthorized`: Missing or invalid authentication token
 
 #### Activate Semester
 
@@ -759,11 +760,11 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Semester not found
-- `409 Conflict`: Semester already active
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Semester not found
+* `409 Conflict`: Semester already active
 
 #### Archive Semester
 
@@ -812,11 +813,11 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Semester not found
-- `409 Conflict`: Semester already archived
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Semester not found
+* `409 Conflict`: Semester already archived
 
 ### Course Enrollment
 
@@ -897,12 +898,12 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
-- `409 Conflict`: Student already enrolled
-- `422 Unprocessable Entity`: Course has reached student quota
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
+* `409 Conflict`: Student already enrolled
+* `422 Unprocessable Entity`: Course has reached student quota
 
 #### Remove Students from Course
 
@@ -957,10 +958,10 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
 
 #### Update Student Role
 
@@ -992,10 +993,10 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course or user not found
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course or user not found
 
 #### Get Course Roster
 
@@ -1042,9 +1043,9 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
 
 ### Resource Quotas
 
@@ -1093,9 +1094,9 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
 
 #### Update Quota for Course
 
@@ -1136,10 +1137,10 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid request body
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
+* `400 Bad Request`: Invalid request body
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
 
 #### Get Usage Statistics
 
@@ -1201,10 +1202,10 @@ GET /courses?semester=WS2025/26&status=active&limit=50&offset=0
 
 **Error Responses:**
 
-- `400 Bad Request`: Invalid query parameters
-- `401 Unauthorized`: Missing or invalid authentication token
-- `403 Forbidden`: Insufficient permissions
-- `404 Not Found`: Course not found
+* `400 Bad Request`: Invalid query parameters
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Course not found
 
 ## Request and Response Schemas
 
@@ -1409,10 +1410,10 @@ Quota management is handled through the API endpoints `/courses/{id}/quota` and 
 
 **Quota Enforcement:**
 
-- **OpenCloud:** Per-user quota within course share
-- **ILIAS:** Max file upload size per course
-- **BBB:** Per-recording storage limits
-- **Moodle:** Course backup size limits
+* **OpenCloud:** Per-user quota within course share
+* **ILIAS:** Max file upload size per course
+* **BBB:** Per-recording storage limits
+* **Moodle:** Course backup size limits
 
 ### Automatic Scaling
 
@@ -1420,9 +1421,9 @@ The API supports automatic quota scaling based on enrollment growth.
 
 **Scaling Triggers:**
 
-- Student enrollment exceeds 90% of max students
-- Storage usage exceeds 80% of allocated
-- Instructor requests quota increase
+* Student enrollment exceeds 90% of max students
+* Storage usage exceeds 80% of allocated
+* Instructor requests quota increase
 
 **Scaling Policy:**
 
@@ -1456,9 +1457,9 @@ The API supports automatic quota scaling based on enrollment growth.
 
 **Scaling Approval:**
 
-- Automatic scaling within preset limits (e.g., up to 2x initial quota)
-- Admin approval required for scaling beyond preset limits
-- Notification sent to instructors and system administrators
+* Automatic scaling within preset limits (e.g., up to 2x initial quota)
+* Admin approval required for scaling beyond preset limits
+* Notification sent to instructors and system administrators
 
 ## Rate Limiting and Throttling
 
@@ -1488,10 +1489,10 @@ X-RateLimit-Bucket: course-admin
 
 **When Rate Limit Exceeded:**
 
-- Client receives `429 Too Many Requests` response
-- `Retry-After` header indicates when request can be retried (in seconds)
-- Request is queued if using batch operations
-- Automatic exponential backoff recommended for retries
+* Client receives `429 Too Many Requests` response
+* `Retry-After` header indicates when request can be retried (in seconds)
+* Request is queued if using batch operations
+* Automatic exponential backoff recommended for retries
 
 **Throttling Response:**
 
@@ -1552,9 +1553,9 @@ def make_api_request(url, headers, body, max_retries=3):
 
 **Rate Limit Periods:**
 
-- Hourly: Resets every hour (e.g., 1000 requests/hour)
-- Per-minute: Resets every minute (e.g., 100 requests/minute)
-- Per-second: Resets every second (e.g., 10 requests/second)
+* Hourly: Resets every hour (e.g., 1000 requests/hour)
+* Per-minute: Resets every minute (e.g., 100 requests/minute)
+* Per-second: Resets every second (e.g., 10 requests/second)
 
 **Rate Limit Calculation:**
 
@@ -1580,10 +1581,10 @@ HISinOne is a campus management system (PCA) that manages course data, student e
 
 **Synchronization Triggers:**
 
-- New semester activation
-- Course creation/update in HISinOne
-- Student enrollment changes
-- Instructor assignment changes
+* New semester activation
+* Course creation/update in HISinOne
+* Student enrollment changes
+* Instructor assignment changes
 
 **Synchronization Endpoints:**
 
@@ -1608,10 +1609,10 @@ HISinOne-Proxy is a lightweight proxy layer that provides a simplified API inter
 
 **Proxy Benefits:**
 
-- Simplified API interface (no complex SAML/OIDC flow required)
-- Caching layer reduces load on HISinOne
-- Transformation layer for data mapping
-- Authentication/authorization proxy
+* Simplified API interface (no complex SAML/OIDC flow required)
+* Caching layer reduces load on HISinOne
+* Transformation layer for data mapping
+* Authentication/authorization proxy
 
 **Proxy API Pattern:**
 
@@ -1738,36 +1739,36 @@ All error responses follow a consistent format:
 **Course Creation Failures:**
 
 1. **Course Already Exists:**
-   - Error Code: `COURSE_ALREADY_EXISTS`
-   - HTTP Status: `409 Conflict`
-   - Recovery: Use course update endpoint instead
+   * Error Code: `COURSE_ALREADY_EXISTS`
+   * HTTP Status: `409 Conflict`
+   * Recovery: Use course update endpoint instead
 
 2. **Quota Exceeded:**
-   - Error Code: `QUOTA_POOL_EXHAUSTED`
-   - HTTP Status: `422 Unprocessable Entity`
-   - Recovery: Request quota increase or reduce course count
+   * Error Code: `QUOTA_POOL_EXHAUSTED`
+   * HTTP Status: `422 Unprocessable Entity`
+   * Recovery: Request quota increase or reduce course count
 
 3. **Invalid Semester:**
-   - Error Code: `SEMESTER_NOT_FOUND`
-   - HTTP Status: `404 Not Found`
-   - Recovery: Create semester first or specify valid semester code
+   * Error Code: `SEMESTER_NOT_FOUND`
+   * HTTP Status: `404 Not Found`
+   * Recovery: Create semester first or specify valid semester code
 
 **Enrollment Failures:**
 
 1. **Student Quota Exceeded:**
-   - Error Code: `ENROLLMENT_QUOTA_EXCEEDED`
-   - HTTP Status: `422 Unprocessable Entity`
-   - Recovery: Increase `maxStudents` quota or remove students
+   * Error Code: `ENROLLMENT_QUOTA_EXCEEDED`
+   * HTTP Status: `422 Unprocessable Entity`
+   * Recovery: Increase `maxStudents` quota or remove students
 
 2. **Duplicate Enrollment:**
-   - Error Code: `ENROLLMENT_DUPLICATE`
-   - HTTP Status: `409 Conflict`
-   - Recovery: Student already enrolled, use update endpoint
+   * Error Code: `ENROLLMENT_DUPLICATE`
+   * HTTP Status: `409 Conflict`
+   * Recovery: Student already enrolled, use update endpoint
 
 3. **Non-Existent Student:**
-   - Error Code: `USER_NOT_FOUND`
-   - HTTP Status: `404 Not Found`
-   - Recovery: Verify student ID in Keycloak
+   * Error Code: `USER_NOT_FOUND`
+   * HTTP Status: `404 Not Found`
+   * Recovery: Verify student ID in Keycloak
 
 ## Webhooks and Event Notifications
 
@@ -1821,9 +1822,9 @@ Webhooks are configured via API endpoint or environment variables.
 
 **Webhook Authentication:**
 
-- HMAC signature in `X-Webhook-Signature` header
-- Secret shared between API and webhook receiver
-- Signature computed as: `HMAC-SHA256(secret, event_payload)`
+* HMAC signature in `X-Webhook-Signature` header
+* Secret shared between API and webhook receiver
+* Signature computed as: `HMAC-SHA256(secret, event_payload)`
 
 ```python
 def verify_webhook_signature(payload, signature, secret):
@@ -1838,10 +1839,10 @@ def verify_webhook_signature(payload, signature, secret):
 
 **Webhook Delivery Guarantees:**
 
-- Minimum once delivery (may deliver duplicates)
-- Retry on failure (configurable maxRetries)
-- Exponential backoff between retries
-- Timeout after configurable period
+* Minimum once delivery (may deliver duplicates)
+* Retry on failure (configurable maxRetries)
+* Exponential backoff between retries
+* Timeout after configurable period
 
 ### Event Payload
 
@@ -1919,10 +1920,11 @@ Lifecycle hooks allow custom actions to be executed at key points in the course 
 **Trigger:** Before course creation
 
 **Use Cases:**
-- Validate course code against institutional standards
-- Check lecturer availability
-- Reserve room if specified
-- Pre-provision platform resources
+
+* Validate course code against institutional standards
+* Check lecturer availability
+* Reserve room if specified
+* Pre-provision platform resources
 
 **Hook Payload:**
 
@@ -1967,10 +1969,11 @@ Lifecycle hooks allow custom actions to be executed at key points in the course 
 **Trigger:** After successful course creation
 
 **Use Cases:**
-- Send notifications to instructors
-- Integrate with external calendars
-- Create platform-specific course resources
-- Log audit trail
+
+* Send notifications to instructors
+* Integrate with external calendars
+* Create platform-specific course resources
+* Log audit trail
 
 **Hook Payload:**
 
@@ -1995,9 +1998,10 @@ Lifecycle hooks allow custom actions to be executed at key points in the course 
 **Trigger:** Before course archival
 
 **Use Cases:**
-- Validate archival prerequisites (e.g., grades submitted)
-- Confirm archival retention period
-- Notify instructors of impending archival
+
+* Validate archival prerequisites (e.g., grades submitted)
+* Confirm archival retention period
+* Notify instructors of impending archival
 
 **Hook Payload:**
 
@@ -2032,9 +2036,10 @@ Lifecycle hooks allow custom actions to be executed at key points in the course 
 **Trigger:** After successful course archival
 
 **Use Cases:**
-- Update catalog (mark course as archived)
-- Archive audit trail
-- Notify course stakeholders
+
+* Update catalog (mark course as archived)
+* Archive audit trail
+* Notify course stakeholders
 
 **Hook Payload:**
 
@@ -2252,13 +2257,13 @@ Audit log entry created in system:
 
 ## Additional Resources
 
-- **Campus Management:** [HISinOne Documentation](https://www.his.de/de/hisinone/)
-- **Identity Provider:** [Keycloak Documentation](https://www.keycloak.org/documentation)
-- **Learning Platforms:**
-  - [ILIAS](https://www.ilias.de/docu/)
-  - [Moodle](https://docs.moodle.org/)
-  - [BigBlueButton](https://docs.bigbluebutton.org/)
-  - [OpenCloud](https://www.opencloud.eu/docs/)
-- **Standards:**
-  - [OAuth 2.0](https://oauth.net/2/)
-  - [OpenAPI 3.0](https://swagger.io/specification/)
+* **Campus Management:** [HISinOne Documentation](https://www.his.de/de/hisinone/)
+* **Identity Provider:** [Keycloak Documentation](https://www.keycloak.org/documentation)
+* **Learning Platforms:**
+  * [ILIAS](https://www.ilias.de/docu/)
+  * [Moodle](https://docs.moodle.org/)
+  * [BigBlueButton](https://docs.bigbluebutton.org/)
+  * [OpenCloud](https://www.opencloud.eu/docs/)
+* **Standards:**
+  * [OAuth 2.0](https://oauth.net/2/)
+  * [OpenAPI 3.0](https://swagger.io/specification/)

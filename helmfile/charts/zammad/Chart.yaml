@@ -6,11 +6,11 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 16.4.1
+    version: 18.7.0
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 21.4.1
+    version: 22.1.6
 description: A Helm chart for Zammad service desk
 name: zammad
 type: application

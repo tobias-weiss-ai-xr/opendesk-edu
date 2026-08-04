@@ -27,7 +27,7 @@ spec:
               service:
                 name: {{ $.Release.Name }}-drawio
                 port:
-                  number: 80
+                  number: {{ ternary 4180 $.Values.drawio.port (and $.Values.sso $.Values.sso.oidc $.Values.sso.oidc.enabled) }}
           {{- end }}
     {{- end }}
   {{- if .Values.ingress.tls }}

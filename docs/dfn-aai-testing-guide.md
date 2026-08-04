@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### Overview
@@ -110,6 +111,7 @@ Verify that users can authenticate through the DFN-AAI test federation and Keycl
 #### Test Steps
 
 1. **Initiate Authentication**
+
    ```bash
    # Open browser to portal
    https://portal.education.example.org
@@ -150,13 +152,14 @@ Open SAML Tracer during authentication and verify:
 1. **AuthnRequest** sent to IdP
    - Contains correct Entity ID
    - Contains correct ACS URL
-   
+
 2. **SAML Assertion** received
    - Signed correctly
    - Contains expected attributes
    - Subject confirmation matches
 
 3. **Attribute Statement** contains:
+
    ```xml
    <saml2:Attribute Name="urn:mace:dir:attribute-def:mail">
      <saml2:AttributeValue>testuser1@test.aai.dfn.de</saml2:AttributeValue>
@@ -195,10 +198,11 @@ Verify that all required eduGAIN attributes are received and correctly mapped to
    | `eduPersonScopedAffiliation` | `faculty@test.aai.dfn.de` | ☐ | ☐ |
 
 4. **Verify Keycloak User Attributes**
+
    ```bash
    # Access Keycloak Admin Console
    https://idp.education.example.org/admin/master/console/
-   
+
    # Navigate to Users → testuser1@test.aai.dfn.de → Attributes
    ```
 
@@ -294,13 +298,13 @@ TOKEN=$(curl -s -X POST "${KEYCLOAK_URL}/realms/master/protocol/openid-connect/t
 # Check roles for each test user
 for user in "testuser1@test.aai.dfn.de" "testuser2@test.aai.dfn.de" "testuser3@test.aai.dfn.de"; do
   echo "=== Checking roles for ${user} ==="
-  
+
   USER_ID=$(curl -s -X GET "${KEYCLOAK_URL}/admin/realms/${REALM}/users?username=${user}" \
     -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
-  
+
   curl -s -X GET "${KEYCLOAK_URL}/admin/realms/${REALM}/users/${USER_ID}/role-mappings/realm" \
     -H "Authorization: Bearer ${TOKEN}" | jq -r '.[] | .name'
-  
+
   echo ""
 done
 ```
@@ -326,6 +330,7 @@ Verify that new users are automatically created with correct profile information
 #### Test Steps
 
 1. **Verify User Does Not Exist**
+
    ```bash
    # Check user doesn't exist before test
    curl -s "https://idp.education.example.org/admin/realms/opendesk/users?username=testuser1@test.aai.dfn.de" \
@@ -338,6 +343,7 @@ Verify that new users are automatically created with correct profile information
    - Complete authentication flow
 
 3. **Verify User Created**
+
    ```bash
    # Check user exists after login
    curl -s "https://idp.education.example.org/admin/realms/opendesk/users?username=testuser1@test.aai.dfn.de" \
@@ -356,6 +362,7 @@ Verify that new users are automatically created with correct profile information
    | Enabled | `true` | | ☐ |
 
 5. **Verify Federation Link**
+
    ```bash
    # Check federated identity link
    curl -s "https://idp.education.example.org/admin/realms/opendesk/users/${USER_ID}/federated-identity" \
@@ -426,7 +433,7 @@ Using SAML Tracer, verify the logout flow:
 1. **LogoutRequest** sent to IdP
    - Contains correct NameID
    - Contains correct SessionIndex
-   
+
 2. **LogoutResponse** received
    - Status: Success
 
@@ -598,15 +605,16 @@ Save sample SAML assertions for reference:
 
 ### Additional Resources
 
-- **DFN-AAI Test Federation:** https://www.aai.dfn.de/testumgebung/
+- **DFN-AAI Test Federation:** <https://www.aai.dfn.de/testumgebung/>
 - **DFN-AAI Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
-- **eduGAIN Technical Profile:** https://technical.edugain.org/
-- **Keycloak SAML Documentation:** https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers
-- **SAML Tracer:** https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/
+- **eduGAIN Technical Profile:** <https://technical.edugain.org/>
+- **Keycloak SAML Documentation:** <https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers>
+- **SAML Tracer:** <https://addons.mozilla.org/en-US/firefox/addon/saml-tracer/>
 
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Übersicht
@@ -706,6 +714,7 @@ Verifizieren, dass Benutzer sich über die DFN-AAI-Testföderation authentifizie
 #### Testschritte
 
 1. **Authentifizierung initiieren**
+
    ```bash
    # Browser zum Portal öffnen
    https://portal.education.example.org
@@ -746,13 +755,14 @@ Verifizieren, dass Benutzer sich über die DFN-AAI-Testföderation authentifizie
 1. **AuthnRequest** an IdP gesendet
    - Enthält korrekte Entity ID
    - Enthält korrekte ACS-URL
-   
+
 2. **SAML-Assertion** empfangen
    - Korrekt signiert
    - Enthält erwartete Attribute
    - Subject-Bestätigung stimmt überein
 
 3. **Attribut-Anweisung** enthält:
+
    ```xml
    <saml2:Attribute Name="urn:mace:dir:attribute-def:mail">
      <saml2:AttributeValue>testuser1@test.aai.dfn.de</saml2:AttributeValue>
@@ -791,10 +801,11 @@ Verifizieren, dass alle erforderlichen eduGAIN-Attribute empfangen und korrekt a
    | `eduPersonScopedAffiliation` | `faculty@test.aai.dfn.de` | ☐ | ☐ |
 
 4. **Keycloak-Benutzerattribute verifizieren**
+
    ```bash
    # Keycloak-Admin-Konsole aufrufen
    https://idp.education.example.org/admin/master/console/
-   
+
    # Navigieren zu Benutzer → testuser1@test.aai.dfn.de → Attribute
    ```
 
@@ -889,6 +900,7 @@ Verifizieren, dass neue Benutzer bei der ersten Anmeldung automatisch mit korrek
 #### Testschritte
 
 1. **Verifizieren, dass Benutzer nicht existiert**
+
    ```bash
    # Prüfen, dass Benutzer vor Test nicht existiert
    curl -s "https://idp.education.example.org/admin/realms/opendesk/users?username=testuser1@test.aai.dfn.de" \
@@ -901,6 +913,7 @@ Verifizieren, dass neue Benutzer bei der ersten Anmeldung automatisch mit korrek
    - Authentifizierungsablauf abschließen
 
 3. **Benutzererstellung verifizieren**
+
    ```bash
    # Prüfen, dass Benutzer nach Anmeldung existiert
    curl -s "https://idp.education.example.org/admin/realms/opendesk/users?username=testuser1@test.aai.dfn.de" \
@@ -919,6 +932,7 @@ Verifizieren, dass neue Benutzer bei der ersten Anmeldung automatisch mit korrek
    | Aktiviert | `true` | | ☐ |
 
 5. **Föderationslink verifizieren**
+
    ```bash
    # Föderierten Identitätslink prüfen
    curl -s "https://idp.education.example.org/admin/realms/opendesk/users/${USER_ID}/federated-identity" \
@@ -1106,15 +1120,16 @@ Sammeln Sie während des Testens folgende Nachweise:
 
 ### Zusätzliche Ressourcen
 
-- **DFN-AAI Testföderation:** https://www.aai.dfn.de/testumgebung/
+- **DFN-AAI Testföderation:** <https://www.aai.dfn.de/testumgebung/>
 - **DFN-AAI-Support:** [support@aai.dfn.de](mailto:support@aai.dfn.de)
-- **eduGAIN Technisches Profil:** https://technical.edugain.org/
-- **Keycloak SAML-Dokumentation:** https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers
-- **SAML Tracer:** https://addons.mozilla.org/de/firefox/addon/saml-tracer/
+- **eduGAIN Technisches Profil:** <https://technical.edugain.org/>
+- **Keycloak SAML-Dokumentation:** <https://www.keycloak.org/docs/latest/server_admin/#saml-identity-providers>
+- **SAML Tracer:** <https://addons.mozilla.org/de/firefox/addon/saml-tracer/>
 
 ---
 
 **Verwandte Dokumentation:**
+
 - [DFN-AAI Service Provider Registration Guide](./dfn-aai-registration.md)
 - [eduGAIN Attribute Mapping for Keycloak](./keycloak-edugain-attributes.md)
 - [Backchannel Logout Guide](./backchannel-logout.md)

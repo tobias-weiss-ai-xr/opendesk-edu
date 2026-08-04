@@ -719,7 +719,9 @@ persistence:
   annotations: {}
   ## @param persistence.labels Persistent Volume Claim Labels
   ##
-  labels: {}
+  labels:
+    backup-tier: "a"
+    k8up/backup: "true"
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:

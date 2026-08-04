@@ -1,0 +1,236 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "ilias": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "port": { "type": "integer" },
+        "autoSetup": { "type": ["boolean", "integer"] },
+        "autoUpdate": { "type": "integer" },
+        "devMode": { "type": "integer" },
+        "installArguments": { "type": "string" },
+        "updateArguments": { "type": "string" },
+        "skipUpdate": { "type": "integer" },
+        "clientName": { "type": "string" },
+        "hostName": { "type": "string" },
+        "timezone": { "type": "string" },
+        "maxUploadSize": { "type": "string" },
+        "errorsPath": { "type": "string" },
+        "memoryLimit": { "type": "string" },
+        "rootPassword": { "type": "string" },
+        "defaultSkin": { "type": "string" },
+        "defaultStyle": { "type": "string" },
+        "sessionLifetime": { "type": "integer" },
+        "dumpAutoload": { "type": "integer" },
+        "phpConfig": { "type": "string" },
+        "clientIni": { "type": "string" },
+        "setupJson": { "type": "string" },
+        "iliasIni": { "type": "string" },
+        "db": {
+          "type": "object",
+          "properties": {
+            "host": { "type": "string" },
+            "user": { "type": "string" },
+            "password": { "type": "string" },
+            "name": { "type": "string" },
+            "dump": { "type": "string" }
+          }
+        },
+        "volumes": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {
+                "size": { "type": "string" },
+                "accessMode": { "type": "string" }
+              }
+            },
+            "iliasdata": {
+              "type": "object",
+              "properties": {
+                "size": { "type": "string" },
+                "accessMode": { "type": "string" }
+              }
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "requests": {
+              "type": "object",
+              "properties": {
+                "cpu": { "type": ["string", "number"] },
+                "memory": { "type": "string" }
+              }
+            },
+            "limits": {
+              "type": "object",
+              "properties": {
+                "cpu": { "type": ["string", "number"] },
+                "memory": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "iliasRPCServer": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "nicId": { "type": "integer" },
+        "logLevel": { "type": "string" },
+        "threads": { "type": "integer" },
+        "ramBufferSize": { "type": "integer" },
+        "maxFileSize": { "type": "integer" },
+        "port": { "type": "integer" },
+        "iliasIni": { "type": "string" },
+        "ilServerProperties": { "type": "string" },
+        "volumes": {
+          "type": "object",
+          "properties": {
+            "lucene": {
+              "type": "object",
+              "properties": {
+                "size": { "type": "string" },
+                "accessMode": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extraVolumes": { "type": "array" },
+    "extraVolumeMounts": { "type": "array" },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "annotations": { "type": "object" },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": { "type": "string" },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": { "type": "string" },
+                    "pathType": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "secretName": { "type": "string" },
+              "hosts": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "mariadbgalera": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "rootUser": {
+          "type": "object",
+          "properties": { "password": { "type": "string" } }
+        },
+        "db": {
+          "type": "object",
+          "properties": {
+            "user": { "type": "string" },
+            "password": { "type": "string" },
+            "name": { "type": "string" }
+          }
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "size": { "type": "string" }
+          }
+        },
+        "galera": {
+          "type": "object",
+          "properties": {
+            "mariabackup": {
+              "type": "object",
+              "properties": { "password": { "type": "string" } }
+            }
+          }
+        },
+        "mariadbConfiguration": { "type": "string" }
+      }
+    },
+    "mariadb": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "auth": {
+          "type": "object",
+          "properties": {
+            "username": { "type": "string" },
+            "password": { "type": "string" },
+            "rootPassword": { "type": "string" },
+            "database": { "type": "string" }
+          }
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "size": { "type": "string" }
+          }
+        },
+        "primary": {
+          "type": "object",
+          "properties": { "configuration": { "type": "string" } }
+        }
+      }
+    },
+    "mariadbBackup": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "schedule": { "type": "string" },
+        "volume": {
+          "type": "object",
+          "properties": { "size": { "type": "string" } }
+        }
+      }
+    },
+    "cronjob": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "image": { "type": "string" },
+        "tag": { "type": "string" },
+        "schedule": { "type": "string" }
+      }
+    },
+    "ssoCheck": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "schedule": { "type": "string" }
+      }
+    }
+  }
+}

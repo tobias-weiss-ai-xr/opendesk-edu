@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "coder"
+    url: "https://helm.coder.com/coder-v2"
+    oci: false
+releases:
+  - name: "code-server"
+    chart: "coder/coder"
+    version: "{{ .Values.charts.codeServer.version }}"
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.codeServer.enabled }}
+    timeout: 600
+commonLabels:
+  deployStage: "050-components"
+  component: "code-server"

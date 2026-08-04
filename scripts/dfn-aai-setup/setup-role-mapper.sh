@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 #
 # Setup Role Assignment Mapper for DFN-AAI / eduGAIN Federation
 # Creates a script mapper that assigns roles based on eduPersonAffiliation
@@ -36,7 +36,7 @@ ROLE_MAPPER_SCRIPT='
 /**
  * DFN-AAI / eduGAIN Role Assignment Mapper
  * Maps eduPersonAffiliation values to Keycloak realm roles
- * 
+ *
  * Affiliation Mapping (per DFN-AAI spec):
  *   faculty, teacher → instructor
  *   staff, employee  → staff
@@ -44,6 +44,7 @@ ROLE_MAPPER_SCRIPT='
  *   member           → member
  *   affiliate        → affiliate
  *   alum             → alumni
+ *   library-walk-in  → library
  */
 
 var affiliation = user.getAttribute("affiliation");
@@ -90,6 +91,9 @@ for each (var aff in affiliation) {
         case "alum":
             rolesToGrant.push("alumni");
             break;
+        case "library-walk-in":
+            rolesToGrant.push("library");
+            break;
     }
 }
 
@@ -126,6 +130,7 @@ REQUIRED_ROLES=(
     "member"
     "affiliate"
     "alumni"
+    "library"
 )
 
 show_usage() {
@@ -164,6 +169,7 @@ Role Mapping Rules:
     member               →  member
     affiliate            →  affiliate
     alum                 →  alumni
+    library-walk-in      →  library
 
 Examples:
     # Create role mapper and required roles
@@ -186,21 +192,21 @@ EOF
 # kcadm wrapper
 run_kcadm() {
     local args=("$@")
-    
+
     if [[ "${DRY_RUN:-false}" == "true" ]]; then
         echo "[DRY-RUN] kcadm.sh ${args[*]}"
         return 0
     fi
-    
+
     kcadm.sh "${args[@]}"
 }
 
 # Login to Keycloak
 login_keycloak() {
     log_step "Logging in to Keycloak..."
-    
+
     local server_url="${KEYCLOAK_URL}/"
-    
+
     if [[ -n "${CLIENT_SECRET:-}" ]]; then
         run_kcadm config credentials \
             --server "${server_url}" \
@@ -215,14 +221,14 @@ login_keycloak() {
             --client "${CLIENT_ID}" \
             --realm master
     fi
-    
+
     log_info "Successfully logged in to Keycloak"
 }
 
 # Create realm roles if they don't exist
 create_required_roles() {
     log_step "Creating required realm roles..."
-    
+
     for role in "${REQUIRED_ROLES[@]}"; do
         # Check if role exists
         if run_kcadm get roles/${role} -r ${REALM} 2>/dev/null | grep -q '"name"'; then
@@ -234,21 +240,21 @@ create_required_roles() {
                 -s description="Role for ${role} users from DFN-AAI federation"
         fi
     done
-    
+
     log_info "Required roles verified"
 }
 
 # Create role assignment mapper
 create_role_mapper() {
     log_step "Creating role assignment mapper..."
-    
+
     local mapper_name="affiliation-to-role-mapper"
-    
+
     # Check if mapper already exists
     local existing
     existing=$(run_kcadm get identity-provider/instances/${IDP_ALIAS}/mappers -r ${REALM} 2>/dev/null | \
         grep -o "\"name\" : \"${mapper_name}\"" || true)
-    
+
     if [[ -n "${existing}" ]]; then
         if [[ "${DELETE_EXISTING:-false}" == "true" ]]; then
             log_warn "Deleting existing mapper: ${mapper_name}"
@@ -263,7 +269,7 @@ create_role_mapper() {
             return 0
         fi
     fi
-    
+
     # Create the script mapper
     # Note: Keycloak requires the script to be base64 encoded in some versions
     run_kcadm create identity-provider/instances/${IDP_ALIAS}/mappers \
@@ -273,14 +279,14 @@ create_role_mapper() {
         -s identityProviderAlias="${IDP_ALIAS}" \
         -s 'config.syncMode=INHERIT' \
         -s 'config.script='"${ROLE_MAPPER_SCRIPT}"
-    
+
     log_info "Role assignment mapper created successfully"
 }
 
 # Verify configuration
 verify_configuration() {
     log_step "Verifying role mapper configuration..."
-    
+
     # Check for required roles
     local missing_roles=0
     for role in "${REQUIRED_ROLES[@]}"; do
@@ -289,12 +295,12 @@ verify_configuration() {
             missing_roles=$((missing_roles + 1))
         fi
     done
-    
+
     if [[ ${missing_roles} -gt 0 ]]; then
         log_warn "${missing_roles} required roles are missing"
         log_warn "Run with --create-roles to create missing roles"
     fi
-    
+
     # Check for mapper
     local mapper_name="affiliation-to-role-mapper"
     if run_kcadm get identity-provider/instances/${IDP_ALIAS}/mappers -r ${REALM} 2>/dev/null | \
@@ -303,7 +309,7 @@ verify_configuration() {
     else
         log_warn "Role mapper '${mapper_name}' is not configured"
     fi
-    
+
     log_info ""
     log_info "Configuration summary:"
     log_info "  Realm: ${REALM}"
@@ -376,40 +382,40 @@ main() {
                 ;;
         esac
     done
-    
+
     # Validate required parameters
     if [[ -z "${IDP_ALIAS:-}" ]]; then
         log_error "IdP alias is required (use -p or --idp-alias)"
         show_usage
         exit 1
     fi
-    
+
     if [[ -z "${KEYCLOAK_URL:-}" ]]; then
         log_error "Keycloak URL is required (use -u or --keycloak-url)"
         show_usage
         exit 1
     fi
-    
+
     # Set defaults
     ADMIN_USER="${ADMIN_USER:-${DEFAULT_ADMIN_USER}}"
     ADMIN_PASSWORD="${ADMIN_PASSWORD:-${KC_ADMIN_PASSWORD:-${DEFAULT_ADMIN_PASSWORD}}}"
     CLIENT_ID="${CLIENT_ID:-admin-cli}"
     REALM="${REALM:-${DEFAULT_REALM}}"
-    
+
     # Login to Keycloak
     login_keycloak
-    
+
     # Create roles if requested
     if [[ "${CREATE_ROLES:-false}" == "true" ]]; then
         create_required_roles
     fi
-    
+
     # Create role mapper
     create_role_mapper
-    
+
     # Verify configuration
     verify_configuration
-    
+
     log_info ""
     log_info "Role mapper setup complete!"
 }

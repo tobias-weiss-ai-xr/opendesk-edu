@@ -1,46 +1,47 @@
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
 # SPDX-License-Identifier: Apache-2.0
 ---
-{{- if .Values.federation.enabled -}}
-{{- if .Values.federation.dfnAai.enabled -}}
+{{- if .Values.federation.enabled }}
+{{- range $envKey, $envName := dict "dfnTest" "dfn-aai-test" "dfnProduction" "dfn-aai" }}
+{{- $env := index $.Values.federation $envKey }}
+{{- if and $env $env.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: keycloak-dfn-aai-idp-config
-  namespace: {{ .Release.Namespace }}
+  name: keycloak-dfn-aai-idp-config-{{ $envName }}
+  namespace: {{ $.Release.Namespace }}
   labels:
     app.kubernetes.io/name: keycloak
     app.kubernetes.io/component: saml-idp
     app.kubernetes.io/part-of: opendesk
+    federation.environment: {{ $envKey }}
 data:
   dfn-aai-idp-config.json: |
     {
-      "alias": "{{ .Values.federation.dfnAai.alias | default "dfn-aai" }}",
+      "alias": "{{ $env.alias | default $envName }}",
       "providerId": "saml",
       "enabled": true,
-      "trustEmail": {{ .Values.federation.dfnAai.trustEmail | default true }},
-      "firstBrokerLoginFlowAlias": "{{ .Values.federation.dfnAai.firstLoginFlow | default "first broker login" }}",
-      "displayName": "{{ .Values.federation.dfnAai.displayName | default "Sign in with your institution" }}",
+      "trustEmail": {{ $env.trustEmail | default true }},
+      "firstBrokerLoginFlowAlias": "{{ $env.firstLoginFlow | default "first broker login" }}",
+      "displayName": "{{ $env.displayName | default "Sign in with your institution" }}",
       "config": {
-        {{- if .Values.federation.dfnAai.testMode }}
-        "metadataDescriptorUrl": "{{ .Values.federation.dfnAai.testMetadataUrl | default "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml" }}",
-        {{- else }}
-        "metadataDescriptorUrl": "{{ .Values.federation.dfnAai.prodMetadataUrl | default "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml" }}",
+        "metadataDescriptorUrl": "{{ $env.metadataUrl }}",
+        "entityId": "{{ $env.entityId | default (printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm) }}",
+        "singleSignOnServiceUrl": "{{ $env.saml.ssoUrl | default (printf "https://%s/idp/profile/SAML2/Redirect/SSO" (ternary "test.aai.dfn.de" "www.aai.dfn.de" (eq $envKey "dfnTest"))) }}",
+        {{- if $env.saml.logoutUrl }}
+        "singleLogoutServiceUrl": "{{ $env.saml.logoutUrl }}",
         {{- end }}
-        "entityId": "{{ .Values.federation.dfnAai.entityId }}",
-        "singleSignOnServiceUrl": "{{ .Values.federation.dfnAai.ssoUrl }}",
-        {{- if .Values.federation.dfnAai.sloUrl }}
-        "singleLogoutServiceUrl": "{{ .Values.federation.dfnAai.sloUrl }}",
-        {{- end }}
-        "nameIDPolicyFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+        "nameIDPolicyFormat": "{{ $env.saml.nameIdFormat | default "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" }}",
         "principalType": "ATTRIBUTE",
         "principalAttribute": "urn:mace:dir:attribute-def:eduPersonTargetedID",
         "signatureAlgorithm": "RSA_SHA256",
-        "wantAuthnRequestsSigned": "true",
-        "validateSignature": "true",
+        "wantAuthnRequestsSigned": "{{ $env.saml.wantAssertionsSigned | default "true" }}",
+        "validateSignature": "{{ $env.saml.validateSignature | default "true" }}",
         "xmlSigKeyInfoKeyNameStrategy": "KEY_ID",
         "allowCreate": "true"
       }
     }
+---
+{{- end }}
 {{- end }}
 {{- end }}

@@ -1,6 +1,6 @@
 /**
  * End-to-End Backchannel Logout Test Suite
- * 
+ *
  * This test verifies that when a user logs out from the portal,
  * their sessions are terminated across all connected services:
  * - ILIAS (SAML backchannel)
@@ -8,7 +8,7 @@
  * - BigBlueButton (SAML backchannel)
  * - OpenCloud (OIDC backchannel)
  * - Nextcloud (OIDC backchannel)
- * 
+ *
  * Environment Variables Required:
  * - PORTAL_URL: Portal base URL (e.g., https://portal.example.org)
  * - PORTAL_USERNAME: Test user username
@@ -18,7 +18,7 @@
  * - BBB_URL: BigBlueButton base URL
  * - OPENCLOUD_URL: OpenCloud base URL
  * - NEXTCLOUD_URL: Nextcloud base URL
- * 
+ *
  * Run with: npx playwright test tests/playwright/backchannel-e2e.spec.js
  */
 
@@ -96,15 +96,15 @@ function checkEnvironment() {
 async function isAuthenticated(page, service) {
   const config = CONFIG.services[service];
   try {
-    await page.goto(`${config.url}${config.dashboardPath}`, { 
+    await page.goto(`${config.url}${config.dashboardPath}`, {
       waitUntil: 'networkidle',
-      timeout: CONFIG.timeouts.sessionCheck 
+      timeout: CONFIG.timeouts.sessionCheck
     });
-    
+
     // Check for login button (logged out state)
     const loginButton = await page.locator(`text=${config.loginIndicator}`).first();
     const hasLoginButton = await loginButton.isVisible().catch(() => false);
-    
+
     return !hasLoginButton;
   } catch (error) {
     console.error(`Error checking ${service} authentication: ${error.message}`);
@@ -118,7 +118,7 @@ async function isAuthenticated(page, service) {
 async function waitForLogout(page, service, timeout = CONFIG.timeouts.logout) {
   const config = CONFIG.services[service];
   const startTime = Date.now();
-  
+
   while (Date.now() - startTime < timeout) {
     const isAuth = await isAuthenticated(page, service);
     if (!isAuth) {
@@ -131,7 +131,7 @@ async function waitForLogout(page, service, timeout = CONFIG.timeouts.logout) {
     }
     await page.waitForTimeout(1000);
   }
-  
+
   return {
     success: false,
     service,
@@ -166,15 +166,15 @@ test.describe('Backchannel Logout E2E Tests', () => {
       if (await loginButton.isVisible()) {
         await loginButton.click();
       }
-      
+
       // Wait for Keycloak login page
       await page.waitForURL(/realms/, { timeout: CONFIG.timeouts.login });
-      
+
       // Fill credentials
       await page.fill('input[name="username"], input[id="username"]', CONFIG.portal.username);
       await page.fill('input[name="password"], input[id="password"]', CONFIG.portal.password);
       await page.click('input[type="submit"], button[type="submit"]');
-      
+
       // Wait for redirect back to portal
       await page.waitForURL(CONFIG.portal.url, { timeout: CONFIG.timeouts.login });
     });
@@ -185,19 +185,19 @@ test.describe('Backchannel Logout E2E Tests', () => {
       await test.step(`Verify ${serviceName} session`, async () => {
         const servicePage = await context.newPage();
         await servicePage.goto(`${serviceConfig.url}${serviceConfig.dashboardPath}`);
-        
+
         const isAuth = await isAuthenticated(servicePage, serviceName);
         results[serviceName] = {
           authenticated: isAuth,
           type: serviceConfig.type
         };
-        
+
         // Take screenshot for evidence
-        await servicePage.screenshot({ 
+        await servicePage.screenshot({
           path: `.sisyphus/evidence/task-6-${serviceName}-pre-logout.png`,
-          fullPage: true 
+          fullPage: true
         });
-        
+
         await servicePage.close();
       });
     }
@@ -205,8 +205,8 @@ test.describe('Backchannel Logout E2E Tests', () => {
     // Verify all services authenticated
     const allAuthenticated = Object.values(results).every(r => r.authenticated);
     expect(allAuthenticated).toBeTruthy();
-    
-  
+
+
   });
 
   test('2. Portal logout terminates all service sessions', async ({ page, context }) => {
@@ -243,7 +243,7 @@ test.describe('Backchannel Logout E2E Tests', () => {
       const logoutButton = page.locator('button:has-text("Logout"), a:has-text("Logout"), button:has-text("Sign out")').first();
       await expect(logoutButton).toBeVisible({ timeout: 5000 });
       await logoutButton.click();
-      
+
       // Wait for logout to complete
       await page.waitForURL(/login|logout/, { timeout: CONFIG.timeouts.logout });
     });
@@ -253,18 +253,18 @@ test.describe('Backchannel Logout E2E Tests', () => {
     for (const [serviceName, serviceConfig] of Object.entries(CONFIG.services)) {
       await test.step(`Verify ${serviceName} session terminated`, async () => {
         const servicePage = await context.newPage();
-        
+
         // Navigate to service and wait for logout
         await servicePage.goto(`${serviceConfig.url}${serviceConfig.dashboardPath}`);
         const result = await waitForLogout(servicePage, serviceName);
         terminationResults.push(result);
-        
+
         // Take screenshot for evidence
-        await servicePage.screenshot({ 
+        await servicePage.screenshot({
           path: `.sisyphus/evidence/task-6-${serviceName}-post-logout.png`,
-          fullPage: true 
+          fullPage: true
         });
-        
+
         await servicePage.close();
       });
     }
@@ -287,8 +287,8 @@ test.describe('Backchannel Logout E2E Tests', () => {
 
     // Assert all sessions terminated
     expect(timingReport.allServicesTerminated).toBeTruthy();
-    
-  
+
+
   });
 
   test('3. Logout propagation time within acceptable bounds', async ({ page, context }) => {
@@ -329,8 +329,8 @@ test.describe('Backchannel Logout E2E Tests', () => {
     // Verify all within 60s (as per plan requirement)
     const maxAllowedTime = 60000;
     const allWithinBounds = Object.values(propagationTimes).every(t => t <= maxAllowedTime);
-    
-  
+
+
     expect(allWithinBounds).toBeTruthy();
   });
 
@@ -354,8 +354,8 @@ test.describe('Backchannel Logout E2E Tests', () => {
 
     // Get cookies before logout
     const cookiesBeforeLogout = await context.cookies();
-    const sessionCookiesBefore = cookiesBeforeLogout.filter(c => 
-      c.name.toLowerCase().includes('session') || 
+    const sessionCookiesBefore = cookiesBeforeLogout.filter(c =>
+      c.name.toLowerCase().includes('session') ||
       c.name.toLowerCase().includes('token')
     );
 
@@ -369,8 +369,8 @@ test.describe('Backchannel Logout E2E Tests', () => {
 
     // Get cookies after logout
     const cookiesAfterLogout = await context.cookies();
-    const sessionCookiesAfter = cookiesAfterLogout.filter(c => 
-      c.name.toLowerCase().includes('session') || 
+    const sessionCookiesAfter = cookiesAfterLogout.filter(c =>
+      c.name.toLowerCase().includes('session') ||
       c.name.toLowerCase().includes('token')
     );
 
@@ -381,8 +381,8 @@ test.describe('Backchannel Logout E2E Tests', () => {
       cookiesCleared: sessionCookiesBefore.length > sessionCookiesAfter.length
     };
 
-  
-    
+
+
     // Note: Some cookies may remain but be invalidated server-side
     // This test verifies cookie behavior is consistent
     expect(evidence).toBeDefined();
@@ -428,9 +428,9 @@ test.describe('Backchannel Logout E2E Tests', () => {
         await servicePage.goto(`${serviceConfig.url}${serviceConfig.dashboardPath}`);
         await servicePage.waitForLoadState('networkidle');
         const filename = `task-6-05-${serviceName}-session.png`;
-        await servicePage.screenshot({ 
+        await servicePage.screenshot({
           path: `.sisyphus/evidence/${filename}`,
-          fullPage: true 
+          fullPage: true
         });
         screenshots.push(filename);
         await servicePage.close();
@@ -459,16 +459,16 @@ test.describe('Backchannel Logout E2E Tests', () => {
         await servicePage.goto(`${serviceConfig.url}${serviceConfig.dashboardPath}`);
         await servicePage.waitForLoadState('networkidle');
         const filename = `task-6-08-${serviceName}-logged-out.png`;
-        await servicePage.screenshot({ 
+        await servicePage.screenshot({
           path: `.sisyphus/evidence/${filename}`,
-          fullPage: true 
+          fullPage: true
         });
         screenshots.push(filename);
         await servicePage.close();
       });
     }
 
-  
+
     expect(screenshots.length).toBeGreaterThan(0);
   });
 });
@@ -504,10 +504,10 @@ test.describe('Backchannel Logout - Edge Cases', () => {
     // Verify Moodle session is terminated
     await moodlePage.waitForTimeout(5000);
     await moodlePage.reload();
-    
+
     const loginVisible = await moodlePage.locator(`text=${CONFIG.services.moodle.loginIndicator}`).isVisible();
     expect(loginVisible).toBeTruthy();
-    
+
     await moodlePage.close();
   });
 
@@ -546,7 +546,7 @@ test.describe('Backchannel Logout - Edge Cases', () => {
     await page2.waitForTimeout(5000);
     await page2.goto(CONFIG.portal.url);
     const needsLogin = await page2.locator('button:has-text("Login"), a:has-text("Login")').first().isVisible();
-    
+
     expect(needsLogin).toBeTruthy();
 
     await context1.close();

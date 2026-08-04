@@ -23,7 +23,7 @@ data:
         <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
                   checkAddress="false" handlerSSL="true" cookieProps="; path=/; HttpOnly; Secure">
 
-          <SSO entityID="https://id.opendesk.example.com/realms/opendesk" ECP="true" authnRequestsSigned="true">
+          <SSO entityID="https://id.opendesk.hrz.uni-marburg.de/realms/opendesk" ECP="true" authnRequestsSigned="true">
             SAML2
           </SSO>
 
@@ -32,10 +32,12 @@ data:
           <Handler type="Status" Location="/Status" acl="127.0.0.1"/>
           <Handler type="Session" Location="/Session" showAttributeValues="false"/>
           <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+          <Handler type="Logout" Location="/SLO/SOAP"
+                   Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"/>
         </Sessions>
 
         <MetadataProvider id="KeycloakMD" type="XML"
-                          url="https://id.opendesk.example.com/realms/opendesk/protocol/saml/descriptor"
+                          url="https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
                           backingFilePath="keycloak-metadata.xml"
                           reloadInterval="7200">
         </MetadataProvider>
@@ -67,8 +69,8 @@ data:
   attribute-map.xml: |
     <Attributes xmlns="urn:mace:shibboleth:2.0:attribute-map">
       <Attribute name="email" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="USERNAME"/>
-      <Attribute name="givenname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="FIRSTNAME"/>
-      <Attribute name="surname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="LASTNAME"/>
+      <Attribute name="firstname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="FIRSTNAME"/>
+      <Attribute name="lastname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="LASTNAME"/>
     </Attributes>
 
   attribute-policy.xml: |

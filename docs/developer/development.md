@@ -32,7 +32,7 @@ developing the openDesk platform.
 ```mermaid
 flowchart TD
  J[helmfile.yaml.gotmpl\nor a helmfile outside of this repository]-->A
- J-->K[./helmfile/environemnts/*your_environment*/values.yaml.gotmpl\nor another environment values file]
+ J-->K[./helmfile/environments/*your_environment*/values.yaml.gotmpl\nor another environment values file]
  A[./helmfile_generic.yaml.gotmpl]-->B[./helmfile/apps/*all_configured_apps*/helmfile.yaml.gotmpl\nReferences the relevant app Helm\ncharts using details from 'charts.yaml.gotmpl']
  B-->C[./values-*all_configured_components*.yaml.gotmpl\nValues to template the charts\nwith references to the `images.yaml.gotmpl`]
  A-->D[./helmfile/environments/default/*\nwith just some examples below]
@@ -69,17 +69,18 @@ The `charts.yaml.gotmpl` and `images.yaml.gotmpl` files are the central place to
 
 Besides the deployment automation itself, some tools work with the contents of the files:
 
-- **Linting**: Ensures consistency of the file contents for the other tools.
-- **Renovate**: Automatically create MRs that update the components to their latest version.
-- **Mirror**: Mirror artifacts to openCode.
+* **Linting**: Ensures consistency of the file contents for the other tools.
+* **Renovate**: Automatically create MRs that update the components to their latest version.
+* **Mirror**: Mirror artifacts to openCode.
 
 Please find details on these tools below.
 
 ### Linting
 
 In the project's CI, there is a step dedicated to lint the two yaml files, as we want them to be in
-- alphabetical order regarding the components
-- logical order regarding the non-commented lines (registry > repository > tag).
+
+* alphabetical order regarding the components
+* logical order regarding the non-commented lines (registry > repository > tag).
 
 In the linting step, the [openDesk CI CLI](https://gitlab.opencode.de/bmi/opendesk/tooling/opendesk-ci-cli) is used to apply the
 aforementioned sorting, and the result is compared with the unsorted version. If there is a delta, the linting fails, and you can fix it by running the CLI tool locally, verifying and applying the result to your branch.
@@ -89,6 +90,7 @@ aforementioned sorting, and the result is compared with the unsorted version. If
 > end. Ideally, you stick with the many available examples in the yaml files.
 
 Example:
+
 ```yaml
  synapse:
  # providerCategory: "Supplier"
@@ -108,6 +110,7 @@ If you follow the "push early, push often" paradigm to save your work to the cen
 existing documentation, you can avoid the CI and its linting being executed, as it might not offer additional value.
 
 GitLab offers two options to skip the CI on a commit/push:
+
 1. Add `[ci skip]` to your commit message ([details](https://docs.gitlab.com/ee/ci/pipelines/#skip-a-pipeline)).
 **Note:** The string has to be removed before merging your feature branch into `develop`.
 2. Use the related git push option `git push -o ci.skip` ([details](https://docs.gitlab.com/topics/git/commit/#push-options)).
@@ -116,15 +119,15 @@ GitLab offers two options to skip the CI on a commit/push:
 
 Uses a regular expression to match the values of the following attributes:
 
-- `# upstreamRegistry` *required*: Attribute's value must be prefixed with `https://` for Renovate.
-- `# upstreamRepository` *required*
-- `tag` *required*
+* `# upstreamRegistry` *required*: Attribute's value must be prefixed with `https://` for Renovate.
+* `# upstreamRepository` *required*
+* `tag` *required*
 
 Checks for newer versions of the given artifact and creates an MR containing the newest version's tag (and digest).
 
 ### Mirroring
 
-- See also: https://gitlab.opencode.de/bmi/opendesk/tooling/oci-pull-mirror
+* See also: <https://gitlab.opencode.de/bmi/opendesk/tooling/oci-pull-mirror>
 
 > [!note]
 > The mirror is scheduled to run every hour at 42 minutes past the hour.
@@ -134,13 +137,14 @@ configured to pull artifacts that do not originate from openCode into projects c
 [openDesk Components](https://github.com/Bundesdruckerei/opendesk) repository.
 
 The mirror script takes the information on what artifacts to mirror from the annotation inside the two yaml files:
-- `# upstreamRegistry` *required*: To identify the source registry
-- `# upstreamRegistryCredentialId`: *optional*: In case the source registry is not public, the access credentials have to be specified as environment variables and contain the value of this key in their name, so you want to specify the key in uppercase:
-  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_USERNAME`
-  - `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_PASSWORD`
-- `# upstreamRepository` *required*: To identify the source repository
-- `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set, the mirror for the component will be activated. Only tags that match the given regular expression will be mirrored. **Note:** You must use single quotes for this attribute's value if you use backslash leading regex notation like `\d`.
-- `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artifacts beginning with a specific version. You must use capturing group
+
+* `# upstreamRegistry` *required*: To identify the source registry
+* `# upstreamRegistryCredentialId`: *optional*: In case the source registry is not public, the access credentials have to be specified as environment variables and contain the value of this key in their name, so you want to specify the key in uppercase:
+  * `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_USERNAME`
+  * `MIRROR_CREDENTIALS_SRC_<upstreamRegistryCredentialId>_PASSWORD`
+* `# upstreamRepository` *required*: To identify the source repository
+* `# upstreamMirrorTagFilterRegEx` *required*: If this annotation is set, the mirror for the component will be activated. Only tags that match the given regular expression will be mirrored. **Note:** You must use single quotes for this attribute's value if you use backslash leading regex notation like `\d`.
+* `# upstreamMirrorStartFrom` *optional*: Array of numeric values in case you want to mirror only artifacts beginning with a specific version. You must use capturing group
  in `# upstreamMirrorTagFilterRegEx` to identify the single numeric elements of the version within the tag and use per capturing group (left to right) one numeric array
  element here to define the version the mirror should start with.
 

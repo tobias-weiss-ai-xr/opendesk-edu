@@ -1,0 +1,9 @@
+dn: cn=etherpad,cn=applications,cn=opendesk,cn=edu
+cn: etherpad
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Etherpad
+odApplicationDescription: Kollaborativer Texteditor (Etherpad)
+odApplicationURL: https://etherpad.{{ .Values.global.domain }}
+odApplicationIcon: etherpad
+odApplicationOrder: 135

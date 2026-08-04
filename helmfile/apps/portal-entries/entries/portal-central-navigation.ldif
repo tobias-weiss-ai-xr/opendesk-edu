@@ -1,0 +1,17 @@
+# Add collab-service entries to the portal's central navigation
+# This makes tiles visible in the portal navigation panel
+#
+# Apply with:
+# ldapmodify -x -H ldap://localhost \
+#   -D "cn=admin,dc=swp-ldap,dc=internal" -W \
+#   -f portal-central-navigation.ldif
+dn: cn=domain,cn=portal,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+changetype: modify
+add: univentionNewPortalCentralNavigation
+univentionNewPortalCentralNavigation: cn=jupyterhub,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=rstudio,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=ttyd,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=code-server,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=slidev,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=collab-dashboard,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+univentionNewPortalCentralNavigation: cn=open-webui,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal

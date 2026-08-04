@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  domain: {{ .Values.global.domain | quote }}
+ingress:
+  enabled: true
+  hosts:
+    - "r.{{ .Values.global.domain }}"
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+    haproxy-ingress.github.io/ssl-redirect: "true"
+image:
+  repository: rocker/rstudio
+  tag: "4.4.2"
+
+# OpenCloud storage integration — enable and configure per deployment
+opencloud:
+  enabled: {{ .Values.apps.rstudio.opencloud.enabled | default false }}
+  url: {{ .Values.apps.rstudio.opencloud.url | default (printf "https://opencloud.%s" .Values.global.domain) | quote }}
+  username: {{ .Values.apps.rstudio.opencloud.username | default "" | quote }}
+  password: {{ .Values.apps.rstudio.opencloud.password | default "" | quote }}

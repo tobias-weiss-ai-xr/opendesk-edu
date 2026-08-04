@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Comfortabel en Soeverein?
 
 🎓 openDesk Edu — Digitale Soevereiniteit aan Universiteiten
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Doe mee!
+# 🤝 Doe mee
 
 **Help ons openDesk Edu voor universiteiten te bouwen!**
 

@@ -14,11 +14,14 @@ import ldap3
 from keycloak import KeycloakAdmin
 
 # Configure logging
-log_file = os.getenv("LOG_FILE", "./opendesk-user-sync.log")
+_log_handlers = [logging.StreamHandler()]
+_log_file = os.getenv("LOG_FILE", "/var/log/opendesk-user-sync.log")
+if os.path.exists(os.path.dirname(_log_file)):
+    _log_handlers.append(logging.FileHandler(_log_file))
 logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler(log_file), logging.StreamHandler()],
+    handlers=_log_handlers,
 )
 logger = logging.getLogger(__name__)
 
@@ -26,7 +29,7 @@ logger = logging.getLogger(__name__)
 class LDAPClient:
     """LDAP client for querying users from university directory"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.server = os.getenv("LDAP_SERVER", "ldap://localhost")
         self.base_dn = os.getenv("LDAP_BASE_DN", "")
         self.bind_dn = os.getenv("LDAP_BIND_DN", "")
@@ -99,7 +102,7 @@ class LDAPClient:
             logger.error(f"LDAP search failed: {e}")
             return []
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         """Close LDAP connection"""
         if self.conn:
             self.conn.unbind()
@@ -109,7 +112,7 @@ class LDAPClient:
 class KeycloakAdminClient:
     """Keycloak admin API client for user management"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.url = os.getenv("KEYCLOAK_URL", "http://localhost:8080/auth")
         self.realm = os.getenv("KEYCLOAK_REALM", "opendesk")
         self.username = os.getenv("KEYCLOAK_ADMIN_USERNAME", "admin")
@@ -314,7 +317,7 @@ def map_affiliation_to_role(affiliation: str) -> str:
     return role_mappings.get(affiliation_lower, "student")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Sync users from LDAP to Keycloak")
     parser.add_argument("--source", choices=["ldap"], default="ldap", help="Source system")
     parser.add_argument("--filter", help='LDAP filter string (e.g., "(eduPersonAffiliation=student)")')

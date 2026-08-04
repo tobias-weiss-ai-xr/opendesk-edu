@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "dask"
+    url: "https://helm.dask.org"
+    oci: false
+releases:
+  - name: "dask"
+    chart: "dask/dask-gateway"
+    version: "{{ .Values.charts.dask.version }}"
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.dask.enabled }}
+    timeout: 600
+commonLabels:
+  deployStage: "050-components"
+  component: "dask"

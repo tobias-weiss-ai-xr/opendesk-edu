@@ -11,6 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### Overview
@@ -77,9 +78,9 @@ For DFN-AAI federation members, use the aggregated metadata:
 
 | Environment | Metadata URL |
 |-------------|--------------|
-| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml` |
-| Production Federation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml` |
-| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml` |
+| Test Federation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` |
+| Production Federation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
+| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml` |
 
 #### Individual Institution Metadata Examples
 
@@ -400,7 +401,7 @@ kcadm.sh set-password -r opendesk \
   --new-password <secure-password>
 
 # Grant admin role
-kcadmin.sh add-roles -r opendesk \
+kcadm.sh add-roles -r opendesk \
   --uusername emergency-admin \
   --rolename admin
 ```
@@ -451,6 +452,7 @@ kcadm.sh get users/<user-id> -r opendesk
 **Symptom:** Error importing metadata from URL
 
 **Solutions:**
+
 1. Verify network connectivity to IdP
 2. Check certificate validity (use `--insecure` for test)
 3. Download metadata file and import manually
@@ -461,6 +463,7 @@ kcadm.sh get users/<user-id> -r opendesk
 **Symptom:** User created but attributes empty
 
 **Solutions:**
+
 1. Contact IdP admin about attribute release policy
 2. Verify attribute names match IdP configuration
 3. Use SAML Tracer to inspect actual assertion
@@ -471,6 +474,7 @@ kcadm.sh get users/<user-id> -r opendesk
 **Symptom:** Authentication succeeds but no user created
 
 **Solutions:**
+
 1. Check `First Login Flow` configuration
 2. Verify mappers are configured correctly
 3. Enable debug logging: `org.keycloak.broker.saml:debug`
@@ -481,6 +485,7 @@ kcadm.sh get users/<user-id> -r opendesk
 **Symptom:** "Invalid signature" errors
 
 **Solutions:**
+
 1. Import IdP signing certificate correctly
 2. Verify signature algorithm matches (RSA_SHA256)
 3. Check time synchronization (NTP)
@@ -497,6 +502,7 @@ kcadm.sh get users/<user-id> -r opendesk
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Übersicht
@@ -536,9 +542,9 @@ Für DFN-AAI-Föderationsmitglieder verwenden Sie die aggregierten Metadaten:
 
 | Umgebung | Metadaten-URL |
 |----------|---------------|
-| Testföderation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml` |
-| Produktivföderation | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml` |
-| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml` |
+| Testföderation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml` |
+| Produktivföderation | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml` |
+| eduGAIN | `https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml` |
 
 ---
 
@@ -705,6 +711,7 @@ Siehe [task-4-idp-config.xml](../.sisyphus/evidence/task-4-idp-config.xml) für 
 **Symptom:** Fehler beim Importieren von Metadaten von URL
 
 **Lösungen:**
+
 1. Netzwerkkonnektivität zum IdP überprüfen
 2. Zertifikatsgültigkeit prüfen (`--insecure` für Test verwenden)
 3. Metadaten-Datei herunterladen und manuell importieren
@@ -715,6 +722,7 @@ Siehe [task-4-idp-config.xml](../.sisyphus/evidence/task-4-idp-config.xml) für 
 **Symptom:** Benutzer erstellt, aber Attribute leer
 
 **Lösungen:**
+
 1. IdP-Admin bezüglich Attributfreigaberichtlinie kontaktieren
 2. Prüfen, dass Attributnamen mit IdP-Konfiguration übereinstimmen
 3. SAML Tracer verwenden, um tatsächliche Assertion zu inspizieren
@@ -725,6 +733,7 @@ Siehe [task-4-idp-config.xml](../.sisyphus/evidence/task-4-idp-config.xml) für 
 **Symptom:** Authentifizierung erfolgreich, aber kein Benutzer erstellt
 
 **Lösungen:**
+
 1. `First Login Flow`-Konfiguration prüfen
 2. Überprüfen, dass Mapper korrekt konfiguriert sind
 3. Debug-Logging aktivieren: `org.keycloak.broker.saml:debug`

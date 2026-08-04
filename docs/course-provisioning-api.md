@@ -12,6 +12,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### Overview
@@ -25,6 +26,7 @@ http://localhost:8000/api/v1
 ```
 
 **Production:**
+
 ```
 https://semester.{domain}/api/v1
 ```
@@ -32,6 +34,7 @@ https://semester.{domain}/api/v1
 ### Authentication
 
 API endpoints require authentication via:
+
 - **Bearer Token**: `Authorization: Bearer <token>`
 - **API Key**: `X-API-Key: <key>`
 
@@ -52,6 +55,7 @@ POST /api/v1/courses
 ```
 
 **Request Body:**
+
 ```json
 {
   "semester_id": "2026ws",
@@ -66,6 +70,7 @@ POST /api/v1/courses
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "course_id": "crs_abc123def456",
@@ -99,11 +104,13 @@ GET /api/v1/courses
 | `page_size` | integer | No | Items per page (default: 20, max: 100) |
 
 **Example Request:**
+
 ```bash
 curl "http://localhost:8000/api/v1/courses?semester_id=2026ws&status=active&page=1&page_size=20"
 ```
 
 **Response:**
+
 ```json
 {
   "courses": [
@@ -135,6 +142,7 @@ GET /api/v1/courses/{course_id}
 ```
 
 **Response:**
+
 ```json
 {
   "course_id": "crs_abc123",
@@ -160,6 +168,7 @@ PUT /api/v1/courses/{course_id}
 ```
 
 **Request Body:**
+
 ```json
 {
   "title": "Einführung in die Informatik (Updated)",
@@ -189,6 +198,7 @@ POST /api/v1/courses/{course_id}/enrollments
 ```
 
 **Request Body:**
+
 ```json
 {
   "user_ids": ["user-001", "user-002", "user-003"],
@@ -206,6 +216,7 @@ POST /api/v1/courses/{course_id}/enrollments
 | `guest` | Limited guest access |
 
 **Response (201 Created):**
+
 ```json
 [
   {
@@ -238,6 +249,7 @@ POST /api/v1/archival/archive/{course_id}
 ```
 
 **Request Body:**
+
 ```json
 {
   "create_snapshots": true,
@@ -246,6 +258,7 @@ POST /api/v1/archival/archive/{course_id}
 ```
 
 **Response:**
+
 ```json
 {
   "course_id": "crs_abc123",
@@ -263,6 +276,7 @@ POST /api/v1/archival/bulk-archive
 ```
 
 **Request Body (by semester):**
+
 ```json
 {
   "semester_id": "2025ws",
@@ -272,6 +286,7 @@ POST /api/v1/archival/bulk-archive
 ```
 
 **Request Body (by course IDs):**
+
 ```json
 {
   "course_ids": ["crs_001", "crs_002", "crs_003"],
@@ -281,6 +296,7 @@ POST /api/v1/archival/bulk-archive
 ```
 
 **Response (202 Accepted):**
+
 ```json
 {
   "job_id": "job_abc123",
@@ -301,6 +317,7 @@ POST /api/v1/archival/restore/{archive_id}
 ```
 
 **Request Body:**
+
 ```json
 {
   "restore_enrollments": true,
@@ -309,6 +326,7 @@ POST /api/v1/archival/restore/{archive_id}
 ```
 
 **Response:**
+
 ```json
 {
   "archive_id": "arch_xyz789",
@@ -348,6 +366,7 @@ POST /api/v1/semesters
 ```
 
 **Request Body:**
+
 ```json
 {
   "semester_id": "2026ws",
@@ -360,6 +379,7 @@ POST /api/v1/semesters
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "semester_id": "2026ws",
@@ -381,6 +401,7 @@ GET /api/v1/semesters
 ```
 
 **Response:**
+
 ```json
 {
   "semesters": [
@@ -418,6 +439,7 @@ GET /api/v1/audit/logs
 | `limit` | integer | Max results (default: 100, max: 1000) |
 
 **Response:**
+
 ```json
 {
   "logs": [
@@ -450,6 +472,7 @@ GET /health
 ```
 
 **Response:**
+
 ```json
 {
   "status": "healthy"
@@ -463,6 +486,7 @@ GET /ready
 ```
 
 **Response:**
+
 ```json
 {
   "status": "ready"
@@ -498,6 +522,7 @@ GET /ready
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Übersicht
@@ -511,6 +536,7 @@ http://localhost:8000/api/v1
 ```
 
 **Produktion:**
+
 ```
 https://semester.{domain}/api/v1
 ```
@@ -518,6 +544,7 @@ https://semester.{domain}/api/v1
 ### Authentifizierung
 
 API-Endpunkte erfordern eine Authentifizierung über:
+
 - **Bearer-Token**: `Authorization: Bearer <token>`
 - **API-Schlüssel**: `X-API-Key: <key>`
 
@@ -538,6 +565,7 @@ POST /api/v1/courses
 ```
 
 **Anfragekörper:**
+
 ```json
 {
   "semester_id": "2026ws",
@@ -552,6 +580,7 @@ POST /api/v1/courses
 ```
 
 **Antwort (201 Erstellt):**
+
 ```json
 {
   "course_id": "crs_abc123def456",
@@ -585,6 +614,7 @@ GET /api/v1/courses
 | `page_size` | integer | Nein | Einträge pro Seite (Standard: 20, max: 100) |
 
 **Beispielanfrage:**
+
 ```bash
 curl "http://localhost:8000/api/v1/courses?semester_id=2026ws&status=active&page=1&page_size=20"
 ```
@@ -602,6 +632,7 @@ PUT /api/v1/courses/{course_id}
 ```
 
 **Anfragekörper:**
+
 ```json
 {
   "title": "Einführung in die Informatik (Aktualisiert)",
@@ -631,6 +662,7 @@ POST /api/v1/courses/{course_id}/enrollments
 ```
 
 **Anfragekörper:**
+
 ```json
 {
   "user_ids": ["user-001", "user-002", "user-003"],
@@ -658,6 +690,7 @@ POST /api/v1/archival/archive/{course_id}
 ```
 
 **Anfragekörper:**
+
 ```json
 {
   "create_snapshots": true,
@@ -672,6 +705,7 @@ POST /api/v1/archival/bulk-archive
 ```
 
 **Anfragekörper (nach Semester):**
+
 ```json
 {
   "semester_id": "2025ws",
@@ -687,6 +721,7 @@ POST /api/v1/archival/restore/{archive_id}
 ```
 
 **Anfragekörper:**
+
 ```json
 {
   "restore_enrollments": true,
@@ -705,6 +740,7 @@ POST /api/v1/semesters
 ```
 
 **Anfragekörper:**
+
 ```json
 {
   "semester_id": "2026ws",
@@ -750,6 +786,7 @@ GET /health
 ```
 
 **Antwort:**
+
 ```json
 {
   "status": "healthy"
@@ -763,6 +800,7 @@ GET /ready
 ```
 
 **Antwort:**
+
 ```json
 {
   "status": "ready"
@@ -798,6 +836,7 @@ GET /ready
 ---
 
 ## Verwandte Dokumentation
+
 - [Semester Lifecycle](./semester-lifecycle.md) - Benutzerhandbuch
 - [Semester Automation Guide](./semester-automation-guide.md) - Automatisierungseinrichtung
 - [External Services](./external-services.md) - LMS-Integration

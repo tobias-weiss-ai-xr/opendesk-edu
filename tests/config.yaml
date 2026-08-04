@@ -1,0 +1,157 @@
+# openDesk Test Framework Configuration
+# Environment: HRZ Production Cluster
+# Domain: *.opendesk.hrz.uni-marburg.de
+
+cluster:
+  namespace: opendesk
+  kubeconfig: ~/.kube/config
+
+# Service endpoints to test
+services:
+  identity:
+    keycloak:
+      host: id.opendesk.hrz.uni-marburg.de
+      realm: opendesk
+      oidc_well_known: /.well-known/openid-configuration
+      login_path: /realms/opendesk/protocol/openid-connect/auth
+
+  portal:
+    portal:
+      host: portal.opendesk.hrz.uni-marburg.de
+      paths:
+        - /
+        - /umc
+        - /udm
+    
+  files:
+    nextcloud:
+      host: files.opendesk.hrz.uni-marburg.de
+      oidc_client: nextcloud
+      status_path: /status.php
+    
+    opencloud:
+      host: opencloud.opendesk.hrz.uni-marburg.de
+      oidc_client: opencloud
+      graph_api: /graph
+
+  communication:
+    element:
+      host: chat.opendesk.hrz.uni-marburg.de
+      matrix_discovery: /.well-known/matrix/client
+    
+    synapse:
+      host: matrix.opendesk.hrz.uni-marburg.de
+      federation_path: /_matrix/federation
+    
+    jitsi:
+      host: meet.opendesk.hrz.uni-marburg.de
+    
+    bigbluebutton:
+      host: bbb.opendesk.hrz.uni-marburg.de
+    
+    intercom:
+      host: ics.opendesk.hrz.uni-marburg.de
+
+  groupware:
+    ox_appsuite:
+      host: webmail.opendesk.hrz.uni-marburg.de
+      oidc_client: open-xchange
+      api_paths:
+        - /apisuite
+        - /appsuite/api
+    
+    ox_dav:
+      host: dav.opendesk.hrz.uni-marburg.de
+      paths:
+        - /caldav
+        - /carddav
+
+  collaboration:
+    collabora:
+      host: office.opendesk.hrz.uni-marburg.de
+      wopi_discovery: /hosting/discovery
+    
+    cryptpad:
+      host: pad.opendesk.hrz.uni-marburg.de
+    
+    drawio:
+      host: draw.opendesk.hrz.uni-marburg.de
+    
+    excalidraw:
+      host: excalidraw.opendesk.hrz.uni-marburg.de
+    
+    etherpad:
+      host: etherpad.opendesk.hrz.uni-marburg.de
+    
+    slidev:
+      host: slides.opendesk.hrz.uni-marburg.de
+    
+    ttyd:
+      host: term.opendesk.hrz.uni-marburg.de
+    
+    openproject:
+      host: projects.opendesk.hrz.uni-marburg.de
+      oidc_client: openproject
+    
+    collab_dashboard:
+      host: tools.opendesk.hrz.uni-marburg.de
+
+  lms:
+    ilias:
+      host: lms.opendesk.hrz.uni-marburg.de
+      saml_metadata: /Shibboleth.sso/Metadata
+    
+    moodle:
+      host: moodle.opendesk.hrz.uni-marburg.de
+      oidc_client: moodle
+
+  knowledge:
+    xwiki:
+      host: wiki.opendesk.hrz.uni-marburg.de
+      saml_metadata: /xwiki/bin/loginsaml/saml/request
+
+  infrastructure:
+    minio:
+      host: objectstore-ui.opendesk.hrz.uni-marburg.de
+    
+    seaweedfs_ui:
+      host: objectstorage-ui.opendesk.hrz.uni-marburg.de
+    
+    seaweedfs_s3:
+      host: objectstorage.opendesk.hrz.uni-marburg.de
+    
+    grafana:
+      host: grafana.opendesk.hrz.uni-marburg.de
+    
+    root:
+      host: opendesk.hrz.uni-marburg.de
+      paths:
+        - /.well-known
+        - /
+
+# Thresholds
+thresholds:
+  ssl_expiry_days: 30
+  http_timeout: 10
+  retry_attempts: 2
+  
+# Allowed HTTP status codes (others = fail)
+allowed_http_codes:
+  - 200
+  - 302
+  - 401
+  - 403
+  
+# Critical services (fail if any of these fail)
+critical_services:
+  - identity.keycloak
+  - portal.portal
+  - files.nextcloud
+  - files.opencloud
+
+# Paths to skip in smoke tests
+skip_paths:
+  - /metrics
+  - /healthz
+  - /readyz
+  - /livez

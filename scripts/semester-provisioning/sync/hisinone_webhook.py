@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """HISinOne webhook receiver.
 
 English / Deutsch bilingual docstring.
@@ -13,7 +13,7 @@ import json
 import hmac
 import hashlib
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 import httpx
 from fastapi import FastAPI, Request, HTTPException, status
@@ -72,7 +72,7 @@ async def _forward_to_api(
 
 
 @app.post("/api/v1/webhooks/hisinone")
-async def handle_webhook(request: Request):
+async def handle_webhook(request: Request) -> dict[str, Any]:
     body = await request.body()
     signature = request.headers.get("X-HISINONE-SIGNATURE") or request.headers.get(
         "X-HISINONE_Signature"
@@ -85,7 +85,7 @@ async def handle_webhook(request: Request):
     # Parse payload
     try:
         payload = json.loads(body.decode("utf-8"))
-    except Exception:
+    except json.JSONDecodeError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid JSON payload"
         )

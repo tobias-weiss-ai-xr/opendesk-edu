@@ -2,6 +2,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{.Release.Name }}-ilias-data
+  labels:
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.ilias.volumes.data.accessMode }}
@@ -19,6 +22,8 @@ metadata:
   name: {{.Release.Name }}-ilias-iliasdata
   labels:
 {{ include "ilias.labels" . | nindent 4 }}
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.ilias.volumes.iliasdata.accessMode }}
@@ -36,6 +41,8 @@ metadata:
   name: {{.Release.Name }}-ilias-lucene
   labels:
 {{ include "ilias.labels" . | nindent 4 }}
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.iliasRPCServer.volumes.lucene.accessMode }}
@@ -51,6 +58,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{.Release.Name }}-mariadb-backup-pvc
+  labels:
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes: [ "ReadWriteOnce" ]
   resources:

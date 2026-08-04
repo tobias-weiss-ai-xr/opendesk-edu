@@ -44,21 +44,21 @@ openDesk follows a structured release cycle to ensure predictability and reliabi
 
 ### Release schedule
 
-- **Major releases** are scheduled for **Q3 each year**, with planning beginning in Q1.
-- **Minor releases** occur **monthly on Mondays**, typically **around 10:00 AM** local time.
-  - Each minor release follows a **4-week cycle**.
-  - **Week 1–3**: Active development of new features and improvements.
-  - **End of Week 3**: **Feature freeze** is enforced to allow stabilization and testing.
-  - **Week 4**: Final testing, approvals, and preparation for release.
-  - At the **end of Week 4**, a new minor version is released, and a new cycle begins.
-- **Patch releases** are created **on demand**, based on criticality and urgency.
+* **Major releases** are scheduled for **Q3 each year**, with planning beginning in Q1.
+* **Minor releases** occur **monthly on Mondays**, typically **around 10:00 AM** local time.
+  * Each minor release follows a **4-week cycle**.
+  * **Week 1–3**: Active development of new features and improvements.
+  * **End of Week 3**: **Feature freeze** is enforced to allow stabilization and testing.
+  * **Week 4**: Final testing, approvals, and preparation for release.
+  * At the **end of Week 4**, a new minor version is released, and a new cycle begins.
+* **Patch releases** are created **on demand**, based on criticality and urgency.
 
 ### Upgrades
 
-- openDesk does not guarantee an in‑place upgrade between two major versions. Always consult the release notes and plan appropriate migration efforts.
-- Even within the same major line, skipping multiple monthly minor versions is not guaranteed to work without intermediate upgrade steps.
-- All breaking changes, including those in monthly minor releases, are highlighted in the release notes under Breaking Changes.
-- Additional, non‑binding migration hints are collected in [migrations.md](./migrations.md)
+* openDesk does not guarantee an in‑place upgrade between two major versions. Always consult the release notes and plan appropriate migration efforts.
+* Even within the same major line, skipping multiple monthly minor versions is not guaranteed to work without intermediate upgrade steps.
+* All breaking changes, including those in monthly minor releases, are highlighted in the release notes under Breaking Changes.
+* Additional, non‑binding migration hints are collected in [migrations.md](./migrations.md)
 
 ## Patch management process
 
@@ -117,12 +117,12 @@ Community users consume information via openCode; Enterprise customers get an ad
 
 Each release (major, minor, or patch) must include:
 
-- **Release notes** outlining new features, fixes, and known issues
-- **Change logs** with commit references and affected components
-- **Test reports** confirming QA coverage and results
-- **Deployment checklist** reviewed and approved by the product owner
+* **Release notes** outlining new features, fixes, and known issues
+* **Change logs** with commit references and affected components
+* **Test reports** confirming QA coverage and results
+* **Deployment checklist** reviewed and approved by the product owner
 
 ## Compliance & review
 
-- The release process is reviewed **bi-annually** to incorporate feedback and evolving requirements
-- Emergency patches (e.g., zero-day security issues) may bypass the standard schedule but must be documented post-deployment
+* The release process is reviewed **bi-annually** to incorporate feedback and evolving requirements
+* Emergency patches (e.g., zero-day security issues) may bypass the standard schedule but must be documented post-deployment

@@ -7,11 +7,15 @@ commonAnnotations:
 limesurvey:
   image: "martialblog/limesurvey"
   tag: "latest"
+  port: 8080
   timezone: "Europe/Berlin"
+  skipInstall: true
 
   db:
+    host: "mariadb-standalone"
     user: "limesurvey"
     name: "limesurvey"
+    password: "limesurvey"
 
   volumes:
     upload:
@@ -26,6 +30,13 @@ limesurvey:
       cpu: "500m"
       memory: "512Mi"
 
+  oidc:
+    enabled: {{ .Values.apps.limesurvey.oidc.enabled | default true }}
+    issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
+    clientId: "opendesk-limesurvey"
+    clientSecret: "{{ .Values.secrets.keycloak.clientSecret.limesurvey | default "" }}"
+    cookieSecret: "{{ .Values.secrets.keycloak.cookieSecret.limesurvey | default "" }}"
+
 # Ingress configuration
 ingress:
   enabled: {{ .Values.ingress.enabled }}
@@ -36,27 +47,20 @@ ingress:
     haproxy-ingress.github.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.limesurvey }}"
     haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.limesurvey }}s"
     haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.limesurvey }}s"
-    haproxy-ingress.github.io/headers: "X-Forwarded-Host survey.opendesk.example.com"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host limesurvey.{{ .Values.global.domain }}"
   hosts:
-    - host: "survey.opendesk.example.com"
+    - host: "limesurvey.{{ .Values.global.domain }}"
       paths:
         - path: /
           pathType: "ImplementationSpecific"
   tls:
     - secretName: "opendesk-certificates-tls"
       hosts:
-        - "survey.opendesk.example.com"
+        - "limesurvey.{{ .Values.global.domain }}"
 
 # Embedded MariaDB configuration
 mariadb:
-  enabled: true
-  auth:
-    username: "limesurvey"
-    database: "limesurvey"
-  primary:
-    persistence:
-      enabled: true
-      size: "5Gi"
+  enabled: false
 
 # Node selector
 nodeSelector: {}

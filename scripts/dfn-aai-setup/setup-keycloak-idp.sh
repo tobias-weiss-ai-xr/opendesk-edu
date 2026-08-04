@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # SPDX-FileCopyrightText: 2025-2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 #
 # Setup Keycloak SAML Identity Provider for DFN-AAI / eduGAIN Federation
 # This script configures Keycloak to act as a SAML Service Provider
@@ -20,9 +20,14 @@ DEFAULT_ADMIN_USER="admin"
 DEFAULT_ADMIN_PASSWORD="admin"
 
 # DFN-AAI Metadata URLs
-DFN_AAI_TEST_METADATA="https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
-DFN_AAI_PROD_METADATA="https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
-DFN_AAI_EDUGAIN_METADATA="https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+DFN_AAI_TEST_METADATA="https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml"
+DFN_AAI_PROD_METADATA="https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml"
+DFN_AAI_EDUGAIN_METADATA="https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml"
+
+# DFN-AAI SSO Endpoint URLs (actual SAML SSO endpoints, NOT metadata URLs)
+DFN_AAI_TEST_SSO_URL="https://test.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"
+DFN_AAI_PROD_SSO_URL="https://www.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"
+DFN_AAI_EDUGAIN_SSO_URL="https://www.aai.dfn.de/idp/profile/SAML2/Redirect/SSO"
 
 # Colors for output
 RED='\033[0;31m'
@@ -101,19 +106,19 @@ EOF
 # kcadm wrapper function
 run_kcadm() {
     local args=("$@")
-    
+
     if [[ "${DRY_RUN:-false}" == "true" ]]; then
         echo "[DRY-RUN] kcadm.sh ${args[*]}"
         return 0
     fi
-    
+
     kcadm.sh "${args[@]}"
 }
 
 # Check prerequisites
 check_prerequisites() {
     log_step "Checking prerequisites..."
-    
+
     # Check kcadm is available
     if ! command -v kcadm.sh &> /dev/null; then
         log_error "kcadm.sh not found in PATH"
@@ -121,22 +126,22 @@ check_prerequisites() {
         log_error "Typically: export PATH=\$PATH:/opt/keycloak/bin"
         exit 1
     fi
-    
+
     # Check network connectivity
     if ! curl -sSf "${METADATA_URL}" -o /dev/null 2>/dev/null; then
         log_warn "Cannot reach federation metadata URL: ${METADATA_URL}"
         log_warn "Network connectivity to DFN-AAI may be required"
     fi
-    
+
     log_info "Prerequisites check passed"
 }
 
 # Login to Keycloak
 login_keycloak() {
     log_step "Logging in to Keycloak..."
-    
+
     local server_url="${KEYCLOAK_URL}/"
-    
+
     if [[ -n "${CLIENT_SECRET:-}" ]]; then
         # Service account login
         run_kcadm config credentials \
@@ -153,14 +158,14 @@ login_keycloak() {
             --client "${CLIENT_ID}" \
             --realm master
     fi
-    
+
     log_info "Successfully logged in to Keycloak"
 }
 
 # Create SAML identity provider
 create_identity_provider() {
     log_step "Creating SAML identity provider '${IDP_ALIAS}'..."
-    
+
     # Check if IdP already exists
     if run_kcadm get identity-provider/instances/${IDP_ALIAS} -r ${REALM} 2>/dev/null; then
         log_warn "Identity provider '${IDP_ALIAS}' already exists"
@@ -170,11 +175,11 @@ create_identity_provider() {
             log_info "Skipping identity provider creation"
             return 0
         fi
-        
+
         # Delete existing IdP
         run_kcadm delete identity-provider/instances/${IDP_ALIAS} -r ${REALM}
     fi
-    
+
     # Create identity provider
     run_kcadm create identity-provider/instances -r ${REALM} \
         -s alias="${IDP_ALIAS}" \
@@ -185,7 +190,7 @@ create_identity_provider() {
         -s displayName="${IDP_DISPLAY_NAME}" \
         -s 'config.metadataDescriptorUrl='"${METADATA_URL}" \
         -s 'config.entityId='"${SP_ENTITY_ID}" \
-        -s 'config.singleSignOnServiceUrl='"${METADATA_URL}" \
+        -s 'config.singleSignOnServiceUrl='"${SSO_URL}" \
         -s 'config.nameIDPolicyFormat=urn:oasis:names:tc:SAML:2.0:nameid-format:persistent' \
         -s 'config.principalType=ATTRIBUTE' \
         -s 'config.principalAttribute=urn:mace:dir:attribute-def:eduPersonTargetedID' \
@@ -194,7 +199,7 @@ create_identity_provider() {
         -s 'config.validateSignature=true' \
         -s 'config.xmlSigKeyInfoKeyNameStrategy=KEY_ID' \
         -s 'config.allowCreate=true'
-    
+
     log_info "Identity provider '${IDP_ALIAS}' created successfully"
 }
 
@@ -203,32 +208,32 @@ configure_discovery() {
     if [[ "${ENABLE_DISCOVERY:-false}" != "true" ]]; then
         return 0
     fi
-    
+
     log_step "Configuring federation discovery service..."
-    
+
     # Update IdP with discovery URL
     run_kcadm update identity-provider/instances/${IDP_ALIAS} -r ${REALM} \
         -s 'config.discoveryEndpoint='"${DISCOVERY_URL}"
-    
+
     log_info "Federation discovery configured"
 }
 
 # Verify configuration
 verify_configuration() {
     log_step "Verifying identity provider configuration..."
-    
+
     # Get IdP configuration
     local idp_config
     idp_config=$(run_kcadm get identity-provider/instances/${IDP_ALIAS} -r ${REALM})
-    
+
     if [[ -z "${idp_config}" ]]; then
         log_error "Failed to retrieve identity provider configuration"
         return 1
     fi
-    
+
     # Verify key settings
     echo "${idp_config}" | grep -q '"enabled" : true' || log_warn "IdP may not be enabled"
-    
+
     log_info "Identity provider configuration verified"
     log_info ""
     log_info "Configuration summary:"
@@ -248,7 +253,7 @@ main() {
     # Initialize variables
     local environment=""
     local keycloak_url=""
-    
+
     # Parse command line arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -327,36 +332,39 @@ main() {
                 ;;
         esac
     done
-    
+
     # Validate required parameters
     if [[ -z "${environment}" ]]; then
         log_error "Environment is required (use -e or --environment)"
         show_usage
         exit 1
     fi
-    
+
     if [[ -z "${KEYCLOAK_URL}" ]]; then
         log_error "Keycloak URL is required (use -u or --keycloak-url)"
         show_usage
         exit 1
     fi
-    
+
     # Set environment-specific configuration
     case "${environment}" in
         test)
             METADATA_URL="${DFN_AAI_TEST_METADATA}"
+            SSO_URL="${DFN_AAI_TEST_SSO_URL}"
             IDP_ALIAS="dfn-aai-test"
             IDP_DISPLAY_NAME="Mit Ihrer Einrichtung anmelden (Test)"
             DISCOVERY_URL="${DISCOVERY_URL:-https://test.discovery.aai.dfn.de/}"
             ;;
         production)
             METADATA_URL="${DFN_AAI_PROD_METADATA}"
+            SSO_URL="${DFN_AAI_PROD_SSO_URL}"
             IDP_ALIAS="dfn-aai"
             IDP_DISPLAY_NAME="Mit Ihrer Einrichtung anmelden"
             DISCOVERY_URL="${DISCOVERY_URL:-https://discovery.aai.dfn.de/}"
             ;;
         edugain)
             METADATA_URL="${DFN_AAI_EDUGAIN_METADATA}"
+            SSO_URL="${DFN_AAI_EDUGAIN_SSO_URL}"
             IDP_ALIAS="edugain"
             IDP_DISPLAY_NAME="Sign in with your institution (eduGAIN)"
             DISCOVERY_URL="${DISCOVERY_URL:-https://discovery.edugain.org/}"
@@ -367,7 +375,7 @@ main() {
             exit 1
             ;;
     esac
-    
+
     # Set defaults
     ADMIN_USER="${ADMIN_USER:-${DEFAULT_ADMIN_USER}}"
     ADMIN_PASSWORD="${ADMIN_PASSWORD:-${KC_ADMIN_PASSWORD:-${DEFAULT_ADMIN_PASSWORD}}}"
@@ -376,16 +384,16 @@ main() {
     TRUST_EMAIL="${TRUST_EMAIL:-true}"
     FIRST_LOGIN_FLOW="${FIRST_LOGIN_FLOW:-first broker login}"
     SP_ENTITY_ID="${SP_ENTITY_ID:-${KEYCLOAK_URL}/realms/${REALM}}"
-    ACS_URL="${ACS_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/saml/endpoint}"
-    SLO_URL="${SLO_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/saml/endpoint}"
-    
+    ACS_URL="${ACS_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/${IDP_ALIAS}/endpoint}"
+    SLO_URL="${SLO_URL:-${KEYCLOAK_URL}/realms/${REALM}/broker/${IDP_ALIAS}/endpoint}"
+
     # Execute setup
     check_prerequisites
     login_keycloak
     create_identity_provider
     configure_discovery
     verify_configuration
-    
+
     log_info ""
     log_info "Setup complete! Identity provider '${IDP_ALIAS}' is ready."
 }

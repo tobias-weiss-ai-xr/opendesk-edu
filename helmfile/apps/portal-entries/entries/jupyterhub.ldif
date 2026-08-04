@@ -1,0 +1,12 @@
+dn: cn=jupyterhub,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+objectClass: univentionNewPortalEntry
+objectClass: top
+cn: jupyterhub
+univentionNewPortalEntryActivate: TRUE
+univentionNewPortalEntryLink: en_US https://jupyter.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLinkTarget: newwindow
+univentionNewPortalEntryDisplayName: en_US JupyterHub
+univentionNewPortalEntryDisplayName: de_DE JupyterHub
+univentionNewPortalEntryDescription: en_US Interactive notebooks (Python, R, Julia)
+univentionNewPortalEntryDescription: de_DE Interaktive Notebooks (Python, R, Julia)
+univentionNewPortalEntryOnlyAnonymous: FALSE

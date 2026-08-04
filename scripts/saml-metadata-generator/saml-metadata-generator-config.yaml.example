@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2025 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 #
 # SAML Metadata Generator Configuration Template
 # Copy this file to: saml-metadata-generator-config.yaml
@@ -58,7 +58,7 @@ requested_attributes:
     friendly_name_de: "E-Mail"
     description_en: "User's email address"
     description_de: "E-Mail-Adresse des Benutzers"
-    
+
   - name: displayName
     urn: "urn:mace:dir:attribute-def:displayName"
     required: true
@@ -66,7 +66,7 @@ requested_attributes:
     friendly_name_de: "Anzeigename"
     description_en: "User's full display name"
     description_de: "Vollständiger Anzeigename des Benutzers"
-    
+
   - name: eduPersonPrincipalName
     urn: "urn:mace:dir:attribute-def:eduPersonPrincipalName"
     required: true
@@ -74,7 +74,7 @@ requested_attributes:
     friendly_name_de: "Principal-Name"
     description_en: "Scoped unique identifier (user@institution)"
     description_de: "Bereichsspezifische eindeutige Kennung (benutzer@institution)"
-    
+
   - name: eduPersonAffiliation
     urn: "urn:mace:dir:attribute-def:eduPersonAffiliation"
     required: true
@@ -82,7 +82,7 @@ requested_attributes:
     friendly_name_de: "Zugehörigkeit"
     description_en: "User's role (student/faculty/staff/member)"
     description_de: "Benutzerrolle (student/faculty/staff/member)"
-    
+
   - name: eduPersonTargetedID
     urn: "urn:mace:dir:attribute-def:eduPersonTargetedID"
     required: true
@@ -90,7 +90,7 @@ requested_attributes:
     friendly_name_de: "Persistente ID"
     description_en: "Privacy-preserving persistent unique identifier"
     description_de: "Datenschutzfreundliche persistente eindeutige Kennung"
-  
+
   # Optional but Recommended Attributes
   - name: givenName
     urn: "urn:mace:dir:attribute-def:givenName"
@@ -99,7 +99,7 @@ requested_attributes:
     friendly_name_de: "Vorname"
     description_en: "User's first/given name"
     description_de: "Vorname des Benutzers"
-    
+
   - name: sn
     urn: "urn:mace:dir:attribute-def:sn"
     required: false
@@ -107,7 +107,7 @@ requested_attributes:
     friendly_name_de: "Nachname"
     description_en: "User's surname/family name"
     description_de: "Nachname des Benutzers"
-    
+
   - name: eduPersonScopedAffiliation
     urn: "urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
     required: false
@@ -115,7 +115,7 @@ requested_attributes:
     friendly_name_de: "Bereichsspezifische Zugehörigkeit"
     description_en: "Affiliation with scope (e.g., student@university.edu)"
     description_de: "Zugehörigkeit mit Bereich (z.B. student@university.edu)"
-    
+
   - name: eduPersonUniqueID
     urn: "urn:mace:dir:attribute-def:eduPersonUniqueID"
     required: false
@@ -123,7 +123,7 @@ requested_attributes:
     friendly_name_de: "Eindeutige ID"
     description_en: "Globally unique identifier across federations"
     description_de: "Globale eindeutige Kennung über Föderationen"
-    
+
   - name: schacHomeOrganization
     urn: "urn:oid:1.3.6.1.4.1.25178.1.2.9"
     required: false
@@ -148,9 +148,10 @@ environments:
   dev:
     base_url: "https://id.dev.opendesk.example.edu"
     realm: "opendesk"
+    alias: "dfn-aai-test"
     entity_id: "https://dev.opendesk.example.edu/saml-sp"
-    acs_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    acs_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
+    slo_url: "https://id.dev.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 30
     certificates:
@@ -160,9 +161,10 @@ environments:
   staging:
     base_url: "https://id.staging.opendesk.example.edu"
     realm: "opendesk"
+    alias: "dfn-aai-test"
     entity_id: "https://staging.opendesk.example.edu/saml-sp"
-    acs_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    acs_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
+    slo_url: "https://id.staging.opendesk.example.edu/realms/opendesk/broker/dfn-aai-test/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 90
     certificates:
@@ -172,9 +174,10 @@ environments:
   production:
     base_url: "https://id.opendesk.example.edu"
     realm: "opendesk"
+    alias: "dfn-aai"
     entity_id: "https://opendesk.example.edu/saml-sp"
-    acs_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
-    slo_url: "https://id.opendesk.example.edu/realms/opendesk/broker/saml/endpoint"
+    acs_url: "https://id.opendesk.example.edu/realms/opendesk/broker/dfn-aai/endpoint"
+    slo_url: "https://id.opendesk.example.edu/realms/opendesk/broker/dfn-aai/endpoint"
     cache_duration: "PT24H"
     valid_until_days: 365  # DFN-AAI requires ≤ 1 year for production
     certificates:
@@ -188,23 +191,23 @@ environments:
 dfn_aai:
   # Test Federation - Always test here first before production!
   test:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-test-metadata.xml"
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Test-metadata.xml"
     registration_url: "https://test.aai.dfn.de/metadata/"
     discovery_url: "https://test.discovery.aai.dfn.de/"
     support_email: "support@aai.dfn.de"
     description: "DFN-AAI Test Federation - Use for development and testing"
-  
+
   # Production Federation - For live deployment
   production:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-basic-metadata.xml"
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-Basic-metadata.xml"
     registration_url: "https://www.aai.dfn.de/en/service/metadata/"
     discovery_url: "https://discovery.aai.dfn.de/"
     support_email: "support@aai.dfn.de"
     description: "DFN-AAI Production Federation - For production deployment"
-  
+
   # eduGAIN Interfederation - International institutions
   edugain:
-    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/dfn-aai-edugain-metadata.xml"
+    metadata_url: "https://www.aai.dfn.de/fileadmin/metadata/DFN-AAI-edugain-metadata.xml"
     registration_url: "https://technical.edugain.org/"
     discovery_url: "https://discovery.edugain.org/"
     support_email: "support@aai.dfn.de"
@@ -216,13 +219,13 @@ dfn_aai:
 registration:
   # Contact DFN-AAI before submitting metadata
   pre_contact_email: "support@aai.dfn.de"
-  
+
   # Test federation approval time (typical)
   test_approval_days: "1-2"
-  
+
   # Production federation approval time (typical)
   production_approval_days: "3-5"
-  
+
   # Required for production registration
   requirements:
     - "Valid CA-signed TLS certificate"
@@ -237,9 +240,9 @@ registration:
 validation:
   # Enable SAML 2.0 schema validation
   schema_validation: true
-  
+
   # Use xmllint for external validation (if available)
   use_xmllint: true
-  
+
   # Check certificate expiration (warn if less than days)
   cert_expiry_warn_days: 30

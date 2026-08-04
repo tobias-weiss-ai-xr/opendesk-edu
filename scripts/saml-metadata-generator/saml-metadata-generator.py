@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2025 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """
 SAML SP Metadata Generator for DFN-AAI Federation
 
@@ -124,14 +124,26 @@ def generate_entity_id(base_url: str, realm: str = "opendesk") -> str:
     return f"{base_url}/realms/{realm}"
 
 
-def generate_acs_url(base_url: str, realm: str = "opendesk") -> str:
-    """Generate Assertion Consumer Service URL for Keycloak."""
-    return f"{base_url}/realms/{realm}/broker/saml/endpoint"
+def generate_acs_url(
+    base_url: str, realm: str = "opendesk", alias: str = "saml"
+) -> str:
+    """Generate Assertion Consumer Service URL for Keycloak.
+
+    Keycloak uses broker/<alias>/endpoint format, where alias is the
+    identity provider alias configured in Keycloak.
+    """
+    return f"{base_url}/realms/{realm}/broker/{alias}/endpoint"
 
 
-def generate_slo_url(base_url: str, realm: str = "opendesk") -> str:
-    """Generate Single Logout Service URL for Keycloak."""
-    return f"{base_url}/realms/{realm}/broker/saml/endpoint"
+def generate_slo_url(
+    base_url: str, realm: str = "opendesk", alias: str = "saml"
+) -> str:
+    """Generate Single Logout Service URL for Keycloak.
+
+    Keycloak uses broker/<alias>/endpoint format, where alias is the
+    identity provider alias configured in Keycloak.
+    """
+    return f"{base_url}/realms/{realm}/broker/{alias}/endpoint"
 
 
 def create_key_descriptor(
@@ -524,8 +536,12 @@ def generate_metadata_file(
     realm = env_config.get("realm", "opendesk")
     entity_id = env_config.get("entity_id") or generate_entity_id(base_url, realm)
 
-    acs_url = env_config.get("acs_url") or generate_acs_url(base_url, realm)
-    slo_url = env_config.get("slo_url") or generate_slo_url(base_url, realm)
+    acs_url = env_config.get("acs_url") or generate_acs_url(
+        base_url, realm, env_config.get("alias", "saml")
+    )
+    slo_url = env_config.get("slo_url") or generate_slo_url(
+        base_url, realm, env_config.get("alias", "saml")
+    )
 
     # Load certificates
     signing_cert = None
@@ -596,7 +612,7 @@ def generate_metadata_file(
     return True
 
 
-def main():
+def main() -> None:
     """Main entry point for the SAML metadata generator."""
     parser = argparse.ArgumentParser(
         description="Generate SAML 2.0 SP metadata for DFN-AAI federation",

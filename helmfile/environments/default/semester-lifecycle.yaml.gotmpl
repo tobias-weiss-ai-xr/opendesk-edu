@@ -421,7 +421,7 @@ semesterLifecycle:
       ##
       apiCredentials:
         username: {{ env "SEMESTER_PROVISIONING_API_USER" | quote }}
-        password: {{ .Values.secrets.campusManagement.password | quote }}
+        password: {{ env "SEMESTER_PROVISIONING_API_PASSWORD" | default "" | quote }}
 
       ## Enrollment sync interval (in hours)
       ##
@@ -485,4 +485,3 @@ semesterLifecycle:
       ##
       recordingRetentionDays: {{ env "SEMESTER_RECORDING_RETENTION_DAYS" | default "365" | quote }}
 
-...

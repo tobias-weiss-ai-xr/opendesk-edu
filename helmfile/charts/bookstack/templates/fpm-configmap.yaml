@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-bookstack-fpm-config
+  labels:
+{{ include "bookstack.labels" . | nindent 4 }}
+data:
+  www2.conf: |
+    ; PHP-FPM pool override
+    [www]
+    user = abc
+    group = abc
+    listen = 127.0.0.1:9000
+    pm = dynamic
+    pm.max_children = 75
+    pm.start_servers = 8
+    pm.min_spare_servers = 5
+    pm.max_spare_servers = 20
+    pm.max_requests = 500
+    clear_env = no
+    catch_workers_output = yes
+    php_admin_value[error_log] = /dev/stderr

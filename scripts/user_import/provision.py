@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 
 import os.path
 import secrets
 import logging
+from typing import Any, Dict
 import configargparse
-
-from pathlib import Path
 
 from lib.argparse_types import opt2bool
 from lib.constants import NON_RECONCILE_GROUPS, DEFAULT_IDENTITY_PROVIDER
 from lib.ucs import Ucs
 from lib.random_user import RandomUser
 from lib.import_user import ImportUser
+from lib.common import setup_logging
 
 p = configargparse.ArgParser()
 p.add(
@@ -284,50 +284,25 @@ p.add(
 
 options = p.parse_args()
 
+setup_logging(options, "provision.py")
+
 new_user_password = options.set_default_password
 
-Path(options.logpath).mkdir(parents=True, exist_ok=True)
 
-logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
-rootLogger = logging.getLogger()
-rootLogger.setLevel(options.loglevel)
-
-fileHandler = logging.FileHandler(
-    "{0}/{1}.log".format(options.logpath, os.path.basename(__file__))
-)
-fileHandler.setFormatter(logFormatter)
-rootLogger.addHandler(fileHandler)
-
-consoleHandler = logging.StreamHandler()
-consoleHandler.setFormatter(logFormatter)
-rootLogger.addHandler(consoleHandler)
-
-logging.info("Running with settings:")
-for option, setting in vars(options).items():
-    logging.info(f"> {option}: {setting if 'password' not in option else '<redacted>'}")
-
-
-def import_callback(person):
+def import_callback(person: Dict[str, Any]) -> None:
     global new_user_password
     if "password" in person and len(str(person["password"])) >= 8:
         logging.debug("Using predefined password for user.")
     elif new_user_password is None or len(new_user_password) < 8:
         person["password"] = "".join(
-            (
-                secrets.choice('öäüÄÖÜß-+<>".,;:0123456789!$%&/()=[]{}<>|_#+*~?')
-                for _ in range(16)
-            )
+            (secrets.choice('öäüÄÖÜß-+<>".,;:0123456789!$%&/()=[]{}<>|_#+*~?') for _ in range(16))
         )
     else:
         person["password"] = new_user_password
     ucs.set_user(person)
 
 
-import_maildomain = (
-    options.import_domain
-    if not options.import_maildomain
-    else options.import_maildomain
-)
+import_maildomain = options.import_domain if not options.import_maildomain else options.import_maildomain
 
 ucs = Ucs(
     adm_username=options.udm_api_username,
@@ -346,9 +321,7 @@ if not options.import_filename and not options.iam_api_url:
         password_reset_mail=options.password_recovery_email,
         randomize_username=options.import_random_usernames,
     )
-    logging.info(
-        f"Accounts that have been created:\n{ucs.get_imported_credentials_list()}"
-    )
+    logging.info(f"Accounts that have been created:\n{ucs.get_imported_credentials_list()}")
 elif options.iam_api_url:
     logging.info(f"Importing users from IAM API: {options.iam_api_url}")
     ImportUser(

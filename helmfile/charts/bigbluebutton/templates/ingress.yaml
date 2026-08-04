@@ -4,23 +4,23 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    {{- range $key, $value := .Values.ingress.annotations }}
+    {{- range $key, $value := .Values.bigbluebutton.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-  ingressClassName: {{ .Values.ingress.className | quote }}
+  ingressClassName: {{ .Values.bigbluebutton.ingress.className | quote }}
   rules:
-    - host: {{ .Values.ingress.hosts.host | quote }}
+    - host: {{ .Values.bigbluebutton.ingress.hosts.host | quote }}
       http:
         paths:
-          - path: {{ .Values.ingress.hosts.paths.path | quote }}
-            pathType: {{ .Values.ingress.hosts.paths.pathType | quote }}
+          - path: {{ .Values.bigbluebutton.ingress.hosts.paths.path | quote }}
+            pathType: {{ .Values.bigbluebutton.ingress.hosts.paths.pathType | quote }}
             backend:
               service:
                 name: {{ .Release.Name }}
                 port:
-                  number: {{ .Values.service.externalPort }}
+                  number: {{ .Values.bigbluebutton.service.externalPort }}
   tls:
     - hosts:
-        - {{ .Values.ingress.hosts.host | quote }}
-      secretName: {{ .Values.ingress.tls.secretName | quote }}
+        - {{ .Values.bigbluebutton.ingress.hosts.host | quote }}
+      secretName: {{ .Values.bigbluebutton.ingress.tls.secretName | quote }}

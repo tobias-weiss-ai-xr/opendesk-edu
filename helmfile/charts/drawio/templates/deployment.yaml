@@ -18,6 +18,10 @@ spec:
       labels:
         drawio/server: "true"
 {{ include "drawio.labels" . | nindent 8 }}
+{{- if .Values.sso.oidc.enabled }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+{{- end }}
     spec:
       containers:
         - name: drawio
@@ -38,3 +42,30 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
           resources: {{ .Values.drawio.resources | toYaml | nindent 12 }}
+{{- if .Values.sso.oidc.enabled }}
+        - name: oauth2-proxy
+          image: {{ .Values.sso.oidc.proxyImage }}:{{ .Values.sso.oidc.proxyTag }}
+          ports:
+            - containerPort: 4180
+              protocol: TCP
+          args:
+            - --provider=oidc
+            - --oidc-issuer-url={{ .Values.sso.oidc.issuerUrl }}
+            - --upstream=http://127.0.0.1:{{ .Values.drawio.port }}
+            - --http-address=0.0.0.0:4180
+            - --email-domain=*
+            - --client-id={{ .Values.sso.oidc.clientId }}
+            - --client-secret={{ .Values.sso.oidc.clientSecret }}
+            - --cookie-secret={{ .Values.sso.oidc.cookieSecret }}
+            - --cookie-secure=true
+            - --pass-authorization-header=true
+            - --set-xauthrequest=true
+            - --ssl-insecure-skip-verify=true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+{{- end }}

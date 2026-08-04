@@ -1,0 +1,63 @@
+---
+replicaCount: 1
+image:
+  repository: rocker/rstudio
+  tag: "4.4.2"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8787
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+  hosts:
+    - host: r.opendesk.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+persistence:
+  enabled: true
+  size: 10Gi
+  accessMode: ReadWriteOnce
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2
+    memory: 4Gi
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# OAuth2-proxy sidecar for Keycloak SSO
+oauth2:
+  enabled: false
+  provider: "keycloak-oidc"
+  clientId: "opendesk-rstudio"
+  clientSecret: ""
+  oidcIssuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+  cookieSecret: ""
+  # Additional config
+  additionalConfig:
+    scope: "openid email profile"
+    set-authorization-header: "true"
+    set-xauthrequest: "true"
+    email-domain: "*"
+    upstream: "http://127.0.0.1:8787"
+    http-address: "0.0.0.0:4180"
+
+# OpenCloud storage integration via rclone sidecar
+opencloud:
+  enabled: false
+  url: "https://opencloud.opendesk.example.com"
+  username: ""
+  password: ""
+  syncInterval: "60s"
+  # Sub-path within OpenCloud to mount (e.g. "projects" or "/" for root)
+  remotePath: "/"
+  # Local mount point (relative to the main container's workspace)
+  mountPath: "opencloud"
