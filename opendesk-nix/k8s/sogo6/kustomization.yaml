@@ -1,0 +1,53 @@
+# SOGo 6 Kustomization
+# SPDX-License-Identifier: Apache-2.0
+#
+# Usage:
+#   kubectl apply -k opendesk-nix/k8s/sogo6
+#
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - includeSelectors: false
+    pairs:
+      app: sogo
+      version: "6.0.0"
+      app.kubernetes.io/name: sogo
+      app.kubernetes.io/instance: sogo6
+      app.kubernetes.io/version: "6.0.0"
+      app.kubernetes.io/part-of: opendesk
+      opendesk.org/component: mail-calendar-contacts
+      de.container.gov.component: sogo6
+
+commonAnnotations:
+  opendesk.org/description: "SOGo 6 - Next-gen groupware with enhanced performance"
+  opendesk.org/registry: "registry.gitlab.opencode.de/umr"
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: registry.gitlab.opencode.de/umr/opendesk-sogo6
+    newName: registry.gitlab.opencode.de/umr/opendesk-sogo6
+    newTag: 6.0.0
+
+vars:
+  - name: HASH_CONFIG
+    objref:
+      kind: ConfigMap
+      name: sogo6-config
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.uid
+  
+  - name: HASH_SECRET
+    objref:
+      kind: Secret
+      name: sogo6-secrets
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.uid

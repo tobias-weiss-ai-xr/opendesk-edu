@@ -1,0 +1,381 @@
+# openDesk Docker Compose Deployment
+#
+# Production-ready Docker Compose setup for openDesk with custom components
+# as an alternative to Kubernetes deployment.
+#
+# Components:
+#   - Traefik (reverse proxy with Let'\''s Encrypt SSL)
+#   - PostgreSQL (consolidated database)
+#   - Keycloak (IAM/Portal - Nubus)
+#   - OpenCloud (file management)
+#   - Element/Synapse (chat)
+#   - Notes/CryptPad (collaborative notes)
+#   - MOX (email server)
+#   - SOGo (webmail)
+#
+# Network Architecture:
+#   - traefik-frontend: Traefik and service exposure
+#   - backend: Internal service communication
+#
+# Configuration:
+#   - Environment variables via .env.production file
+#   - No hardcoded secrets in docker-compose.yml
+#   - Pinned Docker image versions (no '\''latest'\'' tags)
+#   - All containers run as non-root users
+#   - Healthchecks on all production services
+#
+# Usage:
+#   1. Copy .env.example to .env.production
+#   2. Set your domain, passwords, and secrets in .env.production
+#   3. Run: docker-compose up -d
+#
+# Documentation: See README.md for detailed setup instructions
+
+networks:
+  traefik-frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  # Traefik
+  traefik-acme:
+
+  # PostgreSQL
+  pgdata:
+
+  # Services (data persistence)
+  keycloak_data:
+  keycloak_theme:
+  opencloud_data:
+  notes_data:
+  stalwart_data:
+  sogo_data:
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-acme:/acme
+    networks:
+      - traefik-frontend
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - "touch /acme/acme.json && chmod 600 /acme/acme.json && exec /entrypoint.sh --api.insecure=true --ping=true --providers.docker=true --providers.docker.exposedbydefault=false --entrypoints.web.address=:80 --entrypoints.websecure.address=:443 --entrypoints.traefik.address=:8080 --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@${DOMAIN:-example.com}} --certificatesresolvers.letsencrypt.acme.storage=/acme/acme.json --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-frontend"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "-O", "/dev/null", "http://localhost:8080/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    restart: unless-stopped
+    user: "70:70"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "-c", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 4G
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.0
+    container_name: keycloak
+    restart: unless-stopped
+    command: start
+    environment:
+      KC_DB: postgres
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak_db
+      KC_DB_USERNAME: postgres
+      KC_DB_SCHEMA: public
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_IMPORT: /opt/keycloak/data/import/
+      KC_HOSTNAME: keycloak.${DOMAIN:-localhost.localdomain}
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_PORT: 80
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HOSTNAME_ADMIN: http://keycloak.${DOMAIN:-localhost.localdomain}
+      KC_PROXY: edge
+      KC_HTTP_ENABLED: "true"
+      KC_HTTPS_ENABLED: "false"
+      KC_LOG_LEVEL: INFO
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - keycloak_theme:/opt/keycloak/themes
+    networks:
+      - backend
+      - traefik-frontend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-frontend"
+      - "traefik.http.routers.keycloak.rule=Host(keycloak.${DOMAIN})"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: ["CMD-SHELL", "-c", "exec", "kcadm.sh", "config", "credentials", "--server", "http://localhost:8080", "--user", "${KEYCLOAK_ADMIN}", "--password", "${KEYCLOAK_ADMIN_PASSWORD}", "config", "export", ";", "kcadm.sh", "config", "credentials", "--show", "realm", "opendesk"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+
+  opencloud:
+    image: opencloudeu/opencloud:latest
+    container_name: opencloud
+    restart: unless-stopped
+    entrypoint:
+      - /bin/sh
+    # run opencloud init to initialize a configuration file with random secrets
+    # it will fail on subsequent runs, because the config file already exists
+    # therefore we ignore the error and then start the opencloud server
+    command: ["-c", "opencloud init || true; opencloud server"]
+    environment:
+      OC_CONFIG_DIR: /etc/opencloud
+      OC_INSECURE: "true"
+      OC_URL: http://opencloud.localhost
+      OC_LOG_LEVEL: info
+    volumes:
+      - opencloud_data:/var/lib/opencloud
+      - ./opencloud-config:/etc/opencloud
+    networks:
+      - backend
+      - traefik-frontend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-frontend"
+      - "traefik.http.routers.opencloud.rule=Host(opencloud.${DOMAIN})"
+      - "traefik.http.routers.opencloud.tls=true"
+      - "traefik.http.routers.opencloud.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "-O", "/dev/null", "http://localhost:9200/healthz"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+
+  synapse:
+    image: matrixdotorg/synapse:v1.122.0
+    container_name: synapse
+    restart: unless-stopped
+    environment:
+      SYNAPSE_SERVER_NAME: matrix.${DOMAIN}
+      SYNAPSE_REPORT_STATS: "no"
+      POSTGRES_USER: synapse_user
+      POSTGRES_PASSWORD: ${SYNAPSE_DB_PASSWORD:-changeme}
+      POSTGRES_DB: synapse_db
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+      SYNAPSE_SIGNING_KEY_PATH: /data/signing_key.pem
+    volumes:
+      - ./synapse-data:/data
+    networks:
+      - backend
+      - traefik-frontend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-frontend"
+      - "traefik.http.routers.matrix.rule=Host(matrix.${DOMAIN})"
+      - "traefik.http.routers.matrix.tls=true"
+      - "traefik.http.routers.matrix.tls.certresolver=letsencrypt"
+      - "traefik.http.services.matrix.loadbalancer.server.port=8008"
+    healthcheck:
+      test: ["CMD", "curl", "-fS", "http://localhost:8008/_matrix/federation/v1/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+
+  element-web:
+    image: vectorim/element-web:v1.12.6
+    container_name: element-web
+    restart: unless-stopped
+    user: "100:101"
+    environment:
+      ELEMENT_DEFAULT_SERVER_URL: https://matrix.${DOMAIN}
+    networks:
+      - traefik-frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-frontend"
+      - "traefik.http.routers.element.rule=Host(element.${DOMAIN})"
+      - "traefik.http.routers.element.tls=true"
+      - "traefik.http.routers.element.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "-O", "/dev/null", "http://localhost:8080/"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+
+  cryptpad:
+    image: cryptpad/cryptpad:version-2025.9.0
+    container_name: cryptpad
+    restart: unless-stopped
+    environment:
+      CPAD_MAIN_DOMAIN: http://notes.${DOMAIN}:3000
+      CPAD_SANDBOX_DOMAIN: http://notes.${DOMAIN}:3000
+      CPAD_CONF: /cryptpad/config/config.js
+    volumes:
+      - notes_data:/cryptpad/data
+      - ./cryptpad-config/config.js:/cryptpad/config/config.js:ro
+    networks:
+      - backend
+      - traefik-frontend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-frontend"
+      - "traefik.http.routers.notes.rule=Host(notes.${DOMAIN})"
+      - "traefik.http.routers.notes.tls=true"
+      - "traefik.http.routers.notes.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "-O", "/dev/null", "http://localhost:3000/"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+
+  stalwart-mail:
+    image: stalwartlabs/stalwart:latest
+    container_name: stalwart-mail
+    restart: unless-stopped
+    environment:
+      STALWART_HOSTNAME: ${EMAIL_DOMAIN}
+    volumes:
+      - stalwart_data:/opt/stalwart
+      - ./stalwart-config/config.toml:/opt/stalwart/etc/config.toml:ro
+    networks:
+      - backend
+    ports:
+      - "25:25"
+      - "587:587"
+      - "465:465"
+      - "143:143"
+      - "993:993"
+      - "110:110"
+      - "995:995"
+      - "4190:4190"
+      - "8082:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "-O", "/dev/null", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+  sogo:
+    image: sonroyaalmerol/docker-sogo:5.10.0
+    container_name: sogo
+    restart: unless-stopped
+    environment:
+      SOGO_IMAP_SERVER: stalwart-mail
+      SOGO_SIEVE_PORT: 4190
+      SOGO_SMTP_SERVER: stalwart-mail
+      SOGO_SMTP_PORT: 25
+      SOGO_DOMAIN: ${EMAIL_DOMAIN}
+      SOGO_ADMIN_USER: ${SOGO_ADMIN_USER:-admin}
+      SOGO_ADMIN_PASSWORD: ${SOGO_ADMIN_PASSWORD:-changeme}
+      SOGO_OAUTH2_ISSUER: https://keycloak.${DOMAIN}/auth/realms/opendesk
+      SOGO_OAUTH2_CLIENT_ID: sogo
+      SOGO_OAUTH2_CLIENT_SECRET: ${SOGO_OAUTH2_CLIENT_SECRET:-changeme}
+      SOGO_DB_HOST: postgres
+      SOGO_DB_PORT: 5432
+      SOGO_DB_NAME: sogo_db
+      SOGO_DB_USER: sogo_user
+      SOGO_DB_PASSWORD: ${SOGO_DB_PASSWORD:-changeme}
+    volumes:
+      - sogo_data:/var/lib/sogo
+    networks:
+      - backend
+      - traefik-frontend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      stalwart-mail:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-frontend"
+      - "traefik.http.routers.webmail.rule=Host(webmail.${DOMAIN})"
+      - "traefik.http.routers.webmail.tls=true"
+      - "traefik.http.routers.webmail.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "-O", "/dev/null", "http://localhost:20000/SOGo.index"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G

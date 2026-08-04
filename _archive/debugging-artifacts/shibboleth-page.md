@@ -1,0 +1,142 @@
+- generic [ref=e1]:
+  - banner:
+    - generic [ref=e2]:
+      - navigation:
+        - generic [ref=e3]:
+          - link "Direkt zum Hauptinhalt" [ref=e4] [cursor=pointer]:
+            - /url: "#content"
+          - heading "Service-Navigation" [level=6] [ref=e5]
+          - menu [ref=e6]:
+            - link "Philipps-Universität Marburg - Startseite" [ref=e7] [cursor=pointer]:
+              - /url: https://www.uni-marburg.de
+              - text: Philipps-Universität Marburg - Startseite
+            - list [ref=e9]:
+              - listitem [ref=e10]:
+                - link "English" [ref=e11] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=e12]:
+                - link "Kontrastreiche Version" [ref=e13] [cursor=pointer]:
+                  - /url: "#"
+                  - text: Kontrastreiche Version
+      - navigation
+      - navigation [ref=e15]:
+        - menu [ref=e17]:
+          - heading "Web-Login (Shibboleth) Anwendungs-Navigation" [level=6] [ref=e18]:
+            - text: Web-Login (Shibboleth)
+            - generic [ref=e19]: Anwendungs-Navigation
+          - list [ref=e20]:
+            - listitem [ref=e21]:
+              - link "Startseite" [ref=e22] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e23]: Startseite
+            - listitem [ref=e25]:
+              - menuitem "Anmeldung (Login)" [ref=e26] [cursor=pointer]
+            - listitem [ref=e27]:
+              - menuitem "Nutzungsbedingungen" [ref=e28] [cursor=pointer]
+            - listitem [ref=e29]:
+              - menuitem "Selbstauskunft" [ref=e30] [cursor=pointer]
+            - listitem [ref=e31]:
+              - menuitem "Hilfe" [ref=e32] [cursor=pointer]
+            - listitem [ref=e33]:
+              - menuitem "Sitzung beenden (Logout)" [ref=e34] [cursor=pointer]
+            - listitem [ref=e35]:
+              - link "nach oben scrollen" [ref=e36] [cursor=pointer]:
+                - /url: "#top"
+                - text: nach oben scrollen
+      - navigation
+  - generic [ref=e38]:
+    - navigation [ref=e41]:
+      - heading "Breadcrumb-Navigation" [level=6] [ref=e42]
+      - list [ref=e43]:
+        - listitem [ref=e44]:
+          - link "Home" [ref=e45] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e46]: › Anmeldung (Login)
+    - main [ref=e47]:
+      - generic [ref=e50]:
+        - heading "Anmelden bei" [level=1] [ref=e51]
+        - generic [ref=e53]: OpenDesk (Test)
+        - link "Switch to English" [ref=e55] [cursor=pointer]:
+          - /url: "#"
+        - list [ref=e56]:
+          - listitem [ref=e57]:
+            - heading "Inhalt ausklappen Weitere Informationen zum Dienst Weitere Informationen zum Dienst" [level=3] [ref=e58] [cursor=pointer]:
+              - link "Inhalt ausklappen Weitere Informationen zum Dienst Weitere Informationen zum Dienst" [ref=e59]:
+                - /url: javascript:;
+                - generic [ref=e60]: Inhalt ausklappen
+                - generic [ref=e62]: Weitere Informationen zum Dienst
+                - text: Weitere Informationen zum Dienst
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - generic [ref=e65]: Benutzername
+            - textbox "Benutzername" [ref=e66]:
+              - /placeholder: Bitte Uni-Account oder Leseausweisnr. eingeben
+            - generic [ref=e122]: Username (Uni-Account) muss aus 1-8 Zeichen bestehen (ohne @staff.uni-marburg.de / @students.uni-marburg.de).
+          - generic [ref=e67]:
+            - generic [ref=e69]: Passwort (hier ohne 2FA-Token)
+            - textbox "Passwort (hier ohne 2FA-Token)" [active] [ref=e70]:
+              - /placeholder: Bitte Passwort eingeben
+          - group [ref=e72]:
+            - checkbox "Anmeldung nicht für weitere Dienste speichern" [ref=e73]
+            - generic [ref=e74]: Anmeldung nicht für weitere Dienste speichern
+          - group [ref=e76]:
+            - checkbox "Die zu übermittelnden Informationen anzeigen, damit ich die Weitergabe gegebenenfalls ablehnen kann." [ref=e77]
+            - generic [ref=e78]: Die zu übermittelnden Informationen anzeigen, damit ich die Weitergabe gegebenenfalls ablehnen kann.
+          - button "Anmelden" [ref=e80] [cursor=pointer]
+        - heading "Sicherheitshinweise:" [level=3] [ref=e81]
+        - list [ref=e82]:
+          - listitem [ref=e83]:
+            - paragraph [ref=e84]:
+              - text: Achten Sie bei der Passwort-Eingabe auf
+              - strong [ref=e85]: Webseiten mit sicherer Verbindung!
+              - img [ref=e86]
+          - listitem [ref=e87]:
+            - paragraph [ref=e88]:
+              - text: Bitte nutzen Sie die Funktion
+              - strong [ref=e89]: Sitzung beenden (Logout)
+              - text: unter https://weblogin.uni-marburg.de, um sich von Web-Login und allen kürzlich genutzten Diensten abzumelden.
+          - listitem [ref=e90]:
+            - paragraph [ref=e91]:
+              - text: In Einzelfällen kann die Abmeldung an einzelnen Diensten scheitern.
+              - strong [ref=e92]: Zu Ihrer Sicherheit
+              - text: sollten Sie in Ihren Webbrowser-Einstellungen die
+              - emphasis [ref=e93]: Sitzungswiederherstellung (Session Restore)
+              - text: deaktivieren, oder alternativ am Ende Ihrer Sitzung alle Cookies löschen. Zuletzt schließen Sie bitte alle Tabs und beenden Sie den Webbrowser.
+    - contentinfo [ref=e94]:
+      - heading "Kontakt und Informationen zur Website" [level=1] [ref=e95]
+      - generic [ref=e96]:
+        - generic [ref=e97]:
+          - heading "Kontaktinformationen der Universität Marburg" [level=2] [ref=e98]
+          - generic [ref=e99]:
+            - generic:
+              - paragraph [ref=e100]:
+                - strong [ref=e101]:
+                  - text: Philipps-Universität Marburg
+                  - text: HRZ | Hochschulrechenzentrum
+                - generic [ref=e102]:
+                  - text: Hans-Meerwein-Straße 6
+                  - text: 35032 Marburg
+              - paragraph [ref=e103]:
+                - generic [ref=e104]: +49 6421 28-28282
+                - link "helpdesk@hrz.uni-marburg.de" [ref=e106] [cursor=pointer]:
+                  - /url: mailto:helpdesk@hrz.uni-marburg.de
+                  - text: helpdesk@hrz.uni-marburg.de
+            - paragraph [ref=e108]:
+              - link "Kontakt & Service" [ref=e109] [cursor=pointer]:
+                - /url: https://www.uni-marburg.de/de/hrz/ueber-uns/kontakt
+        - navigation [ref=e110]:
+          - generic [ref=e111]:
+            - heading "Service-Navigation" [level=2] [ref=e112]
+            - generic [ref=e113]:
+              - list [ref=e114]
+              - list [ref=e115]:
+                - listitem [ref=e116]:
+                  - link "Impressum" [ref=e117] [cursor=pointer]:
+                    - /url: https://www.uni-marburg.de/de/impressum
+                - listitem [ref=e118]:
+                  - link "Datenschutz" [ref=e119] [cursor=pointer]:
+                    - /url: https://www.uni-marburg.de/de/datenschutz
+                - listitem [ref=e120]:
+                  - link "Barrierefreiheit" [ref=e121] [cursor=pointer]:
+                    - /url: https://www.uni-marburg.de/de/barrierefreiheit
+        - navigation
