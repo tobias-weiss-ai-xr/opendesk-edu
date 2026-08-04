@@ -1,0 +1,39 @@
+# openDesk Dev Agent Operator Pod Disruption Budget
+# SPDX-License-Identifier: Apache-2.0
+#
+# This PDB ensures that at least one operator pod is always available.
+# Important for leader election to work correctly.
+#
+# With replicas=1, this allows graceful shutdown but prevents forced eviction.
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: opendesk-dev-agent-operator
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    # openDesk specific
+    opendesk.org/component: operator
+    opendesk.org/purpose: self-healing
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+    de.container.gov.ha: "true"
+
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opendesk-dev-agent
+      app.kubernetes.io/instance: opendesk-dev-agent-operator
+      app.kubernetes.io/component: operator

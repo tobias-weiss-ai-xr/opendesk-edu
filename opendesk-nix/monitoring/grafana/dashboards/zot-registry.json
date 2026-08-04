@@ -1,0 +1,635 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "zot-registry-dashboard",
+    "title": "Zot Registry Dashboard",
+    "tags": ["opendesk", "zot", "registry", "docker", "container"],
+    "timezone": "browser",
+    "schemaVersion": 30,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "type": "text",
+        "title": "Zot Registry Overview",
+        "gridPos": { "h": 4, "w": 24, "x": 0, "y": 0 },
+        "options": {
+          "content": "<div style='background: linear-gradient(90deg, #0a0014 0%, #571EFA 50%, #927AFA 100%); padding: 20px; border-radius: 5px;'>\n  <h2 style='color: white; margin: 0; text-align: center;'>\n    <img src='https://zotregistry.io/favicon.ico' style='height: 40px; vertical-align: middle;' />\n    &nbsp; Zot Container Registry
+  </h2>\n  <p style='color: #DDD6FE; margin: 10px 0 0 0; text-align: center; font-size: 14px;'>\n    Pull-through caching for GitHub Container Registry & GitLab Registry\n  </p>\n</div>",
+          "mode": "html"
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Registry Status",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": { "text": "Down", "color": "red" },
+                  "1": { "text": "Up", "color": "green" }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "green", "value": 1 }
+              ]
+            },
+            "color": { "mode": "thresholds" }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "probe_success{job=\"blackbox\",instance=~\"zot-registry.*\"}",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total Manifests",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "green", "value": 0 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "zot:storage:manifests_count",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total Blobs",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "green", "value": 0 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "zot:storage:blobs_count",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total Storage",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "zot:storage:total_bytes",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Cache Hit Ratio",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "red", "value": null },
+                { "color": "orange", "value": 30 },
+                { "color": "green", "value": 50 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "zot:cache:hit_ratio:5m * 100",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Cache Size",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "zot:cache:size_bytes",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Container CPU Usage",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 70 },
+                { "color": "red", "value": 85 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "(rate(container_cpu_usage_seconds_total{container_name=~\"zot-registry.*\"}[5m]) / container_spec_cpu_quota{container_name=~\"zot-registry.*\"} * container_spec_cpu_period{container_name=~\"zot-registry.*\"}) * 100",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Container Memory Usage",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 75 },
+                { "color": "red", "value": 85 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "(zot:container:memory_usage_bytes / container_spec_memory_limit_bytes{container_name=~\"zot-registry.*\"}) * 100",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Storage Usage Over Time",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "zot:storage:total_bytes",
+            "legendFormat": "Total Storage"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Manifest & Blob Count",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Manifests"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Blobs"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "zot:storage:manifests_count",
+            "legendFormat": "Manifests"
+          },
+          {
+            "expr": "zot:storage:blobs_count",
+            "legendFormat": "Blobs"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Cache Performance",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 28 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hits"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#119600",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Misses"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hit Ratio"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "rate(zot_cache_hits_total[1m])",
+            "legendFormat": "Hits"
+          },
+          {
+            "expr": "rate(zot_cache_misses_total[1m])",
+            "legendFormat": "Misses"
+          },
+          {
+            "expr": "zot:cache:hit_ratio:5m * 100",
+            "legendFormat": "Hit Ratio",
+            "lineWidth": 3
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Container Resource Usage",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 28 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPU"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Memory"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "(rate(container_cpu_usage_seconds_total{container_name=~\"zot-registry.*\"}[1m]) / container_spec_cpu_quota{container_name=~\"zot-registry.*\"} * container_spec_cpu_period{container_name=~\"zot-registry.*\"}) * 100",
+            "legendFormat": "CPU"
+          },
+          {
+            "expr": "(zot:container:memory_usage_bytes / container_spec_memory_limit_bytes{container_name=~\"zot-registry.*\"}) * 100",
+            "legendFormat": "Memory"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Network Traffic",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 36 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RX"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "TX"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "rate(container_network_receive_bytes_total{container_name=~\"zot-registry.*\"}[1m])",
+            "legendFormat": "RX"
+          },
+          {
+            "expr": "rate(container_network_transmit_bytes_total{container_name=~\"zot-registry.*\"}[1m])",
+            "legendFormat": "TX"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Container Restarts",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 36 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "increase(container_restarts_total{container_name=~\"zot-registry.*\"}[1h])",
+            "legendFormat": "{{container_name}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Health Check Response Time",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 44 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "probe_duration_seconds{job=\"blackbox\",instance=~\"zot-registry.*\"}",
+            "legendFormat": "{{instance}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Uptime History",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 44 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "zot:health:availability:5m * 100",
+            "legendFormat": "Zot Registry"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "",
+            "value": ""
+          },
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": ".*"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(container_name, container_name)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Container",
+          "multi": true,
+          "name": "container",
+          "options": [],
+          "query": "label_values(container_name, container_name)",
+          "refresh": 1,
+          "regex": "zot-registry.*",
+          "skipUrlSync": false,
+          "type": "query"
+        }
+      ]
+    },
+    "schemaVersion": 30,
+    "style": "dark",
+    "tags": ["opendesk", "zot", "registry", "docker"],
+    "time": { "from": "now-1h", "to": "now" },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h"],
+      "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
+    },
+    "timezone": "",
+    "title": "Zot Registry Dashboard",
+    "version": 1
+  },
+  "folderId": 0,
+  "overwrite": true
+}
