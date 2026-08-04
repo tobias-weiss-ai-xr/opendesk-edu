@@ -1,0 +1,12 @@
+- generic [ref=e3]:
+  - generic [ref=e4]: Zur Seite OIDC Callback navigiert
+  - button "Zum Hauptinhalt springen" [ref=e5]
+  - generic [ref=e6]:
+    - heading "OIDC Callback" [level=1] [ref=e7]
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - img [ref=e11]
+        - heading "Sie werden eingeloggt" [level=2] [ref=e12]
+      - paragraph [ref=e14]: Bitte warten, Sie werden weitergeleitet
+      - paragraph [ref=e16]: OpenCloud – Excellent file sharing
+    - img "OpenCloud emblem" [ref=e17]

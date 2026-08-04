@@ -1,0 +1,160 @@
+# openDesk Dev Agent Operator Configuration
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opendesk-dev-agent-config
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    # openDesk specific
+    opendesk.org/config-type: operator
+    opendesk.org/component: operator
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+    de.container.gov.config: "true"
+
+data:
+  # Operator Configuration
+  operator.yaml: |
+    apiVersion: opendesk-dev-agent.tobias-weiss-ai-xr.github.com/v1
+    kind: OperatorConfig
+    metadata:
+      name: opendesk-dev-agent
+    spec:
+      # Operator settings
+      operatorName: opendesk-dev-agent
+      version: "2.1.0"
+      
+      # Health check settings
+      healthCheck:
+        enabled: true
+        intervalSeconds: 60
+        timeoutSeconds: 10
+        
+      # Repair settings
+      repair:
+        enabled: true
+        maxRepairAttempts: 3
+        repairBackoffSeconds: 30
+        
+      # PI Memory integration (for self-learning)
+      piMemory:
+        enabled: false  # Disabled by default for security
+        endpoint: "http://localhost:8082"
+        timeoutSeconds: 5
+        
+      # Namespaces to watch
+      watchNamespaces:
+        - opendesk
+        - opendesk-edu
+        - default
+      
+      # Priority classes for repair
+      repairPriority:
+        Critical: 1
+        High: 2
+        Medium: 3
+        Low: 4
+    
+  # Default HealthPolicy
+  default-healthpolicy.yaml: |
+    apiVersion: opendesk-dev-agent.tobias-weiss-ai-xr.github.com/v1
+    kind: HealthPolicy
+    metadata:
+      name: default-health-check
+      namespace: opendesk-dev-agent
+    spec:
+      checkInterval: 60
+      healthThreshold: 3
+      unhealthyThreshold: 5
+      components:
+        - name: keycloak
+          selector:
+            app: keycloak
+          healthChecks:
+            - type: http
+              path: /health
+              port: 8080
+              expectedStatus: 200
+            - type: tcp
+              port: 8080
+            - type: podReady
+        - name: nextcloud
+          selector:
+            app: nextcloud
+          healthChecks:
+            - type: http
+              path: /status.php
+              port: 80
+              expectedStatus: 200
+            - type: podReady
+        - name: postgresql
+          selector:
+            app: postgresql
+          healthChecks:
+            - type: tcp
+              port: 5432
+            - type: podReady
+            - type: exec
+              command: ["pg_isready"]
+    
+  # Default RepairStrategy
+  default-repairstrategy.yaml: |
+    apiVersion: opendesk-dev-agent.tobias-weiss-ai-xr.github.com/v1
+    kind: RepairStrategy
+    metadata:
+      name: default-repair
+      namespace: opendesk-dev-agent
+    spec:
+      targets:
+        - keycloak
+        - nextcloud
+        - postgresql
+        - mariadb
+      repairActions:
+        - name: restartPod
+          condition: podNotReady
+          priority: 1
+          timeoutSeconds: 30
+        - name: deletePod
+          condition: podCrashLoopBackOff
+          priority: 1
+          timeoutSeconds: 10
+        - name: scaleDeployment
+          condition: deploymentNotAvailable
+          priority: 2
+          parameters:
+            scaleTo: original
+        - name: notify
+          condition: healthDegraded
+          priority: 3
+      repairWindowMinutes: 15
+      maxConcurrentRepairs: 5
+      
+  # Watch namespaces (configurable via Operator)
+  watch-namespaces.txt: |
+    opendesk
+    opendesk-edu
+    default
+    testing
+    
+  # Leader election configuration
+  leader-election.yaml: |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: opendesk-dev-agent-leader-election
+      namespace: opendesk-dev-agent
+    data:
+      leader: "elect"

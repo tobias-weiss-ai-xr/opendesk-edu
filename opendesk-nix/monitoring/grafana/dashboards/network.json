@@ -1,0 +1,591 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "network-dashboard",
+    "title": "Network Dashboard",
+    "tags": ["opendesk", "network", "bandwidth", "traffic"],
+    "timezone": "browser",
+    "schemaVersion": 30,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "type": "text",
+        "title": "Network Monitoring",
+        "gridPos": { "h": 4, "w": 24, "x": 0, "y": 0 },
+        "options": {
+          "content": "<div style='background: linear-gradient(90deg, #0a0014 0%, #571EFA 50%, #927AFA 100%); padding: 20px; border-radius: 5px;'>\n  <h2 style='color: white; margin: 0; text-align: center;'>\n    <i class='fas fa-network-wired' style='color: #DDD6FE; font-size: 40px; vertical-align: middle;'></i>\n    &nbsp; Network Traffic & Performance
+  </h2>\n</div>",
+          "mode": "html"
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Total RX (All Nodes)",
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 100000000 },
+                { "color": "red", "value": 1000000000 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_receive_bytes_total[1m]))",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Total TX (All Nodes)",
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 100000000 },
+                { "color": "red", "value": 1000000000 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_transmit_bytes_total[1m]))",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Network Errors",
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 1 },
+                { "color": "red", "value": 10 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_receive_errs_total[1m]) + rate(node_network_transmit_errs_total[1m]))",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Packet Drops",
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 4 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 1 },
+                { "color": "red", "value": 10 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_receive_drop_total[1m]) + rate(node_network_transmit_drop_total[1m]))",
+            "instant": true
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Network Traffic (All Interfaces)",
+        "gridPos": { "h": 12, "w": 24, "x": 0, "y": 12 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/RX/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/TX/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_receive_bytes_total{device!~\"lo|bond.*|veth.*\"}[1m])) by (device)",
+            "legendFormat": "RX - {{device}}"
+          },
+          {
+            "expr": "sum(rate(node_network_transmit_bytes_total{device!~\"lo|bond.*|veth.*\"}[1m])) by (device)",
+            "legendFormat": "TX - {{device}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Network Packets",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "pps",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/RX/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/TX/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_receive_packets_total[1m])) by (device)",
+            "legendFormat": "RX - {{device}}"
+          },
+          {
+            "expr": "sum(rate(node_network_transmit_packets_total[1m])) by (device)",
+            "legendFormat": "TX - {{device}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Network Errors & Drops",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RX Errors"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "TX Errors"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E5AC0E",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RX Drops"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#C4162A",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [5, 5],
+                    "width": 2
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "TX Drops"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#E5AC0E",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [5, 5],
+                    "width": 2
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_receive_errs_total[1m])) by (device)",
+            "legendFormat": "RX Errors - {{device}}"
+          },
+          {
+            "expr": "sum(rate(node_network_transmit_errs_total[1m])) by (device)",
+            "legendFormat": "TX Errors - {{device}}"
+          },
+          {
+            "expr": "sum(rate(node_network_receive_drop_total[1m])) by (device)",
+            "legendFormat": "RX Drops - {{device}}"
+          },
+          {
+            "expr": "sum(rate(node_network_transmit_drop_total[1m])) by (device)",
+            "legendFormat": "TX Drops - {{device}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Network Traffic by Node",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 32 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/RX/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byRegexp",
+                "options": "/TX/"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(node_network_receive_bytes_total[1m])) by (instance)",
+            "legendFormat": "RX - {{instance}}"
+          },
+          {
+            "expr": "sum(rate(node_network_transmit_bytes_total[1m])) by (instance)",
+            "legendFormat": "TX - {{instance}}"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "TCP States",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 32 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "expr": "node_netstat_Tcp_Listening",
+            "legendFormat": "Listening"
+          },
+          {
+            "expr": "node_netstat_Tcp_Estab",
+            "legendFormat": "Established"
+          },
+          {
+            "expr": "node_netstat_Tcp_TimeWait"
+          },
+          {
+            "expr": "node_netstat_Tcp_CloseWait"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Socket States",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 40 },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "none"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#571EFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "TCP In Use"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#927AFA",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "expr": "node_sockstat_TCP_inuse",
+            "legendFormat": "TCP In Use"
+          },
+          {
+            "expr": "node_sockstat_TCP_orphans",
+            "legendFormat": "TCP Orphans"
+          },
+          {
+            "expr": "node_sockstat_TCP_tw",
+            "legendFormat": "TCP TIME-WAIT"
+          },
+          {
+            "expr": "node_sockstat_UDP_inuse",
+            "legendFormat": "UDP In Use"
+          },
+          {
+            "expr": "node_sockstat_sockets_used",
+            "legendFormat": "Used"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "",
+            "value": ""
+          },
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": ".*"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(node_network_receive_bytes_total, instance)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Node",
+          "multi": true,
+          "name": "node",
+          "options": [],
+          "query": "label_values(node_network_receive_bytes_total, instance)",
+          "refresh": 1,
+          "regex": ".*",
+          "skipUrlSync": false,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": ".*"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(node_network_receive_bytes_total, device)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Network Interface",
+          "multi": true,
+          "name": "interface",
+          "options": [],
+          "query": "label_values(node_network_receive_bytes_total, device)",
+          "refresh": 1,
+          "regex": "^(eth|ens|enp|bond|vlan).*$",
+          "skipUrlSync": false,
+          "type": "query"
+        }
+      ]
+    },
+    "schemaVersion": 30,
+    "style": "dark",
+    "tags": ["opendesk", "network", "traffic"],
+    "time": { "from": "now-1h", "to": "now" },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "15s", "30s", "1m", "5m", "15m", "30m", "1h"],
+      "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
+    },
+    "timezone": "",
+    "title": "Network Dashboard",
+    "version": 1
+  },
+  "folderId": 0,
+  "overwrite": true
+}

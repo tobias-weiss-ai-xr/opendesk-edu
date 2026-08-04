@@ -1,0 +1,102 @@
+# Zot Registry Persistent Volume Claims
+# SPDX-License-Identifier: Apache-2.0
+# Purpose: Storage for Zot Registry data, cache, and backups
+# Storage Classes: ceph-rbd-ssd (RWO), ceph-cephfs-hdd-ec (RWX)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zot-storage
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: storage
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Primary storage for Zot Registry image blobs"
+    opendesk.org/storage-class: "ceph-rbd-ssd"
+    opendesk.org/access-mode: "ReadWriteOnce"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: ceph-rbd-ssd
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zot-cache
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: cache
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Cache directory for Zot Registry (separate from storage for performance)"
+    opendesk.org/storage-class: "ceph-rbd-ssd"
+    opendesk.org/access-mode: "ReadWriteOnce"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: ceph-rbd-ssd
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zot-backups
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: backups
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Backup storage for Zot Registry"
+    opendesk.org/storage-class: "ceph-cephfs-hdd-ec"
+    opendesk.org/access-mode: "ReadWriteMany"
+    # Note: RWX for backup access from multiple pods or backup jobs
+    k8up.io/exclude: "true"  # Exclude from k8up backups (self-managed)
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: ceph-cephfs-hdd-ec
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zot-logs
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: logs
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org/purpose: caching
+  annotations:
+    description: "Log storage for Zot Registry"
+    opendesk.org/storage-class: "ceph-rbd-ssd"
+    opendesk.org/access-mode: "ReadWriteOnce"
+    k8up.io/exclude: "true"  # Logs are ephemeral, no need to backup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ceph-rbd-ssd
+  volumeMode: Filesystem

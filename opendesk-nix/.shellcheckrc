@@ -1,0 +1,17 @@
+# ShellCheck configuration for opendesk-nix
+# Quality discipline ported from cibuilder-fork (stack4ops)
+
+# Enable all checks
+enable=all
+
+# Source paths for shellcheck directives
+source-path=SCRIPTDIR
+
+# Exclusions: documented/necessary patterns in this codebase
+# SC1090/SC1091 - dynamic sourcing of files (flake generated paths)
+# SC2034 - unused variables (declared for clarity/config blocks)
+# SC2154 - variables referenced before assignment (sourced env files)
+exclude=SC1090,SC1091,SC2034,SC2154
+
+# Minimum severity to report (error, warning, info, style)
+severity=style

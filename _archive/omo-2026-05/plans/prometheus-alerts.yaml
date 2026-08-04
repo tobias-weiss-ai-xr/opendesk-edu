@@ -1,0 +1,176 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ums-health-alerts
+  namespace: opendesk
+  labels:
+    app: ums
+    release: kube-prom-stack
+spec:
+  groups:
+    # UMS Core Components
+    - name: ums.core.alerts
+      rules:
+        - alert: UMSLdapPrimaryDown
+          annotations:
+            description: LDAP primary pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not running.
+            summary: LDAP primary server is down
+          expr: |
+            kube_pod_status_phase{namespace="opendesk", pod=~".*ums-ldap-server-primary.*", phase="Running"} == 0
+          for: 5m
+          labels:
+            component: ums
+            severity: critical
+
+        - alert: UMSKeycloakDown
+          annotations:
+            description: Keycloak pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not running.
+            summary: Keycloak is down
+          expr: |
+            kube_statefulset_status_replicas_ready{namespace="opendesk", statefulset="ums-keycloak"} < 1
+          for: 5m
+          labels:
+            component: ums
+            severity: critical
+
+        - alert: UMSUDMListenerDown
+          annotations:
+            description: UDM listener pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not running.
+            summary: UDM listener is down
+          expr: |
+            kube_pod_status_phase{namespace="opendesk", pod=~".*ums-provisioning-udm-listener.*", phase="Running"} == 0
+          for: 5m
+          labels:
+            component: ums
+            severity: critical
+
+        - alert: UMSUDMTransformerDown
+          annotations:
+            description: UDM transformer deployment is not available in namespace {{ $labels.namespace }}.
+            summary: UDM transformer is down
+          expr: |
+            kube_deployment_status_replicas_available{namespace="opendesk", deployment="ums-provisioning-udm-transformer"} < 1
+          for: 5m
+          labels:
+            component: ums
+            severity: critical
+
+        - alert: UMSPortalConsumerDown
+          annotations:
+            description: Portal consumer pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is not running.
+            summary: Portal consumer is down
+          expr: |
+            kube_statefulset_status_replicas_ready{namespace="opendesk", statefulset="ums-portal-consumer"} < 1
+          for: 10m
+          labels:
+            component: ums
+            severity: warning
+
+        - alert: UMSUDMRestAPIDown
+          annotations:
+            description: UDM REST API deployment is not available in namespace {{ $labels.namespace }}.
+            summary: UDM REST API is down
+          expr: |
+            kube_deployment_status_replicas_available{namespace="opendesk", deployment="ums-udm-rest-api"} < 1
+          for: 5m
+          labels:
+            component: ums
+            severity: warning
+
+    # UMS Pod Health
+    - name: ums.pod.health.alerts
+      rules:
+        - alert: UMSHighPodRestartRate
+          annotations:
+            description: UMS pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has high restart rate ({{ $value | humanize }} per 15m).
+            summary: UMS pod restarting frequently
+          expr: |
+            rate(kube_pod_container_status_restarts_total{namespace="opendesk", pod=~".*ums-.*", container!="POD"}[15m]) > 0.2
+          for: 5m
+          labels:
+            component: ums
+            severity: warning
+
+        - alert: UMSPendingPods
+          annotations:
+            description: Namespace {{ $labels.namespace }} has {{ $value }} pending UMS pods.
+            summary: UMS pods are pending
+          expr: |
+            count(kube_pod_status_phase{namespace="opendesk", pod=~".*ums-.*", phase="Pending"})
+          for: 10m
+          labels:
+            component: ums
+            severity: warning
+
+        - alert: UMSFailedPods
+          annotations:
+            description: Namespace {{ $labels.namespace }} has {{ $value }} failed UMS pods.
+            summary: UMS pods have failed
+          expr: |
+            count(kube_pod_status_phase{namespace="opendesk", pod=~".*ums-.*", phase="Failed"})
+          for: 5m
+          labels:
+            component: ums
+            severity: critical
+
+    # UMS Resource Usage
+    - name: ums.resource.alerts
+      rules:
+        - alert: UMSHighMemoryUsage
+          annotations:
+            description: UMS pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is using {{ $value | humanize }} of memory.
+            summary: UMS pod has high memory usage
+          expr: |
+            container_memory_working_set_bytes{namespace="opendesk", pod=~".*ums-.*"} > 2147483648
+          for: 15m
+          labels:
+            component: ums
+            severity: warning
+
+        - alert: UMSHighCPUUsage
+          annotations:
+            description: UMS pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of CPU.
+            summary: UMS pod has high CPU usage
+          expr: |
+            100 * (sum by (pod) (rate(container_cpu_usage_seconds_total{namespace="opendesk", pod=~".*ums-.*"}[5m]))) > 80
+          for: 10m
+          labels:
+            component: ums
+            severity: warning
+
+    # Backup Alerts (enhanced)
+    - name: backup.enhanced.alerts
+      rules:
+        - alert: BackupStuckInActive
+          annotations:
+            description: Backup job {{ $labels.job_name }} in namespace {{ $labels.namespace }} has been active for more than 2 hours.
+            summary: Backup job is stuck
+          expr: |
+            kube_job_status_active{namespace="opendesk", job_name=~"backup-.*-backup-.*"} > 0
+          for: 2h
+          labels:
+            component: k8up
+            severity: warning
+
+        - alert: PruneJobFailed
+          annotations:
+            description: Prune job {{ $labels.job_name }} in namespace {{ $labels.namespace }} failed.
+            summary: Prune job failed
+          expr: |
+            increase(kube_job_status_failed_total{namespace="opendesk", job_name=~"prune-.*"}[5m]) > 0
+          for: 10m
+          labels:
+            component: k8up
+            severity: warning
+
+        - alert: BackupStorageHighUsage
+          annotations:
+            description: Backup PVC {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} is at {{ $value | humanizePercentage }} capacity.
+            summary: Backup storage is nearly full
+          expr: |
+            100 * kubelet_volume_stats_used_bytes{namespace="opendesk", persistentvolumeclaim=~".*backup.*"}
+            / kubelet_volume_stats_capacity_bytes{namespace="opendesk", persistentvolumeclaim=~".*backup.*"} > 90
+          for: 15m
+          labels:
+            component: k8up
+            severity: warning

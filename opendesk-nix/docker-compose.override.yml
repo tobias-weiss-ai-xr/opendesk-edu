@@ -1,0 +1,436 @@
+# Docker Compose Override for Development
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# ==============================================================================
+# This file extends docker-compose.yml for development purposes.
+# It is automatically loaded by docker-compose and provides:
+# - Hot-reloading for configuration files
+# - Debug ports and additional tools
+# - Persistent volumes for development data
+# - Enhanced logging
+#
+# Usage:
+#   # Use with docker-compose (override is automatic)
+#   docker-compose up -d
+#
+#   # Use without override
+#   docker-compose -f docker-compose.yml up -d
+#
+# ==============================================================================
+
+version: '3.8'
+
+# -----------------------------------------------------------------------------
+# Extended Networks
+# -----------------------------------------------------------------------------
+
+networks:
+  opendesk-network:
+    external: true
+    name: opendesk-network
+
+# -----------------------------------------------------------------------------
+# Additional Development Volumes
+# -----------------------------------------------------------------------------
+
+volumes:
+  dev-logs:
+    name: opendesk-dev-logs
+    driver: local
+  
+  dev-config:
+    name: opendesk-dev-config
+    driver: local
+  
+  dev-ssl:
+    name: opendesk-dev-ssl
+    driver: local
+
+# -----------------------------------------------------------------------------
+# Service Overrides - SOGo 5
+# -----------------------------------------------------------------------------
+
+services:
+  sogo5:
+    # Development-specific configuration
+    build:
+      context: .
+      dockerfile: docker/sogo5/Dockerfile
+      args:
+        SOGO_VERSION: 5.8.0
+        MEMCACHED_VERSION: 1.6.21
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    
+    # Mount development configuration
+    volumes:
+      - ./docker/sogo5/sogo.conf:/etc/sogo/sogo.conf:ro
+      - ./docker/sogo5/memcached.conf:/etc/memcached.conf:ro
+      - ./docker/sogo5/entrypoint.sh:/entrypoint.sh:ro
+      - ./docker/sogo5/healthcheck.sh:/healthcheck.sh:ro
+      - ./dev-config/sogo5.conf:/etc/sogo/conf.d/99-dev.conf:ro
+      - dev-logs:/var/log/sogo
+      - dev-ssl:/etc/ssl/private
+    
+    # Enable debug mode
+    environment:
+      SOGoDebugRequests: "YES"
+      SOGoHTTPDebug: "YES"
+      SOGoLogFile: "/var/log/sogo/sogo.log"
+      SOGoLogLevel: "debug"
+      SOGoWatchDogInterval: "60"
+      
+    # Development ports
+    ports:
+      - "20000:20000"  # Web interface
+      - "20001:20001"  # Debug port
+      - "20002:20002"  # CalDAV/CardDAV
+      - "20004:20004"  # ActiveSync
+    
+    # Enhanced resource limits for development
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    
+    # Development entrypoint
+    entrypoint: /entrypoint.sh
+    command: ["sogod", "-WOLogFile", "/var/log/sogo/sogo.log", "-WOLogLevel", "debug"]
+
+  # Development Memcached for SOGo 5
+  memcached5:
+    volumes:
+      - ./docker/sogo5/memcached.conf:/etc/memcached.conf:ro
+    
+    # Enable verbose logging
+    command:
+      - -m 512
+      - -c 8192
+      - -t 8
+      - -vv
+
+# -----------------------------------------------------------------------------
+# Service Overrides - SOGo 6
+# -----------------------------------------------------------------------------
+
+  sogo6:
+    # Development-specific configuration
+    build:
+      context: .
+      dockerfile: docker/sogo6/Dockerfile
+      args:
+        SOGO_VERSION: 6.0.0
+        MEMCACHED_VERSION: 1.6.21
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        EDV_ENABLED: "true"
+    
+    # Mount development configuration
+    volumes:
+      - ./docker/sogo6/sogo.conf:/etc/sogo/sogo.conf:ro
+      - ./docker/sogo6/memcached.conf:/etc/memcached.conf:ro
+      - ./docker/sogo6/entrypoint.sh:/entrypoint.sh:ro
+      - ./docker/sogo6/healthcheck.sh:/healthcheck.sh:ro
+      - ./dev-config/sogo6.conf:/etc/sogo/conf.d/99-dev.conf:ro
+      - dev-logs:/var/log/sogo
+      - dev-ssl:/etc/ssl/private
+      - sogo6-data:/var/spool/sogo
+    
+    # Enable debug mode
+    environment:
+      SOGoDebugRequests: "YES"
+      SOGoHTTPDebug: "YES"
+      SOGoLogFile: "/var/log/sogo/sogo.log"
+      SOGoLogLevel: "debug"
+      SOGoWatchDogInterval: "60"
+      SOGoEDVDataDir: "/var/spool/sogo"
+      
+    # Development ports
+    ports:
+      - "20010:20000"  # Web interface
+      - "20011:20001"  # Debug port
+      - "20012:20002"  # CalDAV/CardDAV
+      - "20014:20004"  # ActiveSync
+    
+    # Enhanced resource limits for development
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    
+    # Development entrypoint
+    entrypoint: /entrypoint.sh
+    command: ["sogod", "-WOLogFile", "/var/log/sogo/sogo.log", "-WOLogLevel", "debug"]
+
+  # Development Memcached for SOGo 6
+  memcached6:
+    volumes:
+      - ./docker/sogo6/memcached.conf:/etc/memcached.conf:ro
+    
+    # Enable verbose logging
+    command:
+      - -m 512
+      - -c 8192
+      - -t 8
+      - -vv
+
+# -----------------------------------------------------------------------------
+# Service Overrides - Dev Agent
+# -----------------------------------------------------------------------------
+
+  dev-agent:
+    # Development-specific configuration
+    build:
+      context: .
+      dockerfile: docker/dev-agent/Dockerfile
+      args:
+        DEV_AGENT_VERSION: 2.1.0
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    
+    # Mount development configuration
+    volumes:
+      - ./docker/dev-agent/config.yaml:/etc/opendesk-dev-agent/config.yaml:ro
+      - ./docker/dev-agent/entrypoint.sh:/entrypoint.sh:ro
+      - ./docker/dev-agent/healthcheck.sh:/healthcheck.sh:ro
+      - ./docker/dev-agent/logrotate.conf:/etc/logrotate.d/opendesk-operator:ro
+      - ./docker/dev-agent/limits.d/opendesk-operator.conf:/etc/security/limits.d/opendesk-operator.conf:ro
+      - dev-logs:/var/log/opendesk
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - ~/.kube:/root/.kube:ro
+      - ~/.config:/root/.config:ro
+    
+    # Enable full debug mode
+    environment:
+      DEV_AGENT_LOG_LEVEL: "debug"
+      DEV_AGENT_DEBUG: "true"
+      DEV_AGENT_DISABLE_PI_MEMORY: "true"
+      DEV_AGENT_LEADER_ELECT: "false"
+      DEV_AGENT_METRICS_ENABLED: "true"
+      DEV_AGENT_HEALTH_ENABLED: "true"
+      
+      # Kubernetes client
+      KUBERNETES_SKIP_TLS_VERIFY: "true"
+      
+      # Development namespace
+      DEV_AGENT_NAMESPACE: "opendesk"
+      DEV_AGENT_WATCH_NAMESPACE: "opendesk"
+    
+    # Development ports
+    ports:
+      - "8080:8080"    # Metrics
+      - "8081:8081"    # Health
+      - "4000:4000"    # Debug/REPL (if enabled)
+    
+    # Enhanced resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    
+    # Development entrypoint
+    entrypoint: /entrypoint.sh
+    command: ["/bin/manager"]
+    privileged: true
+
+# -----------------------------------------------------------------------------
+# Service Overrides - Zot Registry
+# -----------------------------------------------------------------------------
+
+  zot-registry:
+    # Development-specific configuration
+    build:
+      context: .
+      dockerfile: docker/zot-registry/Dockerfile
+      args:
+        ZOT_VERSION: 2.0.0-rc5
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    
+    # Mount development configuration
+    volumes:
+      - ./docker/zot-registry/config.yml:/etc/zot/config.yml:ro
+      - ./docker/zot-registry/passwd:/etc/zot/passwd:ro
+      - zot-storage:/var/lib/zot/storage
+      - zot-cache:/var/lib/zot/cache
+      - dev-logs:/var/log/zot
+    
+    # Enable debug mode
+    environment:
+      ZOT_LOG_LEVEL: "debug"
+      ZOT_LOG_FORMAT: "text"
+      ZOT_DEBUG: "true"
+      ZOT_METRICS_ENABLED: "true"
+      ZOT_HEALTH_ENABLED: "true"
+      
+      # Storage configuration
+      ZOT_STORAGE_DRIVER: "fs"
+      ZOT_STORAGE_ROOT: "/var/lib/zot/storage"
+      
+      # Cache configuration
+      ZOT_CACHE_DIR: "/var/lib/zot/cache"
+      ZOT_CACHE_ENABLED: "true"
+      
+      # Auth configuration
+      ZOT_AUTH_ENABLED: "false"
+      
+      # Upstream caching
+      ZOT_UPSTREAM_CACHE_ENABLED: "true"
+      ZOT_UPSTREAM_REGISTRIES: "ghcr.io,registry.gitlab.opencode.de,registry-1.docker.io"
+    
+    # Development ports
+    ports:
+      - "8080:8080"    # HTTP API
+      - "8443:8443"    # HTTPS API
+      - "9900:9900"    # Metrics/pprof
+    
+    # Enhanced resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+# -----------------------------------------------------------------------------
+# Development Tools
+# -----------------------------------------------------------------------------
+
+services:
+  # Adminer - Database admin interface
+  adminer:
+    image: adminer:latest
+    container_name: opendesk-adminer
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "8083:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb5
+    depends_on:
+      - mariadb5
+      - mariadb6
+    labels:
+      com.opendesk.tool: adminer
+
+  # MailHog - SMTP testing server
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: opendesk-mailhog
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "1025:1025"    # SMTP
+      - "8025:8025"    # Web interface
+    labels:
+      com.opendesk.tool: mailhog
+
+  # pgAdmin - PostgreSQL admin (if needed)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: opendesk-pgadmin
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "8084:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@opendesk.local"
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_PASSWORD:-adminpass}"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    labels:
+      com.opendesk.tool: pgadmin
+
+  # Portainer - Container management
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: opendesk-portainer
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "9443:9443"
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer-data:/data
+    command: ["--admin-password-file", "/tmp/portainer_password"]
+    environment:
+      PORTAINER_ADMIN_PASSWORD_FILE: /tmp/portainer_password
+    labels:
+      com.opendesk.tool: portainer
+
+  # Grafana - Monitoring dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: opendesk-grafana
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/dashboards:/var/lib/grafana/dashboards
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    labels:
+      com.opendesk.tool: grafana
+
+  # Prometheus - Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: opendesk-prometheus
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    labels:
+      com.opendesk.tool: prometheus
+
+# -----------------------------------------------------------------------------
+# Additional Development Volumes
+# -----------------------------------------------------------------------------
+
+volumes:
+  pgadmin-data:
+    name: opendesk-pgadmin-data
+    driver: local
+  
+  portainer-data:
+    name: opendesk-portainer-data
+    driver: local
+  
+  grafana-data:
+    name: opendesk-grafana-data
+    driver: local
+  
+  prometheus-data:
+    name: opendesk-prometheus-data
+    driver: local
