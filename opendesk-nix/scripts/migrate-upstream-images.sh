@@ -4,7 +4,7 @@
 # Migrate Upstream Docker Images to Nix-based container.gov.de Compliant Images
 # Complete end-to-end migration for 24 upstream images
 
-set -euo pipefail
+set -uo pipefail
 
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -173,7 +173,7 @@ build_image() {
 }
 NIX
 
-        cat > "$service_dir/nixos(default.nix" <<NIX
+        cat > "$service_dir/nixos/default.nix" <<NIX
 { system ? "x86_64-linux" }:
 let
   nixos-lib = import <nixpkgs/lib>;
