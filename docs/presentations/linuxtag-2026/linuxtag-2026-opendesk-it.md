@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Comodo e Sovrano?
 
 🎓 openDesk Edu — Sovranità Digitale nelle Università
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Partecipate!
+# 🤝 Partecipate
 
 **Aiutateci a costruire openDesk Edu per le università!**
 

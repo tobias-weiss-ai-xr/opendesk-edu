@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,6 +19,10 @@ spec:
       targetPort: {{ .Values.grommunio.service.targetPort }}
       protocol: TCP
       name: http
+    - port: {{ .Values.grommunio.mail.lmtp.port }}
+      targetPort: lmtp
+      protocol: TCP
+      name: lmtp
     - port: {{ .Values.grommunio.monitoring.prometheus.port }}
       targetPort: metrics
       protocol: TCP

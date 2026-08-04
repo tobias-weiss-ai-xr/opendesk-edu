@@ -9,8 +9,6 @@ rules:
   comments:
     min-spaces-from-content: 1
   document-start: disable
-  truthy:
-    check-keys: false
 
 ignore: |
   helmfile/charts/

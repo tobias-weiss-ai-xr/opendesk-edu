@@ -14,9 +14,26 @@ drawio:
       cpu: "1"
       memory: 2Gi
 
+sso:
+  oidc:
+    enabled: false
+    proxyImage: quay.io/oauth2-proxy/oauth2-proxy
+    proxyTag: v7.6.0
+    issuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+    clientId: "opendesk-drawio"
+    clientSecret: ""
+    cookieSecret: ""
+
 ingress:
-  enabled: false
-  className: ""
+  enabled: true
+  className: haproxy
   annotations: {}
-  hosts: []
-  tls: []
+  hosts:
+    - host: draw.opendesk.hrz.uni-marburg.de
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: drawio-tls
+      hosts:
+        - draw.opendesk.hrz.uni-marburg.de

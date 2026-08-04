@@ -1,0 +1,8 @@
+<svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white" stroke="#E5E7EB"/>
+  <path d="M22 30 H88 V70 H22Z" fill="#341291"/>
+  <path d="M26 34 H84 V66 H26Z" fill="#571EFA"/>
+  <path d="M30 38 H80 V62 H30Z" fill="white"/>
+  <path d="M35 42 L45 48 M45 42 L35 48 M55 42 L65 48 M65 42 L55 48 M75 42 L85 48 M85 42 L75 48" stroke="#341291" stroke-width="2"/>
+  <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">Etherpad</text>
+</svg>

@@ -8,6 +8,8 @@ metadata:
   labels:
     {{- include "f13.labels" . | nindent 4 }}
     app.kubernetes.io/component: parser
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.persistence.doclingModels.accessMode }}
@@ -24,6 +26,8 @@ metadata:
   labels:
     {{- include "f13.labels" . | nindent 4 }}
     app.kubernetes.io/component: transcription
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.persistence.transcriptionData.accessMode }}
@@ -38,6 +42,8 @@ metadata:
   labels:
     {{- include "f13.labels" . | nindent 4 }}
     app.kubernetes.io/component: transcription-inference
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.persistence.transcriptionModels.accessMode }}

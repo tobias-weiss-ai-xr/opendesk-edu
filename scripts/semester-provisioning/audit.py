@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """
 Audit logging module for course provisioning.
 Audit-Logging-Modul für die Kursverwaltung.
@@ -60,7 +60,7 @@ class AuditLogger:
     Audit-Logger für Kursverwaltungsvorgänge.
     """
 
-    def __init__(self, db_path: Optional[str] = ":memory:"):
+    def __init__(self, db_path: Optional[str] = ":memory:") -> None:
         """Initialize audit logger / Audit-Logger initialisieren."""
         self.logs: list[AuditLog] = []
         self.db_path = db_path

@@ -6,6 +6,8 @@ metadata:
   name: {{ .Release.Name }}-zammad-data
   labels:
 {{ include "zammad.labels" . | nindent 4 }}
+    backup-tier: "c"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.zammad.volumes.data.accessMode }}

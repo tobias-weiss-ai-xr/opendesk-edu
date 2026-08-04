@@ -1,0 +1,9 @@
+dn: cn=ssp,cn=applications,cn=opendesk,cn=edu
+cn: ssp
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Passwort ändern
+odApplicationDescription: LDAP Self-Service Password
+odApplicationURL: https://ssp.{{ .Values.global.domain }}
+odApplicationIcon: ssp
+odApplicationOrder: 145

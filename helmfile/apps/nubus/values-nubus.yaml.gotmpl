@@ -363,8 +363,8 @@ nubusPortalFrontend:
     tag: {{ .Values.images.nubusPortalFrontend.tag }}
   assetLoader:
     config:
-      # Poll UDM every x seconds (chart's default is also 10 at the moment)
-      pollInterval: 10
+      # Poll UDM every x seconds (was 10 — increased to 300 to prevent crash loops on transient 503/timeout)
+      pollInterval: 300
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusPortalAssetLoader.registry | quote }}
       repository: {{ .Values.images.nubusPortalAssetLoader.repository }}
@@ -553,10 +553,24 @@ nubusPortalConsumer:
   objectStorage:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
-      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      {{- if .Values.objectstores.nubus.secretKey }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | quote }}
+      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+      secretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
+      {{- else }}
+      {{- fail "No objectstorage secretKey for nubus found!" }}
+      {{- end }}
       existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
-    endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+    {{- if .Values.objectstores.nubus.endpoint }}
+    endpoint: {{ printf "https://%s" .Values.objectstores.nubus.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for nubus found!" }}
+    {{- end }}
   persistence:
     groupMembershipCache:
       size: {{ .Values.persistence.storages.nubusPortalConsumer.size | quote }}
@@ -595,9 +609,7 @@ nubusPortalConsumer:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusWaitForDependency.registry | quote }}
       repository: {{ .Values.images.nubusWaitForDependency.repository }}
       tag: {{ .Values.images.nubusWaitForDependency.tag }}
-    extraEnvVars:
-      - name: AWS_DEFAULT_REGION
-        value: {{ .Values.objectstores.nubus.region | quote }}
+    extraEnvVars: []
     {{- if .Values.certificate.selfSigned }}
     extraVolumeMounts:
       - name: "trusted-cert-secret-volume"
@@ -673,10 +685,24 @@ nubusPortalServer:
   objectStorage:
     auth:
       accessKeyId: {{ .Values.objectstores.nubus.username | quote }}
-      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | default .Values.secrets.minio.umsUser | quote }}
+      {{- if .Values.objectstores.nubus.secretKey }}
+      secretAccessKey: {{ .Values.objectstores.nubus.secretKey | quote }}
+      {{- else if or .Values.apps.minio.enabled .Values.apps.seaweedfs.enabled }}
+      secretAccessKey: {{ .Values.secrets.minio.umsUser | quote }}
+      {{- else }}
+      {{- fail "No objectstorage secretKey for nubus found!" }}
+      {{- end }}
       existingSecret: null
     bucketName: {{ .Values.objectstores.nubus.bucket | quote }}
-    endpoint: {{ printf "https://%s" (.Values.objectstores.nubus.endpoint | default (printf "%s.%s" .Values.global.hosts.minioApi .Values.global.domain)) | quote }}
+    {{- if .Values.objectstores.nubus.endpoint }}
+    endpoint: {{ printf "https://%s" .Values.objectstores.nubus.endpoint | quote }}
+    {{- else if .Values.apps.minio.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.minioApi .Values.global.domain | quote }}
+    {{- else if .Values.apps.seaweedfs.enabled }}
+    endpoint: {{ printf "https://%s.%s" .Values.global.hosts.seaweedfs .Values.global.domain | quote }}
+    {{- else }}
+    {{- fail "No objectstorage endpoint for nubus found!" }}
+    {{- end }}
   persistence:
     annotations:
       {{ .Values.annotations.nubusPortalServer.persistence | toYaml | nindent 6 }}
@@ -1317,7 +1343,7 @@ nubusStackDataUms:
     portalTiles: {{ toYaml .Values.theme.imagery.portalTiles | nindent 6 }}
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
     portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
-    portalManagementLearnLinkBase: "https://lms.opendesk.example.com"
+    portalManagementLearnLinkBase: "https://lms.opendesk.hrz.uni-marburg.de"
     portalManagementProjectLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openproject .Values.global.domain }}
     portalManagementKnowledgeLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.xwiki .Values.global.domain }}
     portalGroupwareLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.openxchange .Values.global.domain }}
@@ -1394,7 +1420,7 @@ nubusStackDataUms:
       03-custom-ilias-portal-entry.yaml: |-
         # SPDX-License-Identifier: AGPL-3.0-only
         # SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
-        
+
         # ILIAS LMS Portal Entry
         # Creates a portal entry for ILIAS Learning Management System with SSO enabled
         # Ref: 41-selfservice-portal.yaml for correct format
@@ -1415,10 +1441,10 @@ nubusStackDataUms:
             en_US: "OpenDesk Learning Management System"
           link:
             - - "en_US"
-              - "https://lms.opendesk.example.com/shib_login.php"
+              - "https://lms.opendesk.hrz.uni-marburg.de/shib_login.php"
             - - "de_DE"
-              - "https://lms.opendesk.example.com/shib_login.php"
-        
+              - "https://lms.opendesk.hrz.uni-marburg.de/shib_login.php"
+
         # Modify existing entry to set linkTarget
         # The 'create' action uses 'ensure' semantics (skip if exists),
         # so we need a separate 'modify' action for properties added later
@@ -1428,7 +1454,7 @@ nubusStackDataUms:
         position: "cn=managementLearn,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Q6: ILIAS tile must NOT appear in portal navigation (userLinks or centralNavigation)
         # The tile only appears in the "Anwendungen" category via category assignment below
         # No userLinks/centralNavigation entries added intentionally
@@ -1441,7 +1467,7 @@ nubusStackDataUms:
         ---
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementLearn,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1480,9 +1506,9 @@ nubusStackDataUms:
             en_US: "OpenDesk E-Learning Platform"
           link:
             - - "en_US"
-              - "https://moodle.opendesk.example.com"
+              - "https://moodle.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://moodle.opendesk.example.com"
+              - "https://moodle.opendesk.hrz.uni-marburg.de"
 
         # Modify existing entry to set linkTarget
         # The 'create' action uses 'ensure' semantics (skip if exists),
@@ -1493,7 +1519,7 @@ nubusStackDataUms:
         position: "cn=managementElearn,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Q6: Moodle tile must NOT appear in portal navigation (userLinks or centralNavigation)
         # The tile only appears in the "Anwendungen" category via category assignment below
         # No userLinks/centralNavigation entries added intentionally
@@ -1506,7 +1532,7 @@ nubusStackDataUms:
         ---
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementElearn,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1535,9 +1561,9 @@ nubusStackDataUms:
             en_US: "BigBlueButton Videoconferencing Platform"
           link:
              - - "en_US"
-               - "https://bbb.opendesk.example.com"
+               - "https://bbb.opendesk.hrz.uni-marburg.de"
              - - "de_DE"
-               - "https://bbb.opendesk.example.com"
+               - "https://bbb.opendesk.hrz.uni-marburg.de"
 
         # Modify existing entry to set linkTarget
         # The 'create' action uses 'ensure' semantics (skip if exists),
@@ -1548,7 +1574,7 @@ nubusStackDataUms:
         position: "cn=managementMeetings,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Q6: BBB tile must NOT appear in portal navigation (userLinks or centralNavigation)
         # The tile only appears in the "Anwendungen" category via category assignment below
         # No userLinks/centralNavigation entries added intentionally
@@ -1561,7 +1587,7 @@ nubusStackDataUms:
         ---
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementMeetings,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1590,9 +1616,9 @@ nubusStackDataUms:
             en_US: "OpenCloud File Storage"
           link:
             - - "en_US"
-              - "https://files.opendesk.example.com"
+              - "https://files.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://files.opendesk.example.com"
+              - "https://files.opendesk.hrz.uni-marburg.de"
 
         # Modify existing entry to set linkTarget
         ---
@@ -1601,15 +1627,58 @@ nubusStackDataUms:
         position: "cn=managementFileshareCloud,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           linkTarget: "newwindow"
-        
+
         # Add OpenCloud entry to "Anwendungen" category
         ---
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementFileshareCloud,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+
+      07-custom-snipr-portal-entry.yaml: |-
+        # SPDX-License-Identifier: AGPL-3.0-only
+        # SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+
+        # SNIpR Lecture Recording Portal Entry
+        # Creates a portal entry for SNIpR with SSO enabled
+        # Ref: 05-custom-bbb-portal-entry.yaml for correct format
+        ---
+        action: "create"
+        module: "portals/entry"
+        position: "cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          name: "managementLecturerecording"
+          activated: true
+          anonymous: false
+          linkTarget: "newwindow"
+          displayName:
+            de_DE: "Vorlesungsaufzeichnung"
+            en_US: "Lecture Recording"
+          description:
+            de_DE: "Vorlesungsaufzeichnung mit automatischer Transkription"
+            en_US: "Lecture recording with automatic transcription"
+          link:
+             - - "en_US"
+               - "https://snipr.{{ .Values.global.domain }}"
+             - - "de_DE"
+               - "https://snipr.{{ .Values.global.domain }}"
+
+        ---
+        action: "modify"
+        module: "portals/entry"
+        position: "cn=managementLecturerecording,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          linkTarget: "newwindow"
+
+        ---
+        action: "ensure_list_contains"
+        module: "portals/category"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        properties:
+          entries:
+            - "cn=managementLecturerecording,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
 
         # Register extended attribute so LMS checkbox appears in user editor
         # This creates the opendeskLearnmanagementEnabledUser checkbox in the UDM
@@ -1686,9 +1755,9 @@ nubusStackDataUms:
             en_US: "Collaborative Text Editor"
           link:
             - - "en_US"
-              - "https://etherpad.opendesk.example.com"
+              - "https://etherpad.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://etherpad.opendesk.example.com"
+              - "https://etherpad.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1698,7 +1767,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementEtherpad,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1725,9 +1794,9 @@ nubusStackDataUms:
             en_US: "Knowledge Base and Documentation"
           link:
             - - "en_US"
-              - "https://wiki.opendesk.example.com"
+              - "https://wiki.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://wiki.opendesk.example.com"
+              - "https://wiki.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1737,7 +1806,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementBookstack,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1764,9 +1833,9 @@ nubusStackDataUms:
             en_US: "Project Management (Kanban Boards)"
           link:
             - - "en_US"
-              - "https://planka.opendesk.example.com"
+              - "https://planka.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://planka.opendesk.example.com"
+              - "https://planka.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1776,7 +1845,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementPlanka,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1803,9 +1872,9 @@ nubusStackDataUms:
             en_US: "IT Support and Service Desk"
           link:
             - - "en_US"
-              - "https://helpdesk.opendesk.example.com"
+              - "https://helpdesk.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://helpdesk.opendesk.example.com"
+              - "https://helpdesk.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1815,7 +1884,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementZammad,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1842,9 +1911,9 @@ nubusStackDataUms:
             en_US: "Online Surveys and Course Evaluations"
           link:
             - - "en_US"
-              - "https://survey.opendesk.example.com"
+              - "https://survey.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://survey.opendesk.example.com"
+              - "https://survey.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1854,7 +1923,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementLimesurvey,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1881,9 +1950,9 @@ nubusStackDataUms:
             en_US: "Diagrams and Architecture Visualization"
           link:
             - - "en_US"
-              - "https://drawio.opendesk.example.com"
+              - "https://drawio.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://drawio.opendesk.example.com"
+              - "https://drawio.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1893,7 +1962,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementDrawio,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1920,9 +1989,9 @@ nubusStackDataUms:
             en_US: "Freehand Whiteboard and Brainstorming"
           link:
             - - "en_US"
-              - "https://excalidraw.opendesk.example.com"
+              - "https://excalidraw.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://excalidraw.opendesk.example.com"
+              - "https://excalidraw.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1932,7 +2001,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementExcalidraw,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1959,9 +2028,9 @@ nubusStackDataUms:
             en_US: "Password Reset for LDAP Accounts"
           link:
             - - "en_US"
-              - "https://ssp.opendesk.example.com"
+              - "https://ssp.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://ssp.opendesk.example.com"
+              - "https://ssp.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -1971,7 +2040,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementSSP,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -1998,9 +2067,9 @@ nubusStackDataUms:
             en_US: "Groupware — Email, Calendar & Contacts"
           link:
             - - "en_US"
-              - "https://sogo.opendesk.example.com"
+              - "https://sogo.opendesk.hrz.uni-marburg.de"
             - - "de_DE"
-              - "https://sogo.opendesk.example.com"
+              - "https://sogo.opendesk.hrz.uni-marburg.de"
 
         action: "modify"
         module: "portals/entry"
@@ -2010,7 +2079,7 @@ nubusStackDataUms:
 
         action: "ensure_list_contains"
         module: "portals/category"
-        position: "cn=od.applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
+        position: "cn=applications,cn=category,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
         properties:
           entries:
             - "cn=managementSogo,cn=entry,cn=portals,cn=univention,{{ .Values.ldap.baseDn }}"
@@ -2250,6 +2319,8 @@ nubusKeycloakBootstrap:
       bindDn: {{ printf "uid=ldapsearch_keycloak,cn=users,%s" .Values.ldap.baseDn }}
       existingSecret:
         name: "ums-keycloak-bootstrap-ldap-opendesk-credentials"
+        keyMapping:
+          password: "password"
   oidc:
     rp:
       umcServer:

@@ -103,7 +103,7 @@ XWiki,PersistentVolume,1
 |                      | Memcached    | No       | Cache                                                                             |                                                |                                                                                                           |
 |                      | PVC          | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs      | `openproject-<web/worker>-*-tmp`               | `/tmp`                                                                                                    |
 |                      |              | No       | PVC backed `emptyDir` as K8s cannot set the sticky bit on standard emptyDirs      | `openproject-<web/worker>-app-*-tmp`           | `/app/tmp`                                                                                                |
-| **OX App Suite**     | MariaDB      | Yes      | Application's control database to coordiate dynamically created ones              | `configdb`                                     |                                                                                                           |
+| **OX App Suite**     | MariaDB      | Yes      | Application's control database to coordinate dynamically created ones              | `configdb`                                     |                                                                                                           |
 |                      |              | Yes      | Dynamically creates databases of schema `PRIMARYDB_n`containing multiple contexts | `PRIMARYDB_*`                                  |                                                                                                           |
 |                      |              | Yes      | OX Guard related settings                                                         | `oxguard*`                                     |                                                                                                           |
 |                      | S3           | Yes      | Attachments of meetings, contacts and tasks                                       | `openxchange`                                  |                                                                                                           |
@@ -118,9 +118,33 @@ XWiki,PersistentVolume,1
 | **XWiki**            | PostgreSQL   | Yes      | Application's main database                                                       | `xwiki`                                        |                                                                                                           |
 |                      | PVC          | Yes      | Attachments                                                                       | `xwiki-data-xwiki-0`                           | `/usr/local/xwiki/data`                                                                                   |
 
-Additionally, the following persistent volumes are mounted by Pods that serve as a data storage for the applications mentioned above.
+## Ephemeral Volume Support
 
-These services are not ment for production use, so you can ignore these as you surely backup your production services instead.
+openDesk does **not** use CSI ephemeral volumes or generic ephemeral inline volumes (Kubernetes 1.23+). The following factors drove this architectural decision:
+
+### Backup compatibility
+Ephemeral volumes do not produce PVC objects that k8up (the platform's backup operator) can discover and protect. Data stored on ephemeral volumes is invisible to the backup schedule and cannot be restored. All workloads with recoverable data must use explicit PVCs or S3 backends that k8up can target.
+
+### Helm chart pattern
+All storage in openDesk is declared as PVC templates in Helm charts (see `persistence:` blocks in chart values). This keeps storage lifecycle visible, version-controlled, and auditable. Ephemeral volumes couple storage lifecycle to pod lifecycle, which breaks the clean Helm abstraction and makes storage configuration harder to review and reproduce.
+
+### CSI driver limitations
+The platform uses **Ceph CSI** drivers (`ceph-rbd-ssd` for RWO, `ceph-cephfs-hdd-ec` for RWX). While Ceph CSI supports CSI ephemeral volumes in certain configurations, the project's CSI driver deployment and `CSIDriver` specification were not configured with ephemeral volume support enabled. Enabling it would require reconfiguring the CSI driver objects cluster-wide, with no operational benefit given the alternatives below.
+
+### Operational consistency
+PVCs are visible via `kubectl get pvc`, monitorable, and manageable through the same Helm lifecycle as their parent applications. Ephemeral volumes exist only inside pod specs and require inspecting individual pod manifests to discover, creating blind spots for operations staff.
+
+### What is used instead
+
+| Use case | Approach |
+|---|---|
+| **Persistent application data** (databases, files, mail) | PVCs + S3 (MinIO/SeaweedFS), backed up via k8up |
+| **Cache / temporary data** | `emptyDir: {}` — lost on pod restart, no backup needed |
+| **Sticky-bit tmpdirs** (OpenProject) | PVC-backed workaround — see OpenProject row in [Details](#details) |
+| **Session state** | Redis / Memcached — in-memory, ephemeral by design |
+| **Stateless scratch space** (CI, batch jobs) | `emptyDir: {}` or hostPath as appropriate |
+
+These services are not meant for production use, so you can ignore these as you surely backup your production services instead.
 
 | Service    | Pod              | Volume Name  | PVC                         | MountPath             | Comment          |
 |------------|------------------|--------------|-----------------------------|-----------------------|------------------|

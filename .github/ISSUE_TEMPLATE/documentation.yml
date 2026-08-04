@@ -11,7 +11,7 @@ body:
     attributes:
       value: |
         ## Documentation Issue / Dokumentationsproblem
-        
+
         Help us improve openDesk Edu documentation!
         Helfen Sie uns, die openDesk Edu Dokumentation zu verbessern!
 
@@ -71,7 +71,7 @@ body:
       placeholder: |
         The current documentation says:
         "Run helmfile apply to deploy"
-        
+
         But it doesn't explain the prerequisites.
       value: |
         Currently, the documentation states...
@@ -87,7 +87,7 @@ body:
         Was sollte die Dokumentation stattdessen sagen? Oder was sollte hinzugefügt werden?
       placeholder: |
         The documentation should include:
-        
+
         1. Prerequisites (Kubernetes version, Helm version, storage class)
         2. Step-by-step deployment process
         3. Post-deployment verification steps
@@ -131,7 +131,7 @@ body:
     attributes:
       value: |
         ---
-        
+
         📖 **Documentation files:** / **Dokumentationsdateien:**
         - Main docs: `docs/` directory
         - Contributing: [CONTRIBUTING.md](../CONTRIBUTING.md)

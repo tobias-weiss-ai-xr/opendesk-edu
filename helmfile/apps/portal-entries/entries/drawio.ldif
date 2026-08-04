@@ -1,0 +1,9 @@
+dn: cn=drawio,cn=applications,cn=opendesk,cn=edu
+cn: drawio
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: draw.io
+odApplicationDescription: Diagramme und Flussdiagramme (diagrams.net)
+odApplicationURL: https://draw.{{ .Values.global.domain }}
+odApplicationIcon: drawio
+odApplicationOrder: 120

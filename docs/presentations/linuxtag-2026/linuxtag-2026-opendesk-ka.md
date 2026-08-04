@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: მომფორტული და სუვერენულობა?
 
 🎓 openDesk Edu — ციხოვნული სუვერენულობა უნივერსიტეტებში
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 ჩაერთეთ!
+# 🤝 ჩაერთეთ
 
 **დაგვეხმარეთ openDesk Edu-ის შექმნაში უნივერსიტეტებისთვის!**
 

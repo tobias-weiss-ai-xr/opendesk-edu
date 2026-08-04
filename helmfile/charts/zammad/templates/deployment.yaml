@@ -21,6 +21,8 @@ spec:
       containers:
         - name: zammad
           image: {{ .Values.zammad.image }}:{{ .Values.zammad.tag }}
+          command: ["bundle", "exec", "puma"]
+          args: ["-b", "tcp://[::]:3000", "-e", "production"]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -41,13 +43,23 @@ spec:
               value: "production"
             - name: RAILS_TRUSTED_PROXIES
               value: "{{ .Release.Name }}-zammad-ingress"
-            - name: DATABASE_URL
-              value: "postgresql://{{ include "zammad.dbUser" . }}:{{ include "zammad.dbPassword" . }}@{{ include "zammad.dbHost" . }}:{{ .Values.zammad.db.port }}/{{ include "zammad.dbName" . }}"
+            - name: POSTGRESQL_PORT
+              value: "5432"
+            - name: POSTGRESQL_HOST
+              value: "{{ include "zammad.dbHost" . }}"
+            - name: POSTGRESQL_USER
+              value: "{{ include "zammad.dbUser" . }}"
+            - name: POSTGRESQL_DB
+              value: "{{ include "zammad.dbName" . }}"
+            - name: POSTGRESQL_PASS
+              value: "{{ include "zammad.dbPassword" . }}"
             - name: ELASTICSEARCH_URL
               value: "http://{{ include "zammad.esHost" . }}:{{ include "zammad.esPort" . }}"
+            - name: REDIS_URL
+              value: "redis://open-webui-redis:6379"
           volumeMounts:
             - name: zammad-data
-              mountPath: /opt/zammad
+              mountPath: /opt/zammad/storage
 {{- if .Values.extraVolumeMounts }}
 {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
 {{- end }}

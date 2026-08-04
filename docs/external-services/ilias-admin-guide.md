@@ -57,6 +57,7 @@ Keycloak (SAML IdP)  <-- Shibboleth SP (Apache mod_shib)
 ### Certificate Management
 
 Generate new SP certificates:
+
 ```bash
 openssl req -new -x509 -nodes -days 3650 \
   -keyout sp-key.pem -out sp-cert.pem \
@@ -64,6 +65,7 @@ openssl req -new -x509 -nodes -days 3650 \
 ```
 
 Update the K8s secret:
+
 ```bash
 kubectl create secret generic ilias-shibboleth-certs \
   --from-file=sp-key.pem=sp-key.pem \
@@ -125,6 +127,7 @@ Users must be in the `cn=managed-by-attribute-Learnmanagement,cn=groups,<baseDn>
 The `srsolutions/ilias:9-php8.2-apache` image does not include `libapache2-mod-shib2` by default. To add it:
 
 1. Build a custom Docker image:
+
 ```dockerfile
 FROM srsolutions/ilias:9-php8.2-apache
 RUN apt-get update && apt-get install -y libapache2-mod-shib2 && a2enmod shib && apt-get clean
@@ -135,6 +138,7 @@ RUN apt-get update && apt-get install -y libapache2-mod-shib2 && a2enmod shib &&
 ## Deployment
 
 Apply all configuration:
+
 ```bash
 # Apply Shibboleth ConfigMaps
 kubectl apply -f helmfile/apps/ilias/templates/shibboleth-config.yaml

@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: opendesk
 data:
   shibboleth.conf: |
-    ServerName lms.opendesk.example.com
+    ServerName lms.opendesk.hrz.uni-marburg.de
     UseCanonicalName On
     ShibCompatValidUser Off
     LogLevel mod_shib:debug

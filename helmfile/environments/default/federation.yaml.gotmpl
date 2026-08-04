@@ -71,7 +71,7 @@ federation:
       ##
       ## Auto-generates: https://id.example.org/realms/opendesk/broker/dfn-aai-test/endpoint
       ##
-      acsUrl: {{ env "DFN_TEST_ACS_URL" | default (printf "https://id.%s/realms/%s/broker/dfn-aai-test/endpoint" .Values.global.domain .Values.platform.realm) | quote }}
+      acsUrl: {{ env "DFN_TEST_ACS_URL" | default "https://id.opendesk-edu.org/realms/opendesk/broker/dfn-aai-test/endpoint" | quote }}
 
       ## Require signed authentication requests
       ## When enabled, all auth requests to the IdP are signed using Keycloak's SAML signing certificate.
@@ -103,11 +103,15 @@ federation:
     ##
     attributeMapping:
 
-      ## Map eduPersonPrincipalName to Keycloak email
-      ## DFN-AAI uses eduPersonPrincipalName as the persistent identifier.
-      ## Most deployments prefer to use this as the email attribute.
+      ## Map mail to Keycloak email
+      ## DFN-AAI releases the mail attribute as the user's primary email address.
       ##
-      email: {{ env "DFN_TEST_ATTR_EMAIL" | default "eduPersonPrincipalName" | quote }}
+      email: {{ env "DFN_TEST_ATTR_EMAIL" | default "mail" | quote }}
+
+      ## Map eduPersonPrincipalName to Keycloak username
+      ## DFN-AAI uses eduPersonPrincipalName as the persistent identifier (user@institution).
+      ##
+      username: {{ env "DFN_TEST_ATTR_USERNAME" | default "eduPersonPrincipalName" | quote }}
 
       ## Map displayName to Keycloak firstName (full name split)
       ## Alternatively, map to custom attribute if preferred.
@@ -161,7 +165,7 @@ federation:
       ## Default: Uses JVM default trust store
       ##
       # trustStore: "/opt/keycloak/conf/truststore.jks"
-      # trustStorePassword: "{{ .Values.secrets.keycloak.truststorePassword }}"
+# trustStorePassword: "your-truststore-password"
 
   ## DFN-AAI production federation configuration
   ## Use this for production deployment with official DFN-AAI membership.
@@ -208,7 +212,7 @@ federation:
       ##
       ## Auto-generates: https://id.example.org/realms/opendesk/broker/dfn-aai/endpoint
       ##
-      acsUrl: {{ env "DFN_PRODUCTION_ACS_URL" | default (printf "https://id.%s/realms/%s/broker/dfn-aai/endpoint" .Values.global.domain .Values.platform.realm) | quote }}
+      acsUrl: {{ env "DFN_PRODUCTION_ACS_URL" | default "https://id.opendesk-edu.org/realms/opendesk/broker/dfn-aai/endpoint" | quote }}
 
       ## Require signed authentication requests (production requires this)
       ##
@@ -231,9 +235,13 @@ federation:
     ##
     attributeMapping:
 
-      ## Map eduPersonPrincipalName to Keycloak email
+      ## Map mail to Keycloak email
       ##
-      email: {{ env "DFN_PRODUCTION_ATTR_EMAIL" | default "eduPersonPrincipalName" | quote }}
+      email: {{ env "DFN_PRODUCTION_ATTR_EMAIL" | default "mail" | quote }}
+
+      ## Map eduPersonPrincipalName to Keycloak username
+      ##
+      username: {{ env "DFN_PRODUCTION_ATTR_USERNAME" | default "eduPersonPrincipalName" | quote }}
 
       ## Map displayName to Keycloak firstName
       ##
@@ -278,7 +286,7 @@ federation:
       ## Required if your university uses a specific PKI infrastructure.
       ##
       ## trustStore: "/opt/keycloak/conf/truststore.jks"
-      ## trustStorePassword: "{{ .Values.secrets.keycloak.truststorePassword }}"
+      ## trustStorePassword: "your-truststore-password"
 
   ## Custom Shibboleth IdP configuration
   ## Configure direct integration with a specific university Shibboleth IdP.
@@ -302,7 +310,7 @@ federation:
     #   saml:
     #     ssoBinding: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
     #     nameIdFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-    #     acsUrl: {{ printf "https://id.%s/realms/%s/broker/university-shibboleth/endpoint" .Values.global.domain .Values.platform.realm | quote }}
+    #     acsUrl: {{ printf "https://id.%s/realms/%s/broker/university-shibboleth/endpoint" "opendesk-edu.org" "opendesk" | quote }}
     #     signAssertions: true
     #     wantAssertionsSigned: true
     #     validateSignature: true
@@ -310,7 +318,8 @@ federation:
     #   ## Attribute mapping
     #   ##
     #   attributeMapping:
-    #     email: "eduPersonPrincipalName"
+    #     email: "mail"
+    #     username: "eduPersonPrincipalName"
     #     firstName: "displayName"
     #     lastName: "displayName"
     #     affiliation: "eduPersonAffiliation"
@@ -325,4 +334,3 @@ federation:
     #   trust:
     #     enabled: true
 
-...

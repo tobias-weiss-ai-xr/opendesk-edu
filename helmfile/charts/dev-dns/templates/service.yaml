@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2024 OpenDesk Edu Team
+# SPDX-License-Identifier: Apache-2.0
+#
+# NodePort service exposing k3s CoreDNS externally for team machines.
+# Points to the existing kube-dns service's selector (coredns pods).
+#
+# This is the primary way team machines resolve internal dev hostnames:
+# configure their DNS resolver to <node-ip>:<nodePort>.
+#
+{{- if .Values.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dev-dns.fullname" . }}-external
+  namespace: kube-system
+  labels:
+    {{- include "dev-dns.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: NodePort
+  ports:
+    - name: dns-udp
+      port: {{ .Values.service.port }}
+      targetPort: 53
+      protocol: UDP
+      nodePort: {{ .Values.service.nodePort.udp }}
+    - name: dns-tcp
+      port: {{ .Values.service.port }}
+      targetPort: 53
+      protocol: TCP
+      nodePort: {{ .Values.service.nodePort.tcp }}
+  selector:
+    k8s-app: kube-dns
+{{- end }}

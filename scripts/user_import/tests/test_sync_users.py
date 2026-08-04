@@ -57,20 +57,13 @@ class TestLDAPClient(unittest.TestCase):
     def test_ldap_connect_success(self, mock_connection):
         """Test successful LDAP connection"""
         mock_conn = MagicMock()
+        mock_connection.return_value = mock_conn
         mock_conn.bind.return_value = True
-
-        def mock_conn_init(*args, **kwargs):
-            if kwargs.get("auto_bind"):
-                mock_conn.bind()
-            return mock_conn
-
-        mock_connection.side_effect = mock_conn_init
 
         client = LDAPClient()
         result = client.connect()
 
         self.assertTrue(result)
-        mock_connection.assert_called()
         mock_conn.bind.assert_called_once()
 
     @patch("ldap3.Connection")

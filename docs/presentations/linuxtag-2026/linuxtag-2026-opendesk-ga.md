@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Comfortáilteach agus Sábhárlacht?
 
 🎓 openDesk Edu — Sábhárlacht Dhigiteach in Ollscoileanna
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Bí páirteach!
+# 🤝 Bí páirteach
 
 **Cabhraigh linn openDesk Edu a thógáil do ollscoileanna!**
 

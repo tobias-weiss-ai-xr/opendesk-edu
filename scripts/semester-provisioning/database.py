@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """
 SQLite database storage for course provisioning.
 SQLite-Datenbankspeicherung für die Kursverwaltung.
@@ -39,7 +39,7 @@ class Database:
     SQLite-Datenbankmanager mit PostgreSQL-fähigem Schema.
     """
 
-    def __init__(self, config: Optional[DatabaseConfig] = None):
+    def __init__(self, config: Optional[DatabaseConfig] = None) -> None:
         self.config = config or DatabaseConfig()
         self._connection: Optional[sqlite3.Connection] = None
 
@@ -354,8 +354,8 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                UPDATE courses 
-                SET status = 'archived', archived_at = ?, updated_at = ? 
+                UPDATE courses
+                SET status = 'archived', archived_at = ?, updated_at = ?
                 WHERE course_id = ? AND status = 'active'
             """,
                 (now, now, course_id),
@@ -383,8 +383,8 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                UPDATE courses 
-                SET status = 'active', archived_at = NULL, updated_at = ? 
+                UPDATE courses
+                SET status = 'active', archived_at = NULL, updated_at = ?
                 WHERE course_id = ? AND status = 'archived'
             """,
                 (now, course_id),

@@ -34,7 +34,7 @@ class KeycloakClient:
     oder erweitert werden, um deterministische Daten bereitzustellen.
     """
 
-    def __init__(self, config: KeycloakConfig):
+    def __init__(self, config: KeycloakConfig) -> None:
         self.config = config
 
     def get_roles(

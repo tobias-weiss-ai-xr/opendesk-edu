@@ -1,0 +1,16 @@
+{{- if .Values.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "rstudio.fullname" . }}-workspace
+  labels:
+    {{- include "rstudio.labels" . | nindent 4 }}
+    backup-tier: "c"
+    k8up/backup: "true"
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size }}
+{{- end }}

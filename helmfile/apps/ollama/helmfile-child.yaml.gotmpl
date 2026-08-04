@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "ollama"
+    url: "https://ollama.github.io/helm-chart"
+    oci: false
+releases:
+  - name: "ollama"
+    chart: "ollama/ollama"
+    version: "0.68.0"
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.ollama.enabled }}
+    timeout: 900
+commonLabels:
+  deployStage: "010-infra"
+  component: "ollama"

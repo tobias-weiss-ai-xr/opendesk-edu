@@ -14,9 +14,25 @@ excalidraw:
       cpu: 200m
       memory: 256Mi
 
+  oidc:
+    enabled: false
+    proxyImage: quay.io/oauth2-proxy/oauth2-proxy
+    proxyTag: latest
+    issuerUrl: "https://keycloak.opendesk.example.com/realms/opendesk"
+    clientId: "opendesk-excalidraw"
+    clientSecret: ""
+    cookieSecret: ""
+
 ingress:
-  enabled: false
-  className: ""
+  enabled: true
+  className: haproxy
   annotations: {}
-  hosts: []
-  tls: []
+  hosts:
+    - host: excalidraw.opendesk.hrz.uni-marburg.de
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: excalidraw-tls
+      hosts:
+        - excalidraw.opendesk.hrz.uni-marburg.de

@@ -1,7 +1,7 @@
 # SNIpR F13 Transcription Integration Guide
 
-> **Version:** v1.2  
-> **Last Updated:** March 31, 2026  
+> **Version:** v1.2
+> **Last Updated:** March 31, 2026
 > **Status:** Production Ready
 
 ## Overview
@@ -83,6 +83,7 @@ snipr:
 ```
 
 Apply changes:
+
 ```bash
 helmfile -e default apply --until snipr
 ```
@@ -218,6 +219,7 @@ curl -X POST https://snipr.opendesk.example.com/api/transcribe \
 ```
 
 Supported languages:
+
 - `de` - German (recommended for German universities)
 - `en` - English
 - `fr` - French
@@ -239,6 +241,7 @@ snipr:
 ```
 
 **Callback validation flow:**
+
 1. F13 signs callback with HMAC-SHA256
 2. SNIpR verifies signature using shared secret
 3. Only valid callbacks are processed
@@ -267,12 +270,14 @@ If SNIpR doesn't respond with 200 OK, F13 will retry:
 ### Improving Accuracy
 
 **1. Audio Preprocessing:**
+
 ```bash
 # Normalize audio before transcription
 ffmpeg -i input.mp4 -af "aresample=44100,acompressor=threshold=0.3:ratio=2:attack=10:release=250" output.mp3
 ```
 
 **2. Custom Vocabulary:**
+
 ```yaml
 snipr:
   transcription:
@@ -285,6 +290,7 @@ snipr:
 ```
 
 **3. Speaker Diarization:**
+
 ```yaml
 snipr:
   transcription:
@@ -360,6 +366,7 @@ snipr:
 ```
 
 **Fallback behavior:**
+
 1. Try F13 first
 2. If F13 fails (timeout, error, unreachable), use local Whisper
 3. Log fallback usage for monitoring
@@ -398,7 +405,7 @@ groups:
           severity: warning
         annotations:
           summary: "High transcription error rate"
-          
+
       - alert: SniprF13Down
         expr: up{job="snipr-f13"} == 0
         for: 2m
@@ -415,18 +422,21 @@ groups:
 **Symptom:** Recording shows "transcription failed"
 
 **Check:**
+
 ```bash
 kubectl logs -l component=snipr -c snipr-api | grep -i "transcription"
 kubectl logs -l component=f13 | grep -i "error"
 ```
 
 **Common causes:**
+
 - F13 API key invalid
 - Audio file format unsupported
 - F13 service unreachable
 - Insufficient storage for transcript
 
 **Solution:**
+
 ```bash
 # Verify F13 connectivity
 curl -k https://f13.opendesk.example.com/api/health
@@ -444,11 +454,13 @@ curl -X POST https://f13.opendesk.example.com/api/transcribe \
 **Symptom:** Transcript contains many errors
 
 **Check:**
+
 - Audio quality (background noise, volume)
 - Language code matches actual language
 - Model size appropriate for use case
 
 **Solution:**
+
 - Improve audio recording quality
 - Use larger model (`whisper-large-v3`)
 - Add custom vocabulary for technical terms
@@ -458,11 +470,13 @@ curl -X POST https://f13.opendesk.example.com/api/transcribe \
 **Symptom:** Transcription job completed but SNIpR doesn't update
 
 **Check:**
+
 ```bash
 kubectl logs -l component=snipr -c snipr-api | grep -i "callback"
 ```
 
 **Solution:**
+
 - Verify callback URL is accessible from F13
 - Check webhook secret matches
 - Review SNIpR firewall rules
@@ -476,6 +490,7 @@ kubectl logs -l component=snipr -c snipr-api | grep -i "callback"
 ---
 
 **Related Documentation:**
+
 - [F13 AI Service Setup](../ai/f13-setup.md)
 - [S3 Storage Configuration](../storage/s3-setup.md)
 - [Monitoring and Metrics](../operations/monitoring.md)

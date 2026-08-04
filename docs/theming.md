@@ -28,4 +28,4 @@ You can just update the files in [helmfile/files/theme](../helmfile/files/theme)
 
 ## Known limitations
 
-- Portal and Keycloak screen styles, especially colors, must be applied in the [`portalStylesheets.css`](../helmfile/files/theme/portalStylesheet.css),
+* Portal and Keycloak screen styles, especially colors, must be applied in the [`portalStylesheets.css`](../helmfile/files/theme/portalStylesheet.css),

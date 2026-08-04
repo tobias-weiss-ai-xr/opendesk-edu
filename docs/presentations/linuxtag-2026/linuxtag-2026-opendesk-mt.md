@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Komdu u Suveren?
 
 🎓 openDesk Edu — Sovranità Diġitali fl-Universitajiet
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Ikkontribwixxi!
+# 🤝 Ikkontribwixxi
 
 **Għinuna nibnu openDesk Edu għall-universitajiet!**
 

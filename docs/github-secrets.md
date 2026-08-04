@@ -6,16 +6,16 @@ This guide explains how to configure GitHub Actions secrets for openDesk Edu wor
 
 | Secret Name | Description | Required By | How to Generate |
 |-------------|-------------|---------------|-----------------|
-| `CODEBERG_TOKEN` | Personal Access Token for Codeberg sync | `.github/workflows/sync-to-codeberg.yml` | Create at https://codeberg.org/user/settings/applications |
-| `GITHUB_TOKEN` | GitHub Personal Access Token | `.github/workflows/sync-to-codeberg.yml` | Create at https://github.com/settings/tokens (auto-provided by GitHub Actions) |
-| `GITLEAKS_LICENSE` | Gitleaks license for enhanced secret scanning | `.github/workflows/security-scan.yml` | Optional - get from https://gitleaks.io/ |
+| `CODEBERG_TOKEN` | Personal Access Token for Codeberg sync | `.github/workflows/sync-to-codeberg.yml` | Create at <https://codeberg.org/user/settings/applications> |
+| `GITHUB_TOKEN` | GitHub Personal Access Token | `.github/workflows/sync-to-codeberg.yml` | Create at <https://github.com/settings/tokens> (auto-provided by GitHub Actions) |
+| `GITLEAKS_LICENSE` | Gitleaks license for enhanced secret scanning | `.github/workflows/security-scan.yml` | Optional - get from <https://gitleaks.io/> |
 | `PAGERDUTY_SERVICE_KEY` | PagerDuty integration key | `docs/monitoring-setup.md` | From PagerDuty account |
 
 ## Setting Up Secrets
 
 ### 1. Create Codeberg Personal Access Token
 
-1. Go to https://codeberg.org/user/settings/applications
+1. Go to <https://codeberg.org/user/settings/applications>
 2. Click "Generate New Token"
 3. Configure:
    - **Token Name**: `opendesk-edu-github-sync`
@@ -28,7 +28,7 @@ This guide explains how to configure GitHub Actions secrets for openDesk Edu wor
 
 ### 2. Add Secret to GitHub Repository
 
-1. Go to your GitHub repository: https://github.com/opendesk-edu/opendesk-edu/settings/secrets/actions
+1. Go to your GitHub repository: <https://github.com/opendesk-edu/opendesk-edu/settings/secrets/actions>
 2. Click "New repository secret"
 3. Configure:
    - **Name**: `CODEBERG_TOKEN`
@@ -62,9 +62,11 @@ This guide explains how to configure GitHub Actions secrets for openDesk Edu wor
 ### Token Permissions
 
 **CODEBERG_TOKEN** required scopes:
+
 - `repo` - Full control of repositories (needed for push)
 
 **PAGERDUTY_SERVICE_KEY** (if using):
+
 - Only events: API access, read-only
 - No repository access needed
 
@@ -100,6 +102,7 @@ GitHub maintains audit logs:
 **Error**: `Resource not accessible by integration`
 
 **Solution**:
+
 - Verify secret name matches exactly (`CODEBERG_TOKEN` all caps)
 - Check secret is in repository settings (not organization)
 - Wait up to 1 minute for secret to propagate
@@ -109,6 +112,7 @@ GitHub maintains audit logs:
 **Error**: `Invalid credentials or have expired`
 
 **Solution**:
+
 1. Generate new Codeberg token
 2. Update `CODEBERG_TOKEN` secret in GitHub
 3. Run sync workflow again
@@ -118,6 +122,7 @@ GitHub maintains audit logs:
 **Error**: `Push to create is not enabled for organizations`
 
 **Solution**:
+
 - Ensure Codeberg repository exists and is writable
 - Verify token has `repo` scope
 - Check organization permissions (opendesk-edu must allow repo creation)
@@ -127,6 +132,7 @@ GitHub maintains audit logs:
 **Error**: `GITHUB_TOKEN` not accessible
 
 **Solution**:
+
 - The `GITHUB_TOKEN` is automatically provided by GitHub Actions
 - No manual setup needed
 - If workflow fails with authentication, check workflow file syntax

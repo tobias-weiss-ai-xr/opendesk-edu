@@ -14,5 +14,6 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: {{ .Values.limesurvey.port }}
+      name: {{ .Values.limesurvey.oidc.enabled | ternary "oauth2-proxy" "limesurvey" }}
+      targetPort: {{ .Values.limesurvey.oidc.enabled | ternary 4180 .Values.limesurvey.port }}
   type: ClusterIP

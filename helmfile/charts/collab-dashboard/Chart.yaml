@@ -1,0 +1,6 @@
+apiVersion: v2
+name: collab-dashboard
+description: Collab Services feature catalog dashboard for openDesk Edu
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

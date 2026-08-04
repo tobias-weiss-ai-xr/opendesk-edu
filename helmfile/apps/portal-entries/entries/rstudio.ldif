@@ -1,0 +1,12 @@
+dn: cn=rstudio,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+objectClass: univentionNewPortalEntry
+objectClass: top
+cn: rstudio
+univentionNewPortalEntryActivate: TRUE
+univentionNewPortalEntryLink: en_US https://r.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLinkTarget: newwindow
+univentionNewPortalEntryDisplayName: en_US RStudio
+univentionNewPortalEntryDisplayName: de_DE RStudio
+univentionNewPortalEntryDescription: en_US R statistics environment
+univentionNewPortalEntryDescription: de_DE R Statistik-Umgebung
+univentionNewPortalEntryOnlyAnonymous: FALSE

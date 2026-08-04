@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # Contributing to openDesk Edu
 
-<!-- 
+<!--
 Welcome! / Willkommen!
 
 English: This guide will help you contribute to openDesk Edu effectively.
@@ -75,6 +75,7 @@ All services integrate with openDesk's Keycloak-based Single Sign-On (SSO) and u
 ### Target Contributors
 
 We welcome contributions from:
+
 - 🏛️ **University IT administrators** with development skills
 - 🌍 **Open source developers** interested in educational software
 - 🇩🇪 **German public sector IT teams** (Öffentliche Verwaltung)
@@ -521,7 +522,7 @@ function log_message(string $level, string $message, array $context = []): void
         'message' => $message,
         'context' => $context
     ];
-    
+
     file_put_contents(LOG_FILE, json_encode($entry) . "\n", FILE_APPEND);
 }
 
@@ -544,7 +545,7 @@ function handle_request(): void
 
 1. **Type Declarations**: Always use `declare(strict_types=1)` and type hints
 2. **Error Handling**: Use try-catch with structured logging
-3. **Security**: 
+3. **Security**:
    - Validate all inputs
    - Use prepared statements for database queries
    - Never expose stack traces in production
@@ -581,15 +582,15 @@ function parse_logout_request(string $xml): array
 {
     libxml_use_internal_errors(true);
     $doc = new DOMDocument();
-    
+
     if (!$doc->loadXML($xml)) {
         throw new InvalidArgumentException('Invalid XML');
     }
-    
+
     $xpath = new DOMXPath($doc);
     $xpath->registerNamespace('samlp', 'urn:oasis:names:tc:SAML:2.0:protocol');
     $xpath->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
-    
+
     return [
         'id' => $xpath->query('//samlp:LogoutRequest/@ID')[0]?->nodeValue,
         'issuer' => $xpath->query('//saml:Issuer')[0]?->nodeValue,
@@ -619,7 +620,7 @@ Ruby is used for BigBlueButton integrations and controllers.
 class MyController < ApplicationController
   # Skip CSRF for server-to-server communication
   skip_before_action :verify_authenticity_token, only: [:endpoint]
-  
+
   # Constants
   TIMEOUT = ENV.fetch('TIMEOUT', 30).to_i
   VERBOSE = ENV.fetch('VERBOSE', 'false') == 'true'
@@ -631,7 +632,7 @@ class MyController < ApplicationController
   #
   def endpoint
     log_event(:info, 'request_started', { ip: request.remote_ip })
-    
+
     begin
       result = process_request
       render json: result, status: :ok
@@ -705,7 +706,7 @@ class SamlBackchannelController < ApplicationController
     begin
       saml_request = read_saml_request
       logout_request = parse_saml_request(saml_request)
-      
+
       unless verify_signature(logout_request)
         return render_error_response(403, 'Signature verification failed')
       end
@@ -928,20 +929,20 @@ test.describe('Backchannel Logout', () => {
     await page.fill('[name="username"]', 'testuser');
     await page.fill('[name="password"]', 'password');
     await page.click('button[type="submit"]');
-    
+
     // Open service in new tab
     const moodlePage = await context.newPage();
     await moodlePage.goto('https://moodle.opendesk.local');
-    
+
     // Verify logged in
     await expect(moodlePage.locator('.user-profile')).toBeVisible();
-    
+
     // Logout from portal
     await page.click('[data-testid="logout-button"]');
-    
+
     // Wait for logout propagation
     await page.waitForTimeout(5000);
-    
+
     // Verify session terminated in Moodle
     await moodlePage.reload();
     await expect(moodlePage.locator('[name="username"]')).toBeVisible();
@@ -1204,7 +1205,9 @@ What actually happened.
 
 ## Logs
 ```
+
 Paste relevant logs here
+
 ```
 
 ## Additional Context
@@ -1256,7 +1259,7 @@ Any other context, screenshots, or mockups.
 Instead:
 
 1. **Open a private security advisory**: [GitHub Security Advisories](https://github.com/opendesk-edu/opendesk-edu/security/advisories/new)
-2. **Or email**: security@opendesk-edu.org
+2. **Or email**: <security@opendesk-edu.org>
 
 ### What to Include
 
@@ -1359,6 +1362,7 @@ feature:
 | Issue | Solution |
 |-------|----------|
 | Error X | Do Y |
+
 ```
 
 ---
@@ -1370,6 +1374,7 @@ feature:
 openDesk Edu is licensed under the **Apache License 2.0**.
 
 ```
+
 Copyright 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 Copyright 2025-2026 openDesk Edu Contributors
 
@@ -1384,6 +1389,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
 ```
 
 ### Adding Copyright
@@ -1447,7 +1453,9 @@ Deploy Moodle with backchannel logout enabled.
 
 ## Error message
 ```
+
 Error: INSTALLATION FAILED: cannot re-use a name that is still in use
+
 ```
 
 ## Environment
@@ -1457,7 +1465,9 @@ Error: INSTALLATION FAILED: cannot re-use a name that is still in use
 
 ## Logs
 ```
+
 [paste relevant logs]
+
 ```
 ```
 
@@ -1507,12 +1517,12 @@ git merge upstream/main
 
 | Resource | Link |
 |----------|------|
-| Helm Docs | https://helm.sh/docs/ |
-| helmfile Docs | https://helmfile.readthedocs.io/ |
-| Kubernetes Docs | https://kubernetes.io/docs/ |
-| Keycloak Docs | https://www.keycloak.org/documentation |
-| SAML 2.0 Spec | https://docs.oasis-open.org/security/saml/ |
-| Conventional Commits | https://www.conventionalcommits.org/ |
+| Helm Docs | <https://helm.sh/docs/> |
+| helmfile Docs | <https://helmfile.readthedocs.io/> |
+| Kubernetes Docs | <https://kubernetes.io/docs/> |
+| Keycloak Docs | <https://www.keycloak.org/documentation> |
+| SAML 2.0 Spec | <https://docs.oasis-open.org/security/saml/> |
+| Conventional Commits | <https://www.conventionalcommits.org/> |
 
 ---
 

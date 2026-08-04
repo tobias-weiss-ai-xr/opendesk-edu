@@ -145,13 +145,13 @@ We cannot hold back all migrations as some are required e.g. due to a change in 
 
 This section provides an overview of potential changes to be part of the next major release (openDesk 2.0).
 
-- `functional.portal.link*` (see `functional.yaml.gotmpl` for details) are going to be moved into the `theme.*` tree, we are also going to move the icons used for the links currently found under `theme.imagery.portalEntries` in this step.
-- We will explicitly set the [database schema configuration](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/#HConfigurethenamesofdatabaseschemas) for XWiki to avoid the use of the `public` schema.
-- Removal of the `OPENDESK_1_12_0_SKIP_PVC_MIGRATION` option that was [introduced with openDesk 1.12.0](#fixed-helmfile-templating-storageclassnames-for-nubus-openproject-and-ox-connector).
-- Focussing on PostgreSQL all components except OX App Suite components:
-  - Removal of the XWiki MariaDB support.
-  - Removal of the Nextcloud MariaDB support.
-- The option `technical.nubus.keycloak.ldapFederation.importUsers` described in the [≥ 1.12.0 migrations](#new-application-default-keycloak-imports-users-to-its-own-database) is likely to be removed by enforcing the documented change of the user import setting.
+* `functional.portal.link*` (see `functional.yaml.gotmpl` for details) are going to be moved into the `theme.*` tree, we are also going to move the icons used for the links currently found under `theme.imagery.portalEntries` in this step.
+* We will explicitly set the [database schema configuration](https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Configuration/#HConfigurethenamesofdatabaseschemas) for XWiki to avoid the use of the `public` schema.
+* Removal of the `OPENDESK_1_12_0_SKIP_PVC_MIGRATION` option that was [introduced with openDesk 1.12.0](#fixed-helmfile-templating-storageclassnames-for-nubus-openproject-and-ox-connector).
+* Focussing on PostgreSQL all components except OX App Suite components:
+  * Removal of the XWiki MariaDB support.
+  * Removal of the Nextcloud MariaDB support.
+* The option `technical.nubus.keycloak.ldapFederation.importUsers` described in the [≥ 1.12.0 migrations](#new-application-default-keycloak-imports-users-to-its-own-database) is likely to be removed by enforcing the documented change of the user import setting.
 
 ## Overview and mandatory upgrade path
 
@@ -167,6 +167,7 @@ matching that constraint, though our links always point to the newest patch rele
 
 > [!note]
 > An exemplary update path for an upgrade from v1.3.2 to v1.7.1 would be:
+>
 > 1. You are at v1.3.2 → pre steps for v1.4.0 to v1.5.0
 > 1. Upgrade to v1.5.0 → post steps for v1.4.0 to v1.5.0
 > 1. You are at v1.5.0 → pre steps for v1.6.0 to 1.7.1
@@ -294,8 +295,8 @@ Now the users are imported from the LDAP into the Keycloak database (and kept in
 
 With openDesk 1.12.0, this import behavior became the default also for existing installations. However, enabling user import on systems that were initially installed before 1.8.0 will lead to the following side effects:
 
-- 2FA reset required: All users with two-factor authentication enabled must reconfigure their second factor.
-- OIDC user duplication risk: Externally integrated OIDC clients may detect duplicate users if they rely on Keycloak’s default internal user identifiers.
+* 2FA reset required: All users with two-factor authentication enabled must reconfigure their second factor.
+* OIDC user duplication risk: Externally integrated OIDC clients may detect duplicate users if they rely on Keycloak’s default internal user identifiers.
 To avoid this issue, clients should use the `opendesk_useruuid` OIDC claim as the stable user identifier.
 
 This behavior has been corrected in openDesk 1.12.1 by introducing the following configuration option in `technical.yaml.gotmpl` which keeps the existing default instead of enforcing the import to be enabled.
@@ -340,7 +341,7 @@ helm uninstall -n <your_namespace> jitsi
 
 **Context**
 
-The for following Persistant Volumes Claims the storage class attributes were not templated causing the related PVCs to fall back to the Helm Chart's default for size and to the cluster's default for the name:
+The for following Persistent Volumes Claims the storage class attributes were not templated causing the related PVCs to fall back to the Helm Chart's default for size and to the cluster's default for the name:
 
 | Component    | PVC name                                  | storageClassName | size | With 1.12.0 set in                             | Migration required    |
 | ------------ | ----------------------------------------- | ---------------- | ---- | ---------------------------------------------- | --------------------- |
@@ -356,7 +357,7 @@ While the OpenProject ones are ephemeral temporary volumes, only used because [K
 **Required action**
 
 As an operator you will know how to run an update migration for existing PVCs to change e.g. its storageClassName
-or size[^1]. As this still might not come handy during an upgrade and to allow independend scheduling of the task,
+or size[^1]. As this still might not come handy during an upgrade and to allow independent scheduling of the task,
 there is an alternative at least until openDesk 2.0:
 Setting the environment variable `OPENDESK_1_12_0_SKIP_PVC_MIGRATION` to any non empty value
 will trigger Helm post renderer scripts that remove the newly added attributes again.
@@ -409,8 +410,9 @@ smtp:
 **Context**
 
 XWiki receives user and account identity information via two mechanisms:
-- **OIDC** – during a user’s SSO-based login to XWiki
-- **LDAP** – during nightly synchronization jobs
+
+* **OIDC** – during a user’s SSO-based login to XWiki
+* **LDAP** – during nightly synchronization jobs
 
 In earlier releases, usernames provided via OIDC were automatically normalized to lowercase, while usernames synchronized from LDAP were not. This mismatch could result in duplicate user accounts in XWiki that differ only by letter case.
 
@@ -421,24 +423,24 @@ To identify and merge duplicate user accounts, run the following script:
 
 *Prerequisites*
 
-- You need a user account with XWiki administrator permissions.
-- These permissions can be granted via IAM administration in the user's "openDesk" tab.
-- Note that permissions are currently synchronized to XWiki nightly.
-- Verify that the permissions are active by opening the waffle menu in XWiki and checking for the "Wiki administration" option.
-- In XWiki, click your avatar to open your user profile:
-  - Navigate to "Settings"
-  - Set "User type" to "Advanced" (required to execute scripts)
-  - Save the change
+* You need a user account with XWiki administrator permissions.
+* These permissions can be granted via IAM administration in the user's "openDesk" tab.
+* Note that permissions are currently synchronized to XWiki nightly.
+* Verify that the permissions are active by opening the waffle menu in XWiki and checking for the "Wiki administration" option.
+* In XWiki, click your avatar to open your user profile:
+  * Navigate to "Settings"
+  * Set "User type" to "Advanced" (required to execute scripts)
+  * Save the change
 
 *Running the script*
 
-- Create a new XWiki page (it can be deleted after the cleanup is complete).
-- Use the "Edit" dropdown and switch to the "Wiki" editor (not the default WYSIWYG editor).
-- Paste the script into the editor and save the page.
-- On the newly created page, click "Show duplicate user accounts" to start the analysis.
-- A list of "Duplicate user accounts" will be displayed.
-- If duplicates are found, click "Replace and disable duplicate accounts" to merge them.
-- For each merged account, the script outputs a message similar to: `Duplicate user account [XWiki.uppercase1] has been replaced by account [XWiki.UpperCase1] and disabled.`
+* Create a new XWiki page (it can be deleted after the cleanup is complete).
+* Use the "Edit" dropdown and switch to the "Wiki" editor (not the default WYSIWYG editor).
+* Paste the script into the editor and save the page.
+* On the newly created page, click "Show duplicate user accounts" to start the analysis.
+* A list of "Duplicate user accounts" will be displayed.
+* If duplicates are found, click "Replace and disable duplicate accounts" to merge them.
+* For each merged account, the script outputs a message similar to: `Duplicate user account [XWiki.uppercase1] has been replaced by account [XWiki.UpperCase1] and disabled.`
 
 ##### IAM new feature: External routing for mail domains
 
@@ -564,6 +566,7 @@ be derived from the `MASTER_PASSWORD`.
 The [nats-box](https://github.com/nats-io/nats-box), a handy tool when it comes to debugging the Nubus provisioning stack, is no longer enabled in openDesk by default.
 
 To re-enable the nats-box for your deployment you have to set:
+
 ```yaml
 technical:
   nubus:
@@ -575,7 +578,7 @@ technical:
 
 > [!note]
 > The nats-box also gets enabled when setting `debug.enabled: true`, but that should only be used in non-production scenarios and enabled debug
-> accross the whole deployment.
+> across the whole deployment.
 
 ##### New Helmfile default: Postfix SMTP SASL security options
 
@@ -641,24 +644,27 @@ Starting from openDesk v1.9.0, the SMTP SASL security options set within openDes
 recommended defaults. This might break currently working connections with external SMTP relays. To prevent
 this you have to configure the supported options for your mail relay one of the following ways:
 
-- Recommended: Directly upgrade to v1.10.0 and set SMTP SASL options through `smtp.security.*`.
-- Configure a customization for `smtpSASLSecurityOptions`.
+* Recommended: Directly upgrade to v1.10.0 and set SMTP SASL options through `smtp.security.*`.
+* Configure a customization for `smtpSASLSecurityOptions`.
 
 ##### Helmfile fix: Cassandra passwords read from `databases.*`
 
 **Target group:** All of the below must apply to your deployment:
+
 1. Enterprise Edition
 2. Using external Cassandra DB
 3. Defined the Cassandra passwords in `databases.*` (`database.yaml.gotmpl`) which got ignored until now
 4. Defined the Cassandra passwords then in `secrets.*` (`secrets.yaml.gotmpl`)
 
 The Cassandra passwords
-- `databases.dovecotDictmap.password`
-- `databases.dovecotACL.password`
+
+* `databases.dovecotDictmap.password`
+* `databases.dovecotACL.password`
 
 are no longer ignored. So please move the passwords from
-- `secrets.cassandra.dovecotDictmapUser`
-- `secrets.cassandra.dovecotACLUser`
+
+* `secrets.cassandra.dovecotDictmapUser`
+* `secrets.cassandra.dovecotACLUser`
 
 to the `databases.*` structure.
 
@@ -675,8 +681,9 @@ From now on, the dialog can be explicitly controlled via the setting
 If you want your users to see this dialog, set the attribute to `true`.
 
 Additionally, it is now possible to explicitly define the hostnames shown in the client onboarding dialog using the following values:
-- `functional.groupware.externalClients.fqdnImap`
-- `functional.groupware.externalClients.fqdnSmtp`
+
+* `functional.groupware.externalClients.fqdnImap`
+* `functional.groupware.externalClients.fqdnSmtp`
 
 If these values are not explicitly set, openDesk will use `.Values.global.domain` as in previous releases.
 
@@ -700,10 +707,10 @@ However, for consistency and easier maintenance, we recommend migrating users fr
 
 The portal has been migrated to use OIDC for single sign-on by default. This introduces the following requirements for existing deployments:
 
-- New database: Deployments using external databases must provide a new PostgreSQL database. See `databases.umsAuthSession` in `databases.yaml.gotmpl` for configuration details.
-- New secrets: Deployments managing secrets manually must add:
-  - `secrets.keycloak.clientSecret.portal`: The OIDC client secret for the portal.
-  - `secrets.postgresql.umsAuthSessionUser`: For internal databases, set the secret for the database user here. If you are using an external database, you already provide these credentials in the New database step above.
+* New database: Deployments using external databases must provide a new PostgreSQL database. See `databases.umsAuthSession` in `databases.yaml.gotmpl` for configuration details.
+* New secrets: Deployments managing secrets manually must add:
+  * `secrets.keycloak.clientSecret.portal`: The OIDC client secret for the portal.
+  * `secrets.postgresql.umsAuthSessionUser`: For internal databases, set the secret for the database user here. If you are using an external database, you already provide these credentials in the New database step above.
 
 > [!note]
 > The SAML Client for the Nubus portal is still preserved in Keycloak and is going to be removed with openDesk 1.10.0.
@@ -720,8 +727,8 @@ With the new default, self-registration is switched off for new deployments. Exi
 
 1. Log in with an XWiki admin account.
 2. Open the URL below (replace `<YOURDOMAIN>` with your domain), or navigate manually:
-   - URL: `https://wiki.<YOURDOMAIN>/bin/admin/XWiki/XWikiPreferences?editor=globaladmin&section=Rights#|t=usersandgroupstable&p=1&l=10&uorg=users&wiki=local&clsname=XWiki.XWikiGlobalRights`
-   - Manual navigation: Burger menu → *Administer Wiki* (repeat for each subwiki, if applicable) → *Users & Groups* → *Rights* → *Users* (table header)
+   * URL: `https://wiki.<YOURDOMAIN>/bin/admin/XWiki/XWikiPreferences?editor=globaladmin&section=Rights#|t=usersandgroupstable&p=1&l=10&uorg=users&wiki=local&clsname=XWiki.XWikiGlobalRights`
+   * Manual navigation: Burger menu → _Administer Wiki_ (repeat for each subwiki, if applicable) → _Users & Groups_ → _Rights_ → _Users_ (table header)
 3. In the first row labeled "Unregistered Users", ensure the box in the "Register" column shows a ❌ (disabled) by clicking it if necessary.
 
 ##### New application default: Synapse rooms `v12`
@@ -738,9 +745,9 @@ OpenDesk includes several bundled widgets. When upgrading a room, a new room is 
 
 To preserve as much data as possible, dedicated upgrade guidelines for each of these widgets are available:
 
-- Matrix NeoBoard widget: https://github.com/nordeck/matrix-neoboard?tab=readme-ov-file#matrix-room-upgrades
-- Matrix Meetings widget: https://github.com/nordeck/matrix-meetings?tab=readme-ov-file#matrix-room-upgrades
-- Matrix Poll widget: https://github.com/nordeck/matrix-poll?tab=readme-ov-file#matrix-room-upgrades
+* Matrix NeoBoard widget: <https://github.com/nordeck/matrix-neoboard?tab=readme-ov-file#matrix-room-upgrades>
+* Matrix Meetings widget: <https://github.com/nordeck/matrix-meetings?tab=readme-ov-file#matrix-room-upgrades>
+* Matrix Poll widget: <https://github.com/nordeck/matrix-poll?tab=readme-ov-file#matrix-room-upgrades>
 
 > [!note]
 > These instructions apply to any room upgrades, not just upgrade to `v12`.
@@ -751,7 +758,7 @@ To preserve as much data as possible, dedicated upgrade guidelines for each of t
 
 openDesk now enforces restrictions on the characters allowed in directory and filenames by explicitly disallowing the following set: `* " | ? ; : \ / ~ < >`
 
-The reason is that desktop clients can not handle all characters due to restrictions in the underlying operating system and therefor syncing these directories and/or files will fail.
+The reason is that desktop clients can not handle all characters due to restrictions in the underlying operating system and therefore syncing these directories and/or files will fail.
 
 This change was introduced because desktop clients cannot reliably handle certain characters due to operating system limitations, causing file synchronization to fail when these characters are present.
 
@@ -808,6 +815,7 @@ The following Nextcloud apps/functions are no longer enabled by default. Please 
 * Comments: Core app that lets users leave comments in the activity tab of the file/directory details pane.
 
 If required the apps can be enabled using the openDesk customization options for `opendeskNextcloudManagement`, see `customizations.yaml.gotmpl` for details, with the following settings:
+
 ```yaml
 configuration:
   feature:
@@ -824,14 +832,17 @@ configuration:
 
 Gravatar support is no longer enabled by default in Jitsi and OpenProject. In case it is required openDesk's customization options can be used to enabled it, see `customizations.yaml.gotmpl` for details.
 
-- Jitsi: `customization.release.jitsi` with
+* Jitsi: `customization.release.jitsi` with
+
   ```yaml
   jitsi:
     web:
       extraConfig:
         disableThirdPartyRequests: false
   ```
-- Open Project: `customization.release.openproject` with
+
+* Open Project: `customization.release.openproject` with
+
   ```yaml
   environment:
     OPENPROJECT_PLUGIN__OPENPROJECT__AVATARS: '{enable_gravatars: true, enable_local_avatars: true}'
@@ -938,9 +949,10 @@ With openDesk 1.6.0 OX App Suite persists the attachments on contact, calendar o
 To enable the use of this new filestore backend existing deployments must execute the following steps.
 
 Preparation:
-- Ensure your `kubeconfig` is pointing to the cluster that is running your deployment.
-- Identify/create a e.g. local temporary directory that can keep the attachments while upgrading openDesk.
-- Set some environment variables to prepare running the documented commands:
+
+* Ensure your `kubeconfig` is pointing to the cluster that is running your deployment.
+* Identify/create a e.g. local temporary directory that can keep the attachments while upgrading openDesk.
+* Set some environment variables to prepare running the documented commands:
 
 ```shell
 export ATTACHMENT_TEMP_DIR=<your_temporary_directory_for_the_attachments>
@@ -948,9 +960,11 @@ export NAMESPACE=<your_namespace>
 ```
 
 1. Copy the existing attachments from all `open-xchange-core-mw-default-*` Pods to the identified directory, example for `open-xchange-core-mw-default-0`:
+
 ```shell
 kubectl cp -n ${NAMESPACE} open-xchange-core-mw-default-0:/opt/open-xchange/ox-filestore ${ATTACHMENT_TEMP_DIR}
 ```
+
 2. Run the upgrade.
 3. Continue with the [related post-upgrade steps](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-post-upgrade)
 
@@ -963,34 +977,45 @@ kubectl cp -n ${NAMESPACE} open-xchange-core-mw-default-0:/opt/open-xchange/ox-f
 Continued from the [related pre-upgrade section](#ox-app-suite-fix-up-using-s3-as-storage-for-non-mail-attachments-pre-upgrade).
 
 1. Copy the attachments back from your temporary directory into `open-xchange-core-mw-default-0`.
+
 ```shell
 kubectl cp -n ${NAMESPACE} ${ATTACHMENT_TEMP_DIR}/* open-xchange-core-mw-default-0:/opt/open-xchange/ox-filestore
 ```
+
 2. Ideally you verify the files have been copied as expected checking the target directory in the `open-xchange-core-mw-default-0` Pod. All the following commands are for execution within the aforementioned Pod.
 3. Get the `id` of the new object storage based OX filestore, using the following command in the first line of the following block. In the shown example output the `id` for the new filestore would be `10` as the filestore can be identified by its path value `s3://ox-filestore-s3`, the `id` of the existing filestore would be `3` identified by the corresponding path `/opt/open-xchange/ox-filestore`:
+
 ```shell
 /opt/open-xchange/sbin/listfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
 id path                             size reserved used max-entities cur-entities
  3 /opt/open-xchange/ox-filestore 100000      200    5         5000            1
 10 s3://ox-filestore-s3           100000        0    0         5000            0
 ```
+
 4. Get the list of your OX contexts IDs (`cid` column in the output of the `listcontext` command), as the next step needs to be executed per OX context. Most installation will just have a single OX context (`1`).
+
 ```shell
 /opt/open-xchange/sbin/listcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
 cid fid fname       enabled qmax qused name lmappings
   1   3 1_ctx_store true             5 1    1,context1
 ```
+
 5. For each of your OX contexts IDs run the final filestore migration command and you will get output like this: `context 1 to filestore 10 scheduled as job 1`:
+
 ```shell
 /opt/open-xchange/sbin/movecontextfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -f <your_s3_filestore_id_from_step_3> -c <your_context_id_from_step_4>
 ```
+
 6. Depending on the size of your filestore, moving the contexts will take some time. You can check the status of a context's jobs with the command below. When the job status is `Done` you can also doublecheck that everything worked as expected by running the `listfilestore` command from step #3 and should see that the filestore is no longer used.
+
 ```shell
 /opt/open-xchange/sbin/jobcontrol -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -c <your_context_id_from_step_4> -l
 ID    Type of Job                              Status     Further Information
 1     movefilestore                            Done       move context 1 to filestore 10
 ```
+
 7. Finally you can unregister the old filestore:
+
 ```shell
 /opt/open-xchange/sbin/unregisterfilestore -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW -i <your_old_filestore_id_from_step_3>
 ```
@@ -1089,10 +1114,10 @@ databases:
 
 In case you are planning to migrate an existing instance from MariaDB to PostgreSQL please check the upstream documentation for details:
 
-- Nextcloud database migration: https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
-- XWiki:
-  - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
-  - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport
+* Nextcloud database migration: <https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html>
+* XWiki:
+  * <https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature>
+  * <https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport>
 
 ### Versions ≥ v1.1.2
 
@@ -1137,9 +1162,9 @@ If you have set custom `persistence.size.*`-values for your deployment, please c
 
 When comparing the [old v1.1.0 structure](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/v1.1.0/helmfile/environments/default/persistence.yaml.gotmpl) with the [new one](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/blob/v1.1.1/helmfile/environments/default/persistence.yaml.gotmpl), you will spot these changes:
 
-- We replaced `persistence.size` with `persistence.storages`.
-- Below each component you can define now the `size` and the optional component specific `storageClassName`.
-- We streamlined the structure of the components by placing them on the same level, as beforehand, Nubus had an additional level of nesting.
+* We replaced `persistence.size` with `persistence.storages`.
+* Below each component you can define now the `size` and the optional component specific `storageClassName`.
+* We streamlined the structure of the components by placing them on the same level, as beforehand, Nubus had an additional level of nesting.
 
 The following configuration:
 
@@ -1205,13 +1230,13 @@ provided by openDesk, we have prefixed these app directories with `opendesk-`.
 
 Affected are the following directories, here listed directly with the new prefix:
 
-- [`./helmfile/apps/opendesk-migrations-pre`](../helmfile/apps/opendesk-migrations-pre)
-- [`./helmfile/apps/opendesk-migrations-post`](../helmfile/apps/opendesk-migrations-post)
-- [`./helmfile/apps/opendesk-openproject-bootstrap`](../helmfile/apps/opendesk-openproject-bootstrap)
+* [`./helmfile/apps/opendesk-migrations-pre`](../helmfile/apps/opendesk-migrations-pre)
+* [`./helmfile/apps/opendesk-migrations-post`](../helmfile/apps/opendesk-migrations-post)
+* [`./helmfile/apps/opendesk-openproject-bootstrap`](../helmfile/apps/opendesk-openproject-bootstrap)
 
 The described changes most likely require manual action in the following situation:
 
-- You are referencing our upstream files e.g. in your Argo CD deployment. If so, please update your references to use the new directory names.
+* You are referencing our upstream files e.g. in your Argo CD deployment. If so, please update your references to use the new directory names.
 
 ##### Helmfile cleanup: Splitting external services and openDesk services
 
@@ -1219,12 +1244,12 @@ In v1.0.0 there was a directory `/helmfile/apps/services` that was intended to c
 
 As some services that are actually part of openDesk snuck in there, we had to split the directory into two separate ones:
 
-- [`./helmfile/apps/opendesk-services`](../helmfile/apps/opendesk-services)
-- [`./helmfile/apps/services-external`](../helmfile/apps/services-external)
+* [`./helmfile/apps/opendesk-services`](../helmfile/apps/opendesk-services)
+* [`./helmfile/apps/services-external`](../helmfile/apps/services-external)
 
 The described changes most likely require manual action in the following situation:
 
-- You are referencing our upstream files e.g. in your Argo CD deployment. If so, please update your references to use the new directory names.
+* You are referencing our upstream files e.g. in your Argo CD deployment. If so, please update your references to use the new directory names.
 
 ##### Helmfile cleanup: Streamlining `openxchange` and `oxAppSuite` attribute names
 
@@ -1352,22 +1377,26 @@ Please ensure the Redis you are using is updated to at least version 7.4 to supp
 Unfortunately XWiki does not upgrade itself as expected. The bug has been reported and the supplier is aware. The following additional steps are required:
 
 1. To enforce re-indexing of the now fixed full-text search, access the XWiki Pod and run the following commands to delete two search related directories:
+
    ```
    rm -rf /usr/local/xwiki/data/store/solr/search_9
    rm -rf /usr/local/xwiki/data/cache/solr/search_9
    ```
+
 > The pod will need to be restarted for the changes to take effect.
 
 2. This is necessary if the openDesk single sign-on no longer works, and you get a standard XWiki login dialogue instead:
-   - Find the XWiki ConfigMap `xwiki-init-scripts` and locate in the `entrypoint` key the lines beginning with `xwiki_replace_or_add "/usr/local/xwiki/data/xwiki.cfg"`
-   - Before those lines, add the following line while setting `<YOUR_TEMPORARY_SUPERADMIN_PASSWORD>` to a value you are happy with:
+   * Find the XWiki ConfigMap `xwiki-init-scripts` and locate in the `entrypoint` key the lines beginning with `xwiki_replace_or_add "/usr/local/xwiki/data/xwiki.cfg"`
+   * Before those lines, add the following line while setting `<YOUR_TEMPORARY_SUPERADMIN_PASSWORD>` to a value you are happy with:
+
      ```
          xwiki_replace_or_add "/usr/local/xwiki/data/xwiki.cfg" 'xwiki.superadminpassword' '<YOUR_TEMPORARY_SUPERADMIN_PASSWORD>'
      ```
-   - Restart the XWiki Pod.
-   - Access XWiki's web UI and login with `superadmin` and the password you set above.
-   - Once XWiki UI is fully rendered, remove the line with the temporary `superadmin` password from the aforementioned ConfigMap.
-   - Restart the XWiki Pod.
+
+   * Restart the XWiki Pod.
+   * Access XWiki's web UI and login with `superadmin` and the password you set above.
+   * Once XWiki UI is fully rendered, remove the line with the temporary `superadmin` password from the aforementioned ConfigMap.
+   * Restart the XWiki Pod.
 
 You should have now a fully functional XWiki instance with single sign-on and full-text search.
 
@@ -1383,24 +1412,26 @@ You should have now a fully functional XWiki instance with single sign-on and fu
 The update will remove unnecessary OX-Profiles in Nubus, so long as these profiles are in use.
 
 So please ensure that only the following two supported profiles are assigned to your users:
-- `opendesk_standard`: "opendesk Standard"
-- `none`: "Login disabled"
+
+* `opendesk_standard`: "opendesk Standard"
+* `none`: "Login disabled"
 
 You can review and update other accounts as follows:
-- Login as IAM admin.
-- Open the user module.
-- Open the extended search by clicking the funnel (DE: "Trichter") icon next to the search input field.
-- Open the "Property" (DE: "Eigenschaft") list and select "OX Access" (DE: "OX-Berechtigung").
-- Enter an asterisk (*) in the input field next to the list.
-- Start the search by clicking once more on the funnel icon.
-- Sort the result list for the "OX Access" column.
-- Edit every user that has a value different to `opendesk_standard` or `none`:
-  - Open the user.
-  - Go to section "OX App Suite".
-  - Change the value in the dropdown "OX Access" to either:
-    - "openDesk Standard" if the user should be able to use the Groupware module.
-    - "Login disabled" if the user should not use the Groupware module.
-  - Update the user account with the green "SAVE" button at the top of the page.
+
+* Login as IAM admin.
+* Open the user module.
+* Open the extended search by clicking the funnel (DE: "Trichter") icon next to the search input field.
+* Open the "Property" (DE: "Eigenschaft") list and select "OX Access" (DE: "OX-Berechtigung").
+* Enter an asterisk (*) in the input field next to the list.
+* Start the search by clicking once more on the funnel icon.
+* Sort the result list for the "OX Access" column.
+* Edit every user that has a value different to `opendesk_standard` or `none`:
+  * Open the user.
+  * Go to section "OX App Suite".
+  * Change the value in the dropdown "OX Access" to either:
+    * "openDesk Standard" if the user should be able to use the Groupware module.
+    * "Login disabled" if the user should not use the Groupware module.
+  * Update the user account with the green "SAVE" button at the top of the page.
 
 ##### Configuration Cleanup: Updated `global.imagePullSecrets`
 
@@ -1432,7 +1463,7 @@ functional:
 
 Until v0.9.0 openDesk used the LDAP entryUUID of a user to generate the user's Matrix ID. Due to restrictions of the
 Matrix protocol, an update to a Matrix ID is not possible. Therefore, it was technically convenient to use the UUID
-as they are immutable (see https://en.wikipedia.org/wiki/Universally_unique_identifier for more details on UUIDs.)
+as they are immutable (see <https://en.wikipedia.org/wiki/Universally_unique_identifier> for more details on UUIDs.)
 
 From the user experience perspective, that was a flawed approach, so from openDesk 1.0 onwards, by default, the openDesk login username is used to define the `localpart` of the Matrix ID.
 
@@ -1442,16 +1473,18 @@ must update their external ID in Synapse and deactivate the old user afterward. 
 Matrix account, losing their existing contacts, chats, and rooms.
 
 The following Admin API calls are helpful:
-- `GET /_synapse/admin/v2/users/@<entryuuid>:<matrixdomain>` get the user's existing external_id (auth_provider: "oidc")
-- `PUT /_synapse/admin/v2/users/@<entryuuid>:<matrixdomain>` update user's external_id with JSON payload:
+
+* `GET /_synapse/admin/v2/users/@<entryuuid>:<matrixdomain>` get the user's existing external_id (auth_provider: "oidc")
+* `PUT /_synapse/admin/v2/users/@<entryuuid>:<matrixdomain>` update user's external_id with JSON payload:
   `{ "external_ids": [ { "auth_provider": "oidc", "external_id": "<old_id>+deprecated" } ] }`
-- `POST /_synapse/admin/v1/deactivate/@<entryuuid>:<matrixdomain>` deactivate old user with JSON payload:
+* `POST /_synapse/admin/v1/deactivate/@<entryuuid>:<matrixdomain>` deactivate old user with JSON payload:
   `{ "erase": true }`
 
 For more details, check the Admin API documentation:
-https://element-hq.github.io/synapse/latest/usage/administration/admin_api/index.html
+<https://element-hq.github.io/synapse/latest/usage/administration/admin_api/index.html>
 
 You can enforce the old standard with the following setting:
+
 ```yaml
 functional:
  chat:
@@ -1486,12 +1519,12 @@ product names.
 
 This results in the following changes to the default subdomain naming:
 
-- **collabora**: `collabora` → `office`
-- **cryptpad**: `cryptpad` → `pad`
-- **minioApi**: `minio` → `objectstore`
-- **minioConsole**: `minio-console` → `objectstore-ui`
-- **nextcloud**: `fs` → `files`
-- **openproject**: `project` → `projects`
+* **collabora**: `collabora` → `office`
+* **cryptpad**: `cryptpad` → `pad`
+* **minioApi**: `minio` → `objectstore`
+* **minioConsole**: `minio-console` → `objectstore-ui`
+* **nextcloud**: `fs` → `files`
+* **openproject**: `project` → `projects`
 
 Existing deployments should keep the old subdomains because URL/link changes are not supported through all components.
 
@@ -1525,14 +1558,14 @@ global:
 
 In case you would like to update an existing deployment to use the new hostnames, you would be doing so at your own risk, so please consider the following:
 
-- Some of your user's bookmarks and links will stop working.
-- Portal links will get updated automatically.
-- The update of the OpenProject <-> Nextcloud file integration needs to be updated manually as follows:
-  - Use an account with functional admin permissions for both Nextcloud and OpenProject
-  - In Nextcloud: *Administration* > *Files* > *External file storages* > Select `Nextcloud at [your_domain]`
-    - Edit *Details* - *General Information* - *Storage provider* and update the *hostname* to `files.<your_domain>`
-  - In OpenProject: *Administration* > *OpenProject* > *OpenProject server*
-    - Update the *OpenProject host* to `projects.<your_domain>`
+* Some of your user's bookmarks and links will stop working.
+* Portal links will get updated automatically.
+* The update of the OpenProject <-> Nextcloud file integration needs to be updated manually as follows:
+  * Use an account with functional admin permissions for both Nextcloud and OpenProject
+  * In Nextcloud: _Administration_ > _Files_ > _External file storages_ > Select `Nextcloud at [your_domain]`
+    * Edit _Details_ - _General Information_ - _Storage provider_ and update the _hostname_ to `files.<your_domain>`
+  * In OpenProject: _Administration_ > _OpenProject_ > *OpenProject server*
+    * Update the _OpenProject host_ to `projects.<your_domain>`
 
 ##### Changed openDesk defaults: Dedicated group for access to the UDM REST API
 
@@ -1561,15 +1594,16 @@ If you need other accounts to use the API, please assign them to the aforementio
 
 With openDesk 1.0 the user permission for authenticated access to the Chat and Video Conference components was split into two separate permissions.
 
-Therefore, the newly added *Video Conference* permission has to be added to users that should have continued access to the component.
+Therefore, the newly added _Video Conference_ permission has to be added to users that should have continued access to the component.
 
 This can be done as IAM admin:
-- Open the *user* module.
-- Select all users that should get the permission for *Video Conference* using the checkbox left of the users' entry.
-- In top bar of the user table click on *Edit*.
-- Select the *openDesk* section from the left-hand menu.
-- Check the checkbox for *Video Conference* and the directly below check box for *Overwrite*.
-- Click on the green *Save* button at the top of the screen to apply the change.
+
+* Open the _user_ module.
+* Select all users that should get the permission for _Video Conference_ using the checkbox left of the users' entry.
+* In top bar of the user table click on _Edit_.
+* Select the _openDesk_ section from the left-hand menu.
+* Check the checkbox for _Video Conference_ and the directly below check box for _Overwrite_.
+* Click on the green _Save_ button at the top of the screen to apply the change.
 
 > [!tip]
 > If you have a lot of users and want to update (almost) all them, you can select all users by clicking the checkbox in the user's table header and then de-selecting the users you do not want to update.
@@ -1594,7 +1628,7 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 #### Versions ≥ v1.8.0 migrations-post
 
-- Automatically restarts the StatefulSet `ox-connector` due to updated handling of the Connector's provisioning secret.
+* Automatically restarts the StatefulSet `ox-connector` due to updated handling of the Connector's provisioning secret.
 
 ### Versions ≥ v1.6.0 (automated)
 
@@ -1603,7 +1637,7 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 #### Versions ≥ v1.6.0 migrations-post
 
-- Automatically restarts the StatefulSets `ums-provisioning-nats` and `ox-connector` due to a workaround applied on the NATS secrets, see the "Notes" segment of the ["Password seed" heading in getting-started.md](./docs/getting-started.md#password-seed)
+* Automatically restarts the StatefulSets `ums-provisioning-nats` and `ox-connector` due to a workaround applied on the NATS secrets, see the "Notes" segment of the ["Password seed" heading in getting-started.md](./docs/getting-started.md#password-seed)
 
 > [!note]
 > This change aims to prevent authentication failures with NATS in some Pods, which can lead to errors such as: `wait-for-nats Unavailable, waiting 2 seconds. Error: nats: 'Authorization Violation'`.
@@ -1615,12 +1649,12 @@ kubectl -n ${NAMESPACE} delete pvc ox-connector-ox-contexts-ox-connector-0
 
 #### Versions ≥ v1.2.0 migrations-pre
 
-- Automatically deletes PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
-- Automatically deletes StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
+* Automatically deletes PVC `group-membership-cache-ums-portal-consumer-0`: With the upgrade the Nubus Portal Consumer no longer requires to be executed with root privileges. The PVC contains files that require root permission to access them, therefore the PVC gets deleted (and re-created) during the upgrade.
+* Automatically deletes StatefulSet `ums-portal-consumer`: A bug was fixed in the templating of the Portal Consumer's PVC causing the values in `persistence.storages.nubusPortalConsumer.*` to be ignored. As these values are immutable, we had to delete the whole StatefulSet.
 
 #### Versions ≥ v1.2.0 migrations-post
 
-- Automatically restarts the Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` and deletes the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
+* Automatically restarts the Deployment `ums-provisioning-udm-transformer` and StatefulSet `ums-provisioning-udm-listener` and deletes the Nubus Provisioning consumer `durable_name:incoming` on stream `stream:incoming`: Due to a bug in Nubus 1.7.0 the `incoming` stream was blocked after the upgrade, the aforementioned measures unblock the stream.
 
 ### Versions ≥ v1.1.0 (automated)
 
@@ -1646,8 +1680,8 @@ The permissions required to execute the migrations can be found in the migration
 
 openDesk comes with two upgrade steps as part of the deployment; they can be found in the folder [/helmfile/apps](../helmfile/apps/) along with all other components:
 
-- `migrations-pre`: Is the very first app that gets deployed.
-- `migrations-post`: Is the last app that gets deployed.
+* `migrations-pre`: Is the very first app that gets deployed.
+* `migrations-post`: Is the last app that gets deployed.
 
 Both migrations must be deployed exclusively at their first/last position and not parallel with other components.
 
@@ -1657,10 +1691,10 @@ The status of the upgrade migrations is tracked in the ConfigMap `migrations-sta
 
 When a new upgrade migration is required, ensure to address the following list:
 
-- Update the generated release version file [`global.generated.yaml.gotmpl`](../helmfile/environments/default/global.generated.yaml.gotmpl) at least on the patch level to test the upgrade in your feature branch and trigger it in the `develop` branch after the feature branch was merged. During the release process, the value is overwritten by the release's version number.
-- You have to implement the migration logic as a runner script in the [`opendesk-migrations`](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations) image. Please find more instructions in the linked repository.
-- You most likely have to update the [`opendesk-migrations` Helm chart](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations) within the `rules` section of the [`role.yaml`](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/templates/role.yaml) to provide the permissions required for the execution of your migration's logic.
-- You must set the runner's ID you want to execute in the [migrations.yaml.gotmpl](../helmfile/shared/migrations.yaml.gotmpl). See also the `migrations.*` section of [the Helm chart's README.md](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/README.md).
-- Update the [`charts.yaml.gotmpl`](../helmfile/environments/default/charts.yaml.gotmpl) and [`images.yaml.gotmpl`](../helmfile/environments/default/images.yaml.gotmpl) to reflect the newer releases of the `opendesk-migrations` Helm chart and container image.
+* Update the generated release version file [`global.generated.yaml.gotmpl`](../helmfile/environments/default/global.generated.yaml.gotmpl) at least on the patch level to test the upgrade in your feature branch and trigger it in the `develop` branch after the feature branch was merged. During the release process, the value is overwritten by the release's version number.
+* You have to implement the migration logic as a runner script in the [`opendesk-migrations`](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/images/opendesk-migrations) image. Please find more instructions in the linked repository.
+* You most likely have to update the [`opendesk-migrations` Helm chart](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations) within the `rules` section of the [`role.yaml`](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/templates/role.yaml) to provide the permissions required for the execution of your migration's logic.
+* You must set the runner's ID you want to execute in the [migrations.yaml.gotmpl](../helmfile/shared/migrations.yaml.gotmpl). See also the `migrations.*` section of [the Helm chart's README.md](https://gitlab.opencode.de/bmi/opendesk/components/platform-development/charts/opendesk-migrations/-/blob/main/charts/opendesk-migrations/README.md).
+* Update the [`charts.yaml.gotmpl`](../helmfile/environments/default/charts.yaml.gotmpl) and [`images.yaml.gotmpl`](../helmfile/environments/default/images.yaml.gotmpl) to reflect the newer releases of the `opendesk-migrations` Helm chart and container image.
 
 [^1]: For PVC migrations in development we use the the [`migrate_pvc.py`](./migrations-helper/migrate_pvc.py) script. It comes without any warranty.

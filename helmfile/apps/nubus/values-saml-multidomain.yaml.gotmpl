@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: 2024 opendesk-edu
+# SPDX-License-Identifier: Apache-2.0
+#
+# SAML Multi-Domain Portal Configuration
+# This configuration implements SAML-based authentication for multi-domain portal deployment
+
+# Portal Server Configuration - SAML Authentication
+portalServer:
+  # Feature toggles for SAML environment
+  featureToggles:
+    umc_session_refresh: true  # Important for SAML session management
+    notifications_api: false
+    centered_layout: true
+    left_sidebar: false
+    newsfeed: {{ and .Values.apps.xwiki.enabled .Values.functional.portal.newsfeed.enabled }}
+    welcome_message: {{ .Values.functional.portal.welcomeMessage.enabled }}
+
+  # SAML requires UMC session refresh enabled
+  sessionRefreshEnabled: true
+
+# Portal Frontend Configuration - Remove OIDC components
+portalFrontend:
+  # No domain-aware.js injection for SAML authentication
+  # Frontend will use standard SAML redirects handled by the server
+  css: {{ .Values.theme.styles.portal.main | toJson }}
+  favicon: {{ .Values.theme.imagery.portal.faviconIco | toJson }}
+  faviconSvg: {{ .Values.theme.imagery.portal.faviconSvg | toJson }}
+  favicon96Png: {{ .Values.theme.imagery.portal.favicon96Png | toJson }}
+  appleTouchIcon: {{ .Values.theme.imagery.portal.appleTouchIcon | toJson }}
+
+# Portal Consumer Configuration - SAML mode
+portal:
+  authMode: "saml"
+  # Ensure assets URL is relative for multi-domain support
+  assetsBaseUrl: "/univention/portal"
+  
+# Ensure no OIDC environment variables are set
+# All OIDC configuration is removed in favor of SAML
+
+# Multi-domain ingress resources will handle multi-domain routing
+# No need for domain-aware.js as SAML handles domain detection server-side

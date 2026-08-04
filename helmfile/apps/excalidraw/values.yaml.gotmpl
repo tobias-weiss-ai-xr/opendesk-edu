@@ -17,19 +17,26 @@ excalidraw:
       cpu: 200m
       memory: 256Mi
 
+  oidc:
+    enabled: {{ .Values.apps.excalidraw.oidc.enabled | default true }}
+    issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
+    clientId: "opendesk-excalidraw"
+    clientSecret: "{{ .Values.secrets.keycloak.clientSecret.excalidraw | default "" }}"
+    cookieSecret: "{{ .Values.secrets.keycloak.cookieSecret.excalidraw | default "" }}"
+
 ingress:
   enabled: {{ .Values.ingress.enabled }}
   className: "haproxy"
   annotations:
     {{ .Values.annotations.excalidraw.ingress | toYaml | nindent 4 }}
     haproxy-ingress.github.io/ssl-redirect: "true"
-    haproxy-ingress.github.io/headers: "X-Forwarded-Host excalidraw.opendesk.hrz.uni-marburg.de"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host excalidraw.{{ .Values.global.domain }}"
   hosts:
-    - host: "excalidraw.opendesk.hrz.uni-marburg.de"
+    - host: "excalidraw.{{ .Values.global.domain }}"
       paths:
         - path: /
           pathType: "ImplementationSpecific"
   tls:
     - secretName: "opendesk-certificates-tls"
       hosts:
-        - "excalidraw.opendesk.hrz.uni-marburg.de"
+        - "excalidraw.{{ .Values.global.domain }}"

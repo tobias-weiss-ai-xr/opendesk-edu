@@ -15,6 +15,7 @@
 ### Installation
 
 #### macOS (Homebrew)
+
 ```bash
 brew install docker-desktop
 brew install kubectl
@@ -25,6 +26,7 @@ brew install node
 ```
 
 #### Ubuntu/Debian
+
 ```bash
 # Docker Desktop
 wget https://desktop.docker.com/linux/main/amd64/docker-desktop-4.32.0-amd64.deb
@@ -46,6 +48,7 @@ sudo apt install python3 python3-pip nodejs npm
 ```
 
 #### Windows (winget/powershell)
+
 ```powershell
 # Docker Desktop
 winget install Docker.DockerDesktop
@@ -69,6 +72,7 @@ winget install OpenJS.NodeJS
 ## Local Cluster Setup
 
 ### Option 1: Kind (Recommended)
+
 ```bash
 # Install kind
 go install sigs.k8s.io/kind@v0.24.0
@@ -76,6 +80,7 @@ kind create cluster --name opendesk-edu
 ```
 
 ### Option 2: Minikube
+
 ```bash
 # Install minikube
 winget install Kubernetes.minikube
@@ -83,12 +88,14 @@ minikube start
 ```
 
 ### Option 3: Docker Desktop Kubernetes
+
 - Enable Kubernetes in Docker Desktop settings
 - Set as default context: `kubectl config use-context docker-desktop`
 
 ## Development Workflow
 
 ### 1. Configure Environment
+
 ```bash
 # Copy environment template
 cp helmfile/environments/default/global.yaml.gotmpl \
@@ -99,6 +106,7 @@ nano helmfile/environments/default/global.yaml
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 # Download chart dependencies
 cd helmfile
@@ -106,6 +114,7 @@ helmfile deps
 ```
 
 ### 3. Test Charts
+
 ```bash
 # Run all tests (lint + template + unit tests)
 make test
@@ -118,6 +127,7 @@ make spellcheck # Documentation spellcheck
 ```
 
 ### 4. Deploy Locally
+
 ```bash
 # Dry-run to see what would be deployed
 helmfile -e default apply --diff
@@ -131,6 +141,7 @@ kubectl get svc -A
 ```
 
 ### 5. Access Services
+
 ```bash
 # Port-forward to a service (example)
 kubectl port-forward svc/keycloak 8080:8080 -n keycloak
@@ -142,6 +153,7 @@ kubectl get ingress -A
 ## Troubleshooting
 
 ### Helm/ helmfile Issues
+
 ```bash
 # Verify helmfile syntax
 helmfile -e default template
@@ -151,6 +163,7 @@ helmfile -e default apply --debug
 ```
 
 ### Cluster Issues
+
 ```bash
 # Check cluster status
 kubectl cluster-info
@@ -164,6 +177,7 @@ kubectl describe pod <pod-name> -n <namespace>
 ```
 
 ### Resource Issues
+
 ```bash
 # Increase Docker Desktop resource allocation
 # Settings > Resources > CPUs/Memory
@@ -175,12 +189,14 @@ kubectl top pods -A
 ## Development Scripts
 
 The `scripts/` directory contains utility scripts:
+
 - `scripts/user_import/` - User provisioning tooling
 - `scripts/maintenance/` - Backup/restore operations
 
 ## IDE Setup
 
 ### VS Code Extensions
+
 - [Helm Intellisense](https://marketplace.visualstudio.com/items?itemName=technosophos.helm-vscode)
 - [Kubernetes](https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools)
 - [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)

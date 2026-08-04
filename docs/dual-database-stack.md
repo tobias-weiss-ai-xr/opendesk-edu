@@ -12,6 +12,7 @@ SPDX-License-Identifier: Apache-2.0
 ---
 
 <a name="english"></a>
+
 ## English
 
 ### Executive Summary
@@ -107,6 +108,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 **Version:** 14+ (recommended: 14 or 15)
 
 **Strengths:**
+
 - Mature, battle-tested ecosystem
 - Excellent for relational data and complex queries
 - Strong ACID compliance
@@ -115,6 +117,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 - Wide range of extensions (PostGIS, pg_trgm, etc.)
 
 **Used by:**
+
 - SOGo (webmail, calendar, contacts)
 - Keycloak (identity management, SSO)
 - Nextcloud (file storage metadata)
@@ -128,6 +131,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 **Version:** 10.11+ (recommended: 10.11 or 11.x)
 
 **Strengths:**
+
 - MySQL compatible and proven
 - Designed for high-scale web applications
 - Faster reads than PostgreSQL for simple queries
@@ -136,6 +140,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 - Popular in hosted email systems
 
 **Used by:**
+
 - Grommunio (groupware, email, calendar, contacts)
 - User information and authentication
 - Per-user email messages (SQLite databases)
@@ -169,6 +174,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 | **Total** | **60 GiB** | **+220 GiB** | **220 MB** | **Varying** |
 
 **Notes:**
+
 - Grommunio stores email messages in per-user SQLite databases
 - Archival policies can reduce storage over time
 - Storage can be tiered (NVMe for hot data, HDD for archives)
@@ -180,6 +186,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 #### Backup Strategy
 
 **PostgreSQL:**
+
 ```yaml
 # Recommended backup tools
 - pg_dump: Logical backups (small, portable)
@@ -188,6 +195,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 ```
 
 **MariaDB:**
+
 ```yaml
 # Recommended backup tools
 - mysqldump: Logical backups (compatible with MariaDB)
@@ -196,6 +204,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 ```
 
 **Grommunio SQLite:**
+
 ```yaml
 # Per-user SQLite databases
 - Location: /var/lib/grommunio/users/{username}/sqlite/
@@ -207,12 +216,14 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 #### High Availability
 
 **PostgreSQL:**
+
 - Patroni (recommended) or repmgr
 - Quorum-based automatic failover
 - Streaming replication with synchronous commits
 - Load balancer: pgBouncer or HAProxy
 
 **MariaDB:**
+
 - Galera Cluster (recommended) or Master-Slave replication
 - Synchronous replication for data consistency
 - Automatic failover (MaxScale or ProxySQL)
@@ -221,6 +232,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 #### Monitoring
 
 **Metrics to Track:**
+
 - Database connections per service
 - Query latency (p50, p95, p99)
 - Replication lag (for HA setups)
@@ -228,6 +240,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 - Memory usage and cache hit ratios
 
 **Tools:**
+
 - Prometheus Operator (postgres-exporter, mysqld-exporter)
 - Grafana dashboards
 - Alertmanager alerts for replication lag, connection limits
@@ -239,6 +252,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 #### Network Isolation
 
 **Recommended Network Policies:**
+
 ```yaml
 # PostgreSQL network
 - Ingress: Keycloak, Nextcloud, SOGo, ILIAS, Moodle, OX
@@ -256,12 +270,14 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 #### Authentication
 
 **PostgreSQL:**
+
 - Use md5 or scram-sha-256 passwords
 - SSL/TLS required for connections
 - Separate database users for each service
 - Least privilege principle
 
 **MariaDB:**
+
 - Use caching_sha2_password authentication
 - SSL/TLS required for connections
 - Separate database user for Grommunio
@@ -274,6 +290,7 @@ openDesk Edu uses a **dual database stack** architecture to support both Postgre
 #### PostgreSQL Optimization
 
 **Query Performance:**
+
 ```sql
 -- Recommended settings for production
 shared_buffers = 25% of RAM
@@ -285,6 +302,7 @@ wal_buffers = 16MB
 ```
 
 **Connection Pooling:**
+
 - Use pgBouncer for connection pooling
 - Pool size: 10-20 connections per service
 - Transaction mode mode vs Session mode based on workload
@@ -292,6 +310,7 @@ wal_buffers = 16MB
 #### MariaDB Optimization
 
 **Query Performance:**
+
 ```sql
 -- Recommended settings for production
 innodb_buffer_pool_size = 50-70% of RAM
@@ -302,6 +321,7 @@ query_cache_size = 0 (disabled in MariaDB 10+)
 ```
 
 **Connection Pooling:**
+
 - Use ProxySQL or MaxScale for connection pooling
 - Pool size: 10-15 connections per service
 - Smart routing based on query type
@@ -315,6 +335,7 @@ query_cache_size = 0 (disabled in MariaDB 10+)
 **Scenario:** You're currently running SOGo with PostgreSQL and want to add Grommunio as an alternative.
 
 **Steps:**
+
 1. Deploy MariaDB alongside existing PostgreSQL
 2. Install Grommunio Helm chart with MariaDB dependency
 3. Configure Grommunio for OIDC authentication with existing Keycloak
@@ -324,6 +345,7 @@ query_cache_size = 0 (disabled in MariaDB 10+)
 7. Both 스택s run in parallel - no forced migration
 
 **Advantages:**
+
 - No downtime for PostgreSQL services
 - Users can choose between SOGo and Grommunio
 - Gradual migration approach
@@ -334,6 +356,7 @@ query_cache_size = 0 (disabled in MariaDB 10+)
 **Scenario:** Future Grommunio improvements might encourage full MariaDB migration.
 
 **Considerations:**
+
 - SOGo doesn't support MariaDB effectively
 - Would require alternative groupware (only Grommunio or OX)
 - Reduces choice and flexibility
@@ -348,21 +371,25 @@ query_cache_size = 0 (disabled in MariaDB 10+)
 #### Common Issues
 
 **Issue 1: High Memory Usage**
+
 - **Symptom:** Node memory pressure, pod evictions
 - **Cause:** PostgreSQL/MariaDB misconfigured for available RAM
 - **Solution:** Adjust shared_buffers/effective_cache_size for PG, innodb_buffer_pool_size for MariaDB
 
 **Issue 2: Slow Query Performance**
+
 - **Symptom:** Grommunio or SOGo slow to load
 - **Cause:** Missing indexes, connection pool exhausted
 - **Solution:** Add indexes, increase pool size, check query plans
 
 **Issue 3: Replication Lag**
+
 - **Symptom:** Stale data on replicas
 - **Cause:** Network bandwidth, high write volume
 - **Solution:** Optimize queries, increase network, check commit consistency settings
 
 **Issue 4: Storage Exhaustion**
+
 - **Symptom:** Disk full, pod crashes
 - **Cause:** Grommunio SQLite databases growing too large
 - **Solution:** Implement archival policy, increase storage, add monitoring alerts
@@ -370,17 +397,20 @@ query_cache_size = 0 (disabled in MariaDB 10+)
 #### Debug Commands
 
 **Check PostgreSQL Connections:**
+
 ```sql
 SELECT count(*), state FROM pg_stat_activity GROUP BY state;
 ```
 
 **Check MariaDB Connections:**
+
 ```sql
 SHOW STATUS LIKE 'Threads_connected';
 SHOW PROCESSLIST;
 ```
 
 **Check Grommunio SQLite Size:**
+
 ```bash
 du -sh /var/lib/grommunio/users/*/sqlite/
 ```
@@ -399,11 +429,13 @@ du -sh /var/lib/grommunio/users/*/sqlite/
 | Complexity | Low | Medium | HA setup, monitoring |
 
 **Annual Cost Increase:**
+
 - Cloud: +40-60% infrastructure cost
 - Self-managed: +30-50% hardware cost
 - Staff: +10-20% operational overhead (monitoring two stacks)
 
 **ROI Justification:**
+
 - User choice and flexibility = higher adoption
 - Grommunio's ActiveSync support = mobile-first users
 - Competitive advantage vs single-stack solutions
@@ -414,6 +446,7 @@ du -sh /var/lib/grommunio/users/*/sqlite/
 ### Best Practices
 
 #### DO ✓
+
 1. Deploy PostgreSQL and MariaDB on separate nodes if possible
 2. Use dedicated storage classes for each database
 3. Monitor both stacks with unified dashboards
@@ -422,6 +455,7 @@ du -sh /var/lib/grommunio/users/*/sqlite/
 6. Test failover procedures quarterly
 
 #### DON'T ✗
+
 1. Don't run both databases on the same node in production
 2. Don't share storage volumes between databases
 3. Don't use root credentials for applications
@@ -442,6 +476,7 @@ du -sh /var/lib/grommunio/users/*/sqlite/
 ---
 
 <a name="deutsch"></a>
+
 ## Deutsch
 
 ### Zusammenfassung
@@ -492,21 +527,25 @@ openDesk Edu verwendet eine **Architektur mit zwei Datenbank-Stacks**, um sowohl
 #### Häufige Probleme
 
 **Problem 1: Hoher Speicherverbrauch**
+
 - **Symptom:** Speicherdruck auf Knoten, Pod-Evictionen
 - **Ursache:** Fehlkonfiguration von PostgreSQL/MariaDB für verfügbaren RAM
 - **Lösung:** shared_buffers/effective_cache_size für PG, innodb_buffer_pool_size für MariaDB anpassen
 
 **Problem 2: Langsame Abfrageleistung**
+
 - **Symptom:** Grommunio oder SOGo laden langsam
 - **Ursache:** Fehlende Indizes, Verbindungspool erschöpft
 - **Lösung:** Indizes hinzufügen, Pool-Größe erhöhen, Abfragepläne prüfen
 
 **Problem 3: Replikationsverzögerung**
+
 - **Symptom:** Veraltete Daten auf Replikas
 - **Ursache:** Netzwerkbandbreite, hohes Schreibvolumen
 - **Lösung:** Abfragen optimieren, Netzwerk erweitern, Commit-Consistency-Einstellungen prüfen
 
 **Problem 4: Speichererschöpfung**
+
 - **Symptom:** Festplatte voll, Pods stürzen ab
 - **Ursache:** Grommunio-SQLite-Datenbanken werden zu groß
 - **Lösung:** Archivierungsrichtlinie implementieren, Speicher erweitern, Monitoring-Warnungen hinzufügen

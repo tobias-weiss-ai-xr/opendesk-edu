@@ -11,10 +11,36 @@
 /helmfile/charts/moodle/         @tobias-weiss-ai-xr
 /helmfile/charts/bigbluebutton/  @tobias-weiss-ai-xr
 /helmfile/charts/opencloud/      @tobias-weiss-ai-xr
+/helmfile/charts/etherpad/       @tobias-weiss-ai-xr
+/helmfile/charts/bookstack/       @tobias-weiss-ai-xr
+/helmfile/charts/planka/         @tobias-weiss-ai-xr
+/helmfile/charts/zammad/         @tobias-weiss-ai-xr
+/helmfile/charts/limesurvey/     @tobias-weiss-ai-xr
+/helmfile/charts/drawio/         @tobias-weiss-ai-xr
+/helmfile/charts/excalidraw/     @tobias-weiss-ai-xr
+/helmfile/charts/self-service-password/ @tobias-weiss-ai-xr
+/helmfile/charts/sogo/           @tobias-weiss-ai-xr
+/helmfile/charts/f13/            @tobias-weiss-ai-xr
+/helmfile/charts/grommunio/      @tobias-weiss-ai-xr
+/helmfile/charts/snipr/          @tobias-weiss-ai-xr
+/helmfile/charts/typo3/          @tobias-weiss-ai-xr
 /helmfile/apps/ilias/            @tobias-weiss-ai-xr
 /helmfile/apps/moodle/           @tobias-weiss-ai-xr
 /helmfile/apps/bigbluebutton/    @tobias-weiss-ai-xr
 /helmfile/apps/opencloud/        @tobias-weiss-ai-xr
+/helmfile/apps/etherpad/        @tobias-weiss-ai-xr
+/helmfile/apps/bookstack/        @tobias-weiss-ai-xr
+/helmfile/apps/planka/           @tobias-weiss-ai-xr
+/helmfile/apps/zammad/           @tobias-weiss-ai-xr
+/helmfile/apps/limesurvey/       @tobias-weiss-ai-xr
+/helmfile/apps/drawio/           @tobias-weiss-ai-xr
+/helmfile/apps/excalidraw/       @tobias-weiss-ai-xr
+/helmfile/apps/self-service-password/ @tobias-weiss-ai-xr
+/helmfile/apps/sogo/             @tobias-weiss-ai-xr
+/helmfile/apps/f13/              @tobias-weiss-ai-xr
+/helmfile/apps/grommunio/        @tobias-weiss-ai-xr
+/helmfile/apps/snipr/            @tobias-weiss-ai-xr
+/helmfile/apps/typo3/            @tobias-weiss-ai-xr
 
 # CI and automation
 /.github/                        @tobias-weiss-ai-xr

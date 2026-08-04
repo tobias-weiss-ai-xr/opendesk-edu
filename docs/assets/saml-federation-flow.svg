@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" font-family="system-ui,-apple-system,sans-serif">
+  <style>
+    .g{font-size:10px;fill:#6B7280;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+    .n{font-size:11px;fill:#1F2937;text-anchor:middle;dominant-baseline:central;font-weight:500}
+    .s{rx:6;stroke-width:1.5}
+  </style>
+  <rect width="1200" height="400" fill="#FAFBFC"/>
+  <text x="30" y="20" class="g">SAML Federation Flow</text>
+  
+  <!-- University IdP -->
+  <rect x="30" y="32" width="180" height="40" rx="20" fill="#EFF6FF" stroke="#2563EB" class="s"/>
+  <text x="120" y="52" class="n" fill="#2563EB">University IdP</text>
+  <text x="120" y="62" class="n" fill="#93C5FD" font-size="9">(DFN-AAI)</text>
+  
+  <!-- Arrow 1 -->
+  <line x1="210" y1="52" x2="245" y2="52" stroke="#2563EB" stroke-width="1.5" marker-end="url(#ab)"/>
+  <text x="228" y="45" font-size="8" fill="#2563EB">SAML</text>
+  
+  <!-- Keycloak Broker -->
+  <rect x="250" y="32" width="180" height="40" rx="20" fill="#EFF6FF" stroke="#2563EB" class="s"/>
+  <text x="340" y="52" class="n" fill="#2563EB">Keycloak Broker</text>
+  <text x="340" y="62" class="n" fill="#93C5FD" font-size="9">(SAML→OIDC)</text>
+  
+  <!-- Arrow 2 -->
+  <line x1="430" y1="52" x2="465" y2="52" stroke="#2563EB" stroke-width="1.5" marker-end="url(#ab)"/>
+  <text x="448" y="45" font-size="8" fill="#2563EB">OIDC</text>
+  
+  <!-- openDesk Services -->
+  <rect x="470" y="32" width="180" height="40" rx="20" fill="#EFF6FF" stroke="#2563EB" class="s"/>
+  <text x="560" y="52" class="n" fill="#2563EB">openDesk Services</text>
+  <text x="560" y="62" class="n" fill="#93C5FD" font-size="9">(ILIAS, Moodle, BBB...)</text>
+  
+  <!-- Attribute Mapping -->
+  <rect x="30" y="100" width="620" height="100" rx="10" fill="#F5F3FF" stroke="#E9E5F5"/>
+  <text x="50" y="118" class="g" fill="#7C3AED">Attribute Mapping</text>
+  
+  <rect x="45" y="128" width="150" height="24" rx="4" fill="#fff" stroke="#571EFA" class="s"/>
+  <text x="120" y="145" class="n" fill="#7C3AED">eduPersonAffiliation → roles</text>
+  
+  <rect x="210" y="128" width="150" height="24" rx="4" fill="#fff" stroke="#571EFA" class="s"/>
+  <text x="285" y="145" class="n" fill="#7C3AED">mail → email</text>
+  
+  <rect x="375" y="128" width="150" height="24" rx="4" fill="#fff" stroke="#571EFA" class="s"/>
+  <text x="450" y="145" class="n" fill="#7C3AED">displayName → displayName</text>
+  
+  <rect x="45" y="164" width="150" height="24" rx="4" fill="#fff" stroke="#571EFA" class="s"/>
+  <text x="120" y="181" class="n" fill="#7C3AED">cn → firstName</text>
+  
+  <rect x="210" y="164" width="150" height="24" rx="4" fill="#fff" stroke="#571EFA" class="s"/>
+  <text x="285" y="181" class="n" fill="#7C3AED">sn → lastName</text>
+  
+  <rect x="375" y="164" width="150" height="24" rx="4" fill="#fff" stroke="#571EFA" class="s"/>
+  <text x="450" y="181" class="n" fill="#7C3AED">uid → username</text>
+  
+  <!-- Arrow from Keycloak to Attribute Mapping -->
+  <line x1="340" y1="76" x2="340" y2="98" stroke="#2563EB" stroke-width="1"/>
+  
+  <defs>
+    <marker id="ab" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <polygon points="0 0,10 3.5,0 7" fill="#2563EB"/>
+    </marker>
+  </defs>
+</svg>
