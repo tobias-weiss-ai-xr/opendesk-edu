@@ -32,6 +32,7 @@ SPDX-License-Identifier: Apache-2.0
         * [New persistence requirement: OX Connector requires its own PostgreSQL database](#new-persistence-requirement-ox-connector-requires-its-own-postgresql-database)
         * [Full re-provisioning of all objects on upgrade](#full-re-provisioning-of-all-objects-on-upgrade)
         * [Changed Helmfile structure: `userNamespaces` setting moved to `technical.userNamespaces`](#changed-helmfile-structure-usernamespaces-setting-moved-to-technicalusernamespaces)
+        * [Changed Helmfile default: Matrix federation is no longer enabled by default](#changed-helmfile-default-matrix-federation-is-no-longer-enabled-by-default)
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
@@ -247,6 +248,65 @@ After:
 technical:
   userNamespaces: true
 ```
+
+##### Changed Helmfile default: Matrix federation is no longer enabled by default
+
+**Target group:** Deployments using the chat module to exchange messages with users of other homeservers.
+
+**Context**
+
+openDesk's Synapse homeserver can federate with other Matrix homeservers. Previously federation was
+enabled by default, which meant every new deployment exposed the federation endpoint and accepted
+federation traffic from any homeserver on the internet ("open federation") unless the operator
+actively turned it off. To harden the default deployment, `functional.externalServices.matrix.federation.enabled`
+is now `false`, so federation is an explicit opt-in decision.
+
+Open federation noticeably increases the attack surface of a homeserver: The federation API is
+reachable by arbitrary remote servers, and a large share of the vulnerabilities reported against
+Synapse can only be triggered over that path. A recent example is the Synapse 1.157.2 security
+release shipped with openDesk 1.17.1 and 1.16.2, whose CVE fixes were, per the
+[upstream release notes](https://github.com/element-hq/synapse/releases/tag/v1.157.2), especially
+relevant for setups configured with open federation. Deployments without federation, or with
+federation limited to a known set of trusted partner domains, were largely unaffected.
+Switching off or restricted federation therefore reduces both the exposure to such issues and the
+urgency of reacting to them.
+
+**Required action**
+
+If your deployment federates with other homeservers, re-enable federation explicitly:
+
+```yaml
+functional:
+  externalServices:
+    matrix:
+      federation:
+        enabled: true
+```
+
+Additionally, you can restrict federation to a defined set of homeserver domains instead of
+federating openly. When `domainAllowList` is non-empty, Synapse only federates with the listed
+domains:
+
+```yaml
+functional:
+  externalServices:
+    matrix:
+      federation:
+        enabled: true
+        domainAllowList:
+          - "partner-one.example"
+          - "partner-two.example"
+```
+
+An empty list (`domainAllowList: []`, the default) means no restriction, i.e. open federation with
+all reachable homeservers. We recommend maintaining an allow list wherever the set of federation
+partners is known in advance.
+
+> [!note]
+> Changing the setting does not remove already federated rooms or their history; it only stops
+> further federation traffic. Existing rooms shared with users on other homeservers will no longer
+> receive or send updates once federation is disabled or the remote domain is not part of the
+> allow list.
 
 ### Versions ≥ v1.17.0
 
