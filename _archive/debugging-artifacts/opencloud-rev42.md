@@ -1,0 +1,15 @@
+- generic [ref=e3]:
+  - generic [ref=e4]: Zur Seite Zugriff verweigert navigiert
+  - button "Zum Hauptinhalt springen" [ref=e5]
+  - generic [ref=e6]:
+    - heading "Zugriff verweigert" [level=1] [ref=e7]
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - img [ref=e11]
+          - heading "Nicht angemeldet" [level=2] [ref=e12]
+        - paragraph [ref=e14]: Das könnte aufgrund einer routinemäßigen Abmeldung aus Sicherheitsgründen geschehen sein oder Ihr Benutzerkonto ist inaktiv oder noch nicht freigeschaltet. Bitte versuchen Sie es nach einiger Zeit erneut oder wenden Sie sich an Ihre Administration.
+        - paragraph [ref=e16]: OpenCloud – Excellent file sharing
+      - link "Erneut anmelden" [ref=e17] [cursor=pointer]:
+        - /url: /login
+    - img "OpenCloud emblem" [ref=e18]

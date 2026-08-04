@@ -1,0 +1,294 @@
+# Zot Registry Configuration ConfigMap
+# SPDX-License-Identifier: Apache-2.0
+# Purpose: Configuration for Zot Registry
+# Security Level: SAFE TO COMMIT (no secrets, only non-sensitive config)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zot-config
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: config
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Zot Registry configuration - pull-through cache for GitHub/GitLab registries"
+data:
+  # Main configuration file
+  config.yml: |
+    version: 2.0.0
+
+    server:
+      addr: ":8080"
+      http:
+        enablePprof: false
+        enableMetrics: true
+        idleTimeout: 5m
+        readTimeout: 30s
+        writeTimeout: 30s
+      tls:
+        enabled: false
+      rateLimits:
+        upload: 100
+        download: 200
+        requestsPerSecond: 200
+
+    storage:
+      rootDirectory: /var/lib/zot/storage
+      filesystem:
+        maxThreads: 10
+        dedicatedBlobDir: true
+        inlineBlobSize: 1024
+        cache:
+          enabled: true
+          directory: /var/lib/zot/cache
+          maxSize: "10Gi"
+          maxEntries: 10000
+          ttl: 24h
+        chunkSize: 5Mi
+        maxUploadSize: "10Gi"
+      gc:
+        enabled: true
+        interval: 24h
+        deleteUntagged: true
+        keepUntaggedManifests: 5
+        dryRun: false
+      s3: null
+      gcs: null
+      azure: null
+
+    auth:
+      htpasswd:
+        path: /etc/zot/passwd
+        realm: "Zot Registry - openDesk Cache"
+        algorithm: bcrypt
+      allowAnonymousReads: true
+      allowAnonymousWrites: false
+      token:
+        enabled: false
+
+    accessControl:
+      roles:
+        - name: "reader"
+          permissions:
+            read:
+              - "*"
+        - name: "pusher"
+          permissions:
+            read:
+              - "*"
+            write:
+              - "registry.gitlab.opencode.de/umr/*"
+              - "ghcr.io/opendesk-edu/*"
+            delete:
+              - "registry.gitlab.opencode.de/umr/*"
+              - "ghcr.io/opendesk-edu/*"
+        - name: "admin"
+          permissions:
+            read:
+              - "*"
+            write:
+              - "*"
+            delete:
+              - "*"
+      users:
+        - name: "cache-user"
+          password: "${ZOT_CACHE_PASSWORD}"
+          roles: ["reader", "pusher"]
+        - name: "admin"
+          password: "${ZOT_ADMIN_PASSWORD}"
+          roles: ["admin"]
+        - name: "ci-bot"
+          password: "${ZOT_CI_PASSWORD}"
+          roles: ["pusher"]
+
+    upstream:
+      - name: ghcr
+        url: https://ghcr.io
+        tlsVerify: true
+        timeout: 30s
+        maxRetries: 3
+        auth:
+          username: "${GHCR_USERNAME}"
+          password: "${GHCR_PASSWORD}"
+        pullThrough:
+          enabled: true
+          destinations:
+            - "ghcr.io/opendesk-edu/*"
+            - "ghcr.io/tobias-weiss-ai-xr/*"
+        proxy:
+          enabled: true
+          ttl: 1h
+
+      - name: gitlab-opencode
+        url: https://registry.gitlab.opencode.de
+        tlsVerify: true
+        timeout: 30s
+        maxRetries: 3
+        auth:
+          username: "${GITLAB_USERNAME}"
+          password: "${GITLAB_PASSWORD}"
+        pullThrough:
+          enabled: true
+          destinations:
+            - "registry.gitlab.opencode.de/umr/*"
+        proxy:
+          enabled: true
+          ttl: 1h
+
+      - name: dockerhub
+        url: https://registry-1.docker.io
+        tlsVerify: true
+        timeout: 30s
+        maxRetries: 3
+        pullThrough:
+          enabled: false
+        rateLimits:
+          requestsPerSecond: 10
+
+    cache:
+      embedded:
+        enabled: true
+        maxSize: "10Gi"
+        maxEntries: 10000
+        gcInterval: 1h
+        evictionPolicy: "LRU"
+      redis:
+        enabled: false
+
+    notification:
+      audit:
+        enabled: true
+        file: /var/log/zot/audit.log
+        maxSize: 100
+        maxBackups: 5
+        rotate:
+          enabled: true
+          maxAge: 30
+          compress: true
+      events:
+        - Push
+        - Pull
+        - Delete
+        - AuthenticationFailure
+        - AuthorizationFailure
+        - CacheHit
+        - CacheMiss
+        - UpstreamPull
+      email:
+        enabled: false
+
+    security:
+      scan:
+        enabled: false
+      rateLimit:
+        ip:
+          enabled: true
+          requestsPerSecond: 100
+          burst: 200
+          whitelist:
+            - "10.0.0.0/8"
+            - "172.16.0.0/12"
+            - "192.168.0.0/16"
+      cors:
+        enabled: false
+      cosign:
+        enabled: false
+
+    network:
+      http:
+        proxy:
+          enabled: false
+      timeout: 30s
+      keepAlive:
+        enabled: true
+        interval: 15s
+        timeout: 30s
+
+    gc:
+      schedule:
+        - at: "00:00"
+          keepSigned: true
+          keepUntagged: false
+          dryRun: false
+        - at: "0 2 * * 0"
+          keepSigned: true
+          keepUntagged: false
+          deleteUntaggedOlderThan: 30d
+          dryRun: false
+      quotas:
+        - name: "cache-quota"
+          maxStorage: "50Gi"
+          maxArtifacts: 5000
+
+    backup:
+      enabled: true
+      directory: /var/lib/zot/backups
+      schedule:
+        - at: "01:00"
+          type: full
+          keep: 7
+        - at: "0 3 * * 0"
+          type: full
+          keep: 4
+        - at: "0 4 1 * *"
+          type: full
+          keep: 12
+      compress: true
+      compressionLevel: 6
+
+    logging:
+      level: info
+      output: "/var/log/zot/zot.log"
+      format: json
+      rotation:
+        enabled: true
+        maxSize: 100
+        maxBackups: 5
+        maxAge: 30
+        compress: true
+
+    api:
+      enableOCI: true
+      enableDockerV2: true
+      pagination:
+        maxResults: 100
+        defaultResults: 25
+      etag:
+        enabled: true
+---
+kind: ConfigMap
+metadata:
+  name: zot-config-env
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    component: config
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching
+  annotations:
+    description: "Environment variables for Zot Registry"
+data:
+  # Zot environment variables
+  ZOT_CUSTOM_CERT_DIR: /etc/zot/certs
+  ZOT_REGISTRY_HTTP_PORT: "8080"
+  ZOT_REGISTRY_HTTPS_PORT: "8443"
+  ZOT_LOG_LEVEL: info
+  ZOT_LOG_OUTPUT: /var/log/zot/zot.log
+  ZOT_STORAGE_ROOT: /var/lib/zot/storage
+  ZOT_CACHE_ROOT: /var/lib/zot/cache
+  ZOT_ENABLE_ANALYTICS: "false"
+  ZOT_ENABLE_METRICS: "true"
+  ZOT_ENABLE_VULNERABILITY_SCANNING: "false"
+  
+  # Upstream credentials (will be overridden by Secrets)
+  GHCR_USERNAME: ""
+  GHCR_PASSWORD: ""
+  GITLAB_USERNAME: ""
+  GITLAB_PASSWORD: ""
+  ZOT_CACHE_PASSWORD: ""
+  ZOT_ADMIN_PASSWORD: ""
+  ZOT_CI_PASSWORD: ""

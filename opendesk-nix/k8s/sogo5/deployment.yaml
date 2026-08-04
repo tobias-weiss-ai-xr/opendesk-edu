@@ -1,0 +1,504 @@
+# SOGo 5 Deployment Configuration
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sogo5
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    opendesk.org/component: mail-calendar-contacts
+    opendesk.org.version: "5.8.0"
+    
+    de.zki.it-grundschutz.module: SY.3.4Mail
+    de.zki.it-grundschutz.layer: Application
+    de.zki.it-grundschutz.classification: internal
+    
+    de.container.gov.component: sogo5
+    de.container.gov.security-level: enhanced
+
+spec:
+  replicas: 2
+  
+  selector:
+    matchLabels:
+      app: sogo
+      version: "5.8.0"
+      component: app
+  
+  # Rolling update strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  
+  # Minimum available pods during updates
+  minReadySeconds: 30
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 5
+
+  template:
+    metadata:
+      labels:
+        app: sogo
+        version: "5.8.0"
+        component: app
+        
+        # For network policies
+        network-policy: allow-internal
+        
+        # For monitoring
+        prometheus.io/scrape: "false"  # SOGo doesn't expose Prometheus metrics
+        
+        # ZKI IT-Grundschutz
+        de.zki.it-grundschutz.module: SY.3.4Mail
+      
+      annotations:
+        # Checksum for config reload
+        checksum/config: "${HASH_CONFIG:-default}"
+        checksum/secret: "${HASH_SECRET:-default}"
+        
+        # Timestamp
+        opendesk.org/deployment-time: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+    
+    spec:
+      # Security context
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        fsGroupChangePolicy: "OnRootMismatch"
+        supplementalGroups: []
+        
+      # Host settings
+      hostname: sogo5-pod
+      subdomain: sogo5-headless
+      
+      # Affinity
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values: ["sogo"]
+                topologyKey: kubernetes.io/hostname
+        
+        # Prefer nodes with SSD storage for SOGo
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: topology.kubernetes.io/zone
+                    operator: In
+                    values: ["ssd"]
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values: ["amd64"]
+      
+      # Tolerations
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: Exists
+          effect: NoSchedule
+        - key: "node-role.kubernetes.io/master"
+          operator: Exists
+          effect: NoSchedule
+        - key: "dedicated"
+          operator: Equal
+          value: "sogo"
+          effect: NoSchedule
+      
+      # Priority class
+      priorityClassName: "opendesk-high-priority"
+      
+      # Resource requirements
+      resources:
+        limits:
+          cpu: "4"
+          memory: "4Gi"
+          ephemeral-storage: "5Gi"
+        requests:
+          cpu: "1"
+          memory: "2Gi"
+          ephemeral-storage: "2Gi"
+      
+      # Topology spread constraints
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: sogo
+              version: "5.8.0"
+      
+      # Containers
+      containers:
+        - name: sogo5
+          image: registry.gitlab.opencode.de/umr/opendesk-sogo5:5.8.0
+          imagePullPolicy: IfNotPresent
+          
+          # Security context
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false  # SOGo needs to write logs and temp files
+            runAsNonRoot: true
+            runAsUser: 999
+            capabilities:
+              drop: ["ALL"]
+              add: []
+            
+          # Environment variables
+          env:
+            # Database configuration
+            - name: DB_HOST
+              value: "postgresql.opendesk.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "sogo"
+            - name: DB_USER
+              value: "sogo"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sogo5-secrets
+                  key: db-password
+            
+            # LDAP configuration
+            - name: LDAP_HOST
+              value: "ldap.opendesk.svc.cluster.local"
+            - name: LDAP_PORT
+              value: "389"
+            - name: LDAP_BASE_DN
+              value: "dc=opendesk,dc=org"
+            - name: LDAP_BIND_DN
+              value: "cn=admin,dc=opendesk,dc=org"
+            - name: LDAP_BIND_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sogo5-ldap-secret
+                  key: LDAP_BIND_PASSWORD
+            
+            # Mail server configuration
+            - name: IMAP_HOST
+              value: "dovecot.opendesk.svc.cluster.local"
+            - name: IMAP_PORT
+              value: "993"
+            - name: SMTP_HOST
+              value: "postfix.opendesk.svc.cluster.local"
+            - name: SMTP_PORT
+              value: "587"
+            - name: SIEVE_HOST
+              value: "dovecot.opendesk.svc.cluster.local"
+            - name: SIEVE_PORT
+              value: "4190"
+            
+            # SOGo settings
+            - name: SOGO_TIMEZONE
+              value: "Europe/Berlin"
+            - name: SOGO_LANGUAGE
+              value: "German"
+            - name: SOGO_HOSTNAME
+              value: "sogo5.opendesk-edu.org"
+            - name: SOGO_MAIL_DOMAINS
+              value: "opendesk-edu.org,opendesk.org"
+            
+            # Performance settings
+            - name: SOGO_WORKERS_COUNT
+              value: "10"
+            - name: SOGO_MAX_THREADS
+              value: "100"
+            - name: SOGO_MAX_DB_CONNECTIONS
+              value: "20"
+            
+            # Logging
+            - name: SOGO_LOG_LEVEL
+              value: "1"
+            - name: SOGO_DEBUG_REQUESTS
+              value: "NO"
+            
+            # Kubernetes metadata
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            
+            # Timezone
+            - name: TZ
+              value: "Europe/Berlin"
+          
+          # Environment variables from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: sogo5-config
+                optional: true
+          
+          # Ports
+          ports:
+            # HTTP port (SOGo Web Interface)
+            - containerPort: 20000
+              name: http
+              protocol: TCP
+            # HTTPS port
+            - containerPort: 20001
+              name: https
+              protocol: TCP
+            # DAV port (CalDAV/CardDAV)
+            - containerPort: 20002
+              name: dav
+              protocol: TCP
+            # ActiveSync port
+            - containerPort: 20003
+              name: activesync
+              protocol: TCP
+            # Admin port
+            - containerPort: 20004
+              name: admin
+              protocol: TCP
+            # Memcached monitoring port (internal)
+            - containerPort: 11211
+              name: memcached
+              protocol: TCP
+          
+          # Command
+          command: ["/sbin/tini", "--"]
+          args: ["/entrypoint.sh"]
+          
+          # Liveness probe
+          livenessProbe:
+            httpGet:
+              path: /SOGo
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 30
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Readiness probe
+          readinessProbe:
+            httpGet:
+              path: /SOGo
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Startup probe
+          startupProbe:
+            httpGet:
+              path: /SOGo
+              port: http
+              scheme: HTTP
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+          
+          # Volume mounts
+          volumeMounts:
+            # Data volume
+            - name: sogo5-data
+              mountPath: /var/lib/sogo
+              subPath: data
+            
+            # Logs volume
+            - name: sogo5-logs
+              mountPath: /var/log/sogo
+              subPath: logs
+            
+            # Attachments volume
+            - name: sogo5-attachments
+              mountPath: /var/spool/sogo
+              subPath: attachments
+            
+            # Temp volume
+            - name: sogo5-tmp
+              mountPath: /tmp/sogo
+              subPath: tmp
+            
+            # Config files (from ConfigMap)
+            - name: sogo5-config
+              mountPath: /etc/sogo/sogo.conf
+              subPath: sogo.conf
+            - name: sogo5-config
+              mountPath: /etc/sogo/GNUstep.conf
+              subPath: GNUstep.conf
+            
+            # PID files
+            - name: sogo5-pid
+              mountPath: /var/run/sogo
+              readOnly: false
+            
+            # Timezone
+            - name: tz-config
+              mountPath: /etc/localtime
+              subPath: localtime
+              readOnly: true
+            - name: tz-config
+              mountPath: /etc/timezone
+              subPath: timezone
+              readOnly: true
+            
+            # Scripts
+            - name: scripts
+              mountPath: /healthcheck.sh
+              subPath: healthcheck.sh
+              readOnly: true
+            - name: scripts
+              mountPath: /startup-probe.sh
+              subPath: startup-probe.sh
+              readOnly: true
+          
+          # Resources limits enforcement
+          startupProbe:
+            httpGet:
+              path: /SOGo
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 60
+            
+          # Lifecycle hooks
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "echo 'Shutting down SOGo...'; pkill -TERM -u 999; sleep 60; pkill -KILL -u 999; echo 'SOGo stopped'"]
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "echo 'SOGo 5 started in pod $(POD_NAME)' > /var/log/sogo/startup.log; touch /tmp/sogo-ready"]
+          
+          # Termination message
+          terminationMessagePath: /tmp/termination-log
+          terminationMessagePolicy: File
+      
+      # Sidecar: Memcached (if not using separate deployment)
+      # Uncomment to run memcached in the same pod
+      # - name: memcached
+      #   image: memcached:1.6
+      #   securityContext:
+      #     runAsUser: 999
+      #     runAsGroup: 999
+      #   command: ["memcached", "-u", "999", "-m", "256", "-c", "1024", "-t", "4", "-p", "11211", "-l", "127.0.0.1"]
+      #   ports:
+      #     - containerPort: 11211
+      #       name: memcached
+      #       protocol: TCP
+      #   resources:
+      #     limits:
+      #       cpu: "1"
+      #       memory: "512Mi"
+      #     requests:
+      #       cpu: "500m"
+      #       memory: "256Mi"
+      
+      # Image pull secrets
+      imagePullSecrets:
+        - name: sogo5-pull-secret
+      
+      # Volumes
+      volumes:
+        # Persistent volumes
+        - name: sogo5-data
+          persistentVolumeClaim:
+            claimName: sogo5-data
+        - name: sogo5-logs
+          persistentVolumeClaim:
+            claimName: sogo5-logs
+        - name: sogo5-attachments
+          persistentVolumeClaim:
+            claimName: sogo5-attachments
+        - name: sogo5-tmp
+          persistentVolumeClaim:
+            claimName: sogo5-tmp
+        
+        # ConfigMap volume
+        - name: sogo5-config
+          configMap:
+            name: sogo5-config
+            defaultMode: 420
+        
+        # PID volume (emptyDir for share process namespace)
+        - name: sogo5-pid
+          emptyDir: {}
+        
+        # Timezone volume
+        - name: tz-config
+          configMap:
+            name: timezone-config
+            items:
+              - key: localtime
+                path: localtime
+              - key: timezone
+                path: timezone
+        
+        # Scripts volume (from ConfigMap)
+        - name: scripts
+          configMap:
+            name: sogo5-config
+            defaultMode: 509
+            items:
+              - key: healthcheck.sh
+                path: healthcheck.sh
+              - key: startup-probe.sh
+                path: startup-probe.sh
+
+---
+# Timezone ConfigMap (shared across namespace)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: timezone-config
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: timezone
+    app.kubernetes.io/part-of: opendesk
+
+data:
+  localtime: |
+    # Copied from host at /usr/share/zoneinfo/Europe/Berlin
+    # This is a symbolic link to the actual timezone file
+    # In container, we copy the content
+    # Generated with: cp /usr/share/zoneinfo/Europe/Berlin /tmp/berlin && hexdump -C /tmp/berlin
+    # But for portability, we use the timezone name
+    # Actual implementation uses /etc/localtime mounted from host
+    
+    # This is a placeholder. The actual timezone file is copied
+    # during container build or mounted from the host.
+    # For this ConfigMap approach, we need the actual file content.
+    
+    # Alternative: Use the timezone name and let the OS handle it
+    Europe/Berlin
+  timezone: "Europe/Berlin"

@@ -1,0 +1,64 @@
+# openDesk Dev Agent Operator Horizontal Pod Autoscaler
+# SPDX-License-Identifier: Apache-2.0
+#
+# Note: The Dev Agent Operator uses leader election, so only ONE active pod
+# is allowed at a time. This HPA is for demonstration purposes and should
+# only be enabled if the operator is modified to support multiple active instances.
+#
+# Currently, replicas should be set to 1 in the Deployment.
+#
+# To enable multiple instances (not recommended without leader election fix):
+# - Set replicas: 2+ in deployment.yaml
+# - Uncomment this HPA
+# - Ensure proper leader election implementation
+---
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: opendesk-dev-agent-operator
+#   namespace: opendesk-dev-agent
+#   labels:
+#     app.kubernetes.io/name: opendesk-dev-agent
+#     app.kubernetes.io/instance: opendesk-dev-agent-operator
+#     app.kubernetes.io/version: "2.1.0"
+#     app.kubernetes.io/component: operator
+#     app.kubernetes.io/part-of: opendesk
+#     app.kubernetes.io/managed-by: kustomize
+#     
+#     # openDesk specific
+#     opendesk.org/component: operator
+#     
+#     # ZKI IT-Grundschutz
+#     de.zki.it-grundschutz.module: SY.3.4Kub
+#     
+#     # container.gov.de
+#     de.container.gov.component: opendesk-dev-agent-operator
+#
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: opendesk-dev-agent-operator
+#   
+#   # Minimum replicas (leader + 1 standby)
+#   minReplicas: 1
+#   
+#   # Maximum replicas
+#   maxReplicas: 3
+#   
+#   # Scale based on CPU utilization
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: cpu
+#         target:
+#           type: Utilization
+#           averageUtilization: 50
+#     
+#     # Scale based on memory utilization
+#     - type: Resource
+#       resource:
+#         name: memory
+#         target:
+#           type: Utilization
+#           averageUtilization: 70

@@ -1,0 +1,28 @@
+# openDesk Dev Agent Operator Namespace
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    # openDesk specific
+    opendesk.org/component: operator
+    opendesk.org/purpose: self-healing
+    opendesk.org/version: "2.1.0"
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    de.zki.it-grundschutz.layer: Management
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+spec:
+  finalizers:
+    - kubernetes
