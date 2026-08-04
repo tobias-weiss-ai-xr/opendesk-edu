@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-opendesk-edu
+  labels:
+    app.kubernetes.io/name: demo-opendesk-edu
+    env: demo
+  annotations:
+    description: "Demo namespace for OpenDesk educational platform"

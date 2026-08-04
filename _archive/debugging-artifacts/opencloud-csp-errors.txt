@@ -1,0 +1,3 @@
+Total messages: 1 (Errors: 1, Warnings: 0)
+
+[ERROR] Failed to load resource: the server responded with a status of 400 () @ https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/auth?client_id=web&redirect_uri=https%3A%2F%2Fopencloud.opendesk.hrz.uni-marburg.de%2Foidc-callback.html&response_type=code&scope=openid+profile+email&state=08c37fc92ce64c25bdc353a77760ced2&code_challenge=qkgn_teMflGnM8Ic4t6ZAgoFm2K5qq916xjo5bQdgm4&code_challenge_method=S256&response_mode=query:0
