@@ -193,9 +193,19 @@ functional:
         enabled: false
     matrix:
       federation:
-        # Disable to not support Matrix federation with your installation.
-        enabled: true
-        # List of matrix homeserver domains you want to allow federation with
+        # Enable to support Matrix federation with your installation.
+        # Federation lets your users communicate with users on other Matrix homeservers. It also exposes the
+        # federation endpoint to those homeservers, which increases the attack surface of your installation,
+        # therefore it is disabled by default and has to be enabled explicitly.
+        # Ref.: https://element-hq.github.io/synapse/latest/federate.html
+        enabled: false
+        # List of matrix homeserver domains you want to allow federation with.
+        # An empty list means no restriction ("open federation"), i.e. federation with every reachable
+        # homeserver. If the federation partners are known upfront, we recommend to list them here to limit
+        # federation to those domains. Only takes effect when `enabled` is `true`.
+        # Note: When an allow-listed homeserver has a setup where the actual matrix domain (which is part of
+        # the homeserver users MX ID) is different from the domain the homeserver is listening on, you have
+        # to add the actual matrix domain here, not the listening domain.
         domainAllowList: []
 
   filestore:
