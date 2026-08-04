@@ -1,0 +1,218 @@
+# SOGo 5 Configuration ConfigMap
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sogo5-config
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: mail
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    opendesk.org/config-type: sogo
+    opendesk.org/component: mail-calendar-contacts
+    
+    de.zki.it-grundschutz.module: SY.3.4Mail
+    de.container.gov.component: sogo5
+
+data:
+  # Main SOGo configuration
+  sogo.conf: |
+    {
+      /* Database Configuration */
+      SOGoProfileURL = "postgresql://sogo:${DB_PASSWORD}@${DB_HOST}:5432/sogo";
+      OCSFolderInfoURL = "postgresql://sogo:${DB_PASSWORD}@${DB_HOST}:5432/sogo";
+      OCSSessionsFolderURL = "postgresql://sogo:${DB_PASSWORD}@${DB_HOST}:5432/sogo";
+      
+      /* Email Configuration */
+      OCSEMailDomains = ("opendesk-edu.org", "opendesk.org");
+      SOGoHostName = "sogo5.opendesk-edu.org";
+      
+      /* LDAP Configuration */
+      SOGoUserSources = (
+        {
+          type = ldap;
+          host = "ldap://${LDAP_HOST}:389";
+          baseDN = "${LDAP_BASE_DN}";
+          bindDN = "${LDAP_BIND_DN}";
+          bindPassword = "${LDAP_BIND_PASSWORD}";
+          idFieldName = "uid";
+          UIDFieldName = "uid";
+          CNFieldName = "cn";
+          UIDFieldNames = ("uid", "sAMAccountName");
+          base = "${LDAP_BASE:-ou=users}";
+          scope = SUB;
+          isAddressBook = YES;
+          displayName = "OpenDesk LDAP";
+          canAuthenticate = YES;
+          timeout = 10;
+          maxRetryCount = 3;
+          connectionUseTLS = YES;
+        }
+      );
+      
+      /* Mail Server Configuration */
+      SOGoIMAPServer = "imap://${IMAP_HOST}:993";
+      SOGoSMTPServer = "smtp://${SMTP_HOST}:587";
+      SOGoSieveServer = "sieve://${IMAP_HOST}:4190";
+      SOGoIMAPEncryption = YES;
+      SOGoSMTPEncryption = YES;
+      SOGoMailingMechanism = smtp;
+      
+      /* Memcached Configuration */
+      SOGOMemcachedHost = "127.0.0.1";
+      SOGOMemcachedPort = 11211;
+      SOGoUseMemcached = YES;
+      
+      /* Performance Settings */
+      WOWorkersCount = 10;
+      WOMaxThreadsPerWorker = 100;
+      SOGoMaximumDBConnections = 20;
+      SOGoDBConnectionPoolSize = 5;
+      
+      /* Session Settings */
+      SOGoSessionTimeOut = 1800;
+      SOGoMaximumSessionLength = 86400;
+      SOGoSessionStore = memcached;
+      
+      /* Security Settings */
+      SOGoSuperUsernames = ("admin");
+      SOGoPasswordChangeEnabled = YES;
+      SOGoXSRFValidationEnabled = YES;
+      SOGoSecureSessionCookies = YES;
+      
+      /* Features */
+      SOGoDefaultCalendar = YES;
+      SOGoDefaultAddressBook = YES;
+      SOGoEnablePublicAccess = YES;
+      SOGoEnableEMailAlarms = YES;
+      SOGoEnableEMailVacation = YES;
+      
+      /* Language */
+      SOGoLanguage = "German";
+      SOGoTimeZone = "Europe/Berlin";
+      
+      /* Logging */
+      SOGoLogFile = "/var/log/sogo/sogo.log";
+      SOGoLogLevel = 1;
+      SOGoDebugRequests = NO;
+      SOGoDebugSQLQueries = NO;
+    }
+
+  # GNUstep configuration
+  GNUstep.conf: |
+    {
+      // GNUstep environment variables
+      NSGlobalDomain = {
+        GSFileSystemRepresentation = unix;
+        GSDebugResourceLoading = NO;
+        GSPrintPageRange = NO;
+        GSAllowTextSmoothing = YES;
+        GSFastEnumerationExtendsBeyondCount = YES;
+      };
+    }
+
+  # Memcached configuration
+  memcached.conf: |
+    -p 11211
+    -l 127.0.0.1
+    -m 256
+    -c 1024
+    -t 4
+    -u sogo
+    -P /var/run/sogo/memcached.pid
+    -v
+    -moden
+    -D proxy
+    -d
+    -f 1.05
+    -M
+
+  # Logrotate configuration
+  logrotate.conf: |
+    /var/log/sogo/sogo.log {
+        daily
+        rotate 30
+        compress
+        delaycompress
+        notifempty
+        copytruncate
+        size 100M
+        create 0640 sogo sogo
+        dateext
+        maxage 90
+    }
+
+  # Health check script
+  healthcheck.sh: |
+    #!/bin/bash
+    # Basic health check for SOGo 5
+    
+    SOGO_PID=$(cat /var/run/sogo/sogo.pid 2>/dev/null)
+    MEMCACHED_PID=$(cat /var/run/sogo/memcached.pid 2>/dev/null)
+    
+    exit_code=0
+    
+    # Check SOGo process
+    if [ -z "$SOGO_PID" ] || ! kill -0 "$SOGO_PID" 2>/dev/null; then
+        echo "ERROR: SOGo process not running"
+        exit_code=1
+    fi
+    
+    # Check Memcached process
+    if [ -z "$MEMCACHED_PID" ] || ! kill -0 "$MEMCACHED_PID" 2>/dev/null; then
+        echo "ERROR: Memcached process not running"
+        exit_code=1
+    fi
+    
+    # Check TCP ports
+    if ! nc -z 127.0.0.1 20000 2>/dev/null; then
+        echo "ERROR: SOGo HTTP port (20000) not responding"
+        exit_code=1
+    fi
+    
+    if ! nc -z 127.0.0.1 11211 2>/dev/null; then
+        echo "ERROR: Memcached port (11211) not responding"
+        exit_code=1
+    fi
+    
+    # Check database connectivity
+    if ! pg_isready -h "${DB_HOST}" -p 5432 -U "sogo" -d "sogo" 2>/dev/null; then
+        echo "ERROR: Cannot connect to PostgreSQL"
+        exit_code=1
+    fi
+    
+    if [ $exit_code -eq 0 ]; then
+        echo "OK: SOGo 5 is healthy"
+    fi
+    
+    exit $exit_code
+
+  # Startup script
+  startup-probe.sh: |
+    #!/bin/bash
+    # Startup probe for SOGo 5
+    
+    timeout=60
+    interval=5
+    attempt=0
+    max_attempts=$((timeout / interval))
+    
+    while [ $attempt -lt $max_attempts ]; do
+        attempt=$((attempt + 1))
+        
+        # Check if SOGo is ready
+        if curl -s -f -o /dev/null "http://127.0.0.1:20000/SOGo" 2>/dev/null; then
+            echo "OK: SOGo 5 is ready after ${attempt} attempts"
+            exit 0
+        fi
+        
+        sleep $interval
+    done
+    
+    echo "ERROR: SOGo 5 did not start within ${timeout} seconds"
+    exit 1

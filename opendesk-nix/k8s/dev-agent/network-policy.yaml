@@ -1,0 +1,262 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dev-agent-operator-ingress
+  namespace: opendesk-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator
+    app.kubernetes.io(component: network-policy
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/network-policy: "operator-ingress"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.zki.it-grundschutz.layer: "Platform"
+    de.container.gov.policy: "ingress"
+    de.container.gov.scope: "operator"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: dev-agent-operator
+      app.kubernetes.io/instance: dev-agent-operator
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow HTTP/HTTPS from monitored namespaces
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk-edu
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: default
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8443
+    - protocol: TCP
+      port: 9443
+  # Allow metrics from monitoring namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8080
+  # Allow self-communication (leader election, health checks)
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: dev-agent-operator
+          app.kubernetes.io/instance: dev-agent-operator
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8081
+    - protocol: TCP
+      port: 8443
+    - protocol: TCP
+      port: 9443
+  # Allow DNS (port 53)
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+  # Allow access to Kubernetes API
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/8
+        except:
+        - 10.0.0.0/24
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 6443
+  # Allow access to all namespaces for monitoring
+  - to:
+    - ipBlock:
+        cidr: 10.96.0.0/12
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 6443
+  # Allow HTTP/HTTPS to all pods in monitored namespaces
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          opendesk.org/monitored: "true"
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dev-agent-operator-monitoring
+  namespace: opendesk-operator
+  labels:
+    app.kubernetes.io/name: dev-agent-operator
+    app.kubernetes.io/instance: dev-agent-operator
+    app.kubernetes.io/component: monitoring
+    opendesk.org/network-policy: "monitoring"
+    de.container.gov.policy: "monitoring"
+    de.container.gov.scope: "operator"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: dev-agent-operator
+      app.kubernetes.io/instance: dev-agent-operator
+  policyTypes:
+  - Ingress
+  ingress:
+  # Allow monitoring tools to scrape metrics
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 9443
+  # Allow Prometheus to access metrics endpoint
+  - from:
+    - podSelector:
+        matchLabels:
+          app: kube-prometheus-stack-prometheus
+    ports:
+    - protocol: TCP
+      port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: monitored-namespaces
+  namespace: opendesk
+  labels:
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/network-policy: "monitored-namespaces"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.container.gov.policy: "monitored"
+    de.container.gov.scope: "namespace"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  # Allow dev-agent-operator to monitor all pods
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk-operator
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: dev-agent-operator
+          app.kubernetes.io/instance: dev-agent-operator
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8443
+    - protocol: TCP
+      port: 9443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: monitored-namespaces
+  namespace: opendesk-edu
+  labels:
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/network-policy: "monitored-namespaces"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.container.gov.policy: "monitored"
+    de.container.gov.scope: "namespace"
+  annotations:
+    opendesk.org/monitored: "true"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  # Allow dev-agent-operator to monitor all pods
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk-operator
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: dev-agent-operator
+          app.kubernetes.io/instance: dev-agent-operator
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8443
+    - protocol: TCP
+      port: 9443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: monitored-namespaces
+  namespace: default
+  labels:
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/network-policy: "monitored-namespaces"
+    de.zki.it-grundschutz.module: "BA.3.4Kubernetes"
+    de.container.gov.policy: "monitored"
+    de.container.gov.scope: "namespace"
+  annotations:
+    opendesk.org/monitored: "true"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  # Allow dev-agent-operator to monitor all pods
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk-operator
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: dev-agent-operator
+          app.kubernetes.io/instance: dev-agent-operator
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8443
+    - protocol: TCP
+      port: 9443

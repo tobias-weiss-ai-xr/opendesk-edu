@@ -1,0 +1,657 @@
+# Docker Compose for openDesk Nix Development
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# ==============================================================================
+# Development and testing configuration for openDesk containers
+#
+# Usage:
+#   # Start all services (dev mode)
+#   docker-compose up -d
+#
+#   # Start specific services
+#   docker-compose up -d sogo5 memcached5
+#   docker-compose up -d sogo6 memcached6
+#   docker-compose up -d dev-agent
+#   docker-compose up -d zot-registry
+#
+#   # View logs
+#   docker-compose logs -f <service>
+#
+#   # Run commands in containers
+#   docker-compose exec sogo5 sh
+#   docker-compose exec dev-agent sh
+#
+#   # Stop and remove all containers
+#   docker-compose down
+#
+#   # Stop, remove, and clean volumes
+#   docker-compose down -v
+#
+#   # Test specific service
+#   docker-compose up --build --force-recreate sogo5
+#   docker-compose up --build --force-recreate sogo6
+#   docker-compose up --build --force-recreate dev-agent
+#   docker-compose up --build --force-recreate zot-registry
+#
+# Networks:
+#   opendesk-network - Main network for all openDesk services
+#
+# Volumes:
+#   sogo5-data       - SOGo 5 persistent data
+#   sogo6-data       - SOGo 6 persistent data
+#   zot-storage      - Zot Registry storage
+#   zot-cache        - Zot Registry cache
+#
+# ==============================================================================
+
+version: '3.8'
+
+# -----------------------------------------------------------------------------
+# Networks
+# -----------------------------------------------------------------------------
+
+networks:
+  opendesk-network:
+    name: opendesk-network
+    driver: bridge
+    attachable: true
+    internal: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+
+# -----------------------------------------------------------------------------
+# Volumes
+# -----------------------------------------------------------------------------
+
+volumes:
+  sogo5-data:
+    name: sogo5-data
+    driver: local
+  
+  sogo6-data:
+    name: sogo6-data
+    driver: local
+  
+  zot-storage:
+    name: zot-storage
+    driver: local
+  
+  zot-cache:
+    name: zot-cache
+    driver: local
+
+# -----------------------------------------------------------------------------
+# Services - Database Backends
+# -----------------------------------------------------------------------------
+
+services:
+  # MariaDB for SOGo 5
+  mariadb5:
+    image: mariadb:11.4.4
+    container_name: opendesk-mariadb5
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:-rootpass}"
+      MYSQL_DATABASE: "sogo5"
+      MYSQL_USER: "sogo5"
+      MYSQL_PASSWORD: "${SOGO5_DB_PASSWORD:-sogo5pass}"
+    volumes:
+      - sogo5-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-uroot", "-p${MARIADB_ROOT_PASSWORD:-rootpass}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    read_only: false
+    tmpfs:
+      - /tmp:size=100M,mode=1777
+    sysctls:
+      - net.core.somaxconn=1000
+      - net.ipv4.tcp_keepalive_time=60
+
+  # MariaDB for SOGo 6
+  mariadb6:
+    image: mariadb:11.4.4
+    container_name: opendesk-mariadb6
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:-rootpass}"
+      MYSQL_DATABASE: "sogo6"
+      MYSQL_USER: "sogo6"
+      MYSQL_PASSWORD: "${SOGO6_DB_PASSWORD:-sogo6pass}"
+    volumes:
+      - sogo6-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-uroot", "-p${MARIADB_ROOT_PASSWORD:-rootpass}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    read_only: false
+    tmpfs:
+      - /tmp:size=100M,mode=1777
+
+  # Memcached for SOGo 5
+  memcached5:
+    image: memcached:1.6.21-alpine
+    container_name: opendesk-memcached5
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "11211:11211"
+    command:
+      - -m 512
+      - -c 8192
+      - -t 8
+      - -v
+    healthcheck:
+      test: ["CMD", "echo", "stats\\nquit", "|", "nc", "localhost", "11211"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=50M,mode=1777
+
+  # Memcached for SOGo 6
+  memcached6:
+    image: memcached:1.6.21-alpine
+    container_name: opendesk-memcached6
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "11212:11211"
+    command:
+      - -m 512
+      - -c 8192
+      - -t 8
+      - -v
+    healthcheck:
+      test: ["CMD", "echo", "stats\\nquit", "|", "nc", "localhost", "11211"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=50M,mode=1777
+
+# -----------------------------------------------------------------------------
+# Services - SOGo 5
+# -----------------------------------------------------------------------------
+
+  sogo5:
+    build:
+      context: .
+      dockerfile: docker/sogo5/Dockerfile
+      args:
+        SOGO_VERSION: 5.8.0
+        MEMCACHED_VERSION: 1.6.21
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    image: ${REGISTRY:-registry.gitlab.opencode.de/umr}/opendesk-sogo5:${SOGO5_VERSION:-5.8.0}
+    container_name: opendesk-sogo5
+    restart: unless-stopped
+    depends_on:
+      mariadb5:
+        condition: service_healthy
+      memcached5:
+        condition: service_healthy
+    networks:
+      - opendesk-network
+    environment:
+      # Database
+      SOGoProfileURL: "mysql://sogo5:${SOGO5_DB_PASSWORD:-sogo5pass}@mariadb5:3306/sogo5/sogo_user_profile"
+      
+      # Memcached
+      SOGoMemcachedHost: memcached5
+      SOGoMemcachedPort: 11211
+      SOGoMemcachedTimeout: 30
+      
+      # SOGo configuration
+      SOGoLanguage: English
+      SOGoTimeZone: UTC
+      SOGoAdminAuthenticationLevel: 1
+      SOGoXSRFValidationEnabled: YES
+      SOGoMailingMechanism: smtp
+      SOGoSMTPServer: smtp
+      SOGoSMTPPort: 25
+      
+      # Web interface
+      SOGoPageTitle: "openDesk SOGo 5"
+      SOGoVacationEnabled: YES
+      SOGoForwardEnabled: YES
+      SOGoSieveScriptsEnabled: YES
+      
+      # Logging
+      SOGoDebugRequests: NO
+      SOGoHTTPDebug: NO
+      
+      # Performance
+      SOGoMaximumMessageSize: 104857600
+      SOGoMaximumPartsCount: 1000
+      
+      # Mail settings
+      SOGoMailCustomFrom: "noreply@opendesk.local"
+      SOGoHideSystemAddressBook: YES
+    volumes:
+      - ./docker/sogo5/sogo.conf:/etc/sogo/sogo.conf:ro
+      - ./docker/sogo5/memcached.conf:/etc/memcached.conf:ro
+    ports:
+      - "20000:20000"  # SOGo web interface
+      - "20002:20002"  # SOGo DAV (CalDAV/CardDAV)
+      - "20004:20004"  # ActiveSync
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:20000/SOGo/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    entrypoint: /entrypoint.sh
+    command: ["sogod"]
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - DAC_OVERRIDE
+      - SETGID
+      - SETUID
+    read_only: false
+    tmpfs:
+      - /tmp:size=100M,mode=1777
+      - /var/run:size=50M,mode=0755
+    ulimits:
+      nproc: 1024
+      nofile:
+        soft: 65535
+        hard: 65535
+    sysctls:
+      - net.core.somaxconn=1000
+    labels:
+      com.opendesk.component: sogo5
+      com.opendesk.version: "5.8.0"
+      com.opendesk.maintainer: "team@opendesk-edu.org"
+
+# -----------------------------------------------------------------------------
+# Services - SOGo 6
+# -----------------------------------------------------------------------------
+
+  sogo6:
+    build:
+      context: .
+      dockerfile: docker/sogo6/Dockerfile
+      args:
+        SOGO_VERSION: 6.0.0
+        MEMCACHED_VERSION: 1.6.21
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        EDV_ENABLED: "true"
+    image: ${REGISTRY:-registry.gitlab.opencode.de/umr}/opendesk-sogo6:${SOGO6_VERSION:-6.0.0}
+    container_name: opendesk-sogo6
+    restart: unless-stopped
+    depends_on:
+      mariadb6:
+        condition: service_healthy
+      memcached6:
+        condition: service_healthy
+    networks:
+      - opendesk-network
+    environment:
+      # Database
+      SOGoProfileURL: "mysql://sogo6:${SOGO6_DB_PASSWORD:-sogo6pass}@mariadb6:3306/sogo6/sogo_user_profile"
+      
+      # Memcached
+      SOGoMemcachedHost: memcached6
+      SOGoMemcachedPort: 11211
+      SOGoMemcachedTimeout: 30
+      
+      # SOGo configuration
+      SOGoLanguage: English
+      SOGoTimeZone: UTC
+      SOGoAdminAuthenticationLevel: 1
+      SOGoXSRFValidationEnabled: YES
+      SOGoMailingMechanism: smtp
+      SOGoSMTPServer: smtp
+      SOGoSMTPPort: 25
+      
+      # Web interface
+      SOGoPageTitle: "openDesk SOGo 6"
+      SOGoVacationEnabled: YES
+      SOGoForwardEnabled: YES
+      SOGoSieveScriptsEnabled: YES
+      
+      # New SOGo 6 features
+      SOGoEnablePublicAccess: YES
+      SOGoMailActiveSync: YES
+      SOGoMailAvoidDuplicates: YES
+      
+      # Logging
+      SOGoDebugRequests: NO
+      SOGoHTTPDebug: NO
+      
+      # Performance
+      SOGoMaximumMessageSize: 104857600
+      SOGoMaximumPartsCount: 1000
+      
+      # EDV (Electronic Document Management)
+      SOGoEDVEnabled: YES
+      SOGoEDVDataDir: /var/spool/sogo
+      
+      # Mail settings
+      SOGoMailCustomFrom: "noreply@opendesk.local"
+      SOGoHideSystemAddressBook: YES
+    volumes:
+      - ./docker/sogo6/sogo.conf:/etc/sogo/sogo.conf:ro
+      - ./docker/sogo6/memcached.conf:/etc/memcached.conf:ro
+      - sogo6-data:/var/spool/sogo
+    ports:
+      - "20010:20000"  # SOGo web interface
+      - "20012:20002"  # SOGo DAV (CalDAV/CardDAV)
+      - "20014:20004"  # ActiveSync
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:20000/SOGo/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    entrypoint: /entrypoint.sh
+    command: ["sogod"]
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - DAC_OVERRIDE
+      - SETGID
+      - SETUID
+    read_only: false
+    tmpfs:
+      - /tmp:size=100M,mode=1777
+      - /var/run:size=50M,mode=0755
+    ulimits:
+      nproc: 1024
+      nofile:
+        soft: 65535
+        hard: 65535
+    sysctls:
+      - net.core.somaxconn=1000
+    labels:
+      com.opendesk.component: sogo6
+      com.opendesk.version: "6.0.0"
+      com.opendesk.maintainer: "team@opendesk-edu.org"
+
+# -----------------------------------------------------------------------------
+# Services - Dev Agent Operator
+# -----------------------------------------------------------------------------
+
+  dev-agent:
+    build:
+      context: .
+      dockerfile: docker/dev-agent/Dockerfile
+      args:
+        DEV_AGENT_VERSION: 2.1.0
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    image: ${REGISTRY:-registry.gitlab.opencode.de/umr}/opendesk-dev-agent:${DEV_AGENT_VERSION:-2.1.0}
+    container_name: opendesk-dev-agent
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    depends_on:
+      zot-registry:
+        condition: service_started
+    environment:
+      # Operator configuration
+      DEV_AGENT_NAMESPACE: "opendesk"
+      DEV_AGENT_WATCH_NAMESPACE: "opendesk"
+      DEV_AGENT_LOG_LEVEL: "info"
+      DEV_AGENT_METRICS_PORT: "8080"
+      DEV_AGENT_HEALTH_PORT: "8081"
+      
+      # Kubernetes client
+      KUBERNETES_SERVER: "${KUBERNETES_SERVER:-https://kubernetes.default.svc}"
+      KUBERNETES_SKIP_TLS_VERIFY: "true"
+      
+      # PI Memory integration (disabled in dev mode)
+      PI_MEMORY_ENABLED: "false"
+      PI_MEMORY_HOST: "pi-memory"
+      PI_MEMORY_PORT: "17687"
+      
+      # Operator flags
+      OPERATOR_DEBUG: "true"
+      OPERATOR_DISABLE_PI_MEMORY: "true"
+      OPERATOR_LEADER_ELECT: "false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./docker/dev-agent/config.yaml:/etc/opendesk-dev-agent/config.yaml:ro
+      - ./docker/dev-agent/logrotate.conf:/etc/logrotate.d/opendesk-operator:ro
+    ports:
+      - "8080:8080"    # Metrics
+      - "8081:8081"    # Health
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    privileged: false
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - DAC_OVERRIDE
+    read_only: false
+    tmpfs:
+      - /tmp:size=100M,mode=1777
+      - /var/run:size=50M,mode=0755
+    ulimits:
+      nproc: 1024
+      nofile:
+        soft: 65535
+        hard: 65535
+    labels:
+      com.opendesk.component: dev-agent
+      com.opendesk.version: "2.1.0"
+      com.opendesk.maintainer: "team@opendesk-edu.org"
+
+# -----------------------------------------------------------------------------
+# Services - Zot Registry
+# -----------------------------------------------------------------------------
+
+  zot-registry:
+    build:
+      context: .
+      dockerfile: docker/zot-registry/Dockerfile
+      args:
+        ZOT_VERSION: 2.0.0-rc5
+        BUILD_DATE: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    image: ${REGISTRY:-registry.gitlab.opencode.de/umr}/zot-registry:${ZOT_VERSION:-2.0.0-rc5}
+    container_name: opendesk-zot-registry
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "8080:8080"    # HTTP API
+      - "8443:8443"    # HTTPS API (if configured)
+    environment:
+      # Zot configuration
+      ZOT_HOST: "0.0.0.0"
+      ZOT_PORT: "8080"
+      ZOT_LOG_LEVEL: "info"
+      ZOT_LOG_FORMAT: "json"
+      
+      # Storage
+      ZOT_STORAGE_DRIVER: "fs"
+      ZOT_STORAGE_ROOT: "/var/lib/zot/storage"
+      
+      # Cache
+      ZOT_CACHE_DIR: "/var/lib/zot/cache"
+      ZOT_CACHE_ENABLED: "true"
+      
+      # Auth
+      ZOT_AUTH_ENABLED: "true"
+      
+      # Upstream caching
+      ZOT_UPSTREAM_CACHE_ENABLED: "true"
+      ZOT_UPSTREAM_REGISTRIES: "ghcr.io,registry.gitlab.opencode.de"
+    volumes:
+      - zot-storage:/var/lib/zot/storage
+      - zot-cache:/var/lib/zot/cache
+      - ./docker/zot-registry/config.yml:/etc/zot/config.yml:ro
+      - ./docker/zot-registry/passwd:/etc/zot/passwd:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    privileged: false
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - DAC_OVERRIDE
+    read_only: false
+    tmpfs:
+      - /tmp:size=100M,mode=1777
+      - /var/run:size=50M,mode=0755
+    ulimits:
+      nproc: 1024
+      nofile:
+        soft: 65535
+        hard: 65535
+    labels:
+      com.opendesk.component: zot-registry
+      com.opendesk.version: "2.0.0-rc5"
+      com.opendesk.maintainer: "team@opendesk-edu.org"
+
+# -----------------------------------------------------------------------------
+# Services - Test Services
+# -----------------------------------------------------------------------------
+
+  # Test service that crashes (for operator testing)
+  test-crash-loop:
+    image: busybox:latest
+    container_name: opendesk-test-crash-loop
+    restart: always
+    networks:
+      - opendesk-network
+    command: ["sh", "-c", "echo 'Crash loop test container'; sleep 5; exit 1"]
+    healthcheck:
+      test: ["CMD", "exit", "0"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+    labels:
+      com.opendesk.test: crash-loop
+      opendesk-dev-agent/repair-enabled: "true"
+
+  # Test service that should be repaired
+  test-healthy:
+    image: nginx:alpine
+    container_name: opendesk-test-healthy
+    restart: unless-stopped
+    networks:
+      - opendesk-network
+    ports:
+      - "8082:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    labels:
+      com.opendesk.test: healthy
+      opendesk-dev-agent/monitor-enabled: "true"
+
+# -----------------------------------------------------------------------------
+# Profiles
+# -----------------------------------------------------------------------------
+
+profiles:
+  # Profile for SOGo 5 development
+  sogo5-dev:
+    services:
+      - mariadb5
+      - memcached5
+      - sogo5
+  
+  # Profile for SOGo 6 development
+  sogo6-dev:
+    services:
+      - mariadb6
+      - memcached6
+      - sogo6
+  
+  # Profile for Dev Agent development
+  dev-agent-dev:
+    services:
+      - zot-registry
+      - dev-agent
+  
+  # Profile for Zot Registry development
+  zot-dev:
+    services:
+      - zot-registry
+  
+  # Profile for testing
+  testing:
+    services:
+      - test-crash-loop
+      - test-healthy
+  
+  # Full development profile
+  full-dev:
+    services:
+      - mariadb5
+      - memcached5
+      - sogo5
+      - mariadb6
+      - memcached6
+      - sogo6
+      - zot-registry
+      - dev-agent
+      - test-crash-loop
+      - test-healthy

@@ -1,0 +1,8 @@
+Total messages: 2 (Errors: 0, Warnings: 0)
+Returning 5 messages for level "error"
+
+[ERROR] Failed to load resource: the server responded with a status of 401 () @ https://opencloud.opendesk.hrz.uni-marburg.de/api/v0/settings/roles-list:0
+[ERROR] E @ https://opencloud.opendesk.hrz.uni-marburg.de/js/index.html-CGFTrQAi.mjs:36
+[ERROR] Failed to load resource: the server responded with a status of 401 () @ https://opencloud.opendesk.hrz.uni-marburg.de/graph/v1.0/me?%24expand=memberOf:0
+[ERROR] E @ https://opencloud.opendesk.hrz.uni-marburg.de/js/index.html-CGFTrQAi.mjs:36
+[ERROR] Failed to load resource: the server responded with a status of 404 () @ https://weblogin.uni-marburg.de/favicon.ico:0

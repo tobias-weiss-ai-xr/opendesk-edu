@@ -1,0 +1,383 @@
+# openDesk Dev Agent Operator Deployment
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opendesk-dev-agent-operator
+  namespace: opendesk-dev-agent
+  labels:
+    app.kubernetes.io/name: opendesk-dev-agent
+    app.kubernetes.io/instance: opendesk-dev-agent-operator
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/component: operator
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    # openDesk specific
+    opendesk.org/component: operator
+    opendesk.org/purpose: self-healing-repair-automation
+    opendesk.org/version: "2.1.0"
+    
+    # ZKI IT-Grundschutz
+    de.zki.it-grundschutz.module: SY.3.4Kub
+    de.zki.it-grundschutz.layer: Management
+    de.zki.it-grundschutz.classification: internal
+    
+    # container.gov.de
+    de.container.gov.component: opendesk-dev-agent-operator
+    de.container.gov.security-level: enhanced
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opendesk-dev-agent
+      app.kubernetes.io/instance: opendesk-dev-agent-operator
+      app.kubernetes.io/component: operator
+  
+  # Pod-level configuration
+  strategy:
+    type: Recreate  # Ensure only one instance runs at a time (for leader election)
+    rollingUpdate: null
+  
+  # Deployment strategy - Recreate ensures clean startup
+  # For HA, change to RollingUpdate with replicas > 1
+  # But leader election only allows one active instance
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: opendesk-dev-agent
+        app.kubernetes.io/instance: opendesk-dev-agent-operator
+        app.kubernetes.io/version: "2.1.0"
+        app.kubernetes.io/component: operator
+        app.kubernetes.io/part-of: opendesk
+        
+        # openDesk specific
+        opendesk.org/component: operator
+        opendesk.org/purpose: self-healing-repair-automation
+        
+        # For network policies
+        network-policy: allow-all
+        
+        # ZKI IT-Grundschutz
+        de.zki.it-grundschutz.module: SY.3.4Kub
+        
+        # container.gov.de
+        de.container.gov.component: opendesk-dev-agent-operator
+      
+      annotations:
+        # Restart operator when config changes
+        checksum/config: "${HASH_CONFIG:-default}"
+        
+        # Prometheus metrics
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+        
+        # openDesk metadata
+        opendesk.org/last-updated: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+        opendesk.org/build-version: "2.1.0"
+    
+    spec:
+      # Security Context - Run as non-root
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+        supplementalGroups: []  # No additional groups
+        seLinuxOptions: null  # Use cluster default
+        
+      # Service Account
+      serviceAccountName: opendesk-dev-agent
+      automationServiceAccountToken: false
+      
+      # Affinity - Prefer to run on control plane nodes if possible
+      # But allow running on any node
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: In
+                    values: ["true"]
+                  - key: node-role.kubernetes.io/master
+                    operator: In
+                    values: ["true"]
+        podAntiAffinity:
+          # Try not to schedule multiple operator pods on same node
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values: ["opendesk-dev-agent"]
+                topologyKey: kubernetes.io/hostname
+      
+      # Tolerations - Allow running on control plane nodes
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+      
+      # Resource requirements
+      resources:
+        limits:
+          cpu: "500m"
+          memory: "512Mi"
+          ephemeral-storage: "500Mi"
+        requests:
+          cpu: "100m"
+          memory: "256Mi"
+          ephemeral-storage: "50Mi"
+      
+      # Priority Class (if defined)
+      # priorityClassName: system-cluster-critical
+      
+      # Pod Disruption Budget - Graceful eviction
+      # PDB will be created separately
+      
+      # Containers
+      containers:
+        - name: operator
+          image: registry.gitlab.opencode.de/umr/opendesk-dev-agent:2.1.0
+          imagePullPolicy: IfNotPresent
+          
+          # Security Context for container
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false  # Need to write logs
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop: ["ALL"]
+              # Note: We need to add back any required capabilities
+              # Currently none are required for basic operation
+              add: []
+            
+          # Environment variables
+          env:
+            # Operator configuration
+            - name: OPERATOR_NAME
+              value: "opendesk-dev-agent"
+            - name: OPERATOR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: OPERATOR_VERSION
+              value: "2.1.0"
+            - name: OPERATOR_LOG_LEVEL
+              value: "info"
+            
+            # Health check configuration
+            - name: OPERATOR_METRICS_BIND_ADDRESS
+              value: "0.0.0.0:8080"
+            - name: OPERATOR_HEALTH_PROBE_BIND_ADDRESS
+              value: "0.0.0.0:8081"
+            
+            # Debug mode
+            - name: OPERATOR_DEBUG
+              value: "false"
+            
+            # Disable PI Memory (default)
+            - name: OPERATOR_DISABLE_PI_MEMORY
+              value: "true"
+            
+            # Cluster type (for optimizations)
+            - name: K8S_CLUSTER_TYPE
+              value: "k3s"
+            
+            # Watch namespaces (comma-separated)
+            - name: OPERATOR_WATCH_NAMESPACES
+              value: "opendesk,opendesk-edu,default"
+            
+            # Kubernetes service discovery
+            - name: KUBERNETES_SERVICE_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: KUBERNETES_SERVICE_PORT
+              value: "6443"
+            
+            # Pod information
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            
+            # Timezone
+            - name: TZ
+              value: "Europe/Berlin"
+          
+          # Command
+          command: ["/entrypoint.sh"]
+          args: []
+          
+          # ports
+          ports:
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+            - containerPort: 8081
+              name: health
+              protocol: TCP
+          
+          # Liveness Probe
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Readiness Probe
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 15
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Startup Probe
+          startupProbe:
+            httpGet:
+              path: /startup
+              port: 8081
+              scheme: HTTP
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+          
+          # Environment from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: opendesk-dev-agent-config
+                optional: true
+          
+          # Volume mounts
+          volumeMounts:
+            # Configuration volume
+            - name: config
+              mountPath: /etc/opendesk-dev-agent
+              readOnly: true
+            
+            # Logs volume
+            - name: logs
+              mountPath: /var/log/opendesk
+              readOnly: false
+            
+            # Data volume
+            - name: data
+              mountPath: /var/lib/opendesk
+              readOnly: false
+            
+            # Cache volume
+            - name: cache
+              mountPath: /var/cache/opendesk
+              readOnly: false
+            
+            # kubeconfig for in-cluster access
+            # Note: This is mounted automatically by Kubernetes
+            # But we mount it here for clarity and to ensure it exists
+            - name: kubeconfig
+              mountPath: /home/opendesk/.kube
+              readOnly: true
+            
+            # Run directory
+            - name: rundir
+              mountPath: /run/opendesk
+              readOnly: false
+            
+            # Temporary directory
+            - name: tmp
+              mountPath: /tmp
+              readOnly: false
+          
+          # Lifecycle hooks
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "echo 'Shutting down: Sending TERM to manager...'; kill -TERM 1; sleep 30; echo 'Forcing shutdown...'; kill -KILL 1"]
+          
+          # Termination message path and policy
+          terminationMessagePath: /tmp/termination-log
+          terminationMessagePolicy: File
+          
+          # Resource limits enforcement
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 60
+      
+      # Image pull secrets
+      imagePullSecrets:
+        - name: opendesk-dev-agent-pull-secret
+      
+      # Volumes
+      volumes:
+        - name: config
+          configMap:
+            name: opendesk-dev-agent-config
+            defaultMode: 420
+        
+        - name: logs
+          emptyDir: {}
+        
+        - name: data
+          emptyDir: {}
+        
+        - name: cache
+          emptyDir: {}
+        
+        - name: kubeconfig
+          secret:
+            secretName: opendesk-dev-agent-kubeconfig
+            optional: true
+            defaultMode: 420
+        
+        - name: rundir
+          emptyDir: {}
+        
+        - name: tmp
+          emptyDir: {}
+  
+  # Revision history limit
+  revisionHistoryLimit: 3
+  
+  # Progress deadline (time to wait for deployment to progress)
+  progressDeadlineSeconds: 600

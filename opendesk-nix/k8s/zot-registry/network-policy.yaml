@@ -1,0 +1,128 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zot-registry
+  namespace: zot-registry
+  labels:
+    app: zot-registry
+    app.kubernetes.io/name: zot-registry
+    app.kubernetes.io/instance: zot-registry
+    app.kubernetes.io/version: "2.0.0-rc5"
+    app.kubernetes.io/component: registry
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/network-policy: "zot-registry"
+    de.zki.it-grundschutz.module: "SW.1.1Registry,BA.3.4Docker"
+    de.zki.it-grundschutz.layer: "Platform"
+    de.container.gov.policy: "registry"
+    de.container.gov.component-type: "registry"
+    de.container.gov.scope: "namespace"
+spec:
+  podSelector:
+    matchLabels:
+      app: zot-registry
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # ===========================================================================
+  # INGRESS RULES
+  # ===========================================================================
+  ingress:
+  
+  # 1. Allow pull requests from opendesk namespaces
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk-edu
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: default
+    ports:
+    - protocol: TCP
+      port: 8080
+  
+  # 2. Allow SBOM generation requests from CI/CD namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ci-cd
+    ports:
+    - protocol: TCP
+      port: 8080
+  
+  # 3. Allow admin access from specific IP ranges (if needed)
+  #    Uncomment and configure as needed
+  # - from:
+  #   - ipBlock:
+  #       cidr: 192.168.0.0/16
+  #   ports:
+  #   - protocol: TCP
+  #     port: 8080
+  
+  # 4. Allow health checks from monitoring namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8081
+  
+  # 5. Self-communication (for pull-through caching to upstream registries)
+  - from:
+    - podSelector:
+        matchLabels:
+          app: zot-registry
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8081
+  
+  # ===========================================================================
+  # EGRESS RULES
+  # ===========================================================================
+  egress:
+  
+  # 1. Allow DNS resolution
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  
+  # 2. Allow upstream registry access (pull-through caching)
+  - to:
+    # GitHub Container Registry
+    - ipBlock:
+        cidr: 140.82.112.0/20
+    # GitLab Registry
+    - ipBlock:
+        cidr: 35.185.44.0/22
+        cidr: 2600:3c01::f03c:91ff:fe18:bb2f/128
+    # Docker Hub / Registry
+    - ipBlock:
+        cidr: 104.16.0.0/12
+        cidr: 192.0.2.0/24
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+  
+  # 3. Allow access to Kubernetes API (for potential future features)
+  - to:
+    - ipBlock:
+        cidr: 10.96.0.0/12
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 6443

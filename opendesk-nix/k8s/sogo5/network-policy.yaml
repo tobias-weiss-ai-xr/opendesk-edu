@@ -1,0 +1,169 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sogo5
+  namespace: sogo
+  labels:
+    app: sogo5
+    app.kubernetes.io/name: sogo5
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: groupware
+    app.kubernetes.io/part-of: opendesk
+    opendesk.org/network-policy: "sogo5"
+    de.zki.it-grundschutz.module: "SY.3.4Mail,BA.3.4Docker"
+    de.container.gov.policy: "groupware"
+    de.container.gov.component-type: "groupware"
+spec:
+  podSelector:
+    matchLabels:
+      app: sogo5
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # ===========================================================================
+  # INGRESS RULES
+  # ===========================================================================
+  ingress:
+  
+  # 1. Allow web access from browser clients (via ingress)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 20000
+    - protocol: TCP
+      port: 20002
+    - protocol: TCP
+      port: 20003
+    - protocol: TCP
+      port: 20004
+  
+  # 2. Allow direct access from internal services
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk-edu
+    ports:
+    - protocol: TCP
+      port: 20000
+    - protocol: TCP
+      port: 20002
+    - protocol: TCP
+      port: 20003
+    - protocol: TCP
+      port: 20004
+  
+  # 3. Allow health checks from dev-agent-operator
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk-operator
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: dev-agent-operator
+          app.kubernetes.io/instance: dev-agent-operator
+    ports:
+    - protocol: TCP
+      port: 8081
+  
+  # 4. Allow monitoring from monitoring namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+    ports:
+    - protocol: TCP
+      port: 20000
+    - protocol: TCP
+      port: 8081
+  
+  # ===========================================================================
+  # EGRESS RULES
+  # ===========================================================================
+  egress:
+  
+  # 1. Allow DNS resolution
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  
+  # 2. Allow database access (PostgreSQL)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+      podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432
+  
+  # 3. Allow IMAP server access
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+      podSelector:
+        matchLabels:
+          app: dovecot
+    ports:
+    - protocol: TCP
+      port: 143
+    - protocol: TCP
+      port: 993
+  
+  # 4. Allow SMTP server access
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+      podSelector:
+        matchLabels:
+          app: postfix
+    ports:
+    - protocol: TCP
+      port: 25
+    - protocol: TCP
+      port: 587
+    - protocol: TCP
+      port: 465
+  
+  # 5. Allow LDAP access
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+      podSelector:
+        matchLabels:
+          app: openldap
+    ports:
+    - protocol: TCP
+      port: 389
+    - protocol: TCP
+      port: 636
+  
+  # 6. Allow memcached access (if external)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: opendesk
+      podSelector:
+        matchLabels:
+          app: memcached
+    ports:
+    - protocol: TCP
+      port: 11211

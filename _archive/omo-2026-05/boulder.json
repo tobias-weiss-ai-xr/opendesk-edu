@@ -1,0 +1,67 @@
+{
+  "active_plan": "/home/weissto_local/git/opendesk_git/opendesk-edu/.sisyphus/plans/demo-private-dns-namespace.md",
+  "started_at": "2026-04-02T23:45:00Z",
+  "session_ids": [
+    "ses_2bcc4d34affe8Ud5g4ftZNh8u3",
+    "ses_2a7b25ee7ffe1i2jTm3ufcCine",
+    "ses_2a78532ebffeqKxylWF9AcPJ98",
+    "ses_2a76374d8ffeT7xaeQSAdFZ49K",
+    "ses_2a75e5470ffeQtOEA9TZBGmlxG",
+    "ses_2a759c84affe37DKWr41e2LHoN",
+    "ses_2a758a357ffeU8ZCNuJydMqE78",
+    "ses_2a720b865ffe6s0azJm7407jQV",
+    "ses_2a71f8ad0fferVsOYdbuq0fQl0",
+    "ses_2a71ebcd0ffeTJ8Eak3D3ziMoZ",
+    "ses_293a295d8ffe7f1O2uTc4xHoPJ",
+    "ses_293a2969affeKG47TuwTNf1Q3Y",
+    "ses_293a294caffeOnNn4m9LTH0q7w",
+    "ses_292d3d94affevpz0tITw8zvuMu",
+    "ses_292cd38dbffe39uVOXSUs7eKXe",
+    "ses_292c64379ffejJDbQ4es8gq5Z0",
+    "ses_292a81776ffestbKRhiriDGwaR",
+    "ses_292a81684ffe1PXhW4rro3thb3",
+    "ses_292a78ab6ffe6TVNI575jinjpK",
+    "ses_292a8166dffeS30PsjgCiAqsi2"
+  ],
+  "plan_name": "demo-private-dns-namespace",
+  "git_branch": "demo-private-dns-namespace",
+  "worktree_path": null,
+  "task_sessions": {
+    "todo:3": {
+      "task_key": "todo:3",
+      "task_label": "3",
+      "task_title": "Create CoreDNS Deployment and Service [quick]",
+      "session_id": "ses_2a75e5470ffeQtOEA9TZBGmlxG",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-04T13:15:45.879Z"
+    },
+    "todo:4": {
+      "task_key": "todo:4",
+      "task_label": "4",
+      "task_title": "Create DNS record definitions [quick]",
+      "session_id": "ses_2a759c84affe37DKWr41e2LHoN",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-04T13:20:20.844Z"
+    },
+    "todo:5": {
+      "task_key": "todo:5",
+      "task_label": "5",
+      "task_title": "ConfigMap for service-to-DNS mappings [quick]",
+      "session_id": "ses_2a758a357ffeU8ZCNuJydMqE78",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-04T13:21:35.805Z"
+    },
+    "todo:6": {
+      "task_key": "todo:6",
+      "task_label": "6",
+      "task_title": "Create OpenCloud manifest for demo namespace [quick]",
+      "session_id": "ses_2a75711afffeiUp4kcIfo72cfd",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-04-04T13:28:20.525Z"
+    }
+  }
+}
