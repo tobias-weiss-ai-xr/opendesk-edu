@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opencloud-sidecar.fullname" . }}
+  labels:
+    {{- include "opencloud-sidecar.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "opencloud-sidecar.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opencloud-sidecar.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: rclone-sync
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - |
+              rclone config create opencloud webdav \
+                url "{{ .Values.opencloud.url }}/dav/files/{{ .Values.opencloud.username }}" \
+                vendor "other" \
+                user "{{ .Values.opencloud.username }}" \
+                pass "{{ .Values.opencloud.password }}"
+              while true; do
+                echo "Syncing OpenCloud..."
+                rclone sync opencloud:{{ .Values.opencloud.remotePath }} /data/ \
+                  --verbose --progress
+                sleep {{ .Values.opencloud.syncInterval }}
+              done
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "opencloud-sidecar.fullname" . }}-data

@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,6 +8,12 @@ metadata:
 {{ include "etherpad.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas }}
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       etherpad/server: "true"
@@ -21,6 +27,16 @@ spec:
       containers:
         - name: etherpad
           image: {{ .Values.etherpad.image }}:{{ .Values.etherpad.tag }}
+{{- if .Values.sso.oidc.enabled }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              cd /opt/etherpad-lite && \
+               npm install ep_openid_connect@latest --no-save 2>&1 | tail -5 && \
+              echo "OIDC plugin installed, starting etherpad..." && \
+              node node_modules/ep_etherpad-lite/node/server.js
+{{- end }}
           securityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -41,6 +57,22 @@ spec:
               value: "postgres"
             - name: TRUST_PROXY
               value: "true"
+{{- if .Values.sso.oidc.enabled }}
+            - name: OPENID_CONNECT_CLIENT_ID
+              value: {{ .Values.sso.oidc.clientId | quote }}
+            - name: OPENID_CONNECT_CLIENT_SECRET
+              value: {{ .Values.sso.oidc.clientSecret | quote }}
+            - name: OPENID_CONNECT_ISSUER
+              value: {{ .Values.sso.oidc.issuerUrl | quote }}
+            - name: OPENID_CONNECT_NAME
+              value: "SSO"
+            - name: OPENID_CONNECT_SCOPE
+              value: "openid profile email"
+            - name: OPENID_CONNECT_AUTH_METHOD
+              value: "none"
+            - name: OPENID_CONNECT_REDIRECT_URI
+              value: "https://{{ index .Values.ingress.hosts 0 "host" }}/auth/openid_connect/callback"
+{{- end }}
           volumeMounts:
             - name: etherpad-data
               mountPath: /opt/etherpad/var
@@ -50,8 +82,9 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.etherpad.port }}
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            failureThreshold: 5
           readinessProbe:
             tcpSocket:
               port: {{ .Values.etherpad.port }}

@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -7,7 +7,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}-greenlight
 spec:
-  minAvailable: {{ if .Values.pdb }}{{ .Values.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
+  minAvailable: {{ if .Values.bigbluebutton.pdb }}{{ .Values.bigbluebutton.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-greenlight

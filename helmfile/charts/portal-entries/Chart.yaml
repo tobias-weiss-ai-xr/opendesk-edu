@@ -1,0 +1,6 @@
+apiVersion: v2
+name: portal-entries
+description: Modular portal entry provisioning for openDesk Edu
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 """
 Course restoration script for reversing archival.
 Kurswiederherstellungsskript zum Rückgängigmachen der Archivierung.
@@ -18,6 +18,7 @@ wird auf ACTIVE zurückgesetzt und der Vorgang wird protokolliert.
 from __future__ import annotations
 
 import logging
+import sqlite3
 from datetime import datetime, timezone
 from typing import Any, Optional
 
@@ -308,6 +309,6 @@ def _get_snapshot_id(course_id: str, database: Database) -> Optional[str]:
             row = cursor.fetchone()
             if row:
                 return row[0]
-    except Exception:
+    except (sqlite3.OperationalError, sqlite3.DatabaseError):
         pass
     return None

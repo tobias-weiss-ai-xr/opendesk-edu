@@ -29,13 +29,13 @@ data:
         ],
     ];
   setup.sh: |-
-    #!/bin/sh
+    #!/bin/bash
     set -e
 
     echo "Waiting for database..."
     tries=0
     maxTries=30
-    until mysql --host=${LS_DB_HOST} --port=${LS_DB_PORT} --user=${LS_DB_USER} --password=${LS_DB_PASSWORD} -e "SELECT 1;" &> /dev/null; do
+    until (echo > /dev/tcp/${LS_DB_HOST}/${LS_DB_PORT}) 2>/dev/null; do
         tries=$((tries + 1))
         if [ $tries -gt $maxTries ]; then
             echo "Could not connect to database, aborting"
@@ -46,13 +46,4 @@ data:
     done
     echo "Database connection established"
 
-    TABLE_EXISTS=$(mysql --host=${LS_DB_HOST} --port=${LS_DB_PORT} --user=${LS_DB_USER} --password=${LS_DB_PASSWORD} ${LS_DB_NAME} -s -N -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='${LS_DB_NAME}' AND table_name='${LS_TABLE_PREFIX}settings';" 2>/dev/null || echo "0")
-
-    if [ "$TABLE_EXISTS" -eq "0" ]; then
-        echo "LimeSurvey not yet installed, running initial setup..."
-        mkdir -p /var/www/html/upload/surveys
-        chown -R www-data:www-data /var/www/html/upload/surveys
-        echo "LimeSurvey ready for first-time configuration via web UI"
-    else
-        echo "LimeSurvey already installed"
-    fi
+    echo "LimeSurvey ready for first-time configuration via web UI"

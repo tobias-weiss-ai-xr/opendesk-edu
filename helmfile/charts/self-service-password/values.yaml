@@ -22,6 +22,15 @@ selfServicePassword:
     startTls: "false"
     networkTimeout: "2"
 
+  oidc:
+    enabled: false
+    proxyImage: quay.io/oauth2-proxy/oauth2-proxy
+    proxyTag: latest
+    issuerUrl: "https://keycloak.opendesk.example.com/realms/opendesk"
+    clientId: "opendesk-ssp"
+    clientSecret: ""
+    cookieSecret: ""
+
 ingress:
   enabled: false
   className: ""

@@ -1,0 +1,9 @@
+dn: cn=excalidraw,cn=applications,cn=opendesk,cn=edu
+cn: excalidraw
+objectClass: top
+objectClass: odApplication
+odApplicationDisplayName: Excalidraw
+odApplicationDescription: Whiteboard für Zusammenarbeit
+odApplicationURL: https://excalidraw.{{ .Values.global.domain }}
+odApplicationIcon: excalidraw
+odApplicationOrder: 125

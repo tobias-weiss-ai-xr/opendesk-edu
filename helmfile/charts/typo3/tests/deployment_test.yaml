@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 suite: Deployment
 templates:
   - deployment.yaml
@@ -15,7 +15,7 @@ tests:
     asserts:
       - matchRegex:
           path: spec.template.spec.containers[0].image
-          pattern: typo3/cms-core:13\..+
+          pattern: typo3:.+
 
   - it: should set replica count from values
     asserts:

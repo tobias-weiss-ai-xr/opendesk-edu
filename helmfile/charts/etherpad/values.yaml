@@ -24,6 +24,13 @@ etherpad:
 
 replicas: 1
 
+sso:
+  oidc:
+    enabled: false
+    issuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+    clientId: "opendesk-etherpad"
+    clientSecret: ""
+
 ingress:
   enabled: false
   className: ""

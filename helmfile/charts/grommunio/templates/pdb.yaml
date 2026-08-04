@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 {{- if .Values.grommunio.pdb.enabled }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -8,12 +8,7 @@ metadata:
   labels:
 {{ include "grommunio.labels" . | nindent 4 }}
 spec:
-  {{- if .Values.grommunio.pdb.minAvailable }}
   minAvailable: {{ .Values.grommunio.pdb.minAvailable }}
-  {{- end }}
-  {{- if .Values.grommunio.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.grommunio.pdb.maxUnavailable }}
-  {{- end }}
   selector:
     matchLabels:
 {{ include "grommunio.selectorLabels" . | nindent 6 }}

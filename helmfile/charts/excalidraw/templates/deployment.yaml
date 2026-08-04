@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,6 +18,10 @@ spec:
       labels:
         excalidraw/server: "true"
 {{ include "excalidraw.labels" . | nindent 8 }}
+{{- if .Values.excalidraw.oidc.enabled }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+{{- end }}
     spec:
       containers:
         - name: excalidraw
@@ -25,8 +29,13 @@ spec:
           ports:
             - containerPort: {{ .Values.excalidraw.port }}
           securityContext:
-            runAsUser: 1000
-            runAsNonRoot: true
+            runAsUser: 0
+            runAsGroup: 0
+          volumeMounts:
+            - name: nginx-tmp
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
           livenessProbe:
             tcpSocket:
               port: {{ .Values.excalidraw.port }}
@@ -38,3 +47,35 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
           resources: {{ .Values.excalidraw.resources | toYaml | nindent 12 }}
+{{- if .Values.excalidraw.oidc.enabled }}
+        - name: oauth2-proxy
+          image: {{ .Values.excalidraw.oidc.proxyImage }}:{{ .Values.excalidraw.oidc.proxyTag }}
+          ports:
+            - containerPort: 4180
+              protocol: TCP
+          args:
+            - --provider=oidc
+            - --oidc-issuer-url={{ .Values.excalidraw.oidc.issuerUrl }}
+            - --upstream=http://127.0.0.1:{{ .Values.excalidraw.port }}
+            - --http-address=0.0.0.0:4180
+            - --email-domain=*
+            - --client-id={{ .Values.excalidraw.oidc.clientId }}
+            - --client-secret={{ .Values.excalidraw.oidc.clientSecret }}
+            - --cookie-secret={{ .Values.excalidraw.oidc.cookieSecret }}
+            - --cookie-secure=true
+            - --pass-authorization-header=true
+            - --set-xauthrequest=true
+            - --ssl-insecure-skip-verify=true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+{{- end }}
+      volumes:
+        - name: nginx-tmp
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}

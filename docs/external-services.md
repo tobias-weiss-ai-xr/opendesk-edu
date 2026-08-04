@@ -268,10 +268,11 @@ Configuration follows the same pattern as the upstream services above.
 ## Footnotes
 
 [^1] The upstream product documentation provides some valuable information regarding database migrations:
-- Nextcloud: https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
-- XWiki:
-  - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature
-  - https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport
+
+* Nextcloud: <https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html>
+* XWiki:
+  * <https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/Backup#HUsingtheXWikiExportfeature>
+  * <https://www.xwiki.org/xwiki/bin/view/Documentation/AdminGuide/ImportExport>
 
 [^2] OX App Suite only supports MariaDB and requires root access, as it manages its databases itself.
 

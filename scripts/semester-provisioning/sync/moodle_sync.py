@@ -21,7 +21,7 @@ class MoodleSyncAdapter:
     Dummy-Implementierung ersetzt.
     """
 
-    def __init__(self, role_mapping: Dict[str, str]):
+    def __init__(self, role_mapping: Dict[str, str]) -> None:
         self.role_mapping = role_mapping
 
     def map_role(self, keycloak_role: str) -> Optional[str]:

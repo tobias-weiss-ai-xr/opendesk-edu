@@ -16,10 +16,7 @@ requireConfig: "ignored"
 # List of Repositories
 # See: https://docs.renovatebot.com/configuration-options/
 repositories:
-  - repository: "tobias-weiss-ai-xr/opendesk-edu"
-    # Set the branch to read current dependency state from, this is especially useful during
-    # renovate setup when looking into your feature branch or when your default branch is
-    # not the one you want to check on.
+  - repository: "opendesk-edu/opendesk-edu"
     baseBranches: [ "main" ]
     # Set a limit for the maximum number of parallel MRs (default 10)
     prConcurrentLimit: 50

@@ -6,7 +6,7 @@ commonAnnotations:
 
 typo3:
   # Image configuration
-  image: {{ .Values.images.typo3.repository | default "ghcr.io/opendesk-edu/typo3" | quote }}
+  image: {{ .Values.images.typo3.repository | default "ghcr.io/opendesk/typo3" | quote }}
   tag: {{ .Values.images.typo3.tag | default "13.4.0" | quote }}
   port: 80
 
@@ -38,6 +38,13 @@ typo3:
 
   # Install tool password (hashed)
   installToolPassword: {{ .Values.secrets.typo3.installToolPassword | default "changeme" | quote }}
+
+sso:
+  oidc:
+    enabled: {{ .Values.apps.typo3.oidc.enabled | default false }}
+    issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
+    clientId: "opendesk-typo3"
+    clientSecret: "{{ .Values.secrets.keycloak.clientSecret.typo3 | default "" }}"
 
 # Ingress configuration
 ingress:

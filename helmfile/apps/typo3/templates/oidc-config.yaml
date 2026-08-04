@@ -13,14 +13,14 @@ data:
   oidc-config.php: |
     <?php
     return [
-        'oidcEndpointAuthorize' => 'https://id.opendesk.example.com/realms/opendesk/protocol/openid-connect/auth',
-        'oidcEndpointToken' => 'https://id.opendesk.example.com/realms/opendesk/protocol/openid-connect/token',
-        'oidcEndpointUserInfo' => 'https://id.opendesk.example.com/realms/opendesk/protocol/openid-connect/userinfo',
-        'oidcEndpointLogout' => 'https://id.opendesk.example.com/realms/opendesk/protocol/openid-connect/logout',
+        'oidcEndpointAuthorize' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/auth',
+        'oidcEndpointToken' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/token',
+        'oidcEndpointUserInfo' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/userinfo',
+        'oidcEndpointLogout' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/logout',
         'oidcClientKey' => 'typo3',
         'oidcClientSecret' => '',
         'oidcScopes' => 'openid profile email',
-        'oidcRedirectUri' => 'https://cms.opendesk.example.com/typo3/index.php?loginProvider=1537648589',
+        'oidcRedirectUri' => 'https://cms.opendesk.hrz.uni-marburg.de/typo3/index.php?loginProvider=1537648589',
         'oidcMapping' => [
             'username' => 'preferred_username',
             'email' => 'email',

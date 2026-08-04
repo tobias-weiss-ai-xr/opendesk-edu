@@ -27,7 +27,7 @@ spec:
               service:
                 name: {{ $.Release.Name }}-self-service-password
                 port:
-                  number: 80
+                  number: {{ .Values.selfServicePassword.oidc.enabled | ternary 4180 80 }}
           {{- end }}
     {{- end }}
   {{- if .Values.ingress.tls }}

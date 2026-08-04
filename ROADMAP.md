@@ -31,6 +31,27 @@
 | Excalidraw whiteboard (stateless) | ✅ |
 | Self-Service Password (LDAP) | ✅ |
 | SOGo groupware (alternative to OX App Suite) | ✅ |
+| TYPO3 CMS v13.4 LTS (SAML2 + OIDC SSO) | ✅ |
+| Grommunio groupware (ActiveSync, OIDC) | ✅ |
+
+---
+
+## v1.0.1 — Operational Hardening (HRZ Maui)
+
+> Sprint 5+6: First production deployment hardening at University of Marburg.
+
+| What | Status |
+|:-----|:------:|
+| SSO audit — all 44 Keycloak clients verified | ✅ |
+| Domain migration — from `opendesk-edu.org` to `opendesk.hrz.uni-marburg.de` (12 ingresses) | ✅ |
+| Planka — ingress class fixed (nginx→haproxy), OIDC endpoints fixed | ✅ |
+| SSP — ingress backend service name fixed, OAuth2-proxy working | ✅ |
+| k8up backup operator deployed & verified (33 snapshots) | ✅ |
+| Monitoring — Grafana dashboards deployed (edu-health, k8up) | ✅ |
+| Planka chart — `values.yaml` stripped of unrenderable `.gotmpl` syntax | ✅ |
+| External DNS script — 12 missing A records documented | ✅ |
+| Portal SAML multidomain — hardcoded `opendesk-edu.org` → `opendesk.hrz.uni-marburg.de` | ✅ |
+| Helmfile `.gotmpl` workaround — defined (build works, direct `helm` for targeted syncs) | ✅ |
 
 ---
 
@@ -47,6 +68,7 @@ SAML Service Provider within this federation.
 - [x] Support standard eduGAIN attributes (`eduPersonAffiliation`, `mail`, `displayName`, `persistentId`)
 - [x] Document federation metadata generation for deployers
 - [x] Support Shibboleth IdP as external identity provider (for universities that already run one)
+- [x] Predictable federation metadata (SP) — scripts at `scripts/saml-metadata-generator/` and `scripts/dfn-aai-setup/`
 - [ ] Test with DFN-AAI test federation (`https://www.aai.dfn.de/`)
 
 ### Semester Lifecycle Management
@@ -59,14 +81,24 @@ need to follow this rhythm.
 - [x] Automated course archival at semester end
 - [x] Integration hook for campus management systems (HIS/LSF)
 
+### Build Pipeline — Own Container Images
+
+All charts currently use upstream container images. Building own images gives sovereignty over
+security patching, custom configurations, and supply-chain transparency.
+
+- [ ] Set up CI pipeline for building images from upstream source
+- [ ] Image registry infrastructure (Harbor or equivalent)
+- [ ] Automated base-image updates (Dependabot/Renovate for Docker)
+- [ ] Signing and attestation (cosign, SBOM generation)
+
 ### Backchannel Logout
 
 Critical for security — when a user logs out of the portal, all sessions across all services must
 be terminated.
 
-- [ ] Implement SAML backchannel logout for ILIAS, Moodle, BBB
-- [ ] Implement OIDC backchannel logout for OpenCloud, Nextcloud
-- [ ] Central logout from portal propagates to all services
+- [x] Implement SAML backchannel logout for ILIAS, Moodle, BBB
+- [x] Implement OIDC backchannel logout for OpenCloud, Nextcloud
+- [x] Central logout from portal propagates to all services
 
 ### User Provisioning & Deprovisioning
 
@@ -77,8 +109,8 @@ existing `scripts/user_import/` tooling.
 - [x] Configurable SAML account linking via Keycloak admin API (federated-identity endpoints)
 - [x] Two-phase deprovisioning: disable (6-month grace period) → permanent delete
 - [x] UCS/UDM REST API integration for provisioning (LDAP groups, CSV/ODS import)
-- [ ] Docker image for standalone execution
-- [ ] Documentation and operational runbook
+- [x] Docker image for standalone execution
+- [x] Documentation and operational runbook
 
 ---
 
@@ -169,6 +201,7 @@ The proven pattern at German universities uses **three layers**:
 Automate user provisioning based on university enrollment/exmatriculation events.
 
 **Data flow:**
+
 ```
 HISinOne (immatrikulation) → LDAP/AD (existing university IdM) → Keycloak (user sync) → all services
 HISinOne (exmatrikulation) → LDAP/AD → Keycloak (user deactivation) → access revoked
@@ -193,6 +226,7 @@ HISinOne (exmatrikulation) → LDAP/AD → Keycloak (user deactivation) → acce
 Automate course creation, enrollment, and roster management in ILIAS and Moodle.
 
 **Data flow:**
+
 ```
 HISinOne (semester start) → HISinOne-Proxy → openDesk Integration Layer
   → ILIAS: create courses, assign categories, add lecturers, enroll students
@@ -331,13 +365,13 @@ universities that want maximum control with minimal infrastructure.
 
 **Recommendation:** Use Opencast for infrastructure-rich campuses, SNIpR for focused teaching needs.
 
-- [ ] Helm chart for SNIpR recording service
-- [ ] SSO integration via Keycloak (OIDC)
-- [] Integration with F13 transcription service for auto-transcription
-- [ ] Storage backend (S3-compatible for recordings)
-- [ ] LTI 1.3 integration with ILIAS and Moodle
-- [ ] Portal tile for SNIpR
-- [ ] Backup integration with k8up
+- [x] Helm chart for SNIpR recording service
+- [x] SSO integration via Keycloak (OIDC)
+- [x] Integration with F13 transcription service for auto-transcription
+- [x] Storage backend (S3-compatible for recordings)
+- [x] LTI 1.3 integration with ILIAS and Moodle
+- [x] Portal tile for SNIpR
+- [x] Backup integration with k8up
 
 ---
 
@@ -509,14 +543,15 @@ Growing EU requirement via European Open Science Cloud (EOSC).
 | **Canvas LMS** | Proprietary (Instructure). Conflicts with sovereignty principle. |
 | **Shibboleth IdP deployment** | Universities already run their own IdP. openDesk Edu integrates as a SAML SP, not an IdP provider. SATOSA proxy (v5.0) handles SAML-to-OIDC translation for federated scenarios. |
 | **Keycloak as eduGAIN IdP** | SAML federation support is incomplete. Use Shibboleth IdP for federation, Keycloak for internal IAM. |
+| **Stack4Ops/public** | Evaluated and discarded — operations tooling not relevant to education integration needs |
 
 ---
 
 ## Timeline
 
 ```
-2026 Q2   v1.0  Core platform + 13 education services (ILIAS, Moodle, BBB, OpenCloud, SOGo, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, SSP)
-           v1.1  DFN-AAI federation + semester lifecycle + logout + user provisioning/deprovisioning
+2026 Q2   v1.0  Core platform + 15 education services (ILIAS, Moodle, BBB, OpenCloud, SOGo, Grommunio, TYPO3, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, SSP)
+            v1.1  DFN-AAI federation + semester lifecycle + logout + user provisioning/deprovisioning + own container image pipeline
 2026 Q3   v1.2  Opencast + Tobira lecture recording
 2026 Q4   v1.5  HISinOne/Marvin campus management integration (phase 1: identity)
 2027 Q1   v1.5  HISinOne integration (phase 2: courses, phase 3: schedule/exams)

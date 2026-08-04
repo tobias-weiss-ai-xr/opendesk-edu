@@ -27,18 +27,18 @@ serviceAccount:
   annotations: {}
 
 ingress:
-  enabled: false
+  enabled: true
   className: "haproxy"
   annotations: {}
   hosts:
-    - host: "moodle.opendesk.example.com"
+    - host: "moodle.opendesk.hrz.uni-marburg.de"
       paths:
         - path: /
           pathType: "ImplementationSpecific"
   tls:
     - secretName: "opendesk-certificates-tls"
       hosts:
-        - "moodle.opendesk.example.com"
+        - "moodle.opendesk.hrz.uni-marburg.de"
 
 resources:
   requests:
@@ -59,8 +59,32 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+# External database configuration
+externalDatabase:
+  host: ""
+  port: 3306
+  name: "moodle"
+  user: "moodle"
+  password: ""
+
 persistence:
   enabled: true
   size: "8Gi"
   storageClass: ""
   accessMode: "ReadWriteMany"
+
+# SAML SSO configuration
+sso:
+  saml:
+    enabled: true
+    entityId: https://moodle.opendesk.example.com/shibboleth
+    idpEntityId: https://id.opendesk.example.com/realms/opendesk
+    idpSsoUrl: https://id.opendesk.example.com/realms/opendesk/protocol/saml
+    idpMetadataUrl: https://id.opendesk.example.com/realms/opendesk/protocol/saml/descriptor

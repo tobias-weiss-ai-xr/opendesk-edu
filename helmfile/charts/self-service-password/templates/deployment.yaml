@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,6 +18,10 @@ spec:
       labels:
         self-service-password/server: "true"
 {{ include "self-service-password.labels" . | nindent 8 }}
+{{- if .Values.selfServicePassword.oidc.enabled }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+{{- end }}
     spec:
       containers:
         - name: self-service-password
@@ -44,11 +48,38 @@ spec:
           resources: {{ .Values.selfServicePassword.resources | toYaml | nindent 12 }}
           livenessProbe:
             tcpSocket:
-              port: 80
+              port: {{ .Values.selfServicePassword.port }}
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             tcpSocket:
-              port: 80
+              port: {{ .Values.selfServicePassword.port }}
             initialDelaySeconds: 5
             periodSeconds: 5
+{{- if .Values.selfServicePassword.oidc.enabled }}
+        - name: oauth2-proxy
+          image: {{ .Values.selfServicePassword.oidc.proxyImage }}:{{ .Values.selfServicePassword.oidc.proxyTag }}
+          ports:
+            - containerPort: 4180
+              protocol: TCP
+          args:
+            - --provider=oidc
+            - --oidc-issuer-url={{ .Values.selfServicePassword.oidc.issuerUrl }}
+            - --upstream=http://127.0.0.1:{{ .Values.selfServicePassword.port }}
+            - --http-address=0.0.0.0:4180
+            - --email-domain=*
+            - --client-id={{ .Values.selfServicePassword.oidc.clientId }}
+            - --client-secret={{ .Values.selfServicePassword.oidc.clientSecret }}
+            - --cookie-secret={{ .Values.selfServicePassword.oidc.cookieSecret }}
+            - --cookie-secure=true
+            - --pass-authorization-header=true
+            - --set-xauthrequest=true
+            - --ssl-insecure-skip-verify=true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+{{- end }}

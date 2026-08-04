@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 suite: Ingress
 templates:
   - ingress.yaml
@@ -25,7 +25,6 @@ tests:
   - it: should configure the host from values
     set:
       ingress.enabled: true
-      ingress.hosts[0].host: typo3.opendesk.example.com
     asserts:
       - equal:
           path: spec.rules[0].host
@@ -34,9 +33,6 @@ tests:
   - it: should configure TLS when provided
     set:
       ingress.enabled: true
-      ingress.tls:
-        - hosts:
-            - typo3.opendesk.example.com
     asserts:
       - isNotNull:
           path: spec.tls

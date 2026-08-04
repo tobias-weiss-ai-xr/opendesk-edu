@@ -27,7 +27,7 @@ What actually happened. Include relevant error messages, logs, or screenshots.
 
 ## Environment
 
-- **openDesk Edu version**: 
+- **openDesk Edu version**:
 - **Kubernetes distribution and version**: (e.g., RKE2 1.28, K3s 1.29)
 - **Ingress controller**: (e.g., HAProxy, NGINX)
 - **Storage class**: (e.g., Ceph RBD, local-path)

@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "jupyterhub"
+    url: "https://hub.jupyter.org/helm-chart"
+    oci: false
+releases:
+  - name: "jupyterhub"
+    chart: "jupyterhub/jupyterhub"
+    version: "{{ .Values.charts.jupyterhub.version }}"
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.jupyterhub.enabled }}
+    timeout: 900
+commonLabels:
+  deployStage: "050-components"
+  component: "jupyterhub"

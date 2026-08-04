@@ -58,7 +58,7 @@ DB Password generator
 */}}
 {{- define "ilias.dbPassword" -}}
 {{-   if .Values.ilias.db.password }}
-{{- .Values.ilias.db.user }}
+{{- .Values.ilias.db.password }}
 {{-   else if .Values.mariadbgalera.enabled }}
 {{- .Values.mariadbgalera.db.password }}
 {{-   else }}
@@ -72,7 +72,7 @@ DB Name generator
 */}}
 {{- define "ilias.dbName" -}}
 {{-   if .Values.ilias.db.name }}
-{{- .Values.ilias.db.user }}
+{{- .Values.ilias.db.name }}
 {{-   else if .Values.mariadbgalera.enabled }}
 {{- .Values.mariadbgalera.db.name }}
 {{-   else }}

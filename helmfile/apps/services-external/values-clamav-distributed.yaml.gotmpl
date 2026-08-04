@@ -100,9 +100,9 @@ freshclam:
       {{ .Values.annotations.servicesExternalClamavDistributed.freshclamServiceAccount | toYaml | nindent 6 }}
   extraEnvVars:
     - name: "HTTP_PROXY"
-      value: "http://proxy.example.com:3128"
+      value: "http://www-proxy2.uni-marburg.de:3128"
     - name: "HTTPS_PROXY"
-      value: "http://proxy.example.com:3128"
+      value: "http://www-proxy2.uni-marburg.de:3128"
     - name: "NO_PROXY"
       value: "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/16,192.168.0.0/16,*.svc,*.cluster.local"
   settings:

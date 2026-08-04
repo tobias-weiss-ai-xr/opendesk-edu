@@ -6,6 +6,8 @@ metadata:
   name: {{ .Release.Name }}-bookstack-uploads
   labels:
 {{ include "bookstack.labels" . | nindent 4 }}
+    backup-tier: "b"
+    k8up/backup: "true"
 spec:
   accessModes:
     - {{ .Values.bookstack.volumes.uploads.accessMode }}

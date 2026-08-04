@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
@@ -27,7 +27,7 @@ _courses_db: dict[str, Course] = {}
 _enrollments_db: dict[str, Enrollment] = {}
 
 
-async def _get_lms_client(lms: LMSPlatform):
+async def _get_lms_client(lms: LMSPlatform) -> ILIASClient | MoodleClient:
     if lms == LMSPlatform.ILIAS:
         return ILIASClient()
     return MoodleClient()

@@ -1,25 +1,23 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 
 """
 Phase 1 Deprovisioning Script: Disable Users Missing from IAM API
 """
 
-import os.path
 import logging
 import configargparse
 import requests
-from datetime import datetime
-from pathlib import Path
 
 from lib.constants import NON_RECONCILE_GROUPS, DEFAULT_IDENTITY_PROVIDER
 from lib.ucs import Ucs
 from lib.keycloak import remove_saml_identity_with_credentials
+from lib.common import parse_bool_string, setup_logging, create_ucs_options, get_timestamp, get_default_output_filename
 
 
-def parse_args():
+def parse_args() -> configargparse.ArgumentParser:
     p = configargparse.ArgParser()
 
     p.add(
@@ -93,21 +91,21 @@ def parse_args():
         "--dry_run",
         env_var="DRY_RUN",
         default=False,
-        type=lambda x: x.lower() in ("true", "1", "yes"),
+        type=parse_bool_string,
         help="If True, only log what would be done without making changes.",
     )
     p.add(
         "--verify_certificate",
         env_var="VERIFY_CERTIFICATE",
         default=True,
-        type=lambda x: x.lower() in ("true", "1", "yes"),
+        type=parse_bool_string,
         help="Verify SSL certificates.",
     )
     p.add(
         "--enforce_ipv4",
         env_var="ENFORCE_IPV4",
         default=False,
-        type=lambda x: x.lower() in ("true", "1", "yes"),
+        type=parse_bool_string,
         help="Enforce IPv4 communication.",
     )
     p.add(
@@ -121,32 +119,7 @@ def parse_args():
     return p.parse_args()
 
 
-def setup_logging(options):
-    Path(options.logpath).mkdir(parents=True, exist_ok=True)
-
-    logFormatter = logging.Formatter("%(asctime)s %(levelname)-5.5s %(message)s")
-    rootLogger = logging.getLogger()
-    rootLogger.setLevel(options.loglevel)
-
-    fileHandler = logging.FileHandler(
-        f"{options.logpath}/{os.path.basename(__file__)}.log"
-    )
-    fileHandler.setFormatter(logFormatter)
-    rootLogger.addHandler(fileHandler)
-
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setFormatter(logFormatter)
-    rootLogger.addHandler(consoleHandler)
-
-    logging.info("Running with settings:")
-    for option, setting in vars(options).items():
-        if "password" in option.lower():
-            logging.info(f"> {option}: <redacted>")
-        else:
-            logging.info(f"> {option}: {setting}")
-
-
-def get_iam_api_users(iam_api_url):
+def get_iam_api_users(iam_api_url: str) -> set[str]:
     try:
         response = requests.get(iam_api_url, timeout=30)
         response.raise_for_status()
@@ -166,7 +139,7 @@ def get_iam_api_users(iam_api_url):
         return set()
 
 
-def get_ucs_users(ucs):
+def get_ucs_users(ucs: Ucs) -> set[str]:
     try:
         users = ucs._Ucs__get_object_list("user", "user")
         usernames = set()
@@ -179,22 +152,21 @@ def get_ucs_users(ucs):
 
         logging.info(f"Found {len(usernames)} users in UCS")
         return usernames
-
     except Exception as e:
         logging.error(f"Failed to get UCS users: {e}")
         return set()
 
 
 def deprovision_user(
-    ucs,
-    username,
-    keycloak_url,
-    keycloak_username,
-    keycloak_password,
-    identity_provider,
-    timestamp,
-    dry_run=False,
-):
+    ucs: Ucs,
+    username: str,
+    keycloak_url: str,
+    keycloak_username: str,
+    keycloak_password: str,
+    identity_provider: str,
+    timestamp: str,
+    dry_run: bool = False,
+) -> bool:
     logging.info(f"Deprovisioning user: {username}")
 
     if dry_run:
@@ -221,9 +193,7 @@ def deprovision_user(
         ):
             logging.info(f"  Removed SAML identity for {username}")
         else:
-            logging.warning(
-                f"  Could not remove SAML identity for {username} (may not exist)"
-            )
+            logging.warning(f"  Could not remove SAML identity for {username} (may not exist)")
     except Exception as e:
         logging.error(f"  Error removing SAML identity for {username}: {e}")
 
@@ -236,16 +206,16 @@ def deprovision_user(
     return success
 
 
-def main():
+def main() -> None:
     options = parse_args()
-    setup_logging(options)
+    setup_logging(options, "deprovision_disable.py")
 
-    timestamp = datetime.now().strftime("%Y-%m-%dT%Hh%Mm%SZ")
+    timestamp = get_timestamp()
 
     if options.output_deprovisioned_filename:
         output_file = options.output_deprovisioned_filename
     else:
-        output_file = f"deprovisioned-{options.import_domain}-{timestamp}.txt"
+        output_file = get_default_output_filename("deprovisioned", options.import_domain)
 
     keycloak_url = options.keycloak_url
     if not keycloak_url:
@@ -253,36 +223,11 @@ def main():
 
     maildomain = options.import_maildomain or options.import_domain
 
-    class UcsOptions:
-        pass
-
-    ucs_options = UcsOptions()
-    ucs_options.enforce_ipv4 = options.enforce_ipv4
-    ucs_options.localhost_port = options.localhost_port
-    ucs_options.verify_certificate = options.verify_certificate
-    ucs_options.output_accounts_filename = None
-    ucs_options.reconcile_groups = False
-    ucs_options.trigger_invitation_mail = False
-    ucs_options.create_maildomains = False
-    ucs_options.create_oxcontexts = False
-    ucs_options.default_oxcontext = 1
-    ucs_options.group_component_enable_groupware = True
-    ucs_options.group_component_enable_fileshare = True
-    ucs_options.group_component_enable_projectmanagement = True
-    ucs_options.group_component_enable_knowledgemanagement = True
-    ucs_options.group_component_enable_livecollaboration = True
-    ucs_options.group_component_enable_videoconference = True
-    ucs_options.group_component_enable_notes = True
-    ucs_options.component_disable_groupware = False
-    ucs_options.component_disable_fileshare = False
-    ucs_options.component_disable_projectmanagement = False
-    ucs_options.component_disable_knowledgemanagement = False
-    ucs_options.component_disable_livecollaboration = False
-    ucs_options.component_disable_videoconference = False
-    ucs_options.component_disable_notes = False
-    ucs_options.admin_enable_fileshare = False
-    ucs_options.admin_enable_projectmanagement = False
-    ucs_options.admin_enable_knowledgemanagement = False
+    ucs_options = create_ucs_options(
+        enforce_ipv4=options.enforce_ipv4,
+        localhost_port=options.localhost_port,
+        verify_certificate=options.verify_certificate,
+    )
 
     ucs = Ucs(
         adm_username=options.udm_api_username,

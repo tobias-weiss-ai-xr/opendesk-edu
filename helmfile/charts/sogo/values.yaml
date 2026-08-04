@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 sogo:
   image:
-    repository: sonroyaalmerol/docker-sogo
-    tag: "5.11.0"
+    repository: weissto/sogo
+    tag: "bookworm-5.8.0"
     pullPolicy: IfNotPresent
 
   replicaCount: 1
@@ -27,6 +27,10 @@ sogo:
     user: "sogo"
     password: ""
     name: "sogo"
+    initJob:
+      enabled: true
+      nodeSelector: {}
+      tolerations: []
 
   # LDAP connection
   ldap:

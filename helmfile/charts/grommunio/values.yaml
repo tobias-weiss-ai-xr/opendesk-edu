@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 
 # =============================================================================
 # GROMMUNIO APPLICATION CONFIGURATION
@@ -16,7 +16,7 @@ grommunio:
 
   # Deployment scaling
   replicaCount: 1
-  
+
   # Rolling update strategy (zero-downtime deployments)
   strategy:
     type: RollingUpdate
@@ -43,7 +43,6 @@ grommunio:
     runAsGroup: 1000
 
   containerSecurityContext:
-    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     runAsNonRoot: true
 
@@ -55,7 +54,7 @@ grommunio:
   # Localization
   timezone: "Europe/Berlin"
   language: "English"
-  pageTile: "openDesk Mail"
+  pageTitle: "openDesk Mail"
 
   # =========================================================================
   # DATABASE CONFIGURATION (CRITICAL: MariaDB/MySQL ONLY)
@@ -68,7 +67,7 @@ grommunio:
     user: "grommunio"
     password: ""
     name: "grommunio"
-    
+
     # Connection pool settings
     pool:
       maxConnections: 100
@@ -90,7 +89,7 @@ grommunio:
   # =========================================================================
   auth:
     method: oidc  # Preferred: oidc or saml
-    
+
     # Keycloak OIDC configuration (preferred)
     oidc:
       enabled: true
@@ -98,7 +97,7 @@ grommunio:
       clientId: "grommunio"
       clientSecret: ""
       scope: "openid profile email"
-    
+
     # SAML configuration (alternative)
     saml:
       enabled: false
@@ -124,17 +123,20 @@ grommunio:
   # =========================================================================
   mail:
     domain: "opendesk.example.com"
-    
+
     imap:
       server: "imaps://dovecot:993"
       ssl: true
-      
+
     smtp:
       server: "smtp://postfix:587"
       tls: true
-      
+
     sieve:
       server: "sieve://dovecot:4190"
+
+    lmtp:
+      port: 24
 
   # =========================================================================
   # FEATURE FLAGS
@@ -147,9 +149,6 @@ grommunio:
     ews: true         # Exchange Web Services
     mapi: true        # MAPI/HTTP for Outlook
     webinterface: true
-    chat: true
-    meet: true
-    files: true
 
   # =========================================================================
   # ACTIVESYNC CONFIGURATION (Mobile devices)
@@ -193,6 +192,8 @@ grommunio:
       port: 9090
       path: "/metrics"
       scrapeInterval: 30s
+      alertLabels: {}
+      additionalLabels: {}
 
   # =========================================================================
   # HEALTH CHECKS (Critical for production)
@@ -205,7 +206,7 @@ grommunio:
       periodSeconds: 30
       timeoutSeconds: 10
       failureThreshold: 3
-      
+
     readiness:
       path: "/ready"
       port: 8080
@@ -213,7 +214,7 @@ grommunio:
       periodSeconds: 10
       timeoutSeconds: 5
       failureThreshold: 3
-      
+
     startup:
       path: "/healthz"
       port: 8080
@@ -255,6 +256,7 @@ grommunio:
     type: ClusterIP
     port: 80
     targetPort: 8080
+    annotations: {}
 
   # =========================================================================
   # POD DISRUPTION BUDGET
@@ -262,7 +264,6 @@ grommunio:
   pdb:
     enabled: true
     minAvailable: 1
-    maxUnavailable: 0
 
   # =========================================================================
   # HORIZONTAL POD AUTOSCALER
@@ -295,6 +296,11 @@ grommunio:
     tools:
       kdb2mt: true
       oxm2mt: true
+
+# =============================================================================
+# NETWORK POLICY
+# =============================================================================
+networkPolicy: {}
 
 # =============================================================================
 # MARIADB SUBCHART (Optional - dev/test only)

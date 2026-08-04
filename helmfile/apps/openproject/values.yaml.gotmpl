@@ -125,6 +125,10 @@ extraVolumeMounts:
     subPath: "ca-certificates.crt"
 {{- end }}
 
+extraEnvVars:
+- name: SECRET_KEY_BASE
+  value: "458d47ccba119f036b9069c6e76be5e6669ab28dac584bfc390dbd5436429f3aa0c0b6088112e29fd931f1cbf4674fcc6cf3b6fd48c1b22c8f79bf53b6247a3e"
+
 hocuspocus:
   enabled: true
   ingress:
@@ -197,6 +201,9 @@ openproject:
   # seed will only be executed on initial installation
   seed_locale: "de"
   host: "{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}"
+  # SECRET_KEY_BASE used to sign cookies/sessions
+  # Generate via: openssl rand -hex 64
+  secretKeyBase: {{ .Values.secrets.openproject.secretKeyBase | default .Values.databases.openproject.password | quote }}
   # Will only be set on initial seed / installation
   admin_user:
     name: "OpenProject Internal Admin"

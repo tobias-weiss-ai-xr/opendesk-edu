@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 
 global:
   imageRegistry: registry.opencode.de/f13/microservices
@@ -66,7 +66,7 @@ secrets:
   feedbackDb: ""
   transcriptionDb: ""
   rabbitmq: ""
-  huggingfaceToken: "placeholder-token-replace-in-production"  # REQUIRED: Set to your HuggingFace API token for model downloads
+  huggingfaceToken: ""  # REQUIRED: Set to your HuggingFace API token for model downloads
 
 ingress:
   enabled: true

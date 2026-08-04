@@ -53,6 +53,23 @@ spec:
               value: "false"
             - name: XML_CATALOG_FILES
               value: "/usr/share/xml/shibboleth/catalog.xml:/usr/share/xml/xmltooling/catalog.xml:/usr/share/xml/opensaml/saml20-catalog.xml:/usr/share/xml/opensaml/saml11-catalog.xml"
+{{- if .Values.externalDatabase.host }}
+            - name: MOODLE_DATABASE_TYPE
+              value: {{ .Values.externalDatabase.type | default "pgsql" | quote }}
+            - name: MOODLE_DATABASE_HOST
+              value: {{ .Values.externalDatabase.host | quote }}
+            - name: MOODLE_DATABASE_PORT
+              value: {{ .Values.externalDatabase.port | toString | quote }}
+            - name: MOODLE_DATABASE_NAME
+              value: {{ .Values.externalDatabase.database | quote }}
+            - name: MOODLE_DATABASE_USER
+              value: {{ .Values.externalDatabase.user | quote }}
+            - name: MOODLE_DATABASE_PASSWORD
+              value: {{ .Values.externalDatabase.password | quote }}
+{{- else }}
+            - name: MOODLE_DATABASE_HOST
+              value: "postgresql"
+{{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           livenessProbe:
@@ -68,29 +85,36 @@ spec:
           volumeMounts:
             - name: moodle-data
               mountPath: /bitnami/moodle
+            - name: moodle-data
+              mountPath: /var/www/moodledata
+              subPath: moodledata
+{{- if .Values.sso.saml.enabled }}
             - name: shibboleth-sp-config
               mountPath: /etc/shibboleth
-              readOnly: true
-            - name: shibboleth-sp-certs
-              mountPath: /etc/shibboleth/certs
               readOnly: true
             - name: apache-shibboleth-config
               mountPath: /etc/apache2/conf-enabled/shibboleth.conf
               subPath: shibboleth.conf
               readOnly: true
+            - name: entity-metadata
+              mountPath: /etc/shibboleth/metadata
+              readOnly: true
+{{- end }}
       volumes:
         - name: moodle-data
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-moodle-data
+{{- if .Values.sso.saml.enabled }}
         - name: shibboleth-sp-config
           configMap:
-            name: moodle-shibboleth-sp-config
-        - name: shibboleth-sp-certs
-          secret:
-            secretName: moodle-shibboleth-sp-secret
+            name: {{ .Release.Name }}-shibboleth-sp-config
         - name: apache-shibboleth-config
           configMap:
-            name: moodle-apache-shibboleth-config
+            name: {{ .Release.Name }}-apache-shibboleth-config
+        - name: entity-metadata
+          secret:
+            secretName: {{ .Release.Name }}-entity-metadata
+{{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

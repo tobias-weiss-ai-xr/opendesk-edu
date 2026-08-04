@@ -8,9 +8,6 @@ paginate: true
 
 ![width:900](media/readme-lead-image.svg)
 
-
-
-
 # 🏛️ openDesk: Зручны і Суверэнны?
 
 🎓 openDesk Edu — Лічбовая Суверэнасць ва Ўніверсітэтах
@@ -322,7 +319,7 @@ helmfile rollback -e hrz
 
 ---
 
-# 🤝 Далучайцеся!
+# 🤝 Далучайцеся
 
 **Дапамажыце нам стварыць openDesk Edu для ўніверсітэтаў!**
 

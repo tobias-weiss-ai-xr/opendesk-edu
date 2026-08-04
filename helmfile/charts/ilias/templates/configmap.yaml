@@ -84,6 +84,7 @@ data:
                 INSERT INTO settings (keyword, value) VALUES ('shib_update_lastname', '1') ON DUPLICATE KEY UPDATE value='1';
                 INSERT INTO settings (keyword, value) VALUES ('shib_user_default_role', '4') ON DUPLICATE KEY UPDATE value='4';
                 INSERT INTO settings (keyword, value) VALUES ('auth_mode', 'shibboleth') ON DUPLICATE KEY UPDATE value='shibboleth';
+                INSERT INTO settings (keyword, value) VALUES ('shib_automatic_redirect', '1') ON DUPLICATE KEY UPDATE value='1';
             "
         fi
 ---
