@@ -1,0 +1,139 @@
+# Grafana Contact Points Configuration
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# This file configures notification contact points for Grafana Alerting.
+# Multiple contact points can be defined for different notification methods.
+#
+# Usage:
+#   - Email notifications
+#   - Slack webhook notifications
+#   - PagerDuty notifications
+#   - Webhook notifications (for custom integrations)
+#
+# ==============================================================================
+
+# Example contact point configurations (uncomment and modify as needed)
+
+# -----------------------------------------------------------------------------
+# Email Contact Point
+# -----------------------------------------------------------------------------
+# Uncomment and modify the following to enable email notifications
+#
+# - name: email
+#   type: email
+#   settings:
+#     # List of email addresses to notify
+#     addresses: "alerts@opendesk-edu.org,admin@opendesk-edu.org"
+#     # SMTP server configuration (matches Grafana's SMTP settings)
+#     single_email: false
+#     # Optional: custom subject line template
+#     message: "{{ .CommonLabels.alertname }}: {{ .CommonLabels.severity }}"
+#     # Optional: disable resolution notifications
+#     disable_resolve_message: false
+
+# -----------------------------------------------------------------------------
+# Slack Contact Point
+# -----------------------------------------------------------------------------
+# Uncomment and modify the following to enable Slack notifications
+#
+# - name: slack-channel
+#   type: slack
+#   settings:
+#     # Slack webhook URL (create in Slack: Apps > Incoming Webhooks)
+#     url: "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
+#     # Channel to post to (overrides webhook default)
+#     title: "{{ template \"slack.opendesk.title\" . }}"
+#     text: "{{ template \"slack.opendesk.text\" . }}"
+#     # Optional: custom emoji
+#     icon_emoji: ":warning:"
+#     # Optional: custom username
+#     username: "Grafana Alerts"
+#     # Optional: enablement of Slack blocks for richer notifications
+#     use_blocks: true
+
+# -----------------------------------------------------------------------------
+# PagerDuty Contact Point
+# -----------------------------------------------------------------------------
+# Uncomment and modify the following to enable PagerDuty notifications
+#
+# - name: pagerduty
+#   type: pagerduty
+#   settings:
+#     # PagerDuty Integration/Service Key
+#     integration_key: "your-pagerduty-integration-key"
+#     # Optional: URL to link back to Grafana from PagerDuty
+#     url: "https://grafana.opendesk-edu.org"
+#     # Optional: severity level mapping
+#     severity: "{{ if eq .CommonLabels.severity \"critical\" }}\n  high\n{{ else if eq .CommonLabels.severity \"warning\" }}\n  medium\n{{ else }}\n  low\n{{ end }}"
+
+# -----------------------------------------------------------------------------
+# Webhook Contact Point (Generic)
+# -----------------------------------------------------------------------------
+# Uncomment and modify the following to enable generic webhook notifications
+#
+# - name: webhook
+#   type: webhook
+#   settings:
+#     # Webhook URL to POST alerts to
+#     url: "https://your-webhook-endpoint.example.com/alerts"
+#     # HTTP method (POST by default)
+#     method: "POST"
+#     # Optional: custom headers
+#     headers:
+#       - name: "Content-Type"
+#         value: "application/json"
+#       - name: "Authorization"
+#         value: "Bearer your-token"
+#     # Optional: max retry attempts
+#     max_retries: 3
+
+# -----------------------------------------------------------------------------
+# Microsoft Teams Contact Point
+# -----------------------------------------------------------------------------
+# Uncomment and modify the following to enable Teams notifications
+#
+# - name: teams
+#   type: teams
+#   settings:
+#     # Microsoft Teams webhook URL
+#     url: "https://outlook.office.com/webhook/..."
+#     # Character limit for message
+#     max_message_length: 1000
+
+# -----------------------------------------------------------------------------
+# Discord Contact Point
+# -----------------------------------------------------------------------------
+# Uncomment and modify the following to enable Discord notifications
+#
+# - name: discord
+#   type: discord
+#   settings:
+#     # Discord webhook URL
+#     url: "https://discord.com/api/webhooks/your-webhook-url"
+#     # Optional: avatar URL
+#     avatar_url: "https://opendesk-edu.org/static/logo.png"
+#     # Optional: custom message format
+#     message: "{{ .CommonLabels.alertname }}: {{ .CommonLabels.severity }}"
+
+# -----------------------------------------------------------------------------
+# Content-based template definitions for Slack
+# -----------------------------------------------------------------------------
+#
+# templates:
+#   - name: slack.opendesk.title
+#     template: "{{ define \"slack.opendesk.title\" }}{{ if .Status == \"firing\" }}
+# \u26a0 {{ .CommonLabels.alertname }}{{ else }}-
+# \u2705 {{ .CommonLabels.alertname }} resolved{{ end }}{{ end }}"
+# 
+#   - name: slack.opendesk.text
+#     template: "{{ define \"slack.opendesk.text\" }}{{ range .Alerts }}
+# *Alert:* {{ .Labels.alertname }}
+# *Severity:* {{ .Labels.severity }}
+# *Status:* {{ .Status }}
+# *Summary:* {{ .Annotations.summary }}
+# *Description:* {{ .Annotations.description }}
+# *Starts At:* {{ .StartsAt.Format \"2006-01-02 15:04:05 UTC\" }}
+# {{ if gt (len .GeneratorURL) 0 }}
+# *Source:* <{{ .GeneratorURL }}|View in Grafana>{{ end }}
+# {{ end }}{{ end }}"
