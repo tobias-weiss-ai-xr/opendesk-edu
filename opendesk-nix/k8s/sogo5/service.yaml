@@ -1,0 +1,176 @@
+# SOGo 5 Service Configuration
+# SPDX-License-Identifier: Apache-2.0
+---
+# ClusterIP Service for SOGo Web Interface
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5-web
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    opendesk.org/component: mail-calendar-contacts
+    opendesk.org.service-type: web
+    
+    de.zki.it-grundschutz.module: SY.3.4Mail
+    de.container.gov.component: sogo5
+    de.container.gov.service: web
+
+spec:
+  selector:
+    app: sogo
+    version: "5.8.0"
+    component: app
+  
+  ports:
+    # HTTP port (SOGo Web Interface)
+    - name: http
+      port: 80
+      targetPort: 20000
+      protocol: TCP
+    
+    # HTTPS port (if configured)
+    - name: https
+      port: 443
+      targetPort: 20001
+      protocol: TCP
+
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIPTimeoutSeconds: 3600
+
+---
+# Headless Service for direct pod access
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5-headless
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: opendesk
+    app.kubernetes.io/managed-by: kustomize
+    
+    opendesk.org/service-type: headless
+
+spec:
+  clusterIP: None
+  selector:
+    app: sogo
+    version: "5.8.0"
+    component: app
+  
+  ports:
+    - name: http
+      port: 20000
+      targetPort: 20000
+      protocol: TCP
+    - name: https
+      port: 20001
+      targetPort: 20001
+      protocol: TCP
+    - name: dav
+      port: 20002
+      targetPort: 20002
+      protocol: TCP
+
+---
+# Service for CalDAV/CardDAV
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5-dav
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: dav
+    app.kubernetes.io/part-of: opendesk
+    
+    opendesk.org/service-type: dav
+    
+    de.zki.it-grundschutz.module: SY.3.4Mail
+
+spec:
+  selector:
+    app: sogo
+    version: "5.8.0"
+    component: app
+  
+  ports:
+    - name: dav
+      port: 20002
+      targetPort: 20002
+      protocol: TCP
+
+  type: ClusterIP
+
+---
+# Service for ActiveSync
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5-activesync
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: activesync
+    app.kubernetes.io/part-of: opendesk
+    
+    opendesk.org/service-type: activesync
+
+spec:
+  selector:
+    app: sogo
+    version: "5.8.0"
+    component: app
+  
+  ports:
+    - name: activesync
+      port: 20003
+      targetPort: 20003
+      protocol: TCP
+
+  type: ClusterIP
+
+---
+# Service for Admin Interface
+apiVersion: v1
+kind: Service
+metadata:
+  name: sogo5-admin
+  namespace: sogo5
+  labels:
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/instance: sogo5
+    app.kubernetes.io/version: "5.8.0"
+    app.kubernetes.io/component: admin
+    
+    opendesk.org/service-type: admin
+
+spec:
+  selector:
+    app: sogo
+    version: "5.8.0"
+    component: app
+  
+  ports:
+    - name: admin
+      port: 20004
+      targetPort: 20004
+      protocol: TCP
+
+  type: ClusterIP

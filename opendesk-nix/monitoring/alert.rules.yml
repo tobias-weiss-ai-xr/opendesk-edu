@@ -1,0 +1,504 @@
+# Prometheus Alert Rules for openDesk Nix
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+#
+# ==============================================================================
+# Alert rules for monitoring openDesk containers and services.
+#
+# Rules are evaluated every evaluation_interval (15s by default in prometheus.yml)
+# and alerts are sent to Alertmanager for notification.
+#
+#severity: critical, warning, info
+#
+# ==============================================================================
+
+groups:
+  # -----------------------------------------------------------------------------
+  # General System Alerts
+  # -----------------------------------------------------------------------------
+  - name: general.alerts
+    interval: 30s
+    
+    rules:
+      # Instance down alerts
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute"
+          impact: "Service {{ $labels.service }} is not responding"
+          action: "Check container logs, restart container if needed"
+      
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(promhttp_handler_requests_total{status=~"4..|5.."}[5m]) / rate(promhttp_handler_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on {{ $labels.instance }}"
+          description: "{{ $labels.instance }} has {{ printf \"%.2f\" $value }}% error rate"
+          impact: "Poor user experience, reduced service availability"
+          action: "Check logs, verify service health"
+
+  # -----------------------------------------------------------------------------
+  # Dev Agent Operator Alerts
+  # -----------------------------------------------------------------------------
+  - name: dev-agent.alerts
+    interval: 15s
+    
+    rules:
+      # Dev Agent down
+      - alert: DevAgentDown
+        expr: up{job="dev-agent"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          component: dev-agent
+        annotations:
+          summary: "Dev Agent Operator is down"
+          description: "Dev Agent Operator container is not responding"
+          impact: "No automatic repairs will be performed for failing pods"
+          action: "Check Dev Agent logs, restart container"
+      
+      # Dev Agent health check failed
+      - alert: DevAgentHealthCheckFailed
+        expr: probe_success{job="blackbox",module="http_2xx",instance=~"dev-agent:.*"} == 0
+        for: 30s
+        labels:
+          severity: warning
+          component: dev-agent
+        annotations:
+          summary: "Dev Agent health check failed"
+          description: "Dev Agent health endpoint returned error"
+          impact: "Operator may not be functioning correctly"
+          action: "Check health endpoint, verify operator status"
+      
+      # High repair rate
+      - alert: HighRepairRate
+        expr: rate(dev_agent_repairs_total[5m]) > 5
+        for: 5m
+        labels:
+          severity: warning
+          component: dev-agent
+        annotations:
+          summary: "High repair rate detected"
+          description: "Dev Agent has performed {{ printf \"%.0f\" $value }} repairs in the last 5 minutes"
+          impact: "Many pods are failing, investigate root cause"
+          action: "Check cluster logs, investigate failing pods"
+      
+      # Repair failures
+      - alert: RepairFailures
+        expr: increase(dev_agent_repair_failures_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          component: dev-agent
+        annotations:
+          summary: "Dev Agent repair failures detected"
+          description: "{{ printf \"%.0f\" $value }} repair attempts have failed"
+          impact: "Operator cannot fix failing pods automatically"
+          action: "Check operator logs, manual intervention may be required"
+      
+      # Long repair time
+      - alert: LongRepairTime
+        expr: histogram_quantile(0.95, sum(rate(dev_agent_repair_duration_seconds_bucket[5m])) by (le)) > 30
+        for: 5m
+        labels:
+          severity: warning
+          component: dev-agent
+        annotations:
+          summary: "Long repair execution time"
+          description: "95th percentile repair time is {{ printf \"%.2f\" $value }} seconds"
+          impact: "Slow response to failing pods"
+          action: "Investigate repair process, optimize if needed"
+
+  # -----------------------------------------------------------------------------
+  # SOGo 5 Alerts
+  # -----------------------------------------------------------------------------
+  - name: sogo5.alerts
+    interval: 30s
+    
+    rules:
+      # SOGo 5 down
+      - alert: SOGo5Down
+        expr: up{job="sogo5"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: sogo5
+        annotations:
+          summary: "SOGo 5 is down"
+          description: "SOGo 5 service is not responding"
+          impact: "Email, calendar, and contacts services unavailable for SOGo 5 users"
+          action: "Check SOGo 5 container logs, restart if needed"
+      
+      # SOGo 5 health check failed
+      - alert: SOGo5HealthCheckFailed
+        expr: probe_success{job="blackbox",module="http_2xx",instance=~"sogo5:.*"} == 0
+        for: 30s
+        labels:
+          severity: warning
+          component: sogo5
+        annotations:
+          summary: "SOGo 5 health check failed"
+          description: "SOGo 5 web interface returned error"
+          impact: "Users cannot access SOGo 5 services"
+          action: "Check SOGo 5 logs, verify database connection"
+      
+      # SOGo 5 high memory usage
+      - alert: SOGo5HighMemoryUsage
+        expr: (container_memory_working_set_bytes{container_name=~"sogo5.*"} / container_spec_memory_limit_bytes{container_name=~"sogo5.*"}) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: sogo5
+        annotations:
+          summary: "SOGo 5 high memory usage"
+          description: "SOGo 5 is using {{ printf \"%.2f\" $value }}% of its memory limit"
+          impact: "Performance degradation, potential out of memory errors"
+          action: "Increase memory limit or investigate memory leaks"
+      
+      # SOGo 5 high CPU usage
+      - alert: SOGo5HighCPUUsage
+        expr: (rate(container_cpu_usage_seconds_total{container_name=~"sogo5.*"}[5m]) / container_spec_cpu_quota{container_name=~"sogo5.*"} * container_spec_cpu_period{container_name=~"sogo5.*"}) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: sogo5
+        annotations:
+          summary: "SOGo 5 high CPU usage"
+          description: "SOGo 5 is using {{ printf \"%.2f\" $value }}% of its CPU limit"
+          impact: "Performance degradation, slow response times"
+          action: "Increase CPU limit or investigate CPU-intensive operations"
+
+  # -----------------------------------------------------------------------------
+  # SOGo 6 Alerts
+  # -----------------------------------------------------------------------------
+  - name: sogo6.alerts
+    interval: 30s
+    
+    rules:
+      # SOGo 6 down
+      - alert: SOGo6Down
+        expr: up{job="sogo6"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: sogo6
+        annotations:
+          summary: "SOGo 6 is down"
+          description: "SOGo 6 service is not responding"
+          impact: "Email, calendar, contacts, and EDV services unavailable for SOGo 6 users"
+          action: "Check SOGo 6 container logs, restart if needed"
+      
+      # SOGo 6 health check failed
+      - alert: SOGo6HealthCheckFailed
+        expr: probe_success{job="blackbox",module="http_2xx",instance=~"sogo6:.*"} == 0
+        for: 30s
+        labels:
+          severity: warning
+          component: sogo6
+        annotations:
+          summary: "SOGo 6 health check failed"
+          description: "SOGo 6 web interface returned error"
+          impact: "Users cannot access SOGo 6 services"
+          action: "Check SOGo 6 logs, verify database and storage"
+      
+      # SOGo 6 high memory usage
+      - alert: SOGo6HighMemoryUsage
+        expr: (container_memory_working_set_bytes{container_name=~"sogo6.*"} / container_spec_memory_limit_bytes{container_name=~"sogo6.*"}) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: sogo6
+        annotations:
+          summary: "SOGo 6 high memory usage"
+          description: "SOGo 6 is using {{ printf \"%.2f\" $value }}% of its memory limit"
+          impact: "Performance degradation, potential out of memory errors"
+          action: "Increase memory limit or investigate memory leaks"
+      
+      # SOGo 6 storage usage
+      - alert: SOGo6HighStorageUsage
+        expr: (volume_used_bytes{volume=~"sogo6-data.*"} / volume_capacity_bytes{volume=~"sogo6-data.*"}) * 100 > 80
+        for: 10m
+        labels:
+          severity: warning
+          component: sogo6
+        annotations:
+          summary: "SOGo 6 high storage usage"
+          description: "SOGo 6 storage is {{ printf \"%.2f\" $value }}% full"
+          impact: "Risk of running out of storage for EDV and mail data"
+          action: "Clean up old data, increase storage capacity"
+
+  # -----------------------------------------------------------------------------
+  # Zot Registry Alerts
+  # -----------------------------------------------------------------------------
+  - name: zot-registry.alerts
+    interval: 30s
+    
+    rules:
+      # Zot Registry down
+      - alert: ZotRegistryDown
+        expr: up{job="zot-registry"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: zot-registry
+        annotations:
+          summary: "Zot Registry is down"
+          description: "Zot Registry service is not responding"
+          impact: "Container image pulls and pushes disabled, local caching unavailable"
+          action: "Check Zot Registry container logs, restart if needed"
+      
+      # Zot Registry health check failed
+      - alert: ZotRegistryHealthCheckFailed
+        expr: probe_success{job="blackbox",module="http_2xx",instance=~"zot-registry:.*"} == 0
+        for: 30s
+        labels:
+          severity: warning
+          component: zot-registry
+        annotations:
+          summary: "Zot Registry health check failed"
+          description: "Zot Registry health endpoint returned error"
+          impact: "Registry may not be functioning correctly"
+          action: "Check Zot Registry logs, verify configuration"
+      
+      # Zot Registry storage usage
+      - alert: ZotRegistryHighStorageUsage
+        expr: (volume_used_bytes{volume=~"zot-storage.*"} / volume_capacity_bytes{volume=~"zot-storage.*"}) * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+          component: zot-registry
+        annotations:
+          summary: "Zot Registry high storage usage"
+          description: "Zot Registry storage is {{ printf \"%.2f\" $value }}% full"
+          impact: "Risk of running out of storage for cached images"
+          action: "Clean up old images, increase storage capacity"
+      
+      # Zot Registry cache hit ratio low
+      - alert: ZotRegistryLowCacheHitRatio
+        expr: (sum(rate(zot_cache_hits_total[5m])) / sum(rate(zot_cache_requests_total[5m]))) * 100 < 50
+        for: 15m
+        labels:
+          severity: warning
+          component: zot-registry
+        annotations:
+          summary: "Zot Registry low cache hit ratio"
+          description: "Cache hit ratio is {{ printf \"%.2f\" $value }}%"
+          impact: "Most image pulls are going to upstream, slower performance"
+          action: "Review cache configuration, check upstream connectivity"
+
+  # -----------------------------------------------------------------------------
+  # Database Alerts (MariaDB)
+  # -----------------------------------------------------------------------------
+  - name: mariadb.alerts
+    interval: 30s
+    
+    rules:
+      # MariaDB down
+      - alert: MariaDBDown
+        expr: up{job="mariadb-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: mariadb
+        annotations:
+          summary: "MariaDB exporter is down"
+          description: "Cannot collect MariaDB metrics"
+          impact: "Cannot monitor database health"
+          action: "Check MariaDB exporter container"
+      
+      # MariaDB high connections
+      - alert: MariaDBHighConnections
+        expr: mysql_global_status_threads_connected > mysql_global_variables_max_connections * 0.8
+        for: 5m
+        labels:
+          severity: warning
+          component: mariadb
+        annotations:
+          summary: "MariaDB high connection count"
+          description: "MariaDB has {{ printf \"%.0f\" $value }} active connections (80% of max)"
+          impact: "New connections may be rejected"
+          action: "Check for connection leaks, increase max_connections"
+      
+      # MariaDB slow queries
+      - alert: MariaDBSlowQueries
+        expr: rate(mysql_global_status_slow_queries[5m]) > 5
+        for: 5m
+        labels:
+          severity: warning
+          component: mariadb
+        annotations:
+          summary: "MariaDB slow queries detected"
+          description: "{{ printf \"%.0f\" $value }} slow queries per minute"
+          impact: "Database performance issues"
+          action: "Analyze slow query log, optimize queries"
+      
+      # MariaDB high error rate
+      - alert: MariaDBHighErrorRate
+        expr: rate(mysql_global_status_questions[5m]) - rate(mysql_global_status_queries[5m]) > rate(mysql_global_status_questions[5m]) * 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: mariadb
+        annotations:
+          summary: "MariaDB high error rate"
+          description: "MariaDB has {{ printf \"%.2f\" $value }}% error rate"
+          impact: "Database operations failing"
+          action: "Check database logs, verify database integrity"
+
+  # -----------------------------------------------------------------------------
+  # Memcached Alerts
+  # -----------------------------------------------------------------------------
+  - name: memcached.alerts
+    interval: 30s
+    
+    rules:
+      # Memcached down
+      - alert: MemcachedDown
+        expr: up{job="memcached-exporter"} == 0
+        for: 1m
+        labels:
+          severity: warning
+          component: memcached
+        annotations:
+          summary: "Memcached exporter is down"
+          description: "Cannot collect Memcached metrics"
+          impact: "Cannot monitor cache health"
+          action: "Check Memcached exporter container"
+      
+      # Memcached high memory usage
+      - alert: MemcachedHighMemoryUsage
+        expr: (memcached_stats_bytes_used / memcached_stats_limit_maxbytes) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+          component: memcached
+        annotations:
+          summary: "Memcached high memory usage"
+          description: "Memcached is using {{ printf \"%.2f\" $value }}% of its memory limit"
+          impact: "Cache evictions will increase, performance may degrade"
+          action: "Increase Memcached memory limit"
+      
+      # Memcached high eviction rate
+      - alert: MemcachedHighEvictionRate
+        expr: rate(memcached_stats_evictions[5m]) / rate(memcached_stats_cmd_set[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: memcached
+        annotations:
+          summary: "Memcached high eviction rate"
+          description: "Memcached eviction rate is {{ printf \"%.2f\" $value }}%"
+          impact: "Cache effectiveness reduced, increased database load"
+          action: "Increase Memcached memory, check cache keys"
+
+  # -----------------------------------------------------------------------------
+  # Node/Container Alerts
+  # -----------------------------------------------------------------------------
+  - name: node.alerts
+    interval: 30s
+    
+    rules:
+      # Node high memory usage
+      - alert: NodeHighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: node
+        annotations:
+          summary: "Node high memory usage"
+          description: "Node memory usage is {{ printf \"%.2f\" $value }}%"
+          impact: "Performance degradation, potential out of memory"
+          action: "Add more nodes, optimize memory usage"
+      
+      # Node high CPU usage
+      - alert: NodeHighCPUUsage
+        expr: (100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: node
+        annotations:
+          summary: "Node high CPU usage"
+          description: "Node CPU usage is {{ printf \"%.2f\" $value }}%"
+          impact: "Performance degradation, slow response times"
+          action: "Add more nodes, optimize CPU usage"
+      
+      # Node disk space low
+      - alert: NodeDiskSpaceLow
+        expr: (node_filesystem_free_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 20
+        for: 5m
+        labels:
+          severity: warning
+          component: node
+        annotations:
+          summary: "Node disk space low"
+          description: "Node root filesystem has {{ printf \"%.2f\" $value }}% free space"
+          impact: "Risk of running out of disk space"
+          action: "Clean up disk, add more storage"
+      
+      # Node disk I/O high
+      - alert: NodeHighDiskIO
+        expr: rate(node_disk_io_time_seconds_total[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          component: node
+        annotations:
+          summary: "Node high disk I/O"
+          description: "Node disk I/O utilization is {{ printf \"%.2f\" $value }}%"
+          impact: "Disk performance bottleneck"
+          action: "Optimize disk usage, add faster storage"
+      
+      # Container restart loop
+      - alert: ContainerRestartLoop
+        expr: increase(container_restarts_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          component: containers
+        annotations:
+          summary: "Container restart loop detected"
+          description: "Container {{ $labels.container_name }} has restarted {{ printf \"%.0f\" $value }} times"
+          impact: "Service instability"
+          action: "Check container logs, fix application errors"
+
+  # -----------------------------------------------------------------------------
+  # Network Alerts
+  # -----------------------------------------------------------------------------
+  - name: network.alerts
+    interval: 30s
+    
+    rules:
+      # Network high error rate
+      - alert: NetworkHighErrorRate
+        expr: rate(node_network_receive_errs_total[5m]) + rate(node_network_transmit_errs_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: network
+        annotations:
+          summary: "Network high error rate"
+          description: "Network error rate is {{ printf \"%.2f\" $value }} errors per second"
+          impact: "Network connectivity issues"
+          action: "Check network hardware, review network configuration"
+      
+      # Network high packet loss
+      - alert: NetworkHighPacketLoss
+        expr: rate(node_network_receive_drop_total[5m]) + rate(node_network_transmit_drop_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: network
+        annotations:
+          summary: "Network high packet loss"
+          description: "Network packet drop rate is {{ printf \"%.2f\" $value }} packets per second"
+          impact: "Network connectivity issues"
+          action: "Check network hardware, review network configuration"

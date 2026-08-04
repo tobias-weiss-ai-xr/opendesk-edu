@@ -1,0 +1,16 @@
+# Zot Registry Namespace
+# SPDX-License-Identifier: Apache-2.0
+# Purpose: Dedicated namespace for Zot Registry deployment
+# Security: RBAC enabled, Network Policies recommended
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zot-registry
+  labels:
+    name: zot-registry
+    app: zot-registry
+    component: registry
+    environment: production
+    managed-by: opendesk-edu
+    opendesk.org/component: registry
+    opendesk.org.purpose: caching

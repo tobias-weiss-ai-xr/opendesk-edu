@@ -1,0 +1,390 @@
+name: SBOM Generation
+
+# SPDX-License-Identifier: Apache-2.0
+# Maintainer: openDesk Edu Team <team@opendesk-edu.org>
+
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: 'Component to generate SBOM for'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - sogo5
+          - sogo6
+          - dev-agent
+          - zot-registry
+      format:
+        description: 'SBOM format'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - cyclonedx
+          - spdx
+      sign:
+        description: 'Sign SBOMs with cosign'
+        required: false
+        default: false
+        type: boolean
+      publish:
+        description: 'Publish to container.gov.de (manual upload)'
+        required: false
+        default: false
+        type: boolean
+      push-to-registry:
+        description: 'Push SBOMs to GitLab registry'
+        required: false
+        default: false
+        type: boolean
+  
+  push:
+    branches:
+      - main
+      - develop
+      - release/*
+    paths:
+      - 'docker/**'
+      - 'k8s/**'
+      - '.github/workflows/sbom.yml'
+  
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'docker/**'
+      - 'k8s/**'
+
+# Run on self-hosted runner
+jobs:
+  sbom:
+    name: Generate SBOM
+    runs-on: [self-hosted, linux]
+    
+    env:
+      # Registry configuration
+      REGISTRY: registry.gitlab.opencode.de/umr
+      
+      # Versions
+      SOGO5_VERSION: 5.8.0
+      SOGO6_VERSION: 6.0.0
+      DEV_AGENT_VERSION: 2.1.0
+      ZOT_VERSION: 2.0.0-rc5
+      
+      # SBOM directory
+      SBOM_DIR: sbom/output
+      
+      # Tool versions
+      SYFT_VERSION: v0.90.0
+      COSIGN_VERSION: v2.2.0
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      
+      - name: Set up environment
+        id: env
+        run: |
+          echo "WORKSPACE=$(pwd)" >> $GITHUB_ENV
+          echo "GITHUB_REF_NAME=${GITHUB_REF_NAME:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
+          
+          # Determine component from input
+          COMPONENT="${{ github.event.inputs.component || 'all' }}"
+          case "$COMPONENT" in
+            all)
+              COMPONENTS=("sogo5" "sogo6" "dev-agent" "zot-registry")
+              ;;
+            *)
+              COMPONENTS=("$COMPONENT")
+              ;;
+          esac
+          
+          echo "COMPONENTS=${COMPONENTS[*]}" >> $GITHUB_ENV
+          echo "COMPONENT=$COMPONENT" >> $GITHUB_ENV
+          
+          echo "FORMAT=${{ github.event.inputs.format || 'both' }}" >> $GITHUB_ENV
+          echo "SHOULD_SIGN=${{ github.event.inputs.sign || false }}" >> $GITHUB_ENV
+          echo "SHOULD_PUBLISH=${{ github.event.inputs.publish || false }}" >> $GITHUB_ENV
+          echo "SHOULD_PUSH=${{ github.event.inputs.push-to-registry || false }}" >> $GITHUB_ENV
+      
+      - name: Create output directory
+        run: |
+          mkdir -p ${SBOM_DIR}/cyclonedx
+          mkdir -p ${SBOM_DIR}/spdx
+          mkdir -p ${SBOM_DIR}/signed/cyclonedx
+          mkdir -p ${SBOM_DIR}/signed/spdx
+      
+      - name: Install Syft
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b ${WORKSPACE}/bin ${SYFT_VERSION}
+          chmod +x ${WORKSPACE}/bin/syft
+      
+      - name: Install cosign
+        run: |
+          curl -sLo cosign.tar.gz https://github.com/sigstore/cosign/releases/download/${COSIGN_VERSION}/cosign-linux-amd64.tar.gz
+          tar -xzf cosign.tar.gz -C ${WORKSPACE}/bin/
+          rm -f cosign.tar.gz
+          chmod +x ${WORKSPACE}/bin/cosign
+          echo "${WORKSPACE}/bin" >> $GITHUB_PATH
+      
+      - name: Generate CycloneDX SBOMs
+        if: ${{ env.FORMAT == 'both' || env.FORMAT == 'cyclonedx' }}
+        run: |
+          for component in ${COMPONENTS}; do
+            echo "Generating CycloneDX SBOM for ${component}..."
+            
+            DOCKERFILE="${WORKSPACE}/docker/${component}/Dockerfile"
+            CONTEXT="${WORKSPACE}/docker/${component}"
+            
+            if [ -f "$DOCKERFILE" ]; then
+              # Generate all CycloneDX formats
+              ${WORKSPACE}/bin/syft dir:${CONTEXT} -o cyclonedx-json=${SBOM_DIR}/cyclonedx/${component}-${COMPONENT_VERSION}.cyclonedx.json
+              ${WORKSPACE}/bin/syft dir:${CONTEXT} -o cyclonedx-xml=${SBOM_DIR}/cyclonedx/${component}-${COMPONENT_VERSION}.cyclonedx.xml
+            else
+              echo "Warning: Dockerfile not found for ${component}"
+            fi
+          done
+      
+      - name: Generate SPDX SBOMs
+        if: ${{ env.FORMAT == 'both' || env.FORMAT == 'spdx' }}
+        run: |
+          for component in ${COMPONENTS}; do
+            echo "Generating SPDX SBOM for ${component}..."
+            
+            DOCKERFILE="${WORKSPACE}/docker/${component}/Dockerfile"
+            CONTEXT="${WORKSPACE}/docker/${component}"
+            
+            if [ -f "$DOCKERFILE" ]; then
+              # Generate all SPDX formats
+              ${WORKSPACE}/bin/syft dir:${CONTEXT} -o spdx-json=${SBOM_DIR}/spdx/${component}-${COMPONENT_VERSION}.spdx.json
+              ${WORKSPACE}/bin/syft dir:${CONTEXT} -o spdx=${SBOM_DIR}/spdx/${component}-${COMPONENT_VERSION}.spdx
+            else
+              echo "Warning: Dockerfile not found for ${component}"
+            fi
+          done
+      
+      - name: Validate SBOMs
+        run: |
+          echo "Validating CycloneDX SBOMs..."
+          for file in ${SBOM_DIR}/cyclonedx/*.cyclonedx.*; do
+            if [ -f "$file" ]; then
+              ${WORKSPACE}/bin/syft validate "$file" || echo "Warning: Validation failed for $file"
+            fi
+          done
+          
+          echo "Validating SPDX SBOMs..."
+          for file in ${SBOM_DIR}/spdx/*.spdx*; do
+            if [ -f "$file" ]; then
+              ${WORKSPACE}/bin/syft validate "$file" || echo "Warning: Validation failed for $file"
+            fi
+          done
+      
+      - name: Generate cosign key
+        if: ${{ env.SHOULD_SIGN == 'true' }}
+        run: |
+          echo "Generating cosign key pair..."
+          cd ${WORKSPACE}
+          cosign generate-key-pair
+          echo "COSIGN_PRIVATE_KEY=$(cat cosign.key)" >> $GITHUB_ENV
+          echo "COSIGN_PUBLIC_KEY=$(cat cosign.pub)" >> $GITHUB_ENV
+      
+      - name: Sign SBOMs with cosign
+        if: ${{ env.SHOULD_SIGN == 'true' }}
+        run: |
+          echo "Signing SBOMs..."
+          
+          # Sign CycloneDX files
+          for file in ${SBOM_DIR}/cyclonedx/*.cyclonedx.*; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              cosign sign-blob --key cosign.key --output=${SBOM_DIR}/signed/cyclonedx/${filename}.sig "$file"
+            fi
+          done
+          
+          # Sign SPDX files
+          for file in ${SBOM_DIR}/spdx/*.spdx*; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              cosign sign-blob --key cosign.key --output=${SBOM_DIR}/signed/spdx/${filename}.sig "$file"
+            fi
+          done
+          
+          # Save public key
+          cp cosign.pub ${SBOM_DIR}/signed/
+      
+      - name: Create SBOM index
+        run: |
+          echo "Creating SBOM index..."
+          
+          # Create index.json
+          cat > ${SBOM_DIR}/index.json <<'EOF'
+          {
+            "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "parent_reference": {},
+            "boms": [
+          EOF
+          
+          # Add CycloneDX files to index
+          for file in ${SBOM_DIR}/cyclonedx/*.cyclonedx.json; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              component=$(echo "$filename" | sed 's|-[0-9].*||')
+              version=$(echo "$filename" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+)?')
+              
+              cat >> ${SBOM_DIR}/index.json <<EOF
+              {
+                "type": "cyclonedx",
+                "format": "json",
+                "file": "cyclonedx/${filename}",
+                "component": "${component}",
+                "version": "${version}",
+                "serial_number": "urn:uuid:$(uuidgen)"
+              },
+              EOF
+            fi
+          done
+          
+          # Add SPDX files to index
+          for file in ${SBOM_DIR}/spdx/*.spdx.json; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              component=$(echo "$filename" | sed 's|-[0-9].*||')
+              version=$(echo "$filename" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+)?')
+              
+              cat >> ${SBOM_DIR}/index.json <<EOF
+              {
+                "type": "spdx",
+                "format": "json",
+                "file": "spdx/${filename}",
+                "component": "${component}",
+                "version": "${version}",
+                "serial_number": "urn:uuid:$(uuidgen)"
+              },
+              EOF
+            fi
+          done
+          
+          # Close index.json
+          sed -i 's/,$//' ${SBOM_DIR}/index.json
+          echo "    ]" >> ${SBOM_DIR}/index.json
+          echo "  }" >> ${SBOM_DIR}/index.json
+      
+      - name: Upload SBOM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ env.COMPONENT }}-${{ github.sha }}
+          path: ${SBOM_DIR}/
+          retention-days: 30
+      
+      - name: Push to GitLab registry (optional)
+        if: ${{ env.SHOULD_PUSH == 'true' && github.ref == 'refs/heads/main' }}
+        run: |
+          echo "Pushing SBOMs to GitLab registry..."
+          echo "::warning:: GitLab registry push for SBOMs is not yet implemented"
+          echo "Manual upload required to: registry.gitlab.opencode.de/umr/opendesk-nix/sbom"
+      
+      - name: Publish instructions
+        if: ${{ env.SHOULD_PUBLISH == 'true' }}
+        run: |
+          echo ""
+          echo "========================================="
+          echo "SBOM Generation Complete!"
+          echo "========================================="
+          echo ""
+          echo "Download SBOMs from artifacts:"
+          echo "  https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo ""
+          echo "To publish to container.gov.de:"
+          echo "  1. Download the SBOM artifacts"
+          echo "  2. Visit https://container.gov.de"
+          echo "  3. Navigate to SBOM Upload"
+          echo "  4. Upload files from cyclonedx/ and spdx/ directories"
+          echo "  5. Verify and publish"
+          echo ""
+          echo "Signed SBOMs are in the signed/ directory"
+          echo "Public key is available at: ${SBOM_DIR}/signed/cosign.pub"
+          echo ""
+
+  # ===========================================================================
+  # SUB-JOBS: Component-specific SBOM generation
+  # ===========================================================================
+  
+  sogo5-sbom:
+    name: SOGo 5 SBOM
+    runs-on: [self-hosted, linux]
+    if: ${{ github.event.inputs.component == 'sogo5' || contains(github.event.pull_request.labels.*, 'area:sogo5') }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate SOGo 5 SBOM
+        run: |
+          mkdir -p sbom/output/cyclonedx sbom/output/spdx
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b bin v0.90.0
+          ./bin/syft dir:docker/sogo5 -o cyclonedx-json=sbom/output/cyclonedx/sogo5-${{ env.SOGO5_VERSION }}.cyclonedx.json
+          ./bin/syft dir:docker/sogo5 -o spdx-json=sbom/output/spdx/sogo5-${{ env.SOGO5_VERSION }}.spdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sogo5-sbom
+          path: sbom/output/
+
+  sogo6-sbom:
+    name: SOGo 6 SBOM
+    runs-on: [self-hosted, linux]
+    if: ${{ github.event.inputs.component == 'sogo6' || contains(github.event.pull_request.labels.*, 'area:sogo6') }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate SOGo 6 SBOM
+        run: |
+          mkdir -p sbom/output/cyclonedx sbom/output/spdx
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b bin v0.90.0
+          ./bin/syft dir:docker/sogo6 -o cyclonedx-json=sbom/output/cyclonedx/sogo6-${{ env.SOGO6_VERSION }}.cyclonedx.json
+          ./bin/syft dir:docker/sogo6 -o spdx-json=sbom/output/spdx/sogo6-${{ env.SOGO6_VERSION }}.spdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sogo6-sbom
+          path: sbom/output/
+
+  dev-agent-sbom:
+    name: Dev Agent SBOM
+    runs-on: [self-hosted, linux]
+    if: ${{ github.event.inputs.component == 'dev-agent' || contains(github.event.pull_request.labels.*, 'area:operator') }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Dev Agent SBOM
+        run: |
+          mkdir -p sbom/output/cyclonedx sbom/output/spdx
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b bin v0.90.0
+          ./bin/syft dir:docker/dev-agent -o cyclonedx-json=sbom/output/cyclonedx/dev-agent-${{ env.DEV_AGENT_VERSION }}.cyclonedx.json
+          ./bin/syft dir:docker/dev-agent -o spdx-json=sbom/output/spdx/dev-agent-${{ env.DEV_AGENT_VERSION }}.spdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dev-agent-sbom
+          path: sbom/output/
+
+  zot-registry-sbom:
+    name: Zot Registry SBOM
+    runs-on: [self-hosted, linux]
+    if: ${{ github.event.inputs.component == 'zot-registry' || contains(github.event.pull_request.labels.*, 'area:registry') }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Zot Registry SBOM
+        run: |
+          mkdir -p sbom/output/cyclonedx sbom/output/spdx
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b bin v0.90.0
+          ./bin/syft dir:docker/zot-registry -o cyclonedx-json=sbom/output/cyclonedx/zot-registry-${{ env.ZOT_VERSION }}.cyclonedx.json
+          ./bin/syft dir:docker/zot-registry -o spdx-json=sbom/output/spdx/zot-registry-${{ env.ZOT_VERSION }}.spdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zot-registry-sbom
+          path: sbom/output/
