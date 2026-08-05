@@ -80,6 +80,7 @@ let
     tolerations ? [ ],
     priorityClassName ? null,
     terminationGracePeriodSeconds ? 30,
+    ...
   }:
     {
       metadata = {
