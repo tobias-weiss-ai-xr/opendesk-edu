@@ -100,7 +100,6 @@
 [submodule "charts-upgrade-v1.20.1"]
 	path = charts-upgrade-v1.20.1
 	url = git@github.com:tobias-weiss-ai-xr/opendesk-charts.git
-	ignore = dirty
 
 # ============================================================================
 # OpenDesk COP (GitHub - opendesk-edu)
