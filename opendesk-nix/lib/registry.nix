@@ -4,17 +4,15 @@
 { lib, pkgs, ... }:
 
 let
-  # Registry types
-  registryTypes = lib.genAttrs [ "oci" "docker" "zot" "ghcr" "gitlab" "docker-hub" "quay" "harbor" "ecr" "acr" "gcr" "local" ] (
-    idx: type: idx
-  );
+  # Registry type names (for validation)
+  registryTypeNames = [ "oci" "docker" "zot" "ghcr" "gitlab" "docker-hub" "quay" "harbor" "ecr" "acr" "gcr" "local" ];
 
-  # Registry configuration
+  # Registry configuration type
   registryType = lib.types.submodule {
     options = {
       name = lib.mkOption { type = lib.types.str; };
       url = lib.mkOption { type = lib.types.str; };
-      type = lib.mkOption { type = lib.types.oneOf (map (t: lib.types.literal t) (builtins.attrNames registryTypes)); };
+      type = lib.mkOption { type = lib.types.enum registryTypeNames; };
       username = lib.mkOption { default = null; type = lib.types.nullOr lib.types.str; };
       password = lib.mkOption { default = null; type = lib.types.nullOr lib.types.str; };
       insecure = lib.mkOption { default = false; type = lib.types.bool; };
@@ -33,7 +31,7 @@ let
   registries = lib.genAttrs [
     "ghcr" "gitlab" "zot" "docker-hub" "quay" "harbor" 
     "ecr" "acr" "gcr" "local" "nix-cache"
-  ] (idx: name:
+  ] (name:
     let
       cfg = {
         name = name;
@@ -114,7 +112,7 @@ let
     });
 
 in {
-  inherit registryTypes registryType formatImageName registries 
+  inherit registryType formatImageName registries 
     pushToRegistry pullFromRegistry containerdRegistryConfig dockerAuthConfig;
   
   # Helper to get registry by name
