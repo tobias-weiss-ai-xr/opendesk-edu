@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+
+# Course Provisioning API - Production Dependencies
+
+# Web Framework
+fastapi>=0.109.0,<1.0.0
+uvicorn[standard]>=0.27.0,<1.0.0
+
+# Data Validation
+pydantic>=2.5.0,<3.0.0
+pydantic-settings>=2.1.0,<3.0.0
+
+# HTTP Client for LMS/Keycloak APIs
+httpx>=0.26.0,<1.0.0
+
+# Async Support
+anyio>=4.2.0,<5.0.0
+
+# Configuration
+python-dotenv>=1.0.0,<2.0.0
+pyyaml>=6.0.0,<7.0.0
+
+# Security
+python-jose[cryptography]>=3.3.0,<4.0.0

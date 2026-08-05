@@ -1,0 +1,10 @@
+<svg width="111" height="111" viewBox="0 0 111 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="110" height="110" rx="20" fill="white" stroke="#E5E7EB"/>
+  <path d="M55 25 C40 25, 30 35, 30 50 C30 65, 40 75, 55 75 C70 75, 80 65, 80 50 C80 35, 70 25, 55 25 Z" fill="#341291"/>
+  <path d="M45 40 C42 38, 38 40, 38 43 C38 46, 42 48, 45 46 C48 44, 48 42, 45 40 Z" fill="#571EFA"/>
+  <path d="M65 40 C62 38, 58 40, 58 43 C58 46, 62 48, 65 46 C68 44, 68 42, 65 40 Z" fill="#571EFA"/>
+  <path d="M45 60 C42 58, 38 60, 38 63 C38 66, 42 68, 45 66 C48 64, 48 62, 45 60 Z" fill="#571EFA"/>
+  <path d="M65 60 C62 58, 58 60, 58 63 C58 66, 62 68, 65 66 C68 64, 68 62, 65 60 Z" fill="#571EFA"/>
+  <path d="M55 35 L55 45 M55 55 L55 65" stroke="#341291" stroke-width="2"/>
+  <text x="55" y="135" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#6B7280">F13</text>
+</svg>

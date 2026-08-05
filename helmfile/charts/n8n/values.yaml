@@ -1,0 +1,28 @@
+image:
+  repository: n8nio/n8n
+  tag: latest
+
+config:
+  host: n8n.opendesk.hrz.uni-marburg.de
+  encryptionKey: "opendesk-n8n-key-change-me"
+  dbType: sqlite
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: ceph-rbd-ssd
+
+sso:
+  oidc:
+    enabled: true
+    clientId: opendesk-n8n
+    clientSecret: vp0XnZw87Baw4uZJsvuG8uyT8fAEV1ep
+    discoveryEndpoint: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"

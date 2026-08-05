@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+suite: PersistentVolumeClaim
+templates:
+  - pvc.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create 3 PVCs when parser and transcription are enabled
+    asserts:
+      - hasDocuments:
+          count: 3
+
+  - it: should create docling-models PVC for parser
+    documentIndex: 0
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-docling-models
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: parser
+      - equal:
+          path: spec.resources.requests.storage
+          value: 1Gi
+      - contains:
+          path: spec.accessModes
+          content: ReadWriteOnce
+
+  - it: should create transcription-data PVC
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-transcription-data
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: transcription
+      - equal:
+          path: spec.resources.requests.storage
+          value: 1Gi
+      - contains:
+          path: spec.accessModes
+          content: ReadWriteOnce
+
+  - it: should create transcription-models PVC
+    documentIndex: 2
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-transcription-models
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: transcription-inference
+      - equal:
+          path: spec.resources.requests.storage
+          value: 1Gi
+      - contains:
+          path: spec.accessModes
+          content: ReadWriteOnce

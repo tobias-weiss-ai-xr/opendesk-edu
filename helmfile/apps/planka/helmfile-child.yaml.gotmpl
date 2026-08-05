@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+# Planka - Project management / Kanban board
+---
+releases:
+  - name: "planka"
+    chart: "../../charts/planka"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.planka }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.planka.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "planka"

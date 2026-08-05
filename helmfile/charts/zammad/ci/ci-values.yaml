@@ -1,0 +1,7 @@
+postgresql:
+  enabled: true
+  auth:
+    password: "test"
+
+elasticsearch:
+  enabled: true

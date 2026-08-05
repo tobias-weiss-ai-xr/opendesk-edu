@@ -1,0 +1,166 @@
+# SPDX-FileCopyrightText: 2024-2025 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+---
+autoscaling:
+  enabled: false
+
+collabora:
+  aliasgroups:
+    - host: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+  env:
+    - name: "POD_NAME"
+      valueFrom:
+        fieldRef:
+          fieldPath: "metadata.name"
+  extra_params: >
+    --o:logging.disable_server_audit={{ .Values.technical.collabora.loggingDisableServerAudit }}
+    --o:ssl.enable=false
+    --o:ssl.termination=true
+    --o:fetch_update_check=0
+    --o:num_prespawn_children={{ .Values.technical.collabora.numPrespawnChildren }}
+    --o:remote_font_config.url=https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}/apps/richdocuments/settings/fonts.json
+    --o:net.proto={{ if eq .Values.cluster.networking.ipFamilies "DualStack" }}all{{ else }}{{ .Values.cluster.networking.ipFamilies }}{{ end }}
+    --o:net.connection_timeout_secs={{ .Values.technical.collabora.netConnectionTimeoutSecs }}
+    --o:security.enable_macros_execution={{ .Values.functional.weboffice.macros.enabled }}
+    --o:security.macro_security_level={{- $val := printf "%v" .Values.functional.weboffice.macros.securityLevel -}}{{- if or (eq $val "0") (eq $val "1") -}}{{ $val }}
+      {{- else -}}
+      {{ fail (printf "Invalid value for functional.weboffice.macros.securityLevel: '%s'. Allowed values: 0 or 1" $val) }}
+      {{- end }}
+    {{- if .Values.debug.enabled }}
+    --o:logging.level=debug
+    {{- else }}
+    --o:logging.anonymize.anonymize_user_data=true
+    {{- end }}
+    {{- if eq (env "OPENDESK_ENTERPRISE") "true" }}
+    --o:user_interface.use_integration_theme=false
+    {{- end }}
+    {{- if .Values.apps.collaboraController.enabled }}
+    --o:indirection_endpoint.url=https://{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}/controller/routeToken
+    --o:monitors.monitor[0]=ws://collabora-controller-cool-controller.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:9000/controller/ws
+    --o:monitors.monitor[0][@retryInterval]=5
+    {{- end }}
+  username: "collabora-internal-admin"
+  password: {{ .Values.secrets.collabora.adminPassword | quote }}
+
+fullnameOverride: "collabora"
+
+image:
+  repository: "{{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.collabora.registry }}/{{ .Values.images.collabora.repository }}"
+  tag: {{ .Values.images.collabora.tag | quote }}
+  pullPolicy: {{ .Values.global.imagePullPolicy | quote }}
+
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . | quote }}
+{{- end }}
+
+ingress:
+  annotations:
+  {{- if eq .Values.ingress.controller "nginx" }}
+    nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "{{ if .Values.apps.collaboraController.enabled }}$arg_RouteToken{{ else }}$arg_WOPISrc{{ end }}"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location /cool/getMetrics { deny all; return 403; }
+      location /cool/adminws/ { deny all; return 403; }
+      location /browser/dist/admin/admin.html { deny all; return 403; }
+  {{- else }}
+    haproxy-ingress.github.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.collabora }}"
+    haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    haproxy-ingress.github.io/timeout-tunnel: "{{ .Values.ingress.parameters.bodyTimeout.collabora }}s"
+    haproxy-ingress.github.io/balance-algorithm: "url_param {{ if .Values.apps.collaboraController.enabled }}RouteToken{{ else }}WOPISrc{{ end }} check_post"
+    haproxy-ingress.github.io/config-backend: |
+      hash-type consistent
+      # block admin urls from outside
+      acl admin_url path_beg /cool/getMetrics
+      acl admin_url path_beg /cool/adminws/
+      acl admin_url path_beg /browser/dist/admin/admin.html
+      http-request deny if admin_url
+  {{- end }}
+  {{- with .Values.annotations.collabora.ingress }}
+    {{ . | toYaml | nindent 4 }}
+  {{- end }}
+  enabled: {{ .Values.ingress.enabled }}
+  className: {{ .Values.ingress.ingressClassName | quote }}
+  hosts:
+    - host: "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
+      paths:
+        - path: "/"
+          pathType: "Prefix"
+  tls:
+    - secretName: {{ .Values.ingress.tls.secretName | quote }}
+      hosts:
+        - "{{ .Values.global.hosts.collabora }}.{{ .Values.global.domain }}"
+
+podAnnotations:
+  intents.otterize.com/service-name: "collabora"
+  {{- with .Values.annotations.collabora.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
+
+podSecurityContext:
+  fsGroup: 1001
+
+prometheus:
+  servicemonitor:
+    enabled: {{ .Values.monitoring.prometheus.serviceMonitors.enabled }}
+    labels:
+      {{ .Values.monitoring.prometheus.serviceMonitors.labels | toYaml | nindent 6 }}
+  rules:
+    enabled: {{ .Values.monitoring.prometheus.prometheusRules.enabled }}
+    additionalLabels:
+      {{ .Values.monitoring.prometheus.prometheusRules.labels | toYaml | nindent 6 }}
+
+replicaCount: {{ .Values.replicas.collabora }}
+
+resources:
+  {{ .Values.resources.collabora | toYaml | nindent 2 }}
+
+securityContext:
+  allowPrivilegeEscalation: true
+  privileged: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
+  capabilities:
+    drop:
+      - "ALL"
+    add:
+      # For secuity reasons, esp. when macros are enabled, Collabora isolates all documents workspaces
+      # from each other. This isolation can work in three different ways. Collabora will automatically
+      # select the best option.
+      # - Using linux user namespaces is the most efficient one. You can test if user namespaces are
+      #   available by running `unshare -Ur bash` in the Collabora Pod. If it returns
+      #   `unshare: unshare failed: Operation not permitted`
+      #   user namespaces are not available.
+      #   Capabilities required: none
+      #   Note: A container runtime still could gate syscalls like `unshare` with `CAP_SYSADMIN`. You could
+      #         try using a custom seccompProfile in that case.
+      #         Ref.: https://github.com/CollaboraOnline/online/blob/master/docker/cool-seccomp-profile.json
+      # - Linking the documents and runtime environment into their own context.
+      #   Capabilities required: `CAP_SYSADMIN`, `CAP_SYSCHROOT`, `CHOWN`, `FOWNER`
+      # - Copying the documents and runtime environment into their own context,
+      #   having impact on the performance.
+      #   Capabilities required: `CAP_SYSCHROOT`, `CHOWN`, `FOWNER`
+      - "CHOWN"
+      - "FOWNER"
+      - "SYS_CHROOT"
+
+  seLinuxOptions:
+    {{ .Values.seLinuxOptions.collabora | toYaml | nindent 4 }}
+
+serviceAccount:
+  create: true
+  annotations:
+    {{ .Values.annotations.collabora.serviceAccount | toYaml | nindent 4 }}
+
+service:
+  annotations:
+    {{ .Values.annotations.collabora.service | toYaml | nindent 4 }}
+...

@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+drawio:
+  image: jgraph/drawio
+  tag: latest
+  port: 8080
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 2Gi
+
+sso:
+  oidc:
+    enabled: false
+    proxyImage: quay.io/oauth2-proxy/oauth2-proxy
+    proxyTag: v7.6.0
+    issuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+    clientId: "opendesk-drawio"
+    clientSecret: ""
+    cookieSecret: ""
+
+ingress:
+  enabled: true
+  className: haproxy
+  annotations: {}
+  hosts:
+    - host: draw.opendesk.hrz.uni-marburg.de
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: drawio-tls
+      hosts:
+        - draw.opendesk.hrz.uni-marburg.de

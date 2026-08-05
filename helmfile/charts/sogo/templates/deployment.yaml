@@ -1,0 +1,87 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-sogo
+  labels:
+{{ include "sogo.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      sogo/server: "true"
+{{ include "sogo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        sogo/server: "true"
+{{ include "sogo.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: sogo
+          image: {{ .Values.sogo.image.repository }}:{{ .Values.sogo.image.tag }}
+          imagePullPolicy: {{ .Values.sogo.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
+          ports:
+            - containerPort: 80
+          env:
+            - name: SOGO_DEFAULT_ENCODING
+              value: "UTF-8"
+            - name: HTTP_PROXY
+              value: "http://www-proxy2.uni-marburg.de:3128"
+            - name: HTTPS_PROXY
+              value: "http://www-proxy2.uni-marburg.de:3128"
+            - name: NO_PROXY
+              value: "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.opendesk.hrz.uni-marburg.de"
+          envFrom:
+            - configMapRef:
+                name: {{ include "sogo.fullname" . }}
+            - secretRef:
+                name: {{ include "sogo.fullname" . }}
+          command:
+            - /bin/bash
+            - /opt/custom-entrypoint/entrypoint.sh
+          volumeMounts:
+            {{- if .Values.sogo.persistence.enabled }}
+            - name: sogo-data
+              mountPath: /var/lib/sogo
+            {{- end }}
+            - name: sogo-config
+              mountPath: /etc/sogo/sogo.conf.d
+            - name: entrypoint
+              mountPath: /opt/custom-entrypoint
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources: {{ .Values.sogo.resources | toYaml | nindent 12 }}
+      volumes:
+        {{- if .Values.sogo.persistence.enabled }}
+        - name: sogo-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-sogo-data
+        {{- end }}
+        - name: sogo-config
+          configMap:
+            name: {{ include "sogo.fullname" . }}
+        - name: entrypoint
+          configMap:
+            name: {{ include "sogo.fullname" . }}-entrypoint
+            defaultMode: 0755

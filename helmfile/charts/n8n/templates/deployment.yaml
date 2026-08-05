@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-n8n
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: n8n
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: n8n
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: n8n
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 5678
+              name: web
+          env:
+            - name: N8N_PORT
+              value: "5678"
+            - name: N8N_HOST
+              value: "{{ .Values.config.host }}"
+            - name: N8N_PROTOCOL
+              value: "https"
+            - name: N8N_ENCRYPTION_KEY
+              value: "{{ .Values.config.encryptionKey }}"
+            - name: WEBHOOK_URL
+              value: "https://{{ .Values.config.host }}"
+            - name: DB_TYPE
+              value: "{{ .Values.config.dbType }}"
+            - name: N8N_METRICS
+              value: "false"
+{{- if .Values.sso.oidc.enabled }}
+            - name: N8N_SSO_MANAGED_BY_ENV
+              value: "true"
+            - name: N8N_SSO_OIDC_LOGIN_ENABLED
+              value: "true"
+            - name: N8N_SSO_OIDC_CLIENT_ID
+              value: "{{ .Values.sso.oidc.clientId }}"
+            - name: N8N_SSO_OIDC_CLIENT_SECRET
+              value: "{{ .Values.sso.oidc.clientSecret }}"
+            - name: N8N_SSO_OIDC_DISCOVERY_ENDPOINT
+              value: "{{ .Values.sso.oidc.discoveryEndpoint }}"
+{{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: web
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: n8n-data
+              mountPath: /home/node/.n8n
+      volumes:
+        - name: n8n-data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-n8n-data
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-n8n
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: n8n
+spec:
+  ports:
+    - port: 5678
+      targetPort: web
+      name: web
+  selector:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: n8n
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-n8n-ingress
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+spec:
+  ingressClassName: haproxy
+  rules:
+    - host: "{{ .Values.config.host }}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-n8n
+                port:
+                  number: 5678
+---
+{{- if .Values.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-n8n-data
+  labels:
+    backup-tier: "c"
+    k8up/backup: "true"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size }}
+  storageClassName: {{ .Values.persistence.storageClass }}
+{{- end }}

@@ -1,0 +1,24 @@
+image:
+  repository: rclone/rclone
+  tag: latest
+  pullPolicy: IfNotPresent
+
+opencloud:
+  url: "https://opencloud.opendesk.example.com"
+  username: ""
+  password: ""
+  remotePath: "/"
+  syncInterval: "60s"
+
+persistence:
+  enabled: true
+  size: 10Gi
+  accessMode: ReadWriteOnce
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

@@ -1,0 +1,12 @@
+apiVersion: v2
+name: smoke-tests
+description: Periodic smoke tests for OpenDesk Edu services - verifies DNS resolution and HTTP health endpoints
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - smoke-test
+  - monitoring
+  - cronjob
+maintainers:
+  - name: OpenDesk Edu Team

@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+# Self-Improvement Agent Python dependencies
+PyYAML>=6.0
+requests>=2.31.0

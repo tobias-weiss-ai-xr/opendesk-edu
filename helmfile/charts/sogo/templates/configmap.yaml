@@ -1,0 +1,66 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "sogo.fullname" . }}
+  labels:
+    {{- include "sogo.labels" . | nindent 4 }}
+data:
+  db.yaml: |
+    SOGoProfileURL: "{{ include "sogo.dbUrl" . }}"
+    OCSFolderInfoURL: "{{ include "sogo.dbUrl" . }}"
+    OCSSessionsFolderURL: "{{ include "sogo.dbUrl" . }}"
+    OCSStoreURL: "{{ include "sogo.dbUrl" . }}"
+    OCSAclURL: "{{ include "sogo.dbUrl" . }}"
+    OCSCacheFolderURL: "{{ include "sogo.dbUrl" . }}"
+    OCSEMailAlarmsFolderURL: "{{ include "sogo.dbUrl" . }}"
+    {{- if .Values.sogo.oidc.enabled }}
+    OCSOpenIdURL: "{{ include "sogo.dbUrl" . }}"
+    {{- end }}
+
+  general.yaml: |
+    SOGoLanguage: {{ .Values.sogo.language }}
+    SOGoTimeZone: "{{ .Values.sogo.timezone }}"
+    SOGoMailDomain: "{{ .Values.sogo.mailDomain }}"
+    {{- if .Values.sogo.oidc.enabled }}
+    SOGoAuthenticationType: openid
+    SOGoXSRFValidationEnabled: false
+    SOGoOpenIdConfigUrl: "{{ .Values.sogo.oidc.configUrl }}"
+    SOGoOpenIdClient: "{{ .Values.sogo.oidc.clientId }}"
+    SOGoOpenIdScope: "{{ .Values.sogo.oidc.scope }}"
+    SOGoOpenIdEnableRefreshToken: true
+    SOGoOpenIdTokenCheckInterval: 3600
+    SOGoOpenIdLogoutEnabled: true
+    {{- end }}
+    WOWorkersCount: 5
+    SOGoPageTitle: "{{ .Values.sogo.pageTile }}"
+    SOGoVacationEnabled: true
+    SOGoForwardEnabled: true
+    SOGoSieveScriptsEnabled: true
+    SOGoMemcachedHost: "{{ .Values.sogo.memcachedHost }}"
+    SOGoDaemonAddresses: "*:80"
+    SOListenPort: 80
+
+  mail.yaml: |
+    SOGoIMAPServer: "{{ .Values.sogo.imap.server }}"
+    SOGoSMTPServer: "{{ .Values.sogo.smtp.server }}"
+    SOGoSieveServer: "{{ .Values.sogo.sieve.server }}"
+
+  ldap.yaml: |
+    SOGoUserSources:
+      - type: ldap
+        CNFieldName: cn
+        UIDFieldName: uid
+        IDFieldName: uid
+        bindFields:
+          - uid
+          - mail
+        baseDN: "{{ .Values.sogo.ldap.baseDN }}"
+        bindDN: "{{ .Values.sogo.ldap.bindDN }}"
+        bindPassword: "{{ .Values.sogo.ldap.bindPassword }}"
+        canAuthenticate: true
+        displayName: "Users"
+        hostname: "{{ include "sogo.ldapUrl" . }}"
+        id: users
+        isAddressBook: true

@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "opendesk-f13"
+    chart: "../../charts/f13"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.f13 }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.f13.enabled }}
+    timeout: 1200
+
+commonLabels:
+  deployStage: "050-components"
+  component: "f13"

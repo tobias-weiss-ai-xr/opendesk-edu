@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "snipr"
+    chart: "../../charts/snipr"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- if .Values.customization.release.snipr }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.snipr.enabled }}
+    timeout: 1200
+
+commonLabels:
+  deployStage: "050-components"
+  component: "snipr"

@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "etherpad"
+    chart: "../../charts/etherpad"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.etherpad }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.etherpad.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "etherpad"

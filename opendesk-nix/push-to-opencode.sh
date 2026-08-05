@@ -3,7 +3,7 @@
 # Push All Images to opencode.de Container Registry
 #
 # Pulls images from GHCR (ghcr.io/opendesk-edu/*, ghcr.io/tobias-weiss-ai-xr/*)
-# and pushes them to registry.gitlab.opencode.de/umr/
+# and pushes them to registry.opencode.de/umr/
 #
 # Usage:
 #   OPENCODE_TOKEN="your-pat" ./push-to-opencode.sh [OPTIONS]
@@ -13,14 +13,14 @@
 #   --core         Push only core images (OpenCloud, Stalwart, SOGo, PostgreSQL, Memcached, Keycloak)
 #   --list         List images that would be pushed
 #   --dry-run      Show what would be pushed without pushing
-#   --registry     Override target registry (default: registry.gitlab.opencode.de/umr)
+#   --registry     Override target registry (default: registry.opencode.de/umr)
 #   --source       Override source registry (default: ghcr.io)
 #   --help         Show this help
 #
 # Environment variables:
 #   OPENCODE_TOKEN   GitLab Personal Access Token (required for push)
 #   OPENCODE_USER    GitLab username (default: weiss)
-#   OPENCODE_REGISTRY  Target registry (default: registry.gitlab.opencode.de/umr)
+#   OPENCODE_REGISTRY  Target registry (default: registry.opencode.de/umr)
 #
 # Examples:
 #   OPENCODE_TOKEN="glpat-xxx" ./push-to-opencode.sh --core
@@ -35,7 +35,7 @@ set -euo pipefail
 # Configuration
 # =============================================================================
 
-TARGET_REGISTRY="${OPENCODE_REGISTRY:-registry.gitlab.opencode.de/umr}"
+TARGET_REGISTRY="${OPENCODE_REGISTRY:-registry.opencode.de/umr}"
 SOURCE_REGISTRY="${SOURCE_REGISTRY:-ghcr.io}"
 GITLAB_USER="${OPENCODE_USER:-weiss}"
 
@@ -155,7 +155,7 @@ login_registry() {
     fi
 
     log_info "Logging in to ${TARGET_REGISTRY}..."
-    if echo "$OPENCODE_TOKEN" | docker login registry.gitlab.opencode.de -u "$GITLAB_USER" --password-stdin 2>&1; then
+    if echo "$OPENCODE_TOKEN" | docker login registry.opencode.de -u "$GITLAB_USER" --password-stdin 2>&1; then
         log_success "Login successful (user: ${GITLAB_USER})"
     else
         log_error "Login failed! Check your OPENCODE_TOKEN."
@@ -164,9 +164,9 @@ login_registry() {
 }
 
 # Convert a source image reference to a target image reference
-# e.g. ghcr.io/opendesk-edu/sogo:latest → registry.gitlab.opencode.de/umr/sogo:latest
-# e.g. ghcr.io/opendesk-edu/supplier/univention/keycloak:26.7.0 → registry.gitlab.opencode.de/umr/supplier/univention/keycloak:26.7.0
-# e.g. ghcr.io/tobias-weiss-ai-xr/snipr:latest → registry.gitlab.opencode.de/umr/snipr:latest
+# e.g. ghcr.io/opendesk-edu/sogo:latest → registry.opencode.de/umr/sogo:latest
+# e.g. ghcr.io/opendesk-edu/supplier/univention/keycloak:26.7.0 → registry.opencode.de/umr/supplier/univention/keycloak:26.7.0
+# e.g. ghcr.io/tobias-weiss-ai-xr/snipr:latest → registry.opencode.de/umr/snipr:latest
 convert_image() {
     local source_image="$1"
     # Strip the registry prefix
@@ -271,7 +271,7 @@ main() {
                 echo "Environment:"
                 echo "  OPENCODE_TOKEN    GitLab PAT (required)"
                 echo "  OPENCODE_USER     GitLab username (default: weiss)"
-                echo "  OPENCODE_REGISTRY Target registry (default: registry.gitlab.opencode.de/umr)"
+                echo "  OPENCODE_REGISTRY Target registry (default: registry.opencode.de/umr)"
                 echo ""
                 echo "Core images:"
                 for img in "${CORE_IMAGES[@]}"; do

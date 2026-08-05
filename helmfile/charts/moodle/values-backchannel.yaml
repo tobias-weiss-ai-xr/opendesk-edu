@@ -1,0 +1,88 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Moodle backchannel logout configuration
+# This file configures SAML backchannel logout for Moodle
+#
+
+moodle:
+  # Enable SAML authentication with backchannel logout
+  saml:
+    enabled: true
+
+    # Backchannel logout configuration
+    backchannelLogout:
+      enabled: {{ .Values.backchannelLogout.saml.moodle.enabled | default "false" | quote }}
+
+    # SAML SP (Service Provider) configuration
+    sp:
+      entityId: "{{ .Values.global.moodleSaml.entityId | default (printf "https://moodle.%s/shibboleth" .Values.global.domain) | quote }}"
+      assertionConsumerService: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/SAML2/POST"
+      singleLogoutService: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/Logout"
+
+    # SAML IdP (Identity Provider) configuration
+    idp:
+      entityId: "{{ .Values.platform.keycloak.baseUrl | default (printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm) | quote }}"
+      singleSignOnService: "{{ .Values.platform.keycloak.baseUrl | default (printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm) | quote }}/protocol/saml"
+      singleLogoutService: "{{ .Values.platform.keycloak.baseUrl | default (printf "https://id.%s/realms/%s" .Values.global.domain .Values.platform.realm) | quote }}/protocol/saml"
+
+  # Apache Shibboleth integration
+  shibboleth:
+    enabled: true
+
+    # Backchannel logout settings
+    backchannelLogout:
+      enabled: {{ .Values.backchannelLogout.saml.moodle.enabled | default "false" | quote }}
+
+      # SOAP binding (backchannel)
+      soapBinding: {{ .Values.backchannelLogout.saml.moodle.bindings.soap | default "true" | quote }}
+
+      # HTTP-Redirect binding (frontchannel)
+      redirectBinding: {{ .Values.backchannelLogout.saml.moodle.bindings.httpRedirect | default "true" | quote }}
+
+      # HTTP-POST binding (frontchannel)
+      postBinding: {{ .Values.backchannelLogout.saml.moodle.bindings.httpPost | default "true" | quote }}
+
+      # Signature requirements
+      signature:
+        requireSignedRequests: {{ .Values.backchannelLogout.saml.moodle.signature.requireSignedRequests | default "true" | quote }}
+        signResponses: {{ .Values.backchannelLogout.saml.moodle.signature.signResponses | default "true" | quote }}
+
+      # Session termination timeout
+      sessionTerminationTimeout: {{ .Values.backchannelLogout.saml.moodle.sessionTerminationTimeout | default "30" | quote }}
+
+      # Verbose logging
+      verbose: {{ .Values.backchannelLogout.saml.moodle.verbose | default "false" | quote }}
+
+  # Moodle authentication plugin configuration
+  auth:
+    shibboleth:
+      enabled: true
+
+      # Map SAML attributes to Moodle user fields
+      attributeMapping:
+        username: "uid"
+        email: "mail"
+        firstname: "displayName"  # Split on space
+        lastname: "sn"
+        idp: "idp-entity-id"
+
+      # Backchannel logout behavior
+      logout:
+        enabled: {{ .Values.backchannelLogout.saml.moodle.enabled | default "false" | quote }}
+        revokeSession: true
+        redirectAfterLogout: "https://portal.{{ .Values.global.domain }}"
+
+  # Dependency: Shibboleth SP configuration
+  dependencies:
+    shibboleth-sp:
+      enabled: true
+
+      # ConfigMap with Shibboleth SP configuration
+      configMap: moodle-shibboleth-sp-config
+
+      # Secret with SP certificate and key
+      secret: moodle-shibboleth-sp-secret
+
+      # SP metadata URL
+      metadataUrl: "https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/Metadata"

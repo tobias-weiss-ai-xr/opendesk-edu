@@ -1,0 +1,7 @@
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: "test"
+sso:
+  oidc:
+    enabled: false

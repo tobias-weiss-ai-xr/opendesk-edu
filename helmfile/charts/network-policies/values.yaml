@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+betty:
+  image:
+    registry: "registry.opencode.de"
+    repository: "bmi/opendesk/components/platform-development/charts/betty"
+    name: "betty"
+    tag: "1.0.0"
+  imagePullPolicy: "IfNotPresent"
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+
+# Default deny all ingress/egress traffic (defense-in-depth)
+defaultDenyPolicy:
+  enabled: true
+
+# Allow DNS resolution (CoreDNS access)
+dnsPolicy:
+  enabled: true
+  podSelector:
+    matchLabels:
+      opendesk.zendis.de/component: "true"
+
+# Allow ingress controller to route traffic to services
+ingressControllerPolicy:
+  enabled: true
+  ingressClassNames:
+    - "haproxy"
+    - "nginx"
+
+# Allow specific service-to-service communications
+serviceToServicePolicies:
+  enabled: true

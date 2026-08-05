@@ -1,0 +1,216 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.config.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "opencloud.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+data:
+  opencloud.yaml: |
+    token_manager:
+      jwt_secret: "override-via-env"
+      machine_auth_api_key: "override-via-env"
+      system_user_api_key: "override-via-env"
+      transfer_secret: "override-via-env"
+      url_signing_secret: "override-via-env"
+      system_user_id: {{ .Values.systemUserId | quote }}
+    graph:
+      application:
+        id: {{ .Values.graphApplicationId | quote }}
+      events:
+        tls_insecure: true
+      spaces:
+        insecure: true
+      identity:
+        ldap:
+{{- if .Values.graph.ldap.enabled }}
+          uri: {{ .Values.graph.ldap.uri | quote }}
+          bind_dn: {{ .Values.graph.ldap.bind_dn | quote }}
+          bind_password: {{ .Values.graph.ldap.bind_password | quote }}
+          base_dn: {{ .Values.graph.ldap.base_dn | quote }}
+          scope: {{ .Values.graph.ldap.scope | quote }}
+          user_schema:
+            id: {{ .Values.graph.ldap.user_schema.id | quote }}
+            displayName: {{ .Values.graph.ldap.user_schema.displayName | quote }}
+            mail: {{ .Values.graph.ldap.user_schema.mail | quote }}
+            name: {{ .Values.graph.ldap.user_schema.name | quote }}
+          group_schema:
+            id: {{ .Values.graph.ldap.group_schema.id | quote }}
+            mail: {{ .Values.graph.ldap.group_schema.mail | quote }}
+            member: {{ .Values.graph.ldap.group_schema.member | quote }}
+          write_disabled: {{ .Values.graph.ldap.write_disabled }}
+{{- else }}
+          bind_password: "disabled"
+          write_disabled: true
+{{- end }}
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    collaboration:
+      wopi:
+        secret: "override-via-env"
+      app:
+        insecure: true
+    proxy:
+      oidc:
+        insecure: true
+      insecure_backends: true
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    frontend:
+      app_handler:
+        insecure: true
+      archiver:
+        insecure: true
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    auth_bearer:
+      auth_providers:
+        oidc:
+          insecure: true
+    users:
+      drivers:
+        ldap:
+{{- if .Values.graph.ldap.enabled }}
+          uri: {{ .Values.graph.ldap.uri | quote }}
+          bind_dn: {{ .Values.graph.ldap.bind_dn | quote }}
+          bind_password: {{ .Values.graph.ldap.bind_password | quote }}
+          base_dn: {{ .Values.graph.ldap.base_dn | quote }}
+          scope: {{ .Values.graph.ldap.scope | quote }}
+          user_schema:
+            id: {{ .Values.graph.ldap.user_schema.id | quote }}
+            displayName: {{ .Values.graph.ldap.user_schema.displayName | quote }}
+            mail: {{ .Values.graph.ldap.user_schema.mail | quote }}
+            name: {{ .Values.graph.ldap.user_schema.name | quote }}
+          write_disabled: {{ .Values.graph.ldap.write_disabled }}
+{{- else }}
+          bind_password: "disabled"
+          write_disabled: true
+{{- end }}
+    groups:
+      drivers:
+        ldap:
+{{- if .Values.graph.ldap.enabled }}
+          uri: {{ .Values.graph.ldap.uri | quote }}
+          bind_dn: {{ .Values.graph.ldap.bind_dn | quote }}
+          bind_password: {{ .Values.graph.ldap.bind_password | quote }}
+          base_dn: {{ .Values.graph.ldap.base_dn | quote }}
+          scope: {{ .Values.graph.ldap.scope | quote }}
+          group_schema:
+            id: {{ .Values.graph.ldap.group_schema.id | quote }}
+            mail: {{ .Values.graph.ldap.group_schema.mail | quote }}
+            member: {{ .Values.graph.ldap.group_schema.member | quote }}
+          write_disabled: {{ .Values.graph.ldap.write_disabled }}
+{{- else }}
+          bind_password: "disabled"
+          write_disabled: true
+{{- end }}
+    ocdav:
+      insecure: true
+    ocm:
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    thumbnails:
+      thumbnail:
+        transfer_secret: "override-via-env"
+        webdav_allow_insecure: true
+        cs3_allow_insecure: true
+    search:
+      events:
+        tls_insecure: true
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    audit:
+      events:
+        tls_insecure: true
+    settings:
+      service_account_ids:
+      - {{ .Values.serviceAccountId | quote }}
+    sharing:
+      events:
+        tls_insecure: true
+    storage_users:
+      events:
+        tls_insecure: true
+      mount_id: {{ .Values.storageUsersMountId | quote }}
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    notifications:
+      notifications:
+        events:
+          tls_insecure: true
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    nats:
+      nats:
+        tls_skip_verify_client_cert: true
+    gateway:
+      storage_registry:
+        storage_users_mount_id: {{ .Values.storageUsersMountId | quote }}
+    userlog:
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    auth_service:
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    clientlog:
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+    activitylog:
+      service_account:
+        service_account_id: {{ .Values.serviceAccountId | quote }}
+        service_account_secret: "override-via-env"
+
+
+  csp.yaml: |
+    directives:
+      child-src:
+        - "'self'"
+      connect-src:
+        - "'self'"
+        - "blob:"
+        - "https://raw.githubusercontent.com/opencloud-eu/awesome-apps/"
+        - "https://update.opencloud.eu/"
+        - "https://{{ (index .Values.ingress.hosts 0).host }}"
+        - "{{ .Values.oidc.issuer | regexFind "^https://[^/]+" }}"
+      default-src:
+        - "'none'"
+      font-src:
+        - "'self'"
+      frame-ancestors:
+        - "'self'"
+      frame-src:
+        - "'self'"
+        - "blob:"
+        - "https://embed.diagrams.net/"
+      img-src:
+        - "'self'"
+        - "data:"
+        - "blob:"
+        - "https://raw.githubusercontent.com/opencloud-eu/awesome-apps/"
+      manifest-src:
+        - "'self'"
+      media-src:
+        - "'self'"
+      object-src:
+        - "'self'"
+        - "blob:"
+      script-src:
+        - "'self'"
+        - "'unsafe-inline'"
+      style-src:
+        - "'self'"
+        - "'unsafe-inline'"
+{{- end }}

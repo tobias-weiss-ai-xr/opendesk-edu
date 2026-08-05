@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "excalidraw"
+    chart: "../../charts/excalidraw"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.excalidraw }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.excalidraw.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "excalidraw"

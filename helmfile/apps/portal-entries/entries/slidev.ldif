@@ -1,0 +1,12 @@
+dn: cn=slidev,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+objectClass: univentionNewPortalEntry
+objectClass: top
+cn: slidev
+univentionNewPortalEntryActivate: TRUE
+univentionNewPortalEntryLink: en_US https://slides.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLinkTarget: newwindow
+univentionNewPortalEntryDisplayName: en_US Slidev
+univentionNewPortalEntryDisplayName: de_DE Slidev
+univentionNewPortalEntryDescription: en_US Markdown presentations
+univentionNewPortalEntryDescription: de_DE Markdown-Präsentationen
+univentionNewPortalEntryOnlyAnonymous: FALSE

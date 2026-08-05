@@ -1,0 +1,85 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test configmap
+templates:
+  - configmap.yaml
+tests:
+  - it: should create ConfigMap with correct name
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-sogo
+  - it: should contain 90-helm.yaml in data
+    asserts:
+      - exists:
+          path: data["90-helm.yaml"]
+  - it: should include SOGoProfileURL in config
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoProfileURL = .*sogo_user_profile"
+  - it: should include OCSFolderInfoURL in config
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "OCSFolderInfoURL = .*sogo_folder_info"
+  - it: should include correct timezone
+    set:
+      sogo.timezone: "America/New_York"
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoTimeZone = \"America/New_York\""
+  - it: should include correct language
+    set:
+      sogo.language: "German"
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoLanguage = German"
+  - it: should include correct page title
+    set:
+      sogo.pageTile: "Custom Mail"
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoPageTitle = \"Custom Mail\""
+  - it: should include OIDC configuration when enabled
+    set:
+      sogo.oidc.enabled: true
+      sogo.oidc.configUrl: "https://keycloak.example.com/.well-known"
+      sogo.oidc.clientId: "sogo-client"
+      sogo.oidc.scope: "openid profile"
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoOpenIdConfigUrl = \"https://keycloak\\.example\\.com/.well-known\""
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoOpenIdClient = \"sogo-client\""
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoOpenIdScope = \"openid profile\""
+  - it: should include IMAP server configuration
+    set:
+      sogo.imap.server: "imaps://mail.example.com:993"
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoIMAPServer = \"imaps://mail\\.example\\.com:993\""
+  - it: should include SMTP server configuration
+    set:
+      sogo.smtp.server: "smtp://mail.example.com:587"
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoSMTPServer = \"smtp://mail\\.example\\.com:587\""
+  - it: should include mail domain
+    set:
+      sogo.mailDomain: "example.com"
+    asserts:
+      - matchRegex:
+          path: data["90-helm.yaml"]
+          pattern: "SOGoMailDomain = \"example\\.com\""

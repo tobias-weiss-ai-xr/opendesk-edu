@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "f13.fullname" . }}-general
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: core
+data:
+  general.yml: |
+    authentication:
+      guest_mode: {{ .Values.authentication.guestMode }}
+      keycloak_base_url: {{ include "f13.keycloakUrl" . }}
+      keycloak_realm: {{ include "f13.keycloakRealm" . }}
+      audience: {{ .Values.authentication.audience | quote }}
+
+    services:
+      chat:
+        enabled: {{ .Values.services.chat.enabled }}
+        url: http://{{ include "f13.fullname" . }}-chat:8000
+      summary:
+        enabled: {{ .Values.services.summary.enabled }}
+        url: http://{{ include "f13.fullname" . }}-summary:8000
+      parser:
+        enabled: {{ .Values.services.parser.enabled }}
+        url: http://{{ include "f13.fullname" . }}-parser:8000
+      rag:
+        enabled: {{ .Values.services.rag.enabled }}
+        url: http://{{ include "f13.fullname" . }}-rag:8000
+      transcription:
+        enabled: {{ .Values.services.transcription.enabled }}
+        url: http://{{ include "f13.fullname" . }}-transcription:8000
+
+    elasticsearch:
+      host: {{ include "f13.elasticHost" . }}
+      port: 9200
+
+    feedback_db:
+      host: {{ include "f13.feedbackDbHost" . }}
+      port: 5432
+      name: f13_feedback
+      user: f13_feedback
+
+    transcription_db:
+      host: {{ include "f13.transcriptionDbHost" . }}
+      port: 5432
+      name: {{ .Values.transcription.transcriptionDb.name | quote }}
+      user: {{ .Values.transcription.transcriptionDb.user | quote }}

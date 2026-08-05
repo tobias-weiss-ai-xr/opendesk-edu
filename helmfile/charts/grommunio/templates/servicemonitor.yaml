@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.grommunio.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "grommunio.fullname" . }}
+  labels:
+{{ include "grommunio.labels" . | nindent 4 }}
+    {{- if .Values.grommunio.monitoring.prometheus.additionalLabels }}
+{{ toYaml .Values.grommunio.monitoring.prometheus.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+{{ include "grommunio.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: metrics
+      path: {{ .Values.grommunio.monitoring.prometheus.path }}
+      interval: {{ .Values.grommunio.monitoring.prometheus.scrapeInterval }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

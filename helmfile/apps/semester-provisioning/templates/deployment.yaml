@@ -1,0 +1,163 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "semester-provisioning.fullname" . }}-api
+  labels:
+    {{- include "semester-provisioning.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: {{ .Values.semesterProvisioning.replicas }}
+  selector:
+    matchLabels:
+      {{- include "semester-provisioning.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        {{- include "semester-provisioning.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: api
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ include "semester-provisioning.serviceAccountName" . }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.semesterProvisioning.podSecurityContext | nindent 8 }}
+      containers:
+        - name: api
+          securityContext:
+            {{- toYaml .Values.semesterProvisioning.securityContext | nindent 12 }}
+          image: {{ include "semester-provisioning.image" . }}
+          imagePullPolicy: {{ .Values.semesterProvisioning.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.semesterProvisioning.port }}
+              protocol: TCP
+          env:
+            - name: SEMESTER_CONFIG_PATH
+              value: /app/config/config.yaml
+            - name: LOG_LEVEL
+              value: {{ .Values.audit.log_level | quote }}
+            - name: DATABASE_TYPE
+              value: {{ .Values.database.type | quote }}
+            {{- if eq .Values.database.type "postgresql" }}
+            - name: DATABASE_HOST
+              value: {{ .Values.database.postgresql.host | quote }}
+            - name: DATABASE_PORT
+              value: {{ .Values.database.postgresql.port | quote }}
+            - name: DATABASE_NAME
+              value: {{ .Values.database.postgresql.database | quote }}
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "semester-provisioning.fullname" . }}-db-credentials
+                  key: user
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "semester-provisioning.fullname" . }}-db-credentials
+                  key: password
+            {{- else }}
+            - name: DATABASE_PATH
+              value: {{ .Values.database.sqlite_path | quote }}
+            {{- end }}
+            {{- if .Values.ilias.enabled }}
+            - name: ILIAS_API_URL
+              value: {{ .Values.ilias.api_url | quote }}
+            - name: ILIAS_CLIENT_ID
+              value: {{ .Values.ilias.client_id | quote }}
+            - name: ILIAS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "semester-provisioning.fullname" . }}-lms-credentials
+                  key: ilias-api-key
+            {{- end }}
+            {{- if .Values.moodle.enabled }}
+            - name: MOODLE_API_URL
+              value: {{ .Values.moodle.api_url | quote }}
+            - name: MOODLE_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "semester-provisioning.fullname" . }}-lms-credentials
+                  key: moodle-api-token
+            {{- end }}
+            - name: KEYCLOAK_URL
+              value: {{ .Values.keycloak.url | quote }}
+            - name: KEYCLOAK_REALM
+              value: {{ .Values.keycloak.realm | quote }}
+            {{- if .Values.keycloak.admin_user }}
+            - name: KEYCLOAK_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "semester-provisioning.fullname" . }}-keycloak-credentials
+                  key: admin-user
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "semester-provisioning.fullname" . }}-keycloak-credentials
+                  key: admin-password
+            {{- end }}
+            - name: ARCHIVE_RETENTION_YEARS
+              value: {{ .Values.provisioning.archive_retention_years | quote }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: {{ .Values.semesterProvisioning.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.semesterProvisioning.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.semesterProvisioning.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.semesterProvisioning.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: {{ .Values.semesterProvisioning.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.semesterProvisioning.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.semesterProvisioning.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.semesterProvisioning.readinessProbe.failureThreshold }}
+          resources:
+            {{- toYaml .Values.semesterProvisioning.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+            {{- if and (eq .Values.database.type "sqlite") (ne .Values.database.sqlite_path ":memory:") }}
+            - name: data
+              mountPath: /app/data
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "semester-provisioning.configMapName" . }}
+        {{- if and (eq .Values.database.type "sqlite") (ne .Values.database.sqlite_path ":memory:") }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "semester-provisioning.fullname" . }}-data
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,12 @@
+dn: cn=collab-dashboard,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+objectClass: univentionNewPortalEntry
+objectClass: top
+cn: collab-dashboard
+univentionNewPortalEntryActivate: TRUE
+univentionNewPortalEntryLink: en_US https://collab.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLinkTarget: newwindow
+univentionNewPortalEntryDisplayName: en_US Collab Dashboard
+univentionNewPortalEntryDisplayName: de_DE Collab Dashboard
+univentionNewPortalEntryDescription: en_US Feature catalog for all tools
+univentionNewPortalEntryDescription: de_DE Feature-Katalog für alle Tools
+univentionNewPortalEntryOnlyAnonymous: FALSE

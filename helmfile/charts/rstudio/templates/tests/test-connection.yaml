@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "rstudio.name" . }}-test-connection"
+  labels:
+    {{- include "rstudio.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: registry.hrz.uni-marburg.de/dockerio-cache/busybox:latest
+      command: ['nc', '-z', '-w', '3', '{{ include "rstudio.name" . }}', '{{ .Values.service.port | toString }}']
+
+  restartPolicy: Never

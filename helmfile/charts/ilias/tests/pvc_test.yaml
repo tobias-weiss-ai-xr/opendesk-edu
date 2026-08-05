@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test pvc
+templates:
+  - pvc.yaml
+tests:
+  - it: should create 4 PVCs by default (mariadbBackup enabled by default)
+    asserts:
+      - hasDocuments:
+          count: 4
+  - it: should create ilias-data PVC with correct name and size
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-data
+      - equal:
+          path: spec.resources.requests.storage
+          value: 4Gi
+    documentIndex: 0
+  - it: should create ilias-iliasdata PVC with correct name and size
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-iliasdata
+      - equal:
+          path: spec.resources.requests.storage
+          value: 4Gi
+    documentIndex: 1
+  - it: should create lucene PVC with correct name and size
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-lucene
+      - equal:
+          path: spec.resources.requests.storage
+          value: 4Gi
+    documentIndex: 2
+  - it: should create mariadb-backup PVC with correct name and size (default)
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-mariadb-backup-pvc
+      - equal:
+          path: spec.resources.requests.storage
+          value: 4Gi
+    documentIndex: 3
+  - it: should create 3 PVCs when mariadbBackup is disabled
+    set:
+      mariadbBackup.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 3
+  - it: should not create mariadb-backup PVC when disabled
+    set:
+      mariadbBackup.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 3
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-data
+    documentIndex: 0

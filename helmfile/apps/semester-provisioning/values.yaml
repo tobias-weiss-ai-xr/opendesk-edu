@@ -1,0 +1,385 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# ==============================================================================
+# Default values for semester-provisioning Helm chart
+# Standardwerte für das Semester-Provisioning Helm-Chart
+# ==============================================================================
+
+# ==============================================================================
+# Global settings / Globale Einstellungen
+# ==============================================================================
+global:
+  imageRegistry: ""
+  pullSecrets: []
+
+# ==============================================================================
+# Semester Provisioning API / Semester-Provisioning-API
+# ==============================================================================
+semesterProvisioning:
+  # Container image settings / Container-Image-Einstellungen
+  image:
+    repository: "semester-provisioning"
+    tag: "latest"
+    pullPolicy: "IfNotPresent"
+
+  # Number of API replicas / Anzahl der API-Replikas
+  replicas: 1
+
+  # API server port / API-Server-Port
+  port: 8000
+
+  # Resource limits and requests / Ressourcen-Limits und -Requests
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # Pod security context / Pod-Sicherheitskontext
+  podSecurityContext:
+    runAsNonRoot: true
+    fsGroup: 1000
+    seccompProfile:
+      type: RuntimeDefault
+
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+
+  # Liveness probe settings / Liveness-Probe-Einstellungen
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  # Readiness probe settings / Readiness-Probe-Einstellungen
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# ==============================================================================
+# Semester Configuration / Semester-Konfiguration
+# ==============================================================================
+semester:
+  # Enable semester lifecycle management / Semester-Lebenszyklus-Management aktivieren
+  enabled: true
+
+  # Current semester definition / Aktuelle Semester-Definition
+  current:
+    name: "WS25/26"
+    type: "wintersemester"  # wintersemester | sommersemester
+    start_date: "2025-10-01"
+    end_date: "2026-03-31"
+
+    # Phase dates / Phasen-Daten
+    phases:
+      enrollment:
+        start: "2025-07-01"
+        end: "2025-09-30"
+      teaching:
+        start: "2025-10-15"
+        end: "2026-02-28"
+      exam:
+        start: "2026-03-01"
+        end: "2026-03-31"
+      archival:
+        deadline: "2026-04-15"
+
+  # Previous semester (for transitions) / Vorheriges Semester (für Übergänge)
+  previous:
+    name: "SS25"
+    type: "sommersemester"
+    start_date: "2025-04-01"
+    end_date: "2025-09-30"
+
+# ==============================================================================
+# Automation Settings / Automatisierungseinstellungen
+# ==============================================================================
+automation:
+  # Enable automation / Automatisierung aktivieren
+  enabled: true
+
+  # Timezone for cron jobs / Zeitzone für Cron-Jobs
+  timezone: "Europe/Berlin"
+
+  # Cron schedules for lifecycle jobs / Cron-Zeitpläne für Lebenszyklus-Jobs
+  cron:
+    # Semester start job: Runs on 1st day of semester at 6 AM
+    # Semester-Start-Job: Läuft am 1. Tag des Semesters um 6 Uhr
+    semester_start: "0 6 1 10 *"
+
+    # Mid-semester check: 15th of each month at 9 AM
+    # Semester-Mitte-Check: 15. jedes Monats um 9 Uhr
+    mid_semester_check: "0 9 15 * *"
+
+    # Semester end job: Runs on 1st day after semester end at 6 AM
+    # Semester-Ende-Job: Läuft am 1. Tag nach Semesterende um 6 Uhr
+    semester_end: "0 6 1 4 *"
+
+    # Archival cleanup: April 1st at 2 AM (after archival deadline)
+    # Archiv-Bereinigung: 1. April um 2 Uhr (nach Archiv-Frist)
+    archival_cleanup: "0 2 1 4 *"
+
+    # Role sync: Every 15 minutes / Rollen-Sync: Alle 15 Minuten
+    role_sync: "*/15 * * * *"
+
+  # Job history settings / Job-Verlaufseinstellungen
+  jobs:
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 1
+
+# ==============================================================================
+# Course Provisioning Settings / Kursbereitstellungseinstellungen
+# ==============================================================================
+provisioning:
+  # Default category for courses / Standardkategorie für Kurse
+  default_category: "courses"
+
+  # Course title prefix / Kurstitel-Präfix
+  course_prefix: ""
+
+  # Auto-archive courses at semester end / Kurse am Semesterende automatisch archivieren
+  auto_archive: true
+
+  # Archive retention period in years / Archiv-Aufbewahrungszeitraum in Jahren
+  archive_retention_years: 5
+
+  # Enable automatic course provisioning from campus management
+  # Automatische Kursbereitstellung aus dem Campus-Management aktivieren
+  auto_provision: false
+
+# ==============================================================================
+# Role Synchronization Settings / Rollen-Synchronisierungseinstellungen
+# ==============================================================================
+roles:
+  # Enable role synchronization / Rollen-Synchronisierung aktivieren
+  enabled: true
+
+  # Sync interval in minutes / Sync-Intervall in Minuten
+  sync_interval_minutes: 15
+
+  # Sync on enrollment changes / Bei Einschreibungsänderungen synchronisieren
+  sync_on_enrollment_change: true
+
+  # Role mappings: campus_role -> keycloak_role -> lms_role
+  # Rollen-Mappings: campus_role -> keycloak_role -> lms_role
+  mappings:
+    - campus_role: "student"
+      keycloak_role: "student"
+      lms_role: "student"
+    - campus_role: "tutor"
+      keycloak_role: "tutor"
+      lms_role: "tutor"
+    - campus_role: "lecturer"
+      keycloak_role: "instructor"
+      lms_role: "instructor"
+    - campus_role: "auditor"
+      keycloak_role: "auditor"
+      lms_role: "guest"
+    - campus_role: "external"
+      keycloak_role: "affiliate"
+      lms_role: "guest"
+
+# ==============================================================================
+# LMS Integration Settings / LMS-Integrationseinstellungen
+# ==============================================================================
+ilias:
+  # Enable ILIAS integration / ILIAS-Integration aktivieren
+  enabled: true
+  # ILIAS API URL / ILIAS-API-URL
+  api_url: ""
+  # ILIAS API key (from secret) / ILIAS-API-Schlüssel (aus Secret)
+  api_key: ""
+  # ILIAS client ID / ILIAS-Client-ID
+  client_id: "default"
+
+moodle:
+  # Enable Moodle integration / Moodle-Integration aktivieren
+  enabled: true
+  # Moodle API URL / Moodle-API-URL
+  api_url: ""
+  # Moodle API token (from secret) / Moodle-API-Token (aus Secret)
+  api_token: ""
+
+# ==============================================================================
+# Keycloak Integration Settings / Keycloak-Integrationseinstellungen
+# ==============================================================================
+keycloak:
+  # Keycloak server URL / Keycloak-Server-URL
+  url: ""
+  # Keycloak realm / Keycloak-Realm
+  realm: "opendesk-edu"
+  # Admin credentials (from secret) / Admin-Anmeldedaten (aus Secret)
+  admin_user: ""
+  admin_password: ""
+
+# ==============================================================================
+# Database Settings / Datenbankeinstellungen
+# ==============================================================================
+database:
+  # Database type: sqlite or postgresql / Datenbanktyp: sqlite oder postgresql
+  type: "sqlite"
+
+  # SQLite path (if type is sqlite) / SQLite-Pfad (wenn Typ sqlite)
+  sqlite_path: ":memory:"
+
+  # PostgreSQL settings (if type is postgresql) / PostgreSQL-Einstellungen (wenn Typ postgresql)
+  postgresql:
+    host: ""
+    port: 5432
+    database: "semester_provisioning"
+    user: ""
+    password: ""
+    ssl_mode: "prefer"
+
+# ==============================================================================
+# Audit Logging Settings / Audit-Logging-Einstellungen
+# ==============================================================================
+audit:
+  # Enable audit logging / Audit-Logging aktivieren
+  enabled: true
+  # Log level: DEBUG, INFO, WARNING, ERROR / Log-Level: DEBUG, INFO, WARNING, ERROR
+  log_level: "INFO"
+  # Retention days for audit logs / Aufbewahrungstage für Audit-Logs
+  retention_days: 365
+
+# ==============================================================================
+# Ingress Settings / Ingress-Einstellungen
+# ==============================================================================
+ingress:
+  # Enable ingress / Ingress aktivieren
+  enabled: true
+
+  # Ingress class name / Ingress-Class-Name
+  className: "nginx"
+
+  # Ingress annotations / Ingress-Annotationen
+  annotations: {}
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+  # Host configuration / Host-Konfiguration
+  hosts:
+    - host: semester.opendesk.hrz.uni-marburg.de
+      paths:
+        - path: /
+          pathType: Prefix
+
+  # TLS configuration / TLS-Konfiguration
+  tls: []
+    # - secretName: semester-provisioning-tls
+    #   hosts:
+    #     - semester.opendesk.hrz.uni-marburg.de
+
+# ==============================================================================
+# Service Settings / Service-Einstellungen
+# ==============================================================================
+service:
+  # Service type / Service-Typ
+  type: ClusterIP
+  # Service port / Service-Port
+  port: 80
+  # Target port (container port) / Target-Port (Container-Port)
+  targetPort: 8000
+
+# ==============================================================================
+# Persistence Settings / Persistenz-Einstellungen
+# ==============================================================================
+persistence:
+  # Enable persistence for data / Persistenz für Daten aktivieren
+  enabled: false
+
+  # Storage class name / Storage-Class-Name
+  storageClass: ""
+
+  # Access mode / Zugriffsmodus
+  accessMode: ReadWriteOnce
+
+  # Storage size / Speichergröße
+  size: 1Gi
+
+# ==============================================================================
+# Node Settings / Node-Einstellungen
+# ==============================================================================
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# ==============================================================================
+# Pod Disruption Budget Settings / Pod-Disruption-Budget-Einstellungen
+# ==============================================================================
+podDisruptionBudget:
+  # Enable PDB / PDB aktivieren
+  enabled: false
+  # Minimum available / Minimal verfügbar
+  minAvailable: 1
+  # Maximum unavailable / Maximal nicht verfügbar
+  # maxUnavailable: 1
+
+# ==============================================================================
+# Service Account Settings / Service-Account-Einstellungen
+# ==============================================================================
+serviceAccount:
+  # Create service account / Service-Account erstellen
+  create: true
+  # Service account name (defaults to release name) / Service-Account-Name
+  name: ""
+  # Annotations for service account / Annotationen für Service-Account
+  annotations: {}
+
+# ==============================================================================
+# RBAC Settings / RBAC-Einstellungen
+# ==============================================================================
+rbac:
+  # Create RBAC resources / RBAC-Ressourcen erstellen
+  create: true
+  # Rules for the role / Regeln für die Rolle
+  rules: []
+
+# ==============================================================================
+# Extra Environment Variables / Zusätzliche Umgebungsvariablen
+# ==============================================================================
+extraEnv: []
+  # - name: MY_VAR
+  #   value: "my-value"
+
+# ==============================================================================
+# Extra Volumes / Zusätzliche Volumes
+# ==============================================================================
+extraVolumes: []
+  # - name: my-volume
+  #   configMap:
+  #     name: my-configmap
+
+# ==============================================================================
+# Extra Volume Mounts / Zusätzliche Volume-Mounts
+# ==============================================================================
+extraVolumeMounts: []
+  # - name: my-volume
+  #   mountPath: /path/to/mount
+  #   readOnly: true
+
+# ==============================================================================
+# ConfigMap Settings (for external configuration) / ConfigMap-Einstellungen
+# ==============================================================================
+configMap:
+  # Use existing ConfigMap (disables creation of new ConfigMap)
+  # Vorhandene ConfigMap verwenden (deaktiviert Erstellung neuer ConfigMap)
+  existingConfigMap: ""

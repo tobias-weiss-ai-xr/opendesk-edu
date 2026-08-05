@@ -1,0 +1,112 @@
+{
+  "dashboard": {
+    "title": "OpenDesk Log Explorer",
+    "uid": "open-desk-log-explorer",
+    "tags": ["logs", "loki", "opendesk", "exploration"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Log Volume by Job",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "count_over_time({job=\"opendesk-logs\"}[5m])",
+            "refId": "A",
+            "legendFormat": "{{job}}"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 0},
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Recent Errors",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "{job=\"opendesk-logs\"} |= \"error\" |= \"Error\" |= \"ERROR\" | logfmt",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 10, "w": 12, "x": 0, "y": 6},
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "sortOrder": "Descending"
+        }
+      },
+      {
+        "id": 3,
+        "title": "Keycloak Authentication Logs",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "{job=\"opendesk-logs\", filename=~\".*keycloak.*\"} |= \"authentication\"",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 10, "w": 12, "x": 12, "y": 6},
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "sortOrder": "Descending"
+        }
+      },
+      {
+        "id": 4,
+        "title": "Backup Process Logs",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "{job=\"opendesk-logs\", filename=~\".*backup.*\"}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 10, "w": 12, "x": 0, "y": 16},
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "sortOrder": "Descending"
+        }
+      },
+      {
+        "id": 5,
+        "title": "General System Logs",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "{job=\"opendesk-logs\"} | logfmt",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 10, "w": 12, "x": 12, "y": 16},
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "sortOrder": "Descending"
+        }
+      }
+    ]
+  }
+}

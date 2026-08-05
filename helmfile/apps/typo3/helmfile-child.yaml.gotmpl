@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "typo3"
+    chart: "../../charts/typo3"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.typo3 }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.typo3.enabled }}
+    timeout: 1800
+
+commonLabels:
+  deployStage: "050-components"
+  component: "typo3"

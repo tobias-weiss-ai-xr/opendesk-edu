@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-planka
+  labels:
+{{ include "planka.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      planka/server: "true"
+{{ include "planka.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        planka/server: "true"
+{{ include "planka.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: planka
+          image: {{ .Values.planka.image }}:{{ .Values.planka.tag }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          ports:
+            - containerPort: {{ .Values.planka.port }}
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://{{ include "planka.dbUser" . }}:{{ include "planka.dbPassword" . }}@{{ include "planka.dbHost" . }}:5432/{{ include "planka.dbName" . }}"
+            - name: DEFAULT_EMAIL
+              value: {{ .Values.planka.defaultEmail | quote }}
+            - name: DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-planka-secrets
+                  key: planka-default-password
+            - name: BASE_URL
+              value: {{ .Values.planka.baseUrl | quote }}
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-planka-secrets
+                  key: planka-secret-key
+            - name: OIDC_CLIENT_ID
+              value: {{ .Values.planka.oidc.clientId | quote }}
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-planka-secrets
+                  key: planka-oidc-client-secret
+            - name: OIDC_AUTH_ENDPOINT
+              value: {{ .Values.planka.oidc.authEndpoint | quote }}
+            - name: OIDC_TOKEN_ENDPOINT
+              value: {{ .Values.planka.oidc.tokenEndpoint | quote }}
+            - name: OIDC_USERINFO_ENDPOINT
+              value: {{ .Values.planka.oidc.userinfoEndpoint | quote }}
+            - name: OIDC_SCOPE
+              value: {{ .Values.planka.oidc.scope | quote }}
+          volumeMounts:
+            - name: planka-data
+              mountPath: /app/public/user-avatars
+              subPath: user-avatars
+            - name: planka-data
+              mountPath: /app/public/project-background-images
+              subPath: project-background-images
+            - name: planka-data
+              mountPath: /app/attachments
+              subPath: attachments
+{{- if .Values.extraVolumeMounts }}
+{{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+{{- end }}
+          resources: {{ .Values.planka.resources | toYaml | nindent 12 }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.planka.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.planka.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: planka-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-planka-data
+{{- if .Values.extraVolumes }}
+{{- toYaml .Values.extraVolumes | nindent 8 }}
+{{- end }}

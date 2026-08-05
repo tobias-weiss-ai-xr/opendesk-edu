@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: ConfigMap
+templates:
+  - configmap.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a ConfigMap
+    asserts:
+      - isKind:
+          of: ConfigMap
+
+  - it: should contain AdditionalConfiguration.php
+    asserts:
+      - isNotNull:
+          path: data["AdditionalConfiguration.php"]
+
+  - it: should have trustedHostsPattern
+    asserts:
+      - matchRegex:
+          path: data["AdditionalConfiguration.php"]
+          pattern: "trustedHostsPattern"
+
+  - it: should have utf8mb4 charset
+    asserts:
+      - matchRegex:
+          path: data["AdditionalConfiguration.php"]
+          pattern: "utf8mb4"
+
+  - it: should have installToolPassword
+    asserts:
+      - matchRegex:
+          path: data["AdditionalConfiguration.php"]
+          pattern: "installToolPassword"

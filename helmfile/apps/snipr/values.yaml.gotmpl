@@ -1,0 +1,87 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+snipr:
+  image: ghcr.io/tobias-weiss-ai-xr/snipr
+  tag: "v1.0.0"
+  replicaCount: 2
+
+  # Enable SNIpR application
+  enabled: {{ .Values.apps.snipr.enabled | default true }}
+
+  # Transcription configuration (F13 integration)
+  transcription:
+    enabled: {{ .Values.apps.snipr.transcription.enabled | default true }}
+    f13:
+      endpoint: {{ .Values.services.f13.endpoint | default (printf "https://f13.%s" .Values.global.domain) | quote }}
+      model: {{ .Values.services.f13.model | default "whisper-medium" | quote }}
+      language: {{ .Values.services.f13.language | default "de" | quote }}
+
+  # Storage configuration (SeaweedFS S3)
+  storage:
+    enabled: {{ .Values.apps.seaweedfs.enabled | default true }}
+    endpoint: {{ .Values.services.seaweedfs.endpoint | default "http://seaweedfs-s3:8333" | quote }}
+    bucket: {{ .Values.services.seaweedfs.bucket | default "snipr-recordings" | quote }}
+
+  # SSO configuration (Keycloak OIDC)
+  sso:
+    keycloak:
+      realm: {{ .Values.global.keycloak.realm | default "opendesk" | quote }}
+      clientId: {{ .Values.apps.snipr.sso.clientId | default "snipr" | quote }}
+
+  # LTI 1.3 configuration
+  lti:
+    enabled: {{ .Values.apps.snipr.lti.enabled | default true }}
+    keycloak:
+      clientId: {{ .Values.apps.snipr.lti.clientId | default "snipr-lti" | quote }}
+    platforms:
+      ilias:
+        deploymentId: {{ .Values.apps.snipr.lti.ilias.deploymentId | default "ilias-snipr" | quote }}
+        launchUrl: {{ .Values.apps.snipr.lti.ilias.launchUrl | default (printf "https://ilias.%s/snipr/lti/launch" .Values.global.domain) | quote }}
+      moodle:
+        deploymentId: {{ .Values.apps.snipr.lti.moodle.deploymentId | default "moodle-snipr" | quote }}
+        launchUrl: {{ .Values.apps.snipr.lti.moodle.launchUrl | default (printf "https://moodle.%s/mod/lti/launch" .Values.global.domain) | quote }}
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "haproxy"
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/timeout-server: "120000ms"
+    haproxy-ingress.github.io/timeout-client: "120000ms"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: "snipr.{{ .Values.global.domain }}"
+      paths:
+        - path: "/"
+          pathType: "Prefix"
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "snipr.{{ .Values.global.domain }}"
+
+# Resources
+resources:
+  requests:
+    cpu: {{ .Values.resources.snipr.requests.cpu | default "500m" | quote }}
+    memory: {{ .Values.resources.snipr.requests.memory | default "1Gi" | quote }}
+  limits:
+    cpu: {{ .Values.resources.snipr.limits.cpu | default "1000m" | quote }}
+    memory: {{ .Values.resources.snipr.limits.memory | default "2Gi" | quote }}
+
+# Autoscaling
+autoscaling:
+  enabled: {{ .Values.autoscaling.snipr.enabled | default true }}
+  minReplicas: {{ .Values.autoscaling.snipr.minReplicas | default 2 }}
+  maxReplicas: {{ .Values.autoscaling.snipr.maxReplicas | default 10 }}
+  targetCPUUtilizationPercentage: {{ .Values.autoscaling.snipr.targetCPUUtilizationPercentage | default 70 }}
+
+# Backup configuration (k8up)
+backup:
+  enabled: {{ .Values.backup.snipr.enabled | default true }}
+  schedule: {{ .Values.backup.snipr.schedule | default "0 3 * * 0" | quote }}
+  retention:
+    daily: {{ .Values.backup.snipr.retention.daily | default 7 }}
+    weekly: {{ .Values.backup.snipr.retention.weekly | default 4 }}
+    monthly: {{ .Values.backup.snipr.retention.monthly | default 12 }}

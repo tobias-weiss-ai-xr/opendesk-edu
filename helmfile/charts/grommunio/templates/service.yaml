@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "grommunio.fullname" . }}
+  labels:
+{{ include "grommunio.labels" . | nindent 4 }}
+  {{- with .Values.grommunio.service.annotations }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.grommunio.service.type }}
+  ports:
+    - port: {{ .Values.grommunio.service.port }}
+      targetPort: {{ .Values.grommunio.service.targetPort }}
+      protocol: TCP
+      name: http
+    - port: {{ .Values.grommunio.mail.lmtp.port }}
+      targetPort: lmtp
+      protocol: TCP
+      name: lmtp
+    - port: {{ .Values.grommunio.monitoring.prometheus.port }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+  selector:
+{{ include "grommunio.selectorLabels" . | nindent 4 }}

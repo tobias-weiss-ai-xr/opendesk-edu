@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: typo3-oidc-config
+  namespace: {{ .Release.Namespace }}  # yamllint disable-line rule:braces
+  labels:
+    app.kubernetes.io/name: typo3
+    app.kubernetes.io/component: oidc
+    app.kubernetes.io/part-of: opendesk
+data:
+  oidc-config.php: |
+    <?php
+    return [
+        'oidcEndpointAuthorize' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/auth',
+        'oidcEndpointToken' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/token',
+        'oidcEndpointUserInfo' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/userinfo',
+        'oidcEndpointLogout' => 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/logout',
+        'oidcClientKey' => 'typo3',
+        'oidcClientSecret' => '',
+        'oidcScopes' => 'openid profile email',
+        'oidcRedirectUri' => 'https://cms.opendesk.hrz.uni-marburg.de/typo3/index.php?loginProvider=1537648589',
+        'oidcMapping' => [
+            'username' => 'preferred_username',
+            'email' => 'email',
+            'firstname' => 'given_name',
+            'lastname' => 'family_name',
+        ],
+    ];

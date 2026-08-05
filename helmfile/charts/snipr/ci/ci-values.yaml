@@ -1,0 +1,93 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# CI testing values for template rendering validation
+snipr:
+  image: ghcr.io/tobias-weiss-ai-xr/snipr
+  tag: "v1.0.0-test"
+  imagePullPolicy: IfNotPresent
+  replicaCount: 1
+  
+  api:
+    port: 8080
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "200m"
+        memory: "512Mi"
+  
+  web:
+    port: 3000
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "128Mi"
+      limits:
+        cpu: "100m"
+        memory: "256Mi"
+  
+  ffmpeg:
+    enabled: false
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+  
+  storage:
+    type: filesystem
+    filesystem:
+      path: /var/snipr/recordings
+      persistence:
+        enabled: true
+        size: 10Gi
+        accessMode: ReadWriteOnce
+        storageClass: standard
+  
+  sso:
+    type: oidc
+    keycloak:
+      realm: test
+      clientId: snipr-test
+      clientSecret: test-secret
+      authUrl: https://keycloak.test/realms/test/protocol/openid-connect/auth
+      tokenUrl: https://keycloak.test/realms/test/protocol/openid-connect/token
+      userInfoUrl: https://keycloak.test/realms/test/protocol/openid-connect/userinfo
+      jwksUrl: https://keycloak.test/realms/test/protocol/openid-connect/certs
+  
+  transcription:
+    enabled: false
+  
+  lti:
+    enabled: false
+
+replicaCount: 1
+replicas: 1
+
+ingress:
+  enabled: false
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: "50m"
+    memory: "128Mi"
+  limits:
+    cpu: "100m"
+    memory: "256Mi"
+
+autoscaling:
+  enabled: false
+
+podSecurityContext: {}
+
+securityContext: {}
+
+podDisruptionBudget:
+  enabled: false
+
+serviceAccount:
+  create: true

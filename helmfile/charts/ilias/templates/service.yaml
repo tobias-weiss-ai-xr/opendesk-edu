@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-ilias
+  labels:
+    ilias/server: "true"
+{{ include "ilias.labels" . | nindent 4 }}
+spec:
+  selector:
+    ilias/server: "true"
+{{ include "ilias.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.ilias.port }}
+  type: ClusterIP

@@ -1,0 +1,92 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+# Runtime values for Grommunio Helm chart
+# These values override defaults in helmfile/charts/grommunio/values.yaml
+# using platform-level gotmpl references
+
+grommunio:
+  # Ingress - use platform host and domain
+  ingress:
+    hostname: "{{ .Values.global.hosts.grommunio }}.{{ .Values.global.domain }}"
+
+  # Authentication - Keycloak OIDC
+  auth:
+    oidc:
+      enabled: true
+      issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm | default \"opendesk\" }}"
+      clientId: "grommunio"
+      scope: "openid profile email"
+
+  # LDAP - OpenLDAP user federation
+  ldap:
+    enabled: true
+    host: "ums-ldap-server"
+    port: 389
+    baseDN: "{{ .Values.ldap.baseDn }}"
+    bindDN: "uid=grommunio,ou=services,{{ .Values.ldap.baseDn }}"
+    userFilter: "(objectClass=person)"
+
+  # Mail - Postfix SMTP and Dovecot IMAP
+  mail:
+    domain: "{{ .Values.global.mailDomain | default .Values.global.domain }}"
+    imap:
+      server: "imaps://dovecot.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:993"
+      ssl: true
+    smtp:
+      server: "smtp://postfix.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:587"
+      tls: true
+    sieve:
+      server: "sieve://dovecot.{{ .Release.Namespace }}.svc.{{ .Values.cluster.networking.domain }}:4190"
+
+  # File integration - Nextcloud
+  files:
+    enabled: true
+    nextcloudUrl: "https://{{ .Values.global.hosts.nextcloud }}.{{ .Values.global.domain }}"
+    webdavPath: "/remote.php/dav/files"
+
+  # Database - MariaDB (NOT PostgreSQL)
+  db:
+    type: mariadb
+    host: "mariadb-headless"
+    port: 3306
+    name: "grommunio"
+    user: "grommunio"
+    password: {{ .Values.secrets.grommunio.dbPassword | default "" | quote }}
+
+  # Cache - Redis
+  cache:
+    host: "redis-headless"
+    port: 6379
+    password: {{ .Values.secrets.grommunio.cachePassword | default "" | quote }}
+
+  # Monitoring
+  monitoring:
+    enabled: true
+    prometheus:
+      enabled: true
+
+  # ActiveSync for mobile devices
+  activesync:
+    enabled: true
+    version: "16.1"
+
+  # Outlook integration
+  outlook:
+    mapiEnabled: true
+    ewsEnabled: true
+    autodiscoverDomain: "{{ .Values.global.domain }}"
+
+  # Logging
+  logging:
+    level: {{ if .Values.debug.enabled }}"DEBUG"{{ else }}"INFO"{{ end }}
+    format: "json"
+
+  # Resources - match global configuration
+  resources:
+    requests:
+      memory: {{ .Values.global.grommunio.resources.requests.memory | default "4Gi" | quote }}
+      cpu: {{ .Values.global.grommunio.resources.requests.cpu | default "1000m" | quote }}
+    limits:
+      memory: {{ .Values.global.grommunio.resources.limits.memory | default "8Gi" | quote }}
+      cpu: {{ .Values.global.grommunio.resources.limits.cpu | default "2000m" | quote }}

@@ -7,11 +7,11 @@
 # OpenSpec: Full compliance (FR-IMAGE-001 through FR-IMAGE-009)
 # 
 
-{ config, pkgs, lib, ... }:
+{ config ? {}, pkgs, lib, ... }:
 
 {
   # Import openDesk overlays
-  nixpkgs.overlays = [ (import ../../../../../overlays/opendesk.nix) ];
+  nixpkgs.overlays = [ (import ../../../../overlays/opendesk.nix) ];
 
   # portal-entries service
   services.portal-entries = {

@@ -1,0 +1,97 @@
+suite: Deployment
+templates:
+  - deployment.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    set:
+      image.repository: "test-org/opencloud"
+      image.tag: "v1.0.0"
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: .+/test-org/opencloud:.+
+
+  - it: should set replica count from values
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 2
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]
+      - isNotNull:
+          path: metadata.labels["helm.sh/chart"]
+
+  - it: should configure OIDC environment variables
+    set:
+      oidc.clientId: "test-client"
+      oidc.clientSecret: "test-secret"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROXY_OIDC_CLIENT_ID
+            value: "test-client"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROXY_OIDC_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: oc-oidc-client-secret
+                name: RELEASE-NAME-opencloud-secrets
+
+  - it: should set liveness and readiness probes
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].livenessProbe
+      - isNotNull:
+          path: spec.template.spec.containers[0].readinessProbe
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.path
+          value: /status.php
+
+  - it: should set resource requests and limits
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.requests
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.limits
+
+  - it: should mount the data volume
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: opencloud-data
+            mountPath: /var/lib/opencloud
+
+  - it: should set container security context from defaults
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 1000
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+
+  - it: should set pod security context with fsGroup from defaults
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1000
