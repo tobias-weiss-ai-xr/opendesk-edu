@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.services.rag.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "f13.fullname" . }}-rag
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: rag
+data:
+  rag_pipeline_config.yml: |
+    elasticsearch:
+      host: {{ include "f13.elasticHost" . }}
+      port: 9200
+
+    chunking:
+      strategy: sentence
+      chunk_size: 512
+      chunk_overlap: 50
+
+    embedding:
+      model: {{ .Values.rag.embeddingModel | default "all-MiniLM-L6-v2" | quote }}
+
+    retrieval:
+      top_k: 5
+      score_threshold: 0.7
+{{- end }}

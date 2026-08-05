@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ilias-ilserver
+  labels:
+{{ include "ilias.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ilias/rpc-server: "true"
+{{ include "ilias.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        ilias/rpc-server: "true"
+{{ include "ilias.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: ilias
+          image: {{ .Values.iliasRPCServer.image }}:{{ .Values.iliasRPCServer.tag }}
+          command: ["/bin/bash", "-c", "java -jar /app/ilServer.jar /app/ilServer.properties start"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: false
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          ports:
+            - containerPort: {{ .Values.iliasRPCServer.port }}
+          env:
+            - name: ILSERVER_LOGLEVEL
+              value: {{ .Values.iliasRPCServer.logLevel | quote }}
+            - name: ILSERVER_NIC_ID
+              value: {{ .Values.iliasRPCServer.nicId | quote }}
+            - name: ILSERVER_CLIENT_NAME
+              value: {{ .Values.ilias.clientName | quote }}
+            - name: ILSERVER_THREADS
+              value: {{ .Values.iliasRPCServer.threads | quote }}
+            - name: ILSERVER_RAMBUFFER_SIZE
+              value: {{ .Values.iliasRPCServer.ramBufferSize | quote }}
+            - name: ILSERVER_MAX_FILESIZE
+              value: {{ .Values.iliasRPCServer.maxFileSize | quote }}
+          volumeMounts:
+            - name: ilias-data
+              mountPath: /var/www/html/data/
+            - name: ilias-iliasdata
+              mountPath: /var/www/html/iliasdata/
+            - name: ilias-lucence
+              mountPath: /var/lucenedata/ilias
+            - name: ilias-il-config
+              mountPath: /app/ilServer.properties
+              subPath: ilServer.properties
+            - name: ilias-il-config
+              mountPath: /app/ilias.ini.php
+              subPath: ilias.ini.php
+{{- if .Values.extraVolumeMounts }}
+{{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+{{- end }}
+          resources: {{ .Values.ilias.resources | toYaml | nindent 12 }}
+      volumes:
+        - name: ilias-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-ilias-data
+        - name: ilias-iliasdata
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-ilias-iliasdata
+        - name: ilias-lucence
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-ilias-lucene
+        - name: ilias-il-config
+          configMap:
+            name: {{.Release.Name }}-ilias-rpc-config
+        - name: ilias-secret
+          secret:
+            secretName: {{.Release.Name }}-ilias-secrets
+            items:
+              - key: ilias-client.php
+                path: ilias-client.php
+{{- if .Values.extraVolumes }}
+{{- toYaml .Values.extraVolumes | nindent 8 }}
+{{- end }}

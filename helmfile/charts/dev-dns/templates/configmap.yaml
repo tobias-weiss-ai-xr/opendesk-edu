@@ -1,0 +1,27 @@
+{{- if .Values.coredns.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+  labels:
+    k8s-app: kube-dns
+    {{- include "dev-dns.labels" . | nindent 4 }}
+data:
+  dev-zone.server: |
+{{- $targetIP := .Values.coredns.targetIP }}
+{{- $zoneName := .Values.coredns.zoneName }}
+{{- $hostnames := list }}
+{{- range .Values.coredns.hostEntries }}
+{{- range .hostnames }}
+{{- $hostnames = append $hostnames (regexFind "^[^.]+" .) }}
+{{- end }}
+{{- end }}
+    {{ $zoneName }} {
+        template IN A {
+            match "^({{ join "|" $hostnames }})\.{{ $zoneName }}\.$"
+            answer "{{ "{{ .Name }}" }} {{ $.Values.coredns.ttl }} IN A {{ $targetIP }}"
+        }
+        forward . /etc/resolv.conf
+    }
+{{- end }}

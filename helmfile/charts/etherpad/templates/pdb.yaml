@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Release.Name }}-etherpad-pdb
+  labels:
+{{ include "etherpad.labels" . | nindent 4 }}
+spec:
+  minAvailable: {{ if .Values.pdb }}{{ .Values.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
+  selector:
+    matchLabels:
+      etherpad/server: "true"
+{{ include "etherpad.selectorLabels" . | nindent 6 }}

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#341291"/>
+      <stop offset="100%" stop-color="#571EFA"/>
+    </linearGradient>
+
+    <!-- D letterform gradient (two-tone) -->
+    <linearGradient id="dGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#927AFA"/>
+      <stop offset="45%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#341291"/>
+    </linearGradient>
+
+    <!-- Glow filter for the D -->
+    <filter id="dGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur"/>
+      <feColorMatrix in="blur" type="matrix"
+        values="0 0 0 0 0.34
+                0 0 0 0 0.12
+                0 0 0 0 0.57
+                0 0 0 0.6 0" result="colorBlur"/>
+      <feMerge>
+        <feMergeNode in="colorBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle shadow under D -->
+    <filter id="dShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="shadowBlur"/>
+      <feOffset dx="0" dy="16" result="shadowOffset"/>
+      <feColorMatrix in="shadowOffset" type="matrix"
+        values="0 0 0 0 0.1
+                0 0 0 0 0.02
+                0 0 0 0 0.2
+                0 0 0 0.35 0" result="shadowColor"/>
+      <feMerge>
+        <feMergeNode in="shadowColor"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Clip for the two-tone upper accent overlay -->
+    <clipPath id="upperHalf">
+      <rect x="0" y="0" width="1000" height="500"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background rounded rectangle -->
+  <rect x="0" y="0" width="1000" height="1000" rx="200" ry="200" fill="url(#bgGrad)"/>
+
+  <!-- D letterform with glow + shadow -->
+  <g filter="url(#dShadow)">
+    <g filter="url(#dGlow)">
+      <!-- Main D shape (compound path, evenodd for counter) -->
+      <path fill-rule="evenodd" fill="url(#dGrad)" d="
+        M 175 130 L 175 870 L 530 870 C 710 870, 850 710, 850 500 C 850 290, 710 130, 530 130 Z
+        M 315 280 L 500 280 C 630 280, 710 370, 710 500 C 710 630, 630 720, 500 720 L 315 720 Z
+      "/>
+
+      <!-- Accent overlay on upper half for two-tone effect -->
+      <g clip-path="url(#upperHalf)">
+        <path fill-rule="evenodd" fill="#927AFA" opacity="0.35" d="
+          M 175 130 L 175 870 L 530 870 C 710 870, 850 710, 850 500 C 850 290, 710 130, 530 130 Z
+          M 315 280 L 500 280 C 630 280, 710 370, 710 500 C 710 630, 630 720, 500 720 L 315 720 Z
+        "/>
+      </g>
+    </g>
+  </g>
+
+  <!-- "EDU" text at bottom -->
+  <text x="500" y="940" text-anchor="middle" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-size="72" font-weight="700" letter-spacing="24" fill="#DDD6FE" opacity="0.5">EDU</text>
+</svg>

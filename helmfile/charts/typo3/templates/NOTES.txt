@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the service:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:80
+
+Next steps:
+  1. Complete the TYPO3 install tool setup
+  2. Configure SSO/SSO integration if needed
+  3. Set up persistent storage for fileadmin and var
+
+Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu

@@ -1,0 +1,3 @@
+# Python dependencies for the SAML Metadata Generator
+# PyYAML is required to parse the YAML configuration
+PyYAML>=6.0

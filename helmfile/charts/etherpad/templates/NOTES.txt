@@ -1,0 +1,14 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the service:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 9001:9001
+
+Next steps:
+  1. Enable ingress and configure a hostname for external access
+  2. Configure SSO/SSO integration if needed
+  3. Set up persistent storage for pad data
+
+Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu

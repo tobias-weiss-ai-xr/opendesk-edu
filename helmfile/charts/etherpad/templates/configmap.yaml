@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-etherpad-config
+data:
+  settings.json: |-
+    {
+      "users": {
+        "admin": {
+          "password": "{{ .Values.etherpad.adminPassword | default "admin" }}"
+        }
+      },
+      "ep_etherpad-lite": {
+        "dbType": "postgres",
+        "dbSettings": {
+          "host": "{{ include "etherpad.dbHost" . }}",
+          "port": {{ .Values.etherpad.db.port }},
+          "user": "{{ include "etherpad.dbUser" . }}",
+          "password": "{{ include "etherpad.dbPassword" . }}",
+          "database": "{{ include "etherpad.dbName" . }}"
+        }
+      }
+    }

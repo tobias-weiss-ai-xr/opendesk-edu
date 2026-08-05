@@ -1,0 +1,6 @@
+target-branch: main
+chart-dirs:
+  - helmfile/charts
+check-version-increment: false
+validate-maintainers: false
+helm-extra-args: "--timeout 60s"

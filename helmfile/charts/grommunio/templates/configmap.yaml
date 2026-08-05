@@ -1,0 +1,71 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grommunio.fullname" . }}-config
+  labels:
+{{ include "grommunio.labels" . | nindent 4 }}
+data:
+  GROMMUNIO_TIMEZONE: {{ .Values.grommunio.timezone | quote }}
+  GROMMUNIO_LANGUAGE: {{ .Values.grommunio.language | quote }}
+  GROMMUNIO_PAGE_TITLE: {{ .Values.grommunio.pageTitle | quote }}
+  GROMMUNIO_DB_TYPE: {{ .Values.grommunio.db.type | quote }}
+  GROMMUNIO_DB_HOST: {{ .Values.grommunio.db.host | quote }}
+  GROMMUNIO_DB_PORT: {{ .Values.grommunio.db.port | quote }}
+  GROMMUNIO_DB_NAME: {{ .Values.grommunio.db.name | quote }}
+  GROMMUNIO_DB_USER: {{ .Values.grommunio.db.user | quote }}
+  GROMMUNIO_DB_POOL_MAX: {{ .Values.grommunio.db.pool.maxConnections | quote }}
+  GROMMUNIO_DB_POOL_MIN: {{ .Values.grommunio.db.pool.minIdle | quote }}
+  GROMMUNIO_CACHE_HOST: {{ .Values.grommunio.cache.host | quote }}
+  GROMMUNIO_CACHE_PORT: {{ .Values.grommunio.cache.port | quote }}
+  GROMMUNIO_CACHE_DB: {{ .Values.grommunio.cache.db | quote }}
+  GROMMUNIO_CACHE_POOL: {{ .Values.grommunio.cache.poolSize | quote }}
+  GROMMUNIO_MAIL_DOMAIN: {{ .Values.grommunio.mail.domain | quote }}
+  GROMMUNIO_MAIL_IMAP_SERVER: {{ .Values.grommunio.mail.imap.server | quote }}
+  GROMMUNIO_MAIL_SMTP_SERVER: {{ .Values.grommunio.mail.smtp.server | quote }}
+  GROMMUNIO_MAIL_SIEVE_SERVER: {{ .Values.grommunio.mail.sieve.server | quote }}
+  GROMMUNIO_MAIL_LMTP_PORT: {{ .Values.grommunio.mail.lmtp.port | quote }}
+  GROMMUNIO_FEATURES: |
+    email={{ .Values.grommunio.features.email }}
+    calendar={{ .Values.grommunio.features.calendar }}
+    contacts={{ .Values.grommunio.features.contacts }}
+    activesync={{ .Values.grommunio.features.activesync }}
+    ews={{ .Values.grommunio.features.ews }}
+    mapi={{ .Values.grommunio.features.mapi }}
+    webinterface={{ .Values.grommunio.features.webinterface }}
+  GROMMUNIO_ACTIVESYNC_ENABLED: {{ .Values.grommunio.activesync.enabled | quote }}
+  GROMMUNIO_ACTIVESYNC_VERSION: {{ .Values.grommunio.activesync.version | quote }}
+  GROMMUNIO_OUTLOOK_MAPI_ENABLED: {{ .Values.grommunio.outlook.mapiEnabled | quote }}
+  GROMMUNIO_OUTLOOK_EWS_ENABLED: {{ .Values.grommunio.outlook.ewsEnabled | quote }}
+  GROMMUNIO_LOGGING_LEVEL: {{ .Values.grommunio.logging.level | quote }}
+  GROMMUNIO_LOGGING_FORMAT: {{ .Values.grommunio.logging.format | quote }}
+  GROMMUNIO_MONITORING_ENABLED: {{ .Values.grommunio.monitoring.enabled | quote }}
+  GROMMUNIO_MONITORING_PORT: {{ .Values.grommunio.monitoring.prometheus.port | quote }}
+  GROMMUNIO_MONITORING_PATH: {{ .Values.grommunio.monitoring.prometheus.path | quote }}
+  GROMMUNIO_FILES_ENABLED: {{ .Values.grommunio.files.enabled | quote }}
+  GROMMUNIO_FILES_NEXTCLOUD_URL: {{ .Values.grommunio.files.nextcloudUrl | quote }}
+  {{- if .Values.grommunio.files.webdavPath }}
+  GROMMUNIO_FILES_WEBDAV_PATH: {{ .Values.grommunio.files.webdavPath | quote }}
+  {{- end }}
+  {{- if .Values.grommunio.auth.oidc.enabled }}
+  GROMMUNIO_AUTH_METHOD: "oidc"
+  GROMMUNIO_OIDC_ISSUER: {{ .Values.grommunio.auth.oidc.issuerUrl | quote }}
+  GROMMUNIO_OIDC_CLIENT_ID: {{ .Values.grommunio.auth.oidc.clientId | quote }}
+  GROMMUNIO_OIDC_SCOPE: {{ .Values.grommunio.auth.oidc.scope | quote }}
+  GROMMUNIO_OIDC_DISCOVERY_URL: {{ include "grommunio.oidcDiscoveryUrl" . | quote }}
+  {{- else if .Values.grommunio.auth.saml.enabled }}
+  GROMMUNIO_AUTH_METHOD: "saml"
+  GROMMUNIO_SAML_ENTITY_ID: {{ .Values.grommunio.auth.saml.entityId | quote }}
+  GROMMUNIO_SAML_ACS_URL: {{ .Values.grommunio.auth.saml.assertionConsumerServiceUrl | quote }}
+  GROMMUNIO_SAML_IDP_URL: {{ .Values.grommunio.auth.saml.identityProviderUrl | quote }}
+  {{- end }}
+  {{- if .Values.grommunio.ldap.enabled }}
+  GROMMUNIO_LDAP_ENABLED: "true"
+  GROMMUNIO_LDAP_HOST: {{ .Values.grommunio.ldap.host | quote }}
+  GROMMUNIO_LDAP_PORT: {{ .Values.grommunio.ldap.port | quote }}
+  GROMMUNIO_LDAP_BASE_DN: {{ .Values.grommunio.ldap.baseDN | quote }}
+  GROMMUNIO_LDAP_BIND_DN: {{ .Values.grommunio.ldap.bindDN | quote }}
+  GROMMUNIO_LDAP_USER_FILTER: {{ .Values.grommunio.ldap.userFilter | quote }}
+  GROMMUNIO_LDAP_URL: {{ include "grommunio.ldapUrl" . | quote }}
+  {{- end }}

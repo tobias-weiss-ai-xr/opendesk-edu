@@ -1,0 +1,118 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+technical:
+
+  # Cryptpad related technical settings
+  cryptpad:
+    # Define how many child processes are initially spawned, even without any user accessing Cryptpad.
+    # Ref.: https://github.com/cryptpad/cryptpad/blob/0dd3c1f53d56dffb06651b86ead6b9b387920173/config/config.example.js#L111
+    maxWorkers: 4
+    # Autoscaling options
+    autoscaling:
+      # Enable the Autoscaling
+      enabled: false
+      # Minimal numbers of replicas
+      minReplicas: 1
+      # Maximum numbers of replicas
+      maxReplicas: 100
+      # Percentage of the targeted CPU Utilization
+      targetCPUUtilizationPercentage: 80
+      # Percentage of the targeted Memory Utilization
+      targetMemoryUtilizationPercentage: 80
+
+  # Collabora related technical settings
+  # Ref.: https://sdk.collaboraonline.com/docs/installation/Configuration.html
+  collabora:
+    # Set the value for the start parameter `-o:num_prespawn_children` to define how many child processes
+    # are initially spawned, even without any user accessing Collabora.
+    numPrespawnChildren: 4
+    # Defines the value for the start parameter `--o:disable_server_audit`
+    loggingDisableServerAudit: "true"
+    # Defines the value for the start parameter `--o:net.connection_timeout_secs`
+    netConnectionTimeoutSecs: 60
+
+  # Dovecot EE related settings
+  dovecot:
+    objectStorage:
+      # Size of objectstore fs cache
+      fsCacheSize: "2G"
+      # Size of fts cache
+      ftsCacheSize: "2G"
+      # Wether fs and fts cache should reside in RAM (tmpfs) or not
+      # If this value is true, the cache sizes of the fs cache + fts cache
+      # must be considered additionally to Dovecot's memory footprint.
+      cacheTmpfs: false
+    protocol:
+      imap:
+        limits:
+          # Set the `mail_max_userip_connections` in the `protocol imap` block
+          # Ref.: https://doc.dovecot.org/main/core/admin/limits.html#mail_max_userip_connections
+          maxUserIpConnections: 30
+
+  # Nextcloud related settings
+  nextcloud:
+    # Settings for the Nextcloud all-in-one (AIO) pod
+    aio:
+      # PHP-FPM (web) settings
+      # Note: The cron job's PHP memory limit is derived from the actual memory resource limit
+      # defined for the cron job.
+      php:
+        # Set the PHP memory limit for the PHP-FPM (web) workers in PHP notation, e.g. 2G.
+        # This is a per-request limit and must not exceed the AIO pod's memory limit.
+        memoryLimit: "768M"
+        # Number of PHP-FPM worker processes (`pm.max_children`). The theoretical worst-case
+        # web memory is `php.workers` x `php.memoryLimit`, but real usage is far lower.
+        workers: 20
+      # nginx (web server) settings
+      nginx:
+        # Number of nginx worker processes. Either a number, or "auto" (one worker per host
+        # CPU core). "auto" is not cgroup-aware, so pin a number to bound it on large nodes.
+        workers: "auto"
+    # Settings for the Nextcloud notify_push (push notifications) service
+    pushNotify:
+      # nginx (reverse proxy) settings
+      nginx:
+        # Number of nginx worker processes for the notify_push reverse proxy. Either a number,
+        # or "auto" (one worker per host CPU core; not cgroup-aware).
+        workers: 2
+
+  # Nubus related settings
+  nubus:
+    # Keycloak acts as the identity provider in Nubus.
+    keycloak:
+      # Settings related to the LDAP user backend configured for Keycloak.
+      ldapFederation:
+        # With openDesk 1.8.0 the setting "import users from LDAP" in the Keycloak ldap
+        # federation was enabled for new installations as a new out-of-the-box default within
+        # the Nubus stack.
+        # To align older installations with this setting, you can set the below option to `true`,
+        # Leaving it with the null value below will not change the setting at all.
+        # See also section for openDesk Release ≥ v1.12.0 in `migrations.md`.
+        importUsers: ~
+    # Nubus provisioning framework that is being used to actively provision data internally within
+    # Nubus e.g. for the portal or self service as well as externally, e.g. to OX App Suite.
+    provisioning:
+      # NATS including NATS JetStream is the queueing used by Nubus' provisioning.
+      # Ref.: https://nats.io/about/
+      nats:
+        # The NATS Box is a container for debugging NATS messages using a CLI tool.
+        # Ref.: https://github.com/nats-io/nats-box
+        natsBox:
+          # Enable the NATS Box container for the deployment. Will also be enabled in case of
+          # `.Values.debug.enabled: true`
+          enabled: false
+
+  # Groupware related technical settings
+  oxAppSuite:
+    quota:
+      # Ensure esp. on larger deployments that the quota isn't hit.
+      # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.quota.calendar
+      calendar: 250000
+
+    provisioning:
+      # In environments with a large number of users and groups, we offer the option to enable a
+      # dedicated Pod for the OX App Suite Core Middleware, exclusively handling provisioning tasks.
+      # This approach ensures that heavy provisioning workloads do not negatively impact the user
+      # experience, such as by slowing down pods that serve end-user sessions.
+      dedicatedCoreMwPod: false

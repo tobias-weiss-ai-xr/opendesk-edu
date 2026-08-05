@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+{{- if .Values.apps.sogo.enabled }}
+releases:
+  - name: sogo
+    chart: ../../charts/sogo
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.sogo }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.sogo.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "sogo"
+{{- end }}

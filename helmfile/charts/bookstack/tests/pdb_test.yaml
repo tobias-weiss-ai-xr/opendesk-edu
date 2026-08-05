@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: PodDisruptionBudget
+templates:
+  - pdb.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a PDB with correct name and minAvailable
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - isNotNull:
+          path: metadata.name
+      - matchRegex:
+          path: metadata.name
+          pattern: -pdb$
+      - equal:
+          path: spec.minAvailable
+          value: 1
+      - isNotNull:
+          path: spec.selector.matchLabels["app.kubernetes.io/instance"]

@@ -1,0 +1,12 @@
+apiVersion: v2
+name: dev-dns
+description: Dev DNS server customization for k3s CoreDNS - adds static host entries for internal services and exposes DNS externally via NodePort
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - dns
+  - coredns
+  - development
+maintainers:
+  - name: OpenDesk Edu Team

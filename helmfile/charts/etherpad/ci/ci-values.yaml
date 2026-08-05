@@ -1,0 +1,4 @@
+postgresql:
+  enabled: true
+  auth:
+    password: "test"

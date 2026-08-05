@@ -1,0 +1,46 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "smoke-tests.fullname" . }}-alerts
+  namespace: {{ .Values.monitoring.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "smoke-tests.labels" . | nindent 4 }}
+    release: {{ .Values.monitoring.releaseLabel }}
+spec:
+  groups:
+  - name: smoketests.rules
+    rules:
+    - alert: SmokeTestFailed
+      annotations:
+        summary: "Smoke test job failed"
+        description: "Smoke test job {{ printf "{{ $labels.job_name }}" }} in namespace {{ printf "{{ $labels.namespace }}" }} failed."
+      expr: |
+        increase(kube_job_status_failed_total{job_name=~"smoke-test-.*",namespace="{{ .Release.Namespace }}"}[5m]) > 0
+      for: 1m
+      labels:
+        severity: warning
+        component: smoke-tests
+
+    - alert: SmokeTestRepeatedFailures
+      annotations:
+        summary: "Smoke tests failing repeatedly"
+        description: "Smoke tests have failed {{ printf "{{ $value }}" }} times in the last hour in namespace {{ .Release.Namespace }}"
+      expr: |
+        increase(kube_job_status_failed_total{job_name=~"smoke-test-.*",namespace="{{ .Release.Namespace }}"}[1h]) > 2
+      for: 5m
+      labels:
+        severity: critical
+        component: smoke-tests
+
+    - alert: SmokeTestNoRecentRun
+      annotations:
+        summary: "No smoke test run in 15 minutes"
+        description: "Smoke tests have not run in more than 15 minutes in namespace {{ .Release.Namespace }}"
+      expr: |
+        time() - max by(job_name) (kube_job_status_completion_time{job_name=~"smoke-test-.*",namespace="{{ .Release.Namespace }}",status="succeeded"}) > 900
+      for: 1m
+      labels:
+        severity: warning
+        component: smoke-tests
+{{- end }}

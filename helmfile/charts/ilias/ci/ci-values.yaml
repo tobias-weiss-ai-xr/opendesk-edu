@@ -1,0 +1,8 @@
+# CI values for ILIAS — uses vendored mariadb subchart
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: "test"
+
+mariadbgalera:
+  enabled: false

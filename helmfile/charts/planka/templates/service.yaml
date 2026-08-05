@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-planka
+  labels:
+    planka/server: "true"
+{{ include "planka.labels" . | nindent 4 }}
+spec:
+  selector:
+    planka/server: "true"
+{{ include "planka.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: 1337
+      targetPort: {{ .Values.planka.port }}
+  type: ClusterIP

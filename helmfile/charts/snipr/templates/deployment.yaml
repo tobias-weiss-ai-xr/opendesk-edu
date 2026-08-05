@@ -1,0 +1,155 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "snipr.fullname" . }}
+  labels:
+    {{- include "snipr.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "snipr.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "snipr.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "snipr.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: snipr-api
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.snipr.image }}:{{ .Values.snipr.tag }}"
+          imagePullPolicy: {{ .Values.snipr.imagePullPolicy }}
+          command: ["./snipr", "api"]
+          ports:
+            - name: http
+              containerPort: {{ .Values.snipr.api.port }}
+              protocol: TCP
+          env:
+            - name: RUST_LOG
+              value: "info"
+            - name: S3_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: s3-endpoint
+            - name: S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: s3-bucket
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: s3-access-key
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: s3-secret-key
+            - name: OIDC_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: oidc-issuer
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: oidc-client-id
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: oidc-client-secret
+            - name: F13_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: f13-endpoint
+            - name: F13_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: f13-api-key
+            - name: LTI_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: lti-client-id
+            - name: LTI_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "snipr.fullname" . }}-secret
+                  key: lti-client-secret
+          resources:
+            {{- toYaml .Values.snipr.api.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+        - name: snipr-web
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.snipr.image }}:{{ .Values.snipr.tag }}"
+          imagePullPolicy: {{ .Values.snipr.imagePullPolicy }}
+          command: ["./snipr", "web"]
+          ports:
+            - name: web
+              containerPort: {{ .Values.snipr.web.port }}
+              protocol: TCP
+          env:
+            - name: API_URL
+              value: "http://localhost:{{ .Values.snipr.api.port }}"
+          resources:
+            {{- toYaml .Values.snipr.web.resources | nindent 12 }}
+      {{- if .Values.snipr.ffmpeg.enabled }}
+        - name: ffmpeg-sidecar
+          image: "jrottenberg/ffmpeg:latest"
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c", "while true; do sleep 3600; done"]
+          resources:
+            {{- toYaml .Values.snipr.ffmpeg.resources | nindent 12 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- if eq .Values.snipr.storage.type "filesystem" }}
+        - name: recordings
+          persistentVolumeClaim:
+            claimName: {{ include "snipr.fullname" . }}-data
+        {{- end }}

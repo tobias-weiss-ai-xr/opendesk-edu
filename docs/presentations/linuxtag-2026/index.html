@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>openDesk Edu - Presentations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px 0 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header h2 {
+            font-size: 1.3em;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            margin: 30px auto 0;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .language-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .language-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .language-card .flag {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .language-card .name {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .language-card .title {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .project-description {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-top: 20px;
+        }
+
+        .project-description h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .project-description ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .project-description li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .project-description li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .info-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px 40px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .presenter h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .presenter p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .presenter a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .presenter a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 40px;
+            background: #f9f9f9;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .highlight h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .gif-showcase {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .gif-showcase .gif {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .gif-showcase figcaption {
+            margin-top: 15px;
+            color: #666;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .video-teaser {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .video-teaser iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 openDesk Edu - Presentations</h1>
+            <h2>LinuxTag 2026 · Chemnitz · 28.03.2026</h2>
+            <img src="presentations-media/readme-lead-image.svg" alt="openDesk Edu Illustration" class="hero-image">
+        </header>
+
+        <div class="content">
+            <div class="section">
+                <h2>🌍 Available Languages</h2>
+
+                <div class="languages-grid">
+                    <a href="linuxtag-2026-opendesk.html" class="language-card">
+                        <div class="flag">🇩🇪</div>
+                        <div class="name">Deutsch</div>
+                        <div class="title">openDesk: Komfortabel und Souverän?</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-en.html" class="language-card">
+                        <div class="flag">🇬🇧</div>
+                        <div class="name">English</div>
+                        <div class="title">openDesk: Comfortable and Sovereign?</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-fr.html" class="language-card">
+                        <div class="flag">🇫🇷</div>
+                        <div class="name">Français</div>
+                        <div class="title">openDesk: Confort et Souveraineté?</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-es.html" class="language-card">
+                        <div class="flag">🇪🇸</div>
+                        <div class="name">Español</div>
+                        <div class="title">openDesk: ¿Cómodo y Soberano?</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-it.html" class="language-card">
+                        <div class="flag">🇮🇹</div>
+                        <div class="name">Italiano</div>
+                        <div class="title">openDesk: Comodo e Sovrano?</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-pt.html" class="language-card">
+                        <div class="flag">🇵🇹</div>
+                        <div class="name">Português</div>
+                        <div class="title">openDesk: Confortável e Soberano</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-nl.html" class="language-card">
+                        <div class="flag">🇳🇱</div>
+                        <div class="name">Nederlands</div>
+                        <div class="title">openDesk: Comfortabel en Soeverein</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-sv.html" class="language-card">
+                        <div class="flag">🇸🇪</div>
+                        <div class="name">Svenska</div>
+                        <div class="title">openDesk: Bekvämt och Suverän</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-ca.html" class="language-card">
+                        <div class="flag">🇦🇩</div>
+                        <div class="name">Català</div>
+                        <div class="title">openDesk: Còmode i Sobirà</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-gl.html" class="language-card">
+                        <div class="flag">🇬🇱</div>
+                        <div class="name">Galego</div>
+                        <div class="title">openDesk: Confortable e Soberano</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-da.html" class="language-card">
+                        <div class="flag">🇩🇰</div>
+                        <div class="name">dansk</div>
+                        <div class="title">openDesk: Komfortabel og Suveræn</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-fi.html" class="language-card">
+                        <div class="flag">🇫🇮</div>
+                        <div class="name">suomi</div>
+                        <div class="title">openDesk: Mukava ja Suvereeni</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-pl.html" class="language-card">
+                        <div class="flag">🇵🇱</div>
+                        <div class="name">polski</div>
+                        <div class="title">openDesk: Komfortowy i Suwerenny</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-cs.html" class="language-card">
+                        <div class="flag">🇨🇿</div>
+                        <div class="name">čeština</div>
+                        <div class="title">openDesk: Pohodlný a Svrchovaný</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-ro.html" class="language-card">
+                        <div class="flag">🇷🇴</div>
+                        <div class="name">română</div>
+                        <div class="title">openDesk: Confortabil și Suveran</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-sk.html" class="language-card">
+                        <div class="flag">🇸🇰</div>
+                        <div class="name">slovenčina</div>
+                        <div class="title">openDesk: Pohodlný a Svrchovaný</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-hu.html" class="language-card">
+                        <div class="flag">🇭🇺</div>
+                        <div class="name">magyar</div>
+                        <div class="title">openDesk: Kényelmes és Szuverén</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-hr.html" class="language-card">
+                        <div class="flag">🇭🇷</div>
+                        <div class="name">hrvatski</div>
+                        <div class="title">openDesk: Ugodan i Suverenan</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-sl.html" class="language-card">
+                        <div class="flag">🇸🇮</div>
+                        <div class="name">slovenščina</div>
+                        <div class="title">openDesk: Ugoden in Svršen</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-el.html" class="language-card">
+                        <div class="flag">🇬🇷</div>
+                        <div class="name">Ελληνικά</div>
+                        <div class="title">openDesk: Άνετο και Κυρίαρχο</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-bg.html" class="language-card">
+                        <div class="flag">🇧🇬</div>
+                        <div class="name">български</div>
+                        <div class="title">openDesk: Комфортен и Суверен</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-et.html" class="language-card">
+                        <div class="flag">🇪🇪</div>
+                        <div class="name">eesti</div>
+                        <div class="title">openDesk: Mugav ja Suveräänne</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-lt.html" class="language-card">
+                        <div class="flag">🇱🇹</div>
+                        <div class="name">lietuvių</div>
+                        <div class="title">openDesk: Patogus ir Suverenąs</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-lv.html" class="language-card">
+                        <div class="flag">🇱🇻</div>
+                        <div class="name">latviešu</div>
+                        <div class="title">openDesk: Ērts un Suverēns</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-ga.html" class="language-card">
+                        <div class="flag">🇬🇪</div>
+                        <div class="name">Gaeilge</div>
+                        <div class="title">openDesk: Compordach agus Soiúil</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-mt.html" class="language-card">
+                        <div class="flag">🇲🇹</div>
+                        <div class="name">Malti</div>
+                        <div class="title">openDesk: Komdu u Sovran</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-sr.html" class="language-card">
+                        <div class="flag">🇷🇸</div>
+                        <div class="name">српски</div>
+                        <div class="title">openDesk: Угодно и Суверено</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-uk.html" class="language-card">
+                        <div class="flag">🇺🇦</div>
+                        <div class="name">українська</div>
+                        <div class="title">openDesk: Зручність і Суверенітет</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-be.html" class="language-card">
+                        <div class="flag">🇧🇪</div>
+                        <div class="name">беларуская</div>
+                        <div class="title">openDesk: Камфортны і Суверэнны</div>
+                    </a>
+
+                    <a href="linuxtag-2026-opendesk-zh.html" class="language-card">
+                        <div class="flag">🇨🇳</div>
+                        <div class="name">中文</div>
+                        <div class="title">openDesk: 舒适与主权</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📖 About the Project</h2>
+
+                <div class="highlight">
+                    <span class="tag">🎓 LMS</span>
+                    <span class="tag">🔐 SSO</span>
+                    <span class="tag">☁️ Cloud-Native</span>
+                    <span class="tag">🔒 BSI-Certified</span>
+                    <span class="tag">🇩🇪 Open Source</span>
+                </div>
+
+                <div class="video-teaser">
+                    <iframe src="https://www.youtube.com/embed/s-Y93fyIzH4" title="openDesk Edu Teaser" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+
+                <div class="gif-showcase">
+                    <img src="presentations-media/opendesk-edu-ilias-integration.gif" alt="ILIAS Integration Demo" class="gif">
+                    <figcaption>ILIAS Integration Demo — Seamless SAML SSO with Keycloak</figcaption>
+                </div>
+
+                <div class="project-description">
+                    <h3>🎯 Was ist openDesk Edu?</h3>
+                    <p style="margin-bottom: 15px;">
+                        Die offizielle Open-Source-Alternative zu Microsoft 365 und Google Workspace — speziell für den Einsatz an Universitäten und Hochschulen entwickelt.
+                    </p>
+
+                    <ul>
+                        <li><strong>Single-Command-Deploy</strong> — Ein Befehl `helmfile apply` deployiert alles auf Kubernetes</li>
+                        <li><strong>Unified Keycloak SSO</strong> — Zentrales SSO für alle Dienste, inklusive Anbindung an DFN-AAI für föderierte Identitäten</li>
+                        <li><strong>13+ educational services</strong> — ILIAS, Moodle, BigBlueButton, Etherpad, BookStack, Planka, Zammad, LimeSurvey, Draw.io, Excalidraw, und mehr</li>
+                        <li><strong>Configurable alternatives</strong> — BigBlueButton ↔ Jitsi (Video), OpenCloud ↔ Nextcloud (Files), SOGo ↔ OX App Suite (Email)</li>
+                        <li><strong>Integriertes Backup</strong> — Automatische Backups mit k8up/restic</li>
+                        <li><strong>BSI-zertifiziert</strong> — Für die öffentliche Verwaltung entwickelt von ZenDiS/BMI</li>
+                    </ul>
+                </div>
+
+                <div class="project-description">
+                    <h3>🏛️ Warum digitale Souveränität?</h3>
+                    <ul>
+                        <li><strong>Kein Vendor Lock-in</strong> — Volle Kontrolle über Infrastruktur und Daten, keine Abhängigkeit von US-Tech-Giganten</li>
+                        <li><strong>Offene Standards</strong> — Interoperabilität mit DFN-AAI und föderierten Identitäten aus dem europäischen Forschungsnetz</li>
+                        <li><strong>Datenschutzkonform</strong> — Lokale Kontrolle, keine Auslandsübertragung, DSGVO-konform</li>
+                        <li><strong>Kosteneffizient</strong> — Open Source statt proprietärer Lizenzen und Abonnement-Modellen</li>
+                        <li><strong>Lehr- und Forschungsfreiheit</strong> — Unabhängigkeit von kommerziellen Plattformen und deren Geschäftsmodellen</li>
+                    </ul>
+                </div>
+
+                <p style="text-align: center; margin-top: 30px;">
+                    <a href="https://github.com/opendesk-edu/opendesk-edu" style="display: inline-block; background: #667eea; color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; margin: 10px;">
+                        View on GitHub →
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="presenter">
+                <h3>👤 Presenter</h3>
+                <p><strong>Tobias Weiß</strong></p>
+                <p>HRZ Zentrale Systeme · Universität Marburg</p>
+                <p><a href="https://mastodon.social/@graphwiz_ai">@graphwiz_ai@mastodon.social</a></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 openDesk Edu · Presented at LinuxTag 2026 · Chemnitz, Germany</p>
+            <p>
+                <a href="https://github.com/opendesk-edu/opendesk-edu">GitHub</a> ·
+                <a href="https://www.opencode.de/en/opendesk">openDesk Project</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

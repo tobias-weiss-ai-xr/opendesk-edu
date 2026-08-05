@@ -1,0 +1,63 @@
+🎯 openDesk-Ratespiel – 2 Wahrheiten, 1 Lüge
+
+Basierend auf opendesk.eu – Stand Juni 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Behauptung: openDesk wird von einer öffentlichen Einrichtung im Auftrag des Bundes entwickelt.
+
+1. openDesk wird vom Zentrum für Digitale Souveränität (ZenDiS) entwickelt – einer hundertprozentigen Bundes-GmbH.
+2. openDesk ist ein kommerzielles Produkt eines amerikanischen Cloud-Konzerns und wird von einem Berliner Startup vertrieben.
+3. openDesk wird im Auftrag des Bundesministeriums für Digitales und Staatsmodernisierung (BMDS) bereitgestellt.
+
+→ Lüge: Aussage 2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Behauptung: openDesk vereint bewährte Open-Source-Programme unter einer Oberfläche.
+
+1. openDesk bündelt Nextcloud (Dateien), Element/Matrix (Chat) und Collabora Online (Dokumente).
+2. Alle Komponenten von openDesk sind vollständige Eigenentwicklungen – kein einziges bestehendes Open-Source-Programm kommt zum Einsatz.
+3. openDesk bietet E-Mail, Kalender und Kontakte über die OX App Suite von Open-Xchange an.
+
+→ Lüge: Aussage 2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Behauptung: openDesk ist auf die Bedürfnisse der Öffentlichen Verwaltung zugeschnitten.
+
+1. openDesk wurde speziell für die Öffentliche Verwaltung in Deutschland entwickelt und vom BMDS gefördert.
+2. openDesk ist ausschließlich für Bundesbehörden gedacht – Landes- und Kommunalverwaltungen können es nicht nutzen.
+3. openDesk gibt es als kostenfreie Community Edition zum Selberbetreiben und als Enterprise Edition mit Support.
+
+→ Lüge: Aussage 2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Behauptung: openDesk hat einen politischen und öffentlichen Entstehungshintergrund.
+
+1. openDesk baut auf dem „Souveränen Arbeitsplatz“ auf, einer Initiative des Bundesministeriums des Innern aus dem Jahr 2019.
+2. Das ZenDiS wurde im Dezember 2022 gegründet und hat die Weiterentwicklung von openDesk Anfang 2024 übernommen.
+3. openDesk wurde von der Universität Marburg als Forschungsprojekt gestartet und 2025 an die Industrie verkauft.
+
+→ Lüge: Aussage 3
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Behauptung: openDesk legt großen Wert auf Sicherheit und Flexibilität beim Betrieb.
+
+1. openDesk setzt bei Chats auf standardmäßige Ende-zu-Ende-Verschlüsselung (über Element/Matrix).
+2. openDesk ist eine klassische Desktop-Software, die auf jedem Windows-PC installiert wird.
+3. openDesk kann entweder als Cloud-Dienst (SaaS) aus einem deutschen Rechenzentrum oder im eigenen Rechenzentrum auf Kubernetes betrieben werden.
+
+→ Lüge: Aussage 2

@@ -1,0 +1,42 @@
+suite: Service
+templates:
+  - service.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Service
+    asserts:
+      - isKind:
+          of: Service
+
+  - it: should expose the configured port
+    asserts:
+      - equal:
+          path: spec.ports[0].port
+          value: 9001
+
+  - it: should target the same port
+    asserts:
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 9001
+
+  - it: should be of type ClusterIP
+    asserts:
+      - equal:
+          path: spec.type
+          value: ClusterIP
+
+  - it: should have correct selector labels
+    asserts:
+      - isSubset:
+          path: spec.selector
+          content:
+            etherpad/server: "true"
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]

@@ -1,0 +1,109 @@
+{
+  "dashboard": {
+    "title": "OpenDesk Backup Monitoring",
+    "uid": "open-desk-backup-dashboard",
+    "tags": ["backup", "k8up", "opendesk"],
+    "timezone": "browser",
+    "refresh": "1m",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Backup Job Status",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(kube_job_status_completion_time{namespace=\"opendesk\"}) - sum(kube_job_status_start_time{namespace=\"opendesk\"})",
+            "legendFormat": "Last Backup Time",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "orientation": "horizontal"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Failed Backup Jobs (Last 24h)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "increase(kube_job_status_failed_total{namespace=\"opendesk\"}[24h])",
+            "legendFormat": "Failed Jobs",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "orientation": "horizontal"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "red", "value": 1}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Backup Jobs by Status",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (status) (kube_job_status_completion_time{namespace=\"opendesk\"})",
+            "legendFormat": "{{status}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4}
+      },
+      {
+        "id": 4,
+        "title": "Backup Volume (GiB)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(kubelet_volume_stats_used_bytes{namespace=\"opendesk\"}) / 1024^3",
+            "legendFormat": "Backup Volume",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+        "options": {
+          "legend": {"displayMode": "table", "placement": "bottom"}
+        }
+      },
+      {
+        "id": 5,
+        "title": "Backup Errors (Loki)",
+        "type": "logs",
+        "targets": [
+          {
+            "expr": "{job=\"opendesk-logs\", filename=~\".*backup.*\"} |= \"error\"",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 12},
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "sortOrder": "Descending",
+          "dedupStrategy": "none"
+        }
+      }
+    ]
+  }
+}

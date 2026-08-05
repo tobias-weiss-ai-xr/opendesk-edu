@@ -1,0 +1,132 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: opendesk
+  labels:
+    app: alertmanager
+data:
+  alertmanager.yaml: |
+    global:
+      resolve_timeout: 5m
+      smtp_smarthost: 'postfix.opendesk.svc.cluster.local:25'
+      smtp_from: 'alertmanager@opendesk.hrz.uni-marburg.de'
+      smtp_require_tls: false
+
+    templates:
+    - '/etc/alertmanager/templates/*.tmpl'
+
+    route:
+      group_by: ['alertname', 'namespace']
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 12h
+      receiver: 'default-receiver'
+
+      routes:
+        # Critical backup failure alerts go to the critical receiver
+        - match:
+            severity: critical
+          receiver: 'backup-critical-receiver'
+
+        # Backup-related warnings go to backup receiver
+        - match_re:
+            alertname: '.*Backup.*'
+          receiver: 'backup-warning-receiver'
+
+    receivers:
+      - name: 'default-receiver'
+        email_configs:
+        - to: 'admin@opendesk.hrz.uni-marburg.de'
+
+      - name: 'backup-critical-receiver'
+        email_configs:
+        - to: 'admin@opendesk.hrz.uni-marburg.de'
+
+      - name: 'backup-warning-receiver'
+        email_configs:
+        - to: 'admin@opendesk.hrz.uni-marburg.de'
+
+    inhibit_rules:
+      # Inhibit warning if there's a critical alert for the same alertname
+      - source_match:
+          severity: 'critical'
+        target_match:
+          severity: 'warning'
+        equal: ['alertname', 'instance']
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager
+  namespace: opendesk
+  labels:
+    app: alertmanager
+spec:
+  selector:
+    app: alertmanager
+  ports:
+    - name: web
+      port: 9093
+      targetPort: web
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+  namespace: opendesk
+  labels:
+    app: alertmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+        - name: alertmanager
+          image: prom/alertmanager:v0.27.0
+          args:
+            - '--config.file=/etc/alertmanager/alertmanager.yaml'
+            - '--storage.path=/alertmanager'
+            - '--web.external-url=http://alertmanager.opendesk.svc.cluster.local:9093'
+          ports:
+            - containerPort: 9093
+              name: web
+          volumeMounts:
+            - name: config
+              mountPath: /etc/alertmanager
+            - name: storage
+              mountPath: /alertmanager
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      volumes:
+        - name: config
+          configMap:
+            name: alertmanager-config
+        - name: storage
+          emptyDir: {}

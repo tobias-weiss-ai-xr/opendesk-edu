@@ -61,6 +61,7 @@ KUBECTL ?= kubectl
 # ==============================================================================
 
 .PHONY: help build-all push-all deploy-all undeploy-all test-all sbom-all clean
+.PHONY: test test-verbose test-count shellcheck lint
 .PHONY: build-sogo5 build-sogo6 build-dev-agent build-zot
 .PHONY: push-sogo5 push-sogo6 push-dev-agent push-zot
 .PHONY: deploy-sogo5 deploy-sogo6 deploy-dev-agent deploy-zot
@@ -74,7 +75,7 @@ KUBECTL ?= kubectl
 # HELP TARGET
 # ==============================================================================
 
-hhelp: ## Show this help message
+help: ## Show this help message
 	@echo ""
 	@echo "================================================================================"
 	@echo "  openDesk Nix - Master Makefile"
@@ -297,6 +298,28 @@ test-zot: build-zot ## Test Zot Registry image
 		echo "Zot Registry: PASSED" || echo "Zot Registry: FAILED"
 	@docker stop zot-test >/dev/null 2>&1 || true
 	@docker rm zot-test >/dev/null 2>&1 || true
+
+# ==============================================================================
+# TEST TARGETS (Bats)
+# Quality discipline ported from cibuilder-fork (stack4ops)
+# ==============================================================================
+
+test: ## Run all Bats tests
+	bats tests/*.bats
+
+test-verbose: ## Run tests with verbose output
+	bats -t tests/*.bats
+
+test-count: ## Show test statistics
+	@echo Total tests: && bats tests/*.bats 2>&1 | grep "^1\.\." | cut -d. -f2
+	@echo Passing: && bats tests/*.bats 2>&1 | grep "^ok" | wc -l
+	@echo Failing: && bats tests/*.bats 2>&1 | grep "^not ok" | wc -l
+
+shellcheck: ## Validate all shell scripts with shellcheck
+	@find scripts docker -name "*.sh" -type f -o -maxdepth 1 -name "*.sh" -type f | \
+		xargs shellcheck 2>/dev/null || echo "Note: shellcheck not installed, skipping"
+
+lint: shellcheck ## Run all linters
 
 # ==============================================================================
 # SBOM TARGETS

@@ -1,0 +1,33 @@
+suite: Persistence
+templates:
+  - pvc.yaml
+tests:
+  - it: should create a PersistentVolumeClaim when enabled
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+
+  - it: should set the correct storage size
+    asserts:
+      - equal:
+          path: spec.resources.requests.storage
+          value: "100Gi"
+
+  - it: should set ReadWriteMany access mode
+    asserts:
+      - contains:
+          path: spec.accessModes
+          content: ReadWriteMany
+
+  - it: should set storage class when configured
+    asserts:
+      - equal:
+          path: spec.storageClassName
+          value: "ceph-cephfs-hdd-ec"
+
+  - it: should not create a PVC when disabled
+    set:
+      persistence.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

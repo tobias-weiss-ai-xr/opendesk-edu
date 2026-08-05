@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ilias-shibboleth-certs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: ilias
+    app.kubernetes.io/component: shibboleth-sp
+    app.kubernetes.io/part-of: opendesk
+type: Opaque
+data:
+  sp-key.pem: {{ .Values.secrets.shibboleth.spKey | default "" | b64enc }}
+  sp-cert.pem: {{ .Values.secrets.shibboleth.spCert | default "" | b64enc }}

@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#341291"/>
+      <stop offset="50%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#927AFA"/>
+    </linearGradient>
+
+    <!-- D-icon gradient -->
+    <linearGradient id="dGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#927AFA"/>
+    </linearGradient>
+
+    <!-- Cut line gradient -->
+    <linearGradient id="cutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#927AFA"/>
+      <stop offset="50%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#341291"/>
+    </linearGradient>
+
+    <!-- Decorative dot pattern -->
+    <pattern id="dotPattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <circle cx="30" cy="30" r="3" fill="#DDD6FE" opacity="0.08"/>
+    </pattern>
+
+    <!-- Clip path for die-cut boundary -->
+    <clipPath id="stickerClip">
+      <rect x="60" y="60" width="880" height="880" rx="120" ry="120"/>
+    </clipPath>
+
+    <!-- D-icon letter path -->
+    <path id="dLetter" d="M 420,300 L 420,440 L 510,440 C 560,440 600,405 600,370 C 600,335 560,300 510,300 Z M 450,330 L 505,330 C 540,330 565,348 565,370 C 565,392 540,410 505,410 L 450,410 Z"/>
+  </defs>
+
+  <!-- Die-cut sticker shape - filled background -->
+  <rect x="60" y="60" width="880" height="880" rx="120" ry="120" fill="url(#bgGrad)"/>
+
+  <!-- Content clipped to sticker boundary -->
+  <g clip-path="url(#stickerClip)">
+
+    <!-- Subtle dot pattern overlay -->
+    <rect x="60" y="60" width="880" height="880" fill="url(#dotPattern)"/>
+
+    <!-- Decorative geometric elements -->
+    <!-- Top-left corner accent -->
+    <circle cx="160" cy="160" r="80" fill="#927AFA" opacity="0.12"/>
+    <circle cx="160" cy="160" r="40" fill="#DDD6FE" opacity="0.06"/>
+
+    <!-- Bottom-right corner accent -->
+    <circle cx="840" cy="840" r="100" fill="#927AFA" opacity="0.1"/>
+    <circle cx="840" cy="840" r="50" fill="#DDD6FE" opacity="0.05"/>
+
+    <!-- Top-right decorative dots -->
+    <circle cx="800" cy="180" r="8" fill="#DDD6FE" opacity="0.15"/>
+    <circle cx="830" cy="200" r="5" fill="#DDD6FE" opacity="0.1"/>
+    <circle cx="780" cy="210" r="6" fill="#DDD6FE" opacity="0.12"/>
+
+    <!-- Bottom-left decorative dots -->
+    <circle cx="200" cy="800" r="8" fill="#DDD6FE" opacity="0.15"/>
+    <circle cx="170" cy="820" r="5" fill="#DDD6FE" opacity="0.1"/>
+    <circle cx="220" cy="830" r="6" fill="#DDD6FE" opacity="0.12"/>
+
+    <!-- Decorative lines -->
+    <line x1="140" y1="500" x2="180" y2="500" stroke="#DDD6FE" stroke-width="2" opacity="0.1"/>
+    <line x1="820" y1="480" x2="870" y2="480" stroke="#DDD6FE" stroke-width="2" opacity="0.1"/>
+    <line x1="150" y1="520" x2="175" y2="520" stroke="#DDD6FE" stroke-width="1.5" opacity="0.08"/>
+    <line x1="830" y1="500" x2="860" y2="500" stroke="#DDD6FE" stroke-width="1.5" opacity="0.08"/>
+
+    <!-- D-icon background shape -->
+    <rect x="370" y="200" width="260" height="260" rx="52" ry="52" fill="white" opacity="0.15"/>
+    <rect x="380" y="210" width="240" height="240" rx="48" ry="48" fill="url(#dGrad)"/>
+
+    <!-- D letter inside icon -->
+    <use href="#dLetter" fill="white" opacity="0.95"/>
+
+    <!-- "openDesk" text -->
+    <text x="500" y="580" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="82" font-weight="700" fill="white" letter-spacing="2">
+      open<tspan fill="#DDD6FE">Desk</tspan>
+    </text>
+
+    <!-- "EDUCATION" text -->
+    <text x="500" y="650" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="42" font-weight="600" fill="#DDD6FE" letter-spacing="14">
+      EDUCATION
+    </text>
+
+    <!-- Thin decorative line under text -->
+    <line x1="340" y1="680" x2="660" y2="680" stroke="#DDD6FE" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+
+    <!-- Small tagline or decorative text -->
+    <text x="500" y="730" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="400" fill="#DDD6FE" opacity="0.6" letter-spacing="4">
+      OPEN SOURCE LEARNING
+    </text>
+
+    <!-- Subtle corner brackets as decorative elements -->
+    <!-- Top-right bracket -->
+    <path d="M 770,140 L 810,140 L 810,180" fill="none" stroke="#DDD6FE" stroke-width="2" opacity="0.2" stroke-linecap="round"/>
+    <!-- Bottom-left bracket -->
+    <path d="M 190,860 L 190,820 L 230,820" fill="none" stroke="#DDD6FE" stroke-width="2" opacity="0.2" stroke-linecap="round"/>
+
+  </g>
+
+  <!-- Die-cut bold outline / cut line -->
+  <rect x="60" y="60" width="880" height="880" rx="120" ry="120" fill="none" stroke="url(#cutGrad)" stroke-width="6"/>
+
+</svg>

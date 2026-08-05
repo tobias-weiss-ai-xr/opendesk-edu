@@ -1,0 +1,95 @@
+suite: Deployment
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: martialblog/limesurvey:.+
+
+  - it: should set the container port to the configured value
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 80
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+
+  - it: should have a single replica
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should configure database environment variables
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[0].name
+          value: LS_DB_HOST
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LS_DB_USER
+            value: "limesurvey"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LS_TABLE_PREFIX
+            value: "lime_"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LS_SITE_NAME
+            value: "LimeSurvey"
+
+  - it: should set resource requests and limits
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.requests
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.limits
+
+  - it: should mount the upload volume
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: limesurvey-upload
+            mountPath: /var/www/html/upload/surveys
+
+  - it: should have an init container for setup
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.initContainers[0].name
+      - equal:
+          path: spec.template.spec.initContainers[0].name
+          value: setup
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

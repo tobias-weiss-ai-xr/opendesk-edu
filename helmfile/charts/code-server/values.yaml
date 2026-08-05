@@ -1,0 +1,48 @@
+replicaCount: 1
+image:
+  repository: codercom/code-server
+  tag: "4.96.2"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8080
+ingress:
+  enabled: true
+  className: ""
+  className: "haproxy"
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: "true"
+  hosts:
+    - host: code.opendesk.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
+persistence:
+  enabled: true
+  size: 5Gi
+  accessMode: ReadWriteOnce
+oauth2:
+  enabled: false
+  provider: "keycloak-oidc"
+  clientId: "opendesk-code-server"
+  clientSecret: ""
+  oidcIssuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+  cookieSecret: ""
+
+# OpenCloud storage integration via rclone sidecar
+opencloud:
+  enabled: false
+  url: "https://opencloud.opendesk.example.com"
+  username: ""
+  password: ""
+  syncInterval: "60s"
+  remotePath: "/"
+  mountPath: "opencloud"

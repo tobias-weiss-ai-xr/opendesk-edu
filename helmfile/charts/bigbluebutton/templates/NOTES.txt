@@ -1,0 +1,14 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the service:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:80
+
+Next steps:
+  1. Configure SAML/SSO integration with Keycloak
+  2. Set up persistent storage for session recordings
+  3. Review values.yaml for Greenlight and database configuration
+
+Documentation: https://github.com/tobias-weiss-ai-xr/opendesk-edu

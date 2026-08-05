@@ -59,18 +59,20 @@ jobs:
 
   # GitLab CI configuration
   gitlabBuild = { serviceName }:
-    pkgs.writeText ".gitlab-ci-${serviceName}.yml" (lib.generateYAML {
-      image = "nixos/nix:latest";
-      stages = [ "build" "test" ];
-      build = {
-        stage = "build";
-        script = [ "nix build .#packages.${serviceName}-image" ];
-      };
-      test = {
-        stage = "test";
-        script = [ "nix flake check" ];
-      };
-    });
+    pkgs.writeText ".gitlab-ci-${serviceName}.yml" ''
+      image: nixos/nix:latest
+      stages:
+        - build
+        - test
+      build:
+        stage: build
+        script:
+          - nix build .#packages.${serviceName}-image
+      test:
+        stage: test
+        script:
+          - nix flake check
+    '';
 
 in {
   inherit buildWorkflow deployWorkflow mkWorkflow gitlabBuild;

@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+repositories:
+  - name: "open-webui"
+    url: "https://helm.openwebui.com"
+    oci: false
+releases:
+  - name: "open-webui"
+    chart: "open-webui/open-webui"
+    version: "3.0.6"
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.openWebui.enabled }}
+    timeout: 600
+commonLabels:
+  deployStage: "050-components"
+  component: "open-webui"

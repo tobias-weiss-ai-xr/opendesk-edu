@@ -1,0 +1,89 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.services.transcription.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "f13.fullname" . }}-transcription-db
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: transcription-db
+spec:
+  serviceName: {{ include "f13.fullname" . }}-transcription-db
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "f13.componentLabels" (dict "component" "transcription-db" "root" .) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "f13.componentLabels" (dict "component" "transcription-db" "root" .) | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: postgres
+          image: {{ .Values.transcription.transcriptionDb.image | default "docker.io/library/postgres:16-alpine" }}
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: false
+          env:
+            - name: POSTGRES_DB
+              value: {{ .Values.transcription.transcriptionDb.name | quote }}
+            - name: POSTGRES_USER
+              value: {{ .Values.transcription.transcriptionDb.user | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "f13.fullname" . }}-secrets
+                  key: transcription-db-password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - {{ .Values.transcription.transcriptionDb.user }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - {{ .Values.transcription.transcriptionDb.user }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.resources.transcriptionDb | nindent 12 }}
+  volumeClaimTemplates:
+    - metadata:
+    labels:
+      backup-tier: "b"
+      k8up/backup: "true"
+        name: postgres-data
+      spec:
+        accessModes:
+          - {{ .Values.persistence.transcriptionData.accessMode }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.transcriptionData.size }}
+{{- end }}

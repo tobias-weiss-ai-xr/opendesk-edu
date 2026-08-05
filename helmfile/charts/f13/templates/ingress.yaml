@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "f13.fullname" . }}-ingress
+  annotations:
+    {{- if .Values.ingress.annotations }}
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    {{- end }}
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/proxy-body-size: "100M"
+    haproxy-ingress.github.io/timeout-server: "600s"
+    haproxy-ingress.github.io/timeout-client: "600s"
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ingress.className | default .Values.global.ingressClassName | quote }}
+  rules:
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "f13.fullname" . }}-core
+                port:
+                  number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "f13.fullname" . }}-frontend
+                port:
+                  number: 9999
+  {{- if and .Values.ingress.tls .Values.ingress.tls.enabled }}
+  tls:
+    - secretName: {{ .Values.ingress.tls.secretName | default "opendesk-certificates-tls" | quote }}
+      hosts:
+        - {{ .Values.ingress.hostname | quote }}
+  {{- end }}
+{{- end }}

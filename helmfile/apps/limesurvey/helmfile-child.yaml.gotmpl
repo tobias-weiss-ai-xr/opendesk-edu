@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "limesurvey"
+    chart: "../../charts/limesurvey"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.limesurvey }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.limesurvey.enabled }}
+    timeout: 1800
+
+commonLabels:
+  deployStage: "050-components"
+  component: "limesurvey"

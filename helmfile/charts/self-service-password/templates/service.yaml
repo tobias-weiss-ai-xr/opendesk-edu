@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-self-service-password
+  labels:
+    self-service-password/server: "true"
+{{ include "self-service-password.labels" . | nindent 4 }}
+spec:
+  selector:
+    self-service-password/server: "true"
+{{ include "self-service-password.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.selfServicePassword.oidc.enabled | ternary 4180 80 }}
+      name: {{ .Values.selfServicePassword.oidc.enabled | ternary "oauth2-proxy" "ssp" }}
+      targetPort: {{ .Values.selfServicePassword.oidc.enabled | ternary 4180 .Values.selfServicePassword.port }}
+  type: ClusterIP

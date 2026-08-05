@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" font-family="system-ui,-apple-system,sans-serif">
+  <style>
+    .g{font-size:10px;fill:#6B7280;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+    .n{font-size:11px;fill:#1F2937;text-anchor:middle;dominant-baseline:central;font-weight:500}
+    .s{rx:6;stroke-width:1.5}
+  </style>
+  <rect width="1200" height="680" fill="#FAFBFC"/>
+  <text x="30" y="20" class="g">Identity</text>
+  <rect x="30" y="32" width="120" height="40" rx="20" fill="#EFF6FF" stroke="#2563EB" class="s"/>
+  <text x="90" y="52" class="n" fill="#2563EB">Users</text>
+  <line x1="150" y1="52" x2="185" y2="52" stroke="#2563EB" stroke-width="1.5" marker-end="url(#ab)"/>
+  <rect x="190" y="32" width="150" height="40" rx="6" fill="#EFF6FF" stroke="#2563EB" class="s"/>
+  <text x="265" y="48" class="n" fill="#2563EB">Shibboleth IdP</text>
+  <text x="265" y="62" class="n" fill="#93C5FD" font-size="9">DFN-AAI / eduGAIN</text>
+  <line x1="340" y1="52" x2="375" y2="52" stroke="#2563EB" stroke-width="1.5" marker-end="url(#ab)"/>
+  <rect x="380" y="28" width="160" height="48" rx="8" fill="#2563EB"/>
+  <text x="460" y="48" class="n" fill="#fff" font-size="12" font-weight="600">Keycloak SSO</text>
+  <text x="460" y="64" class="n" fill="#DBEAFE" font-size="9">OIDC + SAML 2.0</text>
+  <line x1="540" y1="52" x2="575" y2="52" stroke="#2563EB" stroke-width="1.5" marker-end="url(#ab)"/>
+  <rect x="580" y="28" width="130" height="48" rx="8" fill="#571EFA"/>
+  <text x="645" y="48" class="n" fill="#fff" font-size="12" font-weight="600">Portal</text>
+  <text x="645" y="64" class="n" fill="#DDD6FE" font-size="9">Nubus</text>
+  <rect x="405" y="86" width="110" height="24" rx="4" fill="#EFF6FF" stroke="#93C5FD" class="s"/>
+  <text x="460" y="102" class="n" fill="#1E40AF" font-size="9">OpenLDAP</text>
+  <line x1="460" y1="76" x2="460" y2="83" stroke="#93C5FD" stroke-width="1"/>
+  <rect x="30" y="130" width="680" height="100" rx="10" fill="#F5F3FF" stroke="#E9E5F5"/>
+  <text x="50" y="148" class="g" fill="#7C3AED">Core openDesk</text>
+  <rect x="45" y="158" width="88" height="36" rx="6" fill="#fff" stroke="#571EFA" class="s"/><text x="89" y="180" class="n">Element</text>
+  <rect x="143" y="158" width="88" height="36" rx="6" fill="#fff" stroke="#571EFA" class="s"/><text x="187" y="180" class="n">OX App Suite</text>
+  <rect x="241" y="158" width="88" height="36" rx="6" fill="#fff" stroke="#571EFA" class="s"/><text x="285" y="180" class="n">Nextcloud</text>
+  <rect x="339" y="158" width="88" height="36" rx="6" fill="#fff" stroke="#571EFA" class="s"/><text x="383" y="180" class="n">XWiki</text>
+  <rect x="437" y="158" width="88" height="36" rx="6" fill="#fff" stroke="#571EFA" class="s"/><text x="481" y="180" class="n">OpenProject</text>
+  <rect x="535" y="158" width="88" height="36" rx="6" fill="#fff" stroke="#571EFA" class="s"/><text x="579" y="180" class="n">Jitsi</text>
+  <rect x="633" y="158" width="64" height="36" rx="6" fill="#fff" stroke="#571EFA" class="s"/><text x="665" y="180" class="n">Notes</text>
+  <rect x="45" y="200" width="88" height="22" rx="4" fill="#fff" stroke="#571EFA" class="s"/><text x="89" y="215" class="n" font-size="9">Collabora</text>
+  <rect x="143" y="200" width="88" height="22" rx="4" fill="#fff" stroke="#571EFA" class="s"/><text x="187" y="215" class="n" font-size="9">CryptPad</text>
+  <rect x="30" y="245" width="680" height="100" rx="10" fill="#ECFDF5" stroke="#D1FAE5"/>
+  <text x="50" y="263" class="g" fill="#059669">Educational Services</text>
+  <rect x="45" y="273" width="78" height="36" rx="6" fill="#fff" stroke="#059669" class="s"/><text x="84" y="291" class="n" fill="#059669">ILIAS</text>
+  <rect x="133" y="273" width="78" height="36" rx="6" fill="#fff" stroke="#059669" class="s"/><text x="172" y="291" class="n" fill="#059669">Moodle</text>
+  <rect x="221" y="273" width="78" height="36" rx="6" fill="#fff" stroke="#059669" class="s"/><text x="260" y="291" class="n" fill="#059669">BBB</text>
+  <rect x="309" y="273" width="78" height="36" rx="6" fill="#fff" stroke="#059669" class="s"/><text x="348" y="291" class="n" fill="#059669">OpenCloud</text>
+  <rect x="397" y="273" width="78" height="36" rx="6" fill="#fff" stroke="#059669" class="s"/><text x="436" y="291" class="n" fill="#059669">SOGo</text>
+  <rect x="485" y="273" width="78" height="36" rx="6" fill="#fff" stroke="#059669" class="s"/><text x="524" y="291" class="n" fill="#059669">Etherpad</text>
+  <rect x="573" y="273" width="78" height="36" rx="6" fill="#fff" stroke="#059669" class="s"/><text x="612" y="291" class="n" fill="#059669">BookStack</text>
+  <rect x="45" y="315" width="78" height="22" rx="4" fill="#fff" stroke="#059669" class="s"/><text x="84" y="330" class="n" font-size="9">Planka</text>
+  <rect x="133" y="315" width="78" height="22" rx="4" fill="#fff" stroke="#059669" class="s"/><text x="172" y="330" class="n" font-size="9">Zammad</text>
+  <rect x="221" y="315" width="78" height="22" rx="4" fill="#fff" stroke="#059669" class="s"/><text x="260" y="330" class="n" font-size="9">LimeSurvey</text>
+  <rect x="309" y="315" width="78" height="22" rx="4" fill="#fff" stroke="#059669" class="s"/><text x="348" y="330" class="n" font-size="9">Draw.io</text>
+  <rect x="397" y="315" width="78" height="22" rx="4" fill="#fff" stroke="#059669" class="s"/><text x="436" y="330" class="n" font-size="9">Excalidraw</text>
+  <rect x="485" y="315" width="78" height="22" rx="4" fill="#fff" stroke="#059669" class="s"/><text x="524" y="330" class="n" font-size="9">LTB SSP</text>
+  <line x1="460" y1="76" x2="460" y2="125" stroke="#2563EB" stroke-width="1"/>
+  <line x1="89" y1="125" x2="665" y2="125" stroke="#2563EB" stroke-width=".7" stroke-dasharray="3 2"/>
+  <line x1="460" y1="125" x2="460" y2="240" stroke="#2563EB" stroke-width=".7" stroke-dasharray="3 2"/>
+  <text x="468" y="122" font-size="8" fill="#2563EB" font-weight="600">SAML / OIDC</text>
+  <rect x="30" y="360" width="680" height="70" rx="10" fill="#F9FAFB" stroke="#E5E7EB"/>
+  <text x="50" y="378" class="g" fill="#6B7280">Infrastructure</text>
+  <rect x="45" y="388" width="100" height="28" rx="4" fill="#fff" stroke="#9CA3AF" class="s"/><text x="95" y="406" class="n" fill="#4B5563" font-size="10">Kubernetes</text>
+  <rect x="155" y="388" width="100" height="28" rx="4" fill="#fff" stroke="#9CA3AF" class="s"/><text x="205" y="406" class="n" fill="#4B5563" font-size="10">helmfile</text>
+  <rect x="265" y="388" width="100" height="28" rx="4" fill="#fff" stroke="#9CA3AF" class="s"/><text x="315" y="406" class="n" fill="#4B5563" font-size="10">HAProxy</text>
+  <rect x="375" y="388" width="100" height="28" rx="4" fill="#fff" stroke="#9CA3AF" class="s"/><text x="425" y="406" class="n" fill="#4B5563" font-size="10">k8up + restic</text>
+  <rect x="485" y="388" width="120" height="28" rx="4" fill="#fff" stroke="#9CA3AF" class="s"/><text x="545" y="406" class="n" fill="#4B5563" font-size="10">Prometheus</text>
+  <rect x="615" y="388" width="85" height="28" rx="4" fill="#F3F4F6" stroke="#D1D5DB" class="s"/><text x="657" y="406" class="n" fill="#6B7280" font-size="9">user_import</text>
+  <rect x="740" y="28" width="440" height="290" rx="10" fill="#F9FAFB" stroke="#D1D5DB" stroke-dasharray="6 4"/>
+  <text x="760" y="48" class="g" fill="#9CA3AF">Roadmap</text>
+  <rect x="760" y="60" width="400" height="85" rx="8" fill="#fff" stroke="#A78BFA" class="s"/>
+  <text x="960" y="78" class="n" fill="#7C3AED" font-weight="600" font-size="11">F13 AI Assistant (v4.0)</text>
+  <text x="960" y="93" class="n" fill="#9CA3AF" font-size="9">chat · RAG · summary · transcription</text>
+  <rect x="775" y="102" width="52" height="20" rx="3" fill="#EDE9FE"/><text x="801" y="116" class="n" font-size="8" fill="#6D28D9">Core</text>
+  <rect x="833" y="102" width="44" height="20" rx="3" fill="#EDE9FE"/><text x="855" y="116" class="n" font-size="8" fill="#6D28D9">Chat</text>
+  <rect x="883" y="102" width="60" height="20" rx="3" fill="#EDE9FE"/><text x="913" y="116" class="n" font-size="8" fill="#6D28D9">Summary</text>
+  <rect x="949" y="102" width="40" height="20" rx="3" fill="#EDE9FE"/><text x="969" y="116" class="n" font-size="8" fill="#6D28D9">RAG</text>
+  <rect x="995" y="102" width="56" height="20" rx="3" fill="#EDE9FE"/><text x="1023" y="116" class="n" font-size="8" fill="#6D28D9">Parser</text>
+  <rect x="1057" y="102" width="90" height="20" rx="3" fill="#EDE9FE"/><text x="1102" y="116" class="n" font-size="8" fill="#6D28D9">Transcription</text>
+  <line x1="540" y1="65" x2="755" y2="95" stroke="#2563EB" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#ab)"/>
+  <text x="640" y="70" font-size="8" fill="#2563EB">JWKS</text>
+  <text x="760" y="166" class="g" fill="#9CA3AF">Timeline</text>
+  <line x1="760" y1="174" x2="1160" y2="174" stroke="#E5E7EB" stroke-width="1"/>
+  <text x="770" y="192" font-size="9" fill="#059669" font-weight="600">v1.0</text>
+  <text x="800" y="192" font-size="9" fill="#4B5563">Core + 13 edu services</text>
+  <text x="770" y="208" font-size="9" fill="#059669" font-weight="600">v1.1</text>
+  <text x="800" y="208" font-size="9" fill="#4B5563">DFN-AAI + provisioning</text>
+  <text x="770" y="224" font-size="9" fill="#7C3AED" font-weight="600">v4.0</text>
+  <text x="800" y="224" font-size="9" fill="#4B5563">F13 AI + xAPI analytics</text>
+  <text x="770" y="240" font-size="9" fill="#7C3AED" font-weight="600">v5.0</text>
+  <text x="800" y="240" font-size="9" fill="#4B5563">SATOSA proxy + multi-tenancy</text>
+  <rect x="770" y="254" width="140" height="24" rx="4" fill="#F9FAFB" stroke="#D1D5DB" stroke-dasharray="4 3"/>
+  <text x="840" y="270" class="n" font-size="9" fill="#9CA3AF">vLLM / Ollama (GPU)</text>
+  <rect x="920" y="254" width="100" height="24" rx="4" fill="#F9FAFB" stroke="#D1D5DB" stroke-dasharray="4 3"/>
+  <text x="970" y="270" class="n" font-size="9" fill="#9CA3AF">HISinOne (v1.5)</text>
+  <rect x="1030" y="254" width="100" height="24" rx="4" fill="#F9FAFB" stroke="#D1D5DB" stroke-dasharray="4 3"/>
+  <text x="1080" y="270" class="n" font-size="9" fill="#9CA3AF">SATOSA (v5.0)</text>
+  <rect x="740" y="330" width="440" height="70" rx="10" fill="#FFF7ED" stroke="#FED7AA"/>
+  <text x="760" y="350" class="g" fill="#C2410C">Alternatives</text>
+  <text x="760" y="372" font-size="10" fill="#9A3412">Email</text>
+  <rect x="800" y="360" width="88" height="20" rx="4" fill="#fff" stroke="#EA580C"/><text x="844" y="374" class="n" font-size="9" fill="#EA580C">OX App Suite</text>
+  <text x="896" y="374" font-size="10" fill="#9CA3AF">/</text>
+  <rect x="910" y="360" width="55" height="20" rx="4" fill="#fff" stroke="#059669"/><text x="937" y="374" class="n" font-size="9" fill="#059669">SOGo</text>
+  <text x="980" y="372" font-size="10" fill="#9A3412">Video</text>
+  <rect x="1020" y="360" width="50" height="20" rx="4" fill="#fff" stroke="#EA580C"/><text x="1045" y="374" class="n" font-size="9" fill="#EA580C">Jitsi</text>
+  <text x="1078" y="374" font-size="10" fill="#9CA3AF">/</text>
+  <rect x="1092" y="360" width="75" height="20" rx="4" fill="#fff" stroke="#059669"/><text x="1129" y="374" class="n" font-size="9" fill="#059669">BBB</text>
+  <text x="760" y="392" font-size="10" fill="#9A3412">Files</text>
+  <rect x="800" y="384" width="75" height="20" rx="4" fill="#fff" stroke="#EA580C"/><text x="837" y="398" class="n" font-size="9" fill="#EA580C">Nextcloud</text>
+  <text x="883" y="398" font-size="10" fill="#9CA3AF">/</text>
+  <rect x="897" y="384" width="80" height="20" rx="4" fill="#fff" stroke="#059669"/><text x="937" y="398" class="n" font-size="9" fill="#059669">OpenCloud</text>
+  <rect x="740" y="415" width="440" height="50" rx="10" fill="#fff" stroke="#E5E7EB"/>
+  <rect x="760" y="430" width="12" height="12" rx="3" fill="#571EFA"/><text x="778" y="440" font-size="9" fill="#374151">Core</text>
+  <rect x="820" y="430" width="12" height="12" rx="3" fill="#059669"/><text x="838" y="440" font-size="9" fill="#374151">Education</text>
+  <rect x="900" y="430" width="12" height="12" rx="3" fill="#2563EB"/><text x="918" y="440" font-size="9" fill="#374151">Identity</text>
+  <rect x="975" y="430" width="12" height="12" rx="3" fill="#9CA3AF"/><text x="993" y="440" font-size="9" fill="#374151">Infra</text>
+  <rect x="1040" y="430" width="12" height="12" rx="3" fill="none" stroke="#D1D5DB" stroke-dasharray="3 2"/><text x="1058" y="440" font-size="9" fill="#374151">Roadmap</text>
+  <text x="600" y="660" text-anchor="middle" font-size="9" fill="#9CA3AF">openDesk Edu — openDesk CE + Educational Services · Unified Keycloak SSO · One-command Kubernetes deploy</text>
+  <defs>
+    <marker id="ab" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <polygon points="0 0,10 3.5,0 7" fill="#2563EB"/>
+    </marker>
+  </defs>
+</svg>

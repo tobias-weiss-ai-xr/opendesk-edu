@@ -1,0 +1,97 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#571EFA"/>
+      <stop offset="100%" stop-color="#341291"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#927AFA"/>
+      <stop offset="100%" stop-color="#571EFA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#bg)"/>
+
+  <!-- Subtle decorative circles -->
+  <circle cx="100" cy="100" r="80" fill="white" opacity="0.05"/>
+  <circle cx="1100" cy="300" r="120" fill="white" opacity="0.05"/>
+  <circle cx="600" cy="200" r="150" fill="white" opacity="0.04"/>
+
+  <!-- openDesk D icon (simplified) -->
+  <g transform="translate(80, 60)">
+    <path fill="white" opacity="0.3" d="M0 60C0 82 18 100 40 100H80V60H0Z"/>
+    <path fill="white" d="M0 60V40C0 18 18 0 40 0H80C102 0 120 18 120 40V60C120 82 102 100 80 100H40C18 100 0 82 0 60Z" opacity="0.15"/>
+    <!-- Graduation cap -->
+    <path fill="#927AFA" d="M60 20L20 40L60 60L100 40L60 20Z"/>
+    <path fill="white" d="M20 40L60 60V80H20V40Z" opacity="0.9"/>
+    <path fill="white" d="M60 60L100 40V80H60V60Z" opacity="0.7"/>
+    <circle fill="#927AFA" cx="100" cy="40" r="4"/>
+    <line x1="100" y1="44" x2="103" y2="56" stroke="#927AFA" stroke-width="2"/>
+  </g>
+
+  <!-- Title -->
+  <text x="260" y="120" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="60" font-weight="bold">openDesk Edu</text>
+  <text x="260" y="165" fill="white" font-family="system-ui, -apple-system, sans-serif" font-size="24" opacity="0.85">Educational Services for Universities</text>
+
+  <!-- Service icons -->
+  <!-- ILIAS -->
+  <g transform="translate(260, 210)">
+    <rect width="80" height="80" rx="12" fill="white"/>
+    <path fill="#571EFA" d="M40 18L12 32V58L40 72L68 58V32L40 18Z"/>
+    <path fill="#341291" d="M12 32L40 46V72L12 58V32Z"/>
+    <circle fill="#927AFA" cx="68" cy="32" r="4"/>
+    <text x="40" y="102" fill="white" font-family="system-ui, sans-serif" font-size="13" text-anchor="middle" font-weight="600">ILIAS</text>
+  </g>
+
+  <!-- Moodle -->
+  <g transform="translate(380, 210)">
+    <rect width="80" height="80" rx="12" fill="white"/>
+    <path d="M20 55C20 55 28 38 40 33C52 28 58 18 65 18" stroke="#571EFA" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <circle cx="20" cy="55" r="4" fill="#571EFA"/>
+    <circle cx="40" cy="33" r="4" fill="#571EFA"/>
+    <circle cx="65" cy="18" r="4" fill="#571EFA"/>
+    <text x="40" y="102" fill="white" font-family="system-ui, sans-serif" font-size="13" text-anchor="middle" font-weight="600">Moodle</text>
+  </g>
+
+  <!-- BigBlueButton -->
+  <g transform="translate(500, 210)">
+    <rect width="80" height="80" rx="12" fill="white"/>
+    <rect x="12" y="15" width="56" height="36" rx="3" fill="#571EFA"/>
+    <rect x="16" y="19" width="22" height="14" rx="2" fill="white" opacity="0.8"/>
+    <rect x="42" y="19" width="22" height="14" rx="2" fill="white" opacity="0.6"/>
+    <rect x="28" y="56" width="24" height="14" rx="4" fill="#341291"/>
+    <line x1="40" y1="63" x2="40" y2="70" stroke="#341291" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="40" y="102" fill="white" font-family="system-ui, sans-serif" font-size="13" text-anchor="middle" font-weight="600">BigBlueButton</text>
+  </g>
+
+  <!-- OpenCloud -->
+  <g transform="translate(640, 210)">
+    <rect width="80" height="80" rx="12" fill="white"/>
+    <path d="M14 32.5L40 16L66 32.5L66 47L40 65L14 47Z" fill="#341291"/>
+    <path d="M35 35L40 20L45.5 35L60 40L45.5 45.5L40 61L35 45.5L20 40Z" fill="#571EFA"/>
+    <text x="50" y="102" fill="white" font-family="system-ui, sans-serif" font-size="13" text-anchor="middle" font-weight="600">OpenCloud</text>
+  </g>
+
+  <!-- Feature badges -->
+  <g transform="translate(260, 340)">
+    <rect width="120" height="32" rx="16" fill="white" opacity="0.15"/>
+    <text x="60" y="22" fill="white" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle">SSO Integrated</text>
+  </g>
+  <g transform="translate(400, 340)">
+    <rect width="120" height="32" rx="16" fill="white" opacity="0.15"/>
+    <text x="60" y="22" fill="white" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle">LMS Platforms</text>
+  </g>
+  <g transform="translate(540, 340)">
+    <rect width="120" height="32" rx="16" fill="white" opacity="0.15"/>
+    <text x="60" y="22" fill="white" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle">Video Conf</text>
+  </g>
+  <g transform="translate(680, 340)">
+    <rect width="120" height="32" rx="16" fill="white" opacity="0.15"/>
+    <text x="60" y="22" fill="white" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle">Cloud Files</text>
+  </g>
+  <g transform="translate(820, 340)">
+    <rect width="120" height="32" rx="16" fill="white" opacity="0.15"/>
+    <text x="60" y="22" fill="white" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle">One-Click Deploy</text>
+  </g>
+</svg>

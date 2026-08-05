@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v2
+appVersion: 13.4.0
+dependencies:
+- condition: mariadb.enabled
+  name: mariadb
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.2.2
+description: A Helm chart for TYPO3 CMS
+name: typo3
+type: application
+version: 0.1.0
+annotations:
+  artifacthub.io/changes: |
+    - Initial TYPO3 CMS chart with MariaDB dependency
+    - Custom Dockerfile with PHP 8.4 and Composer mode
+    - helm-unittest test stubs for all templates
+  artifacthub.io/links: |
+    - name: Source
+      url: https://github.com/tobias-weiss-ai-xr/opendesk-edu

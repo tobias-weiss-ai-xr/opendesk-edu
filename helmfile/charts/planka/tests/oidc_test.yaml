@@ -1,0 +1,47 @@
+suite: OIDC Configuration
+templates:
+  - configmap.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should include OIDC_CLIENT_ID key in planka-env
+    asserts:
+      - matchRegex:
+          path: data["planka-env"]
+          pattern: OIDC_CLIENT_ID=
+
+  - it: should include OIDC_AUTH_ENDPOINT key in planka-env
+    asserts:
+      - matchRegex:
+          path: data["planka-env"]
+          pattern: OIDC_AUTH_ENDPOINT=
+
+  - it: should include OIDC_TOKEN_ENDPOINT key in planka-env
+    asserts:
+      - matchRegex:
+          path: data["planka-env"]
+          pattern: OIDC_TOKEN_ENDPOINT=
+
+  - it: should include OIDC_USERINFO_ENDPOINT key in planka-env
+    asserts:
+      - matchRegex:
+          path: data["planka-env"]
+          pattern: OIDC_USERINFO_ENDPOINT=
+
+  - it: should include OIDC_SCOPE key in planka-env
+    asserts:
+      - matchRegex:
+          path: data["planka-env"]
+          pattern: OIDC_SCOPE=
+
+  - it: should render OIDC values when set
+    set:
+      planka.oidc.clientId: "test-client"
+      planka.oidc.authEndpoint: "https://id.example.com/auth"
+    asserts:
+      - matchRegex:
+          path: data["planka-env"]
+          pattern: OIDC_CLIENT_ID=test-client
+      - matchRegex:
+          path: data["planka-env"]
+          pattern: OIDC_AUTH_ENDPOINT=https://id\.example\.com/auth

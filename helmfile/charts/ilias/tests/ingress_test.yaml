@@ -1,0 +1,30 @@
+suite: Ingress
+templates:
+  - ingress.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create an Ingress when enabled
+    asserts:
+      - isKind:
+          of: Ingress
+      - isNotNull:
+          path: spec.rules
+
+  - it: should configure the host from values
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "lms.opendesk.example.com"
+
+  - it: should not create an Ingress when disabled
+    set:
+      ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should configure TLS when provided
+    asserts:
+      - isNotNull:
+          path: spec.tls

@@ -1,0 +1,92 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.elasticsearch.deploy }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "f13.fullname" . }}-elasticsearch
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: elasticsearch
+spec:
+  serviceName: {{ include "f13.fullname" . }}-elasticsearch
+  replicas: {{ .Values.elasticsearch.replicas | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "f13.componentLabels" (dict "component" "elasticsearch" "root" .) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "f13.componentLabels" (dict "component" "elasticsearch" "root" .) | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: elasticsearch
+          image: docker.io/library/elasticsearch:8.12.0
+          ports:
+            - name: http
+              containerPort: 9200
+              protocol: TCP
+            - name: transport
+              containerPort: 9300
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: discovery.type
+              value: single-node
+            - name: xpack.security.enabled
+              value: "false"
+            - name: xpack.security.http.ssl.enabled
+              value: "false"
+            - name: ES_JAVA_OPTS
+              value: "-Xms{{ .Values.elasticsearch.memory | default "2Gi" }} -Xmx{{ .Values.elasticsearch.memory | default "2Gi" }}"
+            - name: cluster.name
+              value: f13-elasticsearch
+          volumeMounts:
+            - name: elasticsearch-data
+              mountPath: /usr/share/elasticsearch/data
+          livenessProbe:
+            httpGet:
+              path: /_cluster/health?local=true
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /_cluster/health?local=true
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+          resources:
+            {{- toYaml .Values.resources.elasticsearch | nindent 12 }}
+  volumeClaimTemplates:
+    - metadata:
+    labels:
+      backup-tier: "b"
+      k8up/backup: "true"
+        name: elasticsearch-data
+        labels:
+          backup-tier: "b"
+          k8up/backup: "true"
+      spec:
+        accessModes:
+          - {{ .Values.persistence.elasticsearchData.accessMode | default "ReadWriteOnce" }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.elasticsearchData.size | default "10Gi" }}
+{{- end }}

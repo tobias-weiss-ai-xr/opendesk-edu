@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+apiVersion: v2
+name: alertmanager
+description: Alerting and notification system
+type: application
+version: 1.0.0
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+appVersion: v0.27.0
+annotations:
+  artifacthub.io/changes: |
+    - Initial chart creation for alerting infrastructure

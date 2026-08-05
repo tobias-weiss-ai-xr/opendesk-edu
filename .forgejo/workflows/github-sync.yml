@@ -1,0 +1,82 @@
+name: Sync to GitHub
+
+on:
+  push:
+    branches:
+      - '**'
+  schedule:
+    # Run every 4 hours
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  github-sync:
+    name: Sync to GitHub mirror
+    runs-on: codeberg-small
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: https://github.com/actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for mirror
+
+      - name: Configure git
+        run: |
+          git config --global user.name "Codeberg Actions Bot"
+          git config --global user.email "actions@codeberg.org"
+
+      - name: Add GitHub remote
+        run: |
+          git remote add github https://oauth2:${{ secrets.GH_TOKEN }}@github.com/tobias-weiss-ai-xr/opendesk-edu.git
+
+      - name: Sync to GitHub (with retry)
+        run: |
+          # Retry logic with exponential backoff
+          MAX_RETRIES=3
+          RETRY_DELAY=10
+          ATTEMPT=1
+
+          while [ $ATTEMPT -le $MAX_RETRIES ]; do
+            echo "Sync attempt $ATTEMPT of $MAX_RETRIES..."
+
+            if git push --mirror github 2>&1; then
+              echo "✓ Sync successful on attempt $ATTEMPT"
+              exit 0
+            else
+              echo "✗ Sync failed on attempt $ATTEMPT"
+              if [ $ATTEMPT -lt $MAX_RETRIES ]; then
+                echo "Retrying in ${RETRY_DELAY}s..."
+                sleep $RETRY_DELAY
+                RETRY_DELAY=$((RETRY_DELAY * 2))  # Exponential backoff
+              fi
+            fi
+            ATTEMPT=$((ATTEMPT + 1))
+          done
+
+          # All retries failed
+          echo "❌ Sync failed after $MAX_RETRIES attempts"
+          exit 1
+
+      - name: Verify sync
+        if: success()
+        run: |
+          echo "Checking remote refs..."
+          LOCAL_REFS=$(git show-ref | wc -l)
+          REMOTE_REFS=$(git ls-remote github | wc -l)
+          echo "Local refs: $LOCAL_REFS"
+          echo "Remote refs: $REMOTE_REFS"
+          if [ "$LOCAL_REFS" -ne "$REMOTE_REFS" ]; then
+            echo "⚠️ Warning: Ref count mismatch (local=$LOCAL_REFS, remote=$REMOTE_REFS)"
+          fi
+
+      - name: Report status
+        if: success()
+        run: |
+          echo "✓ Codeberg → GitHub sync completed successfully"
+
+      - name: Report failure
+        if: failure()
+        run: |
+          echo "❌ Codeberg → GitHub sync failed"
+          echo "Check the above logs for details"

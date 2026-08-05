@@ -1,0 +1,4 @@
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: "test"

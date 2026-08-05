@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.grommunio.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "grommunio.fullname" . }}-alerts
+  labels:
+{{ include "grommunio.labels" . | nindent 4 }}
+    {{- if .Values.grommunio.monitoring.prometheus.alertLabels }}
+{{ toYaml .Values.grommunio.monitoring.prometheus.alertLabels | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: {{ include "grommunio.fullname" . }}-alerts
+      rules:
+        - alert: GrommunioPodNotReady
+          expr: |
+            kube_pod_status_ready{namespace="{{ .Release.Namespace }}",pod=~"{{ include "grommunio.fullname" . }}.*"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Grommunio pod not ready"
+            description: "Pod {{ "{{ $labels.pod }}" }} in namespace {{ "{{ $labels.namespace }}" }} has been not ready for more than 5 minutes."
+        - alert: GrommunioPodCrashLooping
+          expr: |
+            rate(kube_pod_container_status_restarts_total{namespace="{{ .Release.Namespace }}",pod=~"{{ include "grommunio.fullname" . }}.*"}[15m]) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Grommunio pod crash looping"
+            description: "Pod {{ "{{ $labels.pod }}" }} in namespace {{ "{{ $labels.namespace }}" }} is crash looping."
+        - alert: GrommunioHighMemory
+          expr: |
+            container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",container="grommunio"} > 7Gi
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Grommunio memory usage near limit"
+            description: "Grommunio container memory is {{ "{{ $value | humanize }}" }}, approaching the 8Gi limit."
+        - alert: GrommunioReplicaDown
+          expr: |
+            kube_deployment_status_replicas_available{namespace="{{ .Release.Namespace }}",deployment="{{ include "grommunio.fullname" . }}"} < 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Grommunio has no available replicas"
+            description: "Deployment {{ "{{ $labels.deployment }}" }} has zero available replicas."
+{{- end }}

@@ -1,0 +1,116 @@
+# SPDX-FileCopyrightText: 2026 OpenDesk Edu Team
+# SPDX-License-Identifier: Apache-2.0
+#
+# Smoke Tests chart values
+# =========================
+# This chart deploys a CronJob that periodically runs smoke tests against
+# OpenDesk Edu services to verify DNS resolution and HTTP availability.
+
+# ---------------------------------------------------------------------------
+# CronJob schedule
+# ---------------------------------------------------------------------------
+schedule: "*/5 * * * *"        # Every 5 minutes
+concurrencyPolicy: "Forbid"    # Don't allow overlapping runs
+successfulJobsHistoryLimit: 3  # Keep last 3 successful
+failedJobsHistoryLimit: 5      # Keep last 5 failed
+activeDeadlineSeconds: 120     # Max 2 minutes per run
+ttlSecondsAfterFinished: 300   # Clean up pods after 5 minutes
+
+# ---------------------------------------------------------------------------
+# Image for the smoke test container
+# ---------------------------------------------------------------------------
+image:
+  repository: curlimages/curl
+  tag: 8.12.1
+  pullPolicy: IfNotPresent
+
+# ---------------------------------------------------------------------------
+# Services to test
+# ---------------------------------------------------------------------------
+# Each entry is tested via HTTPS GET and DNS resolution.
+# name:      Display name (used in log output)
+# url:       Full URL to check (should return HTTP 2xx)
+# hostname:  DNS name to resolve (defaults to URL hostname if omitted)
+services:
+  - name: "Keycloak"
+    url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+  - name: "JupyterHub"
+    url: "https://jupyter.opendesk.hrz.uni-marburg.de"
+  - name: "Open WebUI"
+    url: "https://ai.opendesk.hrz.uni-marburg.de"
+  - name: "Code Server"
+    url: "https://code.opendesk.hrz.uni-marburg.de"
+  - name: "RStudio"
+    url: "https://r.opendesk.hrz.uni-marburg.de"
+  - name: "Slidev"
+    url: "https://slides.opendesk.hrz.uni-marburg.de"
+  - name: "TTYD"
+    url: "https://term.opendesk.hrz.uni-marburg.de"
+  - name: "Collab Dashboard"
+    url: "https://collab.opendesk.hrz.uni-marburg.de"
+  - name: "Portal"
+    url: "https://portal.opendesk.hrz.uni-marburg.de/univention/portal/portal.json"
+
+# ---------------------------------------------------------------------------
+# Extra verification checks (beyond basic DNS + HTTP)
+# ---------------------------------------------------------------------------
+extraChecks:
+  # HTTP checks with content verification (portal.json is in services above)
+  http: []
+
+  # SSL/TLS certificate checks
+  ssl:
+    - host: "id.opendesk.hrz.uni-marburg.de"
+    - host: "portal.opendesk.hrz.uni-marburg.de"
+    - host: "ai.opendesk.hrz.uni-marburg.de"
+    - host: "opencloud.opendesk.hrz.uni-marburg.de"
+
+  # OIDC redirect chain checks
+  oidc:
+    - name: "JupyterHub"
+      url: "https://jupyter.opendesk.hrz.uni-marburg.de/hub/oauth_login"
+      clientId: "opendesk-jupyterhub"
+    - name: "RStudio"
+      url: "https://r.opendesk.hrz.uni-marburg.de"
+      clientId: "opendesk-rstudio"
+    - name: "Code Server"
+      url: "https://code.opendesk.hrz.uni-marburg.de"
+      clientId: "opendesk-codeserver"
+    - name: "Collab Dashboard"
+      url: "https://collab.opendesk.hrz.uni-marburg.de"
+      clientId: "opendesk-collab-dashboard"
+    - name: "TTYD"
+      url: "https://term.opendesk.hrz.uni-marburg.de"
+      clientId: "opendesk-ttyd"
+    - name: "Slidev"
+      url: "https://slides.opendesk.hrz.uni-marburg.de"
+
+  # Portal entry names to verify exist in portal.json
+  portalEntries:
+    - "JupyterHub"
+    - "RStudio"
+    - "Slidev"
+    - "code-server"
+    - "Open WebUI"
+    - "File Storage"
+    - "Collab Dashboard"
+    - "Web Terminal"
+
+# ---------------------------------------------------------------------------
+# Monitoring / Alerting
+# ---------------------------------------------------------------------------
+monitoring:
+  enabled: true
+  namespace: opendesk
+  releaseLabel: kube-prom-stack
+
+# ---------------------------------------------------------------------------
+# Resource limits
+# ---------------------------------------------------------------------------
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

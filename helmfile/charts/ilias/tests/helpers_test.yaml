@@ -1,0 +1,45 @@
+suite: Helpers
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should render ilias.name helper as chart name
+    asserts:
+      - matchRegex:
+          path: metadata.labels["app.kubernetes.io/name"]
+          pattern: ilias
+
+  - it: should render ilias.labels helper with managed-by label
+    asserts:
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+
+  - it: should render ilias.dbHost to mariadb when mariadbgalera disabled
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_DB_HOST
+            value: "RELEASE-NAME-mariadb"
+
+  - it: should render ilias.dbHost to mariadbgalera when enabled
+    set:
+      mariadbgalera:
+        enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_DB_HOST
+            value: "RELEASE-NAME-mariadbgalera"
+
+  - it: should render ilias.dbHost to custom host when provided
+    set:
+      ilias.db.host: "custom-db-host"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_DB_HOST
+            value: "custom-db-host"

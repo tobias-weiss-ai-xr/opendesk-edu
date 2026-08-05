@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+etherpad:
+  image: etherpad/etherpad
+  tag: "1.9.9"
+  port: 9001
+  db:
+    host: ""
+    user: etherpad
+    password: ""
+    name: etherpad
+    port: 5432
+  volumes:
+    data:
+      size: "1Gi"
+      accessMode: "ReadWriteMany"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+replicas: 1
+
+sso:
+  oidc:
+    enabled: false
+    issuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+    clientId: "opendesk-etherpad"
+    clientSecret: ""
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+persistence:
+  storageClass: ""
+
+postgresql:
+  enabled: true
+  auth:
+    username: etherpad
+    database: etherpad
+    existingSecret: ""

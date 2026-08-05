@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "f13.fullname" . }}-core-pdb
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: core
+spec:
+  minAvailable: {{ .Values.pdb.core.minAvailable | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "f13.componentLabels" (dict "component" "core" "root" .) | nindent 6 }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "f13.fullname" . }}-frontend-pdb
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+spec:
+  minAvailable: {{ .Values.pdb.frontend.minAvailable | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "f13.componentLabels" (dict "component" "frontend" "root" .) | nindent 6 }}

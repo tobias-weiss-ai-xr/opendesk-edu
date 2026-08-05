@@ -1,0 +1,12 @@
+etherpad.opendesk.hrz.uni-marburg.de
+bookstack.opendesk.hrz.uni-marburg.de
+planka.opendesk.hrz.uni-marburg.de
+helpdesk.opendesk.hrz.uni-marburg.de
+survey.opendesk.hrz.uni-marburg.de
+drawio.opendesk.hrz.uni-marburg.de
+excalidraw.opendesk.hrz.uni-marburg.de
+ssp.opendesk.hrz.uni-marburg.de
+sogo.opendesk.hrz.uni-marburg.de
+semester.opendesk.hrz.uni-marburg.de
+lms.opendesk.hrz.uni-marburg.de
+moodle.opendesk.hrz.uni-marburg.de

@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.grommunio.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "grommunio.fullname" . }}
+  labels:
+{{ include "grommunio.labels" . | nindent 4 }}
+  annotations:
+    {{- range $key, $value := .Values.grommunio.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.grommunio.ingress.className }}
+  {{- if .Values.grommunio.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.grommunio.ingress.hostname }}
+      secretName: {{ .Values.grommunio.ingress.tls.secretName }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.grommunio.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "grommunio.fullname" . }}
+                port:
+                  number: {{ .Values.grommunio.service.port }}
+{{- end }}

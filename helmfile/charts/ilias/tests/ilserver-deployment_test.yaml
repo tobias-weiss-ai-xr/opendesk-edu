@@ -1,0 +1,82 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test ilserver-deployment
+templates:
+  - ilserver-deployment.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+  - it: should create Deployment with correct name
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-ilserver
+  - it: should use correct image and tag
+    set:
+      iliasRPCServer.image: srsolutions/ilias-ilserver
+      iliasRPCServer.tag: 9-openjdk17-jre
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: srsolutions/ilias-ilserver:9-openjdk17-jre
+  - it: should set correct container port
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 11111
+  - it: should configure environment variables
+    asserts:
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILSERVER_LOGLEVEL
+            value: INFO
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILSERVER_NIC_ID
+            value: "0"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILSERVER_THREADS
+            value: "1"
+  - it: should mount correct volumes
+    asserts:
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ilias-data
+            mountPath: /var/www/html/data/
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ilias-iliasdata
+            mountPath: /var/www/html/iliasdata/
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ilias-lucence
+            mountPath: /var/lucenedata/ilias
+  - it: should have correct security context
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

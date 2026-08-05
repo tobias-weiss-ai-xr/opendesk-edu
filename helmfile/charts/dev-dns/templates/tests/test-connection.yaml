@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2024 OpenDesk Edu Team
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "dev-dns.fullname" . }}-test-connection"
+  labels:
+    {{- include "dev-dns.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: dns-query
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "=== Testing CoreDNS dev host entries ==="
+          echo "Resolving r.opendesk.hrz.uni-marburg.de..."
+          nslookup r.opendesk.hrz.uni-marburg.de 172.17.128.10 2>&1
+          echo ""
+          echo "Resolving kubernetes.default.svc.cluster.local..."
+          nslookup kubernetes.default.svc.cluster.local 172.17.128.10 2>&1
+          echo ""
+          echo "Resolving google.com via upstream..."
+          nslookup google.com 172.17.128.10 2>&1
+          echo ""
+          echo "=== DNS resolution test complete ==="
+  restartPolicy: Never

@@ -1,0 +1,106 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+# Platform type of repository
+platform: "github"
+
+# Enable onboarding merge request
+onboarding: false
+
+# If set to true: keep repository data between runs instead of deleting the data
+persistRepoData: false
+
+# Controls Renovate's behavior regarding repository config files such as renovate.json
+requireConfig: "ignored"
+
+# List of Repositories
+# See: https://docs.renovatebot.com/configuration-options/
+repositories:
+  - repository: "opendesk-edu/opendesk-edu"
+    baseBranches: [ "main" ]
+    # Set a limit for the maximum number of parallel MRs (default 10)
+    prConcurrentLimit: 50
+    # Prefix to use for all branch names created by renovate bot (default: "renovate/")
+    branchPrefix: "renovate/"
+    # Lowercase merge request and commit titles ("never" = leave titles untouched )
+    commitMessageLowerCase: "never"
+    # Commit scope to use if Semantic Commits are enabled (fix(<scope>)...)
+    semanticCommitScope: "renovate"
+    # Commit type to use if Semantic Commits are enabled (default: "chore")
+    semanticCommitType: "chore"
+    # Enable dependency dashboard
+    dependencyDashboard: false
+    # Include package files only within these defined paths
+    includePaths:
+      - "helmfile/environments/default/images.yaml.gotmpl"
+      - "helmfile/environments/default/charts.yaml.gotmpl"
+    customManagers:
+      - customType: "regex"
+        fileMatch:
+          - "helmfile/environments/default/images.yaml.gotmpl"
+        datasourceTemplate: "docker"
+        matchStrings:
+          # yamllint disable rule:line-length rule:quoted-strings
+          - ' providerResponsible: "(?<depType>.+?)"[\s\S]+? upstreamRegistry: "(?<registryUrl>.+?)"[\s\S]+? upstreamRepository: "(?<depName>.+?)"[\s\S]+? tag: "(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)"'
+          # yamllint enable rule:line-length rule:quoted-strings
+      - customType: "regex"
+        fileMatch:
+          - "helmfile/environments/default/charts.yaml.gotmpl"
+        datasourceTemplate: "docker"
+        matchStrings:
+          # yamllint disable rule:line-length rule:quoted-strings
+          - ' providerResponsible: "(?<depType>.+?)"[\s\S]+? upstreamRegistry: "(?<registryUrl>.+?)"[\s\S]+? upstreamRepository: "(?<depName>.+?)"[\s\S]+? version: "(?<currentValue>.+?)"'
+          # yamllint enable rule:line-length rule:quoted-strings
+    # Rules for matching packages
+    packageRules:
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "openDesk" ]
+        groupName: "Platform"
+        groupSlug: "platform"
+        branchTopic: "platform"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Collabora" ]
+        groupName: "Collabora"
+        groupSlug: "collabora"
+        branchTopic: "collabora"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Element" ]
+        groupName: "Element"
+        groupSlug: "element"
+        branchTopic: "element"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Nordeck" ]
+        groupName: "Nordeck"
+        groupSlug: "nordeck"
+        branchTopic: "nordeck"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Open-Xchange" ]
+        groupName: "Open-Xchange"
+        groupSlug: "openxchange"
+        branchTopic: "openxchange"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "OpenProject" ]
+        groupName: "OpenProject"
+        groupSlug: "openproject"
+        branchTopic: "openproject"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Nextcloud" ]
+        groupName: "nextcloud"
+        branchTopic: "nextcloud"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "Univention" ]
+        groupName: "Univention"
+        groupSlug: "univention"
+        branchTopic: "univention"
+      - matchDatasources: [ "docker" ]
+        matchDepTypes: [ "XWiki" ]
+        groupName: "XWiki"
+        groupSlug: "xwiki"
+        branchTopic: "xwiki"
+    # Add merge request labels
+    labels:
+      - "renovate"
+    # Enable custom regex manager only
+    enabledManagers:
+      - "custom.regex"
+...

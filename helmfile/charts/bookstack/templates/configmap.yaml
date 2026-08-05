@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-bookstack-config
+  labels:
+{{ include "bookstack.labels" . | nindent 4 }}
+data:
+  app-config: |-
+    APP_URL=https://{{ (index .Values.ingress.hosts 0).host }}
+    APP_ENV=production
+    DB_HOST={{ include "bookstack.dbHost" . }}
+    DB_PORT={{ include "bookstack.dbPort" . }}
+    DB_USER={{ include "bookstack.dbUser" . }}
+    DB_DATABASE={{ include "bookstack.dbName" . }}

@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "overleaf"
+    chart: "oci://ghcr.io/sharelatex/overleaf-helm-chart/overleaf"
+    version: "4.1.0"
+    values:
+      - "values.yaml.gotmpl"
+    installed: {{ .Values.apps.overleaf.enabled }}
+    timeout: 600
+commonLabels:
+  deployStage: "050-components"
+  component: "overleaf"

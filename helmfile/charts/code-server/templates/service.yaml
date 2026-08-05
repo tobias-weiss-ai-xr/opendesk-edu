@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "code-server.fullname" . }}
+  labels: {{- include "code-server.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ if .Values.oauth2.enabled }}oauth2{{ else }}http{{ end }}
+      protocol: TCP
+      name: http
+  selector: {{- include "code-server.selectorLabels" . | nindent 4 }}
