@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: Apache-2.0
+# Sample Configuration for Semester Provisioning API
+# Beispielkonfiguration für die Semester-Provisioning-API
+
+# API Configuration / API-Konfiguration
+API_HOST=0.0.0.0
+API_PORT=8000
+API_DEBUG=false
+
+# ILIAS Configuration / ILIAS-Konfiguration
+ILIAS_API_URL=https://ilias.university.de/webservice/index.php
+ILIAS_API_USER=opendesk-edu
+ILIAS_API_KEY=your-ilias-api-key-here
+
+# Moodle Configuration / Moodle-Konfiguration
+MOODLE_API_URL=https://moodle.university.de/webservice/rest/server.php
+MOODLE_API_TOKEN=your-moodle-api-token-here
+
+# Keycloak Configuration / Keycloak-Konfiguration
+KEYCLOAK_URL=https://keycloak.university.de
+KEYCLOAK_REALM=opendesk-edu
+KEYCLOAK_ADMIN_USER=opendesk-edu-admin
+KEYCLOAK_ADMIN_PASSWORD=your-keycloak-admin-password-here
+
+# HISinOne Webhook Configuration / HISinOne Webhook-Konfiguration
+HISINONE_WEBHOOK_SECRET=your-webhook-secret-here
+HISINONE_WEBHOOK_PORT=8001
+
+# Logging Configuration / Logging-Konfiguration
+LOG_LEVEL=INFO
+LOG_FILE=logs/semester-provisioning.log

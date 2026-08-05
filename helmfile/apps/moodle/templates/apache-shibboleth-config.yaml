@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moodle-apache-shibboleth-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: moodle
+    app.kubernetes.io/component: shibboleth-sp
+    app.kubernetes.io/part-of: opendesk
+data:
+  shibboleth.conf: |
+    ServerName moodle.opendesk.hrz.uni-marburg.de
+    UseCanonicalName On
+    ShibCompatValidUser Off
+    LogLevel mod_shib:debug
+
+    # Trust X-Forwarded-Proto header from ingress to detect HTTPS behind TLS termination
+    SetEnvIf X-Forwarded-Proto https HTTPS=on
+
+    <Location />
+      ShibUseHeaders On
+      SetEnvIf X-Forwarded-Proto https HTTPS=on
+    </Location>
+
+    <Location /Shibboleth.sso>
+      SetHandler shib
+      AuthType None
+      Require all granted
+    </Location>
+
+    <IfModule mod_alias.c>
+      <Location /shibboleth-sp>
+        AuthType None
+        Require all granted
+      </Location>
+      Alias /shibboleth-sp/main.css /usr/share/shibboleth/main.css
+    </IfModule>
+
+    <Location /auth/shibboleth>
+      AuthType shibboleth
+      ShibRequestSetting requireSession 1
+      ShibRequestSetting applicationId default
+      require valid-user
+    </Location>

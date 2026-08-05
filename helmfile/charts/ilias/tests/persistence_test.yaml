@@ -1,0 +1,41 @@
+suite: Persistence
+templates:
+  - pvc.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a PersistentVolumeClaim for ilias-data
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+
+  - it: should create a PVC for ilias-iliasdata
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - matchRegex:
+          path: metadata.name
+          pattern: .*-ilias-iliasdata
+
+  - it: should create a PVC for lucene data
+    documentIndex: 2
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+      - matchRegex:
+          path: metadata.name
+          pattern: .*-ilias-lucene
+
+  - it: should set the correct storage size for ilias-data
+    asserts:
+      - equal:
+          path: spec.resources.requests.storage
+          value: 4Gi
+
+  - it: should set ReadWriteMany access mode for ilias-data
+    documentIndex: 0
+    asserts:
+      - contains:
+          path: spec.accessModes
+          content: ReadWriteMany

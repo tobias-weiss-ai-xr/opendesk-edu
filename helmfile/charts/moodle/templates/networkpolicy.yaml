@@ -1,0 +1,78 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+{{- if or (not .Values.networkPolicy) .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "moodle.fullname" . }}-network-policy
+  labels:
+    {{- include "moodle.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 53
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+    # Allow egress to PostgreSQL (shared moodle database)
+    - ports:
+        - protocol: TCP
+          port: 5432
+      to:
+        - podSelector:
+            matchLabels:
+              app: postgresql
+    # Allow egress to MariaDB standalone
+    - ports:
+        - protocol: TCP
+          port: 3306
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mariadb-standalone
+    # Allow egress to Keycloak (SSO)
+    - ports:
+        - protocol: TCP
+          port: 443
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: opendesk
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: keycloak
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+    - from:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              {{- include "moodle.selectorLabels" . | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: 80
+    # Allow ingress from HAProxy ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-controller
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: haproxy-ingress
+{{- end }}

@@ -1,0 +1,12 @@
+dn: cn=open-webui,cn=entry,cn=portals,cn=univention,dc=swp-ldap,dc=internal
+objectClass: univentionNewPortalEntry
+objectClass: top
+cn: open-webui
+univentionNewPortalEntryActivate: TRUE
+univentionNewPortalEntryLink: en_US https://ai.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLinkTarget: newwindow
+univentionNewPortalEntryDisplayName: en_US Open WebUI
+univentionNewPortalEntryDisplayName: de_DE Open WebUI
+univentionNewPortalEntryDescription: en_US AI assistant interface
+univentionNewPortalEntryDescription: de_DE KI-Assistenten-Oberfläche
+univentionNewPortalEntryOnlyAnonymous: FALSE

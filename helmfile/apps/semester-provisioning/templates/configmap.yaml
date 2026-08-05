@@ -1,0 +1,103 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+{{- if not .Values.configMap.existingConfigMap -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "semester-provisioning.configMapName" . }}
+  labels:
+    {{- include "semester-provisioning.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    # Semester Lifecycle Configuration
+    # Semester-Lebenszyklus-Konfiguration
+    semester:
+      enabled: {{ .Values.semester.enabled }}
+      current:
+        name: {{ .Values.semester.current.name | quote }}
+        type: {{ .Values.semester.current.type | quote }}
+        start_date: {{ .Values.semester.current.start_date | quote }}
+        end_date: {{ .Values.semester.current.end_date | quote }}
+        phases:
+          enrollment:
+            start: {{ .Values.semester.current.phases.enrollment.start | quote }}
+            end: {{ .Values.semester.current.phases.enrollment.end | quote }}
+          teaching:
+            start: {{ .Values.semester.current.phases.teaching.start | quote }}
+            end: {{ .Values.semester.current.phases.teaching.end | quote }}
+          exam:
+            start: {{ .Values.semester.current.phases.exam.start | quote }}
+            end: {{ .Values.semester.current.phases.exam.end | quote }}
+          archival:
+            deadline: {{ .Values.semester.current.phases.archival.deadline | quote }}
+      previous:
+        name: {{ .Values.semester.previous.name | quote }}
+        type: {{ .Values.semester.previous.type | quote }}
+        start_date: {{ .Values.semester.previous.start_date | quote }}
+        end_date: {{ .Values.semester.previous.end_date | quote }}
+
+    # Automation settings / Automatisierungseinstellungen
+    automation:
+      enabled: {{ .Values.automation.enabled }}
+      timezone: {{ .Values.automation.timezone | quote }}
+      cron:
+        semester_start: {{ .Values.automation.cron.semester_start | quote }}
+        mid_semester_check: {{ .Values.automation.cron.mid_semester_check | quote }}
+        semester_end: {{ .Values.automation.cron.semester_end | quote }}
+        archival_cleanup: {{ .Values.automation.cron.archival_cleanup | quote }}
+        role_sync: {{ .Values.automation.cron.role_sync | quote }}
+
+    # Course provisioning settings / Kursbereitstellungseinstellungen
+    provisioning:
+      default_category: {{ .Values.provisioning.default_category | quote }}
+      course_prefix: {{ .Values.provisioning.course_prefix | quote }}
+      auto_archive: {{ .Values.provisioning.auto_archive }}
+      archive_retention_years: {{ .Values.provisioning.archive_retention_years }}
+      auto_provision: {{ .Values.provisioning.auto_provision }}
+
+    # Role synchronization settings / Rollen-Synchronisierungseinstellungen
+    roles:
+      enabled: {{ .Values.roles.enabled }}
+      sync_interval_minutes: {{ .Values.roles.sync_interval_minutes }}
+      sync_on_enrollment_change: {{ .Values.roles.sync_on_enrollment_change }}
+      mappings:
+        {{- toYaml .Values.roles.mappings | nindent 8 }}
+
+    # LMS integration settings / LMS-Integrationseinstellungen
+    ilias:
+      enabled: {{ .Values.ilias.enabled }}
+      api_url: {{ .Values.ilias.api_url | quote }}
+      client_id: {{ .Values.ilias.client_id | quote }}
+
+    moodle:
+      enabled: {{ .Values.moodle.enabled }}
+      api_url: {{ .Values.moodle.api_url | quote }}
+
+    # Keycloak settings / Keycloak-Einstellungen
+    keycloak:
+      url: {{ .Values.keycloak.url | quote }}
+      realm: {{ .Values.keycloak.realm | quote }}
+
+    # Database settings / Datenbankeinstellungen
+    database:
+      type: {{ .Values.database.type | quote }}
+      {{- if eq .Values.database.type "sqlite" }}
+      sqlite_path: {{ .Values.database.sqlite_path | quote }}
+      {{- else }}
+      postgresql:
+        host: {{ .Values.database.postgresql.host | quote }}
+        port: {{ .Values.database.postgresql.port }}
+        database: {{ .Values.database.postgresql.database | quote }}
+        ssl_mode: {{ .Values.database.postgresql.ssl_mode | quote }}
+      {{- end }}
+
+    # Audit logging settings / Audit-Logging-Einstellungen
+    audit:
+      enabled: {{ .Values.audit.enabled }}
+      log_level: {{ .Values.audit.log_level | quote }}
+      retention_days: {{ .Values.audit.retention_days }}
+---
+{{- end }}

@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  imageRegistry: registry.opencode.de/f13/microservices
+  imagePullPolicy: IfNotPresent
+  keycloakUrl: {{ printf "https://%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
+  keycloakRealm: {{ .Values.platform.realm | quote }}
+  ingressClassName: "haproxy"
+
+imagePullSecrets:
+  - name: {{ .Values.global.imagePullSecret | default "opencode-registry-secret" | quote }}
+
+authentication:
+  guestMode: false
+  keycloakBaseUrl: {{ printf "https://%s.%s" .Values.global.hosts.keycloak .Values.global.domain | quote }}
+  keycloakRealm: {{ .Values.platform.realm | quote }}
+  audience: f13-api
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  hostname: {{ printf "%s.%s" .Values.global.hosts.f13 .Values.global.domain | quote }}
+  className: "haproxy"
+  tls:
+    enabled: true
+    secretName: "opendesk-certificates-tls"
+
+services:
+  chat:
+    enabled: {{ .Values.apps.f13.services.chat.enabled | default true }}
+  summary:
+    enabled: {{ .Values.apps.f13.services.summary.enabled | default true }}
+  parser:
+    enabled: {{ .Values.apps.f13.services.parser.enabled | default true }}
+  rag:
+    enabled: {{ .Values.apps.f13.services.rag.enabled | default true }}
+  transcription:
+    enabled: {{ .Values.apps.f13.services.transcription.enabled | default false }}
+
+llm:
+  provider: {{ .Values.apps.f13.llm.provider | default "openai" | quote }}
+  apiUrl: {{ .Values.apps.f13.llm.apiUrl | default "" | quote }}
+  models:
+    chat: {{ .Values.apps.f13.llm.models.chat | default "" | quote }}
+    summary: {{ .Values.apps.f13.llm.models.summary | default "" | quote }}
+    parser: {{ .Values.apps.f13.llm.models.parser | default "" | quote }}
+
+resources:
+  core:
+    {{- toYaml .Values.resources.f13.core | nindent 4 }}
+  frontend:
+    {{- toYaml .Values.resources.f13.frontend | nindent 4 }}
+  chat:
+    {{- toYaml .Values.resources.f13.chat | nindent 4 }}
+  summary:
+    {{- toYaml .Values.resources.f13.summary | nindent 4 }}
+  parser:
+    {{- toYaml .Values.resources.f13.parser | nindent 4 }}
+  rag:
+    {{- toYaml .Values.resources.f13.rag | nindent 4 }}
+
+secrets:
+  llmApi: {{ .Values.secrets.f13.llmApi | default "" | quote }}
+  feedbackDb: {{ .Values.secrets.f13.feedbackDb | default "" | quote }}
+  transcriptionDb: {{ .Values.secrets.f13.transcriptionDb | default "" | quote }}
+  rabbitmq: {{ .Values.secrets.f13.rabbitmq | default "" | quote }}
+  huggingfaceToken: {{ .Values.secrets.f13.huggingfaceToken | default "" | quote }}

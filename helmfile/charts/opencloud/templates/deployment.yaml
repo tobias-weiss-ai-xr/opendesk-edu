@@ -1,0 +1,184 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opencloud.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "opencloud.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opencloud.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.config.enabled }}
+      initContainers:
+        - name: setup-idm-stubs
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command: ["sh", "-c", "mkdir -p /var/lib/opencloud/idm && touch /var/lib/opencloud/idm/ldap.crt && touch /var/lib/opencloud/idm/ldap.key && chown -R 1000:1000 /var/lib/opencloud/idm"]
+          volumeMounts:
+            - name: opencloud-data
+              mountPath: /var/lib/opencloud
+          securityContext:
+            runAsUser: 0
+      {{- end }}
+      {{- with .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "opencloud.serviceAccountName" . }}
+      containers:
+        - name: opencloud
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- with .Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: PROXY_TLS
+              value: "false"
+            - name: PROXY_HTTP_ADDR
+              value: "0.0.0.0:8080"
+            - name: OC_OIDC_ISSUER
+              value: {{ .Values.oidc.internalIssuer | default .Values.oidc.issuer | quote }}
+            - name: OC_INSECURE
+              value: "true"
+            - name: PROXY_AUTOPROVISION_ACCOUNTS
+              value: {{ .Values.oidc.autoProvisionAccounts | quote }}
+            - name: PROXY_ROLE_ASSIGNMENT_DRIVER
+              value: {{ .Values.oidc.roleAssignmentDriver | quote }}
+            - name: PROXY_OIDC_REWRITE_WELLKNOWN
+              value: {{ .Values.oidc.rewriteWellknown | quote }}
+            - name: PROXY_USER_OIDC_CLAIM
+              value: {{ .Values.oidc.userOidcClaim | quote }}
+            - name: PROXY_USER_CS3_CLAIM
+              value: {{ .Values.oidc.userCs3Claim | quote }}
+            - name: PROXY_AUTOPROVISION_CLAIM_USERNAME
+              value: {{ .Values.oidc.autoProvisionClaimUsername | quote }}
+            - name: OC_ADMIN_USER_ID
+              value: {{ .Values.oidc.adminUserId | quote }}
+            - name: SETTINGS_SETUP_DEFAULT_ASSIGNMENTS
+              value: {{ .Values.oidc.defaultAssignments | quote }}
+            - name: GRAPH_ASSIGN_DEFAULT_USER_ROLE
+              value: {{ .Values.oidc.assignDefaultUserRole | quote }}
+            - name: GRAPH_USERNAME_MATCH
+              value: {{ .Values.oidc.usernameMatch | quote }}
+            - name: OC_EXCLUDE_RUN_SERVICES
+              value: {{ .Values.oidc.excludeRunServices | quote }}
+            - name: WEB_OPTION_ACCOUNT_EDIT_LINK_HREF
+              value: {{ .Values.oidc.accountEditLink | quote }}
+            - name: OC_LOG_LEVEL
+              value: {{ .Values.logLevel | quote }}
+            - name: PROXY_OIDC_CLIENT_ID
+              value: {{ .Values.oidc.clientId | quote }}
+            - name: PROXY_OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-oidc-client-secret
+            - name: OC_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-jwt-secret
+            - name: OC_TRANSFER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-transfer-secret
+            - name: OC_MACHINE_AUTH_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-machine-auth-api-key
+            - name: OC_SYSTEM_USER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-system-user-api-key
+            - name: OC_SYSTEM_USER_ID
+              value: {{ .Values.systemUserId | quote }}
+            - name: OC_SYSTEM_USER_IDP
+              value: "internal"
+            - name: OC_URL_SIGNING_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencloud.fullname" . }}-secrets
+                  key: oc-url-signing-secret
+            - name: OC_URL
+              value: {{ printf "https://%s" (index .Values.ingress.hosts 0).host | quote }}
+            - name: PROXY_CSP_CONFIG_FILE_OVERRIDE_LOCATION
+              value: "/etc/opencloud/csp.yaml"
+          volumeMounts:
+            - name: opencloud-data
+              mountPath: /var/lib/opencloud
+            - name: opencloud-config
+              mountPath: /etc/opencloud
+          livenessProbe:
+            httpGet:
+              path: /status.php
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /status.php
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: opencloud-data
+          persistentVolumeClaim:
+            claimName: {{ include "opencloud.fullname" . }}-data
+        {{- if .Values.config.enabled }}
+        - name: opencloud-config
+          configMap:
+            name: {{ include "opencloud.fullname" . }}-config
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if gt (int .Values.replicaCount) 1 }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - {{ include "opencloud.name" . }}
+                topologyKey: kubernetes.io/hostname
+      {{- else }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

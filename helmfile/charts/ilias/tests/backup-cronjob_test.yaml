@@ -1,0 +1,98 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test backup-cronjob
+templates:
+  - backup-cronjob.yaml
+tests:
+  - it: should not create resources when mariadbBackup is disabled
+    set:
+      mariadbBackup.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should create a CronJob when enabled
+    set:
+      mariadbBackup.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+  - it: should create CronJob with correct name when enabled
+    set:
+      mariadbBackup.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-mariadb-backup
+  - it: should configure correct schedule when enabled
+    set:
+      mariadbBackup.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - equal:
+          path: spec.schedule
+          value: "0 3 * * *"
+  - it: should use correct image when enabled
+    set:
+      mariadbBackup.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - isNotNull:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+  - it: should configure backup command when enabled
+    set:
+      mariadbBackup.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - isNotNull:
+          path: spec.jobTemplate.spec.template.spec.containers[0].command
+  - it: should mount backup volume when enabled
+    set:
+      mariadbBackup.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].volumeMounts
+          content:
+            name: backup-volume
+            mountPath: /backups
+  - it: should have correct restart policy when enabled
+    set:
+      mariadbBackup.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: OnFailure
+  - it: should use custom schedule when specified
+    set:
+      mariadbBackup.enabled: true
+      mariadbBackup.schedule: "0 1 * * *"
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - equal:
+          path: spec.schedule
+          value: "0 1 * * *"

@@ -1,0 +1,349 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# =============================================================================
+# GROMMUNIO APPLICATION CONFIGURATION
+# =============================================================================
+grommunio:
+  # Image configuration
+  image:
+    repository: grommunio/grommunio
+    tag: "2025.01.1"
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    # Official image: grommunio/grommunio
+    # Alternative: Build from grommunio/grommunio-docker
+
+  # Deployment scaling
+  replicaCount: 1
+
+  # Rolling update strategy (zero-downtime deployments)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  # =========================================================================
+  # RESOURCE REQUIREMENTS (CRITICAL: Higher than SOGo)
+  # =========================================================================
+  # Grommunio requires 4-8GB RAM vs SOGo's 512MB-2GB
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 4Gi
+    limits:
+      cpu: "2"
+      memory: 8Gi
+
+  # Pod security context
+  podSecurityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+    runAsGroup: 1000
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+
+  # Scheduling
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  # Localization
+  timezone: "Europe/Berlin"
+  language: "English"
+  pageTitle: "openDesk Mail"
+
+  # =========================================================================
+  # DATABASE CONFIGURATION (CRITICAL: MariaDB/MySQL ONLY)
+  # =========================================================================
+  # Grommunio does NOT support PostgreSQL - hard requirement
+  db:
+    type: mariadb
+    host: "mariadb-headless"
+    port: 3306
+    user: "grommunio"
+    password: ""
+    name: "grommunio"
+
+    # Connection pool settings
+    pool:
+      maxConnections: 100
+      minIdle: 10
+      connectionTimeout: 30000
+
+  # =========================================================================
+  # CACHE CONFIGURATION (Redis, NOT Memcached)
+  # =========================================================================
+  cache:
+    host: "redis-headless"
+    port: 6379
+    password: ""
+    db: 0
+    poolSize: 10
+
+  # =========================================================================
+  # AUTHENTICATION CONFIGURATION
+  # =========================================================================
+  auth:
+    method: oidc  # Preferred: oidc or saml
+
+    # Keycloak OIDC configuration (preferred)
+    oidc:
+      enabled: true
+      issuerUrl: "https://keycloak.opendesk.example.com/realms/opendesk"
+      clientId: "grommunio"
+      clientSecret: ""
+      scope: "openid profile email"
+
+    # SAML configuration (alternative)
+    saml:
+      enabled: false
+      entityId: "https://grommunio.opendesk.example.com/saml/metadata"
+      assertionConsumerServiceUrl: "https://grommunio.opendesk.example.com/saml/acs"
+      identityProviderUrl: "https://keycloak.opendesk.example.com/realms/opendesk/protocol/saml"
+      identityProviderCert: ""
+
+  # =========================================================================
+  # LDAP CONFIGURATION (User provisioning)
+  # =========================================================================
+  ldap:
+    enabled: true
+    host: "openldap"
+    port: 389
+    baseDN: "ou=users,dc=opendesk,dc=edu"
+    bindDN: "uid=grommunio,ou=services,dc=opendesk,dc=edu"
+    bindPassword: ""
+    userFilter: "(objectClass=person)"
+
+  # =========================================================================
+  # MAIL CONFIGURATION
+  # =========================================================================
+  mail:
+    domain: "opendesk.example.com"
+
+    imap:
+      server: "imaps://dovecot:993"
+      ssl: true
+
+    smtp:
+      server: "smtp://postfix:587"
+      tls: true
+
+    sieve:
+      server: "sieve://dovecot:4190"
+
+    lmtp:
+      port: 24
+
+  # =========================================================================
+  # FEATURE FLAGS
+  # =========================================================================
+  features:
+    email: true
+    calendar: true
+    contacts: true
+    activesync: true  # KEY DIFFERENTIATOR
+    ews: true         # Exchange Web Services
+    mapi: true        # MAPI/HTTP for Outlook
+    webinterface: true
+
+  # =========================================================================
+  # ACTIVESYNC CONFIGURATION (Mobile devices)
+  # =========================================================================
+  activesync:
+    enabled: true
+    version: "16.1"
+    maxDevices: 10
+    syncInterval: 5
+
+  # =========================================================================
+  # OUTLOOK INTEGRATION (MAPI/HTTP, EWS)
+  # =========================================================================
+  outlook:
+    mapiEnabled: true
+    ewsEnabled: true
+    autodiscoverDomain: "opendesk.example.com"
+
+  # =========================================================================
+  # FILE INTEGRATION (Nextcloud)
+  # =========================================================================
+  files:
+    enabled: true
+    nextcloudUrl: "https://nextcloud.opendesk.example.com"
+    webdavPath: "/remote.php/dav/files"
+
+  # =========================================================================
+  # LOGGING
+  # =========================================================================
+  logging:
+    level: "INFO"
+    format: "json"
+
+  # =========================================================================
+  # MONITORING (Prometheus)
+  # =========================================================================
+  monitoring:
+    enabled: true
+    prometheus:
+      enabled: true
+      port: 9090
+      path: "/metrics"
+      scrapeInterval: 30s
+      alertLabels: {}
+      additionalLabels: {}
+
+  # =========================================================================
+  # HEALTH CHECKS (Critical for production)
+  # =========================================================================
+  healthCheck:
+    liveness:
+      path: "/healthz"
+      port: 8080
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 10
+      failureThreshold: 3
+
+    readiness:
+      path: "/ready"
+      port: 8080
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+    startup:
+      path: "/healthz"
+      port: 8080
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 30
+
+  # =========================================================================
+  # PERSISTENCE (Mail storage, SQLite databases)
+  # =========================================================================
+  persistence:
+    enabled: true
+    size: 50Gi
+    accessMode: ReadWriteOnce
+    storageClass: ""
+    mountPath: "/var/lib/grommunio"
+
+  # =========================================================================
+  # INGRESS CONFIGURATION
+  # =========================================================================
+  ingress:
+    enabled: true
+    className: "nginx"
+    hostname: "grommunio.opendesk.example.com"
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    tls:
+      enabled: true
+      secretName: grommunio-tls
+
+  # =========================================================================
+  # SERVICE CONFIGURATION
+  # =========================================================================
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+    annotations: {}
+
+  # =========================================================================
+  # POD DISRUPTION BUDGET
+  # =========================================================================
+  pdb:
+    enabled: true
+    minAvailable: 1
+
+  # =========================================================================
+  # HORIZONTAL POD AUTOSCALER
+  # =========================================================================
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+  # =========================================================================
+  # SERVICE ACCOUNT & RBAC
+  # =========================================================================
+  serviceAccount:
+    create: true
+    name: "grommunio"
+    annotations: {}
+
+  rbac:
+    create: true
+    rules: []
+
+  # =========================================================================
+  # MIGRATION SETTINGS
+  # =========================================================================
+  migration:
+    enabled: false
+    from: ""
+    tools:
+      kdb2mt: true
+      oxm2mt: true
+
+# =============================================================================
+# NETWORK POLICY
+# =============================================================================
+networkPolicy: {}
+
+# =============================================================================
+# MARIADB SUBCHART (Optional - dev/test only)
+# =============================================================================
+mariadb:
+  enabled: false
+  auth:
+    rootPassword: ""
+    username: "grommunio"
+    password: ""
+    database: "grommunio"
+  primary:
+    persistence:
+      enabled: true
+      size: 50Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: "1"
+        memory: 2Gi
+
+# =============================================================================
+# REDIS SUBCHART (Optional - dev/test only)
+# =============================================================================
+redis:
+  enabled: false
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 5Gi
+
+# =============================================================================
+# GLOBAL CONFIGURATION
+# =============================================================================
+global:
+  imagePullSecrets: []
+  opendesk:
+    domain: "opendesk.example.com"
+    keycloak:
+      url: "https://keycloak.opendesk.example.com"
+      realm: "opendesk"

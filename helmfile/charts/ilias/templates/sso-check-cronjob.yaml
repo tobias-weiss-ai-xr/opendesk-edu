@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-sso-check
+  labels:
+{{ include "ilias.labels" . | nindent 4 }}
+data:
+  sso-redirect-check.sh: |
+    #!/bin/sh
+    ILIAS_URL="${ILIAS_URL:-https://lms.opendesk.example.com/shib_login.php}"
+    EXPECTED_DOMAIN="${EXPECTED_DOMAIN:-id.opendesk.example.com}"
+    MAX_REDIRECTS="${MAX_REDIRECTS:-10}"
+    TIMEOUT="${TIMEOUT:-30}"
+    echo "$(date -I '+%Y-%m-%dT%H:%M:%S%z')"
+    HOST=$(echo "${ILIAS_URL}" | sed 's|https\?://\([^/]*\).*|\1|')
+    echo "Checking SSO redirect: ${ILIAS_URL}"
+    echo "Expected domain: ${EXPECTED_DOMAIN}"
+    FINAL_URL=$(curl -skL -o /dev/null -w '%{url_effective}' \
+      --max-redirs "${MAX_REDIRECTS}" \
+      --max-time "${TIMEOUT}" \
+      "${ILIAS_URL}" 2>&1)
+    echo "Final URL: ${FINAL_URL}"
+    if echo "${FINAL_URL}" | grep -q "${EXPECTED_DOMAIN}"; then
+      echo "SSO redirect chain verified — reached ${FINAL_URL}"
+      exit 0
+    else
+      echo "SSO redirect chain broken — final URL: ${FINAL_URL}"
+      exit 1
+    fi
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-sso-check
+  labels:
+{{ include "ilias.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.ssoCheck.schedule | default "*/15 * * * *" | quote }}
+  suspend: {{ .Values.ssoCheck.enabled | default false | not }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 5
+  startingDeadlineSeconds: 300
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: sso-check
+              image: curlimages/curl:latest
+              command: ["/bin/sh", "/tests/sso-redirect-check.sh"]
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 1000
+                runAsGroup: 1000
+                seccompProfile:
+                  type: RuntimeDefault
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+              volumeMounts:
+                - name: test-script
+                  mountPath: /tests/sso-redirect-check.sh
+                  subPath: sso-redirect-check.sh
+          volumes:
+            - name: test-script
+              configMap:
+                name: {{ .Release.Name }}-sso-check
+                defaultMode: 0755

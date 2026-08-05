@@ -1,0 +1,14 @@
+Total messages: 4 (Errors: 4, Warnings: 0)
+
+[ERROR] Connecting to 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration' violates the following Content Security Policy directive: "connect-src 'self' blob: https://raw.githubusercontent.com/opencloud-eu/awesome-apps/ https://update.opencloud.eu/". The action has been blocked. @ https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:82
+[ERROR] Fetch API cannot load https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration. Refused to connect because it violates the document's Content Security Policy. @ https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:82
+[ERROR] [JsonService] getJson: Network Error @ https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:82
+TypeError: Failed to fetch
+    at Cd.fetchWithTimeout (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:31611)
+    at Cd.getJson (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:32151)
+    at ED.getMetadata (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:35533)
+    at ED._getMetadataProperty (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:36519)
+    at ED.getAuthorizationEndpoint (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:35889)
+    at LD.createSigninRequest (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:56154)
+    at wF._signinStart (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:81463)
+    at wF.signinRedirect (https://opencloud.opendesk.hrz.uni-marburg.de/js/chunks/PortalTarget.vue_vue_type_script_lang-BtcHSdI5.mjs:83:76405)

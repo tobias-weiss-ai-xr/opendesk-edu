@@ -1,0 +1,29 @@
+suite: Ingress
+templates:
+  - ingress.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create an Ingress
+    asserts:
+      - isKind:
+          of: Ingress
+
+  - it: should set the ingress class
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: "haproxy"
+
+  - it: should configure TLS
+    asserts:
+      - isNotNull:
+          path: spec.tls
+      - isNotNull:
+          path: spec.tls[0].secretName
+
+  - it: should set the host from values
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "bbb.opendesk.example.com"

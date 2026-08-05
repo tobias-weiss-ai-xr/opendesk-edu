@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2025 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+organization:
+  name: "openDesk Edu Test"
+  display_name: "openDesk Edu Test Environment"
+  url: "https://opendesk-edu.example.org"
+  lang: "en"
+
+contacts:
+  - type: "technical"
+    given_name: "IT"
+    surname: "Support"
+    email: "it-support@example.org"
+    company: "openDesk Edu Test"
+
+  - type: "administrative"
+    given_name: "Admin"
+    surname: "Team"
+    email: "admin@example.org"
+    company: "openDesk Edu Test"
+
+requested_attributes:
+  - mail
+  - displayName
+  - eduPersonAffiliation
+  - eduPersonPrincipalName
+  - givenName
+  - sn
+
+environments:
+  dev:
+    base_url: "https://id.dev.opendesk-edu.local"
+    realm: "opendesk"
+    cache_duration: "PT24H"
+    valid_until_days: 30
+
+  staging:
+    base_url: "https://id.staging.opendesk-edu.example.org"
+    realm: "opendesk"
+    cache_duration: "PT24H"
+    valid_until_days: 90
+
+  production:
+    base_url: "https://id.opendesk-edu.example.edu"
+    realm: "opendesk"
+    cache_duration: "PT24H"
+    valid_until_days: 365

@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-typo3
+  labels:
+    typo3/server: "true"
+{{ include "typo3.labels" . | nindent 4 }}
+spec:
+  selector:
+    typo3/server: "true"
+{{ include "typo3.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.typo3.port }}
+  type: ClusterIP

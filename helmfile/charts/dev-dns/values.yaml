@@ -1,0 +1,66 @@
+# SPDX-FileCopyrightText: 2024 OpenDesk Edu Team
+# SPDX-License-Identifier: Apache-2.0
+#
+# Dev DNS chart values
+# ====================
+# This chart customizes k3s CoreDNS to resolve internal service hostnames
+# that aren't available via public DNS. It requires k3s (not RKE, not vanilla K8s)
+# because it relies on the k3s-specific coredns-custom ConfigMap import mechanism.
+
+# ---------------------------------------------------------------------------
+# CoreDNS customization - adds static host entries to k3s CoreDNS
+# ---------------------------------------------------------------------------
+coredns:
+  enabled: true
+
+  # The target IP for all dev hostname records (the HAProxy ingress).
+  targetIP: 192.168.3.201
+
+  # Zone name for the file plugin (must match the domain suffix of hostnames).
+  zoneName: "opendesk.hrz.uni-marburg.de"
+
+  # SOA serial number (increment when changing records).
+  serial: "2026052902"
+
+  # Default TTL for A records.
+  ttl: 300
+
+  # Static host entries for internal services not resolvable via public DNS.
+  # All entries resolve to targetIP. Hostnames are FULL FQDNs (without trailing dot).
+  #
+  # Default: OpenDesk Edu dev services behind HAProxy at 192.168.3.201
+  hostEntries:
+    - hostnames:
+        - r.opendesk.hrz.uni-marburg.de
+        - term.opendesk.hrz.uni-marburg.de
+        - slides.opendesk.hrz.uni-marburg.de
+        - collab.opendesk.hrz.uni-marburg.de
+        - code.opendesk.hrz.uni-marburg.de
+        - ai.opendesk.hrz.uni-marburg.de
+        - jupyter.opendesk.hrz.uni-marburg.de
+        - id.opendesk.hrz.uni-marburg.de
+        # Hostnames needed by cluster-internal services (resolves to HAProxy)
+        - objectstore.opendesk.hrz.uni-marburg.de
+
+# ---------------------------------------------------------------------------
+# External DNS service - exposes CoreDNS via NodePort for team machines
+# ---------------------------------------------------------------------------
+service:
+  enabled: true
+
+  # Cluster-internal port
+  port: 53
+
+  # NodePort numbers for external access
+  nodePort:
+    udp: 30535
+    tcp: 30534
+
+  # Service annotations
+  annotations: {}
+
+# ---------------------------------------------------------------------------
+# Naming overrides (standard Helm chart convention)
+# ---------------------------------------------------------------------------
+nameOverride: ""
+fullnameOverride: ""

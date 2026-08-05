@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "snipr.fullname" . }}-config
+  labels:
+    {{- include "snipr.labels" . | nindent 4 }}
+data:
+  config.toml: |
+    [server]
+    host = "0.0.0.0"
+    port = {{ .Values.snipr.api.port }}
+    
+    [storage]
+    type = "{{ .Values.snipr.storage.type }}"
+    {{- if eq .Values.snipr.storage.type "s3" }}
+    [storage.s3]
+    endpoint = "{{ .Values.snipr.storage.s3.endpoint }}"
+    bucket = "{{ .Values.snipr.storage.s3.bucket }}"
+    region = "{{ .Values.snipr.storage.s3.region }}"
+    ssl = {{ .Values.snipr.storage.s3.ssl }}
+    {{- end }}
+    {{- if eq .Values.snipr.storage.type "filesystem" }}
+    [storage.filesystem]
+    path = "{{ .Values.snipr.storage.filesystem.path }}"
+    {{- end }}
+    
+    [sso]
+    type = "{{ .Values.snipr.sso.type }}"
+    {{- if eq .Values.snipr.sso.type "oidc" }}
+    [sso.oidc]
+    issuer = "{{ .Values.snipr.sso.keycloak.authUrl | replace "/auth" "" }}"
+    client_id = "{{ .Values.snipr.sso.keycloak.clientId }}"
+    scopes = ["openid", "profile", "email"]
+    {{- end }}
+    
+    [lti]
+    enabled = {{ .Values.snipr.lti.enabled }}
+    {{- if .Values.snipr.lti.enabled }}
+    [lti.platforms.ilias]
+    deployment_id = "{{ .Values.snipr.lti.platforms.ilias.deploymentId }}"
+    launch_url = "{{ .Values.snipr.lti.platforms.ilias.launchUrl }}"
+    
+    [lti.platforms.moodle]
+    deployment_id = "{{ .Values.snipr.lti.platforms.moodle.deploymentId }}"
+    launch_url = "{{ .Values.snipr.lti.platforms.moodle.launchUrl }}"
+    {{- end }}
+    
+    [transcription]
+    enabled = {{ .Values.snipr.transcription.enabled }}
+    {{- if .Values.snipr.transcription.enabled }}
+    [transcription.f13]
+    endpoint = "{{ .Values.snipr.transcription.f13.endpoint }}"
+    model = "{{ .Values.snipr.transcription.f13.model }}"
+    language = "{{ .Values.snipr.transcription.f13.language }}"
+    callback_url = "{{ .Values.snipr.transcription.f13.callbackUrl }}"
+    {{- end }}

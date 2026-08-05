@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ilias-toolobox
+  labels:
+{{ include "ilias.labels" . | nindent 4 }}
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      ilias/server: "true"
+{{ include "ilias.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        ilias/server: "true"
+{{ include "ilias.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: ilias
+          image: {{ .Values.ilias.image }}:{{ .Values.ilias.tag }}
+          command: ["/bin/bash", "-c", "sleep infinity"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsGroup: 33
+            runAsNonRoot: true
+            runAsUser: 33
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          ports:
+            - containerPort: {{ .Values.ilias.port }}
+          env:
+            - name: ILIAS_AUTO_SETUP
+              value: {{ .Values.ilias.autoSetup | quote }}
+            - name: ILIAS_AUTO_UPDATE
+              value: {{ .Values.ilias.autoUpdate | quote }}
+            - name: ILIAS_DEVMODE
+              value: {{ .Values.ilias.devMode | quote }}
+            - name: ILIAS_INSTALL_ARGUMENTS
+              value: {{ .Values.ilias.installArguments | quote }}
+            - name: ILIAS_UPDATE_ARGUMENTS
+              value: {{ .Values.ilias.updateArguments | quote }}
+            - name: ILIAS_SKIP_UPDATE
+              value: {{ .Values.ilias.skipUpdate | quote }}
+            - name: ILIAS_DB_HOST
+              value: {{ include "ilias.dbHost" . | quote }}
+            - name: ILIAS_DB_USER
+              value: {{  include "ilias.dbUser" . | quote }}
+            - name: ILIAS_DB_PASSWORD
+              value: {{ include "ilias.dbPassword" . | quote }}
+            - name: ILIAS_DB_NAME
+              value: {{  include "ilias.dbName" . | quote }}
+            - name: ILIAS_DB_DUMP
+              value: {{ .Values.ilias.db.dump | quote }}
+            - name: ILIAS_CLIENT_NAME
+              value: {{ .Values.ilias.clientName | quote }}
+            - name: ILIAS_HOST_NAME
+              value: {{ .Values.ilias.hostName | quote }}
+            - name: ILIAS_TIMEZONE
+              value: {{ .Values.ilias.timezone | quote }}
+            - name: ILIAS_MAX_UPLOAD_SIZE
+              value: {{ .Values.ilias.maxUploadSize | quote }}
+            - name: ILIAS_ERRORS_PATH
+              value: {{ .Values.ilias.errorsPath | quote }}
+            - name: ILIAS_MEMORY_LIMIT
+              value: {{ .Values.ilias.memoryLimit | quote }}
+            - name: ILIAS_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-ilias-secrets
+                  key: ilias-root-password
+            - name: ILIAS_DEFAULT_SKIN
+              value: {{ .Values.ilias.defaultSkin | quote }}
+            - name: ILIAS_DEFAULT_STYLE
+              value: {{ .Values.ilias.defaultStyle | quote }}
+            - name: ILIAS_INSTALL_CONFIG_PATH
+              value: {{ .Values.ilias.installConfigPath | quote }}
+            - name: ILIAS_SESSION_LIFETIME
+              value: {{ .Values.ilias.sessionLifetime | quote }}
+            - name: ILIAS_DUMP_AUTOLOAD
+              value: {{ .Values.ilias.dumpAutoload | quote }}
+          volumeMounts:
+            - name: ilias-data
+              mountPath: /var/www/html/data
+            - name: ilias-iliasdata
+              mountPath: /var/iliasdata/ilias
+            - name: ilias-config
+              mountPath: /usr/local/etc/php/conf.d/ilias.ini
+              subPath: ilias.ini
+            - name: ilias-config
+              mountPath: /var/www/html/ilias.ini.php
+              subPath: ilias-config.php
+            - name: backup-volume
+              mountPath: /backups
+{{- if .Values.extraVolumeMounts }}
+{{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+{{- end }}
+          resources: {{ .Values.ilias.resources | toYaml | nindent 12 }}
+      securityContext:
+        sysctls:
+          - name: net.ipv4.ip_unprivileged_port_start
+            value: "0"
+      volumes:
+        - name: ilias-data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-ilias-data
+        - name: ilias-iliasdata
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-ilias-iliasdata
+        - name: ilias-config
+          configMap:
+            name: {{.Release.Name }}-ilias-config
+        - name: ilias-secret
+          secret:
+            secretName: {{.Release.Name }}-ilias-secrets
+            items:
+              - key: ilias-client.php
+                path: ilias-client.php
+              - key: setup.json
+                path: setup.json
+        - name: backup-volume
+          persistentVolumeClaim:
+            claimName: {{.Release.Name }}-mariadb-backup-pvc
+{{- if .Values.extraVolumes }}
+{{- toYaml .Values.extraVolumes | nindent 8 }}
+{{- end }}

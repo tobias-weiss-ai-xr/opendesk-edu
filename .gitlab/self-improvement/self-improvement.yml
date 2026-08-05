@@ -1,0 +1,173 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+# Continuous Self-Improvement Agent Pipeline
+#
+# This pipeline runs the OpenSpec self-improvement agent which:
+# 1. Audits all OpenSpec files for completeness
+# 2. Detects gaps, inconsistencies, and improvement opportunities
+# 3. Generates automated fixes
+# 4. Creates merge requests with improvements
+#
+# Can be triggered:
+# - Manually via GitLab UI (run button)
+# - On a schedule (weekly recommended)
+# - After major changes to service specs
+
+stages:
+  - audit
+  - improve
+  - report
+
+variables:
+  PYTHON_IMAGE: "python:3.11-slim"
+  IMPROVEMENT_REPORT_FILE: "improvement-report.json"
+  REPO_ROOT: "${CI_PROJECT_DIR}"
+  GIT_DEPTH: "10"
+  GIT_STRATEGY: "clone"
+  GIT_SUBMODULE_STRATEGY: "recursive"
+
+# Cache for Python dependencies
+.cache-python: &cache-python
+  key:
+    files:
+      - .gitlab/self-improvement/requirements.txt
+  paths:
+    - .cache/pip/
+
+# Template for audit jobs
+.audit-base:
+  image: !reference [.cache-python, PYTHON_IMAGE]
+  stage: audit
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq git
+    - pip install -q -r .gitlab/self-improvement/requirements.txt
+  artifacts:
+    paths:
+      - ${IMPROVEMENT_REPORT_FILE}
+    expire_in: 30 days
+    reports:
+      junit: improvement-report.xml
+    when: always
+
+# Job 1: Quick audit (validates current state, no changes)
+openspec-audit:
+  extends: .audit-base
+  script:
+    - echo "Running OpenSpec audit..."
+    - python .gitlab/self-improvement/improvement_agent.py
+    - echo "Audit complete. Report:"
+    - cat ${IMPROVEMENT_REPORT_FILE} | python -m json.tool | head -50
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - openspec/specs/**/spec.md
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      changes:
+        - openspec/specs/**/spec.md
+
+# Job 2: Generate improvements (creates branch with fixes)
+openspec-improve:
+  extends: .audit-base
+  stage: improve
+  variables:
+    GIT_AUTHOR_NAME: "openDesk Self-Improvement Bot"
+    GIT_AUTHOR_EMAIL: "bot@opendesk-edu.local"
+    GIT_COMMITTER_NAME: "openDesk Self-Improvement Bot"
+    GIT_COMMITTER_EMAIL: "bot@opendesk-edu.local"
+  script:
+    - echo "Generating improvements..."
+    - python .gitlab/self-improvement/improvement_agent.py
+    - |
+      if [ -f "${IMPROVEMENT_REPORT_FILE}" ]; then
+        echo "Improvement report generated"
+        # Check if improvements were applied
+        if git diff --stat | grep -q "."; then
+          echo "Changes detected in working tree"
+          git config user.name "${GIT_AUTHOR_NAME}"
+          git config user.email "${GIT_AUTHOR_EMAIL}"
+          git add -A
+          git commit -m "chore(self-improvement): automated OpenSpec improvements
+
+          Automated improvements from self-improvement agent.
+          See ${IMPROVEMENT_REPORT_FILE} for details." || true
+        else
+          echo "No changes to commit"
+        fi
+      fi
+  artifacts:
+    paths:
+      - ${IMPROVEMENT_REPORT_FILE}
+      - improvement-report.xml
+    expire_in: 30 days
+    when: always
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  needs:
+    - openspec-audit
+
+# Job 3: Create merge request (only on scheduled runs or manual triggers)
+openspec-create-mr:
+  extends: .audit-base
+  stage: report
+  variables:
+    CREATE_MERGE_REQUEST: "true"
+  script:
+    - echo "Creating merge request with improvements..."
+    - python .gitlab/self-improvement/improvement_agent.py
+  artifacts:
+    paths:
+      - ${IMPROVEMENT_REPORT_FILE}
+    expire_in: 30 days
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+      allow_failure: true
+  needs:
+    - openspec-improve
+
+# Job 4: Generate human-readable report
+openspec-report:
+  image: !reference [.cache-python, PYTHON_IMAGE]
+  stage: report
+  before_script:
+    - pip install -q -r .gitlab/self-improvement/requirements.txt
+  script:
+    - python .gitlab/self-improvement/generate_report.py
+  artifacts:
+    paths:
+      - improvement-report.md
+    expire_in: 90 days
+    when: always
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  needs:
+    - openspec-audit
+
+# Optional: Scheduled weekly audit
+weekly-audit:
+  extends: openspec-audit
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+
+# Optional: Quick validation on merge requests
+mr-validation:
+  extends: .audit-base
+  stage: audit
+  script:
+    - echo "Validating OpenSpec changes in MR..."
+    - python .gitlab/self-improvement/improvement_agent.py
+    - |
+      # In MR context, we just audit, don't create improvements
+      echo "Validation complete"
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - openspec/specs/**/spec.md

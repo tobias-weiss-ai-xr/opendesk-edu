@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+commonAnnotations:
+  {{ .Values.annotations.excalidraw.common | toYaml | nindent 2 }}
+
+excalidraw:
+  image: excalidraw/excalidraw
+  tag: latest
+  port: 80
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+  oidc:
+    enabled: {{ .Values.apps.excalidraw.oidc.enabled | default true }}
+    issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
+    clientId: "opendesk-excalidraw"
+    clientSecret: "{{ .Values.secrets.keycloak.clientSecret.excalidraw | default "" }}"
+    cookieSecret: "{{ .Values.secrets.keycloak.cookieSecret.excalidraw | default "" }}"
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: "haproxy"
+  annotations:
+    {{ .Values.annotations.excalidraw.ingress | toYaml | nindent 4 }}
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host excalidraw.{{ .Values.global.domain }}"
+  hosts:
+    - host: "excalidraw.{{ .Values.global.domain }}"
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "excalidraw.{{ .Values.global.domain }}"

@@ -1,0 +1,98 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test deployment-toolbox
+templates:
+  - deployment-toolbox.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+  - it: should create Deployment with correct name
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-toolobox
+  - it: should have 0 replicas by default
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.replicas
+          value: 0
+  - it: should use correct image and tag
+    set:
+      ilias.image: srsolutions/ilias
+      ilias.tag: 9-php8.2-apache
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: srsolutions/ilias:9-php8.2-apache
+  - it: should configure correct command
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].command
+          value: ["/bin/bash", "-c", "sleep infinity"]
+  - it: should set correct container port
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 80
+  - it: should configure environment variables
+    set:
+      ilias.autoSetup: true
+      ilias.autoUpdate: 0
+      ilias.devMode: 0
+    asserts:
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_AUTO_SETUP
+            value: "true"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_AUTO_UPDATE
+            value: "0"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_DEVMODE
+            value: "0"
+  - it: should mount correct volumes
+    asserts:
+      - isKind:
+          of: Deployment
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ilias-data
+            mountPath: /var/www/html/data
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ilias-iliasdata
+            mountPath: /var/iliasdata/ilias
+  - it: should have correct security context
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 33
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
+          value: 33

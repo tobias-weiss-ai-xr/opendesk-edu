@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: Service
+templates:
+  - service.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Service
+    asserts:
+      - isKind:
+          of: Service
+
+  - it: should expose port 80
+    asserts:
+      - equal:
+          path: spec.ports[0].port
+          value: 80
+
+  - it: should target the configured container port
+    asserts:
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 80
+
+  - it: should be of type ClusterIP
+    asserts:
+      - equal:
+          path: spec.type
+          value: ClusterIP
+
+  - it: should have correct selector labels
+    asserts:
+      - isSubset:
+          path: spec.selector
+          content:
+            app.kubernetes.io/name: typo3
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]

@@ -1,0 +1,94 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.services.transcription.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "f13.fullname" . }}-transcription-inference
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: transcription-inference
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "f13.componentLabels" (dict "component" "transcription-inference" "root" .) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "f13.componentLabels" (dict "component" "transcription-inference" "root" .) | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gpu.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- else }}
+      nodeSelector:
+        nvidia.com/gpu.present: "true"
+      {{- end }}
+      {{- with .Values.gpu.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: transcription-inference
+          image: "{{ .Values.global.imageRegistry }}/{{ .Values.images.transcriptionInference.repository }}:{{ .Values.images.transcriptionInference.tag }}"
+          imagePullPolicy: {{ .Values.images.transcriptionInference.pullPolicy | default .Values.global.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: WHISPER_MODEL
+              value: {{ .Values.transcription.whisperModel | default "large-v3" | quote }}
+            - name: HUGGINGFACE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "f13.fullname" . }}-secrets
+                  key: huggingface-token
+          volumeMounts:
+            - name: transcription-models
+              mountPath: /app/models
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 15
+            failureThreshold: 5
+          resources:
+            {{- if .Values.gpu.resources.limits }}
+            {{- toYaml .Values.gpu.resources | nindent 12 }}
+            {{- else }}
+            {{- toYaml .Values.resources.transcriptionInference | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: transcription-models
+          persistentVolumeClaim:
+            claimName: {{ include "f13.fullname" . }}-transcription-models
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

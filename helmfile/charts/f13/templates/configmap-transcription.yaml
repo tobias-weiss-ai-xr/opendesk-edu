@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.services.transcription.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "f13.fullname" . }}-transcription
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: transcription
+data:
+  transcription.yml: |
+    rabbitmq:
+      host: {{ include "f13.rabbitmqHost" . }}
+      port: 5672
+      queue: f13_transcription
+
+    transcription_db:
+      host: {{ include "f13.transcriptionDbHost" . }}
+      port: 5432
+      name: {{ .Values.transcription.transcriptionDb.name | quote }}
+      user: {{ .Values.transcription.transcriptionDb.user | quote }}
+
+    inference:
+      url: http://{{ include "f13.fullname" . }}-transcription-inference:8000
+
+    whisper:
+      model: {{ .Values.transcription.whisperModel | default "large-v3" | quote }}
+      language: {{ .Values.transcription.language | default "de" | quote }}
+{{- end }}

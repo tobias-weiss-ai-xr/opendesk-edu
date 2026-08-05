@@ -1,0 +1,69 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-ilias-cronjob
+  labels:
+{{ include "ilias.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: ilias-cronjob
+              image: {{ .Values.cronjob.image }}:{{ .Values.cronjob.tag }}
+              command: ["/bin/sh", "-c", "/usr/local/bin/php ${ILIAS_WWW_PATH}/cron/cron.php run-jobs root ${ILIAS_CLIENT_NAME}"]
+              env:
+                - name: ILIAS_CLIENT_NAME
+                  value: {{ .Values.ilias.clientName | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                privileged: false
+                readOnlyRootFilesystem: false
+                runAsGroup: 33
+                runAsNonRoot: true
+                runAsUser: 33
+                seLinuxOptions: {}
+                seccompProfile:
+                  type: RuntimeDefault
+              volumeMounts:
+                - name: ilias-data
+                  mountPath: /var/www/html/data
+                - name: ilias-iliasdata
+                  mountPath: /var/iliasdata/ilias
+                - name: ilias-config
+                  mountPath: /usr/local/etc/php/conf.d/ilias.ini
+                  subPath: ilias.ini
+                - name: ilias-config
+                  mountPath: /var/www/html/ilias.ini.php
+                  subPath: ilias-config.php
+                - name: ilias-secret
+                  mountPath: /var/www/html/data/{{ .Values.ilias.clientName }}/client.ini.php
+                  subPath: ilias-client.php
+{{- if .Values.extraVolumeMounts }}
+{{- toYaml .Values.extraVolumeMounts | nindent 16 }}
+{{- end }}
+          volumes:
+            - name: ilias-data
+              persistentVolumeClaim:
+                claimName: {{ .Release.Name }}-ilias-data
+            - name: ilias-iliasdata
+              persistentVolumeClaim:
+                claimName: {{ .Release.Name }}-ilias-iliasdata
+            - name: ilias-config
+              configMap:
+                name: {{.Release.Name }}-ilias-config
+            - name: ilias-secret
+              secret:
+                secretName: {{.Release.Name }}-ilias-secrets
+                items:
+                  - key: ilias-client.php
+                    path: ilias-client.php
+{{- if .Values.extraVolumes }}
+{{- toYaml .Values.extraVolumes | nindent 12 }}
+{{- end }}

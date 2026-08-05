@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+sogo:
+  db:
+    host: "postgresql"
+    password: "test"
+  ldap:
+    bindPassword: "test"
+  oidc:
+    enabled: true
+    clientSecret: "test"
+  persistence:
+    enabled: false

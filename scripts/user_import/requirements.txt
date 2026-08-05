@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+requests>=2.31
+pandas>=2.0
+configargparse>=1.7
+python-dateutil>=2.8
+odfpy>=1.4
+openpyxl>=3.1
+
+# User provisioning dependencies
+ldap3>=2.9.1
+python-keycloak>=4.0.0
+
+# Testing dependencies
+pytest>=7.4.0
+pytest-mock>=3.10.0
+pytest-cov>=4.1.0

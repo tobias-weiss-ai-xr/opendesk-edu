@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+sogo:
+  db:
+    host: {{ .Values.databases.sogo.host | default "postgresql" }}
+    port: {{ .Values.databases.sogo.port | default 5432 }}
+    user: {{ .Values.databases.sogo.username | default "sogo" }}
+    password: {{ .Values.databases.sogo.password | default "" }}
+    name: {{ .Values.databases.sogo.name | default "sogo" }}
+
+  ldap:
+    host: {{ .Values.ldap.host | default "openldap" }}
+    port: {{ .Values.ldap.port | default 389 }}
+    baseDN: {{ .Values.ldap.baseDN | default "ou=users,dc=opendesk,dc=edu" }}
+    bindDN: {{ .Values.ldap.sogoBindDN | default "uid=sogo,ou=services,dc=opendesk,dc=edu" }}
+    bindPassword: {{ .Values.ldap.sogoBindPassword | default "" }}
+
+  imap:
+    server: {{ .Values.apps.sogo.imapServer | default "imaps://dovecot:993" }}
+  smtp:
+    server: {{ .Values.apps.sogo.smtpServer | default "smtp://postfix:587" }}
+  sieve:
+    server: {{ .Values.apps.sogo.sieveServer | default "sieve://dovecot:4190" }}
+
+  mailDomain: {{ .Values.apps.sogo.mailDomain | default "opendesk.hrz.uni-marburg.de" }}
+
+  oidc:
+    enabled: {{ .Values.apps.sogo.oidc.enabled | default true }}
+    configUrl: {{ .Values.apps.sogo.oidc.configUrl | default (printf "https://%s/realms/opendesk/.well-known/openid-configuration" .Values.apps.keycloak.host) }}
+    clientId: {{ .Values.apps.sogo.oidc.clientId | default "sogo" }}
+    clientSecret: {{ .Values.secrets.keycloak.clientSecret.sogo | default "" | quote }}
+    scope: "openid profile email"
+
+  memcachedHost: {{ .Values.apps.sogo.memcachedHost | default "memcached:11211" }}
+
+  ingress:
+    enabled: true
+    className: {{ .Values.ingress.className | default "nginx" }}
+    hosts:
+      - host: {{ .Values.apps.sogo.host | default (printf "sogo.%s" .Values.global.domain) }}
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: {{ .Values.apps.sogo.tlsSecret | default (printf "tls-%s" ( .Values.apps.sogo.host | default (printf "sogo.%s" .Values.global.domain))) }}
+        hosts:
+          - {{ .Values.apps.sogo.host | default (printf "sogo.%s" .Values.global.domain) }}
+
+  persistence:
+    enabled: {{ .Values.apps.sogo.persistence.enabled | default true }}

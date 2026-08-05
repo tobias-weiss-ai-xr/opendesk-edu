@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test configmap
+templates:
+  - configmap.yaml
+tests:
+  - it: should create ConfigMap with correct name
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-planka-config
+  - it: should contain planka-env in data
+    asserts:
+      - exists:
+          path: data.planka-env
+  - it: should include DATABASE_URL in planka-env
+    asserts:
+      - matchRegex:
+          path: data.planka-env
+          pattern: "DATABASE_URL=postgresql://"
+  - it: should include BASE_URL in planka-env
+    set:
+      planka.baseUrl: "https://planka.example.com"
+    asserts:
+      - matchRegex:
+          path: data.planka-env
+          pattern: "BASE_URL=https://planka\\.example\\.com"
+  - it: should include OIDC_CLIENT_ID in planka-env
+    set:
+      planka.oidc.clientId: "planka-client"
+    asserts:
+      - matchRegex:
+          path: data.planka-env
+          pattern: "OIDC_CLIENT_ID=planka-client"
+  - it: should include all OIDC endpoints in planka-env
+    set:
+      planka.oidc.authEndpoint: "https://id.example.com/auth"
+      planka.oidc.tokenEndpoint: "https://id.example.com/token"
+      planka.oidc.userinfoEndpoint: "https://id.example.com/userinfo"
+    asserts:
+      - matchRegex:
+          path: data.planka-env
+          pattern: "OIDC_AUTH_ENDPOINT=https://id\\.example\\.com/auth"
+      - matchRegex:
+          path: data.planka-env
+          pattern: "OIDC_TOKEN_ENDPOINT=https://id\\.example\\.com/token"
+      - matchRegex:
+          path: data.planka-env
+          pattern: "OIDC_USERINFO_ENDPOINT=https://id\\.example\\.com/userinfo"

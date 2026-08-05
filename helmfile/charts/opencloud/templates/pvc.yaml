@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if .Values.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "opencloud.fullname" . }}-data
+  namespace: {{ .Release.Namespace }}
+  labels:
+    backup-tier: "b"
+    k8up/backup: "true"
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+  {{- if and .Values.persistence ( .Values.persistence.annotations ) }}
+  annotations:
+    {{- toYaml .Values.persistence.annotations | nindent 4 }}
+  {{- end }}
+spec:
+    accessModes:
+      - {{ .Values.persistence.accessMode | quote }}
+    resources:
+      requests:
+        storage: {{ .Values.persistence.size | quote }}
+    {{- if .Values.persistence.storageClass }}
+    storageClassName: {{ .Values.persistence.storageClass | quote }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,104 @@
+suite: Deployment
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: srsolutions/ilias:.+
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+
+  - it: should have a single replica
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should configure ILIAS environment variables
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_AUTO_SETUP
+            value: "true"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_DB_HOST
+            value: "RELEASE-NAME-mariadb"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_CLIENT_NAME
+            value: "default"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_TIMEZONE
+            value: "Europe/Berlin"
+
+  - it: should set resource requests and limits
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.requests
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.limits
+
+  - it: should have an init container for setup
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.initContainers[0].name
+
+  - it: should mount data volumes
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ilias-data
+            mountPath: /var/www/html/data
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ilias-iliasdata
+            mountPath: /var/iliasdata/ilias
+
+  - it: should reference the ilias secrets
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ILIAS_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-ilias-secrets
+                key: ilias-root-password
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

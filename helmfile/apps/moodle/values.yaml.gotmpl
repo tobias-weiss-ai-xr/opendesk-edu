@@ -1,0 +1,149 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+commonAnnotations:
+  {{ .Values.annotations.moodle.common | default (dict) | toYaml | nindent 2 }}
+
+moodle:
+  image: "ghcr.io/<your-org>/moodle-shib"
+  tag: "v1.0.0"
+  replicaCount: 2
+  
+  # Moodle configuration
+  moodleUsername: "admin"
+  moodlePassword: "" # Will be set via secret
+  moodleEmail: "admin@opendesk.example.com"
+  moodleSiteName: "openDesk Moodle"
+  moodleSkipInstall: false
+  
+  # Database configuration (will use external database from task 6)
+  externalDatabase:
+    host: "moodle-mariadb"
+    port: 3306
+    user: "moodle"
+    password: "" # Will be set via secret
+    database: "moodle"
+    existingSecret: "moodle-database-credentials"
+
+# Security context
+securityContext:
+  enabled: true
+  fsGroup: 1001
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  enabled: true
+  privileged: false
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - "ALL"
+  seccompProfile:
+    type: "RuntimeDefault"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "haproxy"
+  annotations:
+    {{ .Values.annotations.moodle.ingress | default (dict) | toYaml | nindent 4 }}
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/proxy-body-size: "200M"
+    haproxy-ingress.github.io/timeout-server: "300s"
+    haproxy-ingress.github.io/timeout-client: "300s"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: "moodle.opendesk.example.com"
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "moodle.opendesk.example.com"
+
+# Persistence configuration
+persistence:
+  enabled: true
+  size: "8Gi"
+  storageClass: {{ coalesce .Values.persistence.storages.moodle.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+  accessMode: "ReadWriteMany"
+
+# Service configuration
+service:
+  annotations:
+    {{ .Values.annotations.moodle.service | default (dict) | toYaml | nindent 4 }}
+  type: ClusterIP
+  port: 80
+  enabled: true
+
+# Service account configuration
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.moodle.serviceAccount | default (dict) | toYaml | nindent 4 }}
+  create: true
+
+# Volume permissions
+volumePermissions:
+  enabled: true
+
+# Resource configuration
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1G"
+  limits:
+    cpu: "2"
+    memory: "2G"
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# PHP configuration (will be updated in task 11)
+phpConfig: {}
+
+# Apache configuration
+existingApacheConfigmap: ""
+
+# Shibboleth configuration
+shibboleth:
+  enabled: true
+  sp:
+    host: "moodle.opendesk.example.com"
+    entityID: "https://moodle.opendesk.example.com/shibboleth"
+  idp:
+    metadataProvider: "https://id.opendesk.example.com/realms/opendesk/protocol/saml/descriptor"
+
+# Apache extra configuration for Shibboleth
+existingApacheExtraConfigmap: "moodle-apache-shibboleth-config"
+
+# Backchannel logout configuration
+extraVolumes:
+  - name: moodle-apache-backchannel-config
+    configMap:
+      name: moodle-apache-backchannel-config
+  - name: moodle-backchannel-handler
+    configMap:
+      name: moodle-backchannel-handler
+
+extraVolumeMounts:
+  - name: moodle-apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel.conf
+    subPath: backchannel.conf
+    readOnly: true
+  - name: moodle-apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel-env.conf
+    subPath: backchannel-env.conf
+    readOnly: true
+  - name: moodle-backchannel-handler
+    mountPath: /var/www/moodle/auth/shibboleth/backchannel-handler.php
+    subPath: backchannel-handler.php
+    readOnly: true

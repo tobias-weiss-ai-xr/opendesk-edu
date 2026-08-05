@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+commonAnnotations:
+  {{ .Values.annotations.self-service-password.common | toYaml | nindent 2 }}
+
+selfServicePassword:
+  image: ltbproject/self-service-password
+  tag: latest
+  port: 80
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+  ldap:
+    host: "{{ .Values.ldap.host | default "ldap.opendesk.hrz.uni-marburg.de" }}"
+    port: "389"
+    baseDn: "{{ .Values.ldap.baseDN | default "dc=opendesk,dc=example,dc=com" }}"
+    bindDn: "{{ .Values.ldap.bindDN | default "cn=admin,dc=opendesk,dc=example,dc=com" }}"
+    startTls: "false"
+    networkTimeout: "2"
+
+  oidc:
+    enabled: {{ .Values.apps.selfServicePassword.oidc.enabled | default true }}
+    issuerUrl: "https://{{ .Values.global.hosts.keycloak }}.{{ .Values.global.domain }}/realms/opendesk"
+    clientId: "opendesk-ssp"
+    clientSecret: "{{ .Values.secrets.keycloak.clientSecret.ssp | default "" }}"
+
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: "haproxy"
+  annotations:
+    {{ .Values.annotations.self-service-password.ingress | toYaml | nindent 4 }}
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host ssp.{{ .Values.global.domain }}"
+  hosts:
+    - host: "ssp.{{ .Values.global.domain }}"
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "ssp.{{ .Values.global.domain }}"

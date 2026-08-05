@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ttyd
+description: Web terminal (ttyd) Helm chart for openDesk Edu
+type: application
+version: 0.1.0
+appVersion: "1.7.7"

@@ -1,0 +1,29 @@
+suite: Ingress
+templates:
+  - ingress.yaml
+tests:
+  - it: should create an Ingress when enabled
+    asserts:
+      - isKind:
+          of: Ingress
+      - isNotNull:
+          path: spec.rules
+
+  - it: should set the ingress class
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: "haproxy"
+
+  - it: should configure the host from values
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "opencloud.opendesk.example.com"
+
+  - it: should not create an Ingress when disabled
+    set:
+      ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: seaweedfs
+    chart: ../../charts/seaweedfs
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+    installed: true
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "seaweedfs"

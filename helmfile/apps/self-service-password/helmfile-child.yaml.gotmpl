@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "self-service-password"
+    chart: "../../charts/self-service-password"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.self-service-password }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.self-service-password.enabled }}
+    timeout: 600
+
+commonLabels:
+  deployStage: "050-components"
+  component: "self-service-password"

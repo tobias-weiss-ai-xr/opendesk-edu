@@ -1,0 +1,48 @@
+{
+  "roles": {
+    "student": {
+      "description": "Student access",
+      "roles": ["student"],
+      "groups": ["students"],
+      "affiliation": "student",
+      "services": ["ilias", "moodle", "bbb", "files"]
+    },
+    "employee": {
+      "description": "Employee access",
+      "roles": ["employee"],
+      "groups": ["staff"],
+      "affiliation": "employee",
+      "services": ["email", "groupware", "files", "wiki"]
+    },
+    "faculty": {
+      "description": "Faculty access",
+      "roles": ["faculty", "employee"],
+      "groups": ["faculty", "staff"],
+      "affiliation": "faculty",
+      "services": ["ilias", "moodle", "bbb", "email", "groupware", "wiki"]
+    },
+    "lecturer": {
+      "description": "Lecturer access",
+      "roles": ["lecturer", "employee"],
+      "groups": ["lecturers", "staff"],
+      "affiliation": "faculty",
+      "services": ["ilias", "moodle", "bbb", "recording", "grades"]
+    },
+    "staff": {
+      "description": "Staff access",
+      "roles": ["employee"],
+      "groups": ["staff"],
+      "affiliation": "staff",
+      "services": ["email", "groupware", "files"]
+    }
+  },
+  "mappings": {
+    "student": "student",
+    "employee": "employee",
+    "faculty": "faculty",
+    "staff": "staff",
+    "prof": "faculty",
+    "dozent": "lecturer",
+    "lecturer": "lecturer"
+  }
+}

@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test ilserver-service
+templates:
+  - ilserver-service.yaml
+tests:
+  - it: should create a Service with correct kind
+    asserts:
+      - isKind:
+          of: Service
+  - it: should create Service with correct name
+    asserts:
+      - isKind:
+          of: Service
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-rpc
+  - it: should have correct labels
+    asserts:
+      - isKind:
+          of: Service
+      - isNotNull:
+          path: metadata.labels["ilias/rpc-server"]
+      - equal:
+          path: metadata.labels["ilias/rpc-server"]
+          value: "true"
+  - it: should expose correct port
+    asserts:
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.ports[0].port
+          value: 11111
+  - it: should target correct container port
+    asserts:
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 11111
+  - it: should have correct selector
+    asserts:
+      - isKind:
+          of: Service
+      - isNotNull:
+          path: spec.selector["ilias/rpc-server"]
+      - equal:
+          path: spec.selector["ilias/rpc-server"]
+          value: "true"
+  - it: should be ClusterIP type
+    asserts:
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.type
+          value: ClusterIP

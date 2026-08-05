@@ -1,0 +1,90 @@
+suite: Deployment
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: ghcr.io/zammad/zammad:.+
+
+  - it: should set the container port to the configured value
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 3000
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+
+  - it: should have a single replica
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should configure DATABASE_URL env var
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[2].name
+          value: DATABASE_URL
+      - matchRegex:
+          path: spec.template.spec.containers[0].env[2].value
+          pattern: postgresql://zammad:.+@.+:5432/zammad
+
+  - it: should configure ELASTICSEARCH_URL env var
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[3].name
+          value: ELASTICSEARCH_URL
+      - matchRegex:
+          path: spec.template.spec.containers[0].env[3].value
+          pattern: http://.+:9200
+
+  - it: should set resource requests and limits
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.requests
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.limits
+
+  - it: should mount the data volume
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: zammad-data
+            mountPath: /opt/zammad
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false
+
+  - it: should set pod security context with fsGroup
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 1000
