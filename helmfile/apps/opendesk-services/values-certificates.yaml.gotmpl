@@ -53,6 +53,17 @@ global:
     {{- if .Values.apps.oxAppSuite.enabled }}
     openxchange: {{ .Values.global.hosts.openxchange }}
     openxchangeDav: {{ .Values.global.hosts.openxchangeDav }}
+    # In functional.yaml.gotmpl the externalClients.fqdnImap and externalClients.fqdnSmtp can be set.
+    # If they are a subdomains of the global.domain, we want to add then to the hosts list of the cert.
+    {{- $domainSuffix := printf ".%s" .Values.global.domain }}
+    {{- $fqdnImap := .Values.functional.groupware.externalClients.fqdnImap | default "" }}
+    {{- $fqdnSmtp := .Values.functional.groupware.externalClients.fqdnSmtp | default "" }}
+    {{- if hasSuffix $domainSuffix $fqdnImap }}
+    mailImap: {{ trimSuffix $domainSuffix $fqdnImap }}
+    {{- end }}
+    {{- if hasSuffix $domainSuffix $fqdnSmtp }}
+    mailSmtp: {{ trimSuffix $domainSuffix $fqdnSmtp }}
+    {{- end }}
     {{- end }}
     {{- if .Values.apps.staticFiles.enabled }}
     static: {{ .Values.global.hosts.static }}
