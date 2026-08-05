@@ -1,11 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 
-#"""
 # NixOS Container Library for openDesk
 # Provides standardized container builders using docks.nix
 # OpenSpec: FR-BUILD-001 through FR-BUILD-007
-#"""
 
 { pkgs, lib, docks, ... }:
 
@@ -48,40 +46,23 @@ let
     "com.opendesk.nixos" = "true";
   };
 
-  # Security configuration for containers (FR-IMAGE-001, FR-IMAGE-002, FR-IMAGE-003)
-  securityConfig = {
-    polkit.enable = false;
-    openssh.enable = false;
-    sudo.enable = false;
-    
-    # Kernel hardening
-    boot.kernel.sysctl = {
-      "net.ipv4.conf.all.rp_filter" = 1;
-      "net.ipv4.conf.default.rp_filter" = 1;
-      "net.ipv4.tcp_syncookies" = 1;
-      "net.ipv4.icmp_echo_ignore_broadcasts" = 1;
-      "kernel.dmesg_restrict" = 1;
-      "kernel.kptr_restrict" = 2;
-    };
-  };
-
   # Standard volumes for different service types
   standardVolumes = {
     database = {
-      "/var/lib/" = {};
-      "/var/log/" = {};
-      "/etc/" = {};
+      "/var/lib/db" = {};
+      "/var/log" = {};
+      "/etc" = {};
     };
     web = {
       "/var/www" = {};
-      "/var/log/" = {};
+      "/var/log" = {};
       "/tmp" = {};
     };
     cache = {
-      "/var/lib/" = {};
-      "/var/log/" = {};
+      "/var/lib" = {};
+      "/var/log" = {};
     };
-    minimal = { };
+    minimal = {};
   };
 
 in rec {
@@ -90,323 +71,280 @@ in rec {
   mkContainer = {
     name,
     version,
-    configPath,
-    docks ? docks,
-    pkgs ? pkgs,
+    configPath ? null,
     type ? "minimal",
     port ? null,
-    extraPorts ? [ ],
-    volumes ? standardVolumes. or { },
-    extraEnv ? [ ],
+    extraPorts ? [],
+    volumes ? standardVolumes.${type} or {},
+    extraEnv ? [],
     user ? "nobody",
     uid ? 65534,
     gid ? 65534,
     workingDir ? "/",
-    cmd ? [ "/bin/sh" ],
+    cmd ? [ "/usr/bin/env" "bash" "-c" "echo Service ${name} ready" ],
     entrypoint ? null,
     healthCheck ? null,
-    extraPackages ? _: [ ],
-    overlays ? [ ],
-    ociLabels ? { },
+    extraPackages ? _: [],
+    overlays ? [],
+    ociLabels ? {},
     securityProfile ? "default",
     ...
-  } @args:
+  } @ args:
 
-  let
-    # Apply overlays to pkgs
-    nixpkgsWithOverlays = pkgs // {
-      overlays = (pkgs.overlays or [ ]) ++ overlays;
-    };
-    
-    # Full configuration merge
-    fullConfig = defaultContainerConfig // {
-      inherit user workingDir;
-      ExposedPorts = builtins.listToAttrs (
-        map (p: { name = "/tcp"; value = {}; }) (
-          if port != null then [ port ] ++ extraPorts else extraPorts
-        )
+    let
+      # Exposed ports
+      allPorts = lib.optional (port != null) port ++ extraPorts;
+      exposedPorts = builtins.listToAttrs (
+        map (p: { name = "${toString p}/tcp"; value = {}; }) allPorts
       );
-      Volumes = volumes;
-      Env = defaultContainerConfig.env ++ extraEnv;
-      User = user;
-      WorkingDir = workingDir;
-      Cmd = cmd;
-      Entrypoint = entrypoint;
-      HealthCheck = (if healthCheck != null then healthCheck else defaultContainerConfig).healthCheck;
+
+      # Full configuration merge
+      fullContainerConfig = {
+        ExposedPorts = exposedPorts;
+        Volumes = volumes;
+        Env = defaultContainerConfig.env ++ extraEnv;
+        User = user;
+        WorkingDir = workingDir;
+        Cmd = cmd;
+        StopSignal = defaultContainerConfig.stopSignal;
+        StopTimeout = defaultContainerConfig.stopTimeout;
+        HealthCheck = (if healthCheck != null then healthCheck else defaultContainerConfig.healthCheck);
+      } // (if entrypoint != null then { Entrypoint = entrypoint; } else {});
+
+      # Full OCI labels
+      fullOCILabels = defaultOCILabels // ociLabels;
+
+    in
+    docks.mkImage {
+      name = "${name}-opendesk";
+      tag = "${version}-nixos";
+      containerConfig = fullContainerConfig;
+      extraPackages = extraPackages;
+      ociLabels = fullOCILabels;
     };
-    
-    # Full OCI labels
-    fullOCILabels = defaultOCILabels // ociLabels;
-    
-    # Load the NixOS configuration
-    nixosConfig = import configPath {
-      inherit pkgs nixpkgsWithOverlays;
-    };
-    
-    # Merge with security config
-    finalConfig = nixosConfig // securityConfig;
-    
-  in
-  docks.mkImage ({
-    name = name;
-    tag = version;
-    config = finalConfig;
-    extraPackages = extraPackages;
-    containerConfig = fullConfig;
-  } // fullOCILabels);
 
   # Database container builder (FR-BUILD-001, FR-IMAGE-001)
   mkDatabaseContainer = {
     name,
     version,
-    configPath,
+    configPath ? null,
     port ? 3306,
-    dataDir ? "/var/lib/",
-    logDir ? "/var/log/",
-    confDir ? "/etc/",
+    dataDir ? "/var/lib/db",
+    logDir ? "/var/log",
+    confDir ? "/etc",
     initDir ? "/docker-entrypoint-initdb.d",
     user ? name,
     uid ? 999,
     gid ? 999,
     healthCheck ? {
-      test = [ "CMD-SHELL" "-admin ping --silent 2>/dev/null || exit 1" ];
-      interval = 10000000000;
-      timeout = 5000000000;
-      retries = 5;
-      startPeriod = 300000000000; # 5 minutes
+      Test = [ "CMD-SHELL" "pg_isready || mysqladmin ping || exit 1" ];
+      Interval = 10000000000;
+      Timeout = 5000000000;
+      Retries = 5;
+      StartPeriod = 300000000000; # 5 minutes
     },
     extraPackages ? _: [ pkgs.openssl pkgs.procps pkgs.coreutils ],
     ...
-  } @args:
+  } @ args:
 
-  let
-    volumes = {
-      "" = {};
-      "" = {};
-      "" = {};
-      "" = {};
-    };
-    
-    extraEnv = [
-      "_ROOT_PASSWORD="
-      "_DATABASE="
-      "_USER="
-    ];
-    
-  in
-  mkContainer (args // {
-    inherit name version configPath;
-    type = "database";
-    port = port;
-    volumes = volumes;
-    extraEnv = extraEnv;
-    user = user;
-    uid = uid;
-    gid = gid;
-    workingDir = dataDir;
-    healthCheck = healthCheck;
-    extraPackages = extraPackages;
-  });
+    mkContainer (args // {
+      type = "database";
+      volumes = {
+        "${dataDir}" = {};
+        "${logDir}" = {};
+        "${confDir}" = {};
+        "${initDir}" = {};
+      };
+      workingDir = dataDir;
+      healthCheck = healthCheck;
+      extraPackages = extraPackages;
+    });
 
   # Web service container builder
   mkWebContainer = {
     name,
     version,
-    configPath,
+    configPath ? null,
     httpPort ? 8080,
-    httpsPort ? 8443,
+    httpsPort ? null,
     user ? "www-data",
     uid ? 1000,
     gid ? 1000,
-    workingDir ? "/var/www/",
+    workingDir ? "/var/www",
     healthCheck ? {
-      test = [ "CMD-SHELL" "curl -f http://127.0.0.1:/ || exit 1" ];
-      interval = 10000000000;
-      timeout = 5000000000;
-      retries = 3;
+      Test = [ "CMD-SHELL" "curl -f http://127.0.0.1:${toString httpPort}/ || exit 1" ];
+      Interval = 10000000000;
+      Timeout = 5000000000;
+      Retries = 3;
     },
     extraPackages ? _: [ pkgs.curl pkgs.coreutils ],
     ...
-  } @args:
+  } @ args:
 
-  let
-    volumes = {
-      "/var/www" = {};
-      "/var/log/" = {};
-      "/tmp" = {};
-    };
-    
-    extraPorts = lib.filter (p: p != null) [ httpPort httpsPort ];
-    
-  in
-  mkContainer (args // {
-    inherit name version configPath;
-    type = "web";
-    port = httpPort;
-    extraPorts = extraPorts;
-    volumes = volumes;
-    user = user;
-    uid = uid;
-    gid = gid;
-    workingDir = workingDir;
-    healthCheck = healthCheck;
-    extraPackages = extraPackages;
-  });
+    let
+      extraPorts = lib.optional (httpsPort != null) httpsPort;
+    in
+    mkContainer (args // {
+      type = "web";
+      port = httpPort;
+      extraPorts = extraPorts;
+      volumes = {
+        "/var/www" = {};
+        "/var/log" = {};
+        "/tmp" = {};
+      };
+      user = user;
+      uid = uid;
+      gid = gid;
+      workingDir = workingDir;
+      healthCheck = healthCheck;
+      extraPackages = extraPackages;
+    });
 
   # Cache service container builder
   mkCacheContainer = {
     name,
     version,
-    configPath,
+    configPath ? null,
     port ? 6379,
-    dataDir ? "/var/lib/",
-    logDir ? "/var/log/",
+    dataDir ? "/var/lib",
+    logDir ? "/var/log",
     user ? name,
     uid ? 999,
     gid ? 999,
     healthCheck ? {
-      test = [ "CMD-SHELL" "-cli ping | grep PONG || exit 1" ];
-      interval = 5000000000;
-      timeout = 3000000000;
-      retries = 3;
+      Test = [ "CMD-SHELL" "redis-cli ping | grep PONG || exit 1" ];
+      Interval = 5000000000;
+      Timeout = 3000000000;
+      Retries = 3;
     },
     extraPackages ? _: [ pkgs.coreutils ],
     ...
-  } @args:
+  } @ args:
 
-  let
-    volumes = {
-      "" = {};
-      "" = {};
-    };
-    
-  in
-  mkContainer (args // {
-    inherit name version configPath;
-    type = "cache";
-    port = port;
-    volumes = volumes;
-    user = user;
-    uid = uid;
-    gid = gid;
-    workingDir = dataDir;
-    healthCheck = healthCheck;
-    extraPackages = extraPackages;
-  });
+    mkContainer (args // {
+      type = "cache";
+      port = port;
+      volumes = {
+        "${dataDir}" = {};
+        "${logDir}" = {};
+      };
+      user = user;
+      uid = uid;
+      gid = gid;
+      workingDir = dataDir;
+      healthCheck = healthCheck;
+      extraPackages = extraPackages;
+    });
 
   # Message queue container builder
   mkQueueContainer = {
     name,
     version,
-    configPath,
+    configPath ? null,
     port ? 5672,
-    managementPort ? 15672,
-    dataDir ? "/var/lib/",
-    logDir ? "/var/log/",
+    managementPort ? null,
+    dataDir ? "/var/lib",
+    logDir ? "/var/log",
     user ? name,
     uid ? 999,
     gid ? 999,
     healthCheck ? {
-      test = [ "CMD-SHELL" "-ctl status || exit 1" ];
-      interval = 15000000000;
-      timeout = 10000000000;
-      retries = 3;
+      Test = [ "CMD-SHELL" "rabbitmqctl status || exit 1" ];
+      Interval = 15000000000;
+      Timeout = 10000000000;
+      Retries = 3;
     },
     extraPackages ? _: [ pkgs.coreutils ],
     ...
-  } @args:
+  } @ args:
 
-  let
-    volumes = {
-      "" = {};
-      "" = {};
-    };
-    
-    extraPorts = lib.filter (p: p != null) [ port managementPort ];
-    
-  in
-  mkContainer (args // {
-    inherit name version configPath;
-    type = "cache";
-    port = port;
-    extraPorts = extraPorts;
-    volumes = volumes;
-    user = user;
-    uid = uid;
-    gid = gid;
-    workingDir = dataDir;
-    healthCheck = healthCheck;
-    extraPackages = extraPackages;
-  });
+    let
+      extraPorts = lib.optional (managementPort != null) managementPort;
+    in
+    mkContainer (args // {
+      type = "cache";
+      port = port;
+      extraPorts = extraPorts;
+      volumes = {
+        "${dataDir}" = {};
+        "${logDir}" = {};
+      };
+      user = user;
+      uid = uid;
+      gid = gid;
+      workingDir = dataDir;
+      healthCheck = healthCheck;
+      extraPackages = extraPackages;
+    });
 
   # Multi-architecture build support (FR-BUILD-003)
   mkMultiArchContainer = {
     name,
     version,
-    configPath,
+    configPath ? null,
     systems ? [ "x86_64-linux" "aarch64-linux" ],
     ...
-  } @args:
+  } @ args:
 
-  let
-    buildForSystem = system: 
-      mkContainer (args // {
-        pkgs = import <nixpkgs> { inherit system; };
-        docks = import (builtins.fetchGit {
-          url = "https://github.com/dockernix/docks.nix";
-          ref = "refs/tags/0.5.0";
-        }) { pkgs = import <nixpkgs> { inherit system; }; };
-      });
-    
-  in
-  builtins.listToAttrs (map (system: {
-    name = "-";
-    value = buildForSystem system;
-  }) systems);
+    builtins.listToAttrs (map (system:
+      let
+        systemPkgs = import <nixpkgs> { inherit system; };
+        systemDocks = import ../../../lib/docks.nix { pkgs = systemPkgs; };
+      in {
+        name = "${system}";
+        value = mkContainer (args // {
+          pkgs = systemPkgs;
+          docks = systemDocks;
+        });
+      }) systems);
 
-  # Service catalog for all openDesk services
+  # Service catalog for core openDesk services
+  # Uses local docks.nix for all builds (no external dependencies)
   serviceCatalog = rec {
     mariadb = mkDatabaseContainer {
       name = "mariadb";
       version = "11.4.4";
-      configPath = ./docker/services/mariadb/nixos/configuration.nix;
+      port = 3306;
+      user = "mariadb";
+      dataDir = "/var/lib/mariadb";
     };
-    
+
     postgresql = mkDatabaseContainer {
       name = "postgresql";
       version = "16.3";
-      configPath = ./docker/services/postgresql/nixos/configuration.nix;
       port = 5432;
       user = "postgres";
+      dataDir = "/var/lib/postgresql";
+      healthCheck = {
+        Test = [ "CMD-SHELL" "pg_isready -U postgres || exit 1" ];
+        Interval = 10000000000;
+        Timeout = 5000000000;
+        Retries = 5;
+        StartPeriod = 300000000000;
+      };
     };
-    
+
     redis = mkCacheContainer {
       name = "redis";
       version = "7.2.4";
-      configPath = ./docker/services/redis/nixos/configuration.nix;
       port = 6379;
+      user = "redis";
+      dataDir = "/var/lib/redis";
     };
-    
+
     nginx = mkWebContainer {
       name = "nginx";
       version = "1.25.3";
-      configPath = ./docker/services/nginx/nixos/configuration.nix;
       httpPort = 80;
       httpsPort = 443;
       user = "nginx";
       uid = 101;
       gid = 101;
     };
-    
-    # Add more services here as they are migrated
   };
 
-  # Build all services
-  buildAll = 
-    builtins.listToAttrs (
-      map (attr: {
-        name = "-nixos";
-        value = builtins.getAttr attr serviceCatalog;
-      }) (builtins.attrNames serviceCatalog)
-    );
+  # Build all services in the catalog
+  buildAll =
+    builtins.mapAttrs (name: value: value) serviceCatalog;
 }
