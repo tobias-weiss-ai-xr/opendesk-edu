@@ -324,8 +324,13 @@ functional:
       # Expose mail submission with implicit TLS (port 465).
       exposeSubmissions: false
       # FQDN of the IMAP endpoint. If unset, `<.Values.global.domain>` is used.
+      #
+      # A FQDN below `<.Values.global.domain>` is added to openDesk's certificate, e.g.
+      # `imap.example.org` when the domain is `example.org`, but be sure just to use a single level
+      # below the domain. This is only relevant for non-wildcard certificates.
       fqdnImap: ~
-      # FQDN of the SMTP endpoint. If unset, `<.Values.global.domain>` is used.
+      # FQDN of the SMTP endpoint. If unset, `<.Values.global.domain>` is used. See also `fqdnImap` above
+      # for details on certificate requirements.
       fqdnSmtp: ~
     # Control access for external users to groupware data
     # Ref.: https://documentation.open-xchange.com/8/middleware/miscellaneous/sharing_and_guest_mode.html
