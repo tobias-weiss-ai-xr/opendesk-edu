@@ -93,41 +93,49 @@ echo ""
 
 echo "HRZ GitLab (Internal Deployment):"
 echo "  ------------------------------------"
-git submodule status | grep -E "opendesk$|argocd-opendesk|erprobungskonzept|k8s-mc-mirror|k8up|monitoring|registry|user_import" | while read -r hash path branch_etc; do
+git submodule status | while read -r hash path branch_etc; do
     url=$(git config --file .git/config submodule.$path.url 2>/dev/null)
-    branch_info="${branch_etc# )}"
-    short_hash="${hash:0:8}"
-    printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    if [[ "$url" == git@gitlab.hrz.uni-marburg.de:* ]]; then
+        branch_info="${branch_etc# )}"
+        short_hash="${hash:0:8}"
+        printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    fi
 done
 echo ""
 
 echo "GitHub (tobias-weiss-ai-xr - Source of Truth):"
 echo "  -----------------------------------------------"
-git submodule status | grep -E "opendesk-edu$|opendesk-collab|opendesk-dev|opendesk-helm|opendesk-knowledge|opendesk-kubectl|opendesk-nix|opendesk-sogo|charts-upgrade" | while read -r hash path branch_etc; do
+git submodule status | while read -r hash path branch_etc; do
     url=$(git config --file .git/config submodule.$path.url 2>/dev/null)
-    branch_info="${branch_etc# )}"
-    short_hash="${hash:0:8}"
-    printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    if [[ "$url" == git@github.com:tobias-weiss-ai-xr/* ]]; then
+        branch_info="${branch_etc# )}"
+        short_hash="${hash:0:8}"
+        printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    fi
 done
 echo ""
 
 echo "GitHub (opendesk-edu organization):"
 echo "  -------------------------------------"
-git submodule status | grep -E "opendesk-(cop|spec|website)" | while read -r hash path branch_etc; do
+git submodule status | while read -r hash path branch_etc; do
     url=$(git config --file .git/config submodule.$path.url 2>/dev/null)
-    branch_info="${branch_etc# )}"
-    short_hash="${hash:0:8}"
-    printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    if [[ "$url" == git@github.com:opendesk-edu/* ]]; then
+        branch_info="${branch_etc# )}"
+        short_hash="${hash:0:8}"
+        printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    fi
 done
 echo ""
 
 echo "External Upstream:"
 echo "  ------------------"
-git submodule status | grep -E "addon-nextcloud_integration|opencode-de-analysis" | while read -r hash path branch_etc; do
+git submodule status | while read -r hash path branch_etc; do
     url=$(git config --file .git/config submodule.$path.url 2>/dev/null)
-    branch_info="${branch_etc# )}"
-    short_hash="${hash:0:8}"
-    printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    if [[ "$url" != git@gitlab.hrz.uni-marburg.de:* ]] && [[ "$url" != git@github.com:tobias-weiss-ai-xr/* ]] && [[ "$url" != git@github.com:opendesk-edu/* ]]; then
+        branch_info="${branch_etc# )}"
+        short_hash="${hash:0:8}"
+        printf "  * %-30s %-10s %s\n" "$path" "$short_hash" "$branch_info"
+    fi
 done
 echo ""
 
