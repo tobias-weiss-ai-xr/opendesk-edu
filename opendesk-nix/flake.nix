@@ -22,7 +22,15 @@
   } @inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          config = {
+            allowUnfree = true;
+            permittedInsecurePackages = [
+              "keycloak-23.0.6"
+            ];
+          };
+        };
         lib = pkgs.lib;
         docks = import ./lib/docks.nix { inherit pkgs; };
         
@@ -31,7 +39,7 @@
         security = import ./lib/security.nix { inherit pkgs lib; };
         sbom = import ./lib/sbom.nix { inherit pkgs lib; };
         registry = import ./lib/registry.nix { inherit pkgs lib; };
-        k8s = import ./lib/k8s.nix { inherit pkgs lib; };
+        k8s = import ./lib/k8s.nix { inherit pkgs lib types; };
         build = import ./lib/build.nix { inherit pkgs lib docks; };
         security-scanning = import ./lib/security-scanning.nix { inherit pkgs lib; };
         cosign-lib = import ./lib/cosign.nix { inherit pkgs lib; };
@@ -54,47 +62,44 @@
         # PACKAGES - NixOS Container Images
         # ======================================================================
         
-        packages = {
-          inherit (all-containers) 
-            mariadb-nixos 
-            postgresql-nixos 
-            redis-nixos 
-            nginx-nixos 
-            traefik-nixos 
-            keycloak-nixos 
-            moodle-nixos 
-            ilias-nixos 
-            nextcloud-nixos 
-            collabora-nixos 
-            openproject-nixos 
-            planka-nixos 
-            etherpad-nixos 
-            cryptpad-nixos 
-            drawio-nixos 
-            excalidraw-nixos 
-            rocketchat-nixos 
-            element-nixos 
-            jitsi-nixos 
-            bookstack-nixos 
-            xwiki-nixos 
-            grafana-nixos 
-            prometheus-nixos 
-            docker-registry-nixos 
-            zot-registry-nixos 
-          ;
-          
-          # All NixOS containers
-#           all-nixos-images = pkgs.dockerTools.buildLayeredImage {
-#             images = builtins.attrValues all-containers;
-#             maxLayers = 100;
-#           };
-          
+        packages = all-containers //
+          # Auto-generate -nixos suffixed aliases for all containers
+          (builtins.listToAttrs (builtins.map (name: {
+            name = "${name}-nixos";
+            value = all-containers.${name} or null;
+          }) (builtins.attrNames all-containers))) // {
           # Docker image builds (for backward compatibility)
           inherit (build) 
-            mariadb-image 
-            postgresql-image 
-            redis-image 
+            mariadb-opendesk 
+            postgresql-opendesk 
+            redis-opendesk 
           ;
+          
+          # K8s resource manifests (as JSON files)
+          k8s-mariadb-deployment = pkgs.writeText "mariadb-deployment.yaml" 
+            (builtins.toJSON (k8s.mkDeployment {
+              name = "mariadb";
+              image = "registry.gitlab.opencode.de/umr/mariadb-opendesk:11.4.4-nixos";
+              replicas = 1;
+            }));
+          k8s-postgresql-deployment = pkgs.writeText "postgresql-deployment.yaml"
+            (builtins.toJSON (k8s.mkDeployment {
+              name = "postgresql";
+              image = "registry.gitlab.opencode.de/umr/postgresql-opendesk:16.3-nixos";
+              replicas = 1;
+            }));
+          k8s-redis-deployment = pkgs.writeText "redis-deployment.yaml"
+            (builtins.toJSON (k8s.mkDeployment {
+              name = "redis";
+              image = "registry.gitlab.opencode.de/umr/redis-opendesk:7.2.4-nixos";
+              replicas = 1;
+            }));
+          k8s-nginx-deployment = pkgs.writeText "nginx-deployment.yaml"
+            (builtins.toJSON (k8s.mkDeployment {
+              name = "nginx";
+              image = "registry.gitlab.opencode.de/umr/nginx-opendesk:1.25.3-nixos";
+              replicas = 2;
+            }));
         };
         
         # Overlays (commented out temporarily - needs proper overlay syntax)
@@ -136,7 +141,7 @@
           
           postgresql = dev.shells.forService {
             serviceName = "postgresql";
-            packages = [ pkgs.postgresql pkgs.psql ];
+            packages = [ pkgs.postgresql ];
           };
           
           redis = dev.shells.forService {
@@ -146,7 +151,7 @@
           
           keycloak = dev.shells.forService {
             serviceName = "keycloak";
-            packages = [ inputs.nixpkgs.legacyPackages.${system}.jdk21 ];
+            packages = [ pkgs.jdk21 ];
           };
         };
         
@@ -166,26 +171,10 @@
         };
         
         # ======================================================================
-        # APPS - Kubernetes Resources
+        # PACKAGES - K8s Resource Manifests (as JSON derivations)
         # ======================================================================
         
-        apps = {
-          # All K8s services
-          # default = k8s.allServices;
-          
-          # Individual services
-          inherit (k8s) 
-            mariadb-service 
-            postgresql-service 
-            redis-service 
-            nginx-service 
-            traefik-service 
-            keycloak-service 
-          ;
-          
-          # Service templates (commented out - causes flake check issues)
-          # services = k8s.services;
-        };
+        # K8s deployment manifests are available as packages via k8s-manifests output
         
         # ======================================================================
         # CHECKS - Verification
@@ -243,24 +232,11 @@
         };
         
         # ======================================================================
-        # FORMATS - Hydra jobsets
+        # FORMATS - Build all images as a single derivation
         # ======================================================================
         
-        formats = {
-          docker = {
-            # Build all NixOS containers as Docker images
-            all-images = let
-              images = builtins.attrValues all-containers;
-            in {
-              name = "docker-all-images";
-              type = "docker";
-              value = pkgs.dockerTools.buildLayeredImage {
-                images = images;
-                maxLayers = 100;
-              };
-            };
-          };
-        };
+        # NOTE: formats section removed - use packages.* for individual images
+        # To build all images: nix build .#mariadb .#postgresql .#redis ...
         
         # ======================================================================
         # INFO
