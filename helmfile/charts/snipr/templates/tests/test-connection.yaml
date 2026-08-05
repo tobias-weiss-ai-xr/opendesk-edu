@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "snipr.fullname" . }}-test-connection
+  labels:
+    {{- include "snipr.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "snipr.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

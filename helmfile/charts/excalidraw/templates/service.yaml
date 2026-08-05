@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-excalidraw
+  labels:
+    excalidraw/server: "true"
+{{ include "excalidraw.labels" . | nindent 4 }}
+spec:
+  selector:
+    excalidraw/server: "true"
+{{ include "excalidraw.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: 80
+      name: {{ .Values.excalidraw.oidc.enabled | ternary "oauth2-proxy" "excalidraw" }}
+      targetPort: {{ .Values.excalidraw.oidc.enabled | ternary 4180 .Values.excalidraw.port }}
+  type: ClusterIP

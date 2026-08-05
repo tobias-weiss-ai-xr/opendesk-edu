@@ -1,0 +1,118 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "f13.fullname" . }}-core
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "f13.componentLabels" (dict "component" "core" "root" .) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "f13.componentLabels" (dict "component" "core" "root" .) | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: core
+          image: "{{ .Values.global.imageRegistry }}/{{ .Values.images.core.repository }}:{{ .Values.images.core.tag }}"
+          imagePullPolicy: {{ .Values.images.core.pullPolicy | default .Values.global.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: CONFIG_DIR
+              value: /app/configs
+            - name: KEYCLOAK_URL
+              value: {{ include "f13.keycloakIssuer" . | quote }}
+            - name: KEYCLOAK_REALM
+              value: {{ include "f13.keycloakRealm" . | quote }}
+            - name: KEYCLOAK_CLIENT_ID
+              value: {{ .Values.authentication.audience | quote }}
+            - name: LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "f13.fullname" . }}-secrets
+                  key: llm-api-key
+            - name: FEEDBACK_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "f13.fullname" . }}-secrets
+                  key: feedback-db-password
+            - name: TRANSCRIPTION_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "f13.fullname" . }}-secrets
+                  key: transcription-db-password
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "f13.fullname" . }}-secrets
+                  key: rabbitmq-password
+            - name: HUGGINGFACE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "f13.fullname" . }}-secrets
+                  key: huggingface-token
+          volumeMounts:
+            - name: config-general
+              mountPath: /app/configs/general.yml
+              subPath: general.yml
+            - name: config-llm
+              mountPath: /app/configs/llm_models.yml
+              subPath: llm_models.yml
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.resources.core | nindent 12 }}
+      volumes:
+        - name: config-general
+          configMap:
+            name: {{ include "f13.fullname" . }}-general
+        - name: config-llm
+          configMap:
+            name: {{ include "f13.fullname" . }}-llm
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

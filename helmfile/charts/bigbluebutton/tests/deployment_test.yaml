@@ -1,0 +1,58 @@
+suite: Deployment
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    set:
+      bigbluebutton.image: "ghcr.io/test-org/greenlight-saml"
+      bigbluebutton.tag: "v1.3.0"
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: .+:.+
+
+  - it: should set replica count from values
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 2
+
+  - it: should have app label matching release name
+    asserts:
+      - isNotNull:
+          path: metadata.labels.app
+      - matchRegex:
+          path: metadata.labels.app
+          pattern: RELEASE-NAME-greenlight
+
+  - it: should set DATABASE_URL env var
+    set:
+      bigbluebutton.greenlight.databaseUrl: "postgres://test:test@db:5432/greenlight"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: DATABASE_URL
+            value: "postgres://test:test@db:5432/greenlight"
+
+  - it: should set RAILS_ENV to production
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RAILS_ENV
+            value: "production"
+
+  - it: should set resource requests and limits
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.requests
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.limits

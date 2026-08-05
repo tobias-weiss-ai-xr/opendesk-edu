@@ -1,0 +1,60 @@
+suite: Deployment
+templates:
+  - deployment.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: excalidraw/excalidraw:.+
+
+  - it: should set the container port to the configured value
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 80
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+
+  - it: should set the excalidraw/server label
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            excalidraw/server: "true"
+
+  - it: should have a single replica
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should run as non-root user
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 1000
+
+  - it: should set resource requests and limits
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.requests
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.limits

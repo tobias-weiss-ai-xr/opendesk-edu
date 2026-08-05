@@ -1,0 +1,308 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+suite: StatefulSet
+templates:
+  - statefulset-elasticsearch.yaml
+  - statefulset-feedback-db.yaml
+  - statefulset-transcription-db.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create all statefulsets with correct kind
+    asserts:
+      - isKind:
+          of: StatefulSet
+
+  # ===========================================================================
+  # Elasticsearch
+  # ===========================================================================
+  - it: should create elasticsearch StatefulSet with correct name and image
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-elasticsearch
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: docker.io/library/elasticsearch:8.12.0
+
+  - it: should set elasticsearch component label
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: elasticsearch
+
+  - it: should set elasticsearch replicas
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should expose elasticsearch http and transport ports
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 9200
+            protocol: TCP
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: transport
+            containerPort: 9300
+            protocol: TCP
+
+  - it: should configure elasticsearch environment variables
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: discovery.type
+            value: single-node
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: xpack.security.enabled
+            value: "false"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: xpack.security.http.ssl.enabled
+            value: "false"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: cluster.name
+            value: f13-elasticsearch
+
+  - it: should configure elasticsearch ES_JAVA_OPTS with CI memory value
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ES_JAVA_OPTS
+            value: "-Xms512Mi -Xmx512Mi"
+
+  - it: should set elasticsearch volumeClaimTemplates
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - equal:
+          path: spec.volumeClaimTemplates[0].metadata.name
+          value: elasticsearch-data
+      - contains:
+          path: spec.volumeClaimTemplates[0].spec.accessModes
+          content: ReadWriteOnce
+      - equal:
+          path: spec.volumeClaimTemplates[0].spec.resources.requests.storage
+          value: 1Gi
+
+  - it: should set elasticsearch resource requests and limits
+    template: statefulset-elasticsearch.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 256Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 200m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 512Mi
+
+  # ===========================================================================
+  # Feedback DB
+  # ===========================================================================
+  - it: should create feedback-db StatefulSet with correct name and image
+    template: statefulset-feedback-db.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-feedback-db
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: docker.io/library/postgres:16-alpine
+
+  - it: should set feedback-db component label
+    template: statefulset-feedback-db.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: feedback-db
+
+  - it: should set feedback-db replicas
+    template: statefulset-feedback-db.yaml
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should expose feedback-db postgres port
+    template: statefulset-feedback-db.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: postgres
+            containerPort: 5432
+            protocol: TCP
+
+  - it: should configure feedback-db environment variables
+    template: statefulset-feedback-db.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: POSTGRES_DB
+            value: f13_feedback
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: POSTGRES_USER
+            value: f13_feedback
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: feedback-db-password
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
+
+  - it: should set feedback-db volumeClaimTemplates
+    template: statefulset-feedback-db.yaml
+    asserts:
+      - equal:
+          path: spec.volumeClaimTemplates[0].metadata.name
+          value: postgres-data
+      - contains:
+          path: spec.volumeClaimTemplates[0].spec.accessModes
+          content: ReadWriteOnce
+      - equal:
+          path: spec.volumeClaimTemplates[0].spec.resources.requests.storage
+          value: 1Gi
+
+  - it: should set feedback-db resource requests and limits
+    template: statefulset-feedback-db.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi
+
+  # ===========================================================================
+  # Transcription DB
+  # ===========================================================================
+  - it: should create transcription-db StatefulSet with correct name and image
+    template: statefulset-transcription-db.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-f13-transcription-db
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: postgres:16-alpine
+
+  - it: should set transcription-db component label
+    template: statefulset-transcription-db.yaml
+    asserts:
+      - isSubset:
+          path: metadata.labels
+          content:
+            app.kubernetes.io/component: transcription-db
+
+  - it: should set transcription-db replicas
+    template: statefulset-transcription-db.yaml
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should expose transcription-db postgres port
+    template: statefulset-transcription-db.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: postgres
+            containerPort: 5432
+            protocol: TCP
+
+  - it: should configure transcription-db environment variables
+    template: statefulset-transcription-db.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: POSTGRES_DB
+            value: f13_transcription
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: POSTGRES_USER
+            value: f13_transcription
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-f13-secrets
+                key: transcription-db-password
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
+
+  - it: should set transcription-db volumeClaimTemplates
+    template: statefulset-transcription-db.yaml
+    asserts:
+      - equal:
+          path: spec.volumeClaimTemplates[0].metadata.name
+          value: postgres-data
+      - contains:
+          path: spec.volumeClaimTemplates[0].spec.accessModes
+          content: ReadWriteOnce
+      - equal:
+          path: spec.volumeClaimTemplates[0].spec.resources.requests.storage
+          value: 1Gi
+
+  - it: should set transcription-db resource requests and limits
+    template: statefulset-transcription-db.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 50m
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.memory
+          value: 64Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.cpu
+          value: 100m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 128Mi

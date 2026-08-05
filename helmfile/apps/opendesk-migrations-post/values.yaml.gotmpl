@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+additionalAnnotations:
+  {{ .Values.annotations.opendeskMigrationsPost.additional | toYaml | nindent 2 }}
+
+podAnnotations:
+  intents.otterize.com/service-name: "opendesk-migrations-post"
+  {{- with .Values.annotations.opendeskMigrationsPost.pod }}
+  {{ . | toYaml | nindent 2 }}
+  {{- end }}
+
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.opendeskMigrationsPost.serviceAccount | toYaml | nindent 4 }}
+
+migrations:
+  stage: "POST"
+...

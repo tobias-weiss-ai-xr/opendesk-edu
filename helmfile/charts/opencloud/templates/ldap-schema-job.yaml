@@ -1,0 +1,136 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+{{- if .Values.graph.ldap.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "opencloud.fullname" . }}-ldap-schema
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+data:
+  schema.ldif: |
+    dn: cn=opencloud,cn=schema,cn=config
+    objectClass: olcSchemaConfig
+    cn: opencloud
+    olcAttributeTypes: ( 1.3.6.1.4.1.99999.1.1 NAME 'openCloudUUID'
+      DESC 'OpenCloud user UUID'
+      SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+      SINGLE-VALUE )
+    olcObjectClasses: ( 1.3.6.1.4.1.99999.2.1 NAME 'openCloudUser'
+      DESC 'OpenCloud user auxiliary objectClass'
+      SUP top
+      AUXILIARY
+      MUST uid
+      MAY ( openCloudUUID $ cn $ sn $ mail $ givenName ) )
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "opencloud.fullname" . }}-ldap-schema
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "opencloud.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "opencloud.fullname" . }}-ldap-schema
+      restartPolicy: OnFailure
+      volumes:
+        - name: schema-ldif
+          configMap:
+            name: {{ include "opencloud.fullname" . }}-ldap-schema
+      containers:
+        - name: kubectl
+          image: bitnami/kubectl:1.30
+          volumeMounts:
+            - name: schema-ldif
+              mountPath: /ldif
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -euo pipefail
+
+              LDAP_POD="ums-ldap-server-primary-0"
+              NAMESPACE="{{ .Release.Namespace }}"
+              SCHEMA_DN="cn=opencloud,cn=schema,cn=config"
+
+              echo "Waiting for LDAP pod to be ready..."
+              kubectl wait --for=condition=ready -n "$NAMESPACE" pod "$LDAP_POD" --timeout=120s
+
+              echo "Checking if schema already exists..."
+              if kubectl exec -n "$NAMESPACE" "$LDAP_POD" -c main -- \
+                ldapsearch -Y EXTERNAL -H ldapi:/// -b "$SCHEMA_DN" -LLL dn 2>/dev/null | grep -q "^dn:"; then
+                echo "Schema already exists, skipping."
+                exit 0
+              fi
+
+              echo "Adding openCloudUUID schema to LDAP..."
+              kubectl exec -n "$NAMESPACE" -i "$LDAP_POD" -c main -- \
+                ldapadd -Y EXTERNAL -H ldapi:/// < /ldif/schema.ldif
+
+              echo "Verifying schema was added..."
+              kubectl exec -n "$NAMESPACE" "$LDAP_POD" -c main -- \
+                ldapsearch -Y EXTERNAL -H ldapi:/// -b "$SCHEMA_DN" -LLL dn
+
+              echo "Schema initialization complete."
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "opencloud.fullname" . }}-ldap-schema
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "opencloud.fullname" . }}-ldap-schema
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "opencloud.fullname" . }}-ldap-schema
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+  labels:
+    {{- include "opencloud.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "opencloud.fullname" . }}-ldap-schema
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "opencloud.fullname" . }}-ldap-schema
+    namespace: {{ .Release.Namespace }}
+{{- end }}

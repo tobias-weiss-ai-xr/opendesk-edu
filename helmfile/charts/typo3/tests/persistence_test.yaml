@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: Persistence
+templates:
+  - pvc.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a PersistentVolumeClaim
+    asserts:
+      - isKind:
+          of: PersistentVolumeClaim
+
+  - it: should set the correct storage size
+    asserts:
+      - equal:
+          path: spec.resources.requests.storage
+          value: 1Gi
+
+  - it: should set ReadWriteMany access mode
+    asserts:
+      - contains:
+          path: spec.accessModes
+          content: ReadWriteMany
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]

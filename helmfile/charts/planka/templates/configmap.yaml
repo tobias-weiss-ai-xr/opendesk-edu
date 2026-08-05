@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-planka-config
+  labels:
+{{ include "planka.labels" . | nindent 4 }}
+data:
+  planka-env: |-
+    DATABASE_URL=postgresql://{{ include "planka.dbUser" . }}:{{ include "planka.dbPassword" . }}@{{ include "planka.dbHost" . }}:5432/{{ include "planka.dbName" . }}
+    BASE_URL={{ .Values.planka.baseUrl }}
+    OIDC_CLIENT_ID={{ .Values.planka.oidc.clientId }}
+    OIDC_AUTH_ENDPOINT={{ .Values.planka.oidc.authEndpoint }}
+    OIDC_TOKEN_ENDPOINT={{ .Values.planka.oidc.tokenEndpoint }}
+    OIDC_USERINFO_ENDPOINT={{ .Values.planka.oidc.userinfoEndpoint }}
+    OIDC_SCOPE={{ .Values.planka.oidc.scope }}

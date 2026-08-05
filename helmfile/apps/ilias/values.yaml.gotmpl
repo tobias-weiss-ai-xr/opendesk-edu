@@ -1,0 +1,200 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+commonAnnotations:
+  {{ .Values.annotations.ilias.common | toYaml | nindent 2 }}
+
+ilias:
+  # Image configuration - using custom ILIAS image with Shibboleth SP from Docker Hub
+  image: "ghcr.io/<your-org>/ilias-shibboleth"
+  tag: "9-php8.2-apache-v4"
+  command: ["/usr/local/bin/entrypoint.sh"]
+  autoSetup: true
+  autoUpdate: "0"
+  devMode: "0"
+  hostName: "lms.opendesk.hrz.uni-marburg.de"
+  timezone: "Europe/Berlin"
+  maxUploadSize: "200M"
+  memoryLimit: "4096M"
+  # rootPassword and db.password will be set via secretRef in the chart
+  sessionLifetime: "1800"
+  clientName: "default"
+
+  # Database configuration (embedded MariaDB)
+  db:
+    user: "ilias"
+    # Password will be set via secretRef from ilias-database-credentials secret
+    name: "ilias"
+
+  # Volume configuration
+  volumes:
+    data:
+      size: "4Gi"
+      accessMode: "ReadWriteMany"
+    iliasdata:
+      size: "4Gi"
+      accessMode: "ReadWriteMany"
+
+  # Resource configuration
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "4G"
+    limits:
+      cpu: "3"
+      memory: "6G"
+
+  # PHP configuration
+  phpConfig: {}
+
+  # Client INI configuration
+  clientIni:
+    session: "\\Sessions\\ilDBSessionFactory"
+
+  # Setup JSON configuration
+  setupJson: {}
+
+  # ILIAS INI configuration
+  iliasIni: {}
+
+# Security context
+securityContext:
+  enabled: true
+  fsGroup: 33
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  enabled: true
+  privileged: false
+  runAsUser: 33
+  runAsGroup: 33
+  runAsNonRoot: true
+  capabilities:
+    drop:
+      - "ALL"
+  seccompProfile:
+    type: "RuntimeDefault"
+
+# Ingress configuration
+ingress:
+  enabled: {{ .Values.ingress.enabled }}
+  className: "haproxy"
+  annotations:
+    {{ .Values.annotations.ilias.ingress | toYaml | nindent 4 }}
+    haproxy-ingress.github.io/ssl-redirect: "true"
+    haproxy-ingress.github.io/proxy-body-size: "{{ .Values.ingress.parameters.bodySize.ilias }}"
+    haproxy-ingress.github.io/timeout-server: "{{ .Values.ingress.parameters.bodyTimeout.ilias }}s"
+    haproxy-ingress.github.io/timeout-client: "{{ .Values.ingress.parameters.bodyTimeout.ilias }}s"
+    haproxy-ingress.github.io/headers: "X-Forwarded-Host lms.opendesk.hrz.uni-marburg.de"
+  hosts:
+    - host: "lms.opendesk.hrz.uni-marburg.de"
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+  tls:
+    - secretName: "opendesk-certificates-tls"
+      hosts:
+        - "lms.opendesk.hrz.uni-marburg.de"
+
+# Persistence configuration
+persistence:
+  size: "4Gi"
+  storageClass: {{ coalesce .Values.persistence.storages.ilias.storageClassName .Values.persistence.storageClassNames.RWO | quote }}
+
+# Service configuration
+service:
+  annotations:
+    {{ .Values.annotations.ilias.service | toYaml | nindent 4 }}
+  externalPort: 80
+  enabled: true
+
+# Service account configuration
+serviceAccount:
+  annotations:
+    {{ .Values.annotations.ilias.serviceAccount | toYaml | nindent 4 }}
+
+# Volume permissions
+volumePermissions:
+  enabled: true
+
+# Shibboleth SP environment variables
+extraEnv:
+  - name: XML_CATALOG_FILES
+    value: "/usr/share/xml/shibboleth/catalog.xml:/usr/share/xml/xmltooling/catalog.xml:/usr/share/xml/opensaml/saml20-catalog.xml:/usr/share/xml/opensaml/saml11-catalog.xml"
+
+# Shibboleth SP configuration volumes
+extraVolumes:
+  - name: shibboleth-config
+    configMap:
+      name: ilias-shibboleth-config
+  - name: shibboleth-certs
+    secret:
+      secretName: ilias-shibboleth-certs
+  - name: apache-shibboleth-config
+    configMap:
+      name: ilias-apache-shibboleth-config
+  - name: apache-backchannel-config
+    configMap:
+      name: ilias-apache-backchannel-config
+  - name: backchannel-handler
+    configMap:
+      name: ilias-backchannel-handler
+
+extraVolumeMounts:
+  - name: shibboleth-config
+    mountPath: /etc/shibboleth
+    readOnly: true
+  - name: shibboleth-certs
+    mountPath: /etc/shibboleth/certs
+    readOnly: true
+  - name: apache-shibboleth-config
+    mountPath: /etc/apache2/conf-enabled/shibboleth.conf
+    subPath: shibboleth.conf
+    readOnly: true
+  - name: apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel.conf
+    subPath: backchannel.conf
+    readOnly: true
+  - name: apache-backchannel-config
+    mountPath: /etc/apache2/conf-enabled/backchannel-env.conf
+    subPath: backchannel-env.conf
+    readOnly: true
+  - name: backchannel-handler
+    mountPath: /var/www/html/auth/shibboleth/backchannel-handler.php
+    subPath: backchannel-handler.php
+    readOnly: true
+
+# SAML SSO configuration (SimpleSAMLphp native volumes)
+sso:
+  saml:
+    enabled: true
+    idpMetadataUrl: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Replica count (ILIAS is stateful, default 1)
+cluster:
+  replicas: {{ default 1 .Values.replicas.ilias }}
+
+# Embedded MariaDB configuration
+mariadbgalera:
+  enabled: true
+  rootUser:
+    # Password will be set from ilias-database-credentials secret
+  db:
+    user: "ilias"
+    # Password will be set from ilias-database-credentials secret
+    name: "ilias"
+  persistence:
+    enabled: true
+    size: "10Gi"
+    accessMode: "ReadWriteMany"
+
+...

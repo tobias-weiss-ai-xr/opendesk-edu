@@ -1,0 +1,23 @@
+apiVersion: v2
+appVersion: 9-php8.2-apache
+dependencies:
+- condition: mariadb.enabled
+  name: mariadb
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.2.2
+- alias: mariadbgalera
+  condition: mariadbgalera.enabled
+  name: mariadb-galera
+  repository: https://charts.bitnami.com/bitnami
+  version: 14.1.2
+description: A Helm chart for ILIAS LMS
+name: ilias
+type: application
+version: 0.1.0
+annotations:
+  artifacthub.io/changes: |
+    - Add comprehensive helm-unittest test coverage
+    - Add CI values for template rendering validation
+  artifacthub.io/links: |
+    - name: Source
+      url: https://github.com/tobias-weiss-ai-xr/opendesk-edu

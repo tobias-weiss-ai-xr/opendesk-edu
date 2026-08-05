@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "f13.fullname" . }}-frontend
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+spec:
+  selector:
+    {{- include "f13.componentLabels" (dict "component" "frontend" "root" .) | nindent 4 }}
+  ports:
+    - name: http
+      port: 9999
+      targetPort: http
+      protocol: TCP
+  type: ClusterIP

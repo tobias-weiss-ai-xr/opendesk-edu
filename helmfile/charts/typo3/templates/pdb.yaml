@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Release.Name }}-typo3-pdb
+  labels:
+{{ include "typo3.labels" . | nindent 4 }}
+spec:
+  minAvailable: {{ if .Values.pdb }}{{ .Values.pdb.minAvailable | default 1 }}{{ else }}1{{ end }}
+  selector:
+    matchLabels:
+      typo3/server: "true"
+{{ include "typo3.selectorLabels" . | nindent 6 }}

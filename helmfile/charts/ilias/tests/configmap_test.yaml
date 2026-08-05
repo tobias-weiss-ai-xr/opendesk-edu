@@ -1,0 +1,76 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test configmap
+templates:
+  - configmap.yaml
+tests:
+  - it: should create two ConfigMaps
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: ConfigMap
+  - it: should create ilias-config ConfigMap (document 0)
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-config
+    documentIndex: 0
+  - it: should create ilias-rpc-config ConfigMap (document 1)
+    set:
+      iliasRPCServer.logLevel: DEBUG
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: ConfigMap
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-ilias-rpc-config
+    documentIndex: 1
+  - it: should configure ilias.ini in document 0
+    asserts:
+      - hasDocuments:
+          count: 2
+      - equal:
+          path: data["ilias.ini"]
+          value: |-
+            memory_limit = 4096M
+            error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING & ~E_STRICT
+            log_errors = On
+            max_execution_time = 900
+            max_input_time = 900
+            max_input_vars = 10000
+            upload_max_filesize = 200M
+            post_max_size = 200M
+            session.gc_maxlifetime = 1800
+
+            opcache.enable=1
+            opcache.enable_cli=1
+            opcache.interned_strings_buffer=8
+            opcache.max_accelerated_files=10000
+            opcache.memory_consumption=128
+            opcache.save_comments=1
+            opcache.revalidate_freq=1
+    documentIndex: 0
+  - it: should configure ilias.ini.php in document 1
+    set:
+      iliasRPCServer.logLevel: DEBUG
+    asserts:
+      - hasDocuments:
+          count: 2
+      - equal:
+          path: data["ilias.ini.php"]
+          value: |-
+            [server]
+            absolute_path = /var/www/html/
+
+            [clients]
+            inifile = client.ini.php
+            path = data
+            datadir = iliasdata
+    documentIndex: 1

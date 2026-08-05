@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111 111" width="111" height="111">
+  <!-- Background -->
+  <rect width="111" height="111" rx="20" fill="#ffffff" stroke="#E5E7EB" stroke-width="1"/>
+
+  <!-- D-mark: outer silhouette -->
+  <path fill="#571EFA" d="
+    M 35 22
+    L 56 22
+    C 74 22 86 37 86 55.5
+    C 86 74 74 89 56 89
+    L 35 89
+    Q 27 89 27 82
+    L 27 29
+    Q 27 22 35 22
+    Z
+  "/>
+
+  <!-- D-mark: inner counter (negative space) -->
+  <path fill="#ffffff" d="
+    M 43 33
+    L 54 33
+    C 64 33 72 43 72 55.5
+    C 72 68 64 78 54 78
+    L 43 78
+    Q 39 78 39 73
+    L 39 38
+    Q 39 33 43 33
+    Z
+  "/>
+
+  <!-- Accent: inner detail in counter space -->
+  <rect x="46" y="67" width="14" height="3.5" rx="1.75" fill="#927AFA"/>
+</svg>

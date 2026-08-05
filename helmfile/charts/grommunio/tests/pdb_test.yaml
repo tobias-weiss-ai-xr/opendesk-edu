@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test pod disruption budget
+templates:
+  - pdb.yaml
+tests:
+  - it: should create a PDB when enabled with minAvailable
+    set:
+      grommunio.pdb.enabled: true
+      grommunio.pdb.minAvailable: 1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: PodDisruptionBudget
+      - equal:
+          path: spec.minAvailable
+          value: 1
+      - equal:
+          path: spec.selector.matchLabels["app.kubernetes.io/name"]
+          value: grommunio
+      - equal:
+          path: spec.selector.matchLabels["app.kubernetes.io/instance"]
+          value: RELEASE-NAME
+  - it: should not create a PDB when disabled
+    set:
+      grommunio.pdb.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

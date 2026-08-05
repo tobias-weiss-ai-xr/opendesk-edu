@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test ingress
+templates:
+  - ingress.yaml
+tests:
+  - it: should create an ingress when enabled
+    set:
+      grommunio.ingress.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - equal:
+          path: spec.ingressClassName
+          value: nginx
+      - equal:
+          path: spec.rules[0].host
+          value: grommunio.opendesk.example.com
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: Prefix
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: grommunio.opendesk.example.com
+      - equal:
+          path: spec.tls[0].secretName
+          value: grommunio-tls
+  - it: should not create an ingress when disabled
+    set:
+      grommunio.ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

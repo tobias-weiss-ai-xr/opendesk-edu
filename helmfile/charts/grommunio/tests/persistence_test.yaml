@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test persistence
+templates:
+  - pvc.yaml
+tests:
+  - it: should create a PVC when persistence is enabled
+    set:
+      grommunio.persistence.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: PersistentVolumeClaim
+      - equal:
+          path: spec.accessModes[0]
+          value: ReadWriteOnce
+      - equal:
+          path: spec.resources.requests.storage
+          value: 50Gi
+      - equal:
+          path: metadata.name
+          value: RELEASE-NAME-grommunio-pvc
+  - it: should not create a PVC when persistence is disabled
+    set:
+      grommunio.persistence.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0

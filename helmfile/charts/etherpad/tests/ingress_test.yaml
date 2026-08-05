@@ -1,0 +1,43 @@
+suite: Ingress
+templates:
+  - ingress.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should not create an Ingress when disabled
+    set:
+      ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should create an Ingress when enabled
+    set:
+      ingress.enabled: true
+      ingress.hosts:
+        - host: etherpad.example.com
+          paths:
+            - path: /
+              pathType: Prefix
+    asserts:
+      - isKind:
+          of: Ingress
+      - isNotNull:
+          path: spec.rules
+      - equal:
+          path: spec.rules[0].host
+          value: etherpad.example.com
+
+  - it: should set ingressClassName when provided
+    set:
+      ingress.enabled: true
+      ingress.className: nginx
+      ingress.hosts:
+        - host: etherpad.example.com
+          paths:
+            - path: /
+              pathType: Prefix
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: nginx

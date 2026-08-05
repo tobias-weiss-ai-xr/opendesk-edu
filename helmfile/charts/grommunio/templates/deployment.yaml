@@ -1,0 +1,113 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grommunio.fullname" . }}
+  labels:
+{{ include "grommunio.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.grommunio.replicaCount }}
+  strategy:
+    type: {{ .Values.grommunio.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.grommunio.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.grommunio.strategy.rollingUpdate.maxUnavailable }}
+  selector:
+    matchLabels:
+{{ include "grommunio.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+{{ include "grommunio.labels" . | nindent 8 }}
+    spec:
+{{- include "grommunio.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ .Values.grommunio.serviceAccount.name }}
+      securityContext:
+        fsGroup: {{ .Values.grommunio.podSecurityContext.fsGroup }}
+        runAsUser: {{ .Values.grommunio.podSecurityContext.runAsUser }}
+        runAsGroup: {{ .Values.grommunio.podSecurityContext.runAsGroup }}
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for MariaDB at {{ .Values.grommunio.db.host }}:{{ .Values.grommunio.db.port }}..."
+              until nc -z {{ .Values.grommunio.db.host }} {{ .Values.grommunio.db.port }}; do
+                echo "Waiting for database..."
+                sleep 2
+              done
+              echo "Database is ready!"
+      containers:
+        - name: grommunio
+          image: {{ include "grommunio.image" . }}
+          imagePullPolicy: {{ .Values.grommunio.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: {{ .Values.grommunio.containerSecurityContext.allowPrivilegeEscalation }}
+            runAsNonRoot: {{ .Values.grommunio.containerSecurityContext.runAsNonRoot }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.grommunio.service.targetPort }}
+              protocol: TCP
+            - name: lmtp
+              containerPort: {{ .Values.grommunio.mail.lmtp.port }}
+              protocol: TCP
+            - name: metrics
+              containerPort: {{ .Values.grommunio.monitoring.prometheus.port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "grommunio.fullname" . }}-config
+            - secretRef:
+                name: {{ include "grommunio.fullname" . }}-secret
+          volumeMounts:
+            - name: grommunio-data
+              mountPath: {{ .Values.grommunio.persistence.mountPath }}
+            - name: grommunio-config
+              mountPath: /etc/grommunio
+          resources:
+{{ toYaml .Values.grommunio.resources | nindent 12 }}
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.grommunio.healthCheck.liveness.path }}
+              port: {{ .Values.grommunio.healthCheck.liveness.port }}
+            initialDelaySeconds: {{ .Values.grommunio.healthCheck.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.grommunio.healthCheck.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.grommunio.healthCheck.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.grommunio.healthCheck.liveness.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.grommunio.healthCheck.readiness.path }}
+              port: {{ .Values.grommunio.healthCheck.readiness.port }}
+            initialDelaySeconds: {{ .Values.grommunio.healthCheck.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.grommunio.healthCheck.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.grommunio.healthCheck.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.grommunio.healthCheck.readiness.failureThreshold }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.grommunio.healthCheck.startup.path }}
+              port: {{ .Values.grommunio.healthCheck.startup.port }}
+            initialDelaySeconds: {{ .Values.grommunio.healthCheck.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.grommunio.healthCheck.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.grommunio.healthCheck.startup.timeoutSeconds }}
+            failureThreshold: {{ .Values.grommunio.healthCheck.startup.failureThreshold }}
+      volumes:
+        - name: grommunio-data
+        {{- if .Values.grommunio.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "grommunio.fullname" . }}-pvc
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+        - name: grommunio-config
+          configMap:
+            name: {{ include "grommunio.fullname" . }}-config
+      nodeSelector:
+{{ toYaml .Values.grommunio.nodeSelector | nindent 8 }}
+      tolerations:
+{{ toYaml .Values.grommunio.tolerations | nindent 8 }}
+      affinity:
+{{ toYaml .Values.grommunio.affinity | nindent 8 }}

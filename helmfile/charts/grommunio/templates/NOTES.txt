@@ -1,0 +1,22 @@
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access the service:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward --namespace {{ .Release.Namespace }} $POD_NAME 8080:8080
+
+Next steps:
+  1. Configure MariaDB database connection (Grommunio requires MariaDB, NOT PostgreSQL)
+  2. Enable Keycloak OIDC/SSO integration for single sign-on
+  3. Set up LDAP user provisioning via OpenLDAP
+  4. Configure IMAP/SMTP server settings (Postfix/Dovecot)
+  5. Enable ActiveSync for mobile device sync (EAS 16.1)
+  6. Configure MAPI/HTTP and EWS for Outlook desktop integration
+
+Important:
+  - Grommunio requires MariaDB/MySQL — it does NOT support PostgreSQL
+  - ActiveSync is included in the open-source core (no extra license needed)
+  - Set grommunio.auth.oidc.clientSecret to a secure value for production
+
+Documentation: https://docs.grommunio.com/

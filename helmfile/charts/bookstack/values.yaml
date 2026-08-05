@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+bookstack:
+  image: linuxserver/bookstack
+  tag: latest
+  port: 80
+
+  # Database configuration
+  db:
+    host: "" # Will be set by mariadb chart if left empty
+    port: 3306
+    user: bookstack
+    password: "" # Overridden by mariadb.auth.password if not empty
+    name: bookstack
+
+  # Persistence configuration
+  volumes:
+    uploads:
+      size: 1Gi
+      accessMode: ReadWriteMany
+      # storageClass: ""
+
+  # Resource configuration
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # Replica count
+  replicas: 1
+  appKey: ""  # Generate with: docker run --rm --entrypoint /bin/bash lscr.io/linuxserver/bookstack:latest appkey
+  phpFpmPoolOverride:
+    enabled: false
+
+extraVolumes: []
+extraVolumeMounts: []
+
+sso:
+  oidc:
+    enabled: false
+    clientId: ""
+    clientSecret: ""
+    issuerBaseUrl: ""
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: bookstack.opendesk.hrz.uni-marburg.de
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: bookstack-tls
+      hosts:
+        - bookstack.opendesk.hrz.uni-marburg.de
+
+mariadb:
+  enabled: true
+  auth:
+    username: bookstack
+    password: ""
+    database: bookstack
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+      accessMode: ReadWriteOnce

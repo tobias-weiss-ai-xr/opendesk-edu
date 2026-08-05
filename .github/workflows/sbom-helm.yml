@@ -1,0 +1,181 @@
+name: Generate Helm Charts SBOM
+
+on:
+  workflow_dispatch:
+    inputs:
+      format:
+        description: 'SBOM Format'
+        required: true
+        default: 'cyclonedx'
+        type: choice
+        options:
+          - cyclonedx
+          - spdx
+      output-dir:
+        description: 'Output Directory'
+        required: false
+        default: 'sbom-output-helm'
+
+jobs:
+  generate-helm-sbom:
+    name: Generate Helm Charts SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            charts-upgrade-v1.20.1/
+            opendesk-edu/helmfile/charts/
+            opendesk-dev-agent-operator/helm/
+            common/
+          sparse-checkout-cone-mode: false
+
+      - name: Create output directory
+        run: mkdir -p ${{ inputs.output-dir }}
+
+      - name: Generate SBOM for all Helm Charts
+        run: |
+          echo "🚀 Generating SBOM for all Helm Charts..."
+          
+          # Find all Chart.yaml files
+          CHART_FILES=$(find . -name "Chart.yaml" -type f | grep -v node_modules | grep -v ".git")
+          
+          echo "Found $(echo "$CHART_FILES" | wc -l) Helm charts"
+          echo "$CHART_FILES"
+          
+          if [ "${{ inputs.format }}" = "cyclonedx" ]; then
+            echo "📋 Generating CycloneDX Helm SBOM..."
+            echo '{"bomFormat":"CycloneDX","specVersion":"1.5","version":1,"metadata":{"timestamp":"'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'","tools":[{"name":"helm-sbom-generator","version":"1.0.0"}]},"components":[' > ${{ inputs.output-dir }}/sbom-helm-cyclonedx.json
+            
+            FIRST=true
+            for chart in $CHART_FILES; do
+              CHART_DIR=$(dirname "$chart")
+              CHART_NAME=$(grep "^name:" "$chart" | awk '{print $2}' | tr -d '"')
+              CHART_VERSION=$(grep "^version:" "$chart" | awk '{print $2}' | tr -d '"')
+              CHART_DESC=$(grep "^description:" "$chart" | awk '{print $2}' | tr -d '"') || CHART_DESC=""
+              CHART_HOME=$(grep "^home:" "$chart" | awk '{print $2}' | tr -d '"') || CHART_HOME=""
+              CHART_SOURCES=$(grep "^sources:" -A1 "$chart" | grep -v "sources:" | awk '{print $2}' | tr -d '"') || CHART_SOURCES=""
+              
+              if [ -z "$CHART_NAME" ]; then
+                CHART_NAME=$(basename "$CHART_DIR")
+              fi
+              if [ -z "$CHART_VERSION" ]; then
+                CHART_VERSION="unknown"
+              fi
+              
+              if [ "$FIRST" = true ]; then
+                FIRST=false
+              else
+                echo "," >> ${{ inputs.output-dir }}/sbom-helm-cyclonedx.json
+              fi
+              
+              cat << EOJSON >> ${{ inputs.output-dir }}/sbom-helm-cyclonedx.json
+n  {
+    "type": "library",
+    "bom-ref": "pkg:helm/${CHART_NAME}@${CHART_VERSION}",
+    "name": "${CHART_NAME}",
+    "version": "${CHART_VERSION}",
+    "description": "${CHART_DESC}",
+    "purl": "pkg:helm/${CHART_NAME}@${CHART_VERSION}",
+    "licenses": [{"license": {"id": "Apache-2.0"}}],
+    "externalReferences": [
+      {"type": "website", "url": "${CHART_HOME}"},
+      {"type": "vcs", "url": "${CHART_SOURCES}"}
+    ]
+  }EOJSON
+            done
+            
+            echo '
+  ],"dependencies":[]}' >> ${{ inputs.output-dir }}/sbom-helm-cyclonedx.json
+            echo "✅ CycloneDX Helm SBOM generated"
+          fi
+          
+          if [ "${{ inputs.format }}" = "spdx" ]; then
+            echo "📋 Generating SPDX Helm SBOM..."
+            echo '{"spdxVersion":"SPDX-2.3","dataLicense":"CC0-1.0","SPDXID":"SPDXRef-DOCUMENT","name":"openDesk Helm Charts","documentNamespace":"https://opendesk-edu.org/sbom/helm/'"$(date -u +"%Y%m%d%H%M%S")"'","creationInfo":{"created":"'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'","creators":["Tool: helm-sbom-generator-1.0.0"]},"packages":[' > ${{ inputs.output-dir }}/sbom-helm-spdx.json
+            
+            FIRST=true
+            PACKAGE_ID=1
+            for chart in $CHART_FILES; do
+              CHART_DIR=$(dirname "$chart")
+              CHART_NAME=$(grep "^name:" "$chart" | awk '{print $2}' | tr -d '"')
+              CHART_VERSION=$(grep "^version:" "$chart" | awk '{print $2}' | tr -d '"')
+              CHART_DESC=$(grep "^description:" "$chart" | awk '{print $2}' | tr -d '"') || CHART_DESC=""
+              CHART_HOME=$(grep "^home:" "$chart" | awk '{print $2}' | tr -d '"') || CHART_HOME=""
+              
+              if [ -z "$CHART_NAME" ]; then
+                CHART_NAME=$(basename "$CHART_DIR")
+              fi
+              if [ -z "$CHART_VERSION" ]; then
+                CHART_VERSION="unknown"
+              fi
+              
+              if [ "$FIRST" = true ]; then
+                FIRST=false
+              else
+                echo "," >> ${{ inputs.output-dir }}/sbom-helm-spdx.json
+              fi
+              
+              cat << EOJSON >> ${{ inputs.output-dir }}/sbom-helm-spdx.json
+n  {
+    "SPDXID": "SPDXRef-Package-${PACKAGE_ID}",
+    "name": "${CHART_NAME}",
+    "versionInfo": "${CHART_VERSION}",
+    "downloadLocation": "NOASSERTION",
+    "filesAnalyzed": false,
+    "homepage": "${CHART_HOME}",
+    "description": "${CHART_DESC}",
+    "licenseConcluded": "Apache-2.0",
+    "licenseDeclared": "Apache-2.0",
+    "copyrightText": "NOASSERTION",
+    "externalRefs": [
+      {"referenceCategory": "PACKAGE-MANAGER", "referenceType": "purl", "referenceLocator": "pkg:helm/${CHART_NAME}@${CHART_VERSION}"}
+    ]
+  }EOJSON
+              
+              PACKAGE_ID=$((PACKAGE_ID + 1))
+            done
+            
+            echo '
+  ],"relationships":[]}' >> ${{ inputs.output-dir }}/sbom-helm-spdx.json
+            echo "✅ SPDX Helm SBOM generated"
+          fi
+
+      - name: Generate Summary
+        run: |
+          echo "📊 Helm Charts SBOM Generation Summary" > ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "======================================" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "Generated on: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "Component: All openDesk Helm Charts" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          
+          CHART_COUNT=$(find . -name "Chart.yaml" -type f | grep -v node_modules | grep -v ".git" | wc -l)
+          echo "Charts processed: $CHART_COUNT" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "Format(s): ${{ inputs.format }}" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          
+          for file in ${{ inputs.output-dir }}/sbom-*.json; do
+            if [ -f "$file" ]; then
+              SIZE=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "unknown")
+              echo "- $(basename $file) (${SIZE} bytes)" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+            fi
+          done
+          
+          echo "" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "Tools used:" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          echo "- Custom Helm SBOM Generator" >> ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+          
+          cat ${{ inputs.output-dir }}/SBOM_SUMMARY.md
+
+      - name: Upload SBOM Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-helm-${{ inputs.format }}-${{ github.sha }}
+          path: ${{ inputs.output-dir }}/
+          retention-days: 90

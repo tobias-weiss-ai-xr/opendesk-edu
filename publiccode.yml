@@ -1,0 +1,146 @@
+# SPDX-FileCopyrightText: 2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+#
+# This repository adheres to the publiccode.yml standard by including this
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+---
+publiccodeYmlVersion: "0.4"
+applicationSuite: "openDesk Edu"
+categories:
+  - "email-management"
+  - "contact-management"
+  - "document-management"
+  - "instant-messaging"
+  - "knowledge-management"
+  - "office"
+  - "project-management"
+  - "task-management"
+  - "video-conferencing"
+  - "learning-management"
+name: "openDesk Edu"
+platforms:
+  - "web"
+  - "kubernetes"
+developmentStatus: "stable"
+softwareVersion: "1.14.1-edu"
+releaseDate: "2026-04-28"
+softwareType: "standalone/web"
+url: "https://github.com/tobias-weiss-ai-xr/opendesk-edu"
+logo: ".opencode/openDesk-logo-rgb-color.svg"
+isBasedOn:
+  - "https://github.com/Bundesdruckerei/opendesk"
+maintenance:
+  type: "community"
+
+  contacts:
+    - name: "openDesk Edu Contributors"
+      email: ""
+      affiliation: "openDesk Edu"
+
+legal:
+  license: "Apache-2.0"
+  mainCopyrightOwner: >-
+    2024-2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung
+    (ZenDiS) GmbH
+intendedAudience:
+  countries:
+    - "de"
+  scope:
+    - "education"
+    - "research"
+    - "government"
+    - "local-authorities"
+localisation:
+  availableLanguages:
+    - "de"
+    - "en"
+  localisationReady: true
+roadmap: "https://github.com/tobias-weiss-ai-xr/opendesk-edu/issues"
+description:
+  de:
+    features:
+      - "Produktivität"
+      - "Kollaboration"
+      - "Kommunikation"
+      - "Lernmanagement (ILIAS, Moodle)"
+      - "Videoconferencing (BigBlueButton)"
+      - "Dateiablage (OpenCloud)"
+      - "Groupware (SOGo)"
+      - "Kollaborativer Editor (Etherpad)"
+      - "Wissensdatenbank (BookStack)"
+      - "Projektverwaltung (Planka)"
+      - "Helpdesk (Zammad)"
+      - "Umfragen (LimeSurvey)"
+      - "Diagramme (Draw.io)"
+      - "Whiteboard (Excalidraw)"
+      - "Passwort-Self-Service"
+    genericName: "Digital Workplace für Bildungseinrichtungen"
+    longDescription: >
+      openDesk Edu erweitert die anpassungsfähige Office- und Kollaborations-Suite openDesk
+      um Lernmanagement, Videoconferencing und Cloud-Dateiablage — speziell für Universitäten
+      und Forschungseinrichtungen.
+
+
+      Aufbauend auf openDesk CE bietet openDesk Edu alle vertrauten Büro-Anwendungen
+      (E-Mail, Groupware, Chat, Wiki, Projektmanagement) ergänzt durch:
+
+
+      - **ILIAS** und **Moodle** als Learning-Management-Systeme mit SAML-SSO
+      - **BigBlueButton** für Online-Vorlesungen und Meetings
+      - **OpenCloud** für selbstgehostete Dateisynchronisierung
+
+
+      Alle Dienste sind über das bestehende Keycloak-SSO und den openDesk-Portal
+      integriert. Die Bereitstellung erfolgt über Helm/Helmfile auf Kubernetes.
+    shortDescription: >
+      openDesk CE mit integrierten Bildungsdiensten für Universitäten.
+    screenshots:
+      - ".opencode/screenshots/01-portal-desktop.png"
+      - ".opencode/screenshots/02-dateien-desktop.png"
+      - ".opencode/screenshots/03-projekte-desktop.png"
+      - ".opencode/screenshots/04-wiki-desktop.png"
+    documentation: "https://github.com/tobias-weiss-ai-xr/opendesk-edu#readme"
+  en:
+    features:
+      - "productivity"
+      - "collaboration"
+      - "communication"
+      - "learning management (ILIAS, Moodle)"
+      - "video conferencing (BigBlueButton)"
+      - "file sharing (OpenCloud)"
+      - "Groupware (SOGo)"
+      - "Collaborative Editor (Etherpad)"
+      - "Knowledge Base (BookStack)"
+      - "Project Management (Planka)"
+      - "Helpdesk (Zammad)"
+      - "Surveys (LimeSurvey)"
+      - "Diagrams (Draw.io)"
+      - "Whiteboard (Excalidraw)"
+      - "Password Self-Service"
+    genericName: "Digital Workplace for Education"
+    shortDescription: >
+      openDesk CE with integrated educational services for universities.
+    longDescription: >
+      openDesk Edu extends the adaptable openDesk office and collaboration suite
+      with learning management, video conferencing, and cloud file sharing —
+      specifically designed for universities and research institutions.
+
+
+      Built on openDesk CE, openDesk Edu provides all essential office applications
+      (email, groupware, chat, wiki, project management) plus:
+
+
+      - **ILIAS** and **Moodle** as learning management systems with SAML SSO
+      - **BigBlueButton** for online lectures and meetings
+      - **OpenCloud** for self-hosted file sync and share
+
+
+      All services integrate with openDesk's existing Keycloak SSO and unified portal.
+      Deployment is via Helm/helmfile on Kubernetes.
+    screenshots:
+      - ".opencode/screenshots/01-portal-desktop.png"
+      - ".opencode/screenshots/02-dateien-desktop.png"
+      - ".opencode/screenshots/03-projekte-desktop.png"
+      - ".opencode/screenshots/04-wiki-desktop.png"
+    documentation: "https://github.com/tobias-weiss-ai-xr/opendesk-edu#readme"

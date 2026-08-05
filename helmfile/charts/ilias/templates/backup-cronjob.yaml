@@ -1,0 +1,66 @@
+{{- if .Values.mariadbBackup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{.Release.Name }}-mariadb-backup
+spec:
+  schedule: {{ .Values.mariadbBackup.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            fsGroup: 1001
+          containers:
+            - name: mariadb-backup
+              image: {{ include "mariadbImage" . }}
+              command:
+                - /bin/sh
+                - -c
+                - |-
+                  set -e
+
+                  # Get MariaDB credentials and connection details from the subchart
+                  MARIADB_HOST={{ include "ilias.dbHost" . | quote }}
+                  MARIADB_PORT=3306
+                  MARIADB_USER={{  include "ilias.dbUser" . | quote }}
+                  MARIADB_PASSWORD={{ include "ilias.dbPassword" . | quote }}
+                  DATABASE_NAME={{  include "ilias.dbName" . | quote }}
+
+                  # Generate timestamped filename
+                  TIMESTAMP=$(date +%Y%m%d)
+                  BACKUP_FILE="/backups/${DATABASE_NAME}-${TIMESTAMP}.sql.gz"
+
+                  # Perform the backup
+                  mysqldump -h "${MARIADB_HOST}" -P "${MARIADB_PORT}" -u "${MARIADB_USER}" -p"${MARIADB_PASSWORD}" "${DATABASE_NAME}" | gzip --rsyncable > "${BACKUP_FILE}"
+
+                  # Cleanup old backups (older than 10 days)
+                  find /backups/ -name "${DATABASE_NAME}-*.sql.gz" -mtime +10 -exec rm {} \;
+
+                  echo "Backups in store:"
+                  ls -lah /backups/
+                  echo "Finished backup successfully. You can use the toolbox deployment to access them. Please ensure that this deployment is scaled to zero when this cronjob is executed."
+
+              volumeMounts:
+                - name: backup-volume
+                  mountPath: /backups
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsGroup: 1001
+                runAsNonRoot: true
+                runAsUser: 1001
+                seLinuxOptions: {}
+                seccompProfile:
+                  type: RuntimeDefault
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: {{.Release.Name }}-mariadb-backup-pvc
+
+          restartPolicy: OnFailure
+{{- end }}

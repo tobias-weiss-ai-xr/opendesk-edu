@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: Ingress
+templates:
+  - ingress.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should not create an Ingress when disabled
+    set:
+      ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should create an Ingress when enabled
+    set:
+      ingress.enabled: true
+    asserts:
+      - isKind:
+          of: Ingress
+      - isNotNull:
+          path: spec.rules
+
+  - it: should configure the host from values
+    set:
+      ingress.enabled: true
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "typo3.opendesk.example.com"
+
+  - it: should configure TLS when provided
+    set:
+      ingress.enabled: true
+    asserts:
+      - isNotNull:
+          path: spec.tls

@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v2
+name: f13
+description: A Helm chart for the F13 sovereign AI assistant with chat, summarization, RAG, and transcription services
+type: application
+version: 0.1.0
+appVersion: "1.1.0"
+keywords:
+  - ai
+  - llm
+  - chat
+  - rag
+  - summarization
+  - transcription
+maintainers:
+  - name: openDesk Edu Contributors
+annotations:
+  artifacthub.io/changes: |
+    - Add comprehensive helm-unittest test coverage
+    - Add CI values for template rendering validation
+  artifacthub.io/links: |
+    - name: Source
+      url: https://github.com/tobias-weiss-ai-xr/opendesk-edu

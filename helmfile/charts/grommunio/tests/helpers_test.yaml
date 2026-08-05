@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+suite: test helpers
+templates:
+  - configmap.yaml
+tests:
+  - it: should render LDAP URL helper correctly with defaults
+    asserts:
+      - equal:
+          path: data.GROMMUNIO_LDAP_URL
+          value: "ldap://openldap:389"
+  - it: should render LDAP URL with custom host and port
+    set:
+      grommunio.ldap.host: custom-ldap-server
+      grommunio.ldap.port: 636
+    asserts:
+      - equal:
+          path: data.GROMMUNIO_LDAP_URL
+          value: "ldap://custom-ldap-server:636"
+  - it: should render OIDC discovery URL helper correctly
+    asserts:
+      - equal:
+          path: data.GROMMUNIO_OIDC_DISCOVERY_URL
+          value: "https://keycloak.opendesk.example.com/realms/opendesk/.well-known/openid-configuration"
+  - it: should render OIDC discovery URL with custom issuer
+    set:
+      grommunio.auth.oidc.issuerUrl: "https://sso.example.com/realms/myrealm"
+    asserts:
+      - equal:
+          path: data.GROMMUNIO_OIDC_DISCOVERY_URL
+          value: "https://sso.example.com/realms/myrealm/.well-known/openid-configuration"

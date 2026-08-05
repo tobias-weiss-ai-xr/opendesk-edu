@@ -1,0 +1,95 @@
+suite: Deployment
+templates:
+  - deployment.yaml
+values:
+  - ../ci/ci-values.yaml
+tests:
+  - it: should create a Deployment with correct kind
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should use the correct container image
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: ghcr.io/plankanban/planka:.+
+
+  - it: should set the container port to the configured value
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 1337
+
+  - it: should have standard Kubernetes labels
+    asserts:
+      - isNotNull:
+          path: metadata.labels
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/name"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/instance"]
+      - isNotNull:
+          path: metadata.labels["app.kubernetes.io/managed-by"]
+
+  - it: should have a single replica
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 1
+
+  - it: should configure DATABASE_URL env var
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[0].name
+          value: DATABASE_URL
+      - matchRegex:
+          path: spec.template.spec.containers[0].env[0].value
+          pattern: postgresql://planka:.+@RELEASE-NAME-postgresql:5432/planka
+
+  - it: should configure OIDC environment variables
+    set:
+      planka.oidc.clientId: "test-client"
+      planka.oidc.clientSecret: "test-secret"
+      planka.oidc.authEndpoint: "https://auth.example.com/auth"
+      planka.oidc.tokenEndpoint: "https://auth.example.com/token"
+      planka.oidc.userinfoEndpoint: "https://auth.example.com/userinfo"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: OIDC_CLIENT_ID
+            value: "test-client"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: OIDC_AUTH_ENDPOINT
+            value: "https://auth.example.com/auth"
+
+  - it: should set resource requests and limits
+    asserts:
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.requests
+      - isNotNull:
+          path: spec.template.spec.containers[0].resources.limits
+
+  - it: should mount the data volume
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: planka-data
+            mountPath: /app/public/user-avatars
+            subPath: user-avatars
+
+  - it: should set container security context
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - contains:
+          path: spec.template.spec.containers[0].securityContext.capabilities.drop
+          content: ALL
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.privileged
+          value: false

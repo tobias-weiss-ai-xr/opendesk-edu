@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: AGPL-3.0-or-later
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "f13.fullname" . }}-llm
+  labels:
+    {{- include "f13.labels" . | nindent 4 }}
+    app.kubernetes.io/component: core
+data:
+  llm_models.yml: |
+    provider: {{ .Values.llm.provider | quote }}
+    api_url: {{ .Values.llm.apiUrl | quote }}
+
+    models:
+      chat: {{ .Values.llm.models.chat | quote }}
+      summary: {{ .Values.llm.models.summary | quote }}
+      parser: {{ .Values.llm.models.parser | quote }}

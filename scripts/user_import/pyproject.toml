@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opendesk-edu-user-import"
+version = "1.0.0"
+description = "User provisioning and deprovisioning tools for openDesk via UCS UDM REST API"
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.31",
+    "pandas>=2.0",
+    "configargparse>=1.7",
+    "python-dateutil>=2.8",
+]
+
+[project.optional-dependencies]
+ods = ["odfpy>=1.4"]
+xlsx = ["openpyxl>=3.1"]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "ruff>=0.4",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"

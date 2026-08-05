@@ -1,0 +1,37 @@
+# ILIAS with Shibboleth SP 3.5.2 from Debian testing
+# This bypasses the Debian 13 stable shibd validation bug in shibboleth-sp-common 3.5.0+dfsg-2+deb13u1
+# by installing the fixed version from Debian testing repo
+
+FROM srsolutions/ilias:9-php8.2-apache
+
+USER root
+
+# Enable Debian testing repository to get fixed shibboleth-sp version
+RUN echo "Acquire::ForceIPv4 \"true\";" > /etc/apt/apt.conf.d/99force-ipv4 && \
+    echo "deb http://deb.debian.org/debian testing main" > /etc/apt/sources.list.d/testing.list && \
+    echo "deb http://security.debian.org/debian-security testing-security main" >> /etc/apt/sources.list.d/testing.list && \
+    apt-get update && \
+    apt-get install -y -t testing libapache2-mod-shib shibboleth-sp-common && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Ensure runtime directories exist and are writable by the container user (www-data)
+RUN mkdir -p /var/run/shibboleth /var/log/shibboleth /var/lib/shibboleth /var/cache/shibboleth && \
+    chown -R www-data:www-data /var/run/shibboleth /var/log/shibboleth /var/lib/shibboleth /var/cache/shibboleth && \
+    rm -f /etc/apache2/conf-enabled/shib.conf
+
+# Create entrypoint script that starts shibd before Apache
+# This is required because mod_shib needs shibd running to process SAML requests
+# Note: The Helm chart sets command=["apache2-foreground"], which Docker passes as
+# arguments to the entrypoint. We ignore them and always run shibd + Apache.
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Set entrypoint so shibd starts before Apache regardless of Helm chart command
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+USER www-data
+
+# Verify installation - check shibd binary exists
+RUN which shibd && \
+    shibd -v

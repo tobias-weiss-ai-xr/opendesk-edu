@@ -1,0 +1,272 @@
+# SPDX-FileCopyrightText: 2024 Zentrum für Digitale Souveränität der öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-FileCopyrightText: 2024 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+{{- if .Values.automation.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "semester-provisioning.fullname" . }}-semester-start
+  labels:
+    {{- include "semester-provisioning.labels" . | nindent 4 }}
+    app.kubernetes.io/component: semester-start
+spec:
+  schedule: {{ .Values.automation.cron.semester_start | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.automation.jobs.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.automation.jobs.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "semester-provisioning.serviceAccountName" . }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.semesterProvisioning.podSecurityContext | nindent 12 }}
+          containers:
+            - name: semester-start
+              securityContext:
+                {{- toYaml .Values.semesterProvisioning.securityContext | nindent 16 }}
+              image: {{ include "semester-provisioning.image" . }}
+              imagePullPolicy: {{ .Values.semesterProvisioning.image.pullPolicy }}
+              command:
+                - /app/semester-provisioning
+                - transition
+                - --old-semester={{ .Values.semester.previous.name }}
+                - --new-semester={{ .Values.semester.current.name }}
+              env:
+                - name: SEMESTER_CONFIG_PATH
+                  value: /app/config/config.yaml
+                - name: LOG_LEVEL
+                  value: {{ .Values.audit.log_level | quote }}
+                {{- if .Values.ilias.enabled }}
+                - name: ILIAS_API_URL
+                  value: {{ .Values.ilias.api_url | quote }}
+                {{- end }}
+                {{- if .Values.moodle.enabled }}
+                - name: MOODLE_API_URL
+                  value: {{ .Values.moodle.api_url | quote }}
+                {{- end }}
+              volumeMounts:
+                - name: config
+                  mountPath: /app/config
+                  readOnly: true
+                {{- if .Values.persistence.enabled }}
+                - name: data
+                  mountPath: /app/data
+                {{- end }}
+          volumes:
+            - name: config
+              configMap:
+                name: {{ include "semester-provisioning.configMapName" . }}
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ include "semester-provisioning.fullname" . }}-data
+            {{- end }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "semester-provisioning.fullname" . }}-role-sync
+  labels:
+    {{- include "semester-provisioning.labels" . | nindent 4 }}
+    app.kubernetes.io/component: role-sync
+spec:
+  schedule: {{ .Values.automation.cron.role_sync | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.automation.jobs.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.automation.jobs.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "semester-provisioning.serviceAccountName" . }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.semesterProvisioning.podSecurityContext | nindent 12 }}
+          containers:
+            - name: role-sync
+              securityContext:
+                {{- toYaml .Values.semesterProvisioning.securityContext | nindent 16 }}
+              image: {{ include "semester-provisioning.image" . }}
+              imagePullPolicy: {{ .Values.semesterProvisioning.image.pullPolicy }}
+              command:
+                - /app/semester-provisioning
+                - sync-roles
+                - --semester={{ .Values.semester.current.name }}
+              env:
+                - name: SEMESTER_CONFIG_PATH
+                  value: /app/config/config.yaml
+                - name: LOG_LEVEL
+                  value: {{ .Values.audit.log_level | quote }}
+                {{- if .Values.ilias.enabled }}
+                - name: ILIAS_API_URL
+                  value: {{ .Values.ilias.api_url | quote }}
+                - name: ILIAS_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "semester-provisioning.fullname" . }}-secrets
+                      key: ilias-api-key
+                {{- end }}
+                {{- if .Values.moodle.enabled }}
+                - name: MOODLE_API_URL
+                  value: {{ .Values.moodle.api_url | quote }}
+                - name: MOODLE_API_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "semester-provisioning.fullname" . }}-secrets
+                      key: moodle-api-token
+                {{- end }}
+                - name: KEYCLOAK_URL
+                  value: {{ .Values.keycloak.url | quote }}
+                - name: KEYCLOAK_REALM
+                  value: {{ .Values.keycloak.realm | quote }}
+                - name: KEYCLOAK_ADMIN_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "semester-provisioning.fullname" . }}-secrets
+                      key: keycloak-admin-user
+                - name: KEYCLOAK_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "semester-provisioning.fullname" . }}-secrets
+                      key: keycloak-admin-password
+              volumeMounts:
+                - name: config
+                  mountPath: /app/config
+                  readOnly: true
+                {{- if .Values.persistence.enabled }}
+                - name: data
+                  mountPath: /app/data
+                {{- end }}
+          volumes:
+            - name: config
+              configMap:
+                name: {{ include "semester-provisioning.configMapName" . }}
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ include "semester-provisioning.fullname" . }}-data
+            {{- end }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "semester-provisioning.fullname" . }}-semester-end
+  labels:
+    {{- include "semester-provisioning.labels" . | nindent 4 }}
+    app.kubernetes.io/component: semester-end
+spec:
+  schedule: {{ .Values.automation.cron.semester_end | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.automation.jobs.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.automation.jobs.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "semester-provisioning.serviceAccountName" . }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.semesterProvisioning.podSecurityContext | nindent 12 }}
+          containers:
+            - name: semester-end
+              securityContext:
+                {{- toYaml .Values.semesterProvisioning.securityContext | nindent 16 }}
+              image: {{ include "semester-provisioning.image" . }}
+              imagePullPolicy: {{ .Values.semesterProvisioning.image.pullPolicy }}
+              command:
+                - /app/semester-provisioning
+                - archive-semester
+                - --semester={{ .Values.semester.current.name }}
+              env:
+                - name: SEMESTER_CONFIG_PATH
+                  value: /app/config/config.yaml
+                - name: LOG_LEVEL
+                  value: {{ .Values.audit.log_level | quote }}
+                {{- if .Values.ilias.enabled }}
+                - name: ILIAS_API_URL
+                  value: {{ .Values.ilias.api_url | quote }}
+                {{- end }}
+                {{- if .Values.moodle.enabled }}
+                - name: MOODLE_API_URL
+                  value: {{ .Values.moodle.api_url | quote }}
+                {{- end }}
+              volumeMounts:
+                - name: config
+                  mountPath: /app/config
+                  readOnly: true
+                {{- if .Values.persistence.enabled }}
+                - name: data
+                  mountPath: /app/data
+                {{- end }}
+          volumes:
+            - name: config
+              configMap:
+                name: {{ include "semester-provisioning.configMapName" . }}
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ include "semester-provisioning.fullname" . }}-data
+            {{- end }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "semester-provisioning.fullname" . }}-archival-cleanup
+  labels:
+    {{- include "semester-provisioning.labels" . | nindent 4 }}
+    app.kubernetes.io/component: archival-cleanup
+spec:
+  schedule: {{ .Values.automation.cron.archival_cleanup | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.automation.jobs.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.automation.jobs.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "semester-provisioning.serviceAccountName" . }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.semesterProvisioning.podSecurityContext | nindent 12 }}
+          containers:
+            - name: archival-cleanup
+              securityContext:
+                {{- toYaml .Values.semesterProvisioning.securityContext | nindent 16 }}
+              image: {{ include "semester-provisioning.image" . }}
+              imagePullPolicy: {{ .Values.semesterProvisioning.image.pullPolicy }}
+              command:
+                - /app/semester-provisioning
+                - cleanup-archives
+                - --retention-years={{ .Values.provisioning.archive_retention_years }}
+              env:
+                - name: SEMESTER_CONFIG_PATH
+                  value: /app/config/config.yaml
+                - name: LOG_LEVEL
+                  value: {{ .Values.audit.log_level | quote }}
+              volumeMounts:
+                - name: config
+                  mountPath: /app/config
+                  readOnly: true
+                {{- if .Values.persistence.enabled }}
+                - name: data
+                  mountPath: /app/data
+                {{- end }}
+          volumes:
+            - name: config
+              configMap:
+                name: {{ include "semester-provisioning.configMapName" . }}
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ include "semester-provisioning.fullname" . }}-data
+            {{- end }}
+---
+{{- end }}

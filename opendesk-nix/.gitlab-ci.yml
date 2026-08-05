@@ -329,6 +329,15 @@ build:all:
 # STAGE 3: TEST
 # ============================================================================
 
+test:scripts:
+  stage: test
+  image: bats/bats:latest
+  script:
+    - echo "Running Bats test suite for shell scripts..."
+    - bats tests/scripts.bats
+  tags:
+    - docker
+
 test:sogo5:
   stage: test
   image: docker:24.0.7-cli

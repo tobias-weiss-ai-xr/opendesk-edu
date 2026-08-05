@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{{- if and (eq .Values.snipr.storage.type "filesystem") .Values.snipr.storage.filesystem.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "snipr.fullname" . }}-data
+  labels:
+    {{- include "snipr.labels" . | nindent 4 }}
+  {{- if .Values.snipr.storage.filesystem.persistence.annotations }}
+  annotations:
+    {{- toYaml .Values.snipr.storage.filesystem.persistence.annotations | nindent 4 }}
+  {{- end }}
+  annotations:
+    {{- if .Values.snipr.backup.enabled }}
+    k8up.io/backup: "true"
+    backup.k8up.io/destination: {{ .Values.snipr.backup.repositories.recordings.backend | quote }}
+    {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.snipr.storage.filesystem.persistence.accessMode | quote }}
+  storageClassName: {{ .Values.snipr.storage.filesystem.persistence.storageClass | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.snipr.storage.filesystem.persistence.size | quote }}
+{{- end }}

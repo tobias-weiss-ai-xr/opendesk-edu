@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "zammad"
+    chart: "../../charts/zammad"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.zammad }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.zammad.enabled }}
+    timeout: 1800
+
+commonLabels:
+  deployStage: "050-components"
+  component: "zammad"

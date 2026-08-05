@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-portal-entries
+  labels:
+    app.kubernetes.io/name: portal-entries
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  {{- range .Values.entries }}
+  {{ .id }}.ldif: |
+    dn: cn={{ .id }},cn=entry,cn=portals,cn=univention,{{ $.Values.ldap.baseDn }}
+    objectClass: univentionNewPortalEntry
+    objectClass: top
+    cn: {{ .id }}
+    univentionNewPortalEntryActivate: TRUE
+    univentionNewPortalEntryLink: en_US {{ .url }}
+    univentionNewPortalEntryLink: de_DE {{ .url }}
+    univentionNewPortalEntryLinkTarget: newwindow
+    univentionNewPortalEntryDisplayName: en_US {{ .displayName.en }}
+    univentionNewPortalEntryDisplayName: de_DE {{ .displayName.de }}
+    univentionNewPortalEntryDescription: en_US {{ .description.en }}
+    univentionNewPortalEntryDescription: de_DE {{ .description.de }}
+    univentionNewPortalEntryOnlyAnonymous: FALSE
+  {{- end }}
+  apply.sh: |
+    #!/bin/sh
+    set -e
+    LDAP_PASSWORD=***    BASE_DN="{{ $.Values.ldap.baseDn }}"
+    ADMIN_DN="{{ $.Values.ldap.adminDn }}"
+
+    # Add/update collab-service portal entries (upsert: delete then add)
+    for f in /entries/*.ldif; do
+      entry_id=$(basename "$f" .ldif)
+      entry_dn="cn=$entry_id,cn=entry,cn=portals,cn=univention,$BASE_DN"
+      echo "Checking $entry_id..."
+      # Delete existing entry (ignore if not found)
+      ldapdelete -x -H ldap://localhost \
+        -D "$ADMIN_DN" -w "$LDAP_PASSWORD" \
+        "$entry_dn" 2>/dev/null || true
+      # Always add (fresh state from ConfigMap)
+      echo "  Creating $entry_id..."
+      ldapadd -x -H ldap://localhost \
+        -D "$ADMIN_DN" -w "$LDAP_PASSWORD" \
+        -f "$f"
+    done
+
+    # Add entries to portal central navigation (makes them visible)
+    CENTRAL_DN="cn=domain,cn=portal,cn=portals,cn=univention,$BASE_DN"
+    for f in /entries/*.ldif; do
+      entry_id=$(basename "$f" .ldif)
+      entry_dn="cn=$entry_id,cn=entry,cn=portals,cn=univention,$BASE_DN"
+      # Check if already in central navigation
+      in_central=$(ldapsearch -x -LLL -H ldap://localhost \
+        -D "$ADMIN_DN" -w "$LDAP_PASSWORD" \
+        -b "$CENTRAL_DN" univentionNewPortalCentralNavigation 2>/dev/null | grep -c "$entry_dn" || echo "0")
+      if [ "$in_central" -eq 0 ]; then
+        echo "Adding $entry_id to central navigation..."
+        echo "dn: $CENTRAL_DN
+changetype: modify
+add: univentionNewPortalCentralNavigation
+univentionNewPortalCentralNavigation: $entry_dn" | ldapmodify -x -H ldap://localhost \
+          -D "$ADMIN_DN" -w "$LDAP_PASSWORD" 2>/dev/null || true
+      fi
+    done
+    echo "Done"

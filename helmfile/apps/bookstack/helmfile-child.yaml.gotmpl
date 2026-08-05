@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+# SPDX-License-Identifier: Apache-2.0
+---
+releases:
+  - name: "bookstack"
+    chart: "../../charts/bookstack"
+    wait: true
+    values:
+      - "values.yaml.gotmpl"
+      {{- range .Values.customization.release.bookstack }}
+      - {{ . }}
+      {{- end }}
+    installed: {{ .Values.apps.bookstack.enabled }}
+    timeout: 1800
+
+commonLabels:
+  deployStage: "050-components"
+  component: "bookstack"

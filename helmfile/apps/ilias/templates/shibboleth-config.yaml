@@ -1,0 +1,592 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ilias-shibboleth-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: ilias
+    app.kubernetes.io/component: shibboleth-sp
+    app.kubernetes.io/part-of: opendesk
+data:
+  shibboleth2.xml: |
+    <SPConfig xmlns="urn:mace:shibboleth:3.0:native:sp:config"
+              clockSkew="180">
+
+      <OutOfProcess tranLogFormat="%u|%s|%IDP|%i|%ac|%t|%attr|%n|%b|%E|%S|%SS|%L|%ua|%a" />
+
+        <ApplicationDefaults entityID="ilias-saml"
+                            REMOTE_USER="USERNAME">
+
+        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
+                  checkAddress="false" handlerSSL="true" cookieProps="; path=/; HttpOnly; Secure">
+
+          <SSO entityID="https://id.opendesk.hrz.uni-marburg.de/realms/opendesk" ECP="true" authnRequestsSigned="true">
+            SAML2
+          </SSO>
+
+          <Logout>SAML2</Logout>
+          <Handler type="MetadataGenerator" Location="/Metadata" signing="true"/>
+          <Handler type="Status" Location="/Status" acl="127.0.0.1"/>
+          <Handler type="Session" Location="/Session" showAttributeValues="false"/>
+          <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+          <Handler type="Logout" Location="/SLO/SOAP"
+                   Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"/>
+        </Sessions>
+
+        <MetadataProvider id="KeycloakMD" type="XML"
+                          url="https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
+                          backingFilePath="keycloak-metadata.xml"
+                          reloadInterval="7200">
+        </MetadataProvider>
+
+        <AttributeExtractor type="XML" validate="true" path="attribute-map.xml"/>
+
+        <AttributeResolver type="Query" subjectMatch="true">
+          <Attribute name="email" nameFormat="Basic"/>
+          <Attribute name="givenname" nameFormat="Basic"/>
+          <Attribute name="surname" nameFormat="Basic"/>
+        </AttributeResolver>
+
+        <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
+
+        <CredentialResolver type="File" use="signing"
+                            key="/etc/shibboleth/certs/sp-key.pem"
+                            certificate="/etc/shibboleth/certs/sp-cert.pem"/>
+
+      </ApplicationDefaults>
+
+      <!-- Policies that determine how to process and authenticate runtime messages. -->
+      <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
+
+      <!-- Low-level configuration about protocols and bindings available for use. -->
+      <ProtocolProvider type="XML" validate="true" reloadChanges="false" path="protocols.xml"/>
+
+    </SPConfig>
+
+  attribute-map.xml: |
+    <Attributes xmlns="urn:mace:shibboleth:2.0:attribute-map">
+      <Attribute name="email" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="USERNAME"/>
+      <Attribute name="firstname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="FIRSTNAME"/>
+      <Attribute name="lastname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="LASTNAME"/>
+    </Attributes>
+
+  attribute-policy.xml: |
+    <AttributeFilterPolicyGroup xmlns="urn:mace:shibboleth:2.0:afp"
+                                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <AttributeFilterPolicy id="PolicyForKeycloak">
+        <PolicyRequirementRule xsi:type="ANY"/>
+        <AttributeRule attributeID="USERNAME">
+          <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="FIRSTNAME">
+          <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="LASTNAME">
+          <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+      </AttributeFilterPolicy>
+    </AttributeFilterPolicyGroup>
+
+  security-policy.xml: |
+    <SecurityPolicies xmlns="urn:mace:shibboleth:3.0:native:sp:config">
+
+        <!-- Each policy defines a set of rules to use to secure messages. -->
+
+        <!--
+        The predefined policy enforces replay/freshness, standard
+        condition processing, and permits signing and client TLS.
+        -->
+        <Policy id="default" validate="false">
+            <PolicyRule type="MessageFlow" checkReplay="true" expires="300"/>
+            <PolicyRule type="Conditions">
+                <PolicyRule type="Audience"/>
+            </PolicyRule>
+            <PolicyRule type="ClientCertAuth" errorFatal="true"/>
+            <PolicyRule type="XMLSigning" errorFatal="true"/>
+            <PolicyRule type="SimpleSigning" errorFatal="true"/>
+        </Policy>
+
+        <Policy id="blockUnsolicited" validate="false">
+            <PolicyRule type="MessageFlow" blockUnsolicited="true" checkReplay="true" expires="300"/>
+            <PolicyRule type="Conditions">
+                <PolicyRule type="Audience"/>
+            </PolicyRule>
+            <PolicyRule type="ClientCertAuth" errorFatal="true"/>
+            <PolicyRule type="XMLSigning" errorFatal="true"/>
+            <PolicyRule type="SimpleSigning" errorFatal="true"/>
+            <PolicyRule type="Bearer" blockUnsolicited="true"/>
+        </Policy>
+
+        <!--
+        This policy is a place-holder for use of assertions in metadata
+        as a way of attaching signed information about particular IdPs.
+        -->
+        <Policy id="entity-attributes">
+            <PolicyRule type="Conditions"/>
+            <PolicyRule type="XMLSigning" errorFatal="true"/>
+        </Policy>
+
+        <!-- Disables known weak algorithms. -->
+        <ExcludedAlgorithms excludeDefaults="true"/>
+
+    </SecurityPolicies>
+
+  protocols.xml: |
+    <Protocols xmlns="urn:mace:shibboleth:2.0:native:sp:protocols">
+
+      <!-- SAML 2.0 -->
+      <Protocol id="SAML2">
+        <Service id="SSO">
+          <Initiator id="SAML2" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" path="/SAML2/POST" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" path="/SAML2/POST-SimpleSign" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" path="/SAML2/Artifact" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" path="/SAML2/ECP" />
+        </Service>
+        <Service id="Logout">
+          <Initiator id="SAML2" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" path="/SLO/SOAP" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" path="/SLO/Redirect" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" path="/SLO/POST" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" path="/SLO/Artifact" />
+        </Service>
+        <Service id="NameIDMgmt">
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" path="/NIM/SOAP" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" path="/NIM/Redirect" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" path="/NIM/POST" />
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" path="/NIM/Artifact" />
+        </Service>
+        <Service id="ArtifactResolution">
+          <Binding id="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" path="/Artifact/SOAP" />
+        </Service>
+      </Protocol>
+
+      <!-- SAML 1.1 and SAML 1.0 -->
+      <Protocol id="SAML1">
+        <Service id="SSO">
+          <Initiator id="Shib1" />
+          <Binding id="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" path="/SAML/POST" />
+          <Binding id="urn:oasis:names:tc:SAML:1.0:profiles:artifact-01" path="/SAML/Artifact" />
+        </Service>
+      </Protocol>
+
+      <!-- ADFSv1 / WS-Federation -->
+      <Protocol id="ADFS">
+        <Service id="SSO">
+          <Initiator id="ADFS" />
+          <Binding id="http://schemas.xmlsoap.org/ws/2003/07/secext" path="/ADFS" />
+        </Service>
+        <Service id="Logout">
+          <Initiator id="ADFS" />
+        </Service>
+      </Protocol>
+
+      <!-- Local Logout -->
+      <Protocol id="Local">
+        <Service id="Logout">
+          <Initiator id="Local" />
+        </Service>
+      </Protocol>
+
+    </Protocols>
+
+  shibd.logger: |
+    # Shibboleth SP daemon logging configuration
+    log4j.rootCategory=INFO, shibd_log, warn_log
+
+    # Main log file appender
+    log4j.appender.shibd_log=org.apache.log4j.RollingFileAppender
+    log4j.appender.shibd_log.fileName=/var/log/shibboleth/shibd.log
+    log4j.appender.shibd_log.maxFileSize=1000000
+    log4j.appender.shibd_log.maxBackupIndex=10
+    log4j.appender.shibd_log.layout=org.apache.log4j.PatternLayout
+    log4j.appender.shibd_log.layout.ConversionPattern=%d{%Y-%m-%d %H:%M:%S} %p %c %x: %m%n
+
+    # Warning-level log file appender
+    log4j.appender.warn_log=org.apache.log4j.RollingFileAppender
+    log4j.appender.warn_log.fileName=/var/log/shibboleth/shibd_warn.log
+    log4j.appender.warn_log.maxFileSize=1000000
+    log4j.appender.warn_log.maxBackupIndex=10
+    log4j.appender.warn_log.layout=org.apache.log4j.PatternLayout
+    log4j.appender.warn_log.layout.ConversionPattern=%d{%Y-%m-%d %H:%M:%S} %p %c %x: %m%n
+    log4j.appender.warn_log.threshold=WARN
+
+    # Debug categories (uncomment to enable for debugging)
+    #log4j.category.OpenSAML.MessageDecoder=DEBUG
+    #log4j.category.OpenSAML.MessageEncoder=DEBUG
+
+  native.logger: |
+    # Shibboleth SP native module logging configuration
+    log4j.rootCategory=INFO, native_log
+
+    log4j.appender.native_log=org.apache.log4j.RollingFileAppender
+    log4j.appender.native_log.fileName=/var/log/shibboleth/native.log
+    log4j.appender.native_log.maxFileSize=1000000
+    log4j.appender.native_log.maxBackupIndex=10
+    log4j.appender.native_log.layout=org.apache.log4j.PatternLayout
+    log4j.appender.native_log.layout.ConversionPattern=%d{%Y-%m-%d %H:%M:%S} %p %c %x: %m%n
+
+  console.logger: |
+    # Console logging for Shibboleth SP
+    log4j.rootCategory=INFO, console
+
+    log4j.appender.console=org.apache.log4j.ConsoleAppender
+    log4j.appender.console.layout=org.apache.log4j.PatternLayout
+    log4j.appender.console.layout.ConversionPattern=%d{%Y-%m-%d %H:%M:%S} %p %c %x: %m%n
+
+  bindingTemplate.html: |
+    <html>
+      <head>
+        <title>Shibboleth Authentication Request</title>
+      </head>
+      <body onload="document.forms[0].submit()">
+
+        <h1>Shibboleth Authentication Request</h1>
+
+        <script type="text/javascript">
+        <!--
+        document.write("<p>You are automatically being redirected to the authentication service. ");
+        document.write("If the browser appears to be hung up after 15-20 seconds, try reloading ");
+        document.write("the page before contacting the technical support staff in charge of the ");
+        document.write("authentication service you are trying to access.</p>");
+        document.write("<h2>Redirecting...</h2>");
+        // -->
+        </script>
+
+        <noscript>
+        <p>
+        <strong>Note:</strong> Since your browser does not support JavaScript, you must press the
+        Continue button once to proceed to the authentication service.
+        </p>
+        </noscript>
+
+        <form method="POST" action="<shibmlp action/>">
+        <shibmlpif TARGET>
+          <input type="hidden" name="TARGET" value="<shibmlp TARGET/>"/>
+        </shibmlpif>
+        <shibmlpif RelayState>
+          <input type="hidden" name="RelayState" value="<shibmlp RelayState/>"/>
+        </shibmlpif>
+        <shibmlpif SAMLRequest>
+          <input type="hidden" name="SAMLRequest" value="<shibmlp SAMLRequest/>"/>
+        </shibmlpif>
+        <shibmlpif SAMLResponse>
+          <input type="hidden" name="SAMLResponse" value="<shibmlp SAMLResponse/>"/>
+        </shibmlpif>
+        <shibmlpif SAMLart>
+          <input type="hidden" name="SAMLart" value="<shibmlp SAMLart/>"/>
+        </shibmlpif>
+        <shibmlpif SigAlg>
+          <input type="hidden" name="SigAlg" value="<shibmlp SigAlg/>"/>
+        </shibmlpif>
+        <shibmlpif Signature>
+          <input type="hidden" name="Signature" value="<shibmlp Signature/>"/>
+        </shibmlpif>
+            <shibmlpif KeyInfo>
+                <input type="hidden" name="KeyInfo" value="<shibmlp KeyInfo/>"/>
+            </shibmlpif>
+        <noscript>
+        <div>
+        <input type="submit" value="Continue"/>
+        </div>
+        </noscript>
+        </form>
+      </body>
+    </html>
+
+  sessionError.html: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "DTD/xhtml1-strict.dtd">
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link rel="stylesheet" type="text/css" href="<shibmlp styleSheet/>" />
+      <title><shibmlp errorType/></title>
+    </head>
+
+    <body>
+
+    <shibmlpif logoLocation>
+    <img src="<shibmlp logoLocation/>" alt="Logo" />
+    </shibmlpif>
+    <h1><shibmlp errorType/></h1>
+
+    <p>The system encountered an error at <shibmlp now /></p>
+
+    <p>To report this problem, please contact the site administrator at
+    <a href="mailto:<shibmlp supportContact/>"><shibmlp supportContact/></a>.
+    </p>
+
+    <p>Please include the following message in any email:</p>
+    <p class="error"><shibmlp errorType/> at (<shibmlp requestURL/>)</p>
+
+    <p><shibmlp errorText/></p>
+
+    <shibmlpif statusCode>
+      <p>Error from identity provider:</p>
+      <blockquote>
+        <strong>Status:</strong> <shibmlp statusCode/><br>
+        <shibmlpif statusCode2>
+          <strong>Sub-Status:</strong> <shibmlp statusCode2/><br/>
+        </shibmlpif>
+        <shibmlpif statusMessage>
+          <strong>Message:</strong> <shibmlp statusMessage/><br/>
+        </shibmlpif>
+      </blockquote>
+    </shibmlpif>
+
+    </body>
+    </html>
+
+  discoveryTemplate.html: |
+    <html>
+      <head>
+        <title>Request for Authentication</title>
+      </head>
+      <body>
+        <h1>Request for Authentication</h1>
+
+            <p>This web site requires you to login before proceeding. Please identify
+            the domain name of your organization:</p>
+
+        <form method="GET" action="<shibmlp action/>">
+                <shibmlpif target>
+                    <input type="hidden" name="target" value="<shibmlp target/>"/>
+                </shibmlpif>
+
+                <shibmlpif acsIndex>
+                    <input type="hidden" name="acsIndex" value="<shibmlp acsIndex/>"/>
+                </shibmlpif>
+
+                <shibmlpif isPassive>
+                    <input type="hidden" name="isPassive" value="<shibmlp isPassive/>"/>
+                </shibmlpif>
+
+                <shibmlpif forceAuthn>
+                    <input type="hidden" name="forceAuthn" value="<shibmlp forceAuthn/>"/>
+                </shibmlpif>
+
+                <shibmlpif authnContextClassRef>
+                    <input type="hidden" name="authnContextClassRef" value="<shibmlp authnContextClassRef/>"/>
+                </shibmlpif>
+
+                <shibmlpif authnContextDeclRef>
+                    <input type="hidden" name="authnContextDeclRef" value="<shibmlp authnContextDeclRef/>"/>
+                </shibmlpif>
+
+                <shibmlpif authnContextComparison>
+                    <input type="hidden" name="authnContextComparison" value="<shibmlp authnContextComparison/>"/>
+                </shibmlpif>
+
+            <input type="text" name="entityID" value="<shibmlp entityID/>">
+            <input type="submit" value="Submit"/>
+        </form>
+
+        <shibmlpif entityID>
+        <p>The system was unable to determine how to proceed using the value you supplied.</p>
+        </shibmlpif>
+      </body>
+    </html>
+
+  postTemplate.html: |
+    <html>
+        <head>
+            <title>Login Completed</title>
+            <script language="Javascript">
+            <!--
+            function submitOnce() {
+              if (location.hash.length>0) {
+                 if (confirm("Are you sure you want to resubmit this form information a second time?")) {
+                    document.getElementById("shib_continue").click();
+                 } else {
+                    document.body.innerHTML="<html>Form information was not resubmitted.</html>";
+                 }
+              } else {
+                 var loc = window.location;
+                 window.location = loc + "#submitted";
+                 document.getElementById("shib_continue").click();
+              }
+            }
+            // -->
+            </script>
+        </head>
+        <body onload="submitOnce()">
+            <h2>Login Completed</h2>
+
+            <noscript>
+            <p>A form submission to this site was interrupted by the login process.
+            If you would like to complete it now, submit this form.</p>
+            </noscript>
+
+            <form method="POST" action="<shibmlp action/>">
+            <shibmlpfor PostedData>
+                <input type="hidden" name="<shibmlp $name/>" value="<shibmlp $value/>"/>
+            </shibmlpfor>
+            <input type="submit" id="shib_continue" name="_shib_continue_" value="Continue"/>
+            </form>
+    </body>
+    </html>
+
+  localLogout.html: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "DTD/xhtml1-strict.dtd">
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link rel="stylesheet" type="text/css" href="<shibmlp styleSheet/>" />
+      <title>Local Logout</title>
+    </head>
+
+    <body>
+
+    <shibmlpif logoLocation>
+    <img src="<shibmlp logoLocation/>" alt="Logo" />
+    </shibmlpif>
+    <h1>Local Logout</h1>
+
+    <strong>Status of Local Logout:</strong> <shibmlp logoutStatus/>
+
+    <p/>
+
+    You <strong>MUST</strong> close your browser to complete the logout process.
+
+    </body>
+    </html>
+
+  globalLogout.html: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "DTD/xhtml1-strict.dtd">
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link rel="stylesheet" type="text/css" href="<shibmlp styleSheet/>" />
+      <title>Global Logout</title>
+    </head>
+
+    <body>
+
+    <shibmlpif logoLocation>
+    <img src="<shibmlp logoLocation/>" alt="Logo" />
+    </shibmlpif>
+    <h1>Global Logout</h1>
+
+    <p><strong>Status of Global Logout:</strong> <shibmlp logoutStatus/></p>
+
+    <p>If the message above indicates success, you have been logged out of all
+    the applications and systems that support the logout mechanism.</p>
+
+    <p>Regardless of the outcome, it is strongly advised that you close your browser
+    to ensure that you complete the logout process.</p>
+
+    </body>
+    </html>
+
+  partialLogout.html: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "DTD/xhtml1-strict.dtd">
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link rel="stylesheet" type="text/css" href="<shibmlp styleSheet/>" />
+      <title>Partial Logout</title>
+    </head>
+
+    <body>
+
+    <shibmlpif logoLocation>
+    <img src="<shibmlp logoLocation/>" alt="Logo" />
+    </shibmlpif>
+    <h1>Partial Logout</h1>
+
+    <p>You remain logged into one or more applications accessed during your session.
+    To complete the logout process, please close/exit your browser completely.</p>
+
+    </body>
+    </html>
+
+  metadataError.html: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "DTD/xhtml1-strict.dtd">
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link rel="stylesheet" type="text/css" href="<shibmlp styleSheet/>" />
+      <title>Unknown Identity Provider</title>
+    </head>
+
+    <body>
+
+    <shibmlpif logoLocation>
+    <img src="<shibmlp logoLocation/>" alt="Logo" />
+    </shibmlpif>
+    <h1>Unknown or Unusable Identity Provider</h1>
+
+    <p>The identity provider supplying your login credentials is not authorized
+    for use with this service or does not support the necessary capabilities.</p>
+
+    <p>To report this problem, please contact the site administrator at
+    <a href="mailto:<shibmlp supportContact/>"><shibmlp supportContact/></a>.
+    </p>
+
+    <p>Please include the following error message in any email:</p>
+    <p class="error">Identity provider lookup failed at (<shibmlp requestURL/>)</p>
+    <shibmlpif entityID>
+    <p><strong>EntityID:</strong> <shibmlp entityID/></p>
+    </shibmlpif>
+    <p><shibmlp errorType/>: <shibmlp errorText/></p>
+
+    </body>
+    </html>
+
+  sslError.html: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "DTD/xhtml1-strict.dtd">
+
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <link rel="stylesheet" type="text/css" href="<shibmlp styleSheet/>" />
+      <title>POST Failed</title>
+    </head>
+
+    <body>
+
+    <shibmlpif logoLocation>
+    <img src="<shibmlp logoLocation/>" alt="Logo" />
+    </shibmlpif>
+    <h1>POST Failed</h1>
+
+    <p>
+    You have attemped to submit information without the protection
+    of TLS to this site.<br/>
+    </p>
+
+    <p>
+    For the protection of your submission and the integrity of the site,
+    this is not permitted. Please try accessing the server with a
+    URL starting with <strong>https://</strong> and report this problem
+    to <a href="mailto:<shibmlp supportContact/>"><shibmlp supportContact/></a>
+    </p>
+
+    </body>
+    </html>

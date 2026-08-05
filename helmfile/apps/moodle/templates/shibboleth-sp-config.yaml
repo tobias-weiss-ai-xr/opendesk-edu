@@ -1,0 +1,226 @@
+# SPDX-FileCopyrightText: 2026 Zentrum für Digitale Souveränität der Öffentlichen Verwaltung (ZenDiS) GmbH
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: moodle-shibboleth-sp-secret
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: moodle
+    app.kubernetes.io/component: shibboleth-sp
+    app.kubernetes.io/part-of: opendesk
+type: Opaque
+data:
+  # Shibboleth SP keypair TLS certificate (sp-cert.pem)
+  # This certificate is used for SAML message signing and TLS termination
+sp-cert.pem: {{ .Values.secrets.moodleSaml.spCert | default "" | b64enc | quote }}
+
+  # Shibboleth SP private key (sp-key.pem)
+  # Private key corresponding to sp-cert.pem
+sp-key.pem: {{ .Values.secrets.moodleSaml.spKey | default "" | b64enc | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moodle-shibboleth-sp-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: moodle
+    app.kubernetes.io/component: shibboleth-sp
+    app.kubernetes.io/part-of: opendesk
+data:
+  shibboleth2.xml: |
+    <SPConfig xmlns="urn:mace:shibboleth:3.0:native:sp:config"
+             clockSkew="180">
+
+      <!-- Application configuration -->
+      <ApplicationDefaults entityID="{{ .Values.global.moodleSaml.entityId | default (printf "https://moodle.%s/shibboleth" .Values.global.domain) | quote }}"
+                          REMOTE_USER="USERNAME"
+                          cipherSuites="DEFAULT:!DH:!3DES:!DES:!RC4:!aNULL:!eNULL:!MD5:!EXP:!PSK:!SRP"
+                          signing="false" encryption="false">
+
+        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
+                  checkAddress="false" handlerSSL="true" cookieProps="; path=/; HttpOnly; Secure"
+                  exportLocation="https://moodle.{{ .Values.global.domain }}/Shibboleth.sso/Metadata"
+                  idpHistory="false" idpHistoryDays="7">
+
+          <!-- SSO endpoints -->
+          <SSO discoveryProtocol="SAMLDS" discoveryURL="https://id.{{ .Values.global.domain }}/realms/{{ .Values.platform.realm }}/protocol/saml/ds">
+            SAML2 SAML1
+          </SSO>
+
+          <!-- Single Logout Service configurations -->
+          {{ if .Values.backchannelLogout.enabled | default "false" }}
+          {{ if .Values.backchannelLogout.saml.moodle.enabled | default "false" }}
+
+          <!-- Backchannel Logout Service (SAML 2.0) -->
+          <LogoutRequest listener="Logout" />
+          <LogoutResponse listener="Logout" />
+          <SessionInitiator name="Logout" location="/Shibboleth.sso/Logout"
+                            binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+                            isDefault="{{ .Values.backchannelLogout.saml.moodle.bindings.soap | default "true" }}"/>
+
+          {{ end }}
+          {{ end }}
+
+          <!-- Frontchannel Logout Service (SAML 2.0) -->
+          <LogoutRequest listener="Logout" />
+          <LogoutResponse listener="Logout" />
+          <SessionInitiator name="Logout" location="/Shibboleth.sso/Logout"
+                            binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                            isDefault="{{ not .Values.backchannelLogout.enabled | default "true" }}"/>
+          <SessionInitiator name="Logout" location="/Shibboleth.sso/Logout"
+                            binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+
+          <!-- Metadata generation -->
+          <MetadataProvider type="XML" uri="/etc/shibboleth/idp-metadata.xml"
+                            backingFilePath="/etc/shibboleth/idp-metadata.xml" reloadInterval="7200">
+            <MetadataFilter type="RequireValidUntil" minSeconds="3600"/>
+            <MetadataFilter type="Signature" certificate="/etc/shibboleth/idp-cert.pem"/>
+          </MetadataProvider>
+
+        </Sessions>
+
+        <AttributeExtractor type="XML" validate="true" path="attribute-map.xml"/>
+        <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
+
+        <!-- Metadata generation -->
+        <MetadataProvider type="XML" uri=""
+                          file="/etc/shibboleth/sp-metadata.xml" reloadInterval="180"/>
+      </ApplicationDefaults>
+
+      <!-- Security policies -->
+      <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
+      <ProtocolProvider type="XML" validate="true" reloadInterval="3600"
+                       uri="internal://protocol-config.xml"/>
+
+    </SPConfig>
+
+  attribute-map.xml: |
+    <Attributes xmlns="urn:mace:shibboleth:2.0:attribute-map">
+      <Attribute name="email" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="USERNAME"/>
+      <Attribute name="firstname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="FIRSTNAME"/>
+      <Attribute name="lastname" nameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" id="LASTNAME"/>
+    </Attributes>
+
+  attribute-policy.xml: |
+    <AttributeFilterPolicyGroup xmlns="urn:mace:shibboleth:2.0:afp"
+                                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <AttributeFilterPolicy id="PolicyForKeycloak">
+        <PolicyRequirementRule xsi:type="ANY"/>
+        <AttributeRule attributeID="USERNAME">
+          <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="FIRSTNAME">
+          <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+        <AttributeRule attributeID="LASTNAME">
+          <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+      </AttributeFilterPolicy>
+    </AttributeFilterPolicyGroup>
+
+  idp-metadata.xml: |
+    {{ .Values.secrets.moodleSaml.idpMetadata | default "" | quote }}
+
+  idp-cert.pem: |
+    {{ .Values.secrets.moodleSaml.idpCert | default "" | quote }}
+
+  # Apache mod_shibboleth configuration
+  shibboleth.conf: |
+    #
+    # Shibboleth SP Apache configuration for Moodle
+    # SPDX-License-Identifier: Apache-2.0
+    #
+
+    ServerName moodle.{{ .Values.global.domain }}
+    UseCanonicalName On
+    ShibCompatValidUser Off
+    {{ if and .Values.backchannelLogout.saml.moodle.enabled .Values.backchannelLogout.saml.moodle.verbose }}
+    LogLevel mod_shib:debug
+    {{ else }}
+    LogLevel mod_shib:warn
+    {{ end }}
+
+    # Trust X-Forwarded-Proto header from ingress to detect HTTPS behind TLS termination
+    SetEnvIf X-Forwarded-Proto https HTTPS=on
+
+    <Location />
+      ShibUseHeaders On
+      SetEnvIf X-Forwarded-Proto https HTTPS=on
+    </Location>
+
+    # Shibboleth Request Mapper
+    <Location /Shibboleth.sso>
+      SetHandler shib
+      AuthType None
+      Require all granted
+    </Location>
+
+    # Shibboleth stylesheets
+    <IfModule mod_alias.c>
+      <Location /shibboleth-sp>
+        AuthType None
+        Require all granted
+      </Location>
+      Alias /shibboleth-sp/main.css /usr/share/shibboleth/main.css
+    </IfModule>
+
+    # SAML authentication endpoint for Moodle
+    <Location /auth/shibboleth>
+      AuthType shibboleth
+      ShibRequestSetting requireSession 1
+      ShibRequestSetting applicationId default
+      require valid-user
+    </Location>
+
+    {{ if .Values.backchannelLogout.enabled | default "false" }}
+    {{ if .Values.backchannelLogout.saml.moodle.enabled | default "false" }}
+
+    # Backchannel logout handler
+    <Location /Shibboleth.sso/Logout>
+      SetHandler shib
+      AuthType None
+      Require all granted
+
+      {{ if .Values.backchannelLogout.saml.moodle.signature.requireSignedRequests | default "true" }}
+      ShibRequireSignature On
+      {{ else }}
+      ShibRequireSignature Off
+      {{ end }}
+
+      {{ if .Values.backchannelLogout.saml.moodle.signature.signResponses | default "true" }}
+      ShibSignResponses On
+      {{ else }}
+      ShibSignResponses Off
+      {{ end }}
+
+      # Timeout for session termination
+      ShibRequestSetting timeout "{{ .Values.backchannelLogout.saml.moodle.sessionTerminationTimeout | default "30" }}"
+    </Location>
+
+    # Frontchannel logout endpoint (user redirect)
+    <Location /auth/shibboleth/logout>
+      AuthType shibboleth
+      ShibRequestSetting ShibDoLogout yes
+      ShibRequestSetting applicationId default
+      require valid-user
+    </Location>
+
+    {{ end }}
+    {{ end }}
+
+    # Admin portal (LDAP authentication)
+    <Location /admin>
+      AuthType Basic
+      AuthName "Admin Portal Access"
+      AuthLDAPBindDN "cn=admin,dc=swp-ldap,dc=internal"
+      AuthLDAPBindPasswordFile "/var/secrets/ldap_admin_pass"
+      AuthLDAPURL "ldap://ums-ldap-server-primary/dc=swp-ldap,dc=internal?uid"
+      require ldap-group cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal
+    </Location>
+
+    <Location /admin/bbb-shared-secret>
+      require ldap-group cn=Domain Admins,cn=groups,dc=swp-ldap,dc=internal
+    </Location>

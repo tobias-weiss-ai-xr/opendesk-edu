@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2024-2026 HRZ Marburg
+# SPDX-License-Identifier: Apache-2.0
+---
+global:
+  domain: "opendesk.hrz.uni-marburg.de"
+  mailDomain: "opendesk.hrz.uni-marburg.de"
+  matrixDomain: "opendesk.hrz.uni-marburg.de"
+  helmRegistry: "registry.opencode.de/bmi/opendesk/components"
+  imageRegistry: "registry.opencode.de/bmi/opendesk/components"
+
+apps:
+  snipr:
+    enabled: false
+
+secrets:
+  keycloak:
+    clientSecret:
+      snipr: "placeholder-snipr-secret"

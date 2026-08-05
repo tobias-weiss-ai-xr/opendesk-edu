@@ -1,0 +1,39 @@
+---
+replicaCount: 1
+image:
+  repository: weissto/collab-dashboard
+  tag: "latest"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+  hosts:
+    - host: collab.opendesk.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# OAuth2-proxy sidecar for Keycloak SSO
+oauth2:
+  enabled: false
+  provider: "keycloak-oidc"
+  clientId: "opendesk-collab-dashboard"
+  clientSecret: ""
+  oidcIssuerUrl: "https://id.opendesk.example.com/realms/opendesk"
+  cookieSecret: ""
