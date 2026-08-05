@@ -1,0 +1,122 @@
+# SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
+# SPDX-License-Identifier: Apache-2.0
+#
+# Git submodule configuration for opendesk_git
+# Source of truth: Use GitHub forks (tobias-weiss-ai-xr) as primary URLs
+# HRZ GitLab repos are used for internal deployment
+
+# ============================================================================
+# Core OpenDesk Components (HRZ GitLab)
+# ============================================================================
+
+[submodule "opendesk"]
+	path = opendesk
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/opendesk.git
+
+[submodule "argocd-opendesk"]
+	path = argocd-opendesk
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/argocd/opendesk.git
+
+[submodule "erprobungskonzept"]
+	path = erprobungskonzept
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/erprobungskonzept.git
+
+[submodule "k8s-mc-mirror"]
+	path = k8s-mc-mirror
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/k8s-mc-mirror.git
+
+[submodule "k8up"]
+	path = k8up
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/k8up.git
+
+[submodule "monitoring"]
+	path = monitoring
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/monitoring.git
+
+[submodule "registry"]
+	path = registry
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/registry.git
+
+[submodule "user_import"]
+	path = user_import
+	url = git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/user-import.git
+
+# ============================================================================
+# OpenDesk Edu Components (GitHub - tobias-weiss-ai-xr)
+# ============================================================================
+
+[submodule "opendesk-edu"]
+	path = opendesk-edu
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-edu.git
+
+[submodule "opendesk-edu-landscape"]
+	path = opendesk-edu-landscape
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-edu-landscape.git
+
+[submodule "opendesk-edu-spec"]
+	path = opendesk-edu-spec
+	url = git@github.com:opendesk-edu/opendesk-edu-spec.git
+
+[submodule "opendesk-edu-website"]
+	path = opendesk-edu-website
+	url = git@github.com:opendesk-edu/opendesk-edu-website.git
+
+# ============================================================================
+# Helper Components & Tools (GitHub - tobias-weiss-ai-xr)
+# ============================================================================
+
+[submodule "opendesk-collab-dashboard"]
+	path = opendesk-collab-dashboard
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-collab-dashboard.git
+
+[submodule "opendesk-dev-agent"]
+	path = opendesk-dev-agent
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-dev-agent.git
+
+[submodule "opendesk-dev-agent-operator"]
+	path = opendesk-dev-agent-operator
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-dev-agent-operator.git
+
+[submodule "opendesk-helm-charts"]
+	path = opendesk-helm-charts
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-helm-charts.git
+
+[submodule "opendesk-knowledge"]
+	path = opendesk-knowledge
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-knowledge.git
+
+[submodule "opendesk-kubectl"]
+	path = opendesk-kubectl
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-kubectl.git
+
+[submodule "opendesk-sogo-image"]
+	path = opendesk-sogo-image
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-sogo-image.git
+
+# ============================================================================
+# charts-upgrade (GitHub - tobias-weiss-ai-xr)
+# ============================================================================
+
+[submodule "charts-upgrade-v1.20.1"]
+	path = charts-upgrade-v1.20.1
+	url = git@github.com:tobias-weiss-ai-xr/opendesk-charts.git
+
+# ============================================================================
+# OpenDesk COP (GitHub - opendesk-edu)
+# ============================================================================
+
+[submodule "opendesk-cop"]
+	path = opendesk-cop
+	url = git@github.com:opendesk-edu/opendesk-cop.git
+
+# ============================================================================
+# External/Upstream Components
+# ============================================================================
+
+[submodule "addon-nextcloud_integration"]
+	path = addon-nextcloud_integration
+	url = https://gitlab.opencode.de/bmi/opendesk/component-code/groupware/appsuite8/addon-nextcloud_integration
+
+[submodule "opencode-de-analysis"]
+	path = opencode-de-analysis
+	url = https://github.com/tobias-weiss-ai-xr/opencode-de-analysis.git
