@@ -58,15 +58,11 @@ Der Wettbewerb fördert skalierbare Vorhaben, die auf andere Hochschulen übertr
 
 Gerade diese Verbund-Skalierung ist es, die der Ideenwettbewerb ermöglichen kann: die Erprobung an einer weiteren Hochschule oder in einem Verbund als zusätzlicher Real-Betrieb — auf Basis einer Plattform, die bereits produktionsnah erprobt ist.
 
-### 2.5 Reifegrad und Umsetzungsstand
-
-Die Plattform befindet sich in der **produktionsnahen Phase**: Die Software-Pakete sind gebaut, auf Sicherheitslücken geprüft, signiert und per Software-Stückliste dokumentiert; die standardisierte Bereitstellung ist umgesetzt und dokumentiert. Für die aktuelle Paketsammlung wurden keine bekannten Sicherheitslücken festgestellt. Damit sind die Bausteine unmittelbar für die Skalierung an einer weiteren Hochschule oder in einem Verbund geeignet — die Voraussetzungen des Wettbewerbs (laufendes oder konkret geplantes Vorhaben) sind erfüllt.
-
-### 2.6 Team und Nachhaltigkeit
+### 2.5 Team und Nachhaltigkeit
 
 openDesk Edu wird von einer offenen Community aus Hochschul- und Projektbeteiligten getragen. Die Arbeit ist vollständig offen; Beiträge sind ausdrücklich erwünscht. Langfristig stehen Wartung, Updates, Dokumentation und Betrieb im Vordergrund — durch ein deterministisches Build-Verfahren und die Anbindung an Standard-Infrastruktur dauerhaft wirtschaftlich und nachvollziehbar.
 
-### 2.7 Mehrwert des Wettbewerbspreises
+### 2.6 Mehrwert des Wettbewerbspreises
 
 Die Förderung ist bewusst ideell und personell ausgerichtet — für dieses Projekt die passende Form. Im Vordergrund stehen Reichweite, Vernetzung und realer Transfer:
 
