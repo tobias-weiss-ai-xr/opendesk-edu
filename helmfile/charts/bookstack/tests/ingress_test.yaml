@@ -26,7 +26,7 @@ tests:
     asserts:
       - equal:
           path: spec.rules[0].host
-          value: "bookstack.opendesk.hrz.uni-marburg.de"
+          value: "bookstack.home.opendesk-edu.org"
 
   - it: should configure TLS when provided
     set:

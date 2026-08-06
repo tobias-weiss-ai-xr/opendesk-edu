@@ -16,7 +16,7 @@ print_section "OpenCloud OIDC Login Regression Test"
 
 total_tests=$((total_tests + 1))
 
-opencloud_url="https://opencloud.opendesk.hrz.uni-marburg.de"
+opencloud_url="https://opencloud.home.opendesk-edu.org"
 keycloak_realm="opendesk"
 
 redirected_to_keycloak=false
@@ -25,7 +25,7 @@ http_code=$(get_http_code "$opencloud_url" 2>/dev/null || echo "0")
 if [ "$http_code" = "302" ]; then
     redirect_url=$(get_redirect_url "$opencloud_url" 2>/dev/null || echo "")
     
-    if [[ "$redirect_url" == *"opendesk.hrz.uni-marburg.de"* ]]; then
+    if [[ "$redirect_url" == *"home.opendesk-edu.org"* ]]; then
         print_result PASS "OpenCloud redirects to Keycloak: ${redirect_url:0:80}..."
         passed_tests=$((passed_tests + 1))
         redirected_to_keycloak=true
@@ -44,7 +44,7 @@ fi
 total_tests=$((total_tests + 1))
 
 if [ "$redirected_to_keycloak" = true ]; then
-    keycloak_url="https://id.opendesk.hrz.uni-marburg.de/realms/$keycloak_realm/.well-known/openid-configuration"
+    keycloak_url="https://id.home.opendesk-edu.org/realms/$keycloak_realm/.well-known/openid-configuration"
     
     if http_request "$keycloak_url" | grep -q '"issuer"' && http_request "$keycloak_url" | grep -q '"authorization_endpoint"'; then
         print_result PASS "Keycloak OIDC configuration is valid"

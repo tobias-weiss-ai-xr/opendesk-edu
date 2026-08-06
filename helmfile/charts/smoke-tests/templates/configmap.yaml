@@ -68,9 +68,9 @@ data:
     {{- range .Values.extraChecks.oidc }}
     add_host "{{ .url }}"
     {{- end }}
-    add_host "https://portal.opendesk.hrz.uni-marburg.de"
-    add_host "https://id.opendesk.hrz.uni-marburg.de"
-    add_host "https://opencloud.opendesk.hrz.uni-marburg.de"
+    add_host "https://portal.home.opendesk-edu.org"
+    add_host "https://id.home.opendesk-edu.org"
+    add_host "https://opencloud.home.opendesk-edu.org"
 
     {{- range .Values.services }}
     check
@@ -124,7 +124,7 @@ data:
     {{- range .Values.extraChecks.oidc }}
     check
     LOCATION=$(curl -sk $HOSTS -o /dev/null -w "%{redirect_url}" $CTYPE "{{ .url }}" 2>/dev/null || echo "")
-    if echo "$LOCATION" | grep -q "id.opendesk.hrz.uni-marburg.de"; then
+    if echo "$LOCATION" | grep -q "id.home.opendesk-edu.org"; then
       {{- if .clientId }}
       if echo "$LOCATION" | grep -q "client_id={{ .clientId }}"; then
         pass "OIDC {{ .name }} -> Keycloak (client={{ .clientId }})"
@@ -145,7 +145,7 @@ data:
     # ---- Suite 5: Portal ----
     header "5/7: Portal Data Integrity"
     check
-    PJSON=$(curl -sk $HOSTS "https://portal.opendesk.hrz.uni-marburg.de/univention/portal/portal.json" 2>/dev/null || echo "")
+    PJSON=$(curl -sk $HOSTS "https://portal.home.opendesk-edu.org/univention/portal/portal.json" 2>/dev/null || echo "")
     echo "$PJSON" | grep -q '"cache_id"' && pass "Portal JSON is parseable" || fail "Portal JSON not parseable"
     {{- range .Values.extraChecks.portalEntries }}
     check; echo "$PJSON" | grep -qi "{{ . }}" && pass "Portal entry '{{ . }}' present" || fail "Portal entry '{{ . }}' MISSING"
@@ -154,7 +154,7 @@ data:
     # ---- Suite 6: Keycloak ----
     header "6/7: Keycloak OIDC Configuration"
     check
-    KCONFIG=$(curl -sk $HOSTS "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration" 2>/dev/null || echo "")
+    KCONFIG=$(curl -sk $HOSTS "https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration" 2>/dev/null || echo "")
     if echo "$KCONFIG" | grep -q '"issuer"'; then
       ISSUER=$(echo "$KCONFIG" | sed 's/.*"issuer":"\([^"]*\)".*/\1/')
       pass "Keycloak issuer: $ISSUER"
@@ -168,7 +168,7 @@ data:
     # ---- Suite 7: OpenCloud ----
     header "7/7: OpenCloud Configuration"
     check
-    OC=$(curl -sk $HOSTS "https://opencloud.opendesk.hrz.uni-marburg.de/config.json" 2>/dev/null || echo "")
+    OC=$(curl -sk $HOSTS "https://opencloud.home.opendesk-edu.org/config.json" 2>/dev/null || echo "")
     if echo "$OC" | grep -q '"openIdConnect"'; then
       OCID=$(echo "$OC" | sed 's/.*"authority":"\([^"]*\)".*/\1/')
       pass "OpenCloud OIDC authority: $OCID"

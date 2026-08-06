@@ -23,7 +23,7 @@ See [values.yaml](values.yaml) for the full configuration reference.
 
 ### Host Entries
 
-Default entries resolve `*.opendesk.hrz.uni-marburg.de` services (r, term, slides, collab, code, ai, jupyter) to `192.168.3.201` (HAProxy).
+Default entries resolve `*.home.opendesk-edu.org` services (r, term, slides, collab, code, ai, jupyter) to `192.168.3.201` (HAProxy).
 
 Override in your own values file:
 

@@ -64,7 +64,7 @@ spec:
             severity: critical
           annotations:
             summary: "OpenCloud ingress unreachable"
-            description: "OpenCloud HTTPS endpoint at files.opendesk.hrz.uni-marburg.de is returning errors."
+            description: "OpenCloud HTTPS endpoint at files.home.opendesk-edu.org is returning errors."
 
         # ── k8up Operator ──────────────────────────────────────────────
         - alert: K8upOperatorDown

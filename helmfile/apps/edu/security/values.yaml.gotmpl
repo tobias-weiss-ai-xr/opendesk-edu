@@ -177,11 +177,11 @@ network:
     # Allow SMTP
     allowSmtp: true
     smtpServers:
-      - mx.uni-marburg.de
+      - mx.home.opendesk-edu.org
     
     # Custom egress rules
     customRules:
-      - name: allow-hrz-services
+      - name: allow-cluster-services
         destinations:
           - 192.168.3.0/24
         ports:
@@ -441,12 +441,12 @@ monitoring:
       # Receivers
       receivers:
         - name: security-team
-          email: security@opendesk.hrz.uni-marburg.de
+          email: security@home.opendesk-edu.org
           slack: "#security-alerts"
           pagerduty: "security-pagerduty"
         
         - name: devops-team
-          email: devops@opendesk.hrz.uni-marburg.de
+          email: devops@home.opendesk-edu.org
           slack: "#devops-alerts"
     
     # Alert rules
@@ -535,7 +535,7 @@ compliance:
     # Data protection officer
     dpo:
       name: "[To be assigned]"
-      email: dpo@uni-marburg.de
+      email: dpo@home.opendesk-edu.org
     
     # Required for DSGVO
     requirements:
@@ -604,7 +604,7 @@ vulnerability:
     
     # Report recipients
     recipients:
-      - security@opendesk.hrz.uni-marburg.de
+      - security@home.opendesk-edu.org
     
     # Report storage
     storage:
@@ -625,7 +625,7 @@ incidentResponse:
     
     # Contact information
     contact:
-      email: incident@opendesk.hrz.uni-marburg.de
+      email: incident@home.opendesk-edu.org
       phone: "+49-xxx-xxxx"
       slack: "#incident-response"
   

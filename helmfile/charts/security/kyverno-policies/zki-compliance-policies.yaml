@@ -472,7 +472,7 @@ spec:
           Add a tls section with at least one secret.
           Example:
           tls:
-          - hosts: ["example.opendesk.hrz.uni-marburg.de"]
+          - hosts: ["example.home.opendesk-edu.org"]
             secretName: tls-secret
         pattern:
           spec:

@@ -3,7 +3,7 @@ objectClass: univentionNewPortalEntry
 objectClass: top
 cn: slidev
 univentionNewPortalEntryActivate: TRUE
-univentionNewPortalEntryLink: en_US https://slides.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLink: en_US https://slides.home.opendesk-edu.org
 univentionNewPortalEntryLinkTarget: newwindow
 univentionNewPortalEntryDisplayName: en_US Slidev
 univentionNewPortalEntryDisplayName: de_DE Slidev

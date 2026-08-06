@@ -66,7 +66,7 @@ print_section "OIDC Configuration Checks"
 
 total_tests=$((total_tests + 1))
 
-if check_oidc_well_known "id.opendesk.hrz.uni-marburg.de" "opendesk" &>/dev/null; then
+if check_oidc_well_known "id.home.opendesk-edu.org" "opendesk" &>/dev/null; then
     print_result PASS "Keycloak OIDC well-known configuration accessible"
     passed_tests=$((passed_tests + 1))
 else

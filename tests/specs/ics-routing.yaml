@@ -20,7 +20,7 @@ description: |
 version: 1
 
 # Default ICS base URL (overridable via ICS_BASE_URL env var)
-base_url: "https://ics.opendesk.hrz.uni-marburg.de"
+base_url: "https://ics.home.opendesk-edu.org"
 
 # Default auth type for all services
 auth: none
@@ -28,7 +28,7 @@ auth: none
 services:
   opencloud:
     route: /oc
-    backend: opencloud.opendesk.hrz.uni-marburg.de
+    backend: opencloud.home.opendesk-edu.org
     auth: oidc
 
     tests:
@@ -79,12 +79,12 @@ services:
             expect:
               headers:
                 X-Forwarded-Host:
-                  value: opencloud.opendesk.hrz.uni-marburg.de
+                  value: opencloud.home.opendesk-edu.org
                   soft_fail: true
 
   sogo:
     route: /sogo
-    backend: sogo.opendesk.hrz.uni-marburg.de
+    backend: sogo.home.opendesk-edu.org
     auth: saml
 
     tests:
@@ -115,7 +115,7 @@ services:
 
   ilias:
     route: /ilias
-    backend: lms.opendesk.hrz.uni-marburg.de
+    backend: lms.home.opendesk-edu.org
     auth: saml
 
     tests:
@@ -146,7 +146,7 @@ services:
 
   bookstack:
     route: /wiki
-    backend: wiki.opendesk.hrz.uni-marburg.de
+    backend: wiki.home.opendesk-edu.org
 
     tests:
       - scenario: "Unauthenticated GET /wiki/ requires auth"
@@ -167,12 +167,12 @@ services:
               status: [200, 302]
               headers:
                 X-Forwarded-Host:
-                  value: wiki.opendesk.hrz.uni-marburg.de
+                  value: wiki.home.opendesk-edu.org
                   soft_fail: true
 
   self-service-password:
     route: /ssp
-    backend: ssp.opendesk.hrz.uni-marburg.de
+    backend: ssp.home.opendesk-edu.org
 
     tests:
       - scenario: "GET /ssp/ returns password change page"
@@ -193,12 +193,12 @@ services:
               status: [200, 302]
               headers:
                 X-Forwarded-Host:
-                  value: ssp.opendesk.hrz.uni-marburg.de
+                  value: ssp.home.opendesk-edu.org
                   soft_fail: true
 
   collab-dashboard:
     route: /collab
-    backend: collab.opendesk.hrz.uni-marburg.de
+    backend: collab.home.opendesk-edu.org
 
     tests:
       - scenario: "GET /collab/ returns dashboard"
@@ -211,7 +211,7 @@ services:
 
   rstudio:
     route: /r
-    backend: r.opendesk.hrz.uni-marburg.de
+    backend: r.home.opendesk-edu.org
 
     tests:
       - scenario: "GET /r/ requires auth or redirects"
@@ -232,12 +232,12 @@ services:
               status: [200, 302]
               headers:
                 X-Forwarded-Host:
-                  value: r.opendesk.hrz.uni-marburg.de
+                  value: r.home.opendesk-edu.org
                   soft_fail: true
 
   ttyd:
     route: /term
-    backend: term.opendesk.hrz.uni-marburg.de
+    backend: term.home.opendesk-edu.org
 
     tests:
       - scenario: "GET /term/ reaches terminal"
@@ -250,7 +250,7 @@ services:
 
   code-server:
     route: /code
-    backend: code.opendesk.hrz.uni-marburg.de
+    backend: code.home.opendesk-edu.org
 
     tests:
       - scenario: "GET /code/ requires auth or redirects"
@@ -271,5 +271,5 @@ services:
               status: [200, 302]
               headers:
                 X-Forwarded-Host:
-                  value: code.opendesk.hrz.uni-marburg.de
+                  value: code.home.opendesk-edu.org
                   soft_fail: true

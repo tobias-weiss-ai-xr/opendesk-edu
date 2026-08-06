@@ -12,7 +12,7 @@ stalwart:
   auth:
     oidc:
       enabled: true
-      issuerUrl: "https://portal.opendesk.hrz.uni-marburg.de/realms/opendesk"
+      issuerUrl: "https://portal.home.opendesk-edu.org/realms/opendesk"
       clientId: stalwart
       clientSecret: "changeme-replace-with-actual-stalwart-oidc-client-secret"
       scope: "openid profile email"
@@ -117,7 +117,7 @@ stalwart:
   ingress:
     enabled: true
     ingressClassName: "haproxy"
-    hostname: mail.opendesk.hrz.uni-marburg.de
+    hostname: mail.home.opendesk-edu.org
     annotations:
       haproxy-ingress.github.io/ssl-redirect: "true"
       haproxy-ingress.github.io/timeout-server: "600s"

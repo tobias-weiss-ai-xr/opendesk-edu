@@ -23,7 +23,7 @@ sogo:
   sieve:
     server: {{ .Values.apps.sogo.sieveServer | default "sieve://stalwart-stalwart:4190" }}
 
-  mailDomain: {{ .Values.apps.sogo.mailDomain | default "opendesk.hrz.uni-marburg.de" }}
+  mailDomain: {{ .Values.apps.sogo.mailDomain | default "home.opendesk-edu.org" }}
 
   oidc:
     enabled: {{ .Values.apps.sogo.oidc.enabled | default true }}

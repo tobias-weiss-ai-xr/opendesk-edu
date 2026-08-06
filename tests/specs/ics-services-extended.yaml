@@ -18,14 +18,14 @@ description: |
   - Authenticated access: requests reach the backend with proper headers
 version: 1
 
-base_url: "https://ics.opendesk.hrz.uni-marburg.de"
+base_url: "https://ics.home.opendesk-edu.org"
 
 auth: none
 
 services:
   nextcloud:
     route: /fs
-    backend: files.opendesk.hrz.uni-marburg.de
+    backend: files.home.opendesk-edu.org
     auth: oidc
 
     tests:
@@ -69,7 +69,7 @@ services:
 
   xwiki:
     route: /wiki
-    backend: wiki.opendesk.hrz.uni-marburg.de
+    backend: wiki.home.opendesk-edu.org
     auth: oidc
 
     tests:

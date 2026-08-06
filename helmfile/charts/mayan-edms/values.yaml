@@ -339,4 +339,4 @@ extraVolumes: []
 hostAliases:
   - ip: "192.168.3.201"
     hostnames:
-      - "id.opendesk.hrz.uni-marburg.de"
+      - "id.home.opendesk-edu.org"

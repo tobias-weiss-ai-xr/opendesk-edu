@@ -42,7 +42,7 @@ hisinone:
     ## LDAP server hostname
     ## HRZ Marburg typically runs Active Directory / OpenLDAP on dedicated hosts.
     ##
-    host: {{ env "HISINONE_LDAP_HOST" | default "ldap.uni-marburg.de" | quote }}
+    host: {{ env "HISINONE_LDAP_HOST" | default "ldap.home.opendesk-edu.org" | quote }}
 
     ## LDAP server port (636 for LDAPS, 389 for STARTTLS)
     ##
@@ -53,9 +53,9 @@ hisinone:
     useSsl: {{ env "HISINONE_LDAP_USE_SSL" | default "true" | quote }}
 
     ## Base DN for user searches
-    ## HRZ-specific: users are typically under ou=people,dc=uni-marburg,dc=de
+    ## cluster-specific: users are typically under ou=people,dc=opendesk-edu,dc=org
     ##
-    usersBaseDn: {{ env "HISINONE_LDAP_USERS_BASE_DN" | default "ou=people,dc=uni-marburg,dc=de" | quote }}
+    usersBaseDn: {{ env "HISINONE_LDAP_USERS_BASE_DN" | default "ou=people,dc=opendesk-edu,dc=org" | quote }}
 
     ## User search filter
     ## (objectClass=person) is standard; (objectClass=user) for AD.
@@ -63,9 +63,9 @@ hisinone:
     userSearchFilter: {{ env "HISINONE_LDAP_USER_FILTER" | default "(objectClass=person)" | quote }}
 
     ## Base DN for group searches (if using group membership mapping)
-    ## HRZ-specific: groups typically under ou=groups,dc=uni-marburg,dc=de
+    ## cluster-specific: groups typically under ou=groups,dc=opendesk-edu,dc=org
     ##
-    groupsBaseDn: {{ env "HISINONE_LDAP_GROUPS_BASE_DN" | default "ou=groups,dc=uni-marburg,dc=de" | quote }}
+    groupsBaseDn: {{ env "HISINONE_LDAP_GROUPS_BASE_DN" | default "ou=groups,dc=opendesk-edu,dc=org" | quote }}
 
     ## Group search filter
     ##
@@ -74,7 +74,7 @@ hisinone:
     ## Bind DN for LDAP search (service account)
     ## This account must have read access to user and group entries.
     ##
-    bindDn: {{ env "HISINONE_LDAP_BIND_DN" | default "uid=opendesk-sync,ou=services,dc=uni-marburg,dc=de" | quote }}
+    bindDn: {{ env "HISINONE_LDAP_BIND_DN" | default "uid=opendesk-sync,ou=services,dc=opendesk-edu,dc=org" | quote }}
 
     ## LDAP attribute mapping (HISinOne LDAP → Keycloak user attributes)
     ##

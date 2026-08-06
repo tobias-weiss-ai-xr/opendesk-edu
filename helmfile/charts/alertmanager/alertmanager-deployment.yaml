@@ -12,7 +12,7 @@ data:
     global:
       resolve_timeout: 5m
       smtp_smarthost: 'postfix.{{ .Release.Namespace }}.svc.cluster.local:25'
-      smtp_from: 'alertmanager@opendesk.hrz.uni-marburg.de'
+      smtp_from: 'alertmanager@home.opendesk-edu.org'
       smtp_require_tls: false
 
     templates:
@@ -39,15 +39,15 @@ data:
     receivers:
       - name: 'default-receiver'
         email_configs:
-        - to: 'admin@opendesk.hrz.uni-marburg.de'
+        - to: 'admin@home.opendesk-edu.org'
 
       - name: 'backup-critical-receiver'
         email_configs:
-        - to: 'admin@opendesk.hrz.uni-marburg.de'
+        - to: 'admin@home.opendesk-edu.org'
 
       - name: 'backup-warning-receiver'
         email_configs:
-        - to: 'admin@opendesk.hrz.uni-marburg.de'
+        - to: 'admin@home.opendesk-edu.org'
 
     inhibit_rules:
       # Inhibit warning if there's a critical alert for the same alertname

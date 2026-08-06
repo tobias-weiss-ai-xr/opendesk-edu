@@ -469,7 +469,7 @@ function handle_logout_request(): void
         $response = generate_logout_response(
             $parsed['id'],
             $parsed['issuer'] ?? '',
-            'https://' . ($_SERVER['HTTP_HOST'] ?? 'moodle.opendesk.hrz.uni-marburg.de') . '/shibboleth'
+            'https://' . ($_SERVER['HTTP_HOST'] ?? 'moodle.home.opendesk-edu.org') . '/shibboleth'
         );
 
         // Wrap in SOAP if request was SOAP

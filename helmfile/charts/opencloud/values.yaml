@@ -151,6 +151,6 @@ notifications:
   smtp:
     host: ""
     port: 587
-    sender: "noreply@opendesk.hrz.uni-marburg.de"
+    sender: "noreply@home.opendesk-edu.org"
     username: ""
     # password is set via secrets

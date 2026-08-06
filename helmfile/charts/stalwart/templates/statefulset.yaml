@@ -108,7 +108,7 @@ spec:
           - name: STALWART_RECOVERY_ADMIN
             value: "admin:admin123"
           - name: STALWART_HOSTNAME
-            value: "mail.opendesk.hrz.uni-marburg.de"
+            value: "mail.home.opendesk-edu.org"
             {{- if .Values.stalwart.tls.enabled }}
             {{- if .Values.stalwart.tls.certificate.certPath }}
             - name: STALWART_TLS_CERT

@@ -17,8 +17,8 @@ spec:
         - -c
         - |
           echo "=== Testing CoreDNS dev host entries ==="
-          echo "Resolving r.opendesk.hrz.uni-marburg.de..."
-          nslookup r.opendesk.hrz.uni-marburg.de 172.17.128.10 2>&1
+          echo "Resolving r.home.opendesk-edu.org..."
+          nslookup r.home.opendesk-edu.org 172.17.128.10 2>&1
           echo ""
           echo "Resolving kubernetes.default.svc.cluster.local..."
           nslookup kubernetes.default.svc.cluster.local 172.17.128.10 2>&1

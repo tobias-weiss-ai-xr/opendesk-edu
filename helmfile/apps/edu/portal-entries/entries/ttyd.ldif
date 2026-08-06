@@ -3,7 +3,7 @@ objectClass: univentionNewPortalEntry
 objectClass: top
 cn: ttyd
 univentionNewPortalEntryActivate: TRUE
-univentionNewPortalEntryLink: en_US https://term.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLink: en_US https://term.home.opendesk-edu.org
 univentionNewPortalEntryLinkTarget: newwindow
 univentionNewPortalEntryDisplayName: en_US Web Terminal
 univentionNewPortalEntryDisplayName: de_DE Web Terminal

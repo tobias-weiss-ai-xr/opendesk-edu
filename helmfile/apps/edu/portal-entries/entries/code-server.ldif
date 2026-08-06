@@ -3,7 +3,7 @@ objectClass: univentionNewPortalEntry
 objectClass: top
 cn: code-server
 univentionNewPortalEntryActivate: TRUE
-univentionNewPortalEntryLink: en_US https://code.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLink: en_US https://code.home.opendesk-edu.org
 univentionNewPortalEntryLinkTarget: newwindow
 univentionNewPortalEntryDisplayName: en_US code-server
 univentionNewPortalEntryDisplayName: de_DE code-server

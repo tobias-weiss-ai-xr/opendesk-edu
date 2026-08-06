@@ -19,12 +19,12 @@ version: 1.0.0
 appVersion: "1.0.0"
 maintainers:
   - name: HRZ openDesk Team
-    email: admin@opendesk.hrz.uni-marburg.de
+    email: admin@home.opendesk-edu.org
 keywords:
   - network-policies
   - security
   - networking
   - defense-in-depth
-home: https://opendesk.hrz.uni-marburg.de
+home: https://home.opendesk-edu.org
 sources:
   - https://gitlab.hrz.uni-marburg.de/hrz/kubernetes/opendesk/opendesk

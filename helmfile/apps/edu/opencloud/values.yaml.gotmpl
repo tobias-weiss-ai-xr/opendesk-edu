@@ -94,14 +94,14 @@ urlSigningSecret: {{ .Values.secrets.opencloud.urlSigningSecret | quote }}
 hostAliases:
   - ip: "192.168.3.201"
     hostnames:
-      - "id.opendesk.hrz.uni-marburg.de"
-      - "files.opendesk.hrz.uni-marburg.de"
-      - "portal.opendesk.hrz.uni-marburg.de"
+      - "id.home.opendesk-edu.org"
+      - "files.home.opendesk-edu.org"
+      - "portal.home.opendesk-edu.org"
 
 # Email notifications via Stalwart
 notifications:
   smtp:
     host: "stalwart-stalwart.opendesk.svc.cluster.local"
     port: 587
-    sender: "noreply@opendesk.hrz.uni-marburg.de"
+    sender: "noreply@home.opendesk-edu.org"
     username: ""

@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: opendesk
 data:
   shibboleth.conf: |
-    ServerName moodle.opendesk.hrz.uni-marburg.de
+    ServerName moodle.home.opendesk-edu.org
     UseCanonicalName On
     ShibCompatValidUser Off
     LogLevel mod_shib:debug

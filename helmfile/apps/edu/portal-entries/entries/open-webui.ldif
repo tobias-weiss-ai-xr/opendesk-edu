@@ -3,7 +3,7 @@ objectClass: univentionNewPortalEntry
 objectClass: top
 cn: open-webui
 univentionNewPortalEntryActivate: TRUE
-univentionNewPortalEntryLink: en_US https://ai.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLink: en_US https://ai.home.opendesk-edu.org
 univentionNewPortalEntryLinkTarget: newwindow
 univentionNewPortalEntryDisplayName: en_US Open WebUI
 univentionNewPortalEntryDisplayName: de_DE Open WebUI

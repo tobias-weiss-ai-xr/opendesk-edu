@@ -3,7 +3,7 @@ objectClass: univentionNewPortalEntry
 objectClass: top
 cn: collab-dashboard
 univentionNewPortalEntryActivate: TRUE
-univentionNewPortalEntryLink: en_US https://collab.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLink: en_US https://collab.home.opendesk-edu.org
 univentionNewPortalEntryLinkTarget: newwindow
 univentionNewPortalEntryDisplayName: en_US Collab Dashboard
 univentionNewPortalEntryDisplayName: de_DE Collab Dashboard

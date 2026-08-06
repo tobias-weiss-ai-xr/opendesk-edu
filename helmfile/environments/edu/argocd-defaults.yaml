@@ -1,6 +1,6 @@
 # ArgoCD CMP defaults — provides parent .Values context for standalone helmfile children
 global:
-  domain: opendesk.hrz.uni-marburg.de
+  domain: home.opendesk-edu.org
   hosts:
     keycloak: portal
     opencloud: files

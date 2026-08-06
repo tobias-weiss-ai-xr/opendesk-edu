@@ -22,7 +22,7 @@ bash opendesk-edu/scripts/verify-integrations.sh
 ```bash
 export KUBECONFIG=/path/to/kubeconfig
 export NAMESPACE=opendesk
-export DOMAIN=opendesk.hrz.uni-marburg.de
+export DOMAIN=home.opendesk-edu.org
 ```
 
 ---
@@ -347,7 +347,7 @@ Save as `run-health-checks.sh`:
 set -e
 
 NAMESPACE=${1:-opendesk}
-DOMAIN=${2:-opendesk.hrz.uni-marburg.de}
+DOMAIN=${2:-home.opendesk-edu.org}
 FAILURES=0
 
 check() {

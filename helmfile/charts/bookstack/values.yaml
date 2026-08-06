@@ -51,14 +51,14 @@ ingress:
   enabled: true
   annotations: {}
   hosts:
-    - host: bookstack.opendesk.hrz.uni-marburg.de
+    - host: bookstack.home.opendesk-edu.org
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - secretName: bookstack-tls
       hosts:
-        - bookstack.opendesk.hrz.uni-marburg.de
+        - bookstack.home.opendesk-edu.org
 
 mariadb:
   enabled: true

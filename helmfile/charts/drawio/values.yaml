@@ -29,14 +29,14 @@ ingress:
   className: haproxy
   annotations: {}
   hosts:
-    - host: draw.opendesk.hrz.uni-marburg.de
+    - host: draw.home.opendesk-edu.org
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - secretName: drawio-tls
       hosts:
-        - draw.opendesk.hrz.uni-marburg.de
+        - draw.home.opendesk-edu.org
 
   # =========================================================================
   # MONITORING (ServiceMonitor for Prometheus)

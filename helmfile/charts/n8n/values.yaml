@@ -3,7 +3,7 @@ image:
   tag: latest
 
 config:
-  host: n8n.opendesk.hrz.uni-marburg.de
+  host: n8n.home.opendesk-edu.org
   encryptionKey: "opendesk-n8n-key-change-me"
   dbType: sqlite
 
@@ -25,7 +25,7 @@ sso:
     enabled: true
     clientId: opendesk-n8n
     clientSecret: vp0XnZw87Baw4uZJsvuG8uyT8fAEV1ep
-    discoveryEndpoint: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+    discoveryEndpoint: "https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration"
 
   # =========================================================================
   # POD DISRUPTION BUDGET

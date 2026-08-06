@@ -8,7 +8,7 @@
 set -euo pipefail
 
 NAMESPACE=${1:-opendesk}
-DOMAIN=${2:-opendesk.hrz.uni-marburg.de}
+DOMAIN=${2:-home.opendesk-edu.org}
 FAILURES=0
 
 GREEN='\033[0;32m'

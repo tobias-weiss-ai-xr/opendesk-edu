@@ -31,8 +31,8 @@ stalwart:
     ldap:
       host: "ums-ldap.{{ .Values.global.domain }}"
       port: 636
-      baseDn: "{{ .Values.ldap.baseDn | default "dc=uni-marburg,dc=de" }}"
-      bindDn: "{{ .Values.ldap.bindDn | default "cn=admin,dc=uni-marburg,dc=de" }}"
+      baseDn: "{{ .Values.ldap.baseDn | default "dc=opendesk-edu,dc=org" }}"
+      bindDn: "{{ .Values.ldap.bindDn | default "cn=admin,dc=opendesk-edu,dc=org" }}"
       bindPassword: {{ .Values.secrets.ldap.bindPassword | default "" | quote }}
       tls:
         enabled: true
@@ -190,8 +190,8 @@ stalwart:
   hostAliases:
     - ip: "192.168.3.201"
       hostnames:
-        - "id.opendesk.hrz.uni-marburg.de"
-        - "mail.opendesk.hrz.uni-marburg.de"
-        - "portal.opendesk.hrz.uni-marburg.de"
+        - "id.home.opendesk-edu.org"
+        - "mail.home.opendesk-edu.org"
+        - "portal.home.opendesk-edu.org"
 
 

@@ -19,7 +19,7 @@ description: |
 version: 1
 
 # Default ICS base URL (overridable via ICS_BASE_URL env var)
-base_url: "https://ics.opendesk.hrz.uni-marburg.de"
+base_url: "https://ics.home.opendesk-edu.org"
 
 # Default auth: all scenarios require a portal session
 auth: session
@@ -27,7 +27,7 @@ auth: session
 services:
   opencloud:
     route: /oc
-    backend: opencloud.opendesk.hrz.uni-marburg.de
+    backend: opencloud.home.opendesk-edu.org
     auth: oidc
 
     tests:
@@ -55,7 +55,7 @@ services:
 
   sogo:
     route: /sogo
-    backend: sogo.opendesk.hrz.uni-marburg.de
+    backend: sogo.home.opendesk-edu.org
     auth: saml
 
     tests:
@@ -79,7 +79,7 @@ services:
 
   ilias:
     route: /ilias
-    backend: lms.opendesk.hrz.uni-marburg.de
+    backend: lms.home.opendesk-edu.org
     auth: saml
 
     tests:

@@ -3,7 +3,7 @@ objectClass: univentionNewPortalEntry
 objectClass: top
 cn: jupyterhub
 univentionNewPortalEntryActivate: TRUE
-univentionNewPortalEntryLink: en_US https://jupyter.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLink: en_US https://jupyter.home.opendesk-edu.org
 univentionNewPortalEntryLinkTarget: newwindow
 univentionNewPortalEntryDisplayName: en_US JupyterHub
 univentionNewPortalEntryDisplayName: de_DE JupyterHub

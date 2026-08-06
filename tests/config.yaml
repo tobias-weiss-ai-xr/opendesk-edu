@@ -1,6 +1,6 @@
 # openDesk Test Framework Configuration
 # Environment: HRZ Production Cluster
-# Domain: *.opendesk.hrz.uni-marburg.de
+# Domain: *.home.opendesk-edu.org
 
 cluster:
   namespace: opendesk
@@ -10,14 +10,14 @@ cluster:
 services:
   identity:
     keycloak:
-      host: id.opendesk.hrz.uni-marburg.de
+      host: id.home.opendesk-edu.org
       realm: opendesk
       oidc_well_known: /.well-known/openid-configuration
       login_path: /realms/opendesk/protocol/openid-connect/auth
 
   portal:
     portal:
-      host: portal.opendesk.hrz.uni-marburg.de
+      host: portal.home.opendesk-edu.org
       paths:
         - /
         - /umc
@@ -25,106 +25,106 @@ services:
     
   files:
     nextcloud:
-      host: files.opendesk.hrz.uni-marburg.de
+      host: files.home.opendesk-edu.org
       oidc_client: nextcloud
       status_path: /status.php
     
     opencloud:
-      host: opencloud.opendesk.hrz.uni-marburg.de
+      host: opencloud.home.opendesk-edu.org
       oidc_client: opencloud
       graph_api: /graph
 
   communication:
     element:
-      host: chat.opendesk.hrz.uni-marburg.de
+      host: chat.home.opendesk-edu.org
       matrix_discovery: /.well-known/matrix/client
     
     synapse:
-      host: matrix.opendesk.hrz.uni-marburg.de
+      host: matrix.home.opendesk-edu.org
       federation_path: /_matrix/federation
     
     jitsi:
-      host: meet.opendesk.hrz.uni-marburg.de
+      host: meet.home.opendesk-edu.org
     
     bigbluebutton:
-      host: bbb.opendesk.hrz.uni-marburg.de
+      host: bbb.home.opendesk-edu.org
     
     intercom:
-      host: ics.opendesk.hrz.uni-marburg.de
+      host: ics.home.opendesk-edu.org
 
   groupware:
     ox_appsuite:
-      host: webmail.opendesk.hrz.uni-marburg.de
+      host: webmail.home.opendesk-edu.org
       oidc_client: open-xchange
       api_paths:
         - /apisuite
         - /appsuite/api
     
     ox_dav:
-      host: dav.opendesk.hrz.uni-marburg.de
+      host: dav.home.opendesk-edu.org
       paths:
         - /caldav
         - /carddav
 
   collaboration:
     collabora:
-      host: office.opendesk.hrz.uni-marburg.de
+      host: office.home.opendesk-edu.org
       wopi_discovery: /hosting/discovery
     
     cryptpad:
-      host: pad.opendesk.hrz.uni-marburg.de
+      host: pad.home.opendesk-edu.org
     
     drawio:
-      host: draw.opendesk.hrz.uni-marburg.de
+      host: draw.home.opendesk-edu.org
     
     excalidraw:
-      host: excalidraw.opendesk.hrz.uni-marburg.de
+      host: excalidraw.home.opendesk-edu.org
     
     etherpad:
-      host: etherpad.opendesk.hrz.uni-marburg.de
+      host: etherpad.home.opendesk-edu.org
     
     slidev:
-      host: slides.opendesk.hrz.uni-marburg.de
+      host: slides.home.opendesk-edu.org
     
     ttyd:
-      host: term.opendesk.hrz.uni-marburg.de
+      host: term.home.opendesk-edu.org
     
     openproject:
-      host: projects.opendesk.hrz.uni-marburg.de
+      host: projects.home.opendesk-edu.org
       oidc_client: openproject
     
     collab_dashboard:
-      host: tools.opendesk.hrz.uni-marburg.de
+      host: tools.home.opendesk-edu.org
 
   lms:
     ilias:
-      host: lms.opendesk.hrz.uni-marburg.de
+      host: lms.home.opendesk-edu.org
       saml_metadata: /Shibboleth.sso/Metadata
     
     moodle:
-      host: moodle.opendesk.hrz.uni-marburg.de
+      host: moodle.home.opendesk-edu.org
       oidc_client: moodle
 
   knowledge:
     xwiki:
-      host: wiki.opendesk.hrz.uni-marburg.de
+      host: wiki.home.opendesk-edu.org
       saml_metadata: /xwiki/bin/loginsaml/saml/request
 
   infrastructure:
     minio:
-      host: objectstore-ui.opendesk.hrz.uni-marburg.de
+      host: objectstore-ui.home.opendesk-edu.org
     
     seaweedfs_ui:
-      host: objectstorage-ui.opendesk.hrz.uni-marburg.de
+      host: objectstorage-ui.home.opendesk-edu.org
     
     seaweedfs_s3:
-      host: objectstorage.opendesk.hrz.uni-marburg.de
+      host: objectstorage.home.opendesk-edu.org
     
     grafana:
-      host: grafana.opendesk.hrz.uni-marburg.de
+      host: grafana.home.opendesk-edu.org
     
     root:
-      host: opendesk.hrz.uni-marburg.de
+      host: home.opendesk-edu.org
       paths:
         - /.well-known
         - /

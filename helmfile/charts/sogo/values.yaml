@@ -12,7 +12,7 @@ sogo:
 
   # External server URL for OIDC redirect_uri construction
   # Falls back to ingress.hosts[0].host if not set
-  serverURL: "https://contacts.opendesk.hrz.uni-marburg.de"
+  serverURL: "https://contacts.home.opendesk-edu.org"
 
   resources:
     requests:
@@ -58,7 +58,7 @@ sogo:
   sieve:
     server: "sieve://dovecot:4190"
 
-  mailDomain: "opendesk.hrz.uni-marburg.de"
+  mailDomain: "home.opendesk-edu.org"
 
   persistence:
     enabled: true
@@ -69,7 +69,7 @@ sogo:
   # OIDC/Keycloak SSO
   oidc:
     enabled: false
-    configUrl: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+    configUrl: "https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration"
     clientId: "sogo"
     # clientSecret is NOT set here — it is managed by the pre-install hook
     # (sync-oidc-secret-job.yaml) which creates the Keycloak client with a
@@ -109,7 +109,7 @@ ingress:
   className: "nginx"
   annotations: {}
   hosts:
-    - host: contacts.opendesk.hrz.uni-marburg.de
+    - host: contacts.home.opendesk-edu.org
       paths:
         - path: /
           pathType: Prefix
@@ -130,7 +130,7 @@ service:
   # OpenCloud external file storage integration
   opencloud:
     enabled: false
-    url: "https://files.opendesk.hrz.uni-marburg.de"
+    url: "https://files.home.opendesk-edu.org"
     webdavPath: "/remote.php/dav/files/{uid}/"
 
   # Skip the OIDC sync hook (pre-install job).

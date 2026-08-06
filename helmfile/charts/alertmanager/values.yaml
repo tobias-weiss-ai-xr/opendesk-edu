@@ -18,7 +18,7 @@ config:
   global:
     resolve_timeout: 5m
     smtp_smarthost: 'postfix.opendesk.svc.cluster.local:25'
-    smtp_from: 'alertmanager@opendesk.hrz.uni-marburg.de'
+    smtp_from: 'alertmanager@home.opendesk-edu.org'
     smtp_require_tls: false
 
   route:
@@ -42,15 +42,15 @@ config:
   receivers:
     - name: 'default-receiver'
       email_configs:
-      - to: 'admin@opendesk.hrz.uni-marburg.de'
+      - to: 'admin@home.opendesk-edu.org'
 
     - name: 'backup-critical-receiver'
       email_configs:
-      - to: 'admin@opendesk.hrz.uni-marburg.de'
+      - to: 'admin@home.opendesk-edu.org'
 
     - name: 'backup-warning-receiver'
       email_configs:
-      - to: 'admin@opendesk.hrz.uni-marburg.de'
+      - to: 'admin@home.opendesk-edu.org'
 
 serviceMonitor:
   enabled: true

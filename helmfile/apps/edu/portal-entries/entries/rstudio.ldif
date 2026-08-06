@@ -3,7 +3,7 @@ objectClass: univentionNewPortalEntry
 objectClass: top
 cn: rstudio
 univentionNewPortalEntryActivate: TRUE
-univentionNewPortalEntryLink: en_US https://r.opendesk.hrz.uni-marburg.de
+univentionNewPortalEntryLink: en_US https://r.home.opendesk-edu.org
 univentionNewPortalEntryLinkTarget: newwindow
 univentionNewPortalEntryDisplayName: en_US RStudio
 univentionNewPortalEntryDisplayName: de_DE RStudio

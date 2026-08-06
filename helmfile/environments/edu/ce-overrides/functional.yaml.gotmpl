@@ -46,16 +46,16 @@ functional:
         clientAuthenticatorType: client-secret
         secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
         redirectUris:
-        - https://files.opendesk.hrz.uni-marburg.de/*
-        - https://portal.opendesk.hrz.uni-marburg.de/*
+        - https://files.home.opendesk-edu.org/*
+        - https://portal.home.opendesk-edu.org/*
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
         authorizationServicesEnabled: false
         attributes:
           backchannel.logout.session.required: true
-          backchannel.logout.url: https://files.opendesk.hrz.uni-marburg.de/backchannel_logout
-          post.logout.redirect.uris: https://files.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*
+          backchannel.logout.url: https://files.home.opendesk-edu.org/backchannel_logout
+          post.logout.redirect.uris: https://files.home.opendesk-edu.org/*##https://portal.home.opendesk-edu.org/*
         defaultClientScopes:
         - opendesk-opencloud-scope
       - name: stalwart
@@ -64,15 +64,15 @@ functional:
         clientAuthenticatorType: client-secret
         secret: 4a312df6bfb2c74cd73e895a09818ca2e58f51a1c1b5db906224780542c97b85
         redirectUris:
-        - https://mail.opendesk.hrz.uni-marburg.de/*
-        - https://portal.opendesk.hrz.uni-marburg.de/*
+        - https://mail.home.opendesk-edu.org/*
+        - https://portal.home.opendesk-edu.org/*
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
         authorizationServicesEnabled: false
         attributes:
           backchannel.logout.session.required: true
-          post.logout.redirect.uris: https://mail.opendesk.hrz.uni-marburg.de/*##https://portal.opendesk.hrz.uni-marburg.de/*
+          post.logout.redirect.uris: https://mail.home.opendesk-edu.org/*##https://portal.home.opendesk-edu.org/*
         defaultClientScopes:
         - openid
         - profile
@@ -83,9 +83,9 @@ functional:
         clientAuthenticatorType: client-secret
         secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
         redirectUris:
-        - https://lms.opendesk.hrz.uni-marburg.de/*
-        rootUrl: https://lms.opendesk.hrz.uni-marburg.de
-        adminUrl: https://lms.opendesk.hrz.uni-marburg.de
+        - https://lms.home.opendesk-edu.org/*
+        rootUrl: https://lms.home.opendesk-edu.org
+        adminUrl: https://lms.home.opendesk-edu.org
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
@@ -100,7 +100,7 @@ functional:
           saml.client.signature: 'false'
           saml.authnstatement: 'true'
           saml_name_id_format: persistent
-          frontchannel.logout.url: https://lms.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout
+          frontchannel.logout.url: https://lms.home.opendesk-edu.org/Shibboleth.sso/Logout
         protocolMappers:
         - name: email
           protocol: saml
@@ -140,9 +140,9 @@ functional:
         clientAuthenticatorType: client-secret
         secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
         redirectUris:
-        - https://moodle.opendesk.hrz.uni-marburg.de/*
-        rootUrl: https://moodle.opendesk.hrz.uni-marburg.de
-        adminUrl: https://moodle.opendesk.hrz.uni-marburg.de
+        - https://moodle.home.opendesk-edu.org/*
+        rootUrl: https://moodle.home.opendesk-edu.org
+        adminUrl: https://moodle.home.opendesk-edu.org
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
@@ -157,7 +157,7 @@ functional:
           saml.client.signature: 'false'
           saml.authnstatement: 'true'
           saml_name_id_format: persistent
-          frontchannel.logout.url: https://moodle.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout
+          frontchannel.logout.url: https://moodle.home.opendesk-edu.org/Shibboleth.sso/Logout
         protocolMappers:
         - name: email
           protocol: saml
@@ -197,10 +197,10 @@ functional:
         clientAuthenticatorType: client-secret
         secret: 2dc8959a6956838c7d50f19c3e17989f2343098fa87f82381d15ffa89b08e577
         redirectUris:
-        - https://bbb.opendesk.hrz.uni-marburg.de/*
-        - https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback
-        rootUrl: https://bbb.opendesk.hrz.uni-marburg.de
-        adminUrl: https://bbb.opendesk.hrz.uni-marburg.de
+        - https://bbb.home.opendesk-edu.org/*
+        - https://bbb.home.opendesk-edu.org/auth/saml2/callback
+        rootUrl: https://bbb.home.opendesk-edu.org
+        adminUrl: https://bbb.home.opendesk-edu.org
         consentRequired: false
         frontchannelLogout: true
         publicClient: false
@@ -215,7 +215,7 @@ functional:
           saml.client.signature: 'false'
           saml.authnstatement: 'true'
           saml_name_id_format: persistent
-          frontchannel.logout.url: https://bbb.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Logout
+          frontchannel.logout.url: https://bbb.home.opendesk-edu.org/Shibboleth.sso/Logout
         protocolMappers:
         - name: email
           protocol: saml

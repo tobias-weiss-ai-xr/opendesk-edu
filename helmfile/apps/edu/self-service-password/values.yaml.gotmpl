@@ -18,7 +18,7 @@ selfServicePassword:
       memory: 128Mi
 
   ldap:
-    host: "{{ .Values.ldap.host | default "ldap.opendesk.hrz.uni-marburg.de" }}"
+    host: "{{ .Values.ldap.host | default "ldap.home.opendesk-edu.org" }}"
     port: "389"
     baseDn: "{{ .Values.ldap.baseDN | default "dc=opendesk,dc=example,dc=com" }}"
     bindDn: "{{ .Values.ldap.bindDN | default "cn=admin,dc=opendesk,dc=example,dc=com" }}"

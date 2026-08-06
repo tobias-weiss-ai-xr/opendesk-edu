@@ -55,17 +55,17 @@ data:
     echo '    DocumentRoot /usr/share/sogo-web' >> /etc/apache2/sites-available/sogo.conf
     echo '    ServerName sogo' >> /etc/apache2/sites-available/sogo.conf
     echo '    ServerAlias *' >> /etc/apache2/sites-available/sogo.conf
-    echo '    RedirectMatch 302 ^/$ {{ .Values.sogo.serverURL | default "https://sogo.opendesk.hrz.uni-marburg.de" }}/SOGo/' >> /etc/apache2/sites-available/sogo.conf
+    echo '    RedirectMatch 302 ^/$ {{ .Values.sogo.serverURL | default "https://sogo.home.opendesk-edu.org" }}/SOGo/' >> /etc/apache2/sites-available/sogo.conf
     echo '' >> /etc/apache2/sites-available/sogo.conf
     echo '    ProxyPreserveHost On' >> /etc/apache2/sites-available/sogo.conf
     echo '    RequestHeader set "x-webobjects-server-port" "443"' >> /etc/apache2/sites-available/sogo.conf
-    echo '    RequestHeader set "x-webobjects-server-name" "{{ .Values.sogo.host | default "sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
-    echo '    RequestHeader set "x-webobjects-server-url" "{{ .Values.sogo.serverURL | default "https://sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
+    echo '    RequestHeader set "x-webobjects-server-name" "{{ .Values.sogo.host | default "sogo.home.opendesk-edu.org" }}"' >> /etc/apache2/sites-available/sogo.conf
+    echo '    RequestHeader set "x-webobjects-server-url" "{{ .Values.sogo.serverURL | default "https://sogo.home.opendesk-edu.org" }}"' >> /etc/apache2/sites-available/sogo.conf
     echo '' >> /etc/apache2/sites-available/sogo.conf
     echo '    <Location /SOGo>' >> /etc/apache2/sites-available/sogo.conf
     echo '        RequestHeader set "x-webobjects-server-port" "443"' >> /etc/apache2/sites-available/sogo.conf
-    echo '        RequestHeader set "x-webobjects-server-name" "{{ .Values.sogo.host | default "sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
-    echo '        RequestHeader set "x-webobjects-server-url" "{{ .Values.sogo.serverURL | default "https://sogo.opendesk.hrz.uni-marburg.de" }}"' >> /etc/apache2/sites-available/sogo.conf
+    echo '        RequestHeader set "x-webobjects-server-name" "{{ .Values.sogo.host | default "sogo.home.opendesk-edu.org" }}"' >> /etc/apache2/sites-available/sogo.conf
+    echo '        RequestHeader set "x-webobjects-server-url" "{{ .Values.sogo.serverURL | default "https://sogo.home.opendesk-edu.org" }}"' >> /etc/apache2/sites-available/sogo.conf
     echo '        ProxyPass http://127.0.0.1:20000/SOGo retry=0' >> /etc/apache2/sites-available/sogo.conf
     echo '        ProxyPassReverse http://127.0.0.1:20000/SOGo' >> /etc/apache2/sites-available/sogo.conf
     echo '    </Location>' >> /etc/apache2/sites-available/sogo.conf
