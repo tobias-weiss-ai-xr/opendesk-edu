@@ -1,72 +1,63 @@
 # Bewerbung: HFD Ideenwettbewerb Digitale Souveränität 2026
 
 **Projekt:** openDesk Edu — Digitale Souveränität als skalierbare Hochschulplattform
-**Einreichungsfrist:** 31. August 2026
-**Jury-Auswahl:** September 2026
-**Bekanntgabe Siegerteam:** 05. Oktober 2026
 
 ---
 
 ## 1. Kurzbeschreibung (Formular, max. 500 Zeichen)
 
-> openDesk Edu ist eine vollständig quelloffene, Kubernetes-basierte Plattform für den souveränen digitalen Arbeitsplatz an Hochschulen. 78 quelloffene Dienste (LMS, Dateiaustausch, Groupware, Videokonferenz) werden als NixOS-Container deterministisch gebaut, signiert und per SBOM dokumentiert (0 CVEs). Deployment per GitOps auf eigener Infrastruktur, SCS-kompatibler Cloud oder im Verbund — mit SSO-Föderation über Keycloak und DFN-AAI/eduGAIN. Skalierbar und herstellerunabhängig.
+> openDesk Edu ist eine vollständig quelloffene Alternative zu kommerziellen Cloud-Diensten für den digitalen Arbeitsplatz an Hochschulen. Die Plattform bündelt bewährte freie Software für Dateiaustausch, E-Mail, Videokonferenz, Lernplattformen und Chat. Alle Daten bleiben auf der eigenen Infrastruktur der Hochschule — ohne Herstellerbindung und Lizenzkosten. Die Lösung ist fertig entwickelt, dokumentiert und auf andere Hochschulen übertragbar, auch im Verbund.
 
-*(482 von 500 Zeichen)*
+*(463 von 500 Zeichen)*
 
 ---
 
 ## 2. Vollständige Einreichung
 
-### 2.1 Projektprofil
+### 2.1 Worum geht es?
 
-**openDesk Edu** ist eine vollständig quelloffene, Kubernetes-native Plattform für den digitalen Arbeitsplatz sowie die Forschungs- und Lehrinfrastruktur von Hochschulen. Die Plattform bündelt bewährte quelloffene Kernkomponenten für Dateiaustausch, Groupware, Videokonferenz, Lernmanagement, Messaging und wissenschaftliches Rechnen in einer einzigen, deterministisch aufgebauten und reproduzierbar bereitgestellten Umgebung — als Alternative zu proprietären Cloud-Diensten.
+**openDesk Edu** stellt Hochschulen eine vollständig quelloffene Alternative zu proprietären Cloud-Diensten bereit. Statt Dateiaustausch, E-Mail und Kalender, Videokonferenz, Lernplattform und Messaging bei einzelnen Anbietern auszulagern, bündelt openDesk Edu diese Werkzeuge in einer einzigen Umgebung, die auf der Infrastruktur der Hochschule betrieben wird. Alle Daten verbleiben damit in der Hoheit der Einrichtung.
 
-Kernmerkmale:
+Die Plattform ist keine Ideenskizze, sondern eine **lauffähige, produktionsnahe Lösung**: Die Software-Pakete („Container“) werden automatisiert gebaut, auf Sicherheitslücken geprüft, signiert und mit einem Software-Stücklisten-Nachweis (SBOM) je Paket dokumentiert. Die Bereitstellung erfolgt weitgehend automatisiert über eine standardisierte, offene Plattform-Technologie (Kubernetes).
 
-- **100 % Open Source** auf allen Ebenen: Anwendungen, Container, Build- und Deployment-Pipeline.
-- **Deterministische, reproduzierbare Builds:** Container werden aus NixOS definiert und sind in identischer Qualität auf jeder Infrastruktur reproduzierbar.
-- **Kubernetes-nativ:** GitOps (ArgoCD) und Helm/Helmfile als standardisierte Deployment-Wege.
-- **Integrierte Identität und Föderation:** SSO über Keycloak, Anbindung an Hochschul-IdPs sowie SAML-Föderation über DFN-AAI/eduGAIN.
-- **Supply-Chain-Sicherheit:** SBOM (SPDX 2.3) für jeden Container, Cosign-Signierung, Schwachstellenprüfung (0 CVEs).
+### 2.2 Beitrag zur digitalen Souveränität
 
-### 2.2 Bezug zum Thema Digitale Souveränität
+Viele Hochschulen betreiben ihren digitalen Arbeitsplatz über proprietäre Cloud-Dienste, die anbietergebunden sind, mit Lizenzkosten verbunden sind und deren Datenverarbeitung außerhalb eigener Kontrolle stattfindet. openDesk Edu adressiert diese Abhängigkeit:
 
-Viele Hochschulen betreiben ihren digitalen Arbeitsplatz über proprietäre Cloud-Dienste mit anbietergebundener Infrastruktur, steigenden Lizenzkosten und Datenverarbeitung außerhalb eigener Kontrolle. openDesk Edu adressiert diese Abhängigkeit mit einer leistungsfähigen quelloffenen Alternative:
+- **Datenhoheit:** Speicherung und Verarbeitung erfolgen auf selbst kontrollierter Infrastruktur; Daten verlassen die Einrichtung nicht.
+- **Herstellerunabhängigkeit:** Jede Komponente ist austauschbar und quelloffen — es entsteht keine Bindung an einzelne Anbieter.
+- **Beschaffungsfähig:** Vollständig quelloffener Code, nachvollziehbar und für öffentliche Vergabeanforderungen geeignet.
 
-- **Datenhoheit** bleibt bei der Einrichtung; Speicherung und Verarbeitung erfolgen auf selbst kontrollierter Infrastruktur.
-- **Herstellerunabhängigkeit:** keine Lock-in-Bindung an einzelne Anbieter; jede Komponente ist austauschbar.
-- **Plan- und beschaffungsfähig:** vollständig quelloffen, nachvollziehbar, für öffentliche Vergabe geeignet.
-
-Die Plattform trägt zu mehreren ausgeschriebenen Themenfeldern bei: **Open Source**, **souveräne Cloud**, **digitale Identitäten**, **Data Governance** (transparente Datenhaltung, Compliance-Nachweise) sowie **KI-Infrastruktur** (ausbaufähige quelloffene KI-/ML-Dienste).
+Die Plattform trägt zu mehreren ausgeschriebenen Themenfeldern bei: **Open Source** (vollständig quelloffen auf allen Ebenen), **souveräne Cloud** (Betrieb auf eigener oder zertifizierbarer souveräner Infrastruktur), **digitale Identitäten** (zentraler Anmeldedienst mit Anbindung an die Hochschul-Föderation DFN-AAI und das europäische Netzwerk eduGAIN), **Data Governance** (transparente Datenhaltung, dokumentierte Sicherheits- und Herkunftsnachweise je Software-Paket) sowie **KI-Infrastruktur** (ausbaufähige quelloffene KI- und Lern-Dienste in derselben Umgebung).
 
 ### 2.3 Skalierbarkeit auf andere Hochschulen
 
-Der Wettbewerb verlangt skalierbare, auf weitere Hochschulen übertragbare Vorhaben. openDesk Edu ist von Grund auf auf Übertragbarkeit ausgelegt:
+Der Wettbewerb fördert skalierbare Vorhaben, die auf andere Hochschulen übertragbar sind. openDesk Edu ist von Grund auf darauf ausgelegt:
 
-- **Offene Artefakte:** Alle Container-Definitionen, Kubernetes-Manifeste und Build-Skripte liegen in öffentlichen Repositories.
-- **Standardisierte Basis:** Das Deployment läuft auf jeder konformen Kubernetes-Umgebung, auf souveräner Cloud (SCS-kompatibel) sowie auf eigener Hardware (z. B. K3s).
-- **Keine Hochschultyp-Bindung:** Funktionsfähig von kleinen Einrichtungen bis zu großen Verbünden; Betrieb durch ein kleines IT-Team ist vorgesehen.
-- **Dokumentierte Übertragung:** Deployment-Leitfaden sowie Muster für SSO, Monitoring, Backup und Betrieb.
-- **Verbundstauglichkeit:** Die Architektur erlaubt einem Hochschulverbund, die Plattform zentral oder föderiert zu betreiben und Betriebslast zu teilen.
+- **Offenheit:** Die Software und alle Konfigurationsdateien liegen in öffentlichen Repositories und sind frei verfügbar.
+- **Standardisierte Plattform:** Die Bereitstellung läuft auf einer gebräuchlichen, offenen Plattform-Technologie (Kubernetes) — unabhängig davon, ob selbst betrieben oder auf einer souveränen Cloud-Infrastruktur.
+- **Keine Hochschultyp-Bindung:** Funktionsfähig von kleinen Einrichtungen bis zu großen Verbünden; ein Betrieb durch ein kleines IT-Team ist vorgesehen.
+- **Dokumentierte Übertragung:** Ein Leitfaden sowie Muster für Anmeldedienste, Monitoring, Datensicherung und Betrieb unterstützen die Übernahme.
+- **Verbundstauglichkeit:** Die Architektur erlaubt einem Hochschulverbund, die Plattform zentral oder föderiert (auf mehrere Standorte verteilt) zu betreiben und Betriebslast zu teilen.
 
-Genau diese Verbund-Skalierung ist das, was der Ideenwettbewerb ermöglichen kann: die Erprobung an einer Transferhochschule oder in einem Verbund als zusätzlicher Real-Betrieb.
+Gerade diese Verbund-Skalierung ist es, die der Ideenwettbewerb ermöglichen kann: die Erprobung an einer weiteren Hochschule oder in einem Verbund als zusätzlicher Real-Betrieb — auf Basis einer Plattform, die bereits produktionsnah erprobt ist.
 
-### 2.4 Reifegrad
+### 2.4 Reifegrad und Umsetzungsstand
 
-Das Projekt befindet sich in der **produktionsnahen Phase** — nicht als Ideenskizze, sondern als lauffähige Lösung: Die Container-Build-Pipeline (deterministisch, signiert, SBOM-dokumentiert), das Kubernetes-Deployment und die GitOps-Werkzeuge sind umgesetzt und dokumentiert. Die Bausteine eignen sich unmittelbar zur Skalierung an einer weiteren Hochschule oder in einem Verbund.
+Die Plattform befindet sich in der **produktionsnahen Phase**: Die Software-Pakete sind gebaut, auf Sicherheitslücken geprüft, signiert und per Software-Stückliste dokumentiert; die standardisierte Bereitstellung ist umgesetzt und dokumentiert. Für die aktuelle Paketsammlung wurden keine bekannten Sicherheitslücken festgestellt. Damit sind die Bausteine unmittelbar für die Skalierung an einer weiteren Hochschule oder in einem Verbund geeignet — die Voraussetzungen des Wettbewerbs (laufendes oder konkret geplantes Vorhaben) sind erfüllt.
 
 ### 2.5 Team und Nachhaltigkeit
 
-Getragen von der openDesk-Edu-Community. Die Arbeit ist vollständig offen; Beiträge sind ausdrücklich erwünscht. Langfristig stehen Wartung, Updates, Dokumentation und Betrieb im Vordergrund — durch den deterministischen Build und die herstellerunabhängige Toolchain dauerhaft wirtschaftlich und nachvollziehbar gestaltbar.
+openDesk Edu wird von einer offenen Community aus Hochschul- und Projektbeteiligten getragen. Die Arbeit ist vollständig offen; Beiträge sind ausdrücklich erwünscht. Langfristig stehen Wartung, Updates, Dokumentation und Betrieb im Vordergrund — durch ein deterministisches Build-Verfahren und die Anbindung an Standard-Infrastruktur dauerhaft wirtschaftlich und nachvollziehbar.
 
 ### 2.6 Mehrwert des Wettbewerbspreises
 
-Die Förderung ist bewusst ideell und personell ausgerichtet — für dieses Projekt die passende Form: Benötigt werden Reichweite, Vernetzung und ein konkreter Transfer-Ort:
+Die Förderung ist bewusst ideell und personell ausgerichtet — für dieses Projekt die passende Form. Im Vordergrund stehen Reichweite, Vernetzung und realer Transfer:
 
-- **Realer Transfer:** Skalierung bei einer Transferhochschule oder in einem Verbund als Pilot.
-- **Fachliche Begleitung** durch das HFD-Team zur Adaption auf weitere Einrichtungen.
+- **Realer Transfer:** Skalierung bei einer Transferhochschule oder in einem Verbund als Pilot — ein konkreter Ort für die Erprobung.
+- **Fachliche Begleitung** durch das HFD-Team zur Anpassung auf weitere Einrichtungen.
 - **Netzwerk und Sichtbarkeit** über die HFD-Kanäle und -Formate (Konferenzen, Workshops).
-- **Reproduzierbarkeit als Vorbild:** Weitere Hochschulen können den Weg anhand der offenen Artefakte nachvollziehen.
+- **Reproduzierbarkeit als Vorbild:** Weitere Hochschulen können den Weg anhand der offenen Artefakte nachvollziehen und direkt übernehmen.
 
 ---
 
