@@ -1,3 +1,10 @@
+## [1.16.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.2...v1.16.3) (2026-08-06)
+
+
+### Bug Fixes
+
+* **open-xchange:** Bump charts and images to latest 8.49 ([decb603](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/decb60323f4c8b6626c34399514f4f59b893c388))
+
 ## [1.16.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.1...v1.16.2) (2026-07-31)
 
 
