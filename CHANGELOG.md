@@ -1,3 +1,10 @@
+## [1.17.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.17.1...v1.17.2) (2026-08-06)
+
+
+### Bug Fixes
+
+* **open-xchange:** Bump charts and images to latest 8.49 ([9f7bd0c](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/9f7bd0ca983d207de057609654df01e770758e79))
+
 ## [1.17.1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.17.0...v1.17.1) (2026-07-31)
 
 
@@ -40,6 +47,13 @@
 * **open-xchange:** Enable contact picker's LDAP cache and allow configuring it using `cacheExpirySeconds`; see `updates.md` for more details ([4a4bfe1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4a4bfe1a3571931d781b4ba41eb7571c888e5d18))
 * **open-xchange:** Harden Postfix config ([81e1daa](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/81e1daa66a9bf9b51b8aa8d1a04f4e8c381ff081))
 * **openproject:** Update from 17.5.1 to 17.6.0 ([c1dd349](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c1dd349f1dae7ac21578c4475a0e62b24a926794))
+
+## [1.16.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.2...v1.16.3) (2026-08-06)
+
+
+### Bug Fixes
+
+* **open-xchange:** Bump charts and images to latest 8.49 ([decb603](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/decb60323f4c8b6626c34399514f4f59b893c388))
 
 ## [1.16.2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.1...v1.16.2) (2026-07-31)
 
