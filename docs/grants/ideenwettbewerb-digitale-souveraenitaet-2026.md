@@ -65,7 +65,7 @@ Die Förderung ist bewusst ideell und personell ausgerichtet — für dieses Pro
 
 - **Projekt:** openDesk Edu (openDesk-Edu-Community)
 - **E-Mail:** info@opendesk-edu.org
-- **Quellcode:** github.com/tobias-weiss-ai-xr/opendesk-nix
+- **Quellcode:** github.com/tobias-weiss-ai-xr/opendesk-edu
 
 ---
 
