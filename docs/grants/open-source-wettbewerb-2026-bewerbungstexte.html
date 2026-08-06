@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Open Source Wettbewerb 2026 — Bewerbungstexte openDesk Edu</title>
+<style>
+  @page {
+    size: A4;
+    margin: 22mm 20mm 24mm 20mm;
+    @bottom-center {
+      content: "openDesk Edu · Open Source Wettbewerb 2026 — Seite " counter(page) " von " counter(pages);
+      font-family: "Inter", "DejaVu Sans", sans-serif;
+      font-size: 8.5pt;
+      color: #8a8a9a;
+    }
+  }
+  @page :first {
+    @bottom-center {
+      content: "";
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Inter", "DejaVu Sans", sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #1a1a2e;
+  }
+
+  /* ---------- Cover header ---------- */
+  .cover {
+    background: linear-gradient(135deg, #0a0014 0%, #1a0030 55%, #2a0a4a 100%);
+    border-radius: 10px;
+    padding: 34px 38px 30px 38px;
+    color: #ffffff;
+    margin-bottom: 26px;
+    page-break-after: avoid;
+  }
+  .cover .eyebrow {
+    font-size: 9.5pt;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #a78bfa;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-size: 23pt;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .cover .subtitle {
+    font-size: 12.5pt;
+    font-weight: 400;
+    color: #ddd6fe;
+    line-height: 1.45;
+  }
+  .cover .meta {
+    margin-top: 18px;
+    font-size: 10pt;
+    color: #c4b5fd;
+    line-height: 1.6;
+  }
+  .cover .meta strong { color: #ffffff; }
+
+  /* ---------- Headings ---------- */
+  h2 {
+    font-size: 13.5pt;
+    font-weight: 800;
+    color: #341291;
+    margin: 22px 0 8px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #571efa;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 14px 0 4px 0;
+    page-break-after: avoid;
+  }
+
+  p { margin-bottom: 8px; }
+  ul { margin: 4px 0 10px 18px; }
+  li { margin-bottom: 3px; }
+
+  strong { font-weight: 700; }
+
+  .section-note {
+    font-size: 9pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="eyebrow">Einreichung · Open Source Wettbewerb 2026</div>
+  <h1>openDesk Edu — Die Open-Source-Digitalplattform für Hochschulen</h1>
+  <div class="subtitle">Eine Erweiterung der openDesk Community Edition des Bundes um hochschulspezifische Dienste: Lehre, Forschung, Studium und Verwaltung auf einer einheitlich authentifizierten, vollständig quelloffenen Plattform.</div>
+  <div class="meta">
+    <strong>Einreichung:</strong> Universität Marburg<br>
+    <strong>Kategorien:</strong> Interne Verwaltungsanwendungen, Künstliche Intelligenz<br>
+    <strong>Ansprechpartner:</strong> Tobias Weiß, DevOps Engineer // Lead Digital Sovereignty
+  </div>
+</div>
+
+<!-- ================= 1. PROJEKTBESCHREIBUNG ================= -->
+<h2>1. Projektbeschreibung</h2>
+
+<h3>openDesk Edu – Die Open-Source-Digitalplattform für Hochschulen</h3>
+<p>openDesk Edu ist eine Erweiterung der openDesk Community Edition des Bundes (ZenDiS) um spezifisch für Hochschulen benötigte Dienste. Während openDesk primär auf Verwaltungsmitarbeitende ausgerichtet ist, adressiert openDesk Edu die gesamte Hochschule: Studierende, Lehrende, Forschende und Verwaltung auf einer einzigen, einheitlich authentifizierten Plattform.</p>
+
+<h3>Problemstellung</h3>
+<p>Hochschulen in Deutschland stehen vor einem strategischen Dilemma: Entweder sie setzen auf proprietäre All-in-One-Lösungen wie Microsoft 365 Education – mit hohen Lizenzkosten, Vendor-Lock-in und Datenabfluss in US-Rechenzentren – oder sie betreiben eine heterogene Landschaft aus Einzellösungen (Moodle, ILIAS, Nextcloud, Jitsi etc.) ohne gemeinsame Benutzerverwaltung, ohne einheitlichen Zugang und ohne integrierte Arbeitsabläufe. Beide Wege sind unbefriedigend: Ersterer widerspricht der digitalen Souveränität, letzterer erzeugt hohen Administrationsaufwand und eine schlechte User Experience.</p>
+
+<h3>Lösung</h3>
+<p>openDesk Edu vereint über 25 quelloffene Dienste auf einer gemeinsamen Kubernetes-Plattform mit zentralem Keycloak-Single-Sign-On. Ein einziger Login genügt, um auf alle Dienste zuzugreifen – von E-Mail und Groupware über Lernmanagementsysteme bis hin zu wissenschaftlichen Rechenwerkzeugen und KI-Assistenten.</p>
+
+<p><strong>Lernmanagementsysteme:</strong> ILIAS und Moodle in vollständig integrierter Form mit SAML-Authentifizierung über Keycloak und DFN-AAI-Anbindung. Beide Systeme teilen sich die Benutzerbasis und ermöglichen nahtlose Übergänge zwischen Kursen, Prüfungen und Kollaboration.</p>
+
+<p><strong>Kollaboration und Produktivität:</strong> Nextcloud oder OpenCloud für Dateispeicher und -austausch, Etherpad für Echtzeit-Zusammenarbeit, BookStack als Wissensdatenbank, Planka für Projektmanagement und Zammad als Service-Desk. Für E-Mail und Groupware stehen OX App Suite, SOGo und Grommunio zur Auswahl – je nach Anforderung an ActiveSync-Unterstützung und Skalierbarkeit.</p>
+
+<p><strong>Wissenschaftliches Rechnen (Collab Services):</strong> Eine neuartige Integration von JupyterHub, Overleaf, RStudio Server, code-server (VS Code im Browser), KasmVNC (Linux-Desktop im Browser), Dask Gateway (verteiltes Rechnen), ttyd (Web-Terminal), Slidev und Excalidraw – alles über eine zentrale Dashboard-Oberfläche erreichbar. Dies senkt die Einstiegshürde für digitale Lehre und Forschung erheblich, da Studierende und Forschende keine lokale Installation mehr benötigen.</p>
+
+<p><strong>Künstliche Intelligenz (zweite Kategorie):</strong> Open WebUI bietet eine ChatGPT-ähnliche Oberfläche, die über Ollama mit lokalen Large Language Models (LLaMA, Mistral u.a.) verbunden ist. Sämtliche KI-Verarbeitung erfolgt auf der eigenen Infrastruktur – keine Daten verlassen die Hochschule. Dies ist für den Forschungs- und Lehrbetrieb, insbesondere unter datenschutzrechtlichen Aspekten, von zentraler Bedeutung.</p>
+
+<h3>Technische Architektur</h3>
+<p>Die Plattform basiert auf Kubernetes (K8s 1.28+) mit Helm und helmfile als Deployment-Werkzeugen. Jeder Dienst ist in einem eigenen Helm-Chart gekapselt und über helmfile-Gruppen organisierbar. Die gesamte Konfiguration erfolgt über zentrale YAML-Templates, die Umgebungsvariablen, Domains und Zertifikate steuern.</p>
+<ul>
+  <li><strong>Authentifizierung:</strong> Keycloak als zentraler Identity Provider (SAML 2.0 + OIDC)</li>
+  <li><strong>Hochschulföderation:</strong> Vollständige DFN-AAI / eduGAIN-Integration über Shibboleth Service Provider</li>
+  <li><strong>Verschlüsselung:</strong> Automatisierte TLS-Zertifikate über die openDesk-Certificates-Komponente</li>
+  <li><strong>Backup:</strong> k8up (restic-basiert) für alle persistenten Daten</li>
+  <li><strong>Monitoring:</strong> Prometheus-Stack (im openDesk-Upstream enthalten)</li>
+  <li><strong>Storage:</strong> RWO/RWX-StorageClasses aus der openDesk-Konfiguration</li>
+</ul>
+<p>Ein besonderes architektonisches Merkmal ist die modulare Austauschbarkeit: Für jede Funktion existieren mehrere Optionen (z.B. Nextcloud ODER OpenCloud für Dateien, OX App Suite ODER SOGo ODER Grommunio für E-Mail). Hochschulen wählen die Komponente, die ihren Anforderungen am besten entspricht – ohne die Plattform wechseln zu müssen.</p>
+
+<h3>Umsetzungsstand</h3>
+<p>Das Projekt ist aktiv in Entwicklung und wird an der Universität Marburg betrieben. Alle Kernkomponenten sind deployt und getestet. Phase A (Foundation mit 11 wissenschaftlichen Rechenwerkzeugen) ist abgeschlossen, Phasen B und C (Produktionshärtung und Feinschliff) sind in Arbeit. Die Plattform wurde auf der Chemnitzer Linux-Tage 2026 sowie auf dem LinuxTag 2026 in 30 Sprachen präsentiert und stieß auf großes Interesse im gesamten DACH-Raum.</p>
+
+<!-- ================= 2. TECHNISCHER INNOVATIONSGRAD ================= -->
+<h2>2. Technischer Innovationsgrad und Beitrag zur Verwaltungsmodernisierung</h2>
+<p>openDesk Edu stellt in mehrfacher Hinsicht eine technische Neuerung dar:</p>
+
+<p><strong>1. Erste vollständige Integration von openDesk mit hochschulspezifischen Diensten.</strong> Während openDesk als Verwaltungsplattform konzipiert ist, erweitert openDesk Edu den Ansatz auf den gesamten Hochschulkontext. Die Integration von ILIAS, Moodle, JupyterHub und Overleaf in die bestehende Keycloak-SSO-Infrastruktur ist technisch anspruchsvoll: Jeder Dienst erfordert individuelle SAML/OIDC-Konfiguration, Attribut-Mapping und Session-Handling. Die Lösung dieser Integrationsprobleme – dokumentiert in wiederverwendbaren Helm-Charts und Konfigurationsvorlagen – ist ein konkreter Beitrag zur Verwaltungsmodernisierung, da andere Hochschulen diese Arbeit nicht wiederholen müssen.</p>
+
+<p><strong>2. Collab Services – wissenschaftliche Werkzeuge als Plattform.</strong> Die Bündelung von JupyterHub, Overleaf, RStudio, code-server, Dask und Open WebUI in einer einheitlichen Helmfile-Gruppe mit zentralem Dashboard ist neuartig. Existierende Lösungen (z.B. CoCalc) sind proprietär oder erfordern eigene Infrastruktur. openDesk Edu bietet eine quelloffene Alternative, die tief in die vorhandene Hochschul-IT integriert ist – inklusive DFN-AAI-Authentifizierung und gemeinsamer Storage-Anbindung über OpenCloud-WebDAV.</p>
+
+<p><strong>3. Lokale KI als Plattformdienst.</strong> Open WebUI + Ollama sind als vollständig lokale KI-Infrastruktur integriert, ohne Cloud-Abhängigkeit. Dies ist technisch innovativ, weil es GPU-Scheduling, Modell-Management und Benutzerauthentifizierung in einem Kubernetes-Cluster vereint – eine Kombination, die in dieser Form an keiner anderen deutschen Hochschule produktiv eingesetzt wird.</p>
+
+<p><strong>4. Modulare Helmfile-Architektur.</strong> openDesk Edu führt das Konzept der alternativen Komponenten (z.B. Nextcloud ↔ OpenCloud, Jitsi ↔ BigBlueButton) ein. Dies wird durch ein ausgeklügeltes helmfile-Labeling und konditionale Releases ermöglicht – ein Architekturmuster, das über das Projekt hinaus als Best Practice für modulare Kubernetes-Plattformen dienen kann.</p>
+
+<p><strong>Beitrag zur Verwaltungsmodernisierung:</strong> openDesk Edu zeigt, dass eine moderne, cloud-native Hochschul-IT vollständig auf Open-Source-Basis realisiert werden kann. Die Plattform reduziert die Fragmentierung der IT-Landschaft, senkt den Administrationsaufwand durch zentrale Authentifizierung und einheitliches Deployment und macht Hochschulen unabhängig von proprietären Anbietern.</p>
+
+<!-- ================= 3. ÖKONOMISCHER NUTZEN ================= -->
+<h2>3. Ökonomischer Nutzen</h2>
+<p>openDesk Edu adressiert die wirtschaftliche Ineffizienz der aktuellen Hochschul-IT-Landschaft:</p>
+
+<p><strong>1. Wegfall von Lizenzkosten.</strong> Eine deutsche Universität mittlerer Größe (20.000 Studierende) gibt jährlich zwischen 500.000 € und 2 Mio. € für proprietäre Softwarelizenzen aus – Microsoft Campus Agreement, Adobe, MATLAB, SPSS und weitere. openDesk Edu ersetzt diese durch quelloffene Äquivalente: Nextcloud/OpenCloud statt SharePoint/OneDrive, Collabora statt Microsoft 365, JupyterHub statt MATLAB Online, Open WebUI statt ChatGPT Enterprise, RStudio statt SPSS. Die Lizenzkosten sinken auf null.</p>
+
+<p><strong>2. Konsolidierung der IT-Infrastruktur.</strong> Aktuell betreiben viele Hochschulen parallele Infrastrukturen: Ein Team betreut das Lernmanagementsystem, ein anderes die Kollaborationsplattform, ein drittes die E-Mail-Infrastruktur, ein viertes die Rechencluster – oft mit unterschiedlichen Authentifizierungssystemen und ohne Integration. openDesk Edu konsolidiert dies auf einer Kubernetes-Plattform mit einem Identity Provider. Die Einsparungen bei Betrieb, Wartung und Personal sind erheblich: Statt 5–6 Teilinfrastrukturen wird nur eine betrieben.</p>
+
+<p><strong>3. Geringere Einarbeitungs- und Supportkosten.</strong> Durch das einheitliche Benutzererlebnis (ein Login, ein Portal, konsistente Bedienung) sinken Support-Anfragen signifikant. Studierende und Mitarbeitende müssen sich nicht in sechs verschiedene Systeme mit sechs verschiedenen Passwörtern und Bedienlogiken einarbeiten.</p>
+
+<p><strong>4. Shared-Development-Effekt.</strong> openDesk Edu ist als Gemeinschaftsprojekt konzipiert. Wenn eine Hochschule eine Integration vornimmt, profitiert die gesamte Community. Dies vermeidet Doppelarbeit: Aktuell implementieren 80 deutsche Hochschulen unabhängig voneinander die Integration von ILIAS mit Keycloak – jede mit eigenem Aufwand und eigenen Fehlern. openDesk Edu bietet eine geteilte, getestete Referenzimplementierung.</p>
+
+<p><strong>5. Vermiedene Wechselkosten.</strong> Die modulare Architektur ermöglicht den Austausch von Komponenten ohne Plattformwechsel. Eine Hochschule, die heute Nextcloud nutzt, kann später auf OpenCloud wechseln – ohne die Benutzerverwaltung, das Portal oder die Backup-Infrastruktur ändern zu müssen. Dies reduziert das wirtschaftliche Risiko von Technologieentscheidungen erheblich.</p>
+
+<p>Die Gesamtkostenersparnis über einen Fünf-Jahres-Zeitraum wird für eine mittlere Universität auf 2–4 Mio. € geschätzt – bei gleichzeitiger Steigerung der digitalen Souveränität.</p>
+
+<!-- ================= 4. NACHHALTIGKEIT ================= -->
+<h2>4. Nachhaltigkeit der Lösung</h2>
+<p>openDesk Edu ist auf technische, organisatorische und ökologische Nachhaltigkeit ausgelegt:</p>
+
+<h3>Technische Nachhaltigkeit</h3>
+<ul>
+  <li><strong>Open-Source-Lizenzierung:</strong> Sämtliche Komponenten stehen unter Open-Source-Lizenzen (Apache 2.0, AGPL-3.0, GPL, MIT). Es gibt keine versteckten proprietären Abhängigkeiten. Das Projekt kann auch bei Wegfall der ursprünglichen Entwickler von jeder Hochschule oder jedem Dienstleister weitergeführt werden.</li>
+  <li><strong>Standards statt proprietärer Schnittstellen:</strong> SAML 2.0, OIDC, LDAP, CalDAV/CardDAV, WebDAV, SCIM – alle Integrationen basieren auf offenen Standards. Komponenten können gegen jede standardskonforme Alternative ausgetauscht werden.</li>
+  <li><strong>Modulare Architektur:</strong> Jeder Dienst ist ein eigener, austauschbarer Baustein. Veraltete Komponenten können durch aktuelle Alternativen ersetzt werden, ohne die Gesamtplattform zu gefährden. Dies verhindert technologische Altlasten.</li>
+  <li><strong>Upstream-Following:</strong> openDesk Edu folgt den Upstream-Versionen aller integrierten Projekte. Sicherheitsupdates und neue Versionen werden zeitnah eingespielt.</li>
+</ul>
+
+<h3>Organisatorische Nachhaltigkeit</h3>
+<ul>
+  <li><strong>Community-getrieben:</strong> Das Projekt ist als Kollaboration mehrerer Hochschulen und Einrichtungen angelegt. Die Entwicklung findet öffentlich auf GitHub und Codeberg statt, Beiträge sind explizit erwünscht.</li>
+  <li><strong>Dokumentation und Wissenstransfer:</strong> Umfangreiche Dokumentation (Architektur, Deployment, Konfiguration, Migration) und mehrsprachige Präsentationsmaterialien (30 Sprachen) senken die Einstiegshürde für neue Hochschulen.</li>
+  <li><strong>Keine Vendor-Lock-in:</strong> Es gibt keine Abhängigkeit von einem bestimmten Dienstleister. Betrieb, Wartung und Weiterentwicklung können von jedem qualifizierten IT-Dienstleister oder hochschuleigenem Personal übernommen werden.</li>
+</ul>
+
+<h3>Ökologische Nachhaltigkeit</h3>
+<ul>
+  <li><strong>Ressourceneffizienz durch Konsolidierung:</strong> Statt mehrerer paralleler Infrastrukturen (ein Cluster pro Anwendung) betreibt openDesk Edu eine gemeinsame Kubernetes-Plattform. Dies reduziert den Gesamtenergieverbrauch durch besser ausgelastete Hardware und geringeren Overhead.</li>
+  <li><strong>Lokale KI:</strong> Anders als Cloud-KI-Dienste (ChatGPT, Claude, Gemini) erfordert die lokale Ollama-Integration keine energieintensiven Rechenzentrumsverbindungen und keine Datenübertragung über weite Strecken.</li>
+</ul>
+
+<!-- ================= 5. DIGITALE SOUVERÄNITÄT ================= -->
+<h2>5. Beitrag zur Stärkung der Digitalen Souveränität</h2>
+<p>openDesk Edu leistet einen zentralen Beitrag zur digitalen Souveränität deutscher Hochschulen:</p>
+
+<p><strong>1. Vollständige Datenhoheit.</strong> Sämtliche Daten – von E-Mails über Kursmaterialien bis hin zu KI-Interaktionen – verbleiben auf der Infrastruktur der Hochschule. Es findet keine Datenübertragung an Drittanbieter statt, insbesondere nicht in US-amerikanische Rechenzentren (kein Microsoft 365, keine Google Workspace, kein ChatGPT). Dies ist für Hochschulen nicht nur eine Frage der Souveränität, sondern auch der datenschutzrechtlichen Compliance (DSGVO, insbesondere Art. 44–49 zur Drittlandübermittlung).</p>
+
+<p><strong>2. Unabhängigkeit von proprietären Ökosystemen.</strong> openDesk Edu bricht die Abhängigkeit von den Ökosystemen der großen US-Technologiekonzerne. Statt Microsoft 365 Education (geschätzte Marktdurchdringung an deutschen Hochschulen: &gt;60 %) setzt die Plattform auf vollständig quelloffene Alternativen. Dies bedeutet: Keine erzwungenen Updates, keine Lizenzänderungen, keine einseitigen Konditionsanpassungen, keine Kündigung von Lizenzen aufgrund politischer Entscheidungen.</p>
+
+<p><strong>3. Basierend auf openDesk – der Souveränitätsplattform des Bundes.</strong> openDesk wurde im Auftrag des Bundesministeriums des Innern und für Heimat entwickelt, um die öffentliche Verwaltung von proprietären Abhängigkeiten zu lösen. openDesk Edu überführt dieses Konzept in den Hochschulkontext und stellt sicher, dass die digitale Souveränität von der Verwaltungsebene nahtlos in die akademische Lehre und Forschung fortgesetzt wird.</p>
+
+<p><strong>4. DFN-AAI-Integration als Souveränitätsbaustein.</strong> Die Integration der DFN-AAI-Föderation (Shibboleth/eduGAIN) stellt sicher, dass Hochschulen ihre bestehende Authentifizierungsinfrastruktur weiter nutzen können. Dies vermeidet Insellösungen und stärkt die föderierte Identitätsverwaltung im deutschen Wissenschaftsnetz.</p>
+
+<p><strong>5. Lokale KI statt Cloud-KI.</strong> Die Integration von Open WebUI mit Ollama ermöglicht KI-Nutzung ohne Cloud-Anbindung. Ein Hochschulgesetz oder eine Datenschutzverordnung kann nicht dazu führen, dass der KI-Assistent abgeschaltet werden muss – weil keine Daten Dritte erreichen. Dies ist ein entscheidender Unterschied zu ChatGPT Enterprise, Microsoft Copilot oder Google Gemini, die alle eine Datenverarbeitung auf Servern in den USA erfordern.</p>
+
+<p><strong>6. Nachvollziehbare und prüfbare Software.</strong> Da sämtlicher Quellcode offen liegt, können Hochschulen Sicherheitsaudits durchführen, Schwachstellen eigenständig schließen und die Software an eigene Bedürfnisse anpassen – ohne auf den Goodwill eines Herstellers angewiesen zu sein.</p>
+
+<p class="section-note">Stand: Juni 2026 | Einreichung zum Open Source Wettbewerb 2026 · Kategorien: Interne Verwaltungsanwendungen, Künstliche Intelligenz</p>
+
+</body>
+</html>
