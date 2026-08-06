@@ -1,8 +1,8 @@
 # openDesk Edu — Historical Deployment Notes
 
 This file consolidates useful architectural knowledge from the April 2026
-edu deployment cycle. The actual deployment target has moved to the HRZ cluster
-(`*.opendesk.hrz.uni-marburg.de`). This is kept for reference only.
+edu deployment cycle. The actual deployment target has moved to the Kubernetes cluster
+(`*.home.opendesk-edu.org`). This is kept for reference only.
 
 ---
 
@@ -37,7 +37,7 @@ c3594d8 fix(sogo): enable Apache proxy for port 80 access
 cf61abb docs: Add UMS-SOGO-DEPLOYMENT-STATUS.md
 ```
 
-## Key Fixes (recorded, not deployed — target moved to HRZ cluster)
+## Key Fixes (recorded, not deployed — target moved to Kubernetes cluster)
 
 ### Portal MinIO Credentials
 - **Problem**: Invalid MinIO credentials in `ums-portal-consumer-object-storage` secret

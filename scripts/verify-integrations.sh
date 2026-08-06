@@ -10,7 +10,7 @@
 set -euo pipefail
 
 NAMESPACE="${NAMESPACE:-opendesk}"
-DOMAIN="${DOMAIN:-opendesk.hrz.uni-marburg.de}"
+DOMAIN="${DOMAIN:-home.opendesk-edu.org}"
 CLUSTER_DOMAIN="${CLUSTER_DOMAIN:-svc.cluster.local}"
 PASS=0
 FAIL=0

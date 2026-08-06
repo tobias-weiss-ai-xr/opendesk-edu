@@ -24,7 +24,7 @@ The CMP sidecar intercepts `.enc.yaml` files, decrypts them with `sops
 --decrypt`, and hands the plaintext to ArgoCD's resource detection.
 
 > **⚠️ Verified on ArgoCD v3.0.12 (2026-07-09).** The CMP sidecar was
-> successfully deployed and tested in production on the HRZ cluster
+> successfully deployed and tested in production on the Kubernetes cluster
 > (K3s v1.32.3). An encrypted K8s Secret (`test-secret.enc.yaml`) was
 > decrypted end-to-end and applied by ArgoCD.
 
@@ -37,7 +37,7 @@ The CMP sidecar intercepts `.enc.yaml` files, decrypts them with `sops
 
 ## Sidecar Configuration (Actual Deployment)
 
-This section describes the exact configuration applied to the HRZ cluster.
+This section describes the exact configuration applied to the Kubernetes cluster.
 
 ### 1. Create the age key Secret
 
@@ -147,11 +147,11 @@ spec:
             - "curl -sL -o /tools/sops https://github.com/getsops/sops/releases/download/v3.9.4/sops-v3.9.4.linux.amd64 && chmod +x /tools/sops"
           env:
             - name: HTTP_PROXY
-              value: http://www-proxy1.uni-marburg.de:3128
+              value: http://www-proxy1.opendesk-edu.org:3128
             - name: HTTPS_PROXY
-              value: http://www-proxy1.uni-marburg.de:3128
+              value: http://www-proxy1.opendesk-edu.org:3128
             - name: no_proxy
-              value: argocd-repo-server,argocd-application-controller,argocd-metrics,argocd-server,argocd-server-metrics,argocd-redis,*.domain.local,127.0.0.0/8,10.0.0.0/8,172.16.0.0/16,172.17.0.0/16,192.168.0.0/16,gitlab.hrz.uni-marburg.de,registry.hrz.uni-marburg.de,weblogin.uni-marburg.de
+              value: argocd-repo-server,argocd-application-controller,argocd-metrics,argocd-server,argocd-server-metrics,argocd-redis,*.domain.local,127.0.0.0/8,10.0.0.0/8,172.16.0.0/16,172.17.0.0/16,192.168.0.0/16,gitlab.home.opendesk-edu.org,registry.home.opendesk-edu.org,weblogin.opendesk-edu.org
           volumeMounts:
             - name: extra-tools
               mountPath: /tools
@@ -165,11 +165,11 @@ spec:
             - name: SOPS_AGE_KEY_FILE
               value: /sops-age-key/age-key.txt
             - name: HTTP_PROXY # Added for proxy access in the CMP sidecar
-              value: http://www-proxy1.uni-marburg.de:3128
+              value: http://www-proxy1.opendesk-edu.org:3128
             - name: HTTPS_PROXY # Added for proxy access in the CMP sidecar
-              value: http://www-proxy1.uni-marburg.de:3128
+              value: http://www-proxy1.opendesk-edu.org:3128
             - name: no_proxy # Added for proxy access in the CMP sidecar
-              value: argocd-repo-server,argocd-application-controller,argocd-metrics,argocd-server,argocd-server-metrics,argocd-redis,*.domain.local,127.0.0.0/8,10.0.0.0/8,172.16.0.0/16,172.17.0.0/16,192.168.0.0/16,gitlab.hrz.uni-marburg.de,registry.hrz.uni-marburg.de,weblogin.uni-marburg.de
+              value: argocd-repo-server,argocd-application-controller,argocd-metrics,argocd-server,argocd-server-metrics,argocd-redis,*.domain.local,127.0.0.0/8,10.0.0.0/8,172.16.0.0/16,172.17.0.0/16,192.168.0.0/16,gitlab.home.opendesk-edu.org,registry.home.opendesk-edu.org,weblogin.opendesk-edu.org
           volumeMounts:
             - name: extra-tools
               mountPath: /custom-tools # Where sops binary is installed

@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Infraestrutura de nuvem soberana   | SBOM para todos os componentes
 
 ---
 
-# Helmfile e Ambiente HRZ
+# Helmfile e Ambiente Kubernetes
 
 ```bash
 # Implantação com Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orquestração com Helmfile** ⚓
   - Configuração declarativa em `helmfile_generic.yaml.gotmpl`
-  - Sobrescritas específicas do ambiente em `environments/hrz/`
+  - Sobrescritas específicas do ambiente em `environments/production/`
   - Cópia de segurança automática de dependências
-- **Ambiente HRZ criado** 🖥️
+- **Ambiente Kubernetes criado** 🖥️
   - Cópia de `staging` com ajustes
-  - Configuração específica da Uni Marburg
+  - Configuração específica da Uni OpenDesk
   - Sistema de teste para a operação piloto
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → Mosaico do ILIAS
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Início de sessão (weblogin.uni-marburg.de)
+4. 🎓 Início de sessão (weblogin.opendesk-edu.org)
 5. 📨 Asserção SAML de volta
 6. ✅ Painel do ILIAS
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Revisar alterações
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Aplicar atualizações
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Reverter se necessário
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Atualizações controladas via Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Atualização HRZ: Migração de Ingress
+# Atualização Kubernetes: Migração de Ingress
 
 - **Migração:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (ramo uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Atualização HRZ: Cópia de Segurança Dual
+# Atualização Kubernetes: Cópia de Segurança Dual
 
 - **Objetivos:** Armazenamento de Cópia de Segurança Redundante 🗄️
 - **Estratégia:** Compatível com S3 com backend restic 🔄

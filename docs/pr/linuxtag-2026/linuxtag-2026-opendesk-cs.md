@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suverénní cloudová infrastruktura   | SBOM pro všechny komponenty
 
 ---
 
-# Helmfile & HRZ-Prostředí
+# Helmfile & Kubernetes-Prostředí
 
 ```bash
 # Nasazení s Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orchestrace přes Helmfile** ⚓
   - Deklarativní konfigurace v `helmfile_generic.yaml.gotmpl`
-  - Přepsání specifická pro prostředí v `environments/hrz/`
+  - Přepsání specifická pro prostředí v `environments/production/`
   - Automatická záloha závislostí
-- **HRZ-Prostředí vytvořeno** 🖥️
+- **Kubernetes-Prostředí vytvořeno** 🖥️
   - Kopie `staging` s úpravami
-  - Konfigurace specifická pro Uni Marburg
+  - Konfigurace specifická pro Uni OpenDesk
   - Testovací systém pro pilotní provoz
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portál → ILIAS dlaždice
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Přihlášení (weblogin.uni-marburg.de)
+4. 🎓 Přihlášení (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion zpět
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Zkontroluj změny
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Použij aktualizace
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Návrat zpět v případě potřeby
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Kontrolované aktualizace přes Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Aktualizace: Migrace Ingress
+# Kubernetes-Aktualizace: Migrace Ingress
 
 - **Migrace:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (větev uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Aktualizace: Duální Záloha
+# Kubernetes-Aktualizace: Duální Záloha
 
 - **Cíl:** Redundantní zálohovací úložiště 🗄️
 - **Strategie:** S3 kompatibilní s restic backendem 🔄

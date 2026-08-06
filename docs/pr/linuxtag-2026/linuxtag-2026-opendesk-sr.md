@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suverena cloud infrastruktura   | SBOM za sve komponente
 
 ---
 
-# Helmfile i HRZ-Okruženje
+# Helmfile i Kubernetes-Okruženje
 
 ```bash
 # Deployment sa Helmfile-om
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orkestracija** ⚓
   - Deklarativna konfiguracija u `helmfile_generic.yaml.gotmpl`
-  - Preklapanja specifična za okruženje u `environments/hrz/`
+  - Preklapanja specifična za okruženje u `environments/production/`
   - Automatsko pravljenje rezerve zavisnosti
-- **HRZ-Okruženje kreirano** 🖥️
+- **Kubernetes-Okruženje kreirano** 🖥️
   - Kopija `staging`-a sa prilagođavanjima
-  - Konfiguracija specifična za Uni Marburg
+  - Konfiguracija specifična za Uni OpenDesk
   - Test sistem za pilot rad
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion nazad
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Pregledaj promene
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Primeni ažuriranja
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Rollback ako je potrebno
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Kontrolisana ažuriranja preko Helmfile-a** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Ingres Migracija
+# Kubernetes-Upgrade: Ingres Migracija
 
 - **Migracija:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (uniapps grana)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Dupli Backup
+# Kubernetes-Upgrade: Dupli Backup
 
 - **Ciljevi:** Redundantno Backup Skladište 🗄️
 - **Strategija:** S3-kompatibilno sa restic backend-om 🔄

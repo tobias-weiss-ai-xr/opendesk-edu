@@ -632,9 +632,9 @@ The **ZKI IT-Grundschutz-Profil implementation** for **openDesk** is now **compl
 
 | Role | Email | Slack |
 |------|-------|-------|
-| Security Team | security@opendesk.hrz.uni-marburg.de | #security |
-| Incident Response | incident@opendesk.hrz.uni-marburg.de | #incident-response |
-| DevOps Team | devops@opendesk.hrz.uni-marburg.de | #devops |
+| Security Team | security@home.opendesk-edu.org | #security |
+| Incident Response | incident@home.opendesk-edu.org | #incident-response |
+| DevOps Team | devops@home.opendesk-edu.org | #devops |
 
 ---
 

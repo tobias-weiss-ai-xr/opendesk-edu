@@ -197,11 +197,11 @@ kubectl get clusterpolicyreports -w
 
 | Need | Contact | Channel | Response Time |
 |------|---------|---------|---------------|
-| General Questions | Security Team | security@opendesk.hrz... | 4-8 hours |
-| **Security Incidents** | Incident Response | incident@opendesk.hrz... | **15 min** |
-| Technical Issues | DevOps Team | devops@opendesk.hrz... | 4-8 hours |
+| General Questions | Security Team | security@home.opendesk-edu.org... | 4-8 hours |
+| **Security Incidents** | Incident Response | incident@home.opendesk-edu.org... | **15 min** |
+| Technical Issues | DevOps Team | devops@home.opendesk-edu.org... | 4-8 hours |
 | Policy Questions | Security Team Lead | @security-lead (Slack) | 2-4 hours |
-| Approvals | CISO | ciso@opendesk.hrz... | 30 min |
+| Approvals | CISO | ciso@home.opendesk-edu.org... | 30 min |
 | Data Protection | DPO | datenschutz@opendesk... | 1 hour |
 
 **Slack Channels**: #security, #devops, #incident-response

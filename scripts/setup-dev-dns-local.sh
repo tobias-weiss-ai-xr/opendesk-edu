@@ -5,7 +5,7 @@
 # setup-dev-dns-local.sh - Configure this machine as a dev DNS client
 #
 # Sets up local DNS forwarding so this machine can resolve dev service
-# hostnames (r.opendesk.hrz.uni-marburg.de, etc.) that are NOT available
+# hostnames (r.home.opendesk-edu.org, etc.) that are NOT available
 # via public DNS.
 #
 # Architecture (v2 - simplified, no tunnel):
@@ -15,7 +15,7 @@
 #
 # This replaces the old tunnel-based architecture (SSH → socat → CoreDNS)
 # which leaked socat processes and caused NXDOMAIN for valid subdomains
-# like portal.opendesk.hrz.uni-marburg.de.
+# like portal.home.opendesk-edu.org.
 #
 # Usage:
 #   ./setup-dev-dns-local.sh start    # Start dnsmasq with dev host entries
@@ -30,7 +30,7 @@
 #   - System DNS queries go through local dnsmasq (127.0.0.1:53)
 #   - Dev hostnames resolve to the cluster (synthetic records)
 #   - Normal DNS still resolves via HRZ DNS
-#   - portal.opendesk.hrz.uni-marburg.de and other public hostnames
+#   - portal.home.opendesk-edu.org and other public hostnames
 #     resolve normally from HRZ DNS
 
 set -euo pipefail
@@ -47,14 +47,14 @@ TARGET_IP="192.168.3.201"
 # NOTE: Only include hostnames that DON'T resolve via public DNS.
 # Hostnames like portal.*, files.*, chat.* exist in public DNS and MUST NOT be here.
 DEV_HOSTNAMES=(
-  r.opendesk.hrz.uni-marburg.de
-  term.opendesk.hrz.uni-marburg.de
-  slides.opendesk.hrz.uni-marburg.de
-  collab.opendesk.hrz.uni-marburg.de
-  code.opendesk.hrz.uni-marburg.de
-  ai.opendesk.hrz.uni-marburg.de
-  jupyter.opendesk.hrz.uni-marburg.de
-  id.opendesk.hrz.uni-marburg.de
+  r.home.opendesk-edu.org
+  term.home.opendesk-edu.org
+  slides.home.opendesk-edu.org
+  collab.home.opendesk-edu.org
+  code.home.opendesk-edu.org
+  ai.home.opendesk-edu.org
+  jupyter.home.opendesk-edu.org
+  id.home.opendesk-edu.org
 )
 
 # Upstream DNS servers (HRZ)
@@ -109,7 +109,7 @@ CONF_HEADER
   done
 
   echo "" >> /tmp/dev-dns-dnsmasq.conf
-  echo "# All other *.opendesk.hrz.uni-marburg.de queries fall through" >> /tmp/dev-dns-dnsmasq.conf
+  echo "# All other *.home.opendesk-edu.org queries fall through" >> /tmp/dev-dns-dnsmasq.conf
   echo "# to upstream HRZ DNS and resolve normally." >> /tmp/dev-dns-dnsmasq.conf
 
   sudo cp /tmp/dev-dns-dnsmasq.conf "${DNSMASQ_CONF}"
@@ -167,7 +167,7 @@ start() {
   info "  Everything else → HRZ DNS"
   echo ""
   info "To stop:  ${0} stop"
-  info "To test:  nslookup r.opendesk.hrz.uni-marburg.de"
+  info "To test:  nslookup r.home.opendesk-edu.org"
 }
 
 stop() {
@@ -204,11 +204,11 @@ verify() {
 
   # Test a public hostname resolves (portal exists in public DNS)
   local portal_result
-  portal_result=$(dig @127.0.0.1 portal.opendesk.hrz.uni-marburg.de +short 2>&1)
+  portal_result=$(dig @127.0.0.1 portal.home.opendesk-edu.org +short 2>&1)
   if [[ -n "${portal_result}" ]]; then
-    echo -e "    ${GREEN}✅${NC} portal.opendesk.hrz.uni-marburg.de → ${portal_result}"
+    echo -e "    ${GREEN}✅${NC} portal.home.opendesk-edu.org → ${portal_result}"
   else
-    echo -e "    ${RED}❌${NC} portal.opendesk.hrz.uni-marburg.de → ${portal_result:-TIMEOUT}"
+    echo -e "    ${RED}❌${NC} portal.home.opendesk-edu.org → ${portal_result:-TIMEOUT}"
     all_ok=false
   fi
 

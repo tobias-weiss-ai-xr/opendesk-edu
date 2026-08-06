@@ -469,11 +469,11 @@ README_ZKI_IMPLEMENTATION.md (Master Index)
 
 | Role | Email | Slack | Response Time |
 |------|-------|-------|---------------|
-| Security Team | security@opendesk.hrz.uni-marburg.de | #security | 4-8 hours |
-| Incident Response | incident@opendesk.hrz.uni-marburg.de | #incident-response | 15 min |
-| DevOps Team | devops@opendesk.hrz.uni-marburg.de | #devops | 4-8 hours |
-| CISO | ciso@opendesk.hrz.uni-marburg.de | @ciso | 30 min |
-| DPO | datenschutz@opendesk.hrz.uni-marburg.de | @dpo | 1 hour |
+| Security Team | security@home.opendesk-edu.org | #security | 4-8 hours |
+| Incident Response | incident@home.opendesk-edu.org | #incident-response | 15 min |
+| DevOps Team | devops@home.opendesk-edu.org | #devops | 4-8 hours |
+| CISO | ciso@home.opendesk-edu.org | @ciso | 30 min |
+| DPO | datenschutz@home.opendesk-edu.org | @dpo | 1 hour |
 
 ---
 

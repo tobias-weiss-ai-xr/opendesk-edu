@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Commits: ~ 1 500                |
 
 ---
 
-# Helmfile & HRZ-Среда
+# Helmfile & Kubernetes-Среда
 
 ```bash
 # Разполагане с Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Оркестрация с Helmfile** ⚓
   - Декларативна конфигурация в `helmfile_generic.yaml.gotmpl`
-  - Замествания специфични за средата в `environments/hrz/`
+  - Замествания специфични за средата в `environments/production/`
   - Автоматично архивиране на зависимости
-- **Създадена HRZ-Среда** 🖥️
+- **Създадена Kubernetes-Среда** 🖥️
   - Копие на `staging` с корекции
-  - Конфигурация специфична за Университет Marburg
+  - Конфигурация специфична за Университет OpenDesk
   - Тестова система за пилотна експлоатация
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion back
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Преглед на промените
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Прилагане на актуализациите
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Връщане при нужда
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Контролирани актуализации чрез Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Актуализация: Миграция на Ingress
+# Kubernetes-Актуализация: Миграция на Ingress
 
 - **Миграция:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (клон uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Актуализация: Двойно Архивиране
+# Kubernetes-Актуализация: Двойно Архивиране
 
 - **Цели:** Резервно съхранение с излишъци 🗄️
 - **Стратегия:** S3-съвместим с restic backend 🔄

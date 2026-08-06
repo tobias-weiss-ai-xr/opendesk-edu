@@ -114,7 +114,7 @@ spec:
       pattern:
         metadata.annotations:
           keycloak\.org/realm: "opendesk"
-          keycloak\.org/auth-server-url: "https://keycloak.opendesk.hrz.uni-marburg.de/auth"
+          keycloak\.org/auth-server-url: "https://keycloak.home.opendesk-edu.org/auth"
 ```
 
 **Owner**: Security Team, DevOps Team
@@ -205,7 +205,7 @@ spec:
   schedule: "0 2 * * *"
   backend:
     s3:
-      endpoint: "s3.hrz.uni-marburg.de"
+      endpoint: "s3.home.opendesk-edu.org"
       bucket: "opendesk-backups"
       prefix: "kyverno"
       accessKeyIDSecretRef:
@@ -522,10 +522,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - my-app.opendesk.hrz.uni-marburg.de
+    - my-app.home.opendesk-edu.org
     secretName: tls-my-app  # Must exist in namespace
   rules:
-  - host: my-app.opendesk.hrz.uni-marburg.de
+  - host: my-app.home.opendesk-edu.org
     http:
       paths:
       - path: /

@@ -411,7 +411,7 @@ openDesk Edu represents the future of educational technology: **unified, soverei
 
 4. **💬 Join the Community**: [GitHub repository](https://github.com/opendesk-edu/opendesk-edu) | [Codeberg mirror](https://codeberg.org/opendesk-edu/opendesk-edu)
 
-5. **📧 Contact Us**: tobias.weiss@uni-marburg.de
+5. **📧 Contact Us**: tobias.weiss@opendesk-edu.org
 
 ---
 

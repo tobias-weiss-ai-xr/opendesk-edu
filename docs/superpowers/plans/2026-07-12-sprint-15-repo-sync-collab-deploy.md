@@ -151,7 +151,7 @@ helmfile -e test -f apps/bookstack/helmfile.yaml.gotmpl sync
 
 ```bash
 kubectl get pods -l app.kubernetes.io/name=bookstack -n opendesk
-curl -sk -o /dev/null -w "%{http_code}" https://bookstack.opendesk.hrz.../
+curl -sk -o /dev/null -w "%{http_code}" https://bookstack.home.opendesk-edu.org.../
 ```
 
 ### Task 5: Deploy Self-Service Password

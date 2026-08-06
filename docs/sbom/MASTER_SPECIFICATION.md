@@ -741,7 +741,7 @@ cosign sign-blob --key cosign.key sbom.json --tsa-url http://timestamp.sectigo.c
 - **container.gov.de:** security@opendesk-edu.org
 - **General:** info@opendesk-edu.org
 
-**Matrix Channel:** `#opendesk-ce-public:matrix.uni-marburg.de`  
+**Matrix Channel:** `#opendesk-ce-public:matrix.opendesk-edu.org`  
 **GitHub Discussions:** `opendesk-edu/opendesk-edu-website/discussions`
 
 ---

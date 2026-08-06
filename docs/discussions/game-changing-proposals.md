@@ -29,13 +29,13 @@
 **Proposal:** Issue Verifiable Credentials (VCs) for user attributes (role, group, student ID) signed by the identity provider. Services verify VCs offline using the issuer's public key. BundID/EUDI Wallet integration is the on-ramp.
 
 **Impact:** Offline authorization, reduced LDAP load, portable identity across clusters. eIDAS 2.0 compliance.
-**Effort:** Large (new service), but Phase 1 (bundID SAML) is already deployed at HRZ.
+**Effort:** Large (new service), but Phase 1 (bundID SAML) is already deployed at Kubernetes.
 
 ---
 
 ## 4. 📊 Built-in Cost Transparency
 
-**Problem:** openDesk hosting providers (HRZ, DFN, etc.) need to show per-service resource costs to their customers. Currently no visibility.
+**Problem:** openDesk hosting providers (Kubernetes, DFN, etc.) need to show per-service resource costs to their customers. Currently no visibility.
 
 **Proposal:** Add a `opendesk-cost-exporter` that reads K8s resource metrics + PVC sizes + ingress bandwidth and exposes Prometheus metrics with labels per service (app.kubernetes.io/instance). Bundle with a pre-built Grafana dashboard.
 
@@ -131,5 +131,5 @@ Services subscribe to relevant events instead of polling LDAP or making REST cal
 
 ---
 
-*Prepared by openDesk Edu (HRZ Marburg) — July 2026*
+*Prepared by openDesk Edu (Kubernetes OpenDesk) — July 2026*
 *Based on operational experience with 25+ services across Edu, CE, and SME deployments.*

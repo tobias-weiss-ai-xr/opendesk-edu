@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suverénna cloudová infraštruktúra | SBOM pre všetky komponenty
 
 ---
 
-# Helmfile a HRZ-Prostredie
+# Helmfile a Kubernetes-Prostredie
 
 ```bash
 # Nasadenie cez Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orchestrácia** ⚓
   - Deklaratívna konfigurácia v `helmfile_generic.yaml.gotmpl`
-  - Prostredie-specifické prepisy v `environments/hrz/`
+  - Prostredie-specifické prepisy v `environments/production/`
   - Automatický backup závislostí
-- **HRZ-Prostredie vytvorené** 🖥️
+- **Kubernetes-Prostredie vytvorené** 🖥️
   - Kópia `staging` s úpravami
-  - Konfigurácia špecifická pre Uni Marburg
+  - Konfigurácia špecifická pre Uni OpenDesk
   - Testovací systém pre pilotnú prevádzku
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portál → ILIAS dlaždice
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Prihlásenie (weblogin.uni-marburg.de)
+4. 🎓 Prihlásenie (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion späť
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Prehľad zmien
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Aplikácia aktualizácií
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Návrat späť v prípade potreby
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Riadené aktualizácie cez Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Aktualizácia: Migrácia Ingressu
+# Kubernetes-Aktualizácia: Migrácia Ingressu
 
 - **Migrácia:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (vetva uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Aktualizácia: Duálny Backup
+# Kubernetes-Aktualizácia: Duálny Backup
 
 - **Ciele:** Redundantné Zálohovanie Úložiska 🗄️
 - **Stratégia:** S3-kompatibilná s restic backendom 🔄

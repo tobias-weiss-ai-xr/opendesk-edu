@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
 
 ---
 
-# Helmfile та HRZ-Середовище
+# Helmfile та Kubernetes-Середовище
 
 ```bash
 # Розгортання за допомогою Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Оркестрація Helmfile** ⚓
   - Декларативна конфігурація в `helmfile_generic.yaml.gotmpl`
-  - Перевизначення для конкретного середовища в `environments/hrz/`
+  - Перевизначення для конкретного середовища в `environments/production/`
   - Автоматичне резервне копіювання залежностей
-- **HRZ-Середовище створено** 🖥️
+- **Kubernetes-Середовище створено** 🖥️
   - Копія `staging` з адаптаціями
-  - Конфігурація для Uni Marburg
+  - Конфігурація для Uni OpenDesk
   - Тестова система для пілотної експлуатації
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Портал → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Вхід (weblogin.uni-marburg.de)
+4. 🎓 Вхід (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion назад
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Переглянути зміни
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Застосувати оновлення
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Відкат за потреби
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Контрольовані оновлення через Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Міграція Ingress
+# Kubernetes-Upgrade: Міграція Ingress
 
 - **Міграція:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (гілка uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Двоїсте Резервне Копіювання
+# Kubernetes-Upgrade: Двоїсте Резервне Копіювання
 
 - **Цілі:** Резервне Сховище з Надмірністю 🗄️
 - **Стратегія:** S3-сумісне з restic бекендом 🔄

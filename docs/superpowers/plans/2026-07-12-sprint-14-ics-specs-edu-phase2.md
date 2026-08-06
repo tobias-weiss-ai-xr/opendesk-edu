@@ -106,7 +106,7 @@ PORTAL_USERNAME=ics-testuser PORTAL_PASSWORD=ics-testuser-2026 npx playwright te
 git checkout develop
 git merge feat/v1.1-release-prep
 git push github develop
-git push hrz develop  # if applicable
+git push production develop  # if applicable
 ```
 
 ---
@@ -139,7 +139,7 @@ Read `opendesk-edu/helmfile/apps/sogo/values.yaml.gotmpl` to verify no test-spec
 helmfile -e test -f apps/sogo/helmfile.yaml.gotmpl sync
 # Verify SOGo pods start
 kubectl get pods -l app.kubernetes.io/name=sogo -n opendesk
-# Verify ICS proxy: curl -sk https://ics.opendesk.hrz.../sogo/SOGo/ → 302
+# Verify ICS proxy: curl -sk https://ics.home.opendesk-edu.org/sogo/SOGo/ → 302
 ```
 
 ### Task 5: Enable ILIAS on test environment
@@ -167,7 +167,7 @@ Read `opendesk-edu/helmfile/apps/ilias/values.yaml.gotmpl` — verify LDAP, DB, 
 ```bash
 helmfile -e test -f apps/ilias/helmfile.yaml.gotmpl sync
 kubectl get pods -l app.kubernetes.io/name=ilias -n opendesk
-curl -sk https://ics.opendesk.hrz.../ilias/ → 302
+curl -sk https://ics.home.opendesk-edu.org/ilias/ → 302
 ```
 
 ### Task 6: Add portal entries for SOGo + ILIAS
@@ -185,7 +185,7 @@ Read `opendesk-edu/helmfile/apps/portal-entries/values.yaml.gotmpl` to understan
 
 Add SOGo entry with:
 - Name: "SOGo E-Mail"
-- Link: `https://ics.opendesk.hrz.../sogo/`
+- Link: `https://ics.home.opendesk-edu.org/sogo/`
 - Icon: email/mail icon
 - Group: appropriate edu group
 
@@ -193,7 +193,7 @@ Add SOGo entry with:
 
 Add ILIAS entry with:
 - Name: "ILIAS LMS"
-- Link: `https://ics.opendesk.hrz.../ilias/`
+- Link: `https://ics.home.opendesk-edu.org/ilias/`
 - Icon: learning/LMS icon
 - Group: appropriate edu group
 
@@ -248,7 +248,7 @@ Add to `docs/superpowers/plans/moodle-ics-integration.md` (or create separate fi
 These are NOT part of this sprint but listed for planning visibility:
 
 - **Moodle + JupyterHub ICS integration** (implementation — after research in Tasks 7-8)
-- **Real Shibboleth test account** — Need HRZ-assigned test account for full authenticated ICS testing (currently blocked)
+- **Real Shibboleth test account** — Need Kubernetes-assigned test account for full authenticated ICS testing (currently blocked)
 - **OpenProject ICS routing** — `/webmail` route returns 404, not yet configured
 - **End-to-end Playwright CI** — Browser tests can't run in CI without headless browser + real credentials
 - **Backchannel logout integration tests** — Full round-trip logout testing requires real Shibboleth session

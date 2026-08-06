@@ -53,7 +53,7 @@ opendesk-edu/scripts/user_import/
 **DO NOT move (sensitive/generated data):**
 
 - `user_import/template.csv`, `user_import/template.ods` — real user data
-- `user_import/all-hrz-users-*` — real LDAP data
+- `user_import/all-users-*` — real LDAP data
 - `user_import/users-*.txt` — generated credentials
 - `user_import/keycloak-logs.log` — debug logs
 - `user_import/DEPLOYMENT.md` — contains plaintext passwords

@@ -479,7 +479,7 @@ curl -X POST "https://api.container.gov.de/v1/projects/$CONTAINER_GOV_DE_PROJECT
 | container.gov.de | security@opendesk-edu.org | 24 hours |
 | General | info@opendesk-edu.org | 48 hours |
 
-**Matrix Channel:** `#opendesk-ce-public:matrix.uni-marburg.de`
+**Matrix Channel:** `#opendesk-ce-public:matrix.opendesk-edu.org`
 
 ---
 

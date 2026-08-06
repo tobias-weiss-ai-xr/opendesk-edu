@@ -28,7 +28,7 @@ curl -s -X POST "https://codeberg.org/api/v1/repos/opendesk-edu/opendesk-edu/pul
     "title": "feat(portal): add entries for collab-dashboard, open-webui, ollama, rstudio, ttyd, code-server",
     "head": "feat/portal-entries-collab-services",
     "base": "main",
-    "body": "## Summary\n\nAdds 6 portal entries (16-21) to nubus bootstrap data for edu collab services:\n\n| # | Service | Hostname |\n|---|---------|----------|\n| 16 | Collab Dashboard | collab.opendesk.hrz... |\n| 17 | Open WebUI | ai.opendesk.hrz... |\n| 18 | RStudio | r.opendesk.hrz... |\n| 19 | TTYD | term.opendesk.hrz... |\n| 20 | Code Server | code.opendesk.hrz... |\n| 21 | Ollama | ai.opendesk.hrz... |\n\nAll follow existing portal entry pattern: activated=true, anonymous=false, linkTarget=newwindow, bilingual de_DE/en_US."
+    "body": "## Summary\n\nAdds 6 portal entries (16-21) to nubus bootstrap data for edu collab services:\n\n| # | Service | Hostname |\n|---|---------|----------|\n| 16 | Collab Dashboard | collab.home.opendesk-edu.org |\n| 17 | Open WebUI | ai.home.opendesk-edu.org |\n| 18 | RStudio | r.home.opendesk-edu.org |\n| 19 | TTYD | term.home.opendesk-edu.org |\n| 20 | Code Server | code.home.opendesk-edu.org |\n| 21 | Ollama | ai.home.opendesk-edu.org |\n\nAll follow existing portal entry pattern: activated=true, anonymous=false, linkTarget=newwindow, bilingual de_DE/en_US."
   }'
 ```
 
@@ -110,7 +110,7 @@ Wait until all pods show `Running`. Some services (BookStack with MariaDB, Ollam
 
 ## Task 4: Verify each service is accessible
 
-**Context:** Each service has an ingress via HAProxy. Verify HTTP responses. Services use `*.opendesk.hrz.uni-marburg.de`.
+**Context:** Each service has an ingress via HAProxy. Verify HTTP responses. Services use `*.home.opendesk-edu.org`.
 
 **Files:** None (kubectl + curl only)
 
@@ -121,19 +121,19 @@ kubectl get ingress -n opendesk --no-headers -o custom-columns='NAME:.metadata.n
 ```
 
 Expected ingresses:
-- `bookstack` → `wiki.opendesk.hrz.uni-marburg.de`
-- `self-service-password` → `ssp.opendesk.hrz.uni-marburg.de`
-- `collab-dashboard` → `collab.opendesk.hrz.uni-marburg.de`
-- `open-webui` → `ai.opendesk.hrz.uni-marburg.de`
-- `rstudio` → `r.opendesk.hrz.uni-marburg.de`
-- `ttyd` → `term.opendesk.hrz.uni-marburg.de`
-- `code-server` → `code.opendesk.hrz.uni-marburg.de`
+- `bookstack` → `wiki.home.opendesk-edu.org`
+- `self-service-password` → `ssp.home.opendesk-edu.org`
+- `collab-dashboard` → `collab.home.opendesk-edu.org`
+- `open-webui` → `ai.home.opendesk-edu.org`
+- `rstudio` → `r.home.opendesk-edu.org`
+- `ttyd` → `term.home.opendesk-edu.org`
+- `code-server` → `code.home.opendesk-edu.org`
 
 - [ ] **Step 2: Curl each service endpoint**
 
 ```bash
 for host in wiki ssp collab ai r term code; do
-  code=$(curl -sk -o /dev/null -w "%{http_code}" --max-time 10 "https://${host}.opendesk.hrz.uni-marburg.de/" 2>/dev/null)
+  code=$(curl -sk -o /dev/null -w "%{http_code}" --max-time 10 "https://${host}.home.opendesk-edu.org/" 2>/dev/null)
   echo "${host}: ${code}"
 done
 ```
@@ -164,59 +164,59 @@ Ollama may not have an ingress (uses ClusterIP). Verify it's running and the mod
 Add scenarios for each new service following the existing pattern:
 
 ```yaml
-  # BookStack (wiki.opendesk.hrz)
+  # BookStack (wiki.home.opendesk-edu.org)
   - service: bookstack
     method: GET
     path: /
     status: 200
     headers:
       x-forwarded-user: { value: present, soft_fail: true }
-      x-forwarded-host: { value: "wiki.opendesk.hrz.uni-marburg.de" }
+      x-forwarded-host: { value: "wiki.home.opendesk-edu.org" }
 
-  # Self-Service Password (ssp.opendesk.hrz)
+  # Self-Service Password (ssp.home.opendesk-edu.org)
   - service: self-service-password
     method: GET
     path: /
     status: 200
     headers:
       x-forwarded-user: { value: present, soft_fail: true }
-      x-forwarded-host: { value: "ssp.opendesk.hrz.uni-marburg.de" }
+      x-forwarded-host: { value: "ssp.home.opendesk-edu.org" }
 
-  # Collab Dashboard (collab.opendesk.hrz)
+  # Collab Dashboard (collab.home.opendesk-edu.org)
   - service: collab-dashboard
     method: GET
     path: /
     status: 200
     headers:
       x-forwarded-user: { value: present, soft_fail: true }
-      x-forwarded-host: { value: "collab.opendesk.hrz.uni-marburg.de" }
+      x-forwarded-host: { value: "collab.home.opendesk-edu.org" }
 
-  # RStudio (r.opendesk.hrz)
+  # RStudio (r.home.opendesk-edu.org)
   - service: rstudio
     method: GET
     path: /
     status: 200
     headers:
       x-forwarded-user: { value: present, soft_fail: true }
-      x-forwarded-host: { value: "r.opendesk.hrz.uni-marburg.de" }
+      x-forwarded-host: { value: "r.home.opendesk-edu.org" }
 
-  # TTYD (term.opendesk.hrz)
+  # TTYD (term.home.opendesk-edu.org)
   - service: ttyd
     method: GET
     path: /
     status: 200
     headers:
       x-forwarded-user: { value: present, soft_fail: true }
-      x-forwarded-host: { value: "term.opendesk.hrz.uni-marburg.de" }
+      x-forwarded-host: { value: "term.home.opendesk-edu.org" }
 
-  # Code Server (code.opendesk.hrz)
+  # Code Server (code.home.opendesk-edu.org)
   - service: code-server
     method: GET
     path: /
     status: 200
     headers:
       x-forwarded-user: { value: present, soft_fail: true }
-      x-forwarded-host: { value: "code.opendesk.hrz.uni-marburg.de" }
+      x-forwarded-host: { value: "code.home.opendesk-edu.org" }
 ```
 
 - [ ] **Step 2: Validate specs**
@@ -230,7 +230,7 @@ Expected: All specs pass validation.
 - [ ] **Step 3: Run CLI specs against live services**
 
 ```bash
-ICS_BASE_URL="https://intercom.opendesk.hrz.uni-marburg.de" python3 tests/run-specs.py 2>&1 | tee /tmp/ics-test-results.log
+ICS_BASE_URL="https://intercom.home.opendesk-edu.org" python3 tests/run-specs.py 2>&1 | tee /tmp/ics-test-results.log
 ```
 
 - [ ] **Step 4: Commit and push spec updates**
@@ -304,7 +304,7 @@ git push codeberg feat/ics-specs-collab-services
 - **JupyterHub ICS** — blocked on Helm chart creation
 - **Overleaf, KasmVNC, Dask** — disabled in test values
 - **Ollama GPU optimization** — cluster has no GPU nodes, CPU-only is fine for small models
-- **Real Shibboleth auth testing** — requires university IdP test account from HRZ
+- **Real Shibboleth auth testing** — requires university IdP test account from Kubernetes
 
 ---
 

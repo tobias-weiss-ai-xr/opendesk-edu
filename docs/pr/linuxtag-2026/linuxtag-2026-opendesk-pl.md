@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suwerenna infrastruktura chmurowa | SBOM dla wszystkich komponentów
 
 ---
 
-# Helmfile & Środowisko HRZ
+# Helmfile & Środowisko Kubernetes
 
 ```bash
 # Wdrożenie z Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orkiestracja Helmfile** ⚓
   - Konfiguracja deklaratywna w `helmfile_generic.yaml.gotmpl`
-  - Nadpisywania specyficzne dla środowiska w `environments/hrz/`
+  - Nadpisywania specyficzne dla środowiska w `environments/production/`
   - Automatyczna kopia zapasowa zależności
-- **Środowisko HRZ utworzone** 🖥️
+- **Środowisko Kubernetes utworzone** 🖥️
   - Kopia `staging` z dostosowaniami
-  - Konfiguracja specyficzna dla Uni Marburg
+  - Konfiguracja specyficzna dla Uni OpenDesk
   - System testowy dla operacji pilotażowej
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → kafel ILIAS
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Logowanie (weblogin.uni-marburg.de)
+4. 🎓 Logowanie (weblogin.opendesk-edu.org)
 5. 📨 Potwierdzenie SAML z powrotem
 6. ✅ Panel ILIAS
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Przejrzyj zmiany
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Zastosuj aktualizacje
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Wycofaj w razie potrzeby
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Kontrolowane aktualizacje przez Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Aktualizacja HRZ: Migracja Ingress
+# Aktualizacja Kubernetes: Migracja Ingress
 
 - **Migracja:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (gałąź uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Aktualizacja HRZ: Podwójna Kopia Zapasowa
+# Aktualizacja Kubernetes: Podwójna Kopia Zapasowa
 
 - **Cel:** Redundantny magazyn kopii zapasowych 🗄️
 - **Strategia:** Kompatybilny z S3 z backendem restic 🔄

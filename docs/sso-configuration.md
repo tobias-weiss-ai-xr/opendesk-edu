@@ -21,7 +21,7 @@ OpenDesk Edu uses Keycloak as the central Identity and Access Management (IAM) h
 
 | Parameter   | Value                                      |
 |-------------|--------------------------------------------|
-| URL         | `https://id.opendesk.hrz.uni-marburg.de`   |
+| URL         | `https://id.home.opendesk-edu.org`   |
 | Realm       | `opendesk`                                 |
 | Admin User  | `kcadmin` (set during bootstrap)           |
 | Version     | Keycloak 22+ (via nubus/opendesk-keycloak-bootstrap) |
@@ -32,7 +32,7 @@ OpenDesk Edu uses Keycloak as the central Identity and Access Management (IAM) h
 |-----------------|--------------------------------------|
 | Kubernetes      | K3s v1.32.3                          |
 | Ingress Class   | `haproxy`                            |
-| Domain          | `*.opendesk.hrz.uni-marburg.de`       |
+| Domain          | `*.home.opendesk-edu.org`       |
 | Namespace       | `opendesk-edu`                       |
 | CA              | Let's Encrypt (via cert-manager)     |
 
@@ -43,8 +43,8 @@ OpenDesk Edu uses Keycloak as the central Identity and Access Management (IAM) h
 ```
                                ┌─────────────────────────────┐
                                │       Keycloak              │
-                               │   id.opendesk.hrz.uni-      │
-                               │   marburg.de/realms/opendesk│
+                               │   id.home.opendesk-edu.org.uni-      │
+                               │   opendesk-edu.org/realms/opendesk│
                                │                             │
                                │   OIDC Provider + SAML IdP  │
                                └─────────────────────────────┘
@@ -90,8 +90,8 @@ Used by: Portal, XWiki, OpenProject, Nextcloud, Jitsi, OpenCloud, Notes, Matrix,
   "standardFlowEnabled": true,
   "directAccessGrantsEnabled": false,
   "serviceAccountsEnabled": true,
-  "redirectUris": ["https://{service}.opendesk.hrz.uni-marburg.de/*"],
-  "webOrigins": ["https://{service}.opendesk.hrz.uni-marburg.de"],
+  "redirectUris": ["https://{service}.home.opendesk-edu.org/*"],
+  "webOrigins": ["https://{service}.home.opendesk-edu.org"],
   "attributes": {
     "access.token.lifespan": "300",
     "use.refresh.tokens": true
@@ -110,8 +110,8 @@ Used by: RStudio, ttyd, Slidev, code-server, Collab Dashboard
   "publicClient": true,
   "standardFlowEnabled": true,
   "redirectUris": [
-    "https://{service}.opendesk.hrz.uni-marburg.de/*",
-    "https://{service}.opendesk.hrz.uni-marburg.de/oauth2/callback"
+    "https://{service}.home.opendesk-edu.org/*",
+    "https://{service}.home.opendesk-edu.org/oauth2/callback"
   ]
 }
 ```
@@ -121,10 +121,10 @@ Used by: RStudio, ttyd, Slidev, code-server, Collab Dashboard
 Used by: ILIAS, Moodle, BigBlueButton
 
 ```xml
-<md:EntityDescriptor entityID="https://{service}.opendesk.hrz.uni-marburg.de/shibboleth">
+<md:EntityDescriptor entityID="https://{service}.home.opendesk-edu.org/shibboleth">
   <md:SPSSODescriptor>
     <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:POST"
-                                  Location="https://{service}.opendesk.hrz.uni-marburg.de/Shibboleth.sso/SAML2/POST"/>
+                                  Location="https://{service}.home.opendesk-edu.org/Shibboleth.sso/SAML2/POST"/>
   </md:SPSSODescriptor>
 </md:EntityDescriptor>
 ```
@@ -138,30 +138,30 @@ The following table lists all OIDC and SAML clients currently registered in the 
 | #  | Client ID                      | Protocol | Type        | Service                | Redirect URI(s)                                                    |
 |----|--------------------------------|----------|-------------|------------------------|--------------------------------------------------------------------|
 | 1  | `opendesk-portal`              | OIDC     | Confidential| Portal                 | `https://portal.*/`                                               |
-| 2  | `opendesk-matrix`              | OIDC     | Confidential| Element/Matrix Chat    | `https://chat.opendesk.hrz.uni-marburg.de/*`                      |
-| 3  | `opendesk-jitsi`               | OIDC     | Confidential| Jitsi Videoconference  | `https://video.opendesk.hrz.uni-marburg.de/*`                     |
-| 4  | `opendesk-xwiki`               | OIDC     | Confidential| XWiki Knowledge Base   | `https://wiki.opendesk.hrz.uni-marburg.de/*`                      |
-| 5  | `opendesk-openproject`         | OIDC     | Confidential| OpenProject PM         | `https://projekte.opendesk.hrz.uni-marburg.de/*`                  |
-| 6  | `opendesk-nextcloud`           | OIDC     | Confidential| Nextcloud Files        | `https://files.opendesk.hrz.uni-marburg.de/*`                     |
-| 7  | `opendesk-oxappsuite`          | OIDC     | Confidential| OX App Suite Mail      | `https://mail.opendesk.hrz.uni-marburg.de/*`                      |
+| 2  | `opendesk-matrix`              | OIDC     | Confidential| Element/Matrix Chat    | `https://chat.home.opendesk-edu.org/*`                      |
+| 3  | `opendesk-jitsi`               | OIDC     | Confidential| Jitsi Videoconference  | `https://video.home.opendesk-edu.org/*`                     |
+| 4  | `opendesk-xwiki`               | OIDC     | Confidential| XWiki Knowledge Base   | `https://wiki.home.opendesk-edu.org/*`                      |
+| 5  | `opendesk-openproject`         | OIDC     | Confidential| OpenProject PM         | `https://projekte.home.opendesk-edu.org/*`                  |
+| 6  | `opendesk-nextcloud`           | OIDC     | Confidential| Nextcloud Files        | `https://files.home.opendesk-edu.org/*`                     |
+| 7  | `opendesk-oxappsuite`          | OIDC     | Confidential| OX App Suite Mail      | `https://mail.home.opendesk-edu.org/*`                      |
 | 8  | `opendesk-dovecot`             | OIDC     | Confidential| Dovecot IMAP/POP       | (internal, no redirect)                                           |
-| 9  | `opendesk-notes`               | OIDC     | Confidential| Notes/Impress          | `https://notes.opendesk.hrz.uni-marburg.de/*`                     |
-| 10 | `opendesk-opencloud`           | OIDC     | Confidential| OpenCloud Files        | `https://opencloud.opendesk.hrz.uni-marburg.de/*`                 |
-| 11 | `snipr`                        | OIDC     | Confidential| SNIpR Lecture Record.  | `https://snipr.opendesk.hrz.uni-marburg.de/*`                     |
+| 9  | `opendesk-notes`               | OIDC     | Confidential| Notes/Impress          | `https://notes.home.opendesk-edu.org/*`                     |
+| 10 | `opendesk-opencloud`           | OIDC     | Confidential| OpenCloud Files        | `https://opencloud.home.opendesk-edu.org/*`                 |
+| 11 | `snipr`                        | OIDC     | Confidential| SNIpR Lecture Record.  | `https://snipr.home.opendesk-edu.org/*`                     |
 | 12 | `snipr-lti`                    | OIDC     | Confidential| SNIpR LTI Integration  | (LTI 1.3 platform launch)                                         |
-| 13 | `sogo`                         | OIDC     | Confidential| SOGo Groupware         | `https://sogo.opendesk.hrz.uni-marburg.de/*`                      |
-| 14 | `typo3`                        | OIDC     | Confidential| TYPO3 CMS              | `https://cms.opendesk.hrz.uni-marburg.de/*`                       |
-| 15 | `planka`                       | OIDC     | Confidential| Planka Kanban          | `https://planka.opendesk.hrz.uni-marburg.de/*`                    |
+| 13 | `sogo`                         | OIDC     | Confidential| SOGo Groupware         | `https://sogo.home.opendesk-edu.org/*`                      |
+| 14 | `typo3`                        | OIDC     | Confidential| TYPO3 CMS              | `https://cms.home.opendesk-edu.org/*`                       |
+| 15 | `planka`                       | OIDC     | Confidential| Planka Kanban          | `https://planka.home.opendesk-edu.org/*`                    |
 | 16 | `f13-api`                      | OIDC     | Confidential| f13 AI Services        | (audience: `f13-api`, no redirect)                                |
-| 17 | `opendesk-jupyterhub`          | OIDC     | Confidential| JupyterHub Notebooks   | `https://jupyter.opendesk.hrz.uni-marburg.de/hub/oauth_callback`  |
-| 18 | `opendesk-rstudio`             | OIDC     | Public      | RStudio IDE            | `https://r.opendesk.hrz.uni-marburg.de/oauth2/callback`           |
-| 19 | `opendesk-ttyd`                | OIDC     | Public      | ttyd Web Terminal      | `https://term.opendesk.hrz.uni-marburg.de/oauth2/callback`        |
-| 20 | `opendesk-slidev`              | OIDC     | Public      | Slidev Presentations   | `https://slides.opendesk.hrz.uni-marburg.de/oauth2/callback`      |
-| 21 | `opendesk-code-server`         | OIDC     | Public      | code-server (VS Code)  | `https://code.opendesk.hrz.uni-marburg.de/oauth2/callback`        |
-| 22 | `opendesk-collab-dashboard`    | OIDC     | Public      | Collab Dashboard       | `https://collab.opendesk.hrz.uni-marburg.de/oauth2/callback`      |
-| 23 | `ilias` (SAML SP)              | SAML     | SP Entity   | ILIAS LMS              | `https://lms.opendesk.hrz.uni-marburg.de/Shibboleth.sso/SAML2/POST` |
-| 24 | `moodle` (SAML SP)             | SAML     | SP Entity   | Moodle LMS             | `https://moodle.opendesk.hrz.uni-marburg.de/Shibboleth.sso/SAML2/POST` |
-| 25 | `opendesk-bigbluebutton`       | SAML     | SP Entity   | BigBlueButton          | `https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback`     |
+| 17 | `opendesk-jupyterhub`          | OIDC     | Confidential| JupyterHub Notebooks   | `https://jupyter.home.opendesk-edu.org/hub/oauth_callback`  |
+| 18 | `opendesk-rstudio`             | OIDC     | Public      | RStudio IDE            | `https://r.home.opendesk-edu.org/oauth2/callback`           |
+| 19 | `opendesk-ttyd`                | OIDC     | Public      | ttyd Web Terminal      | `https://term.home.opendesk-edu.org/oauth2/callback`        |
+| 20 | `opendesk-slidev`              | OIDC     | Public      | Slidev Presentations   | `https://slides.home.opendesk-edu.org/oauth2/callback`      |
+| 21 | `opendesk-code-server`         | OIDC     | Public      | code-server (VS Code)  | `https://code.home.opendesk-edu.org/oauth2/callback`        |
+| 22 | `opendesk-collab-dashboard`    | OIDC     | Public      | Collab Dashboard       | `https://collab.home.opendesk-edu.org/oauth2/callback`      |
+| 23 | `ilias` (SAML SP)              | SAML     | SP Entity   | ILIAS LMS              | `https://lms.home.opendesk-edu.org/Shibboleth.sso/SAML2/POST` |
+| 24 | `moodle` (SAML SP)             | SAML     | SP Entity   | Moodle LMS             | `https://moodle.home.opendesk-edu.org/Shibboleth.sso/SAML2/POST` |
+| 25 | `opendesk-bigbluebutton`       | SAML     | SP Entity   | BigBlueButton          | `https://bbb.home.opendesk-edu.org/auth/saml2/callback`     |
 | 26 | `UMC OIDC`                     | OIDC     | Confidential| Univention Portal      | (nubus UMC integration)                                           |
 | 27 | `guardian-management-api`      | OIDC     | Confidential| Guardian IAM API       | (internal, nubus)                                                 |
 | 28 | `guardian-scripts`             | OIDC     | Confidential| Guardian Scripts       | (internal, nubus)                                                 |
@@ -171,16 +171,16 @@ The following table lists all OIDC and SAML clients currently registered in the 
 | 32 | `security-admin-console`       | OIDC     | Confidential| Security Admin Console | (built-in)                                                        |
 | 33 | `account`                      | OIDC     | Public      | User Account Console   | (built-in)                                                        |
 | 34 | `account-console`              | OIDC     | Public      | Account Console (legacy)| (built-in)                                                       |
-| 35 | `opendesk-n8n`                 | OIDC     | Confidential| n8n Workflow Automation | `https://n8n.opendesk.hrz.uni-marburg.de/rest/sso/oidc/callback` |
-| 36 | `opendesk-zammad`              | OIDC     | Confidential| Zammad Helpdesk        | `https://helpdesk.opendesk.hrz.uni-marburg.de/auth/openid_connect/callback` |
-| 37 | `opendesk-ssp`                 | OIDC     | Confidential| Self-Service-Password  | `https://ssp.opendesk.hrz.uni-marburg.de/oauth2/callback`        |
-| 38 | `opendesk-bookstack`           | OIDC     | Confidential| Bookstack Wiki         | `https://bookstack.opendesk.hrz.uni-marburg.de/oidc/callback`    |
-| 39 | `opendesk-planka`              | OIDC     | Public      | Planka Kanban          | `https://planka.opendesk.hrz.uni-marburg.de/api/oauth`           |
-| 40 | `opendesk-limesurvey`          | OIDC     | Public      | LimeSurvey             | `https://limesurvey.opendesk.hrz.uni-marburg.de/oauth2/callback` |
-| 41 | `opendesk-drawio`              | OIDC     | Public      | Draw.io Diagrams       | `https://draw.opendesk.hrz.uni-marburg.de/oauth2/callback`       |
-| 42 | `opendesk-excalidraw`          | OIDC     | Public      | Excalidraw Whiteboard  | `https://excalidraw.opendesk.hrz.uni-marburg.de/oauth2/callback` |
-| 43 | `opendesk-etherpad`            | OIDC     | Public      | Etherpad Collaborative | `https://etherpad.opendesk.hrz.uni-marburg.de/oauth2/callback`   |
-| 44 | `opendesk-typo3`               | OIDC     | Public      | TYPO3 CMS              | `https://typo3.opendesk.hrz.uni-marburg.de/oauth2/callback`      |
+| 35 | `opendesk-n8n`                 | OIDC     | Confidential| n8n Workflow Automation | `https://n8n.home.opendesk-edu.org/rest/sso/oidc/callback` |
+| 36 | `opendesk-zammad`              | OIDC     | Confidential| Zammad Helpdesk        | `https://helpdesk.home.opendesk-edu.org/auth/openid_connect/callback` |
+| 37 | `opendesk-ssp`                 | OIDC     | Confidential| Self-Service-Password  | `https://ssp.home.opendesk-edu.org/oauth2/callback`        |
+| 38 | `opendesk-bookstack`           | OIDC     | Confidential| Bookstack Wiki         | `https://bookstack.home.opendesk-edu.org/oidc/callback`    |
+| 39 | `opendesk-planka`              | OIDC     | Public      | Planka Kanban          | `https://planka.home.opendesk-edu.org/api/oauth`           |
+| 40 | `opendesk-limesurvey`          | OIDC     | Public      | LimeSurvey             | `https://limesurvey.home.opendesk-edu.org/oauth2/callback` |
+| 41 | `opendesk-drawio`              | OIDC     | Public      | Draw.io Diagrams       | `https://draw.home.opendesk-edu.org/oauth2/callback`       |
+| 42 | `opendesk-excalidraw`          | OIDC     | Public      | Excalidraw Whiteboard  | `https://excalidraw.home.opendesk-edu.org/oauth2/callback` |
+| 43 | `opendesk-etherpad`            | OIDC     | Public      | Etherpad Collaborative | `https://etherpad.home.opendesk-edu.org/oauth2/callback`   |
+| 44 | `opendesk-typo3`               | OIDC     | Public      | TYPO3 CMS              | `https://typo3.home.opendesk-edu.org/oauth2/callback`      |
 
 **Total: 44 registered clients** (38 custom service clients + 6 built-in Keycloak clients)
 
@@ -195,13 +195,13 @@ The following table lists all OIDC and SAML clients currently registered in the 
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-portal`                                            |
 | Client Type       | Confidential (client-secret)                                |
-| Redirect URI      | `https://portal.opendesk.hrz.uni-marburg.de/*`              |
+| Redirect URI      | `https://portal.home.opendesk-edu.org/*`              |
 | Auth Flow         | Authorization Code + Service Account                        |
 
 **Chart values:**
 ```yaml
 global:
-  domain: opendesk.hrz.uni-marburg.de
+  domain: home.opendesk-edu.org
   hosts:
     portal: portal
 # Portal OIDC client is created by Keycloak bootstrap job;
@@ -225,14 +225,14 @@ global:
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-xwiki`                                             |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://wiki.opendesk.hrz.uni-marburg.de/*`                |
+| Redirect URI      | `https://wiki.home.opendesk-edu.org/*`                |
 | Scope             | `openid,opendesk-xwiki-scope`                               |
 
 **Chart values:**
 ```yaml
 # In xwiki.properties (oidc-config.php equivalent)
 oidc.clientid: "opendesk-xwiki"
-oidc.provider: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
+oidc.provider: "https://id.home.opendesk-edu.org/realms/opendesk"
 oidc.scope: "openid,opendesk-xwiki-scope"
 oidc.secret: "<client-secret>"
 oidc.endpoint.token.auth_method: "client_secret_basic"
@@ -248,7 +248,7 @@ oidc.user.nameFormater: "${oidc.user.opendesk_username._clean._lowerCase}"
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-openproject`                                       |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://projekte.opendesk.hrz.uni-marburg.de/*`            |
+| Redirect URI      | `https://projekte.home.opendesk-edu.org/*`            |
 | Scope             | `[openid,opendesk-openproject-scope]`                       |
 
 **Chart values:**
@@ -264,7 +264,7 @@ openproject:
       login: "opendesk_username"
       admin: "openproject_admin"
 environment:
-  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
+  OPENPROJECT_OPENID__CONNECT_KEYCLOAK_ISSUER: "https://id.home.opendesk-edu.org/realms/opendesk"
   OPENPROJECT_OMNIAUTH__DIRECT__LOGIN__PROVIDER: "keycloak"
 ```
 
@@ -277,14 +277,14 @@ environment:
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-nextcloud`                                         |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://files.opendesk.hrz.uni-marburg.de/*`               |
+| Redirect URI      | `https://files.home.opendesk-edu.org/*`               |
 | Scope             | `openid,opendesk-nextcloud-scope`                           |
 
 **Chart values:**
 ```yaml
 # Nextcloud OIDC app configuration
 oidc:
-  provider-url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
+  provider-url: "https://id.home.opendesk-edu.org/realms/opendesk"
   client-id: "opendesk-nextcloud"
   client-secret: "<client-secret>"
   scope: "openid email profile opendesk-nextcloud-scope"
@@ -299,7 +299,7 @@ oidc:
 | Protocol          | OIDC + JWT (hybrid)                                        |
 | Client ID         | `opendesk-jitsi`                                             |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://video.opendesk.hrz.uni-marburg.de/*`               |
+| Redirect URI      | `https://video.home.opendesk-edu.org/*`               |
 
 **Chart values:**
 ```yaml
@@ -318,12 +318,12 @@ settings:
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-opencloud`                                         |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://opencloud.opendesk.hrz.uni-marburg.de/*`           |
+| Redirect URI      | `https://opencloud.home.opendesk-edu.org/*`           |
 
 **Chart values:**
 ```yaml
 oidc:
-  issuer: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
+  issuer: "https://id.home.opendesk-edu.org/realms/opendesk"
   clientId: "opendesk-opencloud"
   clientSecret: "<client-secret>"
   autoProvisionAccounts: "true"
@@ -342,7 +342,7 @@ oidc:
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-notes`                                             |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://notes.opendesk.hrz.uni-marburg.de/*`               |
+| Redirect URI      | `https://notes.home.opendesk-edu.org/*`               |
 | Scope             | `openid opendesk-notes-scope`                               |
 
 **Chart values:**
@@ -354,8 +354,8 @@ backend:
       rpClientId: "opendesk-notes"
       rpClientSecret: "<client-secret>"
       rpScopes: "openid opendesk-notes-scope"
-      loginRedirectUrl: "https://notes.opendesk.hrz.uni-marburg.de"
-      redirectAllowedHosts: "https://notes.opendesk.hrz.uni-marburg.de/*"
+      loginRedirectUrl: "https://notes.home.opendesk-edu.org"
+      redirectAllowedHosts: "https://notes.home.opendesk-edu.org/*"
 ```
 
 ---
@@ -367,7 +367,7 @@ backend:
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-matrix`                                            |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://chat.opendesk.hrz.uni-marburg.de/*`                |
+| Redirect URI      | `https://chat.home.opendesk-edu.org/*`                |
 | Scope             | `openid,opendesk-matrix-scope`                              |
 
 **Chart values:**
@@ -385,7 +385,7 @@ backend:
 | Protocol          | OIDC                                                        |
 | Client ID         | `opendesk-oxappsuite`                                        |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://mail.opendesk.hrz.uni-marburg.de/*`                |
+| Redirect URI      | `https://mail.home.opendesk-edu.org/*`                |
 | Scope             | `openid,opendesk-oxappsuite-scope`                          |
 
 **Chart values:**
@@ -421,7 +421,7 @@ backend:
 | Protocol          | OIDC                                                        |
 | Client ID         | `sogo`                                                       |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://sogo.opendesk.hrz.uni-marburg.de/*`                |
+| Redirect URI      | `https://sogo.home.opendesk-edu.org/*`                |
 | Scope             | `openid profile email`                                      |
 
 **Chart values:**
@@ -429,7 +429,7 @@ backend:
 sogo:
   oidc:
     enabled: true
-    configUrl: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+    configUrl: "https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration"
     clientId: "sogo"
     clientSecret: "<client-secret>"
     scope: "openid profile email"
@@ -444,7 +444,7 @@ sogo:
 | Protocol          | OIDC                                                        |
 | Client ID         | `typo3`                                                      |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://cms.opendesk.hrz.uni-marburg.de/typo3/index.php?loginProvider=1537648589` |
+| Redirect URI      | `https://cms.home.opendesk-edu.org/typo3/index.php?loginProvider=1537648589` |
 | Scope             | `openid profile email`                                      |
 
 **Chart values:**
@@ -453,7 +453,7 @@ sogo:
 oidcClientKey: "typo3"
 oidcClientSecret: "<client-secret>"
 oidcScopes: "openid profile email"
-oidcRedirectUri: "https://cms.opendesk.hrz.uni-marburg.de/typo3/index.php?loginProvider=1537648589"
+oidcRedirectUri: "https://cms.home.opendesk-edu.org/typo3/index.php?loginProvider=1537648589"
 ```
 
 ---
@@ -465,7 +465,7 @@ oidcRedirectUri: "https://cms.opendesk.hrz.uni-marburg.de/typo3/index.php?loginP
 | Protocol          | OIDC                                                        |
 | Client ID         | `planka` (default) / `opendesk-planka`                      |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://planka.opendesk.hrz.uni-marburg.de/*`              |
+| Redirect URI      | `https://planka.home.opendesk-edu.org/*`              |
 | Scope             | `openid profile email`                                      |
 
 **Chart values:**
@@ -473,9 +473,9 @@ oidcRedirectUri: "https://cms.opendesk.hrz.uni-marburg.de/typo3/index.php?loginP
 planka:
   oidc:
     clientId: "planka"
-    authEndpoint: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/auth"
-    tokenEndpoint: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/token"
-    userinfoEndpoint: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/userinfo"
+    authEndpoint: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/auth"
+    tokenEndpoint: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/token"
+    userinfoEndpoint: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/userinfo"
     scope: "openid profile email"
 ```
 
@@ -488,7 +488,7 @@ planka:
 | Protocol          | OIDC                                                        |
 | Client ID         | `snipr` (SSO) + `snipr-lti` (LTI 1.3)                      |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://snipr.opendesk.hrz.uni-marburg.de/*`               |
+| Redirect URI      | `https://snipr.home.opendesk-edu.org/*`               |
 
 **Chart values:**
 ```yaml
@@ -517,7 +517,7 @@ snipr:
 **Chart values:**
 ```yaml
 authentication:
-  keycloakBaseUrl: "https://id.opendesk.hrz.uni-marburg.de"
+  keycloakBaseUrl: "https://id.home.opendesk-edu.org"
   keycloakRealm: "opendesk"
   audience: "f13-api"
 ```
@@ -531,7 +531,7 @@ authentication:
 | Protocol          | OIDC (Generic OAuthenticator)                               |
 | Client ID         | `opendesk-jupyterhub`                                        |
 | Client Type       | Confidential                                                |
-| Redirect URI      | `https://jupyter.opendesk.hrz.uni-marburg.de/hub/oauth_callback` |
+| Redirect URI      | `https://jupyter.home.opendesk-edu.org/hub/oauth_callback` |
 | Scope             | `openid email profile`                                      |
 
 **Chart values:**
@@ -541,10 +541,10 @@ hub:
     GenericOAuthenticator:
       client_id: "opendesk-jupyterhub"
       client_secret: "<client-secret>"
-      oauth_callback_url: "https://jupyter.opendesk.hrz.uni-marburg.de/hub/oauth_callback"
-      authorize_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/auth"
-      token_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/token"
-      userdata_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/userinfo"
+      oauth_callback_url: "https://jupyter.home.opendesk-edu.org/hub/oauth_callback"
+      authorize_url: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/auth"
+      token_url: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/token"
+      userdata_url: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/userinfo"
     JupyterHub:
       authenticator_class: "oauthenticator.generic.GenericOAuthenticator"
 ```
@@ -555,18 +555,18 @@ hub:
 
 The following services use the oauth2-proxy sidecar pattern (identical configuration):
 
-- **RStudio** → `https://r.opendesk.hrz.uni-marburg.de`
-- **ttyd** → `https://term.opendesk.hrz.uni-marburg.de`
-- **Slidev** → `https://slides.opendesk.hrz.uni-marburg.de`
-- **code-server** → `https://code.opendesk.hrz.uni-marburg.de`
-- **Collab Dashboard** → `https://collab.opendesk.hrz.uni-marburg.de`
+- **RStudio** → `https://r.home.opendesk-edu.org`
+- **ttyd** → `https://term.home.opendesk-edu.org`
+- **Slidev** → `https://slides.home.opendesk-edu.org`
+- **code-server** → `https://code.home.opendesk-edu.org`
+- **Collab Dashboard** → `https://collab.home.opendesk-edu.org`
 
 | Parameter         | Value                                                       |
 |-------------------|-------------------------------------------------------------|
 | Protocol          | OIDC (via oauth2-proxy v7.6.0)                             |
 | Client ID         | `opendesk-{service}` (public client)                       |
 | Client Type       | Public (no client secret needed)                            |
-| Redirect URI      | `https://{service}.opendesk.hrz.uni-marburg.de/oauth2/callback` |
+| Redirect URI      | `https://{service}.home.opendesk-edu.org/oauth2/callback` |
 | Scope             | `openid email profile`                                      |
 
 **Chart values:**
@@ -575,7 +575,7 @@ oauth2:
   enabled: true
   provider: "keycloak-oidc"
   clientId: "opendesk-{service}"
-  oidcIssuerUrl: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
+  oidcIssuerUrl: "https://id.home.opendesk-edu.org/realms/opendesk"
   cookieSecret: "<32-hex-char-stable-secret>"
 ```
 
@@ -595,19 +595,19 @@ oauth2:
 | Parameter         | Value                                                       |
 |-------------------|-------------------------------------------------------------|
 | Protocol          | SAML 2.0 (via Shibboleth SP)                               |
-| SP Entity ID      | `https://lms.opendesk.hrz.uni-marburg.de/shibboleth`        |
-| ACS URL           | `https://lms.opendesk.hrz.uni-marburg.de/Shibboleth.sso/SAML2/POST` |
-| IdP Metadata      | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor` |
+| SP Entity ID      | `https://lms.home.opendesk-edu.org/shibboleth`        |
+| ACS URL           | `https://lms.home.opendesk-edu.org/Shibboleth.sso/SAML2/POST` |
+| IdP Metadata      | `https://id.home.opendesk-edu.org/realms/opendesk/protocol/saml/descriptor` |
 
 **Chart values:**
 ```yaml
 # Shibboleth SP configuration (ConfigMap)
 shibboleth:
   sp:
-    host: "lms.opendesk.hrz.uni-marburg.de"
-    entityID: "https://lms.opendesk.hrz.uni-marburg.de/shibboleth"
+    host: "lms.home.opendesk-edu.org"
+    entityID: "https://lms.home.opendesk-edu.org/shibboleth"
   idp:
-    metadataProvider: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
+    metadataProvider: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/saml/descriptor"
 ```
 
 ---
@@ -617,19 +617,19 @@ shibboleth:
 | Parameter         | Value                                                       |
 |-------------------|-------------------------------------------------------------|
 | Protocol          | SAML 2.0 (via Shibboleth SP)                               |
-| SP Entity ID      | `https://moodle.opendesk.hrz.uni-marburg.de/shibboleth`     |
-| ACS URL           | `https://moodle.opendesk.hrz.uni-marburg.de/Shibboleth.sso/SAML2/POST` |
-| IdP Metadata      | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor` |
+| SP Entity ID      | `https://moodle.home.opendesk-edu.org/shibboleth`     |
+| ACS URL           | `https://moodle.home.opendesk-edu.org/Shibboleth.sso/SAML2/POST` |
+| IdP Metadata      | `https://id.home.opendesk-edu.org/realms/opendesk/protocol/saml/descriptor` |
 
 **Chart values:**
 ```yaml
 shibboleth:
   enabled: true
   sp:
-    host: "moodle.opendesk.hrz.uni-marburg.de"
-    entityID: "https://moodle.opendesk.hrz.uni-marburg.de/shibboleth"
+    host: "moodle.home.opendesk-edu.org"
+    entityID: "https://moodle.home.opendesk-edu.org/shibboleth"
   idp:
-    metadataProvider: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
+    metadataProvider: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/saml/descriptor"
 ```
 
 ---
@@ -639,9 +639,9 @@ shibboleth:
 | Parameter         | Value                                                       |
 |-------------------|-------------------------------------------------------------|
 | Protocol          | SAML 2.0 (via Greenlight/BoldChat)                         |
-| SP Entity ID      | `https://bbb.opendesk.hrz.uni-marburg.de/shibboleth`        |
-| ACS URL           | `https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback` |
-| IdP SSO URL       | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml` |
+| SP Entity ID      | `https://bbb.home.opendesk-edu.org/shibboleth`        |
+| ACS URL           | `https://bbb.home.opendesk-edu.org/auth/saml2/callback` |
+| IdP SSO URL       | `https://id.home.opendesk-edu.org/realms/opendesk/protocol/saml` |
 
 **Chart values:**
 ```yaml
@@ -649,14 +649,14 @@ bigbluebutton:
   greenlight:
     default_registration: "saml"
     saml:
-      idp_entityId: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
-      idp_sso_target_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml"
-      sp_entityId: "https://bbb.opendesk.hrz.uni-marburg.de/shibboleth"
+      idp_entityId: "https://id.home.opendesk-edu.org/realms/opendesk"
+      idp_sso_target_url: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/saml"
+      sp_entityId: "https://bbb.home.opendesk-edu.org/shibboleth"
 boldchat:
   params:
-    assertion_consumer_service_url: "https://bbb.opendesk.hrz.uni-marburg.de/auth/saml2/callback"
-    sp_entity_id: "https://bbb.opendesk.hrz.uni-marburg.de/shibboleth"
-    idp_metadata_url: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/saml/descriptor"
+    assertion_consumer_service_url: "https://bbb.home.opendesk-edu.org/auth/saml2/callback"
+    sp_entity_id: "https://bbb.home.opendesk-edu.org/shibboleth"
+    idp_metadata_url: "https://id.home.opendesk-edu.org/realms/opendesk/protocol/saml/descriptor"
 ```
 
 ---
@@ -669,7 +669,7 @@ Access to the Keycloak Admin CLI requires authentication. Use the pod-based `kca
 
 ```bash
 # Get admin token
-TOKEN=$(curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/master/protocol/openid-connect/token" \
+TOKEN=$(curl -s -X POST "https://id.home.opendesk-edu.org/realms/master/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=kcadmin" \
   -d "password=${KEYCLOAK_ADMIN_PASSWORD}" \
@@ -681,14 +681,14 @@ TOKEN=$(curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/master/pr
 
 ```bash
 # Using API
-curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients" \
+curl -s -X GET "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients" \
   -H "Authorization: Bearer ${TOKEN}" | jq '.[].clientId'
 ```
 
 #### Create an OIDC Confidential Client
 
 ```bash
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients" \
+curl -s -X POST "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients" \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -697,8 +697,8 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/cl
     "publicClient": false,
     "standardFlowEnabled": true,
     "serviceAccountsEnabled": true,
-    "redirectUris": ["https://new-service.opendesk.hrz.uni-marburg.de/*"],
-    "webOrigins": ["https://new-service.opendesk.hrz.uni-marburg.de"]
+    "redirectUris": ["https://new-service.home.opendesk-edu.org/*"],
+    "webOrigins": ["https://new-service.home.opendesk-edu.org"]
   }'
 ```
 
@@ -706,18 +706,18 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/cl
 
 ```bash
 # Get client UUID first
-CLIENT_UUID=$(curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients?clientId=opendesk-new-service" \
+CLIENT_UUID=$(curl -s -X GET "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients?clientId=opendesk-new-service" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
 
 # Regenerate secret
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients/${CLIENT_UUID}/client-secret" \
+curl -s -X POST "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients/${CLIENT_UUID}/client-secret" \
   -H "Authorization: Bearer ${TOKEN}"
 ```
 
 #### Create an OIDC Public Client (oauth2-proxy)
 
 ```bash
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients" \
+curl -s -X POST "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients" \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -726,8 +726,8 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/cl
     "publicClient": true,
     "standardFlowEnabled": true,
     "redirectUris": [
-      "https://new-tool.opendesk.hrz.uni-marburg.de/*",
-      "https://new-tool.opendesk.hrz.uni-marburg.de/oauth2/callback"
+      "https://new-tool.home.opendesk-edu.org/*",
+      "https://new-tool.home.opendesk-edu.org/oauth2/callback"
     ]
   }'
 ```
@@ -736,11 +736,11 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/cl
 
 ```bash
 # Create SAML client
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients" \
+curl -s -X POST "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients" \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
-    "clientId": "https://new-sp.opendesk.hrz.uni-marburg.de/shibboleth",
+    "clientId": "https://new-sp.home.opendesk-edu.org/shibboleth",
     "protocol": "saml",
     "attributes": {
       "saml.assertion.signature": "true",
@@ -757,9 +757,9 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/cl
 #### Delete a Client
 
 ```bash
-CLIENT_UUID=$(curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients?clientId=opendesk-stale-service" \
+CLIENT_UUID=$(curl -s -X GET "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients?clientId=opendesk-stale-service" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
-curl -s -X DELETE "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients/${CLIENT_UUID}" \
+curl -s -X DELETE "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients/${CLIENT_UUID}" \
   -H "Authorization: Bearer ${TOKEN}"
 ```
 
@@ -767,7 +767,7 @@ curl -s -X DELETE "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/
 
 ```bash
 # Create scope
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/client-scopes" \
+curl -s -X POST "https://id.home.opendesk-edu.org/admin/realms/opendesk/client-scopes" \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -779,10 +779,10 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/cl
   }'
 
 # Add custom protocol mapper to scope
-SCOPE_UUID=$(curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/client-scopes?name=opendesk-new-scope" \
+SCOPE_UUID=$(curl -s -X GET "https://id.home.opendesk-edu.org/admin/realms/opendesk/client-scopes?name=opendesk-new-scope" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
 
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/client-scopes/${SCOPE_UUID}/protocol-mappers/models" \
+curl -s -X POST "https://id.home.opendesk-edu.org/admin/realms/opendesk/client-scopes/${SCOPE_UUID}/protocol-mappers/models" \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -803,10 +803,10 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/cl
 #### Add Protocol Mapper to Existing Client
 
 ```bash
-CLIENT_UUID=$(curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients?clientId=opendesk-xwiki" \
+CLIENT_UUID=$(curl -s -X GET "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients?clientId=opendesk-xwiki" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
 
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients/${CLIENT_UUID}/protocol-mappers/models" \
+curl -s -X POST "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients/${CLIENT_UUID}/protocol-mappers/models" \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -848,18 +848,18 @@ Services with custom scopes (XWiki, Nextcloud, Matrix, OpenProject, OX AppSuite,
 
 ```bash
 # Verify Keycloak is reachable and realm exists
-curl -s https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration \
+curl -s https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration \
   | jq '.issuer'
-# Expected: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk"
+# Expected: "https://id.home.opendesk-edu.org/realms/opendesk"
 ```
 
 #### 2. Test OIDC Login Flow (any service)
 
 ```bash
 # 1. Initiate auth request (outputs redirect URL)
-AUTH_URL="https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/auth?\
+AUTH_URL="https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/auth?\
 client_id=opendesk-portal&\
-redirect_uri=https://portal.opendesk.hrz.uni-marburg.de/&\
+redirect_uri=https://portal.home.opendesk-edu.org/&\
 response_type=code&\
 scope=openid+email+profile&\
 state=test123"
@@ -871,20 +871,20 @@ echo "Open in browser: $AUTH_URL"
 
 ```bash
 # Exchange auth code for tokens (requires a valid code from step 2)
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/token" \
+curl -s -X POST "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=authorization_code" \
   -d "client_id=opendesk-portal" \
   -d "client_secret=<portal-client-secret>" \
   -d "code=<auth-code>" \
-  -d "redirect_uri=https://portal.opendesk.hrz.uni-marburg.de/"
+  -d "redirect_uri=https://portal.home.opendesk-edu.org/"
 ```
 
 #### 4. Test Service Account (Client Credentials)
 
 ```bash
 # Get token using client credentials (machine-to-machine)
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/token" \
+curl -s -X POST "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials" \
   -d "client_id=opendesk-portal" \
@@ -895,7 +895,7 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol
 
 ```bash
 TOKEN="<access-token>"
-curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol/openid-connect/token/introspect" \
+curl -s -X POST "https://id.home.opendesk-edu.org/realms/opendesk/protocol/openid-connect/token/introspect" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "token=${TOKEN}" \
   -d "client_id=opendesk-portal" \
@@ -907,7 +907,7 @@ curl -s -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/protocol
 Open the following URL in a browser:
 
 ```
-https://lms.opendesk.hrz.uni-marburg.de/Shibboleth.sso/Login?target=https://lms.opendesk.hrz.uni-marburg.de/
+https://lms.home.opendesk-edu.org/Shibboleth.sso/Login?target=https://lms.home.opendesk-edu.org/
 ```
 
 This triggers SAML authentication: the Shibboleth SP redirects to Keycloak's SAML IdP endpoint, which performs authentication and returns a SAML assertion.
@@ -916,11 +916,11 @@ This triggers SAML authentication: the Shibboleth SP redirects to Keycloak's SAM
 
 ```bash
 # Get user UUID from Keycloak
-USER_UUID=$(curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/users?username=testuser" \
+USER_UUID=$(curl -s -X GET "https://id.home.opendesk-edu.org/admin/realms/opendesk/users?username=testuser" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
 
 # Get user details
-curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/users/${USER_UUID}" \
+curl -s -X GET "https://id.home.opendesk-edu.org/admin/realms/opendesk/users/${USER_UUID}" \
   -H "Authorization: Bearer ${TOKEN}" | jq '.attributes'
 ```
 
@@ -928,7 +928,7 @@ curl -s -X GET "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/use
 
 ```bash
 # Run the repository's smoke test suite
-./scripts/smoke-test.sh opendesk.hrz.uni-marburg.de <ingress-ip>
+./scripts/smoke-test.sh home.opendesk-edu.org <ingress-ip>
 
 # Expected results:
 # - OIDC services → HTTP 302 (redirect to Keycloak)
@@ -976,7 +976,7 @@ OpenDesk Edu verwendet Keycloak als zentrales Identitäts- und Zugriffsmanagemen
 
 | Parameter   | Wert                                        |
 |-------------|---------------------------------------------|
-| URL         | `https://id.opendesk.hrz.uni-marburg.de`    |
+| URL         | `https://id.home.opendesk-edu.org`    |
 | Realm       | `opendesk`                                  |
 | Admin-Benutzer | `kcadmin`                               |
 
@@ -986,7 +986,7 @@ OpenDesk Edu verwendet Keycloak als zentrales Identitäts- und Zugriffsmanagemen
 |-----------------|---------------------------------------|
 | Kubernetes      | K3s v1.32.3                           |
 | Ingress-Klasse  | `haproxy`                             |
-| Domain          | `*.opendesk.hrz.uni-marburg.de`       |
+| Domain          | `*.home.opendesk-edu.org`       |
 | Namespace       | `opendesk-edu`                        |
 
 Die englische Version dieses Dokuments enthält die vollständige Referenz aller registrierten Clients (34 insgesamt), detaillierte Konfigurationswerte pro Dienst, Keycloak Admin CLI-Befehle und Testprozeduren. Bitte konsultieren Sie den englischen Abschnitt für alle technischen Details.

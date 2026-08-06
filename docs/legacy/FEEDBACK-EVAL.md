@@ -591,13 +591,13 @@ $ cd opendesk && git status --short
 
 ---
 
-### Heavy Customization for HRZ (University Computing Center) Deployment
+### Heavy Customization for Kubernetes (University Computing Center) Deployment
 
-The opendesk repository has been extensively customized for HRZ (Hochschulrechenzentrum - University Computing Center at Philipps University Marburg). All customizations are tracked in the current `merge_1112_upstream` branch and are **not** present in other branches.
+The opendesk repository has been extensively customized for Kubernetes (Hochschulrechenzentrum - University Computing Center at Philipps University OpenDesk). All customizations are tracked in the current `merge_1112_upstream` branch and are **not** present in other branches.
 
 #### Customization Timeline (26 Commits)
 
-**2025-08-05 to 2025-08-28**: Initial HRZ Environment Setup (10 commits)
+**2025-08-05 to 2025-08-28**: Initial Kubernetes Environment Setup (10 commits)
 - Chart path configuration
 - Component enablement
 - CI disabling
@@ -620,7 +620,7 @@ The opendesk repository has been extensively customized for HRZ (Hochschulrechen
 
 | Position | Commit | Date | Description |
 |----------|--------|------|-------------|
-| 1 | `307feab4` | 2025-08-05 | **hrz env** - Created complete HRZ environment directory structure |
+| 1 | `307feab4` | 2025-08-05 | **production env** - Created complete Kubernetes environment directory structure |
 | 2 | `e373ffdc` | 2025-08-05 | Fix local chart path to `../charts-v1.6.0` |
 | 3 | `2ec9e73c` | 2025-08-05 | Need local path (helmfile discussion #182) |
 | 4 | `1e3fb6e6` | 2025-08-05 | Freshclam tmp write fix (dirty: readOnlyRootFilesystem: true) |
@@ -629,7 +629,7 @@ The opendesk repository has been extensively customized for HRZ (Hochschulrechen
 | 7 | `057b5dce` | 2025-08-07 | Fix XWiki PV size |
 | 8 | `8a0b0f3b` | 2025-08-07 | Disable element-admin and element-groupsync (enterprise features) |
 | 9 | `83fd255a` | 2025-08-07 | Disable CI (rename `.gitlab-ci.yml` → `_gitlab-ci.yml`) |
-| 10 | `2cf972d3` | 2025-08-07 | Create fully defined helm file (`helmfile template -e hrz > opendesk.yaml`) |
+| 10 | `2cf972d3` | 2025-08-07 | Create fully defined helm file (`helmfile template -e production > opendesk.yaml`) |
 | 11 | `60a3df84` | 2025-08-18 | Adjust persistence volume sizes |
 | 12 | `e47a803a` | 2025-08-18 | Introduce `ADD_MAIL_DOMAINS` (duplicate) |
 | 13 | `9cddb7d7` | 2025-08-19 | Introduce `ADD_MAIL_DOMAINS` (functionality) |
@@ -637,9 +637,9 @@ The opendesk repository has been extensively customized for HRZ (Hochschulrechen
 | 15 | `1cac0e78` | 2025-09-04 | Add IdP settings, change replicas, change SMTP settings |
 | 16 | `35a08b82` | 2025-09-05 | Changes on IdP mappers and replication count |
 | 17 | `b769dcff` | 2025-09-10 | Revert IdP mappers and scaling |
-| 18 | `f9bf62c9` | 2025-11-25 | Merge HRZ changes |
+| 18 | `f9bf62c9` | 2025-11-25 | Merge Kubernetes changes |
 | 19 | `cf78a43b` | 2025-10-27 | Local charts configuration |
-| 20 | `223d6574` | 2025-11-03 | Disable SSO autogen, add HRZ URLs for legal notice |
+| 20 | `223d6574` | 2025-11-03 | Disable SSO autogen, add Kubernetes URLs for legal notice |
 | 21 | `baf0e5ce` | 2025-11-24 | Disable federated SSO (using SAML-UMR), change to UMR links |
 | 22 | `e8f954df` | 2025-11-25 | Change local chart paths |
 | 23 | `604f0eb9` | 2025-11-25 | Postfix authentication changes |
@@ -651,19 +651,19 @@ The opendesk repository has been extensively customized for HRZ (Hochschulrechen
 
 #### Major Customization Categories
 
-##### 1. HRZ Environment Configuration (NEW - Entirely Created)
+##### 1. Kubernetes Environment Configuration (NEW - Entirely Created)
 **Files Added**: 9 new configuration files
-- `helmfile/environments/hrz/annotations.yaml.gotmpl` (305 bytes)
-- `helmfile/environments/hrz/certificate.yaml.gotmpl` (349 bytes)
-- `helmfile/environments/hrz/cluster.yaml.gotmpl` (1,702 bytes)
-- `helmfile/environments/hrz/debug.yaml.gotmpl` (191 bytes)
-- `helmfile/environments/hrz/functional.yaml.gotmpl` (21,774 bytes)
-- `helmfile/environments/hrz/global.yaml.gotmpl` (2,728 bytes)
-- `helmfile/environments/hrz/monitoring.yaml.gotmpl` (612 bytes)
-- `helmfile/environments/hrz/opendesk_main.yaml.gotmpl` (1,845 bytes)
-- `helmfile/environments/hrz/persistence.yaml.gotmpl` (1,817 bytes)
-- `helmfile/environments/hrz/replicas.yaml.gotmpl` (6,330 bytes) - **Added later**
-- `helmfile/environments/hrz/smtp.yaml.gotmpl` (663 bytes) - **Added later**
+- `helmfile/environments/production/annotations.yaml.gotmpl` (305 bytes)
+- `helmfile/environments/production/certificate.yaml.gotmpl` (349 bytes)
+- `helmfile/environments/production/cluster.yaml.gotmpl` (1,702 bytes)
+- `helmfile/environments/production/debug.yaml.gotmpl` (191 bytes)
+- `helmfile/environments/production/functional.yaml.gotmpl` (21,774 bytes)
+- `helmfile/environments/production/global.yaml.gotmpl` (2,728 bytes)
+- `helmfile/environments/production/monitoring.yaml.gotmpl` (612 bytes)
+- `helmfile/environments/production/opendesk_main.yaml.gotmpl` (1,845 bytes)
+- `helmfile/environments/production/persistence.yaml.gotmpl` (1,817 bytes)
+- `helmfile/environments/production/replicas.yaml.gotmpl` (6,330 bytes) - **Added later**
+- `helmfile/environments/production/smtp.yaml.gotmpl` (663 bytes) - **Added later**
 
 **Purpose**: University-specific deployment configuration
 
@@ -717,7 +717,7 @@ The opendesk repository has been extensively customized for HRZ (Hochschulrechen
 - Prevents automatic pipeline execution
 
 **Helm File Generation**:
-- Created fully pre-rendered `opendesk.yaml` via `helmfile template -e hrz`
+- Created fully pre-rendered `opendesk.yaml` via `helmfile template -e production`
 - Allows deployment without helmfile
 
 **Persistence**:
@@ -736,17 +736,17 @@ The opendesk repository has been extensively customized for HRZ (Hochschulrechen
 **New Files Created** (13 total):
 - `TODO.md`
 - `mini-client-cronjob.yml`
-- `helmfile/environments/hrz/annotations.yaml.gotmpl`
-- `helmfile/environments/hrz/certificate.yaml.gotmpl`
-- `helmfile/environments/hrz/cluster.yaml.gotmpl`
-- `helmfile/environments/hrz/debug.yaml.gotmpl`
-- `helmfile/environments/hrz/functional.yaml.gotmpl`
-- `helmfile/environments/hrz/global.yaml.gotmpl`
-- `helmfile/environments/hrz/monitoring.yaml.gotmpl`
-- `helmfile/environments/hrz/opendesk_main.yaml.gotmpl`
-- `helmfile/environments/hrz/persistence.yaml.gotmpl`
-- `helmfile/environments/hrz/replicas.yaml.gotmpl`
-- `helmfile/environments/hrz/smtp.yaml.gotmpl`
+- `helmfile/environments/production/annotations.yaml.gotmpl`
+- `helmfile/environments/production/certificate.yaml.gotmpl`
+- `helmfile/environments/production/cluster.yaml.gotmpl`
+- `helmfile/environments/production/debug.yaml.gotmpl`
+- `helmfile/environments/production/functional.yaml.gotmpl`
+- `helmfile/environments/production/global.yaml.gotmpl`
+- `helmfile/environments/production/monitoring.yaml.gotmpl`
+- `helmfile/environments/production/opendesk_main.yaml.gotmpl`
+- `helmfile/environments/production/persistence.yaml.gotmpl`
+- `helmfile/environments/production/replicas.yaml.gotmpl`
+- `helmfile/environments/production/smtp.yaml.gotmpl`
 
 **Renamed Files** (1):
 - `.gitlab-ci.yml` → `_gitlab-ci.yml`
@@ -784,7 +784,7 @@ current HEAD: merge_1112_upstream (26 commits ahead)
      |
      ├── 6a069296 (latest) - adjust paths, fix minio, add AI TODO
      ├── 44dea358 - merge with upstream v1.11.2, resolve conflicts
-     └── [24 HRZ custom commits]
+     └── [24 Kubernetes custom commits]
         
 merge base: f30325ef (upstream/develop at v1.11.2)
      |
@@ -792,7 +792,7 @@ merge base: f30325ef (upstream/develop at v1.11.2)
 ```
 
 **Key Points**:
-- Branch `merge_1112_upstream` contains **only** HRZ customizations
+- Branch `merge_1112_upstream` contains **only** Kubernetes customizations
 - No other branches (merge_110_upstream, v1.6.0, v1.7.0) are merged into current HEAD
 - Divergence from upstream: 26 commits, 1,247 insertions, 72 deletions
 - Base openDesk version: **v1.11.2**

@@ -441,11 +441,11 @@ kubectl get clusterpolicies -l openDesk.zki/category
 
 | Role | Name | Email | Slack | Emergency | Response Time |
 |------|------|-------|-------|-----------|---------------|
-| Security Team | - | security@opendesk.hrz.uni-marburg.de | #security | No | 4-8 hours |
-| Incident Response | - | incident@opendesk.hrz.uni-marburg.de | #incident-response | Yes | 15 minutes |
-| DevOps Team | - | devops@opendesk.hrz.uni-marburg.de | #devops | No | 4-8 hours |
-| CISO | - | ciso@opendesk.hrz.uni-marburg.de | @ciso | Yes | 30 minutes |
-| DPO | - | datenschutz@opendesk.hrz.uni-marburg.de | @dpo | Yes | 1 hour |
+| Security Team | - | security@home.opendesk-edu.org | #security | No | 4-8 hours |
+| Incident Response | - | incident@home.opendesk-edu.org | #incident-response | Yes | 15 minutes |
+| DevOps Team | - | devops@home.opendesk-edu.org | #devops | No | 4-8 hours |
+| CISO | - | ciso@home.opendesk-edu.org | @ciso | Yes | 30 minutes |
+| DPO | - | datenschutz@home.opendesk-edu.org | @dpo | Yes | 1 hour |
 
 ### Escalation Path
 
@@ -614,6 +614,6 @@ You now have:
 
 **🔍 Need help?** Start with the [Quick Start Guide](QUICK_START_ZKI_COMPLIANCE.md) or the [Critical Actions document](ZKI_CRITICAL_ACTIONS.md).
 
-**📞 Need support?** Contact the [Security Team](mailto:security@opendesk.hrz.uni-marburg.de) or ask in Slack #security.
+**📞 Need support?** Contact the [Security Team](mailto:security@home.opendesk-edu.org) or ask in Slack #security.
 
 **🎯 Ready to start?** Begin with the [Critical Actions](ZKI_CRITICAL_ACTIONS.md) - the 5 P0 items that must be addressed before production deployment.

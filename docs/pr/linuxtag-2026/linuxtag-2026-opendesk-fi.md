@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suvereeni cloud-infrastruktuuri   | SBOM kaikille komponenteille
 
 ---
 
-# Helmfile & HRZ-ympäristö
+# Helmfile & Kubernetes-ympäristö
 
 ```bash
 # Julkaisu Helmfilella
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile-orkestrointi** ⚓
   - Deklaratiivinen konfiguraatio tiedostossa `helmfile_generic.yaml.gotmpl`
-  - Ympäristökohtaiset ylikirjoitukset hakemistossa `environments/hrz/`
+  - Ympäristökohtaiset ylikirjoitukset hakemistossa `environments/production/`
   - Automaattinen riippuvuuskopio
-- **HRZ-ympäristö luotu** 🖥️
+- **Kubernetes-ympäristö luotu** 🖥️
   - `staging`-ympäristön kopio mukautuksin
-  - Uni Marburg -kohtainen konfiguraatio
+  - Uni OpenDesk -kohtainen konfiguraatio
   - Testijärjestelmä pilottikäyttöä varten
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portaali → ILIAS-tiili
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Kirjautuminen (weblogin.uni-marburg.de)
+4. 🎓 Kirjautuminen (weblogin.opendesk-edu.org)
 5. 📨 SAML-vahvistus takaisin
 6. ✅ ILIAS-hallintapaneeli
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Tarkista muutokset
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Ota päivitykset käyttöön
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Palauta tarvittaessa
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Hallitut päivitykset Helmfilen kautta** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-päivitys: Ingress-siirto
+# Kubernetes-päivitys: Ingress-siirto
 
 - **Siirto:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (uniapps-haara)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-päivitys: Kaksoisvarmuuskopio
+# Kubernetes-päivitys: Kaksoisvarmuuskopio
 
 - **Tavoite:** Redundantti varmuuskopiointitallennus 🗄️
 - **Strategia:** S3-yhteensopiva restic-taustajärjestelmä 🔄

@@ -13,7 +13,7 @@ SPDX-License-Identifier: Apache-2.0
 | **License** | Apache-2.0 |
 | **Upstream** | [openDesk CE v1.15.x](https://www.opencode.de/en/opendesk) |
 | **Repository** | [GitHub](https://github.com/opendesk-edu/opendesk-edu) / [Codeberg](https://codeberg.org/opendesk-edu/opendesk-edu) |
-| **Host** | HRZ Marburg, Philipps-Universitat Marburg |
+| **Host** | Kubernetes OpenDesk, Philipps-Universitat OpenDesk |
 
 ---
 
@@ -115,19 +115,19 @@ openDesk Edu introduces optional drop-in alternatives for three core CE componen
 
 ### 2.3 Hosted Environment
 
-The reference deployment runs at HRZ Marburg (Philipps-Universitat Marburg):
+The reference deployment runs at Kubernetes OpenDesk (Philipps-Universitat OpenDesk):
 
 | Parameter | Value |
 |:----------|:------|
 | Platform | K3s v1.32.3 on Debian 12 |
 | Nodes | 9 (3 control-plane + 6 workers) |
-| Control plane | vhrz2331, vhrz2332, vhrz2333 |
-| Workers | vhrz2334 through vhrz2339 |
+| Control plane | node01, node02, node03 |
+| Workers | node04 through node09 |
 | API endpoint | `https://192.168.3.200:6443` |
 | Container runtime | containerd 2.0.4-k3s2 |
 | Ingress | HAProxy + Nginx |
 | GitOps | ArgoCD |
-| Domain | `*.opendesk.hrz.uni-marburg.de` |
+| Domain | `*.home.opendesk-edu.org` |
 | Ingress IP | 192.168.3.201 |
 
 ---
@@ -568,7 +568,7 @@ For production deployments, the bundled services must be replaced with productio
 | ClamAV | Antivirus / ICAP scanning | Distributed or Simple mode |
 | Postfix | Mail relay / MX | `databases.*` for SMTP credentials |
 | Coturn | TURN server for WebRTC | Voice/video NAT traversal |
-| Proxy | `http://www-proxy2.uni-marburg.de:3128` | For pods requiring internet access |
+| Proxy | `http://www-proxy2.opendesk-edu.org:3128` | For pods requiring internet access |
 
 ---
 
@@ -593,7 +593,7 @@ For production deployments, the bundled services must be replaced with productio
 [k8up](https://k8up.io/) provides restic-based backups:
 
 - **Schedule**: `backup-live` runs daily at 00:42
-- **Target**: `s3:https://s3.hrz.uni-marburg.de/backups`
+- **Target**: `s3:https://s3.home.opendesk-edu.org/backups`
 - **Scope**: Only RWX PVCs (due to RWO multi-node mount limitation)
 - **RWX PVCs backed up**: `clamav-db`, `clamav-tmp`, `dovecot`, `opendesk-opencloud-data`, `seaweedfs-all-in-one-data`, `slidev-slides`
 - **RWO PVCs**: require separate backup strategy (CSI snapshots or per-node schedules)
@@ -624,15 +624,15 @@ controller:
 
 ### 9.2 DNS
 
-- Domain: `*.opendesk.hrz.uni-marburg.de` resolves to ingress IP `192.168.3.201`
+- Domain: `*.home.opendesk-edu.org` resolves to ingress IP `192.168.3.201`
 - Nameservers: `137.248.21.22`, `137.248.1.5`, `137.248.1.8`
-- **Known quirk**: CoreDNS returns SERVFAIL on external CNAME chains (HRZ-specific). Workaround: use `hostAliases` in deployments for internal domains.
+- **Known quirk**: CoreDNS returns SERVFAIL on external CNAME chains (Kubernetes-specific). Workaround: use `hostAliases` in deployments for internal domains.
 
 ### 9.3 Outbound Proxy
 
-Pods requiring internet access must route through `http://www-proxy2.uni-marburg.de:3128`.
+Pods requiring internet access must route through `http://www-proxy2.opendesk-edu.org:3128`.
 
-**DNS note**: `www-proxy2.uni-marburg.de` resolves in DNS; `proxy02.hrz.uni-marburg.de` does NOT.
+**DNS note**: `www-proxy2.opendesk-edu.org` resolves in DNS; `proxy02.home.opendesk-edu.org` does NOT.
 
 ### 9.4 TLS
 
@@ -931,7 +931,7 @@ Five-phase integration with the dominant German campus management system:
 
 - `main` branch — stable, production-ready
 - Feature branches — development
-- `deploy/hrz` — HRZ-specific deployment configuration
+- `- deploy/production` — Kubernetes-specific deployment configuration
 - `gh-pages` — documentation site
 
 ### 17.2 PR Discipline
@@ -1053,7 +1053,7 @@ opendesk-edu/
 
 ---
 
-## Appendix A: Active Namespaces (HRZ Cluster)
+## Appendix A: Active Namespaces (Kubernetes Cluster)
 
 | Namespace | Purpose |
 |:----------|:--------|
@@ -1079,12 +1079,12 @@ opendesk-edu/
 | testing | Test workloads |
 | traefik | Traefik ingress |
 
-## Appendix B: Known Issues (HRZ-Specific)
+## Appendix B: Known Issues (Kubernetes-Specific)
 
 | # | Issue | Impact | Mitigation |
 |:--|:-----|:-------|:-----------|
 | 1 | CoreDNS SERVFAIL on external CNAME chains | External DNS resolution fails | Use `hostAliases` for internal domains |
-| 2 | `proxy02.hrz.uni-marburg.de` unresolvable | Proxy hostname fails | Use `www-proxy2.uni-marburg.de` instead |
+| 2 | `proxy02.home.opendesk-edu.org` unresolvable | Proxy hostname fails | Use `www-proxy2.opendesk-edu.org` instead |
 | 3 | MariaDB password staleness | Helm-deployed password may differ | Check and sync `ALTER USER` |
 | 4 | Nextcloud AIO probe bug | 10x PHP-FPM load, container restarts | Patch deployment and chart template |
 | 5 | MariaDB transient "Connection refused" | ILIAS cronjobs fail on first attempt | 5-attempt retry loop with 10s sleep |

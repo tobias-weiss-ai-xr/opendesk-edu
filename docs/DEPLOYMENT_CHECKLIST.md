@@ -203,13 +203,13 @@ kubectl get ingress -n opendesk | grep -E "(mayan|paperless)"
 ```
 Ingress should show the correct hostnames.
 
-> **Live-Deployment (31.07.2026):** Paperless-ngx läuft unter `dms.opendesk.hrz.uni-marburg.de`
+> **Live-Deployment (31.07.2026):** Paperless-ngx läuft unter `dms.home.opendesk-edu.org`
 > (nicht `paperless.`). Mayan EDMS noch nicht deployed.
 
 ### 9. Access Systems
 
 - **Mayan EDMS**: https://mayan.your-domain.com (noch nicht deployed)
-- **Paperless-ngx**: https://dms.opendesk.hrz.uni-marburg.de (live)
+- **Paperless-ngx**: https://dms.home.opendesk-edu.org (live)
 
 > **⚠️ Login (Paperless-ngx 2.12):** OIDC wird von Version 2.12.0 **nicht unterstützt**
 > (`PAPERLESS_OIDC_*`-Env wird ignoriert) — Login nur mit lokalem Superuser (`admin`),

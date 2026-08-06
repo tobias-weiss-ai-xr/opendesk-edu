@@ -37,19 +37,19 @@ if $RUN_OIDC; then
 echo "--- OIDC / SSO Contracts ---"
 
 # 1.1 Keycloak OIDC issuer (from external, then in-cluster)
-OIDC_ISS=$(curl -sk --max-time 5 https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('issuer',''))" 2>/dev/null || echo "")
-if echo "$OIDC_ISS" | grep -q "id.opendesk.hrz.uni-marburg.de"; then
+OIDC_ISS=$(curl -sk --max-time 5 https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('issuer',''))" 2>/dev/null || echo "")
+if echo "$OIDC_ISS" | grep -q "id.home.opendesk-edu.org"; then
   pass "Keycloak OIDC issuer: $OIDC_ISS"
 else
   OC_POD=$(kubectl get pods -n "$NAMESPACE" -l app.kubernetes.io/name=opencloud -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
-  OIDC_ISS=$(kubectl exec -n "$NAMESPACE" "$OC_POD" -- sh -c 'curl -sk --max-time 5 https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get(\"issuer\",\"\"))"' 2>/dev/null || echo "")
+  OIDC_ISS=$(kubectl exec -n "$NAMESPACE" "$OC_POD" -- sh -c 'curl -sk --max-time 5 https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get(\"issuer\",\"\"))"' 2>/dev/null || echo "")
   echo "$OIDC_ISS" | grep -q "id.opendesk" && pass "Keycloak OIDC issuer (in-cluster): $OIDC_ISS" || fail "Keycloak OIDC issuer unreachable"
 fi
 
 # 1.2 OpenCloud OIDC config
 OC_POD=$(kubectl get pods -n "$NAMESPACE" -l app.kubernetes.io/name=opencloud -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
 OC_ISSUER=$(kubectl describe pod "$OC_POD" -n "$NAMESPACE" 2>/dev/null | grep "OC_OIDC_ISSUER" | awk '{print $2}')
-[ "$OC_ISSUER" = "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk" ] && \
+[ "$OC_ISSUER" = "https://id.home.opendesk-edu.org/realms/opendesk" ] && \
   pass "OpenCloud OIDC issuer: $OC_ISSUER" || fail "OpenCloud OIDC issuer: $OC_ISSUER"
 
 # 1.3 Stalwart OIDC client in Keycloak (v0.16 uses internal OIDC provider, client is for JMAP)

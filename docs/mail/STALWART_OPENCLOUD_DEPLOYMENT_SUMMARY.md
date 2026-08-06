@@ -62,14 +62,14 @@ This document summarizes the configuration changes made to deploy **Stalwart Mai
 **Component:** Mail server (IMAP, SMTP, POP3, Sieve)
 
 **Access Points:**
-- Admin Console: `https://mail.opendesk.hrz.uni-marburg.de`
-- IMAP: `mail.opendesk.hrz.uni-marburg.de:993` (IMAPS)
-- IMAP: `mail.opendesk.hrz.uni-marburg.de:143` (STARTTLS)
-- SMTP: `mail.opendesk.hrz.uni-marburg.de:465` (SMTPS)
-- SMTP: `mail.opendesk.hrz.uni-marburg.de:587` (STARTTLS)
-- POP3: `mail.opendesk.hrz.uni-marburg.de:995` (POP3S)
-- POP3: `mail.opendesk.hrz.uni-marburg.de:110` (STARTTLS)
-- Sieve: `mail.opendesk.hrz.uni-marburg.de:4190`
+- Admin Console: `https://mail.home.opendesk-edu.org`
+- IMAP: `mail.home.opendesk-edu.org:993` (IMAPS)
+- IMAP: `mail.home.opendesk-edu.org:143` (STARTTLS)
+- SMTP: `mail.home.opendesk-edu.org:465` (SMTPS)
+- SMTP: `mail.home.opendesk-edu.org:587` (STARTTLS)
+- POP3: `mail.home.opendesk-edu.org:995` (POP3S)
+- POP3: `mail.home.opendesk-edu.org:110` (STARTTLS)
+- Sieve: `mail.home.opendesk-edu.org:4190`
 
 **Features:**
 - OIDC authentication with Keycloak
@@ -94,7 +94,7 @@ This document summarizes the configuration changes made to deploy **Stalwart Mai
 **Component:** Nextcloud-based file sync and share with OIDC
 
 **Access Point:**
-- Web: `https://files.opendesk.hrz.uni-marburg.de`
+- Web: `https://files.home.opendesk-edu.org`
 
 **Features:**
 - OIDC authentication with Keycloak
@@ -204,17 +204,17 @@ Register both services in Keycloak:
 **Stalwart:**
 - Client ID: `stalwart`
 - Secret: `$STALWART_OIDC_SECRET`
-- Redirect URIs: `https://mail.opendesk.hrz.uni-marburg.de/*`, `https://portal.opendesk.hrz.uni-marburg.de/*`
+- Redirect URIs: `https://mail.home.opendesk-edu.org/*`, `https://portal.home.opendesk-edu.org/*`
 - Protocol: openid-connect
 - Access Type: confidential
 
 **OpenCloud:**
 - Client ID: `opendesk-opencloud`
 - Secret: `$OPENCLOUD_OIDC_SECRET`
-- Redirect URIs: `https://files.opendesk.hrz.uni-marburg.de/*`, `https://portal.opendesk.hrz.uni-marburg.de/*`
+- Redirect URIs: `https://files.home.opendesk-edu.org/*`, `https://portal.home.opendesk-edu.org/*`
 - Protocol: openid-connect
 - Access Type: confidential
-- Backchannel Logout URL: `https://files.opendesk.hrz.uni-marburg.de/backchannel_logout`
+- Backchannel Logout URL: `https://files.home.opendesk-edu.org/backchannel_logout`
 
 ### 4. Deploy
 
@@ -244,8 +244,8 @@ kubectl logs -f deployment/opendesk-opencloud
 kubectl get svc opendesk-opencloud
 
 # Test access
-curl -k https://mail.opendesk.hrz.uni-marburg.de/api/health
-curl -k https://files.opendesk.hrz.uni-marburg.de/status.php
+curl -k https://mail.home.opendesk-edu.org/api/health
+curl -k https://files.home.opendesk-edu.org/status.php
 ```
 
 ## Post-Deployment Tasks
@@ -286,8 +286,8 @@ Both services integrate with:
    - Clients: stalwart, opendesk-opencloud
 
 2. **LDAP** - User directory
-   - Server: ums-ldap.opendesk.hrz.uni-marburg.de:636
-   - Base DN: dc=uni-marburg,dc=de
+   - Server: ums-ldap.home.opendesk-edu.org:636
+   - Base DN: dc=opendesk-edu,dc=org
 
 3. **HAProxy Ingress** - TLS termination
    - Ingress class: haproxy
@@ -305,7 +305,7 @@ Both services integrate with:
 
 **Q: Pods crash on startup**
 - Check LDAP connectivity: `kubectl exec -it stalwart-0 -- nc -zv ums-ldap 636`
-- Verify OIDC issuer URL: `kubectl exec -it stalwart-0 -- curl -k https://portal.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration`
+- Verify OIDC issuer URL: `kubectl exec -it stalwart-0 -- curl -k https://portal.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration`
 - Check logs: `kubectl logs -f deployment/stalwart`
 
 **Q: OIDC login fails**
@@ -330,7 +330,7 @@ Both services integrate with:
 - Test write: `kubectl exec -it opendesk-opencloud-0 -- touch /var/lib/opencloud/testfile`
 
 **Q: Backchannel logout not working**
-- Verify backchannel logout URL in Keycloak: `https://files.opendesk.hrz.uni-marburg.de/backchannel_logout`
+- Verify backchannel logout URL in Keycloak: `https://files.home.opendesk-edu.org/backchannel_logout`
 - Check backchannel secret matches in Keycloak and OpenCloud config
 - Verify log level: increase to debug in OpenCloud config
 

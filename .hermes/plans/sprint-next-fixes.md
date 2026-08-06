@@ -10,7 +10,7 @@
    - Delete stuck helm release
 
 2. **SOGo ingress — no LB address**
-   - sogo.opendesk.hrz.uni-marburg.de has no ADDRESS
+   - sogo.home.opendesk-edu.org has no ADDRESS
    - Compare with working ingresses (bookstack, drawio)
    - Check haproxy backend config / ingress annotations
 

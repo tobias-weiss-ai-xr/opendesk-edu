@@ -150,7 +150,7 @@ kubectl create configmap opendesk-dashboards-k8up \
 
 ---
 
-## Backup B12: HRZ-Upgrade: Gelöste Probleme
+## Backup B12: Kubernetes-Upgrade: Gelöste Probleme
 
 - **ClamAV Image** 🦠
   - Bild temporär nicht verfügbar → Upgrade auf v1.5.2

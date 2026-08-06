@@ -7,10 +7,10 @@ n8n (workflow automation) and Zammad (helpdesk/ticketing).
 
 | Parameter | Value |
 |-----------|-------|
-| URL | `https://id.opendesk.hrz.uni-marburg.de` |
+| URL | `https://id.home.opendesk-edu.org` |
 | Realm | `opendesk` |
-| Issuer | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk` |
-| Discovery URL | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration` |
+| Issuer | `https://id.home.opendesk-edu.org/realms/opendesk` |
+| Discovery URL | `https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration` |
 
 ---
 
@@ -44,9 +44,9 @@ by setting `N8N_SSO_MANAGED_BY_ENV=true`.
 |-----------|-------|
 | Client ID | `opendesk-n8n` |
 | Client Secret | `vp0XnZw87Baw4uZJsvuG8uyT8fAEV1ep` |
-| Discovery Endpoint | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration` |
-| Redirect URI (in n8n) | `https://n8n.opendesk.hrz.uni-marburg.de/rest/sso/oidc/callback` |
-| n8n Host | `n8n.opendesk.hrz.uni-marburg.de` |
+| Discovery Endpoint | `https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration` |
+| Redirect URI (in n8n) | `https://n8n.home.opendesk-edu.org/rest/sso/oidc/callback` |
+| n8n Host | `n8n.home.opendesk-edu.org` |
 
 ### 1.4 Keycloak Client Configuration (for n8n)
 
@@ -61,9 +61,9 @@ When creating/verifying the `opendesk-n8n` client in Keycloak:
   "directAccessGrantsEnabled": false,
   "serviceAccountsEnabled": true,
   "redirectUris": [
-    "https://n8n.opendesk.hrz.uni-marburg.de/rest/sso/oidc/callback"
+    "https://n8n.home.opendesk-edu.org/rest/sso/oidc/callback"
   ],
-  "webOrigins": ["https://n8n.opendesk.hrz.uni-marburg.de"]
+  "webOrigins": ["https://n8n.home.opendesk-edu.org"]
 }
 ```
 
@@ -77,7 +77,7 @@ image:
   tag: latest
 
 config:
-  host: n8n.opendesk.hrz.uni-marburg.de
+  host: n8n.home.opendesk-edu.org
   encryptionKey: "opendesk-n8n-key-change-me"
   dbType: sqlite
 ```
@@ -122,7 +122,7 @@ env:
   - name: N8N_SSO_OIDC_CLIENT_SECRET
     value: "vp0XnZw87Baw4uZJsvuG8uyT8fAEV1ep"
   - name: N8N_SSO_OIDC_DISCOVERY_ENDPOINT
-    value: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+    value: "https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration"
 
   # Optional: role provisioning (disabled by default)
   - name: N8N_SSO_USER_ROLE_PROVISIONING
@@ -133,7 +133,7 @@ Or via updated `values.yaml` with a new config section:
 
 ```yaml
 config:
-  host: n8n.opendesk.hrz.uni-marburg.de
+  host: n8n.home.opendesk-edu.org
   encryptionKey: "opendesk-n8n-key-change-me"
   dbType: sqlite
   sso:
@@ -142,7 +142,7 @@ config:
       loginEnabled: true
       clientId: "opendesk-n8n"
       clientSecret: "vp0XnZw87Baw4uZJsvuG8uyT8fAEV1ep"
-      discoveryEndpoint: "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration"
+      discoveryEndpoint: "https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration"
 ```
 
 And in `deployment.yaml`:
@@ -205,9 +205,9 @@ Zammad supports:
 |-----------|-------|
 | Client ID | `opendesk-zammad` |
 | Client Secret | `pTX8SA1xUGSaLCeKmY7NO9rTstHX6qq1` |
-| Issuer URL | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk` |
-| Redirect URI (in Keycloak) | `https://helpdesk.opendesk.hrz.uni-marburg.de/auth/openid_connect/callback` |
-| Zammad FQDN | `helpdesk.opendesk.hrz.uni-marburg.de` |
+| Issuer URL | `https://id.home.opendesk-edu.org/realms/opendesk` |
+| Redirect URI (in Keycloak) | `https://helpdesk.home.opendesk-edu.org/auth/openid_connect/callback` |
+| Zammad FQDN | `helpdesk.home.opendesk-edu.org` |
 
 ### 2.4 Keycloak Client Configuration (for Zammad)
 
@@ -222,11 +222,11 @@ When creating/verifying the `opendesk-zammad` client in Keycloak:
   "directAccessGrantsEnabled": false,
   "serviceAccountsEnabled": true,
   "redirectUris": [
-    "https://helpdesk.opendesk.hrz.uni-marburg.de/auth/openid_connect/callback"
+    "https://helpdesk.home.opendesk-edu.org/auth/openid_connect/callback"
   ],
-  "webOrigins": ["https://helpdesk.opendesk.hrz.uni-marburg.de"],
+  "webOrigins": ["https://helpdesk.home.opendesk-edu.org"],
   "attributes": {
-    "backchannel.logout.url": "https://helpdesk.opendesk.hrz.uni-marburg.de/auth/openid_connect/backchannel_logout",
+    "backchannel.logout.url": "https://helpdesk.home.opendesk-edu.org/auth/openid_connect/backchannel_logout",
     "backchannel.logout.session.required": "true"
   }
 }
@@ -242,9 +242,9 @@ When creating/verifying the `opendesk-zammad` client in Keycloak:
 2. Go to **Settings > Security > Third-Party Applications**
 3. Click **OpenID Connect**
 4. Configure:
-   - **Display name**: `Keycloak` (or `Uni Marburg`)
+   - **Display name**: `Keycloak` (or `Uni OpenDesk`)
    - **Identifier**: `opendesk-zammad`
-   - **Issuer**: `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk`
+   - **Issuer**: `https://id.home.opendesk-edu.org/realms/opendesk`
    - **UID field**: `sub` (leave default)
    - **Scopes**: `openid email profile`
    - **PKCE**: Disabled (since we have a client secret)
@@ -263,7 +263,7 @@ Setting.set('auth_third_party_oidc', true)
 Setting.set('auth_third_party_oidc_config', {
   display_name: 'Keycloak',
   identifier: 'opendesk-zammad',
-  issuer: 'https://id.opendesk.hrz.uni-marburg.de/realms/opendesk',
+  issuer: 'https://id.home.opendesk-edu.org/realms/opendesk',
   uid_field: 'sub',
   scopes: 'openid email profile',
   pkce: false
@@ -337,7 +337,7 @@ env:
   - name: ZAMMAD_HTTP_TYPE
     value: "https"
   - name: ZAMMAD_FQDN
-    value: "helpdesk.opendesk.hrz.uni-marburg.de"
+    value: "helpdesk.home.opendesk-edu.org"
 ```
 
 The OIDC configuration itself must be configured via the Admin UI or Rails
@@ -345,7 +345,7 @@ console (Section 2.5 or 2.6 above) after deployment.
 
 ### 2.10 Verification
 
-1. Navigate to `https://helpdesk.opendesk.hrz.uni-marburg.de/`
+1. Navigate to `https://helpdesk.home.opendesk-edu.org/`
 2. The login page should show the configured SSO button (e.g., "Keycloak")
 3. Click it — you should be redirected to Keycloak for authentication
 4. After successful login, you're redirected back to Zammad
@@ -358,7 +358,7 @@ console (Section 2.5 or 2.6 above) after deployment.
 
 ```bash
 TOKEN=$(curl -s -X POST \
-  "https://id.opendesk.hrz.uni-marburg.de/realms/master/protocol/openid-connect/token" \
+  "https://id.home.opendesk-edu.org/realms/master/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=kcadmin" \
   -d "password=${KEYCLOAK_ADMIN_PASSWORD}" \
@@ -371,12 +371,12 @@ TOKEN=$(curl -s -X POST \
 ```bash
 # Check n8n client
 curl -s -X GET \
-  "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients?clientId=opendesk-n8n" \
+  "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients?clientId=opendesk-n8n" \
   -H "Authorization: Bearer ${TOKEN}" | jq '.[0] | {clientId, publicClient, redirectUris}'
 
 # Check Zammad client
 curl -s -X GET \
-  "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients?clientId=opendesk-zammad" \
+  "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients?clientId=opendesk-zammad" \
   -H "Authorization: Bearer ${TOKEN}" | jq '.[0] | {clientId, publicClient, redirectUris}'
 ```
 
@@ -385,20 +385,20 @@ curl -s -X GET \
 ```bash
 # Get n8n client UUID and secret
 N8N_UUID=$(curl -s -X GET \
-  "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients?clientId=opendesk-n8n" \
+  "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients?clientId=opendesk-n8n" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
 
 curl -s -X GET \
-  "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients/${N8N_UUID}/client-secret" \
+  "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients/${N8N_UUID}/client-secret" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.value'
 
 # Get Zammad client UUID and secret
 ZAMMAD_UUID=$(curl -s -X GET \
-  "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients?clientId=opendesk-zammad" \
+  "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients?clientId=opendesk-zammad" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.[0].id')
 
 curl -s -X GET \
-  "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk/clients/${ZAMMAD_UUID}/client-secret" \
+  "https://id.home.opendesk-edu.org/admin/realms/opendesk/clients/${ZAMMAD_UUID}/client-secret" \
   -H "Authorization: Bearer ${TOKEN}" | jq -r '.value'
 ```
 
@@ -414,7 +414,7 @@ curl -s -X GET \
 | **Client Secret** | `vp0XnZw87Baw4uZJsvuG8uyT8fAEV1ep` | `pTX8SA1xUGSaLCeKmY7NO9rTstHX6qq1` |
 | **Client Type** | Confidential (secret required) | Confidential (secret) or Public (PKCE) |
 | **Redirect URI in n8n** | `.../rest/sso/oidc/callback` | `.../auth/openid_connect/callback` |
-| **Discovery/Issuer** | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration` | `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk` |
+| **Discovery/Issuer** | `https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration` | `https://id.home.opendesk-edu.org/realms/opendesk` |
 | **Scope** | (uses discovery default) | `openid email profile` |
 | **Current chart** | No SSO config | No SSO config, no ZAMMAD_FQDN set |
 | **Effort to enable** | Add ~6 env vars | Configure FQDN env var + Admin UI setup |

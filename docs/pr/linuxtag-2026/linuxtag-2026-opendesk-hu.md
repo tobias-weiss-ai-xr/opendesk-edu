@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Szuverén felhőinfrastruktúra     | SBOM minden komponenshez
 
 ---
 
-# Helmfile és HRZ-Környezet
+# Helmfile és Kubernetes-Környezet
 
 ```bash
 # Telepítés Helmfile-lel
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orchestráció** ⚓
   - Deklaratív konfiguráció a `helmfile_generic.yaml.gotmpl` fájlban
-  - Környezet-specifikus felülbírálások az `environments/hrz/` könyvtárban
+  - Környezet-specifikus felülbírálások az `environments/production/` könyvtárban
   - Automatikus függőségi biztonsági mentés
-- **HRZ-Környezet létrehozva** 🖥️
+- **Kubernetes-Környezet létrehozva** 🖥️
   - A `staging` másolata módosításokkal
-  - Uni Marburg-specifikus konfiguráció
+  - Uni OpenDesk-specifikus konfiguráció
   - Tesztrendszer a pilot üzemeltetéshez
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portál → ILIAS csempe
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Bejelentkezés (weblogin.uni-marburg.de)
+4. 🎓 Bejelentkezés (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion visszatérés
 6. ✅ ILIAS Irányítópult
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Változások áttekintése
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Frissítések alkalmazása
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Visszagördítés ha szükséges
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Helmfile-en keresztüli vezérelt frissítések** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Frissítés: Ingress Migráció
+# Kubernetes-Frissítés: Ingress Migráció
 
 - **Migráció:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (uniapps ág)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Frissítés: Kettős Biztonsági Mentés
+# Kubernetes-Frissítés: Kettős Biztonsági Mentés
 
 - **Célok:** Redundáns Biztonsági Mentés Tárolás 🗄️
 - **Stratégia:** S3-kompatibilis restic backend-del 🔄

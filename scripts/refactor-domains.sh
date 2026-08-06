@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # OpenDesk Edu Domain Refactoring Script
-# Replaces: opendesk.hrz.uni-marburg.de, hrz.uni-marburg.de, uni-marburg.de
+# Replaces: home.opendesk-edu.org, home.opendesk-edu.org, opendesk-edu.org
 # With: home.opendesk-edu.org
 
 set -e
@@ -58,7 +58,7 @@ echo ""
 # Count files with replacements needed
 NEEDS_REPLACE=0
 for file in $FILES; do
-  if grep -q -E "opendesk\.hrz\.uni-marburg\.de|hrz\.uni-marburg\.de|uni-marburg\.de|dc=uni-marburg,dc=de|mx\.uni-marburg\.de|ldap\.uni-marburg\.de|HRZ|Marburg" "$file" 2>/dev/null; then
+  if grep -q -E "opendesk\.hrz\.uni-marburg\.de|hrz\.uni-marburg\.de|uni-marburg\.de|dc=opendesk-edu,dc=org|mx\.uni-marburg\.de|ldap\.uni-marburg\.de|HRZ|Marburg" "$file" 2>/dev/null; then
     NEEDS_REPLACE=$((NEEDS_REPLACE + 1))
   fi
 done
@@ -71,7 +71,7 @@ REPLACEMENTS=(
   "s/opendesk\.hrz\.uni-marburg\.de/home.opendesk-edu.org/g"
   "s/hrz\.uni-marburg\.de/home.opendesk-edu.org/g"
   "s/uni-marburg\.de/opendesk-edu.org/g"
-  "s/dc=uni-marburg,dc=de/dc=opendesk-edu,dc=org/g"
+  "s/dc=opendesk-edu,dc=org/dc=opendesk-edu,dc=org/g"
   "s/mx\.uni-marburg\.de/mx.home.opendesk-edu.org/g"
   "s/ldap\.uni-marburg\.de/ldap.home.opendesk-edu.org/g"
   "s/ums-ldap\.opendesk\.hrz\.uni-marburg\.de/ums-ldap.home.opendesk-edu.org/g"
@@ -85,7 +85,7 @@ for file in $FILES; do
   
   # Check if file needs modification
   needs_change=false
-  for pattern in "opendesk.hrz.uni-marburg.de" "hrz.uni-marburg.de" "uni-marburg.de" "dc=uni-marburg,dc=de"; do
+  for pattern in "home.opendesk-edu.org" "home.opendesk-edu.org" "opendesk-edu.org" "dc=opendesk-edu,dc=org"; do
     if grep -q "$pattern" "$file" 2>/dev/null; then
       needs_change=true
       break

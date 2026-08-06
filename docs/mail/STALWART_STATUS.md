@@ -3,9 +3,9 @@
 **Status:** ✅ Running — All 9 listeners active  
 **Image:** `stalwartlabs/mail-server:v0.11.8`  
 **Config Format:** Legacy compatible (`[server.listener.<name>]` with `bind` directive)  
-**Ingress:** `mail.opendesk.hrz.uni-marburg.de` (HAProxy, TLS)  
+**Ingress:** `mail.home.opendesk-edu.org` (HAProxy, TLS)  
 **Storage:** 20Gi RWO (ceph-rbd-ssd)  
-**Auth:** OIDC via Keycloak (`id.opendesk.hrz.uni-marburg.de/realms/opendesk`)  
+**Auth:** OIDC via Keycloak (`id.home.opendesk-edu.org/realms/opendesk`)  
 
 ---
 
@@ -30,7 +30,7 @@ Stalwart is deployed and functional. All network listeners started successfully:
 | Issue | Impact | Workaround |
 |-------|--------|------------|
 | Webadmin UI bundle cannot download from GitHub | Admin UI unavailable | Use API/admin CLI instead. Blocked by cluster network restrictions. |
-| DNS record `mail.opendesk.hrz.uni-marburg.de` may not resolve externally | External access fails | Add CNAME/A record pointing to ingress IP `192.168.3.201` |
+| DNS record `mail.home.opendesk-edu.org` may not resolve externally | External access fails | Add CNAME/A record pointing to ingress IP `192.168.3.201` |
 
 ## Configuration
 

@@ -1,7 +1,7 @@
 # Root Directory Refactor — Design
 
 **Date:** 2026-08-01
-**Repository:** openDesk HRZ Monorepo (`opendesk_git`)
+**Repository:** openDesk Kubernetes Monorepo (`opendesk_git`)
 **Status:** Approved
 
 ## Problem
@@ -26,7 +26,7 @@ under logical folders. Root keeps only `AGENTS.md`, `README.md`, `passvault.sh`,
 | `scripts/` | 9 scripts: `DEPLOY_NOW.sh`, `FIX_ISSUES.sh`, `MERGE_ALL.sh`, `PUSH_CHANGES.sh`, `deploy-simple.sh`, `deploy-stalwart-final.sh`, `add-keycloak-custom-audience.sh`, `setup-seaweedfs-buckets.sh`, `update-pv-node-affinity.sh` |
 | `deploy-configs/opencloud/` | `opencloud-values-{complete,final,root}.yaml`, `opencloud-values.yaml` |
 | `deploy-configs/stalwart/` | `stalwart-values-{static,v001,v011}.yaml`, `deploy-stalwart-opencloud-only.yaml` |
-| `docs/operations/` | `opendesk-environment-hrz.md` |
+| `docs/operations/` | `opendesk-environment.md` |
 | `docs/legacy/` | `CHANGES.md`, `UPGRADE_SUMMARY.md`, `FEEDBACK-EVAL.md`, `SECRETS.md` |
 | `docs/maintenance/` | `sync-public-repo.md` (from root `docs/`) |
 
@@ -49,7 +49,7 @@ under logical folders. Root keeps only `AGENTS.md`, `README.md`, `passvault.sh`,
 
 ## Reference Updates
 
-- `AGENTS.md:527` — `opendesk-environment-hrz.md` → `opendesk-edu/docs/operations/opendesk-environment-hrz.md`
+- `AGENTS.md:527` — `opendesk-environment.md` → `opendesk-edu/docs/operations/opendesk-environment.md`
 - `README.md:102,133` — same path update
 - `README.md` structure section (lines ~61-63) — reflect that session logs moved
 - ZKI docs: replace `opendesk-edu/security-policies/zki/` → `../../security-policies/zki/`

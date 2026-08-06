@@ -1091,10 +1091,10 @@ All exceptions and waivers MUST be documented in a central register:
 
 | Role | Name | Email | Phone |
 |------|------|-------|-------|
-| **CISO** | [To be assigned] | ciso@opendesk.hrz.uni-marburg.de | [To be assigned] |
-| **Security Team Lead** | [To be assigned] | security@opendesk.hrz.uni-marburg.de | [To be assigned] |
-| **Incident Response** | openDesk Security Team | incident@opendesk.hrz.uni-marburg.de | +49-xxx-xxxx |
-| **Data Protection Officer** | [To be assigned] | dpo@uni-marburg.de | [To be assigned] |
+| **CISO** | [To be assigned] | ciso@home.opendesk-edu.org | [To be assigned] |
+| **Security Team Lead** | [To be assigned] | security@home.opendesk-edu.org | [To be assigned] |
+| **Incident Response** | openDesk Security Team | incident@home.opendesk-edu.org | +49-xxx-xxxx |
+| **Data Protection Officer** | [To be assigned] | dpo@opendesk-edu.org | [To be assigned] |
 
 ---
 

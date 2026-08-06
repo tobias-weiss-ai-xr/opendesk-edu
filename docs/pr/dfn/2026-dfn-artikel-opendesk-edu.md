@@ -39,9 +39,9 @@ Das einheitliche Monitoring in Grafana gibt Administratoren einen Überblick üb
 
 Die automatisierte Backup-Lösung mit k8up und Restic sichert täglich inkrementell Daten auf ein S3-kompatibles Ziel. Auch bei einem Totalausfall eines Knotens lassen sich die Dienste wiederherstellen. Die Konfiguration erfolgt deklarativ über Kubernetes-Ressourcen und ist damit versionierbar und auditierbar.
 
-## Betriebserfahrung aus Marburg
+## Betriebserfahrung aus OpenDesk
 
-Am HRZ der Universität Marburg läuft openDesk Edu aktuell auf einem K3s-Cluster mit neun Knoten. Der produktionsnahe Testbetrieb umfasst 28 Dienste, darunter Lernmanagement-Systeme (Moodle, ILIAS), Kollaborationsdienste (Nextcloud/OpenCloud, Etherpad, Jitsi, Collabora), Groupware (SOGo), Forschungsinfrastruktur (JupyterHub, RStudio, Dask) sowie verschiedene Spezialdienste wie Overleaf, XWiki und Zammad.
+Am Kubernetes der Universität OpenDesk läuft openDesk Edu aktuell auf einem K3s-Cluster mit neun Knoten. Der produktionsnahe Testbetrieb umfasst 28 Dienste, darunter Lernmanagement-Systeme (Moodle, ILIAS), Kollaborationsdienste (Nextcloud/OpenCloud, Etherpad, Jitsi, Collabora), Groupware (SOGo), Forschungsinfrastruktur (JupyterHub, RStudio, Dask) sowie verschiedene Spezialdienste wie Overleaf, XWiki und Zammad.
 
 Eine Beobachtung aus der Testphase: Der Betrieb mit gemeinsamer Authentifizierung und Monitoring reduziert den Aufwand für wiederkehrende Konfigurationsarbeiten – Admins müssen zentrale Einstellungen nur einmal definieren. Gleichzeitig bleibt die Flexibilität erhalten, neue Dienste zu integrieren oder bestehende auszutauschen.
 
@@ -85,7 +85,7 @@ Die Community organisiert sich über quartalsweise Community-of-Practice-Calls; 
 | **Authentifizierung** | Keycloak (SAML 2.0 + OIDC); DFN-AAI-Integration in Vorbereitung |
 | **Monitoring** | Prometheus + Grafana |
 | **Backup** | k8up (inkrementell, Restic, S3-kompatibel) |
-| **Status** | Erprobungsphase am HRZ Marburg |
+| **Status** | Erprobungsphase am Kubernetes OpenDesk |
 | **Dienste** | 28+ integrierte Komponenten ([Übersicht](https://landscape.opendesk-edu.org/)) |
 
 ---
@@ -102,7 +102,7 @@ Die Community organisiert sich über quartalsweise Community-of-Practice-Calls; 
 **Platzierungsvorschläge:**
 - **Aufmacher:** Fokus auf Ökosystem-Ansatz und digitale Souveränität als strategische Entscheidung
 - **Fachbeitrag:** Architektur und Betriebserfahrungen aus der Praxis
-- **Interview-Format:** Gespräch mit Tobias Weiß (HRZ Marburg) zu Umsetzung und Lessons Learned
+- **Interview-Format:** Gespräch mit Tobias Weiß (Kubernetes OpenDesk) zu Umsetzung und Lessons Learned
 
 **Bildmaterial (Druckqualität):**
 - `images/readme-lead-image.svg` – Titelbild (Vektor, skalierbar)

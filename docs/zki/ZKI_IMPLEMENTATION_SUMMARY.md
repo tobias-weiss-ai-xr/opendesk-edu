@@ -726,10 +726,10 @@ kubectl get clusterpodvulnerabilityreports
 | Role | Name | Email | Notes |
 |------|------|-------|-------|
 | **Project Lead** | [To be assigned] | [To be assigned] | Overall responsibility |
-| **Security Team Lead** | [To be assigned] | security@opendesk.hrz.uni-marburg.de | Security implementation |
-| **DevOps Lead** | [To be assigned] | devops@opendesk.hrz.uni-marburg.de | Technical implementation |
-| **CISO** | [To be assigned] | ciso@opendesk.hrz.uni-marburg.de | Security oversight |
-| **Data Protection Officer** | [To be assigned] | dpo@uni-marburg.de | DSGVO compliance |
+| **Security Team Lead** | [To be assigned] | security@home.opendesk-edu.org | Security implementation |
+| **DevOps Lead** | [To be assigned] | devops@home.opendesk-edu.org | Technical implementation |
+| **CISO** | [To be assigned] | ciso@home.opendesk-edu.org | Security oversight |
+| **Data Protection Officer** | [To be assigned] | dpo@opendesk-edu.org | DSGVO compliance |
 
 ---
 

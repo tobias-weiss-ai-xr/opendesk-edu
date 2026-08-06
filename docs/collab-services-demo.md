@@ -1,8 +1,8 @@
 # OpenDesk Edu — Collaboration Services Demo
 
 **Date:** May 28, 2026
-**Environment:** HRZ K3s Cluster (192.168.3.200) — `opendesk-edu` namespace
-**Domain:** `*.opendesk.hrz.uni-marburg.de`
+**Environment:** Kubernetes K3s Cluster (192.168.3.200) — `opendesk-edu` namespace
+**Domain:** `*.home.opendesk-edu.org`
 
 ---
 
@@ -25,14 +25,14 @@
              ▼               ▼               ▼               ▼
         ┌──────────────────────────────────────────────────────────────┐
         │                   Keycloak SSO (Shibboleth)                   │
-        │         id.opendesk.hrz.uni-marburg.de/realms/opendesk       │
+        │         id.home.opendesk-edu.org/realms/opendesk       │
         │         ↓ auto-redirect to SAML (Shibboleth)                 │
         └──────────────────────────────────────────────────────────────┘
                              │
                              ▼
               ┌──────────────────────────────┐
               │  Shibboleth (University SSO) │
-              │  weblogin.uni-marburg.de     │
+              │  weblogin.opendesk-edu.org     │
               └──────────────────────────────┘
 ```
 
@@ -54,18 +54,18 @@ User → Service (e.g. RStudio)
 
 | Service | URL | Auth | Type | Status |
 |---------|-----|------|------|--------|
-| **RStudio** | [r.opendesk.hrz.uni-marburg.de](https://r.opendesk.hrz.uni-marburg.de) | oauth2-proxy → Keycloak → Shibboleth | IDE | ✅ |
-| **ttyd** | [term.opendesk.hrz.uni-marburg.de](https://term.opendesk.hrz.uni-marburg.de) | oauth2-proxy → Keycloak → Shibboleth | Terminal | ✅ |
-| **Slidev** | [slides.opendesk.hrz.uni-marburg.de](https://slides.opendesk.hrz.uni-marburg.de) | None (nginx static) | Presentations | ✅ |
-| **code-server** | [code.opendesk.hrz.uni-marburg.de](https://code.opendesk.hrz.uni-marburg.de) | oauth2-proxy → Keycloak → Shibboleth | VS Code | ✅ |
-| **Collab Dashboard** | [collab.opendesk.hrz.uni-marburg.de](https://collab.opendesk.hrz.uni-marburg.de) | oauth2-proxy → Keycloak → Shibboleth | Dashboard | ✅ |
-| **JupyterHub** | [jupyter.opendesk.hrz.uni-marburg.de](https://jupyter.opendesk.hrz.uni-marburg.de) | Native OIDC → Keycloak → Shibboleth | Notebooks | ✅ |
-| **Open WebUI** | [ai.opendesk.hrz.uni-marburg.de](https://ai.opendesk.hrz.uni-marburg.de) | Native OIDC → Keycloak → Shibboleth | AI Chat | ✅ |
-| **ILIAS** | [lms.opendesk.hrz.uni-marburg.de](https://lms.opendesk.hrz.uni-marburg.de) | SAML → Shibboleth | LMS | ✅ |
-| **Moodle** | [moodle.opendesk.hrz.uni-marburg.de](https://moodle.opendesk.hrz.uni-marburg.de) | SAML → Shibboleth | LMS | ✅ |
-| **OpenCloud** | [opencloud.opendesk.hrz.uni-marburg.de](https://opencloud.opendesk.hrz.uni-marburg.de) | OIDC → Keycloak → Shibboleth | File Sync | ✅ |
-| **Portal** | [portal.opendesk.hrz.uni-marburg.de](https://portal.opendesk.hrz.uni-marburg.de) | OIDC → Keycloak → Shibboleth | Navigation | ✅ |
-| **Nextcloud** | [files.opendesk.hrz.uni-marburg.de](https://files.opendesk.hrz.uni-marburg.de) | OIDC → Keycloak → Shibboleth | Files | ✅ |
+| **RStudio** | [r.home.opendesk-edu.org](https://r.home.opendesk-edu.org) | oauth2-proxy → Keycloak → Shibboleth | IDE | ✅ |
+| **ttyd** | [term.home.opendesk-edu.org](https://term.home.opendesk-edu.org) | oauth2-proxy → Keycloak → Shibboleth | Terminal | ✅ |
+| **Slidev** | [slides.home.opendesk-edu.org](https://slides.home.opendesk-edu.org) | None (nginx static) | Presentations | ✅ |
+| **code-server** | [code.home.opendesk-edu.org](https://code.home.opendesk-edu.org) | oauth2-proxy → Keycloak → Shibboleth | VS Code | ✅ |
+| **Collab Dashboard** | [collab.home.opendesk-edu.org](https://collab.home.opendesk-edu.org) | oauth2-proxy → Keycloak → Shibboleth | Dashboard | ✅ |
+| **JupyterHub** | [jupyter.home.opendesk-edu.org](https://jupyter.home.opendesk-edu.org) | Native OIDC → Keycloak → Shibboleth | Notebooks | ✅ |
+| **Open WebUI** | [ai.home.opendesk-edu.org](https://ai.home.opendesk-edu.org) | Native OIDC → Keycloak → Shibboleth | AI Chat | ✅ |
+| **ILIAS** | [lms.home.opendesk-edu.org](https://lms.home.opendesk-edu.org) | SAML → Shibboleth | LMS | ✅ |
+| **Moodle** | [moodle.home.opendesk-edu.org](https://moodle.home.opendesk-edu.org) | SAML → Shibboleth | LMS | ✅ |
+| **OpenCloud** | [opencloud.home.opendesk-edu.org](https://opencloud.home.opendesk-edu.org) | OIDC → Keycloak → Shibboleth | File Sync | ✅ |
+| **Portal** | [portal.home.opendesk-edu.org](https://portal.home.opendesk-edu.org) | OIDC → Keycloak → Shibboleth | Navigation | ✅ |
+| **Nextcloud** | [files.home.opendesk-edu.org](https://files.home.opendesk-edu.org) | OIDC → Keycloak → Shibboleth | Files | ✅ |
 
 ---
 
@@ -73,11 +73,11 @@ User → Service (e.g. RStudio)
 
 ### 1. User visits a service → Redirected to Keycloak
 
-When a user visits any oauth2-proxy protected service (e.g., RStudio at `r.opendesk.hrz.uni-marburg.de`), the oauth2-proxy detects no session and redirects to Keycloak:
+When a user visits any oauth2-proxy protected service (e.g., RStudio at `r.home.opendesk-edu.org`), the oauth2-proxy detects no session and redirects to Keycloak:
 
 ```
 HTTP/1.1 302 Found
-Location: https://id.opendesk.hrz.uni-marburg.de/...
+Location: https://id.home.opendesk-edu.org/...
 ```
 
 ### 2. Keycloak auto-redirects to Shibboleth (SAML)
@@ -92,7 +92,7 @@ The Keycloak authentication flow has been configured with an Identity Provider R
 
 ![Shibboleth Login](screenshots/shibboleth-login.png)
 
-Users authenticate with their university credentials (HRZ account). After successful login, Shibboleth issues a SAML assertion back to Keycloak, which then issues an OIDC token to oauth2-proxy, and the user gains access to the service.
+Users authenticate with their university credentials (Kubernetes account). After successful login, Shibboleth issues a SAML assertion back to Keycloak, which then issues an OIDC token to oauth2-proxy, and the user gains access to the service.
 
 ### 4. Post-Login: Service Access
 
@@ -107,40 +107,40 @@ After SSO authentication, users can access all authorized services without re-au
 - **Chart:** `helmfile/charts/rstudio/`
 - **Image:** `ghcr.io/tobias-weiss-ai-xr/rstudio-server:latest`
 - **Features:** oauth2-proxy sidecar, OpenCloud rclone sidecar (future), persistent workspace PVC
-- **Access:** `https://r.opendesk.hrz.uni-marburg.de`
+- **Access:** `https://r.home.opendesk-edu.org`
 
 ### code-server — Web VS Code
 
 - **Chart:** `helmfile/charts/code-server/`
 - **Image:** `codercom/code-server:4.96.2`
 - **Features:** oauth2-proxy sidecar (✅ active), OpenCloud rclone sidecar (future), persistent workspace PVC
-- **Access:** `https://code.opendesk.hrz.uni-marburg.de`
+- **Access:** `https://code.home.opendesk-edu.org`
 
 ### ttyd — Web Terminal
 
 - **Chart:** `helmfile/charts/ttyd/`
 - **Image:** `tsl0922/ttyd:1.7.7`
 - **Features:** oauth2-proxy sidecar, OpenCloud rclone sidecar (future), workspace PVC
-- **Access:** `https://term.opendesk.hrz.uni-marburg.de`
+- **Access:** `https://term.home.opendesk-edu.org`
 
 ### Slidev — Presentation Platform
 
 - **Chart:** `helmfile/charts/slidev/`
 - **Image:** `nginx:alpine` (static)
 - **Features:** No auth (public/presenter mode), mounted presentation content
-- **Access:** `https://slides.opendesk.hrz.uni-marburg.de`
+- **Access:** `https://slides.home.opendesk-edu.org`
 
 ### Collab Dashboard — Service Navigation
 
 - **Chart:** `helmfile/charts/collab-dashboard/`
 - **Features:** Portal-style tile dashboard for all collab services, oauth2-proxy sidecar
-- **Access:** `https://collab.opendesk.hrz.uni-marburg.de`
+- **Access:** `https://collab.home.opendesk-edu.org`
 
 ### OpenCloud — File Sync & Storage
 
 ![OpenCloud Login](screenshots/opencloud.png)
 
-- **URL:** `https://opencloud.opendesk.hrz.uni-marburg.de`
+- **URL:** `https://opencloud.home.opendesk-edu.org`
 - **Namespace:** `opendesk` (shared infrastructure)
 - **Storage:** 100Gi RWX PVC (CephFS)
 - **Auth:** OIDC → Keycloak → Shibboleth
@@ -151,7 +151,7 @@ After SSO authentication, users can access all authorized services without re-au
 
 ![ILIAS Login](screenshots/ilias-login.png)
 
-- **URL:** `https://lms.opendesk.hrz.uni-marburg.de`
+- **URL:** `https://lms.home.opendesk-edu.org`
 - **Auth:** SAML (Shibboleth direct)
 - **Status:** Configured with Shibboleth auto-redirect
 
@@ -159,20 +159,20 @@ After SSO authentication, users can access all authorized services without re-au
 
 ![Moodle Dashboard](screenshots/moodle.png)
 
-- **URL:** `https://moodle.opendesk.hrz.uni-marburg.de`
+- **URL:** `https://moodle.home.opendesk-edu.org`
 - **Auth:** SAML (Shibboleth direct)
 - **Status:** Online
 
 ### Open WebUI — AI Chat Interface
 
-- **URL:** `https://ai.opendesk.hrz.uni-marburg.de`
+- **URL:** `https://ai.home.opendesk-edu.org`
 - **Backend:** Ollama (GPU node)
 - **Auth:** Native OIDC → Keycloak → Shibboleth
 - **Status:** Running with OIDC integration
 
 ### JupyterHub — Collaborative Notebooks
 
-- **URL:** `https://jupyter.opendesk.hrz.uni-marburg.de`
+- **URL:** `https://jupyter.home.opendesk-edu.org`
 - **Auth:** Native OIDC → Keycloak → Shibboleth
 - **Status:** Running with OIDC integration
 
@@ -224,7 +224,7 @@ helm upgrade code-server helmfile/charts/code-server -n opendesk-edu \
 ```bash
 $ bash scripts/smoke-test.sh
 === Collab Services Smoke Test ===
-Domain: opendesk.hrz.uni-marburg.de | Ingress: 192.168.3.201
+Domain: home.opendesk-edu.org | Ingress: 192.168.3.201
 
   ✅ RStudio (r) → HTTP 302
   ✅ ttyd (term) → HTTP 302
@@ -255,7 +255,7 @@ All tests use `nc -z` for pure TCP connectivity checks (works through oauth2-pro
 
 ## Keycloak Configuration
 
-- **URL:** `https://id.opendesk.hrz.uni-marburg.de/realms/opendesk`
+- **URL:** `https://id.home.opendesk-edu.org/realms/opendesk`
 - **Admin:** `kcadmin` (via internal secret)
 - **Shibboleth Auto-Redirect:** Configured via Identity Provider Redirector in `2fa-browser` flow with `defaultProvider=saml-umr`
 
@@ -279,13 +279,13 @@ All tests use `nc -z` for pure TCP connectivity checks (works through oauth2-pro
 |-----------|---------|
 | **Cluster** | K3s at 192.168.3.200:6443 |
 | **Ingress** | HAProxy at 192.168.3.201 |
-| **Keycloak** | id.opendesk.hrz.uni-marburg.de |
-| **Shibboleth** | weblogin.uni-marburg.de (SAML IdP) |
+| **Keycloak** | id.home.opendesk-edu.org |
+| **Shibboleth** | weblogin.opendesk-edu.org (SAML IdP) |
 | **LDAP** | openldap.opendesk-edu.svc.cluster.local:389 (dev) |
 | **LDAP (UMS)** | ums-ldap-server.opendesk.svc.cluster.local:389 (prod) |
-| **MinIO** | objectstore.opendesk.hrz.uni-marburg.de |
-| **OpenCloud** | opencloud.opendesk.hrz.uni-marburg.de |
-| **Portal** | portal.opendesk.hrz.uni-marburg.de |
+| **MinIO** | objectstore.home.opendesk-edu.org |
+| **OpenCloud** | opencloud.home.opendesk-edu.org |
+| **Portal** | portal.home.opendesk-edu.org |
 
 ---
 

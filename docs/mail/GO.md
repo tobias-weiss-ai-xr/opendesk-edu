@@ -155,7 +155,7 @@ kubectl get pods -n opendesk -w
 ## ✨ WHAT YOU'RE GETTING
 
 ### Stalwart Mail Server
-- 📧 **Admin Console:** `https://mail.opendesk.hrz.uni-marburg.de`
+- 📧 **Admin Console:** `https://mail.home.opendesk-edu.org`
 - 🔐 **OIDC Authentication** via Keycloak
 - 📚 **LDAP Integration** with UMS
 - 🔒 **TLS Encryption** on all ports
@@ -164,7 +164,7 @@ kubectl get pods -n opendesk -w
 - 🛡️ **Security Hardened** (non-root, read-only FS, etc.)
 
 ### OpenCloud (Nextcloud)
-- 📁 **Web Interface:** `https://files.opendesk.hrz.uni-marburg.de`
+- 📁 **Web Interface:** `https://files.home.opendesk-edu.org`
 - 🔐 **OIDC Authentication** via Keycloak
 - 👥 **Auto-provisioning** of users
 - 💾 **100Gi Storage** on erasure-coded HDD (ceph-cephfs-hdd-ec)
@@ -281,4 +281,4 @@ Everything you need is in this directory:
 
 **Last Updated:** 2026-07-25  
 **Maintainer:** AI Assistant  
-**Repository:** openDesk Edu (HRZ Marburg)
+**Repository:** openDesk Edu (Kubernetes OpenDesk)

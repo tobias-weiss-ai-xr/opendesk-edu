@@ -114,8 +114,8 @@ This document describes the centralized logging infrastructure available in the 
 
 **Configuration:**
 - **Email Provider**: Postfix service (`postfix.opendesk.svc.cluster.local:25`)
-- **From Address**: `alertmanager@opendesk.hrz.uni-marburg.de`
-- **Default Recipient**: `admin@opendesk.hrz.uni-marburg.de`
+- **From Address**: `alertmanager@home.opendesk-edu.org`
+- **Default Recipient**: `admin@home.opendesk-edu.org`
 
 **Alert Routing:**
 - **backup-critical-receiver**: Critical backup failures
@@ -285,7 +285,7 @@ All components are currently operational:
 ## Log Querying
 
 ### Access Methods
-1. **Grafana UI**: Explore logs through web interface on `grafana.opendesk.hrz.uni-marburg.de`
+1. **Grafana UI**: Explore logs through web interface on `grafana.home.opendesk-edu.org`
 2. **Loki API**: Direct HTTP API calls for automation
 3. **Command Line**: `logcli` tool for efficient queries
 4. **Port Forwarding**: Local Loki API access via `kubectl port-forward`

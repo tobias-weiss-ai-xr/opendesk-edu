@@ -30,7 +30,7 @@ EUDI Wallet ──OIDC4VP─┘
 
 | Phase | Scope | Effort | Status |
 |-------|-------|--------|--------|
-| 1 | bundID SAML IdP in Keycloak | Low (config) | ✅ Implemented at HRZ |
+| 1 | bundID SAML IdP in Keycloak | Low (config) | ✅ Implemented at Kubernetes |
 | 2 | EUDI Wallet SIOP/OIDC4VP | Medium (KC config) | ✅ Client scaffolded |
 | 3 | EUDI Issuer Service (VCs) | Large (new service) | ⏳ Helm chart scaffolded |
 

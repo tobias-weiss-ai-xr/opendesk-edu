@@ -4,7 +4,7 @@ This document describes how the dev DNS server works and how to deploy it repeat
 
 ## Problem
 
-Internal services (r, term, slides, collab, code, ai, jupyter) on `*.opendesk.hrz.uni-marburg.de` resolve to an internal IP (192.168.3.201 - HAProxy) that has no public DNS record.
+Internal services (r, term, slides, collab, code, ai, jupyter) on `*.home.opendesk-edu.org` resolve to an internal IP (192.168.3.201 - HAProxy) that has no public DNS record.
 
 Team machines need to resolve these hostnames during development.
 
@@ -42,7 +42,7 @@ bash scripts/deploy-dev-dns.sh
 
 ```bash
 kubectl run dns-test --image=busybox:1.36 --rm -it --restart=Never -- sh -c \
-  "nslookup r.opendesk.hrz.uni-marburg.de 172.17.128.10"
+  "nslookup r.home.opendesk-edu.org 172.17.128.10"
 # Expected: Address 192.168.3.201
 ```
 
@@ -94,17 +94,17 @@ bash scripts/setup-dev-dns-local.sh status
 
 ```
 DNS query → dnsmasq (127.0.0.1:53)
-  ├─ *.opendesk.hrz.uni-marburg.de → socat (UDP→TCP) → SSH tunnel (TCP)
+  ├─ *.home.opendesk-edu.org → socat (UDP→TCP) → SSH tunnel (TCP)
   │    → socat (TCP→UDP) on node → NodePort → kube-proxy → CoreDNS
   │    → file plugin → dev zone file → returns 192.168.3.201
-  └─ everything else → HRZ DNS (137.248.1.8, 137.248.1.5)
+  └─ everything else → Kubernetes DNS (137.248.1.8, 137.248.1.5)
 ```
 
 Components:
 - **SSH tunnel**: Forwards local port 30534 to cluster node's localhost (TCP only)
 - **socat** (remote): Converts TCP→UDP on the node, reaches NodePort at `127.0.0.1:30535`
 - **socat** (local): Converts UDP→TCP for DNS queries to go through SSH
-- **dnsmasq**: Local DNS forwarder that routes dev domain queries through the tunnel and everything else directly to HRZ DNS
+- **dnsmasq**: Local DNS forwarder that routes dev domain queries through the tunnel and everything else directly to Kubernetes DNS
 - **resolvconf**: `/etc/resolv.conf` configured with `127.0.0.1` as primary nameserver
 
 ### Requirements
@@ -141,13 +141,13 @@ List of hostname groups (all resolve to `coredns.targetIP`):
 ```yaml
 coredns:
   targetIP: 192.168.3.201  # IP to resolve hostnames to
-  zoneName: "opendesk.hrz.uni-marburg.de"  # Zone origin
+  zoneName: "home.opendesk-edu.org"  # Zone origin
   serial: "2026052901"  # SOA serial (increment on change)
   ttl: 300  # Record TTL in seconds
   hostEntries:
     - hostnames:
-        - r.opendesk.hrz.uni-marburg.de
-        - term.opendesk.hrz.uni-marburg.de
+        - r.home.opendesk-edu.org
+        - term.home.opendesk-edu.org
 ```
 
 #### `service.nodePort`

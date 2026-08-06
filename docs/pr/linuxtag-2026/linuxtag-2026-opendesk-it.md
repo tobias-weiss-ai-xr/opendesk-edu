@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Infrastruttura cloud sovrana   | SBOM per tutti i componenti
 
 ---
 
-# Helmfile & Ambiente HRZ
+# Helmfile & Ambiente Kubernetes
 
 ```bash
 # Distribuzione con Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orchestrazione Helmfile** ⚓
   - Configurazione dichiarativa in `helmfile_generic.yaml.gotmpl`
-  - Override specifici per ambiente in `environments/hrz/`
+  - Override specifici per ambiente in `environments/production/`
   - Backup automatico delle dipendenze
-- **Ambiente HRZ creato** 🖥️
+- **Ambiente Kubernetes creato** 🖥️
   - Copia di `staging` con adattamenti
-  - Configurazione specifica per l'Università di Marburg
+  - Configurazione specifica per l'Università di OpenDesk
   - Sistema di test per il funzionamento pilota
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portale → Riquadro ILIAS
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 Assertion SAML di ritorno
 6. ✅ Dashboard ILIAS
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Verificare le modifiche
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Applicare gli aggiornamenti
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Ripristinare se necessario
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Aggiornamenti controllati tramite Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Migrazione Ingress
+# Kubernetes-Upgrade: Migrazione Ingress
 
 - **Migrazione:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (ramo uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Backup duale
+# Kubernetes-Upgrade: Backup duale
 
 - **Obiettivi:** Archiviazione backup ridondante 🗄️
 - **Strategia:** Compatibile S3 con backend restic 🔄

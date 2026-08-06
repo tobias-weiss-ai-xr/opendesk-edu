@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 
 **openDesk Edu** is an open ecosystem built on [openDesk Community Edition (CE)](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk), providing educational institutions with full digital sovereignty through choice and interchangeability.
 
-It deploys on the CE submodule (`helmfile/ce/`, v1.17.0) and adds 30+ edu-specific apps, all running on the **HRZ K3s cluster** (`*.opendesk.hrz.uni-marburg.de`).
+It deploys on the CE submodule (`helmfile/ce/`, v1.17.0) and adds 30+ edu-specific apps, all running on the **Kubernetes K3s cluster** (`*.home.opendesk-edu.org`).
 
 ---
 

@@ -1,13 +1,13 @@
 # Syncing Changes to the Public openDesk Edu Repository
 
-> How to sync changes from the private `opendesk` repo (GitLab HRZ) to the
+> How to sync changes from the private `opendesk` repo (GitLab Kubernetes) to the
 > public `opendesk-edu` repo (Codeberg).
 
 Last updated: Sprint 13 (June 2026)
 
 ## Overview
 
-The private `opendesk` repository contains all HRZ-internal configuration,
+The private `opendesk` repository contains all Kubernetes-internal configuration,
 security documentation, and production deployment specifics. The public
 `opendesk-edu` repository on Codeberg contains only the education-focused
 subset suitable for open-source distribution.
@@ -20,7 +20,7 @@ subset suitable for open-source distribution.
 | `opendesk/helmfile/apps/ilias/` | `docs/pod-security-admission-setup.md` |
 | `opendesk/helmfile/apps/sogo/` | `docs/secrets-encryption-setup.md` |
 | `opendesk/helmfile/apps/opencloud/` | `opendesk_sec/` (full security variant) |
-| `opendesk/helmfile/apps/etherpad/` | Internal HRZ credentials/secrets |
+| `opendesk/helmfile/apps/etherpad/` | Internal Kubernetes credentials/secrets |
 | `opendesk/helmfile/apps/jupyterhub/` | Internal network topology docs |
 | `opendesk/helmfile/apps/moodle/` | |
 | `tests/` (health checks, etc.) | |
@@ -33,7 +33,7 @@ subset suitable for open-source distribution.
 ```bash
 # Clone fresh copy to avoid polluting your working tree
 cd /tmp
-git clone git@gitlab.hrz.uni-marburg.de:hrz/kubernetes/opendesk/opendesk.git opendesk-sync
+git clone git@gitlab.home.opendesk-edu.org:opendesk/opendesk.git opendesk-sync
 cd opendesk-sync
 ```
 

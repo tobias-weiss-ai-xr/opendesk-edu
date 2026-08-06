@@ -258,13 +258,13 @@ check_keycloak_clients() {
     
     echo_info "Required OIDC Clients:"
     echo "  1. Client ID: stalwart"
-    echo "     Redirect URIs: https://mail.opendesk.hrz.uni-marburg.de/*"
-    echo "     Web Origins: https://mail.opendesk.hrz.uni-marburg.de"
+    echo "     Redirect URIs: https://mail.home.opendesk-edu.org/*"
+    echo "     Web Origins: https://mail.home.opendesk-edu.org"
     echo ""
     echo "  2. Client ID: opendesk-opencloud"
-    echo "     Redirect URIs: https://files.opendesk.hrz.uni-marburg.de/*"
-    echo "     Web Origins: https://files.opendesk.hrz.uni-marburg.de"
-    echo "     Backchannel Logout URL: https://files.opendesk.hrz.uni-marburg.de/oidc/logout"
+    echo "     Redirect URIs: https://files.home.opendesk-edu.org/*"
+    echo "     Web Origins: https://files.home.opendesk-edu.org"
+    echo "     Backchannel Logout URL: https://files.home.opendesk-edu.org/oidc/logout"
     echo ""
     
     echo_info "To register clients manually:"
@@ -279,8 +279,8 @@ check_keycloak_clients() {
     echo_code "kcadm.sh create clients/opendesk/stalwart \\"
     echo_code "  -s clientId=stalwart \\"
     echo_code "  -s enabled=true \\"
-    echo_code "  -s 'redirectUris=[\"https://mail.opendesk.hrz.uni-marburg.de/*\"]' \\"
-    echo_code "  -s 'webOrigins=[\"https://mail.opendesk.hrz.uni-marburg.de\"]'"
+    echo_code "  -s 'redirectUris=[\"https://mail.home.opendesk-edu.org/*\"]' \\"
+    echo_code "  -s 'webOrigins=[\"https://mail.home.opendesk-edu.org\"]'"
     echo ""
     
     return 0
@@ -295,8 +295,8 @@ check_dns() {
     
     echo_info "Required DNS Records:"
     echo ""
-    echo "  mail.opendesk.hrz.uni-marburg.de.    IN  A     <INGRESS_IP>"
-    echo "  files.opendesk.hrz.uni-marburg.de.   IN  A     <INGRESS_IP>"
+    echo "  mail.home.opendesk-edu.org.    IN  A     <INGRESS_IP>"
+    echo "  files.home.opendesk-edu.org.   IN  A     <INGRESS_IP>"
     echo ""
     echo_info "To find your Ingress IP:"
     echo_command "kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
@@ -326,8 +326,8 @@ check_dns() {
         echo_info "DNS should point to: $ingress_ip"
         echo ""
         echo_info "Testing DNS resolution (may fail if DNS not configured yet):"
-        dig +short mail.opendesk.hrz.uni-marburg.de 2>/dev/null || echo "  DNS lookup failed - not configured yet"
-        dig +short files.opendesk.hrz.uni-marburg.de 2>/dev/null || echo "  DNS lookup failed - not configured yet"
+        dig +short mail.home.opendesk-edu.org 2>/dev/null || echo "  DNS lookup failed - not configured yet"
+        dig +short files.home.opendesk-edu.org 2>/dev/null || echo "  DNS lookup failed - not configured yet"
         echo ""
     fi
     
@@ -437,8 +437,8 @@ verify_deployment() {
     
     echo_step "4" "Health check URLs..."
     echo_info "Once pods are running, check health at:"
-    echo "  Stalwart: https://mail.opendesk.hrz.uni-marburg.de/api/health"
-    echo "  OpenCloud: https://files.opendesk.hrz.uni-marburg.de/status.php"
+    echo "  Stalwart: https://mail.home.opendesk-edu.org/api/health"
+    echo "  OpenCloud: https://files.home.opendesk-edu.org/status.php"
     echo ""
     
     echo_step "5" "Logs..."

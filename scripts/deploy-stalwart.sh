@@ -57,7 +57,7 @@ ACTION="sync"
 [[ "$DIFF" == true ]] && ACTION="diff"
 
 # Determine domain from ce-overrides
-DOMAIN=$(grep 'domain:' "$HELMFILE_DIR/environments/$ENVIRONMENT/ce-overrides.yaml" 2>/dev/null | head -1 | awk '{print $2}' || echo "opendesk.hrz.uni-marburg.de")
+DOMAIN=$(grep 'domain:' "$HELMFILE_DIR/environments/$ENVIRONMENT/ce-overrides.yaml" 2>/dev/null | head -1 | awk '{print $2}' || echo "home.opendesk-edu.org")
 
 echo "========================================="
 echo " Stalwart Mail Server — Deploy ($ENVIRONMENT)"

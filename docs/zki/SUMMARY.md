@@ -526,10 +526,10 @@ opendesk_git/
 
 | Role | Email | Slack | Emergency |
 |------|-------|-------|-----------|
-| **Security Team** | security@opendesk.hrz.uni-marburg.de | #security | No |
-| **Incident Response** | incident@opendesk.hrz.uni-marburg.de | #incident-response | Yes |
-| **DevOps Team** | devops@opendesk.hrz.uni-marburg.de | #devops | No |
-| **CISO** | ciso@opendesk.hrz.uni-marburg.de | @ciso | Yes |
+| **Security Team** | security@home.opendesk-edu.org | #security | No |
+| **Incident Response** | incident@home.opendesk-edu.org | #incident-response | Yes |
+| **DevOps Team** | devops@home.opendesk-edu.org | #devops | No |
+| **CISO** | ciso@home.opendesk-edu.org | @ciso | Yes |
 
 ---
 

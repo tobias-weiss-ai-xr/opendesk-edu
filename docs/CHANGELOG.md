@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed duplicate GPG keys
 - Deleted stale CE CI artifacts (`.gitlab/`, `.ralph/`)
 - Removed dead keycloak template files and portal entries for CE services
-- Ported deploy/hrz etherpad refactoring (removed Bitnami PostgreSQL subchart)
+- Ported deploy/production etherpad refactoring (removed Bitnami PostgreSQL subchart)
 - Deleted 8 stale local branches
 - Removed 3,716 tracked `node_modules/` files (85MB) from collab-dashboard
 - Deleted 19 stale root-level CE-era ALL_CAPS markdown files

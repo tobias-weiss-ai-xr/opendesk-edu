@@ -485,8 +485,8 @@ kubectl get policyreports -o json | jq '.items[].results[] | select(.resource.ki
 1. **Check this guide** ✅
 2. **Check Kyverno documentation**: https://kyverno.io/docs/
 3. **Ask in Slack**: #security-help
-4. **Contact Security Team**: security@opendesk.hrz.uni-marburg.de
-5. **Escalate to CISO**: ciso@opendesk.hrz.uni-marburg.de
+4. **Contact Security Team**: security@home.opendesk-edu.org
+5. **Escalate to CISO**: ciso@home.opendesk-edu.org
 
 ---
 
@@ -494,10 +494,10 @@ kubectl get policyreports -o json | jq '.items[].results[] | select(.resource.ki
 
 | Role | Name | Email | Slack | Emergency |
 |------|------|-------|-------|-----------|
-| **Security Team** | openDesk Security | security@opendesk.hrz.uni-marburg.de | #security | No |
-| **Incident Response** | IRT | incident@opendesk.hrz.uni-marburg.de | #incident-response | Yes |
-| **DevOps Team** | DevOps | devops@opendesk.hrz.uni-marburg.de | #devops | No |
-| **CISO** | [Name] | ciso@opendesk.hrz.uni-marburg.de | @ciso | Yes |
+| **Security Team** | openDesk Security | security@home.opendesk-edu.org | #security | No |
+| **Incident Response** | IRT | incident@home.opendesk-edu.org | #incident-response | Yes |
+| **DevOps Team** | DevOps | devops@home.opendesk-edu.org | #devops | No |
+| **CISO** | [Name] | ciso@home.opendesk-edu.org | @ciso | Yes |
 
 ---
 

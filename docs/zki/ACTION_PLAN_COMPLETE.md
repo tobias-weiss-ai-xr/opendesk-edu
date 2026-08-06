@@ -624,7 +624,7 @@ done
 
 2. Notify stakeholders:
    - Slack: @security-team in #security channel
-   - Email: security@opendesk.hrz.uni-marburg.de
+   - Email: security@home.opendesk-edu.org
    - Phone: Call Security On-Call if after hours
 
 3. Open incident ticket:
@@ -677,10 +677,10 @@ done
 
 | Role | Name | Email | Phone | Slack | Escalation |
 |------|------|-------|-------|-------|------------|
-| Primary | Security On-Call | security-oncall@opendesk.hrz.uni-marburg.de | +49 6421 XXXXXXX | @security-oncall | None |
-| Secondary | DevOps On-Call | devops-oncall@opendesk.hrz.uni-marburg.de | +49 6421 XXXXXXX | @devops-oncall | Primary |
-| Tertiary | CISO | ciso@opendesk.hrz.uni-marburg.de | +49 6421 XXXXXXX | @ciso | Secondary |
-| DPO | [Name] | datenschutz@opendesk.hrz.uni-marburg.de | +49 6421 XXXXXXX | @dpo | CISO |
+| Primary | Security On-Call | security-oncall@home.opendesk-edu.org | +49 6421 XXXXXXX | @security-oncall | None |
+| Secondary | DevOps On-Call | devops-oncall@home.opendesk-edu.org | +49 6421 XXXXXXX | @devops-oncall | Primary |
+| Tertiary | CISO | ciso@home.opendesk-edu.org | +49 6421 XXXXXXX | @ciso | Secondary |
+| DPO | [Name] | datenschutz@home.opendesk-edu.org | +49 6421 XXXXXXX | @dpo | CISO |
 
 **Emergency Log Location**:
 ```

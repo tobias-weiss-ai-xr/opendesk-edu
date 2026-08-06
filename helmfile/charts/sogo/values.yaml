@@ -140,7 +140,7 @@ service:
 
   # Hook job image for OIDC sync.
   # Uses our own minimal kubectl image for air-gapped clusters.
-  # Registry: registry.hrz.uni-marburg.de/opendesk/kubectl
+  # Registry: registry.home.opendesk-edu.org/opendesk/kubectl
   # Source: https://github.com/tobias-weiss-ai-xr/opendesk-kubectl
   hookImage:
     repository: registry.gitlab.com/tbsweiss/opendesk-kubectl

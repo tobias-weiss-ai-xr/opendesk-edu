@@ -123,7 +123,7 @@ The **"IT-Sicherheit und Datenschutz"** (IT Security and Data Protection) workin
 - ✅ **Resource monitoring** (CPU, memory, disk)
 
 #### Physical Security (Infrastructure)
-- ✅ **K3s cluster** on physical servers (HRZ Marburg)
+- ✅ **K3s cluster** on physical servers (Kubernetes OpenDesk)
 - ✅ **Access controls** at data center level
 - ✅ **Environmental controls** (cooling, power)
 - ✅ **Redundant power** (UPS, generators)

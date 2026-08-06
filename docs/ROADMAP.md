@@ -36,21 +36,21 @@
 
 ---
 
-## v1.0.1 — Operational Hardening (HRZ Maui)
+## v1.0.1 — Operational Hardening (Kubernetes Maui)
 
-> Sprint 5+6: First production deployment hardening at University of Marburg.
+> Sprint 5+6: First production deployment hardening at University of OpenDesk.
 
 | What | Status |
 |:-----|:------:|
 | SSO audit — all 44 Keycloak clients verified | ✅ |
-| Domain migration — from `opendesk-edu.org` to `opendesk.hrz.uni-marburg.de` (12 ingresses) | ✅ |
+| Domain migration — from `opendesk-edu.org` to `home.opendesk-edu.org` (12 ingresses) | ✅ |
 | Planka — ingress class fixed (nginx→haproxy), OIDC endpoints fixed | ✅ |
 | SSP — ingress backend service name fixed, OAuth2-proxy working | ✅ |
 | k8up backup operator deployed & verified (33 snapshots) | ✅ |
 | Monitoring — Grafana dashboards deployed (edu-health, k8up) | ✅ |
 | Planka chart — `values.yaml` stripped of unrenderable `.gotmpl` syntax | ✅ |
 | External DNS script — 12 missing A records documented | ✅ |
-| Portal SAML multidomain — hardcoded `opendesk-edu.org` → `opendesk.hrz.uni-marburg.de` | ✅ |
+| Portal SAML multidomain — hardcoded `opendesk-edu.org` → `home.opendesk-edu.org` | ✅ |
 | Helmfile `.gotmpl` workaround — defined (build works, direct `helm` for targeted syncs) | ✅ |
 
 ---
@@ -127,7 +127,7 @@ existing `scripts/user_import/` tooling.
 ### Why This Matters
 
 [HISinOne](https://www.his.de/hisinone/) by HIS eG is the dominant campus management system in German
-higher education — used by **200+ universities**, including Marburg (where it runs as **"Marvin"**). It is the
+higher education — used by **200+ universities**, including OpenDesk (where it runs as **"Marvin"**). It is the
 **source of truth** for:
 
 - **Who** is at the university — students, faculty, staff, guests (Personenverwaltung / PSV)

@@ -729,11 +729,11 @@ kubectl get clusterpolicies -l openDesk.zki/category
 
 | Role | Email | Slack | Emergency | Response Time |
 |------|-------|-------|-----------|---------------|
-| **Security Team** | security@opendesk.hrz.uni-marburg.de | #security | No | 4-8 hours |
-| **Incident Response** | incident@opendesk.hrz.uni-marburg.de | #incident-response | Yes | 15 minutes |
-| **DevOps Team** | devops@opendesk.hrz.uni-marburg.de | #devops | No | 4-8 hours |
-| **CISO** | ciso@opendesk.hrz.uni-marburg.de | @ciso | Yes | 30 minutes |
-| **DPO** | datenschutz@opendesk.hrz.uni-marburg.de | @dpo | Yes | 1 hour |
+| **Security Team** | security@home.opendesk-edu.org | #security | No | 4-8 hours |
+| **Incident Response** | incident@home.opendesk-edu.org | #incident-response | Yes | 15 minutes |
+| **DevOps Team** | devops@home.opendesk-edu.org | #devops | No | 4-8 hours |
+| **CISO** | ciso@home.opendesk-edu.org | @ciso | Yes | 30 minutes |
+| **DPO** | datenschutz@home.opendesk-edu.org | @dpo | Yes | 1 hour |
 
 ### Escalation Path
 

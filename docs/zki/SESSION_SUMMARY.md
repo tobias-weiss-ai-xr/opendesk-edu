@@ -328,10 +328,10 @@ Total Size Added: ~312 KB
 ### Contacts
 | Role | Contact | Channel | Response Time |
 |------|---------|---------|---------------|
-| Security Team | security@opendesk.hrz... | #security | 4-8 hours |
-| **Incidents** | incident@opendesk.hrz... | #incident-response | **15 min** |
-| DevOps Team | devops@opendesk.hrz... | #devops | 4-8 hours |
-| CISO | ciso@opendesk.hrz... | @ciso | 30 min |
+| Security Team | security@home.opendesk-edu.org... | #security | 4-8 hours |
+| **Incidents** | incident@home.opendesk-edu.org... | #incident-response | **15 min** |
+| DevOps Team | devops@home.opendesk-edu.org... | #devops | 4-8 hours |
+| CISO | ciso@home.opendesk-edu.org... | @ciso | 30 min |
 | DPO | datenschutz@opendesk... | @dpo | 1 hour |
 
 ---

@@ -79,11 +79,11 @@ lifecycle:
 ldap:
   enabled: false
   url: "ldap://openldap:389"
-  baseDn: "dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
-  bindDn: "cn=admin,dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
+  baseDn: "dc=opendesk-edu,dc=org"
+  bindDn: "cn=admin,dc=opendesk-edu,dc=org"
   bindPassword: ""
-  userBaseDn: "ou=People,dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
-  groupBaseDn: "ou=Groups,dc=opendesk,dc=hrz,dc=uni-marburg,dc=de"
+  userBaseDn: "ou=People,dc=opendesk-edu,dc=org"
+  groupBaseDn: "ou=Groups,dc=opendesk-edu,dc=org"
   userFilter: "(objectClass=inetOrgPerson)"
   groupFilter: "(objectClass=groupOfUniqueNames)"
 

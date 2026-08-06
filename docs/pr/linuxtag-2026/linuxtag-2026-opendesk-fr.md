@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Infrastructure cloud souveraine   | SBOM pour tous les composants
 
 ---
 
-# Helmfile & Environnement HRZ
+# Helmfile & Environnement Kubernetes
 
 ```bash
 # Déploiement avec Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orchestration Helmfile** ⚓
   - Configuration déclarative dans `helmfile_generic.yaml.gotmpl`
-  - Surcharges spécifiques à l'environnement dans `environments/hrz/`
+  - Surcharges spécifiques à l'environnement dans `environments/production/`
   - Sauvegarde automatique des dépendances
-- **Environnement HRZ créé** 🖥️
+- **Environnement Kubernetes créé** 🖥️
   - Copie de `staging` avec adaptations
-  - Configuration spécifique à l'Université de Marburg
+  - Configuration spécifique à l'Université de OpenDesk
   - Système de test pour le pilotage
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portail → Tuile ILIAS
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Connexion (weblogin.uni-marburg.de)
+4. 🎓 Connexion (weblogin.opendesk-edu.org)
 5. 📨 Assertion SAML retour
 6. ✅ Tableau de bord ILIAS
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Vérifier les modifications
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Appliquer les mises à jour
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Retour en arrière si nécessaire
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Mises à jour contrôlées via Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade : Migration Ingress
+# Kubernetes-Upgrade : Migration Ingress
 
 - **Migration :** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (branche uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade : Sauvegarde duale
+# Kubernetes-Upgrade : Sauvegarde duale
 
 - **Objectifs :** Stockage de sauvegarde redondant 🗄️
 - **Stratégie :** Compatible S3 avec backend restic 🔄

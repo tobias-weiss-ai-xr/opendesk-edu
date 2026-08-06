@@ -1,6 +1,6 @@
-# LinuxTag 2026 — openDesk an der Uni Marburg
+# LinuxTag 2026 — openDesk an der Uni OpenDesk
 
-Präsentation über die openDesk-Erfahrung an der Philipps-Universität Marburg.
+Präsentation über die openDesk-Erfahrung an der Philipps-Universität OpenDesk.
 
 **Datum:** 28.03.2026
 **Konferenz:** LinuxTag 2026

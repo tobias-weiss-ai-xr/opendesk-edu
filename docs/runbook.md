@@ -3,7 +3,7 @@
 ## Architecture
 
 ```
-Services running on K3s cluster (opendesk.hrz.uni-marburg.de):
+Services running on K3s cluster (home.opendesk-edu.org):
 
 Keycloak SSO ──OIDC──→ OpenCloud, Stalwart, SOGo, Portal
                            │
@@ -20,12 +20,12 @@ Postfix ── disabled (replicas=0)
 
 | Service | URL | Status |
 |---------|-----|--------|
-| Portal | https://portal.opendesk.hrz.uni-marburg.de | ✅ |
-| OpenCloud | https://files.opendesk.hrz.uni-marburg.de | ✅ |
-| SOGo | https://contacts.opendesk.hrz.uni-marburg.de | ✅ |
-| Stalwart | mail.opendesk.hrz.uni-marburg.de | ✅ |
-| Element | https://element.opendesk.hrz.uni-marburg.de | ✅ |
-| XWiki | https://xwiki.opendesk.hrz.uni-marburg.de | ✅ |
+| Portal | https://portal.home.opendesk-edu.org | ✅ |
+| OpenCloud | https://files.home.opendesk-edu.org | ✅ |
+| SOGo | https://contacts.home.opendesk-edu.org | ✅ |
+| Stalwart | mail.home.opendesk-edu.org | ✅ |
+| Element | https://element.home.opendesk-edu.org | ✅ |
+| XWiki | https://xwiki.home.opendesk-edu.org | ✅ |
 
 ## Credentials
 
@@ -84,7 +84,7 @@ kubectl exec stalwart-stalwart-0 -n opendesk -- /tmp/stalwart-cli --url http://l
 - **backup-live**: RWX PVCs daily 00:42
 - **backup-stalwart**: RWO PVC via label selector daily 01:00
 - All 29 RWO PVCs annotated `k8up.io/exclude: true`
-- S3 target: `s3://s3.hrz.uni-marburg.de/backups`
+- S3 target: `s3://s3.home.opendesk-edu.org/backups`
 
 ## Deployment Methods
 
@@ -96,7 +96,7 @@ helmfile -e edu -f helmfile/edu-helmfile.yaml.gotmpl sync
 
 ### ArgoCD (GitOps)
 - CE apps: `opendesk-apps` @ master branch
-- Edu apps: `opendesk-edu-apps` @ deploy/edu-hrz branch
+- Edu apps: `opendesk-edu-apps` @ deploy/edu-production branch
 - **Note**: CMP sidecar env var limitation means per-app env don't reach helmfile. CMP-based edu apps show `Unknown` in ArgoCD but are deployed via helmfile directly.
 
 ## SMTP Relay
@@ -118,7 +118,7 @@ Services using Stalwart:
 Known issue: per-app `plugin.env` vars don't reach the CMP sidecar in ArgoCD v3.1.8.
 Workaround: use `helm.values` (Helm-based child apps) instead of CMP.
 
-### HRZ DNS CNAME chain failures
+### Kubernetes DNS CNAME chain failures
 CoreDNS returns SERVFAIL on external CNAME chains.
 Fix: add `hostAliases` in pod specs pointing to ingress IP (192.168.3.201).
 
@@ -131,7 +131,7 @@ Fix: delete conflicting clients via REST API.
 
 | Test | Reason | Status |
 |------|--------|--------|
-| OpenCloud ingress unreachable | HRZ DNS CNAME issue | ⚠️ Known |
+| OpenCloud ingress unreachable | Kubernetes DNS CNAME issue | ⚠️ Known |
 | OpenCloud not installed | Test check method | ⚠️ Known (runs) |
 | Stalwart OIDC issuer | v0.16 uses internal OIDC provider | ⚠️ Known |
 | Stalwart OIDC secret mismatch | v0.16 OIDC config differs from v0.15 | ⚠️ Known |

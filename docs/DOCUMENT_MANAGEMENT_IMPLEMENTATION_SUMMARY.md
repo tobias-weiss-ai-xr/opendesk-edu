@@ -569,7 +569,7 @@ Paperless-ngx wurde am 31.07.2026 live im Namespace `opendesk` deployed:
 | | |
 |---|---|
 | **Release** | `paperless-ngx` (Rev. 8, Helm) |
-| **URL** | `https://dms.opendesk.hrz.uni-marburg.de` (Ingress haproxy) |
+| **URL** | `https://dms.home.opendesk-edu.org` (Ingress haproxy) |
 | **Image** | `ghcr.io/paperless-ngx/paperless-ngx:2.12.0` |
 | **DB** | Gemeinsame `postgresql-0` (DB `paperless`, User `paperless`) |
 | **Cache** | Gemeinsame `redis-master-0` (DB 0 Broker, DB 1 Cache) |
@@ -583,13 +583,13 @@ Paperless-ngx wurde am 31.07.2026 live im Namespace `opendesk` deployed:
 
 ### DNS (cluster-intern via CoreDNS)
 
-Der externe HRZ-DNS-Record `dms.opendesk.hrz.uni-marburg.de` **fehlt noch** (muss extern
+Der externe Kubernetes-DNS-Record `dms.home.opendesk-edu.org` **fehlt noch** (muss extern
 angelegt werden: `A 192.168.3.201`). Für den cluster-internen Zugriff wurde ein CoreDNS-`hosts`-
 Eintrag ergänzt:
 
 ```text
 # kube-system ConfigMap coredns → data.NodeHosts (hosts-Plugin, reload 15s)
-172.17.154.139 dms.opendesk.hrz.uni-marburg.de
+172.17.154.139 dms.home.opendesk-edu.org
 ```
 
 `172.17.154.139` = ClusterIP des `haproxy-ingress` LoadBalancers (extern 192.168.3.201).
@@ -602,7 +602,7 @@ Paperless-ngx 2.12.0 **ignoriert** (verifiziert: `settings.AUTHENTICATION_BACKEN
 OIDC-Backend). Login nur über lokale Benutzer. Der Keycloak-Client `paperless-ngx` wurde daher
 **nicht** registriert. Bei einem Upgrade auf eine OIDC-fähige Paperless-Version:
 1. Client `paperless-ngx` im Keycloak-Realm `opendesk` anlegen
-   (Redirect `https://dms.opendesk.hrz.uni-marburg.de/accounts/oidc/callback/`)
+   (Redirect `https://dms.home.opendesk-edu.org/accounts/oidc/callback/`)
 2. Secret in `helmfile/environments/edu/secrets.yaml` hinterlegen
 3. Secret `paperless-ngx-oidc-secrets` (Keys `oidc-client-secret`, `secret-key`) aktualisieren
 
@@ -640,7 +640,7 @@ This implementation adds two powerful Document Management Systems to openDesk Ed
 - **Mayan EDMS** for formal document management with workflows and compliance
 - **Paperless-ngx** for automated document archiving and OCR
 
-**Paperless-ngx ist seit 2026-07-31 live deployed** (`dms.opendesk.hrz.uni-marburg.de`).
+**Paperless-ngx ist seit 2026-07-31 live deployed** (`dms.home.opendesk-edu.org`).
 Mayan EDMS ist chart-fertig, aber noch nicht deployed. Wichtige Einschränkungen:
 OIDC-Login bei Paperless 2.12 nicht verfügbar (lokaler Login), celery-beat crasht auf CephFS
 (nur Hintergrund-Tasks betroffen), externer DNS-Record fehlt noch (cluster-intern gelöst via CoreDNS).

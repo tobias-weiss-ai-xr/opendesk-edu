@@ -16,7 +16,7 @@ For each edu service, document and implement SSO:
 
 | Service | SSO Protocol | Keycloak Client | Status |
 |---------|-------------|----------------|--------|
-| Keycloak (existing) | — | `id.opendesk.hrz.uni-marburg.de` | ✅ |
+| Keycloak (existing) | — | `id.home.opendesk-edu.org` | ✅ |
 | OpenProject | OIDC | `opendesk-openproject` | Client exists, needs config |
 | OpenWebUI | OIDC | `opendesk-open-webui` / `opendesk-openwebui` | Client exists |
 | Code Server | OIDC | `opendesk-codeserver` | Client exists |

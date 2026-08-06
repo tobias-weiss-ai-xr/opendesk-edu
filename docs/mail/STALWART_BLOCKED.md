@@ -61,7 +61,7 @@ ERROR: Store not configured (store.not-configured)
 - **Helm Chart:** Installed correctly
 - **PVC:** Created (20Gi, ceph-rbd-ssd, Bound)
 - **Service:** Created (ClusterIP, all ports exposed)
-- **Ingress:** Created (mail.opendesk.hrz.uni-marburg.de)
+- **Ingress:** Created (mail.home.opendesk-edu.org)
 - **ConfigMap:** Applied (v0.11 format)
 - **StatefulSet:** Created (1 replica)
 

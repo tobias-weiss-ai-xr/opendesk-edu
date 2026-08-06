@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 # ILIAS Shibboleth SAML Attribute Mapping Fix
 
 > **Date:** 2026-05-27
-> **Applies to:** openDesk HRZ (`opendesk/`) and openDesk Edu (`opendesk-edu/`)
+> **Applies to:** openDesk Kubernetes (`opendesk/`) and openDesk Edu (`opendesk-edu/`)
 
 ## Problem
 
@@ -98,7 +98,7 @@ Keycloak SAML Assertion
 
 ## Files Changed
 
-### opendesk-edu/ (and opendesk/ HRZ)
+### opendesk-edu/ (and opendesk/ Kubernetes)
 
 | File | Change |
 |------|--------|

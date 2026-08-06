@@ -2,7 +2,7 @@
 
 **Status:** OpenCloud ✅ **DEPLOYED & RUNNING** | Stalwart ⚠️ **DEPLOYMENT READY**
 **Date:** July 25, 2026
-**Environment:** HRZ K3s Cluster (opendesk namespace)
+**Environment:** Kubernetes K3s Cluster (opendesk namespace)
 
 ---
 
@@ -16,18 +16,18 @@
 ✅ Namespace: opendesk
 ✅ Replicas: 1
 ✅ Storage: 100Gi Ceph RWX (ceph-cephfs-hdd-ec)
-✅ Ingress: files.opendesk.hrz.uni-marburg.de
+✅ Ingress: files.home.opendesk-edu.org
 ✅ TLS: Configured with opendesk-certificates-tls
 ✅ OIDC: Integrated with Keycloak (opendesk realm)
 ✅ Resource Limits: 2 CPU, 2Gi memory
-✅ Security: Running as root (HRZ cluster requirement)
+✅ Security: Running as root (Kubernetes cluster requirement)
 ```
 
 ### **To Access OpenCloud:**
 
 **Once DNS is configured:**
 ```
-📍 URL: https://files.opendesk.hrz.uni-marburg.de
+📍 URL: https://files.home.opendesk-edu.org
 📍 Alternative: kubectl port-forward opendesk-opencloud-846bbdd559-r689d 8080:8080 -n opendesk
    Then access: http://localhost:8080
 ```
@@ -44,7 +44,7 @@
 | **Values Files** | ✅ **CONFIGURED** | All production settings applied |
 | **Secrets** | ⚠️ **PLACEHOLDERS** | 13 placeholders need real values |
 | **OIDC Clients** | ⚠️ **NOT REGISTERED** | Need Keycloak registration |
-| **DNS** | ⚠️ **NOT CONFIGURED** | Need HRZ DNS admin |
+| **DNS** | ⚠️ **NOT CONFIGURED** | Need Kubernetes DNS admin |
 | **Landscape Page** | ✅ **COMPLETE** | Interactive page with 38 services |
 | **Documentation** | ✅ **COMPREHENSIVE** | 25+ files, 200KB+ content |
 
@@ -66,7 +66,7 @@
 - **Environment Overrides:** Added global hosts configuration
 - **Image Configuration:** Added Stalwart image registry settings
 - **Secrets Template:** Added all required secret placeholders
-- **Security Contexts:** Fixed for HRZ cluster requirements
+- **Security Contexts:** Fixed for Kubernetes cluster requirements
 
 #### 3. Documentation
 - **Implementation Summary:** Complete overview of all changes
@@ -130,8 +130,8 @@ kcadm.sh create clients/opendesk -r opendesk \
   -s enabled=true \
   -s protocol=openid-connect \
   -s standardFlowEnabled=true \
-  -s validRedirectUris=["https://mail.opendesk.hrz.uni-marburg.de/*"] \
-  -s webOrigins=["https://mail.opendesk.hrz.uni-marburg.de"]
+  -s validRedirectUris=["https://mail.home.opendesk-edu.org/*"] \
+  -s webOrigins=["https://mail.home.opendesk-edu.org"]
 
 # Register OpenCloud client
 kcadm.sh create clients/opendesk -r opendesk \
@@ -140,8 +140,8 @@ kcadm.sh create clients/opendesk -r opendesk \
   -s enabled=true \
   -s protocol=openid-connect \
   -s standardFlowEnabled=true \
-  -s validRedirectUris=["https://files.opendesk.hrz.uni-marburg.de/*"] \
-  -s webOrigins=["https://files.opendesk.hrz.uni-marburg.de"]
+  -s validRedirectUris=["https://files.home.opendesk-edu.org/*"] \
+  -s webOrigins=["https://files.home.opendesk-edu.org"]
 ```
 
 #### 3. Generate and Apply Real Secrets (15 minutes)
@@ -176,11 +176,11 @@ helmfile --environment edu sync
 ```
 
 #### 4. Create DNS Records (10 minutes)
-Contact HRZ DNS administrator to create:
+Contact Kubernetes DNS administrator to create:
 ```
-mail.opendesk.hrz.uni-marburg.de.    IN  A  192.168.3.201
-webmail.opendesk.hrz.uni-marburg.de. IN  A  192.168.3.201
-files.opendesk.hrz.uni-marburg.de.   IN  A  192.168.3.201
+mail.home.opendesk-edu.org.    IN  A  192.168.3.201
+webmail.home.opendesk-edu.org. IN  A  192.168.3.201
+files.home.opendesk-edu.org.   IN  A  192.168.3.201
 ```
 
 ---
@@ -261,10 +261,10 @@ helmfile --environment edu sync
 
 ### Priority 4: Create DNS Records (10 minutes)
 ```bash
-# Submit ticket to HRZ DNS team with these records:
-# mail.opendesk.hrz.uni-marburg.de -> 192.168.3.201
-# webmail.opendesk.hrz.uni-marburg.de -> 192.168.3.201
-# files.opendesk.hrz.uni-marburg.de -> 192.168.3.201
+# Submit ticket to Kubernetes DNS team with these records:
+# mail.home.opendesk-edu.org -> 192.168.3.201
+# webmail.home.opendesk-edu.org -> 192.168.3.201
+# files.home.opendesk-edu.org -> 192.168.3.201
 ```
 
 ---
@@ -421,7 +421,7 @@ helm upgrade stalwart . --namespace opendesk -f /path/to/values.yaml
 ### Contributors
 - **Primary Developer:** Agent (Hermes)
 - **Repository Maintainer:** tobias-weiss-ai-xr
-- **Organization:** HRZ Marburg
+- **Organization:** Kubernetes OpenDesk
 
 ### Infrastructure
 - **Kubernetes:** K3s v1.32.3

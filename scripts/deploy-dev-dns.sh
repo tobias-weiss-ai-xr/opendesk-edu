@@ -103,9 +103,9 @@ verify() {
         warn "No dev-dns test pod found. Running inline verification..."
 
         # Test 1: Resolve dev hostname via CoreDNS cluster IP
-        info "Test 1: Resolve r.opendesk.hrz.uni-marburg.de via CoreDNS..."
+        info "Test 1: Resolve r.home.opendesk-edu.org via CoreDNS..."
         if kubectl run dns-test-$$ --image=busybox:1.36 --restart=Never \
-            --rm -it -- sh -c "nslookup r.opendesk.hrz.uni-marburg.de ${COREDNS_SVC_CLUSTER_IP} 2>&1" 2>/dev/null; then
+            --rm -it -- sh -c "nslookup r.home.opendesk-edu.org ${COREDNS_SVC_CLUSTER_IP} 2>&1" 2>/dev/null; then
             info "✅ Dev hostname resolution: PASS"
         else
             warn "⚠️  Dev hostname resolution: FAIL - check ConfigMap"

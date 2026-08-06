@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-25  
 **Scope:** Stalwart Mail Server + OpenCloud Deployment Configuration  
-**Environment:** openDesk Edu (HRZ Marburg)
+**Environment:** openDesk Edu (Kubernetes OpenDesk)
 
 ---
 
@@ -23,7 +23,7 @@ There are **NO critical issues** that would prevent deployment. All essential co
 ## 🟡 WARNINGS (Should Fix Before Production)
 
 ### 1. **LDAP Server Configuration**
-- **Issue:** LDAP server hostname is hardcoded as `ums-ldap.opendesk.hrz.uni-marburg.de`
+- **Issue:** LDAP server hostname is hardcoded as `ums-ldap.home.opendesk-edu.org`
 - **Risk:** DNS resolution may fail in certain network configurations
 - **Fix:** Add a configurable value for LDAP host in `ce-overrides.yaml`
 - **Severity:** Medium
@@ -312,12 +312,12 @@ There are **NO critical issues** that would prevent deployment. All essential co
 
 ### Ingress Configuration
 - **Stalwart:** ✅ Configured with HAProxy
-  - Hostname: mail.opendesk.hrz.uni-marburg.de
+  - Hostname: mail.home.opendesk-edu.org
   - TLS: Enabled with opendesk-certificates-tls
   - Annotations: SSL redirect, timeouts
 
 - **OpenCloud:** ✅ Configured with HAProxy
-  - Hostname: files.opendesk.hrz.uni-marburg.de
+  - Hostname: files.home.opendesk-edu.org
   - TLS: Enabled with opendesk-certificates-tls
   - Annotations: SSL redirect, proxy body size (100M), timeouts
 
@@ -327,8 +327,8 @@ There are **NO critical issues** that would prevent deployment. All essential co
 
 ### DNS Requirements
 - **Required Records:**
-  - `mail.opendesk.hrz.uni-marburg.de` → Ingress IP
-  - `files.opendesk.hrz.uni-marburg.de` → Ingress IP
+  - `mail.home.opendesk-edu.org` → Ingress IP
+  - `files.home.opendesk-edu.org` → Ingress IP
   - MX records → Stalwart service (if exposing externally)
   - SPF, DKIM, DMARC → For email deliverability
 
@@ -367,7 +367,7 @@ There are **NO critical issues** that would prevent deployment. All essential co
 ### LDAP Integration
 - ✅ Stalwart configured for LDAP
 - ⚠️ **Potential Issue:** LDAP hostname hardcoded
-  - Uses: `ums-ldap.opendesk.hrz.uni-marburg.de:636`
+  - Uses: `ums-ldap.home.opendesk-edu.org:636`
   - May not resolve in all network configurations
   - **Fix:** Make configurable via values
 

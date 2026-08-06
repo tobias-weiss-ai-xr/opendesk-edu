@@ -46,7 +46,7 @@ Both services are integrated with:
 - RocksDB storage backend
 
 **Access:**
-- Web Admin: `https://mail.opendesk.hrz.uni-marburg.de`
+- Web Admin: `https://mail.home.opendesk-edu.org`
 - IMAP/SMTP: Use hostnames configured in DNS
 
 ### OpenCloud
@@ -64,7 +64,7 @@ Both services are integrated with:
 - Backchannel logout support
 
 **Access:**
-- Web: `https://files.opendesk.hrz.uni-marburg.de`
+- Web: `https://files.home.opendesk-edu.org`
 
 ## Pre-Deployment Setup
 
@@ -135,32 +135,32 @@ You need to register both Stalwart and OpenCloud as OIDC clients in Keycloak:
 #### For Stalwart:
 - Client ID: `stalwart`
 - Client Secret: `$STALWART_OIDC_SECRET`
-- Redirect URIs: `https://mail.opendesk.hrz.uni-marburg.de/*`, `https://portal.opendesk.hrz.uni-marburg.de/*`
+- Redirect URIs: `https://mail.home.opendesk-edu.org/*`, `https://portal.home.opendesk-edu.org/*`
 - Protocol: openid-connect
 - Access Type: confidential
 
 #### For OpenCloud:
 - Client ID: `opendesk-opencloud`
 - Client Secret: `$OPENCLOUD_OIDC_SECRET`
-- Redirect URIs: `https://files.opendesk.hrz.uni-marburg.de/*`, `https://portal.opendesk.hrz.uni-marburg.de/*`
+- Redirect URIs: `https://files.home.opendesk-edu.org/*`, `https://portal.home.opendesk-edu.org/*`
 - Protocol: openid-connect
 - Access Type: confidential
-- Backchannel Logout URL: `https://files.opendesk.hrz.uni-marburg.de/backchannel_logout`
+- Backchannel Logout URL: `https://files.home.opendesk-edu.org/backchannel_logout`
 
 ### 4. Configure DNS
 
 Ensure the following DNS records exist:
-- `mail.opendesk.hrz.uni-marburg.de` → Cluster ingress IP
-- `files.opendesk.hrz.uni-marburg.de` → Cluster ingress IP
+- `mail.home.opendesk-edu.org` → Cluster ingress IP
+- `files.home.opendesk-edu.org` → Cluster ingress IP
 - MX records pointing to your mail servers
 - SPF, DKIM, DMARC records for email deliverability
 
 ### 5. Configure LDAP
 
 Stalwart connects to LDAP for user directory. Ensure:
-- LDAP server is accessible at `ums-ldap.opendesk.hrz.uni-marburg.de:636`
+- LDAP server is accessible at `ums-ldap.home.opendesk-edu.org:636`
 - Bind DN has sufficient read permissions
-- User base DN is configured correctly (default: `dc=uni-marburg,dc=de`)
+- User base DN is configured correctly (default: `dc=opendesk-edu,dc=org`)
 
 ## Deployment
 
@@ -224,13 +224,13 @@ helmfile -f edu-helmfile.yaml.gotmpl -e edu sync
 
 1. **Initial Admin Setup:**
    ```bash
-   # Access the admin console at https://mail.opendesk.hrz.uni-marburg.de
+   # Access the admin console at https://mail.home.opendesk-edu.org
    # Login with username: admin
    # Password: the one you set in STALWART_ADMIN_PASSWORD
    ```
 
 2. **Configure Mail Domains:**
-   - Add your mail domains (e.g., `uni-marburg.de`)
+   - Add your mail domains (e.g., `opendesk-edu.org`)
    - Configure domain-specific settings
 
 3. **Test Mail Flow:**
@@ -246,12 +246,12 @@ helmfile -f edu-helmfile.yaml.gotmpl -e edu sync
    - MX records pointing to Stalwart servers
    - SPF: `v=spf1 mx ~all`
    - DKIM: Generate and publish DKIM keys
-   - DMARC: `v=DMARC1; p=none; rua=mailto:admin@uni-marburg.de`
+   - DMARC: `v=DMARC1; p=none; rua=mailto:admin@opendesk-edu.org`
 
 ### OpenCloud
 
 1. **Verify OIDC Authentication:**
-   - Visit `https://files.opendesk.hrz.uni-marburg.de`
+   - Visit `https://files.home.opendesk-edu.org`
    - You should be redirected to Keycloak for login
    - After login, you should see the OpenCloud dashboard
 
@@ -262,7 +262,7 @@ helmfile -f edu-helmfile.yaml.gotmpl -e edu sync
 3. **Test File Sync:**
    ```bash
    # Install the Nextcloud desktop client
-   # Connect to https://files.opendesk.hrz.uni-marburg.de
+   # Connect to https://files.home.opendesk-edu.org
    # Upload/download test files
    ```
 
@@ -441,7 +441,7 @@ rateLimit:
 | `auth.oidc.clientId` | OIDC client ID | stalwart |
 | `auth.fallbackAdmin.username` | Admin username | admin |
 | `directory.type` | Directory type (internal/ldap) | ldap |
-| `directory.ldap.host` | LDAP server hostname | ums-ldap.opendesk.hrz.uni-marburg.de |
+| `directory.ldap.host` | LDAP server hostname | ums-ldap.home.opendesk-edu.org |
 | `listeners.*.bind` | Port bindings | Standard ports |
 | `tls.enabled` | Enable TLS | true |
 | `persistence.size` | Storage size | 20Gi |
@@ -453,7 +453,7 @@ rateLimit:
 |-----------|-------------|---------|
 | `image.tag` | OpenCloud image tag | 4.0.3 |
 | `ingress.enabled` | Enable ingress | true |
-| `ingress.hostname` | Ingress hostname | files.opendesk.hrz.uni-marburg.de |
+| `ingress.hostname` | Ingress hostname | files.home.opendesk-edu.org |
 | `oidc.issuer` | Keycloak issuer URL | auto-configured from global |
 | `oidc.clientId` | OIDC client ID | opendesk-opencloud |
 | `oidc.autoProvisionAccounts` | Auto-provision users | true |

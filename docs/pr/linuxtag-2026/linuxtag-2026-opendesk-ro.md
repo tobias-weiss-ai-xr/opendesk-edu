@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Infrastructură cloud suverană   | SBOM pentru toate componentele
 
 ---
 
-# Helmfile și Mediul HRZ
+# Helmfile și Mediul Kubernetes
 
 ```bash
 # Implementare cu Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orchestrare Helmfile** ⚓
   - Configurație declarativă în `helmfile_generic.yaml.gotmpl`
-  - Suprascrieri specifice mediului în `environments/hrz/`
+  - Suprascrieri specifice mediului în `environments/production/`
   - Backup automat al dependențelor
-- **Mediul HRZ creat** 🖥️
+- **Mediul Kubernetes creat** 🖥️
   - Copie a `staging` cu ajustări
-  - Configurație specifică Uni Marburg
+  - Configurație specifică Uni OpenDesk
   - Sistem de testare pentru operarea pilot
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → dala ILIAS
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Autentificare (weblogin.uni-marburg.de)
+4. 🎓 Autentificare (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion înapoi
 6. ✅ Panou ILIAS
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Revizuiți modificările
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Aplicați actualizările
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Revenire dacă este necesar
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Actualizări controlate prin Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Actualizare HRZ: Migrare Ingress
+# Actualizare Kubernetes: Migrare Ingress
 
 - **Migrare:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (ramura uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Actualizare HRZ: Backup Dublu
+# Actualizare Kubernetes: Backup Dublu
 
 - **Obiective:** Stocare de Backup Redundantă 🗄️
 - **Strategie:** Compatibil S3 cu backend restic 🔄

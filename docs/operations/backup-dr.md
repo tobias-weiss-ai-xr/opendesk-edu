@@ -3,7 +3,7 @@
 ## Current Infrastructure
 
 **Backup tool:** k8up (Kubernetes backup operator)
-**Storage:** S3-compatible (MinIO on-cluster + S3 at s3.hrz.uni-marburg.de)
+**Storage:** S3-compatible (MinIO on-cluster + S3 at s3.home.opendesk-edu.org)
 **Schedule:** Daily backups via k8up Schedule CRD
 
 ## What's Backed Up
@@ -62,7 +62,7 @@ spec:
       name: k8up-repo-password
     s3:
       bucket: opendesk-backup
-      endpoint: s3.hrz.uni-marburg.de
+      endpoint: s3.home.opendesk-edu.org
       accessKeyIDSecretRef:
         name: minio-credentials-live
         key: username
@@ -104,7 +104,7 @@ spec:
       name: k8up-repo-password
     s3:
       bucket: opendesk-backup
-      endpoint: s3.hrz.uni-marburg.de
+      endpoint: s3.home.opendesk-edu.org
       accessKeyIDSecretRef:
         name: minio-credentials-live
         key: username
@@ -193,7 +193,7 @@ spec:
       name: k8up-repo-password
     s3:
       bucket: opendesk-backup
-      endpoint: s3.hrz.uni-marburg.de
+      endpoint: s3.home.opendesk-edu.org
       accessKeyIDSecretRef:
         name: minio-credentials-live
         key: username

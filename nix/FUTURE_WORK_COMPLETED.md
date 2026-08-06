@@ -74,7 +74,7 @@ This document confirms that ALL future work items identified from the Nix migrat
 7. `78a37d84` - Update mariadb.nix to use instance parameter for Helmfile compatibility
 8. `14935d7b` - Add comprehensive validation script
 
-All changes pushed to 5 remotes: codeberg, github, gitlab-com, hrz-mirror, opencode-de
+All changes pushed to 5 remotes: codeberg, github, gitlab-com, production-mirror, opencode-de
 
 ---
 

@@ -41,34 +41,34 @@ spec:
     name: opendesk-ca
     kind: ClusterIssuer
   dnsNames:
-    - SERVICE_NAME.opendesk.hrz.uni-marburg.de
+    - SERVICE_NAME.home.opendesk-edu.org
 ```
 
 ### Current Service Certificates
 
 As of 2026-07-29, cert-manager has issued certificates for:
-- bookstack-tls → wiki.opendesk.hrz.uni-marburg.de
-- collabora-tls → office.opendesk.hrz.uni-marburg.de
-- drawio-tls → drawio.opendesk.hrz.uni-marburg.de
-- element-tls → chat.opendesk.hrz.uni-Marburg.de
-- excalidraw-tls → excalidraw.opendesk.hrz.uni-marburg.de
-- grafana-tls → grafana.opendesk.hrz.uni-marburg.de
-- ilias-tls → lms.opendesk.hrz.uni-marburg.de
-- intercom-tls → ics.opendesk.hrz.uni-marburg.de
-- jitsi-tls → meet.opendesk.hrz.uni-marburg.de
-- keycloak-tls → id.opendesk.hrz.uni-marburg.de
-- moodle-tls → moodle.opendesk.hrz.uni-marburg.de
-- opencloud-tls → files.opendesk.hrz.uni-marburg.de
-- openproject-tls → projects.opendesk.hrz.uni-marburg.de
-- planka-tls → planka.opendesk.hrz.uni-marburg.de
-- portal-tls → portal.opendesk.hrz.uni-marburg.de
-- seaweedfs-tls → objectstorage.opendesk.hrz.uni-marburg.de
-- seaweedfs-admin-tls → objectstorage-ui.opendesk.hrz.uni-marburg.de
-- sogo-tls → contacts.opendesk.hrz.uni-marburg.de
-- ssp-tls → ssp.opendesk.hrz.uni-marburg.de
-- stalwart-tls → mail.opendesk.hrz.uni-marburg.de
-- webmail-tls → webmail.opendesk.hrz.uni-marburg.de
-- xwiki-tls → wiki.opendesk.hrz.uni-marburg.de
+- bookstack-tls → wiki.home.opendesk-edu.org
+- collabora-tls → office.home.opendesk-edu.org
+- drawio-tls → drawio.home.opendesk-edu.org
+- element-tls → chat.home.opendesk-edu.org.uni-OpenDesk.de
+- excalidraw-tls → excalidraw.home.opendesk-edu.org
+- grafana-tls → grafana.home.opendesk-edu.org
+- ilias-tls → lms.home.opendesk-edu.org
+- intercom-tls → ics.home.opendesk-edu.org
+- jitsi-tls → meet.home.opendesk-edu.org
+- keycloak-tls → id.home.opendesk-edu.org
+- moodle-tls → moodle.home.opendesk-edu.org
+- opencloud-tls → files.home.opendesk-edu.org
+- openproject-tls → projects.home.opendesk-edu.org
+- planka-tls → planka.home.opendesk-edu.org
+- portal-tls → portal.home.opendesk-edu.org
+- seaweedfs-tls → objectstorage.home.opendesk-edu.org
+- seaweedfs-admin-tls → objectstorage-ui.home.opendesk-edu.org
+- sogo-tls → contacts.home.opendesk-edu.org
+- ssp-tls → ssp.home.opendesk-edu.org
+- stalwart-tls → mail.home.opendesk-edu.org
+- webmail-tls → webmail.home.opendesk-edu.org
+- xwiki-tls → wiki.home.opendesk-edu.org
 
 Each certificate has:
 - 89-day validity (until 2026-10-27)
@@ -99,7 +99,7 @@ kubectl get secret -n opendesk opendesk-root-ca-secret -o json | \
    ```bash
    openssl genrsa -out new-ca.key 4096
    openssl req -x509 -new -nodes -key new-ca.key -sha256 -days 3650 \
-     -subj "/CN=openDesk Root CA/O=HRZ Marburg" -out new-ca.crt
+     -subj "/CN=openDesk Root CA/O=Kubernetes OpenDesk" -out new-ca.crt
    ```
 
 2. **Create new ClusterIssuer:**

@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Infraestructura de núvol sobirà   | SBOM per a tots els components
 
 ---
 
-# Helmfile i Entorn HRZ
+# Helmfile i Entorn Kubernetes
 
 ```bash
 # Desplegament amb Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orquestració amb Helmfile** ⚓
   - Configuració declarativa a `helmfile_generic.yaml.gotmpl`
-  - Anul·lacions específiques de l'entorn a `environments/hrz/`
+  - Anul·lacions específiques de l'entorn a `environments/production/`
   - Còpia de seguretat automàtica de dependències
-- **Entorn HRZ creat** 🖥️
+- **Entorn Kubernetes creat** 🖥️
   - Còpia de `staging` amb ajustos
-  - Configuració específica de la Uni Marburg
+  - Configuració específica de la Uni OpenDesk
   - Sistema de prova per a l'operació pilot
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → Mosaic d'ILIAS
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Inici de sessió (weblogin.uni-marburg.de)
+4. 🎓 Inici de sessió (weblogin.opendesk-edu.org)
 5. 📨 Asserció SAML de tornada
 6. ✅ Panell d'ILIAS
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Revisar canvis
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Aplicar actualitzacions
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Revertir si cal
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Actualitzacions controlades mitjançant Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Actualització HRZ: Migració d'Ingress
+# Actualització Kubernetes: Migració d'Ingress
 
 - **Migració:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (branca uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Actualització HRZ: Còpia de Seguretat Dual
+# Actualització Kubernetes: Còpia de Seguretat Dual
 
 - **Objectius:** Emmagatzematge de Còpia de Seguretat Redundant 🗄️
 - **Estratègia:** Compatible amb S3 amb backend restic 🔄

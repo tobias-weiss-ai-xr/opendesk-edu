@@ -8,7 +8,7 @@
 |------|----------|---------------|-----------|
 | Portal data (entries, icons, JSON) | MinIO `ums/portal-data/` | MinIO `mc mirror` to backup MinIO | Every 6h |
 | LDAP entries | `ums-ldap-server-primary` | `ldapsearch -LLL` dump | Daily |
-| Keycloak realm config | `id.opendesk.hrz.uni-marburg.de` | Keycloak export via admin API | Weekly |
+| Keycloak realm config | `id.home.opendesk-edu.org` | Keycloak export via admin API | Weekly |
 | Helm release state | k3s cluster | `helm get values` for each release | After changes |
 
 ### Tier 2: Important (restore within 24h)
@@ -28,7 +28,7 @@ kubectl exec -n opendesk ums-portal-server-0 -- python3 << 'EOF'
 import boto3, os
 
 s3 = boto3.client('s3',
-    endpoint_url='https://objectstore.opendesk.hrz.uni-marburg.de',
+    endpoint_url='https://objectstore.home.opendesk-edu.org',
     aws_access_key_id=os.environ['OBJECT_STORAGE_ACCESS_KEY_ID'],
     aws_secret_access_key=os.environ['OBJECT_STORAGE_SECRET_ACCESS_KEY'],
     config=botocore.config.Config(signature_version='s3v4'),
@@ -73,11 +73,11 @@ kubectl exec -n opendesk $POD -c main -- ldapsearch -x -LLL \
 ```bash
 # Export realm via Keycloak admin API
 KCADMIN_PASS=$(kubectl get secret -n opendesk opendesk-keycloak-bootstrap-admin-creds -o jsonpath='{.data.admin\.yaml}' | base64 -d | grep password | awk '{print $2}')
-TOKEN=$(curl -sk -X POST "https://id.opendesk.hrz.uni-marburg.de/realms/master/protocol/openid-connect/token" \
+TOKEN=$(curl -sk -X POST "https://id.home.opendesk-edu.org/realms/master/protocol/openid-connect/token" \
   -d "client_id=admin-cli" -d "username=kcadmin" -d "password=$KCADMIN_PASS" -d "grant_type=password" | \
   python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])")
 
-curl -sk "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk" \
+curl -sk "https://id.home.opendesk-edu.org/admin/realms/opendesk" \
   -H "Authorization: Bearer $TOKEN" > /tmp/keycloak-realm-opendesk.json
 ```
 
@@ -95,14 +95,14 @@ curl -sk "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk" \
    ```
    kubectl exec -n opendesk ums-portal-server-0 -- python3 -c "
    import urllib.request; 
-   r = urllib.request.urlopen('https://id.opendesk.hrz.uni-marburg.de/realms/opendesk/.well-known/openid-configuration', timeout=5);
+   r = urllib.request.urlopen('https://id.home.opendesk-edu.org/realms/opendesk/.well-known/openid-configuration', timeout=5);
    print(f'Keycloak: HTTP {r.status}')"
    ```
 3. Check objectstore reachability:
    ```
    kubectl exec -n opendesk ums-portal-server-0 -- python3 -c "
    import urllib.request;
-   r = urllib.request.urlopen('https://objectstore.opendesk.hrz.uni-marburg.de/minio/health/live', timeout=5);
+   r = urllib.request.urlopen('https://objectstore.home.opendesk-edu.org/minio/health/live', timeout=5);
    print(f'MinIO: HTTP {r.status}')"
    ```
 4. Restart portal consumer if data is stale:
@@ -110,10 +110,10 @@ curl -sk "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk" \
 5. Restart portal server as last resort:
    `kubectl rollout restart -n opendesk deployment/ums-portal-server`
 
-### B. DNS Resolution Fails for `*.opendesk.hrz.uni-marburg.de`
+### B. DNS Resolution Fails for `*.home.opendesk-edu.org`
 
 **Symptoms:**
-- `nslookup ai.opendesk.hrz.uni-marburg.de` returns NXDOMAIN or SERVFAIL
+- `nslookup ai.home.opendesk-edu.org` returns NXDOMAIN or SERVFAIL
 - Services unreachable from browser
 
 **Steps:**
@@ -121,11 +121,11 @@ curl -sk "https://id.opendesk.hrz.uni-marburg.de/admin/realms/opendesk" \
 2. Check custom configmap: `kubectl get configmap -n kube-system coredns-custom`
 3. Verify dev-dns .server block is loaded:
    ```
-   kubectl logs -n kube-system -l k8s-app=kube-dns | grep "opendesk.hrz"
+   kubectl logs -n kube-system -l k8s-app=kube-dns | grep "home.opendesk-edu.org"
    ```
-   Should show: `opendesk.hrz.uni-marburg.de.:53`
+   Should show: `home.opendesk-edu.org.:53`
 4. Test resolution from inside cluster:
-   `kubectl run test --image=busybox --rm -it -- nslookup r.opendesk.hrz.uni-marburg.de 172.17.128.10`
+   `kubectl run test --image=busybox --rm -it -- nslookup r.home.opendesk-edu.org 172.17.128.10`
 5. If CoreDNS is broken, restart it:
    `kubectl rollout restart -n kube-system deployment/coredns`
 

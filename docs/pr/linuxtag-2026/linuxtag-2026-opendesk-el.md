@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Commits: ~ 1.500                |
 
 ---
 
-# Helmfile & Περιβάλλον HRZ
+# Helmfile & Περιβάλλον Kubernetes
 
 ```bash
 # Ανάπτυξη με Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Ορχήστρωση Helmfile** ⚓
   - Δηλωτική διαμόρφωση σε `helmfile_generic.yaml.gotmpl`
-  - Παρακαμπτήριες ανά περιβάλλον σε `environments/hrz/`
+  - Παρακαμπτήριες ανά περιβάλλον σε `environments/production/`
   - Αυτόματο αντίγραφο ασφαλείας εξαρτήσεων
-- **Δημιουργήθηκε περιβάλλον HRZ** 🖥️
+- **Δημιουργήθηκε περιβάλλον Kubernetes** 🖥️
   - Αντίγραφο του `staging` με προσαρμογές
-  - Διαμόρφωση ειδική για Πανεπιστήμιο Marburg
+  - Διαμόρφωση ειδική για Πανεπιστήμιο OpenDesk
   - Σύστημα δοκιμών για πιλοτική λειτουργία
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion back
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Έλεγχος αλλαγών
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Εφαρμογή ενημερώσεων
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Επαναφορά αν χρειαστεί
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Ελεγχόμενες ενημερώσεις μέσω Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Αναβάθμιση: Μετάβαση Ingress
+# Kubernetes-Αναβάθμιση: Μετάβαση Ingress
 
 - **Μετάβαση:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (κλάδος uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Αναβάθμιση: Διπλό Αντίγραφο Ασφαλείας
+# Kubernetes-Αναβάθμιση: Διπλό Αντίγραφο Ασφαλείας
 
 - **Στόχοι:** Πλεονασμός Αποθήκευσης Αντιγράφων Ασφαλείας 🗄️
 - **Στρατηγική:** S3-συμβατό με restic backend 🔄

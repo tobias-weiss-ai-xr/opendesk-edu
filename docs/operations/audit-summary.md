@@ -1,7 +1,7 @@
 # Deployment Audit — Quick Summary
 
 **Date:** 2026-07-29  
-**Cluster:** HRZ Marburg K3s v1.32.3  
+**Cluster:** Kubernetes OpenDesk K3s v1.32.3  
 **Namespace:** opendesk  
 
 ---
@@ -142,6 +142,6 @@ kubectl get pods -n opendesk etherpad-postgresql-0 --no-headers
 
 ## 📞 CONTACT
 
-**Lead:** @tobias.weiss (HRZ Marburg)  
+**Lead:** @tobias.weiss (Kubernetes OpenDesk)  
 ** Repository:** https://github.com/opendesk-edu/opendesk-edu  
 **Discussions:** https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk

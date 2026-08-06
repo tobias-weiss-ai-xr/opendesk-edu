@@ -167,7 +167,7 @@ See [Test Coverage Gaps](../../_registry/test-coverage-gaps/spec.md) for testing
 |--------------|-------|--------|----------|
 | Security | 201 | Excellent | Network policies, Otterize, seccomp hardening |
 | Threat Model | 184 | Excellent | Attack surfaces, risk mitigation |
-| Compliance Checklists | 144 | Good | Security standards, HRZ extensions |
+| Compliance Checklists | 144 | Good | Security standards, Kubernetes extensions |
 | Backup Strategy | 9,158 | Comprehensive | k8up configuration, RWO PVC handling |
 | Operations | 11,921 | Comprehensive | Runbooks, troubleshooting procedures |
 | Monitoring | 8,838 | Comprehensive | Prometheus, Grafana, alerts |

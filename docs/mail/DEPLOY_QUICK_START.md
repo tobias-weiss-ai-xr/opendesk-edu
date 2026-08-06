@@ -112,8 +112,8 @@ KEYCLOAK_POD=$(kubectl get pods -n opendesk -l app.kubernetes.io/name=keycloak -
 kubectl exec -it -n opendesk $KEYCLOAK_POD -- kcadm.sh create clients/opendesk/stalwart \
   -s clientId=stalwart \
   -s enabled=true \
-  -s 'redirectUris=["https://mail.opendesk.hrz.uni-marburg.de/*"]' \
-  -s 'webOrigins=["https://mail.opendesk.hrz.uni-marburg.de"]' \
+  -s 'redirectUris=["https://mail.home.opendesk-edu.org/*"]' \
+  -s 'webOrigins=["https://mail.home.opendesk-edu.org"]' \
   -s standardFlowEnabled=true \
   -s implicitFlowEnabled=false \
   -s directAccessGrantsEnabled=true \
@@ -126,9 +126,9 @@ kubectl exec -it -n opendesk $KEYCLOAK_POD -- kcadm.sh get clients/opendesk/stal
 kubectl exec -it -n opendesk $KEYCLOAK_POD -- kcadm.sh create clients/opendesk/opendesk-opencloud \
   -s clientId=opendesk-opencloud \
   -s enabled=true \
-  -s 'redirectUris=["https://files.opendesk.hrz.uni-marburg.de/*"]' \
-  -s 'webOrigins=["https://files.opendesk.hrz.uni-marburg.de"]' \
-  -s 'backchannelLogoutUrl=https://files.opendesk.hrz.uni-marburg.de/oidc/logout' \
+  -s 'redirectUris=["https://files.home.opendesk-edu.org/*"]' \
+  -s 'webOrigins=["https://files.home.opendesk-edu.org"]' \
+  -s 'backchannelLogoutUrl=https://files.home.opendesk-edu.org/oidc/logout' \
   -s standardFlowEnabled=true \
   -s implicitFlowEnabled=false \
   -s directAccessGrantsEnabled=true \
@@ -142,7 +142,7 @@ nano ./opendesk-edu/helmfile/environments/edu/secrets.yaml
 ```
 
 #### Using Keycloak Admin Console
-1. Access: `https://portal.opendesk.hrz.uni-marburg.de/auth/admin`
+1. Access: `https://portal.home.opendesk-edu.org/auth/admin`
 2. Login with admin credentials
 3. Navigate to: Realm `opendesk` → Clients → Create
 4. Create two clients with above configurations
@@ -159,12 +159,12 @@ INGRESS_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpa
 
 echo "Ingress IP: $INGRESS_IP"
 
-# Create DNS records (run on your DNS server or ask HRZ)
-# mail.opendesk.hrz.uni-marburg.de.    IN  A     $INGRESS_IP
-# files.opendesk.hrz.uni-marburg.de.   IN  A     $INGRESS_IP
+# Create DNS records (run on your DNS server or ask Kubernetes)
+# mail.home.opendesk-edu.org.    IN  A     $INGRESS_IP
+# files.home.opendesk-edu.org.   IN  A     $INGRESS_IP
 
 # For email (if enabling SMTP externally):
-# @.opendesk.hrz.uni-marburg.de.       IN  MX    10 mail.opendesk.hrz.uni-marburg.de.
+# @.home.opendesk-edu.org.       IN  MX    10 mail.home.opendesk-edu.org.
 ```
 
 ### Step 5: Deploy
@@ -199,8 +199,8 @@ kubectl logs -f -n opendesk <stalwart-pod-name>
 kubectl logs -f -n opendesk <opencloud-pod-name>
 
 # Test health endpoints (once DNS is configured)
-curl -k https://mail.opendesk.hrz.uni-marburg.de/api/health
-curl -k https://files.opendesk.hrz.uni-marburg.de/status.php
+curl -k https://mail.home.opendesk-edu.org/api/health
+curl -k https://files.home.opendesk-edu.org/status.php
 ```
 
 ---
@@ -209,7 +209,7 @@ curl -k https://files.opendesk.hrz.uni-marburg.de/status.php
 
 ### Pre-Deployment
 - [ ] Required tools installed (kubectl, helm, helmfile)
-- [ ] Access to Kubernetes cluster (HRZ K3s)
+- [ ] Access to Kubernetes cluster (Kubernetes K3s)
 - [ ] Secrets generated and configured
 - [ ] OIDC clients registered in Keycloak
 - [ ] DNS records created
@@ -256,19 +256,19 @@ kubectl get pods -n opendesk | grep keycloak
 # Check Keycloak service
 kubectl get svc -n opendesk keycloak
 
-# The Stalwart/OpenCloud config uses: https://portal.opendesk.hrz.uni-marburg.de
+# The Stalwart/OpenCloud config uses: https://portal.home.opendesk-edu.org
 # Make sure this resolves to your ingress IP
 ```
 
 ### Issue 3: "DNS resolution failed"
 ```
-Error: dial tcp: lookup mail.opendesk.hrz.uni-marburg.de on ...: no such host
+Error: dial tcp: lookup mail.home.opendesk-edu.org on ...: no such host
 ```
 
 **Solution:** DNS records not configured:
 ```bash
 # Check if DNS is configured
-dig mail.opendesk.hrz.uni-marburg.de
+dig mail.home.opendesk-edu.org
 
 # If not, create the DNS records (see Step 4 above)
 ```

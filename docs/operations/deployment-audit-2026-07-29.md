@@ -2,7 +2,7 @@
 
 **Auditor:** Hermes AI Assistant  
 **Date:** 2026-07-29  
-**Cluster:** K3s v1.32.3 (HRZ Marburg)  
+**Cluster:** K3s v1.32.3 (Kubernetes OpenDesk)  
 **Namespace:** opendesk  
 **Scope:** Full production readiness audit  
 
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-During this deep-dive audit, we discovered and resolved **multiple critical issues** affecting the openDesk HRZ production deployment:
+During this deep-dive audit, we discovered and resolved **multiple critical issues** affecting the openDesk Kubernetes production deployment:
 
 ### ✅ Issues RESOLVED
 
@@ -51,7 +51,7 @@ During this deep-dive audit, we discovered and resolved **multiple critical issu
 #### Issue
 - GEANT wildcard certificate `opendesk-certificates-tls` expired on **2026-07-22** (8 days before discovery)
 - 22 services were using this expired certificate via their ingresses
-- Let's Encrypt HTTP01 validation cannot work for internal-only domains (`*.opendesk.hrz.uni-marburg.de` resolves to private IP 192.168.3.201)
+- Let's Encrypt HTTP01 validation cannot work for internal-only domains (`*.home.opendesk-edu.org` resolves to private IP 192.168.3.201)
 
 #### Resolution
 - **Temporary fix:** Switched all 22 services to use per-service certificates issued by internal CA `opendesk-ca`
@@ -213,7 +213,7 @@ kubectl logs -n opendesk job/ldap-backup-$(date +%Y%m%d-%H%M) --tail=20
 
 #### Configuration Location
 - **Child Applications** are defined in a separate repository:
-  - `gitlab.hrz.uni-marburg.de/hrz/kubernetes/argocd/opendesk.git`
+  - `gitlab.home.opendesk-edu.org/kubernetes/argocd/opendesk.git`
 - **We cannot access this repository** from the current environment
 - This is a **pre-existing issue** documented in conversation history
 
@@ -439,4 +439,4 @@ echo "✅ Should be >= 1"
 
 **Report Status:** COMPLETE  
 **Next Audit Due:** 2026-08-29 (30 days)  
-**Owner:** @tobias.weiss (HRZ Marburg)
+**Owner:** @tobias.weiss (Kubernetes OpenDesk)

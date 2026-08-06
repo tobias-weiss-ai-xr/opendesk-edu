@@ -2,7 +2,7 @@
 #
 # Datei: helmfile/apps/edu/stalwart/values.yaml.gotmpl (Ergänzung)
 # Anwendung: Bei Stalwart v0.17+ (config.toml-basiert)
-# Für v0.16.x: Über Web-Admin-UI (mail.opendesk.hrz.uni-marburg.de/admin/)
+# Für v0.16.x: Über Web-Admin-UI (mail.home.opendesk-edu.org/admin/)
 #
 # Credentials: admin / ${STALWART_ADMIN_PASSWORD}
 
@@ -18,7 +18,7 @@ stalwart:
     # Ausgehende DKIM-Signatur
     session.smtp.mail.sign: true
     session.smtp.mail.key: "s2"
-    session.smtp.mail.domain: "uni-marburg.de"
+    session.smtp.mail.domain: "opendesk-edu.org"
 
     session.smtp.mail.dkim.canonicalization: "relaxed/simple"
     session.smtp.mail.dkim.headers: ["From", "Reply-To", "Subject", "Date", "To", "Cc", "Message-ID"]
@@ -32,7 +32,7 @@ stalwart:
     # DMARC-Reporting
     session.smtp.rcpt.dmarc.report: true
     session.smtp.rcpt.dmarc.report-interval: 86400
-    session.smtp.rcpt.dmarc.report-rua: "mailto:dmarc-report@hrz.uni-marburg.de"
+    session.smtp.rcpt.dmarc.report-rua: "mailto:dmarc-report@home.opendesk-edu.org"
     session.smtp.rcpt.dmarc.report-fo: "1"
 
     session.smtp.rcpt.spf.reject: false
@@ -46,11 +46,11 @@ stalwart:
 
     # Reporting
     report.dmarc.enable: true
-    report.dmarc.rua: "mailto:dmarc-report@hrz.uni-marburg.de"
+    report.dmarc.rua: "mailto:dmarc-report@home.opendesk-edu.org"
     report.dmarc.interval: 86400
 
     report.tls.enable: true
-    report.tls.rua: "mailto:tls-report@hrz.uni-marburg.de"
+    report.tls.rua: "mailto:tls-report@home.opendesk-edu.org"
 
   # DKIM-Keys via extraConfigMap mounten
   extraVolumes:
@@ -68,20 +68,20 @@ stalwart:
 # =============================================================================
 #
 # 1. SPF: Cluster-IPs in SPF aufnehmen
-#    uni-marburg.de.  TXT  "v=spf1 include:_spf.uni-marburg.de include:_spf.plan.io
+#    opendesk-edu.org.  TXT  "v=spf1 include:_spf.opendesk-edu.org include:_spf.plan.io
 #                            ip4:192.168.3.110/24 ~all"
 #
 # 2. DKIM: Selector s2 für Stalwart
-#    s2._domainkey.uni-marburg.de.  TXT  "v=DKIM1; k=rsa; p=<PUBLIC_KEY>"
+#    s2._domainkey.opendesk-edu.org.  TXT  "v=DKIM1; k=rsa; p=<PUBLIC_KEY>"
 #
 # 3. DMARC: Bestehenden Record optimieren
-#    _dmarc.uni-marburg.de.  TXT  "v=DMARC1; p=quarantine; sp=quarantine;
-#                                  rua=mailto:dmarc-report@hrz.uni-marburg.de;
-#                                  ruf=mailto:dmarc-ruf@hrz.uni-marburg.de;
+#    _dmarc.opendesk-edu.org.  TXT  "v=DMARC1; p=quarantine; sp=quarantine;
+#                                  rua=mailto:dmarc-report@home.opendesk-edu.org;
+#                                  ruf=mailto:dmarc-ruf@home.opendesk-edu.org;
 #                                  fo=1; ri=3600"
 #
 # 4. TLS-RPT (optional)
-#    _smtp._tls.uni-marburg.de.  TXT  "v=TLSRPTv1; rua=mailto:tls-report@hrz.uni-marburg.de"
+#    _smtp._tls.opendesk-edu.org.  TXT  "v=TLSRPTv1; rua=mailto:tls-report@home.opendesk-edu.org"
 
 # =============================================================================
 # SCHRITTWEISE AKTIVIERUNG

@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,18 +93,18 @@ BMI-ის მიერ დაფინანსებული პლატფ�
 
 ---
 
-# Helmfile და HRZ-გარემო
+# Helmfile და Kubernetes-გარემო
 
 ```bash
 # განთავსება Helmfile-ით
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile ორკესტრაცია** ⚓
   - დეკლარატიული კონფიგურაცია `helmfile_generic.yaml.gotmpl`
-  - გარემოს სპეციფიკური გადაწყვეტები `environments/hrz/`
+  - გარემოს სპეციფიკური გადაწყვეტები `environments/production/`
   - ავტომატური დამოკიდებულებების სარეზერვო კოპირება
-- **HRZ-გარემო შექმნილია** 🖥️
+- **Kubernetes-გარემო შექმნილია** 🖥️
   - `staging`-ის კოპირა მორგებებით
   - მარბურგის უნივერსიტეტის სპეციფიკური კონფიგურაცია
   - სატესტო სისტემა პილოტურ ოპერაციაზე
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ პორტალი → ILIAS ფილა
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 ავტორიზაცია (weblogin.uni-marburg.de)
+4. 🎓 ავტორიზაცია (weblogin.opendesk-edu.org)
 5. 📨 SAML ასერტული უკან
 6. ✅ ILIAS დაშბორდი
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # ცვლილებების გადახედვა
-helmfile diff -e hrz
+helmfile diff -e production
 
 # განახლებების გაცემა
-helmfile apply -e hrz
+helmfile apply -e production
 
 # დაბრუნება თუ საჭიროა
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **კონტროლირებული განახლებები Helmfile-ით** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-განახლება: Ingress მიგრაცია
+# Kubernetes-განახლება: Ingress მიგრაცია
 
 - **მიგრაცია:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (uniapps ბრენჩი)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-განახლება: ორმაგი სარეზერვო კოპირება
+# Kubernetes-განახლება: ორმაგი სარეზერვო კოპირება
 
 - **მიზნები:** რედუნდანტული სარეზერვო საცავი 🗄️
 - **სტრატეგია:** S3-სთან თავსებადი restic backend-ით 🔄

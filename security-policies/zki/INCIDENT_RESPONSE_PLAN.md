@@ -136,12 +136,12 @@ This plan applies to:
 
 | Role | Name | Contact | Responsibilities |
 |------|------|---------|------------------|
-| **Security Lead** | [To be assigned] | security@opendesk.hrz.uni-marburg.de | Technical lead, investigation, containment |
-| **DevOps Lead** | [To be assigned] | devops@opendesk.hrz.uni-marburg.de | Infrastructure, Kubernetes, services |
-| **Network Lead** | [To be assigned] | network@opendesk.hrz.uni-marburg.de | Network security, firewall, traffic |
-| **Application Lead** | [To be assigned] | apps@opendesk.hrz.uni-marburg.de | Application security, web apps |
-| **Data Lead** | [To be assigned] | data@opendesk.hrz.uni-marburg.de | Data protection, DSGVO compliance |
-| **Communication Lead** | [To be assigned] | comms@opendesk.hrz.uni-marburg.de | Internal and external communication |
+| **Security Lead** | [To be assigned] | security@home.opendesk-edu.org | Technical lead, investigation, containment |
+| **DevOps Lead** | [To be assigned] | devops@home.opendesk-edu.org | Infrastructure, Kubernetes, services |
+| **Network Lead** | [To be assigned] | network@home.opendesk-edu.org | Network security, firewall, traffic |
+| **Application Lead** | [To be assigned] | apps@home.opendesk-edu.org | Application security, web apps |
+| **Data Lead** | [To be assigned] | data@home.opendesk-edu.org | Data protection, DSGVO compliance |
+| **Communication Lead** | [To be assigned] | comms@home.opendesk-edu.org | Internal and external communication |
 
 **Extended Members** (on-call):
 - System Administrators
@@ -163,7 +163,7 @@ This plan applies to:
 - **Secondary**: [To be assigned] - +49-xxx-xxxx
 - **Tertiary**: [To be assigned] - +49-xxx-xxxx
 
-**Emergency Contact**: incident@opendesk.hrz.uni-marburg.de
+**Emergency Contact**: incident@home.opendesk-edu.org
 
 ### 3.2 Team Activation
 
@@ -929,7 +929,7 @@ openDesk
 | Tool | Purpose | Access | Notes |
 |------|---------|--------|-------|
 | **Slack** | Real-time communication | IRT | #incident-response, #war-room |
-| **Email** | Formal communication | All | incident@opendesk.hrz.uni-marburg.de |
+| **Email** | Formal communication | All | incident@home.opendesk-edu.org |
 | **Phone/SMS** | Urgent communication | IRT, On-call | [Numbers] |
 | **Loki + Grafana** | Logging and visualization | IRT | For investigation |
 | **Prometheus + Alertmanager** | Monitoring and alerting | IRT | For detection |
@@ -946,12 +946,12 @@ openDesk
 
 | Role | Name | Email | Phone | Notes |
 |------|------|-------|-------|-------|
-| **Incident Response Manager** | [Name] | irt@opendesk.hrz.uni-marburg.de | +49-xxx-xxxx | Primary |
-| **CISO** | [Name] | ciso@opendesk.hrz.uni-marburg.de | +49-xxx-xxxx | Secondary |
-| **Security Team Lead** | [Name] | security@opendesk.hrz.uni-marburg.de | +49-xxx-xxxx | Tertiary |
-| **DevOps Lead** | [Name] | devops@opendesk.hrz.uni-marburg.de | +49-xxx-xxxx | |
-| **Network Lead** | [Name] | network@opendesk.hrz.uni-marburg.de | +49-xxx-xxxx | |
-| **DataProtection Officer** | [Name] | dpo@uni-marburg.de | +49-xxx-xxxx | External |
+| **Incident Response Manager** | [Name] | irt@home.opendesk-edu.org | +49-xxx-xxxx | Primary |
+| **CISO** | [Name] | ciso@home.opendesk-edu.org | +49-xxx-xxxx | Secondary |
+| **Security Team Lead** | [Name] | security@home.opendesk-edu.org | +49-xxx-xxxx | Tertiary |
+| **DevOps Lead** | [Name] | devops@home.opendesk-edu.org | +49-xxx-xxxx | |
+| **Network Lead** | [Name] | network@home.opendesk-edu.org | +49-xxx-xxxx | |
+| **DataProtection Officer** | [Name] | dpo@opendesk-edu.org | +49-xxx-xxxx | External |
 
 **External Contacts**:
 
@@ -961,7 +961,7 @@ openDesk
 | **BSI** | [Name] | info@bsi.bund.de | +49-228-999582-0 | Federal Office for Information Security |
 | **Hessian Data Protection Authority** | [Name] | poststelle@datenschutz.hessen.de | +49-611-848480 | HDSG |
 | **Police** | [Local] | [Email] | 110 | Emergency |
-| **HRZ Marburg** | [Name] | support@hrz.uni-marburg.de | +49-6421-2820 | Hosting provider |
+| **HRZ Marburg** | [Name] | support@home.opendesk-edu.org | +49-6421-2820 | Hosting provider |
 
 ---
 

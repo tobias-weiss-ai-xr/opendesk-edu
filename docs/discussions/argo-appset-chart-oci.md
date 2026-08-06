@@ -2,7 +2,7 @@
 
 ## Context
 
-openDesk Edu at HRZ Marburg uses **helmfile + ArgoCD** for deployment.
+openDesk Edu at Kubernetes OpenDesk uses **helmfile + ArgoCD** for deployment.
 openDesk CE uses **helmfile only** (without ArgoCD).
 
 This proposal has two parts: one for the broader community, one ArgoCD-specific.
@@ -76,12 +76,12 @@ Instead of building a new CI workflow, we simply:
 
 ---
 
-## Part 2: ArgoCD ApplicationSet (HRZ-specific)
+## Part 2: ArgoCD ApplicationSet (Kubernetes-specific)
 
 ### Problem (only for ArgoCD deployments)
 
-Every openDesk app at HRZ has a manually created ArgoCD `Application` resource.
-These are defined in a **separate ArgoCD config repo** (`gitlab.hrz.uni-marburg.de/...`).
+Every openDesk app at Kubernetes has a manually created ArgoCD `Application` resource.
+These are defined in a **separate ArgoCD config repo** (`gitlab.home.opendesk-edu.org/...`).
 Adding a new app = 3 files. Changing env vars = update 50+ resources.
 
 ### Solution: One ApplicationSet generates all apps
@@ -119,8 +119,8 @@ spec:
 
 ### Drawback
 
-- Only relevant for deployments using ArgoCD (HRZ cluster style)
-- Requires `argocd-applicationset-controller` (already running at HRZ)
+- Only relevant for deployments using ArgoCD (Kubernetes cluster style)
+- Requires `argocd-applicationset-controller` (already running at Kubernetes)
 
 ---
 
@@ -133,5 +133,5 @@ spec:
 
 ---
 
-*From: openDesk Edu (HRZ Marburg)*
+*From: openDesk Edu (Kubernetes OpenDesk)*
 *Status: Draft for discussion*

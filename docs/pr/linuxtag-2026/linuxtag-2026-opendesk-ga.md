@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Eisiúintí: ~ 150              |
 
 ---
 
-# Helmfile agus Timpeallacht HRZ
+# Helmfile agus Timpeallacht Kubernetes
 
 ```bash
 # Seoladh le Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orceadrú Helmfile** ⚓
   - Cumraíocht fhógrach i `helmfile_generic.yaml.gotmpl`
-  - Sárú sonrach don timpeallacht i `environments/hrz/`
+  - Sárú sonrach don timpeallacht i `environments/production/`
   - Cúltaca spleáchais uathoibríoch
-- **Timpeallacht HRZ cruthaithe** 🖥️
+- **Timpeallacht Kubernetes cruthaithe** 🖥️
   - Cóip de `staging` le coigeartuithe
-  - Cumraíocht shonrach don Ollscoil Marburg
+  - Cumraíocht shonrach don Ollscoil OpenDesk
   - Córas tástála don oibriú píolóta
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portál → Téil ILIAS
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Logáil isteach (weblogin.uni-marburg.de)
+4. 🎓 Logáil isteach (weblogin.opendesk-edu.org)
 5. 📨 Dearbhú SAML ar ais
 6. ✅ Painéal ILIAS
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Athbhreithniú na n-athruithe
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Cuir na nuashonruithe i bhfeidhm
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Aisghairm más gá
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Nuashonruithe rialaithe tríd an Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Uasghrádú HRZ: Aistriú Ingress
+# Uasghrádú Kubernetes: Aistriú Ingress
 
 - **Aistriú:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (brainse uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# Uasghrádú HRZ: Cúltaca Dúbailte
+# Uasghrádú Kubernetes: Cúltaca Dúbailte
 
 - **Spriocanna:** Stóráil chúltaca iomadúil 🗄️
 - **Straitéis:** Comhoiriúnach le SAML le cúl-taic restic 🔄

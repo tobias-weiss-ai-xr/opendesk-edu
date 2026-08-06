@@ -92,7 +92,7 @@ Weitere Informationen: [github.com/opendesk-edu/opendesk-edu](https://github.com
 
 **Tobias Weiß**
 
-- HRZ Zentrale Systeme · Universität Marburg
+- Kubernetes Zentrale Systeme · Universität OpenDesk
 - @<graphwiz_ai@mastodon.social>
 - LinuxTag 2026 · 28.03.2026
 

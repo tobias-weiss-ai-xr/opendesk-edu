@@ -697,14 +697,14 @@ Legend:
 │                                                                          │
 │  For General Questions:                                                 │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
-│  │ Security Team: security@opendesk.hrz.uni-marburg.de                │ │
+│  │ Security Team: security@home.opendesk-edu.org                │ │
 │  │ Slack: #security                                                   │ │
 │  │ Response: 4-8 hours                                                │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 │                                                                          │
 │  For Security Incidents:                                               │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
-│  │ Incident Response: incident@opendesk.hrz.uni-marburg.de            │ │
+│  │ Incident Response: incident@home.opendesk-edu.org            │ │
 │  │ Slack: #incident-response                                            │ │
 │  │ Phone: [Emergency number]                                          │ │
 │  │ Response: 15 minutes                                               │ │
@@ -712,7 +712,7 @@ Legend:
 │                                                                          │
 │  For Technical Issues:                                                  │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
-│  │ DevOps Team: devops@opendesk.hrz.uni-marburg.de                    │ │
+│  │ DevOps Team: devops@home.opendesk-edu.org                    │ │
 │  │ Slack: #devops                                                     │ │
 │  │ Response: 4-8 hours                                                │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
@@ -726,14 +726,14 @@ Legend:
 │                                                                          │
 │  For Approvals:                                                         │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
-│  │ CISO: ciso@opendesk.hrz.uni-marburg.de                             │ │
+│  │ CISO: ciso@home.opendesk-edu.org                             │ │
 │  │ Slack: @ciso                                                       │ │
 │  │ Response: 30 minutes                                               │ │
 │  └────────────────────────────────────────────────────────────────────┘ │
 │                                                                          │
 │  For Data Protection:                                                   │
 │  ┌────────────────────────────────────────────────────────────────────┐ │
-│  │ DPO: datenschutz@opendesk.hrz.uni-marburg.de                       │ │
+│  │ DPO: datenschutz@home.opendesk-edu.org                       │ │
 │  │ Slack: @dpo                                                        │ │
 │  │ Response: 1 hour                                                   │ │
 │  └────────────────────────────────────────────────────────────────────┘ │

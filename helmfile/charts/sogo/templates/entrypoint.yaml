@@ -16,8 +16,8 @@ data:
     # Skip if custom-built image already has SOGo
     if ! command -v sogod &>/dev/null; then
       echo "Installing SOGo from Debian repos..."
-      echo 'Acquire::http::Proxy "http://www-proxy2.uni-marburg.de:3128";' > /etc/apt/apt.conf.d/99proxy
-      echo 'Acquire::https::Proxy "http://www-proxy2.uni-marburg.de:3128";' >> /etc/apt/apt.conf.d/99proxy
+      echo 'Acquire::http::Proxy "http://www-proxy2.opendesk-edu.org:3128";' > /etc/apt/apt.conf.d/99proxy
+      echo 'Acquire::https::Proxy "http://www-proxy2.opendesk-edu.org:3128";' >> /etc/apt/apt.conf.d/99proxy
       echo 'Acquire::ForceIPv4 "true";' >> /etc/apt/apt.conf.d/99proxy
       apt-get update -qq
       apt-get install -y -qq --no-install-recommends \

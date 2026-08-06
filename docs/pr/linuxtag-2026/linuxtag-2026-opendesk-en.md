@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Sovereign cloud infrastructure   | SBOM for all components
 
 ---
 
-# Helmfile & HRZ-Environment
+# Helmfile & Kubernetes-Environment
 
 ```bash
 # Deployment with Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orchestration** ⚓
   - Declarative configuration in `helmfile_generic.yaml.gotmpl`
-  - Environment-specific overrides in `environments/hrz/`
+  - Environment-specific overrides in `environments/production/`
   - Automatic dependency backup
-- **HRZ-Environment created** 🖥️
+- **Kubernetes-Environment created** 🖥️
   - Copy of `staging` with adjustments
-  - Uni Marburg-specific configuration
+  - Uni OpenDesk-specific configuration
   - Test system for pilot operation
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion back
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Review changes
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Apply updates
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Rollback if needed
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Controlled updates via Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Ingress Migration
+# Kubernetes-Upgrade: Ingress Migration
 
 - **Migration:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (uniapps branch)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Dual Backup
+# Kubernetes-Upgrade: Dual Backup
 
 - **Goals:** Redundant Backup Storage 🗄️
 - **Strategy:** S3-compatible with restic backend 🔄

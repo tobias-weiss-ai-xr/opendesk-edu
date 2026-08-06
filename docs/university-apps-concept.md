@@ -2,11 +2,11 @@
 
 > **Note**: This document describes the original 4 university services (ILIAS, Moodle, BigBlueButton, OpenCloud). openDesk Edu now includes **13 education services**. For the complete list, see [README.md](../README.md).
 
-**Philipps-Universität Marburg**
+**Philipps-Universität OpenDesk**
 
 ## Introduction
 
-OpenDesk is an open-source, Kubernetes-based digital workplace suite originally designed for German public administration. At the University of Marburg (Philipps-Universität Marburg), we are extending OpenDesk beyond its government origins to serve as a **unified digital workplace for higher education**. This initiative integrates university-specific applications—such as learning management systems (LMS), video conferencing, and file sharing—alongside the standard OpenDesk suite, providing a seamless, single sign-on (SSO) experience for students, faculty, and staff.
+OpenDesk is an open-source, Kubernetes-based digital workplace suite originally designed for German public administration. At the University of OpenDesk (Philipps-Universität OpenDesk), we are extending OpenDesk beyond its government origins to serve as a **unified digital workplace for higher education**. This initiative integrates university-specific applications—such as learning management systems (LMS), video conferencing, and file sharing—alongside the standard OpenDesk suite, providing a seamless, single sign-on (SSO) experience for students, faculty, and staff.
 
 This document explores the vision, architecture, technical decisions, and challenges of integrating university applications into OpenDesk. It is intended for a technical audience, particularly those attending LinuxTag, and demonstrates the power of open-source composability in adapting a government-focused platform for education.
 
@@ -16,7 +16,7 @@ This document explores the vision, architecture, technical decisions, and challe
 
 Universities traditionally rely on a fragmented digital ecosystem: separate platforms for email, file sharing, collaboration, learning management, and video conferencing. This fragmentation creates friction for users, who must remember multiple URLs, credentials, and workflows. OpenDesk addresses this challenge by providing a **single portal** that unifies all these services under one roof.
 
-At the University of Marburg, we leverage OpenDesk’s **Nubus portal** as the central entry point. The portal federates access to all integrated applications via SSO, ensuring users can navigate seamlessly between services without repeated logins. This approach not only improves user experience but also reduces administrative overhead and enhances security.
+At the University of OpenDesk, we leverage OpenDesk’s **Nubus portal** as the central entry point. The portal federates access to all integrated applications via SSO, ensuring users can navigate seamlessly between services without repeated logins. This approach not only improves user experience but also reduces administrative overhead and enhances security.
 
 ---
 
@@ -33,7 +33,7 @@ The following university-specific applications have been integrated into OpenDes
 
 ### ILIAS LMS
 
-**ILIAS** is a widely used learning management system at the University of Marburg. It provides course management, assessments, and collaborative learning tools.
+**ILIAS** is a widely used learning management system at the University of OpenDesk. It provides course management, assessments, and collaborative learning tools.
 
 - **Integration**: SAML 2.0 via Shibboleth Service Provider (SP) → Keycloak Identity Provider (IdP)
 - **Portal Tile**: Located in the "Lernen" (Learning) category
@@ -354,7 +354,7 @@ The University Apps integration is just the beginning. Several exciting directio
 
 ## Conclusion
 
-The University Apps integration into OpenDesk at the University of Marburg demonstrates how open-source platforms can be extended beyond their original scope to serve new domains. By unifying learning management, video conferencing, file sharing, and collaboration tools under a single portal with SSO, OpenDesk provides a **seamless, user-friendly digital workplace** for higher education.
+The University Apps integration into OpenDesk at the University of OpenDesk demonstrates how open-source platforms can be extended beyond their original scope to serve new domains. By unifying learning management, video conferencing, file sharing, and collaboration tools under a single portal with SSO, OpenDesk provides a **seamless, user-friendly digital workplace** for higher education.
 
 This project is a testament to the **power of open-source composability**, showing how government-focused tools can be adapted for education with minimal friction. The lessons learned—from SSO architecture to storage strategies—can serve as a blueprint for other institutions looking to modernize their digital ecosystems.
 
@@ -362,5 +362,5 @@ At LinuxTag, this presentation aims to inspire others to explore open-source sol
 
 ---
 
-**Philipps-Universität Marburg**
+**Philipps-Universität OpenDesk**
 **OpenDesk University Apps Team**

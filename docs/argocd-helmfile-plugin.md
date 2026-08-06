@@ -144,7 +144,7 @@ spec:
             - /usr/local/bin/argocd-cmp-server
           env:
             - name: HELMFILE_GLOBAL_OPTIONS
-              value: "--environment hrz --namespace opendesk --allow-no-matching-release"
+              value: "--environment production --namespace opendesk --allow-no-matching-release"
           securityContext:
             runAsNonRoot: true
             runAsUser: 999
@@ -199,7 +199,7 @@ kubectl patch deployment argocd-repo-server -n argocd --type='json' \
     "name": "helmfile",
     "image": "quay.io/argoproj/argocd:v3.0.12",
     "command": ["/usr/local/bin/argocd-cmp-server"],
-    "env": [{"name": "HELMFILE_GLOBAL_OPTIONS", "value": "--environment hrz --namespace opendesk --allow-no-matching-release"}],
+    "env": [{"name": "HELMFILE_GLOBAL_OPTIONS", "value": "--environment production --namespace opendesk --allow-no-matching-release"}],
     "securityContext": {"runAsNonRoot": true, "runAsUser": 999},
     "volumeMounts": [
       {"mountPath": "/home/argocd/cmp-server/config", "name": "cmp-plugin-config"},
@@ -232,7 +232,7 @@ kubectl get application opencloud -n argocd -o json | jq '.status.sync.status'
 ## Troubleshooting
 
 ### ImagePullBackOff
-If the sidecar image can't be pulled (common in HRZ cluster):
+If the sidecar image can't be pulled (common in Kubernetes cluster):
 ```bash
 # Check the error
 kubectl describe pod -n argocd -l app.kubernetes.io/name=argocd-repo-server | grep -A5 "ImagePullBackOff"
@@ -241,9 +241,9 @@ kubectl describe pod -n argocd -l app.kubernetes.io/name=argocd-repo-server | gr
 # Add to the sops sidecar (or globally in the deployment):
 # env:
 #   - name: HTTP_PROXY
-#     value: http://www-proxy2.uni-marburg.de:3128
+#     value: http://www-proxy2.opendesk-edu.org:3128
 #   - name: HTTPS_PROXY
-#     value: http://www-proxy2.uni-marburg.de:3128
+#     value: http://www-proxy2.opendesk-edu.org:3128
 ```
 
 ### Helmfile Not Found
@@ -309,7 +309,7 @@ repoServer:
       command: [/var/run/argocd/argocd-cmp-server]
       env:
         - name: HELMFILE_GLOBAL_OPTIONS
-          value: "--environment hrz --namespace opendesk --allow-no-matching-release"
+          value: "--environment production --namespace opendesk --allow-no-matching-release"
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
@@ -334,10 +334,10 @@ repoServer:
       image: curlimages/curl:latest
       env:
         - name: HTTP_PROXY
-          value: http://www-proxy2.uni-marburg.de:3128
+          value: http://www-proxy2.opendesk-edu.org:3128
         - name: HTTPS_PROXY
-          value: http://www-proxy2.uni-marburg.de:3128
-      command: ["/bin/sh", "-c", "set -ex; curl -sL --proxy http://www-proxy2.uni-marburg.de:3128 https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz | tar xz -C /tools/ linux-amd64/helm; mv /tools/linux-amd64/helm /tools/helm; curl -sL --proxy http://www-proxy2.uni-marburg.de:3128 https://github.com/helmfile/helmfile/releases/download/v0.171.0/helmfile_0.171.0_linux_amd64.tar.gz | tar xz -C /tools/ helmfile; chmod +x /tools/helm /tools/helmfile"]
+          value: http://www-proxy2.opendesk-edu.org:3128
+      command: ["/bin/sh", "-c", "set -ex; curl -sL --proxy http://www-proxy2.opendesk-edu.org:3128 https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz | tar xz -C /tools/ linux-amd64/helm; mv /tools/linux-amd64/helm /tools/helm; curl -sL --proxy http://www-proxy2.opendesk-edu.org:3128 https://github.com/helmfile/helmfile/releases/download/v0.171.0/helmfile_0.171.0_linux_amd64.tar.gz | tar xz -C /tools/ helmfile; chmod +x /tools/helm /tools/helmfile"]
       volumeMounts:
         - mountPath: /tools
           name: extra-tools

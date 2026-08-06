@@ -12,12 +12,12 @@ INGRESS_IP="192.168.3.201"
 
 add_record() {
     local subdomain="$1"
-    echo "${subdomain}.opendesk.hrz.uni-marburg.de. IN A ${INGRESS_IP}"
+    echo "${subdomain}.home.opendesk-edu.org. IN A ${INGRESS_IP}"
 }
 
 cat << EOF
 ; opendesk-edu DNS records
-; Add these to the hrz.uni-marburg.de zone
+; Add these to the home.opendesk-edu.org zone
 ;
 ; All point to ingress controller at ${INGRESS_IP}
 ; Last reviewed: 2026-06-03

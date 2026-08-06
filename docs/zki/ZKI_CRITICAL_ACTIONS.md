@@ -670,7 +670,7 @@ spec:
               # Sync to S3-compatible storage
               echo "Syncing backups to external storage..."
               rclone sync /backup/ s3:opendesk-backups/kyverno/ \
-                --s3-endpoint https://s3.hrz.uni-marburg.de \
+                --s3-endpoint https://s3.home.opendesk-edu.org \
                 --s3-access-key-id $(AWS_ACCESS_KEY_ID) \
                 --s3-secret-access-key $(AWS_SECRET_ACCESS_KEY) \
                 --s3-provider Other \

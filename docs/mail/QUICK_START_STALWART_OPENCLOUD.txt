@@ -38,15 +38,15 @@ STEP 3: Register OIDC Clients in Keycloak
 1. Stalwart:
    - Client ID: stalwart
    - Secret: $STALWART_OIDC_SECRET
-   - Redirect URIs: https://mail.opendesk.hrz.uni-marburg.de/*, https://portal.opendesk.hrz.uni-marburg.de/*
+   - Redirect URIs: https://mail.home.opendesk-edu.org/*, https://portal.home.opendesk-edu.org/*
    - Protocol: openid-connect
    - Access Type: confidential
 
 2. OpenCloud:
    - Client ID: opendesk-opencloud
    - Secret: $OPENCLOUD_OIDC_SECRET
-   - Redirect URIs: https://files.opendesk.hrz.uni-marburg.de/*, https://portal.opendesk.hrz.uni-marburg.de/*
-   - Backchannel Logout URL: https://files.opendesk.hrz.uni-marburg.de/backchannel_logout
+   - Redirect URIs: https://files.home.opendesk-edu.org/*, https://portal.home.opendesk-edu.org/*
+   - Backchannel Logout URL: https://files.home.opendesk-edu.org/backchannel_logout
 
 ================================================================================
 STEP 4: Deploy
@@ -83,8 +83,8 @@ kubectl get svc stalwart
 kubectl get svc opendesk-opencloud
 
 # Test health endpoints
-curl -k https://mail.opendesk.hrz.uni-marburg.de/api/health
-curl -k https://files.opendesk.hrz.uni-marburg.de/status.php
+curl -k https://mail.home.opendesk-edu.org/api/health
+curl -k https://files.home.opendesk-edu.org/status.php
 
 # View logs
 kubectl logs -f deployment/stalwart
@@ -95,15 +95,15 @@ ACCESS YOUR SERVICES
 ================================================================================
 
 Stalwart Mail Server:
-  Admin Console: https://mail.opendesk.hrz.uni-marburg.de
-  IMAP:          mail.opendesk.hrz.uni-marburg.de:993
-  SMTP:          mail.opendesk.hrz.uni-marburg.de:465
+  Admin Console: https://mail.home.opendesk-edu.org
+  IMAP:          mail.home.opendesk-edu.org:993
+  SMTP:          mail.home.opendesk-edu.org:465
 
 OpenCloud:
-  Web: https://files.opendesk.hrz.uni-marburg.de
+  Web: https://files.home.opendesk-edu.org
   
 Both use Keycloak for authentication:
-  Login at: https://portal.opendesk.hrz.uni-marburg.de
+  Login at: https://portal.home.opendesk-edu.org
 
 ================================================================================
 DOCUMENTATION
@@ -124,8 +124,8 @@ TROUBLESHOOTING
    kubectl get cm stalwart-config -o yaml
    
 3. DNS issues? Test:
-   nslookup mail.opendesk.hrz.uni-marburg.de
-   nslookup files.opendesk.hrz.uni-marburg.de
+   nslookup mail.home.opendesk-edu.org
+   nslookup files.home.opendesk-edu.org
 
 4. More help: See STALWART_OPENCLOUD_DEPLOYMENT_SUMMARY.md
 

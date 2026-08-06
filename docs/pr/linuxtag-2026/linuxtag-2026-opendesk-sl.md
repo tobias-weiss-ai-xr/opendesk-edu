@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suverena oblakna infrastruktura  | SBOM za vse komponente
 
 ---
 
-# Helmfile in HRZ-Okolje
+# Helmfile in Kubernetes-Okolje
 
 ```bash
 # Namestitev z Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orkestracija** ⚓
   - Deklarativna konfiguracija v `helmfile_generic.yaml.gotmpl`
-  - Specifična preglasitev okolja v `environments/hrz/`
+  - Specifična preglasitev okolja v `environments/production/`
   - Samodejna varnostna kopija odvisnosti
-- **HRZ-Okolje ustvarjeno** 🖥️
+- **Kubernetes-Okolje ustvarjeno** 🖥️
   - Kopija `staging` s prilagoditvami
-  - Konfiguracija, specifična za Uni Marburg
+  - Konfiguracija, specifična za Uni OpenDesk
   - Testni sistem za pilotno obratovanje
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS ploščica
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Prijava (weblogin.uni-marburg.de)
+4. 🎓 Prijava (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion nazaj
 6. ✅ ILIAS Nadzorna plošča
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Pregled sprememb
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Uporabi posodobitve
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Vračanje, če je potrebno
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Nadzorovane posodobitve preko Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Posodobitev: Migracija Ingressa
+# Kubernetes-Posodobitev: Migracija Ingressa
 
 - **Migracija:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (veja uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Posodobitev: Dvojna Varnostna Kopija
+# Kubernetes-Posodobitev: Dvojna Varnostna Kopija
 
 - **Cilji:** Redundantno Shranjevanje Varnostnih Kopij 🗄️
 - **Strategija:** S3-združljivo z restic zaledjem 🔄

@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Infrastruttura cloud sovran   | SBOM għall-komponenti kollha
 
 ---
 
-# Helmfile u Ambjent HRZ
+# Helmfile u Ambjent Kubernetes
 
 ```bash
 # Deployment b'Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Orkestrazzjoni Helmfile** ⚓
   - Konfigurazzjoni deklarativa f'`helmfile_generic.yaml.gotmpl`
-  - Override speċifiċi għall-ambjent f'`environments/hrz/`
+  - Override speċifiċi għall-ambjent f'`environments/production/`
   - Backup awtomatiku tad-dipendenzi
-- **Ambjent HRZ maħluq** 🖥️
+- **Ambjent Kubernetes maħluq** 🖥️
   - Kopja ta' `staging` b'adattamenti
-  - Konfigurazzjoni speċifika għal Uni Marburg
+  - Konfigurazzjoni speċifika għal Uni OpenDesk
   - Sistema tat-test għall-operazzjoni pilota
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion lura
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Ikkontrolla l-bidliet
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Tapplika l-aġġornamenti
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Rollback jekk meħtieġ
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Aġġornamenti kkontrollati permezz ta' Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Migrazzjoni tal-Ingress
+# Kubernetes-Upgrade: Migrazzjoni tal-Ingress
 
 - **Migrazzjoni:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (branch uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Backup Dupli
+# Kubernetes-Upgrade: Backup Dupli
 
 - **Għanijiet:** Storage Backup Redundant 🗄️
 - **Strateġija:** Kompatibbli ma' S3 b'backend restic 🔄

@@ -320,8 +320,8 @@ apps:
 
 # Edu-specific global config
 global:
-  domain: opendesk.hrz.uni-marburg.de
-  mail_domain: uni-marburg.de
+  domain: home.opendesk-edu.org
+  mail_domain: opendesk-edu.org
 
 # Keycloak bootstrap — add edu SAML clients
 # CE's bootstrap handles core CE clients
@@ -746,7 +746,7 @@ Once the submodule migration is complete:
    - Restore edu-specific CI in `.gitlab-ci.yml`
    - Restore edu README modifications
 
-2. **Deploy/hrz branch:** The etherpad changes on `deploy/hrz` (inline PostgreSQL) should be cherry-picked or rebased onto the new structure.
+2. **Deploy/production branch:** The etherpad changes on `deploy/production` (inline PostgreSQL) should be cherry-picked or rebased onto the new structure.
 
 3. **Next CE update:** `cd helmfile/ce && git fetch && git checkout v1.18.0 && cd ../.. && git add helmfile/ce && git commit -m "chore: update CE to v1.18.0"` — zero conflicts.
 

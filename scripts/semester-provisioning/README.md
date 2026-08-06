@@ -104,7 +104,7 @@ Core library used by all services:
 ### LDAP (for semester_check.py)
 | Variable | Default | Description |
 |---|---|---|
-| `HISINONE_LDAP_HOST` | `ldap.uni-marburg.de` | LDAP server hostname |
+| `HISINONE_LDAP_HOST` | `ldap.opendesk-edu.org` | LDAP server hostname |
 | `HISINONE_LDAP_PORT` | `636` | LDAP server port |
 | `HISINONE_LDAP_USE_SSL` | `true` | Use LDAPS |
 | `HISINONE_LDAP_BIND_DN` | — | Bind DN for LDAP queries |

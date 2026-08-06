@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suvereni debesų infrastruktūra | SBOM visiems komponentams
 
 ---
 
-# Helmfile ir HRZ-Aplinka
+# Helmfile ir Kubernetes-Aplinka
 
 ```bash
 # Diegimas su Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orkestracija** ⚓
   - Deklaratyvi konfigūracija `helmfile_generic.yaml.gotmpl`
-  - Aplinkai specifiniai pakeitimai `environments/hrz/`
+  - Aplinkai specifiniai pakeitimai `environments/production/`
   - Automatinis priklausomybių atsarginis kopijavimas
-- **HRZ-Aplinka sukurta** 🖥️
+- **Kubernetes-Aplinka sukurta** 🖥️
   - `staging` kopija su pakeitimais
-  - Marburgo universiteto specifinė konfigūracija
+  - OpenDesko universiteto specifinė konfigūracija
   - Bandomoji sistema bandomajam naudojimui
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portadas → ILIAS plytelė
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Prisijungimas (weblogin.uni-marburg.de)
+4. 🎓 Prisijungimas (weblogin.opendesk-edu.org)
 5. 📨 SAML teiginys grįžta
 6. ✅ ILIAS Skydelis
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Peržiūrėti pakeitimus
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Taikyti atnaujinimus
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Grąžinti, jei reikia
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Valdomi atnaujinimai per Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Atnaujinimas: Ingress Migracija
+# Kubernetes-Atnaujinimas: Ingress Migracija
 
 - **Migracija:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (uniapps šaka)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Atnaujinimas: Dvigubas Atsarginis Kopijavimas
+# Kubernetes-Atnaujinimas: Dvigubas Atsarginis Kopijavimas
 
 - **Tikslai:** Atsarginė Kopijos Saugykla su Redundancija 🗄️
 - **Strategija:** S3 suderinama su restic backend'u 🔄

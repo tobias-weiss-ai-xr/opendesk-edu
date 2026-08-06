@@ -5,7 +5,7 @@
 
 ## Summary
 
-This session successfully resolved two critical operational issues in the OpenDesk HRZ cluster:
+This session successfully resolved two critical operational issues in the OpenDesk Kubernetes cluster:
 1. **Backup operations unblocked** - Cleared 12 stuck backup job pods and Job resources
 2. **UDM transformer LDAP configured** - Complete LDAP configuration enabling UDM transformations
 

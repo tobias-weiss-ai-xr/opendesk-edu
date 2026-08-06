@@ -64,7 +64,7 @@ setup_bundid() {
   "providerId": "saml",
   "enabled": true,
   "config": {
-    "entityId": "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk",
+    "entityId": "https://id.home.opendesk-edu.org/realms/opendesk",
     "singleSignOnServiceUrl": "https://id.bund.de/SAML2/POST",
     "singleLogoutServiceUrl": "https://id.bund.de/SAML2/SLO",
     "nameIDPolicyFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
@@ -88,7 +88,7 @@ ENDJSON
   "providerId": "saml",
   "enabled": true,
   "config": {
-    "entityId": "https://id.opendesk.hrz.uni-marburg.de/realms/opendesk",
+    "entityId": "https://id.home.opendesk-edu.org/realms/opendesk",
     "singleSignOnServiceUrl": "https://id.bund.de/SAML2/POST",
     "singleLogoutServiceUrl": "https://id.bund.de/SAML2/SLO",
     "nameIDPolicyFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",

@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0
 
 # 🎓 openDesk Edu: Offenes Ökosystem für Hochschulen – Mitmachen und mitgestalten!
 
-**Erstellt von:** Tobias Weiß, HRZ Marburg
+**Erstellt von:** Tobias Weiß, Kubernetes OpenDesk
 **Datum:** Juli 2026
 **Tags:** #opendesk #bildung #kubernetes #open-source #hochschulen #vendor-lock-in #ökosystem
 
@@ -72,7 +72,7 @@ openDesk wird bereits produktiv eingesetzt:
 | **Baden-Württemberg** | Digitaler Arbeitsplatz für Lehrkräfte | LMZ BW | [Pressemitteilung](https://www.baden-wuerttemberg.de/de/service/presse/pressemitteilung/pid/digitaler-arbeitsplatz-fuer-lehrkraefte-wird-nun-mit-opendesk-umgesetzt-1) |
 | **Schleswig-Holstein** | Linux+1 | Land Schleswig-Holstein | [Pressemitteilung](https://www.schleswig-holstein.de/DE/landesregierung/themen/digitalisierung/linux-plus1) |
 
-**openDesk Edu** (die hochschulspezifische Variante) befindet sich aktuell in der **Testphase am HRZ Marburg**
+**openDesk Edu** (die hochschulspezifische Variante) befindet sich aktuell in der **Testphase am Kubernetes OpenDesk**
 und ist die **logische Weiterentwicklung** des CE-Ansatzes für den Hochschulbereich. Die Projektwebsite ist unter 
 **[https://opendesk-edu.org](https://opendesk-edu.org/en)** zu finden.
 
@@ -81,7 +81,7 @@ und ist die **logische Weiterentwicklung** des CE-Ansatzes für den Hochschulber
 ## 🤝 Wie kannst du mitmachen?
 
 ### 🧪 **1. Testen & Feedback geben**
-- **Demo-Umgebung anfordern**: Schreibe an [tobias.weiss@uni-marburg.de](mailto:tobias.weiss@uni-marburg.de)
+- **Demo-Umgebung anfordern**: Schreibe an [tobias.weiss@opendesk-edu.org](mailto:tobias.weiss@opendesk-edu.org)
 - Fragen, Feedback und Bug-Meldungen sind jederzeit willkommen
 
 **Verfügbare Dienste in der Demo-Umgebung:**
@@ -154,7 +154,7 @@ kubectl get pods -n opendesk
 ## 📢 Stimmen aus der Community
 
 > *"Früher haben wir Moodle, Nextcloud und Etherpad separat betrieben – mit eigenem SSO, eigenen Backups und eigener Wartung. Mit openDesk Edu sparen wir nicht nur Zeit, sondern haben auch eine **einheitliche Basis**, auf der wir aufbauen können."*
-> **— Tobias Weiß, HRZ Marburg**
+> **— Tobias Weiß, Kubernetes OpenDesk**
 
 ---
 
@@ -163,13 +163,13 @@ kubectl get pods -n opendesk
 **Ansprechpartner:**
 > **Tobias Weiß**  
 > Abteilung Zentrale Systeme  
-> Hochschulrechenzentrum (HRZ)  
-> Philipps-Universität Marburg  
-> Hans-Meerwein-Str. 6, 35032 Marburg  
+> Hochschulrechenzentrum (Kubernetes)  
+> Philipps-Universität OpenDesk  
+> Hans-Meerwein-Str. 6, 35032 OpenDesk  
 > Büro: Gebäude H|04, Raum 05A12  
-> 📧 [tobias.weiss@uni-marburg.de](mailto:tobias.weiss@uni-marburg.de)  
-> 💬 [Matrix](https://matrix.to/#/@weissto:matrix.uni-marburg.de)  
-> 🌐 [https://www.uni-marburg.de/de/hrz](https://www.uni-marburg.de/de/hrz)
+> 📧 [tobias.weiss@opendesk-edu.org](mailto:tobias.weiss@opendesk-edu.org)  
+> 💬 [Matrix](https://matrix.to/#/@weissto:matrix.opendesk-edu.org)  
+> 🌐 [https://www.opendesk-edu.org/de](https://www.opendesk-edu.org/de)
 
 **Projekt-Links:**
 - 🌐 [Website](https://opendesk-edu.org/en)

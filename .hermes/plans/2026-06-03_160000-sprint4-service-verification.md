@@ -61,8 +61,8 @@ For each service, confirm:
 
 ## Acceptance Criteria
 
-- OpenProject web returns HTTP 200 at `https://projects.opendesk.hrz.uni-marburg.de`
+- OpenProject web returns HTTP 200 at `https://projects.home.opendesk-edu.org`
 - 3+ services SSO-verified via browser
-- All 44 Keycloak clients use `*.opendesk.hrz.uni-marburg.de` domains
+- All 44 Keycloak clients use `*.home.opendesk-edu.org` domains
 - Last k8up backup within 24h
 - No openproject pods in CrashLoopBackOff

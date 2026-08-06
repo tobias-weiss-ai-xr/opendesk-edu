@@ -19,12 +19,12 @@ helm install stalwart . --namespace opendesk \
   --set stalwart.directory.type="ldap" \
   --set stalwart.directory.ldap.host="ums-ldap.opendesk.svc.cluster.local" \
   --set stalwart.directory.ldap.port=636 \
-  --set stalwart.directory.ldap.baseDn="dc=uni-marburg,dc=de" \
-  --set stalwart.directory.ldap.bindDn="cn=admin,dc=uni-marburg,dc=de" \
+  --set stalwart.directory.ldap.baseDn="dc=opendesk-edu,dc=org" \
+  --set stalwart.directory.ldap.bindDn="cn=admin,dc=opendesk-edu,dc=org" \
   --set stalwart.directory.ldap.bindPassword="changeme-ldap" \
   --set stalwart.directory.ldap.tls.enabled=true \
   --set stalwart.auth.oidc.enabled=true \
-  --set stalwart.auth.oidc.issuerUrl="https://id.opendesk.hrz.uni-marburg.de/realms/opendesk" \
+  --set stalwart.auth.oidc.issuerUrl="https://id.home.opendesk-edu.org/realms/opendesk" \
   --set stalwart.auth.oidc.clientId="stalwart" \
   --set stalwart.auth.oidc.clientSecret="changeme-oidc" \
   --set stalwart.auth.oidc.scope="openid profile email" \
@@ -32,7 +32,7 @@ helm install stalwart . --namespace opendesk \
   --set stalwart.auth.fallbackAdmin.passwordHash="$2y$10$YFjOqBrebL9hXgCJ1p7qVOBwlJ7JQY3i3gxJQrL5Jt6T5t8v2" \
   --set stalwart.ingress.enabled=true \
   --set stalwart.ingress.className="haproxy" \
-  --set stalwart.ingress.hostname="mail.opendesk.hrz.uni-marburg.de" \
+  --set stalwart.ingress.hostname="mail.home.opendesk-edu.org" \
   --set stalwart.ingress.tls.enabled=true \
   --set stalwart.ingress.tls.secretName="opendesk-certificates-tls" \
   --set stalwart.persistence.enabled=true \

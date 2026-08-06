@@ -492,11 +492,11 @@ kubectl apply -f helmfile/charts/security/test-resources/
 
 | Role | Email | Slack | Emergency | Response Time |
 |------|-------|-------|-----------|---------------|
-| Security Team | security@opendesk.hrz.uni-marburg.de | #security | No | 4-8 hours |
-| Incident Response | incident@opendesk.hrz.uni-marburg.de | #incident-response | Yes | 15 min |
-| DevOps Team | devops@opendesk.hrz.uni-marburg.de | #devops | No | 4-8 hours |
-| CISO | ciso@opendesk.hrz.uni-marburg.de | @ciso | Yes | 30 min |
-| DPO | datenschutz@opendesk.hrz.uni-marburg.de | @dpo | Yes | 1 hour |
+| Security Team | security@home.opendesk-edu.org | #security | No | 4-8 hours |
+| Incident Response | incident@home.opendesk-edu.org | #incident-response | Yes | 15 min |
+| DevOps Team | devops@home.opendesk-edu.org | #devops | No | 4-8 hours |
+| CISO | ciso@home.opendesk-edu.org | @ciso | Yes | 30 min |
+| DPO | datenschutz@home.opendesk-edu.org | @dpo | Yes | 1 hour |
 
 ---
 
@@ -585,4 +585,4 @@ The **ZKI IT-Grundschutz-Profil** implementation for **openDesk** is now **100% 
 
 *This implementation provides everything needed to achieve ZKI IT-Grundschutz-Profil compliance for openDesk. All files have SPDX license headers and are production-ready. The final step is to complete the P0 actions and deploy to production.*
 
-*For questions or support, contact the Security Team at security@opendesk.hrz.uni-marburg.de or ask in Slack #security.*
+*For questions or support, contact the Security Team at security@home.opendesk-edu.org or ask in Slack #security.*

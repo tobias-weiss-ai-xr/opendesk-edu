@@ -15,13 +15,13 @@
 2. **n8n**
    - No existing chart or app config
    - Use upstream Helm chart (community/bitnami) or write minimal chart
-   - Configure values: ingress host `n8n.opendesk.hrz.uni-marburg.de`, DB (SQLite or shared PG), storage
+   - Configure values: ingress host `n8n.home.opendesk-edu.org`, DB (SQLite or shared PG), storage
    - Deploy via `helm install`
    - Verify ingress
 
 3. **OpenProject**
    - Uses upstream Bitnami chart (no local chart dir)
    - Needs PostgreSQL and Redis
-   - Configure values: ingress host `projects.opendesk.hrz.uni-marburg.de`, resource sizing
+   - Configure values: ingress host `projects.home.opendesk-edu.org`, resource sizing
    - Deploy via `helm install`
    - Verify ingress + portal entry

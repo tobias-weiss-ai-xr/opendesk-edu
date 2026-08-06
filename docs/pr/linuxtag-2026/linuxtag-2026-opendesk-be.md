@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
 
 ---
 
-# Helmfile і HRZ-Асяроддзе
+# Helmfile і Kubernetes-Асяроддзе
 
 ```bash
 # Разгортанне з дапамогай Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Аркестрацыя Helmfile** ⚓
   - Дэкларатыўная канфігурацыя ў `helmfile_generic.yaml.gotmpl`
-  - Перавызначэнні для канкрэтнага асяроддзя ў `environments/hrz/`
+  - Перавызначэнні для канкрэтнага асяроддзя ў `environments/production/`
   - Аўтаматычнае рэзервовае капіяванне залежнасцей
-- **HRZ-Асяроддзе створана** 🖥️
+- **Kubernetes-Асяроддзе створана** 🖥️
   - Копія `staging` з адаптацыямі
-  - Канфігурацыя для Uni Marburg
+  - Канфігурацыя для Uni OpenDesk
   - Тэставая сістэма для пілотнай эксплуатацыі
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Портал → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Уваход (weblogin.uni-marburg.de)
+4. 🎓 Уваход (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion назад
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Праглядзець змены
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Ужыць абнаўленні
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Адкат пры неабходнасці
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Кантролюемыя абнаўленні праз Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Міграцыя Ingress
+# Kubernetes-Upgrade: Міграцыя Ingress
 
 - **Міграцыя:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (галіна uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Upgrade: Двайное Рэзервовае Капіяванне
+# Kubernetes-Upgrade: Двайное Рэзервовае Капіяванне
 
 - **Мэты:** Рэзервовае Сховішча з Лішкам 🗄️
 - **Стратэгія:** S3-сумяшчальнае з restic бэкендам 🔄

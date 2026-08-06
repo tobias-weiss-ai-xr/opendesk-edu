@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suveräänne pilveinfrastruktuur   | SBOM kõigi komponentide jaoks
 
 ---
 
-# Helmfile & HRZ-Keskkond
+# Helmfile & Kubernetes-Keskkond
 
 ```bash
 # Paigaldus Helmfile'iga
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orkestratsioon** ⚓
   - Deklaratiivne konfiguratsioon failis `helmfile_generic.yaml.gotmpl`
-  - Keskkonnaspetsiifilised ülekirjutused failis `environments/hrz/`
+  - Keskkonnaspetsiifilised ülekirjutused failis `environments/production/`
   - Automaatne sõltuvuste varukoopia
-- **Loodud HRZ-Keskkond** 🖥️
+- **Loodud Kubernetes-Keskkond** 🖥️
   - `staging` koopia kohandustega
-  - Marburgi Ülikooli-spetsiifiline konfiguratsioon
+  - OpenDeski Ülikooli-spetsiifiline konfiguratsioon
   - Testisüsteem pilootkäivituseks
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion back
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Vaadake üle muudatused
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Rakendage uuendused
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Taastage vajadusel
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Kontrollitud uuendused Helmfile'i kaudu** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Uuendus: Ingressi Migratsioon
+# Kubernetes-Uuendus: Ingressi Migratsioon
 
 - **Migratsioon:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (haru uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Uuendus: Topelt-Varukoopia
+# Kubernetes-Uuendus: Topelt-Varukoopia
 
 - **Eesmärgid:** Redundantne Varukoopia Salvestus 🗄️
 - **Strateegia:** S3-ühilduv restic backendiga 🔄

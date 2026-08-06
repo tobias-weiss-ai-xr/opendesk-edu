@@ -124,7 +124,7 @@ echo "⚙️  ENVIRONMENT CONFIGURATION"
 echo "---"
 
 echo -n "Checking ce-overrides.yaml... "
-if grep -q "mail.opendesk.hrz.uni-marburg.de" opendesk-edu/helmfile/environments/edu/ce-overrides.yaml 2>/dev/null; then
+if grep -q "mail.home.opendesk-edu.org" opendesk-edu/helmfile/environments/edu/ce-overrides.yaml 2>/dev/null; then
     track 0 "ce-overrides.yaml has global hosts"
 else
     track 2 "ce-overrides.yaml NOT properly updated"
@@ -305,8 +305,8 @@ if [ "$1" == "--execute" ] || [ "$1" == "-y" ]; then
     - Added extensive documentation for all components
     
     Enabled services:
-    - OpenCloud: ✅ Deployed (files.opendesk.hrz.uni-marburg.de)
-    - Stalwart: ⚠️  Config format needs update (mail.opendesk.hrz.uni-marburg.de)
+    - OpenCloud: ✅ Deployed (files.home.opendesk-edu.org)
+    - Stalwart: ⚠️  Config format needs update (mail.home.opendesk-edu.org)
     
     Required before production:
     - Register OIDC clients in Keycloak

@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,18 +93,18 @@ BMI资助平台        | 签名容器镜像
 
 ---
 
-# Helmfile & HRZ 环境
+# Helmfile & Kubernetes 环境
 
 ```bash
 # 使用 Helmfile 部署
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile 编排** ⚓
   - 声明式配置在 `helmfile_generic.yaml.gotmpl`
-  - 环境特定覆盖在 `environments/hrz/`
+  - 环境特定覆盖在 `environments/production/`
   - 自动备份依赖项
-- **HRZ 环境创建** 🖥️
+- **Kubernetes 环境创建** 🖥️
   - 从 `staging` 复制并调整
   - 马堡大学特定配置
   - 试点运行测试系统
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ 门户 → ILIAS 图块
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → 校园 IdP
-4. 🎓 登录 (weblogin.uni-marburg.de)
+4. 🎓 登录 (weblogin.opendesk-edu.org)
 5. 📨 返回 SAML 断言
 6. ✅ ILIAS 仪表板
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # 检查变更
-helmfile diff -e hrz
+helmfile diff -e production
 
 # 应用更新
-helmfile apply -e hrz
+helmfile apply -e production
 
 # 必要时回滚
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **通过 Helmfile 控制更新** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ 升级：Ingress 迁移
+# Kubernetes 升级：Ingress 迁移
 
 - **迁移:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x（uniapps 分支）
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ 升级：双重备份
+# Kubernetes 升级：双重备份
 
 - **目标:** 冗余备份存储 🗄️
 - **策略:** S3 兼容，restic 后端 🔄

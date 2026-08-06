@@ -4,7 +4,7 @@
 apiVersion: v2
 name: network-policies
 description: |-
-  Kubernetes Network Policies for openDesk HRZ deployment.
+  Kubernetes Network Policies for openDesk Kubernetes deployment.
   Controls ingress and egress traffic between services to implement
   defense-in-depth security posture.
 
@@ -18,7 +18,7 @@ type: application
 version: 1.0.0
 appVersion: "1.0.0"
 maintainers:
-  - name: HRZ openDesk Team
+  - name: Kubernetes openDesk Team
     email: admin@home.opendesk-edu.org
 keywords:
   - network-policies
@@ -27,4 +27,4 @@ keywords:
   - defense-in-depth
 home: https://home.opendesk-edu.org
 sources:
-  - https://gitlab.hrz.uni-marburg.de/hrz/kubernetes/opendesk/opendesk
+  - https://gitlab.home.opendesk-edu.org/opendesk/opendesk

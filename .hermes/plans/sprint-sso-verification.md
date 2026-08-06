@@ -14,19 +14,19 @@ For each service:
 - Verify redirect URI is correct after login
 
 Services to test:
-- n8n (`n8n.opendesk.hrz.uni-marburg.de`)
-- Bookstack (`bookstack.opendesk.hrz.uni-marburg.de`)
-- Planka (`planka.opendesk.hrz.uni-marburg.de`)
-- Draw.io (`draw.opendesk.hrz.uni-marburg.de`)
-- Etherpad (`etherpad.opendesk.hrz.uni-marburg.de`)
-- TYPO3 (`typo3.opendesk.hrz.uni-marburg.de`)
-- LimeSurvey (`limesurvey.opendesk.hrz.uni-marburg.de`)
-- Excalidraw (`excalidraw.opendesk.hrz.uni-marburg.de`)
-- SSP (`ssp.opendesk.hrz.uni-marburg.de`)
+- n8n (`n8n.home.opendesk-edu.org`)
+- Bookstack (`bookstack.home.opendesk-edu.org`)
+- Planka (`planka.home.opendesk-edu.org`)
+- Draw.io (`draw.home.opendesk-edu.org`)
+- Etherpad (`etherpad.home.opendesk-edu.org`)
+- TYPO3 (`typo3.home.opendesk-edu.org`)
+- LimeSurvey (`limesurvey.home.opendesk-edu.org`)
+- Excalidraw (`excalidraw.home.opendesk-edu.org`)
+- SSP (`ssp.home.opendesk-edu.org`)
 
 ### 2. SAML services — 2 services
-- Moodle (`moodle.opendesk.hrz.uni-marburg.de`) — Shibboleth SP
-- ILIAS (`lms.opendesk.hrz.uni-marburg.de`) — SimpleSAMLphp
+- Moodle (`moodle.home.opendesk-edu.org`) — Shibboleth SP
+- ILIAS (`lms.home.opendesk-edu.org`) — SimpleSAMLphp
 
 ### 3. Zammad OIDC admin UI
 - Document and execute the manual admin UI setup steps

@@ -10,7 +10,7 @@ All Nix migration commits have been successfully pushed to the following remotes
 | **github** | ✅ SYNCED | 1998a859 |
 | **gitlab-com** | ✅ SYNCED | 1998a859 |
 | **opencode-de** | ⚠️ Protected branch (requires MR) | 839636f1 |
-| **hrz-mirror** | ⚠️ DNS unreachable | - |
+| **production-mirror** | ⚠️ DNS unreachable | - |
 
 ## 📋 Commits in This Session
 

@@ -4,7 +4,7 @@
 **Cluster:** Kubernetes (`*.home.opendesk-edu.org`)
 
 > **Note:** This sub-project was previously developed against a separate external host
-> (`178.63.182.104`). All services now deploy on the **Kubernetes cluster** alongside
+> (`<REDACTED_IP>`). All services now deploy on the **Kubernetes cluster** alongside
 > the main openDesk CE deployment.
 
 > **Architecture Change (2026-07-23):** Migrated from fork-based to Git submodule architecture.

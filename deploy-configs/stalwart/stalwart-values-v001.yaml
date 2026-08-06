@@ -27,8 +27,8 @@ stalwart:
     ldap:
       host: "ums-ldap.opendesk.svc.cluster.local"
       port: 636
-      baseDn: "dc=uni-marburg,dc=de"
-      bindDn: "cn=admin,dc=uni-marburg,dc=de"
+      baseDn: "dc=opendesk-edu,dc=org"
+      bindDn: "cn=admin,dc=opendesk-edu,dc=org"
       bindPassword: "changeme-replace-with-actual-ldap-password"
       tls:
         enabled: true

@@ -3,7 +3,7 @@
 **Date:** 2026-07-25  
 **Status:** OpenCloud ✅ DEPLOYED | Stalwart ⚠️ BLOCKED (Config Format Issue)  
 **Repository:** openDesk Edu (opendesk-edu)  
-**Cluster:** HRZ K3s at opendesk.hrz.uni-marburg.de  
+**Cluster:** Kubernetes K3s at home.opendesk-edu.org  
 
 ---
 
@@ -15,7 +15,7 @@
    - Pod: `opendesk-opencloud-846bbdd559-r689d` (1/1 Running)
    - Namespace: `opendesk`
    - Image: `docker.io/opencloudeu/opencloud:4.0.3`
-   - Ingress: `files.opendesk.hrz.uni-marburg.de`
+   - Ingress: `files.home.opendesk-edu.org`
    - Storage: 100Gi Ceph RWX
    - OIDC: Configured for Keycloak realm `opendesk`
 
@@ -41,8 +41,8 @@
 
 | Service | Status | Pod | Image | Hostname | Port | Ready |
 |---------|--------|-----|-------|----------|------|-------|
-| **OpenCloud** | ✅ **RUNNING** | opendesk-opencloud-846bbdd559-r689d | opencloudeu/opencloud:4.0.3 | files.opendesk.hrz.uni-marburg.de | 8080 | ✅ Yes |
-| **Stalwart** | ❌ **CRASHING** | stalwart-stalwart-0 | stalwartlabs/mail-server:v0.10.0 | mail.opendesk.hrz.uni-marburg.de | 8080 | ❌ No |
+| **OpenCloud** | ✅ **RUNNING** | opendesk-opencloud-846bbdd559-r689d | opencloudeu/opencloud:4.0.3 | files.home.opendesk-edu.org | 8080 | ✅ Yes |
+| **Stalwart** | ❌ **CRASHING** | stalwart-stalwart-0 | stalwartlabs/mail-server:v0.10.0 | mail.home.opendesk-edu.org | 8080 | ❌ No |
 
 ---
 
@@ -65,7 +65,7 @@ helm install opendesk-opencloud . --namespace opendesk \
 
 **Key Configuration:**
 ```yaml
-# Override security to run as root (HRZ cluster policy)
+# Override security to run as root (Kubernetes cluster policy)
 podSecurityContext:
   fsGroup: 0
   runAsUser: 0
@@ -76,7 +76,7 @@ containerSecurityContext:
 
 # OIDC Integration
 oidc:
-  issuer: "https://portal.opendesk.hrz.uni-marburg.de/realms/opendesk"
+  issuer: "https://portal.home.opendesk-edu.org/realms/opendesk"
   clientId: "opendesk-opencloud"
   autoProvisionAccounts: "true"
   roleAssignmentDriver: "oidc"
@@ -94,10 +94,10 @@ ingress:
   enabled: true
   className: "haproxy"
   hosts:
-    - host: "files.opendesk.hrz.uni-marburg.de"
+    - host: "files.home.opendesk-edu.org"
   tls:
     - secretName: "opendesk-certificates-tls"
-      hosts: ["files.opendesk.hrz.uni-marburg.de"]
+      hosts: ["files.home.opendesk-edu.org"]
 ```
 
 ---
@@ -201,10 +201,10 @@ Added global hosts and platform realm configuration:
 ```yaml
 global:
   hosts:
-    keycloak: portal.opendesk.hrz.uni-marburg.de
-    opencloud: files.opendesk.hrz.uni-marburg.de
-    stalwart: mail.opendesk.hrz.uni-marburg.de
-    sogo: webmail.opendesk.hrz.uni-marburg.de
+    keycloak: portal.home.opendesk-edu.org
+    opencloud: files.home.opendesk-edu.org
+    stalwart: mail.home.opendesk-edu.org
+    sogo: webmail.home.opendesk-edu.org
   platform:
     realm: opendesk
 ```
@@ -361,8 +361,8 @@ kcadm.sh create clients/opendesk -r opendesk \
   -s directAccessGrantsEnabled=true \
   -s serviceAccountsEnabled=false \
   -s authorizationServicesEnabled=false \
-  -s webOrigins=["https://mail.opendesk.hrz.uni-marburg.de"] \
-  -s validRedirectUris=["https://mail.opendesk.hrz.uni-marburg.de/*"]
+  -s webOrigins=["https://mail.home.opendesk-edu.org"] \
+  -s validRedirectUris=["https://mail.home.opendesk-edu.org/*"]
 ```
 
 **OpenCloud Client:**
@@ -377,16 +377,16 @@ kcadm.sh create clients/opendesk -r opendesk \
   -s directAccessGrantsEnabled=true \
   -s serviceAccountsEnabled=false \
   -s authorizationServicesEnabled=false \
-  -s webOrigins=["https://files.opendesk.hrz.uni-marburg.de"] \
-  -s validRedirectUris=["https://files.opendesk.hrz.uni-marburg.de/*"]
+  -s webOrigins=["https://files.home.opendesk-edu.org"] \
+  -s validRedirectUris=["https://files.home.opendesk-edu.org/*"]
 ```
 
 ### 3. Create DNS Records (PRIORITY: MEDIUM)
 
 **Required DNS Records:**
-- `mail.opendesk.hrz.uni-marburg.de` → 192.168.3.201 (Traefik Ingress IP)
-- `webmail.opendesk.hrz.uni-marburg.de` → 192.168.3.201
-- `files.opendesk.hrz.uni-marburg.de` → 192.168.3.201
+- `mail.home.opendesk-edu.org` → 192.168.3.201 (Traefik Ingress IP)
+- `webmail.home.opendesk-edu.org` → 192.168.3.201
+- `files.home.opendesk-edu.org` → 192.168.3.201
 
 ### 4. Replace Placeholder Secrets (PRIORITY: HIGH)
 
@@ -442,10 +442,10 @@ openssl rand -hex 32  # For each secret
 - [x] Resource limits configured
 - [x] Pod deployed successfully
 - [x] Pod is Running (1/1)
-- [ ] **PENDING: Verify web access at https://files.opendesk.hrz.uni-marburg.de**
+- [ ] **PENDING: Verify web access at https://files.home.opendesk-edu.org**
 - [ ] **PENDING: Register OIDC client in Keycloak**
 - [ ] **PENDING: Generate and replace placeholder secrets**
-- [ ] **PENDING: Create DNS record for files.opendesk.hrz.uni-marburg.de**
+- [ ] **PENDING: Create DNS record for files.home.opendesk-edu.org**
 
 ### Stalwart ⚠️
 - [x] Helm chart located
@@ -458,7 +458,7 @@ openssl rand -hex 32  # For each secret
 - [ ] **PENDING: Fix configuration format incompatibility**
 - [ ] **PENDING: Register OIDC client in Keycloak**
 - [ ] **PENDING: Generate and replace placeholder secrets**
-- [ ] **PENDING: Create DNS record for mail.opendesk.hrz.uni-marburg.de**
+- [ ] **PENDING: Create DNS record for mail.home.opendesk-edu.org**
 
 ---
 
@@ -498,10 +498,10 @@ cp /tmp/generated-secrets.yaml opendesk-edu/helmfile/environments/edu/secrets.ya
 ```
 
 ### 5. Create DNS Records (10 minutes)
-Contact HRZ DNS administrator to create:
-- `mail.opendesk.hrz.uni-marburg.de`
-- `webmail.opendesk.hrz.uni-marburg.de`
-- `files.opendesk.hrz.uni-marburg.de`
+Contact Kubernetes DNS administrator to create:
+- `mail.home.opendesk-edu.org`
+- `webmail.home.opendesk-edu.org`
+- `files.home.opendesk-edu.org`
 
 ---
 
@@ -574,8 +574,8 @@ Contact HRZ DNS administrator to create:
   ```
 
 - **Access via Ingress:**
-  - OpenCloud: https://files.opendesk.hrz.uni-marburg.de
-  - Stalwart: https://mail.opendesk.hrz.uni-marburg.de (pending DNS)
+  - OpenCloud: https://files.home.opendesk-edu.org
+  - Stalwart: https://mail.home.opendesk-edu.org (pending DNS)
 
 ---
 
@@ -583,7 +583,7 @@ Contact HRZ DNS administrator to create:
 
 - **Primary:** Agent (Hermes)
 - **Repository Owner:** tobias-weiss-ai-xr
-- **Organization:** HRZ Marburg
+- **Organization:** Kubernetes OpenDesk
 
 ---
 

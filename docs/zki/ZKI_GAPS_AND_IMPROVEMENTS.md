@@ -353,7 +353,7 @@ spec:
             - |
               # Sync to S3-compatible storage
               rclone sync /backup/ s3:opendesk-backups/kyverno/ 
-                --s3-endpoint https://s3.hrz.uni-marburg.de 
+                --s3-endpoint https://s3.home.opendesk-edu.org 
                 --s3-access-key-id $(AWS_ACCESS_KEY_ID) 
                 --s3-secret-access-key $(AWS_SECRET_ACCESS_KEY)
             env:
@@ -808,7 +808,7 @@ EOF
 
 # 2. Notify stakeholders
 # Slack: #security #incident-response
-# Email: security@opendesk.hrz.uni-marburg.de
+# Email: security@home.opendesk-edu.org
 # Phone: [Emergency contact]
 
 # 3. Open incident ticket
@@ -1196,7 +1196,7 @@ groups:
     annotations:
       summary: "Critical Kyverno policy violation detected"
       description: "Policy {{ $labels.policy }} has {{ $value }} critical violations in namespace {{ $labels.namespace }}"
-      runbook_url: "https://opendesk.hrz.uni-marburg.de/docs/security/kyverno-runbook#critical-violations"
+      runbook_url: "https://home.opendesk-edu.org/docs/security/kyverno-runbook#critical-violations"
       
   # High: Multiple violations of same policy
   - alert: KyvernoHighPolicyViolationRate

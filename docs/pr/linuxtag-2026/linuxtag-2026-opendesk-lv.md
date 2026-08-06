@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suverēna mākoņu infrastruktūra | SBOM visiem komponentiem
 
 ---
 
-# Helmfile un HRZ-Vide
+# Helmfile un Kubernetes-Vide
 
 ```bash
 # Izvietošana ar Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orkestrācija** ⚓
   - Deklaratīva konfigurācija `helmfile_generic.yaml.gotmpl`
-  - Videi specifiski pārraksti `environments/hrz/`
+  - Videi specifiski pārraksti `environments/production/`
   - Automātiska atkarību dublēšana
-- **HRZ-Vide izveidota** 🖥️
+- **Kubernetes-Vide izveidota** 🖥️
   - `staging` kopija ar pielāgojumiem
-  - Marburgas universitātes specifiska konfigurācija
+  - OpenDeskas universitātes specifiska konfigurācija
   - Testu sistēma pilotu ekspluatācijai
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portāls → ILIAS flīze
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Pieteikšanās (weblogin.uni-marburg.de)
+4. 🎓 Pieteikšanās (weblogin.opendesk-edu.org)
 5. 📨 SAML apgalvojums atpakaļ
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Pārskatīt izmaiņas
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Pieņemt atjauninājumus
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Atsaukt, ja nepieciešams
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Kontrolēti atjauninājumi caur Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Atjaunināšana: Ingress Migrācija
+# Kubernetes-Atjaunināšana: Ingress Migrācija
 
 - **Migrācija:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (uniapps zars)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Atjaunināšana: Dubultā Dublēšana
+# Kubernetes-Atjaunināšana: Dubultā Dublēšana
 
 - **Mērķi:** Redundanta dublēšanas glabātuve 🗄️
 - **Stratēģija:** S3 savietojama ar restic backend 🔄

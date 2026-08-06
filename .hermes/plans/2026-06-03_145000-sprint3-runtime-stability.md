@@ -16,7 +16,7 @@ Deliver a fully operational openDesk Edu cluster: fix the remaining blocker (cla
 - **57/58** pods Running. Only `clamav-simple-0` (0/2, running but unhealthy) — blocked by external internet access.
 - **Moodle:** 1/1 Running, PostgreSQL backend, OIDC issuer configured, SAML disabled (mod_shib.so ABI mismatch).
 - **Helmfile:** `.gotmpl` YAML anchor syntax (`&values`/`*values`) blocks `helmfile sync` on helmfile v2+. Helm CLI used for individual app deploys.
-- **Monitoring:** Grafana ingress deployed at `grafana.opendesk.hrz.uni-marburg.de`, PodMonitor + ServiceMonitor created. Dashboards not yet validated.
+- **Monitoring:** Grafana ingress deployed at `grafana.home.opendesk-edu.org`, PodMonitor + ServiceMonitor created. Dashboards not yet validated.
 - **Git:** `ea248e2` on `main`. Leaked secrets present in history (no force-push to purge yet).
 - **Certificates:** `opendesk-certificates-tls` (self-signed) used across all ingresses. HTTPS works.
 
@@ -59,7 +59,7 @@ Deliver a fully operational openDesk Edu cluster: fix the remaining blocker (cla
 ### 4. Ingress verification
 - **Files:** N/A (read-only audit)
 - **Action:** For each app in `helm list`, confirm ingress exists with correct TLS, domain, and path rules.
-- **Verification:** `kubectl get ingress -n opendesk-edu -o wide` — all hosts under `*.opendesk.hrz.uni-marburg.de`.
+- **Verification:** `kubectl get ingress -n opendesk-edu -o wide` — all hosts under `*.home.opendesk-edu.org`.
 - **Risk:** Low.
 
 ### 5. Monitoring dashboards

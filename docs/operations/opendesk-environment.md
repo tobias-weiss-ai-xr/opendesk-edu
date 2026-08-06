@@ -16,15 +16,15 @@
 
 | Node | Status | Role | Age | OS | Kernel |
 |------|--------|------|-----|-----|--------|
-| vhrz2331 | ✅ Ready | control-plane,etcd,master | 278d | Debian 12 | 6.1.0-43 |
-| vhrz2332 | ✅ Ready | control-plane,etcd,master | 278d | Debian 12 | 6.1.0-43 |
-| vhrz2333 | ✅ Ready | control-plane,etcd,master | 278d | Debian 12 | 6.1.0-43 |
-| vhrz2334 | ✅ Ready | worker | 278d | Debian 12 | 6.1.0-43 |
-| vhrz2335 | ✅ Ready | worker | 278d | Debian 12 | 6.1.0-43 |
-| vhrz2336 | ✅ Ready | worker | 278d | Debian 12 | 6.1.0-43 |
-| vhrz2337 | ✅ Ready | worker | 167d | Debian 12 | 6.1.0-43 |
-| vhrz2338 | ✅ Ready | worker | 167d | Debian 12 | 6.1.0-43 |
-| vhrz2339 | ✅ Ready | worker | 167d | Debian 12 | 6.1.0-43 |
+| node01 | ✅ Ready | control-plane,etcd,master | 278d | Debian 12 | 6.1.0-43 |
+| node02 | ✅ Ready | control-plane,etcd,master | 278d | Debian 12 | 6.1.0-43 |
+| node03 | ✅ Ready | control-plane,etcd,master | 278d | Debian 12 | 6.1.0-43 |
+| node04 | ✅ Ready | worker | 278d | Debian 12 | 6.1.0-43 |
+| node05 | ✅ Ready | worker | 278d | Debian 12 | 6.1.0-43 |
+| node06 | ✅ Ready | worker | 278d | Debian 12 | 6.1.0-43 |
+| node07 | ✅ Ready | worker | 167d | Debian 12 | 6.1.0-43 |
+| node08 | ✅ Ready | worker | 167d | Debian 12 | 6.1.0-43 |
+| node09 | ✅ Ready | worker | 167d | Debian 12 | 6.1.0-43 |
 
 **Container Runtime**: containerd 2.0.4-k3s2 on all nodes
 
@@ -40,7 +40,7 @@ argocd, buildkit, ceph-csi-cephfs, ceph-csi-rbd, deepl, default, gitlab-runner-p
 
 #### **1. Backup Pods Stuck - 6 pods (CRITICAL)**
 **Namespace**: `opendesk`
-**Location**: Node `vhrz2337`
+**Location**: Node `node07`
 **Status**: `ContainerCreating` for **10 hours**
 **Pods**:
 - backup-backup-live-backup-pgqnd-0-zdr4r
@@ -59,17 +59,17 @@ argocd, buildkit, ceph-csi-cephfs, ceph-csi-rbd, deepl, default, gitlab-runner-p
 - Target backup pods: ums-ldap, nats, ox-connector, postfix
 
 **Possible Causes**:
-1. Container runtime issue on node `vhrz2337`
+1. Container runtime issue on node `node07`
 2. Image pull or container start failure
 3. Resource contention (memory at 99% usage)
-4. Node `vhrz2337` may have kubelet or containerd issues
+4. Node `node07` may have kubelet or containerd issues
 
 **Recommended Actions**:
 ```bash
-# Check node vhrz2337 container runtime health
-kubectl describe node vhrz2337
+# Check node node07 container runtime health
+kubectl describe node node07
 
-# Check kubelet logs on node vhrz2337
+# Check kubelet logs on node node07
 # (Requires SSH access to node)
 
 # Delete stuck pods to force restart
@@ -104,7 +104,7 @@ Pod: `clamav-icap-6b54976c45-7dl5g` in `opendesk` namespace
 
 ---
 
-### 📈 Resource Usage (Node vhrz2337)
+### 📈 Resource Usage (Node node07)
 | Resource | Requests | Limits | Usage |
 |----------|----------|--------|-------|
 | CPU | 2080m (26%) | 1089750m (13621%) | Overcommitted |
@@ -165,10 +165,10 @@ kubectl logs clamav-icap-6b54976c45-7dl5g -n opendesk --tail=50
 ## ✅ **RESOLUTION: Backup Issue Fixed (2026-02-11)**
 
 ### Problem
-6 backup pods stuck in `ContainerCreating` state for 10 hours on node vhrz2337.
+6 backup pods stuck in `ContainerCreating` state for 10 hours on node node07.
 
 ### Root Cause
-Incomplete PodConfig `backup-on-vhrz2337` created on Feb 10, 2026:
+Incomplete PodConfig `backup-on-node07` created on Feb 10, 2026:
 - Only had container name: `backup`
 - Missing: image, command, args, volumeMounts, env, resources
 - Applied to all k8up schedule sections (backup, check, prune)
@@ -179,7 +179,7 @@ Incomplete PodConfig `backup-on-vhrz2337` created on Feb 10, 2026:
    - `/spec/check/podConfigRef`
    - `/spec/prune/podConfigRef`
 
-2. **Deleted problematic PodConfig**: `backup-on-vhrz2337`
+2. **Deleted problematic PodConfig**: `backup-on-node07`
 
 3. **Cleaned up stuck pods** (6 pods in ContainerCreating state)
 
@@ -190,7 +190,7 @@ Manual backup test completed successfully on Feb 11, 2026:
 - **Status**: ✅ Succeeded
 - **Success rate**: 5/6 jobs (83%)
 - **Duration**: ~5 minutes total
-- **Nodes used**: Distributed across vhrz2338, vhrz2339, vhrz2335, vhrz2334, vhrz2336 (not forced to vhrz2337)
+- **Nodes used**: Distributed across node08, node09, node05, node04, node06 (not forced to node07)
 
 ### Expected Behavior
 The `backup-live` schedule will run automatically on **Feb 12, 2026 at 00:42 UTC** and should work correctly now.
@@ -204,5 +204,5 @@ The `backup-live` schedule will run automatically on **Feb 12, 2026 at 00:42 UTC
 **Client Version**: kubectl v1.20.2
 **Backup Storage**: MinIO with Ceph RBD (SSD) backend
 **Storage Classes**: ceph-rbd-ssd, ceph-cephfs-hdd-ec
-**Backup Repository**: s3:https://s3.hrz.uni-marburg.de/backups
+**Backup Repository**: s3:https://s3.home.opendesk-edu.org/backups
 **Date of Report**: 2026-02-11 (updated with backup fix resolution)

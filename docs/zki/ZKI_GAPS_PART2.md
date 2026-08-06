@@ -293,7 +293,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: https://staging.opendesk.hrz.uni-marburg.de
+      url: https://staging.home.opendesk-edu.org
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -330,7 +330,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://opendesk.hrz.uni-marburg.de
+      url: https://home.opendesk-edu.org
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -474,7 +474,7 @@ groups:
     annotations:
       summary: "Kyverno policy {{ $labels.policy }} is not ready"
       description: "Policy {{ $labels.policy }} has been disabled or is not functioning"
-      runbook_url: "https://opendesk.hrz.uni-marburg.de/docs/security/kyverno-runbook#policy-not-ready"
+      runbook_url: "https://home.opendesk-edu.org/docs/security/kyverno-runbook#policy-not-ready"
 
   - alert: KyvernoAdmissionControllerDown
     expr: sum(up{job="kyverno-admission-controller"}) by (job) == 0
@@ -486,7 +486,7 @@ groups:
     annotations:
       summary: "Kyverno admission controller is down"
       description: "All Kyverno admission controllers are down - no policies are being enforced"
-      runbook_url: "https://opendesk.hrz.uni-marburg.de/docs/security/kyverno-runbook#admission-controller-down"
+      runbook_url: "https://home.opendesk-edu.org/docs/security/kyverno-runbook#admission-controller-down"
 
   - alert: HighPolicyViolationRate
     expr: sum(rate(kyverno_policy_violations_total[5m])) by (policy) > 10

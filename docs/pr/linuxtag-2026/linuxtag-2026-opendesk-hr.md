@@ -14,7 +14,7 @@ paginate: true
 
 Chemnitzer Linux-Tage 2026 · 28.03.2026
 
-Tobias Weiß · HRZ Zentrale Systeme · Universität Marburg
+Tobias Weiß · Kubernetes Zentrale Systeme · Universität OpenDesk
 
 ---
 
@@ -93,20 +93,20 @@ Suverena cloud infrastruktura     | SBOM za sve komponente
 
 ---
 
-# Helmfile & HRZ-Okruženje
+# Helmfile & Kubernetes-Okruženje
 
 ```bash
 # Implementacija s Helmfile
-helmfile apply -e hrz
+helmfile apply -e production
 ```
 
 - **Helmfile Orkestracija** ⚓
   - Deklarativna konfiguracija u `helmfile_generic.yaml.gotmpl`
-  - Zamjene specifične za okruženje u `environments/hrz/`
+  - Zamjene specifične za okruženje u `environments/production/`
   - Automatska sigurnosna kopija ovisnosti
-- **Stvoreno HRZ-Okruženje** 🖥️
+- **Stvoreno Kubernetes-Okruženje** 🖥️
   - Kopija `staging` s prilagodbama
-  - Konfiguracija specifična za Sveučilište Marburg
+  - Konfiguracija specifična za Sveučilište OpenDesk
   - Testni sustav za pilotni rad
 
 ---
@@ -188,7 +188,7 @@ python3 dev/charts-local.py --revert
 1. 🖥️ Portal → ILIAS tile
 2. 🔄 ILIAS → Shibboleth SP
 3. 🔑 Keycloak → Uni-IdP
-4. 🎓 Login (weblogin.uni-marburg.de)
+4. 🎓 Login (weblogin.opendesk-edu.org)
 5. 📨 SAML Assertion back
 6. ✅ ILIAS Dashboard
 
@@ -257,13 +257,13 @@ git checkout -b myrelease upstream/tags/v1.12.2
 git pull
 
 # Pregled promjena
-helmfile diff -e hrz
+helmfile diff -e production
 
 # Primjena nadogradnji
-helmfile apply -e hrz
+helmfile apply -e production
 
 # Vraćanje ako je potrebno
-helmfile rollback -e hrz
+helmfile rollback -e production
 ```
 
 - **Kontrolirane nadogradnje putem Helmfile** 🔄
@@ -271,7 +271,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Nadogradnja: Ingress Migracija
+# Kubernetes-Nadogradnja: Ingress Migracija
 
 - **Migracija:** nginx → haproxy-ingress 🔀
   - v1.11.2 → v1.13.x (grana uniapps)
@@ -285,7 +285,7 @@ helmfile rollback -e hrz
 
 ---
 
-# HRZ-Nadogradnja: Dvostruko Sigurnosno Kopiranje
+# Kubernetes-Nadogradnja: Dvostruko Sigurnosno Kopiranje
 
 - **Ciljevi:** Redundantno Spremište Sigurnosnih Kopija 🗄️
 - **Strategija:** S3 kompatibilno s restic backend-om 🔄

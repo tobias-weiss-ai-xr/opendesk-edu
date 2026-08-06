@@ -10,7 +10,7 @@
 #   ./add-keycloak-custom-audience.sh <client-id> <custom-audience> [realm] [keycloak-pod]
 #
 # Examples:
-#   ./add-keycloak-custom-audience.sh 87ae71f6... "ldaps://opendesk.hrz.uni-marburg.de/"
+#   ./add-keycloak-custom-audience.sh 87ae71f6... "ldaps://home.opendesk-edu.org/"
 #   ./add-keycloak-custom-audience.sh my-client "https://api.example.com" myrealm my-keycloak-0
 #
 # Dependencies:
@@ -30,7 +30,7 @@ if [ -z "$CLIENT_ID" ] || [ -z "$CUSTOM_AUDIENCE" ]; then
     echo "Usage: $0 <client-id> <custom-audience> [realm] [keycloak-pod]"
     echo ""
     echo "Examples:"
-    echo "  $0 87ae71f6... 'ldaps://opendesk.hrz.uni-marburg.de/'"
+    echo "  $0 87ae71f6... 'ldaps://home.opendesk-edu.org/'"
     echo "  $0 my-client 'https://api.example.com' myrealm my-keycloak-0"
     exit 1
 fi

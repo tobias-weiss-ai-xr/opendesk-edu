@@ -1,25 +1,25 @@
-# DMARC-TODO: opendesk-edu (Produktion – uni-marburg.de)
+# DMARC-TODO: opendesk-edu (Produktion – opendesk-edu.org)
 
 > **Kontext:** openDesk‑Edu‑Deployment auf Kubernetes (k3s).  
 > Stalwart Mail Server (edu‑Variante) als IMAP/SMTP/JMAP‑Backend,  
 > Postfix‑Base + Postfix‑OX mit `dkimpy-milter` für SMTP‑Relay,  
 > HAProxy‑Ingress, Keycloak‑OIDC, OpenLDAP, Ceph‑Storage.  
-> **Live‑Domain: `uni-marburg.de`**  
-> Aktueller DMARC: `p=quarantine; sp=quarantine; rua=mailto:dmarc-report@hrz.uni-marburg.de`
+> **Live‑Domain: `opendesk-edu.org`**  
+> Aktueller DMARC: `p=quarantine; sp=quarantine; rua=mailto:dmarc-report@home.opendesk-edu.org`
 
 ---
 
 ## Phase 0: Vollständige Bestandsaufnahme
 
-- [ ] **0.1** Aktuelle DNS‑Records von `uni-marburg.de` sichern
+- [ ] **0.1** Aktuelle DNS‑Records von `opendesk-edu.org` sichern
   ```bash
   for type in MX TXT AAAA A; do
     echo "=== $type ==="
-    dig $type uni-marburg.de +short
+    dig $type opendesk-edu.org +short
   done
-  dig TXT _dmarc.uni-marburg.de +short
-  dig TXT dkim._domainkey.uni-marburg.de +short 2>/dev/null || echo "Kein DKIM-Record"
-  dig TXT *._domainkey.uni-marburg.de +short 2>/dev/null || echo "Kein Wildcard-DKIM"
+  dig TXT _dmarc.opendesk-edu.org +short
+  dig TXT dkim._domainkey.opendesk-edu.org +short 2>/dev/null || echo "Kein DKIM-Record"
+  dig TXT *._domainkey.opendesk-edu.org +short 2>/dev/null || echo "Kein Wildcard-DKIM"
   ```
 
 - [ ] **0.2** Alle sendenden Systeme im Cluster identifizieren
@@ -41,7 +41,7 @@
 - [ ] **0.3** Stalwart‑DKIM‑Status prüfen
   ```bash
   kubectl exec -n opendesk deploy/stalwart -- stalwart-cli domain list
-  kubectl exec -n opendesk deploy/stalwart -- stalwart-cli domain key list uni-marburg.de
+  kubectl exec -n opendesk deploy/stalwart -- stalwart-cli domain key list opendesk-edu.org
   ```
 
 - [ ] **0.4** dkimpy‑milter‑Status prüfen
@@ -58,9 +58,9 @@
 
 - [ ] **0.6** Aktuelle SPF‑Includes dokumentieren
   ```
-  uni-marburg.de TXT "v=spf1 include:_spf.uni-marburg.de include:_spf.plan.io ~all"
+  opendesk-edu.org TXT "v=spf1 include:_spf.opendesk-edu.org include:_spf.plan.io ~all"
   ```
-  Prüfen, ob `_spf.uni-marburg.de` auch den opendesk‑Cluster umfasst.
+  Prüfen, ob `_spf.opendesk-edu.org` auch den opendesk‑Cluster umfasst.
 
 - [ ] **0.7** Mail‑Routing verstehen (Postfix‑Base ↔ Postfix‑OX ↔ Stalwart)
   ```bash
@@ -86,12 +86,12 @@
 
 - [ ] **1.2** SPF‑Record aktualisieren
   ```
-  uni-marburg.de.  TXT  "v=spf1 include:_spf.uni-marburg.de include:_spf.plan.io ip4:<CLUSTER_EGRESS_CIDR> ~all"
+  opendesk-edu.org.  TXT  "v=spf1 include:_spf.opendesk-edu.org include:_spf.plan.io ip4:<CLUSTER_EGRESS_CIDR> ~all"
   ```
   > **Oder** dedizierten Include-Mechanismus für opendesk:
   ```
-  _spf.opendesk.uni-marburg.de.  TXT  "v=spf1 ip4:<CIDR1> ip4:<CIDR2> ~all"
-  uni-marburg.de.  TXT  "v=spf1 include:_spf.uni-marburg.de include:_spf.plan.io include:_spf.opendesk.uni-marburg.de ~all"
+  _spf.opendesk.opendesk-edu.org.  TXT  "v=spf1 ip4:<CIDR1> ip4:<CIDR2> ~all"
+  opendesk-edu.org.  TXT  "v=spf1 include:_spf.opendesk-edu.org include:_spf.plan.io include:_spf.opendesk.opendesk-edu.org ~all"
   ```
 
 - [ ] **1.3** SPF‑Validierung testen
@@ -99,7 +99,7 @@
   # Von einer Cluster‑IP
   python3 -c "
   import spf
-  result, detail = spf.check(i='<CLUSTER_EGRESS_IP>', s='test@uni-marburg.de', h='mail.opendesk.hrz.uni-marburg.de')
+  result, detail = spf.check(i='<CLUSTER_EGRESS_IP>', s='test@opendesk-edu.org', h='mail.home.opendesk-edu.org')
   print(f'Result: {result} - {detail}')
   "
   ```
@@ -149,7 +149,7 @@
   mkdir -p /tmp/dkim-keys
   docker run --rm -v /tmp/dkim-keys:/keys \
     ghcr.io/opendesk/dkimpy-milter:latest \
-    dkim-genkey -d uni-marburg.de -s s1 -D /keys
+    dkim-genkey -d opendesk-edu.org -s s1 -D /keys
   
   # In Kubernetes Secret
   kubectl create secret generic dkim-keys -n opendesk \
@@ -158,24 +158,24 @@
 
 - [ ] **2.2.3** DNS‑Eintrag publizieren (falls nicht vorhanden)
   ```
-  s1._domainkey.uni-marburg.de.  TXT  "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb..."
+  s1._domainkey.opendesk-edu.org.  TXT  "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb..."
   ```
 
 ### 2.3 Stalwart DKIM – neuen Key für Selector `s2`
 
 - [ ] **2.3.1** Stalwart‑DKIM-Key generieren
   ```bash
-  kubectl exec -n opendesk deploy/stalwart -- stalwart-cli domain key generate uni-marburg.de s2 2048
+  kubectl exec -n opendesk deploy/stalwart -- stalwart-cli domain key generate opendesk-edu.org s2 2048
   ```
 
 - [ ] **2.3.2** Public‑Key auslesen
   ```bash
-  kubectl exec -n opendesk deploy/stalwart -- stalwart-cli domain key get uni-marburg.de s2
+  kubectl exec -n opendesk deploy/stalwart -- stalwart-cli domain key get opendesk-edu.org s2
   ```
 
 - [ ] **2.3.3** DNS‑Eintrag publizieren
   ```
-  s2._domainkey.uni-marburg.de.  TXT  "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb..."
+  s2._domainkey.opendesk-edu.org.  TXT  "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb..."
   ```
 
 - [ ] **2.3.4** Stalwart‑Config für DKIM‑Signierung ergänzen
@@ -187,7 +187,7 @@
     extraConfig:
       session.smtp.mail.sign: true
       session.smtp.mail.key: "s2"
-      session.smtp.mail.domain: "uni-marburg.de"
+      session.smtp.mail.domain: "opendesk-edu.org"
   ```
   > **Hinweis:** Das Chart muss ggf. um `extraConfig` erweitert werden,  
   > oder Sie mounten eine eigene `config.toml` via ConfigMap.
@@ -196,7 +196,7 @@
   ```bash
   kubectl exec -n opendesk deploy/stalwart -- sh -c \
     'echo "DKIM Test from Stalwart" | mail -s "DKIM Test" external-test@example.com'
-  # Beim Empfänger Header prüfen: DKIM-Signature: ... s=s2; d=uni-marburg.de
+  # Beim Empfänger Header prüfen: DKIM-Signature: ... s=s2; d=opendesk-edu.org
   ```
 
 ### 2.4 Mail‑Routing klären
@@ -220,7 +220,7 @@
 
 - [ ] **3.1** Aktuellen DMARC‑Record analysieren
   ```
-  Aktuell: v=DMARC1; p=quarantine; rua=mailto:dmarc-report@hrz.uni-marburg.de; sp=quarantine; ri=86400
+  Aktuell: v=DMARC1; p=quarantine; rua=mailto:dmarc-report@home.opendesk-edu.org; sp=quarantine; ri=86400
   ```
   ✅ `p=quarantine` – gut  
   ✅ `sp=quarantine` – Subdomain‑Policy aktiv  
@@ -231,9 +231,9 @@
 
 - [ ] **3.2** DMARC‑Record optimieren
   ```
-  _dmarc.uni-marburg.de.  TXT  "v=DMARC1; p=quarantine; sp=quarantine; pct=100;
-                                 rua=mailto:dmarc-report@hrz.uni-marburg.de;
-                                 ruf=mailto:dmarc-ruf@hrz.uni-marburg.de;
+  _dmarc.opendesk-edu.org.  TXT  "v=DMARC1; p=quarantine; sp=quarantine; pct=100;
+                                 rua=mailto:dmarc-report@home.opendesk-edu.org;
+                                 ruf=mailto:dmarc-ruf@home.opendesk-edu.org;
                                  fo=1; ri=3600"
   ```
   **Änderungen:**
@@ -244,11 +244,11 @@
 
 - [ ] **3.3** Forensische Berichte empfangen können
   ```bash
-  # Mailbox für ruf einrichten (z. B. dmarc-ruf@hrz.uni-marburg.de)
+  # Mailbox für ruf einrichten (z. B. dmarc-ruf@home.opendesk-edu.org)
   # Oder per Alias an bestehende Mailbox
   kubectl exec -n opendesk deploy/postfix -- \
     postconf -e "virtual_alias_maps=hash:/etc/postfix/virtual"
-  echo "dmarc-ruf@hrz.uni-marburg.de dmarc-team@hrz.uni-marburg.de" >> /tmp/virtual
+  echo "dmarc-ruf@home.opendesk-edu.org dmarc-team@home.opendesk-edu.org" >> /tmp/virtual
   ```
 
 - [ ] **3.4** Prüfen, ob DMARC‑Reports aktuell ankommen und ausgewertet werden
@@ -327,7 +327,7 @@
   [imap]
   host = stalwart.opendesk.svc.cluster.local
   port = 143
-  user = dmarc-parser@uni-marburg.de
+  user = dmarc-parser@opendesk-edu.org
   password = ...
   ```
 
@@ -362,14 +362,14 @@
 - [ ] **5.2** Stalwart‑Konfiguration neu laden
   ```bash
   # Stalwart Config Reload (via HTTP API)
-  curl -X POST https://mail.opendesk.hrz.uni-marburg.de/api/admin/config/reload \
+  curl -X POST https://mail.home.opendesk-edu.org/api/admin/config/reload \
     -H "Authorization: Bearer $ADMIN_TOKEN"
   ```
 
 - [ ] **5.3** Test: Externe Mail ohne DKIM/SPF senden → sollte rejected werden
   ```bash
   # Von einem nicht-authorisierten Server
-  swaks --to testuser@uni-marburg.de --server mail.opendesk.hrz.uni-marburg.de \
+  swaks --to testuser@opendesk-edu.org --server mail.home.opendesk-edu.org \
     --header "Subject: DMARC Test" --body "Test"
   ```
 
@@ -418,12 +418,12 @@
   ```yaml
   - alert: DMARCFailRate
     expr: |
-      rate(dmarc_fail_total{domain="uni-marburg.de"}[1h]) > 0.05
+      rate(dmarc_fail_total{domain="opendesk-edu.org"}[1h]) > 0.05
     for: 2h
     labels:
       severity: warning
     annotations:
-      summary: ">5% DMARC-Fail-Rate auf uni-marburg.de"
+      summary: ">5% DMARC-Fail-Rate auf opendesk-edu.org"
   ```
 
 - [ ] **7.3** Wöchentlichen DMARC‑Report‑Check als Task in der Doku
@@ -438,9 +438,9 @@
 - [ ] **8.4** DKIM‑Signatur für 100% aller ausgehenden Mails sicherstellen
 - [ ] **8.5** DMARC auf `p=reject` umstellen
   ```
-  _dmarc.uni-marburg.de.  TXT  "v=DMARC1; p=reject; sp=reject; pct=100;
-                                 rua=mailto:dmarc-report@hrz.uni-marburg.de;
-                                 ruf=mailto:dmarc-ruf@hrz.uni-marburg.de;
+  _dmarc.opendesk-edu.org.  TXT  "v=DMARC1; p=reject; sp=reject; pct=100;
+                                 rua=mailto:dmarc-report@home.opendesk-edu.org;
+                                 ruf=mailto:dmarc-ruf@home.opendesk-edu.org;
                                  fo=1"
   ```
 
@@ -451,12 +451,12 @@
 - [ ] **9.1** DMARC‑Architektur im Repo dokumentieren
   ```markdown
   # docs/dmarc.md
-  ## DMARC-Architektur uni-marburg.de
+  ## DMARC-Architektur opendesk-edu.org
   
   | Komponente | Rolle | DKIM-Selector | SPF-Include |
   |:-----------|:------|:--------------|:------------|
-  | Postfix-Base | System-MTA | s1 | _spf.uni-marburg.de |
-  | Postfix-OX | Groupware-MTA | s1 | _spf.uni-marburg.de |
+  | Postfix-Base | System-MTA | s1 | _spf.opendesk-edu.org |
+  | Postfix-OX | Groupware-MTA | s1 | _spf.opendesk-edu.org |
   | Stalwart | IMAP/SMTP/JMAP | s2 | _spf.opendesk |
   
   ## Helmfile-Override
