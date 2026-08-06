@@ -20,7 +20,23 @@
 
 Die Plattform ist keine Ideenskizze, sondern eine **lauffähige, produktionsnahe Lösung**: Die Software-Pakete („Container“) werden automatisiert gebaut, auf Sicherheitslücken geprüft, signiert und mit einem Software-Stücklisten-Nachweis (SBOM) je Paket dokumentiert. Die Bereitstellung erfolgt weitgehend automatisiert über eine standardisierte, offene Plattform-Technologie (Kubernetes).
 
-### 2.2 Beitrag zur digitalen Souveränität
+### 2.2 Abgrenzung: Was ist openDesk, was ist openDesk Edu?
+
+Der Name „openDesk" bezeichnet zwei verschiedene Dinge, die für das Verständnis dieser Bewerbung wichtig sind:
+
+**openDesk (Bund):** Eine von der deutschen Bundesverwaltung in Auftrag gegebene, quelloffene Plattform, die öffentlichen Verwaltungen eine souveräne Alternative zu kommerziellen Büro- und Cloud-Angeboten (z. B. Microsoft 365) bereitstellt. Sie ist auf den Verwaltungskontext ausgerichtet — Dateien, E-Mail, Termine, Office-Dokumente.
+
+**openDesk Edu:** Ein eigenständiges, von einer offenen Hochschul-Community getragenes Projekt. Es nutzt die quelloffene Basis von openDesk (Code, Container, Bereitstellungs-Technologie) und erweitert sie gezielt um das, was Hochschulen darüber hinaus brauchen:
+
+- **Lern- und Prüfungsbetrieb:** Lernplattformen (LMS) sind vollständig integriert, nicht nachgerüstet.
+- **Forschung und wissenschaftliches Rechnen:** Werkzeuge für Analyse, Entwicklung und Datenauswertung sind Teil der Plattform.
+- **Wissenschaftliche Identitäten:** Anbindung an die Hochschul-Föderation DFN-AAI und das europäische eduGAIN-Netzwerk — kein separates Anmeldeverfahren.
+- **Semester- und Kurslebenszyklus:** Automatisierung von Benutzer-, Kurs- und Rollenverwaltung entlang des Hochschuljahres.
+- **Zielgruppe:** Studierende, Lehrende, Forschende und Verwaltung — nicht nur Verwaltungsmitarbeitende.
+
+Der Wettbewerbsbeitrag ist damit nicht die Übernahme einer fertigen Verwaltungslösung, sondern die **eigenständige Übertragung eines souveränen Plattform-Ansatzes auf den Hochschulkontext** — mit eigenem Quellcode, eigener Community und eigener Betriebs- und Übertragungserfahrung. openDesk Edu ist kein Teil des openDesk-Projekts des Bundes, sondern ein unabhängiges Hochschulprojekt, das auf dessen offener Basis aufbaut.
+
+### 2.3 Beitrag zur digitalen Souveränität
 
 Viele Hochschulen betreiben ihren digitalen Arbeitsplatz über proprietäre Cloud-Dienste, die anbietergebunden sind, mit Lizenzkosten verbunden sind und deren Datenverarbeitung außerhalb eigener Kontrolle stattfindet. openDesk Edu adressiert diese Abhängigkeit:
 
@@ -30,7 +46,7 @@ Viele Hochschulen betreiben ihren digitalen Arbeitsplatz über proprietäre Clou
 
 Die Plattform trägt zu mehreren ausgeschriebenen Themenfeldern bei: **Open Source** (vollständig quelloffen auf allen Ebenen), **souveräne Cloud** (Betrieb auf eigener oder zertifizierbarer souveräner Infrastruktur), **digitale Identitäten** (zentraler Anmeldedienst mit Anbindung an die Hochschul-Föderation DFN-AAI und das europäische Netzwerk eduGAIN), **Data Governance** (transparente Datenhaltung, dokumentierte Sicherheits- und Herkunftsnachweise je Software-Paket) sowie **KI-Infrastruktur** (ausbaufähige quelloffene KI- und Lern-Dienste in derselben Umgebung).
 
-### 2.3 Skalierbarkeit auf andere Hochschulen
+### 2.4 Skalierbarkeit auf andere Hochschulen
 
 Der Wettbewerb fördert skalierbare Vorhaben, die auf andere Hochschulen übertragbar sind. openDesk Edu ist von Grund auf darauf ausgelegt:
 
@@ -42,15 +58,15 @@ Der Wettbewerb fördert skalierbare Vorhaben, die auf andere Hochschulen übertr
 
 Gerade diese Verbund-Skalierung ist es, die der Ideenwettbewerb ermöglichen kann: die Erprobung an einer weiteren Hochschule oder in einem Verbund als zusätzlicher Real-Betrieb — auf Basis einer Plattform, die bereits produktionsnah erprobt ist.
 
-### 2.4 Reifegrad und Umsetzungsstand
+### 2.5 Reifegrad und Umsetzungsstand
 
 Die Plattform befindet sich in der **produktionsnahen Phase**: Die Software-Pakete sind gebaut, auf Sicherheitslücken geprüft, signiert und per Software-Stückliste dokumentiert; die standardisierte Bereitstellung ist umgesetzt und dokumentiert. Für die aktuelle Paketsammlung wurden keine bekannten Sicherheitslücken festgestellt. Damit sind die Bausteine unmittelbar für die Skalierung an einer weiteren Hochschule oder in einem Verbund geeignet — die Voraussetzungen des Wettbewerbs (laufendes oder konkret geplantes Vorhaben) sind erfüllt.
 
-### 2.5 Team und Nachhaltigkeit
+### 2.6 Team und Nachhaltigkeit
 
 openDesk Edu wird von einer offenen Community aus Hochschul- und Projektbeteiligten getragen. Die Arbeit ist vollständig offen; Beiträge sind ausdrücklich erwünscht. Langfristig stehen Wartung, Updates, Dokumentation und Betrieb im Vordergrund — durch ein deterministisches Build-Verfahren und die Anbindung an Standard-Infrastruktur dauerhaft wirtschaftlich und nachvollziehbar.
 
-### 2.6 Mehrwert des Wettbewerbspreises
+### 2.7 Mehrwert des Wettbewerbspreises
 
 Die Förderung ist bewusst ideell und personell ausgerichtet — für dieses Projekt die passende Form. Im Vordergrund stehen Reichweite, Vernetzung und realer Transfer:
 
