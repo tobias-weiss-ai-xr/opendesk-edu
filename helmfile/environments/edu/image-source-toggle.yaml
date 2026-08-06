@@ -46,9 +46,9 @@ images:
 
   # --- OpenDesk EDU Core Apps ---
   sogo:
-    registry: ghcr.io
-    repository: opendesk-edu/sogo
-    tag: latest
+    registry: docker.io
+    repository: weissto/sogo
+    tag: "bookworm-5.12.9"
 
   stalwart:
     registry: ghcr.io
