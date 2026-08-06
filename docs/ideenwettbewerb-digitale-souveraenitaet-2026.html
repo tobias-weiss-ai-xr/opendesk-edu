@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Bewerbung HFD Ideenwettbewerb Digitale Souveränität 2026 — openDesk Edu</title>
+<style>
+  @page {
+    size: A4;
+    margin: 22mm 20mm 24mm 20mm;
+    @bottom-center {
+      content: "openDesk Edu · HFD Ideenwettbewerb Digitale Souveränität 2026 — Seite " counter(page) " von " counter(pages);
+      font-family: "Inter", "DejaVu Sans", sans-serif;
+      font-size: 8.5pt;
+      color: #8a8a9a;
+    }
+    @bottom-right {
+      content: "";
+    }
+  }
+  @page :first {
+    @bottom-center {
+      content: "";
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Inter", "DejaVu Sans", sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #1a1a2e;
+  }
+
+  /* ---------- Cover header ---------- */
+  .cover {
+    background: linear-gradient(135deg, #0a0014 0%, #1a0030 55%, #2a0a4a 100%);
+    border-radius: 10px;
+    padding: 34px 38px 30px 38px;
+    color: #ffffff;
+    margin-bottom: 26px;
+    page-break-after: avoid;
+  }
+  .cover .eyebrow {
+    font-size: 9.5pt;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #a78bfa;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .cover h1 {
+    font-size: 23pt;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .cover .subtitle {
+    font-size: 12.5pt;
+    font-weight: 400;
+    color: #ddd6fe;
+    line-height: 1.45;
+  }
+  .cover .meta {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(167, 139, 250, 0.35);
+    display: flex;
+    gap: 28px;
+    font-size: 9pt;
+    color: #c4b5fd;
+  }
+  .cover .meta strong { color: #ffffff; font-weight: 600; }
+
+  /* ---------- Headings ---------- */
+  h2 {
+    font-size: 13.5pt;
+    font-weight: 800;
+    color: #341291;
+    margin: 22px 0 8px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #571efa;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 14px 0 4px 0;
+    page-break-after: avoid;
+  }
+
+  p { margin-bottom: 8px; }
+  ul { margin: 4px 0 10px 18px; }
+  li { margin-bottom: 3px; }
+
+  strong { font-weight: 700; }
+
+  /* ---------- Short description box ---------- */
+  .shortbox {
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    border-left: 4px solid #571efa;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 14px 0 18px 0;
+    page-break-inside: avoid;
+  }
+  .shortbox .label {
+    font-size: 8.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #571efa;
+    margin-bottom: 6px;
+  }
+  .shortbox p { margin-bottom: 4px; }
+  .shortbox .counter {
+    font-size: 8.5pt;
+    color: #8a8a9a;
+  }
+
+  /* ---------- Key facts ---------- */
+  .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 20px;
+    margin: 10px 0 14px 0;
+  }
+  .fact {
+    border: 1px solid #e9e5f5;
+    border-radius: 6px;
+    padding: 8px 12px;
+    background: #fafbfc;
+    font-size: 9.5pt;
+  }
+  .fact .k { font-weight: 700; color: #341291; }
+  .fact .v { color: #1a1a2e; }
+
+  /* ---------- Table ---------- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+  }
+  th {
+    background: #0a0014;
+    color: #ffffff;
+    text-align: left;
+    padding: 7px 10px;
+    font-weight: 700;
+  }
+  td {
+    border: 1px solid #e9e5f5;
+    padding: 7px 10px;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #fafbfc; }
+
+  .section-note {
+    font-size: 9pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="eyebrow">Bewerbung · HFD Ideenwettbewerb Digitale Souveränität 2026</div>
+  <h1>openDesk Edu — Digitale Souveränität als skalierbare Hochschulplattform</h1>
+  <div class="subtitle">Eine vollständig quelloffene, Kubernetes-basierte Plattform für den souveränen digitalen Arbeitsplatz, die Forschungs- und Lehrinfrastruktur von Hochschulen — deterministisch gebaut, reproduzierbar bereitgestellt, auf andere Hochschulen übertragbar.</div>
+  <div class="meta">
+    <div><strong>Einreichungsfrist</strong><br>31. August 2026</div>
+    <div><strong>Jury-Auswahl</strong><br>September 2026</div>
+    <div><strong>Bekanntgabe Siegerteam</strong><br>05. Oktober 2026</div>
+  </div>
+</div>
+
+<!-- ================= 1. KURZBESCHREIBUNG ================= -->
+<h2>1. Kurzbeschreibung (Formular, max. 500 Zeichen)</h2>
+
+<div class="shortbox">
+  <div class="label">Einreichungstext</div>
+  <p>openDesk Edu ist eine vollständig quelloffene, Kubernetes-basierte Plattform für den souveränen digitalen Arbeitsplatz an Hochschulen. 78 quelloffene Dienste (LMS, Dateiaustausch, Groupware, Videokonferenz) werden als NixOS-Container deterministisch gebaut, signiert und per SBOM dokumentiert (0 CVEs). Deployment per GitOps auf eigener Infrastruktur, SCS-kompatibler Cloud oder im Verbund — mit SSO-Föderation über Keycloak und DFN-AAI/eduGAIN. Skalierbar und herstellerunabhängig.</p>
+  <div class="counter">482 von 500 Zeichen</div>
+</div>
+
+<!-- ================= 2. VOLLSTÄNDIGE EINREICHUNG ================= -->
+<h2>2. Vollständige Einreichung</h2>
+
+<h3>2.1 Projektprofil</h3>
+<p><strong>openDesk Edu</strong> ist eine vollständig quelloffene, Kubernetes-native Plattform für den digitalen Arbeitsplatz sowie die Forschungs- und Lehrinfrastruktur von Hochschulen. Die Plattform bündelt bewährte quelloffene Kernkomponenten für Dateiaustausch, Groupware, Videokonferenz, Lernmanagement, Messaging und wissenschaftliches Rechnen in einer einzigen, deterministisch aufgebauten und reproduzierbar bereitgestellten Umgebung — als Alternative zu proprietären Cloud-Diensten.</p>
+
+<div class="facts">
+  <div class="fact"><span class="k">100&nbsp;% Open Source</span> — <span class="v">auf allen Ebenen: Anwendungen, Container, Build- und Deployment-Pipeline</span></div>
+  <div class="fact"><span class="k">Deterministische Builds</span> — <span class="v">Container aus NixOS, identisch reproduzierbar auf jeder Infrastruktur</span></div>
+  <div class="fact"><span class="k">Kubernetes-nativ</span> — <span class="v">GitOps (ArgoCD), Helm/Helmfile als standardisierte Deployment-Wege</span></div>
+  <div class="fact"><span class="k">Identität &amp; Föderation</span> — <span class="v">SSO über Keycloak, SAML über DFN-AAI/eduGAIN</span></div>
+  <div class="fact"><span class="k">Supply-Chain-Sicherheit</span> — <span class="v">SBOM (SPDX 2.3) pro Container, Cosign-Signierung, 0 CVEs</span></div>
+  <div class="fact"><span class="k">Hochschulverbund-tauglich</span> — <span class="v">zentraler oder föderierter Betrieb, geteilte Betriebslast</span></div>
+</div>
+
+<h3>2.2 Bezug zum Thema Digitale Souveränität</h3>
+<p>Viele Hochschulen betreiben ihren digitalen Arbeitsplatz über proprietäre Cloud-Dienste mit anbietergebundener Infrastruktur, steigenden Lizenzkosten und Datenverarbeitung außerhalb eigener Kontrolle. openDesk Edu adressiert diese Abhängigkeit mit einer leistungsfähigen quelloffenen Alternative:</p>
+<ul>
+  <li><strong>Datenhoheit</strong> bleibt bei der Einrichtung; Speicherung und Verarbeitung erfolgen auf selbst kontrollierter Infrastruktur.</li>
+  <li><strong>Herstellerunabhängigkeit:</strong> keine Lock-in-Bindung an einzelne Anbieter; jede Komponente ist austauschbar.</li>
+  <li><strong>Plan- und beschaffungsfähig:</strong> vollständig quelloffen, nachvollziehbar, für öffentliche Vergabe geeignet.</li>
+</ul>
+<p>Die Plattform trägt zu mehreren ausgeschriebenen Themenfeldern bei:</p>
+<table>
+  <tr><th>Themenfeld</th><th>Beitrag von openDesk Edu</th></tr>
+  <tr><td><strong>Open Source</strong></td><td>Vollständig quelloffen auf allen Ebenen, deterministische Reproduzierbarkeit</td></tr>
+  <tr><td><strong>Souveräne Cloud</strong></td><td>Deployment auf SCS-kompatibler Cloud oder eigener Hardware (z.&nbsp;B. K3s)</td></tr>
+  <tr><td><strong>Digitale Identitäten</strong></td><td>Keycloak-SSO, SAML-Anbindung an Hochschul-IdPs, DFN-AAI/eduGAIN-Föderation</td></tr>
+  <tr><td><strong>Data Governance</strong></td><td>Transparente Datenhaltung, SBOM-/Compliance-Nachweise, Datenhoheit</td></tr>
+  <tr><td><strong>KI-Infrastruktur</strong></td><td>Ausbaufähige quelloffene KI-/ML-Dienste in derselben souveränen Umgebung</td></tr>
+</table>
+
+<h3>2.3 Skalierbarkeit auf andere Hochschulen</h3>
+<p>Der Wettbewerb verlangt skalierbare, auf weitere Hochschulen übertragbare Vorhaben. openDesk Edu ist von Grund auf auf Übertragbarkeit ausgelegt:</p>
+<ul>
+  <li><strong>Offene Artefakte:</strong> Alle Container-Definitionen, Kubernetes-Manifeste und Build-Skripte liegen in öffentlichen Repositories.</li>
+  <li><strong>Standardisierte Basis:</strong> Das Deployment läuft auf jeder konformen Kubernetes-Umgebung, auf souveräner Cloud (SCS-kompatibel) sowie auf eigener Hardware (z.&nbsp;B. K3s).</li>
+  <li><strong>Keine Hochschultyp-Bindung:</strong> Funktionsfähig von kleinen Einrichtungen bis zu großen Verbünden; Betrieb durch ein kleines IT-Team ist vorgesehen.</li>
+  <li><strong>Dokumentierte Übertragung:</strong> Deployment-Leitfaden sowie Muster für SSO, Monitoring, Backup und Betrieb.</li>
+  <li><strong>Verbundstauglichkeit:</strong> Die Architektur erlaubt einem Hochschulverbund, die Plattform zentral oder föderiert zu betreiben und Betriebslast zu teilen.</li>
+</ul>
+<p>Genau diese Verbund-Skalierung ist das, was der Ideenwettbewerb ermöglichen kann: die Erprobung an einer Transferhochschule oder in einem Verbund als zusätzlicher Real-Betrieb.</p>
+
+<h3>2.4 Reifegrad</h3>
+<p>Das Projekt befindet sich in der <strong>produktionsnahen Phase</strong> — nicht als Ideenskizze, sondern als lauffähige Lösung: Die Container-Build-Pipeline (deterministisch, signiert, SBOM-dokumentiert), das Kubernetes-Deployment und die GitOps-Werkzeuge sind umgesetzt und dokumentiert. Die Bausteine eignen sich unmittelbar zur Skalierung an einer weiteren Hochschule oder in einem Verbund.</p>
+
+<h3>2.5 Team und Nachhaltigkeit</h3>
+<p>Getragen von der openDesk-Edu-Community. Die Arbeit ist vollständig offen; Beiträge sind ausdrücklich erwünscht. Langfristig stehen Wartung, Updates, Dokumentation und Betrieb im Vordergrund — durch den deterministischen Build und die herstellerunabhängige Toolchain dauerhaft wirtschaftlich und nachvollziehbar gestaltbar.</p>
+
+<h3>2.6 Mehrwert des Wettbewerbspreises</h3>
+<p>Die Förderung ist bewusst ideell und personell ausgerichtet — für dieses Projekt die passende Form: Benötigt werden Reichweite, Vernetzung und ein konkreter Transfer-Ort:</p>
+<ul>
+  <li><strong>Realer Transfer:</strong> Skalierung bei einer Transferhochschule oder in einem Verbund als Pilot.</li>
+  <li><strong>Fachliche Begleitung</strong> durch das HFD-Team zur Adaption auf weitere Einrichtungen.</li>
+  <li><strong>Netzwerk und Sichtbarkeit</strong> über die HFD-Kanäle und -Formate (Konferenzen, Workshops).</li>
+  <li><strong>Reproduzierbarkeit als Vorbild:</strong> Weitere Hochschulen können den Weg anhand der offenen Artefakte nachvollziehen.</li>
+</ul>
+
+<!-- ================= 3. KONTAKT ================= -->
+<h2>3. Kontakt</h2>
+<div class="facts">
+  <div class="fact"><span class="k">Projekt:</span> <span class="v">openDesk Edu (openDesk-Edu-Community)</span></div>
+  <div class="fact"><span class="k">E-Mail:</span> <span class="v">info@opendesk-edu.org</span></div>
+  <div class="fact"><span class="k">Quellcode:</span> <span class="v">github.com/tobias-weiss-ai-xr/opendesk-nix</span></div>
+  <div class="fact"><span class="k">Einreichung:</span> <span class="v">HFD Ideenwettbewerb Digitale Souveränität 2026</span></div>
+</div>
+
+<p class="section-note">Eingereicht im Rahmen des HFD-Ideenwettbewerbs Digitale Souveränität 2026. Förderung bewusst ideell und personell ausgerichtet (Reichweite, Vernetzung, Transfer in den realen Hochschulkontext).</p>
+
+</body>
+</html>
