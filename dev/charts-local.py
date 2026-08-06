@@ -105,14 +105,36 @@ def grep_yaml(file):
         for line in file.readlines():
             if not '{{' in line:
                 content += line
-    return yaml.safe_load(content)
+    return [document for document in yaml.safe_load_all(content) if document]
 
 
-def get_child_helmfiles():
-    child_helmfiles = []
-    root_helmfile = grep_yaml(base_helmfile)
-    for entry in root_helmfile['helmfiles']:
-        child_helmfiles.append(base_repo_path+'/'+entry['path'])
+def get_child_helmfiles(helmfile=None, child_helmfiles=None):
+    """Collect all helmfiles reachable from the root helmfile, recursively.
+
+    The helmfiles are nested several levels deep (root -> defaults -> per app
+    defaults -> per app child), the chart references live in the deepest ones.
+    """
+    if helmfile is None:
+        helmfile = base_helmfile
+    if child_helmfiles is None:
+        child_helmfiles = []
+
+    helmfile = os.path.normpath(helmfile)
+    if helmfile in child_helmfiles:
+        return child_helmfiles
+    if not os.path.isfile(helmfile):
+        logging.warning(f"Referenced helmfile {helmfile} does not exist - skipping.")
+        return child_helmfiles
+    child_helmfiles.append(helmfile)
+
+    helmfile_dir = os.path.dirname(helmfile)
+    for document in grep_yaml(helmfile):
+        for entry in document.get('helmfiles') or []:
+            path = entry['path'] if isinstance(entry, dict) else entry
+            if path.startswith('git::'):
+                logging.debug(f"Skipping remote helmfile {path}")
+                continue
+            get_child_helmfiles(os.path.join(helmfile_dir, path), child_helmfiles)
     return child_helmfiles
 
 
@@ -180,7 +202,7 @@ if __name__ == "__main__":
     log_path = script_path + '/../logs'
     charts_yaml = script_path + '/../helmfile/environments/default/charts.yaml.gotmpl'
     base_repo_path = script_path + '/..'
-    base_helmfile = base_repo_path + '/helmfile_generic.yaml.gotmpl'
+    base_helmfile = base_repo_path + '/helmfile.yaml.gotmpl'
     helmfile_backup_extension = '.bak'
 
     Path(log_path).mkdir(parents=True, exist_ok=True)
