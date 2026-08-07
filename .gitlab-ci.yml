@@ -234,6 +234,12 @@ variables:
       - "chromium"
       - "webkit"
       - "firefox"
+  TESTS_REUSE_CONTEXT_GLOBALLY:
+    description: "Select if the test context should be re-initialized for every test (within the run) or not."
+    value: "no"
+    options:
+      - "yes"
+      - "no"
   TESTS_GRACE_PERIOD:
     description: >
       A new deployment sometimes needs a few minutes to sort itself. If tested too early tests may fail. Here you
@@ -856,6 +862,7 @@ run-tests:
           \"GRACE_PERIOD\": \"${TESTS_GRACE_PERIOD}\", \
           \"USER_IMPORT_GRACE_PERIOD\": \"${TESTS_USER_IMPORT_GRACE_PERIOD}\", \
           \"NUMBER_OF_THREADS\": \"${TESTS_NUMBER_OF_THREADS}\", \
+          \"REUSE_CONTEXT_GLOBALLY\": \"${TESTS_REUSE_CONTEXT_GLOBALLY}\", \
           \"OPENDESK_ENV_REF\": \"${OPENDESK_ENV_REF}\" \
         } \
       }" \
