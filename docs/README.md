@@ -75,6 +75,7 @@ See [Deployment Guide](./docs/deployment.md) for detailed instructions.
 | [DFN-AAI Federation](./docs/dfn-aai-federation.md) | SAML federation setup |
 | [Testing](./docs/testing.md) | E2E and integration tests |
 | [Course Provisioning API](./docs/course-provisioning-api.md) | REST API docs |
+| [Paper Work](./docs/paper-work/README.md) | Processing Directory + DPIA Templates (GDPR Art. 30 & 35) |
 
 Full documentation in [`docs/`](./docs/).
 
