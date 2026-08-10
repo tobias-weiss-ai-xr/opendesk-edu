@@ -1,0 +1,33 @@
+<!--
+SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# Paper Work – Templates
+
+This directory contains **anonymized and generalized** data protection-related template documents
+(Impact Assessment + Processing Directory) according to GDPR that serve as **templates** for educational
+institutions introducing openDesk Edu.
+
+> **Note:** All organization-specific information (institution name, location, contact details,
+> internal systems, network identifiers, personnel numbers) has been removed or replaced with placeholders.
+> Values in `[square brackets]` must be replaced by each institution before use.
+
+## Dokumente
+
+| Document | Purpose | Legal Basis |
+|----------|---------|-------------|
+| [processing-directory-template.md](processing-directory-template.md) | Processing Directory (Template) | GDPR Art. 30 |
+| [data-protection-impact-assessment-template.md](data-protection-impact-assessment-template.md) | Data Protection Impact Assessment (Template) | GDPR Art. 35 |
+
+## Instructions for Use
+
+1. **Insert Organization Details:** Add institution name, address, contact details, and Data Protection Officer
+2. **Verify Legal Bases:** Check State Data Protection Act (LDSG) and University Act; specify and adapt
+3. **Update Figures:** Adjust number of affected persons, data volumes, and storage quotas to match actual user count
+4. **Verify Technical/Organizational Measures:** Ensure TOMs correspond to your infrastructure's actual conditions
+5. **Obtain Approvals:** Before deployment, obtain approval from DPO, data center management, and institution leadership
+
+---
+
+*Last Updated: 09.08.2026*
