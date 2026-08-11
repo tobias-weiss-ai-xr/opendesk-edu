@@ -6,6 +6,16 @@ SPDX-License-Identifier: Apache-2.0
 # Datenschutz-Folgenabschätzung (DSFA)
 ## Einführung von openDesk Edu auf einem Kubernetes-Cluster (K3s) im Rechenzentrum einer Bildungseinrichtung
 
+> **⚠️ Rechtlicher Hinweis / Legal Disclaimer**
+>
+> Dieses Dokument ist **keine rechtlich geprüfte Vorlage**. Es dient ausschließlich als **Beispiel / Template** und ist auf die spezifischen Bedürfnisse und rechtlichen Anforderungen der jeweiligen Institution anzupassen.
+>
+> Es wird ausdrücklich empfohlen, die Einrichtung der Rechtsabteilung (Rechtsberatung / Datenschutzbeauftragter) vor deren Verwendung zur Prüfung und Validierung vorzulegen.
+>
+> Die openDesk-Edu-Community übernimmt keine Haftung für die rechtliche Korrektheit, Vollständigkeit oder Eignung dieses Dokuments für konkrete Einsatzzwecke.
+>
+> ---
+>
 > **⚠️ Hinweis zur Anonymisierung**
 > Diese Fassung wurde für die öffentliche Bereitstellung im openDesk-Edu-Repository erstellt.
 > Alle organisationsspezifischen Angaben (Name der Einrichtung, Standort, Kontaktdaten, interne Systeme,
