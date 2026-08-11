@@ -1159,6 +1159,8 @@ nubusProvisioning:
   registerConsumers:
     additionalAnnotations:
       intents.otterize.com/service-name: "ums-provisioning-register-consumers"
+      argocd.argoproj.io/hook: "Sync"
+      argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
       {{- with .Values.annotations.nubusProvisioning.registerConsumersAdditional }}
       {{ . | toYaml | nindent 6 }}
       {{- end }}
