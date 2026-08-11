@@ -842,12 +842,7 @@ nubusUdmRestApi:
       repository: {{ .Values.images.nubusBlocklistCleanup.repository }}
       tag: {{ .Values.images.nubusBlocklistCleanup.tag }}
   ldapUpdateUniventionObjectIdentifier:
-    enabled: true
-    suspend: false
-    image:
-      registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.nubusLdapUpdateUniventionObjectIdentifier.registry | quote }}
-      repository: {{ .Values.images.nubusLdapUpdateUniventionObjectIdentifier.repository }}
-      tag: {{ .Values.images.nubusLdapUpdateUniventionObjectIdentifier.tag }}
+    enabled: false
   persistence:
     annotations:
       {{ .Values.annotations.nubusUdmRestApi.persistence | toYaml | nindent 6 }}
