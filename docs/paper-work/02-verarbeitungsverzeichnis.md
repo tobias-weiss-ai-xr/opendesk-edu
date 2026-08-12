@@ -42,12 +42,22 @@ SPDX-License-Identifier: Apache-2.0
 
 ## 2. Betriebsmittel
 
+> **⚠️ Wichtiger Hinweis:**
+> openDesk Edu ist ein **Betriebsmittel** (technisches Hilfsmittel) und **keine Verarbeitungstätigkeit**.
+> Die in diesem VVT dokumentierten Verarbeitungstätigkeiten werden **mithilfe des Betriebsmittels openDesk Edu** durchgeführt.
+> Die vollständige Beschreibung von openDesk Edu als Betriebsmittel findet sich in:
+> **[01-betriebsmittel-opendesk-edu.md](01-betriebsmittel-opendesk-edu.md)**
+
 | Feld | Inhalt |
 |------|--------|
 | **Name** | openDesk Edu (kollaborative Office-Suite) |
 | **Typ** | Betriebsmittel (technisches Hilfsmittel) |
 | **Beschreibung** | Siehe **[01-betriebsmittel-opendesk-edu.md](01-betriebsmittel-opendesk-edu.md)** |
 | **Betreiber** | Rechenzentrum (RZ) der Einrichtung |
+
+---
+
+**Verweis:** Alle in diesem Dokument genannten Verarbeitungstätigkeiten nutzen openDesk Edu als Betriebsmittel. Für die technischen und organisatorischen Maßnahmen (TOM) sowie die Sicherheitsstandards von openDesk Edu verweisen wir auf die **[Betriebsmittel-Beschreibung](01-betriebsmittel-opendesk-edu.md)**.
 
 ---
 
@@ -59,13 +69,12 @@ openDesk Edu selbst ist **keine Verarbeitungstätigkeit** (siehe [HBDI-Bericht, 
 
 ### 3.1 Übersicht
 
-| Nr. | **Verarbeitungstätigkeit** | **Betriebsmittel-Komponente** | **Rechtsgrundlage** | **Zweck** | **Datenkategorien** | **Betroffene** | **Löschfrist** | **DSFA erforderlich?** |
-|-----|---------------------------|--------------------------------|---------------------|-----------|---------------------|----------------|----------------|-------------------------|
-| 1 | E-Mail-Kommunikation | SOGo | Art. 6 Abs. 1 lit. e DSGVO i.V.m. LDSG | Bereitstellung von E-Mail-Diensten für Forschung/Lehre/Verwaltung | E-Mail-Inhalte, Metadaten (Header, Anhangsdaten), Kontakte, Kalendereinträge | Mitarbeitende, Studierende, externe Kommunikationspartner | Bis zur Löschung durch Nutzer:in + 30 Tage (Papierkorb) | ❌ Nein |
-| 2 | Dateispeicherung und Kollaboration | openCloud | Art. 6 Abs. 1 lit. e DSGVO | Bereitstellung von Cloud-Speicher für Lehrmaterialien, Forschungsdaten, Verwaltungsdokumente | Dateiinhalte, Metadaten (Name, Größe, Berechtigungen), Freigabelinks | Nutzer:innen, Freigabeempfänger:innen | Bis zur Löschung durch Nutzer:in + 30 Tage (Papierkorb) | ✅ Ja (bei sensiblen Inhalten) |
-| 3 | Durchführung von Online-Lehrveranstaltungen | Jitsi | Art. 6 Abs. 1 lit. e DSGVO | Digitale Lehre (Vorlesungen, Seminare, Übungen) | Audio/Video-Streams, Chat-Nachrichten, Meeting-Metadaten (Teilnehmer, Dauer) | Lehrende, Studierende | Nach Ende der Veranstaltung + 30 Tage (Chat-Logs) | ✅ Ja |
-| 4 | Interne Teamkommunikation | Element/Matrix | Art. 6 Abs. 1 lit. e DSGVO | austausch zwischen Mitarbeitenden/Studierenden | Nachrichteninhalte, Gruppenmitgliedschaften, Profilbilder, Dateianhänge | Teammitglieder | Bis zur Löschung durch Nutzer:in | ❌ Nein |
-| 5 | Forschungsdaten-Management | openCloud | Art. 6 Abs. 1 lit. e DSGVO | Kollaborative Bearbeitung von Forschungsdaten | Dateiinhalte (keine sensiblen Daten i.S.v. Art. 9 DSGVO), Metadaten, Versionsverläufe | Forschende, Projektteams | Nach Projektende + [X Jahre] | ✅ Ja |
+| Nr. | **Verarbeitungstätigkeit** | **Betriebsmittel-Komponente** | **Rechtsgrundlage** | **Zweck** | **Datenkategorien** | **Kategorien betroffener Personen** | **Löschfrist** | **DSFA erforderlich?** |
+|-----|---------------------------|--------------------------------|---------------------|-----------|---------------------|-------------------------------------|----------------|-------------------------|
+| 1 | E-Mail-Kommunikation | SOGo | Art. 6 Abs. 1 lit. e DSGVO i.V.m. LDSG | Bereitstellung von E-Mail-Diensten für Forschung/Lehre/Verwaltung | Inhaltsdaten, Metadaten | Mitarbeitende, Studierende, externe Kommunikationspartner | Bis zur Löschung durch Nutzer:in + 30 Tage (Papierkorb) | ❌ Nein |
+| 2 | Dateispeicherung, Kollaboration und Forschungsdaten-Management | openCloud | Art. 6 Abs. 1 lit. e DSGVO | Bereitstellung von Cloud-Speicher für Lehre, Verwaltung und Forschung | Inhaltsdaten, Metadaten, Freigabelinks | Nutzer:innen, Freigabeempfänger:innen, Forschende, Projektteams | Bis zur Löschung durch Nutzer:in + 30 Tage; Forschungsdaten: Nach Projektende + [X Jahre] | ✅ Ja (bei sensiblen/Forschungsdaten) |
+| 3 | Durchführung von Online-Lehrveranstaltungen | Jitsi | Art. 6 Abs. 1 lit. e DSGVO | Digitale Lehre (Vorlesungen, Seminare, Übungen) | Inhaltsdaten (Audio/Video), Metadaten (Teilnehmer, Dauer) | Lehrende, Studierende, Gastvortragende | Nach Ende der Veranstaltung + 30 Tage (Chat-Logs) | ✅ Ja |
+| 4 | Interne Teamkommunikation | Element/Matrix | Art. 6 Abs. 1 lit. e DSGVO | Austausch zwischen Mitarbeitenden/Studierenden | Inhaltsdaten (Nachrichten, Dateianhänge), Metadaten (Gruppenmitgliedschaften) | Teammitglieder | Bis zur Löschung durch Nutzer:in | ❌ Nein |
 | 6 | Bereitstellung des Selbstservice-Portals | Portal | Art. 6 Abs. 1 lit. e DSGVO | Nutzerverwaltung (Passwort-Reset, Profilpflege) | Nutzerstammdaten (Name, E-Mail, Rollen), Anmeldedaten | Nutzer:innen | 6 Monate nach Ende der Zugehörigkeit | ❌ Nein |
 | 7 | System-Monitoring und Logging | Alle Komponenten | Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse) | Betriebssicherheit, Fehleranalyse, Sicherheitsüberwachung | Systemlogs, Zugriffsprotokolle, Performance-Daten (IP-Adressen pseudonymisiert nach 7 Tagen) | Nutzer:innen (indirekt) | 30 Tage (Anwendungslogs), 90 Tage (Sicherheitslogs) | ❌ Nein |
 | 8 | Backup und Recovery | Alle Komponenten | Art. 6 Abs. 1 lit. e DSGVO | Datensicherung und Wiederherstellung | Verschlüsselte Kopien aller Nutzerdaten | Nutzer:innen | Siehe Löschkonzept (30 Tage bis 7 Jahre) | ❌ Nein |
@@ -190,39 +199,6 @@ openDesk Edu selbst ist **keine Verarbeitungstätigkeit** (siehe [HBDI-Bericht, 
 
 ---
 
-#### 3.2.5 Verarbeitungstätigkeit Nr. 5: Forschungsdaten-Management
-
-| **Feld** | **Wert** |
-|----------|----------|
-| **Name der Verarbeitungstätigkeit** | Kollaboratives Forschungsdaten-Management mit openCloud |
-| **Betriebsmittel** | [openDesk Edu (openCloud)](01-betriebsmittel-opendesk-edu.md) |
-| **Verantwortlicher** | [Name der Einrichtung] – Rechenzentrum |
-| **Gemeinsam Verantwortliche** | [Forschungsprojektleitung] |
-| **Zweck der Verarbeitung** | Speicherung und kollaborative Bearbeitung von Forschungsdaten |
-| **Rechtsgrundlage** | 
-- **Primär:** Art. 6 Abs. 1 lit. e DSGVO (öffentliche Aufgabe)
-- **Sekundär:** Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) für externe Kooperationspartner |
-| **Berechtigtes Interesse (Art. 6 Abs. 1 lit. f)** | – |
-| **Kategorien betroffener Personen** | Forschende, Projektmitglieder, externe Kooperationspartner |
-| **Kategorien personenbezogener Daten** | 
-- **Inhaltsdaten:** Forschungsdaten (Dokumente, Rohdaten, Analysen) – **keine sensiblen Daten i.S.v. Art. 9 DSGVO**
-- **Metadaten:** Dateiname, Versionsverlauf, Bearbeiter:innen, Zugriffsrechte |
-| **Empfänger oder Kategorien von Empfängern** | 
-- **Projektmitglieder:** Autorisierte Nutzer:innen des Forschungsprojekts
-- **Administration:** RZ (nur Metadaten für Betrieb) |
-| **Übermittlung an Drittländer** | ❌ Nein (außer bei expliziter Freigabe an externe Kooperationspartner in der EU) |
-| **Speicherdauer/Löschfristen** | Nach Projektende + **[X Jahre]** (gemäß Forschungsdaten-Richtlinie der Einrichtung) |
-| **Technische und organisatorische Maßnahmen (TOM)** | Siehe [01-betriebsmittel-opendesk-edu.md §8](01-betriebsmittel-opendesk-edu.md#8-technische-und-organisatorische-massnahmen-tom) |
-| **Risikobewertung** | Hoch (Forschungsdaten können wettbewerbsrelevant oder personenbeziehbar sein) |
-| **DSFA erforderlich?** | ✅ **Ja** |
-| **Verweis auf DSFA** | Siehe [04-datenschutz-folgenabschaetzung.md](04-datenschutz-folgenabschaetzung.md) |
-
----
-
-*(Weitere Verarbeitungstätigkeiten können nach diesem Muster ergänzt werden.)*
-
----
-
 ## 4. Kategorien von Verarbeitungstätigkeiten
 
 ### 4.1 Nach Datenkategorien
@@ -324,10 +300,9 @@ openDesk Edu selbst ist **keine Verarbeitungstätigkeit** (siehe [HBDI-Bericht, 
 | **Verarbeitungstätigkeit** | **DSFA erforderlich?** | **Verweis** |
 |----------------------------|-------------------------|-------------|
 | E-Mail-Kommunikation | ❌ Nein | – |
-| Dateispeicherung und Kollaboration | ✅ Ja | [04-datenschutz-folgenabschaetzung.md](04-datenschutz-folgenabschaetzung.md) |
+| Dateispeicherung, Kollaboration und Forschungsdaten-Management | ✅ Ja | [04-datenschutz-folgenabschaetzung.md](04-datenschutz-folgenabschaetzung.md) |
 | Online-Lehrveranstaltungen | ✅ Ja | [04-datenschutz-folgenabschaetzung.md](04-datenschutz-folgenabschaetzung.md) |
 | Interne Teamkommunikation | ❌ Nein | – |
-| Forschungsdaten-Management | ✅ Ja | [04-datenschutz-folgenabschaetzung.md](04-datenschutz-folgenabschaetzung.md) |
 
 ---
 
