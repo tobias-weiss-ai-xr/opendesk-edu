@@ -50,23 +50,23 @@ Diese TOM gelten für:
 
 ## 2. Übersicht der TOM
 
-| **Kategorie** | **Maßnahme** | **Status** | **Verantwortlich** | **Referenz (BSI/ISO)** |
-|---------------|--------------|------------|--------------------|------------------------|
-| **Vertraulichkeit** | Zutrittskontrolle (RZ) | ✅ | RZ | BSI ISI 1.2 |
-|  | Zugriffskontrolle (RBAC, MFA) | ✅ | RZ | BSI ISI 1.3 |
-|  | Verschlüsselung (TLS, AES-256) | ✅ | RZ | BSI ISI 3.3 |
-|  | Pseudonymisierung (IP-Adressen) | ✅ | RZ | BSI ISI 1.7 |
-| **Integrität** | Ceph-Replikation (Faktor 3) | ✅ | RZ | BSI ISI 4.1 |
-|  | Prüfsummen (SHA-256) | ✅ | RZ | BSI ISI 4.2 |
-|  | Backup-Verifizierung | ✅ | RZ | BSI ISI 4.3 |
-| **Verfügbarkeit** | Cluster-HA (3 Control-Plane-Nodes) | ✅ | RZ | BSI ISI 5.1 |
-|  | USV | ✅ | RZ | BSI ISI 5.2 |
-|  | Georedundanz (Backup-Standort) | ✅ | RZ | BSI ISI 5.3 |
-| **Protokollierung** | Zentrale Logs (Loki/ELK) | ✅ | RZ | BSI ISI 6.1 |
-|  | SIEM (Wazuh) | ✅ | RZ | BSI ISI 6.2 |
-|  | Audit-Logs (K8s, Shibboleth) | ✅ | RZ | BSI ISI 6.3 |
-| **Organisatorisch** | Schulungen (jährlich) | ✅ | RZ | BSI ISI 7.1 |
-|  | Incident-Response-Plan | ✅ | RZ | BSI ISI 7.2 |
+| **Kategorie** | **Maßnahme** | **Status** | **Verantwortlich** | **BSI ISI** | **ISO 27001** |
+|---------------|--------------|------------|--------------------|--------------|---------------|
+| **Vertraulichkeit** | Zutrittskontrolle (RZ) | ✅ | RZ | ISI 1.2 | A.11.1.1 |
+|  | Zugriffskontrolle (RBAC, MFA) | ✅ | RZ | ISI 1.3 | A.9.4.2, A.9.4.3 |
+|  | Verschlüsselung (TLS, AES-256) | ✅ | RZ | ISI 3.3 | A.10.1.1, A.10.1.2 |
+|  | Pseudonymisierung (IP-Adressen) | ✅ | RZ | ISI 1.7 | A.9.1.2 |
+| **Integrität** | Ceph-Replikation (Faktor 3) | ✅ | RZ | ISI 4.1 | A.12.2.1 |
+|  | Prüfsummen (SHA-256) | ✅ | RZ | ISI 4.2 | A.12.2.2 |
+|  | Backup-Verifizierung | ✅ | RZ | ISI 4.3 | A.12.3.1 |
+| **Verfügbarkeit** | Cluster-HA (3 Control-Plane-Nodes) | ✅ | RZ | ISI 5.1 | A.12.1.1 |
+|  | USV | ✅ | RZ | ISI 5.2 | A.12.1.2, A.12.1.3 |
+|  | Georedundanz (Backup-Standort) | ✅ | RZ | ISI 5.3 | A.17.1.1, A.17.2.1 |
+| **Protokollierung** | Zentrale Logs (Loki/ELK) | ✅ | RZ | ISI 6.1 | A.12.4.1, A.12.4.2 |
+|  | SIEM (Wazuh) | ✅ | RZ | ISI 6.2 | A.16.1.4 |
+|  | Audit-Logs (K8s, Shibboleth) | ✅ | RZ | ISI 6.3 | A.12.4.3 |
+| **Organisatorisch** | Schulungen (jährlich) | ✅ | RZ | ISI 7.1 | A.7.2.2 |
+|  | Incident-Response-Plan | ✅ | RZ | ISI 7.2 | A.16.1.4, A.16.1.5 |
 |  | Vier-Augen-Prinzip | ✅ | RZ | BSI ISI 7.3 |
 
 ---

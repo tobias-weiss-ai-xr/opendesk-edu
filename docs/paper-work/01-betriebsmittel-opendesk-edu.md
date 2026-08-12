@@ -37,7 +37,9 @@ SPDX-License-Identifier: Apache-2.0
 ### 2.1 Rechtliche Grundlagen
 Gemäß **Hessischer Beauftragter für Datenschutz und Informationsfreiheit (HBDI)** im **[Bericht zu Microsoft 365 (2025-11-15, S. 79, Absätze 3173-3180)](https://datenschutz.hessen.de/sites/datenschutz.hessen.de/files/2025-11/hbdi_bericht_m365_2025_11_15.pdf)**:
 
-> *"Der Einsatz eines M365-Produkts für sich genommen stellt **keine Verarbeitungstätigkeit** im Sinne von Art. 30 DSGVO dar. Es handelt sich vielmehr um ein **technisches Hilfs- oder Betriebsmittel**, mit dessen Unterstützung unterschiedliche Verarbeitungstätigkeiten durchgeführt werden können."*
+> *"Zu berücksichtigen ist in diesem Zusammenhang, dass der Einsatz eines M365-Produkts für sich genommen **keine Verarbeitungstätigkeit im Sinne von Art. 30 DSGVO darstellt**. Es handelt sich vielmehr um ein **technisches Hilfs- oder Betriebsmittel**, mit dessen Unterstützung unterschiedliche Verarbeitungstätigkeiten durchgeführt werden können und mit dessen Einsatz zusätzlich produktspezifische Datenverarbeitungen zur Bereitstellung des Dienstes einhergehen. Insofern empfiehlt es sich, eine Beschreibung des M365-Produkts als ‚technisches Hilfs- oder Betriebsmittel‘ vorzuhalten und auf die Beschreibung des M365-Produkts im Verzeichnis der Verarbeitungstätigkeiten zu verweisen."*
+>
+> *Hervorzuheben ist zudem, dass es sich bei den von Microsoft im Rahmen von M365 zur Verfügung gestellten Produkten um Betriebsmittel handelt, die im Rahmen verschiedener Verarbeitungsverfahren personenbezogener Daten zum Einsatz kommen. Daher muss die datenschutzrechtliche Bewertung vom Verantwortlichen im Kontext des jeweiligen Einsatzzwecks erfolgen."
 
 **Folgerung:**
 - openDesk Edu ist eine **kollaborative Office-Suite** (Dateispeicher, E-Mail, Kalender, Chat, Videokonferenz) → **analog zu Microsoft 365**
@@ -197,10 +199,23 @@ openDesk Edu **darf nicht** genutzt werden für:
 - **Profiling ohne Rechtsgrundlage** (z. B. Verhaltensanalyse von Nutzer:innen)
 
 ### 5.3 Verarbeitungen mit Einzelfallprüfung
-Für folgende Verarbeitungen ist eine **individuelle Risikobewertung (DSFA) erforderlich**:
-- Verarbeitung von **pseudonymisierten Forschungsdaten** mit Re-Identifizierungsrisiko
-- Nutzung von **KI-Funktionen** (z. B. Chat-Bots, intelligente Suche) → **DSFA nach Art. 35 DSGVO**
-- **Langfristige Speicherung** von sensiblen Inhalten (z. B. Prüfungsunterlagen)
+Für folgende Verarbeitungen ist eine **individuelle Risikobewertung (DSFA) gemäß Art. 35 DSGVO erforderlich**:
+
+| **Verarbeitung** | **Risiko** | **Rechtsgrundlage DSFA** | **Referenz** |
+|------------------|------------|--------------------------|--------------|
+| Verarbeitung von **pseudonymisierten Forschungsdaten** mit Re-Identifizierungsrisiko | Hoch (Re-Identifizierung) | Art. 35 Abs. 1 DSGVO | EUGdP Leitlinien 4/2019 |
+| Nutzung von **KI-Funktionen** (z. B. Chat-Bots, intelligente Suche, automatisierte Klassifizierung) | Hoch (Profiling, automatisierte Entscheidungsfindung) | Art. 35 Abs. 1 DSGVO + Art. 22 DSGVO | EUGdP Guidelines 4/2019 (Art. 25) |
+| **Langfristige Speicherung** von sensiblen Inhalten (z. B. Prüfungsunterlagen, Gesundheitsdaten) | Hoch (Datenlecks, Missbrauch) | Art. 35 Abs. 1 DSGVO | Art. 9 DSGVO (falls besondere Kategorien) |
+| **Großangelegte Verarbeitung** von personenbezogenen Daten (z. B. alle Studierenden/Mitarbeitenden) | Hoch (Skaleneffekte) | Art. 35 Abs. 1 DSGVO | BayLfD Blacklist |
+| **Externe Freigabe von Daten** an Drittländer oder internationale Organisationen | Hoch (Drittlandübermittlung) | Art. 35 Abs. 1 DSGVO + Art. 44-49 DSGVO | EUGdP Leitlinien 3/2018 |
+
+> **⚠️ Hinweis zu KI-Funktionen:**
+> Falls openDesk Edu **KI-Assistenten, automatisierte Textanalyse oder intelligente Suchfunktionen** nutzt, die **Profiling** oder **automatisierte Entscheidungsfindung** ermöglichen, **muss eine DSFA durchgeführt werden**. Dies gilt insbesondere, wenn:
+> - Nutzer:innen **keine transparente Information** über den KI-Einsatz erhalten,
+> - die KI **ohne menschliche Kontrolle** Entscheidungen trifft,
+> - die KI **personenbezogene Daten** in einer Weise verarbeitet, die **Risiken für Rechte und Freiheiten** birgt (z. B. Diskriminierung, falsche Klassifizierung).
+>
+> **Empfehlung:** Deaktivierung von KI-Funktionen **bis zur Durchführung einer DSFA** oder Bereitstellung einer **Opt-out-Option** für Nutzer:innen.
 
 ---
 
@@ -208,6 +223,9 @@ Für folgende Verarbeitungen ist eine **individuelle Risikobewertung (DSFA) erfo
 
 ### 6.1 Betriebsmittelspezifische Daten
 *(Daten, die durch den Betrieb von openDesk Edu selbst anfallen – unabhängig von der Nutzung)*
+
+> **⚠️ Wichtig:** Diese Datenkategorien gelten **nur für den Betrieb des Betriebsmittels openDesk Edu**. 
+> Die **Inhaltsdaten** (z. B. E-Mails, Dateien, Nachrichten) werden **nicht hier**, sondern in den **Verarbeitungstätigkeiten** (§5) dokumentiert.
 
 | **Kategorie** | **Beispiele** | **Speicherdauer** | **Rechtsgrundlage** |
 |---------------|--------------|-------------------|---------------------|
@@ -244,23 +262,26 @@ Für folgende Verarbeitungen ist eine **individuelle Risikobewertung (DSFA) erfo
 ## 8. Technische und organisatorische Maßnahmen (TOM)
 
 ### 8.1 Übersicht
-Die TOM für openDesk Edu entsprechen den Anforderungen aus **Art. 32 DSGVO** und **BSI IT-Grundschutz (Kritikalität: hoch)**.
+Die TOM für openDesk Edu entsprechen den Anforderungen aus:
+- **Art. 32 DSGVO** – Sicherheit der Verarbeitung
+- **BSI IT-Grundschutz** (Modulare Sicherheitskonzepte, Kritikalität: **hoch**)
+- **ISO/IEC 27001** (Informationssicherheits-Managementsysteme, optional)
 
-| **Kategorie** | **Maßnahme** | **Status** | **Verantwortlich** | **Referenz** |
-|---------------|--------------|------------|--------------------|--------------|
-| **Vertraulichkeit** | Zutrittskontrolle (RZ: Chipkarte + PIN) | ✅ | RZ | BSI ISI 1.2 |
-|  | Zugriffskontrolle (RBAC, MFA für Admins) | ✅ | RZ | BSI ISI 1.3 |
-|  | Verschlüsselung (TLS 1.3, AES-256 für Storage/Backups) | ✅ | RZ | BSI ISI 3.3 |
-| **Integrität** | Ceph-Replikation (Faktor 3), RAID/ZFS | ✅ | RZ | BSI ISI 4.1 |
-|  | Prüfsummen (SHA-256), Backup-Verifizierung | ✅ | RZ | BSI ISI 4.2 |
-| **Verfügbarkeit** | Cluster-HA (3 Control-Plane-Nodes) | ✅ | RZ | BSI ISI 5.1 |
-|  | USV, Georedundanz (Backup-Standort) | ✅ | RZ | BSI ISI 5.2 |
-|  | Disaster Recovery (RTO ≤ 4 h, RPO ≤ 1 h) | ✅ | RZ | BSI ISI 5.3 |
-| **Protokollierung** | Zentrale Logs (Loki/ELK), SIEM (Wazuh) | ✅ | RZ | BSI ISI 6.1 |
-|  | Audit-Logs (K8s, Shibboleth), Immutable Logs (WORM) | ✅ | RZ | BSI ISI 6.2 |
-| **Organisatorisch** | Schulungen (jährlich für Admin-Personal) | ✅ | RZ | BSI ISI 7.1 |
-|  | Incident-Response-Plan, Meldepflichten (Art. 33/34 DSGVO) | ✅ | RZ | BSI ISI 7.2 |
-|  | Vier-Augen-Prinzip für Admin-Aktionen | ✅ | RZ | BSI ISI 7.3 |
+| **Kategorie** | **Maßnahme** | **Status** | **Verantwortlich** | **BSI ISI** | **ISO 27001** |
+|---------------|--------------|------------|--------------------|--------------|---------------|
+| **Vertraulichkeit** | Zutrittskontrolle (RZ: Chipkarte + PIN) | ✅ | RZ | ISI 1.2 | A.11.1.1 |
+|  | Zugriffskontrolle (RBAC, MFA für Admins) | ✅ | RZ | ISI 1.3 | A.9.4.2, A.9.4.3 |
+|  | Verschlüsselung (TLS 1.3, AES-256 für Storage/Backups) | ✅ | RZ | ISI 3.3 | A.10.1.1, A.10.1.2 |
+| **Integrität** | Ceph-Replikation (Faktor 3), RAID/ZFS | ✅ | RZ | ISI 4.1 | A.12.2.1 |
+|  | Prüfsummen (SHA-256), Backup-Verifizierung | ✅ | RZ | ISI 4.2 | A.12.2.2 |
+| **Verfügbarkeit** | Cluster-HA (3 Control-Plane-Nodes) | ✅ | RZ | ISI 5.1 | A.12.1.1 |
+|  | USV, Georedundanz (Backup-Standort) | ✅ | RZ | ISI 5.2 | A.12.1.2, A.12.1.3 |
+|  | Disaster Recovery (RTO ≤ 4 h, RPO ≤ 1 h) | ✅ | RZ | ISI 5.3 | A.17.1.1, A.17.2.1 |
+| **Protokollierung** | Zentrale Logs (Loki/ELK), SIEM (Wazuh) | ✅ | RZ | ISI 6.1 | A.12.4.1, A.12.4.2 |
+|  | Audit-Logs (K8s, Shibboleth), Immutable Logs (WORM) | ✅ | RZ | ISI 6.2 | A.12.4.3 |
+| **Organisatorisch** | Schulungen (jährlich für Admin-Personal) | ✅ | RZ | ISI 7.1 | A.7.2.2 |
+|  | Incident-Response-Plan, Meldepflichten (Art. 33/34 DSGVO) | ✅ | RZ | ISI 7.2 | A.16.1.4, A.16.1.5 |
+|  | Vier-Augen-Prinzip für Admin-Aktionen | ✅ | RZ | ISI 7.3 | A.6.1.1 |
 
 ### 8.2 Detaillierte TOM
 
