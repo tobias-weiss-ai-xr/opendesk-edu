@@ -593,6 +593,19 @@ appsuite:
               open-xchange-admin-soap-usercopy: "enabled"
               open-xchange-admin-user-copy: "enabled"
               open-xchange-deputy: "enabled"
+      {{- with .Values.technical.oxAppSuite.rateLimit.coreMW }}
+      {{- if or .maxRate .maxRateTimeWindow }}
+      http-api:
+        values:
+          properties:
+            {{- with .maxRateTimeWindow }}
+            com.openexchange.servlet.maxRateTimeWindow: {{ . | quote }}
+            {{- end }}
+            {{- with .maxRate }}
+            com.openexchange.servlet.maxRate: {{ . | quote }}
+            {{- end }}
+      {{- end }}
+      {{- end }}
       {{- if .Values.functional.migration.oxAppSuite.enabled }}
       migration:
         values:

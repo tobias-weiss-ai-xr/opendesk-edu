@@ -12,6 +12,9 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
 
 <!-- TOC -->
 * [Updates and features](#updates-and-features)
+  * [1.18.0](#1180)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+      * [Allow overriding HTTP request rate limiting for the core-mw component of the OX App Suite](#allow-overriding-http-request-rate-limiting-for-the-core-mw-component-of-the-ox-app-suite)
   * [1.17.0](#1170)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Enable the "Send later" (scheduled mail) feature for OX App Suite](#enable-the-send-later-scheduled-mail-feature-for-ox-app-suite)
@@ -24,7 +27,7 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
       * [Provide selected secrets as pre-created Kubernetes Secrets](#provide-selected-secrets-as-pre-created-kubernetes-secrets)
     * [`smtp.yaml.gotmpl`](#smtpyamlgotmpl)
       * [Postfix HELO names](#postfix-helo-names)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-1)
       * [OX App Suite LDAP caching for contact picker](#ox-app-suite-ldap-caching-for-contact-picker)
       * [Postfix](#postfix)
         * [SPF validation for incoming mail](#spf-validation-for-incoming-mail)
@@ -33,7 +36,7 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
   * [1.16.0](#1160)
     * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
       * [OpenProject PDF export theming](#openproject-pdf-export-theming)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-1)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-2)
       * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
     * [`service.yaml.gotmpl`](#serviceyamlgotmpl)
       * [Option to set a `loadBalancerIp` for Dovecot and Postfix](#option-to-set-a-loadbalancerip-for-dovecot-and-postfix)
@@ -45,10 +48,29 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-1)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
       * [Virtual alias limits](#virtual-alias-limits)
-    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-2)
+    * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-3)
       * [Proxy protocol support for Postfix](#proxy-protocol-support-for-postfix)
       * [Set limitation on maximum number of objects (for tasks, contacts, attachments)](#set-limitation-on-maximum-number-of-objects-for-tasks-contacts-attachments)
 <!-- TOC -->
+
+## 1.18.0
+
+### `technical.yaml.gotmpl`
+
+#### Allow overriding HTTP request rate limiting for the core-mw component of the OX App Suite
+
+The OX App Suite core-mw component enforces a rate limit on certain API components. It is now possible to override the
+default values for the core-mw component:
+
+```yaml
+technical:
+  oxAppSuite:
+    rateLimit:
+      maxRateTimeWindow: "60000"
+      maxRate: "3000"
+```
+
+This is usually not required but can be helpful to customize for example for load tests.
 
 ## 1.17.0
 
