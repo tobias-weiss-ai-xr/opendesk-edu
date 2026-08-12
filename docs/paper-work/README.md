@@ -151,9 +151,24 @@ A: ❌ Nein. Die Templates sind **Beispiele** und müssen an die Institution ang
 
 ---
 
-## Referenzen
+## Landespezifische Hinweise
 
-| Quelle | Beschreibung | Link |
+Die folgenden Aufsichtsbehörden und Ressourcen sind für die Umsetzung der Datenschutzvorlagen in den jeweiligen Bundesländern relevant:
+
+| Bundesland | Zuständige Behörde | Besonderheiten | Link |
+|------------|--------------------|----------------|------|
+| **Bayern** | Bayerisches Landesamt für Datenschutzaufsicht (BayLfD) | DSFA Blacklist für öffentliche Stellen, Modulare DSFA-Vorlagen | [www.datenschutz-bayern.de](https://www.datenschutz-bayern.de) |
+| **Hessen** | Hessischer Beauftragter für Datenschutz und Informationsfreiheit (HBDI) | M365-Bericht (Betriebsmittel-Klassifizierung), Praxisnah | [datenschutz.hessen.de](https://datenschutz.hessen.de) |
+| **Nordrhein-Westfalen** | Landesbeauftragte für Datenschutz und Informationsfreiheit NRW (LDI NRW) | Spezifische Leitfäden für Hochschulen | [www.ldi.nrw.de](https://www.ldi.nrw.de) |
+| **Baden-Württemberg** | Landesbeauftragter für den Datenschutz und die Informationsfreiheit (LfDI BW) | Muster-VVT für Schulen/Hochschulen | [www.baden-wuerttemberg.datenschutz.de](https://www.baden-wuerttemberg.datenschutz.de) |
+| **Niedersachsen** | Landesbeauftragte für den Datenschutz Niedersachsen (LfD Niedersachsen) | Empfehlungen für E-Learning | [www.lfd.niedersachsen.de](https://www.lfd.niedersachsen.de) |
+| **Andere Bundesländer** | [Liste aller Landesdatenschutzbeauftragten](https://www.bfdi.bund.de/DE/Service/Landesbeauftragte/landesbeauftragte_node.html) | – | – |
+
+**Hinweis:** Prüfen Sie die **Landesdatenschutzgesetze (LDSG)** und **Hochschulgesetze** Ihres Bundeslandes, da diese zusätzliche Anforderungen enthalten können.
+
+---
+
+## Referenzen
 |--------|--------------|------|
 | **HBDI – M365-Bericht (2025-11-15)** | Begründung: M365 = Betriebsmittel (S. 79, 3173-3180) | [PDF](https://datenschutz.hessen.de/sites/datenschutz.hessen.de/files/2025-11/hbdi_bericht_m365_2025_11_15.pdf) |
 | **BayLfD – Betriebsmittel-Vorlage** | Muster für Betriebsmittel-Beschreibung (Modul 5) | [Website](https://www.datenschutz-bayern.de/dsfa/) |
@@ -163,11 +178,14 @@ A: ❌ Nein. Die Templates sind **Beispiele** und müssen an die Institution ang
 
 ---
 
-## Kontakt
+## Verwandte Dokumente
 
-- 🌐 **openDesk Edu Projekt**: [https://opendesk-edu.org](https://opendesk-edu.org)
-- 📧 **GitHub Issues**: [https://github.com/opendesk-edu/opendesk-edu/issues](https://github.com/opendesk-edu/opendesk-edu/issues)
-- 📚 **Community-Forum**: (wird ergänzt)
+- **[INFRASTRUCTURE.md](../INFRASTRUCTURE.md)** – Technische Infrastruktur-Beschreibung (K3s, Ceph, Netzwerk)
+- **[helmfile/](../helmfile/)** – Kubernetes-Konfiguration für openDesk Edu
+
+---
+
+## Kontakt
 
 **Bei rechtlichen Fragen:**
 - **Rechtsabteilung** der Institution
