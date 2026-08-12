@@ -147,6 +147,17 @@ technical:
       # Ref.: https://documentation.open-xchange.com/8/middleware/contacts/contacts_provider_ldap.html#caching
       cacheExpirySeconds: 0
 
+    rateLimit:
+      coreMW:
+        # Specify the rate limit that applies to incoming HTTP requests. A client that exceeds that limit will receive a "429 Too Many Requests" HTTP error code.
+        # Setting this to `null`/`~` resets this value to its respective default value (see reference).
+        # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.servlet.maxRateTimeWindow
+        maxRateTimeWindow: ~
+        # Specify the rate limit' time window in milliseconds in which to track incoming HTTP requests.
+        # Setting this to `null`/`~` resets this value to its respective default value (see reference).
+        # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.servlet.maxRate
+        maxRate: ~
+
   # Postfix related technical settings
   postfix:
     # The time in seconds for the rate limits defined below. The default value of 60 means that the rate limits are applied per minute.
