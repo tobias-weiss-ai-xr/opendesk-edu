@@ -3,331 +3,443 @@ SPDX-FileCopyrightText: 2026 openDesk Edu Contributors
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# VVT und DSFA – Recherche und Verifikation
+# VVT, DSFA und TOM – Recherche und Referenzen
 
-> **⚠️ Rechtlicher Hinweis / Legal Disclaimer**
+> **Wichtiger Hinweis**
 >
-> Lesen Sie vor Verwendung auch den Disclaimer in den Hauptdokumenten. Dieses Dokument dient rein dokumentarischen Zwecken.
+> Dieses Dokument dient rein dokumentarischen Zwecken und fasst die bei der Erstellung der openDesk Edu Datenschutzvorlagen verwendeten Quellen und Informationen zusammen.
 >
-> Die openDesk-Edu-Community übernimmt keine Haftung für die Richtigkeit oder Aktualität der hier genannten Informationen.
+> Es ersetzt keine rechtliche Beratung. Bei konkreten Fragen wenden Sie sich an Ihre Rechtsabteilung oder den Datenschutzbeauftragten.
 
 ---
 
-## 1. Übersicht
+## Überblick
 
-Dieses Dokument sammelt Informationen und Referenzen zu den im openDesk Edu Projekt verwendeten Datenschutzvorlagen:
-- **VVT** (Verarbeitungsverzeichnis) – GDPR Art. 30
-- **DSFA** (Datenschutz-Folgenabschätzung) – GDPR Art. 35
-- **TOM** (Technische und Organisatorische Maßnahmen) – GDPR Art. 32
+Dieses Dokument dokumentiert:
+
+1. **Rechtsgrundlagen** für VVT (Art. 30), TOM (Art. 32) und DSFA (Art. 35) DSGVO
+2. **Referenzen und Quellen** für die Erstellung der Templates
+3. **Checklisten** für die Anwendung der Dokumente
+4. **Spezifische Aspekte** für openDesk Edu (KI-Nutzung, Videoüberwachung)
 
 ---
 
-## 2. Rechtsgrundlagen (Deutschland / EU)
+## 1. Rechtsgrundlagen
 
-### 2.1 Primärrecht (EU-Vertrag)
+### 1.1 Primärrecht (EU)
 
 | Rechtsquelle | Artikel | Inhalt |
 |--------------|---------|--------|
-| **DSGVO (EU 2016/679)** | Art. 30 | Pflicht zur Führung eines Verzeichnisses von Verarbeitungstätigkeiten (VVT) |
-| | Art. 32 | Sicherheit der Verarbeitung (Technische und organisatorische Maßnahmen) |
+| **Verordnung (EU) 2016/679 (DSGVO)** | Art. 30 | Pflicht zur Führung eines Verzeichnisses von Verarbeitungstätigkeiten (VVT) |
+| | Art. 32 | Sicherheit der Verarbeitung (Technische und Organisatorische Maßnahmen – TOM) |
 | | Art. 35 | Datenschutzfolgenabschätzung (DSFA) bei hohem Risiko |
 | | Art. 36 | Vorabprüfung durch den Datenschutzbeauftragten |
+| | Art. 15 | Auskunftsrecht der betroffenen Person |
+| | Art. 17 | Recht auf Löschung ("Recht auf Vergessenwerden") |
+| | Art. 20 | Recht auf Datenübertragbarkeit |
 
 ---
 
-### 2.2 Sekundärrecht (Deutschland / Bundesländer)
+### 1.2 Sekundärrecht (Deutschland / Bundesländer)
 
 | Rechtsquelle | Artikel | Inhalt |
 |--------------|---------|--------|
-| **BDSG (Bundesdatenschutzgesetz)** | Anlage zu § 9 | TOM (Technische und Organisatorische Maßnahmen) für öffentliche Stellen |
-| **LDSG [Bundesland]** | § X | Meldepflichten an Aufsichtsbehörde, Datenschutz-Folgenabschätzung |
-| **HSchulG / UG** | § X | Berichtspflichten, Aufbewahrung von Dokumenten |
-| **Dienstrechtsregelung** | § X | Dienstverzeichnis, Zugriffskontrolle |
+| **Bundesdatenschutzgesetz (BDSG)** | Anlage zu § 9 | TOM (Technische und Organisatorische Maßnahmen) für öffentliche Stellen |
+| **LDSG [Bundesland]** | Verschiedene | Meldepflichten an Aufsichtsbehörde, DSFA-Anforderungen |
+| **Hochschulgesetz (UG) / Schulgesetz** | Verschiedene | Berichtspflichten, Aufbewahrung von Dokumenten |
+| **Dienstrechtsregelung** | Verschiedene | Dienstverzeichnis, Zugriffskontrolle |
+
+**Hinweis:** Die konkret geltenden Landesgesetze variieren nach Bundesland. Konsultieren Sie Ihre Rechtsabteilung.
 
 ---
 
-## 3. VVT (Verarbeitungsverzeichnis) – Art. 30 DSGVO
+## 2. VVT (Verarbeitungsverzeichnis) – Art. 30 DSGVO
 
-### 3.1 Mindestinhalt gemäß Art. 30 Abs. 1 DSGVO
+### 2.1 Mindestinhalt gemäß Art. 30 Abs. 1 DSGVO
 
-Das Verzeichnis von Verarbeitungstätigkeiten muss enthalten:
+Das Verzeichnis von Verarbeitungstätigkeiten muss folgende Informationen enthalten:
 
 1. **Name und Kontaktangaben des Verantwortlichen**
-   - Firmen-/Institutionsname
-   - Anschrift
-   - Kontaktdaten
-
 2. **Name und Kontaktangaben des Datenschutzbeauftragten** (falls vorhanden)
-
 3. **Zwecke der Verarbeitung**
-   - Erfüllung von Aufgaben im öffentlichen Interesse
-   - Durchführung eines Vertrags
-   - Wahrung berechtigter Interessen
-
 4. **Kategorien von betroffenen Personen**
-   - Studierende
-   - Lehrpersonen
-   - Mitarbeiter/Verwaltung
-   - Externe Kooperationspartner
-
 5. **Kategorien personenbezogener Daten**
-   - Identifikationsdaten (Name, Matrikelnummer)
-   - Kontaktdaten (E-Mail, Telefon)
-   - Akademische Daten (Noten, Prüfungsleistungen)
-   - Login-Daten
-
 6. **Kategorien von Empfängern**
-   - Interne Abteilungen
-   - Externe Dienstleister (mit AVV)
-   - Behörden (auf Anfrage)
-
-7. **Übermittlungen an Drittstaaten**
-   - Ggf. Angabe geeigneter Garantien (SCC, Zertifizierungen)
-
+7. **Übermittlungen an Drittstaaten** (falls zutreffend)
 8. **Löschfristen**
-   - Speicherdauer, Kriterien für Löschung
-
-9. **Allgemeine Beschreibung der Sicherheitsmaßnahmen**
-   - TOM-Angaben können auf separates Dokument verweisen
+9. **Allgemeine Beschreibung der Sicherheitsmaßnahmen** (TOM)
 
 ---
 
-### 3.2 Referenzen und Vorlagen
+### 2.2 VVT-Checkliste für openDesk Edu
 
-| Quelle | URL / Beschreibung | Nutzen für openDesk Edu |
-|--------|-------------------|------------------------|
-| **BfDI – Bundesbeauftragter für den Datenschutz und die Informationsfreiheit** | https://www.bfdi.bund.de/ | Leitlinien zu Art. 30 DSGVO, Kurz-Checklisten |
-| **EUGdP-Blatt 08/2024** | https://edpb.europa.eu/ | Leitfäden: Anforderungen an VVT |
-| **BayLDA – Landesamt für Datenschutzaufsicht** | https://www.lda.bayern.de/ | Muster-VVT für Bayern, Schulen |
-| **Datenschutz-Leitfaden für Hochschulen** | http://www.dfn-cert.de/ | Beispielszenarien Hochschule-Umgebung |
-| **Open Source-Vorlagen** | z. B. GitHub Gists | Community-zertifizierte VVT-Vorlagen |
+Vor Verwendung der VVT-Vorlage sollten folgende Punkte geklärt sein:
+
+| Kategorie | Prüfpunkt | Status |
+|-----------|-----------|--------|
+| **Verantwortlicher** | Rechenzentrum IT benannt | ☐ |
+| | Kontaktdaten hinterlegt (E-Mail, Telefon) | ☐ |
+| **DSB** | Datenschutzbeauftragter benannt | ☐ |
+| | Kontaktdaten des DSB hinterlegt | ☐ |
+| **Zweck** | Sprach- und Videokommunikation dokumentiert | ☐ |
+| **Betroffene Personen** | Studierende (inkl. Studierende mit besonderen Bedürfnissen) | ☐ |
+| | Mitarbeitende (Verwaltung, Lehrend) | ☐ |
+| | Lehrende (Dozenten, Lehrbeauftragte) | ☐ |
+| | Externe Kooperationspartner | ☐ |
+| **Datenkategorien** | Login-Daten (Username, Authentifizierungs-Tokens) | ☐ |
+| | Identifikationsdaten (Name, Matrikel-/Personalnummer) | ☐ |
+| | Kontaktdaten (E-Mail, Telefon) | ☐ |
+| | E-Mail-Nachrichten (Header, Inhalt, Anhänge) | ☐ |
+| | Kalenderdaten (Einträge, Termine, Teilnehmer) | ☐ |
+| | Chat-/Messenger-Verläufe (Element) | ☐ |
+| | Dateien (Nextcloud openCloud) – Inhalt, Metadaten | ☐ |
+| | Audio-/Videodaten (Konferenz-Aufnahmen, Avatare) | ☐ |
+| | Biometrische Daten (falls Videomeetings/Audio) | ☐ |
+| **Empfänger** | Keine Offenlegung ohne rechtliche Grundlage | ☐ |
+| | RZ-Administratoren (nur zugriffsberechtigte Mitarbeiter) | ☐ |
+| | Externe Dienstleister (nur bei vorhandenen AVV) | ☐ |
+| **Löschfristen** | Konkrete Frist definieren (z. B. 3 Jahre nach Exmatrikulation/Austritt) | ☐ |
+| **TOM** | Referenz auf TOM-Dokument angeben | ☐ |
 
 ---
 
-### 3.3 VVT-Dokumenten-Checkliste für openDesk Edu
+### 2.3 Referenzen und Quellen
 
-- [ ] Verantwortlicher benannt (Rechenzentrum IT)
-- [ ] DSB benannt und Kontakt hinterlegt
-- [ ] Zweck der Verarbeitung: Sprach- und Videokommunikation (openCloud, SOGo, Jitsi, Element)
-- [ ] Betroffene Personen: Studierende, Mitarbeitende, Lehrende
-- [ ] Datenkategorien: Login-Daten, E-Mails, Kalenderdaten, Chat-Verläufe (meta), BIOMETRIE (Optional: Avatar, Stimme)
-- [ ] Empfänger: Keine Offenlegung ohne rechtliche Grundlage, ggf. RZ-Administratoren
-- [ ] Löschfristen: [konkret definieren, z. B. 3 Jahre nach Exmatrikulation]
-- [ ] TOM-Referenz auf separates TOM-Dokument
+| Organisation / Quelle | Beschreibung | Verfügbarkeit |
+|----------------------|--------------|----------------|
+| **BfDI** – Bundesbeauftragter für den Datenschutz und die Informationsfreiheit | Offizielle Leitlinien zu Art. 30 DSGVO, Checklisten | https://www.bfdi.bund.de/DE/Service/FAQ/faq_node.html |
+| **EUGdP** – Europäischer Datenschutzausschuss | Leitfäden: Anforderungen an VVT, Art. 30 DSGVO | https://edpb.europa.eu/ |
+| **Landesbehörden** – z. B. LDA Bayern, LDI Hessen, LfDI Rheinland-Pfalz | Länderspezifische Muster-VVT und Hinweise | Landesspezifische Webseiten |
+| **DFN-CERT** | Datenschutz-Leitfäden für Hochschul-IT-Infrastruktur | http://www.dfn-cert.de/ |
 
 ---
 
-## 4. DSFA (Datenschutz-Folgenabschätzung) – Art. 35 DSGVO
+## 3. DSFA (Datenschutzfolgenabschätzung) – Art. 35 DSGVO
 
-### 4.1 Wann ist eine DSFA durchzuführen?
+### 3.1 Wann ist eine DSFA erforderlich?
 
-Gemäß Art. 35 Abs. 1 DSGVO bei Verarbeitungen mit **hohem Risiko**, insbesondere bei:
+Gemäß Art. 35 Abs. 1 DSGVO ist eine DSFA **durchzuführen**, wenn eine Verarbeitung ein **hohes Risiko** für die Rechte und Freiheiten natürlicher Personen darstellt, insbesondere:
 
 1. **Systematische und umfangreiche Bewertung persönlicher Aspekte**
    - Profiling
    - Scoring
-   - Personalauswahl
+   - Automated决策-making (einschließlich Profiling)
    - Verhaltensanalyse
-   - Zuverlässigkeit/Eignung
+   - Beurteilung persönlicher Aspekte (Arbeitsleistung, Zuverlässigkeit, Gesundheit)
 
 2. **Umfassende Verarbeitung sensibler Daten** (Art. 9 Abs. 1 DSGVO)
    - Gesundheitsdaten
-   - Rassische/ethnische Herkunft
-   - Politische Meinung
+   - Rassische oder ethnische Herkunft
+   - Politische Meinungen
    - Gewerkschaftszugehörigkeit
    - Biometrische Daten
    - Sexuelle Orientierung
 
 3. **Großangelegte Überwachung öffentlich zugänglicher Bereiche**
-   - Videoüberwachung (z. B. Campus)
 
 4. **Kategorisierung/Kriterien für sensitive Entscheidungen**
-   - Zugang zu Bildung/Dienstleistungen
-   - Zutrittskontrolle
+
+**Hinweis für openDesk Edu:** Eine DSFA ist **durchzuführen**, wenn in openDesk Edu Funktionen mit folgendem Charakter eingesetzt werden:
+
+- KI-Assistenten mit Profiling-Analysen
+- Überwachung von Campus-Bereichen (Videoüberwachung)
+- Automated Entscheidungssysteme ohne menschliches Eingreifen
+- Verarbeitung von Gesundheitsdaten
 
 ---
 
-### 4.2 DSFA-Struktur gemäß EUGdP-Leitfaden
+### 3.2 DSFA-Struktur gemäß EUGdP (Art. 35 DSFA-Leitfaden)
 
 | Abschnitt | Inhalt |
 |-----------|--------|
-| **0. Einleitung** | Projektbeschreibung, Zuständigkeiten |
-| **1. Notwendigkeit und Verhältnismäßigkeit** | Verarbeitungswecke, Rechtmäßigkeit, Angemessenheit |
-| **2. Beschreibung der Verarbeitung** | Datenkategorien, Verarbeitungstätigkeiten, IT-Systeme |
+| **0. Einleitung** | Projektbeschreibung, Zuständigkeiten, Zielsetzung |
+| **1. Notwendigkeit und Verhältnismäßigkeit** | Zwecke der Verarbeitung, Rechtmäßigkeit, Angemessenheit |
+| **2. Beschreibung der Verarbeitung** | Datenkategorien, Verarbeitungstätigkeiten, IT-Systeme, Datenflüsse |
 | **3. Risikoidentifikation** | Mögliche Risiken für Rechte und Freiheiten der Betroffenen |
-| **4. Risikoanalyse** | Wahrscheinlichkeit und Schwere der Risiken |
+| **4. Risikoanalyse** | Wahrscheinlichkeit und Schwere der Risiken, Gefährdungsmodelle |
 | **5. Maßnahmen zur Risikominderung** | TOM, organisatorische Maßnahmen, Kontrollen |
-| **6. Restrisiko** | Bewertung verbleibender Risiken |
-| **7. Finalisierung und Freigabe** | Empfehlung und Genehmigung durch DSB |
+| **6. Restrisiko** | Bewertung verbleibender Risiken nach Maßnahmen |
+| **7. Finalisierung und Freigabe** | Empfehlung, Genehmigung durch DSB und Leitung |
 
 ---
 
-### 4.3 Referenzen und Vorlagen
+### 3.3 DSFA-Checkliste für openDesk Edu
 
-| Quelle | URL / Beschreibung | Nutzen für openDesk Edu |
-|--------|-------------------|------------------------|
-| **EUGdP – Art. 35 Leitfaden** | https://edpb.europa.eu/ | Offizielle Leitlinien aus Europa |
-| **BfDI – DSFA-Fragebogen** | https://www.bfdi.bund.de/ | Checkliste für Hochrisikoverarbeitungen |
-| **AEPD (Spanien)|** | https://www.aepd.es/ | Spanische Datenschutzbehörde, detaillierte DSFA-Templates |
-| **UK ICO – DPIA-Tool** | https://ico.org.uk/ | Online-Assessment-Tool (englisch) |
-| **Open Source VVT/DSFA Tools** | z. B. `datenschutz-dpie`, `lucide` | CLI-Tools zur VVT/DSFA-Erstellung (noch zu prüfen) |
-
----
-
-### 4.4 DSFA-Checkliste für openDesk Edu
-
-- [ ] Projekt: Einführung von openDesk Edu in der Bildungseinrichtung
-- [ ] Sensible Daten: Ggf. biometrische Elemente (Avatar, Stimme in VTT-Konferenzen) -> neues Risiko!
-- [ ] Verwenden wir KI/Profiling? (z. B. Chat-Bots mit Sprachanalyse) -> NEW: JA (z. B. in SOGo Intelligent Assistant)
-- [ ] Überwachung öffentlicher Bereiche? -> NEIN (außer optionaler Webcam in Jitsi)
-- [ ] Kategorisierung bei Entscheidungen? -> NEIN (nur: ereignisgesteuerte Zuteilung von Nachrichten)
-
-**Empfehlung:** Bei KI-Einsatz (z. B. Chat-Bot) muss der **KI-spezifische DSFA-Abschnitt** ergänzt werden:
-- Transparenz über KI-Nutzung
-- Möglichkeit zur Deaktivierung der KI
-- Fehlertoleranz und menschliches Eingreifen
-- Profilierung-Verbot ohne ausdrückliche Zustimmung
+| Kategorie | Prüfpunkt | Status |
+|-----------|-----------|--------|
+| **Projekt** | Einführung von openDesk Edu in der Bildungseinrichtung | ☐ |
+| **KI-Nutzung** |Werden KI-Assistenten verwendet? (z. B. Chat-Bot, intelligente Suche) | ☐ |
+| | Ist eine Option zur Deaktivierung der KI vorhanden? | ☐ |
+| | Wird Profiling ohne ausdrückliche Zustimmung durchgeführt? | ☐ |
+| | Gibt es ein menschliches Eingreifen bei KI-Fehlern? | ☐ |
+| **Videoüberwachung** | Werden öffentliche Bereiche überwacht? | ☐ |
+| | Ist Videoüberwachung nur optionaler Webcam-Betrieb (Jitsi)? | ☐ |
+| **Entscheidungssysteme** | Werden automatische Entscheidungen getroffen? | ☐ |
+| | Gibt es einen Weg zur Überprüfung der Entscheidung? | ☐ |
+| **Sensible Daten** | Werden Gesundheitsdaten prozessiert? | ☐ |
+| | Werden biometrische Daten (Gesichtsdaten, Stimme) prozessiert? | ☐ |
 
 ---
 
-## 5. TOM (Technische und Organisatorische Maßnahmen) – Art. 32 DSGVO
+### 3.4 KI-Spezifische DSFA-Ergänzungen
 
-### 5.1 Pflichten gemäß Art. 32 Abs. 1 DSGVO
+Wenn openDesk Edu KI-Funktionen nutzt (z. B. intelligente Suche, Übersetzung, Chat-Bot), sollten folgende Punkte in der DSFA ergänzt werden:
 
-Verantwortliche und Auftragsverarbeiter setzen TOM ein, um ein dem Risiko angemessenes Schutzniveau zu gewährleisten, insbesondere hinsichtlich:
+1. **Transparenz über KI-Nutzung**
+   - Information der Betroffenen über KI-Einsatz
+   - Identifikation von KI-Verarbeitungen in Benutzeroberfläche
+
+2. **Opt-out-Option**
+   - Möglichkeit zur Deaktivierung der KI-Funktionalitäten
+   - Einfacher Zugang zu Opt-out in den Benutzereinstellungen
+
+3. **Fehlertoleranz (Error Tolerance)**
+   - Human-in-the-Loop (menschliches Eingreifen bei Fehlern)
+   - Escape-Option bei KI-Problemen
+
+4. **Profilierung-Verbot**
+   - Keine Profiling-Analysen für persönliche Zuordnung
+   - Keine Kategorisierung von Studierenden/Mitarbeitenden
+
+5. **Datenminimierung bei KI-Verarbeitung**
+   - KI verarbeitet Daten nur im Rahmen expliziter Anfragen
+   - Keine langfristige Speicherung für Profiling-Zwecke
+
+---
+
+### 3.5 Referenzen und Quellen
+
+| Organisation / Quelle | Beschreibung | Verfügbarkeit |
+|----------------------|--------------|----------------|
+| **EUGdP** – Art. 35 Leitfaden | Offizielle Leitlinien zu DSFA-Verfahren | https://edpb.europa.eu/our-work-tools/our-documents/guidelines |
+| **BfDI** – DSFA-Fragebogen | Checkliste für Hochrisikoverarbeitungen | https://www.bfdi.bund.de/DE/Service/Publikationen/FAQ/faq_node.html |
+| **UK ICO** – DPIA-Tool | Online-Assessment-Tool (englisch) | https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-dpia/ |
+| **AEPD (Spanien)** | Spanische Datenschutzbehörde – detailierte DSFA-Templates | https://www.aepd.es/ |
+
+---
+
+## 4. TOM (Technische und Organisatorische Maßnahmen) – Art. 32 DSGVO
+
+### 4.1 Pflichten gemäß Art. 32 Abs. 1 DSGVO
+
+Verantwortliche und Auftragsverarbeiter setzen TOM ein, um ein **dem Risiko angemessenes Schutzniveau** zu gewährleisten, insbesondere hinsichtlich:
 
 1. **Pseudonymisierung und Verschlüsselung**
-   - TLS 1.3 für Web-Verbindungen
-   - LUKS für Festplatten
-   - Optional: At-Rest-Verschlüsselung in Datenbanken
+   - TLS 1.2+ für Web-Verbindungen (empfohlen: TLS 1.3)
+   - Festplattenverschlüsselung (z. B. LUKS)
+   - At-Rest-Verschlüsselung in Datenbanken (optional, empfohlen)
 
 2. **Fähigkeit zur Vertraulichkeit, Integrität, Verfügbarkeit und Belastbarkeit**
    - Zutrittskontrolle (Rechenzentrum)
    - Zugriffskontrolle (Authentifizierung, 2FA)
-   - Verfügbarkeit (Redundanz, Backup, DRP)
+   - Verfügbarkeit (Redundanz, Backup, Disaster Recovery Plan)
 
 3. **Verfahren zur regelmäßigen Überprüfung, Bewertung und Evaluierung**
    - Penetrationstests
    - Compliance-Audits
-   - Risikobewertung bei Änderungen
+   - Risikobewertung bei Änderungen oder neuen Datenschutzvorkommnissen
 
 4. **Maßnahmen bei Datenpannen**
-   - Alarmierungsverfahren
-   - Meldung an DSB (Stundenfrist)
-   - Meldung an BfDI (72-Stunden-Frist bei Risiken)
+   - Alarmierungs- und Meldeverfahren
+   - Meldung an Datenschutzbeauftragten (innerhalb Stunden)
+   - Meldung an Aufsichtsbehörde (innerhalb 72 Stunden bei hohem Risiko)
 
 ---
 
-### 5.2 BSI-IT-Grundschutz-Kataloge (Referenz)
+### 4.2 TOM-Kategorien
 
-| BSI-Modul | Inhalt | Relevanz für openDesk Edu |
-|-----------|--------|---------------------------|
-| **APP.4.2** | Webanwendungen | HTTPS, OWASP Top 10, XSS-Schutz |
-| **KA.2** | Kabel- und Lichtwellenleiter-Netz | Segmentierung, Firewalls |
-| **KON.4** | Clients | Mobile Device Management |
-| **OPD.1.1** | Linux-Server | Hardening, Updates |
-| **OPW.2** | Web-Server | Reverse Proxy, TLS, Logging |
-| **SYS.1.4** | Datenbank-Systeme | Verschlüsselung, Zugriffskontrolle |
-| **SCM.3** | Software-Konfigurationsmanagement | Code-Reviews, CI/CD-Sicherheitsmechanismen |
-
-**Quelle:** BSI – IT-Grundschutz-Kompendium (https://www.bsi.de)
-
----
-
-### 5.3 TOM-Checkliste (Kurzform)
-
-| Kategorie | Maßnahme |
-|-----------|----------|
+| Kategorie | Maßnahmen (Beispiele) |
+|-----------|----------------------|
 | **Vertraulichkeit** | Zutrittskontrolle, Authentifizierung (SSO + 2FA), TLS, LUKS |
-| **Integrität** | RAID/Replikation, Prüfsummen, Backup-Verifizierung |
+| **Integrität** | RAID / Replication (Ceph), Prüfsummen, Backup-Verifizierung |
 | **Verfügbarkeit** | Backup, DRP, Failover-Mechanismen, USV |
 | **Protokollierung** | Access-Logs, Audit-Logs, SIEM / Log-Analyse |
-| **Organisatorisch** | Schulung, Betriebsanleitungen, Datspenschutzbeauftragter |
+| **Organisatorisch** | Schulungen, Betriebsanleitungen, Datenschutzbeauftragter |
 | **Compliance** | Penetrationstests, Zertifizierungen (optional) |
 
 ---
 
-## 6. Sonstige Vorlagen / Checklisten
+### 4.3 BSI-IT-Grundschutz-Kataloge (Referenz)
 
-| Typ | Quelle | Beschreibung |
-|-----|--------|--------------|
-| **AVV (Auftragsverarbeitungsvertrag)** | https://www.bfdi.bund.de/ | Bei Nutzung externer Cloud-Dienste |
-| **Muster-Anzeigepflichtverletzung** | BfDI | Vorlage für DSFA/DSB-Meldung |
-| **Datenpannen-Meldeformular** | https://budapestuniversity.eu/ | EU-Weit einheitliche Kriterien |
-| **Datenschutz-Folgenabschätzung-Tool** | https://github.com/ | Open-Source Assistenten (z. B. `dsfa-assist`) |
+Das BSI-IT-Grundschutz-Kompendium bietet detaillierte Aufbauten für TOM-Evaluationen.
 
----
+| BSI-Modul | Inhalt | Relevanz für openDesk Edu |
+|-----------|--------|---------------------------|
+| **APP.4.2** | Webanwendungen | HTTPS, OWASP Top 10, XSS-Schutz |
+| **KA.2** | Kabel- und LWL-Netze | Segmentierung, Firewalls, DMZ |
+| **KON.4** | Clients | Mobile-Verwaltungsgeräte, BYOD-Richtlinien |
+| **OPD.1.1** | Linux-Server | Hardening, Updates, SSH-Maßnahmen |
+| **OPW.2** | Web-Server | Reverse Proxy, TLS, Logging |
+| **SYS.1.4** | Datenbank-Systeme | Verschlüsselung, Zugriffskontrolle |
+| **SCM.3** | Software-Konfigurationsmanagement | Code-Reviews, CI/CD-Sicherheitsmechanismen |
 
-## 7. Online-Verifikation (Statusbericht)
-
-### 7.1 Aktuelle Suche ergab
-
-- ✅ Offizielle EUGdP-Leitfäden verfügbar (als PDF)
-- ✅ Exemplarische VVT-Vorlagen diverser Hochschulen (z. B. LMU, TU München, UHAM)
-- ✅ BSI-IT-Grundschutz-Kataloge kostenlos verfügbar
-- ⚠️ MasterThesis-Vorlagen sind nicht aktualisiert (ca. 2021/2022)
-- ⚠️ Gespeicherte Links von früheren Recherchen sind zum Teil veraltet (404)
-- ⚠️ Einige Nicht-EU-Vorlagen sind für deutsche Hochschulen nicht 1:1 anwendbar
-
-### 7.2 Empfehlung für openDesk Edu
-
-**Template-Vorlagen anwenden:**
-- **VVT:** Struktur orientiert an Art. 30 DSGVO, checkliste ergänzt
-- **DSFA:** Struktur 1:1 übernommen, KI-spezifischer Abschnitt ergänzt
-- **TOM:** 1:1 übernommen aus `[Quelle]`, BSI-IT-Grundschutz ist referenziert
-- **Disclaimer:** Klärung, dass Templates nicht legal geprüft sind
-
-**Nächste Schritte:**
-- PR in openDesk Edu-Repo einreichen mit upgedateten Templates
-- optional: Vorlage im VTT-Forum posten, um community feedback zu generieren
-- optional: Vorlage bei BfDI zur Stellungnahme vorlegen (wenn Bedarf nach Verified-Template)
+**Quelle:** BSI – IT-Grundschutz-Kompendium (https://www.bsi.de/DE/Themen/ITGrundschutz/ITGrundschutzKompendium/itgrundschutzkompendium_node.html)
 
 ---
 
-## 8. Literatur und Quellenverzeichnis
+### 4.4 TOM-Checkliste (Kurzform)
 
-### 8.1 Gesetzestexte
+| Bereich | Maßnahme | Status |
+|---------|----------|--------|
+| **Vertraulichkeit – Zutrittskontrolle** | Rechenzentrum nur befugten Personen zugänglich | ☐ |
+| | Zutrittsprotokollierung aktiviert | ☐ |
+| **Vertraulichkeit – Zugriffskontrolle** | Single Sign-On (SSO / OIDC) implementiert | ☐ |
+| | Multi-Faktor-Authentifizierung bei Webdiensten | ☐ |
+| | Rollenbasierte Berechtigungen (Least Privilege) | ☐ |
+| | Regelmäßige Überprüfung der Berechtigungen | ☐ |
+| **Vertraulichkeit – Verschlüsselung** | TLS 1.2/1.3 für alle externen Verbindungen | ☐ |
+| | Serverseitige Festplattenverschlüsselung (LUKS) | ☐ |
+| | Backup-Verschlüsselung (GPG / AES-256) | ☐ |
+| **Integrität** | RAID / Replication (z. B. Ceph Replikationsfaktor 3) | ☐ |
+| | Regelmäßige Scrubs und Prüfsummen | ☐ |
+| | Getrennte Umgebungen (Staging / Live) | ☐ |
+| **Verfügbarkeit – Backup** | Tägliche Backups | ☐ |
+| | Geografische Redundanz (Off-site-Sicherung) | ☐ |
+| | Regelmäßige Recovery-Tests (halbjährlich) | ☐ |
+| **Verfügbarkeit – Redundanz** | Cluster-HA (mindestens 3 Control-Plane-Nodes) | ☐ |
+| | USV (Unterbrechungsfreie Stromversorgung) | ☐ |
+| | Disaster Recovery Plan (dokumentiert und geübt) | ☐ |
+| **Protokollierung** | Access-Logs für alle Services | ☐ |
+| | Zentralisierte Log-Position (Promtail/Loki/ELK) | ☐ |
+| | SIEM / Alarmierung bei ungewöhnlichen Mustern | ☐ |
+| **Organisatorisch** | Schulung zum Datenschutz bei Aufnahme | ☐ |
+| | Jährliche Auffrischungsschulungen | ☐ |
+| | Benannter Datenschutzbeauftragter | ☐ |
+| | Meldeverfahren bei Datenpannen | ☐ |
 
-| Quelle | Datum |
-|--------|-------|
+---
+
+### 4.5 Referenzen und Quellen
+
+| Organisation / Quelle | Beschreibung | Verfügbarkeit |
+|----------------------|--------------|----------------|
+| **BfDI** – TOM-Checklisten | Vorschläge für TOM-Evaluation | https://www.bfdi.bund.de/ |
+| **BSI** – IT-Grundschutz-Kompendium | Offizielle TOM-Aufbau-Methodik für öffentliche Stellen | https://www.bsi.de/ |
+| **DFN-CERT** | Sicherheitsarchitektur und Best Practices für Hochschulen | http://www.dfn-cert.de/ |
+
+---
+
+## 5. Betroffenenrechte (Artt. 15–21 DSGVO)
+
+### 5.1 Verfahren
+
+| Recht | Inhalt | Frist |
+|------|--------|-------|
+| **Auskunft (Art. 15)** | Übersicht über gespeicherte Daten | 1 Monat |
+| **Berichtigung (Art. 16)** | Unrichtige Daten korrigieren | unverzüglich |
+| **Löschung (Art. 17)** | Unrechtschmäßige Daten löschen | unverzüglich |
+| **Einschränkung (Art. 18)** | Verarbeitung einschränken | unverzüglich |
+| **Übertragung (Art. 20)** | Daten an andere Verantwortliche übermitteln | 1 Monat |
+| **Widerspruch (Art. 21)** | Speziell gegen Direct Marketing | unverzüglich |
+| **Widerruf der Einwilligung (Art. 7)** | Einwilligung widerrufen | unbegrenzt |
+
+---
+
+### 5.2 Vorgaben
+
+- ** Kopien der Daten werden in häufig verwendeter, strukturierter und maschinenlesbarer Form bereitgestellt (z. B. CSV / JSON)
+- ** Die Antwort ist kostenlos, es sei denn, der Antrag ist erdacht, frivolisch oder übermäßig
+- ** Die Frist kann um bis zu 2 Monate verlängert werden (unter Angabe von Gründen)
+
+---
+
+## 6. Empfehlungen für openDesk Edu
+
+### 6.1 Templating-Empfehlungen
+
+| Dokument | Struktur | Anpassungen für openDesk Edu |
+|----------|----------|---------------------------|
+| **VVT** | Struktur gem. Art. 30 Abs. 1 DSGVO | Spezifizierung für openCloud, SOGo, Jitsi, Element |
+| **TOM** | Checklisten gem. Art. 32 DSGVO + BSI-IT-Grundschutz | Cluster-spezifische TOMs (K3s, Ceph) |
+| **DSFA** | 0-7 Struktur gem. EUGdP | KI-spezifische Abschnitte für Chat-Bot / Intelligente Suche |
+| **Betroffenenrechte** | Formular gem. ARTt. 15–21 DSGVO | Deaktivierungsoption für KI-Funktionen |
+
+---
+
+### 6.2 Datenschutzvorlagen anwenden
+
+1. **Vorbereitung**
+   - Zunächst TOM-basierte Evalution der IT-Infrastruktur
+   - Datenkategorien und Betroffenenpersonen identifizieren
+
+2. **VVT-Erstellung**
+   - Struktur aus Template übernehmen
+   - Organisationsdetails eintragen
+   - TOM-Referenz ergänzen
+
+3. **TOM-Dokumentation**
+   - Alle Checklisten abarbeiten
+   - Lücken identifizieren und beheben
+
+4. **DSFA (falls erforderlich)**
+   - Abschnitte 0-7 ausfüllen
+   - KI-spezifische Risikoassessment ergänzen
+   - DSB zur Genehmigung vorlegen
+
+5. **Betroffenenrechte**
+   - Antragsformular verwenden
+   - Prozess für Antragsbearbeitung dokumentieren
+
+6. **Review und Genehmigung**
+   - Dokumente durch Rechtsabteilung prüfen
+   - DSB-Gutachten einholen
+   - Leitungsgenehmigung erwirken
+
+---
+
+### 6.3 Nächste Schritte
+
+| Schritt | Zuständigkeit | Zeitrahmen |
+|---------|---------------|------------|
+| Templates an Institution angleichen | IT-Verantwortliche(r), DSB | 1–2 Wochen |
+| TOM-Checkliste ausfüllen | Systemadministratoren | 3–5 Tage |
+| VVT ausfüllen | IT-Verantwortliche(r) | 1–2 Tage |
+| DSFA (falls erforderlich) | IT-Verantwortliche(r), DSB | 2–5 Tage |
+| Rechtsabteilung prüft Dokumente | Rechtsabteilung | 1–2 Wochen |
+| DSB gibt Gutachten ab | Datenschutzbeauftragter | 3–5 Tage |
+| Management-Genehmigung erhalten | Leitung der Institution | 1 Woche |
+
+---
+
+## 7. Literatur und Quellenverzeichnis
+
+### 7.1 Gesetzestexte
+
+| Rechtsquelle | Datum |
+|--------------|-------|
 | Verordnung (EU) 2016/679 (DSGVO) | 2016-04-27 (in Kraft seit 2018-05-25) |
 | Bundesdatenschutzgesetz (BDSG) 2018 | 2018-05-25 |
-| LDSG [Bundesland] | [Var. nach Bundesland] |
-| DSG (lex Natalie/online) | https://dsgvo.de/ (aktualisierte Version) |
+| LDSG [Bundesland] | Landesspezifisch |
+| Hochschulgesetz (UG) / Schulgesetz (SchulG) | Landesspezifisch |
 
-### 8.2 Leitfäden und Dokumente
+### 7.2 Leitfäden und Dokumente
 
-| Quelle | Datum / Stand |
-|--------|--------------|
-| EUGdP – Leitfaden zur DSFA (Art. 35) | https://edpb.europa.eu/ (aktuell: 2024-04) |
-| BfDI – Fragenkatalog VVT | https://www.bfdi.bund.de/DE/Service/FAQ/... |
-| BfDI – DSFA-Fragebogen | https://www.bfdi.bund.de/DE/Service/FAQ/... |
-| BSI IT-Grundschutz-Kompendium | https://www.bsi.de/DE/Themen/ITGrundschutz/... (aktuell: 2024) |
-| BfDI – TOM für öffentliche Stellen (Anlage zu § 9 BDSG) | https://www.bfdi.bund.de/DE/Service/Publikationen/... |
-
-### 8.3 Community- und Open-Source-Ressourcen
-
-| Name | Repo / URL | Beschreibung |
-|------|------------|--------------|
-| `datenschutz-dpie` | https://github.com/ | CLI-Tool zur DSFA-Erstellung (geplant) |
-| `lucide` | https://github.com/ | Open Source VVT/DSFA Generator (aktiv entwickelt) |
-| `gdpr-compliance-checker` | https://github.com/ | Checkliste für SaaS-Dienste |
+| Quelle | Datum / Stand | Verfügbarkeit |
+|--------|--------------|----------------|
+| EUGdP – Leitfaden zur DSFA (Art. 35) | 2024-04 | https://edpb.europa.eu/ |
+| BfDI – Fragenkatalog VVT | Laufend aktualisiert | https://www.bfdi.bund.de/ |
+| BfDI – DSFA-Fragebogen | Laufend aktualisiert | https://www.bfdi.bund.de/ |
+| BSI IT-Grundschutz-Kompendium | 2024 | https://www.bsi.de/ |
 
 ---
 
-## 9. Zusammenfassung und Empfehlung
+## 8. Zusammenfassung
 
-Die Templates in openDesk Edu entsprechen den **Mindestanforderungen** der DSGVO (Art. 30, 32, 35) und sind **konform** mit den Empfehlungen von EUGdP, BfDI und BSI-IT-Grundschutz.
+Die Templates für VVT, TOM und DSFA entsprechen den **Mindestanforderungen** der DSGVO (Artt. 30, 32, 35) und sind in Übereinstimmung mit den Empfehlungen von:
 
-**Hervorzuhebende Anpassungen:**
-- KI-spezifische DSFA-Elemente (bei Chat-Bot-Nutzung)
+- ✅ **EUGdP** (Europäischer Datenschutzausschuss)
+- ✅ **BfDI** (Bundesbeauftragter für den Datenschutz)
+- ✅ **BSI** (Bundesamt für Sicherheit in der Informationstechnik)
+
+**Hervorzuhebende openDesk Edu-spezifische Anpassungen:**
+- KI-spezifische DSFA-Elemente (bei Chat-Bot-Nutzung / Intelligente Suche)
 - Klärung zum Kameraservice Jitsi: keine Überwachung öffentlicher Bereiche
+- Empfehlung zur Deaktivierungsoption für KI-Funktionen
 
-**Disclaimer wird empfohlen:**
-- Die openDesk-Edu-Community übernimmt keine Haftung für die rechtliche Gültigkeit.
-- Jede Bildungseinrichtung sollte Templates durch ihre Rechtsabteilung oder Datenschutzbeauftragten prüfen lassen.
+**Wichtiger Hinweis:**
+Die openDesk-Edu-Community übernimmt keine Haftung für die rechtliche Gültigkeit. Jede Bildungseinrichtung sollte die Templates durch ihre Rechtsabteilung oder den Datenschutzbeauftragten prüfen lassen.
 
 ---
 
-*Erstellt: 11.08.2026*
-*Letzte Aktualisierung: 11.08.2026*
+*Erstellt: 12.08.2026*
+*Letzte Aktualisierung: 12.08.2026*
