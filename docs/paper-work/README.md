@@ -33,8 +33,10 @@ institutions introducing openDesk Edu.
 
 | Document | Purpose | Legal Basis |
 |----------|---------|-------------|
-| [processing-directory-template.md](processing-directory-template.md) | Processing Directory (Template) | GDPR Art. 30 |
-| [data-protection-impact-assessment-template.md](data-protection-impact-assessment-template.md) | Data Protection Impact Assessment (Template) | GDPR Art. 35 |
+| [processing-directory-template.md](processing-directory-template.md) | Verarbeitungsverzeichnis (VVT) – Template | GDPR Art. 30 |
+| [data-protection-impact-assessment-template.md](data-protection-impact-assessment-template.md) | Datenschutzfolgenabschätzung (DSFA) – Template | GDPR Art. 35 |
+| [technical-organizational-measures-template.md](technical-organizational-measures-template.md) | Technische und Organisatorische Maßnahmen (TOM) – Template | GDPR Art. 32 |
+| [research-vvt-dsfa-tom.md](research-vvt-dsfa-tom.md) | Recherche und Verifikation – Referenzen, Checklisten, Quellen | — |
 
 ## Instructions for Use
 
