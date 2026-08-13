@@ -15,6 +15,9 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
   * [1.18.0](#1180)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [Allow overriding HTTP request rate limiting for the core-mw component of the OX App Suite](#allow-overriding-http-request-rate-limiting-for-the-core-mw-component-of-the-ox-app-suite)
+    * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
+      * [Dedicated mobile logo and touch icon for OpenProject](#dedicated-mobile-logo-and-touch-icon-for-openproject)
+      * [Custom fonts for OpenProject's PDF export](#custom-fonts-for-openprojects-pdf-export)
   * [1.17.0](#1170)
     * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
       * [Enable the "Send later" (scheduled mail) feature for OX App Suite](#enable-the-send-later-scheduled-mail-feature-for-ox-app-suite)
@@ -34,7 +37,7 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
         * [User namespaces for the Postfix pod](#user-namespaces-for-the-postfix-pod)
         * [Client, HELO, sender restrictions and rate limits](#client-helo-sender-restrictions-and-rate-limits)
   * [1.16.0](#1160)
-    * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
+    * [`theme.yaml.gotmpl`](#themeyamlgotmpl-1)
       * [OpenProject PDF export theming](#openproject-pdf-export-theming)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-2)
       * [Nextcloud worker and memory tuning](#nextcloud-worker-and-memory-tuning)
@@ -71,6 +74,51 @@ technical:
 ```
 
 This is usually not required but can be helpful to customize for example for load tests.
+### `theme.yaml.gotmpl`
+
+> [!note]
+> The theming attributes `theme.imagery.logoHeaderSvgB64` and `theme.imagery.logoHeaderInvertedSvgB64`
+> have been renamed with this release. See
+> [`migrations-manual.md`](./migrations-manual.md#changed-helmfile-structure-streamlined-naming-of-the-theming-attributes)
+> for the required action.
+
+#### Dedicated mobile logo and touch icon for OpenProject
+
+OpenProject's mobile logo and its touch icon can now be themed independently:
+
+```yaml
+theme:
+  imagery:
+    projects:
+      logoMobileSvg: {{ readFile "./../../files/theme/_common/logoHeader.svg" | b64enc | quote }}
+      touchiconSvg: {{ readFile "./../../files/theme/projects/favicon.svg" | b64enc | quote }}
+```
+
+Previously both were hardcoded to the favicon served for OpenProject, so the only way to change them
+was to change `theme.imagery.projects.faviconSvg` - which changed the browser tab icon as well. The
+defaults keep the visual result close to the previous one: The mobile logo now uses the common header
+logo, the touch icon still uses the OpenProject favicon.
+
+Both attributes take the Base64-encoded content of an SVG file. They are served through the
+opendesk-static-files module and are therefore part of a ConfigMap, so keep them small.
+
+#### Custom fonts for OpenProject's PDF export
+
+The fonts used for OpenProject's PDF exports can now be set:
+
+```yaml
+theme:
+  imagery:
+    projects:
+      pdfExportFontRegularUrl: ~
+      pdfExportFontBoldUrl: ~
+      pdfExportFontItalicUrl: ~
+      pdfExportFontBoldItalicUrl: ~
+```
+
+> [!warning]
+> As with the other OpenProject theming export settings, the fonts are written to OpenProject on every deployment.
+> Changes made in OpenProject's admin UI are lost and must be set using the above options instead.
 
 ## 1.17.0
 

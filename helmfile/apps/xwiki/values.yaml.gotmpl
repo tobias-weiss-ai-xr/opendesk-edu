@@ -193,7 +193,7 @@ postgresql:
   enabled: false
 
 properties:
-  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvgB64 }}"
+  "attachment:xwiki:FlamingoThemes.Iceberg@logo.svg": "data:image/svg+xml;base64,{{ .Values.theme.imagery.logoHeaderSvg }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.secure": 1
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.server": "{{ .Values.global.hosts.xwiki }}.{{ .Values.global.domain }}"
   "property:xwiki:XWiki.XWikiServerXwiki^XWiki.XWikiServerClass.port": 443

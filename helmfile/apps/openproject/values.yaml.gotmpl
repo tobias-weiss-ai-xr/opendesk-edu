@@ -97,16 +97,24 @@ environment:
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__SELECTED__BACKGROUND: {{ .Values.theme.colors.primary | quote }}
   OPENPROJECT_SEED_DESIGN_MAIN__MENU__BG__HOVER__BACKGROUND: {{ .Values.theme.colors.secondaryGreyLight | quote }}
   OPENPROJECT_SEED_DESIGN_LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/logo.svg"
-  OPENPROJECT_SEED_DESIGN_LOGO__MOBILE: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
+  OPENPROJECT_SEED_DESIGN_LOGO__MOBILE: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/logomobile.svg"
   OPENPROJECT_SEED_DESIGN_FAVICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
-  OPENPROJECT_SEED_DESIGN_TOUCH__ICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/favicon.svg"
+  OPENPROJECT_SEED_DESIGN_TOUCH__ICON: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/touchicon.svg"
   OPENPROJECT_SEED_DESIGN_EXPORT__LOGO: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportLogoPath | lower }}"
   OPENPROJECT_SEED_DESIGN_EXPORT__COVER: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportCoverPath | lower }}"
   OPENPROJECT_SEED_DESIGN_EXPORT__FOOTER: "https://{{ .Values.global.hosts.openproject }}.{{ .Values.global.domain }}/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportFooterPath | lower }}"
-  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__REGULAR: TBD
-  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__BOLD: TBD
-  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__ITALIC: TBD
-  # OPENPROJECT_SEED_DESIGN_EXPORT__FONT__BOLD__ITALIC: TBD
+  {{- if .Values.theme.imagery.projects.pdfExportFontRegularUrl }}
+  OPENPROJECT_SEED_DESIGN_EXPORT__FONT__REGULAR: {{ .Values.theme.imagery.projects.pdfExportFontRegularUrl | quote }}
+  {{- end }}
+  {{- if .Values.theme.imagery.projects.pdfExportFontBoldUrl }}
+  OPENPROJECT_SEED_DESIGN_EXPORT__FONT__BOLD: {{ .Values.theme.imagery.projects.pdfExportFontBoldUrl | quote }}
+  {{- end }}
+  {{- if .Values.theme.imagery.projects.pdfExportFontItalicUrl }}
+  OPENPROJECT_SEED_DESIGN_EXPORT__FONT__ITALIC: {{ .Values.theme.imagery.projects.pdfExportFontItalicUrl | quote }}
+  {{- end }}
+  {{- if .Values.theme.imagery.projects.pdfExportFontBoldItalicUrl }}
+  OPENPROJECT_SEED_DESIGN_EXPORT__FONT__BOLD__ITALIC: {{ .Values.theme.imagery.projects.pdfExportFontBoldItalicUrl | quote }}
+  {{- end }}
 
   {{- if .Values.certificate.selfSigned }}
   SSL_CERT_FILE: "/etc/ssl/certs/ca-certificates.crt"
