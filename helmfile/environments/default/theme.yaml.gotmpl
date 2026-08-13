@@ -1,10 +1,14 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-## The theme properties will be used to set the installations color an images.
-## This is currently not supported by most of the components, but we still
-## want to collect and provide the related information based on the attributes
-## defined in this file.
+## The theme properties will be used to set the installations colors and images.
+##
+## This is currently not supported by all components, but we still want to collect and provide the
+## related information based on the attributes defined in this file.
+##
+## Warning: As most of the assets are provided through the opendesk-static-files module and are therefore
+## base64 encoded and placed in a ConfigMap, please ensure the overall ConfigMap limit of 1MiB is not exceeded.
+## If you replace the default assets, just try to not exceed the size of the default assets.
 #
 theme:
   ## Define texts
@@ -16,7 +20,7 @@ theme:
   ## Define other file references
   #
   other:
-    robotsTxt: {{ readFile "./../../files/theme/robots.txt" | b64enc | quote }}
+    robotsTxt: {{ readFile "./../../files/theme/_common/robots.txt" | b64enc | quote }}
 
   ## Define colors
   #
@@ -45,8 +49,8 @@ theme:
   ## Define imagery
   #
   imagery:
-    logoHeaderSvgB64: {{ readFile "./../../files/theme/logoHeader.svg" | b64enc | quote }}
-    logoHeaderInvertedSvgB64: {{ readFile "./../../files/theme/logoHeaderInverted.svg" | b64enc | quote }}
+    logoHeaderSvg: {{ readFile "./../../files/theme/_common/logoHeader.svg" | b64enc | quote }}
+    logoHeaderInvertedSvg: {{ readFile "./../../files/theme/_common/logoHeaderInverted.svg" | b64enc | quote }}
 
     chat:
       faviconPng: {{ readFile "./../../files/theme/chat/favicon.png" | b64enc | quote }}
@@ -120,14 +124,27 @@ theme:
       selfserviceProtectaccount: {{ readFile "./../../files/theme/_dev/empty.svg" | b64enc | quote }}
 
     projects:
+      logoMobileSvg: {{ readFile "./../../files/theme/_common/logoHeader.svg" | b64enc | quote }}
       faviconSvg: {{ readFile "./../../files/theme/projects/favicon.svg" | b64enc | quote }}
+      touchiconSvg: {{ readFile "./../../files/theme/projects/favicon.svg" | b64enc | quote }}
       # Images for OpenProject's PDF export. Unlike the other files here, these are not Base64-encoded
       # up front, so you can use different formats (e.g. PNG, JPEG).
       # Note: PDF theming is overwritten on every deployment. Changes made in OpenProject's admin UI
       # are lost and must be persisted here instead.
-      pdfExportLogoPath: "./../../files/theme/logoHeader.jpg"
+      pdfExportLogoPath: "./../../files/theme/_common/logoHeader.jpg"
       pdfExportCoverPath: "./../../files/theme/login/background.jpg"
       pdfExportFooterPath: "./../../files/theme/login/favicon.png"
+      # Fonts for OpenProject's PDF export. Unlike the other files here, they cannot be provided by
+      # the opendesk-static-files module, as that module would base64 encode them and make them part of
+      # a ConfigMap. Due to the size of a single fonts that can easily exceed 500kB the overall size of
+      # the ConfigMap would be too large as Kubernetes has a hard 1MiB limit.
+      # The fonts must be provided as http(s) URLs to the files.
+      # Only .ttf font files are supported.
+      # Ref.: https://www.openproject.org/docs/system-admin-guide/design/
+      pdfExportFontRegularUrl: ~
+      pdfExportFontBoldUrl: ~
+      pdfExportFontItalicUrl: ~
+      pdfExportFontBoldItalicUrl: ~
 
     videoconference:
       faviconSvg: {{ readFile "./../../files/theme/videoconference/favicon.svg" | b64enc | quote }}
