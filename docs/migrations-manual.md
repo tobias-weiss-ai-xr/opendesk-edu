@@ -32,6 +32,7 @@ SPDX-License-Identifier: Apache-2.0
         * [New persistence requirement: OX Connector requires its own PostgreSQL database](#new-persistence-requirement-ox-connector-requires-its-own-postgresql-database)
         * [Full re-provisioning of all objects on upgrade](#full-re-provisioning-of-all-objects-on-upgrade)
         * [Changed Helmfile structure: `userNamespaces` setting moved to `technical.userNamespaces`](#changed-helmfile-structure-usernamespaces-setting-moved-to-technicalusernamespaces)
+        * [Changed Helmfile structure: Streamlined naming of the theming attributes](#changed-helmfile-structure-streamlined-naming-of-the-theming-attributes)
         * [Changed Helmfile default: Matrix federation is no longer enabled by default](#changed-helmfile-default-matrix-federation-is-no-longer-enabled-by-default)
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
@@ -248,6 +249,63 @@ After:
 technical:
   userNamespaces: true
 ```
+
+##### Changed Helmfile structure: Streamlined naming of the theming attributes
+
+**Target group:** Deployments that customize the header logos, i.e. that set `theme.imagery.logoHeaderSvgB64`
+and/or `theme.imagery.logoHeaderInvertedSvgB64`.
+
+**Context**
+
+Practically all attributes below `theme.imagery` carry Base64-encoded assets, but only the two header
+logo attributes stated this in their name with a `B64` suffix. The naming has been streamlined to the
+`<asset><Format>` scheme used by all other attributes, and the redundant `B64` suffix has been dropped:
+
+| Before                                   | After                                 |
+|------------------------------------------|---------------------------------------|
+| `theme.imagery.logoHeaderSvgB64`         | `theme.imagery.logoHeaderSvg`         |
+| `theme.imagery.logoHeaderInvertedSvgB64` | `theme.imagery.logoHeaderInvertedSvg` |
+
+This is a pure rename: the expected value is unchanged, the attributes still take the Base64-encoded
+content of an SVG file.
+
+**Required action**
+
+If you set one or both of these attributes, rename them in your customization.
+
+Before:
+
+```yaml
+theme:
+  imagery:
+    logoHeaderSvgB64: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
+    logoHeaderInvertedSvgB64: {{ readFile "./files/theme/myLogoHeaderInverted.svg" | b64enc | quote }}
+```
+
+After:
+
+```yaml
+theme:
+  imagery:
+    logoHeaderSvg: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
+    logoHeaderInvertedSvg: {{ readFile "./files/theme/myLogoHeaderInverted.svg" | b64enc | quote }}
+```
+
+The old attribute names are not evaluated any longer. If they are not renamed, the deployment silently
+falls back to openDesk's default logos instead of failing, so please verify your branding after the
+upgrade.
+
+> [!note]
+> Along with the rename, the assets that are shared by several modules have been moved into the new
+> directory `helmfile/files/theme/_common/`, matching the per-module directories that already existed:
+>
+> - `helmfile/files/theme/logoHeader.svg` → `helmfile/files/theme/_common/logoHeader.svg`
+> - `helmfile/files/theme/logoHeaderInverted.svg` → `helmfile/files/theme/_common/logoHeaderInverted.svg`
+> - `helmfile/files/theme/logoHeader.jpg` → `helmfile/files/theme/_common/logoHeader.jpg`
+> - `helmfile/files/theme/robots.txt` → `helmfile/files/theme/_common/robots.txt`
+>
+> This only affects you if your customization references these openDesk-shipped files by path, e.g. via
+> `readFile` or in `theme.imagery.projects.pdfExport*Path`. Adjust such references accordingly.
 
 ##### Changed Helmfile default: Matrix federation is no longer enabled by default
 

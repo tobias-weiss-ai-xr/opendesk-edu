@@ -26,7 +26,7 @@ assets:
     pathType: "ImplementationSpecific"
     paths:
       - path: "/univention/portal/icons/logos/domain.svg"
-        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+        data: {{ .Values.theme.imagery.logoHeaderSvg | quote }}
       - path: "/opendesk-static-files/portal/background.svg"
         data: {{ .Values.theme.imagery.portal.backgroundSvg | quote }}
       - path: "/opendesk-static-files/portal/waiting-spinner.svg"
@@ -97,7 +97,7 @@ assets:
       - path: "/core/img/favicon.ico"
         data: {{ .Values.theme.imagery.files.faviconIco | quote }}
       - path: "/apps/integration_swp/logo"
-        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+        data: {{ .Values.theme.imagery.logoHeaderSvg | quote }}
         mimeType: "image/svg+xml"
       - path: "/apps/theming/img/background/jenna-kim-the-globe-dark.webp"
         data: {{ .Values.theme.imagery.login.backgroundJpg | quote }}
@@ -124,10 +124,14 @@ assets:
     subdomain: {{ .Values.global.hosts.openproject | quote }}
     pathType: "ImplementationSpecific"
     paths:
+      - path: "/opendesk-static-files/logo.svg"
+        data: {{ .Values.theme.imagery.logoHeaderSvg | quote }}
+      - path: "/opendesk-static-files/logomobile.svg"
+        data: {{ .Values.theme.imagery.projects.logoMobileSvg | quote }}
       - path: "/opendesk-static-files/favicon.svg"
         data: {{ .Values.theme.imagery.projects.faviconSvg | quote }}
-      - path: "/opendesk-static-files/logo.svg"
-        data: {{ .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+      - path: "/opendesk-static-files/touchicon.svg"
+        data: {{ .Values.theme.imagery.projects.touchiconSvg | quote }}
       - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportLogoPath | lower }}"
         data: {{ readFile .Values.theme.imagery.projects.pdfExportLogoPath | b64enc | quote }}
       - path: "/opendesk-static-files/{{ base .Values.theme.imagery.projects.pdfExportCoverPath | lower }}"

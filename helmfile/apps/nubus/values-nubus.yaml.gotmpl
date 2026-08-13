@@ -1390,7 +1390,7 @@ nubusStackDataUms:
     portalDirectDocsExtensionPresentation: "odp"
     {{- end }}
     portalEnforceLogin: {{ .Values.functional.portal.enforceLogin }}
-    portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvgB64 | quote }}
+    portalHeaderLogo: {{ toYaml .Values.theme.imagery.logoHeaderSvg | quote }}
     portalTiles: {{ toYaml .Values.theme.imagery.portalTiles | nindent 6 }}
     portalRealtimeCollaborationLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.element .Values.global.domain }}
     portalRealtimeVideoconferenceLinkBase: {{ printf "https://%s.%s" .Values.global.hosts.jitsi .Values.global.domain }}
