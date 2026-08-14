@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: sogo
+    app.kubernetes.io/component: groupware
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/part-of: opendesk
+  name: sogo-config
+  namespace: opendesk-edu
+data:
+  sogo.conf: "{\n  WOPort = \"0.0.0.0:20000\";\n  WOListenQueueSize = 5;\n  SxVMemLimit\
+    \ = 400;\n  SOGoMemcachedHost = \"memcached.opendesk.svc.cluster.local:11211\"\
+    ;\n  SOGoProfileURL = \"mysql://sogo:sogo-db-password-change-me@galera-headless:3306/sogo/sogo_user_profile\"\
+    ;\n  OCSAclURL = \"mysql://sogo:sogo-db-password-change-me@galera-headless:3306/sogo/sogo_acl\"\
+    ;\n  OCSFolderInfoURL = \"mysql://sogo:sogo-db-password-change-me@galera-headless:3306/sogo/sogo_folder_profile\"\
+    ;\n  OCSSessionsFolderURL = \"mysql://sogo:sogo-db-password-change-me@galera-headless:3306/sogo/sogo_sessions_folder\"\
+    ;\n  SOGoIMAPServer = \"imaps://stalwart-stalwart.opendesk-edu.svc.cluster.local:993\"\
+    ;\n  SOGoSMTPServer = \"smtp://stalwart-stalwart.opendesk-edu.svc.cluster.local:587\"\
+    ;\n  SOGoSieveServer = \"sieve://stalwart-stalwart.opendesk-edu.svc.cluster.local:4190\"\
+    ;\n  SOGoMailDomain = \"home.opendesk-edu.org\";\n  SOGoLanguage = \"English\"\
+    ;\n  SOGoTimeZone = \"Europe/Berlin\";\n  SOGoFirstDayOfWeek = 1;\n  SOGoFirstWeekOfYear\
+    \ = 1;\n  SOGoSieveScriptsEnabled = YES;\n  SOGoSieveFolderEncoding = \"UTF-8\"\
+    ;\n  SOGoAppointmentSendEMailNotifications = NO;\n  SOGoEnableEMailAlarms = YES;\n\
+    \  SOGoBusyFollowersEnabled = NO;\n  SOGoUIAdditionalJSFiles = ();\n  WOWorkersCount\
+    \ = 5;\n  WOLogFile = \"/var/log/sogo/sogo.log\";\n  SOGoDebugMessagesEnabled\
+    \ = NO;\n  SOGoDefaultCalendar = \"personal\";\n  SOGoDefaultLanguage = \"English\"\
+    ;\n}\n"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stalwart-config
+  namespace: opendesk-edu
+data:
+  config.json: "{\n  \"@type\": \"Sqlite\",\n  \"path\": \"/data/stalwart.db\"\n}\n"
