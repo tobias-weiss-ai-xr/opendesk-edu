@@ -17,14 +17,15 @@ SPDX-License-Identifier: Apache-2.0
     * [MariaDB](#mariadb)
     * [Nextcloud](#nextcloud)
       * [Running occ commands](#running-occ-commands)
-    * [Open-Xchange](#open-xchange)
     * [OpenProject](#openproject)
     * [Postfix](#postfix)
     * [PostgreSQL](#postgresql)
     * [Redis](#redis)
     * [Cassandra](#cassandra)
-    * [Open-Xchange](#open-xchange-1)
+    * [Open-Xchange](#open-xchange)
       * [OX App Suite](#ox-app-suite)
+        * [Get details about installed components from UI](#get-details-about-installed-components-from-ui)
+        * [Using the command line tools](#using-the-command-line-tools)
         * [Applying global config changes for debugging](#applying-global-config-changes-for-debugging)
         * [Using config cascade](#using-config-cascade)
       * [OX Dovecot](#ox-dovecot)
@@ -193,10 +194,6 @@ While you will find all the details for the CLI tool in the [MariaDB documentati
 
 You can run occ commands in the `opendesk-nextcloud-aio` pod like this: `php occ config:list`
 
-### Open-Xchange
-
-To retrieve more details about the OX App Suite components in use just through the user accessible UI, open the `(?)` drop down menu in the top navigation bar and hold the *Ctrl* key when clicking the "About" menu entry.
-
 ### OpenProject
 
 OpenProject is a Ruby on Rails application. Therefore, you can make use of the Rails console from the Pod's command line `bundle exec rails console`
@@ -301,6 +298,55 @@ SELECT COUNT(*) FROM <table>;             -- count rows (can be slow on large ta
 ### Open-Xchange
 
 #### OX App Suite
+
+##### Get details about installed components from UI
+
+To retrieve more details about the OX App Suite components in use just through the user accessible UI, open the `(?)` drop down menu in the top navigation bar and hold the *Ctrl* key when clicking the "About" menu entry.
+
+##### Using the command line tools
+
+The core-mw container ships the OX App Suite administration and provisioning CLI tools in `/opt/open-xchange/sbin`.
+They cover the whole administrative surface, from context and user provisioning over database schema handling up to
+runtime diagnostics. Get an overview of what is available in your deployment with:
+
+```shell
+ls /opt/open-xchange/sbin
+```
+
+Most of these tools require master admin credentials, which are passed with `-A` (admin user) and `-P` (admin password).
+There is no need to look them up: the core-mw container already provides them as the environment variables
+`MASTER_ADMIN_USER` and `MASTER_ADMIN_PW`, so they can simply be referenced.
+
+The examples below assume you switched into that directory (`cd /opt/open-xchange/sbin`), otherwise prefix the tool
+name with the full path. Listing all users of context `1`:
+
+```shell
+./listuser -c 1 -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+```
+
+A few more examples that are frequently useful when debugging:
+
+```shell
+# List all contexts of the deployment
+./listcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# Show the details of a single user, looked up by its login name
+./listuser -c <contextId> -s <userName> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# Show where the configuration effective for a user comes from (config cascade debugging)
+./getuserconfigurationsource -c <contextId> -i <userId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+```
+
+> [!note]
+> Every tool supports `-h` / `--help` to print its full parameter list, e.g. `./listuser --help`.
+
+> [!warning]
+> These tools operate against the live deployment. Everything named `create*`, `change*` or `delete*` performs a write
+> operation, so restrict yourself to the read-only tools (`list*`, `get*`, `exists*`) when you are only debugging.
+
+The complete reference for all tools, including all parameters and exit codes, is available in the
+[upstream documentation](https://documentation.open-xchange.com/8/middleware/command_line_tools.html), grouped by
+category (Context, User, Configuration, Database, Logging & Monitoring, Miscellaneous, ...).
 
 ##### Applying global config changes for debugging
 
