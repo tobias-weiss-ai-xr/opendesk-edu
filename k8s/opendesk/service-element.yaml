@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: element
+    app.kubernetes.io/component: messaging
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: element
+    app.kubernetes.io/part-of: opendesk
+  name: element
+  namespace: opendesk
+spec:
+  clusterIP: 172.17.198.63
+  clusterIPs:
+  - 172.17.198.63
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: element
+  sessionAffinity: None
+  type: ClusterIP
