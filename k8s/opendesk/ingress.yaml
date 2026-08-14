@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   annotations:
     haproxy-ingress.github.io/ssl-redirect: 'true'
-  generation: 2
   labels:
     app: element
     app.kubernetes.io/name: element
@@ -27,8 +26,6 @@ spec:
   - hosts:
     - chat.home.opendesk-edu.org
     secretName: opendesk-certificates-tls
-status:
-  loadBalancer: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -36,7 +33,6 @@ metadata:
   annotations:
     haproxy-ingress.github.io/ssl-redirect: 'true'
     haproxy-ingress.github.io/timeout-server: 300s
-  generation: 2
   labels:
     app: keycloak
     app.kubernetes.io/name: keycloak
@@ -60,8 +56,6 @@ spec:
   - hosts:
     - id.home.opendesk-edu.org
     secretName: opendesk-certificates-tls
-status:
-  loadBalancer: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -69,7 +63,6 @@ metadata:
   annotations:
     haproxy-ingress.github.io/ssl-redirect: 'true'
     haproxy-ingress.github.io/timeout-server: 600s
-  generation: 2
   labels:
     app: synapse
     app.kubernetes.io/name: synapse
@@ -93,5 +86,3 @@ spec:
   - hosts:
     - matrix.home.opendesk-edu.org
     secretName: opendesk-certificates-tls
-status:
-  loadBalancer: {}

@@ -6,7 +6,6 @@ metadata:
     haproxy-ingress.github.io/ssl-redirect: 'true'
     haproxy-ingress.github.io/timeout-client: 600s
     haproxy-ingress.github.io/timeout-server: 600s
-  generation: 2
   labels:
     app: opendesk-opencloud
     app.kubernetes.io/name: opendesk-opencloud
@@ -30,8 +29,6 @@ spec:
   - hosts:
     - cloud.home.opendesk-edu.org
     secretName: opendesk-certificates-tls
-status:
-  loadBalancer: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -40,7 +37,6 @@ metadata:
     haproxy-ingress.github.io/proxy-body-size: 50M
     haproxy-ingress.github.io/ssl-redirect: 'true'
     haproxy-ingress.github.io/timeout-server: 300s
-  generation: 2
   labels:
     app: sogo
     app.kubernetes.io/name: sogo
@@ -64,15 +60,12 @@ spec:
   - hosts:
     - mail.home.opendesk-edu.org
     secretName: opendesk-certificates-tls
-status:
-  loadBalancer: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
     haproxy-ingress.github.io/ssl-redirect: 'true'
-  generation: 2
   labels:
     app: stalwart
     app.kubernetes.io/name: stalwart
@@ -96,5 +89,3 @@ spec:
   - hosts:
     - mail.home.opendesk-edu.org
     secretName: opendesk-certificates-tls
-status:
-  loadBalancer: {}
