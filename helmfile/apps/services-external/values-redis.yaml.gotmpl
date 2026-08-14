@@ -5,8 +5,8 @@
 architecture: "standalone"
 
 auth:
-  existingSecret: {{ .Values.secrets.redis.password.name | quote }}
-  existingSecretPasswordKey: {{ .Values.secrets.redis.password.key | quote }}
+  existingSecret: {{ .Values.cache.redis.password.name | quote }}
+  existingSecretPasswordKey: {{ .Values.cache.redis.password.key | quote }}
 
 commonAnnotations:
   {{ .Values.annotations.servicesExternalRedis.common | toYaml | nindent 2 }}

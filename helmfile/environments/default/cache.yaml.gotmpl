@@ -1,34 +1,57 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-# Value-only: the `password` entries below are operator overrides for an external cache. They are
-# empty by default, in which case each consumer falls back to `secrets.redis.password.value` - which
-# is the managed Secret that carries the actual Redis password. They therefore take `value` only and
-# not the `create`/`name`/`key` structure: there is nothing to provision from an empty default, and
-# the components still read the literal value.
+{{- $masterPassword := required "A non-empty MASTER_PASSWORD is required!" (env "MASTER_PASSWORD") }}
+{{- $redisPassword := derivePassword 1 "long" $masterPassword "redis" "password" | sha1sum }}
+# This file is the single place a cache and its credential are configured. A `password` carries the
+# full value/create/name/key convention documented on `cassandra.rootPassword` in
+# `secrets.yaml.gotmpl` only where something is handed the Secret rather than the value - the Redis
+# chart and the migrations. The rest are value-only: their charts inline the password, so there is
+# nothing to provision a Secret for and a `create`/`name`/`key` there would only suggest a Secret
+# reference that no consumer makes.
+#
+# The per-component entries default to the bundled server's password because they address that
+# server. Pointing a component at an external cache means overriding its `host`/`port`/`username`/
+# `tls` **and** its `password.value` here, and nothing else: every consumer reads its own entry
+# rather than falling back to a shared one, so the override reaches all of them.
+
 cache:
+  redis:
+    # The password the bundled Redis is deployed with, referenced by `auth.existingSecret` in the Redis chart.
+    password:
+      value: {{ $redisPassword | quote }}
+      create: true
+      name: "redis-password"
+      key: "redis-password"
   intercomService:
     host: "redis-headless"
     port: 6379
     # Username is currently being ignored by the Intercom Service Helm chart.
     # Ref.: https://forge.univention.org/bugzilla/show_bug.cgi?id=59490
     username: "default"
+    # Read as a Secret by the `flush_intercom_sessions` migration and as a literal by the Intercom
+    # Service chart, which has no `existingSecret` for it.
     password:
-      value: ""
+      value: {{ $redisPassword | quote }}
+      create: true
+      name: "cache-intercom-service-password"
+      key: "password"
     tls: false
   nextcloud:
     host: "redis-headless"
     port: 6379
     username: "default"
+    # Value-only: the Nextcloud charts inline the password into their configuration.
     password:
-      value: ""
+      value: {{ $redisPassword | quote }}
     tls: false
   notes:
     host: "redis-headless"
     port: 6379
     username: "default"
+    # Value-only: the Notes chart takes a connection URL with the password inlined.
     password:
-      value: ""
+      value: {{ $redisPassword | quote }}
     tls: false
   openproject:
     host: "memcached"
@@ -37,8 +60,9 @@ cache:
     host: "redis-headless"
     port: 6379
     username: "default"
+    # Value-only: OX App Suite inlines the password into its properties.
     password:
-      value: ""
+      value: {{ $redisPassword | quote }}
     tls: false
   umsSelfservice:
     host: "memcached"
