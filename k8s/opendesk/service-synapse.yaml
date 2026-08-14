@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: synapse
+    app.kubernetes.io/component: messaging
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: synapse
+    app.kubernetes.io/part-of: opendesk
+  name: synapse
+  namespace: opendesk
+spec:
+  clusterIP: 172.17.220.92
+  clusterIPs:
+  - 172.17.220.92
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 8008
+    protocol: TCP
+    targetPort: 8008
+  selector:
+    app: synapse
+  sessionAffinity: None
+  type: ClusterIP

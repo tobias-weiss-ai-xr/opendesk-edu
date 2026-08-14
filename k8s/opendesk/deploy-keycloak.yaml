@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: keycloak
+    app.kubernetes.io/component: identity
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/part-of: opendesk
+  name: keycloak
+  namespace: opendesk
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: keycloak
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: keycloak
+        app.kubernetes.io/component: identity
+        app.kubernetes.io/managed-by: nix
+        app.kubernetes.io/name: keycloak
+        app.kubernetes.io/part-of: opendesk
+    spec:
+      containers:
+      - args:
+        - start
+        command:
+        - /opt/keycloak/bin/kc.sh
+        env:
+        - name: KC_BOOTSTRAP_ADMIN_USERNAME
+          value: admin
+        - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+          value: admin
+        - name: KC_HOSTNAME
+          value: id.home.opendesk-edu.org
+        - name: KC_HTTP_ENABLED
+          value: 'true'
+        - name: KC_PROXY_HEADERS
+          value: xforwarded
+        - name: KC_HOSTNAME_STRICT
+          value: 'false'
+        - name: KC_HOSTNAME_STRICT_HTTPS
+          value: 'false'
+        - name: KC_DB
+          value: mariadb
+        - name: KC_DB_URL
+          value: jdbc:mariadb://galera-headless:3306/keycloak
+        - name: KC_DB_USERNAME
+          value: keycloak
+        - name: KC_DB_PASSWORD
+          value: keycloak-db-password-change-me
+        - name: KC_LOG_LEVEL
+          value: INFO
+        - name: KC_FEATURES
+          value: token-exchange,admin-fine-grained-authz
+        image: quay.io/keycloak/keycloak:26.0
+        imagePullPolicy: IfNotPresent
+        name: keycloak
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: '2'
+            memory: 3Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/keycloak/data
+          name: data
+      dnsConfig:
+        searches:
+        - opendesk.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        runAsUser: 1000
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: keycloak-data

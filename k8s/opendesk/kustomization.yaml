@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- deploy-element.yaml
+- deploy-keycloak.yaml
+- deploy-synapse.yaml
+- sts-galera.yaml
+- service-element.yaml
+- service-keycloak.yaml
+- service-synapse.yaml
+- service-galera.yaml
+- service-galera-headless.yaml
+- configmaps.yaml
+- ingress.yaml

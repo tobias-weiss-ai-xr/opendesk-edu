@@ -1,0 +1,97 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: 'true'
+  generation: 2
+  labels:
+    app: element
+    app.kubernetes.io/name: element
+    app.kubernetes.io/part-of: opendesk
+  name: element-ingress
+  namespace: opendesk
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: chat.home.opendesk-edu.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: element
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - chat.home.opendesk-edu.org
+    secretName: opendesk-certificates-tls
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: 'true'
+    haproxy-ingress.github.io/timeout-server: 300s
+  generation: 2
+  labels:
+    app: keycloak
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/part-of: opendesk
+  name: keycloak-ingress
+  namespace: opendesk
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: id.home.opendesk-edu.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: keycloak
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - id.home.opendesk-edu.org
+    secretName: opendesk-certificates-tls
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: 'true'
+    haproxy-ingress.github.io/timeout-server: 600s
+  generation: 2
+  labels:
+    app: synapse
+    app.kubernetes.io/name: synapse
+    app.kubernetes.io/part-of: opendesk
+  name: synapse-ingress
+  namespace: opendesk
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: matrix.home.opendesk-edu.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: synapse
+            port:
+              number: 8008
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - matrix.home.opendesk-edu.org
+    secretName: opendesk-certificates-tls
+status:
+  loadBalancer: {}
