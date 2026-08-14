@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/ip-allocated-from-pool: rz03-fip-pool
+  labels:
+    app: stalwart
+    app.kubernetes.io/component: mail
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: stalwart
+    app.kubernetes.io/part-of: opendesk
+  name: stalwart
+  namespace: opendesk-edu
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 172.17.225.22
+  clusterIPs:
+  - 172.17.225.22
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    nodePort: 32677
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: smtp
+    nodePort: 32758
+    port: 25
+    protocol: TCP
+    targetPort: 25
+  - name: submission
+    nodePort: 32399
+    port: 587
+    protocol: TCP
+    targetPort: 587
+  - name: submissions
+    nodePort: 32112
+    port: 465
+    protocol: TCP
+    targetPort: 465
+  - name: imap
+    nodePort: 32062
+    port: 143
+    protocol: TCP
+    targetPort: 143
+  - name: imaptls
+    nodePort: 30719
+    port: 993
+    protocol: TCP
+    targetPort: 993
+  selector:
+    app: stalwart
+  sessionAffinity: None
+  type: LoadBalancer

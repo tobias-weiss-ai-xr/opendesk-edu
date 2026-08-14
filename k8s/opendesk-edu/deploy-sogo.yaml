@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sogo
+    app.kubernetes.io/component: groupware
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/part-of: opendesk
+  name: sogo
+  namespace: opendesk-edu
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: sogo
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sogo
+        app.kubernetes.io/component: groupware
+        app.kubernetes.io/managed-by: nix
+        app.kubernetes.io/name: sogo
+        app.kubernetes.io/part-of: opendesk
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: galera-headless
+        - name: DB_PORT
+          value: '3306'
+        - name: DB_NAME
+          value: sogo
+        - name: DB_USER
+          value: sogo
+        - name: DB_PASSWORD
+          value: sogo-db-password-change-me
+        image: docker.io/weissto/sogo:bookworm-5.12.9
+        imagePullPolicy: IfNotPresent
+        name: sogo
+        ports:
+        - containerPort: 20000
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: '1'
+            memory: 2Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: {}
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+          seccompProfile:
+            type: RuntimeDefault
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/sogo/sogo.conf
+          name: config
+          readOnly: true
+          subPath: sogo.conf
+        - mountPath: /var/spool/sogo
+          name: data
+      dnsConfig:
+        searches:
+        - opendesk.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 0
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: false
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: sogo.conf
+            path: sogo.conf
+          name: sogo-config
+        name: config
+      - name: data
+        persistentVolumeClaim:
+          claimName: sogo-data

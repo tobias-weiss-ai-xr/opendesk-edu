@@ -1,0 +1,100 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy-ingress.github.io/proxy-body-size: 100M
+    haproxy-ingress.github.io/ssl-redirect: 'true'
+    haproxy-ingress.github.io/timeout-client: 600s
+    haproxy-ingress.github.io/timeout-server: 600s
+  generation: 2
+  labels:
+    app: opendesk-opencloud
+    app.kubernetes.io/name: opendesk-opencloud
+    app.kubernetes.io/part-of: opendesk
+  name: opendesk-opencloud-ingress
+  namespace: opendesk-edu
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: cloud.home.opendesk-edu.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: opendesk-opencloud
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - cloud.home.opendesk-edu.org
+    secretName: opendesk-certificates-tls
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy-ingress.github.io/proxy-body-size: 50M
+    haproxy-ingress.github.io/ssl-redirect: 'true'
+    haproxy-ingress.github.io/timeout-server: 300s
+  generation: 2
+  labels:
+    app: sogo
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/part-of: opendesk
+  name: sogo-ingress
+  namespace: opendesk-edu
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: mail.home.opendesk-edu.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: sogo
+            port:
+              number: 20000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - mail.home.opendesk-edu.org
+    secretName: opendesk-certificates-tls
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    haproxy-ingress.github.io/ssl-redirect: 'true'
+  generation: 2
+  labels:
+    app: stalwart
+    app.kubernetes.io/name: stalwart
+    app.kubernetes.io/part-of: opendesk
+  name: stalwart-ingress
+  namespace: opendesk-edu
+spec:
+  ingressClassName: haproxy
+  rules:
+  - host: mail.home.opendesk-edu.org
+    http:
+      paths:
+      - backend:
+          service:
+            name: stalwart
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - mail.home.opendesk-edu.org
+    secretName: opendesk-certificates-tls
+status:
+  loadBalancer: {}
