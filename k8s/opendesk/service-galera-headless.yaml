@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: galera
+    app.kubernetes.io/component: database
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: galera
+    app.kubernetes.io/part-of: opendesk
+  name: galera-headless
+  namespace: opendesk
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: mysql
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  - name: galera
+    port: 4567
+    protocol: TCP
+    targetPort: 4567
+  - name: galera-sst
+    port: 4568
+    protocol: TCP
+    targetPort: 4568
+  - name: galera-ist
+    port: 4569
+    protocol: TCP
+    targetPort: 4569
+  selector:
+    app: galera
+  sessionAffinity: None
+  type: ClusterIP

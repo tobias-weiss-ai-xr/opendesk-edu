@@ -1,0 +1,152 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: galera
+    app.kubernetes.io/component: database
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: galera
+    app.kubernetes.io/part-of: opendesk
+  name: galera
+  namespace: opendesk
+spec:
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: galera
+  serviceName: galera-headless
+  template:
+    metadata:
+      labels:
+        app: galera
+        app.kubernetes.io/component: database
+        app.kubernetes.io/managed-by: nix
+        app.kubernetes.io/name: galera
+        app.kubernetes.io/part-of: opendesk
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: galera
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - command:
+        - /bin/bash
+        - /scripts/bootstrap.sh
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ChangeMeGalera123!
+        - name: MARIADB_ROOT_PASSWORD
+          value: ChangeMeGalera123!
+        - name: MARIADB_AUTO_UPGRADE
+          value: '1'
+        image: docker.io/library/mariadb:11.4.4
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - mariadb-admin ping -h localhost -u root -p'ChangeMeGalera123!' 2>/dev/null
+              || exit 1
+          failureThreshold: 10
+          initialDelaySeconds: 180
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: galera
+        ports:
+        - containerPort: 3306
+          name: mysql
+          protocol: TCP
+        - containerPort: 4567
+          name: galera
+          protocol: TCP
+        - containerPort: 4568
+          name: galera-sst
+          protocol: TCP
+        - containerPort: 4569
+          name: galera-ist
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - mariadb -h localhost -u root -p'ChangeMeGalera123!' -e 'SELECT 1' 2>/dev/null
+              || exit 1
+          failureThreshold: 6
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: '2'
+            memory: 4Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: data
+        - mountPath: /etc/mysql/conf.d
+          name: config
+          readOnly: true
+        - mountPath: /docker-entrypoint-initdb.d
+          name: initdb
+          readOnly: true
+        - mountPath: /scripts
+          name: scripts
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 999
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: false
+      terminationGracePeriodSeconds: 300
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: galera-config
+        name: config
+      - configMap:
+          defaultMode: 420
+          name: galera-initdb
+        name: initdb
+      - configMap:
+          defaultMode: 493
+          name: galera-bootstrap
+        name: scripts
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi
+      storageClassName: ceph-rbd
+      volumeMode: Filesystem
+    status:
+      phase: Pending
