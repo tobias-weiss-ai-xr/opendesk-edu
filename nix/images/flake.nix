@@ -25,9 +25,9 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in {
       packages.${system} = {
-        dkimpy-milter = pkgs.callPackage ./images/dkimpy-milter.nix { inherit pkgs; };
-        openldap = pkgs.callPackage ./images/openldap.nix { inherit pkgs; };
-        postfix = pkgs.callPackage ./images/postfix.nix { inherit pkgs; };
+        dkimpy-milter = pkgs.callPackage ./dkimpy-milter.nix { inherit pkgs; };
+        openldap = pkgs.callPackage ./openldap.nix { inherit pkgs; };
+        postfix = pkgs.callPackage ./postfix.nix { inherit pkgs; };
       };
     };
 }
