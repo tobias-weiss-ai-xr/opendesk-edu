@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sogo
+    app.kubernetes.io/component: groupware
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: sogo
+    app.kubernetes.io/part-of: opendesk
+  name: sogo
+  namespace: opendesk-edu
+spec:
+  clusterIP: 172.17.212.172
+  clusterIPs:
+  - 172.17.212.172
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 20000
+    protocol: TCP
+    targetPort: 20000
+  selector:
+    app: sogo
+  sessionAffinity: None
+  type: ClusterIP
