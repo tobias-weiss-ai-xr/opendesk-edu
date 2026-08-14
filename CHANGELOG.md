@@ -1,3 +1,11 @@
+## [1.16.4](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.3...v1.16.4) (2026-08-14)
+
+
+### Bug Fixes
+
+- **open-xchange:** Update Doveoct Pro to patch release 3.0.7-rev5 ([2e3ddf9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/2e3ddf922a70846b98c5cece6cb9724bf5b1ba9a))
+- **open-xchange:** Update 8.49 patch release to fix upstream issue, ref.: https://documentation.open-xchange.com/appsuite/releases/8.51/noteworthy/calendar-purge-selfcheck.html ([b39de04](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/-/commit/b39de045fb49acf362bcc1d55fdbb0d8caa3abaf))
+
 ## [1.16.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.16.2...v1.16.3) (2026-08-06)
 
 
