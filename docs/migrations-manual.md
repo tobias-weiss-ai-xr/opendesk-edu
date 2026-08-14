@@ -33,7 +33,7 @@ SPDX-License-Identifier: Apache-2.0
         * [Full re-provisioning of all objects on upgrade](#full-re-provisioning-of-all-objects-on-upgrade)
         * [Changed Helmfile structure: `userNamespaces` setting moved to `technical.userNamespaces`](#changed-helmfile-structure-usernamespaces-setting-moved-to-technicalusernamespaces)
         * [Changed Helmfile structure: Streamlined naming of the theming attributes](#changed-helmfile-structure-streamlined-naming-of-the-theming-attributes)
-        * [Changed Helmfile default: Matrix federation is no longer enabled by default](#changed-helmfile-default-matrix-federation-is-no-longer-enabled-by-default)
+        * [Changed Helmfile structure: Redis secret moved to `cache.redis.password`](#changed-helmfile-structure-redis-secret-moved-to-cacheredispassword)
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
@@ -273,18 +273,47 @@ content of an SVG file.
 
 If you set one or both of these attributes, rename them in your customization.
 
+##### Changed Helmfile structure: Redis secret moved to `cache.redis.password`
+
+**Target group:** Deployments that override `secrets.redis.password` or point a component at an external cache
+with `cache.<component>.password`.
+
+**Context**
+
+The Redis credential lived in two places: The server's password as `secrets.redis.password`, and a per-component
+override as `cache.<component>.password.value` that carried a value only and was empty by default, with every
+consumer falling back to the former. That fallback is why a component could be pointed at an external cache while
+still authenticating with the bundled Redis password.
+
+Continuing the consolidation started in 1.17.0 (see
+[Secrets consolidated into their domain files](#secrets-consolidated-into-their-domain-files-and-a-consistent-value-structure)),
+[`cache.yaml.gotmpl`](../helmfile/environments/default/cache.yaml.gotmpl) is now the single place a cache and its
+credential are configured, and consumers read their own entry instead of falling back to a shared one.
+
+**Required action**
+
+If you set the Redis password yourself, move it:
+
 Before:
 
 ```yaml
+<<<<<<< HEAD
 theme:
   imagery:
     logoHeaderSvgB64: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
     logoHeaderInvertedSvgB64: {{ readFile "./files/theme/myLogoHeaderInverted.svg" | b64enc | quote }}
+=======
+secrets:
+  redis:
+    password:
+      value: "..."
+>>>>>>> ae1b6086 (fix(helmfile): Consolidate Redis secret definition; see `migrations-manual.md` for required upgrade steps)
 ```
 
 After:
 
 ```yaml
+<<<<<<< HEAD
 theme:
   imagery:
     logoHeaderSvg: {{ readFile "./files/theme/myLogoHeader.svg" | b64enc | quote }}
@@ -306,6 +335,18 @@ upgrade.
 >
 > This only affects you if your customization references these openDesk-shipped files by path, e.g. via
 > `readFile` or in `theme.imagery.projects.pdfExport*Path`. Adjust such references accordingly.
+=======
+cache:
+  redis:
+    password:
+      value: "..."
+```
+
+Note that the per-component entries default to `cache.redis.password` rather than to an empty string. Setting
+only `cache.redis.password` therefore still changes the password for all components using the bundled Redis. If
+a component uses an external cache, override that component's own `password.value` as before - it is now the
+only place its password is read from.
+>>>>>>> ae1b6086 (fix(helmfile): Consolidate Redis secret definition; see `migrations-manual.md` for required upgrade steps)
 
 ##### Changed Helmfile default: Matrix federation is no longer enabled by default
 
