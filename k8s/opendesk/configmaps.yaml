@@ -1,0 +1,209 @@
+apiVersion: v1
+data:
+  config.json: "{\n  \"default_server_config\": {\n    \"m.homeserver\": {\n     \
+    \ \"base_url\": \"https://matrix.home.opendesk-edu.org\",\n      \"server_name\"\
+    : \"matrix.home.opendesk-edu.org\"\n    }\n  },\n  \"brand\": \"openDesk Edu Chat\"\
+    ,\n  \"disable_guests\": false,\n  \"disable_3pid_login\": false,\n  \"default_country_code\"\
+    : \"DE\",\n  \"show_labs_settings\": true,\n  \"integrations_ui_url\": \"\",\n\
+    \  \"integrations_rest_url\": \"\",\n  \"integrations_widgets_urls\": []\n}\n"
+immutable: false
+kind: ConfigMap
+metadata:
+  labels:
+    app: element
+    app.kubernetes.io/component: messaging
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: element
+    app.kubernetes.io/part-of: opendesk
+  name: element-config
+  namespace: opendesk
+---
+apiVersion: v1
+data:
+  bootstrap.sh: "#!/bin/bash\nset -e\nORDINAL=$(hostname | rev | cut -d'-' -f1 | rev)\n\
+    echo \"Galera pod ordinal: $ORDINAL\"\n\nif [ \"$ORDINAL\" = \"0\" ]; then\n \
+    \ # Pod 0: check if we need to bootstrap a new cluster\n  if [ ! -f /var/lib/mysql/grastate.dat\
+    \ ]; then\n    # First boot: no grastate.dat, bootstrap new cluster with empty\
+    \ address\n    echo \"Bootstrap: galera-0 first boot, starting new cluster (gcomm://)\"\
+    \n    exec docker-entrypoint.sh mariadbd --wsrep-new-cluster --wsrep-cluster-address=gcomm://\n\
+    \  elif grep -q \"safe_to_bootstrap: 1\" /var/lib/mysql/grastate.dat; then\n \
+    \   # Cluster was stopped, this node is safe to bootstrap\n    echo \"Bootstrap:\
+    \ galera-0 starting new cluster (safe_to_bootstrap=1)\"\n    exec docker-entrypoint.sh\
+    \ mariadbd --wsrep-new-cluster --wsrep-cluster-address=gcomm://\n  else\n    #\
+    \ Normal start: join existing cluster\n    echo \"Galera-0: starting normally,\
+    \ joining cluster\"\n    exec docker-entrypoint.sh mariadbd\n  fi\nelse\n  # Pod\
+    \ 1+: join existing cluster\n  echo \"Galera-$ORDINAL: joining cluster\"\n  exec\
+    \ docker-entrypoint.sh mariadbd\nfi\n"
+immutable: false
+kind: ConfigMap
+metadata:
+  labels:
+    app: galera
+    app.kubernetes.io/component: database
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: galera
+    app.kubernetes.io/part-of: opendesk
+  name: galera-bootstrap
+  namespace: opendesk
+---
+apiVersion: v1
+data:
+  galera.cnf: '[mysqld]
+
+    # Galera settings
+
+    wsrep_on=ON
+
+    wsrep_provider=/usr/lib/galera/libgalera_smm.so
+
+    wsrep_cluster_name="opendesk-galera"
+
+    wsrep_cluster_address="gcomm://galera-0.galera-headless.opendesk.svc.cluster.local:4567,galera-1.galera-headless.opendesk.svc.cluster.local:4567,galera-2.galera-headless.opendesk.svc.cluster.local:4567"
+
+    wsrep_sst_method=rsync
+
+    wsrep_sst_auth=root:ChangeMeGalera123!
+
+
+    # Binlog
+
+    binlog_format=ROW
+
+    default_storage_engine=InnoDB
+
+    innodb_autoinc_lock_mode=2
+
+    innodb_flush_log_at_trx_commit=0
+
+    innodb_buffer_pool_size=512M
+
+
+    # Character set
+
+    character-set-server=utf8mb4
+
+    collation-server=utf8mb4_unicode_ci
+
+
+    # Networking
+
+    bind-address=0.0.0.0
+
+    port=3306
+
+
+    # Galera ports
+
+    wsrep_provider_options="gmcast.listen_addr=tcp://0.0.0.0:4567;pc.recovery=TRUE"
+
+
+    # SST (receive address set automatically by Galera)
+
+    wsrep_sst_receive_address=AUTO
+
+
+    # Logging
+
+    log_error=stderr
+
+    slow_query_log=OFF
+
+
+    # Safety
+
+    skip-name-resolve=ON
+
+    max_connections=200
+
+    '
+immutable: false
+kind: ConfigMap
+metadata:
+  labels:
+    app: galera
+    app.kubernetes.io/component: database
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: galera
+    app.kubernetes.io/part-of: opendesk
+  name: galera-config
+  namespace: opendesk
+---
+apiVersion: v1
+data:
+  01-init-databases.sql: '-- Galera cluster initialization
+
+    -- Databases for all openDesk services
+
+    CREATE DATABASE IF NOT EXISTS keycloak CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+    CREATE DATABASE IF NOT EXISTS synapse CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+    CREATE DATABASE IF NOT EXISTS sogo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+    CREATE DATABASE IF NOT EXISTS opencloud CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+    -- Service users
+
+    CREATE USER IF NOT EXISTS ''keycloak''@''%'' IDENTIFIED BY ''keycloak-db-password-change-me'';
+
+    GRANT ALL PRIVILEGES ON keycloak.* TO ''keycloak''@''%'';
+
+
+    CREATE USER IF NOT EXISTS ''synapse''@''%'' IDENTIFIED BY ''synapse-db-password-change-me'';
+
+    GRANT ALL PRIVILEGES ON synapse.* TO ''synapse''@''%'';
+
+
+    CREATE USER IF NOT EXISTS ''sogo''@''%'' IDENTIFIED BY ''sogo-db-password-change-me'';
+
+    GRANT ALL PRIVILEGES ON sogo.* TO ''sogo''@''%'';
+
+
+    CREATE USER IF NOT EXISTS ''opencloud''@''%'' IDENTIFIED BY ''opencloud-db-password-change-me'';
+
+    GRANT ALL PRIVILEGES ON opencloud.* TO ''opencloud''@''%'';
+
+
+    FLUSH PRIVILEGES;
+
+    '
+immutable: false
+kind: ConfigMap
+metadata:
+  labels:
+    app: galera
+    app.kubernetes.io/component: database
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: galera
+    app.kubernetes.io/part-of: opendesk
+  name: galera-initdb
+  namespace: opendesk
+---
+apiVersion: v1
+data:
+  homeserver.yaml: "server_name: \"matrix.home.opendesk-edu.org\"\npid_file: /data/homeserver.pid\n\
+    listeners:\n  - port: 8008\n    tls: false\n    type: http\n    x_forwarded: true\n\
+    \    bind_addresses: ['0.0.0.0']\n    resources:\n      - names: [client, federation]\n\
+    \        compress: false\ndatabase:\n  name: sqlite3\n  args:\n    database: /data/homeserver.db\n\
+    macaroon_secret_key: \"opendesk-synapse-macaroon-secret-change-me\"\nlog_config:\
+    \ \"/data/log.config\"\nmedia_store_path: \"/data/media\"\nuploads_path: \"/data/uploads\"\
+    \nsigning_key_path: \"/data/signing.key\"\ntrusted_key_servers:\n  - server_name:\
+    \ \"matrix.org\"\nurl_preview_enabled: false\nenable_registration: false\nmax_upload_size:\
+    \ 50M\nreport_stats: false\n"
+  log.config: "version: 1\nformatters:\n  precise:\n    format: '%(asctime)s - %(name)s\
+    \ - %(levelname)s - %(request)s - %(message)s'\nhandlers:\n  console:\n    class:\
+    \ logging.StreamHandler\n    formatter: precise\nloggers:\n  synapse:\n    level:\
+    \ INFO\n  synapse.storage:\n    level: INFO\nroot:\n  level: INFO\ndisable_existing_loggers:\
+    \ false\n"
+immutable: false
+kind: ConfigMap
+metadata:
+  labels:
+    app: synapse
+    app.kubernetes.io/component: messaging
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: synapse
+    app.kubernetes.io/part-of: opendesk
+  name: synapse-config
+  namespace: opendesk

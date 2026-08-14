@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: galera
+    app.kubernetes.io/component: database
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: galera
+    app.kubernetes.io/part-of: opendesk
+  name: galera
+  namespace: opendesk
+spec:
+  clusterIP: 172.17.209.51
+  clusterIPs:
+  - 172.17.209.51
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: galera
+  sessionAffinity: None
+  type: ClusterIP

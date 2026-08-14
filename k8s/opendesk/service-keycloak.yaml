@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: keycloak
+    app.kubernetes.io/component: identity
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/part-of: opendesk
+  name: keycloak
+  namespace: opendesk
+spec:
+  clusterIP: 172.17.213.188
+  clusterIPs:
+  - 172.17.213.188
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: keycloak
+  sessionAffinity: None
+  type: ClusterIP
