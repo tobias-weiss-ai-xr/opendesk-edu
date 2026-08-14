@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stalwart
+    app.kubernetes.io/component: mail
+    app.kubernetes.io/managed-by: nix
+    app.kubernetes.io/name: stalwart
+    app.kubernetes.io/part-of: opendesk
+  name: stalwart
+  namespace: opendesk-edu
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: stalwart
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2026-08-12T14:31:33+02:00'
+      labels:
+        app: stalwart
+        app.kubernetes.io/component: mail
+        app.kubernetes.io/managed-by: nix
+        app.kubernetes.io/name: stalwart
+        app.kubernetes.io/part-of: opendesk
+    spec:
+      containers:
+      - args:
+        - --config
+        - /etc/stalwart/config.json
+        command:
+        - stalwart
+        env:
+        - name: STALWART_PORT
+          value: '8080'
+        - name: STALWART_HOSTNAME
+          value: mail.home.opendesk-edu.org
+        image: docker.io/stalwartlabs/stalwart:latest
+        imagePullPolicy: IfNotPresent
+        name: stalwart
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 25
+          name: smtp
+          protocol: TCP
+        - containerPort: 587
+          name: submission
+          protocol: TCP
+        - containerPort: 465
+          name: submissions
+          protocol: TCP
+        - containerPort: 143
+          name: imap
+          protocol: TCP
+        - containerPort: 993
+          name: imaptls
+          protocol: TCP
+        resources:
+          limits:
+            cpu: '1'
+            memory: 1Gi
+          requests:
+            cpu: 200m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: {}
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false
+          seccompProfile:
+            type: RuntimeDefault
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/stalwart/config.json
+          name: config
+          readOnly: true
+          subPath: config.json
+        - mountPath: /data
+          name: data
+      dnsConfig:
+        searches:
+        - opendesk.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 0
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: false
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: config.json
+            path: config.json
+          name: stalwart-config
+        name: config
+      - name: data
+        persistentVolumeClaim:
+          claimName: stalwart-data
