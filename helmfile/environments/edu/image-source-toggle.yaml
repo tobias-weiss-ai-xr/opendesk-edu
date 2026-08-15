@@ -93,7 +93,9 @@ images:
 
   opendesk-dev-agent-operator:
     registry: ghcr.io
-    repository: opendesk-edu/opendesk-dev-agent-operator
+    # published from github.com/tobias-weiss-ai-xr/opendesk-dev-agent-operator
+    # (CI pushes to ghcr.io/<github.repository>; the opendesk-edu org path 404s)
+    repository: tobias-weiss-ai-xr/opendesk-dev-agent-operator
     tag: latest
 
   moodle-shib:
