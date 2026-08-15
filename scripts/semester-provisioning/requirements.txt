@@ -6,11 +6,11 @@
 
 # Web Framework
 fastapi>=0.141.1,<1.0.0
-uvicorn[standard]>=0.52.0,<1.0.0
+uvicorn[standard]>=0.52.1,<1.0.0
 
 # Data Validation
 pydantic>=2.13.4,<3.0.0
-pydantic-settings>=2.14.2,<3.0.0
+pydantic-settings>=2.15.0,<3.0.0
 
 # HTTP Client for LMS/Keycloak APIs
 httpx>=0.28.1,<1.0.0

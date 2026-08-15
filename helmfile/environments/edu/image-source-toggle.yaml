@@ -93,8 +93,11 @@ images:
 
   opendesk-dev-agent-operator:
     registry: ghcr.io
-    repository: opendesk-edu/opendesk-dev-agent-operator
-    tag: latest
+    # published from github.com/tobias-weiss-ai-xr/opendesk-dev-agent-operator
+    # (CI pushes to ghcr.io/<github.repository>; the opendesk-edu org path 404s)
+    # Tag convention (upstream + umr): branch tag, not latest
+    repository: tobias-weiss-ai-xr/opendesk-dev-agent-operator
+    tag: main
 
   moodle-shib:
     registry: ghcr.io
@@ -232,7 +235,7 @@ images:
 #   opendesk-dev-agent-operator:
 #     registry: registry.gitlab.opencode.de
 #     repository: umr/opendesk-dev-agent-operator
-#     tag: latest
+#     tag: main
 #
 #   moodle-shib:
 #     registry: registry.gitlab.opencode.de
