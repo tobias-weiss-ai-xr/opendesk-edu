@@ -235,7 +235,7 @@ images:
 #   opendesk-dev-agent-operator:
 #     registry: registry.gitlab.opencode.de
 #     repository: umr/opendesk-dev-agent-operator
-#     tag: latest
+#     tag: main
 #
 #   moodle-shib:
 #     registry: registry.gitlab.opencode.de
