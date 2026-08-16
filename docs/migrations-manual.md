@@ -38,6 +38,7 @@ SPDX-License-Identifier: Apache-2.0
         * [Changed Helmfile structure: Streamlined naming of the theming attributes](#changed-helmfile-structure-streamlined-naming-of-the-theming-attributes)
         * [Changed Helmfile structure: Redis secret moved to `cache.redis.password`](#changed-helmfile-structure-redis-secret-moved-to-cacheredispassword)
         * [Changed Helmfile default: Matrix federation is no longer enabled by default](#changed-helmfile-default-matrix-federation-is-no-longer-enabled-by-default)
+        * [Fixed Helmfile templating: S3 region for Dovecot](#fixed-helmfile-templating-s3-region-for-dovecot)
     * [Versions ≥ v1.17.0](#versions--v1170)
       * [Pre-upgrade to versions ≥ v1.17.0](#pre-upgrade-to-versions--v1170)
         * [Fixed Helmfile templating: `loadBalancerIP` for Dovecot and Postfix services](#fixed-helmfile-templating-loadbalancerip-for-dovecot-and-postfix-services)
@@ -532,6 +533,19 @@ partners is known in advance.
 > further federation traffic. Existing rooms shared with users on other homeservers will no longer
 > receive or send updates once federation is disabled or the remote domain is not part of the
 > allow list.
+
+##### Fixed Helmfile templating: S3 region for Dovecot
+
+**Target group:** Deployments using an external S3 service for Dovecot with `objectstores.dovecot.region` set to a value other than `"eu-west-1"`.
+
+**Context:**
+
+Until now, `objectstores.dovecot.region` was not rendered into the Dovecot values, so Dovecot always used the chart
+default `eu-west-1`. The setting is now passed through and takes effect.
+
+**Required action**
+
+None. Since the region had no effect before, this note is purely informational.
 
 ### Versions ≥ v1.17.0
 
