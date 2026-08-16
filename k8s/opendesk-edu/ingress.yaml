@@ -46,7 +46,7 @@ metadata:
 spec:
   ingressClassName: haproxy
   rules:
-  - host: mail.home.opendesk-edu.org
+  - host: sogo.home.opendesk-edu.org
     http:
       paths:
       - backend:
@@ -58,7 +58,7 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - mail.home.opendesk-edu.org
+    - sogo.home.opendesk-edu.org
     secretName: opendesk-certificates-tls
 ---
 apiVersion: networking.k8s.io/v1
