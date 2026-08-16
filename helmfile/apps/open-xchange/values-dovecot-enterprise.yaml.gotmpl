@@ -70,6 +70,10 @@ dovecot:
       {{- else }}
       {{- fail "No objectstorage endpoint for dovecot found!" }}
       {{- end }}
+      {{- if .Values.objectstores.dovecot.region }}
+      s3:
+        awsRegion: {{ .Values.objectstores.dovecot.region | quote }}
+      {{- end }}
       username: {{ .Values.objectstores.dovecot.username | quote }}
       password:
         value: {{ .Values.objectstores.dovecot.secretKey.value | quote }}
