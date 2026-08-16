@@ -331,7 +331,11 @@ A few more examples that are frequently useful when debugging:
 ./listcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
 
 # Show the details of a single user, looked up by its login name
-./listuser -c <contextId> -s <userName> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+./listuser -c <contextId> -s <univentionObjectIdentifier> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# Enable debug logging for IMAP commands on a specific user
+# Note: The log output is written to /var/log/open-xchange so it should only be enabled for a very limited amount of time
+./changeuser -c <contextId> -u <univentionObjectIdentifier> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW --config/com.openexchange.imap.debugLog.enabled=true
 
 # Show where the configuration effective for a user comes from (config cascade debugging)
 ./getuserconfigurationsource -c <contextId> -i <userId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
