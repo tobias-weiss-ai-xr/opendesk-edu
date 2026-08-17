@@ -640,6 +640,12 @@ nubusPortalConsumer:
   extraEnvVars:
     - name: AWS_DEFAULT_REGION
       value: {{ .Values.objectstores.nubus.region | quote }}
+    # The following two environment variables are required for AWS S3 compatible object storage to work with the AWS SDK v2
+    # and are not yet set upstream (see https://forge.univention.org/bugzilla/show_bug.cgi?id=59716)
+    - name: "AWS_REQUEST_CHECKSUM_CALCULATION"
+      value: "when_required"
+    - name: "AWS_RESPONSE_CHECKSUM_VALIDATION"
+      value: "when_required"
   {{- if .Values.certificate.selfSigned }}
   extraVolumes:
     - name: "trusted-cert-secret-volume"
