@@ -9,6 +9,15 @@ functional:
         # Set to `false` to disable to not provide and update openDesk deployment timestamp for admins in the portal.
         # This is helpful in GitOps deployments as with the timestamp there will always be a change detected.
         enabled: true
+      listViews:
+        # The maximum number of items to be shown in the list views of the  admin portal. The list views are used for
+        # example in the "Users" and "Groups" tiles. When the limit is hit you want to use the search function to find
+        # narrow down the result set.
+        sizelimit: 500
+        # Set to `false` to avoid loading all records of a list view up to the limit specified above when accessing a
+        # list view page (affects only users and groups views). The lists are then only populated after the search has
+        # been triggered manually.
+        autosearch: true
     logging:
       auditLogs:
         # Some components offer the option to generate specific audit logs. Enable these logs with the toggle below:
