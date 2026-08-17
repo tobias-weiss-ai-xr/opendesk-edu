@@ -13,13 +13,15 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
 <!-- TOC -->
 * [Updates and features](#updates-and-features)
   * [1.18.0](#1180)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
+      * [Options to configure the list views of the admin portal](#options-to-configure-the-list-views-of-the-admin-portal)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl)
       * [Allow overriding HTTP request rate limiting for the core-mw component of the OX App Suite](#allow-overriding-http-request-rate-limiting-for-the-core-mw-component-of-the-ox-app-suite)
     * [`theme.yaml.gotmpl`](#themeyamlgotmpl)
       * [Dedicated mobile logo and touch icon for OpenProject](#dedicated-mobile-logo-and-touch-icon-for-openproject)
       * [Custom fonts for OpenProject's PDF export](#custom-fonts-for-openprojects-pdf-export)
   * [1.17.0](#1170)
-    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-1)
       * [Enable the "Send later" (scheduled mail) feature for OX App Suite](#enable-the-send-later-scheduled-mail-feature-for-ox-app-suite)
       * [Configurable "Remember Me" SSO session timeouts](#configurable-remember-me-sso-session-timeouts)
     * [`helmfile-defaults.yaml.gotmpl`](#helmfile-defaultsyamlgotmpl)
@@ -48,7 +50,7 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
     * [`cache.yaml.gotmpl`](#cacheyamlgotmpl)
       * [Options to enable SSL/TLS Redis connection for the Intercom Service, Notes, and OX App Suite](#options-to-enable-ssltls-redis-connection-for-the-intercom-service-notes-and-ox-app-suite)
   * [1.15.0](#1150)
-    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-1)
+    * [`functional.yaml.gotmpl`](#functionalyamlgotmpl-2)
       * [Per user-quota for external sharing](#per-user-quota-for-external-sharing)
       * [Virtual alias limits](#virtual-alias-limits)
     * [`technical.yaml.gotmpl`](#technicalyamlgotmpl-3)
@@ -57,6 +59,26 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
 <!-- TOC -->
 
 ## 1.18.0
+
+### `functional.yaml.gotmpl`
+
+#### Options to configure the list views of the admin portal
+
+Two options are provided to configure the list views (e.g. showing users) of the IAM admin portal:
+
+- Define if the list views should auto load when opening the page (`autoload`)
+- Set the maximum number of entries to load for a result set (`sizelimit`)
+
+When the limit is hit, the result set has to be narrowed down using the search function.
+
+```yaml
+functional:
+  admin:
+    portal:
+      listViews:
+        sizelimit: 500
+        autoload: true
+```
 
 ### `technical.yaml.gotmpl`
 

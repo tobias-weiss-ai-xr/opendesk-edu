@@ -66,7 +66,12 @@ global:
             domain-admins: __DELETE_KEY__
             iam-api-full-access: "cn=IAM API - Full Access,cn=groups,{{ .Values.ldap.baseDn }}"
         web:
+          sizelimit: {{ .Values.functional.admin.portal.listViews.sizelimit }}
           modules:
+            groups:
+              group:
+                search:
+                  autosearch: {{ if .Values.functional.admin.portal.listViews.autosearch }}"True"{{ else }}"False"{{ end }}
             users:
               user:
                 add:
@@ -81,7 +86,7 @@ global:
                   username:
                     syntax: "uid"
                 search:
-                  autosearch: "True"
+                  autosearch: {{ if .Values.functional.admin.portal.listViews.autosearch }}"True"{{ else }}"False"{{ end }}
                 wizard:
                   property:
                     invite:
@@ -110,7 +115,6 @@ global:
       web:
         sso:
           enabled: false
-
       cookie-banner:
         show: "false"
       login:
