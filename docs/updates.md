@@ -143,8 +143,9 @@ default values for the core-mw component:
 technical:
   oxAppSuite:
     rateLimit:
-      maxRateTimeWindow: "60000"
-      maxRate: "3000"
+      coreMW:
+        maxRateTimeWindow: "60000"
+        maxRate: "3000"
 ```
 
 This is usually not required but can be helpful to customize for example for load tests.
