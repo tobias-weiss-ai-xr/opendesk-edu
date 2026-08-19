@@ -38,9 +38,17 @@ migrations:
         optional: true
   {{- end }}
   {{- if .Values.apps.nubus.enabled }}
+    # The password `flush_intercom_sessions` authenticates with - the same fallback every consumer
+    # of `cache.yaml.gotmpl` applies, expressed as a choice of Secret: an empty component entry
+    # means "the bundled server's password", so the server's Secret is mounted then.
     - name: "redis-password"
       secret:
+      {{- if .Values.cache.intercomService.password.value }}
         name: {{ .Values.cache.intercomService.password.name | quote }}
         key: {{ .Values.cache.intercomService.password.key | quote }}
+      {{- else }}
+        name: {{ .Values.cache.redis.password.name | quote }}
+        key: {{ .Values.cache.redis.password.key | quote }}
+      {{- end }}
   {{- end }}
 ...

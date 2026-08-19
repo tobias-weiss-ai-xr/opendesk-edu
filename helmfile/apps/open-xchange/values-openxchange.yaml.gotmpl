@@ -1177,7 +1177,7 @@ appsuite:
       auth:
         enabled: true
         username: {{ .Values.cache.oxAppSuite.username | quote }}
-        password: {{ .Values.cache.oxAppSuite.password.value | quote }}
+        password: {{ .Values.cache.oxAppSuite.password.value | default .Values.cache.redis.password.value | quote }}
     image:
       registry: {{ coalesce .Values.repositories.image.registryOpencodeDe .Values.global.imageRegistry .Values.images.openxchangeCoreMW.registry | quote }}
       repository: {{ .Values.images.openxchangeCoreMW.repository | quote }}
