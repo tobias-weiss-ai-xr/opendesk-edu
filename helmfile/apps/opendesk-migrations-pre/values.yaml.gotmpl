@@ -40,7 +40,10 @@ migrations:
       secret:
         name: {{ .Values.secrets.oxAppSuite.adminPassword.name | quote }}
         key: {{ .Values.secrets.oxAppSuite.adminPassword.key | quote }}
-
+        # This Secret belongs to the `opendesk-secrets` release this Job depends on, so it is there
+        # when the Job starts - unless a deployment sets `create: false` to bring its own. Optional
+        # so that such a deployment does not keep the Job from starting at all; the action reading
+        # it fails and names it.
         optional: true
     # The identity of the `migrations` bucket, which `ox_functional_accounts_export` hands its work
     # to `ox_shared_accounts_import` in - see ../../../docs/migrations-automated.md. Unlike the
