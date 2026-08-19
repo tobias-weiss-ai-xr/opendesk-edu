@@ -69,7 +69,7 @@ While [migrations-manual.md](./migrations-manual.md) provides information about 
 
 Two options are provided to configure the list views (e.g. showing users) of the IAM admin portal:
 
-- Define if the list views should auto load when opening the page (`autoload`)
+- Define if the list views should trigger their search automatically when opening the page (`autosearch`)
 - Set the maximum number of entries to load for a result set (`sizelimit`)
 
 When the limit is hit, the result set has to be narrowed down using the search function.
@@ -80,7 +80,7 @@ functional:
     portal:
       listViews:
         sizelimit: 500
-        autoload: true
+        autosearch: true
 ```
 
 #### Identity a user schedules under in a Shared Account's calendar
