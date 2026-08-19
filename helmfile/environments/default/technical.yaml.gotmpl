@@ -149,11 +149,11 @@ technical:
 
     rateLimit:
       coreMW:
-        # Specify the rate limit that applies to incoming HTTP requests. A client that exceeds that limit will receive a "429 Too Many Requests" HTTP error code.
+        # Specify the rate limit's time window in milliseconds in which to track incoming HTTP requests.
         # Setting this to `null`/`~` resets this value to its respective default value (see reference).
         # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.servlet.maxRateTimeWindow
         maxRateTimeWindow: ~
-        # Specify the rate limit' time window in milliseconds in which to track incoming HTTP requests.
+        # Specify the rate limit that applies to incoming HTTP requests within the time window above. A client that exceeds that limit will receive a "429 Too Many Requests" HTTP error code.
         # Setting this to `null`/`~` resets this value to its respective default value (see reference).
         # Ref.: https://documentation.open-xchange.com/components/middleware/config/8/#mode=search&term=com.openexchange.servlet.maxRate
         maxRate: ~
