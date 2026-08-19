@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Bundesministerium des Innern und für Heimat, PG ZenDiS "Projektgruppe für Aufbau ZenDiS"
 # SPDX-License-Identifier: Apache-2.0
 ---
-{{- $masterPassword := required "A non-empty MASTER_PASSWORD is required!" (env "MASTER_PASSWORD") }}
-{{- $redisPassword := derivePassword 1 "long" $masterPassword "redis" "password" | sha1sum }}
 # This file is the single place a cache and its credential are configured. A `password` carries the
 # full value/create/name/key convention documented on `cassandra.rootPassword` in
 # `secrets.yaml.gotmpl` only where something is handed the Secret rather than the value - the Redis
@@ -10,16 +8,20 @@
 # nothing to provision a Secret for and a `create`/`name`/`key` there would only suggest a Secret
 # reference that no consumer makes.
 #
-# The per-component entries default to the bundled server's password because they address that
-# server. Pointing a component at an external cache means overriding its `host`/`port`/`username`/
-# `tls` **and** its `password.value` here, and nothing else: every consumer reads its own entry
-# rather than falling back to a shared one, so the override reaches all of them.
+# The per-component `password.value` entries are empty by default: an empty entry means "the
+# bundled server's password", and every consumer falls back to `cache.redis.password.value` for it.
+# Overriding only `cache.redis.password.value` therefore changes the password for the server and
+# for every component using it. Pointing a component at an external cache means overriding its
+# `host`/`port`/`username`/`tls` **and** its `password.value`; a non-empty component entry wins
+# over the fallback in every consumer.
 
 cache:
   redis:
     # The password the bundled Redis is deployed with, referenced by `auth.existingSecret` in the Redis chart.
     password:
-      value: {{ $redisPassword | quote }}
+      # A non-empty MASTER_PASSWORD is enforced in `secrets.yaml.gotmpl`, which every helmfile run
+      # renders alongside this file.
+      value: {{ derivePassword 1 "long" (env "MASTER_PASSWORD") "redis" "password" | sha1sum | quote }}
       create: true
       name: "redis-password"
       key: "redis-password"
@@ -30,9 +32,12 @@ cache:
     # Ref.: https://forge.univention.org/bugzilla/show_bug.cgi?id=59490
     username: "default"
     # Read as a Secret by the `flush_intercom_sessions` migration and as a literal by the Intercom
-    # Service chart, which has no `existingSecret` for it.
+    # Service chart, which has no `existingSecret` for it. The Secret below carries the *override*
+    # only: while `value` is empty, the migration mounts the server's `redis-password` Secret
+    # instead (see `opendesk-migrations-post/values.yaml.gotmpl`), so both stay a plain reflection
+    # of what this file states.
     password:
-      value: {{ $redisPassword | quote }}
+      value: ""
       create: true
       name: "cache-intercom-service-password"
       key: "password"
@@ -43,7 +48,7 @@ cache:
     username: "default"
     # Value-only: the Nextcloud charts inline the password into their configuration.
     password:
-      value: {{ $redisPassword | quote }}
+      value: ""
     tls: false
   notes:
     host: "redis-headless"
@@ -51,7 +56,7 @@ cache:
     username: "default"
     # Value-only: the Notes chart takes a connection URL with the password inlined.
     password:
-      value: {{ $redisPassword | quote }}
+      value: ""
     tls: false
   openproject:
     host: "memcached"
@@ -62,7 +67,7 @@ cache:
     username: "default"
     # Value-only: OX App Suite inlines the password into its properties.
     password:
-      value: {{ $redisPassword | quote }}
+      value: ""
     tls: false
   umsSelfservice:
     host: "memcached"

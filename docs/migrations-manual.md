@@ -440,13 +440,14 @@ with `cache.<component>.password`.
 
 The Redis credential lived in two places: The server's password as `secrets.redis.password`, and a per-component
 override as `cache.<component>.password.value` that carried a value only and was empty by default, with every
-consumer falling back to the former. That fallback is why a component could be pointed at an external cache while
-still authenticating with the bundled Redis password.
+consumer falling back to the former.
 
 Continuing the consolidation started in 1.17.0 (see
 [Secrets consolidated into their domain files](#secrets-consolidated-into-their-domain-files-and-a-consistent-value-structure)),
 [`cache.yaml.gotmpl`](../helmfile/environments/default/cache.yaml.gotmpl) is now the single place a cache and its
-credential are configured, and consumers read their own entry instead of falling back to a shared one.
+credential are configured. The fallback itself is unchanged - an empty `cache.<component>.password.value` still
+means "the bundled server's password" - only its target moved along with the server password, from
+`secrets.redis.password` to `cache.redis.password`.
 
 **Required action**
 
@@ -470,10 +471,9 @@ cache:
       value: "..."
 ```
 
-Note that the per-component entries default to `cache.redis.password` rather than to an empty string. Setting
-only `cache.redis.password` therefore still changes the password for all components using the bundled Redis. If
-a component uses an external cache, override that component's own `password.value` as before - it is now the
-only place its password is read from.
+Setting only `cache.redis.password` still changes the password for the server and for all components using the
+bundled Redis, exactly as setting `secrets.redis.password` did before. If a component uses an external cache,
+override that component's own `password.value` as before - a non-empty component entry wins over the fallback.
 
 ##### Changed Helmfile default: Matrix federation is no longer enabled by default
 
