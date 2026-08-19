@@ -1,3 +1,39 @@
+# [1.18.0](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.17.3...v1.18.0) (2026-08-19)
+
+
+### Bug Fixes
+
+* **collabora:** Bump Collabora Controller chart to 1.2.1 ([c98f81d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c98f81dfff657eb4dfb9ab4e956bde8f18e0d8ef))
+* **dovecot:** Set S3 Region; see `migrations-manual.md` for more information ([4764013](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/47640130e327f2157f17a06de80dfc43c18ce102))
+* **element:** Switch Matrix federation off by default; see `migrations-manual.md` for required upgrade steps ([f0b0cf1](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f0b0cf156f2550e6f9ac63b848a42943002d1b4d))
+* **element:** Update from 1.12.6 to 1.12.8 incl. Synapse update to 1.157.2 including CVE fixes especially relevant for setups configured with open federation; see upstream release notes for details: https://github.com/element-hq/synapse/releases/tag/v1.157.2 ([0c64432](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/0c64432c1965e5e8ca3a9a1904bc1a66c5920f86))
+* **helmfile:** Add custom IMAP and SMTP hostnames (see `functional.groupware.externalClients.fqdn*`) to certificate request when below domain ([de931a9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/de931a9e0e84ec80150a882c59cb977319b38fb8))
+* **helmfile:** Consolidate Redis secret definition; see `migrations-manual.md` for required upgrade steps ([68e51b8](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/68e51b8436378461708f93146b36d40f99901dbd))
+* **helmfile:** Restore the Redis password fallback so overriding `cache.redis.password` reaches every consumer of the bundled Redis ([c8068c2](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/c8068c2e1a5502ed217dee6aedb13741afa858a0))
+* **nubus:** [[#405](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/issues/405)] Improve S3 compatibility of Portal Consumer until addressed upstream ([6dd489a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6dd489a247e138a267276d78d6cc56f59270b125))
+* **nubus:** Add missing job argocd hooks ([6a5062f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/6a5062f3a1f0b086f45a46f9652fcdf79c8fd4de))
+* **nubus:** Disable not needed migration job ldapUpdateUniventionObjectIdentifier ([1173774](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1173774bfe737529a9e9cdb9a0ce4183d004ca10))
+* **open-xchange:** Bump charts and images to latest 8.49 ([decb603](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/decb60323f4c8b6626c34399514f4f59b893c388))
+* **open-xchange:** Update 8.49 patch release to fix upstream issue, ref.: https://documentation.open-xchange.com/appsuite/releases/8.51/noteworthy/calendar-purge-selfcheck.html ([b39de04](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/b39de045fb49acf362bcc1d55fdbb0d8caa3abaf))
+* **open-xchange:** Update Doveoct Pro to patch release 3.0.7-rev5 ([2e3ddf9](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/2e3ddf922a70846b98c5cece6cb9724bf5b1ba9a))
+* **open-xchange:** Use unified Helm chart for Dovecot in oD CE and EE ([8d05d3b](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/8d05d3bfe6e81484a2467e52fcc217c4f552741b))
+
+
+### Features
+
+* **collabora:** Upgrade from 25.04.11 to 26.04.02 with AI features; see `updates.md` for more details ([cad02fe](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/cad02fee3aa2e381400f8792695d453f0851de7e))
+* **cryptpad:** Update from 2025.9.0 to 2026.5.1 ([238156e](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/238156e88df8500465102fcda74edb0ec83ed944))
+* **jitsi:** Update from 2.0.11031 to 2.0.11146 and update upstream Helm chart to 3.0.2 ([ae4f01d](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/ae4f01de3585522147086d80f41e05ad0f040f46))
+* **nextcloud:** Update from 32.0.9 to 33.0.7 including the latest apps ([1dc3965](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1dc39655982dc71ea1608a2eb540390a05a5cb24))
+* **nubus:** Size limit for the list views of the admin portal; see `updates.md` for more details ([06c54d3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/06c54d3d8d6eb2cd188195a47f958cf78cb9d306))
+* **open-xchange:** Allow overriding core-mw rate limit configuration ([f374133](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f3741332295454342d55caeb924487b816b51043))
+* **open-xchange:** Migrate from functional mailboxes to shared accounts and move to `univentionObjectIdentifier` instead of `entryUUID` for relevant components; see `migrations-manual.md` for required upgrade steps ([1191808](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/11918088df071fc4bc1def09426f1287da9e06fb))
+* **open-xchange:** Update from 8.49 to 8.50 ([f099cba](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/f099cbada30d7ad1eca1d247809772770ccd63a0))
+* **open-xchange:** Update from 8.50 to 8.51 ([1d4965f](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/1d4965f2768c0e7992050081314074300bfcdac7))
+* **openproject:** Add more theming options; see `updates.md` and `migrations-manual.md` for more details ([4d64ecd](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/4d64ecd1f743172d65484c0096e588030813e139))
+* **openproject:** Update from 17.6.0 to 17.7.2 ([7342b13](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/7342b137be202c725a183c27bd9330cc8395a6cb))
+* **ox-connector:** Update connector to support shared accounts; see `migrations.md` for required upgrade steps ([a611f7a](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/commit/a611f7a6feef3c37cae48e2564f763e67a4f72c8))
+
 ## [1.17.3](https://gitlab.opencode.de/bmi/opendesk/deployment/opendesk/compare/v1.17.2...v1.17.3) (2026-08-14)
 
 
