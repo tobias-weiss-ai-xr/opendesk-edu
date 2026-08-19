@@ -317,28 +317,34 @@ Most of these tools require master admin credentials, which are passed with `-A`
 There is no need to look them up: the core-mw container already provides them as the environment variables
 `MASTER_ADMIN_USER` and `MASTER_ADMIN_PW`, so they can simply be referenced.
 
-The examples below assume you switched into that directory (`cd /opt/open-xchange/sbin`), otherwise prefix the tool
-name with the full path. Listing all users of context `1`:
+Listing all users of context `1`:
 
 ```shell
-./listuser -c 1 -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+listuser -c 1 -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
 ```
 
 A few more examples that are frequently useful when debugging:
 
 ```shell
 # List all contexts of the deployment
-./listcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+listcontext -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
 
 # Show the details of a single user, looked up by its login name
-./listuser -c <contextId> -s <univentionObjectIdentifier> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+listuser -c <contextId> -s <univentionObjectIdentifier> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
 
 # Enable debug logging for IMAP commands on a specific user
 # Note: The log output is written to /var/log/open-xchange so it should only be enabled for a very limited amount of time
-./changeuser -c <contextId> -u <univentionObjectIdentifier> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW --config/com.openexchange.imap.debugLog.enabled=true
+changeuser -c <contextId> -u <univentionObjectIdentifier> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW --config/com.openexchange.imap.debugLog.enabled=true
 
 # Show where the configuration effective for a user comes from (config cascade debugging)
-./getuserconfigurationsource -c <contextId> -i <userId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+getuserconfigurationsource -c <contextId> -i <userId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# List all shared accounts
+listsharedaccount -c <contextId> -A $MASTER_ADMIN_USER -P $MASTER_ADMIN_PW
+
+# Query the OX REST API to check permissions for a shared mailbox
+curl -v -u 'rest-api:<REST_API_PASSWORD>' \
+  'http://open-xchange-core-mw-http-api/preliminary/sharedaccounts/v1/account?userMailLogin=<univention-object-identifier-of-user>&accountMailLogin=<univention-object-identifier-of-shared-mailbox>'
 ```
 
 > [!note]
