@@ -31,6 +31,7 @@ SPDX-License-Identifier: Apache-2.0
       * [Pre-upgrade to versions ≥ v1.18.0](#pre-upgrade-to-versions--v1180)
         * [New persistence requirement: OX Connector requires its own PostgreSQL database](#new-persistence-requirement-ox-connector-requires-its-own-postgresql-database)
         * [Full re-provisioning of all objects on upgrade](#full-re-provisioning-of-all-objects-on-upgrade)
+        * [Nubus fix: Availability of `univentionObjectIdentifier` on all objects](#nubus-fix-availability-of-univentionobjectidentifier-on-all-objects)
         * [OX App Suite: Switch to `univentionObjectIdentifier` and Shared Accounts](#ox-app-suite-switch-to-univentionobjectidentifier-and-shared-accounts)
         * [New Helmfile secrets: Dovecot's password grant client and the OX App Suite REST API](#new-helmfile-secrets-dovecots-password-grant-client-and-the-ox-app-suite-rest-api)
         * [IAM: An externally maintained `univentionObjectIdentifier` has to move](#iam-an-externally-maintained-univentionobjectidentifier-has-to-move)
@@ -226,6 +227,44 @@ technical:
     provisioning:
       dedicatedCoreMwPod: true
 ```
+
+##### Nubus fix: Availability of `univentionObjectIdentifier` on all objects
+
+**Target group:**
+
+Installations that initially deployed an openDesk version <1.6 and always used LDAP secondaries without LDAP proxies
+and run into the problem that the `opendesk-migrations-pre` job fails with an error like:
+
+`The user uid=default.user,cn=users,dc=swp-ldap,dc=internal has no univentionObjectIdentifier, so its OX App Suite user cannot be renamed to one.`
+
+**Context:**
+
+The job that initializes the `univentionObjectIdentifier` - part of openDesk since 1.6.0 until it was phased out with 1.18.0 - ended with status
+"Succeeded" even when the required updates could not be executed. This happened in setups where LDAP secondaries are deployed without the LDAP
+proxy that takes care of routing write requests to the appropriate (primary) backend: The job's writes against a secondary which is read-only
+do not succeed, and objects created while such a setup was in place may still be missing their `univentionObjectIdentifier`.
+
+**Required action:**
+
+Run the job `ums-udm-rest-api-XX-update-univention-object-identifier` again, but with a changed value.
+
+Before:
+
+```yaml
+            - name: LDAP_URI
+              value: ldap://ums-ldap-server
+```
+
+After:
+
+```yaml
+            - name: LDAP_URI
+              value: ldap://ums-ldap-server-primary
+```
+
+An example Job manifest with this change applied can be found in [`1.18.0-initialize-univentionObjectIdentifier.yaml`](./migrations-helper/1.18.0-initialize-univentionObjectIdentifier.yaml).
+
+Once done you can simply re-start the deployment of openDesk 1.18+ and the migrations-pre Job should succeed.
 
 ##### OX App Suite: Switch to `univentionObjectIdentifier` and Shared Accounts
 
